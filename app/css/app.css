@@ -32,3 +32,23 @@ body{
   content: "";
   padding: 0;
 }
+
+.search-result {
+  margin-bottom: 24px;
+}
+
+.search-result h4{
+  margin-bottom: 0px;
+}
+
+.search-title {
+
+}
+
+.search-description, .search-details{
+  display: block;
+}
+
+.search-details{
+  font-size: 12px;
+}

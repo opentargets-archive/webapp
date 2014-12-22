@@ -6,7 +6,6 @@ angular.module('cttvApp', [
 	'ngRoute',
     'ui.bootstrap',
     'cttvControllers',
-    'chartApp',
     'bubbleGraphApp'
 ]).
 

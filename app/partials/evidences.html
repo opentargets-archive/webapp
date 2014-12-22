@@ -31,9 +31,24 @@
 	<!--
 	<pagination boundary-links="true" total-items="search.results.total" ng-model="search.query.page" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="getResults()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
 	-->
+	
+	<style>
+		circle {
+		  fill: rgb(31, 119, 180);
+		  fill-opacity: .25;
+		}
 
+		.leaf circle {
+		  fill: #ff7f0e;
+		  fill-opacity: 1;
+		}
+
+		text {
+		  font: 10px sans-serif;
+		}
+	</style>
 	<div>
-		<div bubble-graph chart-data="data" style="height:200px"></div>
+		<div circle-pack-graph data="d3data" as-bubble="true" use-color-palette="true" style="height:200px"></div>
 	</div>
 
 

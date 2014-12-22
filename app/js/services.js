@@ -25,7 +25,7 @@ angular.module('cttvServices', []).
          */
         var cttvAPI = {
             API_DEFAULT_METHOD : "get",
-            API_URL : "http://127.0.0.1:8008/api/latest/",
+            API_URL : "http://193.62.52.228/api/latest/", //http://127.0.0.1:8008/api/latest/",
             API_SEARCH_URL : "search",
             API_EVIDENCES_URL : "evidences"
         };

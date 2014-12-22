@@ -7,6 +7,7 @@
 
 	
 	<!-- <table class="table table-striped table-hover table-bordered"> -->
+	<!-- 
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
@@ -25,12 +26,20 @@
 			</tr>
 		</tbody>
 	</table>
+	-->
 
+	<div ng-repeat="result in search.results.data" class="search-result">
+		<h4><a href="#/evidences?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
+		<span class="search-description">{{result.description}}</span>
+		<span class="search-details">
+			<span class="label label-default">{{result.type | limitTo: ((result.type==='genename')?4:3) | lowercase}}</span> | 
+			<span>Score: {{result.score}}</span>
+		</span>	
+	</div>
 
 
 
 	<!-- Furthermore this should only be shown when results are displayed -->
-	<pagination boundary-links="true" total-items="search.results.total" ng-model="search.query.page" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="getResults()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
-
+	<pagination boundary-links="true" total-items="search.results.total" ng-model="search.query.page" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="getResults()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" num-pages="numPages" style="{{numPages<=1 ? 'display:none' : ''}}"></pagination>
 </div>
 <!-- end search results-->

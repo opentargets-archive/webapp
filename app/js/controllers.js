@@ -41,7 +41,6 @@ controller('EvidencesCtrl', ['$scope', '$location', '$log', 'cctvAppToAPIService
      */
     var processData = function(data){
         console.log("processData() "+data.data.length);
-        //var d = { "name": "N/A", "children":[] };
         var d = {};
         for(var i=0; i<data.data.length; i++){
             if( d[data.data[i]["biological_object.efo_info.efo_label"]] == undefined ){
@@ -51,12 +50,11 @@ controller('EvidencesCtrl', ['$scope', '$location', '$log', 'cctvAppToAPIService
             }
         }
         
-        var dj = { "name": "N/A", "children":[] };
+        var dj = { "name": $scope.search.label, "children":[] };
         for(var i in d){
-            dj.children.push( {"name": i, "size": d[i]} );
+            dj.children.push( {"name": i, "value": d[i]} );
         }
 
-        console.log(dj); //JSON.stringify(d));
 
         return dj;
     }
@@ -69,12 +67,9 @@ controller('EvidencesCtrl', ['$scope', '$location', '$log', 'cctvAppToAPIService
     $scope.getResults = function(){
         return cttvAPIservice.getEvidences( cctvAppToAPIService.getApiQueryObject(cctvAppToAPIService.EVIDENCES, $scope.search.query) ).
             success(function(data, status) {
-                $scope.search.results = data;
-
                 // process and count the data and then show the bubbles...
-                $scope.data = processData(data);
-                //$scope.render();
-
+                $scope.search.results = data;
+                $scope.d3data = processData(data);
             }).
             error(function(data, status) {
                 $log.error("ERROR "+status);
