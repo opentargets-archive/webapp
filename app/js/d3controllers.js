@@ -6,14 +6,14 @@
 
 
 
-angular.module('bubbleGraphApp',['d3']).
+angular.module('bubbleGraphApp',[]).
 
 
 
 /**
  * BubbleGraph directive
  */
-directive("circlePackGraph", ['d3Service', function(d3Service){
+directive("circlePackGraph", function(){
     return {
         restrict:'EA',
         link: function(scope, elem, attrs){
@@ -104,7 +104,7 @@ directive("circlePackGraph", ['d3Service', function(d3Service){
 
         }
     };
-}]);
+});
 
 
 
