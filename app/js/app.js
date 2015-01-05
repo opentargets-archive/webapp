@@ -20,13 +20,13 @@ config(['$routeProvider',
                 templateUrl: 'partials/search.html',
                 controller: 'SearchAppCtrl'
             }).
-            when('/evidences', {
-                templateUrl: 'partials/evidences.html',
-                controller: 'EvidencesCtrl'
-            }).
-            /*when('/evidences/:id', {
+            when('/evidence', {
                 templateUrl: 'partials/evidence.html',
-                controller: 'EvidencesCtrl'
+                controller: 'EvidenceCtrl'
+            }).
+            /*when('/evidence/:id', {
+                templateUrl: 'partials/evidence.html',
+                controller: 'EvidenceCtrl'
             }).*/
             when('/d3test', {
                 templateUrl: 'partials/d3test.html',

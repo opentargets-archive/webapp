@@ -19,17 +19,17 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="result in search.results.data">	
-				<td><a href="#/evidences?q={{result.id}}&label={{result.title}}"><strong>{{result.title}}</strong></a></td>
-				<td><a href="#/evidences?q={{result.id}}&label={{result.title}}">{{result.description}}</a></td>
-				<td><a href="#/evidences?q={{result.id}}&label={{result.title}}">{{result.type | limitTo: ((result.type==='genename')?4:3) | uppercase}}</a></td>
-				<td><a href="#/evidences?q={{result.id}}&label={{result.title}}">{{result.score}}</a></td>
+				<td><a href="#/evidence?q={{result.id}}&label={{result.title}}"><strong>{{result.title}}</strong></a></td>
+				<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.description}}</a></td>
+				<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.type | limitTo: ((result.type==='genename')?4:3) | uppercase}}</a></td>
+				<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.score}}</a></td>
 			</tr>
 		</tbody>
 	</table>
 	-->
 
 	<div ng-repeat="result in search.results.data" class="search-result">
-		<h4><a href="#/evidences?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
+		<h4><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
 		<span class="search-description">{{result.description}}</span>
 		<span class="search-details">
 			<span class="label label-default">{{result.type | limitTo: ((result.type==='genename')?4:3) | lowercase}}</span> | 

@@ -27,7 +27,7 @@ angular.module('cttvServices', []).
             API_DEFAULT_METHOD : "get",
             API_URL : "http://193.62.52.228/api/latest/", //http://127.0.0.1:8008/api/latest/",
             API_SEARCH_URL : "search",
-            API_EVIDENCES_URL : "evidences"
+            API_EVIDENCE_URL : "evidences"
         };
 
 
@@ -36,7 +36,7 @@ angular.module('cttvServices', []).
          * Private function to actually call the API
          * queryObject:
          *  - method: ['GET' | 'POST']
-         *  - operation: 'search' | 'evidences' | ...
+         *  - operation: 'search' | 'evidence' | ...
          *  - params: Object with:
          *              - q: query string
          *              - from: number to start from
@@ -84,14 +84,14 @@ angular.module('cttvServices', []).
 
 
         /**
-         * Search for evidences using the evidence() API function.
+         * Search for evidence using the evidence() API function.
          * Returns a promise object with methods then(), success(), error()
          */
-        cttvAPI.getEvidences = function(queryObject){
-            $log.log("cttvAPI.getEvidences()");
+        cttvAPI.getEvidence = function(queryObject){
+            $log.log("cttvAPI.getEvidence()");
 
             return callAPI({
-                operation : cttvAPI.API_EVIDENCES_URL,
+                operation : cttvAPI.API_EVIDENCE_URL,
                 params : queryObject
             });
         }
@@ -119,7 +119,7 @@ angular.module('cttvServices', []).
 
         var cttvSearchService = {
             SEARCH: "search",
-            EVIDENCES: 'evidences'
+            EVIDENCE: 'evidence'
         };
 
 
@@ -149,7 +149,7 @@ angular.module('cttvServices', []).
                     qo.q = queryObject.q.title || queryObject.q
                     break;
 
-                case this.EVIDENCES:
+                case this.EVIDENCE:
                     qo.gene = queryObject.q.title || queryObject.q;
                     qo.datastructure = 'simple';
                     break

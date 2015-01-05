@@ -22,13 +22,13 @@ controller('CttvAppCtrl', ['$scope',  function ($scope) {
 
 
 /**
- * EvidencesCtrl
- * Controller for the evidences page
- * It loads a list of evidences for the given search
+ * EvidenceCtrl
+ * Controller for the evidence page
+ * It loads a list of evidence for the given search
  */
-controller('EvidencesCtrl', ['$scope', '$location', '$log', 'cctvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cctvAppToAPIService, cttvAPIservice) {
+controller('EvidenceCtrl', ['$scope', '$location', '$log', 'cctvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cctvAppToAPIService, cttvAPIservice) {
     
-    $log.log('EvidencesCtrl()');
+    $log.log('EvidenceCtrl()');
 
     
     $scope.search = cctvAppToAPIService.cerateSearchInitObject();
@@ -65,7 +65,7 @@ controller('EvidencesCtrl', ['$scope', '$location', '$log', 'cctvAppToAPIService
      * Exposed method to be called by the pagination
      */
     $scope.getResults = function(){
-        return cttvAPIservice.getEvidences( cctvAppToAPIService.getApiQueryObject(cctvAppToAPIService.EVIDENCES, $scope.search.query) ).
+        return cttvAPIservice.getEvidence( cctvAppToAPIService.getApiQueryObject(cctvAppToAPIService.EVIDENCE, $scope.search.query) ).
             success(function(data, status) {
                 // process and count the data and then show the bubbles...
                 $scope.search.results = data;
