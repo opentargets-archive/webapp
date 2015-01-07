@@ -109,7 +109,7 @@ angular.module('cttvServices', []).
      * A service to handle search in the app.
      * This talks to the API service
      */
-    factory('cctvAppToAPIService', ['$http', '$log', function($http, $log) {
+    factory('cttvAppToAPIService', ['$http', '$log', function($http, $log) {
         
         
         var APP_QUERY_Q = "",
