@@ -2,8 +2,8 @@
 
 <div>
 
-	<h2>Evidence for {{search.label}} <small>({{search.query.q}})</small></h2>
-	<div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div>
+	<!-- <h2>Evidence for {{search.label}} <small>({{search.query.q}})</small></h2> -->
+	<!-- <div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div> -->
 
 	<!--
 	<table class="table table-striped table-hover ">
@@ -32,25 +32,25 @@
 	<pagination boundary-links="true" total-items="search.results.total" ng-model="search.query.page" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="getResults()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
 	-->
 	
-	<style>
-		circle {
-		  fill: rgb(31, 119, 180);
-		  fill-opacity: .25;
-		}
+	<!-- <style> -->
+	<!-- 	circle { -->
+	<!-- 	  fill: rgb(31, 119, 180); -->
+	<!-- 	  fill-opacity: .25; -->
+	<!-- 	} -->
 
-		.leaf circle {
-		  fill: #ff7f0e;
-		  fill-opacity: 1;
-		}
+	<!-- 	.leaf circle { -->
+	<!-- 	  fill: #ff7f0e; -->
+	<!-- 	  fill-opacity: 1; -->
+	<!-- 	} -->
 
-		text {
-		  font: 10px sans-serif;
-		}
-	</style>
-	<div>
-		<div circle-pack-graph data="d3data" as-bubble="true" use-color-palette="true" style="height:200px"></div>
-	</div>
-
+	<!-- 	text { -->
+	<!-- 	  font: 10px sans-serif; -->
+	<!-- 	} -->
+	<!-- </style> -->
+	<!-- <div> -->
+	<!-- 	<div circle-pack-graph data="d3data" as-bubble="true" use-color-palette="true" style="height:1000px"></div> -->
+	<!-- </div> -->
+	<gene-associations geneID="{{search.query.q}}" height=800 width=800 style="height:800px; width:800px"></gene_associations>
 
 </div>
 <!-- end search results-->
