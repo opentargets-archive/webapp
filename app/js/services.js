@@ -124,7 +124,7 @@ angular.module('cttvServices', []).
 
 
 
-        cttvSearchService.cerateSearchInitObject = function(){
+        cttvSearchService.createSearchInitObject = function(){
             return {
                 query:{
                     q: APP_QUERY_Q,

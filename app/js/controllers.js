@@ -31,7 +31,7 @@ controller('EvidenceCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService'
     $log.log('EvidenceCtrl()');
 
     
-    $scope.search = cttvAppToAPIService.cerateSearchInitObject();
+    $scope.search = cttvAppToAPIService.createSearchInitObject();
 
 
     
@@ -104,7 +104,7 @@ controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService
     $log.log('SearchCtrl()');
 
     
-    $scope.search = cttvAppToAPIService.cerateSearchInitObject();
+    $scope.search = cttvAppToAPIService.createSearchInitObject();
 
     $scope.getResults = function(){
         return cttvAPIservice.getSearch( cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query) ).
