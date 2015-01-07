@@ -26,12 +26,12 @@ controller('CttvAppCtrl', ['$scope',  function ($scope) {
  * Controller for the evidence page
  * It loads a list of evidence for the given search
  */
-controller('EvidenceCtrl', ['$scope', '$location', '$log', 'cctvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cctvAppToAPIService, cttvAPIservice) {
+controller('EvidenceCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice) {
     
     $log.log('EvidenceCtrl()');
 
     
-    $scope.search = cctvAppToAPIService.cerateSearchInitObject();
+    $scope.search = cttvAppToAPIService.cerateSearchInitObject();
 
 
     
@@ -65,7 +65,7 @@ controller('EvidenceCtrl', ['$scope', '$location', '$log', 'cctvAppToAPIService'
      * Exposed method to be called by the pagination
      */
     $scope.getResults = function(){
-        return cttvAPIservice.getEvidence( cctvAppToAPIService.getApiQueryObject(cctvAppToAPIService.EVIDENCE, $scope.search.query) ).
+        return cttvAPIservice.getEvidence( cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.EVIDENCE, $scope.search.query) ).
             success(function(data, status) {
                 // process and count the data and then show the bubbles...
                 $scope.search.results = data;
@@ -99,15 +99,15 @@ controller('EvidenceCtrl', ['$scope', '$location', '$log', 'cctvAppToAPIService'
  * SearchAppCtrl
  * Controller for the search/results page
  */
-controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cctvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cctvAppToAPIService, cttvAPIservice) {
+controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice) {
     
     $log.log('SearchCtrl()');
 
     
-    $scope.search = cctvAppToAPIService.cerateSearchInitObject();
+    $scope.search = cttvAppToAPIService.cerateSearchInitObject();
 
     $scope.getResults = function(){
-        return cttvAPIservice.getSearch( cctvAppToAPIService.getApiQueryObject(cctvAppToAPIService.SEARCH, $scope.search.query) ).
+        return cttvAPIservice.getSearch( cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query) ).
             success(function(data, status) {
                 $scope.search.results = data;
             }).
