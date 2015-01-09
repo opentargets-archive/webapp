@@ -1,0 +1,27 @@
+line {
+  stroke-width: 2px;
+  stroke: #aaa; }
+
+rect {
+  stroke-width: 2px;
+  stroke: #aaa;
+  fill: #ddd; }
+
+text {
+  font: 100% "Open Sans", Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-size: 50px;
+  font-weight: 300; }
+  text .hidden {
+    display: none; }
+  text .shown {
+    display: block; }
+
+:host {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 52%;
+  /* background-color : blue; */ }
+
+/*# sourceMappingURL=association_header.css.map */

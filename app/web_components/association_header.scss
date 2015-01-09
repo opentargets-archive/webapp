@@ -1,0 +1,32 @@
+@mixin line {
+    stroke-width : 2px;
+    stroke : #aaa;
+}
+
+line { @include line }
+
+rect {
+    @include line;
+    fill : #ddd
+}
+
+text {
+    font : 100% "Open Sans", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    font-size : 50px;
+    font-weight: 300;
+    .hidden {
+	display : none;
+    }
+    .shown {
+	display : block;
+    }
+}
+
+:host {
+    display : block;
+    margin-left : auto;
+    margin-right : auto;
+    width : 52%;
+    /* background-color : blue; */
+}

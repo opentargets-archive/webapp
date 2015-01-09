@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="flowerView.js"></script>
+    <style>
+      .petal {
+      stroke: #ccc;
+      stroke-width: 2px;
+      }
+      .stitches {
+      stroke: #ccc;
+      stroke-width: 2px;
+      stroke-dasharray: 4 5;
+      fill : none;
+      }
+    </style>
+  </head>
+  <body>
+    <svg></svg>
+    <script>
+      var flower = flowerView()
+      .values([1,2,3,4,5,6,7,8]);
+      flower(document.querySelector("svg"));
+    </script>
+  </body>
+</html>

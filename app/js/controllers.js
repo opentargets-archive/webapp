@@ -16,8 +16,22 @@ controller('CttvAppCtrl', ['$scope',  function ($scope) {
     
 }]). 
 
+/**
+   * AssociationsCtrl
+   * Controller for the associations page
+   * It loads a list of associations for the given target <-> disease pair
+*/
+controller('AssociationsCtrl', ['$scope', '$location', '$log', function ($scope, $location, $log) {
+    $log.log('AssociationsCtrl()');
+    $log.log($location.search().t);
 
+    $scope.search = {
+	target : $location.search().t,
+	disease : $location.search().d
+    };
 
+    console.log($scope.search);
+}]).
 
 
 
