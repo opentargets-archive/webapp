@@ -9,6 +9,7 @@ var bubblesView = function () {
 	colorPalette : true,
 	data : undefined
     };
+    target = undefined;
     
     // var diameter = elem[0].offsetWidth,
     //     format = d3.format(",d"),
@@ -89,6 +90,9 @@ var bubblesView = function () {
         nodes.append("title")
             .text(function(d) { return d.name + ": " + conf.format(d.value); });
 
+	nodes = nodes.append("svg:a")
+	    .attr("xlink:href", function (d) {return "/app/#/associations?t=" + target + "&d=" + d.name});
+		
         var circle = nodes.append ("circle");
         circle.attr ("r", function(d) { return d.r; });
         if (conf.flat){
@@ -104,6 +108,7 @@ var bubblesView = function () {
 	if (!arguments.length) {
 	    return conf.data
 	}
+	target = newData.data[0]["biological_subject.gene_info.gene_name"];
 	conf.data = newData;
 	return this;
     };
@@ -142,10 +147,6 @@ Polymer({
 	this.geneName = data.data[0]["biological_subject.gene_info.gene_name"];
 	this.nResults = data.size;
 	this.took = data.took / 1000;
-    },
-    
-    created : function () {
-	this.geneID=this.geneid;
     }
 });
 

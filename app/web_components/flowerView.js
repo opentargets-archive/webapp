@@ -39,40 +39,40 @@ var flowerView = function () {
 	    var reallx = d * 0.8 * Math.cos(r-(radians/2));
 	    var really = d * 0.8 * Math.sin(r-(radians/2));
 
-	    svg.append ("line")
-	    	.attr("class", "stitches")
-	    	.attr("x1", origin[0])
-	    	.attr("y1", origin[1])
-	    	.attr("x2", origin[0] + x)
-	    	.attr("y2", origin[1] + y)
+	    // svg.append ("line")
+	    // 	.attr("class", "stitches")
+	    // 	.attr("x1", origin[0])
+	    // 	.attr("y1", origin[1])
+	    // 	.attr("x2", origin[0] + x)
+	    // 	.attr("y2", origin[1] + y)
 
-	    svg.append("line")
-		.attr("class", "stitches")
-		.attr("x1", origin[0])
-		.attr("y1", origin[1])
-		.attr("x2", origin[0] + rx)
-		.attr("y2", origin[1] + ry)
+	    // svg.append("line")
+	    // 	.attr("class", "stitches")
+	    // 	.attr("x1", origin[0])
+	    // 	.attr("y1", origin[1])
+	    // 	.attr("x2", origin[0] + rx)
+	    // 	.attr("y2", origin[1] + ry)
 
-	    svg.append("line")
-		.attr("class", "stitches")
-		.attr("x1", origin[0] + rx)
-		.attr("y1", origin[1] + ry)
-		.attr("x2", origin[0] + x)
-		.attr("y2", origin[1] + y);
+	    // svg.append("line")
+	    // 	.attr("class", "stitches")
+	    // 	.attr("x1", origin[0] + rx)
+	    // 	.attr("y1", origin[1] + ry)
+	    // 	.attr("x2", origin[0] + x)
+	    // 	.attr("y2", origin[1] + y);
 
-	    svg.append("line")
-		.attr("class", "stitches")
-		.attr("x1", origin[0])
-		.attr("y1", origin[1])
-		.attr("x2", origin[0] + lx)
-		.attr("y2", origin[1] + ly)
+	    // svg.append("line")
+	    // 	.attr("class", "stitches")
+	    // 	.attr("x1", origin[0])
+	    // 	.attr("y1", origin[1])
+	    // 	.attr("x2", origin[0] + lx)
+	    // 	.attr("y2", origin[1] + ly)
 
-	    svg.append("line")
-		.attr("class", "stitches")
-		.attr("x1", origin[0] + lx)
-		.attr("y1", origin[1] + ly)
-		.attr("x2", origin[0] + x)
-		.attr("y2", origin[1] + y);
+	    // svg.append("line")
+	    // 	.attr("class", "stitches")
+	    // 	.attr("x1", origin[0] + lx)
+	    // 	.attr("y1", origin[1] + ly)
+	    // 	.attr("x2", origin[0] + x)
+	    // 	.attr("y2", origin[1] + y);
 
 	    var line = d3.svg.line()
 		.x(function (d) {return d.x;})
@@ -128,3 +128,20 @@ var flowerView = function () {
     
     return render;
 };
+
+Polymer('cttv-associations-overview',{
+    width : "600",
+    height : "200",
+    target : undefined,
+    disease : undefined,
+    ready : function () {
+	var svg = this.shadowRoot.querySelector("svg");
+	flower = flowerView()
+	    .values([0,5,0,18,8,0])
+	    // .target(this.target)
+	    // .disease(this.disease)
+	    // .width(this.width)
+	    // .height(this.height);
+	flower(svg);
+    }
+});

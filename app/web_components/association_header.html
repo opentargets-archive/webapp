@@ -1,19 +1,23 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
-<polymer-element name="cttv-associations-header" attributes="target disease width height">
+<polymer-element name="cttv-associations-header" attributes="data width height">
   <template>
     <link rel="stylesheet" href="association_header.css">
-    <h2>{{target}}</h2>
     <div>
-      <svg></svg>
+      <svg width={{width}} height={{height}}>
+	<g>
+	  <title>{{targetName}}</title>
+	  <rect x={{targetX}} y={{targetY}} rx=20 ry=20 width={{targetWidth}} height={{targetHeight}}></rect>
+	</g>
+	<g>
+	  <title>{{diseaseName}}</title>
+	  <rect x={{diseaseX}} y={{diseaseY}} rx=20 ry=20 width={{diseaseWidth}} height={{diseaseHeight}}></rect>
+	</g>
+	<line x1={{targetX+targetWidth}} y1={{targetHeight*0.8}} x2={{diseaseX}} y2={{diseaseHeight*0.8}}></line>
+	<text id=targetLabel x={{targetLabelX}} y={{targetLabelY}}>{{targetLabel}}</text>
+	<text id=diseaseLabel x={{diseaseLabelX}} y={{diseaseLabelY}}>{{diseaseLabel}}</text>
+      </svg>
     </div>
   </template>
   <script src="association_header.js"></script>
-  <!-- <script> -->
-  <!--   Polymer({ -->
-  <!--   created : function () { -->
-  <!--   console.log (this.attributes.target.value); -->
-  <!--   } -->
-  <!--   }); -->
-  <!-- </script> -->
 </polymer-element>
