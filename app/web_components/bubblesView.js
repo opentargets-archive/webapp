@@ -69,7 +69,6 @@ var bubblesView = function () {
 	
         // remove all previous items before render
         svgElem.selectAll('*').remove();
-
         // If we don't pass any data, return out of the element
         if (!data) return;
 
@@ -136,17 +135,24 @@ var bubblesView = function () {
 Polymer({
     height : "800",
     width : "800",
-    evidenceResponseChanged : function (prevVal) {
-	var data = this.evidenceResponse;
-	var svg = this.shadowRoot.querySelector("svg");
-	var bView = bubblesView()
-	    .data(data)
-	    .height(this.height)
-	    .width(this.width);
-	bView(svg);
-	this.geneName = data.data[0]["biological_subject.gene_info.gene_name"];
-	this.nResults = data.size;
-	this.took = data.took / 1000;
-    }
+    target : "",
+    targetChanged : function () {
+	console.log("polymer element ready");
+	console.log(this.target);
+	var _ = this;
+	var shadowRoot = _.shadowRoot;
+	d3.json("http://193.62.52.228/api/latest/evidences?gene="+_.target+"&datastructure=simple&size=1000&format=json", function (err, data) {
+	    _.geneName = data.data[0]["biological_subject.gene_info.gene_name"];
+	    _.nResults = data.size;
+	    _.took = data.took / 1000;
+
+	    var svg = shadowRoot.querySelector("svg");
+	    var bView = bubblesView()
+		.data(data)
+		.height(_.height)
+		.width(_.width);
+	    bView(svg);
+	});
+    },
 });
 

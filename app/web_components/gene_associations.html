@@ -1,17 +1,11 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 
-<polymer-element name="gene-associations" attributes="geneID width height">
+<polymer-element name="cttv-target-evidence" attributes="target width height">
   <template>
     <link rel="stylesheet" href="bubblesView.css">
-    <core-ajax
-       auto
-       url="http://193.62.52.228/api/latest/evidences?gene={{geneID}}&datastructure=simple&size=1000&format=json"
-       handleAs="json"
-       response="{{evidenceResponse}}">
-    </core-ajax>
     <div>
-      <h2>Evidence for {{geneName}} <small>({{geneID}})</small></h2>
+      <h2>Evidence for {{geneName}} <small>({{target}})</small></h2>
       <h6>Found {{nResults}} results ({{took}} seconds)</h6>
       <svg></svg>
     </div>

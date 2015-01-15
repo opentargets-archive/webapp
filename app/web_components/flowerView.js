@@ -79,6 +79,7 @@ var flowerView = function () {
 		.y(function (d) {return d.y;})
 		.interpolate("basis");
 
+	    // max petal size (dotted)
 	    var data = [
 		{x:origin[0],  y:origin[1]},
 		{x:origin[0]+rx, y:origin[1]+ry},
@@ -87,6 +88,7 @@ var flowerView = function () {
 		{x:origin[0],  y:origin[1]}
 	    ];
 
+	    // real petal size
 	    var realData = [
 		{x:origin[0],  y:origin[1]},
 		{x:origin[0]+realrx, y:origin[1]+realry},
@@ -137,7 +139,8 @@ Polymer('cttv-associations-overview',{
     ready : function () {
 	var svg = this.shadowRoot.querySelector("svg");
 	flower = flowerView()
-	    .values([0,5,0,18,8,0])
+	// .values([0,5,0,18,8,0])
+	    .values([0,0,5,0,18,8])
 	    // .target(this.target)
 	    // .disease(this.disease)
 	    // .width(this.width)
