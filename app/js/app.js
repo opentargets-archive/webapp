@@ -24,10 +24,10 @@ config(['$routeProvider',
                 templateUrl: 'partials/evidence.html',
                 controller: 'EvidenceCtrl'
             }).
-	    when('/associations', {
-		templateUrl: 'partials/associations.html',
-		controller: 'AssociationsCtrl'
-	    }).
+    	    when('/associations', {
+                templateUrl: 'partials/associations.html',
+                controller: 'AssociationsCtrl'
+    	    }).
             /*when('/evidence/:id', {
                 templateUrl: 'partials/evidence.html',
                 controller: 'EvidenceCtrl'

@@ -20,23 +20,23 @@ var bubblesView = function () {
     // processData aggregates evidence by EFO id
     // TODO: This function may change once we have a final version of the API. In the meantime, counts are processed here
     function processData (data) {
-	console.log("BV: ProcessData() " + data.length);
+    	console.log("BV: ProcessData() " + data.length);
 
-	var d = {};
-	for (var i=0; i<data.length; i++) {
-	    var efo_label = data[i]["biological_object.efo_info.efo_label"];
-	    if (d[efo_label] === undefined) {
-		d[efo_label] = 1;
-	    } else {
-		d[efo_label]++;
-	    }
-	}
+    	var d = {};
+    	for (var i=0; i<data.length; i++) {
+    	    var efo_label = data[i]["biological_object.efo_info.efo_label"];
+    	    if (d[efo_label] === undefined) {
+    		d[efo_label] = 1;
+    	    } else {
+    		d[efo_label]++;
+    	    }
+    	}
 
-	var o = {name: "Root", children: []};
-	for (var j in d) {
-	    o.children.push ( {"name":j, "value":d[j]} );
-	}
-	return o;
+    	var o = {name: "Root", children: []};
+    	for (var j in d) {
+    	    o.children.push ( {"name":j, "value":d[j]} );
+    	}
+    	return o;
     }
     
     // Returns a flattened hierarchy containing all leaf nodes under the root.

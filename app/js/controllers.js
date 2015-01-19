@@ -154,6 +154,7 @@ controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService
 controller('SearchBoxCtrl', ['$scope', '$location', 'cttvAPIservice', function ($scope, $location, cttvAPIservice) {
     
     var APP_SEARCH_URL = "search";
+    var APP_EVIDENCE_URL = "evidence";
     $scope.query = "";
 
 
@@ -174,10 +175,35 @@ controller('SearchBoxCtrl', ['$scope', '$location', 'cttvAPIservice', function (
      * Sets a new search via the URL
      */
     $scope.setSearch = function(){
-        if($location.url() != APP_SEARCH_URL){
-            $location.url(APP_SEARCH_URL);
+        console.log("*********");
+        console.log(typeof $scope.query);
+        console.log($scope.query);
+
+        // We need to check whether the user has selected an item from the typeahead
+        // or just seraching for text s/he entered
+        if( (typeof $scope.query).toLowerCase() === "string" ){
+
+            console.log("show search...");
+            // show disambiguation page (i.e. search results)
+            if($location.url() != APP_SEARCH_URL){
+                $location.url(APP_SEARCH_URL);
+            }
+            //$location.search( 'q=' + ($scope.query.title || $scope.query) );
+            $location.search( 'q=' + $scope.query );
+
+        } else {
+
+            // query was selected from suggestion typeahead
+            if( $scope.query.type === "genename"){
+                // show evidence page (i.e. bubbles)
+                if($location.url() != APP_EVIDENCE_URL){
+                    $location.url(APP_EVIDENCE_URL);
+                }
+                $location.search( 'q=' + $scope.query.id+"&label="+$scope.query.title );
+            }
         }
-        $location.search( 'q=' + ($scope.query.title || $scope.query) );
+
+        
 
         $scope.query = "";  // reset the query field
     }
