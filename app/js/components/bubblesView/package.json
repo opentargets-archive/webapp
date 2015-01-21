@@ -7,8 +7,7 @@
     "test": "test"
   },
   "scripts": {
-      "test" : "gulp test",
-    "prepublish": "npm dedupe && gulp test && gulp build-browser-min"
+      "test" : "gulp test"
   },
   "keywords": [
     "cttv"
