@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+  </head>
+  <body>
+    <div id="mydiv"></div>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="build/cttv.bubblesView.js"></script>
+    <script>
+      var view = bubblesView()
+      .onclick(function (d,i) {console.log(d); console.log(i)})
+      .key(function (o) {return o.q})
+      .data([{q:1},{q:2}]);
+      view(document.getElementById("mydiv"));
+    </script>
+  </body>
+  </html>

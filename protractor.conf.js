@@ -2,20 +2,20 @@ exports.config = {
   allScriptsTimeout: 11000,
 
   specs: [
-    'e2e/*.js'
+    'test/e2e/*.js'
   ],
 
   capabilities: {
     'browserName': 'chrome'
   },
 
-  chromeOnly: true,
+  directConnect: true,
 
   baseUrl: 'http://localhost:8000/',
 
-  framework: 'jasmine',
-
-  jasmineNodeOpts: {
-    defaultTimeoutInterval: 30000
-  }
+    framework: 'mocha',
+    mochaOpts : {
+	reporter : "spec",
+	slow : 3000
+    }
 };

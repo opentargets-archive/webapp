@@ -1,14 +1,9 @@
 'use strict';
 
 
-
 /* Services */
 
-
-
 angular.module('cttvServices', []).
-
-
 
 
 
