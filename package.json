@@ -14,6 +14,7 @@
     "gulp-jshint": "^1.9.0",
     "gulp-karma": "0.0.4",
     "gulp-mocha": "^2.0.0",
+    "gulp-protractor": "0.0.12",
     "gulp-watch": "^3.0.0",
     "http-server": "^0.6.1",
     "karma": "^0.12.31",
@@ -23,7 +24,7 @@
     "karma-mocha-reporter": "^0.3.1",
     "karma-phantomjs-launcher": "^0.1.4",
     "mocha": "^2.1.0",
-    "protractor": "^1.1.1",
+    "protractor": "^1.6.1",
     "shelljs": "^0.2.6"
   },
   "scripts": {

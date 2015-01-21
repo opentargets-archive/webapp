@@ -9,6 +9,8 @@ exports.config = {
     'browserName': 'chrome'
   },
 
+    getPageTimeout: 10000,
+    
   directConnect: true,
 
   baseUrl: 'http://localhost:8000/',
