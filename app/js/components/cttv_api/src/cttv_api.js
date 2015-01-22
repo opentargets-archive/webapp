@@ -3,7 +3,8 @@ var XMLHttpRequest = require ("xmlhttprequest").XMLHttpRequest;
 var cttv_api = function () {
     // Prefixes
     var prefix = "http://193.62.52.228/api/latest/";
-    var prefix_evidenceAll = prefix + "evidences?";
+    //var prefix = "http://127.0.0.1:8008/api/latest/";
+    var prefix_filterby = prefix + "filterby?";
 
     var _ = {};
     // callback should be function (error, success) {}
@@ -19,7 +20,7 @@ var cttv_api = function () {
     };
     
     _.url = {};
-    _.url.evidenceAll = function (obj) {
+    _.url.filterby = function (obj) {
 	var opts = [];
 	if (obj.efo != null) {
 	    opts.push("efo=" + obj.efo);
@@ -40,7 +41,7 @@ var cttv_api = function () {
 	    opts.push("datastructure=" + obj.datastructure);
 	}
 
-	return prefix_evidenceAll + opts.join("&");
+	return prefix_filterby + opts.join("&");
     };
 
     return _;

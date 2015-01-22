@@ -18,17 +18,19 @@ describe('CTTV api', function () {
 	    it ("exists", function () {
 		assert.isDefined (cttvApiUrl);
 	    });
-	    describe ("evidenceAll", function () {
+	    describe ("filterby", function () {
 		it("exists", function () {
-		    assert.isDefined(cttvApiUrl.evidenceAll);
+		    assert.isDefined(cttvApiUrl.filterby);
 		});
 		it ("returns the correct url for genes", function () {
-		    var evidenceUrl = cttvApiUrl.evidenceAll({gene : data.gene});
-		    assert.strictEqual(evidenceUrl, "http://193.62.52.228/api/latest/evidences?gene=ENSG00000157764");
+		    var filterby = cttvApiUrl.filterby({gene : data.gene});
+		    assert.strictEqual(filterby, "http://193.62.52.228/api/latest/filterby?gene=ENSG00000157764");
+		    //assert.strictEqual(filterby, "http://127.0.0.1:8008/api/latest/filterby?gene=ENSG00000157764");
 		});
 		it ("returns the correct url mixed values", function () {
-		    var evidenceUrl = cttvApiUrl.evidenceAll({gene:data.gene, efo:data.efo, datastructure:"simple"});
-		    assert.strictEqual(evidenceUrl, "http://193.62.52.228/api/latest/evidences?efo=EFO_0000621&gene=ENSG00000157764&datastructure=simple");
+		    var filterbyUrl = cttvApiUrl.filterby({gene:data.gene, efo:data.efo, datastructure:"simple"});
+		    assert.strictEqual(filterbyUrl, "http://193.62.52.228/api/latest/filterby?efo=EFO_0000621&gene=ENSG00000157764&datastructure=simple");
+		    //assert.strictEqual(filterbyUrl, "http://127.0.0.1:8008/api/latest/filterby?efo=EFO_0000621&gene=ENSG00000157764&datastructure=simple");
 		});
 	    });
 	});
@@ -41,7 +43,7 @@ describe('CTTV api', function () {
 		assert.isFunction (myCttvApi.call);
 	    });
 	    it ("retrieves data from the server", function (done) {
-		var url = myCttvApi.url.evidenceAll({gene:data.gene, size:10});
+		var url = myCttvApi.url.filterby({gene:data.gene, size:10});
 		myCttvApi.call(url, function (status, resp) {
 		    assert.isDefined(resp);
 		    assert.isObject(resp);
