@@ -30,12 +30,11 @@
     "shelljs": "^0.2.6"
   },
   "scripts": {
-    "postinstall": "bower install && (cd app/js/components/bubblesView/ && npm install) && (cd app/js/components/cttv_api/ && npm install)",
+    "postinstall": "node_modules/.bin/webdriver-manager update; (cd app && npm install)",
     "prestart": "npm install",
     "start": "http-server -a localhost -p 8000 -c-1",
     "pretest": "npm install",
-      "postinstall" : "node_modules/.bin/webdriver-manager update",
-    "test": "gulp test && (cd app/js/components/bubblesView/ && npm test) && (cd app/js/components/cttv_api/ && npm test)",
+    "test": "(cd components/bubblesView/ && npm test) && (cd components/cttvApi/ && npm test) && (gulp test)",
     "test-single-run": "karma start tests/unit/karma.conf.js  --single-run",
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",

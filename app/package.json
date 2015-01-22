@@ -1,0 +1,11 @@
+{
+  "name": "cttv-webapp",
+  "version": "0.0.1",
+  "description": "Web application for CTTV project 003",
+  "readme": "README.md",
+  "license": "Apache-2.0",
+  "dependencies": {
+      "cttv.bubblesView": "file:../components/bubblesView",
+      "cttv.Api": "file:../components/cttvApi"
+  }
+}

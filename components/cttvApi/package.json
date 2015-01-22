@@ -1,0 +1,37 @@
+{
+  "name": "cttv.api",
+  "version": "0.0.0",
+  "description": "javascript interface for the cttv rest api",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "keywords": [
+    "cttv",
+    "rest",
+    "api"
+  ],
+  "author": "Miguel Pignatelli <emepyc@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "^8.1.1",
+    "chai": "^1.10.0",
+    "gulp": "^3.8.10",
+    "gulp-browserify": "^0.5.1",
+    "gulp-gzip": "0.0.8",
+    "gulp-jshint": "^1.9.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-rimraf": "^0.1.1",
+    "gulp-uglify": "^1.1.0",
+    "gulp-watch": "^4.0.2",
+    "mkdir": "0.0.2",
+    "mkdirp": "^0.5.0"
+  },
+  "dependencies": {
+    "xmlhttprequest": "^1.7.0"
+  }
+}

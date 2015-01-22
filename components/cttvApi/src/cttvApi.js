@@ -1,6 +1,6 @@
 var XMLHttpRequest = require ("xmlhttprequest").XMLHttpRequest;
 
-var cttv_api = function () {
+var cttvApi = function () {
     // Prefixes
     var prefix = "http://193.62.52.228/api/latest/";
     //var prefix = "http://127.0.0.1:8008/api/latest/";
@@ -47,4 +47,4 @@ var cttv_api = function () {
     return _;
 };
 
-module.exports = exports = cttv_api;
+module.exports = cttvApi;

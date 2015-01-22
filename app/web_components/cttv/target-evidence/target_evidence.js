@@ -5,6 +5,7 @@ Polymer({
     targetChanged : function () {
 	var _ = this;
 	var shadowRoot = _.shadowRoot;
+	console.log(cttvApi);
 	d3.json("http://193.62.52.228/api/latest/evidences?gene="+_.target+"&datastructure=simple&size=1000&format=json", function (err, data) {
 	    _.geneName = data.data[0]["biological_subject.gene_info.gene_name"];
 	    _.nResults = data.size;
