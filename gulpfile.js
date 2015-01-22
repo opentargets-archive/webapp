@@ -37,7 +37,8 @@ gulp.task('e2eTest', function () {
         .on('error', function(e) { throw e })
 });
 
-gulp.task('test', ['unitTest', 'e2eTest']);
+//gulp.task('test', ['unitTest', 'e2eTest']);
+gulp.task('test', ['unitTest']);
 
 gulp.task('watch', function() {
     gulp.watch(['./app/js/*.js', './test/*.js'], ['test', 'lint']);
