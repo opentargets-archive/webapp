@@ -2,7 +2,7 @@
 
 <div>
 
-	<h2>Search: {{(search.query.q.title || search.query.q)}}</h2>
+	<h2>Search results for {{(search.query.q.title || search.query.q)}}</h2>
 	<div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div>
 
 	
@@ -30,7 +30,7 @@
 
 	<div ng-repeat="result in search.results.data" class="search-result">
 		<h4><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
-		<span class="search-description">{{result.description}}</span>
+		<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
 		<span class="search-details">
 			<span class="label label-default">{{result.type | limitTo: ((result.type==='genename')?4:3) | lowercase}}</span> | 
 			<span>Score: {{result.score}}</span>

@@ -155,7 +155,19 @@ controller('SearchBoxCtrl', ['$scope', '$location', 'cttvAPIservice', function (
     
     var APP_SEARCH_URL = "search";
     var APP_EVIDENCE_URL = "evidence";
-    $scope.query = "";
+    var APP_AUTOCOMPLETE_URL = "autocomplete"
+    $scope.query = ""; /*{
+        text: "",
+    };*/
+    $scope.search = {
+        query: {
+            text: ""
+        },
+        results:{
+
+        }
+    }
+
 
 
 
@@ -164,10 +176,48 @@ controller('SearchBoxCtrl', ['$scope', '$location', 'cttvAPIservice', function (
      * This needs to take a value directly, not via scope, otherwise the typeahead is one char behind
      */
     $scope.getSuggestions = function(val) {
-        return cttvAPIservice.getSearch({q:val}).then(function(response){
+        console.log(val);
+        /*return cttvAPIservice.getSearch({q:val}).then(function(response){
                 return response.data.data;
+            });*/
+        return cttvAPIservice.getSearch({q:val}).
+            success(function(data, status) {
+                $scope.query.results = data.data;
+            }).
+            error(function(data, status) {
+                $log.error(status);
             });
     };
+
+
+    /**
+     * Checks if the current search has got any results.
+     * Returns TRUE / FALSE.
+     */
+    $scope.hasResults=function(){
+        return Object.keys($scope.search.results).length>0;
+    }
+
+
+
+    $scope.test = function(query){
+        //console.log(">> "+query);
+        console.log(">> "+$scope.search.query.text+" : "+query);
+
+        if(query.length>=3){
+            // fire the typeahead search
+            cttvAPIservice.getAutocomplete({q:$scope.search.query.text, size:3}).
+                success(function(data, status) {
+                    $scope.search.results = data.data;
+                    console.log(data.data);
+                }).
+                error(function(data, status) {
+                    $log.error(status);
+                });
+        }else{
+            $scope.search.results = {};
+        }
+    }
 
 
 
@@ -175,10 +225,15 @@ controller('SearchBoxCtrl', ['$scope', '$location', 'cttvAPIservice', function (
      * Sets a new search via the URL
      */
     $scope.setSearch = function(){
-        console.log("*********");
-        console.log(typeof $scope.query);
-        console.log($scope.query);
 
+        // show search results page, nice and easy...
+        if($location.url() != APP_SEARCH_URL){
+            $location.url(APP_SEARCH_URL);
+        }
+        $location.search( 'q=' + $scope.search.query.text);
+
+
+        /*
         // We need to check whether the user has selected an item from the typeahead
         // or just seraching for text s/he entered
         if( (typeof $scope.query).toLowerCase() === "string" ){
@@ -202,10 +257,13 @@ controller('SearchBoxCtrl', ['$scope', '$location', 'cttvAPIservice', function (
                 $location.search( 'q=' + $scope.query.id+"&label="+$scope.query.title );
             }
         }
-
+        */
         
-
-        $scope.query = "";  // reset the query field
+        // reset the query field:
+        // the search result page should probably still show this, the problem is that the scope of this search box is separate
+        // so if we then go to the gene, or association page, this would still show the original query...
+        // So, for now we RESET the field, then I'll think about it.
+        $scope.search.query.text = "";  
     }
 
 }]).

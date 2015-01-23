@@ -22,6 +22,52 @@ footer {
 }
 
 
+.search-suggestions-box{
+  position: absolute;
+  background: #FFF;
+  width: 100%;
+
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 4px;
+  padding: 5px;
+  margin: 2px 0 0;
+  list-style: none;
+  font-size: 14px;
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  background-clip: padding-box;
+
+  font-size: 14px;
+  z-index: 10;
+}
+
+.search-suggestions-box .divider{
+  margin: 10px 0px;
+  border-top: 1px solid #CCC;
+  /*border-bottom: 1px solid #EEE;*/
+}
+
+.search-suggestions-box .item:hover{
+  background: #EEE;
+  cursor: pointer;
+}
+
+/* non-breaking block */
+.nbblock{
+  display:block; 
+  margin-bottom:0px;
+}
+
+.text-lowlight{
+  color: #AAA;
+}
+
+.text-highlight{
+  color: #000;
+}
+
+.text-nolight{
+  color: #666;
+}
 
 .container {
   height: 1000px;

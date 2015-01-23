@@ -27,7 +27,8 @@ angular.module('cttvServices', []).
             API_DEFAULT_METHOD : "get",
             API_URL : "http://193.62.52.228/api/latest/", //http://127.0.0.1:8008/api/latest/",
             API_SEARCH_URL : "search",
-            API_EVIDENCE_URL : "evidences"
+            API_EVIDENCE_URL : "evidences",
+            API_AUTOCOMPLETE_URL : "autocomplete",
         };
 
 
@@ -95,6 +96,18 @@ angular.module('cttvServices', []).
                 params : queryObject
             });
         }
+
+
+
+        cttvAPI.getAutocomplete = function(queryObject){
+            $log.log("cttvAPI.getAutocomplete()");
+
+            return callAPI({
+                operation : cttvAPI.API_AUTOCOMPLETE_URL,
+                params : queryObject
+            });
+        }
+
 
 
         return cttvAPI;
