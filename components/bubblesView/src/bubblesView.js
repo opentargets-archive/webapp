@@ -1,5 +1,9 @@
 var bubblesView = function () {
 
+    var key = function (o) {
+	return o["biological_object.efo_info.efo_label"];
+    };
+    
     var conf = {
 	width : 800,
 	height : 300,
@@ -7,7 +11,9 @@ var bubblesView = function () {
 	color : d3.scale.category20c(),
 	flat : true,
 	colorPalette : true,
-	data : undefined
+	data : undefined,
+	key : key,
+	onclick : function () {}
     };
     target = undefined;
     
@@ -20,23 +26,22 @@ var bubblesView = function () {
     // processData aggregates evidence by EFO id
     // TODO: This function may change once we have a final version of the API. In the meantime, counts are processed here
     function processData (data) {
-    	console.log("BV: ProcessData() " + data.length);
+	var d = {};
+	for (var i=0; i<data.length; i++) {
+	    //var efo_label = data[i]["biological_object.efo_info.efo_label"];
+	    var label = conf.key(data[i]);
+	    if (d[label] === undefined) {
+		d[label] = 1;
+	    } else {
+		d[label]++;
+	    }
+	}
 
-    	var d = {};
-    	for (var i=0; i<data.length; i++) {
-    	    var efo_label = data[i]["biological_object.efo_info.efo_label"];
-    	    if (d[efo_label] === undefined) {
-    		d[efo_label] = 1;
-    	    } else {
-    		d[efo_label]++;
-    	    }
-    	}
-
-    	var o = {name: "Root", children: []};
-    	for (var j in d) {
-    	    o.children.push ( {"name":j, "value":d[j]} );
-    	}
-    	return o;
+	var o = {name: "Root", children: []};
+	for (var j in d) {
+	    o.children.push ( {"name":j, "value":d[j]} );
+	}
+	return o;
     }
     
     // Returns a flattened hierarchy containing all leaf nodes under the root.
@@ -55,29 +60,29 @@ var bubblesView = function () {
     /*
      * Render valid JSON data
      */ 
-    var render = function(svg) {
+    var render = function(div) {
+	var svg = d3.select(div)
+	    .append("svg")
+	    .attr("width", conf.width)
+            .attr("height", conf.height);
+
 	var pack = d3.layout.pack()
             .sort(null)
             .size([conf.width, conf.height])
             .padding(1.5);
 
-	var data = processData(conf.data.data);
-
-	svgElem = d3.select(svg)
-            .attr("width", conf.width)
-            .attr("height", conf.height);
+	var data = processData(conf.data);
 	
         // remove all previous items before render
-        svgElem.selectAll('*').remove();
-
+	// TODO: Not needed without updates!
+        svg.selectAll('*').remove();
         // If we don't pass any data, return out of the element
         if (!data) return;
-
-	var nodes = svgElem.selectAll(".node")
+	var nodes = svg.selectAll(".node")
             .data(
                 function(){
                     if (conf.flat){
-                        return pack.nodes(getFlatData(data)).filter(function(d) { return !d.children; })
+                        return pack.nodes(getFlatData(data)).filter(function(d) { return !d.children; });
                     } else {
                         return pack.nodes(data);
                     }
@@ -86,12 +91,14 @@ var bubblesView = function () {
             .enter().append("g")
             .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+	nodes
+	    .on("click", conf.onclick);
 
         nodes.append("title")
             .text(function(d) { return d.name + ": " + conf.format(d.value); });
 
-	nodes = nodes.append("svg:a")
-	    .attr("xlink:href", function (d) {return "/app/#/associations?t=" + target + "&d=" + d.name});
+	// nodes = nodes.append("svg:a")
+	//     .attr("xlink:href", function (d) {return "/app/#/associations?t=" + target + "&d=" + d.name;});
 		
         var circle = nodes.append ("circle");
         circle.attr ("r", function(d) { return d.r; });
@@ -101,18 +108,34 @@ var bubblesView = function () {
         nodes.append("text")
             .attr("dy", ".3em")
             .style("text-anchor", "middle")
-            .text(function(d) { return d.name.substring(0, d.r / 3); });
+            .text(function(d) { return d.name.substring(0, d.r / 3) });
     };
 
     render.data = function (newData) {
 	if (!arguments.length) {
-	    return conf.data
+	    return conf.data;
 	}
-	target = newData.data[0]["biological_subject.gene_info.gene_name"];
+	//target = newData.data[0]["biological_subject.gene_info.gene_name"];
 	conf.data = newData;
 	return this;
     };
 
+    render.onclick = function (cbak) {
+	if (!arguments.length) {
+	    return conf.onclick;
+	}
+	conf.onclick = cbak;
+	return this;
+    };
+    
+    render.key = function (k) {
+	if (!arguments.length) {
+	    return conf.key;
+	}
+	conf.key = k;
+	return this;
+    };
+    
     render.height = function (h) {
 	if (!arguments.length) {
 	    return conf.height;
@@ -132,21 +155,4 @@ var bubblesView = function () {
     return render;
 };
 
-
-Polymer({
-    height : "800",
-    width : "800",
-    evidenceResponseChanged : function (prevVal) {
-	var data = this.evidenceResponse;
-	var svg = this.shadowRoot.querySelector("svg");
-	var bView = bubblesView()
-	    .data(data)
-	    .height(this.height)
-	    .width(this.width);
-	bView(svg);
-	this.geneName = data.data[0]["biological_subject.gene_info.gene_name"];
-	this.nResults = data.size;
-	this.took = data.took / 1000;
-    }
-});
-
+module.exports = bubblesView;
