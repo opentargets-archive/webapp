@@ -16,6 +16,7 @@ controller('CttvAppCtrl', ['$scope',  function ($scope) {
     
 }]). 
 
+
 /**
    * AssociationsCtrl
    * Controller for the associations page
@@ -46,10 +47,9 @@ controller ("EvidenceCtrl", ['$scope', '$location', '$log', function ($scope, $l
     $scope.search = {
 	query : $location.search().q
     };
-
-    console.log($scope.search);
-    
-    //$scope.search = cttvAppToAPIService.createSearchInitObject();
+    $scope.took = 0;
+    $scope.nresults = 0;
+    // $scope.search = cttvAppToAPIService.createSearchInitObject();
 
     /*
      * NOTE: this is a temporary function. It will change when we have the final API call for this

@@ -3,10 +3,10 @@
 
 
 angular.module('cttvApp', [
-	'ngRoute',
+    'ngRoute',
     'ui.bootstrap',
     'cttvControllers',
-    'bubbleGraphApp'
+    'cttvDirectives'
 ]).
 
 
