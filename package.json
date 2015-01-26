@@ -30,6 +30,7 @@
     "shelljs": "^0.2.6"
   },
   "scripts": {
+    "preinstall" : "(cd components/bubblesView/ && npm install); (cd components/cttvApi && npm install)",
     "postinstall": "node_modules/.bin/webdriver-manager update; (cd app && npm install)",
     "prestart": "npm install",
     "start": "http-server -a localhost -p 8000 -c-1",
