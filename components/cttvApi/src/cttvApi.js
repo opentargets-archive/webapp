@@ -1,4 +1,4 @@
-var XMLHttpRequest = require ("xmlhttprequest").XMLHttpRequest;
+var nets = require("nets");
 
 var cttvApi = function () {
     // Prefixes
@@ -7,17 +7,17 @@ var cttvApi = function () {
     var prefix_filterby = prefix + "filterby?";
 
     var _ = {};
-    // callback should be function (error, success) {}
-    _.call = function (url, callback) {
-	var xhr = new XMLHttpRequest;
-	xhr.onreadystatechange = function () {
-	    if (this.readyState === 4) {
-		callback (this.status, JSON.parse(this.responseText));
+    _.call = function (myurl, callback) {
+	nets({url : myurl}, function (err, resp, body) {
+	    if (err == null) {
+		callback(resp.statusCode, JSON.parse(body));
 	    }
-	}
-	xhr.open ("GET", url);
-	xhr.send();
+	});
     };
+    
+    // _.call = function (url, callback) {
+    // 	d3.json(url, callback);
+    // };
     
     _.url = {};
     _.url.filterby = function (obj) {

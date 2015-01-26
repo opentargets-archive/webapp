@@ -3,10 +3,10 @@
 
 
 angular.module('cttvApp', [
-	'ngRoute',
+    'ngRoute',
     'ui.bootstrap',
     'cttvControllers',
-    'bubbleGraphApp'
+    'cttvDirectives'
 ]).
 
 
@@ -20,13 +20,13 @@ config(['$routeProvider',
                 templateUrl: 'partials/search.html',
                 controller: 'SearchAppCtrl'
             }).
-            when('/evidence', {
-                templateUrl: 'partials/evidence.html',
-                controller: 'EvidenceCtrl'
-            }).
-    	    when('/associations', {
+            when('/associations', {
                 templateUrl: 'partials/associations.html',
                 controller: 'AssociationsCtrl'
+            }).
+    	    when('/gene-disease', {
+                templateUrl: 'partials/geneDisease.html',
+                controller: 'GeneDiseaseCtrl'
     	    }).
             /*when('/evidence/:id', {
                 templateUrl: 'partials/evidence.html',

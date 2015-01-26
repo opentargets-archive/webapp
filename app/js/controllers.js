@@ -16,13 +16,14 @@ controller('CttvAppCtrl', ['$scope',  function ($scope) {
     
 }]). 
 
+
 /**
-   * AssociationsCtrl
-   * Controller for the associations page
-   * It loads a list of associations for the given target <-> disease pair
+   * GeneDiseaseCtrl
+   * Controller for the Gene <-> Disease page
+   * It loads the evidence for the given target <-> disease pair
 */
-controller('AssociationsCtrl', ['$scope', '$location', '$log', function ($scope, $location, $log) {
-    $log.log('AssociationsCtrl()');
+controller('GeneDiseaseCtrl', ['$scope', '$location', '$log', function ($scope, $location, $log) {
+    $log.log('GeneDiseaseCtrl()');
     $log.log($location.search().t);
 
     $scope.search = {
@@ -36,20 +37,20 @@ controller('AssociationsCtrl', ['$scope', '$location', '$log', function ($scope,
 
 
 /**
- * EvidenceCtrl
- * Controller for the evidence page
- * It loads a list of evidence for the given search
+ * AssociationsCtrl
+ * Controller for the associations page
+ * It loads a list of associations for the given search
  */
-// controller('EvidenceCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice) {
-controller ("EvidenceCtrl", ['$scope', '$location', '$log', function ($scope, $location, $log) {
-    $log.log('EvidenceCtrl()');
+// controller('AssociationsCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice) {
+controller ("AssociationsCtrl", ['$scope', '$location', '$log', function ($scope, $location, $log) {
+    $log.log('AssociationsCtrl()');
     $scope.search = {
-	query : $location.search().q
+	query : $location.search().q,
+	label : $location.search().label
     };
-
-    console.log($scope.search);
-    
-    //$scope.search = cttvAppToAPIService.createSearchInitObject();
+    $scope.took = 0;
+    $scope.nresults = 0;
+    // $scope.search = cttvAppToAPIService.createSearchInitObject();
 
     /*
      * NOTE: this is a temporary function. It will change when we have the final API call for this

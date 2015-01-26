@@ -42,7 +42,7 @@ describe('CTTV api', function () {
 	    it ("is a function", function () {
 		assert.isFunction (myCttvApi.call);
 	    });
-	    it ("retrieves data from the server", function (done) {
+	    it ("receives a response from the server", function (done) {
 		var url = myCttvApi.url.filterby({gene:data.gene, size:10});
 		myCttvApi.call(url, function (status, resp) {
 		    assert.isDefined(resp);
@@ -51,6 +51,19 @@ describe('CTTV api', function () {
 		    assert.equal(status, 200);
 		    done();
 		})
+	    });
+	    it ("receives data from the server", function (done) {
+		var url = myCttvApi.url.filterby({gene:data.gene, size:10});
+		myCttvApi.call(url, function (status, resp) {
+		    assert.isDefined(resp);
+		    assert.isObject(resp);
+		    assert.isDefined(resp.took);
+		    assert.isDefined(resp.size);
+		    assert.operator(resp.size, '<=', 10);
+		    assert.isDefined(resp.data);
+		    assert.isArray(resp.data);
+		    done();
+		});
 	    });
 	});
 
