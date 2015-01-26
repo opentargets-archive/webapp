@@ -103,7 +103,12 @@
                         <p class="text-lowlight" style="padding:0px 5px">Diseases</p>
                         <div ng-repeat="item in search.results.efo" style="padding:5px" class="item">
                           <p bind-html-unsafe="item.label | typeaheadHighlight:search.query.text" style="margin-bottom:0px"></p>
-                          <small class="text-lowlight">[...]<span ng-repeat="link in item.path"><a>{{link.label | limitTo:40}}<span ng-show="link.label.length>40">...</span></a> <span ng-show="!$last" class="fa fa-angle-right fa-sm"></span> </span></small>
+                          
+                          <!-- show the EFO hierarchy links -->
+                          <small class="text-lowlight">[...]
+                            <span ng-repeat="link in item.path"><a>{{link.label | limitTo:40}}<span ng-show="link.label.length>40">...</span></a> <span ng-show="!$last" class="fa fa-angle-right fa-sm"></span> </span>
+                          </small>
+                          
                         </div>
                       </div>
 
