@@ -45,7 +45,8 @@ controller('AssociationsCtrl', ['$scope', '$location', '$log', function ($scope,
 controller ("EvidenceCtrl", ['$scope', '$location', '$log', function ($scope, $location, $log) {
     $log.log('EvidenceCtrl()');
     $scope.search = {
-	query : $location.search().q
+	query : $location.search().q,
+	label : $location.search().label
     };
     $scope.took = 0;
     $scope.nresults = 0;
