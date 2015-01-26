@@ -7,7 +7,18 @@
   <body>
     <p>Hello world</p>
     <script>
-      console.log(cttvApi);
+      var api = cttvApi();
+      var url = api.url.filterby({
+      gene:"ENSG00000157764",
+      datastructure:"simple",
+      size:1000
+      });
+      console.log(url);
+      api.call(url, function (status, resp) {
+      console.log("STATUS:" + status);
+      console.log("RESP:");
+      console.log(resp);
+      });
     </script>
   </body>
 </html>

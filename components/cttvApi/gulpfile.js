@@ -37,7 +37,7 @@ gulp.task('lint', function() {
     .pipe(jshint.reporter('default'));
 });
 
-gulp.task('test', function () {
+gulp.task('test', ['build-browser'], function () {
     return gulp.src('./test/*.js', {read: false})
         .pipe(mocha({reporter: 'spec',
 		     useColors: false}));

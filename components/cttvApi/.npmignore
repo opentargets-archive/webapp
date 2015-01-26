@@ -3,3 +3,4 @@ test
 index.js
 src
 /*.js
+package.json
