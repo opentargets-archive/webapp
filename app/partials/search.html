@@ -29,7 +29,7 @@
 	-->
 
 	<div ng-repeat="result in search.results.data" class="search-result">
-		<h4><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
+		<h4><a href="#/associations?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
 		<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
 		<span class="search-details">
 			<span class="label label-default">{{result.type | limitTo: ((result.type==='genename')?4:3) | lowercase}}</span> | 

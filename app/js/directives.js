@@ -2,7 +2,7 @@
 
 /* Directives */
 angular.module('cttvDirectives', [])
-    .directive('cttvBubblesView', function () {
+    .directive('cttvTargetAssociations', function () {
 	var bView = bubblesView();
 
 	return {
@@ -27,7 +27,7 @@ angular.module('cttvDirectives', [])
 			.height(attrs.height)
 			.width(attrs.width)
 			.onclick (function (d) {
-			    window.location.href="/app/#/associations?t=" + attrs.target + "&d=" + d.name;
+			    window.location.href="/app/#/gene-disease?t=" + attrs.target + "&d=" + d.name;
 			});
 		    bView(elem[0]);
 		});		
