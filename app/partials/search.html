@@ -2,7 +2,7 @@
 
 <div>
 
-	<h2>Search results for {{(search.query.q.title || search.query.q)}}</h2>
+	<h3>Search results for {{(search.query.q.title || search.query.q)}}</h3>
 	<div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div>
 
 	
@@ -27,19 +27,33 @@
 		</tbody>
 	</table>
 	-->
-
-	<div ng-repeat="result in search.results.data" class="search-result">
-		<h4><a href="#/associations?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
-		<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
-		<span class="search-details">
-			<span class="label label-default">{{result.type | limitTo: ((result.type==='genename')?4:3) | lowercase}}</span> | 
-			<span>Score: {{result.score}}</span>
-		</span>	
+	<div class="row">
+		<div class="col-md-2">
+			<h4>Filters <small>(not working)</small></h4>
+			<div class="checkbox">
+				<label><input type="checkbox" value=""><small>Gene</small></label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value=""><small>Disease</small></label>
+			</div>
+		</div>
+		<div class="col-md-10">
+			<div ng-repeat="result in search.results.data" class="search-result">
+				<h4><a href="#/associations?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
+				<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
+				<span class="search-details">
+					<span class="label label-default">{{result.type | limitTo: ((result.type==='genename')?4:3) | lowercase}}</span> | 
+					<span>Score: {{result.score}}</span>
+				</span>	
+			</div>
+			<!-- Furthermore this should only be shown when results are displayed -->
+			<pagination boundary-links="true" total-items="search.results.total" ng-model="search.query.page" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="getResults()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" num-pages="numPages" style="{{numPages<=1 ? 'display:none' : ''}}"></pagination>
+		</div>
 	</div>
+	
 
 
 
-	<!-- Furthermore this should only be shown when results are displayed -->
-	<pagination boundary-links="true" total-items="search.results.total" ng-model="search.query.page" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="getResults()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" num-pages="numPages" style="{{numPages<=1 ? 'display:none' : ''}}"></pagination>
+	
 </div>
 <!-- end search results-->
