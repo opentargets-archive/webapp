@@ -46,7 +46,7 @@ gulp.task('lint', function() {
     .pipe(jshint.reporter('default'));
 });
 
-gulp.task('test', function(done) {
+gulp.task('test', ['build-browser'], function(done) {
     karma.start({
 	configFile: __dirname + '/karma.conf.js',
 	singleRun: true
