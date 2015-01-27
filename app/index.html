@@ -35,13 +35,15 @@
                 <fieldset>
                   <div class="form-group" style="position:relative"> 
                     
+                    <div ng-click="test($event)">
+
                     <div class="input-group">
                       
                       <!--
                       <input type="text" placeholder="Search for gene or disease" class="form-control ng-valid-maxlength ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" name="text" tabindex="1" ng-model="query" autocomplete="off" required="" typeahead="item as item.title for item in getSuggestions($viewValue)" typeahead-template-url="partials/typeahead.html" typeahead-min-length="3" ng-model-options="{ debounce: 500 }">
                       -->
                       
-                      <input type="text" placeholder="Search for gene or disease" class="form-control ng-valid-maxlength ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="test(search.query.text)">
+                      <input type="text" placeholder="Search for gene or disease" class="form-control ng-valid-maxlength ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text)">
 
                       <div class="input-group-btn">
                         <button type="submit" class="btn btn-primary">
@@ -53,7 +55,7 @@
 
                     <!-- Suggestions box -->
 
-                    <div class="search-suggestions-box" ng-show="hasResults() && search.query.text.length>2" ng-blur="console.log('heloo')">
+                    <div class="search-suggestions-box" ng-show="isVisible()">
                       <!-- TODO: the visibility here should really use focus... not 100% happy with that query.text.length above ... -->
                       
                       <!-- Besthit -->
@@ -68,16 +70,17 @@
                       </div>
                       -->
 
-                      <h4 style="padding:0px 5px">
-                        <span class="nbblock">
-                          <a><span bind-html-unsafe="(search.results.besthit.type=='genedata' ? search.results.besthit.approved_symbol : search.results.besthit.label) | typeaheadHighlight:search.query.text"></span></a>
-                          <span class="label" ng-class="(search.results.besthit.type=='genedata') ? 'label-primary' : 'label-warning'" style="font-size:12px">{{search.results.besthit.type | limitTo:4}}</span>
-                        </span>
-                        <small class="text-lowlight">{{ search.results.besthit.type=="genedata" ? search.results.besthit.approved_name : search.results.besthit.id }}</small>
-                      </h4>
-                      <!-- This is the longer description -->
-                      <p style="margin:0px; padding:0px 5px">{{ ( search.results.besthit.type=="genedata" ? search.results.besthit.uniprot_function[0] : search.results.besthit.definition) | limitTo:300}}<span ng-show="search.results.besthit.uniprot_function[0].length>300 || search.results.besthit.definition.length>300">...</span></p>
-    
+                      <div ng-click="linkTo({type:search.results.besthit.type, q:search.results.besthit.id, label:search.results.besthit.label||search.results.besthit.approved_symbol})" style="cursor:pointer;">
+                        <h4 style="padding:0px 5px">
+                          <span class="nbblock">
+                            <a><span bind-html-unsafe="(search.results.besthit.type=='genedata' ? search.results.besthit.approved_symbol : search.results.besthit.label) | typeaheadHighlight:search.query.text"></span></a>
+                            <span class="label" ng-class="(search.results.besthit.type=='genedata') ? 'label-primary' : 'label-warning'" style="font-size:12px">{{search.results.besthit.type=="genedata" ? "gene" : "disease"}}</span>
+                          </span>
+                          <small class="text-lowlight">{{ search.results.besthit.type=="genedata" ? search.results.besthit.approved_name : search.results.besthit.id }}</small>
+                        </h4>
+                        <!-- This is the longer description -->
+                        <p style="margin:0px; padding:0px 5px">{{ ( search.results.besthit.type=="genedata" ? search.results.besthit.uniprot_function[0] : search.results.besthit.definition) | limitTo:300}}<span ng-show="search.results.besthit.uniprot_function[0].length>300 || search.results.besthit.definition.length>300">...</span></p>
+                      </div>
 
 
                       <!-- Genes -->
@@ -85,14 +88,14 @@
                         <div class="divider"></div>
                         <p class="text-lowlight" style="padding:0px 5px">Genes</p>
                         <div ng-repeat="item in search.results.genes" style="margin:0; padding:5px" class="item">
-                          <a href="#">
-                          <div class="row">
-                            <span class="col-md-4">
-                           <span bind-html-unsafe="item.approved_symbol | typeaheadHighlight:search.query.text" class="text-nolight"></span>
-                          </span>
-                          <span class="col-md-8 text-lowlight" bind-html-unsafe="item.approved_name | typeaheadHighlight:search.query.text"></span>
-                          </div>
-                        </a>
+                          <!-- <a ng-href="#/target-associations?q={{item.id}}&label={{item.approved_symbol}}"> -->
+                            <div class="row" ng-click="linkTo({type:item.type, q:item.id, label:item.approved_symbol})">
+                              <span class="col-md-3">
+                             <span bind-html-unsafe="item.approved_symbol | typeaheadHighlight:search.query.text" class="text-nolight"></span>
+                            </span>
+                            <span class="col-md-9 text-lowlight"><span bind-html-unsafe="item.approved_name | typeaheadHighlight:search.query.text | limitTo: 60"></span><span ng-show="item.approved_name.length>60">...</span></span>
+                            </div>
+                          <!-- </a> -->
                         </div>
                       </div>
 
@@ -102,13 +105,22 @@
                         <div class="divider"></div>
                         <p class="text-lowlight" style="padding:0px 5px">Diseases</p>
                         <div ng-repeat="item in search.results.efo" style="padding:5px" class="item">
-                          <p bind-html-unsafe="item.label | typeaheadHighlight:search.query.text" style="margin-bottom:0px"></p>
-                          <small class="text-lowlight">[...]<span ng-repeat="link in item.path"><a>{{link.label | limitTo:40}}<span ng-show="link.label.length>40">...</span></a> <span ng-show="!$last" class="fa fa-angle-right fa-sm"></span> </span></small>
+                          <!-- #/disease-associations?q={{item.id}}&label={{item.label}} -->
+                            <div ng-click="linkTo({type:item.type, q:item.id, label:item.label})">
+                              <p bind-html-unsafe="item.label | typeaheadHighlight:search.query.text" style="margin-bottom:0px"></p>
+                              
+                              <!-- show the EFO hierarchy links -->
+                              <small class="text-lowlight">
+                                <span ng-show="item.path.length>2">[...]<span class="fa fa-angle-right fa-md" style="margin:0px 4px"></span></span><span ng-repeat="link in item.path" ng-if="$index==item.path.length-2 || $index==item.path.length-1"><span ng-click="linkTo({type:'efo', q:link.uri, label:link.label}); $event.stopPropagation()"><a>{{link.label | limitTo:40}}<span ng-show="link.label.length>40">...</span></a></span><span ng-show="!$last" class="fa fa-angle-right fa-md" style="margin:0px 4px"></span></span>
+                              </small>
+                            </div>
+                          
                         </div>
                       </div>
 
                     </div>
 
+                  </div>
                     <!-- End suggestions box -->
 
 
