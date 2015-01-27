@@ -27,19 +27,19 @@ describe ('bubbleView', function () {
 	    it('works as a getter on empty arguments', function () {
 		assert.isDefined(view.key());
 	    });
-	    it('returns a callback when working as a getter', function () {
-		assert.isFunction(view.key());
+	    it('returns a string when working as a getter', function () {
+		assert.isString(view.key());
 	    });
 	    it('returns the bubbles object on setter', function () {
 		var resp = view.key(function () {});
 		assert.equal(resp, view);
 	    });
 	    it('sets new keys', function () {
-		var f = function () { return a + b };
-		view.key(f);
+		var k = "size";
+		view.key(k);
 		var retf = view.key();
-		assert.equal(f, retf);
-		assert.notEqual(function () {return b + c}, retf);
+		assert.equal(k, retf);
+		assert.notEqual("value", retf);
 	    });
 	});
 	describe ("onclick", function () {
@@ -80,10 +80,11 @@ describe ('bubbleView', function () {
 		assert.equal(view.data(), d);
 	    });
 	    it('Accepts new data', function () {
-		var data = [{q:1},{q:2}];
-		var key = function (o) {
-		    return o.q;
-		};
+		var data = [
+		    {"name":"1", "value":1},
+		    {"name":"2", "value":2}
+		];
+		var key = "value";
 		view.key(key)
 		    .data(data);
 		var d = view.data();
@@ -118,36 +119,84 @@ describe ('bubbleView', function () {
 		assert.equal(view.height(), 300);
 	    });
 	});
+	describe ("flat", function () {
+	    it ('has the flat method', function () {
+		assert.isDefined (view.flat);
+		assert.isFunction (view.flat);
+	    });
+	    it ("works as a getter on empty args", function () {
+		assert.isDefined (view.flat());
+	    });
+	    it ("defaults to true", function () {
+		assert.equal (view.flat(), true);
+	    });
+	    it ("works as a setter when args are given", function () {
+		view.flat(false);
+		assert.equal(view.flat(), false);
+	    });
+	});
+
     });
     describe('Render', function () {
 	var data;
 	var view;
 	beforeEach (function () {
-	    data = [{q:1},{q:2}];
+	    data = [
+		{"name":"first", "value":1},
+		{"name":"second", "value":2}
+	    ];
 	    view = bubblesView()
-		.key (function (o) {
-		    return o.q;
-		})
+		.key ("value")
 		.data(data);
 	});
 	it ('Renders', function () {
 	    view (fixture.el);
 	});
-	it ('Creates the correct number of circles', function () {
+	it ('Creates the correct number of flat circles', function () {
 	    var dataLen = data.length;
 	    view (fixture.el);
 	    assert.equal(fixture.el.querySelectorAll("circle").length, dataLen);
 	});
-	it ('Creates the correct number of titles', function () {
+	it ('Creates the correct number of flat titles', function () {
 	    var dataLen = data.length;
 	    view (fixture.el);
 	    assert.equal(fixture.el.querySelectorAll("title").length, dataLen);
 	});
-	it ('Creates the correct number of texts', function () {
+	it ('Creates the correct number of flat texts', function () {
 	    var dataLen = data.length;
 	    view (fixture.el);
 	    assert.equal(fixture.el.querySelectorAll("text").length, dataLen);
-	})
+	});
+	it ('Creates the correct number of non flat circles', function () {
+	    var dataLen = data.length;
+	    view.flat (false);
+	    view (fixture.el);
+	    assert.equal (fixture.el.querySelectorAll("circle").length, dataLen+1);
+	});
+	it ('Creates then correct number of non flat titles', function () {
+	    var dataLen = data.length;
+	    view.flat (false);
+	    view (fixture.el);
+	    assert.equal (fixture.el.querySelectorAll("title").length, dataLen+1);
+	});
+	it ('Creates the correct number of non flat texts', function () {
+	    var dataLen = data.length;
+	    view.flat (false);
+	    view (fixture.el);
+	    assert.equal (fixture.el.querySelectorAll("text").length, dataLen+1);
+	});
+	it ('Sets the height', function () {
+	    var height = 600;
+	    view.height (height);
+	    view (fixture.el);
+	    assert.equal(fixture.el.querySelectorAll("svg")[0].getAttribute("height"), height);
+	});
+	it ('Sets the width', function () {
+	    var width = 600;
+	    view.width (width);
+	    view (fixture.el);
+	    assert.equal(fixture.el.querySelectorAll("svg")[0].getAttribute("width"), width);
+	});
     });
 });
 

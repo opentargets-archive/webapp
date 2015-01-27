@@ -5,11 +5,31 @@ angular.module('cttvDirectives', [])
     .directive('cttvTargetAssociations', function () {
 	var bView = bubblesView();
 
+	// processData aggregates evidence by EFO id
+	// TODO: This function may change once we have a final version of the API. In the meantime, counts are processed here
+	function processData (data) {
+	    var d = {};
+	    for (var i=0; i<data.length; i++) {
+		var label = data[i]["biological_object.efo_info.efo_label"];
+		if (d[label] === undefined) {
+		    d[label] = 1;
+		} else {
+		    d[label]++;
+		}
+	    }
+
+	    // var o = {name: "Root", children: []};
+	    // for (var j in d) {
+	    // 	o.children.push ( {"name":j, "value":d[j]} );
+	    // }
+	    // return o;
+	    console.log(d);
+	    return d;
+	}
+	
 	return {
 	    restrict: 'EA',
-	    scope: {
-
-	    },
+	    scope: {},
 	    link: function (scope, elem, attrs) {
 		var api = cttvApi();
 		var url = api.url.filterby({
@@ -23,7 +43,7 @@ angular.module('cttvDirectives', [])
 		    scope.$parent.nresults = resp.size;
 		    scope.$parent.$apply();
 		    bView
-			.data(resp.data)
+			.data(processData(resp.data))
 			.height(attrs.height)
 			.width(attrs.width)
 			.onclick (function (d) {
