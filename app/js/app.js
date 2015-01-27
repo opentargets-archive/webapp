@@ -20,8 +20,12 @@ config(['$routeProvider',
                 templateUrl: 'partials/search.html',
                 controller: 'SearchAppCtrl'
             }).
-            when('/associations', {
-                templateUrl: 'partials/associations.html',
+            when('/target-associations', {
+                templateUrl: 'partials/target-associations.html',
+                controller: 'AssociationsCtrl'
+            }).
+            when('/disease-associations', {
+                templateUrl: 'partials/disease-associations.html',
                 controller: 'AssociationsCtrl'
             }).
     	    when('/gene-disease', {

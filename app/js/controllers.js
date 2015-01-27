@@ -170,13 +170,13 @@ controller('SearchBoxCtrl', ['$scope', '$location', 'cttvAPIservice', function (
     }
 
 
-
+    $scope.hasFocus = true;
 
     /**
      * Get suggestions for typeahead.
      * This needs to take a value directly, not via scope, otherwise the typeahead is one char behind
      */
-    $scope.getSuggestions = function(val) {
+    $scope.getSuggestionsOLD = function(val) {
         console.log(val);
         /*return cttvAPIservice.getSearch({q:val}).then(function(response){
                 return response.data.data;
@@ -199,11 +199,15 @@ controller('SearchBoxCtrl', ['$scope', '$location', 'cttvAPIservice', function (
         return Object.keys($scope.search.results).length>0;
     }
 
+    $scope.test=function(e){
+        console.log(e);
+    }
 
+    $scope.isVisible = function(){
+        return $scope.hasFocus && $scope.hasResults() && $scope.search.query.text.length>2;
+    }
 
-    $scope.test = function(query){
-        //console.log(">> "+query);
-        console.log(">> "+$scope.search.query.text+" : "+query);
+    $scope.getSuggestions = function(query){
 
         if(query.length>=3){
             // fire the typeahead search
@@ -218,6 +222,35 @@ controller('SearchBoxCtrl', ['$scope', '$location', 'cttvAPIservice', function (
         }else{
             $scope.search.results = {};
         }
+    }
+
+
+    var setLocation=function(url){
+        console.log(url);
+        if($location.url() != url){
+            $location.url(url);
+        }
+    }
+
+
+    $scope.linkTo =function(s){
+        console.log(s.label+" ("+s.type+") "+s.q);
+
+        // show search results page, nice and easy...
+
+        // so, where do we want to go then?
+        // parse the options:
+        if( s.type.toLowerCase()=="genedata" ){
+            console.log("   genedata");
+            $location.url("target-associations");
+        } else if ( s.type.toLowerCase()=="efo" ){
+            console.log("   efo");  
+            $location.url("disease-associations");
+        }
+        console.log($location);
+        $location.search( 'q=' + s.q + "&label="+s.label);
+        
+        $scope.search.query.text = "";
     }
 
 
