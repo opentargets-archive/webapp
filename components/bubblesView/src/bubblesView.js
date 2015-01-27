@@ -2,8 +2,7 @@ var bubblesView = function () {
     "use strict";
     
     var conf = {
-	width : 800,
-	height : 300,
+	diameter : 600,
 	format : d3.format(",d"),
 	color : d3.scale.category20c(),
 	flat : true,
@@ -13,7 +12,8 @@ var bubblesView = function () {
 	onclick : function () {}
     };
 
-    var focusNode; // undef by default
+    var focus; // undef by default
+    var view;
     var circle;
     
     // var diameter = elem[0].offsetWidth,
@@ -29,16 +29,16 @@ var bubblesView = function () {
     var render = function(div) {
 	var svg = d3.select(div)
 	    .append("svg")
-	    .attr("width", conf.width)
-            .attr("height", conf.height);
+	    .attr("width", conf.diameter)
+            .attr("height", conf.diameter);
 
 	var pack = d3.layout.pack()
             .sort(null)
-            .size([conf.width, conf.height])
+            .size([conf.diameter, conf.diameter])
             .padding(1.5);
 
 	var data = processData(conf.data);
-	focusNode = data;
+	focus = data;
 	
         // remove all previous items before render
 	// TODO: Not needed without updates!
@@ -103,20 +103,28 @@ var bubblesView = function () {
     };
     
     function focusTo (v) {
-	console.log(v);
-	var k = conf.height / v[2];
-	var view = v;
-	var node = d3.selectAll("circle, text");
-	node.attr("transform", function(d) { console.log(d); return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
+	var k = conf.diameter / v[2];
+	var offset = conf.diameter / 2;
+	view = v;
+	var node = d3.selectAll(".node");
+
+	node.attr("transform", function(d) { return "translate(" + (((d.x - v[0]) * k) + offset) + "," + (((d.y - v[1]) * k) + offset) + ")"});
 	circle.attr("r", function(d) { return d.r * k; });
     }
 
+    
     //////////
     // API
     //////////
     render.focus = function (node) {
-	console.log("FOCUS!!");
-	var focus = node;
+	if (!arguments.length) {
+	    if (focus !== undefined) {
+		return focus;
+	    }
+	    console.log("focus node is not (yet?) defined");
+	    return;
+	}
+	focus = node;
 	var transition = d3.transition()
 	    .duration (700)
 	    .tween ("zoom", function () {
@@ -151,20 +159,12 @@ var bubblesView = function () {
 	conf.key = k;
 	return this;
     };
-    
-    render.height = function (h) {
-	if (!arguments.length) {
-	    return conf.height;
-	}
-	conf.height = h;
-	return this;
-    };
 
-    render.width = function (w) {
+    render.diameter = function (d) {
 	if (!arguments.length) {
-	    return conf.width;
+	    return conf.diameter;
 	}
-	conf.width = w;
+	conf.diameter = d;
 	return this;
     };
 

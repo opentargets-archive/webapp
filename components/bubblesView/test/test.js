@@ -42,6 +42,15 @@ describe ('bubbleView', function () {
 		assert.notEqual("value", retf);
 	    });
 	});
+	describe ("focus", function () {
+	    it ('has the focus method', function () {
+		assert.isDefined(view.focus);
+	    });
+	    it ('does not return anything as a getter without rendering', function () {
+		var focusNode = view.focus();
+		assert.isUndefined(focusNode);
+	    });
+	});
 	describe ("onclick", function () {
 	    it('has the "onclick" method', function () {
 		assert.isDefined(view.onclick);
@@ -93,30 +102,17 @@ describe ('bubbleView', function () {
 		assert.notEqual(newd, d);
 	    });
 	});
-	describe ("width", function () {
-	    it('has the width method', function () {
-		assert.isDefined(view.width);
-		assert.isFunction(view.width);
+	describe ("diameter", function () {
+	    it('has the diameter method', function () {
+		assert.isDefined(view.diameter);
+		assert.isFunction(view.diameter);
 	    });
 	    it('works as a getter on empty args', function () {
-		assert.isDefined(view.width());
+		assert.isDefined(view.diameter());
 	    });
 	    it('works as a setter when args are given', function () {
-		view.width(300);
-		assert.equal(view.width(), 300);
-	    });
-	});
-	describe ("height", function () {
-	    it('has the height method', function () {
-		assert.isDefined(view.height);
-		assert.isFunction(view.height);
-	    });
-	    it('works as a getter on empty args', function () {
-		assert.isDefined(view.height());
-	    });
-	    it('works as a setter when args are given', function () {
-		view.height(300);
-		assert.equal(view.height(), 300);
+		view.diameter(800);
+		assert.equal(view.diameter(), 800);
 	    });
 	});
 	describe ("flat", function () {
@@ -185,17 +181,17 @@ describe ('bubbleView', function () {
 	    view (fixture.el);
 	    assert.equal (fixture.el.querySelectorAll("text").length, dataLen+1);
 	});
-	it ('Sets the height', function () {
-	    var height = 600;
-	    view.height (height);
+	it ('Sets the diameter', function () {
+	    var diameter = 800;
+	    view.diameter (diameter);
 	    view (fixture.el);
-	    assert.equal(fixture.el.querySelectorAll("svg")[0].getAttribute("height"), height);
+	    assert.equal(fixture.el.querySelectorAll("svg")[0].getAttribute("height"), diameter);
+	    assert.equal(fixture.el.querySelectorAll("svg")[0].getAttribute("width"), diameter);
 	});
-	it ('Sets the width', function () {
-	    var width = 600;
-	    view.width (width);
+	it ('Sets the focus node', function () {
 	    view (fixture.el);
-	    assert.equal(fixture.el.querySelectorAll("svg")[0].getAttribute("width"), width);
+	    assert.isDefined (view.focus());
+	    assert.propertyVal(view.focus(), "name", "Root"); 
 	});
     });
 });

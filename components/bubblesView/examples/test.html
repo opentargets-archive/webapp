@@ -12,10 +12,9 @@
     <script src="data.js"></script>
     <script>
       var view = bubblesView()
-      .onclick(function (d,i) {console.log(d); console.log(i)})
+      .onclick (function (d) {console.log(d); view.focus(d)})
       .flat(false)
-      .width(600)
-      .height(600)
+      .diameter(600)
       .data(data1)
       view(document.getElementById("mydiv"));
     </script>

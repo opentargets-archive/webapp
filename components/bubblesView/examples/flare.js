@@ -9,7 +9,7 @@ var color = d3.scale.linear()
 var pack = d3.layout.pack()
     .padding(2)
     .size([diameter - margin, diameter - margin])
-    .value(function(d) { return d.size; })
+    .value(function(d) { return d.value; })
 
 var svg = d3.select("body").append("svg")
     .attr("width", diameter)
@@ -17,12 +17,14 @@ var svg = d3.select("body").append("svg")
     .append("g")
     .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
-d3.json("flare.json", function(error, root) {
+d3.json("flare2.json", function(error, root) {
     if (error) return console.error(error);
 
-    var focus = root,
-	nodes = pack.nodes(root),
-	view;
+    console.log("ROOT:");
+    console.log(root);
+    var focus = root;
+    var	nodes = pack.nodes(root);
+    var view;
 
     var circle = svg.selectAll("circle")
 	.data(nodes)
@@ -66,9 +68,16 @@ d3.json("flare.json", function(error, root) {
 
     function focusTo(v) {
 	console.log(v);
-	var k = diameter / v[2]; view = v;
-	node.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
-	circle.attr("r", function(d) { return d.r * k; });
+	var k = diameter / v[2];
+	view = v;
+	console.log("VIEW:");
+	console.log(view);
+	console.log("NODE:");
+	console.log(node);
+	node.attr("transform", function(d) { console.log("translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"); return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
+	console.log("CIRCLE:");
+	console.log(circle);
+	circle.attr("r", function(d) { console.log(d.r*k); return d.r * k; });
     }
 });
 
