@@ -86,7 +86,7 @@ describe ('bubbleView', function () {
 	    it('works as a setter when arguments are given', function () {
 		var d = [];
 		view.data(d);
-		assert.equal(view.data(), d);
+		assert.equal(view.data().data(), d);
 	    });
 	    it('Accepts new data', function () {
 		var data = [
@@ -96,7 +96,7 @@ describe ('bubbleView', function () {
 		var key = "value";
 		view.key(key)
 		    .data(data);
-		var d = view.data();
+		var d = view.data().data();
 		assert.equal(d, data);
 		newd = [];
 		assert.notEqual(newd, d);
@@ -133,14 +133,18 @@ describe ('bubbleView', function () {
 	});
 
     });
+
     describe('Render', function () {
 	var data;
 	var view;
 	beforeEach (function () {
-	    data = [
-		{"name":"first", "value":1},
-		{"name":"second", "value":2}
-	    ];
+	    data = { "name": "Root",
+		     "value": 3,
+		     "children": [
+			 {"name":"first", "value":1},
+			 {"name":"second", "value":2}
+		     ]
+		   };
 	    view = bubblesView()
 		.key ("value")
 		.data(data);
@@ -149,34 +153,34 @@ describe ('bubbleView', function () {
 	    view (fixture.el);
 	});
 	it ('Creates the correct number of flat circles', function () {
-	    var dataLen = data.length;
+	    var dataLen = data.children.length;
 	    view (fixture.el);
 	    assert.equal(fixture.el.querySelectorAll("circle").length, dataLen);
 	});
 	it ('Creates the correct number of flat titles', function () {
-	    var dataLen = data.length;
+	    var dataLen = data.children.length;
 	    view (fixture.el);
 	    assert.equal(fixture.el.querySelectorAll("title").length, dataLen);
 	});
 	it ('Creates the correct number of flat texts', function () {
-	    var dataLen = data.length;
+	    var dataLen = data.children.length;
 	    view (fixture.el);
 	    assert.equal(fixture.el.querySelectorAll("text").length, dataLen);
 	});
 	it ('Creates the correct number of non flat circles', function () {
-	    var dataLen = data.length;
+	    var dataLen = data.children.length;
 	    view.flat (false);
 	    view (fixture.el);
 	    assert.equal (fixture.el.querySelectorAll("circle").length, dataLen+1);
 	});
 	it ('Creates then correct number of non flat titles', function () {
-	    var dataLen = data.length;
+	    var dataLen = data.children.length;
 	    view.flat (false);
 	    view (fixture.el);
 	    assert.equal (fixture.el.querySelectorAll("title").length, dataLen+1);
 	});
 	it ('Creates the correct number of non flat texts', function () {
-	    var dataLen = data.length;
+	    var dataLen = data.children.length;
 	    view.flat (false);
 	    view (fixture.el);
 	    assert.equal (fixture.el.querySelectorAll("text").length, dataLen+1);

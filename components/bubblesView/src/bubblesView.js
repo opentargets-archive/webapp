@@ -1,3 +1,5 @@
+var tree_node = require("tnt.tree.node");
+
 var bubblesView = function () {
     "use strict";
     
@@ -37,21 +39,22 @@ var bubblesView = function () {
             .size([conf.diameter, conf.diameter])
             .padding(1.5);
 
-	var data = processData(conf.data);
-	focus = data;
+	focus = conf.data;
 	
         // remove all previous items before render
 	// TODO: Not needed without updates!
         svg.selectAll('*').remove();
         // If we don't pass any data, return out of the element
-        if (!data) return;
+        if (!conf.data) return;
 	var nodes = svg.selectAll(".node")
             .data(
                 function(){
                     if (conf.flat){
-                        return pack.nodes(getFlatData(data)).filter(function(d) { return !d.children; });
+			conf.data = conf.data.flatten();
+			return pack.nodes(conf.data.data()).filter(function(d) { return !d.children; });
+			//return pack.nodes(conf.data.flatten().data()).filter(function(d) { return !d.children; });
                     } else {
-                        return pack.nodes(data);
+                        return pack.nodes(conf.data.data());
                     }
                 }()
             )
@@ -77,30 +80,12 @@ var bubblesView = function () {
             .style("text-anchor", "middle")
             .text(function(d) { return d.name.substring(0, d.r / 3); });
 
-	focusTo([data.x, data.y, data.r*2]);
+	focusTo([conf.data.data().x, conf.data.data().y, conf.data.data().r*2]);
     };
 
     ////////////////////////
     // Auxiliar functions
     ////////////////////////
-    function processData (data) {
-	return {name: "Root", children: data};
-    }
-    
-    // Returns a flattened hierarchy containing all leaf nodes under the root.
-    function getFlatData(root) {
-        var leaves = [];
-
-        function recurse(name, node) {
-            if (node.children) node.children.forEach (function(child) {
-		recurse(node.name, child);
-	    });
-            else leaves.push({parentName: name || node.name, name: node.name, value: node.value});
-        }
-
-        recurse(null, root);
-        return {children: leaves};
-    };
     
     function focusTo (v) {
 	var k = conf.diameter / v[2];
@@ -112,14 +97,13 @@ var bubblesView = function () {
 	circle.attr("r", function(d) { return d.r * k; });
     }
 
-    
     //////////
     // API
     //////////
     render.focus = function (node) {
 	if (!arguments.length) {
 	    if (focus !== undefined) {
-		return focus;
+		return focus.data();
 	    }
 	    console.log("focus node is not (yet?) defined");
 	    return;
@@ -139,8 +123,7 @@ var bubblesView = function () {
 	if (!arguments.length) {
 	    return conf.data;
 	}
-	//target = newData.data[0]["biological_subject.gene_info.gene_name"];
-	conf.data = newData;
+	conf.data = tree_node(newData);
 	return this;
     };
 
