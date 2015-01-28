@@ -2,23 +2,26 @@ var nets = require("nets");
 
 var cttvApi = function () {
     // Prefixes
-    var prefix = "http://193.62.52.228/api/latest/";
+    // http://
+    // var prefix = "http://cttv:dj8mixijk04jpdg@193.62.52.228/api/latest/";
     //var prefix = "http://127.0.0.1:8008/api/latest/";
+    var prefix = "http://193.62.52.228/api/latest/";
     var prefix_filterby = prefix + "filterby?";
 
     var _ = {};
     _.call = function (myurl, callback) {
-	nets({url : myurl}, function (err, resp, body) {
+	nets({
+	    url : myurl,
+	    headers : {
+		"Authorization" : "Basic Y3R0djpkajhtaXhpamswNGpwZGc="
+	    }
+	}, function (err, resp, body) {
 	    if (err == null) {
 		callback(resp.statusCode, JSON.parse(body));
 	    }
 	});
     };
-    
-    // _.call = function (url, callback) {
-    // 	d3.json(url, callback);
-    // };
-    
+        
     _.url = {};
     _.url.filterby = function (obj) {
 	var opts = [];
