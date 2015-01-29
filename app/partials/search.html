@@ -40,11 +40,10 @@
 		</div>
 		<div class="col-md-10">
 			<div ng-repeat="result in search.results.data" class="search-result">
-				<h4><a href="#/associations?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
+				<h4><a ng-href="#/{{result.type==='genedata'?'target-associations':'disease-associations'}}?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
 				<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
 				<span class="search-details">
-					<span class="label label-default">{{result.type | limitTo: ((result.type==='genename')?4:3) | lowercase}}</span> | 
-					<span>Score: {{result.score}}</span>
+					<span class="label" ng-class="(result.type==='genedata') ? 'label-primary' : 'label-warning'">{{result.type==="genedata" ? "gene" : "disease"}}</span>&nbsp;|&nbsp;<span class="text-lowlight">Score: {{result.score}}</span>
 				</span>	
 			</div>
 			<!-- Furthermore this should only be shown when results are displayed -->

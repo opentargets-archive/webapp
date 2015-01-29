@@ -11,7 +11,7 @@ angular.module('cttvServices', []).
     /** 
      * The API services, with methods to call the ElasticSearch API
      */
-    factory('cttvAPIservice', ['$http', '$log', function($http, $log) {
+    factory('cttvAPIservice', ['$http', '$log', '$location', function($http, $log, $location) {
 
 
 
@@ -20,11 +20,31 @@ angular.module('cttvServices', []).
          */
         var cttvAPI = {
             API_DEFAULT_METHOD : "get",
-            API_URL : "http://193.62.52.228/api/latest/", //http://127.0.0.1:8008/api/latest/",
+            API_URL : "http://193.62.52.228/api/latest/",
             API_SEARCH_URL : "search",
             API_EVIDENCE_URL : "evidences",
             API_AUTOCOMPLETE_URL : "autocomplete",
         };
+
+        // the request configuration object.
+        // Here we set the default values, then populate the rest in the callAPI function
+        var req = {
+            withCredentials: true,
+            headers: {
+                'Authorization' : 'Basic Y3R0djpkajhtaXhpamswNGpwZGc='
+            }
+        }
+
+
+        /* 
+          App running on localhost:
+          we rest some values
+        */
+        if( $location.host()=='127.0.0.1' || $location.host().toLowerCase()=='localhost' ){
+            cttvAPI.API_URL = "http://127.0.0.1:8080/api/latest/";
+            req.withCredentials = false;
+            req.headers = {};
+        }
 
 
 
@@ -40,13 +60,10 @@ angular.module('cttvServices', []).
          */
         var callAPI = function(queryObject){
 
-            return $http(
-                {
-                    method: queryObject.method || cttvAPI.API_DEFAULT_METHOD,
-                    url: cttvAPI.API_URL + queryObject.operation,
-                    params: queryObject.params
-                }
-            );
+            req.method= queryObject.method || cttvAPI.API_DEFAULT_METHOD;
+            req.url= cttvAPI.API_URL + queryObject.operation;
+            req.params= queryObject.params;
+            return $http(req);
         }
 
 
