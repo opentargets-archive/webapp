@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Search test</title>
+  <title>CTTV Core</title>
   <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/app.css">
@@ -42,7 +42,7 @@
                 <fieldset>
                   <div class="form-group" style="position:relative"> 
                     
-                    <div ng-click="test($event)">
+                    
 
                     <div class="input-group">
                       
@@ -50,7 +50,7 @@
                       <input type="text" placeholder="Search for gene or disease" class="form-control ng-valid-maxlength ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" name="text" tabindex="1" ng-model="query" autocomplete="off" required="" typeahead="item as item.title for item in getSuggestions($viewValue)" typeahead-template-url="partials/typeahead.html" typeahead-min-length="3" ng-model-options="{ debounce: 500 }">
                       -->
                       
-                      <input type="text" placeholder="Search for gene or disease" class="form-control ng-valid-maxlength ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text)">
+                      <input type="text" placeholder="Search for gene or disease" class="form-control ng-valid-maxlength ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
                       <div class="input-group-btn">
                         <button type="submit" class="btn btn-primary">
@@ -62,7 +62,7 @@
 
                     <!-- Suggestions box -->
 
-                    <div class="search-suggestions-box" ng-show="isVisible()">
+                    <div class="search-suggestions-box ng-hide" ng-show="isVisible()" ng-cloak ng-model="search.query.results">
                       <!-- TODO: the visibility here should really use focus... not 100% happy with that query.text.length above ... -->
                       
                       <!-- Besthit -->
@@ -93,8 +93,8 @@
                       <!-- Genes -->
                       <div ng-show="search.results.genes.length>0">
                         <div class="divider"></div>
-                        <p class="text-lowlight" style="padding:0px 5px">Genes</p>
-                        <div ng-repeat="item in search.results.genes" style="margin:0; padding:5px" class="item">
+                        <div class="text-lowlight" style="padding:0px 5px">Genes</div>
+                        <div ng-repeat="item in search.results.genes" style="margin:0; padding:4px 5px" class="item">
                           <!-- <a ng-href="#/target-associations?q={{item.id}}&label={{item.approved_symbol}}"> -->
                             <div class="row" ng-click="linkTo({type:item.type, q:item.id, label:item.approved_symbol})">
                               <span class="col-md-3">
@@ -110,24 +110,24 @@
                       <!-- Diseases (EFOs) -->
                       <div ng-show="search.results.efo.length>0">
                         <div class="divider"></div>
-                        <p class="text-lowlight" style="padding:0px 5px">Diseases</p>
-                        <div ng-repeat="item in search.results.efo" style="padding:5px" class="item">
+                        <div class="text-lowlight" style="padding:0px 5px">Diseases</div>
+                        <div ng-repeat="item in search.results.efo" style="padding:4px 5px" class="item">
                           <!-- #/disease-associations?q={{item.id}}&label={{item.label}} -->
                             <div ng-click="linkTo({type:item.type, q:item.id, label:item.label})">
-                              <p bind-html-unsafe="item.label | typeaheadHighlight:search.query.text" style="margin-bottom:0px"></p>
+                              <div bind-html-unsafe="item.label | typeaheadHighlight:search.query.text" style="margin-bottom:0px; line-height:1.1"></div>
                               
                               <!-- show the EFO hierarchy links -->
                               <small class="text-lowlight">
-                                <span ng-show="item.path.length>2">[...]<span class="fa fa-angle-right fa-md" style="margin:0px 4px"></span></span><span ng-repeat="link in item.path" ng-if="$index==item.path.length-2 || $index==item.path.length-1"><span ng-click="linkTo({type:'efo', q:link.uri, label:link.label}); $event.stopPropagation()"><a>{{link.label | limitTo:40}}<span ng-show="link.label.length>40">...</span></a></span><span ng-show="!$last" class="fa fa-angle-right fa-md" style="margin:0px 4px"></span></span>
+                                <span ng-show="item.path.length>2">[...]<span class="fa fa-angle-right fa-md" style="margin:0px 4px"></span></span><span ng-repeat="link in item.path" ng-if="$index==item.path.length-3 || $index==item.path.length-2 || $index==item.path.length-1"><span ng-click="linkTo({type:'efo', q:link.uri, label:link.label}); $event.stopPropagation()" title="{{link.label}}"><a>{{link.label | limitTo:30}}<span ng-show="link.label.length>30">...</span></a></span><span ng-show="!$last" class="fa fa-angle-right fa-md" style="margin:0px 4px"></span></span>
                               </small>
                             </div>
                           
                         </div>
                       </div>
 
-                    </div>
+                    
 
-                  </div>
+                    </div>
                     <!-- End suggestions box -->
 
 
