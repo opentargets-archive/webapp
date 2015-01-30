@@ -5,7 +5,8 @@
   "readme": "README.md",
   "license": "Apache-2.0",
   "dependencies": {
-      "cttv.bubblesView": "file:../components/bubblesView",
-      "cttv.Api": "file:../components/cttvApi"
+    "cttv.Api": "file:../components/cttvApi",
+    "cttv.bubblesView": "file:../components/bubblesView",
+    "cttv.geneAssociations": "file:../components/geneAssociations"
   }
 }

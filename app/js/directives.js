@@ -3,29 +3,41 @@
 /* Directives */
 angular.module('cttvDirectives', [])
     .directive('cttvTargetAssociations', function () {
-	var bView = bubblesView();
-
+	// var bView = bubblesView();
 	// processData aggregates evidence by EFO id
 	// TODO: This function may change once we have a final version of the API. In the meantime, counts are processed here
-	function processData (data) {
-	    var d = {};
-	    for (var i=0; i<data.length; i++) {
-		var label = data[i]["biological_object.efo_info.efo_label"];
-		if (d[label] === undefined) {
-		    d[label] = 1;
-		} else {
-		    d[label]++;
-		}
-	    }
+	// function processData (data) {
+	//     var d = {};
+	//     for (var i=0; i<data.length; i++) {
+	// 	var label = data[i]["biological_object.efo_info.efo_label"];
+	// 	if (d[label] === undefined) {
+	// 	    d[label] = 1;
+	// 	} else {
+	// 	    d[label]++;
+	// 	}
+	//     }
 
-	    // var o = {name: "Root", children: []};
-	    // for (var j in d) {
-	    // 	o.children.push ( {"name":j, "value":d[j]} );
-	    // }
-	    // return o;
-	    console.log(d);
-	    return d;
-	}
+	//     // var o = {name: "Root", children: []};
+	//     // for (var j in d) {
+	//     // 	o.children.push ( {"name":j, "value":d[j]} );
+	//     // }
+	//     // return o;
+	//     //console.log(d);
+	//     return d;
+	// }
+
+	function processData (full_data) {
+	    var nested = d3.nest()
+		.key(function(d) { return d["biological_object.efo_info.efo_label"]; })
+	        .rollup(function(leaves) { return leaves.length; })
+	        .entries(full_data);
+	    var total = d3.sum(nested, function (d) {return d.values});
+	    return {
+		"key": "Root",
+		"values": total,
+		"children": nested
+	    }
+	};
 	
 	return {
 	    restrict: 'EA',
@@ -38,18 +50,19 @@ angular.module('cttvDirectives', [])
 		    size:1000
 		});
 		api.call(url, function (status, resp) {
-		    var bView = bubblesView();
 		    scope.$parent.took = resp.took;
 		    scope.$parent.nresults = resp.size;
 		    scope.$parent.$apply();
-		    bView
+		    var bView = bubblesView()
 			.data(processData(resp.data))
-			.height(attrs.height)
-			.width(attrs.width)
+			.value("values")
+			.key("key")
+			.diameter(attrs.diagonal)
 			.onclick (function (d) {
 			    window.location.href="/app/#/gene-disease?t=" + attrs.target + "&d=" + d.name;
 			});
-		    bView(elem[0]);
+		    var ga = geneAssociations();
+		    ga(bView, elem[0]);
 		});		
 	    }
 	}

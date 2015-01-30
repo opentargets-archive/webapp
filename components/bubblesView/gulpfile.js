@@ -56,7 +56,7 @@ gulp.task('test', ['build-browser'],  function(done) {
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['./src/**/*.js','./lib/**/*.js','./test/**/*.js'], ['build-browser', 'test', 'lint']);
+    gulp.watch(['./src/**/*.js','./src/**/scss/*.scss','./lib/**/*.js','./test/**/*.js'], ['build-browser', 'test', 'lint']);
 });
 
 

@@ -12,6 +12,12 @@ $dim : 1000px;
 @mixin circle-fill ($color, $opacity) {
     fill : $color;
     fill-opacity : $opacity;
+    /* stroke-width: 1px; */
+    /* stroke: black; */
+}
+
+@mixin circle-highlight () {
+    fill : rgb(151,82,105) !important;
 }
 
 @mixin header () {
@@ -20,9 +26,21 @@ $dim : 1000px;
     margin-bottom : 10px;
 }
 
-circle { @include circle-fill(rgb(31, 119, 180), .25) }
+circle {
+    @include circle-fill(rgb(31, 119, 180), .25);
+}
 
-.leaf circle { @include circle-fill(#ff7f0e, 1) }
+.leaf circle {
+    @include circle-fill(rgb(62,139,173), 1);
+}
+
+.root circle {
+    @include circle-fill(white, 0);
+}
+
+.highlight {
+    @include circle-highlight;
+}
 
 h2 {
     font-size : 30px;

@@ -19,6 +19,14 @@ describe ('bubbleView', function () {
 	beforeEach (function () {
 	    view = bubblesView();
 	});
+	
+	describe ('node', function () {
+	    it ('Has the node property', function () {
+		assert.isDefined(bubblesView.node);
+		assert.isFunction(bubblesView.node);
+	    });
+	});
+
 	describe ("key", function () {
 	    it('has the "key" method', function () {
 		assert.isDefined(view.key);
@@ -31,17 +39,42 @@ describe ('bubbleView', function () {
 		assert.isString(view.key());
 	    });
 	    it('returns the bubbles object on setter', function () {
-		var resp = view.key(function () {});
+		var resp = view.key("name");
 		assert.equal(resp, view);
 	    });
-	    it('sets new keys', function () {
-		var k = "size";
-		view.key(k);
+	    it('sets new property name', function () {
+		var n = "size";
+		view.key(n);
 		var retf = view.key();
-		assert.equal(k, retf);
+		assert.equal(n, retf);
 		assert.notEqual("value", retf);
 	    });
 	});
+
+	describe ("value", function () {
+	    it('has the "value" method', function () {
+		assert.isDefined(view.value);
+		assert.isFunction(view.value);
+	    });
+	    it('works as a getter on empty arguments', function () {
+		assert.isDefined(view.value());
+	    });
+	    it('returns a string when working as a getter', function () {
+		assert.isString(view.value());
+	    });
+	    it('returns the bubbles object on setter', function () {
+		var resp = view.value("values");
+		assert.equal(resp, view);
+	    });
+	    it('sets new property value', function () {
+		var n = "vals";
+		view.value(n);
+		var retf = view.value();
+		assert.equal(n, retf);
+		assert.notEqual("value", retf);
+	    });
+	});
+
 	describe ("focus", function () {
 	    it ('has the focus method', function () {
 		assert.isDefined(view.focus);
@@ -86,17 +119,28 @@ describe ('bubbleView', function () {
 	    it('works as a setter when arguments are given', function () {
 		var d = [];
 		view.data(d);
-		assert.equal(view.data().data(), d);
+		assert.equal(view.data(), d);
 	    });
 	    it('Accepts new data', function () {
-		var data = [
-		    {"name":"1", "value":1},
-		    {"name":"2", "value":2}
-		];
+		var data = {
+		    "name" : "Root",
+		    "value" : 3,
+		    "children" : [
+			{
+			    "name":"1",
+			    "value":1
+			},
+			{
+			    "name":"2",
+			    "value":2
+			}
+		    ]
+		};
 		var key = "value";
-		view.key(key)
+		view
+		    .key(key)
 		    .data(data);
-		var d = view.data().data();
+		var d = view.data();
 		assert.equal(d, data);
 		newd = [];
 		assert.notEqual(newd, d);
@@ -146,7 +190,7 @@ describe ('bubbleView', function () {
 		     ]
 		   };
 	    view = bubblesView()
-		.key ("value")
+		.value ("value")
 		.data(data);
 	});
 	it ('Renders', function () {
@@ -195,7 +239,7 @@ describe ('bubbleView', function () {
 	it ('Sets the focus node', function () {
 	    view (fixture.el);
 	    assert.isDefined (view.focus());
-	    assert.propertyVal(view.focus(), "name", "Root"); 
+	    assert.propertyVal(view.focus().data(), "name", "Root"); 
 	});
     });
 });

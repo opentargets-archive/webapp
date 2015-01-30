@@ -1,12 +1,3 @@
-var data = {
-    "name": "Root",
-    "value": 4,
-    "children": [
-	{"name": "first", "value":1},
-	{"name": "second", "value":3}
-    ]
-};
-
 var data1 = {
     "name": "Root",
     "value": 20,
@@ -31,6 +22,49 @@ var data1 = {
 		},
 		{
 		    "name": "subFirst2",
+		    "value": 9
+		}
+	    ]
+	},
+	{
+	    "name": "second",
+	    "value": 8,
+	    "children" : [
+		{
+		    "name": "subFirst1",
+		    "value": 5
+		},
+		{
+		    "name": "subSecond2",
+		    "value": 2
+		},
+		{
+		    "name": "subSecond3",
+		    "value": 1
+		}
+	    ]
+	}
+    ]
+};
+
+var data2 = {
+    "name": "Root",
+    "value": 20,
+    "children" : [
+	{
+	    "name": "first",
+	    "value": 12,
+	    "children" : [
+		{
+		    "name": "subFirst1",
+		    "value": 2
+		},
+		{
+		    "name": "subFirst2",
+		    "value": 1
+		},
+		{
+		    "name": "subFirst3",
 		    "value": 9
 		}
 	    ]
