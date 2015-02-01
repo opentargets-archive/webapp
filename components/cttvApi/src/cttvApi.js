@@ -1,12 +1,19 @@
 var nets = require("nets");
 
 var cttvApi = function () {
-    // Prefixes
-    // http://
-    // var prefix = "http://cttv:dj8mixijk04jpdg@193.62.52.228/api/latest/";
-    var prefix = "http://cttv:75djkwty4805hye@@127.0.0.1:8008/api/latest/";
-    //var prefix = "http://193.62.52.228/api/latest/";
-    var prefix_filterby = prefix + "filterby?";
+    var prefix;
+    if (this.location && this.location.hostname) {
+	// browser present
+	if (this.location.hostname === "127.0.0.1") {
+	    prefix = "http://cttv:75djkwty4805hye@127.0.0.1:8008/api/latest/";
+	} else {
+	    prefix = "http://cttv:dj8mixijk04jpdg@193.62.52.228/api-docs";
+	}
+    } else {
+	// No browser context
+	prefix = "http://cttv:75djkwty4805hye@127.0.0.1:8008/api/latest/";	
+    }
+    var prefixFilterby = prefix + "filterby?";
 
     var _ = {};
     _.call = function (myurl, callback) {
@@ -21,7 +28,7 @@ var cttvApi = function () {
 	    }
 	});
     };
-        
+    
     _.url = {};
     _.url.filterby = function (obj) {
 	var opts = [];
@@ -44,7 +51,7 @@ var cttvApi = function () {
 	    opts.push("datastructure=" + obj.datastructure);
 	}
 
-	return prefix_filterby + opts.join("&");
+	return prefixFilterby + opts.join("&");
     };
 
     return _;

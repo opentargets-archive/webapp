@@ -24,13 +24,13 @@ describe('CTTV api', function () {
 		});
 		it ("returns the correct url for genes", function () {
 		    var filterby = cttvApiUrl.filterby({gene : data.gene});
-		    assert.strictEqual(filterby, "http://193.62.52.228/api/latest/filterby?gene=ENSG00000157764");
-		    //assert.strictEqual(filterby, "http://127.0.0.1:8008/api/latest/filterby?gene=ENSG00000157764");
+		    //assert.strictEqual(filterby, "http://193.62.52.228/api/latest/filterby?gene=ENSG00000157764");
+		    assert.strictEqual(filterby, "http://cttv:75djkwty4805hye@127.0.0.1:8008/api/latest/filterby?gene=ENSG00000157764");
 		});
 		it ("returns the correct url mixed values", function () {
 		    var filterbyUrl = cttvApiUrl.filterby({gene:data.gene, efo:data.efo, datastructure:"simple"});
-		    assert.strictEqual(filterbyUrl, "http://193.62.52.228/api/latest/filterby?efo=EFO_0000621&gene=ENSG00000157764&datastructure=simple");
-		    //assert.strictEqual(filterbyUrl, "http://127.0.0.1:8008/api/latest/filterby?efo=EFO_0000621&gene=ENSG00000157764&datastructure=simple");
+		    //assert.strictEqual(filterbyUrl, "http://193.62.52.228/api/latest/filterby?efo=EFO_0000621&gene=ENSG00000157764&datastructure=simple");
+		    assert.strictEqual(filterbyUrl, "http://cttv:75djkwty4805hye@127.0.0.1:8008/api/latest/filterby?efo=EFO_0000621&gene=ENSG00000157764&datastructure=simple");
 		});
 	    });
 	});
