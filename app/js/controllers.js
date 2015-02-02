@@ -123,6 +123,10 @@
         
         $scope.search = cttvAppToAPIService.createSearchInitObject();
 
+        $scope.test=function(){
+            console.log("test");
+        }
+
         $scope.getResults = function(){
             return cttvAPIservice.getSearch( cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query) ).
                 success(function(data, status) {

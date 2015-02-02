@@ -2,6 +2,7 @@
 
 /* Directives */
 angular.module('cttvDirectives', [])
+
     .directive('cttvTargetAssociations', function () {
 	// var bView = bubblesView();
 	// processData aggregates evidence by EFO id
@@ -64,6 +65,7 @@ angular.module('cttvDirectives', [])
 	    }
 	}
     })
+
     .directive('ebiExpressionAtlasBaselineSummary', function () {
 	return {
 	    restrict: 'EA',
@@ -78,9 +80,19 @@ angular.module('cttvDirectives', [])
 		})
 	    },
 	}
-    });
+    })
 
 
+
+    .directive('cttvSearchSuggestions', function(){
+    	return {
+        	restrict:'EA',
+        	templateUrl: 'partials/search-suggestions.html',
+        	link: function(scope, elem, attrs){
+
+        	}
+        }	
+    })
 /*
 angular.module('myApp.directives', []).
   directive('appVersion', ['version', function(version) {
