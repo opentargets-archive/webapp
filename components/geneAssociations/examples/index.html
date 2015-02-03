@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <head>
   <link rel="stylesheet" href="../build/index.css" />
-  <link rel="stylesheet" href="../../bubblesView/build/bubblesView.css"/>
+  <link rel="stylesheet" href="bubblesView.css"/>
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="../build/cttv.geneAssociations.js"></script>
-  <script src="../../bubblesView/build/cttv.bubblesView.js"></script>
+  <script src="cttv.bubblesView.js"></script>
   <script src="data.js"></script>
 </head>
 
@@ -12,8 +12,7 @@
   <div id="mydiv"></div>
   <script>
     var bView = bubblesView()
-    .onclick (function (d) {bView.focus(bView.node(d))})
-    .data(data1)
+    .data(bubblesView.node(data1))
     .flat(false)
     .value("values")
     .key("key")

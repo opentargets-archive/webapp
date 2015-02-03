@@ -191,7 +191,7 @@ describe ('bubbleView', function () {
 		   };
 	    view = bubblesView()
 		.value ("value")
-		.data(data);
+		.data(bubblesView.node(data));
 	});
 	it ('Renders', function () {
 	    view (fixture.el);

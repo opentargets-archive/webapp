@@ -37,7 +37,7 @@ var bubblesView = function () {
 
 	pack = d3.layout.pack()
 	    .value(function (d) {
-		return d[conf.value]
+		return d[conf.value];
 	    })
             .sort(null)
             .size([conf.diameter, conf.diameter])
@@ -62,13 +62,17 @@ var bubblesView = function () {
         //             }
 	var nodes = svg.selectAll(".node")
         //.data(packData, function (d) {return d[conf.key]});
-	    .data(packData, function (d) {return d._id});
+	    .data(packData, function (d) {
+		return d._id;
+	    });
 
 	// Entering nodes
 	var newNodes = nodes
             .enter()
 	    .append("g")
-	    .on("click", conf.onclick);
+	    .on("click", function (d) {
+		conf.onclick.call(this, tree_node(d));
+	    });
 
 	newNodes
 	    .append("title")
@@ -87,11 +91,10 @@ var bubblesView = function () {
 	nodes
 	    .attr("class", "node")
 	    .classed ("leaf", function (d) {
-		console.log(!d.children);
-		return !d.children
+		return !d.children;
 	    })
 	    .classed ("root", function (d) {
-		return !d._parent
+		return !d._parent;
 	    })
 	    // .attr("class", function(d) {
 	    // 	return d.children ? "node" : "leaf node";
@@ -195,9 +198,9 @@ var bubblesView = function () {
     
     render.data = function (newData) {
 	if (!arguments.length) {
-	    return conf.data.data();
+	    return conf.data;
 	}
-	conf.data = tree_node(newData);
+	conf.data = newData;
 	return this;
     };
 
