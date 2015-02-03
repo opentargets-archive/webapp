@@ -1,5 +1,33 @@
 <div>
-  Gene to disease page for: {{search.target}} -- {{search.disease}}
-  <cttv-associations-header data="{{search}}" width="500" height="120"></cttv-associations-header>
-  <cttv-associations-overview target="{{search.target}}" disease="{{search.disease}}" width="600" height="120"></cttv-associations-overview>
+	<h3>Gene to disease association<br /><small>{{search.target}} <i class="fa fa-arrows-h"></i> {{search.disease}}</small></h3>
+	<div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div>
+
+	<div class="row">
+		<div class="col-md-3">
+			<p>Flower placeholder</p>
+		</div>
+		<div class="col-md-9">
+			<!-- target :: disease header -->
+			<div class="row">
+				<div class="col-sm-5">
+					<div style="border-radius: 10px; background: #CCC; padding: 5px 10px">
+						<p>BRAF</p>
+						<p>Long description about the gene goes here</p>
+					</div>
+				</div>
+				<div class="col-sm-2"><i class="fa fa-arrows-h"></i></div>
+				<div class="col-sm-5">
+					<div style="border-radius: 10px; background: #CCC; padding: 5px 10px">
+						<p>Carcinoma</p>
+						<p>Long description about the disease goes here</p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+	<!-- <cttv-associations-header data="{{search}}" width="500" height="120"></cttv-associations-header> -->
+	<!-- <cttv-associations-overview target="{{search.target}}" disease="{{search.disease}}" width="120" height="120"></cttv-associations-overview>-->
 </div>
