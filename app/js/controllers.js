@@ -27,8 +27,8 @@
         $log.log($location.search().t);
 
         $scope.search = {
-    	target : $location.search().t,
-    	disease : $location.search().d
+    	   target : $location.search().t,
+    	   disease : $location.search().d
         };
 
         console.log($scope.search);
@@ -123,6 +123,19 @@
         
         $scope.search = cttvAppToAPIService.createSearchInitObject();
 
+        /**
+        Something like:
+            {
+                query:{
+                    q: APP_QUERY_Q, // ""
+                    page: APP_QUERY_PAGE,   // 1
+                    size: APP_QUERY_SIZE    // 10
+                },
+
+                results:{}
+            }
+        */
+
         $scope.test=function(){
             console.log("test");
         }
@@ -137,9 +150,12 @@
                 });
         }
 
+
         if($location.search().q){
             // parse parameters
             $scope.search.query.q = $location.search().q || "";
+
+            // need a way of parsing filters too...
 
             // and fire the search
             $scope.getResults();
