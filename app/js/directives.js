@@ -81,9 +81,6 @@ angular.module('cttvDirectives', [])
 	    },
 	}
     })
-
-
-
     .directive('cttvSearchSuggestions', function(){
     	return {
         	restrict:'EA',
