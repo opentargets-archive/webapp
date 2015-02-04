@@ -51,12 +51,12 @@ var geneAssociations = function () {
 		var n = this.value;
 		switch (n) {
 		case "EFO" :
-		    bubblesView.data(data1);
-		    bubblesView.update();
+		    //bubblesView.data(data1);
+		    //bubblesView.update();
 		    break;
 		case "Simplified" :
-		    bubblesView.data(data2);
-		    bubblesView.update();
+		    //bubblesView.data(data2);
+		    //bubblesView.update();
 		    break;
 		}
 	    });
@@ -72,11 +72,9 @@ var geneAssociations = function () {
 	
 	var tree = bubblesView.data();
 	tree.apply (function (node) {
-	    // if (!node.is_leaf()) {
 		zoomSelect.append("option")
 		    .attr("value", node.property("key"))
 		    .text(node.property("key"));
-	    // }
 	    highlightSelect.append("option")
 		.attr("value", node.property("key"))
 		.text(node.property("key"));

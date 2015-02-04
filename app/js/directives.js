@@ -54,13 +54,10 @@ angular.module('cttvDirectives', [])
 		    scope.$parent.nresults = resp.size;
 		    scope.$parent.$apply();
 		    var bView = bubblesView()
-			.data(processData(resp.data))
+			.data(bubblesView.node(processData(resp.data)))
 			.value("values")
 			.key("key")
 			.diameter(attrs.diagonal)
-			.onclick (function (d) {
-			    window.location.href="/app/#/gene-disease?t=" + attrs.target + "&d=" + d.name;
-			});
 		    var ga = geneAssociations();
 		    ga(bView, elem[0]);
 		});		
