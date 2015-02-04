@@ -159,22 +159,22 @@ describe ('bubbleView', function () {
 		assert.equal(view.diameter(), 800);
 	    });
 	});
-	describe ("flat", function () {
-	    it ('has the flat method', function () {
-		assert.isDefined (view.flat);
-		assert.isFunction (view.flat);
-	    });
-	    it ("works as a getter on empty args", function () {
-		assert.isDefined (view.flat());
-	    });
-	    it ("defaults to true", function () {
-		assert.equal (view.flat(), true);
-	    });
-	    it ("works as a setter when args are given", function () {
-		view.flat(false);
-		assert.equal(view.flat(), false);
-	    });
-	});
+	// describe ("flat", function () {
+	//     it ('has the flat method', function () {
+	// 	assert.isDefined (view.flat);
+	// 	assert.isFunction (view.flat);
+	//     });
+	//     it ("works as a getter on empty args", function () {
+	// 	assert.isDefined (view.flat());
+	//     });
+	//     it ("defaults to true", function () {
+	// 	assert.equal (view.flat(), true);
+	//     });
+	//     it ("works as a setter when args are given", function () {
+	// 	view.flat(false);
+	// 	assert.equal(view.flat(), false);
+	//     });
+	// });
 
     });
 
@@ -196,36 +196,36 @@ describe ('bubbleView', function () {
 	it ('Renders', function () {
 	    view (fixture.el);
 	});
-	it ('Creates the correct number of flat circles', function () {
-	    var dataLen = data.children.length;
-	    view (fixture.el);
-	    assert.equal(fixture.el.querySelectorAll("circle").length, dataLen);
-	});
-	it ('Creates the correct number of flat titles', function () {
-	    var dataLen = data.children.length;
-	    view (fixture.el);
-	    assert.equal(fixture.el.querySelectorAll("title").length, dataLen);
-	});
-	it ('Creates the correct number of flat texts', function () {
-	    var dataLen = data.children.length;
-	    view (fixture.el);
-	    assert.equal(fixture.el.querySelectorAll("text").length, dataLen);
-	});
+	// it ('Creates the correct number of flat circles', function () {
+	//     var dataLen = data.children.length;
+	//     view (fixture.el);
+	//     assert.equal(fixture.el.querySelectorAll("circle").length, dataLen);
+	// });
+	// it ('Creates the correct number of flat titles', function () {
+	//     var dataLen = data.children.length;
+	//     view (fixture.el);
+	//     assert.equal(fixture.el.querySelectorAll("title").length, dataLen);
+	// });
+	// it ('Creates the correct number of flat texts', function () {
+	//     var dataLen = data.children.length;
+	//     view (fixture.el);
+	//     assert.equal(fixture.el.querySelectorAll("text").length, dataLen);
+	// });
 	it ('Creates the correct number of non flat circles', function () {
 	    var dataLen = data.children.length;
-	    view.flat (false);
+	    // view.flat (false);
 	    view (fixture.el);
 	    assert.equal (fixture.el.querySelectorAll("circle").length, dataLen+1);
 	});
 	it ('Creates then correct number of non flat titles', function () {
 	    var dataLen = data.children.length;
-	    view.flat (false);
+	    // view.flat (false);
 	    view (fixture.el);
 	    assert.equal (fixture.el.querySelectorAll("title").length, dataLen+1);
 	});
 	it ('Creates the correct number of non flat texts', function () {
 	    var dataLen = data.children.length;
-	    view.flat (false);
+	    // view.flat (false);
 	    view (fixture.el);
 	    assert.equal (fixture.el.querySelectorAll("text").length, dataLen+1);
 	});

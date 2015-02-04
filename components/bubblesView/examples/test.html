@@ -13,10 +13,10 @@
     <div id="mydiv"></div>
     <script>
       var view = bubblesView()
-      .onclick (function (d) {console.log(d); view.focus(view.node(d))})
+      .onclick (function (d) {view.focus(d)})
       .flat(false)
       .diameter(600)
-      .data(data1)
+      .data(bubblesView.node(data1))
       var mytheme = theme();
       mytheme(view, document.getElementById("mydiv"));
       // view(document.getElementById("mydiv"));
