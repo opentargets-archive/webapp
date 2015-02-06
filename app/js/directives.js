@@ -54,11 +54,26 @@ angular.module('cttvDirectives', [])
 		    scope.$parent.took = resp.took;
 		    scope.$parent.nresults = resp.size;
 		    scope.$parent.$apply();
+
+		    // viewport Size
+		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+		    console.log("WIDTH: " + viewportW + " -- HEIGHT: " + viewportH);
+
+		    // Element Coord
+		    var elemOffsetTop = elem[0].offsetTop;
+		    console.log("ELEMOFFTOP: " + elemOffsetTop);
+
+		    // BottomMargin
+		    var bottomMargin = 30;
+
+		    var diameter = viewportH - elemOffsetTop - bottomMargin;
+		    
 		    var bView = bubblesView()
 			.data(bubblesView.node(processData(resp.data)))
 			.value("values")
 			.key("key")
-			.diameter(attrs.diagonal)
+			.diameter(diameter)
 		    var ga = geneAssociations();
 		    ga(bView, elem[0]);
 		});		
