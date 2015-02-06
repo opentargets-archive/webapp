@@ -213,21 +213,18 @@ describe ('bubbleView', function () {
 	// });
 	it ('Creates the correct number of non flat circles', function () {
 	    var dataLen = data.children.length;
-	    // view.flat (false);
 	    view (fixture.el);
 	    assert.equal (fixture.el.querySelectorAll("circle").length, dataLen+1);
 	});
 	it ('Creates then correct number of non flat titles', function () {
 	    var dataLen = data.children.length;
-	    // view.flat (false);
 	    view (fixture.el);
 	    assert.equal (fixture.el.querySelectorAll("title").length, dataLen+1);
 	});
 	it ('Creates the correct number of non flat texts', function () {
-	    var dataLen = data.children.length;
-	    // view.flat (false);
+	    var dataLen = data.children.length * 2;
 	    view (fixture.el);
-	    assert.equal (fixture.el.querySelectorAll("text").length, dataLen+1);
+	    assert.equal (fixture.el.querySelectorAll("text").length, dataLen+2);
 	});
 	it ('Sets the diameter', function () {
 	    var diameter = 800;
