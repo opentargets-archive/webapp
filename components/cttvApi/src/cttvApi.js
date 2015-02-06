@@ -1,23 +1,35 @@
 var nets = require("nets");
 
 var cttvApi = function () {
-    // Prefixes
+    // This was needed when authentication was included in the elasticsearch api
+    // var prefix;
+    // if (this.location && this.location.hostname) {
+    // 	// browser present
+    // 	if (this.location.hostname === "127.0.0.1") {
+    // 	    prefix = "http://cttv:75djkwty4805hye@127.0.0.1:8008/api/latest/";
+    // 	} else {
+    // 	    prefix = "http://cttv:dj8mixijk04jpdg@193.62.52.228/api/latest/";
+    // 	}
+    // } else {
+    // 	// No browser context
+    // 	prefix = "http://cttv:75djkwty4805hye@127.0.0.1:8008/api/latest/";	
+    // }
     var prefix = "http://193.62.52.228/api/latest/";
-    //var prefix = "http://127.0.0.1:8008/api/latest/";
-    var prefix_filterby = prefix + "filterby?";
+    var prefixFilterby = prefix + "filterby?";
 
     var _ = {};
     _.call = function (myurl, callback) {
-	nets({url : myurl}, function (err, resp, body) {
+	nets({
+	    url : myurl
+	    // headers : {
+	    // 	"Authorization" : "Basic Y3R0djpkajhtaXhpamswNGpwZGc="
+	    // }
+	}, function (err, resp, body) {
 	    if (err == null) {
 		callback(resp.statusCode, JSON.parse(body));
 	    }
 	});
     };
-    
-    // _.call = function (url, callback) {
-    // 	d3.json(url, callback);
-    // };
     
     _.url = {};
     _.url.filterby = function (obj) {
@@ -41,7 +53,7 @@ var cttvApi = function () {
 	    opts.push("datastructure=" + obj.datastructure);
 	}
 
-	return prefix_filterby + opts.join("&");
+	return prefixFilterby + opts.join("&");
     };
 
     return _;

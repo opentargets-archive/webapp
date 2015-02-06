@@ -35,7 +35,7 @@ var outputFileMin = join(buildDir,outputFileMinSt);
 gulp.task('default', ['lint', 'test', 'build-browser', 'build-browser-gzip']);
 
 gulp.task('sass', function () {
-    return gulp.src('./src/scss/*scss')
+    return gulp.src('./index.scss')
 	.pipe(sass())
 	.pipe(gulp.dest(buildDir));
 });
@@ -46,7 +46,7 @@ gulp.task('lint', function() {
     .pipe(jshint.reporter('default'));
 });
 
-gulp.task('test', ['build-browser'], function(done) {
+gulp.task('test', ['build-browser'],  function(done) {
     karma.start({
 	configFile: __dirname + '/karma.conf.js',
 	singleRun: true
@@ -56,7 +56,7 @@ gulp.task('test', ['build-browser'], function(done) {
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['./src/**/*.js','./src/**/scss/*.scss','./lib/**/*.js','./test/**/*.js'], ['build-browser', 'test', 'lint']);
+    gulp.watch(['./src/**/*.js','./src/**/scss/*.scss','./test/**/*.js'], ['build-browser', 'test', 'lint']);
 });
 
 

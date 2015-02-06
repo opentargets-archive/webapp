@@ -6,11 +6,24 @@
 
 circle {
   fill: #1f77b4;
-  fill-opacity: 0.25; }
+  fill-opacity: 0.25;
+  /* stroke-width: 1px; */
+  /* stroke: black; */ }
 
 .leaf circle {
-  fill: #ff7f0e;
-  fill-opacity: 1; }
+  fill: #3e8bad;
+  fill-opacity: 1;
+  /* stroke-width: 1px; */
+  /* stroke: black; */ }
+
+.root circle {
+  fill: white;
+  fill-opacity: 0;
+  /* stroke-width: 1px; */
+  /* stroke: black; */ }
+
+.highlight {
+  fill: #975269 !important; }
 
 h2 {
   font-size: 30px;

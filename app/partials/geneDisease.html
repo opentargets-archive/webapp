@@ -3,15 +3,14 @@
 	<div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div>
 
 	<!-- page header with flower and overview -->
-	<div class="row">
+	<div class="row" style="padding-bottom:20px; margin-bottom:20px">
 
 		<div class="col-sm-3"  style="overflow:hidden">
-			<p>Flower placeholder</p>
-			<!-- <cttv-associations-overview target="{{search.target}}" disease="{{search.disease}}" width="120" height="120"></cttv-associations-overview> -->
+			<cttv-gene-disease-association target="{{search.target}}" disease="{{search.disease}}" width="160" height="160" association-data="search.test"></cttv-gene-disease-association>
 		</div>
 
 		<div class="col-sm-9">
-			<!-- target :: disease header -->
+			<!-- target :: disease header 
 			<div class="row">
 				<div class="col-sm-5">
 					<div style="border-radius: 10px; background: #DDD; padding: 5px 10px">
@@ -20,8 +19,9 @@
 					</div>
 				</div>
 				<div class="col-sm-2">
-					<!-- The connection line  -->
-					<div style="height:1px; background:#F00"></div>
+					<div style="display:table; height:100%">
+						<div style="display:table-cell; vertical-align: middle; height:1px; background:#F00"></div>
+					</div>
 				</div>
 				<div class="col-sm-5">
 					<div style="border-radius: 10px; background: #DDD; padding: 5px 10px">
@@ -30,11 +30,28 @@
 					</div>
 				</div>
 			</div>
+			-->
+			<div style="display: table;">
+				<div style="display: table-cell; width:45%">
+					<div style="border-radius: 10px; background: #DDD; padding: 5px 10px">
+						<h5>{{search.target}}<br /><small>{{search.info.biological_subject.about[0]}}</small></h5>
+						<p class="small">May play a role in the postsynaptic responses of hippocampal neuron. Phosphorylates MAP2K1, and thereby contributes to the MAP kinase signal transduction pathway...</p>
+					</div>
+				</div>
+				<div style="display: table-cell; width:10%; vertical-align:middle; padding: 2px">
+					<div style="width:100%; height:1px; border-bottom:2px dotted #DDD"></div>
+				</div>
+				<div style="display: table-cell; width:45%">
+					<div style="border-radius: 10px; background: #DDD; padding: 5px 10px">
+						<h5>{{search.info.biological_object.efo_info.efo_label}}<br /><small>{{search.info.biological_object.efo_info.efo_path}}</small></h5>
+						<p class="small">A usually small, slow-growing neoplasm composed of islands of rounded, oxyphilic, or spindle-shaped cells of medium size, with moderately small vesicular nuclei...</p>
+					</div>
+				</div>
+			</div>
 		</div>
-
 	</div>
 
-	<p></p>
+
 
 	<!-- Filters and tabular data -->
 	<div class="row">
@@ -70,12 +87,14 @@
 							</tr>
 						</thead>
 						<tbody>
+						<!--
 							<tr ng-repeat="result in search.results.data">	
 								<td><a href="#/evidence?q={{result.id}}&label={{result.title}}"><strong>{{result.title}}</strong></a></td>
 								<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.description}}</a></td>
 								<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.type | limitTo: ((result.type==='genename')?4:3) | uppercase}}</a></td>
 								<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.score}}</a></td>
 							</tr>
+						-->
 						</tbody>
 					</table>
 				</accordion-group>

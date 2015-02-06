@@ -30,6 +30,7 @@
     	   // disease : $location.search().d,
            info : {},
            genetic_associations : {},
+           test : [2,4,4,3,4,7],
         };
 
         $scope.getInfo = function(){
@@ -37,11 +38,13 @@
 
             return cttvAPIservice.getAssociations( {
                     gene:$scope.search.target, 
-                    efo:"http://identifiers.org/efo/"+$scope.search.disease.substring(4)
+                    efo:$scope.search.disease, //"http://identifiers.org/efo/"+$scope.search.disease.substring(4),
+                    size:1
                 } ).
                 success(function(data, status) {
                     $scope.search.info = data.data[0];
-                    console.log(data);
+                    console.log("info:");
+                    console.log(data.data[0]);  
                 }).
                 error(function(data, status) {
                     $log.error(status);

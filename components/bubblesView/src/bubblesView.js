@@ -1,121 +1,241 @@
-var bubblesView = function () {
+var tree_node = require("tnt.tree.node");
 
-    var key = function (o) {
-	return o["biological_object.efo_info.efo_label"];
-    };
+var bubblesView = function () {
+    "use strict";
     
     var conf = {
-	width : 800,
-	height : 300,
+	diameter : 600,
 	format : d3.format(",d"),
 	color : d3.scale.category20c(),
-	flat : true,
+	// flat : true,
 	colorPalette : true,
 	data : undefined,
-	key : key,
-	onclick : function () {}
+	value : "value",
+	key : "name",
+	divId : undefined,
+	onclick : function () {},
+	duration: 1000
     };
-    target = undefined;
+
+    var focus; // undef by default
+    var highlight; // undef by default
+    var view;
+    var svg;
+    var pack;
+    var nodes;
+    var circle;
+
+    var currTranslate = [0,0];
+    var currScale = 1;
+    var zoom = d3.behavior.zoom()
+	.scaleExtent([0.8, Infinity])
+	.on("zoom", function () {
+	    redraw(svg);
+	});
     
-    // var diameter = elem[0].offsetWidth,
-    //     format = d3.format(",d"),
-    //     color = d3.scale.category20c(),
-    //     isBubble = attrs.asBubble && attrs.asBubble.toLowerCase()==="true",
-    //     useColorPalette = attrs.useColorPalette && attrs.useColorPalette.toLowerCase()==="true";
-
-    // processData aggregates evidence by EFO id
-    // TODO: This function may change once we have a final version of the API. In the meantime, counts are processed here
-    function processData (data) {
-	var d = {};
-	for (var i=0; i<data.length; i++) {
-	    //var efo_label = data[i]["biological_object.efo_info.efo_label"];
-	    var label = conf.key(data[i]);
-	    if (d[label] === undefined) {
-		d[label] = 1;
-	    } else {
-		d[label]++;
-	    }
-	}
-
-	var o = {name: "Root", children: []};
-	for (var j in d) {
-	    o.children.push ( {"name":j, "value":d[j]} );
-	}
-	return o;
-    }
-    
-    // Returns a flattened hierarchy containing all leaf nodes under the root.
-    function getFlatData(root) {
-        var leaves = [];
-
-        function recurse(name, node) {
-            if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
-            else leaves.push({parentName: name || node.name, name: node.name, value: node.value});
-        }
-
-        recurse(null, root);
-        return {children: leaves};
-    }
-
     /*
      * Render valid JSON data
      */ 
     var render = function(div) {
-	var svg = d3.select(div)
+	conf.divId = d3.select(div).attr("id");
+	svg = d3.select(div)
 	    .append("svg")
-	    .attr("width", conf.width)
-            .attr("height", conf.height);
+	    .attr("width", conf.diameter)
+            .attr("height", conf.diameter)
+	    // .attr("pointer-events", "all")
+	    .append("g")
+	    .call(zoom)
+	    // .call(d3.behavior.zoom()
+	    // 	  .scaleExtent([0.8, Infinity])
+	    // 	  .on("zoom", function() { redraw(svg); })
+	    // 	 )
+	    .append("g");
 
-	var pack = d3.layout.pack()
+	pack = d3.layout.pack()
+	    .value(function (d) {
+		return d[conf.value];
+	    })
             .sort(null)
-            .size([conf.width, conf.height])
+            .size([conf.diameter, conf.diameter])
             .padding(1.5);
 
-	var data = processData(conf.data);
-	
-        // remove all previous items before render
-	// TODO: Not needed without updates!
-        svg.selectAll('*').remove();
-        // If we don't pass any data, return out of the element
-        if (!data) return;
-	var nodes = svg.selectAll(".node")
-            .data(
-                function(){
-                    if (conf.flat){
-                        return pack.nodes(getFlatData(data)).filter(function(d) { return !d.children; });
-                    } else {
-                        return pack.nodes(data);
-                    }
-                }()
-            )
-            .enter().append("g")
-            .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
-            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-	nodes
-	    .on("click", conf.onclick);
-
-        nodes.append("title")
-            .text(function(d) { return d.name + ": " + conf.format(d.value); });
-
-	// nodes = nodes.append("svg:a")
-	//     .attr("xlink:href", function (d) {return "/app/#/associations?t=" + target + "&d=" + d.name;});
-		
-        var circle = nodes.append ("circle");
-        circle.attr ("r", function(d) { return d.r; });
-        if (conf.flat){
-            circle.style("fill", function(d) { return conf.color(conf.colorPalette ? d.name : d.parentName); });
-        }
-        nodes.append("text")
-            .attr("dy", ".3em")
-            .style("text-anchor", "middle")
-            .text(function(d) { return d.name.substring(0, d.r / 3) });
+	render.update();
+	return render;
     };
 
+    render.update = function () {
+	focus = conf.data;
+	
+        // If we don't pass any data, return out of the element
+        if (!conf.data) return;
+	var packData = pack.nodes(conf.data.data());
+	// if (conf.flat){
+	//     conf.data = conf.data.flatten();
+	//     return pack.nodes(conf.data.data()).filter(function(d) { return !d.children; });
+	// 		//return pack.nodes(conf.data.flatten().data()).filter(function(d) { return !d.children; });
+        //             } else {
+        //                 return pack.nodes(conf.data.data());
+        //             }
+	var nodes = svg.selectAll(".node")
+        //.data(packData, function (d) {return d[conf.key]});
+	    .data(packData, function (d) {
+		return d._id;
+	    });
+
+	// Entering nodes
+	var newNodes = nodes
+            .enter()
+	    .append("g")
+	    .on("click", function (d) {
+		if (d3.event.defaultPrevented) {
+		    return;
+		}
+		conf.onclick.call(this, tree_node(d));
+	    });
+
+	newNodes
+	    .append("title")
+            .text(function(d) { return d[conf.key] + ": " + conf.format(d[conf.value]); });	
+	
+        newNodes.append ("circle");
+	
+	// if (conf.flat){
+	    // TODO: circle is not yet defined here
+//            circle.style("fill", function(d) { return conf.color(conf.colorPalette ? d.name : d.parentName); });
+        // }
+
+        newNodes.append("text");
+
+	// Moving nodes
+	nodes
+	    .attr("class", "node")
+	    .classed ("leaf", function (d) {
+		return !d.children;
+	    })
+	    .classed ("root", function (d) {
+		return !d._parent;
+	    })
+	    // .attr("class", function(d) {
+	    // 	return d.children ? "node" : "leaf node";
+	    // })
+	    .transition()
+	    .duration(conf.duration)
+            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+	nodes.select("text")
+	    .attr("dy", ".3em")
+            .style("text-anchor", "middle")
+            .text(function(d) { return d[conf.key].substring(0, d.r / 3); });
+	
+        nodes.select("circle")
+	    .attr ("class", function (d) {
+	    	return "bubblesView_" + d[conf.key] + "_" + conf.divId;
+	    })
+	    .transition()
+	    .duration(conf.duration)
+	    .attr ("r", function(d) {
+		return d.r;
+	    });
+
+	circle = nodes.selectAll("circle");
+
+	// Exiting nodes
+	nodes
+	    .exit()
+	    .remove();
+
+
+	var d = conf.data.data();
+	view = [d.x, d.y, d.r*2];
+	//focusTo([d.x, d.y, d.r*2]);
+	focus (conf.data);
+    };
+
+    ////////////////////////
+    // Auxiliar functions //
+    ////////////////////////
+
+    function redraw (viz) {
+	viz.attr ("transform",
+		   "translate (" + d3.event.translate + ") " +
+		  "scale (" + d3.event.scale + ")");
+	// var node = d3.selectAll(".node");
+	// node
+	//     .attr("transform", function (d) {
+	// 	return "translate(" + 
+	//     })
+    }
+    
+    function focusTo (v) {
+	var k = conf.diameter / v[2];
+	var offset = conf.diameter / 2;
+	view = v;
+	var node = d3.selectAll(".node");
+
+	node
+	    .attr("transform", function(d) {
+		return "translate(" + (((d.x - v[0]) * k) + offset) + "," + (((d.y - v[1]) * k) + offset) + ")";
+	    });
+	circle
+	    .attr("r", function(d) { return d.r * k; });
+    }
+
+    //////////
+    // API  //
+    //////////
+
+    render.select = function (nodes) {
+	if (!arguments.length) {
+	    return highlight;
+	}
+	highlight = nodes;
+
+	// Unhighlight everything
+	d3.selectAll(".highlight")
+	    .classed("highlight", false);
+
+	// No node to highlight
+	if ((nodes === null) || (nodes === undefined) || (nodes.length === 0)) {
+	    return this;
+	}
+
+	for (var i=0; i<nodes.length; i++) {
+	    var node = nodes[i];
+
+	    var circle = d3.selectAll(".bubblesView_" + node.property(conf.key) + "_" + conf.divId);
+	    circle
+		.classed ("highlight", true);
+	}
+	return this;
+    };
+    
+    render.focus = function (node) {
+	if (!arguments.length) {
+	    return focus;
+	}
+	svg.transition()
+	    .duration(conf.duration)
+	    .attr("transform",
+		  "translate (0,0)scale (1)");
+	zoom.translate([0,0]);
+	
+	focus = node;
+	var focusData = focus.data();
+	var transition = d3.transition()
+	    .duration (conf.duration)
+	    .tween ("zoom", function () {
+		var i = d3.interpolateZoom (view, [focusData.x, focusData.y, focusData.r*2]);
+		return function (t) {
+		    focusTo(i(t));
+		};
+	    });
+	return this;
+    };
+    
     render.data = function (newData) {
 	if (!arguments.length) {
 	    return conf.data;
 	}
-	//target = newData.data[0]["biological_subject.gene_info.gene_name"];
 	conf.data = newData;
 	return this;
     };
@@ -128,31 +248,42 @@ var bubblesView = function () {
 	return this;
     };
     
-    render.key = function (k) {
+    render.key = function (n) {
 	if (!arguments.length) {
 	    return conf.key;
 	}
-	conf.key = k;
-	return this;
-    };
-    
-    render.height = function (h) {
-	if (!arguments.length) {
-	    return conf.height;
-	}
-	conf.height = h;
+	conf.key = n;
 	return this;
     };
 
-    render.width = function (w) {
+    render.value = function (v) {
 	if (!arguments.length) {
-	    return conf.width;
+	    return conf.value;
 	}
-	conf.width = w;
+	conf.value = v;
 	return this;
     };
+
+    render.diameter = function (d) {
+	if (!arguments.length) {
+	    return conf.diameter;
+	}
+	conf.diameter = d;
+	return this;
+    };
+
+    // render.flat = function (bool) {
+    // 	if (!arguments.length) {
+    // 	    return conf.flat;
+    // 	}
+    // 	conf.flat = bool;
+    // 	return this;
+    // };
+
+    render.node = tree_node;
     
     return render;
 };
 
+bubblesView.node = tree_node;
 module.exports = bubblesView;

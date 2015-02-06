@@ -1,7 +1,7 @@
 {
-  "name": "cttv.bubblesView",
+  "name": "cttv.geneAssociations",
   "version": "0.0.0",
-  "description": "CTTV bubbles view for the target evidence",
+  "description": "CTTV associations view for a given target (ie gene)",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -41,12 +41,12 @@
     "karma-safari-launcher": "^0.1.1",
     "mkdirp": "^0.5.0",
     "mocha": "~1.20.1",
-    "node-sass": "^2.0.0-beta",
-    "phantomjs": "^1.9.13",
     "requirejs": "^2.1.15",
     "tnt.tree.node": "0.0.1",
     "uglify-js": "~2.4.15",
     "watchify": "^1.0.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "tnt.tooltip": "0.0.5"
+  }
 }
