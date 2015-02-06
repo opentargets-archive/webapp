@@ -13,41 +13,41 @@
   <link href="bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/app.css">
 
-  <!-- js components -->
-  <link rel="stylesheet" href="node_modules/cttv.bubblesView/build/bubblesView.css" />
+  <!-- <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script> -->
   <script type="text/javascript" src="node_modules/cttv.bubblesView/build/cttv.bubblesView.js"></script>
-  <link rel="stylesheet" href="node_modules/cttv.geneAssociations/build/index.css" />
-  <script type="text/javascript" src="node_modules/cttv.geneAssociations/build/cttv.geneAssociations.js"></script>
-  <script type="text/javascript" src="node_modules/cttv.api/build/cttv.api.js"></script>
+  <!-- flower graph -->
+  <script type="text/javascript" src="web_components/cttv/target-disease-evidence/target-disease-evidence-overview/flowerView.js"></script>
+  <link rel="stylesheet" href="web_components/cttv/target-disease-evidence/target-disease-evidence-overview/target_disease_evidence_overview.css">
 
   <!-- Web components -->
   <!-- <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script> -->
   <!-- <link rel="import" href="./web_components/cttv/target-evidence/target_evidence.html"> -->
   <!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-header/target_disease_evidence_header.html"> -->
   <!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-overview/target_disease_evidence_overview.html"> -->
-  
-</head>
+  </head>
 
 <body ng-app="cttvApp">
 
     
-    <div class="container">
+    
 
-
+      
       <!-- Masthead (search) -->
         
         <div class="masthead">
+          <div class="container">
           <div class="row">
 
-            <div class="col-md-3">
+            <div class="col-xs-2">
               <!-- CTTV logo -->
-              <a href="#/"><img src="http://www.targetvalidation.org/sites/targetvalidation.org/files/CTTV_logo_webheader.png" /></a>
+              <a href="#/"><img src="http://www.targetvalidation.org/sites/targetvalidation.org/files/CTTV_logo_webheader.png" width="113px" height="51px"/></a>
+              <!-- <h3 style="color:#FFF">C<i class="fa fa-circle-thin fa-sm"></i>re</h3> --> 
             </div>
             
-            <div class="col-md-9" ng-controller="SearchBoxCtrl">
+            <div class="col-xs-10" ng-controller="SearchBoxCtrl">
               <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
                 <fieldset>
-                  <div class="form-group" style="position:relative"> 
+                  <div class="" style="position:relative"> 
                   
 
                     <div class="input-group">
@@ -68,7 +68,7 @@
                     <!-- End suggestions box -->
 
 
-                    <span class="help-block example-searches">
+                    <span class="">
                       <small>
                         <i>
                           Examples: <a href="#/search?q=braf">BRAF</a>, 
@@ -94,12 +94,22 @@
             </div>
 
           </div>
-
+          </div>
         </div>
 
-
+      
       <!-- End Masthead -->
 
+      <!-- decoration ?? -->
+      <!-- 
+      <div style="width:100%">
+        <span style="width:33%; height:2px; background:#0D3774; display:block; float:left"></span>
+        <span style="width:34%; height:2px; background:#ED4F27; display:block; float:left"></span>
+        <span style="width:33%; height:2px; background:#5C9538; display:block; float:left"></span>
+      </div>
+      -->
+
+   <div class="container"> 
 
       <!-- Content --> 
 
@@ -107,15 +117,16 @@
       
       <!-- End Content -->
 
+  </div>
 
 
       <!-- Footer -->
-      <footer class="">Version 0.1</footer>
+      <div class="footer">Version 0.0.1</div>
       <!-- End Footer-->
 
 
 
-    </div>
+    
 
 
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
@@ -133,7 +144,7 @@
     <!-- <script type="text/javascript" src="js/d3controllers.js"></script> -->
     <script type="text/javascript" src="js/directives.js"></script>
 
-    
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
 </body>
 
 

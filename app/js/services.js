@@ -24,6 +24,7 @@ angular.module('cttvServices', []).
             API_SEARCH_URL : "search",
             API_EVIDENCE_URL : "evidences",
             API_AUTOCOMPLETE_URL : "autocomplete",
+            API_FILTERBY_URL : 'filterby',
         };
 
         // the request configuration object.
@@ -111,6 +112,17 @@ angular.module('cttvServices', []).
 
 
 
+        cttvAPI.getAssociations = function(queryObject){
+            $log.log("cttvAPI.getAssociations()");
+
+            return callAPI({
+                operation : cttvAPI.API_FILTERBY_URL,
+                params : queryObject
+            });
+        }
+
+
+
         cttvAPI.getAutocomplete = function(queryObject){
             $log.log("cttvAPI.getAutocomplete()");
 
@@ -177,7 +189,9 @@ angular.module('cttvServices', []).
                 case this.EVIDENCE:
                     qo.gene = queryObject.q.title || queryObject.q;
                     qo.datastructure = 'simple';
-                    break
+                    break;
+
+                   
             }
 
             return qo;

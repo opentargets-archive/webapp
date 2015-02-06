@@ -22,16 +22,67 @@
        * Controller for the Gene <-> Disease page
        * It loads the evidence for the given target <-> disease pair
     */
-    controller('GeneDiseaseCtrl', ['$scope', '$location', '$log', function ($scope, $location, $log) {
+    controller('GeneDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', function ($scope, $location, $log, cttvAPIservice) {
         $log.log('GeneDiseaseCtrl()');
-        $log.log($location.search().t);
 
         $scope.search = {
-    	   target : $location.search().t,
-    	   disease : $location.search().d
+    	   // target : $location.search().t,
+    	   // disease : $location.search().d,
+           info : {},
+           genetic_associations : {},
+           test : [2,4,4,3,4,7],
         };
 
-        console.log($scope.search);
+        $scope.getInfo = function(){
+            console.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
+
+            return cttvAPIservice.getAssociations( {
+                    gene:$scope.search.target, 
+                    efo:$scope.search.disease, //"http://identifiers.org/efo/"+$scope.search.disease.substring(4),
+                    size:1
+                } ).
+                success(function(data, status) {
+                    $scope.search.info = data.data[0];
+                    console.log("info:");
+                    console.log(data.data[0]);  
+                }).
+                error(function(data, status) {
+                    $log.error(status);
+                });
+        }
+
+
+
+        $scope.getEvidence = function(){
+            return cttvAPIservice.getAssociations( {
+                    gene:$scope.search.target, 
+                    efo:"http://identifiers.org/efo/"+$scope.search.disease.substring(4)
+                } ).
+                success(function(data, status) {
+                    $scope.search.genetic_associations = data.data;
+                    console.log(data);
+                }).
+                error(function(data, status) {
+                    $log.error(status);
+                });
+        }
+
+
+
+        if($location.search().t && $location.search().d){
+            // parse parameters
+            $scope.search.target = $location.search().t;
+            $scope.search.disease = $location.search().d;
+
+            // need a way of parsing filters too...
+
+            // and fire the info search
+            $scope.getInfo();
+
+            // then try get some data
+            $scope.getEvidence();
+        }
+
     }]).
 
 
@@ -198,7 +249,6 @@
                 console.log("close ??");
                 $scope.hasFocus = true;
                 $scope.search.results = {};
-                console.log($scope.search.results);
                 $scope.$apply();
             }
         };

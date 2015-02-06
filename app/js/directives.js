@@ -81,6 +81,7 @@ angular.module('cttvDirectives', [])
 	}
     })
 
+
     .directive('ebiExpressionAtlasBaselineSummary', function () {
 	return {
 	    restrict: 'EA',
@@ -96,6 +97,8 @@ angular.module('cttvDirectives', [])
 	    },
 	}
     })
+
+
     .directive('cttvSearchSuggestions', function(){
     	return {
         	restrict:'EA',
@@ -104,6 +107,28 @@ angular.module('cttvDirectives', [])
 
         	}
         }	
+    })
+
+
+    .directive('cttvGeneDiseaseAssociation', function(){
+    	return {
+    		restrict:'EA',
+    		scope: {
+    			associationData: '='
+    		},
+        	link: function(scope, elem, attrs){
+        		console.log("link()");
+        		console.log(scope);
+        		console.log(attrs.associationData);
+        		var flower = flowerView().values(scope.associationData);
+        		flower(elem[0]);
+        		/*setTimeout(function(){
+        			console.log("changing values...")
+        			flower.values([3,4,5,6,7,8]);
+        			//flower(elem[0]);
+        		}, 4000);*/
+        	}
+    	}
     })
 /*
 angular.module('myApp.directives', []).
