@@ -1,4 +1,5 @@
-var nets = require("nets");
+//var nets = require("nets");
+var httpplease = require("httpplease");
 
 var cttvApi = function () {
     // This was needed when authentication was included in the elasticsearch api
@@ -19,14 +20,11 @@ var cttvApi = function () {
 
     var _ = {};
     _.call = function (myurl, callback) {
-	nets({
-	    url : myurl
-	    // headers : {
-	    // 	"Authorization" : "Basic Y3R0djpkajhtaXhpamswNGpwZGc="
-	    // }
-	}, function (err, resp, body) {
+	httpplease.get({
+	    url: myurl
+	}, function (err, resp) {
 	    if (err == null) {
-		callback(resp.statusCode, JSON.parse(body));
+		callback (resp.status, JSON.parse(resp.body));
 	    }
 	});
     };
