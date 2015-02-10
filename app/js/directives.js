@@ -50,22 +50,24 @@ angular.module('cttvDirectives', [])
 		    datastructure:"simple",
 		    size:1000
 		});
+		console.log("URL: " + url);
 		api.call(url, function (status, resp) {
 		    scope.$parent.took = resp.took;
 		    scope.$parent.nresults = resp.size;
 		    scope.$parent.$apply();
-
+		    console.log("RESP:");
+		    console.log(resp);
 		    // viewport Size
 		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
 		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
 		    console.log("WIDTH: " + viewportW + " -- HEIGHT: " + viewportH);
 
 		    // Element Coord
-		    var elemOffsetTop = elem[0].offsetTop;
-		    console.log("ELEMOFFTOP: " + elemOffsetTop);
+		    var elemOffsetTop = elem[0].parentNode.offsetTop;
+		    console.log("ELEMOFFSETTOP: " + elemOffsetTop);
 
 		    // BottomMargin
-		    var bottomMargin = 30;
+		    var bottomMargin = 50;
 
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 		    
@@ -81,6 +83,90 @@ angular.module('cttvDirectives', [])
 	}
     })
 
+    .directive('pmcCitationList', function () {
+	var pmc = require ('biojs-vis-pmccitation');
+    	return {
+    	    restrict: 'EA',
+    	    templateUrl: "partials/pmcCitation.html",
+    	    link: function (scope, elem, attrs) {
+		var pmids = attrs.pmids.split(",");
+		var terms = [];
+		for (var i=0; i<pmids.length; i++) {
+		    terms.push("EXT_ID:" + pmids[i]);
+		}
+		var query = terms.join(" OR ");
+    		var config = {
+    		    width: 400,
+    		    loadingStatusImage: "",
+    		    source: pmc.Citation.MED_SOURCE,
+		    query: query,
+    		    target: 'pmcCitation',
+    		    displayStyle: pmc.CitationList.FULL_STYLE,
+    		    elementOrder: pmc.CitationList.TITLE_FIRST
+    		};
+    		var instance = new pmc.CitationList(config);
+    		instance.load();
+    	    }
+    	};
+    })
+
+    // .directive('pmcCitationList', function () {
+    // 	var app = require("biojs-vis-pmccitation");
+    // 	function displayCitation (pmid, divId) {
+    // 	    console.log(pmid + " - " + divId);
+    // 	    var instance = new app.Citation({
+    // 		target: divId,
+    // 		source: app.Citation.MED_SOURCE,
+    // 		citation_id: pmid,
+    // 		width: 400,
+    // 		proxyUrl: 'https://cors-anywhere.herokuapp.com/',
+    // 		displayStyle: app.Citation.FULL_STYLE,
+    // 		elementOrder: app.Citation.TITLE_FIRST,
+    // 		showAbstract: false
+    // 	    });
+    // 	    instance.load();
+    // 	}
+    // 	return {
+    // 	    restrict: 'EA',
+    // 	    // scope: {
+    // 	    // 	pmids : '='
+    // 	    // },
+    // 	    templateUrl: "partials/pmcCitation.html",
+    // 	    link: function (scope, elem, attrs) {
+    // 		console.log(attrs.pmids);
+    // 		var pmids = attrs.pmids.split(",");
+    // 		for (var i=0; i<pmids.length; i++) {
+    // 		    var pmid = pmids[i];
+    // 		    var newDiv = document.createElement("div");
+    // 		    newDiv.id = elem[0].id + "_" + i;
+    // 		    elem[0].appendChild(newDiv);
+    // 		    displayCitation(pmid, newDiv.id);
+    // 		}
+    // 	    }
+    // 	};
+    // })
+
+    .directive('pmcCitation', function () {
+	return {
+	    restrict: 'EA',
+	    templateUrl: "partials/pmcCitation.html",
+	    link: function (scope, elem, attrs) {
+		var pmc = require ('biojs-vis-pmccitation');
+		var config = {
+		    source: pmc.Citation.MED_SOURCE,
+		    citation_id: attrs.pmcid,
+		    width: 400,
+		    proxyUrl: 'https://cors-anywhere.herokuapp.com/',
+		    displayStyle: pmc.Citation.FULL_STYLE,
+		    elementOrder: pmc.Citation.TITLE_FIRST,
+		    target : 'pmcCitation',
+		    showAbstract : false
+		};
+		var instance = new pmc.Citation(config);
+		instance.load();
+	    }
+	};
+    })
 
     .directive('ebiExpressionAtlasBaselineSummary', function () {
 	return {
