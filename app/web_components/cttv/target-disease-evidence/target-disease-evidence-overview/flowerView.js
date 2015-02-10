@@ -20,20 +20,22 @@ var flowerView = function () {
 
 		//var valsExtent = d3.extent(conf.values);
 		var sizeScale = d3.scale.linear()
-		    .domain([0, d3.extent(conf.values)[1]])
+		    .domain([0, d3.extent(conf.values, function(d){return d.value})[1]])
 		    .range([0, radius]);
 		
 		var colorScale = d3.scale.linear()
-		    .domain([0, d3.extent(conf.values)[1]])
+		    .domain([0, d3.extent(conf.values, function(d){return d.value})[1]])
 		    .range(["#f7fbff","#08306b"]);
-		
+
 		var origin = [~~(conf.width/2), ~~(conf.height/2)];
+
 		var svg = container.append("svg")
 		    .attr("width", conf.width)
 		    .attr("height", conf.height)
 		    .append("g");
 
 		var petal = function (l, r, d, color) {
+
 		    var x = l * Math.cos(r);
 		    var y = l * Math.sin(r);
 		    var realx = d * Math.cos(r);
@@ -116,16 +118,18 @@ var flowerView = function () {
 		    //.attr("d", line(realData))
 			.attr("d", line(realData))
 		    //.attr("fill", color(x));
-			.attr("fill", function () {console.log(d); return color});
+			.attr("fill", function () {console.log(d); return color})
+			.attr("title", d);
+
 		};
 
 		var petals = function () {
 		    var r = 0;
 		    conf.values.forEach (function (d, i) {
-			var l = radius;
-			//petal (l, r, scale(d));
-			petal (l, r, sizeScale(d), colorScale(d));
-			r += radians;
+				var l = radius;
+				//petal (l, r, scale(d));
+				petal (l, r, sizeScale(d.value), colorScale(d.value));
+				r += radians;
 		    })
 		};
 		petals();
