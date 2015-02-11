@@ -36,12 +36,11 @@
                 efo_path : []
             },
             genetic_associations : {},
-            rna_expression: [],
-            //test : [2,4,4,3,4,7],
-            test: [],
+            rna_expression:[],
+            test:[],
+            categories:[]   // use this for sections of the accordion and flower petals
         };
 
-        //$scope.test = [];
 
         $scope.getInfo = function(){
             console.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
@@ -89,12 +88,12 @@
         $scope.getFlowerData = function(){
             console.log("getFlowerData()");
             $scope.search.test = [
-                {"value":6, "label":"Hello"},
-                {"value":3, "label":"There"},
-                {"value":5, "label":"World!"},
-                {"value":7, "label":"World!"},
-                {"value":4, "label":"World!"},
-                {"value":2, "label":"World!"}
+                {"value":9,  "label":"RNA"},
+                {"value":6,  "label":"Genetics"},
+                {"value":2,  "label":"Somatic"},
+                {"value":4,  "label":"Drugs"},
+                {"value":7,  "label":"Pathways"},
+                {"value":5,  "label":"Mouse data"}
             ];
         }
 
@@ -103,8 +102,8 @@
         $scope.getRnaExpressionData = function(){
             return cttvAPIservice.getAssociations( {
                     gene:$scope.search.target, 
-                    efo:$scope.search.disease/*,
-                    size: 1000*/
+                    efo:$scope.search.disease,
+                    size: 1000
                 } ).
                 success(function(data, status) {
                     $scope.search.rna_expression = data.data;
@@ -113,6 +112,62 @@
                 error(function(data, status) {
                     $log.error(status);
                 });
+        }
+
+
+
+        var initTableDrugs = function(){
+
+            // Drug overview
+            $('#drugs-table-1').dataTable( {
+                "data": [[
+                            "Marketed drug", 
+                            "Small molecule", 
+                            "Adrenergic receptor alpha-1 antagonist<br><span class='badge'>8</span> Publications", 
+                            "Drug negative modulator", 
+                            "C CARDIOVASCULAR SYSTEM, C01 CARDIAC THERAPY, C02 ANTIHYPERTENSIVES"
+                        ]],
+                "columns": [
+                    { "title": "Phase" },
+                    { "title": "Type" },
+                    { "title": "Mechanism of action" },
+                    { "title": "Activity" },
+                    { "title": "ATC Classes" }
+                ],
+                "autoWidth": false,
+                "lengthChange": false,
+                "paging": false,
+                "searching": false,
+                "bInfo" : false,
+                "ordering": false
+            } ); 
+
+
+            // Target overview 
+            $('#drugs-table-2').dataTable( {
+                "data": [[
+                            "Adrenergic receptor alpha-1", 
+                            "Heteropolymeric protein complex", 
+                            "ADRA1B, ADRA1D, ADRA1A"
+                        ]],
+                "columns": [
+                    { "title": "Target name" },
+                    { "title": "Target context" },
+                    { "title": "Protein complex members" }
+                ],
+                "autoWidth": false,
+                "lengthChange": false,
+                "paging": false,
+                "searching": false,
+                "bInfo" : false,
+                "ordering": false
+            } ); 
+        }
+
+
+
+        $scope.getDrugData = function(){
+            initTableDrugs();
         }
 
 
@@ -155,10 +210,6 @@
 
 
         var initTableRNA = function(){
-            console.log("> dataTables:");
-            console.log($('#rna-expression-table'));
-
-            // make the call
 
             $('#rna-expression-table').dataTable( {
                 "data": formatRnaDataToArray($scope.search.rna_expression), //[["non-small cell lung cancer", "decreased transcript level", "lung", "-1.07", "1.08e-17", "GPR65 expression details", "Transription profiling by array of human non-small cell lng cancer tissue", "bla bla bla"]],
@@ -189,8 +240,10 @@
                 console.log("newValue");
                 console.log(oldValue);
                 console.log(newValue);
-                if($scope.search.info.data.biological_object.efo_info[0][0].path){
-                    $scope.search.info.efo_path = $scope.search.info.data.biological_object.efo_info[0][0].path;
+                if($scope.search.info.data.biological_object){
+                    if($scope.search.info.data.biological_object.efo_info[0][0].path){
+                        $scope.search.info.efo_path = $scope.search.info.data.biological_object.efo_info[0][0].path;
+                    }
                 }
             });
 
@@ -205,7 +258,7 @@
 
             // then try get some data
             $scope.getRnaExpressionData();
-
+            setTimeout($scope.getDrugData, 1000);
             // populate the tables
             // RNA-expression table
             //$('#rna-expression-table').ready(initTableRNA);

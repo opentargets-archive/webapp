@@ -29,7 +29,8 @@ var flowerView = function () {
 		return d.value
 	    })[1]])
 	    //.domain([0, d3.extent(conf.values)[1]])
-	    .range(["#3e8bad", "#975269"]);
+	    //.range(["#3e8bad", "#975269"]);
+	    .range(["#3e8bad", "#3e8bad"]);
 		
 	var origin = [~~(conf.width/2), ~~(conf.height/2)];
 	var svg = container.append("svg")
