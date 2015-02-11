@@ -12,72 +12,94 @@ var geneAssociations = function () {
 	// Zoom Select
 	var zoomSelect = menu
 	    .append("span")
+	    .attr("class", "cttvGA_toplevelSelect")
 	    .text("Zoom: ")
 	    .append("select")
 	    .on("change", function () {
 		//var node = tree.find_node_by_name(this.value);
 		var n = this.value;
+		if (n === "Root") {
+		    bubblesView.focus(tree);
+		    bubblesView.select(tree);
+		    return;
+		}
 		var nodes = tree.find_all(function (node) {
 		    return node.property("key") === n;
 		});
-		var lca = tree.lca(nodes);
+		var lca;
+		if (nodes.length > 1) {
+		    lca = tree.lca(nodes);
+		} else {
+		    lca = nodes[0].parent();
+		}
 		bubblesView.focus(lca);
-	    });
-
-	// Highlight Select
-	var highlightSelect = menu
-	    .append("span")
-	    .text("Highlight")
-	    .append("select")
-	    .on("change", function () {
-		var n = this.value;
-		var nodes = tree.find_all(function (node) {
-		    return node.property("key") === n;
-		});
 		bubblesView.select(nodes);
 	    });
-	highlightSelect
-	    .append("option")
-	    .attr("value", "none")
-	    .attr("selected", 1)
-	    .text("None");
 
-	// Structure Select
-	var structureSelect = menu
-	    .append("span")
-	    .text("Structure")
-	    .append("select")
-	    .on("change", function () {
-		var n = this.value;
-		switch (n) {
-		case "EFO" :
-		    //bubblesView.data(data1);
-		    //bubblesView.update();
-		    break;
-		case "Simplified" :
-		    //bubblesView.data(data2);
-		    //bubblesView.update();
-		    break;
-		}
-	    });
-	structureSelect
+	zoomSelect
 	    .append("option")
-	    .attr("value", "EFO")
 	    .attr("selected", 1)
-	    .text("EFO");
-	structureSelect
-	    .append("option")
-	    .attr("value", "Simplified")
-	    .text("Simplified EFO");
+	    .attr("value","Root")
+	    .text("None");
+	
+	// // Highlight Select
+	// var highlightSelect = menu
+	//     .append("span")
+	//     .attr("class", "cttvGA_toplevelSelect")
+	//     .text("Highlight")
+	//     .append("select")
+	//     .on("change", function () {
+	// 	var n = this.value;
+	// 	var nodes = tree.find_all(function (node) {
+	// 	    return node.property("key") === n;
+	// 	});
+	// 	bubblesView.select(nodes);
+	//     });
+	// highlightSelect
+	//     .append("option")
+	//     .attr("value", "none")
+	//     .attr("selected", 1)
+	//     .text("None");
+
+	// // Switch between different structures
+	// Structure Select
+	// var structureSelect = menu
+	//     .append("span")
+	//     .text("Structure")
+	//     .append("select")
+	//     .on("change", function () {
+	// 	var n = this.value;
+	// 	switch (n) {
+	// 	case "EFO" :
+	// 	    //bubblesView.data(data1);
+	// 	    //bubblesView.update();
+	// 	    break;
+	// 	case "Simplified" :
+	// 	    //bubblesView.data(data2);
+	// 	    //bubblesView.update();
+	// 	    break;
+	// 	}
+	//     });
+	// structureSelect
+	//     .append("option")
+	//     .attr("value", "EFO")
+	//     .attr("selected", 1)
+	//     .text("EFO");
+	// structureSelect
+	//     .append("option")
+	//     .attr("value", "Simplified")
+	//     .text("Simplified EFO");
 	
 	var tree = bubblesView.data();
 	tree.apply (function (node) {
+	    if (node.is_leaf()) {
 		zoomSelect.append("option")
 		    .attr("value", node.property("key"))
 		    .text(node.property("key"));
-	    highlightSelect.append("option")
-		.attr("value", node.property("key"))
-		.text(node.property("key"));
+	    }
+	    // highlightSelect.append("option")
+	    // 	.attr("value", node.property("key"))
+	    // 	.text(node.property("key"));
 	});
 
 	// Tooltips
