@@ -1,12 +1,12 @@
 <div>
-	<h3>Gene to disease association<br /><small>{{search.target}} <i class="fa fa-arrows-h"></i> {{search.disease}}</small></h3>
-	<div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div>
+	<h3>Gene to disease association <!-- <br /><small>{{search.target}} <i class="fa fa-arrows-h"></i> {{search.disease}}</small> --></h3>
+	<!-- <div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div> -->
 
 	<!-- page header with flower and overview -->
 	<div class="row" style="padding-bottom:20px; margin-bottom:20px">
 
 		<div class="col-sm-3"  style="overflow:hidden">
-			<cttv-gene-disease-association target="{{search.target}}" disease="{{search.disease}}" width="160" height="160" association-data="search.test"></cttv-gene-disease-association>
+			<cttv-gene-disease-association target="{{search.target}}" disease="{{search.disease}}" width="180" height="180" association-data="search.test"></cttv-gene-disease-association>
 		</div>
 
 		<div class="col-sm-9">
@@ -14,7 +14,7 @@
 			<div class="row">
 				<div class="col-sm-5">
 					<div style="border-radius: 10px; background: #DDD; padding: 5px 10px">
-						<h5>{{search.target}}<br /><small>{{search.info.biological_subject.about[0]}}</small></h5>
+						<h5>{{search.target}}<br /><small>{{search.info.data.biological_subject.about[0]}}</small></h5>
 						<p><small>May play a role in the postsynaptic responses of hippocampal neuron. Phosphorylates MAP2K1, and thereby contributes to the MAP kinase signal transduction pathway...</small></p>
 					</div>
 				</div>
@@ -25,28 +25,39 @@
 				</div>
 				<div class="col-sm-5">
 					<div style="border-radius: 10px; background: #DDD; padding: 5px 10px">
-						<h5>{{search.info.biological_object.efo_info.efo_label}}<br /><small>{{search.info.biological_object.efo_info.efo_path}}</small></h5>
+						<h5>{{search.info.data.biological_object.efo_info.efo_label}}<br /><small>{{search.info.data.biological_object.efo_info.efo_path}}</small></h5>
 						<p><small>A usually small, slow-growing neoplasm composed of islands of rounded, oxyphilic, or spindle-shaped cells of medium size, with moderately small vesicular nuclei...</small></p>
 					</div>
 				</div>
 			</div>
 			-->
 			<div style="display: table;">
+
+				<!-- Gene Info -->
 				<div style="display: table-cell; width:45%">
 					<div style="border-radius: 10px; background: #DDD; padding: 5px 10px">
-						<h5>{{search.target}}<br /><small>{{search.info.biological_subject.about[0]}}</small></h5>
+						<h5>{{search.info.data.biological_subject.gene_info[0].symbol}}<br /><small>{{search.info.data.biological_subject.gene_info[0].name}} ({{search.info.data.biological_subject.gene_info[0].geneid}})</small></h5>
 						<p class="small">May play a role in the postsynaptic responses of hippocampal neuron. Phosphorylates MAP2K1, and thereby contributes to the MAP kinase signal transduction pathway...</p>
 					</div>
 				</div>
+
+				<!-- Divider -->
 				<div style="display: table-cell; width:10%; vertical-align:middle; padding: 2px">
-					<div style="width:100%; height:1px; border-bottom:2px dotted #DDD"></div>
+					<div style="width:100%; height:1px; border-bottom:2px solid #DDD"></div>
 				</div>
+
+				<!-- Disease Info -->
 				<div style="display: table-cell; width:45%">
 					<div style="border-radius: 10px; background: #DDD; padding: 5px 10px">
-						<h5>{{search.info.biological_object.efo_info.efo_label}}<br /><small>{{search.info.biological_object.efo_info.efo_path}}</small></h5>
-						<p class="small">A usually small, slow-growing neoplasm composed of islands of rounded, oxyphilic, or spindle-shaped cells of medium size, with moderately small vesicular nuclei...</p>
+						<h5>{{search.info.data.biological_object.efo_info[0][0].label}}<!-- <br /><small>{{search.info.data.biological_object.efo_info[0][0].efo_id}}</small>--></h5>
+						<p class="small">A carcinoma that originates from breast tissue.</p>
+						<!-- show the EFO hierarchy links -->
+						<!-- <small class="text-lowlight">
+							<span ng-repeat="link in search.info.efo_path"><span ng-click="linkTo({type:'efo', q:link}); $event.stopPropagation()"><a>{{link | limitTo:30}}<span ng-show="link.length>30">...</span></a></span><span ng-show="!$last" class="fa fa-angle-right fa-md" style="margin:0px 4px"></span></span>
+						</small>-->
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
@@ -55,15 +66,16 @@
 
 	<!-- Filters and tabular data -->
 	<div class="row">
+		<!-- 
 		<div class="col-sm-3">
-			<!-- Placeholder for filters etc -->
 			<h4>Filters <br /><small>(not working)</small></h4>
 			<div class="checkbox" ng-repeat="result in ['one', 'two', 'three', 'four', 'five', 'six']">
 				<label><input type="checkbox" ><small>{{result}}</small></label>
 			</div>
 		</div>
+		-->
 
-		<div class="col-sm-9">
+		<div class="col-sm-12">
 
 			<!-- Data tables -->
 
@@ -76,42 +88,36 @@
 			-->
 			
 			<accordion  close-others="false">
-				<accordion-group heading="RNA expression" is-open="true" >
-					<table class="table table-striped table-hover">
-						<thead>
-							<tr>
-								<th>Title</th>
-								<th>Description</th>
-								<th>Type</th>
-								<th>Score</th>
-							</tr>
-						</thead>
-						<tbody>
-						<!--
-							<tr ng-repeat="result in search.results.data">	
-								<td><a href="#/evidence?q={{result.id}}&label={{result.title}}"><strong>{{result.title}}</strong></a></td>
-								<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.description}}</a></td>
-								<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.type | limitTo: ((result.type==='genename')?4:3) | uppercase}}</a></td>
-								<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.score}}</a></td>
-							</tr>
-						-->
-						</tbody>
-					</table>
+				<accordion-group heading="RNA expression ({{search.rna_expression.length}})" is-open="true" >
+					<div>
+						<!-- <h4>Header info for table</h4> -->
+						<table class='table table-striped table-bordered' id="rna-expression-table">
+						</table>
+						<p>Final footer notes for the table...</p>
+					</div>
 				</accordion-group>
 
 				<accordion-group heading="Genetic associations" >
 					<div ng-repeat="result in search.genetic_associations">{{result}}</div>
 				</accordion-group>
 
-				<accordion-group heading="Phenotypic associations" >
+				<accordion-group heading="Somatic mutations" >
 					This content is straight in the template.
 				</accordion-group>
 
-				<accordion-group heading="Known drugs" >
-					This content is straight in the template.
+				<accordion-group heading="Known drugs (1)" >
+					<div>
+						<table class='table table-striped table-bordered' id="drugs-table">
+						</table>
+						<p>Final footer notes for the table...</p>
+					</div>
 				</accordion-group>
 
 				<accordion-group heading="Disrupted pathways" >
+					This content is straight in the template.
+				</accordion-group>
+
+				<accordion-group heading="Mouse models" >
 					This content is straight in the template.
 				</accordion-group>
 
