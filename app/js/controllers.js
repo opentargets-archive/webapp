@@ -89,12 +89,12 @@
         $scope.getFlowerData = function(){
             console.log("getFlowerData()");
             $scope.search.test = [
-                {"value":6, "label":"Hello"},
-                {"value":3, "label":"There"},
-                {"value":5, "label":"World!"},
-                {"value":7, "label":"World!"},
+                {"value":10, "label":"Hello"},
+                {"value":0, "label":"There"},
+                {"value":0, "label":"World!"},
                 {"value":4, "label":"World!"},
-                {"value":2, "label":"World!"}
+                {"value":0, "label":"World!"},
+                {"value":0, "label":"World!"}
             ];
         }
 
@@ -103,8 +103,8 @@
         $scope.getRnaExpressionData = function(){
             return cttvAPIservice.getAssociations( {
                     gene:$scope.search.target, 
-                    efo:$scope.search.disease/*,
-                    size: 1000*/
+                    efo:$scope.search.disease,
+                    size: 1000
                 } ).
                 success(function(data, status) {
                     $scope.search.rna_expression = data.data;
@@ -116,6 +116,10 @@
         }
 
 
+
+        $scope.getDrugData = function(){
+
+        }
 
         /*
          * Takes the data object returned by the API and formats it to an array of arrays 
@@ -189,8 +193,10 @@
                 console.log("newValue");
                 console.log(oldValue);
                 console.log(newValue);
-                if($scope.search.info.data.biological_object.efo_info[0][0].path){
-                    $scope.search.info.efo_path = $scope.search.info.data.biological_object.efo_info[0][0].path;
+                if($scope.search.info.data.biological_object){
+                    if($scope.search.info.data.biological_object.efo_info[0][0].path){
+                        $scope.search.info.efo_path = $scope.search.info.data.biological_object.efo_info[0][0].path;
+                    }
                 }
             });
 
@@ -205,7 +211,7 @@
 
             // then try get some data
             $scope.getRnaExpressionData();
-
+            $scope.getDrugData();
             // populate the tables
             // RNA-expression table
             //$('#rna-expression-table').ready(initTableRNA);
