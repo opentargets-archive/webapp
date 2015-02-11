@@ -41,6 +41,7 @@ var bubblesView = function () {
 	conf.divId = d3.select(div).attr("id");
 	svg = d3.select(div)
 	    .append("svg")
+	    .attr("class", "cttv_bubblesView")
 	    .attr("width", conf.diameter)
             .attr("height", conf.diameter)
 	    .append("g")

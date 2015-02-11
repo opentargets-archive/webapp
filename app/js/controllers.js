@@ -189,9 +189,9 @@
                 console.log("newValue");
                 console.log(oldValue);
                 console.log(newValue);
-                if($scope.search.info.data.biological_object.efo_info[0][0].path){
-                    $scope.search.info.efo_path = $scope.search.info.data.biological_object.efo_info[0][0].path;
-                }
+                // if($scope.search.info.data.biological_object.efo_info[0][0].path){
+                //     $scope.search.info.efo_path = $scope.search.info.data.biological_object.efo_info[0][0].path;
+                // }
             });
 
             // will need a way of parsing filters too...

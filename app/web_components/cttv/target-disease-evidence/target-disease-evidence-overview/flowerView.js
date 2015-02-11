@@ -16,7 +16,6 @@ var flowerView = function () {
     	var container = d3.select(div);
     	radius = conf.diagonal / 2;
 
-<<<<<<< HEAD
 	//var valsExtent = d3.extent(conf.values);
 	var sizeScale = d3.scale.linear()
 	    .domain([0,d3.extent(conf.values, function(d){
@@ -26,7 +25,10 @@ var flowerView = function () {
 	    .range([0, radius]);
 		
 	var colorScale = d3.scale.linear()
-	    .domain([0, d3.extent(conf.values)[1]])
+	    .domain([0,d3.extent(conf.values, function(d){
+		return d.value
+	    })[1]])
+	    //.domain([0, d3.extent(conf.values)[1]])
 	    .range(["#3e8bad", "#975269"]);
 		
 	var origin = [~~(conf.width/2), ~~(conf.height/2)];
@@ -36,7 +38,7 @@ var flowerView = function () {
 	    .append("g")
 	    .attr("transform", "translate(" + radius + "," + radius + ")");
 
-	var label = function (r) {
+	var label = function (r, currLabel) {
 	    var rads = r * 180 / Math.PI;
 	    var offset = 20;
 	    svg.append("text")
@@ -46,10 +48,7 @@ var flowerView = function () {
 		.attr("font-weight", "bold")
 		.attr("text-anchor", (!isReversed(rads)? "start" : "end"))
 		.attr("transform", "translate(" + (0+Math.cos(r)*offset) + "," + (0+Math.sin(r)*offset) + ")rotate(" + (rads) + ")rotate(" + (!isReversed(rads)?0:180) + ")")
-		.text(function (d) {
-		    console.log(d);
-		    d.label;
-		});
+		.text(currLabel);
 
 	    function isReversed (d) {
 		return (d>90 && d<270);
@@ -147,13 +146,13 @@ var flowerView = function () {
 	    var r = 0;
 	    conf.values.forEach (function (d, i) {
 		var l = radius;
-		petal (l, r, sizeScale(d), colorScale(d));
+		petal (l, r, sizeScale(d.value), colorScale(d.value));
 		r += radians;
 	    })
 	    r = 0;
 	    conf.values.forEach (function (d, i) {
 		var l = radius;
-		label (r);
+		label (r, d.label);
 		r += radians;
 	    })
 	};
@@ -164,6 +163,8 @@ var flowerView = function () {
 	if (!arguments.length) {
 	    return conf.values;
 	}
+	console.log("NEW VALS: ");
+	console.log(vals);
 	conf.values = vals;
 	radii = vals.length;
 	radians = 2 * Math.PI / radii

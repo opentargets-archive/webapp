@@ -27,9 +27,6 @@ angular.module('cttvDirectives', [])
 	    for (var j in d) {
 	    	o.children.push ( {"key":j, "efo": labels[j], "values":d[j]} );
 	    }
-	    console.log("PROCESSED:");
-	    console.log(o);
-
 	    return o;
 	    //return d;
 	}
@@ -87,7 +84,8 @@ angular.module('cttvDirectives', [])
 			.value("values")
 			.key("key")
 			.diameter(diameter)
-		    var ga = geneAssociations();
+		    var ga = geneAssociations()
+		    	.target(attrs.target);
 		    ga(bView, elem[0]);
 		});		
 	    }
@@ -227,8 +225,10 @@ angular.module('cttvDirectives', [])
         			console.log("render()");
         			console.log(data);
         			if(data.length>0){
-        				var flower = flowerView().values(data);
-        				flower(elem[0]);
+        			    var flower = flowerView()
+					.values(data)
+					.diagonal(200)
+        			    flower(elem[0]);
         			}
         		}
 

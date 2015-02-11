@@ -150,7 +150,8 @@ var geneAssociations = function () {
 		"value" : "View evidence",
 		"obj" : node,
 		"link" : function (node) {
-		    window.location.href="/app/#/gene-disease?t=" + config.target + "&d=" + node.property("key");
+		    console.log(config);
+		    window.location.href="/app/#/gene-disease?t=" + config.target + "&d=" + node.property("efo");
 		}
 	    });
 	    tooltip.table()
