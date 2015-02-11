@@ -7,38 +7,51 @@ angular.module('cttvDirectives', [])
 	// var bView = bubblesView();
 	// processData aggregates evidence by EFO id
 	// TODO: This function may change once we have a final version of the API. In the meantime, counts are processed here
-	// function processData (data) {
-	//     var d = {};
-	//     for (var i=0; i<data.length; i++) {
-	// 	var label = data[i]["biological_object.efo_info.efo_label"];
-	// 	if (d[label] === undefined) {
-	// 	    d[label] = 1;
-	// 	} else {
-	// 	    d[label]++;
-	// 	}
-	//     }
-
-	//     // var o = {name: "Root", children: []};
-	//     // for (var j in d) {
-	//     // 	o.children.push ( {"name":j, "value":d[j]} );
-	//     // }
-	//     // return o;
-	//     //console.log(d);
-	//     return d;
-	// }
-
-	function processData (full_data) {
-	    var nested = d3.nest()
-		.key(function(d) { return d["biological_object.efo_info.efo_label"]; })
-	        .rollup(function(leaves) { return leaves.length; })
-	        .entries(full_data);
-	    var total = d3.sum(nested, function (d) {return d.values});
-	    return {
-		"key": "Root",
-		"values": total,
-		"children": nested
+	function processData (data) {
+	    var d = {};
+	    var labels = {};
+	    for (var i=0; i<data.length; i++) {
+		console.log(data[i]);
+		//var label = data[i]["biological_object.about"];
+		var label = data[i].biological_object.efo_info[0][0].label;
+		var efo = data[i].biological_object.efo_info[0][0].efo_id;
+		if (d[label] === undefined) {
+		    d[label] = 1;
+		    labels[label] = efo;
+		} else {
+		    d[label]++;
+		}
 	    }
-	};
+
+	    var o = {"key": "Root", children: []};
+	    for (var j in d) {
+	    	o.children.push ( {"key":j, "efo": labels[j], "values":d[j]} );
+	    }
+	    console.log("PROCESSED:");
+	    console.log(o);
+
+	    return o;
+	    //return d;
+	}
+
+	// function processData (full_data) {
+	//     var nested = d3.nest()
+	//     //.key(function(d) { return d["biological_object.about"]; })
+	// 	.key(function (d) {
+	// 	    console.log(d.biological_object.efo_info[0][0].label);
+	// 	    return d.biological_object.efo_info[0][0].label;
+	// 	})
+	//         .rollup(function(leaves) { return leaves.length; })
+	//         .entries(full_data);
+	//     var total = d3.sum(nested, function (d) {return d.values});
+	//     console.log("NESTED:");
+	//     console.log(nested);
+	//     return {
+	// 	"key": "Root",
+	// 	"values": total,
+	// 	"children": nested
+	//     }
+	// };
 	
 	return {
 	    restrict: 'EA',
@@ -47,7 +60,7 @@ angular.module('cttvDirectives', [])
 		var api = cttvApi();
 		var url = api.url.filterby({
 		    gene:attrs.target,
-		    datastructure:"simple",
+		    //datastructure:"simple",
 		    size:1000
 		});
 		console.log("URL: " + url);
@@ -60,11 +73,9 @@ angular.module('cttvDirectives', [])
 		    // viewport Size
 		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
 		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-		    console.log("WIDTH: " + viewportW + " -- HEIGHT: " + viewportH);
 
 		    // Element Coord
 		    var elemOffsetTop = elem[0].parentNode.offsetTop;
-		    console.log("ELEMOFFSETTOP: " + elemOffsetTop);
 
 		    // BottomMargin
 		    var bottomMargin = 50;
