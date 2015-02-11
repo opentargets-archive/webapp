@@ -47,6 +47,5 @@
     "tnt.tree.node": "0.0.1",
     "uglify-js": "~2.4.15",
     "watchify": "^1.0.2"
-  },
-  "dependencies": {}
+  }
 }

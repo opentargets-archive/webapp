@@ -50,6 +50,14 @@ var cttvApi = function () {
 	if (obj.datastructure != null) {
 	    opts.push("datastructure=" + obj.datastructure);
 	}
+	// TODO: Since we know in advance the possible names of the datasources we can add a check here
+	// Taking into account that we may have more than one!
+	if (obj.datasource != null) {
+	    opts.push("datasource=" + obj.datasource);
+	}
+	if (obj.fields != null) {
+	    opts.push("fields=" + obj.fields);
+	}
 
 	return prefixFilterby + opts.join("&");
     };
