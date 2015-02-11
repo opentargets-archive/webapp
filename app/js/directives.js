@@ -207,23 +207,40 @@ angular.module('cttvDirectives', [])
     })
 
 
+    /**
+     * Flower graph
+     */
     .directive('cttvGeneDiseaseAssociation', function(){
     	return {
     		restrict:'EA',
+    		//transclude: 'true',
     		scope: {
     			associationData: '='
     		},
         	link: function(scope, elem, attrs){
         		console.log("link()");
         		console.log(scope);
-        		console.log(attrs.associationData);
-        		var flower = flowerView().values(scope.associationData);
-        		flower(elem[0]);
-        		/*setTimeout(function(){
-        			console.log("changing values...")
-        			flower.values([3,4,5,6,7,8]);
-        			//flower(elem[0]);
-        		}, 4000);*/
+        		//var flower = flowerView().values(scope.associationData);
+        		//flower(elem[0]);
+
+        		scope.render = function(data){
+        			console.log("render()");
+        			console.log(data);
+        			if(data.length>0){
+        				var flower = flowerView().values(data);
+        				flower(elem[0]);
+        			}
+        		}
+
+    			// Watch for data changes
+	            scope.$watch(
+	            	'associationData', 
+	            	function() {
+	            		scope.render(scope.associationData);
+	            		console.log("Watchout radioactive man!!");
+	            	}//,
+	            	//true
+	            );
         	}
     	}
     })

@@ -16,14 +16,17 @@ var flowerView = function () {
     	var container = d3.select(div);
     	radius = conf.diagonal / 2;
 
+<<<<<<< HEAD
 	//var valsExtent = d3.extent(conf.values);
 	var sizeScale = d3.scale.linear()
-	    .domain([0, d3.extent(conf.values)[1]])
+	    .domain([0,d3.extent(conf.values, function(d){
+		return d.value
+	    })[1]])
+	    //.domain([0, d3.extent(conf.values)[1]])
 	    .range([0, radius]);
 		
 	var colorScale = d3.scale.linear()
 	    .domain([0, d3.extent(conf.values)[1]])
-	//.range(["#f7fbff","#08306b"]);
 	    .range(["#3e8bad", "#975269"]);
 		
 	var origin = [~~(conf.width/2), ~~(conf.height/2)];
@@ -43,7 +46,10 @@ var flowerView = function () {
 		.attr("font-weight", "bold")
 		.attr("text-anchor", (!isReversed(rads)? "start" : "end"))
 		.attr("transform", "translate(" + (0+Math.cos(r)*offset) + "," + (0+Math.sin(r)*offset) + ")rotate(" + (rads) + ")rotate(" + (!isReversed(rads)?0:180) + ")")
-		.text("Leaf label");
+		.text(function (d) {
+		    console.log(d);
+		    d.label;
+		});
 
 	    function isReversed (d) {
 		return (d>90 && d<270);
@@ -135,7 +141,6 @@ var flowerView = function () {
 		.attr("class", "petal")
 		.attr("d", line(realData))
 		.attr("fill", function () {return color});
-
 	};
 
 	var petals = function () {
