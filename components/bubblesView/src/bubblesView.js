@@ -7,14 +7,14 @@ var bubblesView = function () {
 	diameter : 600,
 	format : d3.format(",d"),
 	color : d3.scale.category20c(),
-	// flat : true,
 	colorPalette : true,
 	data : undefined,
 	value : "value",
 	key : "name",
 	divId : undefined,
 	onclick : function () {},
-	duration: 1000
+	duration: 1000,
+	//labelOffset : 10
     };
 
     var focus; // undef by default
@@ -24,6 +24,7 @@ var bubblesView = function () {
     var pack;
     var nodes;
     var circle;
+    var paths;
 
     var currTranslate = [0,0];
     var currScale = 1;
@@ -42,13 +43,8 @@ var bubblesView = function () {
 	    .append("svg")
 	    .attr("width", conf.diameter)
             .attr("height", conf.diameter)
-	    // .attr("pointer-events", "all")
 	    .append("g")
 	    .call(zoom)
-	    // .call(d3.behavior.zoom()
-	    // 	  .scaleExtent([0.8, Infinity])
-	    // 	  .on("zoom", function() { redraw(svg); })
-	    // 	 )
 	    .append("g");
 
 	pack = d3.layout.pack()
@@ -86,6 +82,12 @@ var bubblesView = function () {
 	var newNodes = nodes
             .enter()
 	    .append("g")
+	    .on("dblclick", function () {
+		if (d3.event.defaultPrevented) {
+		    return;
+		}
+		d3.event.stopPropagation();
+	    })
 	    .on("click", function (d) {
 		if (d3.event.defaultPrevented) {
 		    return;
@@ -106,6 +108,31 @@ var bubblesView = function () {
 
         newNodes.append("text");
 
+	paths = newNodes
+	    .append("path")
+	    .attr("id", function(d,i){return "s"+i;})
+	    .attr("fill", "none")
+	    // .attr("d", function (d) {
+	    // 	return describeArc(0, 0, d.r, 160, -160);
+	    // });
+
+	var labels = newNodes
+	    .append("text")
+	    .attr("class", "topLabel")
+	    .attr("fill", "navy")
+	    .attr("font-size", 15)
+	    .style("text-anchor", "middle")
+	    .append("textPath")
+	    .attr("xlink:href",function(d,i){
+		return "#s"+i;
+	    })
+	    .attr("startOffset", "50%")
+	    .text(function (d) {
+		if (d.children) {
+		    return d[conf.key].substring(0, d.r);
+		}
+	    });
+
 	// Moving nodes
 	nodes
 	    .attr("class", "node")
@@ -115,17 +142,25 @@ var bubblesView = function () {
 	    .classed ("root", function (d) {
 		return !d._parent;
 	    })
-	    // .attr("class", function(d) {
-	    // 	return d.children ? "node" : "leaf node";
-	    // })
 	    .transition()
 	    .duration(conf.duration)
-            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+            .attr("transform", function(d) {
+		return "translate(" + d.x + "," + d.y + ")";
+	    });
 
+	nodes.select("path")
+	    .attr("d", function (d) {
+		return describeArc(0, 10, d.r, 160, -160);
+	    })
+	
 	nodes.select("text")
 	    .attr("dy", ".3em")
             .style("text-anchor", "middle")
-            .text(function(d) { return d[conf.key].substring(0, d.r / 3); });
+            .text(function(d) {
+		if (!d.children) {
+		    return d[conf.key].substring(0, d.r / 3);
+		}
+	    });
 	
         nodes.select("circle")
 	    .attr ("class", function (d) {
@@ -134,9 +169,10 @@ var bubblesView = function () {
 	    .transition()
 	    .duration(conf.duration)
 	    .attr ("r", function(d) {
+		//return d.r - (d.children ? 0 : conf.labelOffset);
 		return d.r;
 	    });
-
+	
 	circle = nodes.selectAll("circle");
 
 	// Exiting nodes
@@ -155,15 +191,29 @@ var bubblesView = function () {
     // Auxiliar functions //
     ////////////////////////
 
+    function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+	var angleInRadians = (angleInDegrees-90) * Math.PI / 180.0;
+	return {
+	    x: centerX + (radius * Math.cos(angleInRadians)),
+	    y: centerY + (radius * Math.sin(angleInRadians))
+	};
+    }
+
+    function describeArc(x, y, radius, startAngle, endAngle){
+	var start = polarToCartesian(x, y, radius, endAngle);
+	var end = polarToCartesian(x, y, radius, startAngle);
+	var arcSweep = endAngle - startAngle <= 180 ? "0" : "1";
+	var d = [
+	    "M", start.x, start.y,
+	    "A", radius, radius, 0, 1, 1, end.x, end.y
+	].join(" ");
+	return d;
+    }
+    
     function redraw (viz) {
 	viz.attr ("transform",
 		   "translate (" + d3.event.translate + ") " +
 		  "scale (" + d3.event.scale + ")");
-	// var node = d3.selectAll(".node");
-	// node
-	//     .attr("transform", function (d) {
-	// 	return "translate(" + 
-	//     })
     }
     
     function focusTo (v) {
@@ -177,7 +227,15 @@ var bubblesView = function () {
 		return "translate(" + (((d.x - v[0]) * k) + offset) + "," + (((d.y - v[1]) * k) + offset) + ")";
 	    });
 	circle
-	    .attr("r", function(d) { return d.r * k; });
+	    .attr("r", function(d) {
+		return d.r * k;
+	    });
+
+	paths
+	    .attr("d", function (d) {
+		return describeArc(0, 10, d.r*k, 160, -160);
+	    });
+	
     }
 
     //////////

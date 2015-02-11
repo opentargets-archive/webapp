@@ -5,6 +5,7 @@
   "readme": "README.md",
   "license": "Apache-2.0",
   "dependencies": {
+    "biojs-vis-pmccitation": "^0.1.7",
     "cttv.Api": "file:../components/cttvApi",
     "cttv.bubblesView": "file:../components/bubblesView",
     "cttv.geneAssociations": "file:../components/geneAssociations"

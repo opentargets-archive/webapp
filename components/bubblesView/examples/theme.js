@@ -47,11 +47,11 @@ var theme = function () {
 		var n = this.value;
 		switch (n) {
 		case "EFO" :
-		    bubblesView.data(data1);
+		    bubblesView.data(bubblesView.node(data1));
 		    bubblesView.update();
 		    break;
 		case "Simplified" :
-		    bubblesView.data(data2);
+		    bubblesView.data(bubblesView.node(data2));
 		    bubblesView.update();
 		    break;
 		}
@@ -66,7 +66,7 @@ var theme = function () {
 	    .attr("value", "Simplified")
 	    .text("Simplified EFO");
 	
-	var tree = bubblesView.node(bubblesView.data());
+	var tree = bubblesView.data();
 	tree.apply (function (node) {
 	    zoomSelect.append("option")
 		.attr("value", node.node_name())
