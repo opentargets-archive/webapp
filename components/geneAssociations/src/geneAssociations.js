@@ -13,7 +13,7 @@ var geneAssociations = function () {
 	var zoomSelect = menu
 	    .append("span")
 	    .attr("class", "cttvGA_toplevelSelect")
-	    .text("Zoom: ")
+	    .text("Find: ")
 	    .append("select")
 	    .on("change", function () {
 		//var node = tree.find_node_by_name(this.value);
@@ -107,10 +107,12 @@ var geneAssociations = function () {
 	    var obj = {};
 	    obj.header = "Name: " + node.property("key");
 	    obj.rows = [];
-	    obj.rows.push({
-		"label" : "EFO",
-		"value" : "<a target='_blank' href='http://www.ebi.ac.uk/efo/" + node.property("key")  + "'>" + node.property("key")  + "</a>"
-	    });
+	    if (node.property("efo") !== undefined) {
+		obj.rows.push({
+		    "label" : "EFO",
+		    "value" : "<a target='_blank' href='http://www.ebi.ac.uk/efo/" + node.property("efo")  + "'>" + node.property("efo")  + "</a>"
+		});
+	    }
 	    obj.rows.push({
 		"label" : "Evidence count",
 		"value" : node.property("value")
@@ -122,7 +124,7 @@ var geneAssociations = function () {
 	    if (node.property("focused") === 1) {
 		obj.rows.push({
 		    "label" : "Action",
-		    "value" : "release focus",
+		    "value" : "Zoom Out",
 		    "obj" : node,
 		    "link" : function (node) {
 			node.property("focused", undefined);
@@ -132,7 +134,7 @@ var geneAssociations = function () {
 	    } else {
 		obj.rows.push({
 		    "label" : "Action",
-		    "value" : "focus",
+		    "value" : "Zoom In",
 		    "obj" : node,
 		    "link" : function (node) {
 			tree.apply( function (n) {
