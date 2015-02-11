@@ -1,5 +1,5 @@
 var flowerView = function () {
-    "use strict";
+   "use strict";
     var conf = {
 	diagonal : 100,
 	values : [],
@@ -23,7 +23,8 @@ var flowerView = function () {
 		
 	var colorScale = d3.scale.linear()
 	    .domain([0, d3.extent(conf.values)[1]])
-	    .range(["#f7fbff","#08306b"]);
+	//.range(["#f7fbff","#08306b"]);
+	    .range(["#3e8bad", "#975269"]);
 		
 	var origin = [~~(conf.width/2), ~~(conf.height/2)];
 	var svg = container.append("svg")
@@ -32,24 +33,16 @@ var flowerView = function () {
 	    .append("g")
 	    .attr("transform", "translate(" + radius + "," + radius + ")");
 
-	var label = function (l, r, d) {
-	    var x = l * Math.cos(r);
-	    var y = l * Math.sin(r);
-	    var realx = d * Math.cos(r);
-	    var realy = d * Math.sin(r);
-	    
-	    var rads = Math.atan2(0-x, 0-y) * 180 / Math.PI;
-	    if (rads < 0) {
-		rads = rads + 360;
-	    }
+	var label = function (r) {
+	    var rads = r * 180 / Math.PI;
 	    var offset = 20;
-	    
 	    svg.append("text")
 		.attr("x", origin[0])
 		.attr("y", origin[1])
 		.attr("font-size", conf.fontsize)
+		.attr("font-weight", "bold")
 		.attr("text-anchor", (!isReversed(rads)? "start" : "end"))
-	        .attr("transform", "translate(" + (0-Math.sin(r)*20) + "," + (0-Math.cos(r)*20) + ")rotate(" + (rads) + ")rotate(" + (!isReversed(rads)?0:180) + ")")
+		.attr("transform", "translate(" + (0+Math.cos(r)*offset) + "," + (0+Math.sin(r)*offset) + ")rotate(" + (rads) + ")rotate(" + (!isReversed(rads)?0:180) + ")")
 		.text("Leaf label");
 
 	    function isReversed (d) {
@@ -61,7 +54,7 @@ var flowerView = function () {
 	var petal = function (l, r, d, color) {
 	    var x = l * Math.cos(r);
 	    var y = l * Math.sin(r);
-	    var rads = Math.atan2(0-x, 0-y) * 180 / Math.PI;
+	    //var rads = Math.atan2(0-x, 0-y) * 180 / Math.PI;
 	    
 	    var realx = d * Math.cos(r);
 	    var realy = d * Math.sin(r);
@@ -140,9 +133,7 @@ var flowerView = function () {
 
 	    svg.append("path")
 		.attr("class", "petal")
-	    //.attr("d", line(realData))
 		.attr("d", line(realData))
-	    //.attr("fill", color(x));
 		.attr("fill", function () {return color});
 
 	};
@@ -151,15 +142,13 @@ var flowerView = function () {
 	    var r = 0;
 	    conf.values.forEach (function (d, i) {
 		var l = radius;
-		//petal (l, r, scale(d));
 		petal (l, r, sizeScale(d), colorScale(d));
 		r += radians;
 	    })
-
+	    r = 0;
 	    conf.values.forEach (function (d, i) {
 		var l = radius;
-		//petal (l, r, scale(d));
-		label (l, r, sizeScale(d));
+		label (r);
 		r += radians;
 	    })
 	};
