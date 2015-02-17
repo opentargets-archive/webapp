@@ -1,5 +1,8 @@
 //var nets = require("nets");
 var httpplease = require("httpplease");
+var promises = require('httpplease-promises');
+var Promise = require('es6-promise').Promise
+http = httpplease.use(promises(Promise));
 
 var cttvApi = function () {
     // This was needed when authentication was included in the elasticsearch api
@@ -17,19 +20,52 @@ var cttvApi = function () {
     // }
     var prefix = "http://193.62.52.228/api/latest/";
     var prefixFilterby = prefix + "filterby?";
+    var prefixAssociations = prefix + "association?"
+    var prefixSearch = prefix + "search?";
 
     var _ = {};
-    _.call = function (myurl, callback) {
-	httpplease.get({
-	    url: myurl
-	}, function (err, resp) {
-	    if (err == null) {
-		callback (resp.status, JSON.parse(resp.body));
-	    }
+    _.call = function (myurl) {
+	return http.get({
+	    "url" : myurl
 	});
     };
+    // _.call = function (myurl, callback) {
+    // 	http.get({
+    // 	    url: myurl
+    // 	}, function (err, resp) {
+    // 	    if (err == null) {
+    // 		callback (resp.status, JSON.parse(resp.body));
+    // 	    }
+    // 	});
+    // };
     
     _.url = {};
+    _.url.search = function (obj) {
+	var opts = [];
+	if (obj.from != null) {
+	    opts.push("from=" + obj.from);
+	}
+	if (obj.size != null) {
+	    opts.push("size=" + obj.size);
+	}
+	if (obj.q != null) {
+	    opts.push("q=" + obj.size);
+	}
+	if (obj.format != null) {
+	    opts.push("format=" + obj.format);
+	}
+	return prefixSearch + opts.join ("&");
+    };
+    _.url.associations = function (obj) {
+	var opts = [];
+	if (obj.gene != null) {
+	    opts.push("gene=" + obj.gene);
+	} else if (obj.efo != null) {
+	    opts.push("efo=" + obj.efo);
+	}
+
+	return prefixAssociations + opts.join("&");
+    };
     _.url.filterby = function (obj) {
 	var opts = [];
 	if (obj.efo != null) {

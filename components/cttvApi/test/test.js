@@ -18,6 +18,56 @@ describe('CTTV api', function () {
 	    it ("exists", function () {
 		assert.isDefined (cttvApiUrl);
 	    });
+	    describe ("search", function () {
+		it ("exists", function () {
+		    assert.isDefined (cttvApiUrl.search);
+		});
+		it ("retrieves search results for a gene", function (done) {
+		    var url = cttvApiUrl.search({q: data.gene});
+		    myCttvApi.call(url)
+			.then(function (resp) {
+			    resp = JSON.parse(resp.text);
+			    assert.isDefined(resp);
+			    assert.isObject(resp);
+			    assert.isDefined(resp.took);
+			    assert.isDefined(resp.size);
+			    assert.operator(resp.size, '<=', 10);
+			    assert.operator(resp.size, '>', 0);
+			    done();
+			})
+		});
+	    });
+	    describe ("association", function () {
+		it ("exists", function () {
+		    assert.isDefined (cttvApiUrl.associations);
+		});
+		it ("retrieves associations for a gene", function (done) {
+		    var url = cttvApiUrl.associations({gene: data.gene});
+		    myCttvApi.call(url)
+			.then(function (resp) {
+			    resp = JSON.parse(resp.text);
+			    assert.isDefined(resp);
+			    assert.isObject(resp);
+			    assert.isDefined(resp.total);
+			    assert.operator(resp.total, '>', 0);
+			    assert.isDefined(resp.data);
+			    done();
+			});
+		});
+		it ("retrieves associations for a disease", function (done) {
+		    var url = cttvApiUrl.associations({efo: data.efo});
+		    myCttvApi.call(url)
+			.then(function (resp) {
+			    resp = JSON.parse(resp.text);
+			    assert.isDefined(resp);
+			    assert.isObject(resp);
+			    assert.isDefined(resp.total);
+			    assert.operator(resp.total, '>', 0);
+			    assert.isDefined(resp.data);
+			    done();
+			});
+		});
+	    });
 	    describe ("filterby", function () {
 		it("exists", function () {
 		    assert.isDefined(cttvApiUrl.filterby);
@@ -44,26 +94,27 @@ describe('CTTV api', function () {
 	    });
 	    it ("receives a response from the server", function (done) {
 		var url = myCttvApi.url.filterby({gene:data.gene, size:10});
-		myCttvApi.call(url, function (status, resp) {
-		    assert.isDefined(resp);
-		    assert.isObject(resp);
-		    assert.isNumber(status);
-		    assert.equal(status, 200);
-		    done();
-		})
+		myCttvApi.call(url)
+		    .then(function (resp) {
+			assert.isDefined(resp);
+			assert.isObject(resp);
+			done();
+		    })
 	    });
 	    it ("receives data from the server", function (done) {
 		var url = myCttvApi.url.filterby({gene:data.gene, size:10});
-		myCttvApi.call(url, function (status, resp) {
-		    assert.isDefined(resp);
-		    assert.isObject(resp);
-		    assert.isDefined(resp.took);
-		    assert.isDefined(resp.size);
-		    assert.operator(resp.size, '<=', 10);
-		    assert.isDefined(resp.data);
-		    assert.isArray(resp.data);
-		    done();
-		});
+		myCttvApi.call(url)
+		    .then(function (resp) {
+			resp = JSON.parse(resp.text);
+			assert.isDefined(resp);
+			assert.isObject(resp);
+			assert.isDefined(resp.took);
+			assert.isDefined(resp.size);
+			assert.operator(resp.size, '<=', 10);
+			assert.isDefined(resp.data);
+			assert.isArray(resp.data);
+			done();
+		    })
 	    });
 	});
 

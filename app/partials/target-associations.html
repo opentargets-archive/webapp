@@ -4,6 +4,8 @@
   <h3>Diseases associated with {{search.label}} <small>({{search.query}})</small></h3>
   <div class="h6">Found {{nresults}} evidence ({{took/1000}} seconds)</div>
 
+  <i class="fa fa-table" onclick="console.log('table')"></i>
+  <i class="fa fa-picture-o" onclick="console.log('bubbles')"></i>
   <div class="row">
     <div class="col-md-2">
       <h4>Filters <br /><small>(not working)</small></h4>
@@ -27,7 +29,7 @@
       <!-- <pmc-citation pmcid="23962577"></pmc-citation> -->
       <!-- <pmc-citation-list pmids="23962577,25618545"></pmc-citation-list> -->
       <!-- <ebi-expression-atlas-baseline-summary target="{{search.query}}"></ebi-expression-atlas-baseline-summary> -->
-      <cttv-target-associations target="{{search.query}}" diameter=800></cttv-target-associations>
+      <cttv-target-associations target="{{search.query}}" display="bubbles"></cttv-target-associations>
     </div>
 
   </div>

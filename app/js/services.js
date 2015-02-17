@@ -64,6 +64,8 @@ angular.module('cttvServices', []).
             req.method= queryObject.method || cttvAPI.API_DEFAULT_METHOD;
             req.url= cttvAPI.API_URL + queryObject.operation;
             req.params= queryObject.params;
+	    console.log(cttvAPI.API_URL + queryObject.operation);
+	    console.log(queryObject);
             return $http(req);
         }
 

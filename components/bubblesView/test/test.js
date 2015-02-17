@@ -216,15 +216,10 @@ describe ('bubbleView', function () {
 	    view (fixture.el);
 	    assert.equal (fixture.el.querySelectorAll("circle").length, dataLen+1);
 	});
-	it ('Creates then correct number of non flat titles', function () {
+	it ('Creates the correct number of non flat texts', function () {
 	    var dataLen = data.children.length;
 	    view (fixture.el);
-	    assert.equal (fixture.el.querySelectorAll("title").length, dataLen+1);
-	});
-	it ('Creates the correct number of non flat texts', function () {
-	    var dataLen = data.children.length * 2;
-	    view (fixture.el);
-	    assert.equal (fixture.el.querySelectorAll("text").length, dataLen+2);
+	    assert.equal (fixture.el.querySelectorAll("text").length, dataLen+1);
 	});
 	it ('Sets the diameter', function () {
 	    var diameter = 800;

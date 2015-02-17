@@ -40,7 +40,7 @@ circle {
     @include circle-fill(rgb(62,139,173), 1);
 }
 
-.root circle {
+.root {
     @include circle-fill(white, 0);
 }
 

@@ -25,30 +25,29 @@ var bubblesView = function () {
     var pack;
     var nodes;
     var circle;
-    var paths;
+    var label;
+    var path;
 
     var currTranslate = [0,0];
     var currScale = 1;
-    var zoom = d3.behavior.zoom()
-	.scaleExtent([0.8, Infinity])
-	.on("zoom", function () {
-	    redraw(svg);
-	});
+    // var zoom = d3.behavior.zoom()
+    // 	.scaleExtent([0.8, Infinity])
+    // 	.on("zoom", function () {
+    // 	    redraw(svg);
+    // 	});
     
     /*
      * Render valid JSON data
      */ 
     var render = function(div) {
-	console.log("DATA FOR BUBBLES:");
-	console.log(conf.data.data());
+	// console.log("DATA FOR BUBBLES:");
+	// console.log(conf.data.data());
 	conf.divId = d3.select(div).attr("id");
 	svg = d3.select(div)
 	    .append("svg")
 	    .attr("class", "cttv_bubblesView")
 	    .attr("width", conf.diameter)
             .attr("height", conf.diameter)
-	    .append("g")
-	    .call(zoom)
 	    .append("g");
 
 	pack = d3.layout.pack()
@@ -64,11 +63,13 @@ var bubblesView = function () {
     };
 
     render.update = function () {
-	focus = conf.data;
 	
         // If we don't pass any data, return out of the element
         if (!conf.data) return;
 	var packData = pack.nodes(conf.data.data());
+	// console.log("DATA IN BUBBLES: ");
+	// console.log(packData);
+
 	// if (conf.flat){
 	//     conf.data = conf.data.flatten();
 	//     return pack.nodes(conf.data.data()).filter(function(d) { return !d.children; });
@@ -76,16 +77,18 @@ var bubblesView = function () {
         //             } else {
         //                 return pack.nodes(conf.data.data());
         //             }
-	var nodes = svg.selectAll(".node")
-        //.data(packData, function (d) {return d[conf.key]});
-	    .data(packData, function (d) {
-		return d._id;
-	    });
-
-	// Entering nodes
-	var newNodes = nodes
+	circle = svg.selectAll("circle")
+	    // .data(packData, function (d) {
+	    // 	return d[conf.key];
+	// })
+	    .data(packData)
             .enter()
-	    .append("g")
+	    .append("circle")
+	    .attr("class", function (d) {
+		return "bubblesView_" + d[conf.key] + "_" + conf.divId;
+	    })
+	    .classed("node", true)
+
 	    .on("dblclick", function () {
 		if (d3.event.defaultPrevented) {
 		    return;
@@ -99,48 +102,70 @@ var bubblesView = function () {
 		conf.onclick.call(this, tree_node(d));
 	    });
 
-	newNodes
-	    .append("title")
-            .text(function(d) { return d[conf.key] + ": " + conf.format(d[conf.value]); });	
+	// // titles
+	// svg.selectAll("title")
+	//     .data(packData, function (d) {
+	// 	return d._id;
+	//     })
+	//     .enter()
+	//     .append("title")
+        //     .text(function(d) { return d[conf.key] + ": " + conf.format(d[conf.value]); });	
 	
-        newNodes.append ("circle");
-	
-	// if (conf.flat){
-	    // TODO: circle is not yet defined here
-//            circle.style("fill", function(d) { return conf.color(conf.colorPalette ? d.name : d.parentName); });
-        // }
+        //newNodes.append ("circle");
 
-        newNodes.append("text");
+        //newNodes.append("text");
 
-	paths = newNodes
+	path = svg.selectAll("path")
+	    // .data(packData, function (d) {
+	    // 	return d._id;
+	// })
+	    .data(packData)
+	    .enter()
 	    .append("path")
 	    .attr("id", function(d,i){return "s"+i;})
-	    .attr("fill", "none")
-	    // .attr("d", function (d) {
-	    // 	return describeArc(0, 0, d.r, 160, -160);
-	    // });
+	    .attr("fill", "none");
 
-	var labels = newNodes
+	label = svg.selectAll("text")
+	    // .data(packData, function (d) {
+	    // 	return d._id;
+	// })
+	    .data(packData)
+	    .enter()
 	    .append("text")
-	    .attr("class", "topLabel")
-	    .attr("fill", "navy")
-	    .attr("font-size", 15)
-	    .style("text-anchor", "middle")
-	    .append("textPath")
-	    .attr("xlink:href",function(d,i){
-		return "#s"+i;
+	    .attr("class", function (d) {
+		if (d.children) return "topLabel";
+		return "leafLabel";
 	    })
-	    .attr("startOffset", "50%")
-	    .text(function (d) {
+	    .attr("pointer-events", "none")
+	    .attr("fill", "navy")
+	    .attr("font-size", 10)
+	    .attr("text-anchor", "middle")
+	    .each(function (d, i) {
 		if (d.children) {
-		    console.log("LABEL: (" + conf.label + "): " + d[conf.label]);
-		    return d[conf.label].substring(0, d.r*0.8);
+		    d3.select(this)
+			.append("textPath")
+			.attr("xlink:href", function () {
+			    return "#s"+i;
+			})
+			.attr("startOffset", "50%")
+			.text(function () {
+			    return d[conf.label] ? d[conf.label].substring(0, Math.PI*d.r/8) : "";
+			});
+		} else {
+		    d3.select(this)
+			.attr("dy", ".3em")
+			.attr("x", function (d) { return d.x; })
+			.attr("y", function (d) { return d.y; })
+			.text(function (d) {
+			    return d[conf.label].substring(0, d.r / 3);
+			});
 		}
 	    });
+	
 
 	// Moving nodes
-	nodes
-	    .attr("class", "node")
+	circle
+	    //.attr("class", "node")
 	    .classed ("leaf", function (d) {
 		return !d.children;
 	    })
@@ -149,47 +174,45 @@ var bubblesView = function () {
 	    })
 	    .transition()
 	    .duration(conf.duration)
-            .attr("transform", function(d) {
-		return "translate(" + d.x + "," + d.y + ")";
-	    });
+	    .attr("cx", function (d) { return d.x; })
+	    .attr("cy", function (d) { return d.y; })
+	    .attr("r", function (d) { return d.r; });
+            // .attr("transform", function(d) {
+	    // 	return "translate(" + d.x + "," + d.y + ")";
+	    // });
 
-	nodes.select("path")
+	//	nodes.select("path")
+	path
 	    .attr("d", function (d) {
-		return describeArc(0, 10, d.r, 160, -160);
-	    })
-	
-	nodes.select("text")
-	    .attr("dy", ".3em")
-            .style("text-anchor", "middle")
-            .text(function(d) {
-		if (!d.children) {
-		    return d[conf.label].substring(0, d.r / 3);
-		}
+		return describeArc(d.x, d.y+10, d.r, 160, -160);
 	    });
 	
-        nodes.select("circle")
-	    .attr ("class", function (d) {
-	    	return "bubblesView_" + d[conf.key] + "_" + conf.divId;
-	    })
-	    .transition()
-	    .duration(conf.duration)
-	    .attr ("r", function(d) {
-		//return d.r - (d.children ? 0 : conf.labelOffset);
-		return d.r;
-	    });
+	//nodes.select("text")
+
 	
-	circle = nodes.selectAll("circle");
+        // nodes.select("circle")
+	//     .attr ("class", function (d) {
+	//     	return "bubblesView_" + d[conf.key] + "_" + conf.divId;
+	//     })
+	//     .transition()
+	//     .duration(conf.duration)
+	//     .attr ("r", function(d) {
+	// 	//return d.r - (d.children ? 0 : conf.labelOffset);
+	// 	return d.r;
+	//     });
+	
+	//circle = nodes.selectAll("circle");
 
 	// Exiting nodes
-	nodes
-	    .exit()
-	    .remove();
+	// nodes
+	//     .exit()
+	//     .remove();
 
 
 	var d = conf.data.data();
 	view = [d.x, d.y, d.r*2];
 	//focusTo([d.x, d.y, d.r*2]);
-	focus (conf.data);
+	render.focus (conf.data);
     };
 
     ////////////////////////
@@ -225,22 +248,39 @@ var bubblesView = function () {
 	var k = conf.diameter / v[2];
 	var offset = conf.diameter / 2;
 	view = v;
-	var node = d3.selectAll(".node");
 
-	node
-	    .attr("transform", function(d) {
-		return "translate(" + (((d.x - v[0]) * k) + offset) + "," + (((d.y - v[1]) * k) + offset) + ")";
-	    });
 	circle
+	    .attr("cx", function (d) { return ((d.x - v[0])*k)+offset; })
+	    .attr("cy", function (d) { return ((d.y - v[1])*k)+offset; })
+	    // .attr("transform", function(d) {
+	    // 	return "translate(" + (((d.x - v[0]) * k) + offset) + "," + (((d.y - v[1]) * k) + offset) + ")";
+	    // });
 	    .attr("r", function(d) {
 		return d.r * k;
 	    });
 
-	paths
+	path
 	    .attr("d", function (d) {
-		return describeArc(0, 10, d.r*k, 160, -160);
+		return describeArc(((d.x-v[0])*k)+offset, ((d.y-v[1])*k)+10+offset, d.r*k, 160, -160);
 	    });
-	
+
+	label
+	    .each(function (d, i) {
+		if (d.children) {
+		    // d3.select(this)
+		    // 	.select("textPath")
+		    // 	.text(function () {
+		    // 	    return d[conf.label] ? d[conf.label].substring(0, Math.PI*d.r*k/8) : "";
+		    // 	});
+		} else {
+		    d3.select(this)
+		    	.attr("x", function (d) { return ((d.x - v[0])*k)+offset; })
+			.attr("y", function (d) { return ((d.y - v[1])*k)+offset; })
+			.text(function (d) {
+			    return d[conf.label].substring(0, d.r*k / 3);
+			});
+		}
+	    });
     }
 
     //////////
@@ -264,7 +304,9 @@ var bubblesView = function () {
 
 	for (var i=0; i<nodes.length; i++) {
 	    var node = nodes[i];
-
+	    console.log("KEY: " + conf.key);
+	    console.log(node.data());
+	    console.log(node.property(conf.key));
 	    var circle = d3.selectAll(".bubblesView_" + node.property(conf.key) + "_" + conf.divId);
 	    circle
 		.classed ("highlight", true);
@@ -276,12 +318,6 @@ var bubblesView = function () {
 	if (!arguments.length) {
 	    return focus;
 	}
-	svg.transition()
-	    .duration(conf.duration)
-	    .attr("transform",
-		  "translate (0,0)scale (1)");
-	zoom.translate([0,0]);
-	
 	focus = node;
 	var focusData = focus.data();
 	var transition = d3.transition()

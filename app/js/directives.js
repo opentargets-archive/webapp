@@ -7,29 +7,29 @@ angular.module('cttvDirectives', [])
 	// var bView = bubblesView();
 	// processData aggregates evidence by EFO id
 	// TODO: This function may change once we have a final version of the API. In the meantime, counts are processed here
-	function processData (data) {
-	    var d = {};
-	    var labels = {};
-	    for (var i=0; i<data.length; i++) {
-		console.log(data[i]);
-		//var label = data[i]["biological_object.about"];
-		var label = data[i].biological_object.efo_info[0][0].label;
-		var efo = data[i].biological_object.efo_info[0][0].efo_id;
-		if (d[label] === undefined) {
-		    d[label] = 1;
-		    labels[label] = efo;
-		} else {
-		    d[label]++;
-		}
-	    }
+	// function processData (data) {
+	//     var d = {};
+	//     var labels = {};
+	//     for (var i=0; i<data.length; i++) {
+	// 	// console.log(data[i]);
+	// 	//var label = data[i]["biological_object.about"];
+	// 	var label = data[i].biological_object.efo_info[0][0].label;
+	// 	var efo = data[i].biological_object.efo_info[0][0].efo_id;
+	// 	if (d[label] === undefined) {
+	// 	    d[label] = 1;
+	// 	    labels[label] = efo;
+	// 	} else {
+	// 	    d[label]++;
+	// 	}
+	//     }
 
-	    var o = {"key": "Root", children: []};
-	    for (var j in d) {
-	    	o.children.push ( {"key":j, "efo": labels[j], "values":d[j]} );
-	    }
-	    return o;
-	    //return d;
-	}
+	//     var o = {"key": "Root", children: []};
+	//     for (var j in d) {
+	//     	o.children.push ( {"key":j, "efo": labels[j], "values":d[j]} );
+	//     }
+	//     return o;
+	//     //return d;
+	// }
 
 	// function processData (full_data) {
 	//     var nested = d3.nest()
@@ -49,49 +49,110 @@ angular.module('cttvDirectives', [])
 	// 	"children": nested
 	//     }
 	// };
-	
+
+	function processData (data) {
+	    var root = data;
+	    var therapeuticAreas = data.children;
+
+	    for (var i=0; i<therapeuticAreas.length; i++) {
+	    	var tA = therapeuticAreas[i];
+	    	var taChildren = tA.children;
+		if (taChildren === undefined) {
+		    continue;
+		}
+	    	var newChildren = [];
+	    	for (var j=0; j<taChildren.length; j++) {
+	    	    var taChild = taChildren[j];
+	    	    var taLeaves = bubblesView().node(taChild).get_all_leaves();
+	    	    for (var k=0; k<taLeaves.length; k++) {
+	    		newChildren.push(taLeaves[k].data());
+	    	    }
+	    	}
+	    	tA.children = newChildren;
+	    }
+	    return data;
+	};
+
+	var api = cttvApi();
+
+	return {
+	    restrict: 'EA',
+	    scope: {},
+	    link: function (scope, elem, attrs) {
+		// var url = api.url.filterby({
+		//     gene:attrs.target,
+		//     //datastructure:"simple",
+		//     size:1000
+		// });
+		var url = api.url.associations({
+		    gene: attrs.target
+		})
+		console.log("URL: " + url);
+		api.call(url)
+		    .then(function (resp) {
+			resp = JSON.parse(resp.text);
+			// update general information in parent scope
+			scope.$parent.took = resp.took;
+			scope.$parent.nresults = resp.size;
+			scope.$parent.$apply();
+
+			// Prepare the bubbles view
+			// viewport Size
+			var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+			var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+
+			// Element Coord
+			var elemOffsetTop = elem[0].parentNode.offsetTop;
+
+			// BottomMargin
+			var bottomMargin = 50;
+
+			var diameter = viewportH - elemOffsetTop - bottomMargin;
+			processData(resp.data);
+			var bView = bubblesView()
+			    .data(bubblesView.node(resp.data))
+			    .value("association_score")
+			    .key("efo_code")
+			    .label("label")
+			    .diameter(diameter)
+			var ga = geneAssociations()
+			    .target(attrs.target);
+
+			console.log(attrs.display);
+
+			switch(attrs.display) {
+			case "bubbles" :
+			    ga(bView, elem[0]);
+			    break;
+			case "table" : 
+			    console.log("TABLES!");
+			}
+		    });
+	    }
+	}
+    })
+
+    .directive('cttvDiseaseAssociations', function () {
 	return {
 	    restrict: 'EA',
 	    scope: {},
 	    link: function (scope, elem, attrs) {
 		var api = cttvApi();
-		var url = api.url.filterby({
-		    gene:attrs.target,
-		    //datastructure:"simple",
-		    size:1000
+		var url = api.url.associations({
+		    efo: attrs.target
 		});
 		console.log("URL: " + url);
-		api.call(url, function (status, resp) {
-		    scope.$parent.took = resp.took;
-		    scope.$parent.nresults = resp.size;
-		    scope.$parent.$apply();
-		    console.log("RESP:");
-		    console.log(resp);
-		    // viewport Size
-		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-
-		    // Element Coord
-		    var elemOffsetTop = elem[0].parentNode.offsetTop;
-
-		    // BottomMargin
-		    var bottomMargin = 50;
-
-		    var diameter = viewportH - elemOffsetTop - bottomMargin;
-		    
-		    var bView = bubblesView()
-			.data(bubblesView.node(processData(resp.data)))
-			.value("values")
-			.key("efo")
-			.label("key")
-			.diameter(diameter)
-		    var ga = geneAssociations()
-		    	.target(attrs.target);
-		    ga(bView, elem[0]);
-		});		
+		api.call(url)
+		    .then(function (resp) {
+			resp = JSON.parse(resp.text);
+			console.log(resp);
+			scope.$parent.took = resp.took;
+			scope.$parent.nresults = resp.total;
+		    });
 	    }
-	}
+	};
     })
+
 
     .directive('pmcCitationList', function () {
 	var pmc = require ('biojs-vis-pmccitation');

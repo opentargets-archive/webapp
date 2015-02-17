@@ -375,6 +375,8 @@
         }
 
         $scope.getResults = function(){
+	    console.log("SEARCH URL: ");
+	    console.log(cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query));
             return cttvAPIservice.getSearch( cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query) ).
                 success(function(data, status) {
                     $scope.search.results = data;

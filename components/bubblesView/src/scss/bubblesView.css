@@ -21,7 +21,7 @@ circle {
   /* stroke-width: 1px; */
   /* stroke: black; */ }
 
-.root circle {
+.root {
   fill: white;
   fill-opacity: 0;
   /* stroke-width: 1px; */

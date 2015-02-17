@@ -1,8 +1,9 @@
 <!-- search app / results -->
 
 <div>
-	<h2>Disease associations for {{search.label}} <small>({{search.query}})</small></h2>
-	<!-- <div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div> -->
+	<h3>Genes associated with {{search.label}} <small>({{search.query}})</small></h3>
+	<div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div>
 
+	<cttv-disease-associations target="{{search.query}}" diameter=800></cttv-disease-associations>
 </div>
 <!-- end search results-->

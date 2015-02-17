@@ -10,15 +10,17 @@
       var api = cttvApi();
       var url = api.url.filterby({
       gene:"ENSG00000157764",
-      datastructure:"simple",
+//      datastructure:"simple",
       size:1000
       });
       console.log("URL: " + url);
-      api.call(url, function (status, resp) {
-      console.log("STATUS:" + status);
+      api.call(url)
+      .then(function (resp) {
+      resp = JSON.parse(resp.text);
       console.log("RESP:");
       console.log(resp);
       });
+      
     </script>
   </body>
 </html>
