@@ -24,7 +24,6 @@ var geneAssociations = function () {
 		    return;
 		}
 		var nodes = tree.find_all(function (node) {
-		    console.log(node.property("efo_code") + " VS " + n);
 		    return node.property("efo_code") === n;
 		});
 		var lca;
@@ -130,7 +129,7 @@ var geneAssociations = function () {
 		    "value" : "View evidence",
 		    "obj" : node,
 		    "link" : function (node) {
-			window.location.href="/app/#/gene-disease?t=" + config.target + "&d=" + node.property("efo");
+			window.location.href="/app/#/gene-disease?t=" + config.target + "&d=" + node.property("efo_code");
 		    }
 		});
 		obj.rows.push({
