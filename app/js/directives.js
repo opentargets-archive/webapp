@@ -92,8 +92,7 @@ angular.module('cttvDirectives', [])
 		    .then(function (resp) {
 			resp = JSON.parse(resp.text);
 			// update general information in parent scope
-			scope.$parent.took = resp.took;
-			scope.$parent.nresults = resp.size;
+			scope.$parent.nresults = resp.total;
 			scope.$parent.$apply();
 
 			// Prepare the bubbles view
@@ -124,7 +123,8 @@ angular.module('cttvDirectives', [])
 			case "bubbles" :
 			    ga(bView, elem[0]);
 			    break;
-			case "table" : 
+			case "table" :
+			    //$(
 			    console.log("TABLES!");
 			}
 		    });
@@ -133,6 +133,21 @@ angular.module('cttvDirectives', [])
     })
 
     .directive('cttvDiseaseAssociations', function () {
+	function lookDatasource (arr, dsName) {
+	    for (var i=0; i<arr.length; i++) {
+		var ds = arr[i];
+		if (ds.datasource === dsName) {
+		    return {
+			"count": ds.evidence_count,
+			"score": ds.association_score
+		    };
+		}
+	    }
+	    return {
+		"count": 0,
+		"score": 0
+	    };
+	}
 	return {
 	    restrict: 'EA',
 	    scope: {},
@@ -146,8 +161,90 @@ angular.module('cttvDirectives', [])
 		    .then(function (resp) {
 			resp = JSON.parse(resp.text);
 			console.log(resp);
-			scope.$parent.took = resp.took;
 			scope.$parent.nresults = resp.total;
+			scope.$parent.$apply();
+
+			console.log("DISEASE => GENE DATA:");
+			var data = resp.data;
+			console.log(data);
+			var newData = new Array(data.length);
+			var flowers = new Array(data.length);
+
+			for (var i=0; i<data.length; i++) {
+			    var row = [];
+			    var geneLoc = "";
+			    var geneDiseaseLoc = "/app/#/gene-disease?t=" + data[i].gene_id + "&d=" + attrs.target;
+			    row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
+			    // The ensembl id
+			    row.push(data[i].gene_id);
+			    // The association score
+			    row.push(data[i].association_score);
+			    // Genetic Association
+			    row.push(lookDatasource(data[i].datasources, "uniprot").score +
+				     lookDatasource(data[i].datasources, "gwas").score +
+				     lookDatasource(data[i].datasources, "cancer_gene_census").score);
+			    // Somatic Mutations
+			    row.push(lookDatasource(data[i].datasources, "eva").score);
+			    // Known Drugs
+			    row.push(lookDatasource(data[i].datasources, "chembl").score);
+			    // RNA expression
+			    row.push(lookDatasource(data[i].datasources, "expression_atlas").score);
+			    // Disrupted pathways
+			    row.push(lookDatasource(data[i].datasources, "reactome").score);
+			    // Mouse data
+			    row.push(lookDatasource(data[i].datasources, "phenodigm").score);
+
+			    // Flower
+			    var divId = "cttvGeneFlower" + data[i].gene_id;
+			    row.push("<div id=" + divId + "></div>");
+			    var flowerData = [
+			    	{"value":lookDatasource(data[i].datasources, "expression_atlas").score,  "label":"RNA"},
+			    	{"value":lookDatasource(data[i].datasources, "uniprot").score +
+				 lookDatasource(data[i].datasources, "gwas").score +
+				 lookDatasource(data[i].datasources, "cancer_gene_census").score,  "label":"Genetics"},
+			    	{"value":lookDatasource(data[i].datasources, "eva").score,  "label":"Somatic"},
+			    	{"value":lookDatasource(data[i].datasources, "chembl").score,  "label":"Drugs"},
+			    	{"value":lookDatasource(data[i].datasources, "reactome").score,  "label":"Pathways"},
+			    	{"value":lookDatasource(data[i].datasources, "phenodigm").score,  "label":"Mouse"}
+			    ];
+
+			    
+			    var flower = flowerView()
+			    	.values(flowerData)
+				.fontsize(5)
+			    	.diagonal(100);
+			    
+			    newData[i] = row;
+			    flowers[i] = {
+				"id" : divId,
+				"flower" : flower
+			    };
+			}
+			
+			$("#disease-association-table").dataTable({
+			    "data" : newData,
+			    "columns": [
+				{ "title": "Gene" },
+				{ "title": "Ensembl ID"},				    
+			        { "title": "Association Score" },
+			        { "title": "Genetic Association" },
+			        { "title": "Somatic Mutations" },
+			        { "title": "Known Drugs" },
+			        { "title": "RNA Expression" },
+			        { "title": "Disrupted Pathways" },
+				{ "title": "Mouse Data" },
+				{ "title": "Evidence breakdown" }
+			    ],
+			    "autoWidth": false,
+			    "lengthChange": false,
+			    "paging": false,
+			    "searching": false,
+			    "bInfo": false,
+			    "ordering": false
+			});
+			for (var j=0; j<flowers.length; j++) {
+			    flowers[j].flower(document.getElementById(flowers[j].id));
+			}
 		    });
 	    }
 	};

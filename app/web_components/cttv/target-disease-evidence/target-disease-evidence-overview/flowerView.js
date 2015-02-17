@@ -10,7 +10,6 @@ var flowerView = function () {
     var radii = conf.values.length;
     var radians = 2 * Math.PI / radii;
     // var color = d3.scale.category20c();
-    
     var render = function (div) {
 
     	var container = d3.select(div);
@@ -23,6 +22,8 @@ var flowerView = function () {
 	    })[1]])
 	    //.domain([0, d3.extent(conf.values)[1]])
 	    .range([0, radius]);
+
+	console.log(sizeScale.domain());
 		
 	var colorScale = d3.scale.linear()
 	    .domain([0,d3.extent(conf.values, function(d){
@@ -137,6 +138,8 @@ var flowerView = function () {
 		.attr("class", "stitches")
 		.attr("d", line(data));
 
+	    console.log("REAL DATA:");
+	    console.log(realData);
 	    svg.append("path")
 		.attr("class", "petal")
 		.attr("d", line(realData))
@@ -146,6 +149,8 @@ var flowerView = function () {
 	var petals = function () {
 	    var r = 0;
 	    conf.values.forEach (function (d, i) {
+		console.log("D")
+		console.log(d);
 		var l = radius;
 		petal (l, r, sizeScale(d.value), colorScale(d.value));
 		r += radians;
@@ -164,8 +169,6 @@ var flowerView = function () {
 	if (!arguments.length) {
 	    return conf.values;
 	}
-	console.log("NEW VALS: ");
-	console.log(vals);
 	conf.values = vals;
 	radii = vals.length;
 	radians = 2 * Math.PI / radii

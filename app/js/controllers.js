@@ -272,7 +272,7 @@
 
     /**
      * AssociationsCtrl
-     * Controller for the associations page
+     * Controller for the target associations page
      * It loads a list of associations for the given search
      */
     // controller('AssociationsCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice) {
@@ -285,66 +285,7 @@
         $scope.took = 0;
         $scope.nresults = 0;
         // $scope.search = cttvAppToAPIService.createSearchInitObject();
-
-        /*
-         * NOTE: this is a temporary function. It will change when we have the final API call for this
-         * In the meantime we process and count results here
-         */
-        // var processData = function(data){
-        //     console.log("processData() "+data.data.length);
-        //     var d = {};
-        //     for(var i=0; i<data.data.length; i++){
-        //         if( d[data.data[i]["biological_object.efo_info.efo_label"]] == undefined ){
-        //             d[data.data[i]["biological_object.efo_info.efo_label"]] = 1;
-        //         } else {
-        //             d[data.data[i]["biological_object.efo_info.efo_label"]]++;
-        //         }
-        //     }
-            
-        //     var dj = { "name": $scope.search.label, "children":[] };
-        //     for(var i in d){
-        //         dj.children.push( {"name": i, "value": d[i]} );
-        //     }
-
-
-        //     return dj;
-        // }
-
-
-
-        /*
-         * Exposed method to be called by the pagination
-         */
-        // $scope.getResults = function(){
-        //     return cttvAPIservice.getEvidence( cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.EVIDENCE, $scope.search.query) ).
-        //         success(function(data, status) {
-        //             // process and count the data and then show the bubbles...
-        //             $scope.search.results = data;
-        //             $scope.d3data = processData(data);
-        //         }).
-        //         error(function(data, status) {
-        //             $log.error("ERROR "+status);
-        //         });
-        // }
-
-        // if($location.search().q){
-        //     // parse parameters
-        //     $scope.search.query.q = $location.search().q || "";
-
-        //     // for the bubble chart:
-        //     $scope.search.query.size=1000; // get all the results we can in one request
-        //     $scope.search.label = $location.search().label || "";
-            
-        //     // and fire the search
-        //     $scope.getResults();
-        // }
-        
     }]).
-
-
-
-
-
 
     /**
      * SearchAppCtrl
