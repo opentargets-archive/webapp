@@ -85,9 +85,6 @@ angular.module('cttvDirectives', [])
 		displaytype : "="
 	    },
 	    link: function (scope, elem, attrs) {
-		scope.$watch(function () { return attrs.display }, function (newVal, oldVal) {
-		    console.log("========> " + oldVal + " vs " + newVal);
-		});
 
 		function lookDatasource (arr, dsName) {
 		    for (var i=0; i<arr.length; i++) {
@@ -140,12 +137,12 @@ angular.module('cttvDirectives', [])
 
 			console.log(attrs.display);
 
-			switch(attrs.display) {
-			case "bubbles" :
+			// switch(attrs.display) {
+			// case "bubbles" :
 			    console.log("BUBBLES!");
-			    ga(bView, elem[0]);
-			    break;
-			case "table" :
+			    ga(bView, elem[0].querySelector(".cttvBubbles"));
+			//  break;
+			//case "table" :
 			    console.log("TABLES!");
 			    var nodeData = bubblesView.node(resp.data);
 			    var leaves = nodeData.get_all_leaves();
@@ -179,7 +176,7 @@ angular.module('cttvDirectives', [])
 
 			    var table = document.createElement("table");
 			    table.className = "table table-stripped table-bordered";
-			    elem[0].appendChild(table);
+			    elem[0].querySelector(".cttvTable").appendChild(table);
 			    $(table).dataTable({
 			        "data": newData,
 				"columns": [
@@ -199,8 +196,21 @@ angular.module('cttvDirectives', [])
 				"bInfo" : false,
 				"ordering": true
 			    } );
-			}
+			//}
 		    });
+
+		scope.$watch(function () { return attrs.display }, function (newVal, oldVal) {
+		    switch (newVal) {
+		    case "bubbles" :
+			elem[0].querySelector(".cttvTable").style.display = "none";
+			elem[0].querySelector(".cttvBubbles").style.display = "block";
+			break;
+		    case "table" :
+			elem[0].querySelector(".cttvBubbles").style.display = "none";
+			elem[0].querySelector(".cttvTable").style.display = "block";
+			break;
+		    }
+		});
 	    }
 	}
     })

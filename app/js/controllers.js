@@ -286,9 +286,8 @@
         // $scope.search = cttvAppToAPIService.createSearchInitObject();
 
 	// Display toggle (bubbles / table)
-	$scope.displaytype = "table";
+	$scope.displaytype = "bubbles";
 	$scope.setDisplay = function (displ) {
-	    console.log("NEW DISPLAY: " + displ);
 	    $scope.displaytype = displ;
 	}
     }]).
