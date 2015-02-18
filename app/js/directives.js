@@ -3,6 +3,10 @@
 /* Directives */
 angular.module('cttvDirectives', [])
 
+    // .directive('cttvTargetAssociationsTable', function () {
+	
+    // })
+
     .directive('cttvTargetAssociations', function () {
 	// var bView = bubblesView();
 	// processData aggregates evidence by EFO id
@@ -77,13 +81,30 @@ angular.module('cttvDirectives', [])
 
 	return {
 	    restrict: 'EA',
-	    scope: {},
+	    scope: {
+		displaytype : "="
+	    },
 	    link: function (scope, elem, attrs) {
-		// var url = api.url.filterby({
-		//     gene:attrs.target,
-		//     //datastructure:"simple",
-		//     size:1000
-		// });
+		scope.$watch(function () { return attrs.display }, function (newVal, oldVal) {
+		    console.log("========> " + oldVal + " vs " + newVal);
+		});
+
+		function lookDatasource (arr, dsName) {
+		    for (var i=0; i<arr.length; i++) {
+			var ds = arr[i];
+			if (ds.datasource === dsName) {
+			    return {
+				"count": ds.evidence_count,
+				"score": ds.association_score
+			    };
+			}
+		    }
+		    return {
+			"count": 0,
+			"score": 0
+		    };
+		}
+
 		var url = api.url.associations({
 		    gene: attrs.target
 		})
@@ -121,11 +142,63 @@ angular.module('cttvDirectives', [])
 
 			switch(attrs.display) {
 			case "bubbles" :
+			    console.log("BUBBLES!");
 			    ga(bView, elem[0]);
 			    break;
 			case "table" :
-			    //$(
 			    console.log("TABLES!");
+			    var nodeData = bubblesView.node(resp.data);
+			    var leaves = nodeData.get_all_leaves();
+
+			    var newData = new Array (leaves.length);
+			    for (var i=0; i<newData.length; i++) {
+				var data = leaves[i].data();
+				var therapeuticArea = leaves[i].parent().property("label");
+				var row = [];
+				// Disease name
+				var geneDiseaseLoc = "/app/#/gene-disease?t=" + attrs.target + "&d=" + data.efo_code;
+				row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
+				// Therapeutic area
+				row.push(therapeuticArea || "");
+				// Association score
+				row.push(data.association_score);
+				// Genetic associations
+				row.push(lookDatasource (data.datasources, "uniprot").count +
+					 lookDatasource (data.datasources, "gwas").count +
+					 lookDatasource (data.datasources, "cancer_gene_census").count);
+				// Somatic mutations
+				row.push(lookDatasource (data.datasources, "eva").count);
+				// Known drugs
+				row.push(lookDatasource (data.datasources, "chembl").count);
+				row.push(lookDatasource (data.datasources, "expression_atlas").count);
+				row.push(lookDatasource (data.datasources, "reactome").count);
+				//row.push(lookDatasource (data.datasources, "phenodigm").score);
+
+				newData[i] = row;
+			    }
+
+			    var table = document.createElement("table");
+			    table.className = "table table-stripped table-bordered";
+			    elem[0].appendChild(table);
+			    $(table).dataTable({
+			        "data": newData,
+				"columns": [
+				    { "title": "Disease" },
+				    { "title": "Therapeutic Area" },
+				    { "title": "Association score" },
+				    { "title": "Genetic Associations" },
+				    { "title": "Somatic Mutations" },
+				    { "title": "Known Drugs" },
+				    { "title": "RNA Expression" },
+				    { "title": "Disrupted Pathways" }				    
+				],
+				"autoWidth": false,
+				"lengthChange": false,
+				"paging": true,
+				"searching": true,
+				"bInfo" : false,
+				"ordering": true
+			    } );
 			}
 		    });
 	    }
@@ -168,7 +241,8 @@ angular.module('cttvDirectives', [])
 			var data = resp.data;
 			console.log(data);
 			var newData = new Array(data.length);
-			var flowers = new Array(data.length);
+			//var flowers = new Array(data.length);
+			var flowers = {};
 
 			for (var i=0; i<data.length; i++) {
 			    var row = [];
@@ -194,9 +268,9 @@ angular.module('cttvDirectives', [])
 			    // Mouse data
 			    row.push(lookDatasource(data[i].datasources, "phenodigm").score);
 
-			    // Flower
-			    var divId = "cttvGeneFlower" + data[i].gene_id;
-			    row.push("<div id=" + divId + "></div>");
+			    // We will insert the flower here
+			    row.push("");
+
 			    var flowerData = [
 			    	{"value":lookDatasource(data[i].datasources, "expression_atlas").score,  "label":"RNA"},
 			    	{"value":lookDatasource(data[i].datasources, "uniprot").score +
@@ -208,17 +282,13 @@ angular.module('cttvDirectives', [])
 			    	{"value":lookDatasource(data[i].datasources, "phenodigm").score,  "label":"Mouse"}
 			    ];
 
-			    
 			    var flower = flowerView()
 			    	.values(flowerData)
-				.fontsize(5)
+				.fontsize(6)
 			    	.diagonal(100);
 			    
 			    newData[i] = row;
-			    flowers[i] = {
-				"id" : divId,
-				"flower" : flower
-			    };
+			    flowers[data[i].gene_id] = flower;
 			}
 			
 			$("#disease-association-table").dataTable({
@@ -235,16 +305,18 @@ angular.module('cttvDirectives', [])
 				{ "title": "Mouse Data" },
 				{ "title": "Evidence breakdown" }
 			    ],
+			    "fnCreatedRow" : function (row, data, dataIndex) {
+				var div = document.createElement("div");
+				$(row).children("td:last-child").append(div);
+				flowers[data[1]](div);
+			    },
 			    "autoWidth": false,
 			    "lengthChange": false,
-			    "paging": false,
-			    "searching": false,
+			    "paging": true,
+			    "searching": true,
 			    "bInfo": false,
-			    "ordering": false
+			    "ordering": true
 			});
-			for (var j=0; j<flowers.length; j++) {
-			    flowers[j].flower(document.getElementById(flowers[j].id));
-			}
 		    });
 	    }
 	};

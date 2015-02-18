@@ -279,12 +279,18 @@
     controller ("AssociationsCtrl", ['$scope', '$location', '$log', function ($scope, $location, $log) {
         $log.log('AssociationsCtrl()');
         $scope.search = {
-    	query : $location.search().q,
-    	label : $location.search().label
+    	    query : $location.search().q,
+    	    label : $location.search().label
         };
-        $scope.took = 0;
         $scope.nresults = 0;
         // $scope.search = cttvAppToAPIService.createSearchInitObject();
+
+	// Display toggle (bubbles / table)
+	$scope.displaytype = "table";
+	$scope.setDisplay = function (displ) {
+	    console.log("NEW DISPLAY: " + displ);
+	    $scope.displaytype = displ;
+	}
     }]).
 
     /**
