@@ -4,7 +4,26 @@ var geneAssociations = function () {
     var config = {
 	target : ""
     };
-    var _ = function (bubblesView, div) {
+
+    // TODO: Move to cttvApi
+    // This code is duplicated several times now (controllers, directives and components)
+    function lookDatasource (arr, dsName) {
+    	for (var i=0; i<arr.length; i++) {
+    	    var ds = arr[i];
+    	    if (ds.datasource === dsName) {
+    		return {
+    		    "count": ds.evidence_count,
+    		    "score": ds.association_score
+    		};
+    	    }
+    	}
+    	return {
+    	    "count": 0,
+    	    "score": 0
+    	};
+    }
+    
+    var _ = function (bubblesView, div, flower) {
     
 	var menu = d3.select(div)
 	    .append("div");
@@ -16,7 +35,6 @@ var geneAssociations = function () {
 	    .text("Find: ")
 	    .append("select")
 	    .on("change", function () {
-		//var node = tree.find_node_by_name(this.value);
 		var n = this.value;
 		if (n === "Root") {
 		    bubblesView.focus(tree);
@@ -104,41 +122,49 @@ var geneAssociations = function () {
 
 	// Tooltips
 	var bubble_tooltip = function (node) {
+	    // toplevel root is not shown in the bubbles view
 	    if (node.parent() === undefined) {
 		return;
 	    }
+
 	    var obj = {};
+	    // Tooltip for the leaves
 	    if (node.is_leaf()) {
 		// tooltip is for a disease
-		obj.header = "Disease: " + node.property("label");
-		obj.rows = [];
-		obj.rows.push({
-		    "label" : "Therapeutic Area",
-		    "value" : node.parent().property("label")
+		var score = node.property("association_score");
+		obj.header = "Disease: " + node.property("label") + " (Score: " + score + ")";
+		var loc = "/app/#/gene-disease?t=" + config.target + "&d=" + node.property("efo_code");
+		obj.body="<div></div><a href=" + loc + ">View details</a>";
+
+		// TODO: Move to cttvApi
+
+		var leafTooltip = tooltip.plain()
+		    .id(1)
+		    .width(180);
+
+		//Hijack of the fill callback
+		var tableFill = leafTooltip.fill();
+
+		//Pass a new fill callback that calls the original one and decorates with flowers
+		leafTooltip.fill(function (data) {
+		    tableFill.call(this, data);
+		    var datasources = node.property("datasources");
+		    var flowerData = [
+			{"value":lookDatasource(datasources, "expression_atlas").score,  "label":"RNA"},
+			{"value":lookDatasource(datasources, "uniprot").score +
+			 lookDatasource(datasources, "gwas").score +
+			 lookDatasource(datasources, "cancer_gene_census").score,  "label":"Genetics"},
+			{"value":lookDatasource(datasources, "eva").score,  "label":"Somatic"},
+			{"value":lookDatasource(datasources, "chembl").score,  "label":"Drugs"},
+			{"value":lookDatasource(datasources, "reactome").score,  "label":"Pathways"},
+			{"value":lookDatasource(datasources, "phenodigm").score,  "label":"Mouse"}
+		    ];
+
+		    flower.values(flowerData)(this.select("div").node());
 		});
-		obj.rows.push({
-		    "label" : "Score",
-		    "value" : Math.round(node.property("association_score"), 2)
-		});
-		obj.rows.push({
-		    "label" : "Evidence count",
-		    "value" : Math.round(node.property("evidence_count"), 2)
-		});
-		obj.rows.push({
-		    "label" : "Action",
-		    "value" : "View evidence",
-		    "obj" : node,
-		    "link" : function (node) {
-			window.location.href="/app/#/gene-disease?t=" + config.target + "&d=" + node.property("efo_code");
-		    }
-		});
-		obj.rows.push({
-		    "label" : "Evidence breakdown",
-		    "value" : function () {
-			// this is td
-			console.log(this);
-		    }
-		});
+		
+		leafTooltip.call(this, obj);
+
 	    } else {
 		// tooltip is for a therapeutic area
 		obj.header = "Therapeutic Area: " + node.property("label");
@@ -175,13 +201,12 @@ var geneAssociations = function () {
 			    bubblesView.focus(node);
 			}
 		    });
-		}		
+		}
+		tooltip.table()
+	            .id(2)
+	            .width(180)
+	            .call (this, obj);
 	    }
-
-	    tooltip.table()
-	        .id(node.id())
-	        .width(180)
-	        .call (this, obj);
 	};
 	bubblesView
 	    .onclick (bubble_tooltip);
@@ -197,7 +222,6 @@ var geneAssociations = function () {
 	config.target = t;
 	return this;
     };
-    
     return _;
 };
 

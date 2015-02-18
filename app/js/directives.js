@@ -8,51 +8,6 @@ angular.module('cttvDirectives', [])
     // })
 
     .directive('cttvTargetAssociations', function () {
-	// var bView = bubblesView();
-	// processData aggregates evidence by EFO id
-	// TODO: This function may change once we have a final version of the API. In the meantime, counts are processed here
-	// function processData (data) {
-	//     var d = {};
-	//     var labels = {};
-	//     for (var i=0; i<data.length; i++) {
-	// 	// console.log(data[i]);
-	// 	//var label = data[i]["biological_object.about"];
-	// 	var label = data[i].biological_object.efo_info[0][0].label;
-	// 	var efo = data[i].biological_object.efo_info[0][0].efo_id;
-	// 	if (d[label] === undefined) {
-	// 	    d[label] = 1;
-	// 	    labels[label] = efo;
-	// 	} else {
-	// 	    d[label]++;
-	// 	}
-	//     }
-
-	//     var o = {"key": "Root", children: []};
-	//     for (var j in d) {
-	//     	o.children.push ( {"key":j, "efo": labels[j], "values":d[j]} );
-	//     }
-	//     return o;
-	//     //return d;
-	// }
-
-	// function processData (full_data) {
-	//     var nested = d3.nest()
-	//     //.key(function(d) { return d["biological_object.about"]; })
-	// 	.key(function (d) {
-	// 	    console.log(d.biological_object.efo_info[0][0].label);
-	// 	    return d.biological_object.efo_info[0][0].label;
-	// 	})
-	//         .rollup(function(leaves) { return leaves.length; })
-	//         .entries(full_data);
-	//     var total = d3.sum(nested, function (d) {return d.values});
-	//     console.log("NESTED:");
-	//     console.log(nested);
-	//     return {
-	// 	"key": "Root",
-	// 	"values": total,
-	// 	"children": nested
-	//     }
-	// };
 
 	function processData (data) {
 	    var root = data;
@@ -113,7 +68,7 @@ angular.module('cttvDirectives', [])
 			scope.$parent.nresults = resp.total;
 			scope.$parent.$apply();
 
-			// Prepare the bubbles view
+			////// Bubbles View
 			// viewport Size
 			var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
 			var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
@@ -131,72 +86,76 @@ angular.module('cttvDirectives', [])
 			    .value("association_score")
 			    .key("efo_code")
 			    .label("label")
-			    .diameter(diameter)
+			    .diameter(diameter);
 			var ga = geneAssociations()
 			    .target(attrs.target);
+			
+			// Flower for the tooltips
+			// Only one flower is passed, so this means that only one tooltip can be shown at a time
+			var flower = flowerView()
+			    .fontsize(6)
+			    .diagonal(100);
 
-			console.log(attrs.display);
+			ga(bView, elem[0].querySelector(".cttvBubbles"), flower);
 
-			// switch(attrs.display) {
-			// case "bubbles" :
-			    console.log("BUBBLES!");
-			    ga(bView, elem[0].querySelector(".cttvBubbles"));
-			//  break;
-			//case "table" :
-			    console.log("TABLES!");
-			    var nodeData = bubblesView.node(resp.data);
-			    var leaves = nodeData.get_all_leaves();
 
-			    var newData = new Array (leaves.length);
-			    for (var i=0; i<newData.length; i++) {
-				var data = leaves[i].data();
-				var therapeuticArea = leaves[i].parent().property("label");
-				var row = [];
-				// Disease name
-				var geneDiseaseLoc = "/app/#/gene-disease?t=" + attrs.target + "&d=" + data.efo_code;
-				row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
-				// Therapeutic area
-				row.push(therapeuticArea || "");
-				// Association score
-				row.push(data.association_score);
-				// Genetic associations
-				row.push(lookDatasource (data.datasources, "uniprot").count +
-					 lookDatasource (data.datasources, "gwas").count +
-					 lookDatasource (data.datasources, "cancer_gene_census").count);
-				// Somatic mutations
-				row.push(lookDatasource (data.datasources, "eva").count);
-				// Known drugs
-				row.push(lookDatasource (data.datasources, "chembl").count);
-				row.push(lookDatasource (data.datasources, "expression_atlas").count);
-				row.push(lookDatasource (data.datasources, "reactome").count);
-				//row.push(lookDatasource (data.datasources, "phenodigm").score);
+			/////// TABLE VIEW
+			console.log("TABLES!");
+			var nodeData = bubblesView.node(resp.data);
+			var leaves = nodeData.get_all_leaves();
 
-				newData[i] = row;
-			    }
+			var newData = new Array (leaves.length);
+			for (var i=0; i<newData.length; i++) {
+			    var data = leaves[i].data();
+			    var therapeuticArea = leaves[i].parent().property("label");
 
-			    var table = document.createElement("table");
-			    table.className = "table table-stripped table-bordered";
-			    elem[0].querySelector(".cttvTable").appendChild(table);
-			    $(table).dataTable({
-			        "data": newData,
-				"columns": [
-				    { "title": "Disease" },
-				    { "title": "Therapeutic Area" },
-				    { "title": "Association score" },
-				    { "title": "Genetic Associations" },
-				    { "title": "Somatic Mutations" },
-				    { "title": "Known Drugs" },
-				    { "title": "RNA Expression" },
-				    { "title": "Disrupted Pathways" }				    
-				],
-				"autoWidth": false,
-				"lengthChange": false,
-				"paging": true,
-				"searching": true,
-				"bInfo" : false,
-				"ordering": true
-			    } );
-			//}
+			    var row = [];
+			    // Disease name
+			    var geneDiseaseLoc = "/app/#/gene-disease?t=" + attrs.target + "&d=" + data.efo_code;
+			    row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
+			    // Therapeutic area
+			    row.push(therapeuticArea || "");
+			    // Association score
+			    row.push(data.association_score);
+			    // Genetic associations
+			    row.push(lookDatasource (data.datasources, "uniprot").score +
+				     lookDatasource (data.datasources, "gwas").score +
+				     lookDatasource (data.datasources, "cancer_gene_census").score);
+			    // Somatic mutations
+			    row.push(lookDatasource (data.datasources, "eva").score);
+			    // Known drugs
+			    row.push(lookDatasource (data.datasources, "chembl").score);
+			    row.push(lookDatasource (data.datasources, "expression_atlas").score);
+			    row.push(lookDatasource (data.datasources, "reactome").score);
+			    row.push(lookDatasource (data.datasources, "phenodigm").score);
+
+			    newData[i] = row;
+			}
+
+			var table = document.createElement("table");
+			table.className = "table table-stripped table-bordered";
+			elem[0].querySelector(".cttvTable").appendChild(table);
+			$(table).dataTable({
+			    "data": newData,
+			    "columns": [
+				{ "title": "Disease" },
+				{ "title": "Therapeutic Area" },
+				{ "title": "Association score" },
+				{ "title": "Genetic Associations" },
+				{ "title": "Somatic Mutations" },
+				{ "title": "Known Drugs" },
+				{ "title": "RNA Expression" },
+				{ "title": "Disrupted Pathways" },
+				{ "title": "Mouse Data" }
+			    ],
+			    "order" : [[2, "desc"]],
+			    "autoWidth": false,
+			    "lengthChange": false,
+			    "paging": true,
+			    "searching": true,
+			    "bInfo" : false,
+			    "ordering": true
+			} );
 		    });
 
 		scope.$watch(function () { return attrs.display }, function (newVal, oldVal) {
@@ -313,13 +272,14 @@ angular.module('cttvDirectives', [])
 			        { "title": "RNA Expression" },
 			        { "title": "Disrupted Pathways" },
 				{ "title": "Mouse Data" },
-				{ "title": "Evidence breakdown" }
+				{ "title": "Evidence breakdown", "orderable" : false }
 			    ],
 			    "fnCreatedRow" : function (row, data, dataIndex) {
 				var div = document.createElement("div");
 				$(row).children("td:last-child").append(div);
 				flowers[data[1]](div);
 			    },
+			    "order" : [[2, "desc"]],
 			    "autoWidth": false,
 			    "lengthChange": false,
 			    "paging": true,
