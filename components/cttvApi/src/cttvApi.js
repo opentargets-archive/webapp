@@ -18,10 +18,12 @@ var cttvApi = function () {
     // 	// No browser context
     // 	prefix = "http://cttv:75djkwty4805hye@127.0.0.1:8008/api/latest/";	
     // }
-    var prefix = "http://193.62.52.228/api/latest/";
+    //var prefix = "http://193.62.52.228/api/latest/";
+    var prefix = "http://127.0.0.1:8008/api/latest/";
     var prefixFilterby = prefix + "filterby?";
     var prefixAssociations = prefix + "association?"
     var prefixSearch = prefix + "search?";
+    var prefixGene = prefix + "gene/";
 
     var _ = {};
     _.call = function (myurl) {
@@ -40,6 +42,9 @@ var cttvApi = function () {
     // };
     
     _.url = {};
+    _.url.gene = function (obj) {
+	return prefixGene + obj.gene_id;
+    };
     _.url.search = function (obj) {
 	var opts = [];
 	if (obj.from != null) {

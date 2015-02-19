@@ -1,0 +1,31 @@
+<div>
+  <h3>{{target.label}} profile page <small>({{target.id}})</small></h3>
+
+  <div class"row" style="padding-bottom:20px; margin-bottom:20px">
+    <accordion close-others="false">
+      <accordion-group heading="Description" is-open="true">
+	{{target.description}}
+      </accordion-group>
+      <accordion-group heading="Uniprot" is-open="false">
+      </accordion-group>
+
+      <accordion-group heading="Ensembl" is-open="false">
+	Coming soon
+      </accordion-group>
+
+      <accordion-group heading="Gene Ontology" is-open="false">
+	<span ng-repeat="go in goterms">
+	  <a target="_blank" href="http://amigo.geneontology.org/amigo/term/{{go}}">{{go}}</a>
+	</span>
+      </accordion-group>
+
+      <accordion-group heading="RNA Baseline Expression" is-open="false">
+	Coming soon
+      </accordion-group>
+
+      <accordion-group heading="Bibliography" is-open="false">
+	<pmc-citation-list pmids="{{pmids}}"></pmc-citation-list>
+      </accordion-group>
+    </accordion>
+  </div>
+</div>

@@ -34,7 +34,24 @@ describe('CTTV api', function () {
 			    assert.operator(resp.size, '<=', 10);
 			    assert.operator(resp.size, '>', 0);
 			    done();
-			})
+			});
+		});
+	    });
+	    describe ("gene", function () {
+		it ("exists", function () {
+		    assert.isDefined (cttvApiUrl.gene);
+		});
+		it ("retrieves information for a gene", function (done) {
+		    var url = cttvApiUrl.gene({"gene_id" : data.gene});
+		    myCttvApi.call(url)
+			.then(function (resp) {
+			    resp = JSON.parse(resp.text);
+			    assert.isDefined(resp);
+			    assert.isObject(resp);
+			    assert.isDefined(resp.biotype);
+			    assert.equal(resp.biotype, "protein_coding");
+			    done();
+			});
 		});
 	    });
 	    describe ("association", function () {

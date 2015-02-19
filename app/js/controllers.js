@@ -266,9 +266,48 @@
 
         }
 
+    }])
+
+
+/**
+ * TargetCtrl
+ * Controller for the target page
+ * It loads information about a given target
+ */
+    .controller ("TargetCtrl", ["$scope", "$location", "$log", function ($scope, $location, $log) {
+	$log.log('TargetCtrl()');
+	var cttvRestApi = cttvApi();
+	var geneId = $location.url().split("/")[2];
+	var url = cttvRestApi.url.gene({'gene_id' : geneId});
+	console.log(url);
+
+	cttvRestApi.call(url)
+	    .then(function (resp) {
+		resp = JSON.parse(resp.text);
+		console.log(resp);
+		$scope.target = {
+		    label : resp.approved_name || resp.ensembl_external_name,
+		    id : resp.approved_id || resp.ensembl_gene_id,
+		    description : resp.uniprot_function[0]
+		};
+		// GO terms
+		var goterms = _.filter(resp.dbxrefs, function (t) {return t.match(/^GO:/)});
+		var cleanGoterms = _.map(goterms, function (t) {return t.substring(3, t.length)});
+		var uniqGoterms = _.uniq(cleanGoterms);
+		$scope.goterms = uniqGoterms;
+		$scope.$apply();
+
+		// Bibliography
+		var bibliography = _.filter(resp.dbxrefs, function (t) {return t.match(/^PubMed/)});
+		console.log(bibliography);
+		var cleanBibliography = _.map(bibliography, function (t) {return t.substring(7, t.length)});
+		var bibliographyStr = cleanBibliography.join (",");
+		$scope.pmids = bibliographyStr;
+
+		// Update the bindings
+		$scope.$apply();
+	    });
     }]).
-
-
 
     /**
      * AssociationsCtrl

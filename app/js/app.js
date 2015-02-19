@@ -32,6 +32,10 @@ config(['$routeProvider',
                 templateUrl: 'partials/geneDisease.html',
                 controller: 'GeneDiseaseCtrl'
     	    }).
+	    when('/target/:id', {
+		templateUrl: 'partials/target.html',
+		controller: 'TargetCtrl'
+	    }).
             /*when('/evidence/:id', {
                 templateUrl: 'partials/evidence.html',
                 controller: 'EvidenceCtrl'

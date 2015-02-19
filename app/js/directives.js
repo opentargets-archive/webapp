@@ -299,23 +299,30 @@ angular.module('cttvDirectives', [])
     	    restrict: 'EA',
     	    templateUrl: "partials/pmcCitation.html",
     	    link: function (scope, elem, attrs) {
-		var pmids = attrs.pmids.split(",");
-		var terms = [];
-		for (var i=0; i<pmids.length; i++) {
-		    terms.push("EXT_ID:" + pmids[i]);
-		}
-		var query = terms.join(" OR ");
-    		var config = {
-    		    width: 400,
-    		    loadingStatusImage: "",
-    		    source: pmc.Citation.MED_SOURCE,
-		    query: query,
-    		    target: 'pmcCitation',
-    		    displayStyle: pmc.CitationList.FULL_STYLE,
-    		    elementOrder: pmc.CitationList.TITLE_FIRST
-    		};
-    		var instance = new pmc.CitationList(config);
-    		instance.load();
+		scope.$watch(function () { return attrs.pmids}, function (newPMIDs) {
+		    var pmids = newPMIDs.split(",");
+		    console.log("PMIDS TO LOOK FOR...");
+		    console.log(pmids);
+		    if (pmids[0]) {
+			console.log("PMIDS OK..." + pmids.length);
+			var terms = [];
+			for (var i=0; i<pmids.length; i++) {
+			    terms.push("EXT_ID:" + pmids[i]);
+			}
+			var query = terms.join(" OR ");
+    			var config = {
+    			    width: 400,
+    			    loadingStatusImage: "",
+    			    source: pmc.Citation.MED_SOURCE,
+			    query: query,
+    			    target: 'pmcCitation',
+    			    displayStyle: pmc.CitationList.FULL_STYLE,
+    			    elementOrder: pmc.CitationList.TITLE_FIRST
+    			};
+    			var instance = new pmc.CitationList(config);
+    			instance.load();
+		    }		    
+		});
     	    }
     	};
     })
