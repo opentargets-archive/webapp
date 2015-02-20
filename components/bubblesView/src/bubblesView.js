@@ -136,7 +136,14 @@ var bubblesView = function () {
 		if (d.children) return "topLabel";
 		return "leafLabel";
 	    })
-	    .attr("pointer-events", "none")
+	    .style("cursor", "default")
+	    .attr("pointer-events", function (d) {return d.children ? "auto" : "none"})
+	    .on("click", function (d) { // only on those with pointer-events "auto" ie, on therapeutic areas labels
+		if (d3.event.defaultPrevented) {
+		    return;
+		}
+		conf.onclick.call(this, tree_node(d));
+	    })
 	    .attr("fill", "navy")
 	    .attr("font-size", 10)
 	    .attr("text-anchor", "middle")
@@ -267,11 +274,18 @@ var bubblesView = function () {
 	label
 	    .each(function (d, i) {
 		if (d.children) {
-		    // d3.select(this)
-		    // 	.select("textPath")
-		    // 	.text(function () {
-		    // 	    return d[conf.label] ? d[conf.label].substring(0, Math.PI*d.r*k/8) : "";
-		    // 	});
+		    d3.select(this)
+			.select("*")
+			.remove();
+		    d3.select(this)
+		    	.append("textPath")
+			.attr("xlink:href", function () {
+			    return "#s"+i;
+			})
+			.attr("startOffset", "50%")
+			.text(function () {
+			    return d[conf.label] ? d[conf.label].substring(0, Math.PI*d.r*k/8) : "";
+			});
 		} else {
 		    d3.select(this)
 		    	.attr("x", function (d) { return ((d.x - v[0])*k)+offset; })
