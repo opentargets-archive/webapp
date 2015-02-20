@@ -10,7 +10,7 @@ var geneAssociations = function () {
     function lookDatasource (arr, dsName) {
     	for (var i=0; i<arr.length; i++) {
     	    var ds = arr[i];
-    	    if (ds.datasource === dsName) {
+    	    if (ds.datatype === dsName) {
     		return {
     		    "count": ds.evidence_count,
     		    "score": ds.association_score
@@ -132,11 +132,9 @@ var geneAssociations = function () {
 	    if (node.is_leaf()) {
 		// tooltip is for a disease
 		var score = node.property("association_score");
-		obj.header = "Disease: " + node.property("label") + " (Score: " + score + ")";
+		obj.header = node.property("label") + " (Association Score: " + score + ")";
 		var loc = "/app/#/gene-disease?t=" + config.target + "&d=" + node.property("efo_code");
 		obj.body="<div></div><a href=" + loc + ">View details</a>";
-
-		// TODO: Move to cttvApi
 
 		var leafTooltip = tooltip.plain()
 		    .id(1)
@@ -148,18 +146,15 @@ var geneAssociations = function () {
 		//Pass a new fill callback that calls the original one and decorates with flowers
 		leafTooltip.fill(function (data) {
 		    tableFill.call(this, data);
-		    var datasources = node.property("datasources");
+		    var datatypes = node.property("datatypes");
 		    var flowerData = [
-			{"value":lookDatasource(datasources, "expression_atlas").score,  "label":"RNA"},
-			{"value":lookDatasource(datasources, "uniprot").score +
-			 lookDatasource(datasources, "gwas").score +
-			 lookDatasource(datasources, "cancer_gene_census").score,  "label":"Genetics"},
-			{"value":lookDatasource(datasources, "eva").score,  "label":"Somatic"},
-			{"value":lookDatasource(datasources, "chembl").score,  "label":"Drugs"},
-			{"value":lookDatasource(datasources, "reactome").score,  "label":"Pathways"},
-			{"value":lookDatasource(datasources, "phenodigm").score,  "label":"Mouse"}
+			{"value":lookDatasource(datatypes, "genetic_association").score,  "label":"Genetics"},
+			{"value":lookDatasource(datatypes, "rna_expression").score,  "label":"RNA"},
+			{"value":lookDatasource(datatypes, "somatic_mutation").score,  "label":"Somatic"},
+			{"value":lookDatasource(datatypes, "known_drug").score,  "label":"Drugs"},
+			{"value":lookDatasource(datatypes, "affected_pathway").score,  "label":"Pathways"},
+			{"value":lookDatasource(datatypes, "animal_model").score,  "label":"Models"}
 		    ];
-
 		    flower.values(flowerData)(this.select("div").node());
 		});
 		
@@ -167,7 +162,7 @@ var geneAssociations = function () {
 
 	    } else {
 		// tooltip is for a therapeutic area
-		obj.header = "Therapeutic Area: " + node.property("label");
+		obj.header = node.property("label");
 		obj.rows = [];
 		obj.rows.push({
 		    "label" : "Score",

@@ -41,24 +41,25 @@ angular.module('cttvDirectives', [])
 	    },
 	    link: function (scope, elem, attrs) {
 
-		function lookDatasource (arr, dsName) {
-		    for (var i=0; i<arr.length; i++) {
-			var ds = arr[i];
-			if (ds.datasource === dsName) {
-			    return {
-				"count": ds.evidence_count,
-				"score": ds.association_score
-			    };
-			}
-		    }
-		    return {
-			"count": 0,
-			"score": 0
-		    };
-		}
+		// function lookDatasource (arr, dsName) {
+		    // for (var i=0; i<arr.length; i++) {
+		    // 	var ds = arr[i];
+		    // 	if (ds.datasource === dsName) {
+		    // 	    return {
+		    // 		"count": ds.evidence_count,
+		    // 		"score": ds.association_score
+		    // 	    };
+		    // 	}
+		    // }
+		    // return {
+		    // 	"count": 0,
+		    // 	"score": 0
+		    // };
+		// }
 
 		var url = api.url.associations({
-		    gene: attrs.target
+		    gene: attrs.target,
+		    datastructure : "tree"
 		})
 		console.log("URL: " + url);
 		api.call(url)
@@ -118,16 +119,24 @@ angular.module('cttvDirectives', [])
 			    // Association score
 			    row.push(data.association_score);
 			    // Genetic associations
-			    row.push(lookDatasource (data.datasources, "uniprot").score +
-				     lookDatasource (data.datasources, "gwas").score +
-				     lookDatasource (data.datasources, "cancer_gene_census").score);
+			    //row.push(lookDatasource (data.datatypes, "genetic_association"));
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0);
 			    // Somatic mutations
-			    row.push(lookDatasource (data.datasources, "eva").score);
+			    //row.push(lookDatasource (data.datatypes, "somatic_mutation"));
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0);
+
 			    // Known drugs
-			    row.push(lookDatasource (data.datasources, "chembl").score);
-			    row.push(lookDatasource (data.datasources, "expression_atlas").score);
-			    row.push(lookDatasource (data.datasources, "reactome").score);
-			    row.push(lookDatasource (data.datasources, "phenodigm").score);
+			    //row.push(lookDatasource (data.datatypes, "known_drug"));
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0);
+			    // Expression atlas
+			    //row.push(lookDatasource (data.datatypes, "rna_expression"));
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0);
+			    // Reactome / Affected Pathways
+			    //row.push(lookDatasource (data.datatypes, "affected_pathway"));
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0);
+			    // Animal models
+			    //row.push(lookDatasource (data.datatypes, "animal_model"));
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0);
 
 			    newData[i] = row;
 			}
@@ -139,14 +148,14 @@ angular.module('cttvDirectives', [])
 			    "data": newData,
 			    "columns": [
 				{ "title": "Disease" },
-				{ "title": "Therapeutic Area" },
+				{ "title": "Therapeutic area" },
 				{ "title": "Association score" },
-				{ "title": "Genetic Associations" },
-				{ "title": "Somatic Mutations" },
-				{ "title": "Known Drugs" },
-				{ "title": "RNA Expression" },
-				{ "title": "Disrupted Pathways" },
-				{ "title": "Mouse Data" }
+				{ "title": "Genetic associations" },
+				{ "title": "Somatic mutations" },
+				{ "title": "Known drugs" },
+				{ "title": "RNA expression" },
+				{ "title": "Affected pathways" },
+				{ "title": "Animal models" }
 			    ],
 			    "order" : [[2, "desc"]],
 			    "autoWidth": false,
@@ -175,21 +184,21 @@ angular.module('cttvDirectives', [])
     })
 
     .directive('cttvDiseaseAssociations', function () {
-	function lookDatasource (arr, dsName) {
-	    for (var i=0; i<arr.length; i++) {
-		var ds = arr[i];
-		if (ds.datasource === dsName) {
-		    return {
-			"count": ds.evidence_count,
-			"score": ds.association_score
-		    };
-		}
-	    }
-	    return {
-		"count": 0,
-		"score": 0
-	    };
-	}
+	// function lookDatasource (arr, dsName) {
+	//     for (var i=0; i<arr.length; i++) {
+	// 	var ds = arr[i];
+	// 	if (ds.datasource === dsName) {
+	// 	    return {
+	// 		"count": ds.evidence_count,
+	// 		"score": ds.association_score
+	// 	    };
+	// 	}
+	//     }
+	//     return {
+	// 	"count": 0,
+	// 	"score": 0
+	//     };
+	// }
 	return {
 	    restrict: 'EA',
 	    scope: {},
@@ -218,25 +227,21 @@ angular.module('cttvDirectives', [])
 			    var geneLoc = "";
 			    var geneDiseaseLoc = "/app/#/gene-disease?t=" + data[i].gene_id + "&d=" + attrs.target;
 			    row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
-			    // The ensembl id
-			    row.push(data[i].gene_id);
 			    // The association score
 			    row.push(data[i].association_score);
 			    // Genetic Association
-			    row.push(lookDatasource(data[i].datasources, "uniprot").score +
-				     lookDatasource(data[i].datasources, "gwas").score +
-				     lookDatasource(data[i].datasources, "cancer_gene_census").score);
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0);
 			    // Somatic Mutations
-			    row.push(lookDatasource(data[i].datasources, "eva").score);
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0);
 			    // Known Drugs
-			    row.push(lookDatasource(data[i].datasources, "chembl").score);
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0);
 			    // RNA expression
-			    row.push(lookDatasource(data[i].datasources, "expression_atlas").score);
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0);
 			    // Disrupted pathways
-			    row.push(lookDatasource(data[i].datasources, "reactome").score);
-			    // Mouse data
-			    row.push(lookDatasource(data[i].datasources, "phenodigm").score);
-
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0);
+			    // Animal models
+			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0);
+			    
 			    // We will insert the flower here
 			    row.push("");
 
@@ -264,15 +269,14 @@ angular.module('cttvDirectives', [])
 			    "data" : newData,
 			    "columns": [
 				{ "title": "Gene" },
-				{ "title": "Ensembl ID"},				    
-			        { "title": "Association Score" },
-			        { "title": "Genetic Association" },
-			        { "title": "Somatic Mutations" },
-			        { "title": "Known Drugs" },
-			        { "title": "RNA Expression" },
-			        { "title": "Disrupted Pathways" },
-				{ "title": "Mouse Data" },
-				{ "title": "Evidence breakdown", "orderable" : false }
+			        { "title": "Association score" },
+			        { "title": "Genetic association" },
+			        { "title": "Somatic mutations" },
+			        { "title": "Known drugs" },
+			        { "title": "RNA expression" },
+			        { "title": "Affected pathways" },
+				{ "title": "Animal models" },
+				{ "title": "Association score breakdown", "orderable" : false }
 			    ],
 			    "fnCreatedRow" : function (row, data, dataIndex) {
 				var div = document.createElement("div");

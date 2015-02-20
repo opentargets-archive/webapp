@@ -3,7 +3,8 @@ var flowerView = function () {
     var conf = {
 	diagonal : 100,
 	values : [],
-	fontsize : 12
+	fontsize : 12,
+	max : 1
     };
 
     var radius = conf.width / 2;
@@ -16,12 +17,8 @@ var flowerView = function () {
 	container.selectAll("*").remove();
     	radius = conf.diagonal / 2;
 
-	//var valsExtent = d3.extent(conf.values);
 	var sizeScale = d3.scale.linear()
-	    .domain([0,d3.extent(conf.values, function(d){
-		return d.value
-	    })[1]])
-	    //.domain([0, d3.extent(conf.values)[1]])
+	    .domain([0,conf.max])
 	    .range([0, radius]);
 		
 	var colorScale = d3.scale.linear()
@@ -31,6 +28,7 @@ var flowerView = function () {
 	    //.domain([0, d3.extent(conf.values)[1]])
 	    //.range(["#3e8bad", "#975269"]);
 	    .range(["#3e8bad", "#3e8bad"]);
+	var backgroundColor = "#f1f1f1";
 		
 	var origin = [~~(conf.width/2), ~~(conf.height/2)];
 	var svg = container.append("svg")
@@ -41,7 +39,7 @@ var flowerView = function () {
 
 	var label = function (r, currLabel) {
 	    var rads = r * 180 / Math.PI;
-	    var offset = 20;
+	    var offset = 15;
 	    svg.append("text")
 		.attr("x", origin[0])
 		.attr("y", origin[1])
@@ -132,10 +130,10 @@ var flowerView = function () {
 		{x:origin[0]+reallx, y:origin[1]+really},
 		{x:origin[0],  y:origin[1]}
 	    ];
-	    
 	    svg.append("path")
 		.attr("class", "stitches")
-		.attr("d", line(data));
+		.attr("d", line(data))
+		.attr("fill", function () { if (d > 0) {return backgroundColor} else {return "white"}});
 
 	    svg.append("path")
 		.attr("class", "petal")
