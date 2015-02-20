@@ -31,16 +31,8 @@ var cttvApi = function () {
 	    "url" : myurl
 	});
     };
-    // _.call = function (myurl, callback) {
-    // 	http.get({
-    // 	    url: myurl
-    // 	}, function (err, resp) {
-    // 	    if (err == null) {
-    // 		callback (resp.status, JSON.parse(resp.body));
-    // 	    }
-    // 	});
-    // };
-    
+
+    // URL object
     _.url = {};
     _.url.gene = function (obj) {
 	return prefixGene + obj.gene_id;
@@ -67,6 +59,9 @@ var cttvApi = function () {
 	    opts.push("gene=" + obj.gene);
 	} else if (obj.efo != null) {
 	    opts.push("efo=" + obj.efo);
+	}
+	if (obj.datastructure != null) {
+	    opts.push("datastructure=" + obj.datastructure);
 	}
 
 	return prefixAssociations + opts.join("&");

@@ -59,7 +59,7 @@ describe('CTTV api', function () {
 		    assert.isDefined (cttvApiUrl.associations);
 		});
 		it ("retrieves associations for a gene", function (done) {
-		    var url = cttvApiUrl.associations({gene: data.gene});
+		    var url = cttvApiUrl.associations({gene: data.gene, datastructure: "tree"});
 		    myCttvApi.call(url)
 			.then(function (resp) {
 			    resp = JSON.parse(resp.text);
@@ -72,7 +72,7 @@ describe('CTTV api', function () {
 			});
 		});
 		it ("retrieves associations for a disease", function (done) {
-		    var url = cttvApiUrl.associations({efo: data.efo});
+		    var url = cttvApiUrl.associations({efo: data.efo, datastructure: "flat"});
 		    myCttvApi.call(url)
 			.then(function (resp) {
 			    resp = JSON.parse(resp.text);
