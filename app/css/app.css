@@ -38,7 +38,9 @@ body{
   
 }
 
-
+.accordionCell {
+    overflow : scroll
+}
 
 
 .search-suggestions-box{

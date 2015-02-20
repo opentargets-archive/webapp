@@ -301,10 +301,7 @@ angular.module('cttvDirectives', [])
     	    link: function (scope, elem, attrs) {
 		scope.$watch(function () { return attrs.pmids}, function (newPMIDs) {
 		    var pmids = newPMIDs.split(",");
-		    console.log("PMIDS TO LOOK FOR...");
-		    console.log(pmids);
 		    if (pmids[0]) {
-			console.log("PMIDS OK..." + pmids.length);
 			var terms = [];
 			for (var i=0; i<pmids.length; i++) {
 			    terms.push("EXT_ID:" + pmids[i]);
@@ -388,15 +385,23 @@ angular.module('cttvDirectives', [])
     .directive('ebiExpressionAtlasBaselineSummary', function () {
 	return {
 	    restrict: 'EA',
-	    templateUrl: "partials/expressionAtlas.html",
 	    link: function (scope, elem, attrs) {
-		var instance = new Biojs.ExpressionAtlasBaselineSummary ({
-		    geneQuery : attrs.target,
-		    proxyUrl : "",
-		    rootContext : "http://www.ebi.ac.uk/gxa",
-		    geneSetMatch : false,
-		    target : "expressionAtlas"
-		})
+		scope.$watch(function () { return attrs.target }, function (target) {
+		    if (target === "") {
+			return;
+		    }
+		    var newDiv = document.createElement("div");
+		    newDiv.id = "cttvExpressionAtlas";
+		    newDiv.className = "accordionCell";
+		    elem[0].appendChild(newDiv);
+		
+		    var instance = new Biojs.AtlasHeatmap ({
+			getBaseUrl: "http://www.ebi.ac.uk/gxa",
+			params:'geneQuery=' + target,
+			isMultiExperiment: false,
+			target : "cttvExpressionAtlas"
+		    })
+		});
 	    },
 	}
     })

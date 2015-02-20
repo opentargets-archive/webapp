@@ -6,11 +6,24 @@
       <accordion-group heading="Description" is-open="true">
 	{{target.description}}
       </accordion-group>
+
       <accordion-group heading="Uniprot" is-open="false">
+	<p>ID: {{uniprot.id}}</p>
+	<p>Accessions:</p>
+	<ul>
+	  <li ng-repeat="accession in uniprot.accessions"><a target="_blank" href="http://www.uniprot.org/uniprot/{{accession}}">{{accession}}</a></li>
+	</ul>
+	<p>Uniprot Keywords:</p>
+	<ul>
+	  <li ng-repeat="keyword in uniprot.keywords">{{keyword}}</li>
+	</ul>
       </accordion-group>
 
       <accordion-group heading="Ensembl" is-open="false">
-	Coming soon
+	<p ng-if="ensembl.isHuman">ID: <a target="_blank" href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={{ensembl.id}}">{{ensembl.id}}</a></p>
+	<p ng-if="!ensembl.isHuman">ID: {{ensembl.id}}</p>
+	<p>Description: {{ensembl.description}}</p>
+	<p ng-if="ensembl.isHuman">Gene Location: <a target="_blank" href="http://www.ensembl.org/Homo_sapiens/Location/View?db=core;g={{ensembl.id}}">Human {{ensembl.chr}}:{{ensembl.start}}-{{ensembl.end}}</a></p>
       </accordion-group>
 
       <accordion-group heading="Gene Ontology" is-open="false">
@@ -19,8 +32,12 @@
 	</span>
       </accordion-group>
 
-      <accordion-group heading="RNA Baseline Expression" is-open="false">
-	Coming soon
+      <accordion-group>
+	<accordion-heading>
+	  <span ng-click="toggleBaselineExpression()">RNA Baseline expression</span>
+	</accordion-heading>
+	<ebi-expression-atlas-baseline-summary target="{{eaTarget}}"></ebi-expression-atlas-baseline-summary>
+	<!-- Coming soon -->
       </accordion-group>
 
       <accordion-group heading="Bibliography" is-open="false">

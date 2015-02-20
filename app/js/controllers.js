@@ -268,7 +268,6 @@
 
     }])
 
-
 /**
  * TargetCtrl
  * Controller for the target page
@@ -290,16 +289,38 @@
 		    id : resp.approved_id || resp.ensembl_gene_id,
 		    description : resp.uniprot_function[0]
 		};
+
+		// Uniprot
+		$scope.uniprot = {
+		    id : resp.uniprot_id,
+		    accessions : resp.uniprot_accessions,
+		    keywords : resp.uniprot_keywords
+		}
+
+		// Ensembl
+		var isHuman = resp.ensembl_gene_id.substring(0,4) === "ENSG";
+		$scope.ensembl = {
+		    id : resp.ensembl_gene_id,
+		    description : resp.ensembl_description,
+		    isHuman : isHuman,
+		    chr : resp.chromosome,
+		    start : resp.gene_start,
+		    end : resp.gene_end
+		};
+		
 		// GO terms
 		var goterms = _.filter(resp.dbxrefs, function (t) {return t.match(/^GO:/)});
 		var cleanGoterms = _.map(goterms, function (t) {return t.substring(3, t.length)});
 		var uniqGoterms = _.uniq(cleanGoterms);
 		$scope.goterms = uniqGoterms;
-		$scope.$apply();
+
+		// Expression Atlas
+		$scope.toggleBaselineExpression = function () {
+		    $scope.eaTarget = resp.approved_name || resp.ensembl_external_name;
+		};
 
 		// Bibliography
 		var bibliography = _.filter(resp.dbxrefs, function (t) {return t.match(/^PubMed/)});
-		console.log(bibliography);
 		var cleanBibliography = _.map(bibliography, function (t) {return t.substring(7, t.length)});
 		var bibliographyStr = cleanBibliography.join (",");
 		$scope.pmids = bibliographyStr;
