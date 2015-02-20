@@ -106,41 +106,67 @@ angular.module('cttvDirectives', [])
 			var leaves = nodeData.get_all_leaves();
 
 			var newData = new Array (leaves.length);
+			var flowers = {};
 			for (var i=0; i<newData.length; i++) {
 			    var data = leaves[i].data();
+			    var datatypes = {};
+			    datatypes.genetic_association = _.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
+			    datatypes.somatic_mutation = _.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0;
+			    datatypes.known_drug = _.result(_.find(data.datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0;
+			    datatypes.rna_expression = _.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
+			    datatypes.affected_pathway = _.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
+			    datatypes.animal_model = _.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
 			    var therapeuticArea = leaves[i].parent().property("label");
 
 			    var row = [];
 			    // Disease name
 			    var geneDiseaseLoc = "/app/#/gene-disease?t=" + attrs.target + "&d=" + data.efo_code;
 			    row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
+			    // EFO (hidden)
+			    row.push(data.efo_code);
 			    // Therapeutic area
 			    row.push(therapeuticArea || "");
 			    // Association score
 			    row.push(data.association_score);
 			    // Genetic associations
 			    //row.push(lookDatasource (data.datatypes, "genetic_association"));
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0);
+			    row.push(datatypes.genetic_association);
 			    // Somatic mutations
 			    //row.push(lookDatasource (data.datatypes, "somatic_mutation"));
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0);
+			    row.push(datatypes.somatic_mutation);
 
 			    // Known drugs
 			    //row.push(lookDatasource (data.datatypes, "known_drug"));
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0);
+			    row.push(datatypes.known_drug);
 			    // Expression atlas
 			    //row.push(lookDatasource (data.datatypes, "rna_expression"));
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0);
+			    row.push(datatypes.rna_expression);
 			    // Reactome / Affected Pathways
 			    //row.push(lookDatasource (data.datatypes, "affected_pathway"));
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0);
+			    row.push(datatypes.affected_pathway);
 			    // Animal models
 			    //row.push(lookDatasource (data.datatypes, "animal_model"));
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0);
-
+			    row.push(datatypes.animal_model);
+			    // flower placeholder
+			    row.push("");
+			    
+			    var flowerData = [
+			    	{"value":datatypes.genetic_association,  "label":"Genetics"},
+			    	{"value":datatypes.somatic_mutation,  "label":"Somatic"},
+			    	{"value":datatypes.known_drug,  "label":"Drugs"},
+			    	{"value":datatypes.rna_expression,  "label":"RNA"},
+			    	{"value":datatypes.affected_pathway,  "label":"Pathways"},
+			    	{"value":datatypes.animal_model,  "label":"Models"}
+			    ];
+			    var flower = flowerView()
+				.values(flowerData)
+				.fontsize(6)
+				.diagonal(100);
+			    flowers[data.efo_code] = flower;
+			    
 			    newData[i] = row;
 			}
-
+			
 			var table = document.createElement("table");
 			table.className = "table table-stripped table-bordered";
 			elem[0].querySelector(".cttvTable").appendChild(table);
@@ -148,6 +174,7 @@ angular.module('cttvDirectives', [])
 			    "data": newData,
 			    "columns": [
 				{ "title": "Disease" },
+				{ "title": "EFO"},
 				{ "title": "Therapeutic area" },
 				{ "title": "Association score" },
 				{ "title": "Genetic associations" },
@@ -155,16 +182,28 @@ angular.module('cttvDirectives', [])
 				{ "title": "Known drugs" },
 				{ "title": "RNA expression" },
 				{ "title": "Affected pathways" },
-				{ "title": "Animal models" }
+				{ "title": "Animal models" },
+				{ "title": "Association score breakdown", "orderable" : false }
 			    ],
-			    "order" : [[2, "desc"]],
+			    "columnDefs" : [
+				{
+				    "targets" : [1],
+				    "visible" : false
+				}
+			    ],
+			    "fnCreatedRow" : function (row, data, dataIndex) {
+				var div = document.createElement("div");
+				$(row).children("td:last-child").append(div);
+				flowers[data[1]](div);
+			    },
+			    "order" : [[3, "desc"]],
 			    "autoWidth": false,
 			    "lengthChange": false,
 			    "paging": true,
 			    "searching": true,
 			    "bInfo" : false,
 			    "ordering": true
-			} );
+			});
 		    });
 
 		scope.$watch(function () { return attrs.display }, function (newVal, oldVal) {
@@ -215,45 +254,50 @@ angular.module('cttvDirectives', [])
 			scope.$parent.nresults = resp.total;
 			scope.$parent.$apply();
 
-			console.log("DISEASE => GENE DATA:");
 			var data = resp.data;
-			console.log(data);
 			var newData = new Array(data.length);
 			//var flowers = new Array(data.length);
 			var flowers = {};
 
 			for (var i=0; i<data.length; i++) {
+			    var datatypes = {};
+			    datatypes.genetic_association = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
+			    datatypes.somatic_mutation = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0;
+			    datatypes.known_drug = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0;
+			    datatypes.rna_expression = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
+			    datatypes.affected_pathway = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
+			    datatypes.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
 			    var row = [];
 			    var geneLoc = "";
 			    var geneDiseaseLoc = "/app/#/gene-disease?t=" + data[i].gene_id + "&d=" + attrs.target;
 			    row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
+			    // Ensembl ID
+			    row.push(data[i].gene_id);
 			    // The association score
 			    row.push(data[i].association_score);
 			    // Genetic Association
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0);
+			    row.push(datatypes.genetic_association);
 			    // Somatic Mutations
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0);
+			    row.push(datatypes.somatic_mutation);
 			    // Known Drugs
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0);
+			    row.push(datatypes.known_drug);
 			    // RNA expression
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0);
-			    // Disrupted pathways
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0);
+			    row.push(datatypes.rna_expression);
+			    // Affected pathways
+			    row.push(datatypes.affected_pathway);
 			    // Animal models
-			    row.push(_.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0);
+			    row.push(datatypes.animal_model);
 			    
 			    // We will insert the flower here
 			    row.push("");
 
 			    var flowerData = [
-			    	{"value":lookDatasource(data[i].datasources, "expression_atlas").score,  "label":"RNA"},
-			    	{"value":lookDatasource(data[i].datasources, "uniprot").score +
-				 lookDatasource(data[i].datasources, "gwas").score +
-				 lookDatasource(data[i].datasources, "cancer_gene_census").score,  "label":"Genetics"},
-			    	{"value":lookDatasource(data[i].datasources, "eva").score,  "label":"Somatic"},
-			    	{"value":lookDatasource(data[i].datasources, "chembl").score,  "label":"Drugs"},
-			    	{"value":lookDatasource(data[i].datasources, "reactome").score,  "label":"Pathways"},
-			    	{"value":lookDatasource(data[i].datasources, "phenodigm").score,  "label":"Mouse"}
+			    	{"value":datatypes.genetic_association,  "label":"Genetics"},
+			    	{"value":datatypes.somatic_mutation,  "label":"Somatic"},
+			    	{"value":datatypes.known_drug,  "label":"Drugs"},
+			    	{"value":datatypes.rna_expression,  "label":"RNA"},
+			    	{"value":datatypes.affected_pathway,  "label":"Pathways"},
+			    	{"value":datatypes.animal_model,  "label":"Models"}
 			    ];
 
 			    var flower = flowerView()
@@ -269,6 +313,7 @@ angular.module('cttvDirectives', [])
 			    "data" : newData,
 			    "columns": [
 				{ "title": "Gene" },
+				{ "title": "Ensembl ID"},
 			        { "title": "Association score" },
 			        { "title": "Genetic association" },
 			        { "title": "Somatic mutations" },
@@ -277,6 +322,12 @@ angular.module('cttvDirectives', [])
 			        { "title": "Affected pathways" },
 				{ "title": "Animal models" },
 				{ "title": "Association score breakdown", "orderable" : false }
+			    ],
+			    "columnDefs" : [
+			    	{
+			    	    "targets" : [1],
+			    	    "visible" : false
+			    	}
 			    ],
 			    "fnCreatedRow" : function (row, data, dataIndex) {
 				var div = document.createElement("div");

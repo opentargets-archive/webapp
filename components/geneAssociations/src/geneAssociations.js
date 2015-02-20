@@ -149,9 +149,9 @@ var geneAssociations = function () {
 		    var datatypes = node.property("datatypes");
 		    var flowerData = [
 			{"value":lookDatasource(datatypes, "genetic_association").score,  "label":"Genetics"},
-			{"value":lookDatasource(datatypes, "rna_expression").score,  "label":"RNA"},
 			{"value":lookDatasource(datatypes, "somatic_mutation").score,  "label":"Somatic"},
 			{"value":lookDatasource(datatypes, "known_drug").score,  "label":"Drugs"},
+			{"value":lookDatasource(datatypes, "rna_expression").score,  "label":"RNA"},
 			{"value":lookDatasource(datatypes, "affected_pathway").score,  "label":"Pathways"},
 			{"value":lookDatasource(datatypes, "animal_model").score,  "label":"Models"}
 		    ];
