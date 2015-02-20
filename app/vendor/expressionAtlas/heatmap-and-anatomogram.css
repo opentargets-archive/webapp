@@ -9,11 +9,11 @@
 }
 
 .container {
-    margin: 20px auto;
+    /*margin: 20px auto;*/
     /*width: 960px;*/
 }
 
-.row {
+.expressionAtlasRow {
     /*
     border-bottom: 1px solid #ccc;
     margin-bottom: 40px;
@@ -22,7 +22,7 @@
     position: relative;
 }
 
-.row:after {
+.expressionAtlasRow:after {
     clear: both;
     content: ".";
     display: block;
