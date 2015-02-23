@@ -133,7 +133,18 @@ var flowerView = function () {
 	    svg.append("path")
 		.attr("class", "stitches")
 		.attr("d", line(data))
-		.attr("fill", function () { if (d > 0) {return backgroundColor} else {return "white"}});
+		.style("stroke", function () {
+		    if (d>0) {
+			return "#000";
+		    }
+		    return "#ccc";
+		})
+		.style("stroke-width", function () {
+		    if (d>0) {
+			return "0.5px";
+		    }
+		    return "0.25px";
+		})
 
 	    svg.append("path")
 		.attr("class", "petal")
