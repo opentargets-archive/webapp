@@ -318,9 +318,6 @@ var bubblesView = function () {
 
 	for (var i=0; i<nodes.length; i++) {
 	    var node = nodes[i];
-	    console.log("KEY: " + conf.key);
-	    console.log(node.data());
-	    console.log(node.property(conf.key));
 	    var circle = d3.selectAll(".bubblesView_" + node.property(conf.key) + "_" + conf.divId);
 	    circle
 		.classed ("highlight", true);
