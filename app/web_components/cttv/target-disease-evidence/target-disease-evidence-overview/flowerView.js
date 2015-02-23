@@ -164,8 +164,6 @@ var flowerView = function () {
 	if (!arguments.length) {
 	    return conf.values;
 	}
-	console.log("NEW VALS: ");
-	console.log(vals);
 	conf.values = vals;
 	radii = vals.length;
 	radians = 2 * Math.PI / radii

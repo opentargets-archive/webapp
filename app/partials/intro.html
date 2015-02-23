@@ -1,30 +1,90 @@
 <!-- First page should go here -->
 
-<div class="row">
-  
-  <!-- Commenting out the text until we have the final copy -->
+<div class-"row" style="margin-top: 100px;">
+  <div class="col-sm-1"></div>
+  <div class="col-sm-10" ng-controller="SearchBoxCtrl">
 
-  
-  <div class="col-sm-4">
-    <h2>Discover</h2>
-    <p>Find the evidence associating targets with disease. Identify evidence from genetics, somatic mutations, expression patterns, reaction pathways and known drugs. Identify related diseases through ontology connections.</p>
-  </div>
-  <div class="col-sm-4">
-    <h2>Explore</h2>
-    <p>Browse disease relationships. Find evidence from rare diseases by therapeutic area. Explore curated data and find the supporting literature.</p>
-  </div>
-  <div class="col-sm-4">
-    <h2>Share</h2>
-    <p>Export profiles of specific targets. Share target lists...</p> 
-    <!--
-      <p>
-        <span class="fa fa-twitter fa-lg"></span>
-        <span class="fa fa-facebook-square fa-lg"></span>
-        <span class="fa fa-github fa-lg"></span>
-      </p>
-      <p>Integer congue dui ut ipsum feugiat, vitae sollicitudin dui faucibus.</p>
-    -->
-  </div>
-  
+    <img src="http://www.targetvalidation.org/sites/targetvalidation.org/files/CTTV_logo_webheader.png" style="padding-bottom:40px; display: block; margin: 0 auto;"/>
+
+      <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
+        <fieldset>
+          <div class="" style="position:relative"> 
+          
+
+            <div class="input-group">
+              
+              <input type="text" placeholder="Search for gene or disease" class="form-control ng-valid-maxlength ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+
+              <div class="input-group-btn">
+                <button type="submit" class="btn btn-primary">
+                  <span class="fa fa-search fa-lg"></span>
+                </button>
+              </div>
+
+            </div>
+            
+
+            <!-- Suggestions box -->
+            <div cttv-search-suggestions></div>
+            <!-- End suggestions box -->
+
+
+            <span class="">
+              <small>
+                <i>
+                  Examples: <a href="#/search?q=braf">BRAF</a>, 
+                  <a href="#/search?q=carcinoma">Carcinoma</a>, 
+                  <a href="#/search?q=pten">PTEN</a>
+                </i>
+              </small>
+            </span>
+            
+
+            <!-- Error messages -->
+            <!-- again, TODO later
+            <label class="control-label has-error ng-hide" for="query-text" ng-show="query.submitted &amp;&amp; (queryForm.text.$error.required || queryForm.text.$error.minlength)">
+              Your query is too short
+            </label>
+            <label class="control-label ng-hide" for="query-text" ng-show="query.submitted &amp;&amp; (queryForm.text.$error.maxlength)">
+              Your query is too long
+            </label>
+            -->
+          </div>
+        </fieldset>
+      </form>
+
+      <div style="height:100px"></div>
+      
+      <div class="row text-lowlight" style="font-weight: 200; text-align: center">
+
+        <div class="col-sm-4">
+          <i class="fa fa-medkit" style="font-size:70px; color:#0D3774"></i>
+          <h2 style="font-weight: 200">I am interested in Disease D</h2>
+          <p>Which targets T can be modulated to treat disease D?</p>
+        </div>
+
+        <div class="col-sm-4">
+          <i class="fa fa-bullseye" style="font-size:70px; color: #ED4F27"></i>
+          <h2 style="font-weight: 200">I am interested in Target T</h2>  
+          <p>Which disease D can be treated by modulating target T?</p>
+        </div>
+
+        <div class="col-sm-4">
+          <i class="fa fa-bullseye" style="font-size:70px; color:#5C9538"></i>
+          <h2 style="font-weight: 200">I am interested in Target T</h2>  
+          <p>Which other target T1 interacts with target T?</p>
+        </div>
+
+      </div>
+
+      <div style="height:100px"></div>
+
+    </div>
+    <div class="col-sm-1"></div>
 </div>
+
 <!-- End first page -->
+
+
+
+
