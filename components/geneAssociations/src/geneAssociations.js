@@ -29,36 +29,36 @@ var geneAssociations = function () {
 	    .append("div");
 	
 	// Zoom Select
-	var zoomSelect = menu
-	    .append("span")
-	    .attr("class", "cttvGA_toplevelSelect")
-	    .text("Find: ")
-	    .append("select")
-	    .on("change", function () {
-		var n = this.value;
-		if (n === "Root") {
-		    bubblesView.focus(tree);
-		    bubblesView.select(tree);
-		    return;
-		}
-		var nodes = tree.find_all(function (node) {
-		    return node.property("efo_code") === n;
-		});
-		var lca;
-		if (nodes.length > 1) {
-		    lca = tree.lca(nodes);
-		} else {
-		    lca = nodes[0].parent();
-		}
-		bubblesView.focus(lca);
-		bubblesView.select(nodes);
-	    });
+	// var zoomSelect = menu
+	//     .append("span")
+	//     .attr("class", "cttvGA_toplevelSelect")
+	//     .text("Find: ")
+	//     .append("select")
+	//     .on("change", function () {
+	// 	var n = this.value;
+	// 	if (n === "Root") {
+	// 	    bubblesView.focus(tree);
+	// 	    bubblesView.select(tree);
+	// 	    return;
+	// 	}
+	// 	var nodes = tree.find_all(function (node) {
+	// 	    return node.property("efo_code") === n;
+	// 	});
+	// 	var lca;
+	// 	if (nodes.length > 1) {
+	// 	    lca = tree.lca(nodes);
+	// 	} else {
+	// 	    lca = nodes[0].parent();
+	// 	}
+	// 	bubblesView.focus(lca);
+	// 	bubblesView.select(nodes);
+	//     });
 
-	zoomSelect
-	    .append("option")
-	    .attr("selected", 1)
-	    .attr("value","Root")
-	    .text("None");
+	// zoomSelect
+	//     .append("option")
+	//     .attr("selected", 1)
+	//     .attr("value","Root")
+	//     .text("None");
 	
 	// // Highlight Select
 	// var highlightSelect = menu
@@ -109,16 +109,16 @@ var geneAssociations = function () {
 	//     .text("Simplified EFO");
 	
 	var tree = bubblesView.data();
-	tree.apply (function (node) {
-	    if (node.is_leaf() && (node.property("label") !== undefined)) {
-		zoomSelect.append("option")
-		    .attr("value", node.property("efo_code"))
-		    .text(node.property("label"));
-	    }
+	// tree.apply (function (node) {
+	//     if (node.is_leaf() && (node.property("label") !== undefined)) {
+	// 	zoomSelect.append("option")
+	// 	    .attr("value", node.property("efo_code"))
+	// 	    .text(node.property("label"));
+	//     }
 	    // highlightSelect.append("option")
 	    // 	.attr("value", node.property("key"))
 	    // 	.text(node.property("key"));
-	});
+    //});
 
 	// Tooltips
 	var bubble_tooltip = function (node) {
@@ -166,37 +166,37 @@ var geneAssociations = function () {
 		obj.rows = [];
 		obj.rows.push({
 		    "label" : "Score",
-		    "value" : Math.round(node.property("association_score"), 2)
+		    "value" : node.property("association_score")
 		});
-		obj.rows.push({
-		    "label" : "Evidence count",
-		    "value" : Math.round(node.property("evidence_count"), 2)
-		});
+		// obj.rows.push({
+		//     "label" : "Evidence count",
+		//     "value" : Math.round(node.property("evidence_count"), 2)
+		// });
 
-		if (node.property("focused") === 1) {
-		    obj.rows.push({
-			"label" : "Action",
-			"value" : "Zoom Out",
-			"obj" : node,
-			"link" : function (node) {
-			    node.property("focused", undefined);
-			    bubblesView.focus(tree);
-			}
-		    });
-		} else {
-		    obj.rows.push({
-			"label" : "Action",
-			"value" : "Zoom In",
-			"obj" : node,
-			"link" : function (node) {
-			    tree.apply( function (n) {
-				n.property("focused", undefined);
-			    });
-			    node.property("focused", 1);
-			    bubblesView.focus(node);
-			}
-		    });
-		}
+		// if (node.property("focused") === 1) {
+		//     obj.rows.push({
+		// 	"label" : "Action",
+		// 	"value" : "Zoom Out",
+		// 	"obj" : node,
+		// 	"link" : function (node) {
+		// 	    node.property("focused", undefined);
+		// 	    bubblesView.focus(tree);
+		// 	}
+		//     });
+		// } else {
+		//     obj.rows.push({
+		// 	"label" : "Action",
+		// 	"value" : "Zoom In",
+		// 	"obj" : node,
+		// 	"link" : function (node) {
+		// 	    tree.apply( function (n) {
+		// 		n.property("focused", undefined);
+		// 	    });
+		// 	    node.property("focused", 1);
+		// 	    bubblesView.focus(node);
+		// 	}
+		//     });
+		// }
 		tooltip.table()
 	            .id(2)
 	            .width(180)
