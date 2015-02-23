@@ -67,6 +67,86 @@ angular.module('cttvDirectives', [])
 			resp = JSON.parse(resp.text);
 			// update general information in parent scope
 			scope.$parent.nresults = resp.total;
+			scope.$parent.$apply(); // <- Is there any other $apply in the $parent below??
+
+			// Filter
+			// Therapeutic areas accordion
+			var nodeData = bubblesView.node(resp.data);
+			var taNodes = nodeData.children();
+			var therapeuticAreas = _.map(taNodes, function (node) {
+			    var d = node.data();
+			    var name = d.label;
+			    if (d.label.length > 20) {
+				name = d.label.substring(0, 18) + "...";
+			    }
+			    var leaves = bubblesView.node(d).get_all_leaves();
+			    var diseases = _.map(leaves, function (n) {
+				var d = n.data();
+				return {
+				    "name" : d.label,
+				    "efo"  : d.efo_code,
+				    "score" :d.association_score
+				};
+			    });
+			    var diseasesSorted = _.sortBy(diseases, function (d) {
+				return -d.score;
+			    });
+			    return {
+				"name": name,
+				"score": diseases.length,
+				"efo": d.efo_code,
+				"diseases" : diseasesSorted
+			    };
+			});
+			var therapeuticAreasSorted = _.sortBy(therapeuticAreas, function (a) {
+			    return -a.score;
+			});
+			scope.$parent.therapeuticAreas = therapeuticAreasSorted;
+			// scope.$parent.selectRoot = function () {
+			//     bView.focus(nodeData);
+			//     bView.select(nodeData);
+			// };
+			scope.$parent.selectTherapeuticArea = function (efo) {
+			    var taNode = nodeData.find_node(function (node) {
+				return node.property("efo_code") === efo;
+			    });
+			    if (taNode.property("focused") === true) {
+				taNode.property("focused", undefined);
+				bView.focus(nodeData);
+			    } else {
+				taNode.property("focused", true);
+				bView.focus(taNode);
+			    }
+			    bView.select(nodeData);
+			};
+			scope.$parent.selectDisease = function (efo) {
+			    // var nodes = nodeData.find_all(function (node) {
+			    // 	return node.property("efo_code") === efo;
+			    // });
+			    // var lca;
+			    // if (nodes.length > 1) {
+			    // 	lca = tree.lca(nodes);
+			    // } else {
+			    // 	lca = nodes[0].parent();
+			    // }
+			    var node = nodeData.find_node(function (n) {
+				return n.property("efo_code") === efo;
+			    });
+			    // bView.focus(lca);
+			    if (node.property("selected") === true) {
+				node.property("selected", undefined);
+				bView.select(nodeData);
+			    } else {
+				console.log("SEL");
+				//console.log(node.data());
+				node.property("selected", true);
+				bView.select([node]);
+				console.log(node.data());
+			    }
+			};
+			
+
+			// Update the parent scope (needed in the directive)
 			scope.$parent.$apply();
 
 			////// Bubbles View
@@ -102,7 +182,6 @@ angular.module('cttvDirectives', [])
 
 			/////// TABLE VIEW
 			console.log("TABLES!");
-			var nodeData = bubblesView.node(resp.data);
 			var leaves = nodeData.get_all_leaves();
 
 			var newData = new Array (leaves.length);
@@ -211,10 +290,12 @@ angular.module('cttvDirectives', [])
 		    case "bubbles" :
 			elem[0].querySelector(".cttvTable").style.display = "none";
 			elem[0].querySelector(".cttvBubbles").style.display = "block";
+			document.querySelector(".cttv-facet").style.display = "block";
 			break;
 		    case "table" :
 			elem[0].querySelector(".cttvBubbles").style.display = "none";
 			elem[0].querySelector(".cttvTable").style.display = "block";
+			document.querySelector(".cttv-facet").style.display = "none";
 			break;
 		    }
 		});

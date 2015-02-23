@@ -4,15 +4,11 @@
   <h3>Diseases associated with {{search.label}} <small>({{search.query}})</small></h3>
   <div class="h6">Found {{nresults}} evidence</div>
 
-  <!-- <i class="fa fa-table" onclick="console.log('table')"></i> -->
-  <!-- <i class="fa fa-picture-o" onclick="console.log('bubbles')"></i> -->
-  <i class="fa fa-picture-o" ng-click="setDisplay('bubbles')"></i>
-  <i class="fa fa-table" ng-click="setDisplay('table')"></i>
-  
   <div class="row">
-    <div class="col-md-2">
-      <h4>Filter <br /></h4>
-      <h6>Evidence types<h6>
+    
+    <div class="col-md-2 cttv-facet">
+      <accordion>
+	<accordion-group heading="Data types">
 	  <div class="checkbox">
 	    <label><input type="checkbox" disabled="disabled" checked><small>Genetic associations</small></label>
 	    <label><input type="checkbox" disabled="disabled" checked><small>Somatic mutations</small></label>
@@ -20,20 +16,42 @@
     	    <label><input type="checkbox" disabled="disabled" checked><small>RNA expression</small></label>
 	    <label><input type="checkbox" disabled="disabled" checked><small>Affected pathways</small></label>
 	    <label><input type="checkbox" disabled="disabled" checked><small>Animals models</small></label>
-	  </div>
+	  </div>	    
+	</accordion-group>
+
+	<accordion-group heading="Therapeutic Areas" is-open="true">
+	  <accordion>
+	    <!-- <accordion-group class="cttv-accordion-leaf"> -->
+	    <!--   <accordion-heading> -->
+	    <!-- 	<span ng-click="selectRoot()">None</span> -->
+	    <!--   </accordion-heading> -->
+	    <!-- </accordion-group> -->
+	    <accordion-group ng-repeat="ta in therapeuticAreas" class="therapeuticArea">
+	      <accordion-heading>
+		<span ng-click="selectTherapeuticArea(ta.efo)">{{ta.name}} ({{ta.score}})</span>
+	      </accordion-heading>
+	      <accordion>
+		<accordion-group ng-repeat="d in ta.diseases" class="cttv-accordion-leaf">
+		  <accordion-heading>
+		    <span ng-click="selectDisease(d.efo)">{{d.name}}</span>
+		  </accordion-heading>
+		</accordion-group>
+	      </accordion>
+	    </accordion-group>
+	  </accordion>
+	</accordion-group>
+      </accordion>
+
     </div>
 
-
-    <div class="col-md-10">
-      <!-- <pmc-citation pmcid="23962577"></pmc-citation> -->
-      <!-- <pmc-citation-list pmids="23962577,25618545"></pmc-citation-list> -->
-      <!-- <ebi-expression-atlas-baseline-summary target="{{search.query}}"></ebi-expression-atlas-baseline-summary> -->
+    <div class="col-md-8">
+      <i class="fa fa-picture-o" ng-click="setDisplay('bubbles')"></i>
+      <i class="fa fa-table" ng-click="setDisplay('table')"></i>
       <cttv-target-associations target="{{search.query}}" display="{{displaytype}}">
 	<div class="cttvBubbles"></div>
 	<div class="cttvTable"></div>
       </cttv-target-associations>
     </div>
-
   </div>
 </div>
 <!-- end search results-->
