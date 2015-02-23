@@ -24,7 +24,8 @@ var geneAssociations = function () {
 		    return;
 		}
 		var nodes = tree.find_all(function (node) {
-		    return node.property("key") === n;
+		    console.log(node.property("efo") + " VS " + n);
+		    return node.property("efo") === n;
 		});
 		var lca;
 		if (nodes.length > 1) {
@@ -33,6 +34,8 @@ var geneAssociations = function () {
 		    lca = nodes[0].parent();
 		}
 		bubblesView.focus(lca);
+		console.log("NODES:");
+		console.log(nodes);
 		bubblesView.select(nodes);
 	    });
 
@@ -94,7 +97,7 @@ var geneAssociations = function () {
 	tree.apply (function (node) {
 	    if (node.is_leaf()) {
 		zoomSelect.append("option")
-		    .attr("value", node.property("key"))
+		    .attr("value", node.property("efo"))
 		    .text(node.property("key"));
 	    }
 	    // highlightSelect.append("option")
@@ -105,7 +108,7 @@ var geneAssociations = function () {
 	// Tooltips
 	var bubble_tooltip = function (node) {
 	    var obj = {};
-	    obj.header = "Name: " + node.property("key");
+	    obj.header = "Name: " + node.property("label");
 	    obj.rows = [];
 	    if (node.property("efo") !== undefined) {
 		obj.rows.push({
@@ -143,8 +146,8 @@ var geneAssociations = function () {
 			node.property("focused", 1);
 			bubblesView.focus(node);
 		    }
-		})
-	    };
+		});
+	    }
 	    obj.rows.push({
 		"label" : "Action",
 		"value" : "View evidence",

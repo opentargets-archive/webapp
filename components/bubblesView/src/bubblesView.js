@@ -11,6 +11,7 @@ var bubblesView = function () {
 	data : undefined,
 	value : "value",
 	key : "name",
+	label: "name",
 	divId : undefined,
 	onclick : function () {},
 	duration: 1000,
@@ -38,6 +39,8 @@ var bubblesView = function () {
      * Render valid JSON data
      */ 
     var render = function(div) {
+	console.log("DATA FOR BUBBLES:");
+	console.log(conf.data.data());
 	conf.divId = d3.select(div).attr("id");
 	svg = d3.select(div)
 	    .append("svg")
@@ -130,7 +133,8 @@ var bubblesView = function () {
 	    .attr("startOffset", "50%")
 	    .text(function (d) {
 		if (d.children) {
-		    return d[conf.key].substring(0, d.r);
+		    console.log("LABEL: (" + conf.label + "): " + d[conf.label]);
+		    return d[conf.label].substring(0, d.r*0.8);
 		}
 	    });
 
@@ -159,7 +163,7 @@ var bubblesView = function () {
             .style("text-anchor", "middle")
             .text(function(d) {
 		if (!d.children) {
-		    return d[conf.key].substring(0, d.r / 3);
+		    return d[conf.label].substring(0, d.r / 3);
 		}
 	    });
 	
@@ -312,6 +316,14 @@ var bubblesView = function () {
 	    return conf.key;
 	}
 	conf.key = n;
+	return this;
+    };
+
+    render.label = function (n) {
+	if (!arguments.length) {
+	    return conf.label;
+	}
+	conf.label = n;
 	return this;
     };
 
