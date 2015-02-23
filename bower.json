@@ -28,7 +28,7 @@
     "components-font-awesome": "~4.2.0",
     "bootstrap": "~3.3.1",
     "angular-bootstrap": "~0.12.0",
-    "d3": "<=3.5.0",
+    "d3": ">=3.5.4",
     "aight": "~2.0",
     "lodash": "~3.2.0"
   },
