@@ -43,10 +43,11 @@
     
     
 
-      
+      <div style="width:100%; background:#FFF; padding-bottom:70px">
       <!-- Masthead (search) -->
         
-        <div class="masthead">
+        <div class="masthead" ng-show="location.path()!=='/intro'" ng-controller="MastheadCtrl">
+
           <div class="container">
           <div class="row">
 
@@ -121,19 +122,47 @@
       </div>
       -->
 
-   <div class="container"> 
+         <div class="container"> 
 
-      <!-- Content --> 
+            <!-- Content --> 
 
-      <div ng-view></div>
-      
-      <!-- End Content -->
+            <div ng-view></div>
+            
+            <!-- End Content -->
 
-  </div>
+        </div>
 
+      </div>
 
       <!-- Footer -->
-      <div class="footer">Version 0.0.1</div>
+      <div class="footer">
+        <div class="container"> 
+          <div class-"row">
+            <div class="col-sm-3">
+              <h6>INFO</h6>
+              <p>Version 0.0.1</p>
+            </div>
+            <div class="col-sm-3">
+              <h6>SUPPORT</h6>
+            </div>
+            <div class="col-sm-3">
+              <h6>PARTNERS</h6>
+              <p>EBI</p>
+              <p>Sanger</p>
+              <p>GSK</p>
+            </div>
+            <div class="col-sm-3">
+              <h6>SUPPORT</h6>
+              <p><span class="fa fa-send"></span> <a href="mailto:support@targetvalidation.org?Subject=CTTV%20Core%20Platform%20-%20help%20request">support@targetvalidation.org</a></p>
+              <h6>Centre for Therapeutic Target Validation</h6>
+              <p>
+                <span class="fa fa-globe"></span> <a href="http://www.targetvalidation.org">http://www.targetvalidation.org</a><br />
+                <span class="fa fa-phone"></span> +44 (0)1223 494 665<br />
+                <span class="fa fa-twitter"></span> <a href="http://twitter.com/targetvalidate">@targetvalidate</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- End Footer-->
 
 
@@ -184,8 +213,9 @@
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/controllers.js"></script>
     <script type="text/javascript" src="js/services.js"></script>
-    <!-- <script type="text/javascript" src="js/d3controllers.js"></script> -->
     <script type="text/javascript" src="js/directives.js"></script>
+    <script type="text/javascript" src="js/search-box-controller.js"></script>
+    <script type="text/javascript" src="js/gene-disease-controller.js"></script>
 
     <!-- DataTable stuff -->
     <script type="text/javascript" src="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>

@@ -571,8 +571,6 @@ angular.module('cttvDirectives', [])
         		//flower(elem[0]);
 
         		scope.render = function(data){
-        			console.log("render()");
-        			console.log(data);
         			if(data.length>0){
         			    var flower = flowerView()
 					.values(data)
@@ -586,7 +584,6 @@ angular.module('cttvDirectives', [])
 	            	'associationData', 
 	            	function() {
 	            		scope.render(scope.associationData);
-	            		console.log("Watchout radioactive man!!");
 	            	}//,
 	            	//true
 	            );

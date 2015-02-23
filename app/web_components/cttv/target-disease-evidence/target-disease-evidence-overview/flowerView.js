@@ -37,7 +37,7 @@ var flowerView = function () {
 	    .append("g")
 	    .attr("transform", "translate(" + radius + "," + radius + ")");
 
-	var label = function (r, currLabel) {
+	var label = function (r, currLabel, hasData) {
 	    var rads = r * 180 / Math.PI;
 	    var offset = 15;
 	    svg.append("text")
@@ -45,6 +45,12 @@ var flowerView = function () {
 		.attr("y", origin[1])
 		.attr("font-size", conf.fontsize)
 		.attr("font-weight", "bold")
+		.attr("fill", function () {
+		    if (hasData) {
+			return "#000"
+		    }
+		    return "#ccc";
+		})
 		.attr("text-anchor", (!isReversed(rads)? "start" : "end"))
 		.attr("transform", "translate(" + (0+Math.cos(r)*offset) + "," + (0+Math.sin(r)*offset) + ")rotate(" + (rads) + ")rotate(" + (!isReversed(rads)?0:180) + ")")
 		.text(currLabel);
@@ -162,7 +168,7 @@ var flowerView = function () {
 	    r = 0;
 	    conf.values.forEach (function (d, i) {
 		var l = radius;
-		label (r, d.label);
+		label (r, d.label, d.value>0);
 		r += radians;
 	    })
 	};
