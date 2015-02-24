@@ -312,7 +312,7 @@
 
 		// Expression Atlas
 		$scope.toggleBaselineExpression = function () {
-		    $scope.eaTarget = resp.approved_name || resp.ensembl_external_name;
+		    $scope.eaTarget = resp.ensembl_gene_id;
 		};
 
 		// Bibliography

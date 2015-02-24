@@ -530,7 +530,8 @@ angular.module('cttvDirectives', [])
 		    newDiv.id = "cttvExpressionAtlas";
 		    newDiv.className = "accordionCell";
 		    elem[0].appendChild(newDiv);
-		
+
+		    console.log("TARGET IS : " + target);
 		    var instance = new Biojs.AtlasHeatmap ({
 			getBaseUrl: "http://www.ebi.ac.uk/gxa",
 			params:'geneQuery=' + target,
