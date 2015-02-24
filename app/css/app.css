@@ -50,6 +50,14 @@ body{
     overflow : scroll
 }
 
+.accordion-toggle { /* Needed for ie9? */
+    cursor : pointer;
+}
+
+.cttv-change-view {
+    cursor : pointer;
+}
+
 .cttv-facet .therapeuticArea .panel-heading {
     background-color: #c6dcec;
 }
