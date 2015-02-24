@@ -141,7 +141,7 @@ var flowerView = function () {
 		.attr("d", line(data))
 		.style("stroke", function () {
 		    if (d>0) {
-			return "#000";
+			return "#3e8bad";
 		    }
 		    return "#ccc";
 		})
