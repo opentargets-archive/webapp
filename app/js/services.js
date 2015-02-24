@@ -20,7 +20,7 @@ angular.module('cttvServices', []).
          */
         var cttvAPI = {
             API_DEFAULT_METHOD : "GET",
-            API_URL : "http://193.62.52.228/api/latest/",
+            API_URL : "http://beta.targetvalidation.org/api/latest/", // "http://193.62.52.228/api/latest/",
             API_SEARCH_URL : "search",
             API_EVIDENCE_URL : "evidences",
             API_AUTOCOMPLETE_URL : "autocomplete",
