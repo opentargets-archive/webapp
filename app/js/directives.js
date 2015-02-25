@@ -137,11 +137,8 @@ angular.module('cttvDirectives', [])
 				node.property("selected", undefined);
 				bView.select(nodeData);
 			    } else {
-				console.log("SEL");
-				//console.log(node.data());
 				node.property("selected", true);
 				bView.select([node]);
-				console.log(node.data());
 			    }
 			};
 			
@@ -531,11 +528,11 @@ angular.module('cttvDirectives', [])
 		    newDiv.className = "accordionCell";
 		    elem[0].appendChild(newDiv);
 
-		    console.log("TARGET IS : " + target);
 		    var instance = new Biojs.AtlasHeatmap ({
 			getBaseUrl: "http://www.ebi.ac.uk/gxa",
 			params:'geneQuery=' + target,
 			isMultiExperiment: false,
+			species : "homo sapiens",
 			target : "cttvExpressionAtlas"
 		    })
 		});
