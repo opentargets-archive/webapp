@@ -19,8 +19,8 @@ var cttvApi = function () {
     // 	prefix = "http://cttv:75djkwty4805hye@127.0.0.1:8008/api/latest/";	
     // }
     //var prefix = "http://193.62.52.228/api/latest/";
-    //var prefix = "http://127.0.0.1:8008/api/latest/";
-    var prefix = "http://beta.targetvalidation.org/api/latest";
+    // var prefix = "http://127.0.0.1:8008/api/latest/";
+    var prefix = "http://beta.targetvalidation.org/api/latest/";
     var prefixFilterby = prefix + "filterby?";
     var prefixAssociations = prefix + "association?"
     var prefixSearch = prefix + "search?";
