@@ -133,7 +133,7 @@ var geneAssociations = function () {
 		// tooltip is for a disease
 		var score = node.property("association_score");
 		obj.header = node.property("label") + " (Association Score: " + score + ")";
-		var loc = "/app/#/gene-disease?t=" + config.target + "&d=" + node.property("efo_code");
+		var loc = "#/gene-disease?t=" + config.target + "&d=" + node.property("efo_code");
 		obj.body="<div></div><a href=" + loc + ">View details</a>";
 
 		var leafTooltip = tooltip.plain()
