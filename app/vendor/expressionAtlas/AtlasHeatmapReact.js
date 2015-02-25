@@ -71,9 +71,7 @@ Biojs.AtlasHeatmap = Biojs.extend({
 
         var endpoint = opt.heatmapUrl ? opt.heatmapUrl : opt.isMultiExperiment ? '/widgets/heatmap/multiExperiment' : '/widgets/heatmap/referenceExperiment';
         var url = opt.gxaBaseUrl + endpoint + '?' + opt.params;
-	if (opt.species !== undefined) {
-	    	url = url + "&species=" + opt.species;
-	}
+	console.log("URL:" + url);
 
         var httpRequest = {
             url: url,
