@@ -2,7 +2,7 @@
 
                
   <!-- Besthit -->
-  <div ng-click="linkTo({type:search.results.besthit.type, q:search.results.besthit.id, label:search.results.besthit.label||search.results.besthit.approved_symbol})" style="cursor:pointer;">
+  <div ng-if="search.results.besthit!==null" ng-click="linkTo({type:search.results.besthit.type, q:search.results.besthit.id, label:search.results.besthit.label||search.results.besthit.approved_symbol})" style="cursor:pointer;">
     <h4 style="padding:0px 5px">
       <span class="nbblock">
         <a><span bind-html-unsafe="(search.results.besthit.type=='genedata' ? search.results.besthit.approved_symbol : search.results.besthit.label) | typeaheadHighlight:search.query.text"></span></a>
@@ -13,7 +13,10 @@
     <!-- This is the longer description -->
     <p style="margin:0px; padding:0px 5px">{{ ( search.results.besthit.type=="genedata" ? search.results.besthit.uniprot_function[0] : search.results.besthit.definition) | limitTo:300}}<span ng-show="search.results.besthit.uniprot_function[0].length>300 || search.results.besthit.definition.length>300">...</span></p>
   </div>
-
+  <div ng-if="search.results.besthit===null">
+    <p style="padding:0px 5px">
+      Oooops... Not found. <span class="text-lowlight">Try deleting some characters or a different query</span></p>
+  </div>
 
   <!-- Genes -->
   <div ng-show="search.results.genes.length>0">

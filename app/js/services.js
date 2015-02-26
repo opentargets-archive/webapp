@@ -83,6 +83,7 @@ angular.module('cttvServices', []).
             } else if (req.method.toLowerCase() === 'post'){
                 req.data = queryObject.params;
             }
+
             return $http(req);
         }
 
