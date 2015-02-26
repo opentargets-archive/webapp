@@ -290,8 +290,21 @@ var bubblesView = function () {
 		    d3.select(this)
 		    	.attr("x", function (d) { return ((d.x - v[0])*k)+offset; })
 			.attr("y", function (d) { return ((d.y - v[1])*k)+offset; })
-			.text(function (d) {
+		    	.text(function (d) {
 			    return d[conf.label].substring(0, d.r*k / 3);
+			})
+			.attr("font-size", function (d) {
+			    var circleLength = d.r * k / 3;
+			    var labelLength = d[conf.label].length;
+			    if (circleLength < labelLength) {
+				return 10;
+			    }
+			    if (circleLength * 0.8 < labelLength) {
+				return 12;
+			    }
+			    if (circleLength * 0.6 < labelLength) {
+				return 14;
+			    }
 			});
 		}
 	    });
