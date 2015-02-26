@@ -217,7 +217,7 @@ angular.module('cttvDirectives', [])
 			    // Therapeutic area
 			    //row.push(therapeuticArea || "");
 			    //row.push(data.therapeuticArea);
-			    row.push("therapeuticArea");
+			    row.push(data.therapeutic_area || "");
 			    // Association score
 			    row.push(data.association_score);
 			    // Genetic associations
