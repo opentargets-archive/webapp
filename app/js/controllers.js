@@ -314,6 +314,10 @@
 		$scope.toggleBaselineExpression = function () {
 		    $scope.eaTarget = resp.ensembl_gene_id;
 		};
+		$scope.toggleGenomeLocation = function () {
+		    $scope.chr = resp.chromosome,
+		    $scope.genomeBrowserGene = resp.ensembl_gene_id;
+		}
 
 		// Bibliography
 		var bibliography = _.filter(resp.dbxrefs, function (t) {return t.match(/^PubMed/)});

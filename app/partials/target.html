@@ -34,11 +34,19 @@
 
       <accordion-group>
 	<accordion-heading>
+	  <span ng-click="toggleGenomeLocation()">Genome Location</span>
+	</accordion-heading>
+	<cttv-target-genome-browser target="{{genomeBrowserGene}}"></cttv-target-genome-browser>
+      </accordion-group>
+	  
+      
+      <accordion-group>
+	<accordion-heading>
 	  <span ng-click="toggleBaselineExpression()">RNA Baseline expression</span>
 	</accordion-heading>
 	<!--[if lt IE 10]>
             <div class="alert alert-danger">
-              This widget doesn't work on Internet Explorer prior to version 10. We are aware of this problem and working to fix this issue. Please follow <a target="_blank" href="http://www.ebi.ac.uk/gxa/genes/{{ensembl.id}}">this link</a> to get the expression of this gene from the Expression Atlas website
+              This widget doesn't work on Internet Explorer prior to version 10. We are aware of this problem and working to fix this issue. In the meantime, please follow <a target="_blank" href="http://www.ebi.ac.uk/gxa/genes/{{ensembl.id}}">this link</a> to get the expression of this gene from the Expression Atlas website
             </div>
 	    <![endif]-->
 	<ebi-expression-atlas-baseline-summary target="{{eaTarget}}"></ebi-expression-atlas-baseline-summary>
@@ -47,7 +55,7 @@
       <accordion-group heading="Bibliography" is-open="false">
 	<!--[if lt IE 10]>
             <div class="alert alert-danger">
-              This widget doesn't work on Internet Explorer prior to version 10. We are aware of this problem and working to fix this issue. Please follow <a target="_blank" href="http://europepmc.org/search?query={{pmidsLinks}}">this link</a> to get the publication information from EuroPMC directly
+              This widget doesn't work on Internet Explorer prior to version 10. We are aware of this problem and working to fix this issue. In the meantime, please follow <a target="_blank" href="http://europepmc.org/search?query={{pmidsLinks}}">this link</a> to get the publication information from EuroPMC directly
             </div>
 	    <![endif]-->
 	<pmc-citation-list pmids="{{pmids}}"></pmc-citation-list>
