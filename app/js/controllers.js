@@ -191,33 +191,18 @@
 
         }
 
-        $scope.filterResults = function(){
-            console.log("filterResults");
-            console.log( $scope.filters.gene.selected != $scope.filters.efo.selected);
-            var queryobject = {
-                q: $scope.search.query.q
-            };
-            // if one and only one of the filters is selected, apply the corresponding filter
-            // cool way of mimicking a XOR operator ;)
-            if( $scope.filters.gene.selected != $scope.filters.efo.selected ){
-                queryobject.filter = $scope.filters.gene.selected ? 'gene' : 'efo';
-            }
-            cttvAPIservice.getSearch(queryobject).
-                success(function(data, status) {
-                    $scope.search.results = data;
-                }).
-                error(function(data, status) {
-                    $log.error(status);
-                });
-
-
-        }
 
 
         $scope.getResults = function(){
             console.log("SEARCH URL: ");
             console.log(cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query));
-            return cttvAPIservice.getSearch( cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query) ).
+            var queryobject = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
+            // if one and only one of the filters is selected, apply the corresponding filter
+            // cool way of mimicking a XOR operator ;)
+            if( $scope.filters.gene.selected != $scope.filters.efo.selected ){
+                queryobject.filter = $scope.filters.gene.selected ? 'gene' : 'efo';
+            }
+            return cttvAPIservice.getSearch( queryobject ).
                 success(function(data, status) {
                     $scope.search.results = data;
                 }).

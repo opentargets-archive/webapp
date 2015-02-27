@@ -34,10 +34,10 @@
 		<div class="col-md-2">
 			<h4>Filters</h4>
 			<div class="checkbox">
-				<label><input type="checkbox" ng-model="filters.gene.selected" ng-change="filterResults()" ng-disabled="filters.gene.total==0">Gene <span class='badge'>{{filters.gene.total}}</span></label>
+				<label><input type="checkbox" ng-model="filters.gene.selected" ng-change="getResults()" ng-disabled="filters.gene.total==0">Gene <span class='badge'>{{filters.gene.total}}</span></label>
 			</div>
 			<div class="checkbox">
-				<label><input type="checkbox" ng-model="filters.efo.selected" ng-change="filterResults()" ng-disabled="filters.efo.total==0">Disease <span class='badge'>{{filters.efo.total}}</span></label>
+				<label><input type="checkbox" ng-model="filters.efo.selected" ng-change="getResults()" ng-disabled="filters.efo.total==0">Disease <span class='badge'>{{filters.efo.total}}</span></label>
 			</div>
 		</div>
 
