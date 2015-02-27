@@ -30,7 +30,8 @@
     "angular-bootstrap": "~0.12.0",
     "d3": ">=3.5.4",
     "aight": "~2.0",
-    "lodash": "~3.3.0"
+    "lodash": "~3.3.0",
+    "angulartics": "~0.17.2"
   },
   "resolutions": {
     "angular": "~1.3.8"

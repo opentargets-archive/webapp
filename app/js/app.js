@@ -6,7 +6,9 @@ angular.module('cttvApp', [
     'ngRoute',
     'ui.bootstrap',
     'cttvControllers',
-    'cttvDirectives'
+    'cttvDirectives',
+    'angulartics',
+    'angulartics.google.analytics'
 ]).
 
 

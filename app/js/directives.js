@@ -57,12 +57,15 @@ angular.module('cttvDirectives', [])
 		    // };
 		// }
 
-		var url = api.url.associations({
+		var bubblesUrl = api.url.associations({
 		    gene: attrs.target,
 		    datastructure : "tree"
-		})
-		console.log("URL: " + url);
-		api.call(url)
+		});
+		console.log("Bubbles URL: " + bubblesUrl);
+
+		// CALL TO BUILD THE BUBBLES
+		// This is different from the call to build the table because in the table we want to show intermediate nodes
+		api.call(bubblesUrl)
 		    .then(function (resp) {
 			resp = JSON.parse(resp.text);
 			// update general information in parent scope
@@ -175,16 +178,27 @@ angular.module('cttvDirectives', [])
 			    .diagonal(100);
 
 			ga(bView, elem[0].querySelector(".cttvBubbles"), flower);
+		    });
 
-
+		var tableUrl = api.url.associations({
+		    gene: attrs.target,
+		    datastructure : "flat"
+		});
+		console.log("Table URL: " + tableUrl);
+		api.call(tableUrl)
+		    .then(function (resp) {
 			/////// TABLE VIEW
 			console.log("TABLES!");
-			var leaves = nodeData.get_all_leaves();
+			resp = JSON.parse(resp.text);
 
-			var newData = new Array (leaves.length);
+			var newData = [];
 			var flowers = {};
-			for (var i=0; i<newData.length; i++) {
-			    var data = leaves[i].data();
+			for (var i=0; i<resp.data.length; i++) {
+			    var data = resp.data[i]
+			    if (data.efo_code === "cttv_disease") {
+				continue;
+			    }
+
 			    var datatypes = {};
 			    datatypes.genetic_association = _.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
 			    datatypes.somatic_mutation = _.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0;
@@ -192,7 +206,7 @@ angular.module('cttvDirectives', [])
 			    datatypes.rna_expression = _.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
 			    datatypes.affected_pathway = _.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
 			    datatypes.animal_model = _.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
-			    var therapeuticArea = leaves[i].parent().property("label");
+			    //var therapeuticArea = leaves[i].parent().property("label");
 
 			    var row = [];
 			    // Disease name
@@ -201,7 +215,9 @@ angular.module('cttvDirectives', [])
 			    // EFO (hidden)
 			    row.push(data.efo_code);
 			    // Therapeutic area
-			    row.push(therapeuticArea || "");
+			    //row.push(therapeuticArea || "");
+			    //row.push(data.therapeuticArea);
+			    row.push(data.therapeutic_area || "");
 			    // Association score
 			    row.push(data.association_score);
 			    // Genetic associations
@@ -225,7 +241,6 @@ angular.module('cttvDirectives', [])
 			    row.push(datatypes.animal_model);
 			    // flower placeholder
 			    row.push("");
-			    
 			    var flowerData = [
 			    	{"value":datatypes.genetic_association,  "label":"Genetics"},
 			    	{"value":datatypes.somatic_mutation,  "label":"Somatic"},
@@ -239,13 +254,12 @@ angular.module('cttvDirectives', [])
 				.fontsize(6)
 				.diagonal(100);
 			    flowers[data.efo_code] = flower;
-			    
-			    newData[i] = row;
+			    newData.push(row);
 			}
-			
 			var table = document.createElement("table");
 			table.className = "table table-stripped table-bordered";
 			elem[0].querySelector(".cttvTable").appendChild(table);
+
 			$(table).dataTable({
 			    "data": newData,
 			    "columns": [
@@ -281,7 +295,7 @@ angular.module('cttvDirectives', [])
 			    "ordering": true
 			});
 		    });
-
+		
 		scope.$watch(function () { return attrs.display }, function (newVal, oldVal) {
 		    switch (newVal) {
 		    case "bubbles" :
@@ -328,7 +342,6 @@ angular.module('cttvDirectives', [])
 		api.call(url)
 		    .then(function (resp) {
 			resp = JSON.parse(resp.text);
-			console.log(resp);
 			scope.$parent.nresults = resp.total;
 			scope.$parent.$apply();
 
