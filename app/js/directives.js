@@ -528,6 +528,31 @@ angular.module('cttvDirectives', [])
 	};
     })
 
+    .directive('cttvTargetGenomeBrowser', function () {
+	return {
+	    restrict: 'EA',
+	    link: function (scope, elem, attrs) {
+		var w = elem[0].parentNode.offsetWidth - 40;
+		scope.$watch(function () {return attrs.target }, function (target) {
+		    if (target === "") {
+			return;
+		    }
+		    var newDiv = document.createElement("div");
+		    newDiv.id = "cttvTargetGenomeBrowser";
+		    elem[0].appendChild(newDiv);
+
+		    var gB = tnt.board.genome()
+			.species("human")
+			.gene(attrs.target)
+			.width(w);
+		    var theme = targetGenomeBrowser()
+			.chr(scope.chr);
+		    theme(gB, document.getElementById("cttvTargetGenomeBrowser"));
+		});
+	    }
+	};
+    })
+
     .directive('ebiExpressionAtlasBaselineSummary', function () {
 	return {
 	    restrict: 'EA',

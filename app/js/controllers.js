@@ -279,16 +279,34 @@
 	cttvRestApi.call(url)
 	    .then(function (resp) {
 		resp = JSON.parse(resp.text);
-		console.log(resp);
 		$scope.target = {
 		    label : resp.approved_name || resp.ensembl_external_name,
 		    id : resp.approved_id || resp.ensembl_gene_id,
 		    description : resp.uniprot_function[0]
 		};
 
+		// Synonyms
+		var syns = {};
+		var synonyms = resp.synonyms;
+		if (synonyms !== undefined) {
+		    for (var i=0; i<synonyms.length; i++) {
+			syns[synonyms[i]] = 1;
+		    }
+		}
+		var prev_symbols = resp.previous_symbols;
+		if (prev_symbols !== undefined) {
+		    for (var j=0; j<prev_symbols.length; j++) {
+			syns[prev_symbols[j]] = 1;
+		    }
+		}
+		console.log(synonyms);
+		$scope.synonyms = _.keys(syns);
+
 		// Uniprot
 		$scope.uniprot = {
 		    id : resp.uniprot_id,
+		    subunits : resp.uniprot_subunit,
+		    locations : resp.uniprot_subcellular_location,
 		    accessions : resp.uniprot_accessions,
 		    keywords : resp.uniprot_keywords
 		}
@@ -314,6 +332,10 @@
 		$scope.toggleBaselineExpression = function () {
 		    $scope.eaTarget = resp.ensembl_gene_id;
 		};
+		$scope.toggleGenomeLocation = function () {
+		    $scope.chr = resp.chromosome,
+		    $scope.genomeBrowserGene = resp.ensembl_gene_id;
+		}
 
 		// Bibliography
 		var bibliography = _.filter(resp.dbxrefs, function (t) {return t.match(/^PubMed/)});
