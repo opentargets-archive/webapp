@@ -1,0 +1,22 @@
+<div>
+  <h3>{{disease.label}} <small>({{disease.efo}})</small></h3>
+  <accordion close-others="false">
+    <accordion-group heading="Description" is-open="true">
+      {{disease.description}}
+    </accordion-group>
+    <accordion-group heading="Synonyms" is-open="false">
+      <ul>
+	<li ng-repeat="syn in disease.synonyms">
+	  {{syn}}
+	</li>
+      </ul>
+    </accordion-group>
+    <accordion-group heading="EFO Path" is-open="false">
+      <ul>
+	<li ng-repeat="node in disease.path">
+	  {{node.label}} <small>(<a href="#/disease-associations?q={{node.efo}}&label={{node.label}}">See gene assotiations</a>), (<a href="#/disease/{{node.efo}}">Go to disease page</a>)</small>
+	</li>
+      </ul>
+    </accordion-group>
+  </accordion>
+</div>
