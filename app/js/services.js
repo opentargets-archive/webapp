@@ -45,7 +45,7 @@ angular.module('cttvServices', []).
           we rest some values
         */
         if( $location.host()=='127.0.0.1' || $location.host().toLowerCase()=='localhost' ){
-            cttvAPI.API_URL = "http://127.0.0.1:8080/api/latest/";
+            //cttvAPI.API_URL = "http://127.0.0.1:8080/api/latest/";
             //req.withCredentials = false;
             //req.headers = {};
         }

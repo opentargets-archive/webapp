@@ -688,7 +688,7 @@
                                 + "%22' target='_blank'>View in clinicaltrials.org <i class='fa fa-external-link'></i></a>");
 
                     // 7: target name
-                    row.push("<a href='"+data[i].evidence.urls.linkouts[1].url+"'>"+data[i].biological_subject.properties.target_name+"</a>"); // + linkouts[1]
+                    row.push("<a href='"+data[i].evidence.urls.linkouts[1].url+"' target='_blank'>"+data[i].biological_subject.properties.target_name+" <i class='fa fa-external-link'></i></a>"); // + linkouts[1]
 
                     // 8: target class
                     row.push(data[i].evidence.evidence_chain[0].evidence.experiment_specific.target_class[0]);

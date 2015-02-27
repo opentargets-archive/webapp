@@ -28,19 +28,31 @@
 	</table>
 	-->
 	<div class="row">
+
+		<!-- Filters/Facets --> 
+
 		<div class="col-md-2">
-			<h4>Filters <br /><small>(not working)</small></h4>
+			<h4>Filters</h4>
 			<div class="checkbox">
-				<label><input type="checkbox" ><small>Gene</small></label>
+				<label><input type="checkbox" ng-model="filters.gene.selected" ng-change="filterResults()" ng-disabled="filters.gene.total==0">Gene <span class='badge'>{{filters.gene.total}}</span></label>
 			</div>
 			<div class="checkbox">
-				<label><input type="checkbox" ><small>Disease</small></label>
+				<label><input type="checkbox" ng-model="filters.efo.selected" ng-change="filterResults()" ng-disabled="filters.efo.total==0">Disease <span class='badge'>{{filters.efo.total}}</span></label>
 			</div>
 		</div>
+
+		<!-- Search results -->
+
 		<div class="col-md-10">
 			<div ng-repeat="result in search.results.data" class="search-result">
 				<h4><a ng-href="#/{{result.type==='genedata'?'target-associations':'disease-associations'}}?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
 				<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
+				<span class="search-matches text-lowlight">
+					<span ng-repeat="(key, val) in result.highlight"><span bind-html-unsafe="'<span style=\'color:#888\' title=\'Matching field and text\'>' + ( !$first ? ' ... ' : '') + key.split('_').join(' ') + ': </span>' + val.join(', ')"></span></span>
+				</span>
+
+				
+
 				<span class="search-details">
 					<span class="label" ng-class="(result.type==='genedata') ? 'label-primary' : 'label-warning'">{{result.type==="genedata" ? "gene" : "disease"}}</span>&nbsp;|&nbsp;<span class="text-lowlight">Score: {{result.score}}</span>
 				</span>	
@@ -48,6 +60,7 @@
 			<!-- Furthermore this should only be shown when results are displayed -->
 			<pagination boundary-links="true" total-items="search.results.total" ng-model="search.query.page" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="getResults()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" num-pages="numPages" style="{{numPages<=1 ? 'display:none' : ''}}"></pagination>
 		</div>
+
 	</div>
 	
 
