@@ -55,8 +55,8 @@
 				<!-- Disease Info -->
 				<div style="display: table-cell; width:45%">
 					<div class="well well-lg">
-						<h5>
-							{{search.info.efo.label}}
+					  <h5>
+						  <a href="#/disease/{{search.info.efo.efo_code}}">{{search.info.efo.label}}</a>
 							<span class="small" ng-show="search.info.efo.synonyms.length>0"><br />Synonyms: {{search.info.efo.synonyms.join(", ") | limitTo:60}}...</span>
 						</h5>
 						<p class="small">{{search.info.efo.definition | limitTo: 200}}<span ng-show="search.info.efo.definition.length>200">...</span></p>

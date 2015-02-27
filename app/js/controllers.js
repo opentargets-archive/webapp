@@ -265,6 +265,42 @@
     }])
 
 /**
+ * DiseaseCtrl
+ * Controller for the disease page
+ * It loads general information about a given disease
+ */
+    .controller ('DiseaseCtrl', ["$scope", "$location", "$log", function ($scope, $location, $log) {
+	$log.log("DiseaseCtrl()");
+	var cttvRestApi = cttvApi();
+	var efo_code = $location.url().split("/")[2];
+	var url = cttvRestApi.url.disease({'efo' : efo_code});
+	console.log(url);
+	cttvRestApi.call(url)
+	    .then (function (resp) {
+		resp = JSON.parse(resp.text);
+		resp.path_labels.shift(); // remove cttv_disease
+		resp.path_codes.shift(); // remove cttv_disease
+		var path = [];
+		for (var i=0; i<resp.path_labels.length; i++) {
+		    path.push({
+			"label" : resp.path_labels[i],
+			"efo" : resp.path_codes[i]
+		    });
+		}
+		$scope.disease = {
+		    "label" : resp.label,
+		    "efo" : efo_code,
+		    "description" : resp.definition,
+		    "synonyms" : _.uniq(resp.efo_synonyms),
+		    "path" : path
+		};
+
+		// Update bindings
+		$scope.$apply();
+	    })
+    }])
+
+/**
  * TargetCtrl
  * Controller for the target page
  * It loads information about a given target
