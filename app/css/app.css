@@ -46,6 +46,13 @@ body{
   
 }
 
+a.accordion-toggle{
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .accordionCell {
     overflow : scroll
 }
@@ -133,6 +140,11 @@ body{
   line-height: 1.2; 
 }
 
+.text-disabled {
+  color: #AAA;
+  text-decoration: none;
+  cursor: default;
+}
 
 .container {
   /*height: 1000px;*/
