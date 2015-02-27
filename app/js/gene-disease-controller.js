@@ -446,8 +446,8 @@
                     // for uniprot:
                     var eco = messages.NA;
                     if( db===dbs.UNIPROT.toLowerCase() ){
-                        if (checkPath(data[i], "evidence.evidence_codes") && data[i].evidence.evidence_codes[0]) {
-                            eco = data[i].evidence.evidence_codes[0]
+                        if (checkPath(data[i], "evidence.evidence_codes") && data[i].evidence.evidence_codes[1]) {
+                            eco = data[i].evidence.evidence_codes[1];
                         }
                     }
                     row.push( getEcoLabel( data[i].evidence.evidence_codes_info, eco ) );
@@ -649,7 +649,7 @@
                     // 4: Mechanism of action
                     var pubs = 0;
                     var action = data[i].evidence.evidence_chain[0].evidence.experiment_specific.mechanism_of_action+"<br />";
-                        action += "<span ng-click='bla()'><span class='badge'>"
+                        action += "<span><span class='badge'>"
                                 if(data[i].evidence.evidence_chain[0].evidence.provenance_type 
                                     && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature
                                     && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs){
@@ -943,12 +943,13 @@
                     fields: [
                         "biological_object.efo_info",
                         "biological_object.properties.biosamples",
-                        "evidence.experiment_specific.comparison_name", // comparison
+                        "evidence.experiment_specific",
+                        //"evidence.experiment_specific.comparison_name", // comparison
                         "biological_subject.properties.activity",  // activity
-                        "evidence.experiment_specific.log2_fold_change", // fold change
+                        //"evidence.experiment_specific.log2_fold_change", // fold change
                         "evidence.association_score.pvalue.value", // p-value
                         "evidence.urls.linkouts", // provenance & experiment overview
-                        "evidence.experiment_specific.literature.pubmed_refs",  // literature
+                        //"evidence.experiment_specific.literature.pubmed_refs",  // literature
                         "evidence.evidence_codes",
                         "evidence.evidence_codes_info"
                     ]
@@ -1029,7 +1030,7 @@
                     row.push(data[i].evidence.association_score.pvalue.value);
 
                     // experiment overview
-                    row.push("<a href='"+data[i].evidence.urls.linkouts[0].url+"' target='_blank'>Experiment overview and raw data <i class='fa fa-external-link'></i></a>");
+                    row.push("<a href='"+data[i].evidence.urls.linkouts[0].url+"' target='_blank'>" + (data[i].evidence.experiment_specific.study_title || "Experiment overview and raw data") + " <i class='fa fa-external-link'></i></a>");
 
                     // publications
                     var pub="";
