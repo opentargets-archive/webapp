@@ -1,5 +1,5 @@
 <div>
-  <h3>{{target.label}} profile page <small>({{target.id}})</small></h3>
+  <h3>{{target.label}} <small>({{target.id}})</small></h3>
 
   <div class"row" style="padding-bottom:20px; margin-bottom:20px">
     <accordion close-others="false">
@@ -7,11 +7,31 @@
 	{{target.description}}
       </accordion-group>
 
+      <accordion-group heading="Synonyms" is-open="false">
+	<ul>
+	  <li ng-repeat="syn in synonyms">
+	    {{syn}}
+	  </li>
+	</ul>
+      </accordion-group>
+      
       <accordion-group heading="Uniprot" is-open="false">
 	<p>ID: {{uniprot.id}}</p>
 	<p>Accessions:</p>
 	<ul>
 	  <li ng-repeat="accession in uniprot.accessions"><a target="_blank" href="http://www.uniprot.org/uniprot/{{accession}}">{{accession}}</a></li>
+	</ul>
+	<p>Subunit:</p>
+	<ul>
+	  <li ng-repeat="subunit in uniprot.subunits">
+	    {{subunit}}
+	  </li>
+	</ul>
+	<p>Subcellular location:</p>
+	<ul>
+	  <li ng-repeat="location in uniprot.locations">
+	    {{location}}
+	  </li>
 	</ul>
 	<p>Uniprot Keywords:</p>
 	<ul>
