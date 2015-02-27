@@ -51,31 +51,31 @@ var cttv_genome_browser = function() {
 	var left_button = opts_pane
 	    .append("i")
 	    .attr("title", "go left")
-	    .attr("class", "fa fa-arrow-circle-left fa-2x")
+	    .attr("class", "cttvGenomeBrowserIcon fa fa-arrow-circle-left fa-2x")
 	    .on("click", gBrowserTheme.left);
 
 	var zoomIn_button = opts_pane
 	    .append("i")
 	    .attr("title", "zoom in")
-	    .attr("class", "fa fa-search-plus fa-2x")
+	    .attr("class", "cttvGenomeBrowserIcon fa fa-search-plus fa-2x")
 	    .on("click", gBrowserTheme.zoomIn);
 
 	var zoomOut_button = opts_pane
 	    .append("i")
 	    .attr("title", "zoom out")
-	    .attr("class", "fa fa-search-minus fa-2x")
+	    .attr("class", "cttvGenomeBrowserIcon fa fa-search-minus fa-2x")
 	    .on("click", gBrowserTheme.zoomOut);
 
 	var right_button = opts_pane
 	    .append("i")
 	    .attr("title", "go right")
-	    .attr("class", "fa fa-arrow-circle-right fa-2x")
+	    .attr("class", "cttvGenomeBrowserIcon fa fa-arrow-circle-right fa-2x")
 	    .on("click", gBrowserTheme.right);
 	
 	var origLabel = opts_pane
 	    .append("i")
 	    .attr("title", "reload location")
-	    .attr("class", "fa fa-refresh fa-lt")
+	    .attr("class", "cttvGenomeBrowserIcon fa fa-refresh fa-lt")
 	    .on("click", function () {
 		gBrowser.start(orig)
 	    });
@@ -168,7 +168,7 @@ var cttv_genome_browser = function() {
 	var ensemblLoc = links_pane
 	    .append("i")
 	    .attr("title", "open region in ensembl")
-	    .attr("class", "fa fa-external-link fa-2x")
+	    .attr("class", "cttvGenomeBrowserIcon fa fa-external-link fa-2x")
 	    .on("click", function() {var link = buildEnsemblLink(); window.open(link, "_blank")});
 
 	gB.start();
