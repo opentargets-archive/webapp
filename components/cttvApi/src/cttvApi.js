@@ -25,6 +25,7 @@ var cttvApi = function () {
     var prefixAssociations = prefix + "association?"
     var prefixSearch = prefix + "search?";
     var prefixGene = prefix + "gene/";
+    var prefixDisease = prefix + "efo/";
 
     var _ = {};
     _.call = function (myurl) {
@@ -37,6 +38,9 @@ var cttvApi = function () {
     _.url = {};
     _.url.gene = function (obj) {
 	return prefixGene + obj.gene_id;
+    };
+    _.url.disease = function (obj) {
+	return prefixDisease + obj.efo;
     };
     _.url.search = function (obj) {
 	var opts = [];

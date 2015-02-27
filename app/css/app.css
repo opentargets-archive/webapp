@@ -191,11 +191,19 @@ a.accordion-toggle{
 
 }
 
-.search-description, .search-details{
+.search-matches em{
+  color: #999;
+  font-style: normal;
+  font-weight: 500;
+  background-color: #E6E6E6;
+  padding: 0px 2px;
+}
+
+.search-description, .search-details, .search-matches{
   display: block;
 }
 
-.search-details{
+.search-details, .search-matches{
   font-size: 12px;
 }
 
