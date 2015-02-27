@@ -1,5 +1,6 @@
-.fa {
-  padding: 10px; }
+.cttvGenomeBrowserIcon {
+  padding: 10px;
+  cursor: pointer; }
 
 .tnt_options_pane {
   margin-left: auto;

@@ -34,8 +34,9 @@ div .tnt_tooltip_active {
   .tnt_zmenu th:active {
     cursor: move; }
 
-.fa {
-  padding: 10px; }
+.cttvGenomeBrowserIcon {
+  padding: 10px;
+  cursor: pointer; }
 
 .tnt_options_pane {
   margin-left: auto;
