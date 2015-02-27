@@ -320,6 +320,7 @@
 		var cleanBibliography = _.map(bibliography, function (t) {return t.substring(7, t.length)});
 		var bibliographyStr = cleanBibliography.join (",");
 		$scope.pmids = bibliographyStr;
+		$scope.pmidsLinks = (_.map(cleanBibliography,function (p) {return "EXT_ID:" + p})).join(" OR ");
 
 		// Update the bindings
 		$scope.$apply();
