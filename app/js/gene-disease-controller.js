@@ -41,27 +41,58 @@
 
 
         $scope.search = {
-            // target : $location.search().t,
-            // disease : $location.search().d,
             info : {
                 data : {},
                 efo_path : [],
                 efo : {},
                 gene : {}
             },
-            genetic_associations : {
-                common_diseases : [],
-                rare_diseases : []
-            },
-            rna_expression:[],
-            pathways: [],
+            
+            flower_data : [], // processFlowerData([]), // so we initialize the flower to something
             test:[],
             categories:[],   // use this for sections of the accordion and flower petals
-            flower_data : [], // processFlowerData([]), // so we initialize the flower to something
             association_scores : {},
-            drugs : [],
-            somatic_mutations : [],
-            mouse : []
+
+            // tables data:
+            genetic_associations : {
+                is_open : false,
+                is_loading: true,
+                common_diseases : {
+                    data : [],
+                    is_open : false,
+                    is_loading: true
+                },
+                rare_diseases : {
+                    data : [],
+                    is_open : false,
+                    is_loading: true
+                }
+            },
+            rna_expression : {
+                data : [],
+                is_open : false,
+                is_loading: true
+            },
+            pathways : {
+                data : [],
+                is_open : false,
+                is_loading: true
+            },
+            drugs : {
+                data : [],
+                is_open : false,
+                is_loading: true
+            },
+            somatic_mutations : {
+                data : [],
+                is_open : false,
+                is_loading: true
+            },
+            mouse : {
+                data : [],
+                is_open : false,
+                is_loading: true
+            },
         };
 
         $scope.datatypes = datatypes;
@@ -208,13 +239,29 @@
                     ]
                 } ).
                 success(function(data, status) {
-                    console.log(data);
-                    $scope.search.genetic_associations.common_diseases = data.data;
+                    $scope.search.genetic_associations.common_diseases.data = data.data;
                     initCommonDiseasesTable();
+                    $scope.search.genetic_associations.common_diseases.is_open = data.data.length>0;
+                    $scope.search.genetic_associations.common_diseases.is_loading = false;
+
+                    // update for parent
+                    updateGeneticAssociationsSetting();
                 }).
                 error(function(data, status) {
                     $log.error(status);
+                    $scope.search.genetic_associations.common_diseases.is_open = data.data.length>0;
+                    $scope.search.genetic_associations.common_diseases.is_loading = false;
+
+                    // update for parent
+                    updateGeneticAssociationsSetting();
                 });
+        }
+
+
+
+        var updateGeneticAssociationsSetting = function(){
+            $scope.search.genetic_associations.is_open = $scope.search.genetic_associations.common_diseases.is_open || $scope.search.genetic_associations.rare_diseases.is_open;
+            $scope.search.genetic_associations.is_loading = $scope.search.genetic_associations.common_diseases.is_loading || $scope.search.genetic_associations.rare_diseases.is_loading;
         }
 
 
@@ -256,10 +303,10 @@
                             + " <i class='fa fa-external-link'></i></a>");
 
                     // variant type
-                    row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[1]) );
-
-                    // evidence source
                     row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[0]) );
+                    
+                    // evidence source
+                    row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[1]) );
 
                     // evidence source
                     row.push(data[i].evidence.evidence_chain[1].evidence.evidence_codes[0]);
@@ -279,8 +326,8 @@
 
                     newdata.push(row);
                 }catch(e){
-                    console.log("Error parsing common disease data:");
-                    console.log(e);
+                    $log.error("Error parsing common disease data:");
+                    $log.error(e);
                 }
             }
 
@@ -292,7 +339,7 @@
         var initCommonDiseasesTable = function(){
 
             $('#common-diseases-table').dataTable( {
-                "data": formatCommonDiseaseDataToArray($scope.search.genetic_associations.common_diseases),
+                "data": formatCommonDiseaseDataToArray($scope.search.genetic_associations.common_diseases.data),
                 //"ordering" : true,
                 //"order": [[3, 'des']],
                 "autoWidth": false,
@@ -328,12 +375,21 @@
                     ]
                 } ).
                 success(function(data, status) {
-                    console.log(data);
-                    $scope.search.genetic_associations.rare_diseases = data.data;
+                    $scope.search.genetic_associations.rare_diseases.data = data.data;
                     initRareDiseasesTable();
+                    $scope.search.genetic_associations.rare_diseases.is_open = data.data.length>0;
+                    $scope.search.genetic_associations.rare_diseases.is_loading = false;
+
+                    // update for parent
+                    updateGeneticAssociationsSetting();
                 }).
                 error(function(data, status) {
                     $log.error(status);
+                    $scope.search.genetic_associations.rare_diseases.is_open = data.data.length>0;
+                    $scope.search.genetic_associations.rare_diseases.is_loading = false;
+
+                    // update for parent
+                    updateGeneticAssociationsSetting();
                 });
         }
 
@@ -357,7 +413,7 @@
 
                     // mutation
 
-                    var mut = "";
+                    var mut = messages.NA;
                     //if(data[i].evidence.evidence_chain && data[i].evidence.evidence_chain[0].biological_object.about.length>0){
                     //    mut = "<a href='"+ data[i].evidence.evidence_chain[0].biological_object.about[0] +"' target='_blank'>"
                     //         + data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()
@@ -365,11 +421,20 @@
                     //} else {
                     //    mut = messages.NA;
                     //}
-                    var li = db===dbs.EVA.toLowerCase() ? 0 : 1;
-                    if( checkPath(data[i], "evidence.urls.linkouts") && data[i].evidence.urls.linkouts[li] ){
-                        mut = "<a href='"+ data[i].evidence.urls.linkouts[li].url +"' target='_blank'>"
-                            + data[i].evidence.urls.linkouts[li].nice_name
-                            + " <i class='fa fa-external-link'></i></a>";
+                    var li = db===dbs.EVA.toLowerCase() ? 0 : 1; //data[i].evidence.urls.linkouts.length-1;
+                    if( checkPath(data[i], "evidence.urls.linkouts") ){
+                        if( db===dbs.UNIPROT.toLowerCase() ){
+                            if( data[i].evidence.urls.linkouts[li]===undefined){
+                                li = 0;
+                            }
+                        }
+                        if( data[i].evidence.urls.linkouts[li] ){
+
+                            var url = ((li==0) ? data[i].evidence.urls.linkouts[0].url : ("http://www.uniprot.org/uniprot/"+data[i].evidence.urls.linkouts[0].url.split("/").pop()+"#pathology_and_biotech"));
+                            mut = "<a href='" + url + "' target='_blank'>"
+                                + data[i].evidence.urls.linkouts[li].nice_name.split("/").pop()
+                                + " <i class='fa fa-external-link'></i></a>";
+                        }
                     }
                     row.push(mut);
 
@@ -377,11 +442,13 @@
 
                     // mutation type
                     // for EVA:
-                    //  none available
+                    //  none available at the moment
                     // for uniprot:
                     var eco = messages.NA;
-                    if (checkPath(data[i], "evidence.evidence_codes") && data[i].evidence.evidence_codes[0]) {
-                        eco = data[i].evidence.evidence_codes[0]
+                    if( db===dbs.UNIPROT.toLowerCase() ){
+                        if (checkPath(data[i], "evidence.evidence_codes") && data[i].evidence.evidence_codes[0]) {
+                            eco = data[i].evidence.evidence_codes[0]
+                        }
                     }
                     row.push( getEcoLabel( data[i].evidence.evidence_codes_info, eco ) );
 
@@ -416,7 +483,7 @@
                             + " <i class='fa fa-external-link'></i></a>";
                     } else if ( db===dbs.UNIPROT.toLowerCase()){
                         eso = "Curated in Uniprot";
-                        eso = "<a href='http://www.uniprot.org/uniprot/"+data[i].evidence.urls.linkouts[0].url.split("/").pop()+"#pathology_and_biotech_name' target='_blank'>" 
+                        eso = "<a href='http://www.uniprot.org/uniprot/"+data[i].evidence.urls.linkouts[0].url.split("/").pop()+"#pathology_and_biotech' target='_blank'>" 
                             + eso 
                             + " <i class='fa fa-external-link'></i></a>";
                     }
@@ -453,7 +520,7 @@
         var initRareDiseasesTable = function(){
 
             $('#rare-diseases-table').dataTable( {
-                "data": formatRareDiseaseDataToArray($scope.search.genetic_associations.rare_diseases),
+                "data": formatRareDiseaseDataToArray($scope.search.genetic_associations.rare_diseases.data),
                 "autoWidth": false,
                 "paging" : true
             } ); 
@@ -543,11 +610,14 @@
                     ]
                 } ).
                 success(function(data, status) {
-                    console.log(data);
-                    $scope.search.drugs = data.data;
+                    $scope.search.drugs.data = data.data;
                     initTableDrugs();
+                    $scope.search.drugs.is_open = data.data.length>0;
+                    $scope.search.drugs.is_loading = false;
                 }).
                 error(function(data, status) {
+                    $scope.search.drugs.is_open = false;
+                    $scope.search.drugs.is_loading = false;
                     $log.error(status);
                 });
         }
@@ -577,19 +647,36 @@
                     row.push(data[i].evidence.evidence_chain[0].evidence.experiment_specific.molecule_type);
 
                     // 4: Mechanism of action
+                    var pubs = 0;
                     var action = data[i].evidence.evidence_chain[0].evidence.experiment_specific.mechanism_of_action+"<br />";
                         action += "<span ng-click='bla()'><span class='badge'>"
                                 if(data[i].evidence.evidence_chain[0].evidence.provenance_type 
                                     && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature
                                     && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs){
-                                        action+=data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs.length;
+                                        pubs = data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs.length;
                                 } else {
-                                    action += "0"
+                                    pubs = 0;
                                 }
-                        action += "</span> publications</span>";
+                        action += pubs+"</span> publications</span>";
+
+                        // publications:
+                        // we show the publications here in the cells for now
+                        // eventually this should be in a popup or tooltip of some sort
+                        var pub="";
+                        if( pubs>0 ){
+                            pub=":<div>";
+                            for(var j=0; j<pubs; j++){
+                                var n=data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs[j].split('/').pop();
+                                pub+="<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a> "
+                            }
+                            pub+="</div>";
+                        }
+                        action+=pub;
+
                         //action += "<div class='dropdown-menu' style='display:block; position:relative;'>Hello</div>";
                                 
                     row.push(action);
+
                     //evidence.provenance type.
 
                     // 5: Activity
@@ -644,7 +731,7 @@
         var initTableDrugs = function(){
 
             $('#drugs-table').dataTable( {
-                "data": formatDrugsDataToArray($scope.search.drugs),
+                "data": formatDrugsDataToArray($scope.search.drugs.data),
                 "autoWidth": false,
                 //"lengthChange": false,
                 "paging": true,
@@ -692,12 +779,15 @@
                     ]
                 } ).
                 success(function(data, status) {
-                    console.log(data);
-                    $scope.search.pathways = data.data;
+                    $scope.search.pathways.data = data.data;
                     initTablePathways();
+                    $scope.search.pathways.is_open = data.data.length>0;
+                    $scope.search.pathways.is_loading = false;
                 }).
                 error(function(data, status) {
                     $log.error(status);
+                    $scope.search.pathways.is_open = false;
+                    $scope.search.pathways.is_loading = false;
                 });
         }
 
@@ -710,8 +800,7 @@
             var newdata = [];
             for(var i=0; i<data.length; i++){
                 // create rows:
-                var row = [];
-                
+                var row = [];  
                 
                 try{
                     // old working version
@@ -808,8 +897,8 @@
                     newdata.push(row); // use push() so we don't end up with empty rows
 
                 }catch(e){
-                    console.log("Error parsing pathways data:");
-                    console.log(e);
+                    $log.error("Error parsing pathways data:");
+                    $log.error(e);
                 }
             }
             return newdata;
@@ -820,7 +909,7 @@
         var initTablePathways = function(){
             $('#pathways-table').dataTable( {
                 //"data": [[1,2,3,4,5,6,7]],
-                "data" : formatPathwaysDataToArray($scope.search.pathways),
+                "data" : formatPathwaysDataToArray($scope.search.pathways.data),
                 /*"columns": [
                     { "title": "Target context" },
                     { "title": "Protein complex members" },
@@ -865,12 +954,15 @@
                     ]
                 } ).
                 success(function(data, status) {
-                    console.log(data);
-                    $scope.search.rna_expression = data.data;
+                    $scope.search.rna_expression.data = data.data;
                     initTableRNA();
+                    $scope.search.rna_expression.is_open = data.data.length>0;
+                    $scope.search.rna_expression.is_loading = false;
                 }).
                 error(function(data, status) {
                     $log.error(status);
+                    $scope.search.rna_expression.is_open = false;
+                    $scope.search.rna_expression.is_loading = false;
                 });
         }
 
@@ -965,17 +1057,7 @@
         var initTableRNA = function(){
 
             $('#rna-expression-table').dataTable( {
-                "data": formatRnaDataToArray($scope.search.rna_expression), //[["non-small cell lung cancer", "decreased transcript level", "lung", "-1.07", "1.08e-17", "GPR65 expression details", "Transription profiling by array of human non-small cell lng cancer tissue", "bla bla bla"]],
-                /*"columns": [
-                    { "title": "Comparison" },
-                    { "title": "Activity" },
-                    //{ "title": "Tissue" },
-                    { "title": "log2 fold change" },
-                    { "title": "p-value" },
-                    { "title": "Provenance" },
-                    { "title": "Experiment overview" },
-                    { "title": "Publications (PMID)" }
-                ],*/
+                "data": formatRnaDataToArray($scope.search.rna_expression.data),
                 "autoWidth": false,
                 "paging" : true
             } ); 
@@ -1002,12 +1084,14 @@
                     ]
                 } ).
                 success(function(data, status) {
-                    console.log("getMutationData:")
-                    console.log(data);
-                    $scope.search.somatic_mutations = data.data;
+                    $scope.search.somatic_mutations.data = data.data;
                     initTableMutations();
+                    $scope.search.somatic_mutations.is_open = data.data.length>0;
+                    $scope.search.somatic_mutations.is_loading = false;
                 }).
                 error(function(data, status) {
+                    $scope.search.somatic_mutations.is_open = data.data.length>0;
+                    $scope.search.somatic_mutations.is_loading = false;
                     $log.error(status);
                 });
         }
@@ -1044,7 +1128,7 @@
         var initTableMutations = function(){
 
             $('#mutations-table').dataTable( {
-                "data": formatMutationsDataToArray($scope.search.somatic_mutations),
+                "data": formatMutationsDataToArray($scope.search.somatic_mutations.data),
                 //"ordering" : true,
                 //"order": [[3, 'des']],
                 "autoWidth": false,
@@ -1090,13 +1174,15 @@
                     ]
                 } ).
                 success(function(data, status) {
-                    console.log("getMouseData:")
-                    console.log(data);
-                    $scope.search.mouse = data.data;
+                    $scope.search.mouse.data = data.data;
                     initTableMouse();
+                    $scope.search.mouse.is_open = data.data.length>0;
+                    $scope.search.mouse.is_loading = false;
                 }).
                 error(function(data, status) {
                     $log.error(status);
+                    $scope.search.mouse.is_open = false;
+                    $scope.search.mouse.is_loading = false;
                 });
         }
 
@@ -1119,18 +1205,18 @@
                     var human = "";
                     var exp = data[i].evidence.evidence_chain[2].biological_object.properties.experiment_specific
                     for(var e in exp){
-                        human += exp[e] + "<br />";
+                        human += "<li>" + exp[e] + "</li>";
                     }
-                    human = human.substr(0, human.length-6);
+                    human = "<ul>" + human + "</ul>" ;//human.substr(0, human.length-6);
                     row.push(human);
 
                     // mouse
                     var mouse = "";
                     exp = data[i].evidence.evidence_chain[2].biological_subject.properties.experiment_specific
                     for(var e in exp){
-                        mouse += exp[e] + ", ";
+                        mouse += "<li>" + exp[e] + "</li>";
                     }
-                    mouse = mouse.substr(0, mouse.length-2);
+                    mouse = "<ul>" + mouse + "</ul>" ;//mouse.substr(0, mouse.length-2);
                     row.push(mouse);
 
                     // mouse model
@@ -1140,7 +1226,7 @@
                     row.push(mousemodel);
 
                     // evidence source
-                    row.push(data[i].unique_association_fields.predictionModel);
+                    row.push("Phenodigm"); //data[i].unique_association_fields.predictionModel);
 
                     // score
                     row.push(data[i].evidence.association_score.probability.value);
@@ -1148,8 +1234,8 @@
 
                     newdata.push(row); // push, so we don't end up with empty rows
                 }catch(e){
-                    console.log("Error parsing mouse data:");
-                    console.log(e);
+                    $log.error("Error parsing mouse data:");
+                    $log.error(e);
                 }
             }
 
@@ -1161,7 +1247,7 @@
         var initTableMouse = function(){
 
             $('#mouse-table').dataTable( {
-                "data": formatMouseDataToArray($scope.search.mouse),
+                "data": formatMouseDataToArray($scope.search.mouse.data),
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,

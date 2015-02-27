@@ -31,7 +31,7 @@
   },
   "scripts": {
     "preinstall": "(cd components/bubblesView/ && npm install); (cd components/cttvApi && npm install); (cd components/geneAssociations && npm install)",
-    "postinstall": "node_modules/.bin/webdriver-manager update; (cd app && npm install)",
+    "postinstall": "bower install; node_modules/.bin/webdriver-manager update; (cd app && npm install)",
     "prestart": "npm install",
     "start": "http-server -a localhost -p 8000 -c-1",
     "pretest": "npm install",

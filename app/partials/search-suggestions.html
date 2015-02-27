@@ -2,7 +2,7 @@
 
                
   <!-- Besthit -->
-  <div ng-if="search.results.besthit!==null" ng-click="linkTo({type:search.results.besthit.type, q:search.results.besthit.id, label:search.results.besthit.label||search.results.besthit.approved_symbol})" style="cursor:pointer;">
+  <div ng-if="search.results.besthit!==null" ng-click="linkTo({type:search.results.besthit.type, q:search.results.besthit.id, label:search.results.besthit.label||search.results.besthit.approved_symbol})" style="cursor:pointer; padding:4px 0px" class="item">
     <h4 style="padding:0px 5px">
       <span class="nbblock">
         <a><span bind-html-unsafe="(search.results.besthit.type=='genedata' ? search.results.besthit.approved_symbol : search.results.besthit.label) | typeaheadHighlight:search.query.text"></span></a>
@@ -43,9 +43,9 @@
           <div bind-html-unsafe="item.label | typeaheadHighlight:search.query.text" style="margin-bottom:0px; line-height:1.1"></div>
           
           <!-- show the EFO hierarchy links -->
-          <small class="text-lowlight">
+          <span class="small text-lowlight">
             <span ng-show="item.path.length>2">[...]<span class="fa fa-angle-right fa-md" style="margin:0px 4px"></span></span><span ng-repeat="link in item.path" ng-if="$index==item.path.length-3 || $index==item.path.length-2 || $index==item.path.length-1"><span ng-click="linkTo({type:'efo', q:link.uri, label:link.label}); $event.stopPropagation()" title="{{link.label}}"><a>{{link.label | limitTo:30}}<span ng-show="link.label.length>30">...</span></a></span><span ng-show="!$last" class="fa fa-angle-right fa-md" style="margin:0px 4px"></span></span>
-          </small>
+          </span>
         </div>
       
     </div>
