@@ -41,10 +41,13 @@
 			"efo" : resp.path_codes[i]
 		    });
 		}
+		if (resp.efo_synonyms.length === 0) {
+		    resp.efo_synonyms.push(resp.label);
+		}
 		$scope.disease = {
 		    "label" : resp.label,
 		    "efo" : efo_code,
-		    "description" : resp.definition,
+		    "description" : resp.definition || resp.label,
 		    "synonyms" : _.uniq(resp.efo_synonyms),
 		    "path" : path
 		};
