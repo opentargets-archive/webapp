@@ -120,6 +120,14 @@ var cttv_genome_browser = function() {
 		    )
 	    .data(tnt.board.track.data.gene());
 
+	gene_track.data().update().success (function (genes) {
+	    for (var i=0; i<genes.length; i++) {
+		if (genes[i].id === gBrowser.gene()) {
+		    genes[i].color = "#A00000";
+		}
+	    }
+	})
+
 	// Tooltip on genes
 	var gene_tooltip = function (gene) {
 	    var obj = {};
