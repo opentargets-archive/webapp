@@ -118,6 +118,9 @@ angular.module('cttvDirectives', [])
 				bView.focus(nodeData);
 			    } else {
 				taNode.property("focused", true);
+				// release prev focused node:
+				bView.focus().property("focused", undefined);
+				// focus on the new node
 				bView.focus(taNode);
 			    }
 			    bView.select(nodeData);
