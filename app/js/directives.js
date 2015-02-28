@@ -544,6 +544,7 @@ angular.module('cttvDirectives', [])
 		    var gB = tnt.board.genome()
 			.species("human")
 			.gene(attrs.target)
+			.context(20)
 			.width(w);
 		    var theme = targetGenomeBrowser()
 			.chr(scope.chr);

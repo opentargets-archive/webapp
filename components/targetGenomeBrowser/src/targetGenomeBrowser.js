@@ -129,9 +129,17 @@ var cttv_genome_browser = function() {
 		"label" : "Gene Type",
 		"value" : gene.biotype
 	    });
-	    obj.rows.push( {
+	    obj.rows.push({
 		"label" : "Location",
 		"value" : "<a target='_blank' href='http://www.ensembl.org/Homo_sapiens/Location/View?db=core;g=" + gene.id + "'>" + gene.seq_region_name + ":" + gene.start + "-" + gene.end + "</a>"
+	    });
+	    obj.rows.push({
+		"label" : "Associations",
+		"value" : "<a href='#/target-associations?q=" + gene.id + "&label=" + gene.external_name  + "'>View Associations</a>"
+	    });
+	    obj.rows.push({
+		"label" : "CTTV Profile",
+		"value" : "<a href='#/target/" + gene.id + "'>View CTTV profile</a>"
 	    });
 	    obj.rows.push( {
 		"label" : "Description",
