@@ -1,10 +1,10 @@
  <!-- search app / results -->
 
 <div>
-	<h3>Genes associated with {{search.label}} <small>({{search.query}})</small></h3>
+	<h3>Genes associated with {{search.label}} <small>({{search.query}}) <a href="#/disease/{{search.query}}">View disease profile</a></small></h3>
 	<div class="h6">Found {{nresults}} evidence</div>
 
-	<div id="myflower"></div>
+	<!-- <div id="myflower"></div> -->
 	
 	<table class="table table-striped table-bordered" id="disease-association-table"></table>
 	<cttv-disease-associations target="{{search.query}}" diameter=800></cttv-disease-associations>

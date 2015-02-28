@@ -74,6 +74,7 @@
 		resp = JSON.parse(resp.text);
 		$scope.target = {
 		    label : resp.approved_name || resp.ensembl_external_name,
+		    symbol : resp.approved_symbol || resp.approved_name || resp.ensembl_external_name,
 		    id : resp.approved_id || resp.ensembl_gene_id,
 		    description : resp.uniprot_function[0]
 		};
