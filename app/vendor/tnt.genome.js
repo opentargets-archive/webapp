@@ -3104,7 +3104,6 @@ tnt_board_genome = function() {
 			conf.ensgene_search(resp);
 
 			var extra = ~~((resp.end - resp.start) * (conf.context/100));
-			console.log("EXTRA: " + extra);
 			genome_browser
 			    .species(resp.species)
 			    .chr(resp.seq_region_name)

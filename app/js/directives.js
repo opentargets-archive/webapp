@@ -551,7 +551,7 @@ angular.module('cttvDirectives', [])
 			.width(w);
 		    var theme = targetGenomeBrowser()
 			.chr(scope.chr);
-		    theme(gB, document.getElementById("cttvTargetGenomeBrowser"));
+		    theme(gB, document.getElementById("cttvTargetGenomeBrowser"), cttvApi());
 		});
 	    }
 	};
