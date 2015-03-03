@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../build/flowerView.css" />
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="../build/cttv.FlowerView.js"></script>
+    </style>
+  </head>
+  <body>
+    <div id="flower"></div>
+    <div id="legend"></div>
+    <script>
+      var flowerData = [
+      {"value":0.9,  "label":"RNA"},
+      {"value":0.6,  "label":"Genetics"},
+      {"value":0.2,  "label":"Somatic"},
+      {"value":0.4,  "label":"Drugs"},
+      {"value":0.7,  "label":"Pathways"},
+      {"value":0,  "label":"Mouse data"}
+                              ];
+      var flower = flowerView()
+      .diagonal(300)
+      .fontsize(15)
+      .values(flowerData);
+      flower(document.getElementById("flower"));
+    </script>
+  </body>
+</html>
