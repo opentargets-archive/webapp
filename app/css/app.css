@@ -10,6 +10,33 @@ body{
 
 }
 
+.cttv-beta-ribbon {
+    background-color: #a00;
+    overflow: hidden;
+    white-space: nowrap;
+    color: white;
+    display: block;
+    padding: 5px 50px;
+    margin: 1px 0;
+    font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-align: center;
+    border: 1px solid #faa;
+
+    position: absolute;
+    left: -40px;
+    top: 10px;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+
+    -webkit-box-shadow: 0 0 10px #888;
+    -moz-box-shadow: 0 0 10px #888;
+    box-shadow: 0 0 10px #888;
+    text-shadow: 0 0 5px #444;
+}
+
 .masthead {
   width:100%; 
   background-color:#DDD; 
@@ -48,7 +75,7 @@ body{
 
 a.accordion-toggle{
   text-decoration: none;
-  display: block;
+  /* display: block; */
   width: 100%;
   height: 100%;
 }

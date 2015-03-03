@@ -196,21 +196,6 @@ describe ('bubbleView', function () {
 	it ('Renders', function () {
 	    view (fixture.el);
 	});
-	// it ('Creates the correct number of flat circles', function () {
-	//     var dataLen = data.children.length;
-	//     view (fixture.el);
-	//     assert.equal(fixture.el.querySelectorAll("circle").length, dataLen);
-	// });
-	// it ('Creates the correct number of flat titles', function () {
-	//     var dataLen = data.children.length;
-	//     view (fixture.el);
-	//     assert.equal(fixture.el.querySelectorAll("title").length, dataLen);
-	// });
-	// it ('Creates the correct number of flat texts', function () {
-	//     var dataLen = data.children.length;
-	//     view (fixture.el);
-	//     assert.equal(fixture.el.querySelectorAll("text").length, dataLen);
-	// });
 	it ('Creates the correct number of non flat circles', function () {
 	    var dataLen = data.children.length;
 	    view (fixture.el);

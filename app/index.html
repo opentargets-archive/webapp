@@ -16,6 +16,7 @@
   <link href="node_modules/cttv.geneAssociations/build/index.css" rel="stylesheet" />
   <link href="vendor/tnt.genome.css" rel="stylesheet"/>
   <link href="node_modules/cttv.targetGenomeBrowser/build/index.css" rel="stylesheet" />
+  <link href="node_modules/cttv.flowerView/build/flowerView.css" rel="stylesheet"/>
   <link rel="stylesheet" href="css/app.css">
   
   <!-- <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script> -->
@@ -25,11 +26,8 @@
   <script type="text/javascript" src="node_modules/cttv.geneAssociations/build/cttv.geneAssociations.js"></script>
   <script type="text/javascript" src="vendor/tnt.genome.js"></script>
   <script type="text/javascript" src="node_modules/cttv.targetGenomeBrowser/build/cttv.targetGenomeBrowser.js"></script>
+  <script type="text/javascript" src="node_modules/cttv.flowerView/build/cttv.flowerView.js"></script>
   
-  <!-- flower graph -->
-  <script type="text/javascript" src="web_components/cttv/target-disease-evidence/target-disease-evidence-overview/flowerView.js"></script>
-  <link rel="stylesheet" href="web_components/cttv/target-disease-evidence/target-disease-evidence-overview/target_disease_evidence_overview.css">
-
   <!-- Web components -->
   <!-- <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script> -->
   <!-- <link rel="import" href="./web_components/cttv/target-evidence/target_evidence.html"> -->
@@ -54,7 +52,6 @@
       <!-- Masthead (search) -->
         
         <div class="masthead" ng-show="location.path()!=='/intro'" ng-controller="MastheadCtrl">
-
           <div class="container">
             <div class="row">
 
@@ -127,7 +124,8 @@
       </div>
       -->
 
-         <div class="container"> 
+      <div class="container">
+	<div class="cttv-beta-ribbon">BETA</div>
 	   <!-- ie < 9? -->
 	   <!--[if lt IE 9]>
                <div class="alert alert-danger">

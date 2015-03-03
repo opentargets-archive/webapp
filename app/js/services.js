@@ -32,23 +32,23 @@ angular.module('cttvServices', []).
 
         // the request configuration object.
         // Here we set the default values, then populate the rest in the callAPI function
-        /*var req = {
-            withCredentials: true,
-            headers: {
-                'Authorization' : 'Basic Y3R0djpkajhtaXhpamswNGpwZGc='
-            }
-        }*/
+        // var req = {
+        //     withCredentials: true,
+        //     headers: {
+        //         'Authorization' : 'Basic Y3R0djpkajhtaXhpamswNGpwZGc='
+        //     }
+        // }
 
 
         /* 
           App running on localhost:
           we rest some values
         */
-        if( $location.host()=='127.0.0.1' || $location.host().toLowerCase()=='localhost' ){
-            //cttvAPI.API_URL = "http://127.0.0.1:8080/api/latest/";
-            //req.withCredentials = false;
-            //req.headers = {};
-        }
+        // if( $location.host()=='127.0.0.1' || $location.host().toLowerCase()=='localhost' ){
+        //     cttvAPI.API_URL = "http://127.0.0.1:8080/api/latest/";
+        //     req.withCredentials = false;
+        //     req.headers = {};
+        // }
 
 
 

@@ -19,6 +19,45 @@
 
 
 /**
+ * DiseaseCtrl
+ * Controller for the disease page
+ * It loads general information about a given disease
+ */
+    .controller ('DiseaseCtrl', ["$scope", "$location", "$log", function ($scope, $location, $log) {
+	$log.log("DiseaseCtrl()");
+	var cttvRestApi = cttvApi();
+	var efo_code = $location.url().split("/")[2];
+	var url = cttvRestApi.url.disease({'efo' : efo_code});
+	console.log(url);
+	cttvRestApi.call(url)
+	    .then (function (resp) {
+		resp = JSON.parse(resp.text);
+		resp.path_labels.shift(); // remove cttv_disease
+		resp.path_codes.shift(); // remove cttv_disease
+		var path = [];
+		for (var i=0; i<resp.path_labels.length; i++) {
+		    path.push({
+			"label" : resp.path_labels[i],
+			"efo" : resp.path_codes[i]
+		    });
+		}
+		if (resp.efo_synonyms.length === 0) {
+		    resp.efo_synonyms.push(resp.label);
+		}
+		$scope.disease = {
+		    "label" : resp.label,
+		    "efo" : efo_code,
+		    "description" : resp.definition || resp.label,
+		    "synonyms" : _.uniq(resp.efo_synonyms),
+		    "path" : path
+		};
+
+		// Update bindings
+		$scope.$apply();
+	    })
+    }])
+
+/**
  * TargetCtrl
  * Controller for the target page
  * It loads information about a given target
@@ -35,6 +74,7 @@
 		resp = JSON.parse(resp.text);
 		$scope.target = {
 		    label : resp.approved_name || resp.ensembl_external_name,
+		    symbol : resp.approved_symbol || resp.approved_name || resp.ensembl_external_name,
 		    id : resp.approved_id || resp.ensembl_gene_id,
 		    description : resp.uniprot_function[0]
 		};

@@ -22,7 +22,7 @@ var cttv_genome_browser = function() {
 
     var gBrowser;
 
-    var gBrowserTheme = function(gB, div) {
+    var gBrowserTheme = function(gB, div, cttvRestApi) {
 	// Set the different #ids for the html elements (needs to be lively because they depend on the div_id)
 	set_div_id(div);
 
@@ -120,25 +120,86 @@ var cttv_genome_browser = function() {
 		    )
 	    .data(tnt.board.track.data.gene());
 
-	// Tooltip on genes
-	var gene_tooltip = function (gene) {
+	gene_track.data().update().success (function (genes) {
+	    for (var i=0; i<genes.length; i++) {
+		if (genes[i].id === gBrowser.gene()) {
+		    genes[i].color = "#A00000";
+		}
+	    }
+	})
+
+	var tooltip_obj = function (ensemblData, cttvData) {
 	    var obj = {};
-	    obj.header = gene.external_name + " (" + gene.id + ")";
+	    obj.header = ensemblData.external_name + " (" + ensemblData.id + ")";
 	    obj.rows = [];
+
+	    // Associations and target links maybe
+	    var associationsValue;
+	    var targetValue;
+	    if (cttvData && cttvData.data && cttvData.data.length > 0) {
+		associationsValue = "<a href='#/target-associations?q=" + ensemblData.id + "&label=" + ensemblData.external_name + "'>" + (cttvData.data.length - 1) + " disease associations</a> ";
+		targetValue = "<a href='#/target/" + ensemblData.id + "'>View CTTV profile</a>";
+	    }
+
 	    obj.rows.push( {
 		"label" : "Gene Type",
-		"value" : gene.biotype
+		"value" : ensemblData.biotype
 	    });
-	    obj.rows.push( {
+	    obj.rows.push({
 		"label" : "Location",
-		"value" : "<a target='_blank' href='http://www.ensembl.org/Homo_sapiens/Location/View?db=core;g=" + gene.id + "'>" + gene.seq_region_name + ":" + gene.start + "-" + gene.end + "</a>"
+		"value" : "<a target='_blank' href='http://www.ensembl.org/Homo_sapiens/Location/View?db=core;g=" + ensemblData.id + "'>" + ensemblData.seq_region_name + ":" + ensemblData.start + "-" + ensemblData.end + "</a>"
 	    });
+	    if (associationsValue !== undefined) {
+		obj.rows.push({
+		    "label" : "Associations",
+		    "value" : associationsValue
+		});
+	    }
+	    if (targetValue !== undefined) {
+		obj.rows.push({
+		    "label" : "CTTV Profile",
+		    "value" : targetValue
+		});
+	    }
 	    obj.rows.push( {
 		"label" : "Description",
-		"value" : gene.description
+		"value" : ensemblData.description
+	    });
+	    return obj;
+	};
+	
+	// Tooltip on genes
+	var gene_tooltip = function (gene) {
+	    var t = tooltip.table()
+		.id(1);
+	    var event = d3.event;
+	    var elem = this;
+
+	    var s = tooltip.plain()
+		.id(1);
+	    
+	    var url = cttvRestApi.url.associations ({
+		"gene" : gene.id,
+		"datastructure" : "flat"
+	    });
+	    cttvRestApi.call(url)
+		.catch (function () {
+		    console.log("==============> ERROR!!!");
+		    var obj = tooltip_obj(gene);
+		    t.call(elem, obj, event);
+		})
+		.then(function (resp) {
+		    resp = JSON.parse(resp.text);
+		    console.log(resp);
+		    var obj = tooltip_obj (gene, resp);
+		    t.call(elem, obj, event);
+		});
+	    s.call(elem, {
+		header : gene.external_name + " (" + gene.id + ")",
+		body : "<i class='fa fa-spinner fa-2x fa-spin'></i>"
 	    });
 
-	    tooltip.table().call(this, obj);
+	    //tooltip.table().call(this, obj);
 	}
 	
 	gene_track

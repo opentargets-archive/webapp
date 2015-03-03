@@ -59,7 +59,7 @@
 				<div style="display: table-cell; width:45%">
 					<div class="well well-lg">
 						<h5>
-							{{search.info.efo.label}}
+						  <a href="#/disease/{{search.info.efo.efo_code}}">{{search.info.efo.label}}</a>
 							<span class="small" ng-show="search.info.efo.efo_synonyms.length>0"><br />Synonyms: {{search.info.efo.efo_synonyms.join(", ") | limitTo:100}}...</span>
 						</h5>
 						<p class="small">{{search.info.efo.definition | limitTo: 200}}<span ng-show="search.info.efo.definition.length>200">...</span></p>

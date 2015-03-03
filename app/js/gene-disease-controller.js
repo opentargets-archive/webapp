@@ -132,6 +132,8 @@
                 } ).
                 success(function(data, status) {
                     $scope.search.info.efo = data;
+		    // TODO: This is not returned by the api yet. Maybe we need to remove it later
+		    $scope.search.info.efo.efo_code = $scope.search.disease;
                 }).
                 error(function(data, status) {
                     $log.error(status);

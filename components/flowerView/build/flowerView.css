@@ -1,0 +1,9 @@
+.petal {
+  stroke: none;
+  stroke-width: 0px; }
+
+.stitches {
+  stroke: #ccc;
+  stroke-width: 0.25px;
+  /*stroke-dasharray: 4 5;*/
+  fill: none; }

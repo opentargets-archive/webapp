@@ -8,6 +8,7 @@
     "biojs-vis-pmccitation": "^0.1.7",
     "cttv.Api": "file:../components/cttvApi",
     "cttv.bubblesView": "file:../components/bubblesView",
+    "cttv.flowerView": "file:../components/flowerView",
     "cttv.geneAssociations": "file:../components/geneAssociations",
     "cttv.targetGenomeBrowser": "file:../components/targetGenomeBrowser"
   }

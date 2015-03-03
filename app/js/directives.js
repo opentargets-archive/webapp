@@ -118,6 +118,9 @@ angular.module('cttvDirectives', [])
 				bView.focus(nodeData);
 			    } else {
 				taNode.property("focused", true);
+				// release prev focused node:
+				bView.focus().property("focused", undefined);
+				// focus on the new node
 				bView.focus(taNode);
 			    }
 			    bView.select(nodeData);
@@ -544,10 +547,11 @@ angular.module('cttvDirectives', [])
 		    var gB = tnt.board.genome()
 			.species("human")
 			.gene(attrs.target)
+			.context(20)
 			.width(w);
 		    var theme = targetGenomeBrowser()
 			.chr(scope.chr);
-		    theme(gB, document.getElementById("cttvTargetGenomeBrowser"));
+		    theme(gB, document.getElementById("cttvTargetGenomeBrowser"), cttvApi());
 		});
 	    }
 	};
