@@ -8,7 +8,8 @@ angular.module('cttvApp', [
     'cttvControllers',
     'cttvDirectives',
     'angulartics',
-    'angulartics.google.analytics'
+    'angulartics.google.analytics',
+    'viewhead'
 ]).
 
 
