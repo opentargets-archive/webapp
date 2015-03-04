@@ -112,7 +112,7 @@
          * i.e. to fill the two boxes at the top of the page
          */
         $scope.getInfo = function(){
-            console.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
+            $log.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
 
             // get gene specific info 
             cttvAPIservice.getGene( {
@@ -185,7 +185,7 @@
 
 
         $scope.getFlowerData = function(){
-            console.log("getFlowerData()");
+            $log.log("getFlowerData()");
 
             return cttvAPIservice.getAssociation({
                     gene:$scope.search.target, 
@@ -509,8 +509,8 @@
 
 
                 }catch(e){
-                    console.log("Error parsing rare disease data:");
-                    console.log(e);
+                    $log.log("Error parsing rare disease data:");
+                    $log.log(e);
                 }
             }
 
@@ -717,8 +717,8 @@
 
                     newdata.push(row); // use push() so we don't end up with empty rows
                 }catch(e){
-                    console.log("Error parsing drugs data:");
-                    console.log(e);
+                    $log.log("Error parsing drugs data:");
+                    $log.log(e);
                 }
             }
             return newdata;
@@ -1047,8 +1047,8 @@
                     newdata.push(row); // push, so we don't end up with empty rows
 
                 }catch(e){
-                    console.log("Error parsing RNA-expression data:");
-                    console.log(e);
+                    $log.log("Error parsing RNA-expression data:");
+                    $log.log(e);
                 }
             }
 
@@ -1118,8 +1118,8 @@
                     row.push( "<a href='"+data[i].evidence.urls.linkouts[0].url+"' target='_blank'>"+data[i].evidence.urls.linkouts[0].nice_name+" <i class='fa fa-external-link'></i></a>" );
                     newdata.push(row); // push, so we don't end up with empty rows
                 }catch(e){
-                    console.log("Error parsing somatic mutation data:");
-                    console.log(e);
+                    $log.log("Error parsing somatic mutation data:");
+                    $log.log(e);
                 }
             }
 
