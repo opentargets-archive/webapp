@@ -73,6 +73,7 @@ angular.module('cttvServices', []).
             // set common stuff
             var req = {};   // this must be initialized for every call!!!
             req.method = cttvAPI.API_DEFAULT_METHOD;
+            req.cache = true;   // set request to use caching
             if( queryObject.params && queryObject.params.method ){
                 req.method = queryObject.params.method;
                 //delete queryObject.params.method;
