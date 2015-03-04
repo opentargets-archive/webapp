@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="cttvApp">
   <head>
-    <title>CTTV Core</title>
+    <title ng-bind-template="CTTV Core{{viewTitle ? ' - '+viewTitle : ''}}"></title>
 
     <!-- IE9 -->
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -42,7 +42,7 @@
   </head>
 
 
-<body ng-app="cttvApp">
+<body>
 
       <!-- 
       <div style="width:100%; background:#0D3774; height:3px">
@@ -194,6 +194,7 @@
     <script type="text/javascript" src="bower_components/angulartics/dist/angulartics.min.js"></script>
     <script type="text/javascript" src="bower_components/angulartics/dist/angulartics-ga.min.js"></script>
     <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+    <script type="text/javascript" src="js/angularjs-viewhead.js"></script>
 
     <!-- lodash -->
     <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>

@@ -1,8 +1,7 @@
 <!-- search app / results -->
 
 <div>
-
-	<h3>Search results for {{(search.query.q.title || search.query.q)}}</h3>
+	<h3 view-title>Search results for {{(search.query.q.title || search.query.q)}}</h3>
 	<div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div>
 
 	
@@ -42,8 +41,10 @@
 		</div>
 
 		<!-- Search results -->
+		
 
 		<div class="col-md-10">
+
 			<div ng-repeat="result in search.results.data" class="search-result">
 				<h4><a ng-href="#/{{result.type==='genedata'?'target-associations':'disease-associations'}}?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
 				<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
