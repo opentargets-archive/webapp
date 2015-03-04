@@ -28,7 +28,7 @@
 	var cttvRestApi = cttvApi();
 	var efo_code = $location.url().split("/")[2];
 	var url = cttvRestApi.url.disease({'efo' : efo_code});
-	console.log(url);
+	$log.log(url);
 	cttvRestApi.call(url)
 	    .then (function (resp) {
 		resp = JSON.parse(resp.text);
@@ -67,7 +67,7 @@
 	var cttvRestApi = cttvApi();
 	var geneId = $location.url().split("/")[2];
 	var url = cttvRestApi.url.gene({'gene_id' : geneId});
-	console.log(url);
+	$log.log(url);
 
 	cttvRestApi.call(url)
 	    .then(function (resp) {
@@ -93,7 +93,7 @@
 			syns[prev_symbols[j]] = 1;
 		    }
 		}
-		console.log(synonyms);
+		$log.log(synonyms);
 		$scope.synonyms = _.keys(syns);
 
 		// Uniprot
@@ -199,10 +199,6 @@
             }
         */
 
-        $scope.test=function(){
-            console.log("test");
-        }
-
         var getFiltersData = function(){
 
             cttvAPIservice.getSearch({
@@ -234,8 +230,8 @@
 
 
         $scope.getResults = function(){
-            console.log("SEARCH URL: ");
-            console.log(cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query));
+            $log.log("SEARCH URL: ");
+            $log.log(cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query));
             var queryobject = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
             // if one and only one of the filters is selected, apply the corresponding filter
             // cool way of mimicking a XOR operator ;)

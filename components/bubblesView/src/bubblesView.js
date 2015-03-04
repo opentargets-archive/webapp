@@ -40,8 +40,6 @@ var bubblesView = function () {
      * Render valid JSON data
      */ 
     var render = function(div) {
-	// console.log("DATA FOR BUBBLES:");
-	// console.log(conf.data.data());
 	conf.divId = d3.select(div).attr("id");
 	svg = d3.select(div)
 	    .append("svg")
@@ -67,8 +65,6 @@ var bubblesView = function () {
         // If we don't pass any data, return out of the element
         if (!conf.data) return;
 	var packData = pack.nodes(conf.data.data());
-	// console.log("DATA IN BUBBLES: ");
-	// console.log(packData);
 
 	// if (conf.flat){
 	//     conf.data = conf.data.flatten();

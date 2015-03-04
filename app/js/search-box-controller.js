@@ -7,7 +7,7 @@
      */
     angular.module('cttvControllers').
 
-    controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'cttvAPIservice', function ($scope, $location, $window, $document, $element, cttvAPIservice) {
+controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice) {
         
         var APP_SEARCH_URL = "search";
         var APP_EVIDENCE_URL = "evidence";
@@ -30,7 +30,6 @@
             if ($element !== evt.target) {
                 //resetMatches();
                 //scope.$digest();
-                console.log("close ??");
                 $scope.hasFocus = true;
                 $scope.search.results = {};
                 $scope.$apply();
@@ -44,7 +43,6 @@
         });
         
         $element.bind('click', function(evt){
-            console.log('keep open?');
             evt.stopPropagation();
         });
         
@@ -59,10 +57,10 @@
                 cttvAPIservice.getAutocomplete({q:$scope.search.query.text, size:3}).
                     success(function(data, status) {
                         $scope.search.results = data.data;
-                        console.log(data.data);
+                        $log.log(data.data);
                     }).
                     error(function(data, status) {
-                        console.log(status);
+                        $log.log(status);
                     });
             }else{
                 $scope.search.results = {};
@@ -78,10 +76,6 @@
             return Object.keys($scope.search.results).length>0;
         }
 
-        $scope.test=function(e){
-            console.log(e);
-        }
-
         $scope.isVisible = function(){
             var v = $scope.hasFocus && $scope.hasResults() && $scope.search.query.text.length>1;
             return v;
@@ -91,7 +85,7 @@
 
 
         var setLocation=function(url){
-            console.log(url);
+            $log.log(url);
             if($location.url() != url){
                 $location.url(url);
             }
@@ -99,20 +93,20 @@
 
 
         $scope.linkTo =function(s){
-            console.log(s.label+" ("+s.type+") "+s.q);
+            $log.log(s.label+" ("+s.type+") "+s.q);
 
             // show search results page, nice and easy...
 
             // so, where do we want to go then?
             // parse the options:
             if( s.type.toLowerCase()=="genedata" ){
-                console.log("   genedata");
+                $log.log("   genedata");
                 $location.url("target-associations");
             } else if ( s.type.toLowerCase()=="efo" ){
-                console.log("   efo");  
+                $log.log("   efo");  
                 $location.url("disease-associations");
             }
-            console.log($location);
+            $log.log($location);
             $location.search( 'q=' + s.q + "&label="+s.label);
             
             $scope.search.query.text = "";

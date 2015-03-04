@@ -61,7 +61,6 @@ angular.module('cttvDirectives', [])
 		    gene: attrs.target,
 		    datastructure : "tree"
 		});
-		console.log("Bubbles URL: " + bubblesUrl);
 
 		// CALL TO BUILD THE BUBBLES
 		// This is different from the call to build the table because in the table we want to show intermediate nodes
@@ -187,11 +186,9 @@ angular.module('cttvDirectives', [])
 		    gene: attrs.target,
 		    datastructure : "flat"
 		});
-		console.log("Table URL: " + tableUrl);
 		api.call(tableUrl)
 		    .then(function (resp) {
 			/////// TABLE VIEW
-			console.log("TABLES!");
 			resp = JSON.parse(resp.text);
 
 			var newData = [];
@@ -341,7 +338,6 @@ angular.module('cttvDirectives', [])
 		var url = api.url.associations({
 		    efo: attrs.target
 		});
-		console.log("URL: " + url);
 		api.call(url)
 		    .then(function (resp) {
 			resp = JSON.parse(resp.text);
@@ -603,8 +599,6 @@ angular.module('cttvDirectives', [])
     			associationData: '='
     		},
         	link: function(scope, elem, attrs){
-        		console.log("link()");
-        		console.log(scope);
         		//var flower = flowerView().values(scope.associationData);
         		//flower(elem[0]);
 
