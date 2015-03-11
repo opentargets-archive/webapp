@@ -598,17 +598,6 @@
                         // 11: evidence type
                         "evidence.evidence_codes_info"    // Evidence codes???
 
-                        /*
-                        "biological_subject.properties.target_type",    // Target context
-                        "biological_subject.about", //gene_info",    // Protein complex members 
-                        
-                        "biological_subject.properties.activity",    // Mechanism of action of drug 
-                        "evidence.evidence_chain[0].evidence.provenance_type.literature",    // Mechanism of action references
-                        "evidence.evidence_chain[0].evidence.evidence_codes",    // Evidence codes: target to drug  
-                        "evidence.urls.linkouts",    // Provenance - target
-                        //"evidence.urls.linkouts",    // Provenance - drug
-                        "evidence.evidence_chain[1].evidence.experiment_specific"    //Evidence codes
-                        */
                     ]
                 } ).
                 success(function(data, status) {
@@ -674,12 +663,8 @@
                             pub+="</div>";
                         }
                         action+=pub;
-
-                        //action += "<div class='dropdown-menu' style='display:block; position:relative;'>Hello</div>";
                                 
                     row.push(action);
-
-                    //evidence.provenance type.
 
                     // 5: Activity
                     row.push(data[i].biological_subject.properties.activity);
@@ -711,7 +696,6 @@
                     row.push(prot);
 
                     // 11: evidence source
-                    //row.push(data[i].evidence.evidence_chain[1].evidence.experiment_specific);    // Evidence codes
                     row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
 
 
@@ -805,42 +789,6 @@
                 var row = [];  
                 
                 try{
-                    // old working version
-                    /*
-                    // target context
-                    row.push(data[i].biological_subject.properties.target_type);
-
-                    // protein complex member
-                    var prot="";
-                    if(data[i].biological_subject.gene_info){
-                        for(var j=0; j<data[i].biological_subject.gene_info.length; j++){
-                            prot+="<a href='#/target-associations?q="+data[i].biological_subject.gene_info[j].geneid
-                                +"' title='"+data[i].biological_subject.gene_info[j].name+"'>"
-                                +data[i].biological_subject.gene_info[j].symbol
-                                +"</a>, "
-                        }
-                    }
-                    row.push(prot);
-
-                    // activity
-                    row.push(data[i].biological_subject.properties.activity);
-                    // additional context
-                    var prop = "";
-                        for(var p in data[i].evidence.properties.experiment_specific.additional_properties){
-                            prop += p + ":&nbsp;" + data[i].evidence.properties.experiment_specific.additional_properties[p] + ", "
-                        }
-                    row.push(prop);
-                    // provenance - source
-                    row.push("<a href='" + data[i].evidence.urls.linkouts[0].url+"' target='_blank'>" + data[i].evidence.urls.linkouts[0].nice_name + " <i class='fa fa-external-link'></i></a>");
-                    // provenance - references
-                    row.push(data[i].evidence.provenance_type.literature.pubmed_refs || ""); 
-                    // date asserted
-                    row.push(data[i].evidence.date_asserted);
-                    // evidence codes
-                    row.push(data[i].evidence.evidence_codes.join(", "));
-
-                    newdata.push(row); // use push() so we don't end up with empty rows
-                    */
 
                     // disease
                     row.push(data[i].biological_object.efo_info[0][0].label);
@@ -982,32 +930,6 @@
                 var row = [];
                 
                 try{
-                    // original working version
-                    /*
-                    // comparison
-                    row.push(data[i].evidence.experiment_specific.comparison_name);
-                    // activity
-                    row.push(data[i].biological_subject.properties.activity); //.split("/").pop().split("_").join(" "));
-                    // fold change
-                    row.push(data[i].evidence.experiment_specific.log2_fold_change);
-                    // p-value
-                    row.push(data[i].evidence.association_score.pvalue.value);
-                    // provenance
-                    //row.push(data[i].evidence.urls.linkouts.reduce(function(p,c,a,i){return p.nice_name+", "+c.nice_name}));
-                    row.push("<a href='"+data[i].evidence.urls.linkouts[2].url+"' target='_blank'>Gene expression details <i class='fa fa-external-link'></i></a>");
-                    // experiment overview
-                    row.push("<a href='"+data[i].evidence.urls.linkouts[0].url+"' target='_blank'>Experiment overview and raw data <i class='fa fa-external-link'></i></a>");
-                    // publications
-                    var pub="";
-                    if(data[i].evidence.experiment_specific.literature.pubmed_refs){
-                        for(var j=0; j<data[i].evidence.experiment_specific.literature.pubmed_refs.length; j++){
-                            var n=data[i].evidence.experiment_specific.literature.pubmed_refs[j].split('/').pop();
-                            pub+="<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
-                        }
-                    }
-                    row.push(pub);
-                    newdata.push(row); // push, so we don't end up with empty rows
-                    */
 
                     // disease
                     row.push(data[i].biological_object.efo_info[0][0].label);
@@ -1022,7 +944,6 @@
                     row.push( checkPath(data[i], "biological_object.properties.biosamples") ? data[i].biological_object.properties.biosamples : messages.NA );
 
                     // evidence source
-                    //row.push("");
                     row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_codes[0]) + " <a href='http://www.ebi.ac.uk/gxa/FAQ.html' target='_blank'>[?]</a>" );
 
                     // fold change
@@ -1266,6 +1187,7 @@
         var processMouseModelData = function(mmd){
             return mmd.replace(/<(.*?)>/g, function(match){return "<sup>"+match.substr(1,match.length-2)+"</sup>"});
         }
+
 
 
         /*

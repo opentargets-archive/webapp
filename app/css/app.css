@@ -68,6 +68,16 @@ body{
   color: inherit;
 }
 
+.footer h6{
+  color: #F9F9F9;
+}
+
+
+.faqs ul{
+  list-style:none;
+  padding-left: 0px;
+}
+
 
 .dataTables_wrapper{
   

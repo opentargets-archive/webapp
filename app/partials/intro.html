@@ -10,12 +10,14 @@
 
       <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
         <fieldset>
-          <div class="" style="position:relative"> 
+          <div class="form-group has-feedback" style="position:relative"> 
           
 
+            
+            <!-- Search box + search button -->
             <div class="input-group">
-              
-              <input type="text" placeholder="Search for gene or disease" class="form-control ng-valid-maxlength ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+
+              <input type="text" placeholder="Search for gene or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
               <div class="input-group-btn">
                 <button type="submit" class="btn btn-primary">
@@ -25,12 +27,14 @@
 
             </div>
             
+            <!-- Search in progress spinner -->
+            <span class="text-lowlight form-control-feedback" style="right:40px" ng-show="search.progress" ><i class="fa fa-circle-o-notch fa-spin"></i></span>
 
             <!-- Suggestions box -->
             <div cttv-search-suggestions></div>
-            <!-- End suggestions box -->
 
 
+            <!-- examples -->
             <span class="small">
                 <i>
                   Examples: <a href="#/search?q=braf">BRAF</a>, 
@@ -39,16 +43,6 @@
                 </i>
             </span>
             
-
-            <!-- Error messages -->
-            <!-- again, TODO later
-            <label class="control-label has-error ng-hide" for="query-text" ng-show="query.submitted &amp;&amp; (queryForm.text.$error.required || queryForm.text.$error.minlength)">
-              Your query is too short
-            </label>
-            <label class="control-label ng-hide" for="query-text" ng-show="query.submitted &amp;&amp; (queryForm.text.$error.maxlength)">
-              Your query is too long
-            </label>
-            -->
           </div>
         </fieldset>
       </form>
@@ -70,13 +64,6 @@
           <h2 style="font-weight: 200; color:#2B8BAC">Which targets can be modulated to treat disease D?</h2>
         </div>
 
-        
-        <!-- 
-        <div class="col-sm-4">
-          <h2 style="font-weight: 200; color:#2B8BAC">I am interested in Target T</h2>  
-          <p style="font-size: 20px">Which other target T1 interacts with target T?</p>
-        </div>
-        -->
       </div>
 
       <div style="height:100px"></div>

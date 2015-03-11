@@ -35,22 +35,21 @@ config(['$routeProvider',
                 templateUrl: 'partials/geneDisease.html',
                 controller: 'GeneDiseaseCtrl'
     	    }).
-	    when('/target/:id', {
-		templateUrl: 'partials/target.html',
-		controller: 'TargetCtrl'
-	    }).
-	    when('/disease/:id', {
-		templateUrl: 'partials/disease.html',
-		controller: 'DiseaseCtrl'
-	    }).
+    	    when('/target/:id', {
+        		templateUrl: 'partials/target.html',
+        		controller: 'TargetCtrl'
+    	    }).
+    	    when('/disease/:id', {
+        		templateUrl: 'partials/disease.html',
+        		controller: 'DiseaseCtrl'
+    	    }).
+            when('/faq', {
+                templateUrl: 'partials/faq.html'
+            }).
             /*when('/evidence/:id', {
                 templateUrl: 'partials/evidence.html',
                 controller: 'EvidenceCtrl'
             }).*/
-            when('/d3test', {
-                templateUrl: 'partials/d3test.html',
-                controller: 'D3TestCtrl'
-            }).
             otherwise({
                 redirectTo: '/intro'
             });
