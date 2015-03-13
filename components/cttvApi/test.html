@@ -20,6 +20,13 @@
       console.log("RESP:");
       console.log(resp);
       });
+
+      api.call("http://beta.targetvalidation.org/api/latest/association?datastructure=tree")
+      .then(function (resp) {
+      resp = JSON.parse(resp.text);
+      console.log("NEW RESP:");
+      console.log(resp);
+      })
       
     </script>
   </body>

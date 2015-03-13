@@ -74,8 +74,8 @@ var bubblesView = function () {
         //                 return pack.nodes(conf.data.data());
         //             }
 	circle = svg.selectAll("circle")
-	    // .data(packData, function (d) {
-	    // 	return d[conf.key];
+	// .data(packData, function (d) {
+	// 	return d[conf.key];
 	// })
 	    .data(packData)
             .enter()
@@ -412,5 +412,4 @@ var bubblesView = function () {
     return render;
 };
 
-bubblesView.node = tree_node;
 module.exports = bubblesView;

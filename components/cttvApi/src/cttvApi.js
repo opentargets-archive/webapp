@@ -1,8 +1,8 @@
-//var nets = require("nets");
-var httpplease = require("httpplease");
+var http = require("httpplease");
 var promises = require('httpplease-promises');
 var Promise = require('es6-promise').Promise
-http = httpplease.use(promises(Promise));
+var json = require("httpplease/plugins/json");
+http = http.use(json).use(promises(Promise))
 
 var cttvApi = function () {
     // This was needed when authentication was included in the elasticsearch api
@@ -51,7 +51,7 @@ var cttvApi = function () {
 	    opts.push("size=" + obj.size);
 	}
 	if (obj.q != null) {
-	    opts.push("q=" + obj.size);
+	    opts.push("q=" + obj.q);
 	}
 	if (obj.format != null) {
 	    opts.push("format=" + obj.format);

@@ -3,335 +3,186 @@
 /* Directives */
 angular.module('cttvDirectives', [])
 
-    // .directive('cttvTargetAssociationsTable', function () {
-	
-    // })
-
-    .directive('cttvTargetAssociations', function () {
-
-	function processData (data) {
-	    var root = data;
-	    var therapeuticAreas = data.children;
-
-	    for (var i=0; i<therapeuticAreas.length; i++) {
-	    	var tA = therapeuticAreas[i];
-	    	var taChildren = tA.children;
-		if (taChildren === undefined) {
-		    continue;
-		}
-	    	var newChildren = [];
-	    	for (var j=0; j<taChildren.length; j++) {
-	    	    var taChild = taChildren[j];
-	    	    var taLeaves = bubblesView().node(taChild).get_all_leaves();
-	    	    for (var k=0; k<taLeaves.length; k++) {
-	    		newChildren.push(taLeaves[k].data());
-	    	    }
-	    	}
-	    	tA.children = newChildren;
-	    }
-	    return data;
-	};
-
-	var api = cttvApi();
-
+    .directive('cttvTargetAssociationsTable', function () {
 	return {
-	    restrict: 'EA',
-	    scope: {
-		displaytype : "="
-	    },
+	    restrict: 'E',
+	    scope: {},
 	    link: function (scope, elem, attrs) {
-
-		// function lookDatasource (arr, dsName) {
-		    // for (var i=0; i<arr.length; i++) {
-		    // 	var ds = arr[i];
-		    // 	if (ds.datasource === dsName) {
-		    // 	    return {
-		    // 		"count": ds.evidence_count,
-		    // 		"score": ds.association_score
-		    // 	    };
-		    // 	}
-		    // }
-		    // return {
-		    // 	"count": 0,
-		    // 	"score": 0
-		    // };
-		// }
-
-		var bubblesUrl = api.url.associations({
-		    gene: attrs.target,
-		    datastructure : "tree"
-		});
-
-		// CALL TO BUILD THE BUBBLES
-		// This is different from the call to build the table because in the table we want to show intermediate nodes
-		api.call(bubblesUrl)
-		    .then(function (resp) {
-			resp = JSON.parse(resp.text);
-			// update general information in parent scope
-			scope.$parent.nresults = resp.total;
-			scope.$parent.$apply(); // <- Is there any other $apply in the $parent below??
-
-			// Filter
-			// Therapeutic areas accordion
-			var nodeData = bubblesView.node(resp.data);
-			var taNodes = nodeData.children();
-			var therapeuticAreas = _.map(taNodes, function (node) {
-			    var d = node.data();
-			    var name = d.label;
-			    if (d.label.length > 20) {
-				name = d.label.substring(0, 18) + "...";
-			    }
-			    var leaves = bubblesView.node(d).get_all_leaves();
-			    var diseases = _.map(leaves, function (n) {
-				var d = n.data();
-				return {
-				    "name" : d.label,
-				    "efo"  : d.efo_code,
-				    "score" :d.association_score
-				};
-			    });
-			    var diseasesSorted = _.sortBy(diseases, function (d) {
-				return -d.score;
-			    });
-			    return {
-				"name": name,
-				"score": diseases.length,
-				"efo": d.efo_code,
-				"diseases" : diseasesSorted
-			    };
-			});
-			var therapeuticAreasSorted = _.sortBy(therapeuticAreas, function (a) {
-			    return -a.score;
-			});
-			scope.$parent.therapeuticAreas = therapeuticAreasSorted;
-			// scope.$parent.selectRoot = function () {
-			//     bView.focus(nodeData);
-			//     bView.select(nodeData);
-			// };
-			scope.$parent.selectTherapeuticArea = function (efo) {
-			    var taNode = nodeData.find_node(function (node) {
-				return node.property("efo_code") === efo;
-			    });
-			    if (taNode.property("focused") === true) {
-				taNode.property("focused", undefined);
-				bView.focus(nodeData);
-			    } else {
-				taNode.property("focused", true);
-				// release prev focused node:
-				bView.focus().property("focused", undefined);
-				// focus on the new node
-				bView.focus(taNode);
-			    }
-			    bView.select(nodeData);
-			};
-			scope.$parent.selectDisease = function (efo) {
-			    // var nodes = nodeData.find_all(function (node) {
-			    // 	return node.property("efo_code") === efo;
-			    // });
-			    // var lca;
-			    // if (nodes.length > 1) {
-			    // 	lca = tree.lca(nodes);
-			    // } else {
-			    // 	lca = nodes[0].parent();
-			    // }
-			    var node = nodeData.find_node(function (n) {
-				return n.property("efo_code") === efo;
-			    });
-			    // bView.focus(lca);
-			    if (node.property("selected") === true) {
-				node.property("selected", undefined);
-				bView.select(nodeData);
-			    } else {
-				node.property("selected", true);
-				bView.select([node]);
-			    }
-			};
-			
-
-			// Update the parent scope (needed in the directive)
-			scope.$parent.$apply();
-
-			////// Bubbles View
-			// viewport Size
-			var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-			var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-
-			// Element Coord
-			var elemOffsetTop = elem[0].parentNode.offsetTop;
-
-			// BottomMargin
-			var bottomMargin = 50;
-
-			var diameter = viewportH - elemOffsetTop - bottomMargin;
-			processData(resp.data);
-			var bView = bubblesView()
-			    .data(bubblesView.node(resp.data))
-			    .value("association_score")
-			    .key("efo_code")
-			    .label("label")
-			    .diameter(diameter);
-			var ga = geneAssociations()
-			    .target(attrs.target);
-			
-			// Flower for the tooltips
-			// Only one flower is passed, so this means that only one tooltip can be shown at a time
-			var flower = flowerView()
-			    .fontsize(6)
-			    .diagonal(100);
-
-			ga(bView, elem[0].querySelector(".cttvBubbles"), flower);
+		scope.$watch(function () { return attrs.target }, function (val) {
+		    var api = cttvApi();
+		    var tableUrl = api.url.associations({
+			gene: attrs.target,
+			datastructure: "flat"
 		    });
-
-		var tableUrl = api.url.associations({
-		    gene: attrs.target,
-		    datastructure : "flat"
-		});
-		api.call(tableUrl)
-		    .then(function (resp) {
-			/////// TABLE VIEW
-			resp = JSON.parse(resp.text);
-
-			var newData = [];
-			var flowers = {};
-			for (var i=0; i<resp.data.length; i++) {
-			    var data = resp.data[i]
-			    if (data.efo_code === "cttv_disease") {
-				continue;
-			    }
-
-			    var datatypes = {};
-			    datatypes.genetic_association = _.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
-			    datatypes.somatic_mutation = _.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0;
-			    datatypes.known_drug = _.result(_.find(data.datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0;
-			    datatypes.rna_expression = _.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
-			    datatypes.affected_pathway = _.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
-			    datatypes.animal_model = _.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
-			    //var therapeuticArea = leaves[i].parent().property("label");
-
-			    var row = [];
-			    // Disease name
-			    var geneDiseaseLoc = "#/gene-disease?t=" + attrs.target + "&d=" + data.efo_code;
-			    row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
-			    // EFO (hidden)
-			    row.push(data.efo_code);
-			    // Therapeutic area
-			    //row.push(therapeuticArea || "");
-			    //row.push(data.therapeuticArea);
-			    row.push(data.therapeutic_area || "");
-			    // Association score
-			    row.push(data.association_score);
-			    // Genetic associations
-			    //row.push(lookDatasource (data.datatypes, "genetic_association"));
-			    row.push(datatypes.genetic_association);
-			    // Somatic mutations
-			    //row.push(lookDatasource (data.datatypes, "somatic_mutation"));
-			    row.push(datatypes.somatic_mutation);
-
-			    // Known drugs
-			    //row.push(lookDatasource (data.datatypes, "known_drug"));
-			    row.push(datatypes.known_drug);
-			    // Expression atlas
-			    //row.push(lookDatasource (data.datatypes, "rna_expression"));
-			    row.push(datatypes.rna_expression);
-			    // Reactome / Affected Pathways
-			    //row.push(lookDatasource (data.datatypes, "affected_pathway"));
-			    row.push(datatypes.affected_pathway);
-			    // Animal models
-			    //row.push(lookDatasource (data.datatypes, "animal_model"));
-			    row.push(datatypes.animal_model);
-			    // flower placeholder
-			    row.push("");
-			    var flowerData = [
-			    	{"value":datatypes.genetic_association,  "label":"Genetics"},
-			    	{"value":datatypes.somatic_mutation,  "label":"Somatic"},
-			    	{"value":datatypes.known_drug,  "label":"Drugs"},
-			    	{"value":datatypes.rna_expression,  "label":"RNA"},
-			    	{"value":datatypes.affected_pathway,  "label":"Pathways"},
-			    	{"value":datatypes.animal_model,  "label":"Models"}
-			    ];
-			    var flower = flowerView()
-				.values(flowerData)
-				.fontsize(6)
-				.diagonal(100);
-			    flowers[data.efo_code] = flower;
-			    newData.push(row);
-			}
-			var table = document.createElement("table");
-			table.className = "table table-stripped table-bordered";
-			elem[0].querySelector(".cttvTable").appendChild(table);
-
-			$(table).dataTable({
-			    "data": newData,
-			    "columns": [
-				{ "title": "Disease" },
-				{ "title": "EFO"},
-				{ "title": "Therapeutic area" },
-				{ "title": "Association score" },
-				{ "title": "Genetic associations" },
-				{ "title": "Somatic mutations" },
-				{ "title": "Known drugs" },
-				{ "title": "RNA expression" },
-				{ "title": "Affected pathways" },
-				{ "title": "Animal models" },
-				{ "title": "Association score breakdown", "orderable" : false }
-			    ],
-			    "columnDefs" : [
-				{
-				    "targets" : [1],
-				    "visible" : false
+		    api.call(tableUrl)
+			.then(function (resp) {
+			    resp = JSON.parse(resp.text);
+			    console.log("RESP FOR TABLES (IN DIRECTIVE): ");
+			    console.log(resp);
+			    var newData = [];
+			    var flowers = {};
+			    for (var i=0; i<resp.data.length; i++) {
+				var data = resp.data[i];
+				if (data.efo_code === "cttv_disease") {
+				    continue;
 				}
-			    ],
-			    "fnCreatedRow" : function (row, data, dataIndex) {
-				var div = document.createElement("div");
-				$(row).children("td:last-child").append(div);
-				flowers[data[1]](div);
-			    },
-			    "order" : [[3, "desc"]],
-			    "autoWidth": false,
-			    "lengthChange": false,
-			    "paging": true,
-			    "searching": true,
-			    "bInfo" : false,
-			    "ordering": true
+				var datatypes = {};
+				datatypes.genetic_association = _.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
+				datatypes.somatic_mutation = _.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0;
+				datatypes.known_drug = _.result(_.find(data.datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0;
+				datatypes.rna_expression = _.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
+				datatypes.affected_pathway = _.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
+				datatypes.animal_model = _.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
+				var row = [];
+				// Disease name
+				var geneDiseaseLoc = "#/gene-disease?t=" + attrs.target + "&d=" + data.efo_code;
+				row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
+				// EFO (hidden)
+				row.push(data.efo_code);
+				// Therapeutic area
+				row.push(data.therapeutic_area || "");
+				// Association score
+				row.push(data.association_score);
+				// Genetic association
+				row.push(datatypes.genetic_association);
+				// Somatic mutation
+				row.push(datatypes.somatic_mutation);
+				// Known drug
+				row.push(datatypes.known_drug);
+				// Expression atlas
+				row.push(datatypes.rna_expression);
+				// Affected pathway
+				row.push(datatypes.affected_pathway);
+				// Animal model
+				row.push(datatypes.animal_model);
+				// flower (placeholder)
+				row.push("");
+				var flowerData = [
+				    {"value":datatypes.genetic_association,  "label":"Genetics"},
+				    {"value":datatypes.somatic_mutation,  "label":"Somatic"},
+				    {"value":datatypes.known_drug,  "label":"Drugs"},
+				    {"value":datatypes.rna_expression,  "label":"RNA"},
+				    {"value":datatypes.affected_pathway,  "label":"Pathways"},
+				    {"value":datatypes.animal_model,  "label":"Models"}
+				];
+				var flower = flowerView()
+			            .values(flowerData)
+			            .fontsize(6)
+			            .diagonal(100);
+				flowers[data.efo_code] = flower;
+				newData.push(row);
+			    }
+			    var table = document.createElement("table");
+			    table.className = "table table-stripped table-bordered";
+			    elem[0].appendChild(table);
+			    $(table).dataTable({
+				"data": newData,
+				"columns": [
+				    { "title": "Disease" },
+				    { "title": "EFO"},
+				    { "title": "Therapeutic area" },
+				    { "title": "Association score" },
+				    { "title": "Genetic associations" },
+				    { "title": "Somatic mutations" },
+				    { "title": "Known drugs" },
+				    { "title": "RNA expression" },
+				    { "title": "Affected pathways" },
+				    { "title": "Animal models" },
+				    { "title": "Association score breakdown", "orderable" : false }
+				],
+				"columnDefs" : [
+				    {
+					"targets" : [1],
+					"visible" : false
+				    }
+				],
+				"fnCreatedRow" : function (row, data, dataIndex) {
+				    var div = document.createElement("div");
+				    $(row).children("td:last-child").append(div);
+				    flowers[data[1]](div);
+				},
+				"order" : [[3, "desc"]],
+				"autoWidth": false,
+				"lengthChange": false,
+				"paging": true,
+				"searching": true,
+				"bInfo" : false,
+				"ordering": true
+			    });
 			});
-		    });
-		
-		scope.$watch(function () { return attrs.display }, function (newVal, oldVal) {
-		    switch (newVal) {
-		    case "bubbles" :
-			elem[0].querySelector(".cttvTable").style.display = "none";
-			elem[0].querySelector(".cttvBubbles").style.display = "block";
-			document.querySelector(".cttv-facet").style.display = "block";
-			break;
-		    case "table" :
-			elem[0].querySelector(".cttvBubbles").style.display = "none";
-			elem[0].querySelector(".cttvTable").style.display = "block";
-			document.querySelector(".cttv-facet").style.display = "none";
-			break;
-		    }
 		});
 	    }
 	}
     })
 
-    .directive('cttvDiseaseAssociations', function () {
-	// function lookDatasource (arr, dsName) {
-	//     for (var i=0; i<arr.length; i++) {
-	// 	var ds = arr[i];
-	// 	if (ds.datasource === dsName) {
-	// 	    return {
-	// 		"count": ds.evidence_count,
-	// 		"score": ds.association_score
-	// 	    };
-	// 	}
-	//     }
-	//     return {
-	// 	"count": 0,
-	// 	"score": 0
-	//     };
-	// }
+    .directive('cttvTargetAssociationsBubbles', function () {
 	return {
-	    restrict: 'EA',
+	    restrict: 'E',
+	    scope: {
+	    },
+	    link: function (scope, elem, attrs) {
+		scope.$watch(function () {return attrs.target}, function (val) {
+		    ////// Bubbles View
+		    // viewport Size
+		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+
+		    // Element Coord
+		    var elemOffsetTop = elem[0].parentNode.offsetTop;
+
+		    // BottomMargin
+		    var bottomMargin = 50;
+
+		    var diameter = viewportH - elemOffsetTop - bottomMargin;
+		    //processData(resp.data);
+
+		    var api = cttvApi();
+		    var url = api.url.associations({
+		    	gene: attrs.target,
+		    	datastructure: "tree"
+		    })
+		    console.log("BUBBLES URL: " + url);
+		    api.call (url)
+		    	.then (function (resp) {
+			    scope.$parent.nresults=resp.body.total;
+			    scope.$parent.$apply();
+		    	    var data = resp.body.data;
+			    var ga = geneAssociations({
+				"bubblesView" : bubblesView(),
+				"flowerView" : flowerView().fontsize(6).diagonal(100),
+				//"cttvApi" : cttvApi(),
+				"tnt.tree.node" : tnt.tree.node,
+				"tnt.tooltip" : tnt.tooltip,
+				"_" : _
+			    })
+				.data(data)
+				.target(attrs.target)
+				.diameter(diameter);
+		    
+			    ga(elem[0]);
+			    //var therapeuticAreasSorted = ga(elem[0].querySelector(".cttvBubbles"));
+			    //     console.log("RETURNED THERAPEUTIC AREAS:");
+			    //     console.log(therapeuticAreasSorted);
+			    //     scope.$parent.therapeuticAreas = therapeuticAreasSorted;
+			    // }, true);
+			});
+		});
+	    }		    
+	}
+    })
+    .directive('cttvTargetAssociationsTree', function () {
+	return {
+	    restrict: 'E',
+	    scope: {},
+	    link: function (scope, elem, attrs) {
+
+	    }
+	}
+    })
+
+    .directive('cttvDiseaseAssociations', function () {
+	return {
+	    restrict: 'E',
 	    scope: {},
 	    link: function (scope, elem, attrs) {
 		var api = cttvApi();
@@ -441,7 +292,7 @@ angular.module('cttvDirectives', [])
     .directive('pmcCitationList', function () {
 	var pmc = require ('biojs-vis-pmccitation');
     	return {
-    	    restrict: 'EA',
+    	    restrict: 'E',
     	    templateUrl: "partials/pmcCitation.html",
     	    link: function (scope, elem, attrs) {
 		scope.$watch(function () { return attrs.pmids}, function (newPMIDs) {
@@ -507,7 +358,7 @@ angular.module('cttvDirectives', [])
 
     .directive('pmcCitation', function () {
 	return {
-	    restrict: 'EA',
+	    restrict: 'E',
 	    templateUrl: "partials/pmcCitation.html",
 	    link: function (scope, elem, attrs) {
 		var pmc = require ('biojs-vis-pmccitation');
@@ -529,7 +380,7 @@ angular.module('cttvDirectives', [])
 
     .directive('cttvTargetGenomeBrowser', function () {
 	return {
-	    restrict: 'EA',
+	    restrict: 'E',
 	    link: function (scope, elem, attrs) {
 		var w = elem[0].parentNode.offsetWidth - 40;
 		scope.$watch(function () {return attrs.target }, function (target) {
@@ -555,7 +406,7 @@ angular.module('cttvDirectives', [])
 
     .directive('ebiExpressionAtlasBaselineSummary', function () {
 	return {
-	    restrict: 'EA',
+	    restrict: 'E',
 	    link: function (scope, elem, attrs) {
 		scope.$watch(function () { return attrs.target }, function (target) {
 		    if (target === "") {

@@ -1,10 +1,15 @@
-var tooltip = require("tnt.tooltip");
+// var tooltip = require("tnt.tooltip");
+// var tnt_node = require("tnt.tree.node");
 
-var geneAssociations = function () {
+var geneAssociations = function (deps) {
     var config = {
-	target : ""
+	target : "",
+	diameter : 1000,
     };
 
+    // Check that all dependencies are there
+    checkDeps(deps, ["bubblesView", "flowerView", "cttvApi", "tnt.tree.node", "tnt.tooltip", "_"]);
+    
     // TODO: Move to cttvApi
     // This code is duplicated several times now (controllers, directives and components)
     function lookDatasource (arr, dsName) {
@@ -22,103 +27,47 @@ var geneAssociations = function () {
     	    "score": 0
     	};
     }
-    
-    var _ = function (bubblesView, div, flower) {
-    
-	var menu = d3.select(div)
-	    .append("div");
-	
-	// Zoom Select
-	// var zoomSelect = menu
-	//     .append("span")
-	//     .attr("class", "cttvGA_toplevelSelect")
-	//     .text("Find: ")
-	//     .append("select")
-	//     .on("change", function () {
-	// 	var n = this.value;
-	// 	if (n === "Root") {
-	// 	    bubblesView.focus(tree);
-	// 	    bubblesView.select(tree);
-	// 	    return;
-	// 	}
-	// 	var nodes = tree.find_all(function (node) {
-	// 	    return node.property("efo_code") === n;
-	// 	});
-	// 	var lca;
-	// 	if (nodes.length > 1) {
-	// 	    lca = tree.lca(nodes);
-	// 	} else {
-	// 	    lca = nodes[0].parent();
-	// 	}
-	// 	bubblesView.focus(lca);
-	// 	bubblesView.select(nodes);
-	//     });
 
-	// zoomSelect
-	//     .append("option")
-	//     .attr("selected", 1)
-	//     .attr("value","Root")
-	//     .text("None");
+    function render (data, div) {
+	config.root = deps["tnt.tree.node"](data);
+	var taNodes = config.root.children();
+	var therapeuticAreas = deps._.map(taNodes, function (node) {
+	    var d = node.data();
+	    var name = d.label;
+	    if (d.label.length > 20) {
+		name = d.label.substring(0, 18) + "...";
+	    }
+	    var leaves = node.get_all_leaves();
+	    var diseases = deps._.map(leaves, function (n) {
+		var d = n.data();
+		return {
+		    "name": d.label,
+		    "efo": d.efo_code,
+		    "score": d.association_score
+		};
+	    });
+	    var diseasesSorted = deps._.sortBy(diseases, function (d) {
+		return -d.score;
+	    });
+	    return {
+		"name": name,
+		"score": diseases.length,
+		"efo": d.efo_code,
+		"diseases": diseasesSorted
+	    };
+	});
+	var therapeuticAreasSorted = deps._.sortBy(therapeuticAreas, function (a) {
+	    return -a.score;
+	});
+	// Set up the bubbles view correctly
+	deps.bubblesView
+	    .data(config.root)
+	    .value("association_score")
+	    .key("efo_code")
+	    .label("label")
+	    .diameter(config.diameter);
 	
-	// // Highlight Select
-	// var highlightSelect = menu
-	//     .append("span")
-	//     .attr("class", "cttvGA_toplevelSelect")
-	//     .text("Highlight")
-	//     .append("select")
-	//     .on("change", function () {
-	// 	var n = this.value;
-	// 	var nodes = tree.find_all(function (node) {
-	// 	    return node.property("key") === n;
-	// 	});
-	// 	bubblesView.select(nodes);
-	//     });
-	// highlightSelect
-	//     .append("option")
-	//     .attr("value", "none")
-	//     .attr("selected", 1)
-	//     .text("None");
-
-	// // Switch between different structures
-	// Structure Select
-	// var structureSelect = menu
-	//     .append("span")
-	//     .text("Structure")
-	//     .append("select")
-	//     .on("change", function () {
-	// 	var n = this.value;
-	// 	switch (n) {
-	// 	case "EFO" :
-	// 	    //bubblesView.data(data1);
-	// 	    //bubblesView.update();
-	// 	    break;
-	// 	case "Simplified" :
-	// 	    //bubblesView.data(data2);
-	// 	    //bubblesView.update();
-	// 	    break;
-	// 	}
-	//     });
-	// structureSelect
-	//     .append("option")
-	//     .attr("value", "EFO")
-	//     .attr("selected", 1)
-	//     .text("EFO");
-	// structureSelect
-	//     .append("option")
-	//     .attr("value", "Simplified")
-	//     .text("Simplified EFO");
-	
-	var tree = bubblesView.data();
-	// tree.apply (function (node) {
-	//     if (node.is_leaf() && (node.property("label") !== undefined)) {
-	// 	zoomSelect.append("option")
-	// 	    .attr("value", node.property("efo_code"))
-	// 	    .text(node.property("label"));
-	//     }
-	    // highlightSelect.append("option")
-	    // 	.attr("value", node.property("key"))
-	    // 	.text(node.property("key"));
-    //});
+	var tree = deps.bubblesView.data();
 
 	// Tooltips
 	var bubble_tooltip = function (node) {
@@ -133,7 +82,7 @@ var geneAssociations = function () {
 	    var loc = "#/gene-disease?t=" + config.target + "&d=" + node.property("efo_code");
 	    obj.body="<div></div><a href=" + loc + ">View details</a>";
 
-	    var leafTooltip = tooltip.plain()
+	    var leafTooltip = deps["tnt.tooltip"].plain()
 		.id(1)
 		.width(180);
 
@@ -152,26 +101,152 @@ var geneAssociations = function () {
 		    {"value":lookDatasource(datatypes, "affected_pathway").score,  "label":"Pathways"},
 		    {"value":lookDatasource(datatypes, "animal_model").score,  "label":"Models"}
 		];
-		flower.values(flowerData)(this.select("div").node());
+		deps.flowerView.values(flowerData)(this.select("div").node());
 	    });
 	    
 	    leafTooltip.call(this, obj);
 	};
-	bubblesView
+	deps.bubblesView
 	    .onclick (bubble_tooltip);
-	    //.onclick (function (d) {bView.focus(bView.node(d))})
+	//.onclick (function (d) {bView.focus(bView.node(d))})
 	// Render
-	bubblesView(div);
+	deps.bubblesView(div.node());
+
+	//return therapeuticAreasSorted;
+    }
+    
+    // deps should include (bubblesView, flowerView, cttvApi, tnt.tree.node and tooltip)
+    var ga = function (div) {
+	var vis = d3.select(div)
+	    .append("div")
+	    .style("position", "relative");
+	if (config.data === undefined) {
+	    var api = deps.cttvApi;
+	    var url = api.url.associations({
+		gene: config.target,
+		datastructure: "tree"
+	    });
+	    api.call(url)
+		.then (function (resp) {
+		    //var data = JSON.parse(resp).data;
+		    var data = resp.body.data;
+		    processData(data);
+		    render(data, vis);
+		});
+	} else {
+	    render(config.data, vis);
+	}
     };
 
-    _.target = function (t) {
+    // process the data for bubbles display
+    function processData (data) {
+	var therapeuticAreas = data.children;
+
+	for (var i=0; i<therapeuticAreas.length; i++) {
+	    var tA = therapeuticAreas[i];
+	    var taChildren = tA.children;
+	    if (taChildren === undefined) {
+		continue;
+	    }
+	    var newChildren = [];
+	    for (var j=0; j<taChildren.length; j++) {
+		var taChild = taChildren[j];
+		var taLeaves = deps["tnt.tree.node"](taChild).get_all_leaves();
+		for (var k=0; k<taLeaves.length; k++) {
+		    newChildren.push(taLeaves[k].data());
+		}
+	    }
+	    tA.children = newChildren;
+	}
+	return data;
+    };
+    
+    ga.data = function (d) {
+    	if (!arguments.length) {
+    	    return config.data;
+    	}
+    	processData(d);
+	config.data = d;
+    	return this;
+    }
+    
+    // ga.root = function (node) {
+    // 	if (!arguments.length) {
+    // 	    return root;
+    // 	}
+    // 	root = node;
+    // 	return this;
+    // };
+	
+    ga.target = function (t) {
 	if (!arguments.length) {
 	    return config.target;
 	}
 	config.target = t;
 	return this;
     };
-    return _;
+
+    ga.diameter = function (d) {
+	if (!arguments.length) {
+	    return config.diameter;
+	}
+	config.diameter = d;
+	return this;
+    };
+    
+    ga.selectTherapeuticArea = function (efo) {
+	var taNode = config.root.find_node (function (node) {
+	    return node.property("efo_code") == efo;
+	});
+	if (taNode.property("focused") === true) {
+	    taNode.property("focused", undefined);
+	    deps.bubblesView.focus(config.root);
+	} else {
+	    taNode.property("focused", true);
+	    // release prev focused node
+	    deps.bubblesView.focus().property("focused", undefined);
+	    // focus the new node
+	    deps.bubblesView.focus(taNode);
+	}
+	deps.bubblesView.select(config.root);
+	return this;
+    };
+
+    ga.selectDisease = function (efo) {
+	// This code is for diseases with multiple parents
+	// var nodes = nodeData.find_all(function (node) {
+	//  return node.property("efo_code") === efo;
+	// });
+	// var lca;
+	// if (nodes.length > 1) {
+	//  lca = tree.lca(nodes);
+	// } else {
+	//  lca = nodes[0].parent();
+	// }
+	var dNode = nodeData.find_node (function (node) {
+	    return node.property("efo_code") === efo;
+	});
+	if (dNode.property("selected") === true) {
+	    node.property("selected", undefined);
+	    deps.bubblesView.select(config.root);
+	} else {
+	    dNode.property("selected", true);
+	    deps.bubblesView.select([node]);
+	}
+	return this;
+    }
+
+    function checkDeps (obj, depNames) {
+	var missing = [];
+	for (var i=0; i<depNames.length; i++) {
+	    if (typeof(obj[depNames[i]] === "undefined")) {
+		missing.push(depNames[i]);
+	    }
+	}
+	return missing;
+    }
+    
+    return ga;
 };
 
 module.exports = geneAssociations;

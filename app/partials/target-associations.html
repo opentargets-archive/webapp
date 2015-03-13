@@ -41,16 +41,18 @@
 	  </accordion>
 	</accordion-group>
       </accordion>
-
     </div>
 
     <div class="col-md-8">
-      <i class="fa fa-picture-o cttv-change-view" ng-click="setDisplay('bubbles')"></i>
-      <i class="fa fa-table cttv-change-view" ng-click="setDisplay('table')"></i>
-      <cttv-target-associations target="{{search.query}}" display="{{displaytype}}">
-	<div class="cttvBubbles"></div>
-	<div class="cttvTable"></div>
-      </cttv-target-associations>
+      <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('bubbles')"></i>
+      <i class="fa fa-table fa-2x cttv-change-view" ng-click="setDisplay('table')"></i>
+      <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('tree')"></i>
+      <cttv-target-associations-bubbles target="{{search.query}}" associations="{{associationData}}">
+      </cttv-target-associations-bubbles>
+      <cttv-target-associations-table style="display:none" target="{{search.query}}">
+      </cttv-target-associations-table>
+      <cttv-target-associations-tree style="display:none" target="{{search.query}}">
+      </cttv-target-associations-tree>
     </div>
   </div>
 </div>

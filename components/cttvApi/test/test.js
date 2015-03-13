@@ -71,6 +71,17 @@ describe('CTTV api', function () {
 			    done();
 			});
 		});
+		it ("parses the response to json automatically", function (done) {
+		    var url = cttvApiUrl.associations({gene: data.gene, datastructure: "tree"});
+		    myCttvApi.call(url)
+			.then(function (resp) {
+			    assert.isDefined(resp.body);
+			    assert.isObject(resp.body);
+			    assert.isDefined(resp.body.data);
+			    assert.isObject(resp.body.data);
+			    done();
+			});
+		});
 		it ("retrieves associations for a disease", function (done) {
 		    var url = cttvApiUrl.associations({efo: data.efo, datastructure: "flat"});
 		    myCttvApi.call(url)
@@ -88,16 +99,6 @@ describe('CTTV api', function () {
 	    describe ("filterby", function () {
 		it("exists", function () {
 		    assert.isDefined(cttvApiUrl.filterby);
-		});
-		it ("returns the correct url for genes", function () {
-		    var filterby = cttvApiUrl.filterby({gene : data.gene});
-		    assert.strictEqual(filterby, "http://193.62.52.228/api/latest/filterby?gene=ENSG00000157764");
-		    // assert.strictEqual(filterby, "http://cttv:75djkwty4805hye@127.0.0.1:8008/api/latest/filterby?gene=ENSG00000157764");
-		});
-		it ("returns the correct url mixed values", function () {
-		    var filterbyUrl = cttvApiUrl.filterby({gene:data.gene, efo:data.efo, datastructure:"simple"});
-		    assert.strictEqual(filterbyUrl, "http://193.62.52.228/api/latest/filterby?efo=EFO_0000621&gene=ENSG00000157764&datastructure=simple");
-		    //assert.strictEqual(filterbyUrl, "http://cttv:75djkwty4805hye@127.0.0.1:8008/api/latest/filterby?efo=EFO_0000621&gene=ENSG00000157764&datastructure=simple");
 		});
 	    });
 	});

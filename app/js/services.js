@@ -32,12 +32,8 @@ angular.module('cttvServices', []).
 
         // the request configuration object.
         // Here we set the default values, then populate the rest in the callAPI function
-        // var req = {
-        //     withCredentials: true,
-        //     headers: {
-        //         'Authorization' : 'Basic Y3R0djpkajhtaXhpamswNGpwZGc='
-        //     }
-        // }
+//        var req = {
+//        }
 
 
         /* 
@@ -71,7 +67,13 @@ angular.module('cttvServices', []).
 	    // console.log(queryObject);
 
             // set common stuff
-            var req = {};   // this must be initialized for every call!!!
+            var req = {
+	        headers: {
+                    //'Authorization' : 'Basic ='
+		    'X-Auth-Token' : "Y3R0djpkajhtaXhpamswNGpwZGc"
+		}
+	    };   // this must be initialized for every call!!!
+
             req.method = cttvAPI.API_DEFAULT_METHOD;
             req.cache = true;   // set request to use caching
             if( queryObject.params && queryObject.params.method ){
