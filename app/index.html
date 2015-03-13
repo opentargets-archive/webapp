@@ -43,17 +43,10 @@
 
 <body>
 
-      <!-- 
-      <div style="width:100%; background:#0D3774; height:3px">
-        <div style="float:left; width:33.3%; background:#ED4F27; height:3px"></div>
-        <div style="float:left; width:33.3%; background:#5C9538; height:3px"></div>
-      </div>
-      -->
-
       <div style="width:100%; background:#FFF; padding-bottom:70px">
       <!-- Masthead (search) -->
         
-        <div class="masthead" ng-show="location.path()!=='/intro'" ng-controller="MastheadCtrl">
+        <div class="masthead" ng-show="location.path()!=='/intro'" ng-controller="MastheadCtrl" ng-cloak>
           <div class="container">
             <div class="row">
 
@@ -66,12 +59,14 @@
             <div class="col-xs-10" ng-controller="SearchBoxCtrl">
               <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
                 <fieldset>
-                  <div class="" style="position:relative"> 
-                  
+                  <div class="form-group has-feedback" style="position:relative"> 
+          
 
+            
+                    <!-- Search box + search button -->
                     <div class="input-group">
-                      
-                      <input type="text" placeholder="Search for gene or disease" class="form-control ng-valid-maxlength ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+
+                      <input type="text" placeholder="Search for gene or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
                       <div class="input-group-btn">
                         <button type="submit" class="btn btn-primary">
@@ -81,10 +76,11 @@
 
                     </div>
                     
+                    <!-- Search in progress spinner -->
+                    <span class="text-lowlight form-control-feedback" style="right:40px" ng-show="search.progress" ><i class="fa fa-circle-o-notch fa-spin"></i></span>
 
                     <!-- Suggestions box -->
                     <div cttv-search-suggestions></div>
-                    <!-- End suggestions box -->
 
 
                     <span class="small">
@@ -96,15 +92,6 @@
                     </span>
                     
 
-                    <!-- Error messages -->
-                    <!-- again, TODO later
-                    <label class="control-label has-error ng-hide" for="query-text" ng-show="query.submitted &amp;&amp; (queryForm.text.$error.required || queryForm.text.$error.minlength)">
-                      Your query is too short
-                    </label>
-                    <label class="control-label ng-hide" for="query-text" ng-show="query.submitted &amp;&amp; (queryForm.text.$error.maxlength)">
-                      Your query is too long
-                    </label>
-                    -->
                   </div>
                 </fieldset>
               </form>
@@ -155,22 +142,24 @@
       <div class="footer">
         <div class="container"> 
           <div class-"row">
-            <div class="col-sm-4">
-              <h6>INFO</h6>
+            <div class="col-sm-3">
+              <h6 style="color:#FFF">INFO</h6>
               <p>CTTV Core Beta Version 0.1.0</p>
             </div>
-            <!-- <div class="col-sm-3">
-              <h6>SUPPORT</h6>
-            </div> -->
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <h6>PARTNERS</h6>
               <p><a href="http://www.ebi.ac.uk">EBI</a></p>
               <p><a href="http://www.sanger.ac.uk">Sanger</a></p>
               <p><a href="http://www.gsk.com">GSK</a></p>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
               <h6>SUPPORT</h6>
-              <p><span class="fa fa-envelope"></span> <a href="mailto:support@targetvalidation.org?Subject=CTTV%20Core%20Platform%20-%20help%20request">support<span class="fa fa-at"></span>targetvalidation.org</a></p>
+              <p>
+                <a href="#/faq"><i class="fa fa-question-circle"></i> FAQs</a><br />
+                <span class="fa fa-envelope"></span> <a href="mailto:support@targetvalidation.org?Subject=CTTV%20Core%20Platform%20-%20help%20request">support<span class="fa fa-at"></span>targetvalidation.org</a></p>
+            </div>
+            <div class="col-sm-3">
+              <h6>CONTACT</h6>
               <h6>Centre for Therapeutic Target Validation</h6>
               <p>
                 <span class="fa fa-globe"></span> <a href="http://www.targetvalidation.org">http://www.targetvalidation.org</a><br />
