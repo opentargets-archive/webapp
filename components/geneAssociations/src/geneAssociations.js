@@ -28,7 +28,8 @@ var geneAssociations = function (deps) {
     	};
     }
 
-    function render (data, div) {
+    function render (div) {
+	var data = config.data;
 	config.root = deps["tnt.tree.node"](data);
 	var taNodes = config.root.children();
 	var therapeuticAreas = deps._.map(taNodes, function (node) {
@@ -131,10 +132,11 @@ var geneAssociations = function (deps) {
 		    //var data = JSON.parse(resp).data;
 		    var data = resp.body.data;
 		    processData(data);
-		    render(data, vis);
+		    config.data = data;
+		    render(vis);
 		});
 	} else {
-	    render(config.data, vis);
+	    render(vis);
 	}
     };
 

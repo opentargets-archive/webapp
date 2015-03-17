@@ -1,7 +1,7 @@
 {
-  "name": "cttv.bubblesView",
+  "name": "cttv.geneAssociationsTree",
   "version": "0.0.0",
-  "description": "CTTV bubbles view for the target evidence",
+  "description": "Tree based CTTV associations view for a given target",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -10,13 +10,15 @@
     "test": "gulp test"
   },
   "keywords": [
-    "cttv"
+    "cttv",
+    "disease"
   ],
   "author": "Miguel Pignatelli",
   "license": "Apache-2.0",
   "devDependencies": {
     "browserify": "~4.2.0",
     "chai": "^1.9.1",
+    "cttv.api": "file:../cttvApi",
     "gulp": "^3.8.8",
     "gulp-browserify": "^0.5.0",
     "gulp-gzip": "0.0.8",
@@ -41,10 +43,7 @@
     "karma-safari-launcher": "^0.1.1",
     "mkdirp": "^0.5.0",
     "mocha": "~1.20.1",
-    "node-sass": "^2.0.0-beta",
-    "phantomjs": "^1.9.13",
     "requirejs": "^2.1.15",
-    "tnt.tree.node": "../../../tnt.tree.node",
     "uglify-js": "~2.4.15",
     "watchify": "^1.0.2"
   }

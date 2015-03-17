@@ -18,6 +18,7 @@ module.exports = function(config) {
 	  'test/chai.js',
 	  'test/setup.js',
 	  'build/cttv.bubblesView.js',
+	  'node_modules/tnt.tree.node/build/tnt.tree.node.js',
 	  {pattern: 'test/*.html', watched: true, served: true, included: false},
 	  'test/test.js'
     ],

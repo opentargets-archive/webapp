@@ -19,13 +19,6 @@ describe ('bubbleView', function () {
 	beforeEach (function () {
 	    view = bubblesView();
 	});
-	
-	describe ('node', function () {
-	    it ('Has the node property', function () {
-		assert.isDefined(bubblesView.node);
-		assert.isFunction(bubblesView.node);
-	    });
-	});
 
 	describe ("key", function () {
 	    it('has the "key" method', function () {
@@ -191,7 +184,7 @@ describe ('bubbleView', function () {
 		   };
 	    view = bubblesView()
 		.value ("value")
-		.data(bubblesView.node(data));
+		.data(tnt.tree.node(data));
 	});
 	it ('Renders', function () {
 	    view (fixture.el);

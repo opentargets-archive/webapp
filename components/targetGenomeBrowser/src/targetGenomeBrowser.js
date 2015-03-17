@@ -1,6 +1,6 @@
-var tooltip = require("tnt.tooltip");
+//var tooltip = require("tnt.tooltip");
 
-var cttv_genome_browser = function() {
+var cttv_genome_browser = function(deps) {
     "use strict";
 
     // Display elements options that can be overridden by setters
@@ -170,7 +170,7 @@ var cttv_genome_browser = function() {
 	
 	// Tooltip on genes
 	var gene_tooltip = function (gene) {
-	    var t = tooltip.table()
+	    var t = deps["tnt.tooltip"].table()
 		.id(1);
 	    var event = d3.event;
 	    var elem = this;

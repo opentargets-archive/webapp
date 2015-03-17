@@ -33,16 +33,21 @@ angular.module('cttvControllers')
 	    case "bubbles" :
 		$("cttv-target-associations-bubbles").css("display", "block");
 		$("cttv-target-associations-table").css("display", "none");
+		$("cttv-target-associations-tree").css("display", "none");
 		$(".cttv-facet").css("display", "block");
 		break;
 	    case "table" :
 		$("cttv-target-associations-bubbles").css("display", "none");
 		$("cttv-target-associations-table").css("display","block");
+		$("cttv-target-associations-tree").css("display", "none");
 		$(".cttv-facet").css("display", "none");
 		break;
-	    // case "tree" :
-	    // 	$();
-	    // 	break;
+	    case "tree" :
+		$("cttv-target-associations-bubbles").css("display", "none");
+		$("cttv-target-associations-table").css("display","none");
+		$("cttv-target-associations-tree").css("display", "block");
+		$(".cttv-facet").css("display", "none");
+	    	break;
 	    }
 	    
 	}

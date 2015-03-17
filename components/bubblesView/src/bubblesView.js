@@ -83,7 +83,7 @@ var bubblesView = function () {
 	    .attr("class", function (d) {
 		return "bubblesView_" + d[conf.key] + "_" + conf.divId;
 	    })
-	    .classed("node", true)
+	    .classed("bubblesViewNode", true)
 
 	    .on("dblclick", function () {
 		if (d3.event.defaultPrevented) {
@@ -169,10 +169,10 @@ var bubblesView = function () {
 	// Moving nodes
 	circle
 	    //.attr("class", "node")
-	    .classed ("leaf", function (d) {
+	    .classed ("bubblesViewLeaf", function (d) {
 		return !d.children;
 	    })
-	    .classed ("root", function (d) {
+	    .classed ("bubblesViewRoot", function (d) {
 		return !d._parent;
 	    })
 	    .transition()

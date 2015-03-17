@@ -134,7 +134,6 @@ angular.module('cttvDirectives', [])
 		    var bottomMargin = 50;
 
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
-		    //processData(resp.data);
 
 		    var api = cttvApi();
 		    var url = api.url.associations({
@@ -175,7 +174,43 @@ angular.module('cttvDirectives', [])
 	    restrict: 'E',
 	    scope: {},
 	    link: function (scope, elem, attrs) {
+		scope.$watch(function () {return attrs.target}, function (val) {
+		    ////// Tree view
+		    // viewport Size
+		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
 
+		    // Element Coord
+		    var elemOffsetTop = elem[0].parentNode.offsetTop;
+
+		    // BottomMargin
+		    var bottomMargin = 50;
+
+		    var diameter = viewportH - elemOffsetTop - bottomMargin;
+		    console.log("DIAMETER FOR TREE: " + diameter);
+
+		    var api = cttvApi();
+		    var url = api.url.associations({
+			gene: attrs.target,
+			datastructure: "tree"
+		    })
+		    console.log("TREE URL: " + url);
+		    api.call(url)
+			.then (function (resp) {
+			    var data = resp.body.data;
+			    var gat = geneAssociationsTree({
+				"tnt.tree" : tnt.tree,
+				"flowerView" : flowerView(),
+				// "cttvApi"    : cttvApi(),
+				"tnt.tooltip" : tnt.tooltip
+			    })
+				.data(data)
+				.diameter(900)
+				.target(attrs.target);
+			    gat(elem[0]);
+			});
+
+		});
 	    }
 	}
     })
@@ -396,7 +431,9 @@ angular.module('cttvDirectives', [])
 			.gene(attrs.target)
 			.context(20)
 			.width(w);
-		    var theme = targetGenomeBrowser()
+		    var theme = targetGenomeBrowser({
+			"tnt.tooltip" : tnt.tooltip
+		    })
 			.chr(scope.chr);
 		    theme(gB, document.getElementById("cttvTargetGenomeBrowser"), cttvApi());
 		});
