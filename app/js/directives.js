@@ -121,6 +121,15 @@ angular.module('cttvDirectives', [])
 	    scope: {
 	    },
 	    link: function (scope, elem, attrs) {
+		var ga;
+		scope.$watch(function () { return attrs.focus }, function (val) {
+		    if (val === "None") {
+			return;
+		    }
+		    if (ga) {
+			ga.selectTherapeuticArea(val);
+		    }
+		});
 		scope.$watch(function () {return attrs.target}, function (val) {
 		    ////// Bubbles View
 		    // viewport Size
@@ -144,9 +153,8 @@ angular.module('cttvDirectives', [])
 		    api.call (url)
 		    	.then (function (resp) {
 			    scope.$parent.nresults=resp.body.total;
-			    scope.$parent.$apply();
 		    	    var data = resp.body.data;
-			    var ga = geneAssociations({
+			    ga = geneAssociations({
 				"bubblesView" : bubblesView(),
 				"flowerView" : flowerView().fontsize(6).diagonal(100),
 				//"cttvApi" : cttvApi(),
@@ -157,13 +165,18 @@ angular.module('cttvDirectives', [])
 				.data(data)
 				.target(attrs.target)
 				.diameter(diameter);
-		    
+			    // Sort the data based on number of children and association score of disease
+			    var dataSorted = _.sortBy(data.children, function (d) {
+				return -d.children.length
+			    });
+			    for (var i=0; i<data.children.length; i++) {
+				data.children[i].children = _.sortBy (data.children[i].children, function (d) {
+				    return -d.association_score;
+				});
+			    }
+			    scope.$parent.therapeuticAreas = dataSorted;
 			    ga(elem[0]);
-			    //var therapeuticAreasSorted = ga(elem[0].querySelector(".cttvBubbles"));
-			    //     console.log("RETURNED THERAPEUTIC AREAS:");
-			    //     console.log(therapeuticAreasSorted);
-			    //     scope.$parent.therapeuticAreas = therapeuticAreasSorted;
-			    // }, true);
+			    scope.$parent.$apply();
 			});
 		});
 	    }		    
@@ -226,11 +239,10 @@ angular.module('cttvDirectives', [])
 		});
 		api.call(url)
 		    .then(function (resp) {
-			resp = JSON.parse(resp.text);
-			scope.$parent.nresults = resp.total;
+			scope.$parent.nresults = resp.body.total;
 			scope.$parent.$apply();
 
-			var data = resp.data;
+			var data = resp.body.data;
 			var newData = new Array(data.length);
 			//var flowers = new Array(data.length);
 			var flowers = {};

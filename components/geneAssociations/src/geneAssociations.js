@@ -1,5 +1,6 @@
 // var tooltip = require("tnt.tooltip");
 // var tnt_node = require("tnt.tree.node");
+var events = require("biojs-events");
 
 var geneAssociations = function (deps) {
     var config = {
@@ -115,7 +116,7 @@ var geneAssociations = function (deps) {
 
 	//return therapeuticAreasSorted;
     }
-    
+
     // deps should include (bubblesView, flowerView, cttvApi, tnt.tree.node and tooltip)
     var ga = function (div) {
 	var vis = d3.select(div)
@@ -139,7 +140,7 @@ var geneAssociations = function (deps) {
 	    render(vis);
 	}
     };
-
+    
     // process the data for bubbles display
     function processData (data) {
 	var therapeuticAreas = data.children;
@@ -198,7 +199,7 @@ var geneAssociations = function (deps) {
     
     ga.selectTherapeuticArea = function (efo) {
 	var taNode = config.root.find_node (function (node) {
-	    return node.property("efo_code") == efo;
+	    return node.property("efo_code") == efo || node.property("name") == efo;
 	});
 	if (taNode.property("focused") === true) {
 	    taNode.property("focused", undefined);

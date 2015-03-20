@@ -5,6 +5,7 @@
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="../build/cttv.geneAssociations.js"></script>
   <script src="cttv.bubblesView.js"></script>
+  <script src="../node_modules/cttv.api/build/cttv.api.js"></script>
   <script src="data.js"></script>
 </head>
 
@@ -16,7 +17,10 @@
     .value("values")
     .key("key")
     .diameter(800);
-    var ga = geneAssociations();
-    ga(bView, document.getElementById("mydiv"));
+    var ga = geneAssociations({
+    "bubblesView": bView,
+    "cttvApi" : cttvApi
+    });
+    ga(document.getElementById("mydiv"));
   </script>
 </body>

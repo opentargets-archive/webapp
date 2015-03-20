@@ -15,14 +15,32 @@ angular.module('cttvControllers')
 	    label : $location.search().label
 	};
 	$scope.nresults = 0;
+	$scope.focusEFO = "cttv_source";
 
+	var currentFocus = "cttv_disease";
+	var navopen = true;
+	
 	$scope.selectTherapeuticArea = function (efo) {
-	    console.log("SELECTED THERAPEUTIC AREA: " + efo);
-	}
+	    if (efo === currentFocus) {
+		currentFocus = "cttv_disease";
+	    } else {
+		currentFocus = efo;
+	    }
+	    $scope.focusEFO = currentFocus;
+	};
+
+	$scope.selectNavigation = function () {
+	    navopen = !navopen;
+	    if (navopen) {
+		$scope.focusEFO = currentFocus;
+	    } else {
+		$scope.focusEFO = "cttv_disease";
+	    }
+	};
 
 	$scope.selectDisease = function (efo) {
-	    console.log("SELECTED DISEASE: " + efo);
-	}
+	    $scope.highlightEFO = efo;
+	};
 	
 	// Display toggle (vis / table)
 	$scope.displaytype = "bubbles";
