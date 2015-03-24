@@ -119,13 +119,21 @@ angular.module('cttvDirectives', [])
 	return {
 	    restrict: 'E',
 	    scope: {
+		"onFocus": '&onFocus',
+		"onLoad": '&onLoad'
 	    },
 	    link: function (scope, elem, attrs) {
+		// event receiver on focus
+		addEventListener('bubblesViewFocus', function (e) {
+		    // TODO: This is effectively clicking in the nav bar
+		    $("#cttv_targetAssociations_navBar_" + attrs.focus).click();
+		}, true);
 		var ga;
 		scope.$watch(function () { return attrs.focus }, function (val) {
 		    if (val === "None") {
 			return;
 		    }
+
 		    if (ga) {
 			ga.selectTherapeuticArea(val);
 		    }
@@ -155,7 +163,12 @@ angular.module('cttvDirectives', [])
 			    scope.$parent.nresults=resp.body.total;
 		    	    var data = resp.body.data;
 			    ga = geneAssociations({
-				"bubblesView" : bubblesView(),
+				"bubblesView" : bubblesView().breadcrumsClick(function (d) {
+				    var focusEvent = new CustomEvent("bubblesViewFocus", {
+				        "detail" : d
+				    });
+				    this.dispatchEvent(focusEvent);
+				}),
 				"flowerView" : flowerView().fontsize(6).diagonal(100),
 				//"cttvApi" : cttvApi(),
 				"tnt.tree.node" : tnt.tree.node,

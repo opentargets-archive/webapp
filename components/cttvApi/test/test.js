@@ -18,6 +18,26 @@ describe('CTTV api', function () {
 	    it ("exists", function () {
 		assert.isDefined (cttvApiUrl);
 	    });
+	    describe ("requestToken", function () {
+		it ("exists", function () {
+		    assert.isDefined(cttvApiUrl.requestToken);
+		});
+		////// DON'T COMMIT AND PUSH THIS TEST!
+		it ("retrieves a token", function (done) {
+		    myCttvApi.prefix ("http://127.0.0.1:8008/api/latest/");
+		    var url = myCttvApi.url.requestToken({
+			appname: "cttv-web-app",
+			secret: "2J23T20O31UyepRj7754pEA2osMOYfFK"
+		    });
+		    console.log(url);
+		    myCttvApi.call(url)
+			.then (function (resp) {
+			    console.log("RESP:::::::::::::::");
+			    console.log(resp);
+			})
+		    done();
+		})
+	    });
 	    describe ("search", function () {
 		it ("exists", function () {
 		    assert.isDefined (cttvApiUrl.search);
@@ -133,6 +153,21 @@ describe('CTTV api', function () {
 			assert.isArray(resp.data);
 			done();
 		    })
+	    });
+	});
+
+	describe ("prefix", function () {
+	    it ("exists", function () {
+		assert.isDefined (myCttvApi.prefix);
+	    });
+	    it ("is a function", function () {
+		assert.isFunction (myCttvApi.prefix);
+	    });
+	    it ("sets the prefixes for endpoints", function () {
+		var prefix = 'http://127.0.0.1:8008/';
+		myCttvApi.prefix(prefix);
+		var url = myCttvApi.url.search({q: data.gene});
+		assert.match(url, /^http:\/\/127.0.0.1:8008\//);
 	    });
 	});
 

@@ -9,6 +9,21 @@ $dim : 1000px;
     width: $dim;
 }
 
+#cttv_bubblesView_breadcrums {
+    position: absolute;
+    left: 5px;
+    top: 10px;
+}
+
+.cttv_bubblesView_breadcrumLabel {
+    padding-right: 10px;
+}
+
+.cttv_bubblesView_link {
+    color : blue;
+    cursor : pointer;
+}
+
 @mixin circle-fill ($color, $opacity) {
     fill : $color;
     fill-opacity : $opacity;

@@ -15,6 +15,9 @@ var bubblesView = function () {
 	divId : undefined,
 	onclick : function () {},
 	duration: 1000,
+	breadcrumsClick : function () {
+	    render.focus(conf.data);
+	}
 	//labelOffset : 10
     };
 
@@ -22,6 +25,7 @@ var bubblesView = function () {
     var highlight; // undef by default
     var view;
     var svg;
+    var breadcrums;
     var pack;
     var nodes;
     var circle;
@@ -41,6 +45,13 @@ var bubblesView = function () {
      */ 
     var render = function(div) {
 	conf.divId = d3.select(div).attr("id");
+
+	// breadcrums-like navigation
+	breadcrums = d3.select(div)
+	    .append("div")
+	    .attr("id", "cttv_bubblesView_breadcrums")
+	    .attr("height","50");
+	
 	svg = d3.select(div)
 	    .append("svg")
 	    .attr("class", "cttv_bubblesView")
@@ -338,6 +349,41 @@ var bubblesView = function () {
 	if (!arguments.length) {
 	    return focus;
 	}
+
+	// Breadcrums
+	var up = [];
+	node.upstream (function (ancestor) {
+	    if (ancestor.parent() === undefined) {
+		up.push(ancestor.property(conf.label) || "root");
+	    } else {
+		up.push(node.property(conf.label));
+	    }
+	});
+	up.reverse();
+
+	var breadLabels = breadcrums.selectAll("span")
+	    .data(up, function (d) {
+		return d;
+	    });
+
+	breadLabels
+	    .enter()
+	    .append("span")
+	    .attr("class", "cttv_bubblesView_breadcrumLabel")
+	    .text(function (d) {
+		return d;
+	    });
+	breadLabels
+	    .classed ("cttv_bubblesView_link", false)
+	    .on ("click", null);
+
+	breadLabels.exit().remove();
+
+	breadcrums.selectAll(":not(:last-child)")
+	    .classed ("cttv_bubblesView_link", true)
+	    .on("click", conf.breadcrumsClick)
+
+	// Focus
 	focus = node;
 	var focusData = focus.data();
 	var transition = d3.transition()
@@ -348,6 +394,14 @@ var bubblesView = function () {
 		    focusTo(i(t));
 		};
 	    });
+	return this;
+    };
+
+    render.breadcrumsClick = function (cb) {
+	if (!arguments.length) {
+	    return conf.breadcrumsClick;
+	}
+	conf.breadcrumsClick = cb;
 	return this;
     };
     
@@ -407,7 +461,7 @@ var bubblesView = function () {
     // 	return this;
     // };
 
-    render.node = tree_node;
+    // render.node = tree_node;
     
     return render;
 };

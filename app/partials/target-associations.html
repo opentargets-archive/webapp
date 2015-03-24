@@ -2,7 +2,7 @@
 
 <div>
   <h3><span view-title>Diseases associated with {{search.label}}</span> <small>({{search.query}}) <a href="#/target/{{search.query}}">View gene profile</a></small></h3>
-  <div class="h6">Found {{nresults}} evidence</div>
+  <div class="h6">Found {{results.evidenceCount}} evidence</div>
 
   <div class="row">
     
@@ -31,7 +31,7 @@
 	    <!-- </accordion-group> -->
 	    <accordion-group ng-repeat="ta in therapeuticAreas" class="therapeuticArea">
 	      <accordion-heading>
-		<span ng-click="selectTherapeuticArea(ta.name)">{{ta.label}} ({{ta.children.length}})</span>
+		<span id="cttv_targetAssociations_navBar_{{ta.name}}" ng-click="selectTherapeuticArea(ta.name)">{{ta.label}} ({{ta.children.length}})</span>
 	      </accordion-heading>
 	      <accordion>
 		<accordion-group ng-repeat="d in ta.children" class="cttv-accordion-leaf">
@@ -50,7 +50,7 @@
       <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('bubbles')"></i>
       <i class="fa fa-table fa-2x cttv-change-view" ng-click="setDisplay('table')"></i>
       <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('tree')"></i>
-      <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}">
+      <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" on-load="">
       </cttv-target-associations-bubbles>
       <cttv-target-associations-table style="display:none" target="{{search.query}}">
       </cttv-target-associations-table>
