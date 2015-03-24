@@ -23,6 +23,12 @@ var cttvApi = function () {
 
     var _ = {};
     _.call = function (myurl) {
+	// No auth
+	if ((!credentials.token) && (!credentials.appname) && (!credentials.secret)) {
+	    return jsonHttp.get({
+		"url" : myurl
+	    });
+	}
 	console.log("CREDENTIALS TOKEN IS: " + credentials.token);
 	if (!credentials.token) {
 	    var tokenUrl = _.url.requestToken(credentials);
@@ -53,7 +59,7 @@ var cttvApi = function () {
 	    return jsonHttp.get({
 		"url" : myurl,
 		"headers": {
-		    "X-Auth-token": credentials.token
+		    "Auth-token": credentials.token
 		}
 	    });
 	}
