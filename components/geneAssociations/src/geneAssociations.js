@@ -1,6 +1,5 @@
 // var tooltip = require("tnt.tooltip");
 // var tnt_node = require("tnt.tree.node");
-var events = require("biojs-events");
 
 var geneAssociations = function (deps) {
     var config = {
