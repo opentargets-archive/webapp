@@ -162,33 +162,34 @@ angular.module('cttvDirectives', [])
 		    	.then (function (resp) {
 			    scope.$parent.nresults=resp.body.total;
 		    	    var data = resp.body.data;
-			    ga = geneAssociations({
-				"bubblesView" : bubblesView().breadcrumsClick(function (d) {
+
+			    var bView = bubblesView().breadcrumsClick(function (d) {
 				    var focusEvent = new CustomEvent("bubblesViewFocus", {
 				        "detail" : d
 				    });
 				    this.dispatchEvent(focusEvent);
-				}),
-				"flowerView" : flowerView().fontsize(6).diagonal(100),
-				//"cttvApi" : cttvApi(),
-				"tnt.tree.node" : tnt.tree.node,
-				"tnt.tooltip" : tnt.tooltip,
-				"_" : _
-			    })
+			    });
+
+			    var fView = flowerView()
+				.fontsize(6)
+				.diagonal(100);
+			    
+			    ga = geneAssociations()
 				.data(data)
 				.target(attrs.target)
 				.diameter(diameter);
 			    // Sort the data based on number of children and association score of disease
 			    var dataSorted = _.sortBy(data.children, function (d) {
-				return -d.children.length
+				return d.children ? -d.children.length : 0;
 			    });
+
 			    for (var i=0; i<data.children.length; i++) {
 				data.children[i].children = _.sortBy (data.children[i].children, function (d) {
 				    return -d.association_score;
 				});
 			    }
 			    scope.$parent.therapeuticAreas = dataSorted;
-			    ga(elem[0]);
+			    ga(bView, fView, elem[0]);
 			    scope.$parent.$apply();
 			});
 		});
