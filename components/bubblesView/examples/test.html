@@ -12,10 +12,11 @@
     <script src="data.js"></script>
     <div id="mydiv"></div>
     <script>
+      console.log(bubblesView);
       var view = bubblesView()
       .onclick (function (d) {view.focus(d)})
-      .diameter(600)
-      .data(bubblesView.node(data1))
+      .diameter(600);
+      console.log(view);
       var mytheme = theme();
       mytheme(view, document.getElementById("mydiv"));
       // view(document.getElementById("mydiv"));

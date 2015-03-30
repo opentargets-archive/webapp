@@ -42,7 +42,7 @@ var bubblesView = function () {
     
     /*
      * Render valid JSON data
-     */ 
+     */
     var render = function(div) {
 	conf.divId = d3.select(div).attr("id");
 
@@ -71,8 +71,7 @@ var bubblesView = function () {
 	return render;
     };
 
-    render.update = function () {
-	
+    render.update = function () {	
         // If we don't pass any data, return out of the element
         if (!conf.data) return;
 	var packData = pack.nodes(conf.data.data());
@@ -85,10 +84,16 @@ var bubblesView = function () {
         //                 return pack.nodes(conf.data.data());
         //             }
 	circle = svg.selectAll("circle")
-	// .data(packData, function (d) {
-	// 	return d[conf.key];
-	// })
-	    .data(packData)
+	    .data(packData, function (d) {
+		if (d._parent === undefined) {
+		    return d[conf.key];
+		}
+		return d[conf.key] + "_" + d._parent[conf.key];
+	    });
+	//.data(packData)
+
+	// new circles
+	circle
             .enter()
 	    .append("circle")
 	    .attr("class", function (d) {
@@ -108,6 +113,7 @@ var bubblesView = function () {
 		}
 		conf.onclick.call(this, tree_node(d));
 	    });
+	circle.exit().remove();
 
 	// // titles
 	// svg.selectAll("title")
@@ -123,20 +129,28 @@ var bubblesView = function () {
         //newNodes.append("text");
 
 	path = svg.selectAll("path")
-	    // .data(packData, function (d) {
-	    // 	return d._id;
-	// })
-	    .data(packData)
+	    .data(packData, function (d) {
+		if (d._parent === undefined) {
+		    return d[conf.key];
+		}
+		return d[conf.key] + "_" + d._parent[conf.key];
+	    })
+	//.data(packData)
 	    .enter()
 	    .append("path")
 	    .attr("id", function(d,i){return "s"+i;})
 	    .attr("fill", "none");
 
 	label = svg.selectAll("text")
-	    // .data(packData, function (d) {
-	    // 	return d._id;
-	// })
-	    .data(packData)
+	    .data(packData, function (d) {
+		if (d._parent === undefined) {
+		    return d[conf.key];
+		}
+		return d[conf.key] + "_" + d._parent[conf.key];
+	    });
+	//.data(packData)
+
+	var newLabels = label
 	    .enter()
 	    .append("text")
 	    .attr("class", function (d) {
@@ -153,20 +167,33 @@ var bubblesView = function () {
 	    })
 	    .attr("fill", "navy")
 	    .attr("font-size", 10)
-	    .attr("text-anchor", "middle")
+	    .attr("text-anchor", "middle");
+
+	// Create new labels on therapeutic areas
+	newLabels
 	    .each(function (d, i) {
 		if (d.children) {
 		    d3.select(this)
 			.append("textPath")
 			.attr("xlink:href", function () {
-			    return "#s"+i;
+			    return "#s" + i;
 			})
 			.attr("startOffset", "50%")
 			.text(function () {
 			    return d[conf.label] ? d[conf.label].substring(0, Math.PI*d.r/8) : "";
 			});
-		} else {
+		}
+	    });
+
+	label.exit().remove();
+	
+	// Move labels
+	label
+	    .each(function (d, i) {
+		if (!d.children) {
 		    d3.select(this)
+			.transition()
+			.duration(conf.duration)
 			.attr("dy", ".3em")
 			.attr("x", function (d) { return d.x; })
 			.attr("y", function (d) { return d.y; })
@@ -188,7 +215,9 @@ var bubblesView = function () {
 	    })
 	    .transition()
 	    .duration(conf.duration)
-	    .attr("cx", function (d) { return d.x; })
+	    .attr("cx", function (d) {
+		return d.x;
+	    })
 	    .attr("cy", function (d) { return d.y; })
 	    .attr("r", function (d) { return d.r; });
             // .attr("transform", function(d) {
@@ -226,7 +255,8 @@ var bubblesView = function () {
 	var d = conf.data.data();
 	view = [d.x, d.y, d.r*2];
 	//focusTo([d.x, d.y, d.r*2]);
-	render.focus (conf.data);
+	//render.focus (conf.data);
+	focus = conf.data;
     };
 
     ////////////////////////
@@ -462,7 +492,6 @@ var bubblesView = function () {
     // };
 
     // render.node = tree_node;
-    
     return render;
 };
 
