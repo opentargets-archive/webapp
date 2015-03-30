@@ -225,16 +225,15 @@ angular.module('cttvDirectives', [])
 		    api.call(url)
 			.then (function (resp) {
 			    var data = resp.body.data;
-			    var gat = geneAssociationsTree({
-				"tnt.tree" : tnt.tree,
-				"flowerView" : flowerView(),
-				// "cttvApi"    : cttvApi(),
-				"tnt.tooltip" : tnt.tooltip
-			    })
+			    var fView = flowerView()
+				.fontsize(6)
+				.diagonal(100);
+
+			    var gat = geneAssociationsTree()
 				.data(data)
 				.diameter(900)
 				.target(attrs.target);
-			    gat(elem[0]);
+			    gat(fView, elem[0]);
 			});
 
 		});

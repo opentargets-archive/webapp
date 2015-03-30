@@ -1,10 +1,13 @@
-var geneAssociationsTree = function (deps) {
-    // deps are: ["tnt.tree", "flowerView", "cttv.api", "tnt.tooltip"]
+var tnt_tree = require("tnt.tree");
+var tnt_tooltip = require("tnt.tooltip");
+
+var geneAssociationsTree = function () {
     "use strict";
 
     var config = {
 	data : undefined,
-	diameter : 1000
+	diameter : 1000,
+	cttvApi : undefined
     };
     
     var scale = d3.scale.quantize()
@@ -28,10 +31,10 @@ var geneAssociationsTree = function (deps) {
     }
     
 
-    function render (div) {
+    function render (flowerView, div) {
 	var data = config.data;
-	var treeVis = deps["tnt.tree"]();
-
+	var treeVis = tnt_tree();
+    
 	// tooltips
 	var nodeTooltip = function (node) {
 	    var obj = {};
@@ -75,7 +78,7 @@ var geneAssociationsTree = function (deps) {
 		});
 	    }
 
-	    var t = deps["tnt.tooltip"].list()
+	    var t = tnt_tooltip.list()
 		.id(1)
 		.width(180);
 	    // Hijack tooltip's fill callback
@@ -93,7 +96,7 @@ var geneAssociationsTree = function (deps) {
 		    {"value":lookDatasource(datatypes, "affected_pathway").score,  "label":"Pathways"},
 		    {"value":lookDatasource(datatypes, "animal_model").score,  "label":"Models"}
 		]
-		deps.flowerView
+		flowerView
 		    .diagonal(150)
 		    .values(flowerData)(this.select("div").node());
 	    });
@@ -101,35 +104,34 @@ var geneAssociationsTree = function (deps) {
 	    t.call(this, obj);
 	}
 
-	//console.log(treeVis.node_display().size(8));
 	treeVis
 	    .data(config.data)
-	    .node_display(deps["tnt.tree"].node_display.circle()
+	    .node_display(tnt_tree.node_display.circle()
 	    		  .size(8)
 	    		  .fill(function (node) {
 	    		      return scale(node.property("association_score"));
 	    		  })
 	    		 )
 	    .on_click(nodeTooltip)
-	    .label(deps["tnt.tree"].label.text()
-		   .text(function (node) {
-		       if (node.is_leaf()) {
-			   var diseaseName = node.property("label");
-			   if (diseaseName.length > 30) {
-			       diseaseName = diseaseName.substring(0,30) + "...";
-			   }
-			   return diseaseName
-		       }
-		       return "";
-		   })
-		   .fontsize(14)
-		  )
-	    .layout(deps["tnt.tree"].layout.radial()
-		    .width(config.diameter)
-		    .scale(false)
-		   );
+	    .label(tnt_tree.label.text()
+	    	   .text(function (node) {
+	    	       if (node.is_leaf()) {
+	    		   var diseaseName = node.property("label");
+	    		   if (diseaseName.length > 30) {
+	    		       diseaseName = diseaseName.substring(0,30) + "...";
+	    		   }
+	    		   return diseaseName
+	    	       }
+	    	       return "";
+	    	   })
+	    	   .fontsize(14)
+	    	  )
+	    .layout(tnt_tree.layout.radial()
+	    	    .width(config.diameter)
+	    	    .scale(false)
+	    	   );
+
 	treeVis(div.node());
-	console.log(d3.selectAll(".tnt_tree_node"));
 	d3.selectAll(".tnt_tree_node")
 	    .append("title")
 	    .text(function (d) {
@@ -139,13 +141,13 @@ var geneAssociationsTree = function (deps) {
     }
     
     // deps: tree_vis, flower
-    var theme = function (div) {
+    var theme = function (flowerView, div) {
 	var vis = d3.select(div)
 	    .append("div")
 	    .style("position", "relative");
 
-	if ((config.data === undefined) && (config.target !== undefined)) {
-	    var api = deps.cttvApi;
+	if ((config.data === undefined) && (config.target !== undefined) && (config.cttvApi !== undefined)) {
+	    var api = config.cttvApi;
 	    var url = api.url.associations({
 		gene : config.target,
 		datastructure : "tree"
@@ -153,10 +155,10 @@ var geneAssociationsTree = function (deps) {
 	    api.call(url)
 		.then (function (resp) {
 		    config.data = resp.body.data;
-		    render(vis);
+		    render(flowerView, vis);
 		});
 	} else {
-	    render(vis);
+	    render(flowerView, vis);
 	}
     };
 
@@ -177,6 +179,14 @@ var geneAssociationsTree = function (deps) {
 	config.target = t;
 	return this;
     };
+
+    theme.cttvApi = function (api) {
+	if (!arguments.length) {
+	    return config.cttvApi;
+	}
+	config.cttvApi = api;
+	return this;
+    };
     
     // data is object
     theme.data = function (d) {
@@ -189,3 +199,5 @@ var geneAssociationsTree = function (deps) {
 
     return theme;
 };
+
+module.exports = exports = geneAssociationsTree;

@@ -5,8 +5,7 @@
   <link rel="stylesheet" href="../node_modules/cttv.flowerView/build/flowerView.css" />
   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="../node_modules/tnt.tree/build/tnt.tree.js"></script>
-  <script src="../src/geneAssociationsTree.js"></script>
-  <script src="../node_modules/tnt.legend/build/tnt.legend.min.js"></script>
+  <script src="../build/cttv.geneAssociationsTree.js"></script>
   <script src="../node_modules/cttv.api/build/cttv.api.js"></script>
   <script src="../node_modules/cttv.flowerView/build/cttv.flowerView.js"></script>
   <script src="../node_modules/tnt.tooltip/build/tnt.tooltip.js"></script>
@@ -14,23 +13,5 @@
 
 <body>
   <div id="mydiv" style="position:relative"></div>
-  <script>
-    <!-- var api = cttvApi(); -->
-    <!-- api.call (api.url.associations({ -->
-    <!-- gene: "ENSG00000157764", -->
-    <!-- datastructure: "tree" -->
-    <!-- })) -->
-    <!-- .then (function (resp) { -->
-    var theme = geneAssociationsTree({
-    "tnt.tree" : tnt.tree,
-    "flowerView" : flowerView(),
-    "cttvApi"    : cttvApi(),
-    "tnt.tooltip" : tnt.tooltip
-    })
-    //.data(resp.body.data);
-    .target("ENSG00000157764")
-    .diameter(1200)
-    theme(document.getElementById("mydiv"));
-    <!-- }); -->
-  </script>
+  <script src="test.js"></script>
 </body>
