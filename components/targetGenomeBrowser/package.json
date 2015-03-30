@@ -42,11 +42,11 @@
     "mkdirp": "^0.5.0",
     "mocha": "~1.20.1",
     "requirejs": "^2.1.15",
-    "tnt.genome": "file:../../../tnt.genome",
+    "font-awesome": "^4.3.0",
     "uglify-js": "~2.4.15",
     "watchify": "^1.0.2"
   },
   "dependencies": {
-    "font-awesome": "^4.3.0"
+    "tnt.genome": "0.0.0"
   }
 }
