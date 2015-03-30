@@ -19,6 +19,38 @@ angular.module('cttvControllers')
 
 	var currentFocus = "cttv_disease";
 	var navopen = true;
+	// $scope.dataTypes = [
+	//     {
+	// 	name: "genetic_association",
+	// 	selected: true
+	//     },
+	//     {
+	// 	name: "somatic_mutations",
+	// 	selected: true
+	//     },
+	//     {
+	// 	name: "known_drugs",
+	// 	selected: true
+	//     },
+	//     {
+	// 	name: "rna_expression",
+	// 	selected: true
+	//     },
+	//     {
+	// 	name: "affected_pathways",
+	// 	selected: true
+	//     },
+	//     {
+	// 	name: "animal_models",
+	// 	selected: false
+	//     }
+	// ]
+	$scope.currentDataTypes = ["genetic_associations","somatic_mutations","known_drugs", "rna_expression", "affected_pathways"];
+	$scope.dataTypes = ["genetic_associations","somatic_mutations","known_drugs", "rna_expression", "affected_pathways", "animal_models"];
+
+	$scope.filterDataType = function (dataType) {
+	    console.log(dataType + " datatype filter clicked");
+	}
 	
 	$scope.selectTherapeuticArea = function (efo) {
 	    if (efo === currentFocus) {
