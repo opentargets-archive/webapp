@@ -46,5 +46,10 @@
     "tnt.tree.node": "0.0.1",
     "uglify-js": "~2.4.15",
     "watchify": "^1.0.2"
+  },
+  "dependencies": {
+    "lodash": "^3.6.0",
+    "tnt.tooltip": "0.0.8",
+    "tnt.tree.node": "0.0.2"
   }
 }

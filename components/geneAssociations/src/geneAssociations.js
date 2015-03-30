@@ -1,14 +1,16 @@
-// var tooltip = require("tnt.tooltip");
-// var tnt_node = require("tnt.tree.node");
+var tnt_tooltip = require("tnt.tooltip");
+var tnt_node = require("tnt.tree.node");
+var _ = require("lodash");
 
-var geneAssociations = function (deps) {
+var geneAssociations = function () {
     var config = {
 	target : "",
 	diameter : 1000,
+	cttvApi : undefined
     };
 
-    // Check that all dependencies are there
-    checkDeps(deps, ["bubblesView", "flowerView", "cttvApi", "tnt.tree.node", "tnt.tooltip", "_"]);
+    var bubblesView;
+    var flowerView;
     
     // TODO: Move to cttvApi
     // This code is duplicated several times now (controllers, directives and components)
@@ -30,16 +32,16 @@ var geneAssociations = function (deps) {
 
     function render (div) {
 	var data = config.data;
-	config.root = deps["tnt.tree.node"](data);
+	config.root = tnt_node(data);
 	var taNodes = config.root.children();
-	var therapeuticAreas = deps._.map(taNodes, function (node) {
+	var therapeuticAreas = _.map(taNodes, function (node) {
 	    var d = node.data();
 	    var name = d.label;
 	    if (d.label.length > 20) {
 		name = d.label.substring(0, 18) + "...";
 	    }
 	    var leaves = node.get_all_leaves();
-	    var diseases = deps._.map(leaves, function (n) {
+	    var diseases = _.map(leaves, function (n) {
 		var d = n.data();
 		return {
 		    "name": d.label,
@@ -47,7 +49,7 @@ var geneAssociations = function (deps) {
 		    "score": d.association_score
 		};
 	    });
-	    var diseasesSorted = deps._.sortBy(diseases, function (d) {
+	    var diseasesSorted = _.sortBy(diseases, function (d) {
 		return -d.score;
 	    });
 	    return {
@@ -57,18 +59,18 @@ var geneAssociations = function (deps) {
 		"diseases": diseasesSorted
 	    };
 	});
-	var therapeuticAreasSorted = deps._.sortBy(therapeuticAreas, function (a) {
+	var therapeuticAreasSorted = _.sortBy(therapeuticAreas, function (a) {
 	    return -a.score;
 	});
 	// Set up the bubbles view correctly
-	deps.bubblesView
+	bubblesView
 	    .data(config.root)
 	    .value("association_score")
 	    .key("efo_code")
 	    .label("label")
 	    .diameter(config.diameter);
 	
-	var tree = deps.bubblesView.data();
+	var tree = bubblesView.data();
 
 	// Tooltips
 	var bubble_tooltip = function (node) {
@@ -83,7 +85,7 @@ var geneAssociations = function (deps) {
 	    var loc = "#/gene-disease?t=" + config.target + "&d=" + node.property("efo_code");
 	    obj.body="<div></div><a href=" + loc + ">View details</a>";
 
-	    var leafTooltip = deps["tnt.tooltip"].plain()
+	    var leafTooltip = tnt_tooltip.plain()
 		.id(1)
 		.width(180);
 
@@ -102,27 +104,28 @@ var geneAssociations = function (deps) {
 		    {"value":lookDatasource(datatypes, "affected_pathway").score,  "label":"Pathways"},
 		    {"value":lookDatasource(datatypes, "animal_model").score,  "label":"Models"}
 		];
-		deps.flowerView.values(flowerData)(this.select("div").node());
+		flowerView.values(flowerData)(this.select("div").node());
 	    });
 	    
 	    leafTooltip.call(this, obj);
 	};
-	deps.bubblesView
+	bubblesView
 	    .onclick (bubble_tooltip);
 	//.onclick (function (d) {bView.focus(bView.node(d))})
 	// Render
-	deps.bubblesView(div.node());
+	bubblesView(div.node());
 
 	//return therapeuticAreasSorted;
     }
 
-    // deps should include (bubblesView, flowerView, cttvApi, tnt.tree.node and tooltip)
-    var ga = function (div) {
+    var ga = function (bubbles, flower, div) {
+	bubblesView = bubbles;
+	flowerView = flower;
 	var vis = d3.select(div)
 	    .append("div")
 	    .style("position", "relative");
-	if (config.data === undefined) {
-	    var api = deps.cttvApi;
+	if ((config.data === undefined) && (config.cttvApi !== undefined)) {
+	    var api = config.cttvApi;
 	    var url = api.url.associations({
 		gene: config.target,
 		datastructure: "tree"
@@ -153,7 +156,7 @@ var geneAssociations = function (deps) {
 	    var newChildren = [];
 	    for (var j=0; j<taChildren.length; j++) {
 		var taChild = taChildren[j];
-		var taLeaves = deps["tnt.tree.node"](taChild).get_all_leaves();
+		var taLeaves = tnt_node(taChild).get_all_leaves();
 		for (var k=0; k<taLeaves.length; k++) {
 		    newChildren.push(taLeaves[k].data());
 		}
@@ -195,6 +198,14 @@ var geneAssociations = function (deps) {
 	config.diameter = d;
 	return this;
     };
+
+    ga.cttvApi = function (api) {
+	if (!arguments.length) {
+	    return config.cttvApi;
+	}
+	config.cttvApi = api;
+	return this;
+    };
     
     ga.selectTherapeuticArea = function (efo) {
 	var taNode = config.root.find_node (function (node) {
@@ -202,15 +213,15 @@ var geneAssociations = function (deps) {
 	});
 	if (taNode.property("focused") === true) {
 	    taNode.property("focused", undefined);
-	    deps.bubblesView.focus(config.root);
+	    bubblesView.focus(config.root);
 	} else {
 	    taNode.property("focused", true);
 	    // release prev focused node
-	    deps.bubblesView.focus().property("focused", undefined);
+	    bubblesView.focus().property("focused", undefined);
 	    // focus the new node
-	    deps.bubblesView.focus(taNode);
+	    bubblesView.focus(taNode);
 	}
-	deps.bubblesView.select(config.root);
+	bubblesView.select(config.root);
 	return this;
     };
 
@@ -230,22 +241,12 @@ var geneAssociations = function (deps) {
 	});
 	if (dNode.property("selected") === true) {
 	    node.property("selected", undefined);
-	    deps.bubblesView.select(config.root);
+	    bubblesView.select(config.root);
 	} else {
 	    dNode.property("selected", true);
-	    deps.bubblesView.select([node]);
+	    bubblesView.select([node]);
 	}
 	return this;
-    }
-
-    function checkDeps (obj, depNames) {
-	var missing = [];
-	for (var i=0; i<depNames.length; i++) {
-	    if (typeof(obj[depNames[i]] === "undefined")) {
-		missing.push(depNames[i]);
-	    }
-	}
-	return missing;
     }
     
     return ga;
