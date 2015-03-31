@@ -45,7 +45,8 @@
 
 <body>
 
-      <div style="width:100%; background:#FFF; padding-bottom:70px">
+      <div class="cttv-main-container">
+
       <!-- Masthead (search) -->
         
         <div class="masthead" ng-show="location.path()!=='/intro'" ng-controller="MastheadCtrl" ng-cloak>
@@ -55,20 +56,19 @@
             <div class="col-xs-2">
               <!-- CTTV logo -->
               <a href="#/"><img src="http://www.targetvalidation.org/sites/targetvalidation.org/files/CTTV_logo_webheader.png" width="113px" height="51px"/></a>
-              <!-- <h3 style="color:#FFF">C<i class="fa fa-circle-thin fa-sm"></i>re</h3> --> 
             </div>
             
             <div class="col-xs-10" ng-controller="SearchBoxCtrl">
               <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
                 <fieldset>
-                  <div class="form-group has-feedback" style="position:relative"> 
+                  <div class="has-feedback search-form"> 
           
 
             
                     <!-- Search box + search button -->
                     <div class="input-group">
 
-                      <input type="text" placeholder="Search for gene or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+                      <input type="text" placeholder="Search for target or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
                       <div class="input-group-btn">
                         <button type="submit" class="btn btn-primary">
@@ -79,7 +79,7 @@
                     </div>
                     
                     <!-- Search in progress spinner -->
-                    <span class="text-lowlight form-control-feedback" style="right:40px" ng-show="search.progress" ><i class="fa fa-circle-o-notch fa-spin"></i></span>
+                    <span class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress" ><i class="fa fa-circle-o-notch fa-spin"></i></span>
 
                     <!-- Suggestions box -->
                     <div cttv-search-suggestions></div>
@@ -105,15 +105,6 @@
 
       
       <!-- End Masthead -->
-
-      <!-- decoration ?? -->
-      <!-- 
-      <div style="width:100%">
-        <span style="width:33%; height:2px; background:#0D3774; display:block; float:left"></span>
-        <span style="width:34%; height:2px; background:#ED4F27; display:block; float:left"></span>
-        <span style="width:33%; height:2px; background:#5C9538; display:block; float:left"></span>
-      </div>
-      -->
 
       <div class="container">
 	<div class="cttv-beta-ribbon">BETA</div>
@@ -145,7 +136,7 @@
         <div class="container"> 
           <div class-"row">
             <div class="col-sm-3">
-              <h6 style="color:#FFF">INFO</h6>
+              <h6>INFO</h6>
               <p>CTTV Core Beta Version 0.1.0</p>
             </div>
             <div class="col-sm-3">
@@ -232,7 +223,7 @@
     <script type="text/javascript" src="js/directives.js"></script>
     <script type="text/javascript" src="js/search-box-controller.js"></script>
     <script type="text/javascript" src="js/target-associations-controller.js"></script>
-    <script type="text/javascript" src="js/gene-disease-controller.js"></script>
+    <script type="text/javascript" src="js/target-disease-controller.js"></script>
 
     <!-- DataTable stuff -->
     <script type="text/javascript" src="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>

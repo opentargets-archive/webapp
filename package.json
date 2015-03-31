@@ -30,7 +30,7 @@
     "shelljs": "^0.2.6"
   },
   "scripts": {
-    "preinstall": "(cd components/bubblesView/ && npm install); (cd components/cttvApi && npm install); (cd components/geneAssociations && npm install)",
+    "preinstall": "(cd components/bubblesView/ && npm install); (cd components/cttvApi && npm install); (cd components/geneAssociations && npm install); (cd components/flowerView && npm install); (cd components/geneAssociationsTree && npm install); (cd components/targetGenomeBrowser && npm install)",
     "postinstall": "bower install; node_modules/.bin/webdriver-manager update; (cd app && npm install)",
     "prestart": "npm install",
     "start": "http-server -a localhost -p 8000 -c-1",

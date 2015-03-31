@@ -63,16 +63,16 @@ angular.module('cttvServices', []).
             // req.method= queryObject.method || cttvAPI.API_DEFAULT_METHOD;
             // req.url= cttvAPI.API_URL + queryObject.operation;
             // req.params= queryObject.params;
-	    // console.log(cttvAPI.API_URL + queryObject.operation);
-	    // console.log(queryObject);
+            // console.log(cttvAPI.API_URL + queryObject.operation);
+            // console.log(queryObject);
 
             // set common stuff
             var req = {
-	        headers: {
+    	        headers: {
                     //'Authorization' : 'Basic ='
-		    'X-Auth-Token' : "Y3R0djpkajhtaXhpamswNGpwZGc"
-		}
-	    };   // this must be initialized for every call!!!
+                    // 'Auth-Token' : "Y3R0djpkajhtaXhpamswNGpwZGc"
+                }
+    	    };   // this must be initialized for every call!!!
 
             req.method = cttvAPI.API_DEFAULT_METHOD;
             req.cache = true;   // set request to use caching
@@ -86,8 +86,7 @@ angular.module('cttvServices', []).
             } else if (req.method.toLowerCase() === 'post'){
                 req.data = queryObject.params;
             }
-
-            return $http(req);
+            return $http(req); //.then(function(r){return r;}, function(r){return r;});
         }
 
 

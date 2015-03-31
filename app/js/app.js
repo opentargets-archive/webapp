@@ -32,8 +32,7 @@ config(['$routeProvider',
                 controller: 'AssociationsCtrl'
             }).
     	    when('/gene-disease', {
-                templateUrl: 'partials/geneDisease.html',
-                controller: 'GeneDiseaseCtrl'
+                redirectTo: '/target-disease'   // for backward compatibility
     	    }).
     	    when('/target/:id', {
         		templateUrl: 'partials/target.html',
@@ -50,6 +49,10 @@ config(['$routeProvider',
                 templateUrl: 'partials/evidence.html',
                 controller: 'EvidenceCtrl'
             }).*/
+            when('/target-disease', {
+                templateUrl: 'partials/target-disease.html',
+                controller: 'TargetDiseaseCtrl'
+            }).
             otherwise({
                 redirectTo: '/intro'
             });
