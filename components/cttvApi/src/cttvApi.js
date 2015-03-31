@@ -21,46 +21,54 @@ var cttvApi = function () {
 	secret : ""
     };
 
+    var getToken = function () {
+	var tokenUrl = _.url.requestToken(credentials);
+	return jsonHttp.get({
+	    "url": tokenUrl
+	})
+    }
+    
     var _ = {};
     _.call = function (myurl) {
 	// No auth
 	if ((!credentials.token) && (!credentials.appname) && (!credentials.secret)) {
+	    console.log("    CttvApi running in non-authentication mode");
 	    return jsonHttp.get({
 		"url" : myurl
 	    });
 	}
-	console.log("CREDENTIALS TOKEN IS: " + credentials.token);
 	if (!credentials.token) {
-	    var tokenUrl = _.url.requestToken(credentials);
-	    return http.get({
-		"url": tokenUrl
-	    }).then (function (resp) {
-		console.log("GOT A NEW TOKEN: " + resp.body);
-		credentials.token = resp.body.replace(/"/g, "");
-	    }).then (function () {
-		return jsonHttp.get({
-		    "url": myurl,
-		    "headers": {
-			//"withCredentials": true,
-			//"X-Auth-Token": credentials.token
-			//"auth-token": credentials.token
-			"X-Auth-token": "eyJhbGciOiJIUzI1NiIsImV4cCI6MTQyNjYxMjEyOSwiaWF0IjoxNDI2NjExNTI5fQ.IlcwVmN0VmprdFJQZE9iRE5UTGhVWlJVeGc3YU9VaEFKU0t0bnVuMmU2VTcyK0dhbkx5eVNJZnZ0MVVhVmljSCtIOHQ2NkpvMVFvMGQ2TjNEbEVhN0gwazRvTitoR0dQUWxQeE9pVFkweXFnPSI.iaa6E8u4Xx2IrSpuWqJnWjUc9jnrEinM_R0Uj6f34xY"
+	    console.log("No credential token, requesting one...");
+
+	    return getToken()
+		.then(function (resp) {
+		    console.log("   => Got a new token: " + resp.body.token);
+		    credentials.token = resp.body.token;
+		    //credentials.token = resp.text;
+		    var headers = {
+			"Auth-token": credentials.token
 		    }
+		    var myPromise = jsonHttp.get ({
+			"url": myurl,
+			"headers": headers
+		    }).catch(function (err) {
+			console.log(err);
+		    });
+		    return myPromise;
+
 		});
-	    });
-		//return _.call(myurl)
-		// return jsonHttp.get({
-		//      "url": myurl,
-		//      "headers": {
-		// 	 "X-Auth-token": credentials.token
-		//      }
-		// });
 	} else {
+	    console.log("Current token is: " + credentials.token);
+
 	    return jsonHttp.get({
 		"url" : myurl,
 		"headers": {
 		    "Auth-token": credentials.token
 		}
+	    }).catch(function (err) {
+		// Logic to deal with expired tokens
+		credentials.token = "";
+		return _.call(myrl);
 	    });
 	}
     };
@@ -90,7 +98,7 @@ var cttvApi = function () {
 	return this;
     };
 
-    // getter / setter for REST api prefix
+    // getter / setter for REST api prefix (TODO: Call it domain?)
     _.prefix = function (dom) {
 	if (!arguments.length) {
 	    return prefix;
