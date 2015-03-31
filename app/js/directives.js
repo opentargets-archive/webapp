@@ -456,11 +456,9 @@ angular.module('cttvDirectives', [])
 			.gene(attrs.target)
 			.context(20)
 			.width(w);
-		    var theme = targetGenomeBrowser({
-			"tnt.tooltip" : tnt.tooltip
-		    })
+		    var theme = targetGenomeBrowser()
 			.chr(scope.chr);
-		    theme(gB, document.getElementById("cttvTargetGenomeBrowser"), cttvApi());
+		    theme(gB, cttvApi(), document.getElementById("cttvTargetGenomeBrowser"));
 		});
 	    }
 	};
