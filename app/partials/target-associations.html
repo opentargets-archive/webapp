@@ -1,8 +1,8 @@
 <!-- search app / results -->
 
 <div>
-  <h3><span view-title>Diseases associated with {{search.label}}</span> <small>({{search.query}}) <a href="#/target/{{search.query}}">View gene profile</a></small></h3>
-  <div class="h6">Found {{results.evidenceCount}} evidence</div>
+  <h3><span view-title>Diseases associated with {{search.label}}</span> <small>({{search.query}}) <a href="#/target/{{search.query}}">View target profile</a></small></h3>
+  <div class="h6">Found {{nresults}} evidence</div>
 
   <div class="row">
     
@@ -10,12 +10,14 @@
       <accordion>
 	<accordion-group heading="Data types">
 	  <div class="checkbox">
-	    <label><input type="checkbox" disabled="disabled" checked><small>Genetic associations</small></label>
-	    <label><input type="checkbox" disabled="disabled" checked><small>Somatic mutations</small></label>
-	    <label><input type="checkbox" disabled="disabled" checked><small>Known drugs</small></label>
-    	    <label><input type="checkbox" disabled="disabled" checked><small>RNA expression</small></label>
-	    <label><input type="checkbox" disabled="disabled" checked><small>Affected pathways</small></label>
-	    <label><input type="checkbox" disabled="disabled" checked><small>Animals models</small></label>
+	    <label ng-repeat="dataType in dataTypes">
+	      <input type="checkbox"
+		     value="{{dataType}}"
+		     ng-click="filterDataType(dataType)"
+		     ng-checked="currentDataTypes.indexOf(dataType) > -1">
+	      {{dataType | clearUnderscores | upperCaseFirst}}
+
+	    </label>
 	  </div>	    
 	</accordion-group>
 

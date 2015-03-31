@@ -7,6 +7,7 @@ angular.module('cttvApp', [
     'ui.bootstrap',
     'cttvControllers',
     'cttvDirectives',
+    'cttvFilters',
     'angulartics',
     'angulartics.google.analytics',
     'viewhead'
