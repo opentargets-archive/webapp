@@ -6,7 +6,15 @@ var geneAssociations = function () {
     var config = {
 	target : "",
 	diameter : 1000,
-	cttvApi : undefined
+	cttvApi : undefined,
+	datatypes : {
+	    "genetic_association": "Genetics",
+	    "somatic_mutations": "Somatic",
+	    "known_drugs": "Drugs",
+	    "rna_expression": "RNA",
+	    "affected_pathways": "Pathways",
+	    "animal_models": "Models"
+	}
     };
 
     var bubblesView;
@@ -32,36 +40,7 @@ var geneAssociations = function () {
 
     function render (div) {
 	var data = config.data;
-	config.root = tnt_node(data);
-	var taNodes = config.root.children();
-	var therapeuticAreas = _.map(taNodes, function (node) {
-	    var d = node.data();
-	    var name = d.label;
-	    if (d.label.length > 20) {
-		name = d.label.substring(0, 18) + "...";
-	    }
-	    var leaves = node.get_all_leaves();
-	    var diseases = _.map(leaves, function (n) {
-		var d = n.data();
-		return {
-		    "name": d.label,
-		    "efo": d.efo_code,
-		    "score": d.association_score
-		};
-	    });
-	    var diseasesSorted = _.sortBy(diseases, function (d) {
-		return -d.score;
-	    });
-	    return {
-		"name": name,
-		"score": diseases.length,
-		"efo": d.efo_code,
-		"diseases": diseasesSorted
-	    };
-	});
-	var therapeuticAreasSorted = _.sortBy(therapeuticAreas, function (a) {
-	    return -a.score;
-	});
+
 	// Set up the bubbles view correctly
 	bubblesView
 	    .data(config.root)
@@ -95,15 +74,14 @@ var geneAssociations = function () {
 	    //Pass a new fill callback that calls the original one and decorates with flowers
 	    leafTooltip.fill(function (data) {
 		tableFill.call(this, data);
-		var datatypes = node.property("datatypes");
-		var flowerData = [
-		    {"value":lookDatasource(datatypes, "genetic_association").score,  "label":"Genetics"},
-		    {"value":lookDatasource(datatypes, "somatic_mutation").score,  "label":"Somatic"},
-		    {"value":lookDatasource(datatypes, "known_drug").score,  "label":"Drugs"},
-		    {"value":lookDatasource(datatypes, "rna_expression").score,  "label":"RNA"},
-		    {"value":lookDatasource(datatypes, "affected_pathway").score,  "label":"Pathways"},
-		    {"value":lookDatasource(datatypes, "animal_model").score,  "label":"Models"}
-		];
+		var nodeDatatypes = node.property("datatypes");
+		var flowerData = [];
+		for (datatype in config.datatypes) {
+		    if (config.datatypes.hasOwnProperty(datatype)) {
+			flowerData.push({
+			    "value": lookDatasource(nodeDatatypes, datatype).score, "label": config.datatypes[datatype]});
+		    }
+		}
 		flowerView.values(flowerData)(this.select("div").node());
 	    });
 	    
@@ -165,24 +143,18 @@ var geneAssociations = function () {
 	}
 	return data;
     };
-    
+
+    // Getters / Setters
     ga.data = function (d) {
     	if (!arguments.length) {
     	    return config.data;
     	}
     	processData(d);
 	config.data = d;
+	config.root = tnt_node(config.data);
     	return this;
     }
     
-    // ga.root = function (node) {
-    // 	if (!arguments.length) {
-    // 	    return root;
-    // 	}
-    // 	root = node;
-    // 	return this;
-    // };
-	
     ga.target = function (t) {
 	if (!arguments.length) {
 	    return config.target;
@@ -205,6 +177,22 @@ var geneAssociations = function () {
 	}
 	config.cttvApi = api;
 	return this;
+    };
+
+    ga.datatypes = function (dts) {
+    	if (!arguments.length) {
+    	    return config.datatypes;
+    	}
+    	config.datatypes = dts;
+    	return this;
+    };
+
+    // Other methods to interact with the bubblesView
+    ga.update = function (data) {
+	ga.data (data);
+	bubblesView
+	    .data(config.root);
+	bubblesView.update();
     };
     
     ga.selectTherapeuticArea = function (efo) {

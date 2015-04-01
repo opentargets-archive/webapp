@@ -68,6 +68,12 @@ var bubblesView = function () {
             .padding(1.5);
 
 	render.update();
+
+	var d = conf.data.data();
+	view = [d.x, d.y, d.r*2];
+	//focusTo([d.x, d.y, d.r*2]);
+	render.focus (conf.data);
+
 	return render;
     };
 
@@ -76,13 +82,6 @@ var bubblesView = function () {
         if (!conf.data) return;
 	var packData = pack.nodes(conf.data.data());
 
-	// if (conf.flat){
-	//     conf.data = conf.data.flatten();
-	//     return pack.nodes(conf.data.data()).filter(function(d) { return !d.children; });
-	// 		//return pack.nodes(conf.data.flatten().data()).filter(function(d) { return !d.children; });
-        //             } else {
-        //                 return pack.nodes(conf.data.data());
-        //             }
 	circle = svg.selectAll("circle")
 	    .data(packData, function (d) {
 		if (d._parent === undefined) {
@@ -134,12 +133,15 @@ var bubblesView = function () {
 		    return d[conf.key];
 		}
 		return d[conf.key] + "_" + d._parent[conf.key];
-	    })
+	    });
+	// new paths
+	path
 	//.data(packData)
 	    .enter()
 	    .append("path")
 	    .attr("id", function(d,i){return "s"+i;})
 	    .attr("fill", "none");
+
 
 	label = svg.selectAll("text")
 	    .data(packData, function (d) {
@@ -202,7 +204,11 @@ var bubblesView = function () {
 			});
 		}
 	    });
-	
+
+	path
+	    .attr("d", function (d) {
+		return describeArc(d.x, d.y+10, d.r, 160, -160);
+	    });
 
 	// Moving nodes
 	circle
@@ -224,12 +230,8 @@ var bubblesView = function () {
 	    // 	return "translate(" + d.x + "," + d.y + ")";
 	    // });
 
-	//	nodes.select("path")
-	path
-	    .attr("d", function (d) {
-		return describeArc(d.x, d.y+10, d.r, 160, -160);
-	    });
-	
+				   //	nodes.select("path")
+				   
 	//nodes.select("text")
 
 	
@@ -251,12 +253,6 @@ var bubblesView = function () {
 	//     .exit()
 	//     .remove();
 
-
-	var d = conf.data.data();
-	view = [d.x, d.y, d.r*2];
-	//focusTo([d.x, d.y, d.r*2]);
-	//render.focus (conf.data);
-	focus = conf.data;
     };
 
     ////////////////////////
