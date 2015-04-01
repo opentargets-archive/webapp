@@ -1,7 +1,7 @@
 'use strict';
 
 /* Directives */
-angular.module('cttvDirectives', [])
+angular.module('cttvDirectives')
 
     .directive('cttvTargetAssociationsBubbles', function () {
 	return {
