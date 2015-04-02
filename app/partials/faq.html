@@ -24,8 +24,19 @@
 				<h4>Where is the data coming from?</h4>
 				<p>The data in the CTTV Core platform comes from a number of different sources: <a href="http://www.ebi.ac.uk/fgpt/gwas/" target="_blank">GWAS</a>, <a href="http://www.uniprot.org" target="_blank">UniProt</a> and <a href="http://www.ebi.ac.uk/eva/?Home" target="_blank">European Variation Archive (EVA)</a>, <a href="http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/" target="_blank">COSMIC</a>, <a href="https://www.ebi.ac.uk/chembl/" target="_blank">CHEMBL</a>, <a href="http://www.ebi.ac.uk/gxa/home" target="_blank">Expression Atlas</a>, <a href="http://www.reactome.org" target="_blank">Reactome</a>, <a href="http://www.sanger.ac.uk/resources/databases/phenodigm/" target="_blank">Phenodigm</a></p>
 
-				<h4>How's the score calculated?</h4>
-				<p>This is how the score is calculated ... </p>
+				<h4>How's the association score calculated?</h4>
+				<p>The association score between a target and a disease is a numerical value indicating the confidence of their association.</p>
+				<p>The value is between a range of -1 and 1, where:
+				    <ul>
+				        <li> 1 - is the maximum confidence of an association between the gene and the disease</li>
+				        <li> 0 - there is no known association between the gene and the disease</li>
+				        <li>-1 - is the maximum confidence of a negative association between the gene and the disease</li>
+				    </ul>
+				</p>
+				<p>The association score is a number resulting from the combination of scores provided by the datasources for the target and disease taken into cosideration. The datasource scores range between -1 and 1, describing the confidence of the association according to the data provided by the datasource.</br>
+				   In the current implementation the association score is calculated as the maximum score available from any datasource. The datasource considered to calculate the association score can be filtered to customise the calculation.
+				</p>
+				<p>Please note than at the moment there are no negative associations listed, and the method to calculate the association and the datasource scores is temporary and will be revised in the future</p>
 
 			</div>
 			
