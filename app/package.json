@@ -9,8 +9,8 @@
     "cttv.Api": "file:../components/cttvApi",
     "cttv.bubblesView": "file:../components/bubblesView",
     "cttv.flowerView": "file:../components/flowerView",
-    "cttv.geneAssociations": "file:../components/geneAssociations",
-    "cttv.geneAssociationsTree": "file:../components/geneAssociationsTree",
+    "cttv.targetAssociations": "file:../components/targetAssociations",
+    "cttv.targetAssociationsTree": "file:../components/targetAssociationsTree",
     "cttv.targetGenomeBrowser": "file:../components/targetGenomeBrowser",
     "tnt.genome": "0.0.0"
   }

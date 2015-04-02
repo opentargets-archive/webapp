@@ -1,24 +1,23 @@
 {
-  "name": "cttv.geneAssociationsTree",
+  "name": "cttv.targetAssociations",
   "version": "0.0.0",
-  "description": "Tree based CTTV associations view for a given target",
+  "description": "CTTV associations view for a given target",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "prepublish": "gulp build-browser"
   },
   "keywords": [
-    "cttv",
-    "disease"
+    "cttv"
   ],
   "author": "Miguel Pignatelli",
   "license": "Apache-2.0",
   "devDependencies": {
     "browserify": "~4.2.0",
     "chai": "^1.9.1",
-    "cttv.api": "file:../cttvApi",
     "gulp": "^3.8.8",
     "gulp-browserify": "^0.5.0",
     "gulp-gzip": "0.0.8",
@@ -48,6 +47,8 @@
     "watchify": "^1.0.2"
   },
   "dependencies": {
-    "tnt.tree": "0.0.15"
+    "lodash": "^3.6.0",
+    "tnt.tooltip": "0.0.8",
+    "tnt.tree.node": "0.0.2"
   }
 }
