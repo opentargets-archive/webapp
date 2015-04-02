@@ -44,7 +44,7 @@ var geneAssociationsTree = function () {
 	    //obj.body="<div></div><a href=" + loc + ">View evidence details</a><br/><a href=''>Zoom on node</a>";
 	    obj.rows = [];
 	    obj.rows.push({
-		value : "<div></div>"
+		value : "<a class=cttv_flowerLink href=" + loc + "><div></div></a>"
 	    });
 	    obj.rows.push({
 		value: "<a href=" + loc + ">View evidence details</a>"
