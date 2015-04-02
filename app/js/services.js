@@ -68,10 +68,10 @@ angular.module('cttvServices', []).
 
             // set common stuff
             var req = {
-	        headers: {
+	        // headers: {
                     //'Authorization' : 'Basic ='
-		    'X-Auth-Token' : "Y3R0djpkajhtaXhpamswNGpwZGc"
-		}
+		    //'X-Auth-Token' : "Y3R0djpkajhtaXhpamswNGpwZGc"
+	        // }
 	    };   // this must be initialized for every call!!!
 
             req.method = cttvAPI.API_DEFAULT_METHOD;

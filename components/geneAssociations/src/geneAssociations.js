@@ -61,7 +61,7 @@ var geneAssociations = function () {
 	    var obj = {};
 	    var score = node.property("association_score");
 	    obj.header = node.property("label") + " (Association Score: " + score + ")";
-	    var loc = "#/gene-disease?t=" + config.target + "&d=" + node.property("efo_code");
+	    var loc = "#/evidence/" + config.target + "/" + node.property("efo_code");
 	    obj.body="<a class='cttv_flowerLink' href=" + loc + "><div></div></a><a href=" + loc + ">View evidence details</a>";
 
 	    var leafTooltip = tnt_tooltip.plain()

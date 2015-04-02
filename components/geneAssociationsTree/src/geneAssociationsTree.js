@@ -40,7 +40,7 @@ var geneAssociationsTree = function () {
 	    var obj = {};
 	    var score = node.property("association_score");
 	    obj.header = node.property("label") + " (Association score: " + score + ")";
-	    var loc = "#/gene-disease?t=" + config.target + "&d=" + node.property("efo_code");
+	    var loc = "#/evidence/" + config.target + "/" + node.property("efo_code");
 	    //obj.body="<div></div><a href=" + loc + ">View evidence details</a><br/><a href=''>Zoom on node</a>";
 	    obj.rows = [];
 	    obj.rows.push({

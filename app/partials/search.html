@@ -46,7 +46,7 @@
 		<div class="col-md-10">
 
 			<div ng-repeat="result in search.results.data" class="search-result">
-				<h4><a ng-href="#/{{result.type==='genedata'?'target-associations':'disease-associations'}}?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
+				<h4><a ng-href="#/{{result.type==='genedata'?'target':'disease'}}/{{result.id}}/associations">{{result.title}}</a></h4>
 				<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
 				<span class="search-matches text-lowlight">
 					<span ng-repeat="(key, val) in result.highlight"><span bind-html-unsafe="'<span style=\'color:#888\' title=\'Matching field and text\'>' + ( !$first ? ' ... ' : '') + key.split('_').join(' ') + ': </span>' + val.join(', ')"></span></span>

@@ -8,12 +8,22 @@ angular.module('cttvControllers')
  * Controller for the target associations page
  * It loads a list of associations for the given search
  */
-    .controller('AssociationsCtrl', ['$scope', '$location', '$log', function ($scope, $location, $log) {
-	$log.log('AssociationsCtrl()');
+    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', function ($scope, $location, $log) {
+	$log.log('targetAssociationsCtrl()');
+	var q = $location.path().split('/')[2];
 	$scope.search = {
-	    query : $location.search().q,
-	    label : $location.search().label
+	    query : q
 	};
+
+	// given a target id, get the name
+	var api = cttvApi();
+	var url = api.url.gene({'gene_id': q});
+	$log.log(url);
+	api.call(url)
+	    .then(function (resp) {
+		$scope.search.label = resp.body.approved_symbol;
+	    });
+	
 	$scope.nresults = 0;
 	$scope.focusEFO = "cttv_source";
 
@@ -75,6 +85,7 @@ angular.module('cttvControllers')
 	    }
 	    $scope.currentDataTypes=currentDataTypes;
 	}
+
 	
 	$scope.selectTherapeuticArea = function (efo) {
 	    if (efo === currentFocus) {

@@ -11,8 +11,8 @@
        * Controller for the Gene <-> Disease page
        * It loads the evidence for the given target <-> disease pair
     */
-    controller('GeneDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', function ($scope, $location, $log, cttvAPIservice) {
-        $log.log('GeneDiseaseCtrl()');
+    controller('targetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', function ($scope, $location, $log, cttvAPIservice) {
+        $log.log('targetDiseaseCtrl()');
         
         var dbs = {
             EXPRESSION_ATLAS: "expression_atlas",
@@ -687,8 +687,8 @@
                     var prot="";
                     if(data[i].biological_subject.gene_info){
                         for(var j=0; j<data[i].biological_subject.gene_info.length; j++){
-                            prot+="<a href='#/target-associations?q="+data[i].biological_subject.gene_info[j].geneid
-                                +"' title='"+data[i].biological_subject.gene_info[j].name+"'>"
+                            prot+="<a href='#/target/" + data[i].biological_subject.gene_info[j].geneid + "/associations'"
+                                +" title='"+data[i].biological_subject.gene_info[j].name+"'>"
                                 +data[i].biological_subject.gene_info[j].symbol
                                 +"</a>, "
                         }
@@ -809,8 +809,8 @@
                     var prot="";
                     if(data[i].biological_subject.gene_info){
                         for(var j=0; j<data[i].biological_subject.gene_info.length; j++){
-                            prot+="<a href='#/target-associations?q="+data[i].biological_subject.gene_info[j].geneid
-                                +"' title='"+data[i].biological_subject.gene_info[j].name+"'>"
+                            prot+="<a href='#/target/" + data[i].biological_subject.gene_info[j].geneid + "/associations'"+
+                                +" title='"+data[i].biological_subject.gene_info[j].name+"'>"
                                 +data[i].biological_subject.gene_info[j].symbol
                                 +"</a>, "
                         }
@@ -1243,11 +1243,13 @@
         // ================================================= 
 
 
-
-        if($location.search().t && $location.search().d){
+	var urlPath = $location.path().split('/');
+	var target = urlPath[2];
+	var disease = urlPath[3];
+	if (target && disease) {
             // parse parameters
-            $scope.search.target = $location.search().t;
-            $scope.search.disease = $location.search().d;
+	    $scope.search.target = target;
+	    $scope.search.disease = disease;
 
             /*
             $scope.$watch("search.info.data", function(newValue, oldValue) {
