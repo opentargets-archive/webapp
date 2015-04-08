@@ -125,12 +125,13 @@ angular.module('cttvDirectives')
 			    var data = resp.body.data;
 			    scope.$parent.nresults=resp.body.total;
 
-			    var bView = bubblesView().breadcrumsClick(function (d) {
-				var focusEvent = new CustomEvent("bubblesViewFocus", {
-				    "detail" : d
+			    var bView = bubblesView()
+				.breadcrumsClick(function (d) {
+				    var focusEvent = new CustomEvent("bubblesViewFocus", {
+					"detail" : d
+				    });
+				    this.dispatchEvent(focusEvent);
 				});
-				this.dispatchEvent(focusEvent);
-			    });
 
 			    var fView = flowerView()
 				.fontsize (10)

@@ -17,7 +17,8 @@ var bubblesView = function () {
 	duration: 1000,
 	breadcrumsClick : function () {
 	    render.focus(conf.data);
-	}
+	},
+	maxVal : 6
 	//labelOffset : 10
     };
 
@@ -25,6 +26,7 @@ var bubblesView = function () {
     var highlight; // undef by default
     var view;
     var svg;
+    var bubblesView_g;
     var breadcrums;
     var pack;
     var nodes;
@@ -54,11 +56,13 @@ var bubblesView = function () {
 	
 	svg = d3.select(div)
 	    .append("svg")
-	    .attr("class", "cttv_bubblesView")
 	    .attr("width", conf.diameter)
             .attr("height", conf.diameter)
-	    .append("g");
+	    .attr("class", "cttv_bubblesView");
 
+	bubblesView_g = svg
+	    .append("g");
+	
 	pack = d3.layout.pack()
 	    .value(function (d) {
 		return d[conf.value];
@@ -85,7 +89,7 @@ var bubblesView = function () {
         if (!conf.data) return;
 	var packData = pack.nodes(conf.data.data());
 
-	circle = svg.selectAll("circle")
+	circle = bubblesView_g.selectAll("circle")
 	    .data(packData, function (d) {
 		if (d._parent === undefined) {
 		    return d[conf.key];
@@ -118,7 +122,7 @@ var bubblesView = function () {
 	circle.exit().remove();
 
 	// // titles
-	// svg.selectAll("title")
+	// bubblesView_g.selectAll("title")
 	//     .data(packData, function (d) {
 	// 	return d._id;
 	//     })
@@ -130,7 +134,7 @@ var bubblesView = function () {
 
         //newNodes.append("text");
 
-	path = svg.selectAll("path")
+	path = bubblesView_g.selectAll("path")
 	    .data(packData, function (d) {
 		if (d._parent === undefined) {
 		    return d[conf.key];
@@ -146,7 +150,7 @@ var bubblesView = function () {
 	    .attr("fill", "none");
 
 
-	label = svg.selectAll("text")
+	label = bubblesView_g.selectAll("text")
 	    .data(packData, function (d) {
 		if (d._parent === undefined) {
 		    return d[conf.key];
@@ -192,7 +196,7 @@ var bubblesView = function () {
 
 	label.exit().remove();
 
-	var updateTransition = svg.transition()
+	var updateTransition = bubblesView_g.transition()
 	    .duration(conf.duration);
 
 	updateTransition
@@ -284,6 +288,45 @@ var bubblesView = function () {
 	//     .exit()
 	//     .remove();
 
+	// Size legend
+	var maxCurrentVal = 0;
+	conf.data.apply(function (node) {
+	    var score = node.property("association_score");
+	    if (score && score > maxCurrentVal) {
+		maxCurrentVal = score;
+	    }
+	});
+
+	var legendScale = d3.scale.linear()
+	    .domain([0,80])
+	    .range([0,conf.maxVal]);
+
+	if (conf.maxVal !== undefined) {
+	    var legend = svg
+	    	.append("g")
+	    	.attr("transform", "translate(20, " + (conf.diameter - 20)  + ")");
+	    legend
+	    	.append("rect")
+	    	.attr("x", 0)
+	    	.attr("y", 0)
+	    	.attr("width", 80)
+	    	.attr("height", 5)
+	    	.attr("fill", d3.rgb(62,139,173));
+	    
+	    var pos = 20 + legendScale(maxCurrentVal);
+	    legend
+	    	.append("polygon")
+	    	.attr("points", ((pos+0) + ",5 " + (pos-5) + ",15 " + (pos+5) + ",15"))
+	    	.attr("fill", "none")
+	    	.attr("stroke", "black")
+	    	.attr("stroke-width", 2);
+	    legend
+	    	.append("text")
+	    	.attr("x", pos)
+	    	.attr("y", -5)
+	    	.attr("text-anchor", "middle")
+	    	.text(maxCurrentVal);
+	}
     };
 
     ////////////////////////
@@ -378,6 +421,14 @@ var bubblesView = function () {
     // API  //
     //////////
 
+    render.maxVal = function (v) {
+	if (!arguments.length) {
+	    return conf.maxVal;
+	}
+	conf.maxVal = v;
+	return this;
+    };
+    
     render.select = function (nodes) {
 	if (!arguments.length) {
 	    return highlight;
