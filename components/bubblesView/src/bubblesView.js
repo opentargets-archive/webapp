@@ -411,7 +411,7 @@ var bubblesView = function () {
 	var up = [];
 	node.upstream (function (ancestor) {
 	    if (ancestor.parent() === undefined) {
-		up.push(ancestor.property(conf.label) || "root");
+		up.push(ancestor.property(conf.label) || "All");
 	    } else {
 		up.push(node.property(conf.label));
 	    }
