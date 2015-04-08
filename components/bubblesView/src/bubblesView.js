@@ -72,12 +72,15 @@ var bubblesView = function () {
 	var d = conf.data.data();
 	view = [d.x, d.y, d.r*2];
 	//focusTo([d.x, d.y, d.r*2]);
-	render.focus (conf.data);
+	//render.focus (conf.data);
 
 	return render;
     };
 
-    render.update = function () {	
+    render.update = function () {
+	// Safely unfocus on update
+
+	render.focus(conf.data);
         // If we don't pass any data, return out of the element
         if (!conf.data) return;
 	var packData = pack.nodes(conf.data.data());
@@ -188,28 +191,55 @@ var bubblesView = function () {
 	    });
 
 	label.exit().remove();
+
+	var updateTransition = svg.transition()
+	    .duration(conf.duration);
+
+	updateTransition
+	    .selectAll("circle")
+	    .attr("cx", function (d) {
+		return d.x;
+	    })
+	    .attr("cy", function (d) {
+		return d.y;
+	    })
+	    .attr("r", function (d) {
+		return d.r;
+	    })
+
+	// Move labels
+	updateTransition
+	    .selectAll(".leafLabel")
+	    .attr("dy", ".3em")
+	    .attr("x", function (d) { return d.x; })
+	    .attr("y", function (d) { return d.y; })
+	    .text(function (d) {
+		return d[conf.label].substring(0, d.r / 3);
+	    });
 	
 	// Move labels
-	label
-	    .each(function (d, i) {
-		if (!d.children) {
-		    d3.select(this)
-			.transition()
-			.duration(conf.duration)
-			.attr("dy", ".3em")
-			.attr("x", function (d) { return d.x; })
-			.attr("y", function (d) { return d.y; })
-			.text(function (d) {
-			    return d[conf.label].substring(0, d.r / 3);
-			});
-		}
-	    });
+	// label
+	//     .each(function (d, i) {
+	// 	if (!d.children) {
+	// 	    d3.select(this)
+	// 		.transition()
+	// 		.duration(conf.duration)
+	// 		.attr("dy", ".3em")
+	// 		.attr("x", function (d) { return d.x; })
+	// 		.attr("y", function (d) { return d.y; })
+	// 		.text(function (d) {
+	// 		    return d[conf.label].substring(0, d.r / 3);
+	// 		});
+	// 	}
+	//     });
 
-	path
+	updateTransition
+	    .selectAll("path")
 	    .attr("d", function (d) {
 		return describeArc(d.x, d.y+10, d.r, 160, -160);
 	    });
 
+	
 	// Moving nodes
 	circle
 	    //.attr("class", "node")
@@ -219,21 +249,22 @@ var bubblesView = function () {
 	    .classed ("bubblesViewRoot", function (d) {
 		return !d._parent;
 	    })
-	    .transition()
-	    .duration(conf.duration)
-	    .attr("cx", function (d) {
-		return d.x;
-	    })
-	    .attr("cy", function (d) { return d.y; })
-	    .attr("r", function (d) { return d.r; });
-            // .attr("transform", function(d) {
+	    // .transition()
+	    // .duration(conf.duration)
+	    // .attr("cx", function (d) {
+	    // 	return d.x;
+	    // })
+	    // .attr("cy", function (d) { return d.y; })
+	    // .attr("r", function (d) { return d.r; });
+
+
+	// .attr("transform", function(d) {
 	    // 	return "translate(" + d.x + "," + d.y + ")";
 	    // });
 
-				   //	nodes.select("path")
-				   
-	//nodes.select("text")
+	//	nodes.select("path")			   
 
+	//nodes.select("text")
 	
         // nodes.select("circle")
 	//     .attr ("class", function (d) {

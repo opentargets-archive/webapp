@@ -25,10 +25,8 @@ angular.module('cttvControllers')
 	    });
 	
 	$scope.nresults = 0;
-	$scope.focusEFO = "cttv_source";
 
-	var currentFocus = "cttv_disease";
-	var navopen = true;
+	// datatypes filter
 	$scope.dataTypes = [
 	    {
 		name: "genetic_association",
@@ -61,6 +59,7 @@ angular.module('cttvControllers')
 		selected: false
 	    }
 	]
+
 	var currentDataTypes = {};
 	for (var i=0; i<$scope.dataTypes.length; i++) {
 	    if ($scope.dataTypes[i].selected) {
@@ -71,6 +70,15 @@ angular.module('cttvControllers')
 	}
 	$scope.currentDataTypes = currentDataTypes;
 
+	// var dtopen = false;
+	$scope.toggleDataTypes = function () {
+	    // dtopen = !dtopen;
+	    // if (dtopen) {
+		console.log("toggle nav");
+		$scope.toggleNavigation();
+	    // }
+	}
+	
 	$scope.filterDataType = function (dataType) {
 	    var currentDataTypes = {};
 	    for (var i=0; i<$scope.dataTypes.length; i++) {
@@ -86,23 +94,40 @@ angular.module('cttvControllers')
 	    $scope.currentDataTypes=currentDataTypes;
 	}
 
+	// Therapeutic Areas Nav
+	$scope.focusEFO = "cttv_source";
+
+	$scope.tagroup = {};
+	$scope.tagroup.tas = {};
+	$scope.tagroup.filled = false;
+	$scope.tagroup.open = true;
+
 	
+	var currentFocus = "cttv_disease";
+
 	$scope.selectTherapeuticArea = function (efo) {
+	    // Keep track of the state
+	    if (!$scope.tagroup.filled) {
+		$scope.tagroup.filled = true;
+		for (var i=0; i<$scope.therapeuticAreas.length; i++) {
+		    var therapeuticArea = $scope.therapeuticAreas[i];
+		    $scope.tagroup.tas[therapeuticArea.name] = false;
+		}
+	    }
 	    if (efo === currentFocus) {
-		currentFocus = "cttv_disease";
+	    	currentFocus = "cttv_disease";
 	    } else {
-		currentFocus = efo;
+	    	currentFocus = efo;
 	    }
 	    $scope.focusEFO = currentFocus;
 	};
 
-	$scope.selectNavigation = function () {
-	    navopen = !navopen;
-	    if (navopen) {
-		$scope.focusEFO = currentFocus;
-	    } else {
-		$scope.focusEFO = "cttv_disease";
+	$scope.toggleNavigation = function () {
+	    for (var ta in $scope.tagroup.tas) {
+		$scope.tagroup.tas[ta] = false;
 	    }
+	    $scope.focusEFO = "cttv_disease";
+	    currentFocus = "cttv_disease";
 	};
 
 	$scope.selectDisease = function (efo) {
