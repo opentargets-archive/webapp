@@ -24,14 +24,13 @@
 	  </div>	    
 	</accordion-group>
 
-	<accordion-group is-open="tagroup.open">
-	  <accordion-heading>
-	    <span ng-click="toggleNavigation()">Therapeutic Areas Navigation</span>
-	  </accordion-heading>
-	  <accordion>
-	    <!-- <div ng-repeat="ta in therapeuticAreas"> -->
-	    <accordion-group ng-repeat="ta in therapeuticAreas" class="therapeuticArea" is-open="tagroup.tas[ta.name]">
-	      <!-- <accordion-group class="therapeuticArea" is-open="tagroup.tas[ta.name]"> -->
+	<div cttv-nav-recompile="okToRecompile" use-boolean>
+	  <accordion-group is-open="tagroup.open">
+	    <accordion-heading>
+	      <span ng-click="toggleNavigation()">Therapeutic Areas Navigation</span>
+	    </accordion-heading>
+	    <accordion>
+	      <accordion-group ng-repeat="ta in therapeuticAreas" class="therapeuticArea" is-open="tagroup.tas[ta.name]">
 		<accordion-heading>
 		  <span id="cttv_targetAssociations_navBar_{{ta.name}}" ng-click="selectTherapeuticArea(ta.name)">{{ta.label}} ({{ta.children.length}})</span>
 		</accordion-heading>
@@ -43,9 +42,9 @@
 		  </accordion-group>
 		</accordion>
 	      </accordion-group>
-	    <!-- </div> -->
-	  </accordion>
-	</accordion-group>
+	    </accordion>
+	  </accordion-group>
+	</div>
       </accordion>
     </div>
 

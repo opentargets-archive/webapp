@@ -87,6 +87,9 @@ angular.module('cttvControllers')
 		}
 	    }
 	    $scope.currentDataTypes=currentDataTypes;
+
+	    // Re-compile the nav bar
+	    $scope.okToRecompile = true;
 	}
 
 	// Therapeutic Areas Nav
