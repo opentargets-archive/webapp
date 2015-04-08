@@ -70,13 +70,8 @@ angular.module('cttvControllers')
 	}
 	$scope.currentDataTypes = currentDataTypes;
 
-	// var dtopen = false;
 	$scope.toggleDataTypes = function () {
-	    // dtopen = !dtopen;
-	    // if (dtopen) {
-		console.log("toggle nav");
-		$scope.toggleNavigation();
-	    // }
+	    $scope.toggleNavigation();
 	}
 	
 	$scope.filterDataType = function (dataType) {
