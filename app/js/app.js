@@ -34,7 +34,7 @@ config(['$routeProvider',
 	    }).
 	    when('/evidence/:id/:id', {
 		templateUrl: 'partials/targetDisease.html',
-		controller: 'targetDiseaseCtrl'
+		controller: 'TargetDiseaseCtrl'
 	    }).
     	    // when('/gene-disease', {
             //     redirectTo: '/target-disease'   // for backward compatibility
