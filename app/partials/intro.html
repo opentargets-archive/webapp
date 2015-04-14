@@ -28,10 +28,10 @@
           </div>
           
           <!-- Search in progress spinner -->
-          <span class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress" ><i class="fa fa-circle-o-notch fa-spin"></i></span>
+          <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
 
           <!-- Suggestions box -->
-          <div cttv-search-suggestions></div>
+          <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
 
 
           <!-- examples -->

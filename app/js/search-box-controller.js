@@ -78,24 +78,13 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
                 return cttvAPIservice.getAutocomplete({q:$scope.search.query.text, size:3}).
                     then(
                         function(resp){
-                            $scope.search.results = resp.data.data;  // store the results
-                            //$scope.search.progress = false;     // flag for search in progress
+                            $scope.search.results = resp.body.data;  // store the results
                         }, 
-                        function(resp){
-                            $log.log(resp);
-                        }
+                        cttvAPIservice.defaultErrorHandler
                     ).
                     finally(function(){
                         $scope.search.progress = false;
                     });
-                    /*success(function(data, status) {
-                        $scope.search.results = data.data;  // store the results
-                        $scope.search.progress = false;     // flag for search in progress
-                    }).
-                    error(function(data, status) {
-                        $log.log(status);
-                        $scope.search.progress = false;
-                    });*/
             }else{
                 $scope.search.progress = false;
             }

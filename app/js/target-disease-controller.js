@@ -56,42 +56,42 @@
             // tables data:
             genetic_associations : {
                 is_open : false,
-                is_loading: true,
+                is_loading: false,
                 common_diseases : {
                     data : [],
                     is_open : false,
-                    is_loading: true
+                    is_loading: false
                 },
                 rare_diseases : {
                     data : [],
                     is_open : false,
-                    is_loading: true
+                    is_loading: false
                 }
             },
             rna_expression : {
                 data : [],
                 is_open : false,
-                is_loading: true
+                is_loading: false
             },
             pathways : {
                 data : [],
                 is_open : false,
-                is_loading: true
+                is_loading: false
             },
             drugs : {
                 data : [],
                 is_open : false,
-                is_loading: true
+                is_loading: false
             },
             somatic_mutations : {
                 data : [],
                 is_open : false,
-                is_loading: true
+                is_loading: false
             },
             mouse : {
                 data : [],
                 is_open : false,
-                is_loading: true
+                is_loading: false
             },
         };
 
@@ -111,33 +111,33 @@
          * Get the information for target and disease, 
          * i.e. to fill the two boxes at the top of the page
          */
-        $scope.getInfo = function(){
+        var getInfo = function(){
             $log.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
 
             // get gene specific info 
             cttvAPIservice.getGene( {
-                    gene:$scope.search.target
+                    gene_id:$scope.search.target
                 } ).
-                success(function(data, status) {
-                    $scope.search.info.gene = data;
-                }).
-                error(function(data, status) {
-                    $log.error(status);
-                });
+                then(
+                    function(resp) {
+                        $scope.search.info.gene = resp.body;
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                );
 
-
+                
             // get disease specific info with the efo() method
             cttvAPIservice.getEfo( {
                     efo:$scope.search.disease
                 } ).
-                success(function(data, status) {
-                    $scope.search.info.efo = data;
-		    // TODO: This is not returned by the api yet. Maybe we need to remove it later
-		    $scope.search.info.efo.efo_code = $scope.search.disease;
-                }).
-                error(function(data, status) {
-                    $log.error(status);
-                });
+                then(
+                    function(resp) {
+                        $scope.search.info.efo = resp.body;
+                        // TODO: This is not returned by the api yet. Maybe we need to remove it later
+                        $scope.search.info.efo.efo_code = $scope.search.disease;
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                );
 
 
         }
@@ -184,23 +184,22 @@
 
 
 
-        $scope.getFlowerData = function(){
+        var getFlowerData = function(){
             $log.log("getFlowerData()");
 
             return cttvAPIservice.getAssociation({
                     gene:$scope.search.target, 
                     efo:$scope.search.disease
                 }).
-                success(function(data, status) {              
-                    $scope.search.flower_data = processFlowerData(data.data[0].datatypes);
-                    for(var i=0; i<data.data[0].datatypes.length; i++){
-                        $scope.search.association_scores[data.data[0].datatypes[i].datatype] = data.data[0].datatypes[i].association_score; 
-                    }
-                    
-                }).
-                error(function(data, status) {
-                    $log.error(status);
-                });            
+                then(
+                    function(resp) {              
+                        $scope.search.flower_data = processFlowerData(resp.body.data[0].datatypes);
+                        for(var i=0; i<resp.body.data[0].datatypes.length; i++){
+                            $scope.search.association_scores[resp.body.data[0].datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score; 
+                        }
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                );            
         }
 
 
@@ -223,6 +222,7 @@
 
 
         var getCommonDiseaseData = function(){
+            $scope.search.genetic_associations.common_diseases.is_loading = true;
             return cttvAPIservice.getAssociations( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
@@ -240,18 +240,16 @@
                         //"evidence.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs" // publications
                     ]
                 } ).
-                success(function(data, status) {
-                    $scope.search.genetic_associations.common_diseases.data = data.data;
-                    initCommonDiseasesTable();
-                    $scope.search.genetic_associations.common_diseases.is_open = data.data.length>0;
-                    $scope.search.genetic_associations.common_diseases.is_loading = false;
-
-                    // update for parent
-                    updateGeneticAssociationsSetting();
-                }).
-                error(function(data, status) {
-                    $log.error(status);
-                    $scope.search.genetic_associations.common_diseases.is_open = data.data.length>0;
+                then(
+                    function(resp) {
+                        $scope.search.genetic_associations.common_diseases.data = resp.body.data;
+                        initCommonDiseasesTable();
+                        
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                ).
+                finally(function(){
+                    //$scope.search.genetic_associations.common_diseases.is_open = $scope.search.genetic_associations.common_diseases.data.length>0 || false;
                     $scope.search.genetic_associations.common_diseases.is_loading = false;
 
                     // update for parent
@@ -356,6 +354,7 @@
 
 
         var getRareDiseaseData = function(){
+            $scope.search.genetic_associations.rare_diseases.is_loading = true;
             return cttvAPIservice.getAssociations( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
@@ -376,20 +375,16 @@
 
                     ]
                 } ).
-                success(function(data, status) {
-                    $scope.search.genetic_associations.rare_diseases.data = data.data;
-                    initRareDiseasesTable();
-                    $scope.search.genetic_associations.rare_diseases.is_open = data.data.length>0;
+                then(
+                    function(resp) {
+                        $scope.search.genetic_associations.rare_diseases.data = resp.body.data;
+                        initRareDiseasesTable(); 
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                ).
+                finally(function(){
+                    //$scope.search.genetic_associations.rare_diseases.is_open = $scope.search.genetic_associations.rare_diseases.data.length>0 || false;
                     $scope.search.genetic_associations.rare_diseases.is_loading = false;
-
-                    // update for parent
-                    updateGeneticAssociationsSetting();
-                }).
-                error(function(data, status) {
-                    $log.error(status);
-                    $scope.search.genetic_associations.rare_diseases.is_open = data.data.length>0;
-                    $scope.search.genetic_associations.rare_diseases.is_loading = false;
-
                     // update for parent
                     updateGeneticAssociationsSetting();
                 });
@@ -554,7 +549,8 @@
             Drug    Phase   Type    Mechanism of Action Activity    Clinical Trials Target name Target class    Target context  Protein complex members Evidence type
             */
 
-        $scope.getDrugData = function(){
+        var getDrugData = function(){
+            $scope.search.drugs.is_loading = true;
             return cttvAPIservice.getAssociations( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
@@ -600,16 +596,17 @@
 
                     ]
                 } ).
-                success(function(data, status) {
-                    $scope.search.drugs.data = data.data;
-                    initTableDrugs();
-                    $scope.search.drugs.is_open = data.data.length>0;
+                then(
+                    function(resp) {
+                        $scope.search.drugs.data = resp.body.data;
+                        initTableDrugs();
+                        
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                ).
+                finally(function(){
+                    //$scope.search.drugs.is_open = $scope.search.drugs.data.length>0 || false;
                     $scope.search.drugs.is_loading = false;
-                }).
-                error(function(data, status) {
-                    $scope.search.drugs.is_open = false;
-                    $scope.search.drugs.is_loading = false;
-                    $log.error(status);
                 });
         }
 
@@ -672,7 +669,7 @@
                     // 6: Clinical trials
                     row.push( "<a href='https://clinicaltrials.gov/search?intr=%22"
                                 + data[i].evidence.evidence_chain[0].evidence.experiment_specific.molecule_name
-                                + "%22' target='_blank'>View in clinicaltrials.org <i class='fa fa-external-link'></i></a>");
+                                + "%22' target='_blank'>View in clinicaltrials.gov <i class='fa fa-external-link'></i></a>");
 
                     // 7: target name
                     row.push("<a href='"+data[i].evidence.urls.linkouts[1].url+"' target='_blank'>"+data[i].biological_subject.properties.target_name+" <i class='fa fa-external-link'></i></a>"); // + linkouts[1]
@@ -746,7 +743,8 @@
 
 
 
-        $scope.getPathwaysData = function(){
+        var getPathwaysData = function(){
+            $scope.search.pathways.is_loading = true;
             return cttvAPIservice.getAssociations( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
@@ -764,15 +762,15 @@
                         "evidence.evidence_codes"    //Evidence codes
                     ]
                 } ).
-                success(function(data, status) {
-                    $scope.search.pathways.data = data.data;
-                    initTablePathways();
-                    $scope.search.pathways.is_open = data.data.length>0;
-                    $scope.search.pathways.is_loading = false;
-                }).
-                error(function(data, status) {
-                    $log.error(status);
-                    $scope.search.pathways.is_open = false;
+                then(
+                    function(resp) {
+                        $scope.search.pathways.data = resp.body.data;
+                        initTablePathways();
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                ).
+                finally(function(){
+                    //$scope.search.pathways.is_open = $scope.search.pathways.data.length>0 || false; // might trigger an error...
                     $scope.search.pathways.is_loading = false;
                 });
         }
@@ -884,7 +882,8 @@
 
 
 
-        $scope.getRnaExpressionData = function(){
+        var getRnaExpressionData = function(){
+            $scope.search.rna_expression.is_loading = true;
             return cttvAPIservice.getAssociations( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
@@ -904,15 +903,16 @@
                         "evidence.evidence_codes_info"
                     ]
                 } ).
-                success(function(data, status) {
-                    $scope.search.rna_expression.data = data.data;
-                    initTableRNA();
-                    $scope.search.rna_expression.is_open = data.data.length>0;
-                    $scope.search.rna_expression.is_loading = false;
-                }).
-                error(function(data, status) {
-                    $log.error(status);
-                    $scope.search.rna_expression.is_open = false;
+                then(
+                    function(resp) {
+                        $scope.search.rna_expression.data = resp.body.data;
+                        initTableRNA();
+                        
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                ).
+                finally(function(){
+                    //$scope.search.rna_expression.is_open = $scope.search.rna_expression.data.length>0 || false;
                     $scope.search.rna_expression.is_loading = false;
                 });
         }
@@ -996,6 +996,7 @@
 
 
         var getMutationData = function(){
+            $scope.search.somatic_mutations.is_loading = true;
             return cttvAPIservice.getAssociations( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
@@ -1007,16 +1008,17 @@
                         "evidence.urls"
                     ]
                 } ).
-                success(function(data, status) {
-                    $scope.search.somatic_mutations.data = data.data;
-                    initTableMutations();
-                    $scope.search.somatic_mutations.is_open = data.data.length>0;
+                then(
+                    function(resp) {
+                        $scope.search.somatic_mutations.data = resp.body.data;
+                        initTableMutations();
+                        
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                ).
+                finally(function(){
+                    //$scope.search.somatic_mutations.is_open = $scope.search.somatic_mutations.data.length>0 || false;
                     $scope.search.somatic_mutations.is_loading = false;
-                }).
-                error(function(data, status) {
-                    $scope.search.somatic_mutations.is_open = data.data.length>0;
-                    $scope.search.somatic_mutations.is_loading = false;
-                    $log.error(status);
                 });
         }
 
@@ -1083,6 +1085,7 @@
         */
 
         var getMouseData = function(){
+            $scope.search.mouse.is_loading = true;
             return cttvAPIservice.getAssociations( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
@@ -1097,15 +1100,15 @@
                         "evidence.association_score"
                     ]
                 } ).
-                success(function(data, status) {
-                    $scope.search.mouse.data = data.data;
-                    initTableMouse();
-                    $scope.search.mouse.is_open = data.data.length>0;
-                    $scope.search.mouse.is_loading = false;
-                }).
-                error(function(data, status) {
-                    $log.error(status);
-                    $scope.search.mouse.is_open = false;
+                then(
+                    function(resp) {
+                        $scope.search.mouse.data = resp.body.data;
+                        initTableMouse();
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                ).
+                finally(function(){
+                    //$scope.search.mouse.is_open = $scope.search.mouse.data.length>0 || false;
                     $scope.search.mouse.is_loading = false;
                 });
         }
@@ -1144,7 +1147,7 @@
                     row.push(mouse);
 
                     // mouse model
-                    var mousemodel = processMouseModelLinks( data[i].unique_association_fields.allelic_composition, data[i].unique_association_fields.allele_ids)
+                    var mousemodel = processMouseModelLinks( data[i].unique_association_fields.allelic_composition, (data[i].unique_association_fields.allele_ids || "") )
                                     + "<br/ >"
                                     + "<span class='small text-lowlight'>"+data[i].unique_association_fields.genetic_background+"</span>"
                     row.push(mousemodel);
@@ -1175,7 +1178,10 @@
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,
-                "order": [[5, 'asc']],
+                "order": [[5, 'asc']]/*,
+                "tableTools": {
+                    "sSwfPath": "../swfs/copy_csv_xls.swf"
+                }*/
             } ); 
         }
 
@@ -1245,39 +1251,50 @@
 
 
         if($location.search().t && $location.search().d){
+            $log.info("target-disease-controller");
             // parse parameters
             $scope.search.target = $location.search().t;
             $scope.search.disease = $location.search().d;
 
-            /*
-            $scope.$watch("search.info.data", function(newValue, oldValue) {
-                if($scope.search.info.data.biological_object){
-                    if($scope.search.info.data.biological_object.efo_info[0][0].path){
-                        $scope.search.info.efo_path = $scope.search.info.data.biological_object.efo_info[0][0].path;
-                    }
-                }
-            });
-            */
-
-
-            // will need a way of parsing filters too...
-            // $scope.parseFilters() ...
-
             // and fire the info search
-            $scope.getInfo();
+            getInfo();
 
             // get the data for the flower graph
-            $scope.getFlowerData();
+            getFlowerData()
+                .then(function(){
+                    $log.info($scope.search.association_scores);
+                    // then try get some data for the tables where we know we have data...
+
+                    if($scope.search.association_scores[datatypes.GENETIC_ASSOCIATION]){
+                        getCommonDiseaseData();
+                        getRareDiseaseData();
+                    }
+                    if($scope.search.association_scores[datatypes.SOMATIC_MUTATION]){
+                        getMutationData(); 
+                    }
+                    if($scope.search.association_scores[datatypes.KNOWN_DRUG]){
+                        getDrugData();
+                    }
+                    if($scope.search.association_scores[datatypes.RNA_EXPRESSION]){
+                        getRnaExpressionData();
+                    }
+                    if($scope.search.association_scores[datatypes.AFFECTED_PATHWAY]){
+                        getPathwaysData();
+                    }
+                    if($scope.search.association_scores[datatypes.ANIMAL_MODEL]){
+                        getMouseData();
+                    }
+                });
 
             // then try get some data
-            getCommonDiseaseData();
-            getRareDiseaseData();
-            
-            getMutationData(); 
-            $scope.getDrugData();
-            $scope.getRnaExpressionData();
-            $scope.getPathwaysData();
-            getMouseData();
+            // getCommonDiseaseData();
+            // getRareDiseaseData();
+            // 
+            // getMutationData(); 
+            // getDrugData();
+            // getRnaExpressionData();
+            // getPathwaysData();
+            // getMouseData();
 
         }
 

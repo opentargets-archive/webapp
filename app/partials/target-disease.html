@@ -68,7 +68,7 @@
 							<span ng-class="{ 'text-disabled': search.genetic_associations.common_diseases.data.length==0 && search.genetic_associations.rare_diseases.data.length==0 }">Genetic associations</span>
 							<span class='badge' ng-show="search.genetic_associations.common_diseases.data.length>0">{{search.genetic_associations.common_diseases.data.length}}</span>
 							<span class='badge' ng-show="search.genetic_associations.rare_diseases.data.length">{{search.genetic_associations.rare_diseases.data.length}}</span>
-							<i class="pull-right fa fa-circle-o-notch fa-spin" ng-show="search.genetic_associations.is_loading"></i>
+							<span cttv-progress-spinner class="pull-right" ng-show="search.genetic_associations.is_loading"></span>
 						</span>
 					</accordion-heading>
 					<div ng-show="search.genetic_associations.common_diseases.data.length>0 || search.genetic_associations.rare_diseases.data.length>0">
@@ -144,7 +144,7 @@
 						<span class="text-nolight">
 							<span ng-class="{ 'text-disabled': search.somatic_mutations.data.length==0 }">Somatic mutations</span>
 							<span class='badge' ng-show="search.somatic_mutations.data.length>0">{{search.somatic_mutations.data.length}}</span>
-							<i class="pull-right fa fa-circle-o-notch fa-spin" ng-show="search.somatic_mutations.is_loading"></i>
+							<span cttv-progress-spinner class="pull-right" ng-show="search.somatic_mutations.is_loading"></span>
 						</span>
 					</accordion-heading>
 					<div ng-show="search.somatic_mutations.data.length>0">
@@ -174,7 +174,7 @@
 						<span class="text-nolight">
 							<span ng-class="{ 'text-disabled': search.drugs.data.length==0 }">Known drugs</span>
 							<span class='badge' ng-show="search.drugs.data.length>0">{{search.drugs.data.length}}</span>
-							<i class="pull-right fa fa-circle-o-notch fa-spin" ng-show="search.drugs.is_loading"></i>
+							<span cttv-progress-spinner class="pull-right" ng-show="search.drugs.is_loading"></span>
 						</span>
 					</accordion-heading>
 					<div ng-show="search.drugs.data.length>0">
@@ -223,7 +223,7 @@
 						<span class="text-nolight">
 							<span ng-class="{ 'text-disabled': search.rna_expression.data.length==0 }">RNA expression</span>
 							<span class='badge' ng-show="search.rna_expression.data.length>0">{{search.rna_expression.data.length}}</span>
-							<i class="pull-right fa fa-circle-o-notch fa-spin" ng-show="search.rna_expression.is_loading"></i>
+							<span cttv-progress-spinner class="pull-right" ng-show="search.rna_expression.is_loading"></span>
 						</span>
 					</accordion-heading>
 					<div ng-show="search.rna_expression.data.length>0">
@@ -266,7 +266,7 @@
 						<span class="text-nolight">
 							<span ng-class="{ 'text-disabled': search.pathways.data.length==0 }">Disrupted pathways</span>
 							<span class='badge' ng-show="search.pathways.data.length>0">{{search.pathways.data.length}}</span>
-							<i class="pull-right fa fa-circle-o-notch fa-spin" ng-show="search.pathways.is_loading"></i>
+							<span cttv-progress-spinner class="pull-right" ng-show="search.pathways.is_loading"></span>
 						</span>
 					</accordion-heading>
 					<div ng-show="search.pathways.data.length>0">
@@ -307,7 +307,7 @@
 						<span class="text-nolight">
 							<span ng-class="{ 'text-disabled': search.mouse.data.length==0 }">Mouse models</span>
 							<span class='badge' ng-show="search.mouse.data.length>0">{{search.mouse.data.length}}</span>
-							<i class="pull-right fa fa-circle-o-notch fa-spin" ng-show="search.mouse.is_loading"></i>
+							<span cttv-progress-spinner class="pull-right" ng-show="search.mouse.is_loading"></span>
 						</span>
 					</accordion-heading>
 					<div ng-show="search.mouse.data.length>0">

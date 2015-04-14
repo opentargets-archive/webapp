@@ -1,5 +1,4 @@
-<div class="search-suggestions-box ng-hide" ng-show="isVisible()" ng-cloak ng-model="search.query.results">
-
+<div class="search-suggestions-box ng-hide" ng-cloak>
 
   <!-- Besthit -->
   <div ng-if="search.results.besthit!==null && search.results.besthit!==undefined" ng-click="linkTo({type:search.results.besthit.type, q:search.results.besthit.id, label:search.results.besthit.label||search.results.besthit.approved_symbol})" class="item besthit">
@@ -27,7 +26,7 @@
     
     <div class="divider"></div>
     
-    <div class="text-lowlight text-item">Genes</div>
+    <div class="text-lowlight text-item">Targets</div>
     <div ng-repeat="item in search.results.genes" class="item result-item">
       <div class="row" ng-click="linkTo({type:item.type, q:item.id, label:item.approved_symbol})">
         <span class="col-md-3">

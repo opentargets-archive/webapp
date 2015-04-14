@@ -115,25 +115,26 @@
             $log.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
 
             // get gene specific info 
-            cttvAPIservice.getGene( {
+            cttvAPIservice.getGene({
                     gene:$scope.search.target
-                } ).
-                success(function(data, status) {
-                    $scope.search.info.gene = data;
                 }).
-                error(function(data, status) {
-                    $log.error(status);
-                });
-
+                then(
+                    function(data, status) {
+                        $scope.search.info.gene = data;
+                    },
+                    function(data, status) {
+                        $log.error(status);
+                    }
+                );
 
             // get disease specific info with the efo() method
-            cttvAPIservice.getEfo( {
+            cttvAPIservice.getEfo({
                     efo:$scope.search.disease
-                } ).
+                }).
                 success(function(data, status) {
                     $scope.search.info.efo = data;
-		    // TODO: This is not returned by the api yet. Maybe we need to remove it later
-		    $scope.search.info.efo.efo_code = $scope.search.disease;
+		          // TODO: This is not returned by the api yet. Maybe we need to remove it later
+		          $scope.search.info.efo.efo_code = $scope.search.disease;
                 }).
                 error(function(data, status) {
                     $log.error(status);
