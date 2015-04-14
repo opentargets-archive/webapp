@@ -34,6 +34,9 @@ div .tnt_tooltip_active {
   .tnt_zmenu th:active {
     cursor: move; }
 
+.cttv_flowerLink {
+  text-decoration: none !important; }
+
 .tnt_zmenu_header {
   color: #ffffff;
   background: #1e5799;

@@ -22,7 +22,10 @@
   <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
   <script type="text/javascript" src="js/ie_console_noop.js"></script>
 
-  <!-- CTTV Components -->  
+  <!-- TnT -->
+  <script type="text/javascript" src="node_modules/tnt.genome/build/tnt.genome.js"></script>
+  
+  <!-- CTTV Components -->
   <script type="text/javascript" src="node_modules/cttv.bubblesView/build/cttv.bubblesView.js"></script>
   <script type="text/javascript" src="node_modules/cttv.api/build/cttv.api.js"></script>
   <script type="text/javascript" src="node_modules/cttv.geneAssociations/build/cttv.geneAssociations.js"></script>
@@ -67,7 +70,7 @@
                     <!-- Search box + search button -->
                     <div class="input-group">
 
-                      <input type="text" placeholder="Search for target or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+                      <input type="text" placeholder="Search for a target or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
                       <div class="input-group-btn">
                         <button type="submit" class="btn btn-primary">
@@ -215,11 +218,13 @@
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/controllers.js"></script>
     <script type="text/javascript" src="js/api-service.js"></script>
-    <script type="text/javascript" src="js/directives.js"></script>
     <script type="text/javascript" src="js/filters.js"></script>
     <script type="text/javascript" src="js/search-box-controller.js"></script>
     <script type="text/javascript" src="js/target-associations-controller.js"></script>
+    <script type="text/javascript" src="js/disease-associations-controller.js"></script>
     <script type="text/javascript" src="js/target-disease-controller.js"></script>
+    <script type="text/javascript" src="js/directives.js"></script>
+    <script type="text/javascript" src="js/target-associations-bubbles-directive.js"></script>
 
     <!-- DataTable stuff -->
     <script type="text/javascript" src="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>

@@ -1,6 +1,6 @@
-//var tooltip = require("tnt.tooltip");
+var tnt_tooltip = require("tnt.tooltip");
 
-var cttv_genome_browser = function(deps) {
+var cttv_genome_browser = function() {
     "use strict";
 
     // Display elements options that can be overridden by setters
@@ -22,7 +22,7 @@ var cttv_genome_browser = function(deps) {
 
     var gBrowser;
 
-    var gBrowserTheme = function(gB, div, cttvRestApi) {
+    var gBrowserTheme = function(gB, cttvRestApi, div) {
 	// Set the different #ids for the html elements (needs to be lively because they depend on the div_id)
 	set_div_id(div);
 
@@ -170,7 +170,7 @@ var cttv_genome_browser = function(deps) {
 	
 	// Tooltip on genes
 	var gene_tooltip = function (gene) {
-	    var t = deps["tnt.tooltip"].table()
+	    var t = tnt_tooltip.table()
 		.id(1);
 	    var event = d3.event;
 	    var elem = this;
@@ -184,13 +184,11 @@ var cttv_genome_browser = function(deps) {
 	    });
 	    cttvRestApi.call(url)
 		.catch (function () {
-		    console.log("==============> ERROR!!!");
 		    var obj = tooltip_obj(gene);
 		    t.call(elem, obj, event);
 		})
 		.then(function (resp) {
 		    resp = JSON.parse(resp.text);
-		    console.log(resp);
 		    var obj = tooltip_obj (gene, resp);
 		    t.call(elem, obj, event);
 		});

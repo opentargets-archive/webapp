@@ -144,28 +144,6 @@
     }]).
 
     /**
-     * AssociationsCtrl
-     * Controller for the target associations page
-     * It loads a list of associations for the given search
-     */
-    // controller('AssociationsCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice) {
-    controller ("AssociationsCtrl", ['$scope', '$location', '$log', function ($scope, $location, $log) {
-        $log.log('AssociationsCtrl()');
-        $scope.search = {
-    	    query : $location.search().q,
-    	    label : $location.search().label
-        };
-        $scope.nresults = 0;
-        // $scope.search = cttvAppToAPIService.createSearchInitObject();
-
-	// Display toggle (bubbles / table)
-	$scope.displaytype = "bubbles";
-	$scope.setDisplay = function (displ) {
-	    $scope.displaytype = displ;
-	}
-    }]).
-
-    /**
      * SearchAppCtrl
      * Controller for the search/results page
      */

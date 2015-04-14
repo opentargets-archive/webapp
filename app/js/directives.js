@@ -115,87 +115,6 @@ angular.module('cttvDirectives', [])
 	}
     })
 
-    .directive('cttvTargetAssociationsBubbles', function () {
-	return {
-	    restrict: 'E',
-	    scope: {
-		"onFocus": '&onFocus',
-		"onLoad": '&onLoad'
-	    },
-	    link: function (scope, elem, attrs) {
-		// event receiver on focus
-		addEventListener('bubblesViewFocus', function (e) {
-		    // TODO: This is effectively clicking in the nav bar
-		    $("#cttv_targetAssociations_navBar_" + attrs.focus).click();
-		}, true);
-		var ga;
-		scope.$watch(function () { return attrs.focus }, function (val) {
-		    if (val === "None") {
-			return;
-		    }
-
-		    if (ga) {
-			ga.selectTherapeuticArea(val);
-		    }
-		});
-		scope.$watch(function () {return attrs.target}, function (val) {
-		    ////// Bubbles View
-		    // viewport Size
-		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-
-		    // Element Coord
-		    var elemOffsetTop = elem[0].parentNode.offsetTop;
-
-		    // BottomMargin
-		    var bottomMargin = 50;
-
-		    var diameter = viewportH - elemOffsetTop - bottomMargin;
-
-		    var api = cttvApi();
-		    var url = api.url.associations({
-		    	gene: attrs.target,
-		    	datastructure: "tree"
-		    })
-		    console.log("BUBBLES URL: " + url);
-		    api.call (url)
-		    	.then (function (resp) {
-			    scope.$parent.nresults=resp.body.total;
-		    	    var data = resp.body.data;
-
-			    var bView = bubblesView().breadcrumsClick(function (d) {
-				    var focusEvent = new CustomEvent("bubblesViewFocus", {
-				        "detail" : d
-				    });
-				    this.dispatchEvent(focusEvent);
-			    });
-
-			    var fView = flowerView()
-				.fontsize(6)
-				.diagonal(100);
-			    
-			    ga = geneAssociations()
-				.data(data)
-				.target(attrs.target)
-				.diameter(diameter);
-			    // Sort the data based on number of children and association score of disease
-			    var dataSorted = _.sortBy(data.children, function (d) {
-				return d.children ? -d.children.length : 0;
-			    });
-
-			    for (var i=0; i<data.children.length; i++) {
-				data.children[i].children = _.sortBy (data.children[i].children, function (d) {
-				    return -d.association_score;
-				});
-			    }
-			    scope.$parent.therapeuticAreas = dataSorted;
-			    ga(bView, fView, elem[0]);
-			    scope.$parent.$apply();
-			});
-		});
-	    }		    
-	}
-    })
     .directive('cttvTargetAssociationsTree', function () {
 	return {
 	    restrict: 'E',
@@ -380,42 +299,6 @@ angular.module('cttvDirectives', [])
     	};
     })
 
-    // .directive('pmcCitationList', function () {
-    // 	var app = require("biojs-vis-pmccitation");
-    // 	function displayCitation (pmid, divId) {
-    // 	    console.log(pmid + " - " + divId);
-    // 	    var instance = new app.Citation({
-    // 		target: divId,
-    // 		source: app.Citation.MED_SOURCE,
-    // 		citation_id: pmid,
-    // 		width: 400,
-    // 		proxyUrl: 'https://cors-anywhere.herokuapp.com/',
-    // 		displayStyle: app.Citation.FULL_STYLE,
-    // 		elementOrder: app.Citation.TITLE_FIRST,
-    // 		showAbstract: false
-    // 	    });
-    // 	    instance.load();
-    // 	}
-    // 	return {
-    // 	    restrict: 'EA',
-    // 	    // scope: {
-    // 	    // 	pmids : '='
-    // 	    // },
-    // 	    templateUrl: "partials/pmcCitation.html",
-    // 	    link: function (scope, elem, attrs) {
-    // 		console.log(attrs.pmids);
-    // 		var pmids = attrs.pmids.split(",");
-    // 		for (var i=0; i<pmids.length; i++) {
-    // 		    var pmid = pmids[i];
-    // 		    var newDiv = document.createElement("div");
-    // 		    newDiv.id = elem[0].id + "_" + i;
-    // 		    elem[0].appendChild(newDiv);
-    // 		    displayCitation(pmid, newDiv.id);
-    // 		}
-    // 	    }
-    // 	};
-    // })
-
     .directive('pmcCitation', function () {
 	return {
 	    restrict: 'E',
@@ -456,11 +339,9 @@ angular.module('cttvDirectives', [])
 			.gene(attrs.target)
 			.context(20)
 			.width(w);
-		    var theme = targetGenomeBrowser({
-			"tnt.tooltip" : tnt.tooltip
-		    })
+		    var theme = targetGenomeBrowser()
 			.chr(scope.chr);
-		    theme(gB, document.getElementById("cttvTargetGenomeBrowser"), cttvApi());
+		    theme(gB, cttvApi(), document.getElementById("cttvTargetGenomeBrowser"));
 		});
 	    }
 	};
@@ -481,7 +362,7 @@ angular.module('cttvDirectives', [])
 
 		    var instance = new Biojs.AtlasHeatmap ({
 			params:'geneQuery=' + target + "&species=homo%20sapiens",
-			isMultiExperiment: false,
+			isMultiExperiment: true,
 			target : "cttvExpressionAtlas"
 		    })
 		});

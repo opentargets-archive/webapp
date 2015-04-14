@@ -10,7 +10,10 @@
     "test": "gulp test"
   },
   "keywords": [
-    "cttv"
+    "cttv",
+    "tnt",
+    "genome",
+    "browser"
   ],
   "author": "Miguel Pignatelli",
   "license": "Apache-2.0",
@@ -47,6 +50,7 @@
     "watchify": "^1.0.2"
   },
   "dependencies": {
-    "tnt.genome": "0.0.0"
+    "tnt.genome": "0.0.0",
+    "tnt.tooltip": "0.0.8"
   }
 }

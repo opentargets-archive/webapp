@@ -8,15 +8,18 @@
     
     <div class="col-md-2 cttv-facet">
       <accordion>
-	<accordion-group heading="Data types">
+	<accordion-group>
+	  <accordion-heading>
+	    <span>Data types</span>
+	  </accordion-heading>
 	  <div class="checkbox">
 	    <label ng-repeat="dataType in dataTypes">
 	      <input type="checkbox"
-		     value="{{dataType}}"
+		     value="{{dataType.name}}"
 		     ng-click="filterDataType(dataType)"
-		     ng-checked="currentDataTypes.indexOf(dataType) > -1">
-	      {{dataType | clearUnderscores | upperCaseFirst}}
-
+		     ng-checked="dataType.selected">
+		     <!-- ng-checked="currentDataTypes.indexOf(dataType) > -1"> -->
+		     {{dataType.name | clearUnderscores | upperCaseFirst}}
 	    </label>
 	  </div>	    
 	</accordion-group>
@@ -26,11 +29,6 @@
 	    <span ng-click="selectNavigation()">Therapeutic Areas Navigation</span>
 	  </accordion-heading>
 	  <accordion>
-	    <!-- <accordion-group class="cttv-accordion-leaf"> -->
-	    <!--   <accordion-heading> -->
-	    <!-- 	<span ng-click="selectRoot()">None</span> -->
-	    <!--   </accordion-heading> -->
-	    <!-- </accordion-group> -->
 	    <accordion-group ng-repeat="ta in therapeuticAreas" class="therapeuticArea">
 	      <accordion-heading>
 		<span id="cttv_targetAssociations_navBar_{{ta.name}}" ng-click="selectTherapeuticArea(ta.name)">{{ta.label}} ({{ta.children.length}})</span>
@@ -52,7 +50,8 @@
       <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('bubbles')"></i>
       <i class="fa fa-table fa-2x cttv-change-view" ng-click="setDisplay('table')"></i>
       <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('tree')"></i>
-      <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" on-load="">
+      <!-- Views: [Bubbles] [Table] [Tree] -->
+      <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}">
       </cttv-target-associations-bubbles>
       <cttv-target-associations-table style="display:none" target="{{search.query}}">
       </cttv-target-associations-table>

@@ -8,49 +8,84 @@ angular.module('cttvControllers')
  * Controller for the target associations page
  * It loads a list of associations for the given search
  */
-    .controller('AssociationsCtrl', ['$scope', '$location', '$log', function ($scope, $location, $log) {
-	$log.log('AssociationsCtrl()');
+    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', function ($scope, $location, $log) {
+	$log.log('targetAssociationsCtrl()');
+	var q = $location.path().split('/')[2];
 	$scope.search = {
-	    query : $location.search().q,
-	    label : $location.search().label
+	    query : q
 	};
+
+	// given a target id, get the name
+	var api = cttvApi();
+	var url = api.url.gene({'gene_id': q});
+	$log.log(url);
+	api.call(url)
+	    .then(function (resp) {
+		$scope.search.label = resp.body.approved_symbol;
+	    });
+	
 	$scope.nresults = 0;
 	$scope.focusEFO = "cttv_source";
 
 	var currentFocus = "cttv_disease";
 	var navopen = true;
-	// $scope.dataTypes = [
-	//     {
-	// 	name: "genetic_association",
-	// 	selected: true
-	//     },
-	//     {
-	// 	name: "somatic_mutations",
-	// 	selected: true
-	//     },
-	//     {
-	// 	name: "known_drugs",
-	// 	selected: true
-	//     },
-	//     {
-	// 	name: "rna_expression",
-	// 	selected: true
-	//     },
-	//     {
-	// 	name: "affected_pathways",
-	// 	selected: true
-	//     },
-	//     {
-	// 	name: "animal_models",
-	// 	selected: false
-	//     }
-	// ]
-	$scope.currentDataTypes = ["genetic_associations","somatic_mutations","known_drugs", "rna_expression", "affected_pathways"];
-	$scope.dataTypes = ["genetic_associations","somatic_mutations","known_drugs", "rna_expression", "affected_pathways", "animal_models"];
+	$scope.dataTypes = [
+	    {
+		name: "genetic_association",
+		label: "Genetics",
+		selected: true
+	    },
+	    {
+		name: "somatic_mutation",
+		label: "Somatic",
+		selected: true
+	    },
+	    {
+		name: "known_drugs",
+		label: "Drugs",
+		selected: true
+	    },
+	    {
+		name: "rna_expression",
+		label: "RNA",
+		selected: true
+	    },
+	    {
+		name: "affected_pathways",
+		label: "Pathways",
+		selected: true
+	    },
+	    {
+		name: "animal_models",
+		label: "Models",
+		selected: false
+	    }
+	]
+	var currentDataTypes = {};
+	for (var i=0; i<$scope.dataTypes.length; i++) {
+	    if ($scope.dataTypes[i].selected) {
+		var name = $scope.dataTypes[i].name;
+		var label = $scope.dataTypes[i].label;
+		currentDataTypes[name] = label;
+	    }
+	}
+	$scope.currentDataTypes = currentDataTypes;
 
 	$scope.filterDataType = function (dataType) {
-	    console.log(dataType + " datatype filter clicked");
+	    var currentDataTypes = {};
+	    for (var i=0; i<$scope.dataTypes.length; i++) {
+		if ($scope.dataTypes[i].name === dataType.name) {
+		    $scope.dataTypes[i].selected = $scope.dataTypes[i].selected === false ? true : false;
+		}
+		if ($scope.dataTypes[i].selected) {
+		    var name = $scope.dataTypes[i].name
+		    var label = $scope.dataTypes[i].label;
+		    currentDataTypes[name] = label;
+		}
+	    }
+	    $scope.currentDataTypes=currentDataTypes;
 	}
+
 	
 	$scope.selectTherapeuticArea = function (efo) {
 	    if (efo === currentFocus) {

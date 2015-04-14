@@ -140,12 +140,10 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
         $scope.linkTo =function(s){
             // parse the options:
             if( s.type.toLowerCase()=="genedata" ){
-                $location.url("target-associations");
+                $location.url("/target/" + s.q + "/associations");
             } else if ( s.type.toLowerCase()=="efo" ){
-                $location.url("disease-associations");
+                $location.url("/disease/" + s.q + "/associations");
             }
-            // set the page URL
-            $location.search( 'q=' + s.q + "&label="+s.label);
             
             $scope.search.query.text = "";
         }

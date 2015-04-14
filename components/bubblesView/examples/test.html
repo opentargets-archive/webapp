@@ -7,6 +7,7 @@
   <body>
     <link rel="stylesheet" href="../build/bubblesView.css"/>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="../node_modules/tnt.tree.node/build/tnt.tree.node.js"></script>
     <script src="../build/cttv.bubblesView.js"></script>
     <script src="theme.js"></script>
     <script src="data.js"></script>
@@ -16,7 +17,6 @@
       var view = bubblesView()
       .onclick (function (d) {view.focus(d)})
       .diameter(600);
-      console.log(view);
       var mytheme = theme();
       mytheme(view, document.getElementById("mydiv"));
       // view(document.getElementById("mydiv"));
