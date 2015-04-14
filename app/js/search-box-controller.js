@@ -76,12 +76,13 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
                 
                 // fire the typeahead search
                 return cttvAPIservice.getAutocomplete({q:$scope.search.query.text, size:3}).
-                    success(function(data, status) {
-                        $scope.search.results = data.data;  // store the results
-                        $scope.search.progress = false;     // flag for search in progress
-                    }).
-                    error(function(data, status) {
-                        $log.log(status);
+                    then(
+                        function(resp){
+                            $scope.search.results = resp.body.data;  // store the results
+                        }, 
+                        cttvAPIservice.defaultErrorHandler
+                    ).
+                    finally(function(){
                         $scope.search.progress = false;
                     });
             }else{

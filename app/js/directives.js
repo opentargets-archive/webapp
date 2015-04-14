@@ -375,6 +375,7 @@ angular.module('cttvDirectives', [])
     	return {
         	restrict:'EA',
         	templateUrl: 'partials/search-suggestions.html',
+        	replace: true,
         	link: function(scope, elem, attrs){
 
         	}
@@ -416,6 +417,23 @@ angular.module('cttvDirectives', [])
         	}
     	}
     })
+
+
+
+    .directive('cttvProgressSpinner', function(){
+    	return {
+    		restrict: 'EA',
+    		template: '<i class="fa fa-circle-o-notch fa-spin"></i>',
+    		link: function(scope, elem, attrs){
+    			
+    			if(attrs.size){
+    				elem.addClass("fa-"+attrs.size+"x");
+    			}
+    		}
+    	}
+    })
+
+
 /*
 angular.module('myApp.directives', []).
   directive('appVersion', ['version', function(version) {

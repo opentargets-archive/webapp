@@ -2,74 +2,73 @@
 
 <view-title>Home</view-title>
 
-<div class-"row" style="margin-top: 100px;">
+<div class="row intro-content">
   <div class="col-sm-1"></div>
   <div class="col-sm-10" ng-controller="SearchBoxCtrl">
 
-    <img src="http://www.targetvalidation.org/sites/targetvalidation.org/files/CTTV_logo_webheader.png" style="padding-bottom:40px; display: block; margin: 0 auto;"/>
+    <img src="http://www.targetvalidation.org/sites/targetvalidation.org/files/CTTV_logo_webheader.png" class="intro-logo"/>
 
-      <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
-        <fieldset>
-          <div class="form-group has-feedback" style="position:relative"> 
+    <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
+      <fieldset>
+        <div class="form-group has-feedback search-form"> 
+        
           
+          <!-- Search box + search button -->
+          <div class="input-group">
 
-            
-            <!-- Search box + search button -->
-            <div class="input-group">
+            <input type="text" placeholder="Search for a target or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
-              <input type="text" placeholder="Search for a target or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
-
-              <div class="input-group-btn">
-                <button type="submit" class="btn btn-primary">
-                  <span class="fa fa-search fa-lg"></span>
-                </button>
-              </div>
-
+            <div class="input-group-btn">
+              <button type="submit" class="btn btn-primary">
+                <span class="fa fa-search fa-lg"></span>
+              </button>
             </div>
-            
-            <!-- Search in progress spinner -->
-            <span class="text-lowlight form-control-feedback" style="right:40px" ng-show="search.progress" ><i class="fa fa-circle-o-notch fa-spin"></i></span>
 
-            <!-- Suggestions box -->
-            <div cttv-search-suggestions></div>
-
-
-            <!-- examples -->
-            <span class="small">
-                <i>
-                  Examples: <a href="#/search?q=braf">BRAF</a>, 
-                  <a href="#/search?q=carcinoma">Carcinoma</a>, 
-                  <a href="#/search?q=pten">PTEN</a>
-                </i>
-            </span>
-            
           </div>
-        </fieldset>
-      </form>
+          
+          <!-- Search in progress spinner -->
+          <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
 
-      <div style="height:100px"></div>
+          <!-- Suggestions box -->
+          <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
+
+
+          <!-- examples -->
+          <span class="small">
+              <i>
+                Examples: <a href="#/search?q=braf">BRAF</a>, 
+                <a href="#/search?q=carcinoma">Carcinoma</a>, 
+                <a href="#/search?q=pten">PTEN</a>
+              </i>
+          </span>
+          
+        </div>
+      </fieldset>
+    </form>
+
+    <div class="intro-divider"></div>
       
-      <div class="row text-lowlight" style="font-weight: 200; text-align: center">
+    <div class="row text-lowlight">
 
-        <div class="col-sm-6">
-          <!-- <i class="fa fa-bullseye" style="font-size:70px; color: #ED4F27"></i> -->
-          <h2 style="font-weight: 200; color:#666">I am interested in target T:</h2>  
-          <h2 style="font-weight: 200; color:#2B8BAC">Which diseases can be treated by modulating target T?</h2>
-        </div>
-
-
-        <div class="col-sm-6">
-          <!-- <i class="fa fa-medkit" style="font-size:70px; color:#0D3774"></i> -->
-          <h2 style="font-weight: 200; color:#666">I am interested in disease D:</h2>
-          <h2 style="font-weight: 200; color:#2B8BAC">Which targets can be modulated to treat disease D?</h2>
-        </div>
-
+      <div class="col-sm-6">
+        <h2 class="intro-statement intro-statement-heading">I am interested in target T:</h2>  
+        <h2 class="intro-statement intro-statement-p">Which diseases can be treated by modulating target T?</h2>
       </div>
 
-      <div style="height:100px"></div>
+
+      <div class="col-sm-6">
+        <h2 class="intro-statement intro-statement-heading">I am interested in disease D:</h2>
+        <h2 class="intro-statement intro-statement-p">Which targets can be modulated to treat disease D?</h2>
+      </div>
 
     </div>
-    <div class="col-sm-1"></div>
+
+    <div class="intro-divider"></div>
+
+  </div>
+
+  <div class="col-sm-1"></div>
+
 </div>
 
 <!-- End first page -->

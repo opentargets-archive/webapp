@@ -11,7 +11,7 @@ angular.module('cttvServices', []).
     /** 
      * The API services, with methods to call the ElasticSearch API
      */
-    factory('cttvAPIservice', ['$http', '$log', '$location', function($http, $log, $location) {
+    factory('cttvAPIservice', ['$http', '$log', '$location', '$rootScope', '$q', '$timeout', function($http, $log, $location, $rootScope, $q, $timeout) {
 
 
 
@@ -25,16 +25,21 @@ angular.module('cttvServices', []).
             API_EVIDENCE_URL : "evidences",
             API_AUTOCOMPLETE_URL : "autocomplete",
             API_FILTERBY_URL : 'filterby',
-            API_EFO_URL : 'efo',
-            API_ASSOCIATION_URL : 'association',
+            API_EFO_URL : 'disease',
+            API_ASSOCIATION_URL : 'associations', // note: these are no longer URLs, but actual API method names
             API_GENE_URL : 'gene',
         };
 
-        // the request configuration object.
-        // Here we set the default values, then populate the rest in the callAPI function
-//        var req = {
-//        }
 
+
+        var api = cttvApi()
+            // might be doing some configuration here
+            //.prefix("http://localhost:8008/api/latest/")
+            //.appname("cttv-web-app")
+            //.secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
+
+
+        
 
         /* 
           App running on localhost:
@@ -45,6 +50,12 @@ angular.module('cttvServices', []).
         //     req.withCredentials = false;
         //     req.headers = {};
         // }
+
+
+
+        function isSuccess(status) {
+            return 200 <= status && status < 300;
+        }
 
 
 
@@ -60,33 +71,58 @@ angular.module('cttvServices', []).
          */
         var callAPI = function(queryObject){
 
-            // req.method= queryObject.method || cttvAPI.API_DEFAULT_METHOD;
-            // req.url= cttvAPI.API_URL + queryObject.operation;
-            // req.params= queryObject.params;
-            // console.log(cttvAPI.API_URL + queryObject.operation);
-            // console.log(queryObject);
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            var url = api.url[queryObject.operation](queryObject.params);
 
-            // set common stuff
-            var req = {
-	        // headers: {
-                    //'Authorization' : 'Basic ='
-		    //'X-Auth-Token' : "Y3R0djpkajhtaXhpamswNGpwZGc"
-	        // }
-	    };   // this must be initialized for every call!!!
+            var resp = api.call(url, done);
 
-            req.method = cttvAPI.API_DEFAULT_METHOD;
-            req.cache = true;   // set request to use caching
-            if( queryObject.params && queryObject.params.method ){
-                req.method = queryObject.params.method;
-                //delete queryObject.params.method;
+            return promise;
+            //return resp.then(handleSuccess, handleError);
+
+
+            function done(notsure, response){
+              resolvePromise(response);
+              if (!$rootScope.$$phase) $rootScope.$apply();
             }
-            req.url = cttvAPI.API_URL + queryObject.operation;
-            if(req.method.toLowerCase() === 'get'){
-                req.params = queryObject.params;
-            } else if (req.method.toLowerCase() === 'post'){
-                req.data = queryObject.params;
+            
+            function resolvePromise(response){
+              // normalize internal statuses to 0
+              var status = Math.max(response.status, 0);
+
+              // we resolve the the promise on the whole response object,
+              // so essentially we pass back the un-processed response object:
+              // that means the data we're interested is in response.body.
+              (isSuccess(status) ? deferred.resolve : deferred.reject)(response);
+
+              // an alternative approach is to resolve the promise on a custom object
+              // so that we don't pass back the whole raw response, but rather we make up the object
+              // and choose what we want. 
+              // In this example, we go for a more angular/jquery approach and send back data and status.
+              // This means that we have to handle things differently in our success handler...
+              
+              // (isSuccess(status) ? deferred.resolve : deferred.reject)({
+              //   data : response.body,
+              //   status: response.status
+              // });
+              
+                
+              
             }
-            return $http(req); //.then(function(r){return r;}, function(r){return r;});
+        }
+
+
+        
+
+
+
+        var optionsToString = function(obj){
+            var s="";
+            for(var i in obj){
+                s+="&"+i+"="+obj[i];
+            }
+            // remove the leading '&' and returns
+            return s.substring(1);
         }
 
 
@@ -172,7 +208,8 @@ angular.module('cttvServices', []).
             $log.log("cttvAPI.getEfo");
 
             return callAPI({
-                operation: cttvAPI.API_EFO_URL + "/" + queryObject.efo,
+                operation: cttvAPI.API_EFO_URL, // + "/" + queryObject.efo,
+                params: queryObject
             });
         }
 
@@ -187,7 +224,8 @@ angular.module('cttvServices', []).
             $log.log("cttvAPI.getGene");
 
             return callAPI({
-                operation: cttvAPI.API_GENE_URL + "/" + queryObject.gene,
+                operation: cttvAPI.API_GENE_URL, // + "/" + queryObject.gene,
+                params: queryObject
             });
         }
 
@@ -208,6 +246,13 @@ angular.module('cttvServices', []).
                 operation: cttvAPI.API_ASSOCIATION_URL,
                 params: queryObject
             })
+        }
+
+
+
+        cttvAPI.defaultErrorHandler = function(error){
+          $log.error("----");
+          $log.error(error);
         }
 
 
@@ -315,25 +360,6 @@ angular.module('cttvServices', []).
 
 
         return cttvSearchService;
-    }]).
-
-
-
-
-
-
-    /**
-     * A dummy service
-     */
-    factory('notify', ['$window', function(win) {
-        var msgs = [];
-        return function(msg) {
-            msgs.push(msg);
-            if (msgs.length == 3) {
-                win.alert(msgs.join("\n"));
-                msgs = [];
-            }
-        };
     }]);
 
 
