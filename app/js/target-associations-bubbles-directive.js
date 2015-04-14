@@ -55,11 +55,11 @@ angular.module('cttvDirectives')
 		// Data types changes
 		scope.$watch(function () { return attrs.datatypes }, function (dts) {
 		    // if (ga) {
-			var api = cttvApi();
+		    var api = cttvApi();
 			var url = api.url.associations({
 			    gene: attrs.target,
 			    datastructure: "tree"
-			})
+			});
 			api.call (url)
 			    .then (function (resp) {
 				var data = resp.body.data;
@@ -114,7 +114,9 @@ angular.module('cttvDirectives')
 
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 
-		    var api = cttvApi();
+		    var api = cttvApi()
+			.prefix("/api/latest/");
+
 		    var url = api.url.associations({
 		    	gene: attrs.target,
 		    	datastructure: "tree"
