@@ -7,7 +7,7 @@ var data = {
     efo : "EFO_0000621",
 };
 
-describe('CTTV api', function () {
+describe.skip('CTTV api', function () {
     var myCttvApi = cttv_api()
 	.prefix ("http://127.0.0.1:8008/api/latest")
 	.appname ("cttv-web-app")
