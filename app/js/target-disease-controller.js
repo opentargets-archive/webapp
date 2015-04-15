@@ -1178,10 +1178,20 @@
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,
-                "order": [[5, 'asc']]/*,
+                "order": [[5, 'asc']],
+                //"dom" : '<"H">lftip',
+                "dom": '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>',
+                //"dom": 'T<"H"plfr>t<"F"ip>',
                 "tableTools": {
-                    "sSwfPath": "../swfs/copy_csv_xls.swf"
-                }*/
+                    "sSwfPath": "swfs/copy_csv_xls_pdf.swf",//"http://cdn.datatables.net/tabletools/2.2.2/swf/copy_csv_xls.swf",
+                    "aButtons": [ 
+                        {
+                            "sExtends":    "collection",
+                            "sButtonText": "<span class='fa fa-cog'>",
+                            "aButtons":    [ "copy", "csv", "pdf" ]
+                        }
+                     ]
+                }
             } ); 
         }
 
