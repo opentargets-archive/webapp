@@ -24,21 +24,21 @@ config(['$routeProvider',
                 templateUrl: 'partials/search.html',
                 controller: 'SearchAppCtrl'
             }).
-    	    when('/target/:id/associations', {
-        		templateUrl: 'partials/target-associations.html',
-        		controller: 'targetAssociationsCtrl'
-    	    }).
-    	    when('/disease/:id/associations', {
-        		templateUrl: 'partials/disease-associations.html',
-        		controller: 'diseaseAssociationsCtrl'
-    	    }).
-    	    when('/evidence/:id/:id', {
-        		templateUrl: 'partials/targetDisease.html',
-        		controller: 'TargetDiseaseCtrl'
-    	    }).
-    	    when('/gene-disease', {
-                redirectTo: '/target-disease'   // for backward compatibility
-    	    }).
+	    when('/target/:id/associations', {
+		templateUrl: 'partials/target-associations.html',
+		controller: 'targetAssociationsCtrl'
+	    }).
+	    when('/disease/:id/associations', {
+		templateUrl: 'partials/disease-associations.html',
+		controller: 'diseaseAssociationsCtrl'
+	    }).
+	    when('/evidence/:id/:id', {
+		templateUrl: 'partials/targetDisease.html',
+		controller: 'TargetDiseaseCtrl'
+	    }).
+    	    // when('/gene-disease', {
+            //     redirectTo: '/target-disease'   // for backward compatibility
+    	    // }).
     	    when('/target/:id', {
         		templateUrl: 'partials/target.html',
         		controller: 'TargetCtrl'

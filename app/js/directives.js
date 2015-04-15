@@ -3,22 +3,26 @@
 /* Directives */
 angular.module('cttvDirectives', [])
 
-    .directive('cttvTargetAssociationsTable', function () {
+    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
 	return {
 	    restrict: 'E',
 	    scope: {},
 	    link: function (scope, elem, attrs) {
 		scope.$watch(function () { return attrs.target }, function (val) {
-		    var api = cttvApi();
-		    var tableUrl = api.url.associations({
+		    // var api = cttvApi();
+		    // var tableUrl = api.url.associations({
+		    // 	gene: attrs.target,
+		    // 	datastructure: "flat"
+		    // });
+		    cttvAPIservice.getAssociations ({
 			gene: attrs.target,
 			datastructure: "flat"
-		    });
-		    api.call(tableUrl)
+		    })
+		    //api.call(tableUrl)
 			.then(function (resp) {
 			    resp = JSON.parse(resp.text);
-			    console.log("RESP FOR TABLES (IN DIRECTIVE): ");
-			    console.log(resp);
+			    $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
+			    $log.log(resp);
 			    var newData = [];
 			    var flowers = {};
 			    for (var i=0; i<resp.data.length; i++) {
@@ -113,9 +117,9 @@ angular.module('cttvDirectives', [])
 		});
 	    }
 	}
-    })
+    }])
 
-    .directive('cttvTargetAssociationsTree', function () {
+    .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
 	return {
 	    restrict: 'E',
 	    scope: {},
@@ -133,15 +137,19 @@ angular.module('cttvDirectives', [])
 		    var bottomMargin = 50;
 
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
-		    console.log("DIAMETER FOR TREE: " + diameter);
+		    $log.log("DIAMETER FOR TREE: " + diameter);
 
-		    var api = cttvApi();
-		    var url = api.url.associations({
+		    // var api = cttvApi();
+		    // var url = api.url.associations({
+		    // 	gene: attrs.target,
+		    // 	datastructure: "tree"
+		    // })
+		    // console.log("TREE URL: " + url);
+		    // api.call(url)
+		    cttvAPIservice.getAssociations ({
 			gene: attrs.target,
 			datastructure: "tree"
 		    })
-		    console.log("TREE URL: " + url);
-		    api.call(url)
 			.then (function (resp) {
 			    var data = resp.body.data;
 			    var fView = flowerView()
@@ -158,21 +166,24 @@ angular.module('cttvDirectives', [])
 		});
 	    }
 	}
-    })
+    }])
 
-    .directive('cttvDiseaseAssociations', function () {
+    .directive('cttvDiseaseAssociations', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
 	return {
 	    restrict: 'E',
 	    scope: {},
 	    link: function (scope, elem, attrs) {
-		var api = cttvApi();
-		var url = api.url.associations({
+		// var api = cttvApi();
+		// var url = api.url.associations({
+		//     efo: attrs.target
+		// });
+		// api.call(url)
+		cttvAPIservice.getAssociations ({
 		    efo: attrs.target
-		});
-		api.call(url)
+		})		
 		    .then(function (resp) {
 			scope.$parent.nresults = resp.body.total;
-			scope.$parent.$apply();
+			//scope.$parent.$apply();
 
 			var data = resp.body.data;
 			var newData = new Array(data.length);
@@ -265,7 +276,7 @@ angular.module('cttvDirectives', [])
 		    });
 	    }
 	};
-    })
+    }])
 
 
     .directive('pmcCitationList', function () {

@@ -7,8 +7,11 @@ var data = {
     efo : "EFO_0000621",
 };
 
-describe('CTTV api', function () {
-    var myCttvApi = cttv_api();
+describe.skip('CTTV api', function () {
+    var myCttvApi = cttv_api()
+	.prefix ("http://127.0.0.1:8008/api/latest")
+	.appname ("cttv-web-app")
+	.secret ("2J23T20O31UyepRj7754pEA2osMOYfFK");
     it ("retrieves a cttv api object", function () {
 	assert.isDefined(myCttvApi);
     });
@@ -29,11 +32,11 @@ describe('CTTV api', function () {
 			appname: "cttv-web-app",
 			secret: "2J23T20O31UyepRj7754pEA2osMOYfFK"
 		    });
-		    console.log(url);
 		    myCttvApi.call(url)
 			.then (function (resp) {
-			    console.log("RESP:::::::::::::::");
-			    console.log(resp);
+			    assert.isDefined(resp);
+			    assert.isObject(resp.body);
+			    assert.isDefined(resp.body.token);
 			})
 		    done();
 		})
@@ -44,6 +47,7 @@ describe('CTTV api', function () {
 		});
 		it ("retrieves search results for a gene", function (done) {
 		    var url = cttvApiUrl.search({q: data.gene});
+		    console.log(url);
 		    myCttvApi.call(url)
 			.then(function (resp) {
 			    resp = JSON.parse(resp.text);

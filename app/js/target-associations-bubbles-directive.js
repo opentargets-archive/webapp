@@ -3,7 +3,40 @@
 /* Directives */
 angular.module('cttvDirectives')
 
-    .directive('cttvTargetAssociationsBubbles', function () {
+    .directive('cttvNavRecompile', function($compile, $parse) {
+	return {
+	    scope: true, // required to be able to clear watchers safely
+	    compile: function(el) {
+		var template = getElementAsHtml(el);
+		return function link(scope, $el, attrs) {
+		    var stopWatching = scope.$parent.$watch(attrs.kcdRecompile, function(_new, _old) {
+			var useBoolean = attrs.hasOwnProperty('useBoolean');
+			if ((useBoolean && (!_new || _new === 'false')) || (!useBoolean && (!_new || _new === _old))) {
+			    return;
+			}
+			// reset kcdRecompile to false if we're using a boolean
+			if (useBoolean) {
+			    $parse(attrs.kcdRecompile).assign(scope.$parent, false);
+			}
+			
+			// recompile
+			var newEl = $compile(template)(scope.$parent);
+			$el.replaceWith(newEl);
+			
+			// Destroy old scope, reassign new scope
+			stopWatching();
+			scope.$destroy();
+		    });
+		};
+	    }
+	};
+
+	function getElementAsHtml(el) {
+	    return angular.element('<a></a>').append(el.clone()).html();
+	}
+    })
+    
+    .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
 	return {
 	    restrict: 'E',
 	    scope: {
@@ -21,20 +54,24 @@ angular.module('cttvDirectives')
 
 		// Data types changes
 		scope.$watch(function () { return attrs.datatypes }, function (dts) {
-		    // if (ga) {
-			var api = cttvApi();
-			var url = api.url.associations({
+		    if (ga) {
+		    // var api = cttvApi();
+		    // 	var url = api.url.associations({
+		    // 	    gene: attrs.target,
+		    // 	    datastructure: "tree"
+		    // 	});
+		    // 	api.call (url)
+			cttvAPIservice.getAssociations ({
 			    gene: attrs.target,
 			    datastructure: "tree"
 			})
-			api.call (url)
 			    .then (function (resp) {
 				var data = resp.body.data;
 				scope.$parent.nresults = resp.body.total;
 				ga.datatypes(JSON.parse(dts));
 				ga.update(resp.body.data);
 			    })
-		    // }
+		    }
 		});
 
 		// Focus changes
@@ -81,23 +118,30 @@ angular.module('cttvDirectives')
 
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 
-		    var api = cttvApi();
-		    var url = api.url.associations({
-		    	gene: attrs.target,
-		    	datastructure: "tree"
+		    // var api = cttvApi()
+		    // 	.prefix("/api/latest/");
+
+		    // var url = api.url.associations({
+		    // 	gene: attrs.target,
+		    // 	datastructure: "tree"
+		    // })
+		    // $log.log("BUBBLES URL: " + url);
+		    cttvAPIservice.getAssociations ({
+			gene: attrs.target,
+			datastructure: "tree"
 		    })
-		    console.log("BUBBLES URL: " + url);
-		    api.call (url)
+		    // api.call (url)
 		    	.then (function (resp) {
 			    var data = resp.body.data;
 			    scope.$parent.nresults=resp.body.total;
 
-			    var bView = bubblesView().breadcrumsClick(function (d) {
-				var focusEvent = new CustomEvent("bubblesViewFocus", {
-				    "detail" : d
+			    var bView = bubblesView()
+				.breadcrumsClick(function (d) {
+				    var focusEvent = new CustomEvent("bubblesViewFocus", {
+					"detail" : d
+				    });
+				    this.dispatchEvent(focusEvent);
 				});
-				this.dispatchEvent(focusEvent);
-			    });
 
 			    var fView = flowerView()
 				.fontsize (10)
@@ -111,10 +155,10 @@ angular.module('cttvDirectives')
 
 			    updateView (data);
 
-			    scope.$parent.$apply();
+			    //scope.$parent.$apply();
 			    ga(bView, fView, elem[0]);
 			});
 		});
-	    }		    
+	    }
 	}
-    })
+    }]);

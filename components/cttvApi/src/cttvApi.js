@@ -23,7 +23,8 @@ var cttvApi = function () {
     };
 
     var getToken = function () {
-		var tokenUrl = _.url.requestToken(credentials);
+	var tokenUrl = _.url.requestToken(credentials);
+	console.log("TOKEN URL: " + tokenUrl);
 		return jsonHttp.get({
 		    "url": tokenUrl
 		})
@@ -52,14 +53,14 @@ var cttvApi = function () {
 			    var myPromise = jsonHttp.get ({
 					"url": myurl,
 					"headers": headers
-			    }, callback)/.catch(function (err) {
-					console.log(err);
+			    }, callback).catch(function (err) {
+				console.log(err);
 			    });
 			    return myPromise;
 
 			});
 		} else {
-		    console.log("Current token is: " + credentials.token);
+		    //console.log("Current token is: " + credentials.token);
 
 		    return jsonHttp.get({
 				"url" : myurl,
