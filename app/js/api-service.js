@@ -20,7 +20,8 @@ angular.module('cttvServices', []).
          */
         var cttvAPI = {
             API_DEFAULT_METHOD : "GET",
-            API_URL : "http://beta.targetvalidation.org/api/latest/", // "http://193.62.52.228/api/latest/",
+            //API_URL : "http://beta.targetvalidation.org/api/latest/",
+	    // API_URL : "http://193.62.52.228/api/latest/",
             API_SEARCH_URL : "search",
             API_EVIDENCE_URL : "evidences",
             API_AUTOCOMPLETE_URL : "autocomplete",
@@ -33,10 +34,11 @@ angular.module('cttvServices', []).
 
 
         var api = cttvApi()
+	    .prefix("/api/latest/")
             // might be doing some configuration here
             //.prefix("http://localhost:8008/api/latest/")
-            //.appname("cttv-web-app")
-            //.secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
+            .appname("cttv-web-app")
+            .secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
 
 
         
@@ -177,7 +179,7 @@ angular.module('cttvServices', []).
             $log.log("cttvAPI.getAssociations()");
 
             return callAPI({
-                operation : cttvAPI.API_FILTERBY_URL,
+                operation : cttvAPI.API_ASSOCIATION_URL,
                 params : queryObject
             });
         }
