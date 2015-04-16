@@ -15,11 +15,6 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
       files: [
 	  'http://d3js.org/d3.v3.min.js',
-	  'test/chai.js',
-	  'test/setup.js',
-	  'build/cttv.bubblesView.js',
-	  {pattern: 'test/*.html', watched: true, served: true, included: false},
-	  'test/test.js'
     ],
 
 
