@@ -23,13 +23,16 @@
  * Controller for the disease page
  * It loads general information about a given disease
  */
-    .controller ('DiseaseCtrl', ["$scope", "$location", "$log", function ($scope, $location, $log) {
+    .controller ('DiseaseCtrl', ["$scope", "$location", "$log", "cttvAPIservice", function ($scope, $location, $log, cttvAPIservice) {
 	$log.log("DiseaseCtrl()");
-	var cttvRestApi = cttvApi();
+	// var cttvRestApi = cttvApi();
 	var efo_code = $location.url().split("/")[2];
-	var url = cttvRestApi.url.disease({'efo' : efo_code});
-	$log.log(url);
-	cttvRestApi.call(url)
+	// var url = cttvRestApi.url.disease({'efo' : efo_code});
+	// $log.log(url);
+	// cttvRestApi.call(url)
+	cttvAPIservice.getDisease({
+	    'efo': efo_code
+	})
 	    .then (function (resp) {
 		resp = JSON.parse(resp.text);
 		resp.path_labels.shift(); // remove cttv_disease
@@ -53,7 +56,7 @@
 		};
 
 		// Update bindings
-		$scope.$apply();
+		//$scope.$apply();
 	    })
     }])
 
@@ -62,14 +65,16 @@
  * Controller for the target page
  * It loads information about a given target
  */
-    .controller ("TargetCtrl", ["$scope", "$location", "$log", function ($scope, $location, $log) {
+    .controller ("TargetCtrl", ["$scope", "$location", "$log", "cttvAPIservice", function ($scope, $location, $log, cttvAPIservice) {
 	$log.log('TargetCtrl()');
-	var cttvRestApi = cttvApi();
+	// var cttvRestApi = cttvApi();
 	var geneId = $location.url().split("/")[2];
-	var url = cttvRestApi.url.gene({'gene_id' : geneId});
-	$log.log(url);
-
-	cttvRestApi.call(url)
+	// var url = cttvRestApi.url.gene({'gene_id' : geneId});
+	// $log.log(url);
+	// cttvRestApi.call(url)
+	cttvAPIservice.getGene({
+	    "gene_id": geneId
+	})
 	    .then(function (resp) {
 		resp = JSON.parse(resp.text);
 		$scope.target = {
@@ -139,7 +144,7 @@
 		$scope.pmidsLinks = (_.map(cleanBibliography,function (p) {return "EXT_ID:" + p})).join(" OR ");
 
 		// Update the bindings
-		$scope.$apply();
+		// $scope.$apply();
 	    });
     }]).
 
