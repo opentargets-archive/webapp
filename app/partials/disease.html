@@ -1,6 +1,6 @@
 <div>
   <view-title>{{'Disease profile: '+disease.label}}</view-title>
-  <h3>{{disease.label}} <small>({{disease.efo}})  <a href="#/disease-associations?q={{disease.efo}}&label={{disease.label}}">View associations</a></small></h3>
+  <h3>{{disease.label}} <small>({{disease.efo}})  <a href="#/disease/{{disease.efo}}/associations">View associations</a></small></h3>
   <accordion close-others="false">
     <accordion-group heading="Description" is-open="true">
       {{disease.description}}
@@ -15,7 +15,7 @@
     <accordion-group heading="EFO Path" is-open="false">
       <ul>
 	<li ng-repeat="node in disease.path">
-	  {{node.label}} <small>(<a href="#/disease-associations?q={{node.efo}}&label={{node.label}}">See gene associations</a>), (<a href="#/disease/{{node.efo}}">Go to disease page</a>)</small>
+	  {{node.label}} <small>(<a href="#/disease/{{node.efo}}/associations">See gene associations</a>), (<a href="#/disease/{{node.efo}}">Go to disease page</a>)</small>
 	</li>
       </ul>
     </accordion-group>
