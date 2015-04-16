@@ -58,6 +58,9 @@ config(['$routeProvider',
                 templateUrl: 'partials/target-disease.html',
                 controller: 'TargetDiseaseCtrl'
             }).
+            when('/release-notes', {
+                templateUrl: 'partials/release-notes.html'
+            }).
             otherwise({
                 redirectTo: '/intro'
             });
