@@ -44,11 +44,10 @@ var cttvApi = function () {
 
 		    return getToken()
 			.then(function (resp) {
-			    console.log("   => Got a new token: " + resp.body.token);
-			    credentials.token = resp.body.token;
-			    //credentials.token = resp.text;
+			    console.log("   ======>> Got a new token: " + resp.body.token);
+			    //credentials.token = resp.body.token;
 			    var headers = {
-				"Auth-token": credentials.token
+				"Auth-token": resp.body.token
 			    }
 			    var myPromise = jsonHttp.get ({
 					"url": myurl,
@@ -60,8 +59,7 @@ var cttvApi = function () {
 
 			});
 		} else {
-		    //console.log("Current token is: " + credentials.token);
-
+		    console.log("Current token is: " + credentials.token);
 		    return jsonHttp.get({
 				"url" : myurl,
 				"headers": {
@@ -69,8 +67,10 @@ var cttvApi = function () {
 				}
 		    }, callback).catch(function (err) {
 			// Logic to deal with expired tokens
+			console.log("     --- Received an api error -- Possibly the token has expired, so I'll request a new one");
+			console.log(err);
 			credentials.token = "";
-			return _.call(myrl, callback);
+			return _.call(myurl, callback);
 		    });
 		}
     };
