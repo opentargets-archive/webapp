@@ -1,7 +1,7 @@
 <div class="search-suggestions-box ng-hide" ng-cloak>
 
   <!-- Besthit -->
-  <div ng-if="search.results.besthit!==null && search.results.besthit!==undefined" ng-click="linkTo({type:search.results.besthit.type, q:search.results.besthit.id, label:search.results.besthit.label||search.results.besthit.approved_symbol})" class="item besthit">
+  <div ng-if="search.results.besthit!==null && search.results.besthit!==undefined" ng-click="linkTo({type:search.results.besthit.type, q:search.results.besthit.id, label:search.results.besthit.label||search.results.besthit.approved_symbol})" class="text-item besthit">
 
     <h4 class="text-item">
       <span class="nbblock">
@@ -50,7 +50,7 @@
         
         <!-- show the EFO hierarchy links -->
         <span class="small text-lowlight">
-          <span ng-show="item.path.length>2">[...]<span class="fa fa-angle-right fa-md suggestions-efo-hierarchy-arrow"></span></span><span ng-repeat="link in item.path" ng-if="$index==item.path.length-3 || $index==item.path.length-2 || $index==item.path.length-1"><span ng-click="linkTo({type:'efo', q:link.uri.split('/').pop(), label:link.label}); $event.stopPropagation()" title="{{link.label}}"><a>{{link.label | limitTo:30}}<span ng-show="link.label.length>30">...</span></a></span><span ng-show="!$last" class="fa fa-angle-right fa-md suggestions-efo-hierarchy-arrow"></span></span>
+          <span ng-show="item.path[0].length>2">[...]<span class="fa fa-angle-right fa-md suggestions-efo-hierarchy-arrow"></span></span><span ng-repeat="link in item.path[0]" ng-if="$index==item.path[0].length-3 || $index==item.path[0].length-2 || $index==item.path[0].length-1"><span ng-click="linkTo({type:'efo', q:link.uri.split('/').pop(), label:link.label}); $event.stopPropagation()" title="{{link.label}}"><a>{{link.label | limitTo:30}}<span ng-show="link.label.length>30">...</span></a></span><span ng-show="!$last" class="fa fa-angle-right fa-md suggestions-efo-hierarchy-arrow"></span></span>
         </span>
       </div>
     </div>

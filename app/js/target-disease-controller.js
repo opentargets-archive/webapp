@@ -223,7 +223,7 @@
 
         var getCommonDiseaseData = function(){
             $scope.search.genetic_associations.common_diseases.is_loading = true;
-            return cttvAPIservice.getAssociations( {
+            return cttvAPIservice.getFilterBy( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
                     size: 1000,
@@ -355,7 +355,7 @@
 
         var getRareDiseaseData = function(){
             $scope.search.genetic_associations.rare_diseases.is_loading = true;
-            return cttvAPIservice.getAssociations( {
+            return cttvAPIservice.getFilterBy( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
                     size: 1100,
@@ -551,7 +551,7 @@
 
         var getDrugData = function(){
             $scope.search.drugs.is_loading = true;
-            return cttvAPIservice.getAssociations( {
+            return cttvAPIservice.getFilterBy( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
                     size: 1000,
@@ -745,7 +745,7 @@
 
         var getPathwaysData = function(){
             $scope.search.pathways.is_loading = true;
-            return cttvAPIservice.getAssociations( {
+            return cttvAPIservice.getFilterBy( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
                     size: 1000,
@@ -884,7 +884,7 @@
 
         var getRnaExpressionData = function(){
             $scope.search.rna_expression.is_loading = true;
-            return cttvAPIservice.getAssociations( {
+            return cttvAPIservice.getFilterBy( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
                     size: 1000,
@@ -997,7 +997,7 @@
 
         var getMutationData = function(){
             $scope.search.somatic_mutations.is_loading = true;
-            return cttvAPIservice.getAssociations( {
+            return cttvAPIservice.getFilterBy( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
                     size: 1000,
@@ -1086,7 +1086,7 @@
 
         var getMouseData = function(){
             $scope.search.mouse.is_loading = true;
-            return cttvAPIservice.getAssociations( {
+            return cttvAPIservice.getFilterBy( {
                     gene:$scope.search.target, 
                     efo:$scope.search.disease,
                     size: 1000,
@@ -1179,11 +1179,9 @@
                 "paging" : true,
                 "ordering" : true,
                 "order": [[5, 'asc']],
-                //"dom" : '<"H">lftip',
                 "dom": '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>',
-                //"dom": 'T<"H"plfr>t<"F"ip>',
                 "tableTools": {
-                    "sSwfPath": "swfs/copy_csv_xls_pdf.swf",//"http://cdn.datatables.net/tabletools/2.2.2/swf/copy_csv_xls.swf",
+                    "sSwfPath": "swfs/copy_csv_xls_pdf.swf",
                     "aButtons": [ 
                         {
                             "sExtends":    "collection",

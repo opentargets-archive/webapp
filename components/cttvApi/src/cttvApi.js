@@ -15,6 +15,7 @@ var cttvApi = function () {
     var prefixDisease = "efo/";
     var prefixToken = "auth/request_token?";
     var prefixAutocomplete = "autocomplete?";
+    var prefixQuickSearch = "quicksearch?"
 
     var credentials = {
 	token : "",
@@ -121,80 +122,15 @@ var cttvApi = function () {
     };
 
     _.url.search = function (obj) {
-		/*
-		var opts = [];
-		if (obj.from != null) {
-		    opts.push("from=" + obj.from);
-		}
-		if (obj.size != null) {
-		    opts.push("size=" + obj.size);
-		}
-		if (obj.q != null) {
-		    opts.push("q=" + obj.q);
-		}
-		if (obj.format != null) {
-		    opts.push("format=" + obj.format);
-		}
-		if (obj.filter != null) {
-		    opts.push("filter=" + obj.filter);
-		}
-		return prefix + prefixSearch + opts.join ("&");
-		*/
 		return prefix + prefixSearch + parseUrlParams(obj);
     };
 
     _.url.associations = function (obj) {
-		/*
-		var opts = [];
-		if (obj.gene != null) {
-		    opts.push("gene=" + obj.gene);
-		}
-		if (obj.efo != null) {
-		    opts.push("efo=" + obj.efo);
-		}
-		if (obj.datastructure != null) {
-		    opts.push("datastructure=" + obj.datastructure);
-		}
-
-		return prefix + prefixAssociations + opts.join("&");
-		*/
 		return prefix + prefixAssociations + parseUrlParams(obj);
     };
 
 
     _.url.filterby = function (obj) {
-		/*
-		var opts = [];
-		if (obj.efo != null) {
-		    opts.push("efo=" + obj.efo);
-		}
-		if (obj.gene != null) {
-		    opts.push("gene=" + obj.gene);
-		}
-		if (obj.eco != null) {
-		    opts.push("eco=" + obj.eco);
-		}
-		if (obj.size != null) {
-		    opts.push("size=" + obj.size);
-		}
-		if (obj.from != null) {
-		    opts.push("from=" + obj.from);
-		}
-		if (obj.datastructure != null) {
-		    opts.push("datastructure=" + obj.datastructure);
-		}
-		// TODO: Since we know in advance the possible names of the datasources we can add a check here
-		// Taking into account that we may have more than one!
-		// TODO: this is taken care of in the parseUrlParams() function
-		if (obj.datasource != null) {
-		    opts.push("datasource=" + obj.datasource);
-		}
-		if (obj.fields != null) {
-		    opts.push("fields=" + obj.fields);
-		}
-		return prefix + prefixFilterby + opts.join("&");
-		*/
-
 		return prefix + prefixFilterby + parseUrlParams(obj);
     };
 
@@ -204,17 +140,11 @@ var cttvApi = function () {
     };
 
     _.url.autocomplete = function (obj) {
-		/*
-		var opts = [];
-		if (obj.size != null) {
-		    opts.push("size=" + obj.size);
-		}
-		if (obj.q != null) {
-		    opts.push("q=" + obj.q);
-		}
-		return prefix + prefixAutocomplete + opts.join ("&");
-		*/
 		return prefix + prefixAutocomplete + parseUrlParams(obj);
+    };
+
+    _.url.quickSearch = function (obj) {
+		return prefix + prefixQuickSearch + parseUrlParams(obj);
     };
 
     /**
