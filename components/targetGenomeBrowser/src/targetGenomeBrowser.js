@@ -137,7 +137,7 @@ var cttv_genome_browser = function() {
 	    var associationsValue;
 	    var targetValue;
 	    if (cttvData && cttvData.data && cttvData.data.length > 0) {
-		associationsValue = "<a href='#/target-associations?q=" + ensemblData.id + "&label=" + ensemblData.external_name + "'>" + (cttvData.data.length - 1) + " disease associations</a> ";
+		associationsValue = "<a href='#/target/" + ensemblData.id + "/associations'>" + (cttvData.data.length - 1) + " disease associations</a> ";
 		targetValue = "<a href='#/target/" + ensemblData.id + "'>View CTTV profile</a>";
 	    }
 
