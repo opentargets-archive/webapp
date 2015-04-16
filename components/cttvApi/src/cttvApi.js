@@ -15,7 +15,7 @@ var cttvApi = function () {
     var prefixDisease = "efo/";
     var prefixToken = "auth/request_token?";
     var prefixAutocomplete = "autocomplete?";
-    var prefixQuickSearch = "quicksearch?"
+    var prefixQuickSearch = "quicksearch?";
 
     var credentials = {
 	token : "",
