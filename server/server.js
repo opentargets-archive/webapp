@@ -12,7 +12,8 @@ app
 	    uri: url,
 	    headers : req.headers
 	}, function (error, response, body) {
-	    res.send(JSON.parse(body));
+	    res.status(response.statusCode)
+		.send(JSON.parse(body));
 	});
     })
     // .get('/api/latest/auth/:id', function (req, res) {
