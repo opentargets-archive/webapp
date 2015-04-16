@@ -12,7 +12,12 @@ app
 	    uri: url,
 	    headers : req.headers
 	}, function (error, response, body) {
-	    res.send(JSON.parse(body));
+	    if (response) {
+		res.status(response.statusCode)
+		    .send(JSON.parse(body));
+	    } else {
+		res.send(response);
+	    }
 	});
     })
     // .get('/api/latest/auth/:id', function (req, res) {

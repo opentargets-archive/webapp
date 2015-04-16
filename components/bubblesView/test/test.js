@@ -1,6 +1,6 @@
 describe ('bubbleView', function () {
     beforeEach (function () {
-	this.result = fixture.load('html_fixture');
+	//this.result = fixture.load('html_fixture');
     });
     afterEach (function () {
 	fixture.cleanup();
@@ -197,7 +197,7 @@ describe ('bubbleView', function () {
 	it ('Creates the correct number of non flat texts', function () {
 	    var dataLen = data.children.length;
 	    view (fixture.el);
-	    assert.equal (fixture.el.querySelectorAll("text").length, dataLen+1);
+	    assert.equal (fixture.el.querySelectorAll("text").length, dataLen+2);
 	});
 	it ('Sets the diameter', function () {
 	    var diameter = 800;
