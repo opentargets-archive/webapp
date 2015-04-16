@@ -128,9 +128,12 @@ angular.module('cttvDirectives')
 		    // 	datastructure: "tree"
 		    // })
 		    // $log.log("BUBBLES URL: " + url);
+
+		    var dts = JSON.parse(attrs.datatypes);
 		    cttvAPIservice.getAssociations ({
 			gene: attrs.target,
-			datastructure: "tree"
+			datastructure: "tree",
+			filterbydatatype: _.keys(dts)
 		    })
 		    // api.call (url)
 		    	.then (function (resp) {
@@ -154,7 +157,7 @@ angular.module('cttvDirectives')
 			    ga = geneAssociations()
 				.target (attrs.target)
 				.diameter (diameter)
-				.datatypes(JSON.parse(attrs.datatypes))
+				.datatypes(dts)
 
 			    updateView (data);
 
