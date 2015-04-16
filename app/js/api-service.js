@@ -29,6 +29,7 @@ angular.module('cttvServices', []).
             API_EFO_URL : 'disease',
             API_ASSOCIATION_URL : 'associations', // note: these are no longer URLs, but actual API method names
             API_GENE_URL : 'gene',
+	    API_DISEASE_URL: 'disease',
         };
 
 
@@ -77,7 +78,8 @@ angular.module('cttvServices', []).
             var promise = deferred.promise;
             var url = api.url[queryObject.operation](queryObject.params);
 
-            var resp = api.call(url, done);
+            var resp = api
+		.call(url, done);
 
             return promise;
             //return resp.then(handleSuccess, handleError);
@@ -231,7 +233,20 @@ angular.module('cttvServices', []).
             });
         }
 
+        /**
+         * Get disease details via API disease() method based on EFO ids
+         * queryObject params:
+         *  - efo: the EFO code
+         */
+	cttvAPI.getDisease = function (queryObject) {
+	    $log.log ("cttvAPI.getDisease");
 
+	    return callAPI ({
+		operation: cttvAPI.API_DISEASE_URL,
+		params: queryObject
+	    });
+	};
+	
         
         /**
          * Careful not to confuse this with the other above (which btw should be renamed for clarity)
