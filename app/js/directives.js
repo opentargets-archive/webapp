@@ -39,7 +39,7 @@ angular.module('cttvDirectives', [])
 				datatypes.animal_model = _.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
 				var row = [];
 				// Disease name
-				var geneDiseaseLoc = "#/gene-disease?t=" + attrs.target + "&d=" + data.efo_code;
+				var geneDiseaseLoc = "#/evidence/" + attrs.target + "/" + data.efo_code;
 				row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
 				// EFO (hidden)
 				row.push(data.efo_code);
@@ -200,7 +200,7 @@ angular.module('cttvDirectives', [])
 			    datatypes.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
 			    var row = [];
 			    var geneLoc = "";
-			    var geneDiseaseLoc = "#/gene-disease?t=" + data[i].gene_id + "&d=" + attrs.target;
+			    var geneDiseaseLoc = "#/evidence/" + data[i].gene_id + "/" + attrs.target;
 			    row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
 			    // Ensembl ID
 			    row.push(data[i].gene_id);
