@@ -21,7 +21,7 @@ angular.module('cttvServices', []).
         var cttvAPI = {
             API_DEFAULT_METHOD : "GET",
             //API_URL : "http://beta.targetvalidation.org/api/latest/",
-	    // API_URL : "http://193.62.52.228/api/latest/",
+	          // API_URL : "http://193.62.52.228/api/latest/",
             API_SEARCH_URL : "search",
             API_EVIDENCE_URL : "evidences",
             API_AUTOCOMPLETE_URL : "autocomplete",
@@ -29,13 +29,14 @@ angular.module('cttvServices', []).
             API_EFO_URL : 'disease',
             API_ASSOCIATION_URL : 'associations', // note: these are no longer URLs, but actual API method names
             API_GENE_URL : 'gene',
-	    API_DISEASE_URL: 'disease',
+            API_QUICK_SEARCH_URL : 'quickSearch',
+            API_DISEASE_URL: 'disease',
         };
 
 
 
         var api = cttvApi()
-	    .prefix("/api/latest/")
+            .prefix("/api/latest/")
             // might be doing some configuration here
             //.prefix("http://localhost:8008/api/latest/")
             .appname("cttv-web-app")
@@ -43,16 +44,29 @@ angular.module('cttvServices', []).
 
 
         
+        var token = {
 
-        /* 
-          App running on localhost:
-          we rest some values
-        */
-        // if( $location.host()=='127.0.0.1' || $location.host().toLowerCase()=='localhost' ){
-        //     cttvAPI.API_URL = "http://127.0.0.1:8080/api/latest/";
-        //     req.withCredentials = false;
-        //     req.headers = {};
-        // }
+          set : function(tkn){
+            clearTimeout(token._int);
+            token._int = setTimeout(token._clear, 10000) // 1 min = 60000, 10 mins = 600000
+            token._id = tkn;
+          },
+
+          get : function(){
+            return token._id;
+          },
+
+          _id : "",
+
+          _int : -1,
+
+          _clear : function(){
+            $log.log("clear "+token._id);
+            token._id = "";
+            $log.log("  '"+token._id+"'");
+          }
+
+        }
 
 
 
@@ -78,8 +92,9 @@ angular.module('cttvServices', []).
             var promise = deferred.promise;
             var url = api.url[queryObject.operation](queryObject.params);
 
-            var resp = api
-		.call(url, done);
+            var resp = api.call(url, done);
+            
+
 
             return promise;
             //return resp.then(handleSuccess, handleError);
@@ -263,6 +278,28 @@ angular.module('cttvServices', []).
                 operation: cttvAPI.API_ASSOCIATION_URL,
                 params: queryObject
             })
+        }
+
+
+
+        cttvAPI.getFilterBy = function(queryObject){
+          $log.log("cttvAPI.getFilterBy");
+
+            return callAPI({
+                operation: cttvAPI.API_FILTERBY_URL, // + "/" + queryObject.gene,
+                params: queryObject
+            });
+        }
+
+
+
+        cttvAPI.getQuickSearch = function(queryObject){
+          $log.log("cttvAPI.getQuickSearch()");
+
+            return callAPI({
+                operation : cttvAPI.API_QUICK_SEARCH_URL,
+                params : queryObject
+            });
         }
 
 
