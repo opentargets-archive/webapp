@@ -133,6 +133,7 @@ angular.module('cttvControllers')
 	};
 	
 	// Display toggle (vis / table)
+	// TODO: We shouldn't change html events in the controller. This should go in the directive!
 	$scope.displaytype = "bubbles";
 	$scope.setDisplay = function (displ) {
 	    console.log("DISPLAY CHANGED TO " + displ);

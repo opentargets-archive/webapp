@@ -49,10 +49,11 @@
     </div>
 
     <div class="col-md-8">
-      <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('bubbles')"></i>
-      <i class="fa fa-table fa-2x cttv-change-view" ng-click="setDisplay('table')"></i>
-      <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('tree')"></i>
-      <!-- Views: [Bubbles] [Table] [Tree] -->
+      <!-- <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('bubbles')"></i> -->
+      <!-- <i class="fa fa-table fa-2x cttv-change-view" ng-click="setDisplay('table')"></i> -->
+      <!-- <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('tree')"></i> -->
+      
+      Views: [<span class="changeView" ng-click="setDisplay('bubbles')">Bubbles</span>] [<span class="changeView" ng-click="setDisplay('table')">Table</span>] [<span class="changeView" ng-click="setDisplay('tree')">Tree</span>]
       <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}">
       </cttv-target-associations-bubbles>
       <cttv-target-associations-table style="display:none" target="{{search.query}}">
