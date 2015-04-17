@@ -6,7 +6,7 @@
     <h4 class="text-item">
       <span class="nbblock">
         <a><span bind-html-unsafe="(search.results.besthit.type=='genedata' ? search.results.besthit.approved_symbol : search.results.besthit.label) | typeaheadHighlight:search.query.text"></span></a>
-        <span class="label cttv-text-small" ng-class="(search.results.besthit.type=='genedata') ? 'label-primary' : 'label-warning'">{{search.results.besthit.type=="genedata" ? "gene" : "disease"}}</span>
+        <span class="label cttv-text-small" ng-class="(search.results.besthit.type=='genedata') ? 'label-primary' : 'label-warning'">{{search.results.besthit.type=="genedata" ? "target" : "disease"}}</span>
       </span>
       <span class="text-small text-lowlight">{{ search.results.besthit.type=="genedata" ? search.results.besthit.approved_name : search.results.besthit.id }}</span>
     </h4>

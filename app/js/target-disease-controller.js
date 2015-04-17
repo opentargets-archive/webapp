@@ -45,7 +45,8 @@
                 data : {},
                 efo_path : [],
                 efo : {},
-                gene : {}
+                gene : {},
+                title : ""
             },
             
             flower_data : [], // processFlowerData([]), // so we initialize the flower to something
@@ -121,6 +122,7 @@
                 then(
                     function(resp) {
                         $scope.search.info.gene = resp.body;
+                        updateTitle();
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
@@ -135,11 +137,17 @@
                         $scope.search.info.efo = resp.body;
                         // TODO: This is not returned by the api yet. Maybe we need to remove it later
                         $scope.search.info.efo.efo_code = $scope.search.disease;
+                        updateTitle();
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
 
+        }
 
+
+
+        var updateTitle = function(){
+            $scope.search.info.title = (($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name)+"-"+$scope.search.info.efo.label).split(" ").join("_");
         }
 
 
@@ -338,13 +346,13 @@
 
         var initCommonDiseasesTable = function(){
 
-            $('#common-diseases-table').dataTable( {
+            $('#common-diseases-table').dataTable( setTableToolsParams({
                 "data": formatCommonDiseaseDataToArray($scope.search.genetic_associations.common_diseases.data),
                 //"ordering" : true,
                 //"order": [[3, 'des']],
                 "autoWidth": false,
                 "paging" : true
-            } ); 
+            },"-common_diseases") ); 
         }
 
 
@@ -516,11 +524,11 @@
 
         var initRareDiseasesTable = function(){
 
-            $('#rare-diseases-table').dataTable( {
+            $('#rare-diseases-table').dataTable( setTableToolsParams({
                 "data": formatRareDiseaseDataToArray($scope.search.genetic_associations.rare_diseases.data),
                 "autoWidth": false,
                 "paging" : true
-            } ); 
+            }, "-rare_diseases") ); 
         }
 
 
@@ -713,14 +721,12 @@
          */
         var initTableDrugs = function(){
 
-            $('#drugs-table').dataTable( {
+            $('#drugs-table').dataTable( setTableToolsParams({
                 "data": formatDrugsDataToArray($scope.search.drugs.data),
                 "autoWidth": false,
-                //"lengthChange": false,
                 "paging": true,
-                //"bInfo" : false,
                 //"ordering": false
-            } ); 
+            }, "-known_drugs") ); 
 
         }
 
@@ -855,23 +861,12 @@
 
 
         var initTablePathways = function(){
-            $('#pathways-table').dataTable( {
-                //"data": [[1,2,3,4,5,6,7]],
+            $('#pathways-table').dataTable( setTableToolsParams({
                 "data" : formatPathwaysDataToArray($scope.search.pathways.data),
-                /*"columns": [
-                    { "title": "Target context" },
-                    { "title": "Protein complex members" },
-                    { "title": "Activity" },
-                    { "title": "Additional context" },
-                    { "title": "Provenance (SourceDB)" },
-                    { "title": "Provenance (References)" },
-                    { "title": "Date asserted" },
-                    { "title": "Evidence codes" }
-                ],*/
                 //"ordering" : true,
                 "autoWidth": false,
                 "paging" : true
-            } ); 
+            }, "-disrupted_pathways") ); 
         }
 
 
@@ -980,11 +975,11 @@
 
         var initTableRNA = function(){
 
-            $('#rna-expression-table').dataTable( {
+            $('#rna-expression-table').dataTable( setTableToolsParams({
                 "data": formatRnaDataToArray($scope.search.rna_expression.data),
                 "autoWidth": false,
                 "paging" : true
-            } ); 
+            }, "-RNA_expression") ); 
         }
 
 
@@ -1053,13 +1048,13 @@
 
         var initTableMutations = function(){
 
-            $('#mutations-table').dataTable( {
+            $('#mutations-table').dataTable( setTableToolsParams({
                 "data": formatMutationsDataToArray($scope.search.somatic_mutations.data),
                 //"ordering" : true,
                 //"order": [[3, 'des']],
                 "autoWidth": false,
                 "paging" : true
-            } ); 
+            }, "-somatic_mutations") ); 
         }
 
 
@@ -1173,24 +1168,13 @@
 
         var initTableMouse = function(){
 
-            $('#mouse-table').dataTable( {
+            $('#mouse-table').dataTable( setTableToolsParams({
                 "data": formatMouseDataToArray($scope.search.mouse.data),
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,
-                "order": [[5, 'asc']],
-                "dom": '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>',
-                "tableTools": {
-                    "sSwfPath": "swfs/copy_csv_xls_pdf.swf",
-                    "aButtons": [ 
-                        {
-                            "sExtends":    "collection",
-                            "sButtonText": "<span class='fa fa-cog'>",
-                            "aButtons":    [ "copy", "csv", "pdf" ]
-                        }
-                     ]
-                }
-            } ); 
+                "order": [[5, 'asc']]
+            }, "-mouse_models") ); 
         }
 
 
@@ -1238,6 +1222,44 @@
                 obj = obj[prop];
             }
             return true;
+        }
+
+
+
+        function setTableToolsParams(obj, title){
+
+            obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
+            obj.oTableTools= {
+                    "sSwfPath": "swfs/copy_csv_xls_pdf.swf",
+                    "aButtons": [ 
+                        {
+                            "sExtends":    "collection",
+                            "sButtonText": "<span class='fa fa-download'>",
+                            "aButtons": [ 
+                                {
+                                    "sExtends": "copy",
+                                    "sButtonText": "<span class='fa fa-files-o' style='padding-right:7px'></span>Copy"
+                                },
+                                {
+                                    "sExtends": "csv",
+                                    "sButtonText": "<span class='fa fa-file-excel-o' style='padding-right:7px'></span>Excel/CSV",
+                                    "sTitle": $scope.search.info.title+title
+                                },  
+                                {
+                                    "sExtends": "pdf",
+                                    "sButtonText": "<span class='fa fa-file-pdf-o' style='padding-right:7px'></span>PDF",
+                                    "sTitle": $scope.search.info.title+title
+                                }/*,
+                                {
+                                    "sExtends": "print",
+                                    "sButtonText": "<span class='fa fa-print' style='padding-right:7px'></span>Print"
+                                }*/
+                            ],
+                        }
+                     ]
+                }
+
+            return obj;
         }
 
 
