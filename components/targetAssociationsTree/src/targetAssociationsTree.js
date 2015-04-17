@@ -71,7 +71,7 @@ var geneAssociationsTree = function () {
 		obj.rows.push({
 		    value:"Set focus on node",
 		    link : function (n) {
-			treeVis.focus_node(n)
+			treeVis.focus_node(n, true)
 			    .update();
 		    },
 		    obj: node
@@ -95,14 +95,14 @@ var geneAssociationsTree = function () {
 		    {"value":lookDatasource(datatypes, "rna_expression").score,  "label":"RNA"},
 		    {"value":lookDatasource(datatypes, "affected_pathway").score,  "label":"Pathways"},
 		    {"value":lookDatasource(datatypes, "animal_model").score,  "label":"Models"}
-		]
+		];
 		flowerView
 		    .diagonal(150)
 		    .values(flowerData)(this.select("div").node());
 	    });
 
 	    t.call(this, obj);
-	}
+	};
 
 	treeVis
 	    .data(config.data)
@@ -120,7 +120,7 @@ var geneAssociationsTree = function () {
 	    		   if (diseaseName.length > 30) {
 	    		       diseaseName = diseaseName.substring(0,30) + "...";
 	    		   }
-	    		   return diseaseName
+	    		   return diseaseName;
 	    	       }
 	    	       return "";
 	    	   })
@@ -169,7 +169,7 @@ var geneAssociationsTree = function () {
 	}
 	config.diameter = d;
 	return this;
-    }
+    };
     
     //
     theme.target = function (t) {
