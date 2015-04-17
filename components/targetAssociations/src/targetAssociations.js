@@ -76,7 +76,7 @@ var geneAssociations = function () {
 		tableFill.call(this, data);
 		var nodeDatatypes = node.property("datatypes");
 		var flowerData = [];
-		for (datatype in config.datatypes) {
+		for (var datatype in config.datatypes) {
 		    if (config.datatypes.hasOwnProperty(datatype)) {
 			flowerData.push({
 			    "value": lookDatasource(nodeDatatypes, datatype).score, "label": config.datatypes[datatype]});
@@ -124,7 +124,6 @@ var geneAssociations = function () {
     // process the data for bubbles display
     function processData (data) {
 	var therapeuticAreas = data.children;
-
 	for (var i=0; i<therapeuticAreas.length; i++) {
 	    var tA = therapeuticAreas[i];
 	    var taChildren = tA.children;
@@ -132,17 +131,22 @@ var geneAssociations = function () {
 		continue;
 	    }
 	    var newChildren = [];
+	    var nonRedundant = {};
 	    for (var j=0; j<taChildren.length; j++) {
 		var taChild = taChildren[j];
 		var taLeaves = tnt_node(taChild).get_all_leaves();
 		for (var k=0; k<taLeaves.length; k++) {
-		    newChildren.push(taLeaves[k].data());
+		    var leafData = taLeaves[k].data();
+		    if (nonRedundant[leafData.name] === undefined) {
+			nonRedundant[leafData.name] = 1;
+			newChildren.push(leafData);
+		    }
 		}
 	    }
 	    tA.children = newChildren;
 	}
 	return data;
-    };
+    }
 
     // Getters / Setters
     ga.data = function (d) {
@@ -153,7 +157,7 @@ var geneAssociations = function () {
 	config.data = d;
 	config.root = tnt_node(config.data);
     	return this;
-    }
+    };
     
     ga.target = function (t) {
 	if (!arguments.length) {
@@ -235,7 +239,7 @@ var geneAssociations = function () {
 	    bubblesView.select([node]);
 	}
 	return this;
-    }
+    };
     
     return ga;
 };

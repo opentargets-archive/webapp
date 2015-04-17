@@ -18,7 +18,7 @@ var bubblesView = function () {
 	breadcrumsClick : function () {
 	    render.focus(conf.data);
 	},
-	maxVal : 6
+	maxVal : 1
 	//labelOffset : 10
     };
 
@@ -26,6 +26,7 @@ var bubblesView = function () {
     var highlight; // undef by default
     var view;
     var svg;
+    var legend;
     var bubblesView_g;
     var breadcrums;
     var pack;
@@ -71,6 +72,55 @@ var bubblesView = function () {
             .size([conf.diameter, conf.diameter])
             .padding(1.5);
 
+	if (conf.maxVal !== undefined) {
+	    legend = svg
+		.append("g")
+		.attr("transform", "translate(20, " + (conf.diameter - 20) + ")");
+	    legend
+		.append("rect")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("width", 80)
+		.attr("height", 5)
+		.attr("fill", "#c6dcec");
+	    legend
+		.append("rect")
+		.attr("class", "cttv_bubblesView_legendBar")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("width", 0)
+		.attr("height", 5)
+		.attr("fill", d3.rgb(62,139,173));
+	    legend
+		.append("polygon")
+	    	.attr("points", "0,5 -5,15 5,15")
+	    	.attr("fill", "none")
+	    	.attr("stroke", "black")
+	    	.attr("stroke-width", 2);
+	    legend
+	    	.append("text")
+		.attr("class", "cttv_bubblesView_currentMaxValue")
+	    	.attr("x", 0)
+	    	.attr("y", -5)
+	    	.attr("text-anchor", "middle")
+	    	.text("0");
+
+	    legend
+		.append("text")
+		.attr("x", -5)
+		.attr("y", 5)
+		.attr("text-anchor", "end")
+		.text(0);
+
+	    legend
+		.append("text")
+		.attr("x", 85)
+		.attr("y", 5)
+		.attr("text-anchor", "start")
+		.text(conf.maxVal  + " Current score range");
+
+	}
+	
 	render.update();
 
 	var d = conf.data.data();
@@ -297,34 +347,27 @@ var bubblesView = function () {
 	    }
 	});
 
-	var legendScale = d3.scale.linear()
-	    .domain([0,80])
-	    .range([0,conf.maxVal]);
-
 	if (conf.maxVal !== undefined) {
-	    var legend = svg
-	    	.append("g")
-	    	.attr("transform", "translate(20, " + (conf.diameter - 20)  + ")");
+	    var legendScale = d3.scale.linear()
+		.range([0,80])
+		.domain([0,conf.maxVal]);
+
+	    var pos = legendScale(maxCurrentVal);
 	    legend
-	    	.append("rect")
-	    	.attr("x", 0)
-	    	.attr("y", 0)
-	    	.attr("width", 80)
-	    	.attr("height", 5)
-	    	.attr("fill", d3.rgb(62,139,173));
-	    
-	    var pos = 20 + legendScale(maxCurrentVal);
+		.select(".cttv_bubblesView_legendBar")
+		.transition()
+		.duration(conf.duration)
+		.attr("width", pos)
 	    legend
-	    	.append("polygon")
+		.select("polygon")
+		.transition()
+		.duration(conf.duration)
 	    	.attr("points", ((pos+0) + ",5 " + (pos-5) + ",15 " + (pos+5) + ",15"))
-	    	.attr("fill", "none")
-	    	.attr("stroke", "black")
-	    	.attr("stroke-width", 2);
 	    legend
-	    	.append("text")
+		.select(".cttv_bubblesView_currentMaxValue")
+		.transition()
+		.duration(conf.duration)
 	    	.attr("x", pos)
-	    	.attr("y", -5)
-	    	.attr("text-anchor", "middle")
 	    	.text(maxCurrentVal);
 	}
     };

@@ -39,7 +39,7 @@ angular.module('cttvControllers')
 		selected: true
 	    },
 	    {
-		name: "known_drugs",
+		name: "known_drug",
 		label: "Drugs",
 		selected: true
 	    },
@@ -49,12 +49,12 @@ angular.module('cttvControllers')
 		selected: true
 	    },
 	    {
-		name: "affected_pathways",
+		name: "affected_pathway",
 		label: "Pathways",
 		selected: true
 	    },
 	    {
-		name: "animal_models",
+		name: "animal_model",
 		label: "Models",
 		selected: false
 	    }

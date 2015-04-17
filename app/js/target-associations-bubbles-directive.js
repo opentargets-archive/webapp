@@ -54,6 +54,7 @@ angular.module('cttvDirectives')
 
 		// Data types changes
 		scope.$watch(function () { return attrs.datatypes }, function (dts) {
+		    var dts = JSON.parse(attrs.datatypes);
 		    if (ga) {
 		    // var api = cttvApi();
 		    // 	var url = api.url.associations({
@@ -63,12 +64,13 @@ angular.module('cttvDirectives')
 		    // 	api.call (url)
 			cttvAPIservice.getAssociations ({
 			    gene: attrs.target,
-			    datastructure: "tree"
+			    datastructure: "tree",
+			    filterbydatatype: _.keys(dts)
 			})
 			    .then (function (resp) {
 				var data = resp.body.data;
 				scope.$parent.nresults = resp.body.total;
-				ga.datatypes(JSON.parse(dts));
+				ga.datatypes(dts);
 				ga.update(resp.body.data);
 			    })
 		    }
@@ -126,9 +128,12 @@ angular.module('cttvDirectives')
 		    // 	datastructure: "tree"
 		    // })
 		    // $log.log("BUBBLES URL: " + url);
+
+		    var dts = JSON.parse(attrs.datatypes);
 		    cttvAPIservice.getAssociations ({
 			gene: attrs.target,
-			datastructure: "tree"
+			datastructure: "tree",
+			filterbydatatype: _.keys(dts)
 		    })
 		    // api.call (url)
 		    	.then (function (resp) {
@@ -136,6 +141,7 @@ angular.module('cttvDirectives')
 			    scope.$parent.nresults=resp.body.total;
 
 			    var bView = bubblesView()
+				.maxVal(1)
 				.breadcrumsClick(function (d) {
 				    var focusEvent = new CustomEvent("bubblesViewFocus", {
 					"detail" : d
@@ -151,7 +157,7 @@ angular.module('cttvDirectives')
 			    ga = geneAssociations()
 				.target (attrs.target)
 				.diameter (diameter)
-				.datatypes(JSON.parse(attrs.datatypes))
+				.datatypes(dts)
 
 			    updateView (data);
 
