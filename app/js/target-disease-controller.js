@@ -1234,17 +1234,26 @@
                     "aButtons": [ 
                         {
                             "sExtends":    "collection",
-                            "sButtonText": "<span class='fa fa-cog'>",
+                            "sButtonText": "<span class='fa fa-download'>",
                             "aButtons": [ 
-                                "copy",
+                                {
+                                    "sExtends": "copy",
+                                    "sButtonText": "<span class='fa fa-files-o' style='padding-right:7px'></span>Copy"
+                                },
                                 {
                                     "sExtends": "csv",
+                                    "sButtonText": "<span class='fa fa-file-excel-o' style='padding-right:7px'></span>Excel/CSV",
                                     "sTitle": $scope.search.info.title+title
                                 },  
                                 {
                                     "sExtends": "pdf",
+                                    "sButtonText": "<span class='fa fa-file-pdf-o' style='padding-right:7px'></span>PDF",
                                     "sTitle": $scope.search.info.title+title
-                                }
+                                }/*,
+                                {
+                                    "sExtends": "print",
+                                    "sButtonText": "<span class='fa fa-print' style='padding-right:7px'></span>Print"
+                                }*/
                             ],
                         }
                      ]
