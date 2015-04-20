@@ -112,8 +112,9 @@ var geneAssociations = function () {
 		.then (function (resp) {
 		    //var data = JSON.parse(resp).data;
 		    var data = resp.body.data;
-		    processData(data);
-		    config.data = data;
+		    ga.data(data);
+		    // processData(data);
+		    // config.data = data;
 		    render(vis);
 		});
 	} else {
@@ -123,6 +124,12 @@ var geneAssociations = function () {
     
     // process the data for bubbles display
     function processData (data) {
+	if (data === undefined) {
+	    return [];
+	}
+	if (data.children === undefined) {
+	    return data;
+	}
 	var therapeuticAreas = data.children;
 	for (var i=0; i<therapeuticAreas.length; i++) {
 	    var tA = therapeuticAreas[i];
@@ -145,16 +152,31 @@ var geneAssociations = function () {
 	    }
 	    tA.children = newChildren;
 	}
+	return sortData(data);
+    };
+
+    function sortData (data) {
+	var dataSorted = _.sortBy(data.children, function (d) {
+            return d.children ? -d.children.length : 0;
+	});
+	
+	for (var i=0; i<data.children.length; i++) {
+	    data.children[i].children = _.sortBy (data.children[i].children, function (d) {
+	        return -d.association_score;
+	    });
+	}
+	data.children = dataSorted;
 	return data;
-    }
+    };
 
     // Getters / Setters
     ga.data = function (d) {
     	if (!arguments.length) {
     	    return config.data;
     	}
-    	processData(d);
-	config.data = d;
+    	//processData(d);
+	config.data = processData(d);
+	//config.data = d;
 	config.root = tnt_node(config.data);
     	return this;
     };

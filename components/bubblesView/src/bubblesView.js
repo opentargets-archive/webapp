@@ -134,9 +134,13 @@ var bubblesView = function () {
     render.update = function () {
 	// Safely unfocus on update
 
-	render.focus(conf.data);
         // If we don't pass any data, return out of the element
         if (!conf.data) return;
+
+	if (conf.data.children()) {
+	    render.focus(conf.data);
+	}
+
 	var packData = pack.nodes(conf.data.data());
 
 	circle = bubblesView_g.selectAll("circle")
