@@ -74,8 +74,8 @@ angular.module('cttvDirectives')
 			    .fontsize(9)
 			    .diagonal(130)
 			    .values(flowerData);
-			navFlower(document.getElementById("cttv_targetAssociations_flower_" + efo.efo));
-			//$("#cttv_targetAssociations_flower_" + efo.efo).html("<p>I'm a flower<p>")
+			// The parent_efo is needed to dis-ambiguate between same EFOs in different therapeuticAreas
+			navFlower(document.getElementById("cttv_targetAssociations_flower_" + efo.efo + "_" + efo.parent_efo));
 		    }
 		});
 		
