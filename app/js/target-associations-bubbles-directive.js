@@ -50,10 +50,7 @@ angular.module('cttvDirectives')
 		    if (ga && attrs.highlight) {
 			var efo = JSON.parse(attrs.highlight);
 
-			console.log("HIGHLIGHTING EFO IN DIRECTIVE " + efo);
-			ga.selectDisease(efo);
-
-			// Also put a flower in the Directive -- TODO: Again, this is interacting with the navigation, which
+			// Also put a flower in the nav bar -- TODO: Again, this is interacting with the navigation, which
 			// makes it more difficult to reuse!
 			var datatypes = {};
 			datatypes.genetic_association = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
@@ -62,18 +59,29 @@ angular.module('cttvDirectives')
 			datatypes.rna_expression = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
 			datatypes.affected_pathway = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
 			datatypes.animal_model = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
+			var hasActiveDatatype = function (checkDatatype) {
+			    var datatypes = JSON.parse(attrs.datatypes);
+			    for (var datatype in datatypes) {
+				if (datatype === checkDatatype) {
+				    return true;
+				}
+			    }
+			    return false;
+			};
 			var flowerData = [
-			    {"value": datatypes.genetic_association, "label": "Genetics"},
-			    {"value":datatypes.somatic_mutation,  "label":"Somatic"},
-			    {"value":datatypes.known_drug,  "label":"Drugs"},
-			    {"value":datatypes.rna_expression,  "label":"RNA"},
-			    {"value":datatypes.affected_pathway,  "label":"Pathways"},
-			    {"value":datatypes.animal_model,  "label":"Models"}
+			    {"value": datatypes.genetic_association, "label": "Genetics", "active": hasActiveDatatype("genetic_association")},
+			    {"value":datatypes.somatic_mutation,  "label":"Somatic", "active": hasActiveDatatype("somatic_mutation")},
+			    {"value":datatypes.known_drug,  "label":"Drugs", "active": hasActiveDatatype("known_drug")},
+			    {"value":datatypes.rna_expression,  "label":"RNA", "active": hasActiveDatatype("rna_expression")},
+			    {"value":datatypes.affected_pathway,  "label":"Pathways", "active": hasActiveDatatype("affected_pathway")},
+			    {"value":datatypes.animal_model,  "label":"Models", "active": hasActiveDatatype("animal_model")}
 			];
 			var navFlower = flowerView()
 			    .fontsize(9)
 			    .diagonal(130)
 			    .values(flowerData);
+
+			console.log(flowerData);
 			// The parent_efo is needed to dis-ambiguate between same EFOs in different therapeuticAreas
 			navFlower(document.getElementById("cttv_targetAssociations_flower_" + efo.efo + "_" + efo.parent_efo));
 

@@ -20,7 +20,6 @@ var geneAssociations = function () {
     var bubblesView;
     var flowerView;
     
-    // TODO: Move to cttvApi
     // This code is duplicated several times now (controllers, directives and components)
     function lookDatasource (arr, dsName) {
     	for (var i=0; i<arr.length; i++) {
@@ -37,6 +36,15 @@ var geneAssociations = function () {
     	    "score": 0
     	};
     }
+    // This code is duplicated several times now (controllers, directives and components)
+    var hasActiveDatatype =function (checkDatatype) {
+	for (var datatype in config.datatypes) {
+	    if (datatype === checkDatatype) {
+		return true;
+	    }
+	}
+	return false;
+    };
 
     function render (div) {
 	var data = config.data;
@@ -74,14 +82,34 @@ var geneAssociations = function () {
 	    //Pass a new fill callback that calls the original one and decorates with flowers
 	    leafTooltip.fill(function (data) {
 		tableFill.call(this, data);
-		var nodeDatatypes = node.property("datatypes");
 		var flowerData = [];
-		for (var datatype in config.datatypes) {
-		    if (config.datatypes.hasOwnProperty(datatype)) {
-			flowerData.push({
-			    "value": lookDatasource(nodeDatatypes, datatype).score, "label": config.datatypes[datatype]});
-		    }
-		}
+		
+	    });
+	    
+	    leafTooltip.fill(function (data) {
+		tableFill.call(this, data);
+		var nodeDatatypes = node.property("datatypes");
+		var datatypes = {};
+		datatypes.genetic_association = lookDatasource(nodeDatatypes, "genetic_association");
+		datatypes.somatic_mutation = lookDatasource(nodeDatatypes, "somatic_mutation");
+		datatypes.known_drug = lookDatasource(nodeDatatypes, "known_drug");
+		datatypes.rna_expression = lookDatasource(nodeDatatypes, "rna_expression");
+		datatypes.affected_pathway = lookDatasource(nodeDatatypes, "affected_pathway");
+		datatypes.animal_model = lookDatasource(nodeDatatypes, "animal_model");
+		var flowerData = [
+		    {"value": datatypes.genetic_association.score, "label": "Genetics", "active": hasActiveDatatype("genetic_association")},
+		    {"value":datatypes.somatic_mutation.score,  "label":"Somatic", "active": hasActiveDatatype("somatic_mutation")},
+		    {"value":datatypes.known_drug.score,  "label":"Drugs", "active": hasActiveDatatype("known_drug")},
+		    {"value":datatypes.rna_expression.score,  "label":"RNA", "active": hasActiveDatatype("rna_expression")},
+		    {"value":datatypes.affected_pathway.score,  "label":"Pathways", "active": hasActiveDatatype("affected_pathway")},
+		    {"value":datatypes.animal_model.score,  "label":"Models", "active": hasActiveDatatype("animal_model")}
+		];
+		// for (var datatype in config.datatypes) {
+		//     if (config.datatypes.hasOwnProperty(datatype)) {
+		// 	flowerData.push({
+		// 	    "value": lookDatasource(nodeDatatypes, datatype).score, "label": config.datatypes[datatype]});
+		//     }
+		// }
 		flowerView.values(flowerData)(this.select("div").node());
 	    });
 	    

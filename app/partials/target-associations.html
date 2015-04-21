@@ -34,7 +34,7 @@
 		  <span id="cttv_targetAssociations_navBar_{{ta.name}}" ng-click="selectTherapeuticArea(ta.name)">{{ta.label}} ({{ta.children.length}})</span>
 		</accordion-heading>
 		<accordion>
-		  <accordion-group ng-repeat="d in ta.children" class="cttv-accordion-leaf">
+		  <accordion-group ng-repeat="d in ta.children" class="cttv-accordion-leaf" is-open="diseasegroupOpen">
 		    <accordion-heading>
 		      <span ng-click="selectDisease(d)">{{d.label}}</span>
 		    </accordion-heading>

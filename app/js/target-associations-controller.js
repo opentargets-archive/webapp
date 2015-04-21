@@ -96,14 +96,13 @@ angular.module('cttvControllers')
 	$scope.tagroup.tas = {};
 	$scope.tagroup.filled = false;
 	$scope.tagroup.open = true;
-
 	
 	var currentFocus = "cttv_disease";
 
 	$scope.selectTherapeuticArea = function (efo) {
 	    // Keep track of the state
 	    if (!$scope.tagroup.filled) {
-		$scope.tagroup.filled = true;
+	    $scope.tagroup.filled = true;
 		for (var i=0; i<$scope.therapeuticAreas.length; i++) {
 		    var therapeuticArea = $scope.therapeuticAreas[i];
 		    $scope.tagroup.tas[therapeuticArea.name] = false;
@@ -123,8 +122,10 @@ angular.module('cttvControllers')
 	    }
 	    $scope.focusEFO = "cttv_disease";
 	    currentFocus = "cttv_disease";
+	    console.log("TOGGLE NAV");
+	    $scope.diseasegroupOpen = false;
 	};
-
+	
 	$scope.selectedDisease = 0;
 	$scope.selectDisease = function (d) {
 	    console.log("SELECT DISEASE IN CONTROLLER: ");
