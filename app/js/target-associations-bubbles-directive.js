@@ -81,7 +81,6 @@ angular.module('cttvDirectives')
 			    .diagonal(130)
 			    .values(flowerData);
 
-			console.log(flowerData);
 			// The parent_efo is needed to dis-ambiguate between same EFOs in different therapeuticAreas
 			navFlower(document.getElementById("cttv_targetAssociations_flower_" + efo.efo + "_" + efo.parent_efo));
 
@@ -105,7 +104,7 @@ angular.module('cttvDirectives')
 		function updateView (data) {
 		    // TODO: This may prevent from delivering directives as products!
 		    ga.data(data);
-		    scope.$parent.therapeuticAreas = ga.data().children;
+		    scope.$parent.setTherapeuticAreas(ga.data().children);
 		};
 
 		scope.$watch(function () {return attrs.target}, function (val) {
@@ -131,6 +130,8 @@ angular.module('cttvDirectives')
 		    // api.call (url)
 		    	.then (function (resp) {
 			    var data = resp.body.data;
+
+			    // Bubbles View
 			    scope.$parent.nresults=resp.body.total;
 
 			    var bView = bubblesView()

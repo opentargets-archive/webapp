@@ -19,7 +19,7 @@
 		     ng-click="filterDataType(dataType)"
 		     ng-checked="dataType.selected">
 		     <!-- ng-checked="currentDataTypes.indexOf(dataType) > -1"> -->
-		     {{dataType.name | clearUnderscores | upperCaseFirst}}
+		     {{dataType.name | clearUnderscores | upperCaseFirst}} ({{dataType.diseases}})
 	    </label>
 	  </div>	    
 	</accordion-group>

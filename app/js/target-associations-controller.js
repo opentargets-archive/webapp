@@ -56,7 +56,7 @@ angular.module('cttvControllers')
 	    {
 		name: "animal_model",
 		label: "Models",
-		selected: false
+		selected: true
 	    }
 	]
 
@@ -89,6 +89,31 @@ angular.module('cttvControllers')
 	    $scope.currentDataTypes=currentDataTypes;
 	}
 
+	$scope.setTherapeuticAreas = function (tas) {
+	    $scope.therapeuticAreas = tas;
+
+	    // This method is executed with every data change, but we only need it once, so we return if the data has already loaded
+	    if ($scope.dataTypes[0].diseases) {
+		return;
+	    }
+	    var diseasesInDatatypes = {};
+	    for (var i=0; i<tas.length; i++) {
+		var ta = tas[i];
+		for (var j=0; j<ta.children.length; j++) {
+		    var dts = ta.children[j].datatypes;
+		    for (var k=0; k<dts.length; k++) {
+			if (diseasesInDatatypes[dts[k].datatype] === undefined) {
+			    diseasesInDatatypes[dts[k].datatype] = 0;
+			}
+			diseasesInDatatypes[dts[k].datatype]++;
+		    }
+		}
+	    }
+	    for (var n=0; n<$scope.dataTypes.length; n++) {
+		$scope.dataTypes[n].diseases = diseasesInDatatypes[$scope.dataTypes[n].name] || 0;
+	    }
+	};
+	
 	// Therapeutic Areas Nav
 	$scope.focusEFO = "cttv_source";
 
