@@ -97,9 +97,11 @@ angular.module('cttvControllers')
 		return;
 	    }
 	    var diseasesInDatatypes = {};
+	    var nonRedundantDiseases = {};
 	    for (var i=0; i<tas.length; i++) {
 		var ta = tas[i];
 		for (var j=0; j<ta.children.length; j++) {
+		    nonRedundantDiseases[ta.children[j].efo_code] = 1;
 		    var dts = ta.children[j].datatypes;
 		    for (var k=0; k<dts.length; k++) {
 			if (diseasesInDatatypes[dts[k].datatype] === undefined) {
@@ -109,6 +111,9 @@ angular.module('cttvControllers')
 		    }
 		}
 	    }
+
+	    $scope.ndiseases = _.keys(nonRedundantDiseases).length;
+
 	    for (var n=0; n<$scope.dataTypes.length; n++) {
 		$scope.dataTypes[n].diseases = diseasesInDatatypes[$scope.dataTypes[n].name] || 0;
 	    }
