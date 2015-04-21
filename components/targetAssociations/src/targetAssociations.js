@@ -250,15 +250,18 @@ var geneAssociations = function () {
 	// } else {
 	//  lca = nodes[0].parent();
 	// }
-	var dNode = nodeData.find_node (function (node) {
-	    return node.property("efo_code") === efo;
+	var dNode = config.root.find_node (function (node) {
+	    if (node.parent() === undefined) {
+		return false;
+	    }
+	    return efo.efo === node.property("efo_code") && efo.parent_efo === node.parent().property("efo_code");
 	});
 	if (dNode.property("selected") === true) {
-	    node.property("selected", undefined);
+	    dNode.property("selected", undefined);
 	    bubblesView.select(config.root);
 	} else {
 	    dNode.property("selected", true);
-	    bubblesView.select([node]);
+	    bubblesView.select([dNode]);
 	}
 	return this;
     };

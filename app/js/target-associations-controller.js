@@ -125,8 +125,21 @@ angular.module('cttvControllers')
 	    currentFocus = "cttv_disease";
 	};
 
-	$scope.selectDisease = function (efo) {
-	    $scope.highlightEFO = efo;
+	$scope.selectedDisease = 0;
+	$scope.selectDisease = function (d) {
+	    console.log("SELECT DISEASE IN CONTROLLER: ");
+	    console.log(d);
+	    $scope.highlightEFO = {efo: d.efo_code,
+				   parent_efo: d._parent.efo_code,
+				   datatypes: d.datatypes
+				  };
+	    $scope.selectedDisease++;
+	    // if ($scope.selectedDisease === true) {
+	    // 	$scope.selectedDisease = false;
+	    // } else {
+	    // 	$scope.selectedDisease = true;
+	    // }
+	    console.log(" ========> " + $scope.selectedDisease);
 	};
 	
 	// Display toggle (vis / table)

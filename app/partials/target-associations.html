@@ -36,8 +36,9 @@
 		<accordion>
 		  <accordion-group ng-repeat="d in ta.children" class="cttv-accordion-leaf">
 		    <accordion-heading>
-		      <span ng-click="selectDisease(d.name)">{{d.label}}</span>
+		      <span ng-click="selectDisease(d)">{{d.label}}</span>
 		    </accordion-heading>
+		    <div id="cttv_targetAssociations_flower_{{d.efo_code}}"></div>
 		  </accordion-group>
 		</accordion>
 	      </accordion-group>
@@ -52,7 +53,7 @@
       <!-- <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('tree')"></i> -->
       
       Views: [<span class="changeView" ng-click="setDisplay('bubbles')">Bubbles</span>] [<span class="changeView" ng-click="setDisplay('table')">Table</span>] [<span class="changeView" ng-click="setDisplay('tree')">Tree</span>]
-      <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}">
+      <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}" highlight="{{highlightEFO}}" disease-is-selected="{{selectedDisease}}">
       </cttv-target-associations-bubbles>
       <cttv-target-associations-table style="display:none" target="{{search.query}}">
       </cttv-target-associations-table>

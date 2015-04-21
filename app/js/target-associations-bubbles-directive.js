@@ -45,6 +45,40 @@ angular.module('cttvDirectives')
 		    }
 		});
 
+		// Highlight changes
+		scope.$watch(function () { return attrs.diseaseIsSelected }, function () {
+		    if (ga && attrs.highlight) {
+			var efo = JSON.parse(attrs.highlight);
+
+			console.log("HIGHLIGHTING EFO IN DIRECTIVE " + efo);
+			ga.selectDisease(efo);
+
+			// Also put a flower in the Directive -- TODO: Again, this is interacting with the navigation, which
+			// makes it more difficult to reuse!
+			var datatypes = {};
+			datatypes.genetic_association = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
+			datatypes.somatic_mutation = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0;
+			datatypes.known_drug = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0;
+			datatypes.rna_expression = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
+			datatypes.affected_pathway = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
+			datatypes.animal_model = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
+			var flowerData = [
+			    {"value": datatypes.genetic_association, "label": "Genetics"},
+			    {"value":datatypes.somatic_mutation,  "label":"Somatic"},
+			    {"value":datatypes.known_drug,  "label":"Drugs"},
+			    {"value":datatypes.rna_expression,  "label":"RNA"},
+			    {"value":datatypes.affected_pathway,  "label":"Pathways"},
+			    {"value":datatypes.animal_model,  "label":"Models"}
+			];
+			var navFlower = flowerView()
+			    .fontsize(9)
+			    .diagonal(130)
+			    .values(flowerData);
+			navFlower(document.getElementById("cttv_targetAssociations_flower_" + efo.efo));
+			//$("#cttv_targetAssociations_flower_" + efo.efo).html("<p>I'm a flower<p>")
+		    }
+		});
+		
 		// Focus changes
 		scope.$watch(function () { return attrs.focus }, function (val) {
 		    if (val === "None") {
