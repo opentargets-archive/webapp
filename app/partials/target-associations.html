@@ -38,7 +38,11 @@
 		    <accordion-heading>
 		      <span ng-click="selectDisease(d)">{{d.label}}</span>
 		    </accordion-heading>
-		    <div id="cttv_targetAssociations_flower_{{d.efo_code}}_{{d._parent.efo_code}}"></div>
+		    <a href="{{targetDiseaseLink}}">
+		      <div id="cttv_targetAssociations_flower_{{d.efo_code}}_{{d._parent.efo_code}}">
+		      </div>
+		    </a>
+		    <a class="cttv-centered-text" href="{{targetDiseaseLink}}">View evidence details</a>
 		  </accordion-group>
 		</accordion>
 	      </accordion-group>

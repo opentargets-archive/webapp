@@ -76,6 +76,10 @@ angular.module('cttvDirectives')
 			    .values(flowerData);
 			// The parent_efo is needed to dis-ambiguate between same EFOs in different therapeuticAreas
 			navFlower(document.getElementById("cttv_targetAssociations_flower_" + efo.efo + "_" + efo.parent_efo));
+
+			// This is the link to the evidence page from the flower
+			scope.$parent.targetDiseaseLink = "#/evidence/" + attrs.target + "/" + efo.efo;
+
 		    }
 		});
 		

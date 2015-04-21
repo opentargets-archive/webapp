@@ -20,6 +20,11 @@ body{
  */
 
 
+.cttv-centered-text {
+    display: table-cell;
+    text-align: center;
+}
+
 .cttv-beta-ribbon {
     background-color: #a00;
     overflow: hidden;
