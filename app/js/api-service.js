@@ -3,7 +3,7 @@
 
 /* Services */
 
-angular.module('cttvServices', []).
+angular.module('cttvServices').
 
 
 
@@ -100,7 +100,7 @@ angular.module('cttvServices', []).
             //return resp.then(handleSuccess, handleError);
 
 
-            function done(notsure, response){
+            function done(error, response){
               resolvePromise(response);
               if (!$rootScope.$$phase) $rootScope.$apply();
             }

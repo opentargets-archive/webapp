@@ -1,22 +1,27 @@
 <div>
   <view-title>{{'Disease profile: '+disease.label}}</view-title>
-  <h3>{{disease.label}} <small>({{disease.efo}})  <a href="#/disease/{{disease.efo}}/associations">View associations</a></small></h3>
+  <h3>{{disease.label}}</h3>
+  <p class="small"><a href="#/disease/{{disease.efo}}/associations">View associations</a></p>
+  
   <accordion close-others="false">
+
     <accordion-group heading="Description" is-open="true">
       {{disease.description}}
     </accordion-group>
+
     <accordion-group heading="Synonyms" is-open="false">
       <ul>
-	<li ng-repeat="syn in disease.synonyms">
-	  {{syn}}
-	</li>
+      	<li ng-repeat="syn in disease.synonyms">
+      	  {{syn}}
+      	</li>
       </ul>
     </accordion-group>
-    <accordion-group heading="EFO Path" is-open="false">
-      <ul>
-	<li ng-repeat="node in disease.path">
-	  {{node.label}} <small>(<a href="#/disease/{{node.efo}}/associations">See gene associations</a>), (<a href="#/disease/{{node.efo}}">Go to disease page</a>)</small>
-	</li>
+
+    <accordion-group heading="EFO Paths" is-open="false">
+      <ul ng-repeat="path in disease.paths">
+      	<li ng-repeat="node in path">
+      	  {{node.label}} <small>(<a href="#/disease/{{node.efo}}/associations">See gene associations</a>), (<a href="#/disease/{{node.efo}}">Go to disease page</a>)</small>
+      	</li>
       </ul>
     </accordion-group>
   </accordion>
