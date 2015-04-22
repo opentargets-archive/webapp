@@ -32,11 +32,11 @@
 		<div class="col-md-2">
 			<h4>Show results for:</h4>
 			<div class="checkbox">
-				<label ng-class="(filters.gene.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.gene.selected" ng-change="getResults()" ng-disabled="filters.gene.total==0">Target <span class='badge'>{{filters.gene.total}}</span></label>
+				<label ng-class="(filters.gene.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.gene.selected" ng-change="getResults()" ng-disabled="filters.gene.total==0">Target <span class='badge badge-primary'>{{filters.gene.total}}</span></label>
 				<span cttv-progress-spinner class="text-lowlight" ng-show="filters.gene.loading"></span>
 			</div>
 			<div class="checkbox">
-				<label ng-class="(filters.efo.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.efo.selected" ng-change="getResults()" ng-disabled="filters.efo.total==0">Disease <span class='badge'>{{filters.efo.total}}</span></label>
+				<label ng-class="(filters.efo.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.efo.selected" ng-change="getResults()" ng-disabled="filters.efo.total==0">Disease <span class='badge badge-warning'>{{filters.efo.total}}</span></label>
 				<span cttv-progress-spinner class="text-lowlight" ng-show="filters.efo.loading"></span>
 			</div>
 		</div>

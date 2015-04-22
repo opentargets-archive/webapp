@@ -8,7 +8,7 @@ angular.module('cttvControllers')
  * Controller for the target associations page
  * It loads a list of associations for the given search
  */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', function ($scope, $location, $log) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', function ($scope, $location, $log, cttvUtils) {
 	$log.log('targetAssociationsCtrl()');
 	var q = $location.path().split('/')[2];
 	$scope.search = {
@@ -31,31 +31,38 @@ angular.module('cttvControllers')
 	    {
 		name: "genetic_association",
 		label: "Genetics",
+		labelFull: "Genetic associations",
 		selected: true
 	    },
 	    {
 		name: "somatic_mutation",
 		label: "Somatic",
+		labelFull: "Somatic mutations",
 		selected: true
 	    },
 	    {
 		name: "known_drug",
 		label: "Drugs",
+		labelFull: "Known drugs",
 		selected: true
 	    },
 	    {
 		name: "rna_expression",
 		label: "RNA",
+		labelFull: "RNA expression",
 		selected: true
 	    },
-	    {
+	    {      
 		name: "affected_pathway",
 		label: "Pathways",
+		labelFull: "Affected pathways",
 		selected: true
 	    },
 	    {
 		name: "animal_model",
 		label: "Models",
+		labelFull: "Mouse models",
+		bob: "true",
 		selected: true
 	    }
 	]

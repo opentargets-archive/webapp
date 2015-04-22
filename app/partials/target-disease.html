@@ -1,9 +1,9 @@
 <div>
-	<!-- view-title sets the title for the page for this view -->
-	<view-title>{{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name) +' &#8596; '+ search.info.efo.label + ' association'}}</view-title>
+	<!-- view-title sets the title for the page for this view 
+	<view-title>{{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name) +' &#8596; '+ search.info.efo.label + ' association'}}</view-title>-->
 
-	<h3>Target to disease association</h3>
-
+	<!-- <h3>Target to disease association</h3> -->
+	<h3 view-title>{{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}} associations with {{search.info.efo.label}}</h3>
 
 	<!-- page header with flower and overview -->
 	<div class="row gene-disease-header">
@@ -183,7 +183,7 @@
 						<span class="text-nolight">
 							<span ng-class="{ 'text-disabled': search.drugs.data.length==0 }">Known drugs</span>
 							<!--<span class='badge' ng-show="search.drugs.data.length>0">{{search.drugs.data.length}}</span>-->
-							<span class='badge flower-petal' ng-show="search.association_scores[datatypes.KNOWN_DRUG]" title="Association score">{{search.association_scores[datatypes.KNOWN_DRUG] || 0}}</span>
+							<span class='badge flower-petal' ng-show="search.association_scores[datatypes.KNOWN_DRUG]" title="Association score">{{search.association_scores[datatypes.KNOWN_DRUG] | currency : "" : 2}}</span>
 							<span cttv-progress-spinner class="pull-right" ng-show="search.drugs.is_loading"></span>
 						</span>
 					</accordion-heading>
@@ -233,7 +233,7 @@
 						<span class="text-nolight">
 							<span ng-class="{ 'text-disabled': search.rna_expression.data.length==0 }">RNA expression</span>
 							<!-- <span class='badge' ng-show="search.rna_expression.data.length>0">{{search.rna_expression.data.length}}</span> -->
-							<span class='badge flower-petal' ng-show="search.association_scores[datatypes.RNA_EXPRESSION]" title="Association score">{{search.association_scores[datatypes.RNA_EXPRESSION] || 0}}</span>
+							<span class='badge flower-petal' ng-show="search.association_scores[datatypes.RNA_EXPRESSION]" title="Association score">{{search.association_scores[datatypes.RNA_EXPRESSION] | currency : "" : 2}}</span>
 							<span cttv-progress-spinner class="pull-right" ng-show="search.rna_expression.is_loading"></span>
 						</span>
 					</accordion-heading>
@@ -275,9 +275,9 @@
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
-							<span ng-class="{ 'text-disabled': search.pathways.data.length==0 }">Disrupted pathways</span>
+							<span ng-class="{ 'text-disabled': search.pathways.data.length==0 }">Affected pathways</span>
 							<!-- <span class='badge' ng-show="search.pathways.data.length>0">{{search.pathways.data.length}}</span> -->
-							<span class='badge flower-petal' ng-show="search.association_scores[datatypes.AFFECTED_PATHWAY]" title="Association score">{{search.association_scores[datatypes.AFFECTED_PATHWAY] || 0}}</span>
+							<span class='badge flower-petal' ng-show="search.association_scores[datatypes.AFFECTED_PATHWAY]" title="Association score">{{search.association_scores[datatypes.AFFECTED_PATHWAY] | currency : "" : 2}}</span>
 							<span cttv-progress-spinner class="pull-right" ng-show="search.pathways.is_loading"></span>
 						</span>
 					</accordion-heading>
@@ -321,7 +321,7 @@
 						<span class="text-nolight">
 							<span ng-class="{ 'text-disabled': search.mouse.data.length==0 }">Mouse models</span>
 							<!-- <span class='badge' ng-show="search.mouse.data.length>0">{{search.mouse.data.length}}</span> -->
-							<span class='badge flower-petal' ng-show="search.association_scores[datatypes.ANIMAL_MODEL]" title="Association score">{{search.association_scores[datatypes.ANIMAL_MODEL] || 0}}</span>
+							<span class='badge flower-petal' ng-show="search.association_scores[datatypes.ANIMAL_MODEL]" title="Association score">{{search.association_scores[datatypes.ANIMAL_MODEL] | currency : "" : 2}}</span>
 							<span cttv-progress-spinner class="pull-right" ng-show="search.mouse.is_loading"></span>
 						</span>
 					</accordion-heading>

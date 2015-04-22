@@ -3,7 +3,7 @@
 /* Directives */
 angular.module('cttvDirectives', [])
 
-    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst) {
+    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils) {
 	var hasDatatype = function (myDatatype, datatypes) {
 	    for (var i=0; i<datatypes.length; i++) {
 		var datatype = upperCaseFirst(clearUnderscores(datatypes[i]));
@@ -86,7 +86,7 @@ angular.module('cttvDirectives', [])
 				flowers[data.efo_code] = flower;
 				newData.push(row);
 			    }
-			    dtable = $(table).DataTable({
+			    dtable = $(table).DataTable( cttvUtils.setTableToolsParams({
 				"data": newData,
 				"columns": [
 				    { "title": "Disease" },
@@ -114,12 +114,12 @@ angular.module('cttvDirectives', [])
 				},
 				"order" : [[3, "desc"]],
 				"autoWidth": false,
-				"lengthChange": false,
-				"paging": true,
-				"searching": true,
+				//"lengthChange": false,
+				//"paging": true,
+				//"searching": true,
 				"bInfo" : false,
 				"ordering": true
-			    });
+			    }));
 
 
 			});
@@ -245,7 +245,7 @@ angular.module('cttvDirectives', [])
 	}
     }])
 
-    .directive('cttvDiseaseAssociations', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+    .directive('cttvDiseaseAssociations', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
 	return {
 	    restrict: 'E',
 	    scope: {},
@@ -317,7 +317,7 @@ angular.module('cttvDirectives', [])
 			    flowers[data[i].gene_id] = flower;
 			}
 			
-			$("#disease-association-table").dataTable({
+			$("#disease-association-table").dataTable(cttvUtils.setTableToolsParams({
 			    "data" : newData,
 			    "columns": [
 				{ "title": "Gene" },
@@ -344,12 +344,12 @@ angular.module('cttvDirectives', [])
 			    },
 			    "order" : [[2, "desc"]],
 			    "autoWidth": false,
-			    "lengthChange": false,
-			    "paging": true,
-			    "searching": true,
+			    //"lengthChange": false,
+			    //"paging": true,
+			    //"searching": true,
 			    "bInfo": false,
 			    "ordering": true
-			});
+			}) );
 		    });
 	    }
 	};
