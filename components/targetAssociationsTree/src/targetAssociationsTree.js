@@ -7,12 +7,17 @@ var geneAssociationsTree = function () {
     var config = {
 	data : undefined,
 	diameter : 1000,
-	cttvApi : undefined
+	cttvApi : undefined,
+	datatypes: undefined
     };
+    var treeVis = tnt_tree();
     
-    var scale = d3.scale.quantize()
-	.domain([-3,3])
-	.range(["#b2182b", "#ef8a62", "#fddbc7", "#f7f7f7", "#d1e5f0", "#67a9cf", "#2166ac"]);
+    // var scale = d3.scale.quantize()
+    // 	.domain([1,1])
+    // 	.range(["#b2182b", "#ef8a62", "#fddbc7", "#f7f7f7", "#d1e5f0", "#67a9cf", "#2166ac"]);
+    var scale = d3.scale.linear()
+	.domain([0,1])
+	.range(["#f7f7f7", "#2166ac"]);
 
     function lookDatasource (arr, dsName) {
 	for (var i=0; i<arr.length; i++) {
@@ -29,11 +34,18 @@ var geneAssociationsTree = function () {
 	    "score": 0
 	};
     }
-    
+
+    function hasActiveDatatype (checkDatatype) {
+	for (var datatype in config.datatypes) {
+	    if (datatype === checkDatatype) {
+		return true;
+	    }
+	}
+	return false;
+    }
 
     function render (flowerView, div) {
 	var data = config.data;
-	var treeVis = tnt_tree();
     
 	// tooltips
 	var nodeTooltip = function (node) {
@@ -53,7 +65,7 @@ var geneAssociationsTree = function () {
 		value : node.is_collapsed() ? "Uncollapse children" : "Collapse children",
 		link : function (n) {
 		    n.toggle();
-		    treeVis.update();
+		    theme.update();
 		},
 		obj: node
 	    });
@@ -64,6 +76,12 @@ var geneAssociationsTree = function () {
 		    link : function (n) {
 			treeVis.release_focus(n)
 			    .update();
+			// re-insert the titles
+			d3.selectAll(".tnt_tree_node")
+			    .append("title")
+			    .text(function (d) {
+				return d.label;
+			    });
 		    },
 		    obj : node
 		});
@@ -71,8 +89,14 @@ var geneAssociationsTree = function () {
 		obj.rows.push({
 		    value:"Set focus on node",
 		    link : function (n) {
-			treeVis.focus_node(n)
+			treeVis.focus_node(n, true)
 			    .update();
+			// re-insert the titles
+			d3.selectAll(".tnt_tree_node")
+			    .append("title")
+			    .text(function (d) {
+				return d.label;
+			    });
 		    },
 		    obj: node
 		});
@@ -89,20 +113,20 @@ var geneAssociationsTree = function () {
 		origFill.call(this, data);
 		var datatypes = node.property("datatypes");
 		var flowerData = [
-		    {"value":lookDatasource(datatypes, "genetic_association").score,  "label":"Genetics"},
-		    {"value":lookDatasource(datatypes, "somatic_mutation").score,  "label":"Somatic"},
-		    {"value":lookDatasource(datatypes, "known_drug").score,  "label":"Drugs"},
-		    {"value":lookDatasource(datatypes, "rna_expression").score,  "label":"RNA"},
-		    {"value":lookDatasource(datatypes, "affected_pathway").score,  "label":"Pathways"},
-		    {"value":lookDatasource(datatypes, "animal_model").score,  "label":"Models"}
-		]
+		    {"value":lookDatasource(datatypes, "genetic_association").score, "label":"Genetics", "active": hasActiveDatatype("genetic_association",config.datatypes)},
+		    {"value":lookDatasource(datatypes, "somatic_mutation").score,  "label":"Somatic", "active": hasActiveDatatype("somatic_mutation", config.datatypes)},
+		    {"value":lookDatasource(datatypes, "known_drug").score,  "label":"Drugs", "active": hasActiveDatatype("known_drug", config.datatypes)},
+		    {"value":lookDatasource(datatypes, "rna_expression").score,  "label":"RNA", "active": hasActiveDatatype("rna_expression", config.datatypes)},
+		    {"value":lookDatasource(datatypes, "affected_pathway").score,  "label":"Pathways", "active": hasActiveDatatype("affected_pathway", config.datatypes)},
+		    {"value":lookDatasource(datatypes, "animal_model").score,  "label":"Models", "active": hasActiveDatatype("animal_model", config.datatypes)}
+		];
 		flowerView
 		    .diagonal(150)
 		    .values(flowerData)(this.select("div").node());
 	    });
 
 	    t.call(this, obj);
-	}
+	};
 
 	treeVis
 	    .data(config.data)
@@ -114,19 +138,23 @@ var geneAssociationsTree = function () {
 	    		 )
 	    .on_click(nodeTooltip)
 	    .label(tnt_tree.label.text()
+		   .height(20)
 	    	   .text(function (node) {
 	    	       if (node.is_leaf()) {
 	    		   var diseaseName = node.property("label");
 	    		   if (diseaseName.length > 30) {
 	    		       diseaseName = diseaseName.substring(0,30) + "...";
 	    		   }
-	    		   return diseaseName
+			   if (node.is_collapsed()) {
+			       diseaseName += (" (+" + node.n_hidden() + ")");
+			   }
+	    		   return diseaseName;
 	    	       }
 	    	       return "";
 	    	   })
 	    	   .fontsize(14)
 	    	  )
-	    .layout(tnt_tree.layout.radial()
+	    .layout(tnt_tree.layout.vertical()
 	    	    .width(config.diameter)
 	    	    .scale(false)
 	    	   );
@@ -150,7 +178,8 @@ var geneAssociationsTree = function () {
 	    var api = config.cttvApi;
 	    var url = api.url.associations({
 		gene : config.target,
-		datastructure : "tree"
+		datastructure : "tree",
+		// TODO: Add datatypes here!
 	    });
 	    api.call(url)
 		.then (function (resp) {
@@ -162,6 +191,16 @@ var geneAssociationsTree = function () {
 	}
     };
 
+    theme.update = function () {
+	treeVis.data(config.data);
+	treeVis.update();
+	d3.selectAll(".tnt_tree_node")
+	    .append("title")
+	    .text(function (d) {
+		return d.label;
+	    });
+    };
+    
     // size of the tree
     theme.diameter = function (d) {
 	if (!arguments.length) {
@@ -169,7 +208,7 @@ var geneAssociationsTree = function () {
 	}
 	config.diameter = d;
 	return this;
-    }
+    };
     
     //
     theme.target = function (t) {
@@ -194,6 +233,15 @@ var geneAssociationsTree = function () {
 	    return config.data;
 	}
 	config.data = d;
+	return this;
+    };
+
+    // datatypes
+    theme.datatypes = function (dts) {
+	if (!arguments.length) {
+	    return config.datatypes;
+	}
+	config.datatypes = dts;
 	return this;
     };
 

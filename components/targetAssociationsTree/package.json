@@ -48,6 +48,7 @@
     "watchify": "^1.0.2"
   },
   "dependencies": {
-    "tnt.tree": "0.0.15"
+    "tnt.tooltip": "^0.0.8",
+    "tnt.tree": "^0.0.18"
   }
 }

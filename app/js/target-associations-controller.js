@@ -56,7 +56,7 @@ angular.module('cttvControllers')
 	    {
 		name: "animal_model",
 		label: "Models",
-		selected: false
+		selected: true
 	    }
 	]
 
@@ -87,11 +87,38 @@ angular.module('cttvControllers')
 		}
 	    }
 	    $scope.currentDataTypes=currentDataTypes;
-
-	    // Re-compile the nav bar
-	    $scope.okToRecompile = true;
 	}
 
+	$scope.setTherapeuticAreas = function (tas) {
+	    $scope.therapeuticAreas = tas;
+
+	    // This method is executed with every data change, but we only need it once, so we return if the data has already loaded
+	    if ($scope.dataTypes[0].diseases) {
+		return;
+	    }
+	    var diseasesInDatatypes = {};
+	    var nonRedundantDiseases = {};
+	    for (var i=0; i<tas.length; i++) {
+		var ta = tas[i];
+		for (var j=0; j<ta.children.length; j++) {
+		    nonRedundantDiseases[ta.children[j].efo_code] = 1;
+		    var dts = ta.children[j].datatypes;
+		    for (var k=0; k<dts.length; k++) {
+			if (diseasesInDatatypes[dts[k].datatype] === undefined) {
+			    diseasesInDatatypes[dts[k].datatype] = 0;
+			}
+			diseasesInDatatypes[dts[k].datatype]++;
+		    }
+		}
+	    }
+
+	    $scope.ndiseases = _.keys(nonRedundantDiseases).length;
+
+	    for (var n=0; n<$scope.dataTypes.length; n++) {
+		$scope.dataTypes[n].diseases = diseasesInDatatypes[$scope.dataTypes[n].name] || 0;
+	    }
+	};
+	
 	// Therapeutic Areas Nav
 	$scope.focusEFO = "cttv_source";
 
@@ -99,14 +126,13 @@ angular.module('cttvControllers')
 	$scope.tagroup.tas = {};
 	$scope.tagroup.filled = false;
 	$scope.tagroup.open = true;
-
 	
 	var currentFocus = "cttv_disease";
 
 	$scope.selectTherapeuticArea = function (efo) {
 	    // Keep track of the state
 	    if (!$scope.tagroup.filled) {
-		$scope.tagroup.filled = true;
+	    $scope.tagroup.filled = true;
 		for (var i=0; i<$scope.therapeuticAreas.length; i++) {
 		    var therapeuticArea = $scope.therapeuticAreas[i];
 		    $scope.tagroup.tas[therapeuticArea.name] = false;
@@ -126,35 +152,62 @@ angular.module('cttvControllers')
 	    }
 	    $scope.focusEFO = "cttv_disease";
 	    currentFocus = "cttv_disease";
+	    console.log("TOGGLE NAV");
+	    $scope.diseasegroupOpen = false;
 	};
-
-	$scope.selectDisease = function (efo) {
-	    $scope.highlightEFO = efo;
+	
+	$scope.selectedDisease = 0;
+	$scope.selectDisease = function (d) {
+	    $scope.highlightEFO = {efo: d.efo_code,
+				   parent_efo: d._parent.efo_code,
+				   datatypes: d.datatypes
+				  };
+	    $scope.selectedDisease++;
+	    // if ($scope.selectedDisease === true) {
+	    // 	$scope.selectedDisease = false;
+	    // } else {
+	    // 	$scope.selectedDisease = true;
+	    // }
 	};
 	
 	// Display toggle (vis / table)
-	$scope.displaytype = "bubbles";
+	// TODO: We shouldn't change html events in the controller. This should go in the directive!
+	//$scope.displaytype = "bubbles";
+
+	$scope.visibility = {};
 	$scope.setDisplay = function (displ) {
 	    console.log("DISPLAY CHANGED TO " + displ);
 	    //$scope.displaytype = displ;
 	    switch (displ) {
 	    case "bubbles" :
+		// $scope.visibility.bubbles = "block";
+		// $scope.visibility.table = "none";
+		// $scope.visibility.tree = "none";
+
 		$("cttv-target-associations-bubbles").css("display", "block");
 		$("cttv-target-associations-table").css("display", "none");
 		$("cttv-target-associations-tree").css("display", "none");
-		$(".cttv-facet").css("display", "block");
+		$(".cttv-nav").css("display", "block");
 		break;
 	    case "table" :
+		// $scope.visibility.bubbles = "none";
+		// $scope.visibility.table = "block";
+		// $scope.visibility.bubbles = "none";
+
 		$("cttv-target-associations-bubbles").css("display", "none");
 		$("cttv-target-associations-table").css("display","block");
 		$("cttv-target-associations-tree").css("display", "none");
-		$(".cttv-facet").css("display", "none");
+		$(".cttv-nav").css("display", "none");
 		break;
 	    case "tree" :
+		// $scope.visibility.bubbles = "none";
+		// $scope.visibility.table = "none";
+		// $scope.visibility.tree = "block";
+
 		$("cttv-target-associations-bubbles").css("display", "none");
 		$("cttv-target-associations-table").css("display","none");
 		$("cttv-target-associations-tree").css("display", "block");
-		$(".cttv-facet").css("display", "none");
+		$(".cttv-nav").css("display", "none");
 	    	break;
 	    }
 	    

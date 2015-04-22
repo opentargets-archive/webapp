@@ -10,11 +10,20 @@ body{
 
 }
 
+.changeView {
+    color: #3a99d7;
+    cursor: pointer
+}
 
 /*
  * Main index page
  */
 
+
+.cttv-centered-text {
+    display: table-cell;
+    text-align: center;
+}
 
 .cttv-beta-ribbon {
     background-color: #a00;
@@ -127,9 +136,9 @@ a.accordion-toggle{
     background-color: #f5f5f5;
 }
 
-.cttv-facet .cttv-accordion-leaf .panel-body {
-    padding : 0px;
-}
+/* .cttv-facet .cttv-accordion-leaf .panel-body { */
+/*     padding : 0px; */
+/* } */
 
 .cttv-facet .panel-heading {
     padding : 5px;

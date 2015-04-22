@@ -3,20 +3,28 @@
 /* Directives */
 angular.module('cttvDirectives', [])
 
-    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst) {
+	var hasDatatype = function (myDatatype, datatypes) {
+	    for (var i=0; i<datatypes.length; i++) {
+		var datatype = upperCaseFirst(clearUnderscores(datatypes[i]));
+		if (datatype === myDatatype) {
+		    return true;
+		}
+	    }
+	    return false;
+	}
+
 	return {
 	    restrict: 'E',
 	    scope: {},
 	    link: function (scope, elem, attrs) {
-		scope.$watch(function () { return attrs.target }, function (val) {
-		    // var api = cttvApi();
-		    // var tableUrl = api.url.associations({
-		    // 	gene: attrs.target,
-		    // 	datastructure: "flat"
-		    // });
-		    cttvAPIservice.getAssociations ({
+
+		var updateTable = function (table, datatypes) {
+		    var dts = JSON.parse(attrs.datatypes);
+		    return cttvAPIservice.getAssociations ({
 			gene: attrs.target,
-			datastructure: "flat"
+			datastructure: "flat",
+			filterbydatatype: _.keys(dts)
 		    })
 		    //api.call(tableUrl)
 			.then(function (resp) {
@@ -61,14 +69,16 @@ angular.module('cttvDirectives', [])
 				row.push(datatypes.animal_model);
 				// flower (placeholder)
 				row.push("");
+				var keysDatatypes = _.keys(dts);
 				var flowerData = [
-				    {"value":datatypes.genetic_association,  "label":"Genetics"},
-				    {"value":datatypes.somatic_mutation,  "label":"Somatic"},
-				    {"value":datatypes.known_drug,  "label":"Drugs"},
-				    {"value":datatypes.rna_expression,  "label":"RNA"},
-				    {"value":datatypes.affected_pathway,  "label":"Pathways"},
-				    {"value":datatypes.animal_model,  "label":"Models"}
+				    {"value":datatypes.genetic_association, "label":"Genetics", "active": hasDatatype("Genetic association", keysDatatypes)},
+				    {"value":datatypes.somatic_mutation, "label":"Somatic", "active": hasDatatype("Somatic mutation", keysDatatypes)},
+				    {"value":datatypes.known_drug, "label":"Drugs", "active": hasDatatype("Known drug", keysDatatypes)},
+				    {"value":datatypes.rna_expression, "label":"RNA", "active": hasDatatype("Rna expression", keysDatatypes)},
+				    {"value":datatypes.affected_pathway, "label":"Pathways", "active": hasDatatype("Affected pathway", keysDatatypes)},
+				    {"value":datatypes.animal_model, "label":"Models", "active": hasDatatype("Animal model", keysDatatypes)}
 				];
+				// console.log(flowerData);
 				var flower = flowerView()
 			            .values(flowerData)
 			            .fontsize(6)
@@ -76,22 +86,19 @@ angular.module('cttvDirectives', [])
 				flowers[data.efo_code] = flower;
 				newData.push(row);
 			    }
-			    var table = document.createElement("table");
-			    table.className = "table table-stripped table-bordered";
-			    elem[0].appendChild(table);
-			    $(table).dataTable({
+			    dtable = $(table).DataTable({
 				"data": newData,
 				"columns": [
 				    { "title": "Disease" },
 				    { "title": "EFO"},
 				    { "title": "Therapeutic area" },
 				    { "title": "Association score" },
-				    { "title": "Genetic associations" },
-				    { "title": "Somatic mutations" },
-				    { "title": "Known drugs" },
-				    { "title": "RNA expression" },
-				    { "title": "Affected pathways" },
-				    { "title": "Animal models" },
+				    { "title": "Genetic association" },
+				    { "title": "Somatic mutation" },
+				    { "title": "Known drug" },
+				    { "title": "Rna expression" },
+				    { "title": "Affected pathway" },
+				    { "title": "Animal model" },
 				    { "title": "Association score breakdown", "orderable" : false }
 				],
 				"columnDefs" : [
@@ -113,6 +120,55 @@ angular.module('cttvDirectives', [])
 				"bInfo" : false,
 				"ordering": true
 			    });
+
+
+			});
+
+		};
+
+		var table = document.createElement("table");
+		var dtable; // defined when called DataTable
+		table.className = "table table-stripped table-bordered";
+		var firstRendered = false;
+
+		// TODO: This is firing a second time the table creation. Make sure only one table is created at a time
+		scope.$watch(function () { return attrs.datatypes }, function (dts) {
+		    // The table has not rendered first yet
+		    if (!firstRendered) {
+			return;
+		    }
+		    dts = JSON.parse(dts);
+
+		    elem[0].innerHTML = "";
+		    var table = document.createElement("table");
+		    table.className = "table table-stripped table-bordered";
+		    elem[0].appendChild(table);
+
+		    updateTable(table, dts)
+			.then(function () {
+			    dtable.columns().eq(0).each (function (i) {
+				var column = dtable.column(i);
+				if (i>3 && i<10) { // first headers are "Disease", "EFO", "Therapeutic area", "Association score" and last one is "Association score breakdown"
+				    if (hasDatatype(column.header().innerText, _.keys(dts))) {
+					column.visible(true);
+				    } else {
+				    	column.visible(false);
+				    }
+				}
+			    });
+			});
+
+		    // Hide the columns that are filtered out
+		});
+
+		scope.$watch(function () { return attrs.target }, function (val) {
+		    elem[0].appendChild(table);
+		    updateTable(table, JSON.parse(attrs.datatypes))
+			.then(function () {
+			    dtable.columns().eq(0).each (function (i) {
+				var column = dtable.column(i);				
+			    });
+			    firstRendered = true;
 			});
 		});
 	    }
@@ -120,11 +176,34 @@ angular.module('cttvDirectives', [])
     }])
 
     .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+	var gat;
 	return {
 	    restrict: 'E',
 	    scope: {},
 	    link: function (scope, elem, attrs) {
-		scope.$watch(function () {return attrs.target}, function (val) {
+
+		scope.$watch(function () { return attrs.datatypes }, function (dts) {
+		    dts = JSON.parse(dts);
+		    if (!gat) {
+			return;
+		    }
+		    cttvAPIservice.getAssociations ({
+			gene: attrs.target,
+			datastructure: "tree",
+			filterbydatatype: _.keys(dts)
+		    })
+			.then (function (resp) {
+			    var data = resp.body.data;
+			    gat
+				.data(data)
+				.datatypes(dts)
+				.update();
+			});
+		    
+		    
+		});
+
+		scope.$watch(function () { return attrs.target }, function (val) {
 		    ////// Tree view
 		    // viewport Size
 		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -136,19 +215,16 @@ angular.module('cttvDirectives', [])
 		    // BottomMargin
 		    var bottomMargin = 50;
 
+		    // TODO: This is not being used at the moment. We are fixing the size of the tree to 900px (see below)
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 		    $log.log("DIAMETER FOR TREE: " + diameter);
 
-		    // var api = cttvApi();
-		    // var url = api.url.associations({
-		    // 	gene: attrs.target,
-		    // 	datastructure: "tree"
-		    // })
-		    // console.log("TREE URL: " + url);
-		    // api.call(url)
+		    var dts = JSON.parse(attrs.datatypes);
+		    
 		    cttvAPIservice.getAssociations ({
 			gene: attrs.target,
-			datastructure: "tree"
+			datastructure: "tree",
+			filterbydatatype: _.keys(dts)
 		    })
 			.then (function (resp) {
 			    var data = resp.body.data;
@@ -156,8 +232,9 @@ angular.module('cttvDirectives', [])
 				.fontsize(6)
 				.diagonal(100);
 
-			    var gat = geneAssociationsTree()
+			    gat = geneAssociationsTree()
 				.data(data)
+				.datatypes(dts)
 				.diameter(900)
 				.target(attrs.target);
 			    gat(fView, elem[0]);

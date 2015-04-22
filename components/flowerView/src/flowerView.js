@@ -161,16 +161,23 @@ var flowerView = function () {
 	var petals = function () {
 	    var r = 0;
 	    conf.values.forEach (function (d, i) {
-		var l = radius;
-		petal (l, r, sizeScale(d.value), colorScale(d.value));
+		if (d.active === false) {
+		} else {
+		    var l = radius;
+		    petal (l, r, sizeScale(d.value), colorScale(d.value));
+		}
 		r += radians;
-	    })
+
+	    });
 	    r = 0;
 	    conf.values.forEach (function (d, i) {
-		var l = radius;
-		label (r, d.label, d.value>0);
+		if (d.active === false) {
+		} else {
+		    var l = radius;
+		    label (r, d.label, d.value>0);
+		}
 		r += radians;
-	    })
+	    });
 	};
 	petals();
     };

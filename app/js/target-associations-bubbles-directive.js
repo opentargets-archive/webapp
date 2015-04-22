@@ -3,39 +3,6 @@
 /* Directives */
 angular.module('cttvDirectives')
 
-    .directive('cttvNavRecompile', function($compile, $parse) {
-	return {
-	    scope: true, // required to be able to clear watchers safely
-	    compile: function(el) {
-		var template = getElementAsHtml(el);
-		return function link(scope, $el, attrs) {
-		    var stopWatching = scope.$parent.$watch(attrs.kcdRecompile, function(_new, _old) {
-			var useBoolean = attrs.hasOwnProperty('useBoolean');
-			if ((useBoolean && (!_new || _new === 'false')) || (!useBoolean && (!_new || _new === _old))) {
-			    return;
-			}
-			// reset kcdRecompile to false if we're using a boolean
-			if (useBoolean) {
-			    $parse(attrs.kcdRecompile).assign(scope.$parent, false);
-			}
-			
-			// recompile
-			var newEl = $compile(template)(scope.$parent);
-			$el.replaceWith(newEl);
-			
-			// Destroy old scope, reassign new scope
-			stopWatching();
-			scope.$destroy();
-		    });
-		};
-	    }
-	};
-
-	function getElementAsHtml(el) {
-	    return angular.element('<a></a>').append(el.clone()).html();
-	}
-    })
-    
     .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
 	return {
 	    restrict: 'E',
@@ -51,6 +18,7 @@ angular.module('cttvDirectives')
 		}, true);
 
 		var ga;
+		var nav;
 
 		// Data types changes
 		scope.$watch(function () { return attrs.datatypes }, function (dts) {
@@ -68,14 +36,60 @@ angular.module('cttvDirectives')
 			    filterbydatatype: _.keys(dts)
 			})
 			    .then (function (resp) {
-				var data = resp.body.data;
+				//var data = resp.body.data;
 				scope.$parent.nresults = resp.body.total;
 				ga.datatypes(dts);
+				updateView(resp.body.data || []);
 				ga.update(resp.body.data);
 			    })
 		    }
 		});
 
+		// Highlight changes
+		scope.$watch(function () { return attrs.diseaseIsSelected }, function () {
+		    if (ga && attrs.highlight) {
+			var efo = JSON.parse(attrs.highlight);
+
+			// Also put a flower in the nav bar -- TODO: Again, this is interacting with the navigation, which
+			// makes it more difficult to reuse!
+			var datatypes = {};
+			datatypes.genetic_association = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
+			datatypes.somatic_mutation = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0;
+			datatypes.known_drug = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0;
+			datatypes.rna_expression = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
+			datatypes.affected_pathway = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
+			datatypes.animal_model = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
+			var hasActiveDatatype = function (checkDatatype) {
+			    var datatypes = JSON.parse(attrs.datatypes);
+			    for (var datatype in datatypes) {
+				if (datatype === checkDatatype) {
+				    return true;
+				}
+			    }
+			    return false;
+			};
+			var flowerData = [
+			    {"value": datatypes.genetic_association, "label": "Genetics", "active": hasActiveDatatype("genetic_association")},
+			    {"value":datatypes.somatic_mutation,  "label":"Somatic", "active": hasActiveDatatype("somatic_mutation")},
+			    {"value":datatypes.known_drug,  "label":"Drugs", "active": hasActiveDatatype("known_drug")},
+			    {"value":datatypes.rna_expression,  "label":"RNA", "active": hasActiveDatatype("rna_expression")},
+			    {"value":datatypes.affected_pathway,  "label":"Pathways", "active": hasActiveDatatype("affected_pathway")},
+			    {"value":datatypes.animal_model,  "label":"Models", "active": hasActiveDatatype("animal_model")}
+			];
+			var navFlower = flowerView()
+			    .fontsize(9)
+			    .diagonal(130)
+			    .values(flowerData);
+
+			// The parent_efo is needed to dis-ambiguate between same EFOs in different therapeuticAreas
+			navFlower(document.getElementById("cttv_targetAssociations_flower_" + efo.efo + "_" + efo.parent_efo));
+
+			// This is the link to the evidence page from the flower
+			scope.$parent.targetDiseaseLink = "#/evidence/" + attrs.target + "/" + efo.efo;
+
+		    }
+		});
+		
 		// Focus changes
 		scope.$watch(function () { return attrs.focus }, function (val) {
 		    if (val === "None") {
@@ -88,22 +102,9 @@ angular.module('cttvDirectives')
 		});
 
 		function updateView (data) {
-
-		    // Sort the data based on number of children and association score of disease
-		    var dataSorted = _.sortBy(data.children, function (d) {
-			return d.children ? -d.children.length : 0;
-		    });
-
-		    for (var i=0; i<data.children.length; i++) {
-			data.children[i].children = _.sortBy (data.children[i].children, function (d) {
-			    return -d.association_score;
-			});
-		    }
-
 		    // TODO: This may prevent from delivering directives as products!
-		    scope.$parent.therapeuticAreas = dataSorted;
-
 		    ga.data(data);
+		    scope.$parent.setTherapeuticAreas(ga.data().children);
 		};
 
 		scope.$watch(function () {return attrs.target}, function (val) {
@@ -120,15 +121,6 @@ angular.module('cttvDirectives')
 
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 
-		    // var api = cttvApi()
-		    // 	.prefix("/api/latest/");
-
-		    // var url = api.url.associations({
-		    // 	gene: attrs.target,
-		    // 	datastructure: "tree"
-		    // })
-		    // $log.log("BUBBLES URL: " + url);
-
 		    var dts = JSON.parse(attrs.datatypes);
 		    cttvAPIservice.getAssociations ({
 			gene: attrs.target,
@@ -138,6 +130,8 @@ angular.module('cttvDirectives')
 		    // api.call (url)
 		    	.then (function (resp) {
 			    var data = resp.body.data;
+
+			    // Bubbles View
 			    scope.$parent.nresults=resp.body.total;
 
 			    var bView = bubblesView()
@@ -158,8 +152,8 @@ angular.module('cttvDirectives')
 				.target (attrs.target)
 				.diameter (diameter)
 				.datatypes(dts)
-
-			    updateView (data);
+			    
+			    updateView (data || []);
 
 			    //scope.$parent.$apply();
 			    ga(bView, fView, elem[0]);

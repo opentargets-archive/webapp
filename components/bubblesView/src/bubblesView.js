@@ -134,9 +134,13 @@ var bubblesView = function () {
     render.update = function () {
 	// Safely unfocus on update
 
-	render.focus(conf.data);
         // If we don't pass any data, return out of the element
         if (!conf.data) return;
+
+	if (conf.data.children()) {
+	    render.focus(conf.data);
+	}
+
 	var packData = pack.nodes(conf.data.data());
 
 	circle = bubblesView_g.selectAll("circle")
@@ -196,7 +200,15 @@ var bubblesView = function () {
 	//.data(packData)
 	    .enter()
 	    .append("path")
-	    .attr("id", function(d,i){return "s"+i;})
+	    // .attr ("id", function (d, i) {
+	    // 	return "s" + i;
+	    // })
+	    .attr("id", function(d,i){
+	    	if (d._parent === undefined) {
+	    	    return "s_" + d[conf.key];
+	    	}
+	    	return "s_"+ d[conf.key] + "_" + d._parent[conf.key];
+	    })
 	    .attr("fill", "none");
 
 
@@ -217,7 +229,7 @@ var bubblesView = function () {
 		return "leafLabel";
 	    })
 	    .style("cursor", "default")
-	    .attr("pointer-events", function (d) {return d.children ? "auto" : "none"})
+	    .attr("pointer-events", function (d) {return d.children ? "auto" : "none";})
 	    .on("click", function (d) { // only on those with pointer-events "auto" ie, on therapeutic areas labels
 		if (d3.event.defaultPrevented) {
 		    return;
@@ -234,8 +246,14 @@ var bubblesView = function () {
 		if (d.children) {
 		    d3.select(this)
 			.append("textPath")
+			// .attr("xlink:href", function () {
+			//     return "#s" + i;
+			// })
 			.attr("xlink:href", function () {
-			    return "#s" + i;
+			    if (d._parent === undefined) {
+				return "#s_" + d[conf.key];
+			    }
+			    return "#s_" + d[conf.key] + "_" + d._parent[conf.key];
 			})
 			.attr("startOffset", "50%")
 			.text(function () {
@@ -259,7 +277,7 @@ var bubblesView = function () {
 	    })
 	    .attr("r", function (d) {
 		return d.r;
-	    })
+	    });
 
 	// Move labels
 	updateTransition
@@ -302,7 +320,7 @@ var bubblesView = function () {
 	    })
 	    .classed ("bubblesViewRoot", function (d) {
 		return !d._parent;
-	    })
+	    });
 	    // .transition()
 	    // .duration(conf.duration)
 	    // .attr("cx", function (d) {
@@ -357,12 +375,12 @@ var bubblesView = function () {
 		.select(".cttv_bubblesView_legendBar")
 		.transition()
 		.duration(conf.duration)
-		.attr("width", pos)
+		.attr("width", pos);
 	    legend
 		.select("polygon")
 		.transition()
 		.duration(conf.duration)
-	    	.attr("points", ((pos+0) + ",5 " + (pos-5) + ",15 " + (pos+5) + ",15"))
+	    	.attr("points", ((pos+0) + ",5 " + (pos-5) + ",15 " + (pos+5) + ",15"));
 	    legend
 		.select(".cttv_bubblesView_currentMaxValue")
 		.transition()
@@ -429,8 +447,14 @@ var bubblesView = function () {
 			.remove();
 		    d3.select(this)
 		    	.append("textPath")
+			// .attr("xlink:href", function () {
+			//     return "#s"+i;
+			// })
 			.attr("xlink:href", function () {
-			    return "#s"+i;
+			    if (d._parent === undefined) {
+				return "#s_" + d[conf.key];
+			    }
+			    return "#s_" + d[conf.key] + "_" + d._parent[conf.key];
 			})
 			.attr("startOffset", "50%")
 			.text(function () {
@@ -532,7 +556,7 @@ var bubblesView = function () {
 
 	breadcrums.selectAll(":not(:last-child)")
 	    .classed ("cttv_bubblesView_link", true)
-	    .on("click", conf.breadcrumsClick)
+	    .on("click", conf.breadcrumsClick);
 
 	// Focus
 	focus = node;

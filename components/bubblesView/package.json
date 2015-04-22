@@ -48,6 +48,6 @@
     "watchify": "^1.0.2"
   },
   "dependencies": {
-    "tnt.tree.node": "0.0.2"
+    "tnt.tree.node": "^0.0.3"
   }
 }
