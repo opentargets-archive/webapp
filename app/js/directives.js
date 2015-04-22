@@ -138,8 +138,6 @@ angular.module('cttvDirectives', [])
 			return;
 		    }
 		    dts = JSON.parse(dts);
-		    console.log(" C U RR ENT D A T ATYPES:");
-		    console.log(dts);
 
 		    elem[0].innerHTML = "";
 		    var table = document.createElement("table");
@@ -178,11 +176,34 @@ angular.module('cttvDirectives', [])
     }])
 
     .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+	var gat;
 	return {
 	    restrict: 'E',
 	    scope: {},
 	    link: function (scope, elem, attrs) {
-		scope.$watch(function () {return attrs.target}, function (val) {
+
+		scope.$watch(function () { return attrs.datatypes }, function (dts) {
+		    dts = JSON.parse(dts);
+		    if (!gat) {
+			return;
+		    }
+		    cttvAPIservice.getAssociations ({
+			gene: attrs.target,
+			datastructure: "tree",
+			filterbydatatype: _.keys(dts)
+		    })
+			.then (function (resp) {
+			    var data = resp.body.data;
+			    gat
+				.data(data)
+				.datatypes(dts)
+				.update();
+			});
+		    
+		    
+		});
+
+		scope.$watch(function () { return attrs.target }, function (val) {
 		    ////// Tree view
 		    // viewport Size
 		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -194,19 +215,16 @@ angular.module('cttvDirectives', [])
 		    // BottomMargin
 		    var bottomMargin = 50;
 
+		    // TODO: This is not being used at the moment. We are fixing the size of the tree to 900px (see below)
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 		    $log.log("DIAMETER FOR TREE: " + diameter);
 
-		    // var api = cttvApi();
-		    // var url = api.url.associations({
-		    // 	gene: attrs.target,
-		    // 	datastructure: "tree"
-		    // })
-		    // console.log("TREE URL: " + url);
-		    // api.call(url)
+		    var dts = JSON.parse(attrs.datatypes);
+		    
 		    cttvAPIservice.getAssociations ({
 			gene: attrs.target,
-			datastructure: "tree"
+			datastructure: "tree",
+			filterbydatatype: _.keys(dts)
 		    })
 			.then (function (resp) {
 			    var data = resp.body.data;
@@ -214,8 +232,9 @@ angular.module('cttvDirectives', [])
 				.fontsize(6)
 				.diagonal(100);
 
-			    var gat = geneAssociationsTree()
+			    gat = geneAssociationsTree()
 				.data(data)
+				.datatypes(dts)
 				.diameter(900)
 				.target(attrs.target);
 			    gat(fView, elem[0]);
