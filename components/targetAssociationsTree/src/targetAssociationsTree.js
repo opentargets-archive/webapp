@@ -249,12 +249,6 @@ var geneAssociationsTree = function () {
     theme.update = function () {
 	treeVis.data(config.data);
 	treeVis.update();
-	// collapse all the therapeutic area nodes
-	var root = treeVis.root();
-	var tas = root.children();
-	for (var i=0; i<tas.length; i++) {
-	    tas[i].toggle();
-	}
 
 	d3.selectAll(".tnt_tree_node")
 	    .append("title")
