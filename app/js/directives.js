@@ -28,7 +28,8 @@ angular.module('cttvDirectives', [])
 		    })
 		    //api.call(tableUrl)
 			.then(function (resp) {
-			    resp = JSON.parse(resp.text);
+			    //resp = JSON.parse(resp.text);
+			    resp = resp.body;
 			    $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
 			    $log.log(resp);
 			    var newData = [];
@@ -165,9 +166,9 @@ angular.module('cttvDirectives', [])
 		    elem[0].appendChild(table);
 		    updateTable(table, JSON.parse(attrs.datatypes))
 			.then(function () {
-			    dtable.columns().eq(0).each (function (i) {
-				var column = dtable.column(i);				
-			    });
+			    // dtable.columns().eq(0).each (function (i) {
+			    // 	var column = dtable.column(i);				
+			    // });
 			    firstRendered = true;
 			});
 		});
@@ -229,7 +230,7 @@ angular.module('cttvDirectives', [])
 			.then (function (resp) {
 			    var data = resp.body.data;
 			    var fView = flowerView()
-				.fontsize(6)
+				.fontsize(9)
 				.diagonal(100);
 
 			    gat = geneAssociationsTree()
