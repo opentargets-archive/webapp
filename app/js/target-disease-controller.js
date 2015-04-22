@@ -11,7 +11,7 @@
        * Controller for the Gene <-> Disease page
        * It loads the evidence for the given target <-> disease pair
     */
-    controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', function ($scope, $location, $log, cttvAPIservice) {
+    controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, cttvUtils) {
         $log.log('TargetDiseaseCtrl()');
         
         var dbs = {
@@ -306,18 +306,22 @@
                     row.push(data[i].biological_object.efo_info[0][0].label);
 
                     // SNP
-                    row.push( "<a href='"+data[i].evidence.evidence_chain[0].biological_object.about[0]+"' target='_blank'>"
+                    //row.push( "<a href='"+data[i].evidence.evidence_chain[0].biological_object.about[0]+"' target='_blank'>"
+                    row.push( "<a href='http://www.ensembl.org/Homo_sapiens/Variation/Explore?v="+data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()+"' target='_blank'>"
                             + data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()
                             + " <i class='fa fa-external-link'></i></a>");
 
                     // variant type
-                    row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[0]) );
+                    row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[1]) );
                     
                     // evidence source
-                    row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[1]) );
+                    row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[2]) );
 
                     // evidence source
-                    row.push(data[i].evidence.evidence_chain[1].evidence.evidence_codes[0]);
+                    row.push( "<a href='https://www.ebi.ac.uk/gwas/search?query="+data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()+"' target='_blank'>"
+                            + data[i].evidence.evidence_chain[1].evidence.evidence_codes[0]
+                            + " <i class='fa fa-external-link'></i></a>");
+
 
                     // p-value
                     row.push(data[i].evidence.evidence_chain[1].evidence.association_score.pvalue.value);
@@ -327,7 +331,7 @@
                     if(data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs){
                         for(var j=0; j<data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs.length; j++){
                             var n=data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs[j].split('/').pop();
-                            pub+="<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
+                            pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
                         }
                     }
                     row.push(pub);
@@ -346,13 +350,13 @@
 
         var initCommonDiseasesTable = function(){
 
-            $('#common-diseases-table').dataTable( setTableToolsParams({
+            $('#common-diseases-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatCommonDiseaseDataToArray($scope.search.genetic_associations.common_diseases.data),
                 //"ordering" : true,
                 //"order": [[3, 'des']],
                 "autoWidth": false,
                 "paging" : true
-            },"-common_diseases") ); 
+            }, $scope.search.info.title+"-common_diseases") ); 
         }
 
 
@@ -501,7 +505,7 @@
                         pub="";
                         for(var j=0; j<data[i].evidence.provenance_type.literature.pubmed_refs.length; j++){
                             var n=data[i].evidence.provenance_type.literature.pubmed_refs[j].split('/').pop();
-                            pub+="<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>, "
+                            pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>, "
                         }
                     }
                     row.push(pub);
@@ -524,11 +528,11 @@
 
         var initRareDiseasesTable = function(){
 
-            $('#rare-diseases-table').dataTable( setTableToolsParams({
+            $('#rare-diseases-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatRareDiseaseDataToArray($scope.search.genetic_associations.rare_diseases.data),
                 "autoWidth": false,
                 "paging" : true
-            }, "-rare_diseases") ); 
+            }, $scope.search.info.title+"-rare_diseases") ); 
         }
 
 
@@ -663,7 +667,7 @@
                             pub=":<div>";
                             for(var j=0; j<pubs; j++){
                                 var n=data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs[j].split('/').pop();
-                                pub+="<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a> "
+                                pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a> "
                             }
                             pub+="</div>";
                         }
@@ -721,12 +725,12 @@
          */
         var initTableDrugs = function(){
 
-            $('#drugs-table').dataTable( setTableToolsParams({
+            $('#drugs-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatDrugsDataToArray($scope.search.drugs.data),
                 "autoWidth": false,
                 "paging": true,
                 //"ordering": false
-            }, "-known_drugs") ); 
+            }, $scope.search.info.title+"-known_drugs") ); 
 
         }
 
@@ -841,7 +845,7 @@
                         pub="";
                         for(var j=0; j<data[i].evidence.provenance_type.literature.pubmed_refs.length; j++){
                             var n=data[i].evidence.provenance_type.literature.pubmed_refs[j].split('/').pop();
-                            pub+="<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
+                            pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
                         }
                     }
                     row.push(pub);
@@ -861,12 +865,12 @@
 
 
         var initTablePathways = function(){
-            $('#pathways-table').dataTable( setTableToolsParams({
+            $('#pathways-table').dataTable( cttvUtils.setTableToolsParams({
                 "data" : formatPathwaysDataToArray($scope.search.pathways.data),
                 //"ordering" : true,
                 "autoWidth": false,
                 "paging" : true
-            }, "-disrupted_pathways") ); 
+            }, $scope.search.info.title+"-disrupted_pathways") ); 
         }
 
 
@@ -955,7 +959,7 @@
                     if(data[i].evidence.experiment_specific.literature.pubmed_refs){
                         for(var j=0; j<data[i].evidence.experiment_specific.literature.pubmed_refs.length; j++){
                             var n=data[i].evidence.experiment_specific.literature.pubmed_refs[j].split('/').pop();
-                            pub+="<a href='http://www.ncbi.nlm.nih.gov/pubmed/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
+                            pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
                         }
                     }
                     row.push(pub);
@@ -975,11 +979,11 @@
 
         var initTableRNA = function(){
 
-            $('#rna-expression-table').dataTable( setTableToolsParams({
+            $('#rna-expression-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatRnaDataToArray($scope.search.rna_expression.data),
                 "autoWidth": false,
                 "paging" : true
-            }, "-RNA_expression") ); 
+            }, $scope.search.info.title+"-RNA_expression") ); 
         }
 
 
@@ -1032,7 +1036,6 @@
                     // disease
                     row.push(data[i].biological_object.efo_info[0][0].label);
                     // evidence source
-                    //row.push(data[i].evidence.evidence_codes_info[0][0].label);
                     row.push( "<a href='"+data[i].evidence.urls.linkouts[0].url+"' target='_blank'>"+data[i].evidence.urls.linkouts[0].nice_name+" <i class='fa fa-external-link'></i></a>" );
                     newdata.push(row); // push, so we don't end up with empty rows
                 }catch(e){
@@ -1048,13 +1051,13 @@
 
         var initTableMutations = function(){
 
-            $('#mutations-table').dataTable( setTableToolsParams({
+            $('#mutations-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatMutationsDataToArray($scope.search.somatic_mutations.data),
                 //"ordering" : true,
                 //"order": [[3, 'des']],
                 "autoWidth": false,
                 "paging" : true
-            }, "-somatic_mutations") ); 
+            }, $scope.search.info.title+"-somatic_mutations") ); 
         }
 
 
@@ -1168,13 +1171,13 @@
 
         var initTableMouse = function(){
 
-            $('#mouse-table').dataTable( setTableToolsParams({
+            $('#mouse-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatMouseDataToArray($scope.search.mouse.data),
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,
-                "order": [[5, 'asc']]
-            }, "-mouse_models") ); 
+                "order": [[5, 'des']]
+            }, $scope.search.info.title+"-mouse_models") ); 
         }
 
 
@@ -1226,41 +1229,7 @@
 
 
 
-        function setTableToolsParams(obj, title){
-
-            obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
-            obj.oTableTools= {
-                    "sSwfPath": "swfs/copy_csv_xls_pdf.swf",
-                    "aButtons": [ 
-                        {
-                            "sExtends":    "collection",
-                            "sButtonText": "<span class='fa fa-download'>",
-                            "aButtons": [ 
-                                {
-                                    "sExtends": "copy",
-                                    "sButtonText": "<span class='fa fa-files-o' style='padding-right:7px'></span>Copy"
-                                },
-                                {
-                                    "sExtends": "csv",
-                                    "sButtonText": "<span class='fa fa-file-excel-o' style='padding-right:7px'></span>Excel/CSV",
-                                    "sTitle": $scope.search.info.title+title
-                                },  
-                                {
-                                    "sExtends": "pdf",
-                                    "sButtonText": "<span class='fa fa-file-pdf-o' style='padding-right:7px'></span>PDF",
-                                    "sTitle": $scope.search.info.title+title
-                                }/*,
-                                {
-                                    "sExtends": "print",
-                                    "sButtonText": "<span class='fa fa-print' style='padding-right:7px'></span>Print"
-                                }*/
-                            ],
-                        }
-                     ]
-                }
-
-            return obj;
-        }
+        
 
 
 

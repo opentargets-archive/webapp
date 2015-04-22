@@ -100,8 +100,8 @@ body{
 
 
 .faqs ul{
-  list-style:none;
-  padding-left: 0px;
+  /*list-style:none;
+  padding-left: 0px;*/
 }
 
 
@@ -260,15 +260,17 @@ a.accordion-toggle{
 }
 
 .gene-disease-content .table-panel{
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 .gene-disease-content .no-last-el{
   border-right-width: 1px !important;
 }
 
-/* Text */
 
+/* 
+ * Text 
+ */
 
 
 .text-lowlight{
@@ -298,6 +300,70 @@ a.accordion-toggle{
   text-decoration: none;
   cursor: default;
 }
+
+
+/*
+ * Backgrounds
+ */
+
+
+.cttv-blue-background{
+  background: #3E8BAD !important;
+  background-color: #3E8BAD !important;
+}
+
+
+.flower-petal{
+  color: #000 !important;
+  background: #3E8BAD !important;
+  background-color: #3E8BAD !important;
+}
+
+
+.badge:hover {
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+}
+.badge-error {
+  background-color: #b94a48;
+}
+.badge-error:hover {
+  background-color: #953b39;
+}
+.badge-warning {
+  background-color: #f89406;
+}
+.badge-warning:hover {
+  background-color: #c67605;
+}
+.badge-success {
+  background-color: #468847;
+}
+.badge-success:hover {
+  background-color: #356635;
+}
+.badge-info {
+  background-color: #3a87ad;
+}
+.badge-info:hover {
+  background-color: #2d6987;
+}
+.badge-inverse {
+  background-color: #333333;
+}
+.badge-inverse:hover {
+  background-color: #1a1a1a;
+}
+.badge-primary {
+  background-color: #337ab7;
+}
+.badge-primary:hover {
+  background-color: #2d6987;
+}
+
+
+
 
 .container {
   /*height: 1000px;*/

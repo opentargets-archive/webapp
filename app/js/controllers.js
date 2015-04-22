@@ -2,7 +2,7 @@
 
     /* Controllers */
 
-    angular.module('cttvControllers', ['cttvServices']).
+    angular.module('cttvControllers', []).
 
 
 
@@ -18,11 +18,11 @@
 
 
 
-/**
- * DiseaseCtrl
- * Controller for the disease page
- * It loads general information about a given disease
- */
+    /**
+     * DiseaseCtrl
+     * Controller for the disease page
+     * It loads general information about a given disease
+     */
     .controller ('DiseaseCtrl', ["$scope", "$location", "$log", "cttvAPIservice", function ($scope, $location, $log, cttvAPIservice) {
 	$log.log("DiseaseCtrl()");
 	// var cttvRestApi = cttvApi();
@@ -35,15 +35,26 @@
 	})
 	    .then (function (resp) {
 		resp = JSON.parse(resp.text);
-		resp.path_labels.shift(); // remove cttv_disease
-		resp.path_codes.shift(); // remove cttv_disease
-		var path = [];
-		for (var i=0; i<resp.path_labels.length; i++) {
-		    path.push({
-			"label" : resp.path_labels[i],
-			"efo" : resp.path_codes[i]
-		    });
+        //$log.log(resp);
+		//resp.path_labels.shift(); // remove cttv_disease
+		//resp.path_codes.shift(); // remove cttv_disease
+        
+		var paths = [];
+		for (var i=0; i<resp.path.length; i++) {
+            resp.path[i].shift();
+            var path=[];
+            for(var j=0; j<resp.path[i].length; j++){
+                path.push({
+                    "label" : resp.path[i][j].label,
+                    "efo" : resp.path[i][j].uri.split("/").pop()
+                });
+            }
+            paths.push(path);
 		}
+
+        $log.warn(resp.path);
+        $log.warn(paths);
+
 		if (resp.efo_synonyms.length === 0) {
 		    resp.efo_synonyms.push(resp.label);
 		}
@@ -52,7 +63,7 @@
 		    "efo" : efo_code,
 		    "description" : resp.definition || resp.label,
 		    "synonyms" : _.uniq(resp.efo_synonyms),
-		    "path" : path
+		    "paths" : paths
 		};
 
 		// Update bindings
@@ -79,9 +90,10 @@
 		resp = JSON.parse(resp.text);
 		$scope.target = {
 		    label : resp.approved_name || resp.ensembl_external_name,
-		    symbol : resp.approved_symbol || resp.approved_name || resp.ensembl_external_name,
+		    symbol : resp.approved_symbol || resp.ensembl_external_name, //resp.approved_symbol || resp.approved_name || resp.ensembl_external_name,
 		    id : resp.approved_id || resp.ensembl_gene_id,
-		    description : resp.uniprot_function[0]
+		    description : resp.uniprot_function[0],
+            name : resp.approved_name || resp.ensembl_description
 		};
 
 		// Synonyms
@@ -161,11 +173,13 @@
         $scope.filters = {
             gene : {
                 total : 0,
-                selected: false
+                selected: true,
+                loading: false
             },
             efo : {
                 total : 0,
-                selected : false
+                selected : true,
+                loading: false
             }
         }
 
@@ -184,6 +198,7 @@
 
         var getFiltersData = function(){
 
+            $scope.filters.gene.loading = true;
             cttvAPIservice.getSearch({
                     q: $scope.search.query.q,
                     size : 1,
@@ -191,12 +206,15 @@
                 }).
                 then(
                     function(resp) {
-                        $log.info(resp);
                         $scope.filters.gene.total = resp.body.total;
                     },
                     cttvAPIservice.defaultErrorHandler
-                );
+                ).
+                finally(function(){
+                    $scope.filters.gene.loading = false;
+                });
 
+            $scope.filters.efo.loading = true;
             cttvAPIservice.getSearch({
                     q: $scope.search.query.q,
                     size : 1,
@@ -204,19 +222,28 @@
                 }).
                 then(
                     function(resp) {
-                        $log.info(resp);
                         $scope.filters.efo.total = resp.body.total;
                     },
                     cttvAPIservice.defaultErrorHandler
-                );
+                ).
+                finally(function(){
+                    $scope.filters.efo.loading = false;
+                });
 
         }
 
 
 
         $scope.getResults = function(){
-            //$log.log("SEARCH URL: ");
-            //$log.log(cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query));
+
+            if( !$scope.filters.gene.selected && !$scope.filters.efo.selected ){
+                // show no result if no filter is selected
+                $log.warn("no filter selcted");
+                $scope.search.results = null;
+                return;
+            }
+
+
             var queryobject = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
             // if one and only one of the filters is selected, apply the corresponding filter
             // cool way of mimicking a XOR operator ;)
@@ -229,8 +256,9 @@
             cttvAPIservice.getSearch( queryobject )
                 .then(
                     function(resp) {
-                        $log.info(resp);
+                        //$log.info(resp);
                         $scope.search.results = resp.body;
+                        //$log.log($scope.search);
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
