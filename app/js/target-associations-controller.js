@@ -158,8 +158,6 @@ angular.module('cttvControllers')
 	
 	$scope.selectedDisease = 0;
 	$scope.selectDisease = function (d) {
-	    console.log("SELECT DISEASE IN CONTROLLER: ");
-	    console.log(d);
 	    $scope.highlightEFO = {efo: d.efo_code,
 				   parent_efo: d._parent.efo_code,
 				   datatypes: d.datatypes
@@ -170,33 +168,46 @@ angular.module('cttvControllers')
 	    // } else {
 	    // 	$scope.selectedDisease = true;
 	    // }
-	    console.log(" ========> " + $scope.selectedDisease);
 	};
 	
 	// Display toggle (vis / table)
 	// TODO: We shouldn't change html events in the controller. This should go in the directive!
-	$scope.displaytype = "bubbles";
+	//$scope.displaytype = "bubbles";
+
+	$scope.visibility = {};
 	$scope.setDisplay = function (displ) {
 	    console.log("DISPLAY CHANGED TO " + displ);
 	    //$scope.displaytype = displ;
 	    switch (displ) {
 	    case "bubbles" :
+		// $scope.visibility.bubbles = "block";
+		// $scope.visibility.table = "none";
+		// $scope.visibility.tree = "none";
+
 		$("cttv-target-associations-bubbles").css("display", "block");
 		$("cttv-target-associations-table").css("display", "none");
 		$("cttv-target-associations-tree").css("display", "none");
-		$(".cttv-facet").css("display", "block");
+		$(".cttv-nav").css("display", "block");
 		break;
 	    case "table" :
+		// $scope.visibility.bubbles = "none";
+		// $scope.visibility.table = "block";
+		// $scope.visibility.bubbles = "none";
+
 		$("cttv-target-associations-bubbles").css("display", "none");
 		$("cttv-target-associations-table").css("display","block");
 		$("cttv-target-associations-tree").css("display", "none");
-		$(".cttv-facet").css("display", "none");
+		$(".cttv-nav").css("display", "none");
 		break;
 	    case "tree" :
+		// $scope.visibility.bubbles = "none";
+		// $scope.visibility.table = "none";
+		// $scope.visibility.tree = "block";
+
 		$("cttv-target-associations-bubbles").css("display", "none");
 		$("cttv-target-associations-table").css("display","none");
 		$("cttv-target-associations-tree").css("display", "block");
-		$(".cttv-facet").css("display", "none");
+		$(".cttv-nav").css("display", "none");
 	    	break;
 	    }
 	    

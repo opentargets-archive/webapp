@@ -23,7 +23,7 @@
 	    </label>
 	  </div>	    
 	</accordion-group>
-
+	<div class="cttv-nav">
 	  <accordion-group is-open="tagroup.open">
 	    <accordion-heading>
 	      <span ng-click="toggleNavigation()">Therapeutic Areas Navigation</span>
@@ -48,6 +48,7 @@
 	      </accordion-group>
 	    </accordion>
 	  </accordion-group>
+	</div>
       </accordion>
     </div>
 
@@ -57,12 +58,9 @@
       <!-- <i class="fa fa-picture-o fa-2x cttv-change-view" ng-click="setDisplay('tree')"></i> -->
       
       Views: [<span class="changeView" ng-click="setDisplay('bubbles')">Bubbles</span>] [<span class="changeView" ng-click="setDisplay('table')">Table</span>] [<span class="changeView" ng-click="setDisplay('tree')">Tree</span>]
-      <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}" highlight="{{highlightEFO}}" disease-is-selected="{{selectedDisease}}">
-      </cttv-target-associations-bubbles>
-      <cttv-target-associations-table style="display:none" target="{{search.query}}" datatypes="{{currentDataTypes}}">
-      </cttv-target-associations-table>
-      <cttv-target-associations-tree style="display:none" target="{{search.query}}" datatypes="{{currentDataTypes}}">
-      </cttv-target-associations-tree>
+      <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}" highlight="{{highlightEFO}}" disease-is-selected="{{selectedDisease}}" style="display:{{visibility.bubbles}}"></cttv-target-associations-bubbles>
+      <cttv-target-associations-table style="display:none" target="{{search.query}}" datatypes="{{currentDataTypes}}" style="display:{{visibility.table}}"></cttv-target-associations-table>
+      <cttv-target-associations-tree style="display:none" target="{{search.query}}" datatypes="{{currentDataTypes}}" style="display:{{visibility.tree}}"></cttv-target-associations-tree>
     </div>
   </div>
 </div>
