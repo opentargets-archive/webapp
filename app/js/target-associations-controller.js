@@ -99,10 +99,6 @@ angular.module('cttvControllers')
 	$scope.setTherapeuticAreas = function (tas) {
 	    $scope.therapeuticAreas = tas;
 
-	    // This method is executed with every data change, but we only need it once, so we return if the data has already loaded
-	    if ($scope.dataTypes[0].diseases) {
-		return;
-	    }
 	    var diseasesInDatatypes = {};
 	    var nonRedundantDiseases = {};
 	    for (var i=0; i<tas.length; i++) {
@@ -118,8 +114,12 @@ angular.module('cttvControllers')
 		    }
 		}
 	    }
-
 	    $scope.ndiseases = _.keys(nonRedundantDiseases).length;
+
+	    // This method is executed with every data change, but we only need it once, so we return if the data has already loaded
+	    if ($scope.dataTypes[0].diseases) {
+		return;
+	    }
 
 	    for (var n=0; n<$scope.dataTypes.length; n++) {
 		$scope.dataTypes[n].diseases = diseasesInDatatypes[$scope.dataTypes[n].name] || 0;
