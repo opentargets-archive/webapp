@@ -17,7 +17,7 @@ var geneAssociationsTree = function () {
     // 	.range(["#b2182b", "#ef8a62", "#fddbc7", "#f7f7f7", "#d1e5f0", "#67a9cf", "#2166ac"]);
     var scale = d3.scale.linear()
 	.domain([0,1])
-	.range(["#f7f7f7", "#2166ac"]);
+	.range(["#ffffff", "#08519c"]);
 
     function lookDatasource (arr, dsName) {
 	for (var i=0; i<arr.length; i++) {
@@ -44,11 +44,27 @@ var geneAssociationsTree = function () {
 	return false;
     }
 
+    function setTitles () {
+	d3.selectAll(".tnt_tree_node")
+	    .append("title")
+	    .text(function (d) {
+		return d.label;
+	    });
+    }
+
+    function sortNodes () {
+	treeVis.root().sort (function (node1, node2) {
+	    return node2.n_hidden() - node1.n_hidden();
+	});
+    }
+
     function render (flowerView, div) {
 	var data = config.data;
     
 	// tooltips
 	var nodeTooltip = function (node) {
+	    console.log("SHOW TOOLTIP FOR...");
+	    console.log(node.data());
 	    var obj = {};
 	    var score = node.property("association_score");
 	    obj.header = node.property("label") + " (Association score: " + score + ")";
@@ -62,45 +78,48 @@ var geneAssociationsTree = function () {
 		value: "<a href=" + loc + ">View evidence details</a>"
 	    });
 	    obj.rows.push({
-		value : node.is_collapsed() ? "Uncollapse children" : "Collapse children",
+		value : node.is_collapsed() ? "Expand children" : "Collapse children",
 		link : function (n) {
 		    n.toggle();
-		    theme.update();
+		    treeVis.update();
+		    setTitles();
 		},
 		obj: node
 	    });
 
-	    if (treeVis.has_focus(node)) {
-		obj.rows.push({
-		    value : "Release focus",
-		    link : function (n) {
-			treeVis.release_focus(n)
-			    .update();
-			// re-insert the titles
-			d3.selectAll(".tnt_tree_node")
-			    .append("title")
-			    .text(function (d) {
-				return d.label;
-			    });
-		    },
-		    obj : node
-		});
-	    } else {
-		obj.rows.push({
-		    value:"Set focus on node",
-		    link : function (n) {
-			treeVis.focus_node(n, true)
-			    .update();
-			// re-insert the titles
-			d3.selectAll(".tnt_tree_node")
-			    .append("title")
-			    .text(function (d) {
-				return d.label;
-			    });
-		    },
-		    obj: node
-		});
-	    }
+	    // if (treeVis.has_focus(node)) {
+	    // 	obj.rows.push({
+	    // 	    value : "Release focus",
+	    // 	    link : function (n) {
+	    // 		treeVis.release_focus(n)
+	    // 		    .update();
+	    // 		// re-insert the titles
+	    // 		d3.selectAll(".tnt_tree_node")
+	    // 		    .append("title")
+	    // 		    .text(function (d) {
+	    // 			return d.label;
+	    // 		    });
+	    // 	    },
+	    // 	    obj : node
+	    // 	});
+	    // } else {
+	    // 	obj.rows.push({
+	    // 	    value:"Set focus on node",
+	    // 	    link : function (n) {
+	    // 		console.log("SET FOCUS ON NODE: ");
+	    // 		console.log(n.data());
+	    // 		treeVis.focus_node(n, true)
+	    // 		    .update();
+	    // 		// re-insert the titles
+	    // 		d3.selectAll(".tnt_tree_node")
+	    // 		    .append("title")
+	    // 		    .text(function (d) {
+	    // 			return d.label;
+	    // 		    });
+	    // 	    },
+	    // 	    obj: node
+	    // 	});
+	    // }
 
 	    var t = tnt_tooltip.list()
 		.id(1)
@@ -146,7 +165,7 @@ var geneAssociationsTree = function () {
 	    		       diseaseName = diseaseName.substring(0,30) + "...";
 	    		   }
 			   if (node.is_collapsed()) {
-			       diseaseName += (" (+" + node.n_hidden() + ")");
+			       diseaseName += (" (+" + node.n_hidden() + " children)");
 			   }
 	    		   return diseaseName;
 	    	       }
@@ -159,12 +178,65 @@ var geneAssociationsTree = function () {
 	    	    .scale(false)
 	    	   );
 
+	// collapse all the therapeutic area nodes
+	var root = treeVis.root();
+	var tas = root.children();
+
+	for (var i=0; i<tas.length; i++) {
+	    tas[i].toggle();
+	}
+	sortNodes();
+
 	treeVis(div.node());
-	d3.selectAll(".tnt_tree_node")
-	    .append("title")
-	    .text(function (d) {
-		return d.label;
+
+
+	// Apply a legend on the node's color
+	var legendBar = div
+	    .append("div")
+	    .append("svg")
+	    .attr("width", 200)
+	    .attr("height", 20)
+	    .append("g");
+
+	var legendColors = ["#ffffff", "#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
+	legendBar
+	    .append("text")
+	    .attr("x", 0)
+	    .attr("y", 10)
+	    .attr("text-anchor", "start")
+	    .attr("alignment-baseline", "central")
+	    .text("0");
+	legendBar
+	    .append("text")
+	    .attr("x", (30 + (20*legendColors.length)))
+	    .attr("y", 10)
+	    .attr("text-anchor", "start")
+	    .attr("alignment-baseline", "central")
+	    .text("1");
+	legendBar.selectAll("rect")
+	    .data(legendColors)
+	    .enter()
+	    .append("rect")
+	    .attr("x", function (d, i) {
+		return 20 + (i*20);
+	    })
+	    .attr("y", 0)
+	    .attr("width", 20)
+	    .attr("height", 20)
+	    .attr("stroke", "black")
+	    .attr("stroke-width", 1)
+	    .attr("fill", function (d) {
+		return d;
 	    });
+
+	
+	// Add titles
+	setTitles();
+	// d3.selectAll(".tnt_tree_node")
+	//     .append("title")
+	//     .text(function (d) {
+	// 	return d.label;
+	//     });
 
     }
     
@@ -191,14 +263,18 @@ var geneAssociationsTree = function () {
 	}
     };
 
+    
     theme.update = function () {
 	treeVis.data(config.data);
+	// collapse all the therapeutic area nodes
+	var root = treeVis.root();
+	var tas = root.children();
+	for (var i=0; i<tas.length; i++) {
+	    tas[i].toggle();
+	}
+	sortNodes();
 	treeVis.update();
-	d3.selectAll(".tnt_tree_node")
-	    .append("title")
-	    .text(function (d) {
-		return d.label;
-	    });
+	setTitles();
     };
     
     // size of the tree
