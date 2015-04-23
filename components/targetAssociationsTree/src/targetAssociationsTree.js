@@ -194,7 +194,7 @@ var geneAssociationsTree = function () {
 	var legendBar = div
 	    .append("div")
 	    .append("svg")
-	    .attr("width", 200)
+	    .attr("width", 300)
 	    .attr("height", 20)
 	    .append("g");
 
@@ -212,7 +212,7 @@ var geneAssociationsTree = function () {
 	    .attr("y", 10)
 	    .attr("text-anchor", "start")
 	    .attr("alignment-baseline", "central")
-	    .text("1");
+	    .text("1 Score range");
 	legendBar.selectAll("rect")
 	    .data(legendColors)
 	    .enter()

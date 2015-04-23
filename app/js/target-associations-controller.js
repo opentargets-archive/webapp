@@ -48,31 +48,31 @@ angular.module('cttvControllers')
 		name: "genetic_association",
 		label: "Genetics",
 		labelFull: "Genetic associations",
-		selected: false
+		selected: true
 	    },
 	    {
 		name: "somatic_mutation",
 		label: "Somatic",
 		labelFull: "Somatic mutations",
-		selected: false
+		selected: true
 	    },
 	    {
 		name: "known_drug",
 		label: "Drugs",
 		labelFull: "Known drugs",
-		selected: false
+		selected: true
 	    },
 	    {
 		name: "rna_expression",
 		label: "RNA",
 		labelFull: "RNA expression",
-		selected: false
+		selected: true
 	    },
 	    {      
 		name: "affected_pathway",
 		label: "Pathways",
 		labelFull: "Affected pathways",
-		selected: false
+		selected: true
 	    },
 	    {
 		name: "animal_model",
