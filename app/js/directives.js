@@ -117,7 +117,7 @@ angular.module('cttvDirectives', [])
 				//"lengthChange": false,
 				//"paging": true,
 				//"searching": true,
-				"bInfo" : false,
+				//"bInfo" : false,
 				"ordering": true
 			    }));
 
@@ -347,7 +347,7 @@ angular.module('cttvDirectives', [])
 			    //"lengthChange": false,
 			    //"paging": true,
 			    //"searching": true,
-			    "bInfo": false,
+			    //"bInfo": false,
 			    "ordering": true
 			}) );
 		    });
