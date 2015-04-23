@@ -423,6 +423,11 @@ angular.module('cttvDirectives', [])
 		    newDiv.id = "cttvTargetGenomeBrowser";
 		    elem[0].appendChild(newDiv);
 
+		    var api = cttvApi()
+            .prefix("/api/latest/")
+            .appname("cttv-web-app")
+            .secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
+		    
 		    var gB = tnt.board.genome()
 			.species("human")
 			.gene(attrs.target)
@@ -430,7 +435,7 @@ angular.module('cttvDirectives', [])
 			.width(w);
 		    var theme = targetGenomeBrowser()
 			.chr(scope.chr);
-		    theme(gB, cttvApi(), document.getElementById("cttvTargetGenomeBrowser"));
+		    theme(gB, api, document.getElementById("cttvTargetGenomeBrowser"));
 		});
 	    }
 	};

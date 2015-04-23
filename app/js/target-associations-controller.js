@@ -16,14 +16,30 @@ angular.module('cttvControllers')
 	};
 
 	// given a target id, get the name
-	var api = cttvApi();
+	/*var api = cttvApi();
 	var url = api.url.gene({'gene_id': q});
 	$log.log(url);
 	api.call(url)
 	    .then(function (resp) {
 		$scope.search.label = resp.body.approved_symbol;
 	    });
+	*/
 	
+    // get gene specific info 
+    cttvAPIservice.getGene( {
+            gene_id:q
+        } ).
+        then(
+            function(resp) {
+                $scope.search.label = resp.body.approved_symbol;
+            },
+            cttvAPIservice.defaultErrorHandler
+        );
+
+
+
+
+
 	$scope.nresults = 0;
 
 	// datatypes filter
