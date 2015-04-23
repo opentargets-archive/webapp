@@ -29,13 +29,14 @@ angular.module('cttvDirectives', [])
 		    //api.call(tableUrl)
 			.then(function (resp) {
 			    //resp = JSON.parse(resp.text);
-			    resp = resp.body;
-			    $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
-			    $log.log(resp);
+			    var apiData = resp.body.data;
 			    var newData = [];
 			    var flowers = {};
-			    for (var i=0; i<resp.data.length; i++) {
-				var data = resp.data[i];
+			    if (apiData === undefined) {
+			    	apiData = [];
+			    }
+			    for (var i=0; i<apiData.length; i++) {
+				var data = apiData[i];
 				if (data.efo_code === "cttv_disease") {
 				    continue;
 				}
@@ -183,28 +184,33 @@ angular.module('cttvDirectives', [])
 	    scope: {},
 	    link: function (scope, elem, attrs) {
 
+		var datatypesChangesCounter = 0;
 		scope.$watch(function () { return attrs.datatypes }, function (dts) {
 		    dts = JSON.parse(dts);
-		    if (!gat) {
-			return;
+		    if (datatypesChangesCounter>0) {
+			if (!gat) {
+			    setTreeView();
+			    return;
+			}
+			cttvAPIservice.getAssociations ({
+			    gene: attrs.target,
+			    datastructure: "tree",
+			    filterbydatatype: _.keys(dts)
+			})
+			    .then (function (resp) {
+				var data = resp.body.data;
+				if (data) {
+				    gat
+					.data(data)
+					.datatypes(dts)
+					.update();
+				}
+			    });
 		    }
-		    cttvAPIservice.getAssociations ({
-			gene: attrs.target,
-			datastructure: "tree",
-			filterbydatatype: _.keys(dts)
-		    })
-			.then (function (resp) {
-			    var data = resp.body.data;
-			    gat
-				.data(data)
-				.datatypes(dts)
-				.update();
-			});
-		    
-		    
+		    datatypesChangesCounter++;
 		});
 
-		scope.$watch(function () { return attrs.target }, function (val) {
+		var setTreeView = function () {
 		    ////// Tree view
 		    // viewport Size
 		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -229,6 +235,9 @@ angular.module('cttvDirectives', [])
 		    })
 			.then (function (resp) {
 			    var data = resp.body.data;
+			    if (_.isEmpty(data)) {
+				return;
+			    }
 			    var fView = flowerView()
 				.fontsize(9)
 				.diagonal(100);
@@ -240,7 +249,10 @@ angular.module('cttvDirectives', [])
 				.target(attrs.target);
 			    gat(fView, elem[0]);
 			});
-
+		};
+		
+		scope.$watch(function () { return attrs.target }, function (val) {
+		    setTreeView();
 		});
 	    }
 	}

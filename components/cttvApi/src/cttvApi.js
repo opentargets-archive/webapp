@@ -25,11 +25,11 @@ var cttvApi = function () {
 
     var getToken = function () {
 	var tokenUrl = _.url.requestToken(credentials);
-	console.log("TOKEN URL: " + tokenUrl);
+	//console.log("TOKEN URL: " + tokenUrl);
 		return jsonHttp.get({
 		    "url": tokenUrl
-		})
-    }
+		});
+    };
     
     var _ = {};
     _.call = function (myurl, callback) {
@@ -41,15 +41,15 @@ var cttvApi = function () {
 		    }, callback);
 		}
 		if (!credentials.token) {
-		    console.log("No credential token, requesting one...");
+//		    console.log("No credential token, requesting one...");
 
 		    return getToken()
 			.then(function (resp) {
-			    console.log("   ======>> Got a new token: " + resp.body.token);
+//			    console.log("   ======>> Got a new token: " + resp.body.token);
 			    //credentials.token = resp.body.token;
 			    var headers = {
 				"Auth-token": resp.body.token
-			    }
+			    };
 			    var myPromise = jsonHttp.get ({
 					"url": myurl,
 					"headers": headers
@@ -60,7 +60,7 @@ var cttvApi = function () {
 
 			});
 		} else {
-		    console.log("Current token is: " + credentials.token);
+//		    console.log("Current token is: " + credentials.token);
 		    return jsonHttp.get({
 				"url" : myurl,
 				"headers": {
@@ -68,7 +68,7 @@ var cttvApi = function () {
 				}
 		    }, callback).catch(function (err) {
 			// Logic to deal with expired tokens
-			console.log("     --- Received an api error -- Possibly the token has expired, so I'll request a new one");
+			// console.log("     --- Received an api error -- Possibly the token has expired, so I'll request a new one");
 			console.log(err);
 			credentials.token = "";
 			return _.call(myurl, callback);
@@ -167,7 +167,7 @@ var cttvApi = function () {
 			}
 		}
 		return opts.join("&");
-    }
+    };
 
 
     return _;
