@@ -7,7 +7,7 @@ http = http.use(promises(Promise));
 
 var cttvApi = function () {
     // prefixes
-    var prefix = "http://beta.targetvalidation.org/api/latest/";
+    var prefix = "https://beta.targetvalidation.org/api/latest/";
     var prefixFilterby = "filterby?";
     var prefixAssociations = "association?";
     var prefixSearch = "search?";
