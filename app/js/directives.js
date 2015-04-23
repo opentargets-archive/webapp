@@ -384,7 +384,7 @@ angular.module('cttvDirectives', [])
 			}
 			var query = terms.join(" OR ");
     			var config = {
-    			    width: 400,
+    			    width: 800,
     			    loadingStatusImage: "",
     			    source: pmc.Citation.MED_SOURCE,
 			    query: query,
