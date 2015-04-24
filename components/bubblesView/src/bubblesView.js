@@ -466,11 +466,13 @@ var bubblesView = function () {
 		    	.attr("x", function (d) { return ((d.x - v[0])*k)+offset; })
 			.attr("y", function (d) { return ((d.y - v[1])*k)+offset; })
 		    	.text(function (d) {
-			    return d[conf.label].substring(0, d.r*k / 3);
+			    if (d[conf.label]) {
+				return d[conf.label].substring(0, d.r*k / 3);
+			    }
 			})
 			.attr("font-size", function (d) {
 			    var circleLength = d.r * k / 3;
-			    var labelLength = d[conf.label].length;
+			    var labelLength = d[conf.label] ? d[conf.label].length : 0;
 			    if (circleLength < labelLength) {
 				return 10;
 			    }
