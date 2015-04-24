@@ -213,18 +213,6 @@ angular.module('cttvDirectives', [])
 				}
 			    });
 		    }
-		    cttvAPIservice.getAssociations ({
-			gene: attrs.target,
-			datastructure: "tree",
-			filterbydatatype: _.keys(dts)
-		    })
-			.then (function (resp) {
-			    var data = resp.body.data;
-			    gat
-				.data(data)
-				.datatypes(dts)
-				.update();
-			});
 		    datatypesChangesCounter++;
 		});
 

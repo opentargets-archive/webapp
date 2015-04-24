@@ -36,12 +36,13 @@ angular.module('cttvDirectives')
 			    cttvAPIservice.getAssociations (opts)
 				.then (function (resp) {
 				    var data = resp.body.data;
+				    if (_.isEmpty(data)) {
+					data.association_score = 0.01;
+				    }
 				    scope.$parent.nresults = resp.body.total || 0;
 				    ga.datatypes(dts);
 				    updateView(data);
-				    if (data) {
-					ga.update(data);
-				    }
+				    ga.update(data);
 				})
 			} else {
 		    	    setView();
