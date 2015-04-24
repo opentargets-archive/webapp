@@ -32,6 +32,7 @@ angular.module('cttvControllers')
         then(
             function(resp) {
                 $scope.search.label = resp.body.approved_symbol;
+                $scope.search.filename = resp.body.approved_symbol.split(" ").join("_");
             },
             cttvAPIservice.defaultErrorHandler
         );
@@ -41,6 +42,7 @@ angular.module('cttvControllers')
 
 
 	$scope.nresults = 0;
+	$scope.loading = false;
 
 	// datatypes filter
 	$scope.dataTypes = [
@@ -136,7 +138,7 @@ angular.module('cttvControllers')
 	// This method sets the number of diseases supported by each datatype
 	// It needs to be called only once (on load) and without any filter applied
 	$scope.setDiseasesInDatatypes = function () {
-	    console.log("GENE: " + $scope.search.query);
+	    //console.log("GENE: " + $scope.search.query);
 	    cttvAPIservice.getAssociations ({
 		gene: $scope.search.query,
 		datastructure: "tree"
@@ -146,8 +148,8 @@ angular.module('cttvControllers')
 		    var dummy = geneAssociations()
 			.data(data);
 		    var ass = dummy.data().children;
-		    console.log (" A       S          S      O       C: ");
-		    console.log (ass);
+		    //console.log (" A       S          S      O       C: ");
+		    //console.log (ass);
 
 		// This method is executed with every data change, but we only need it once, so we return if the data has already loaded
 		    // if ($scope.dataTypes[0].diseases) {
@@ -200,7 +202,7 @@ angular.module('cttvControllers')
 	    }
 	    $scope.focusEFO = "cttv_disease";
 	    currentFocus = "cttv_disease";
-	    console.log("TOGGLE NAV");
+	    //console.log("TOGGLE NAV");
 	    $scope.diseasegroupOpen = false;
 	};
 	
@@ -224,7 +226,7 @@ angular.module('cttvControllers')
 
 	$scope.visibility = {};
 	$scope.setDisplay = function (displ) {
-	    console.log("DISPLAY CHANGED TO " + displ);
+	    //console.log("DISPLAY CHANGED TO " + displ);
 	    //$scope.displaytype = displ;
 	    switch (displ) {
 	    case "bubbles" :

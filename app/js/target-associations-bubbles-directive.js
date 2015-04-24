@@ -6,9 +6,12 @@ angular.module('cttvDirectives')
     .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
 	return {
 	    restrict: 'E',
+
 	    scope: {
-		"onFocus": '&onFocus'
+			"onFocus": '&onFocus',
+			loadprogress : '='
 	    },
+
 	    link: function (scope, elem, attrs) {
 		// event receiver on focus
 		addEventListener('bubblesViewFocus', function (e) {

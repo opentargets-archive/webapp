@@ -173,12 +173,12 @@
         $scope.filters = {
             gene : {
                 total : 0,
-                selected: true,
+                selected: false,
                 loading: false
             },
             efo : {
                 total : 0,
-                selected : true,
+                selected : false,
                 loading: false
             }
         }
@@ -236,14 +236,21 @@
 
         $scope.getResults = function(){
 
+            /*
             if( !$scope.filters.gene.selected && !$scope.filters.efo.selected ){
                 // show no result if no filter is selected
                 $log.warn("no filter selcted");
                 $scope.search.results = null;
                 return;
             }
-
-
+            */
+            
+            // before getting new results,
+            // we make sure we clear any current results (like in the case
+            // of applying a filter), which also causes the spinner to show...
+            $scope.search.results = {}; 
+            
+            
             var queryobject = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
             // if one and only one of the filters is selected, apply the corresponding filter
             // cool way of mimicking a XOR operator ;)
