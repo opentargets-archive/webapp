@@ -29,14 +29,13 @@ angular.module('cttvDirectives', [])
 		    //api.call(tableUrl)
 			.then(function (resp) {
 			    //resp = JSON.parse(resp.text);
-			    var apiData = resp.body.data;
+			    resp = resp.body;
+			    $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
+			    $log.log(resp);
 			    var newData = [];
 			    var flowers = {};
-			    if (apiData === undefined) {
-			    	apiData = [];
-			    }
-			    for (var i=0; i<apiData.length; i++) {
-				var data = apiData[i];
+			    for (var i=0; i<resp.data.length; i++) {
+				var data = resp.data[i];
 				if (data.efo_code === "cttv_disease") {
 				    continue;
 				}
@@ -119,7 +118,7 @@ angular.module('cttvDirectives', [])
 				//"lengthChange": false,
 				//"paging": true,
 				//"searching": true,
-				//"bInfo" : false,
+				"bInfo" : false,
 				"ordering": true
 			    }));
 
@@ -184,33 +183,28 @@ angular.module('cttvDirectives', [])
 	    scope: {},
 	    link: function (scope, elem, attrs) {
 
-		var datatypesChangesCounter = 0;
 		scope.$watch(function () { return attrs.datatypes }, function (dts) {
 		    dts = JSON.parse(dts);
-		    if (datatypesChangesCounter>0) {
-			if (!gat) {
-			    setTreeView();
-			    return;
-			}
-			cttvAPIservice.getAssociations ({
-			    gene: attrs.target,
-			    datastructure: "tree",
-			    filterbydatatype: _.keys(dts)
-			})
-			    .then (function (resp) {
-				var data = resp.body.data;
-				if (data) {
-				    gat
-					.data(data)
-					.datatypes(dts)
-					.update();
-				}
-			    });
+		    if (!gat) {
+			return;
 		    }
-		    datatypesChangesCounter++;
+		    cttvAPIservice.getAssociations ({
+			gene: attrs.target,
+			datastructure: "tree",
+			filterbydatatype: _.keys(dts)
+		    })
+			.then (function (resp) {
+			    var data = resp.body.data;
+			    gat
+				.data(data)
+				.datatypes(dts)
+				.update();
+			});
+		    
+		    
 		});
 
-		var setTreeView = function () {
+		scope.$watch(function () { return attrs.target }, function (val) {
 		    ////// Tree view
 		    // viewport Size
 		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -235,9 +229,6 @@ angular.module('cttvDirectives', [])
 		    })
 			.then (function (resp) {
 			    var data = resp.body.data;
-			    if (_.isEmpty(data)) {
-				return;
-			    }
 			    var fView = flowerView()
 				.fontsize(9)
 				.diagonal(100);
@@ -249,10 +240,7 @@ angular.module('cttvDirectives', [])
 				.target(attrs.target);
 			    gat(fView, elem[0]);
 			});
-		};
-		
-		scope.$watch(function () { return attrs.target }, function (val) {
-		    setTreeView();
+
 		});
 	    }
 	}
@@ -360,7 +348,7 @@ angular.module('cttvDirectives', [])
 			    //"lengthChange": false,
 			    //"paging": true,
 			    //"searching": true,
-			    //"bInfo": false,
+			    "bInfo": false,
 			    "ordering": true
 			}) );
 		    });
@@ -384,7 +372,7 @@ angular.module('cttvDirectives', [])
 			}
 			var query = terms.join(" OR ");
     			var config = {
-    			    width: 800,
+    			    width: 400,
     			    loadingStatusImage: "",
     			    source: pmc.Citation.MED_SOURCE,
 			    query: query,
@@ -435,11 +423,6 @@ angular.module('cttvDirectives', [])
 		    newDiv.id = "cttvTargetGenomeBrowser";
 		    elem[0].appendChild(newDiv);
 
-		    var api = cttvApi()
-            .prefix("/api/latest/")
-            .appname("cttv-web-app")
-            .secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
-		    
 		    var gB = tnt.board.genome()
 			.species("human")
 			.gene(attrs.target)
@@ -447,7 +430,7 @@ angular.module('cttvDirectives', [])
 			.width(w);
 		    var theme = targetGenomeBrowser()
 			.chr(scope.chr);
-		    theme(gB, api, document.getElementById("cttvTargetGenomeBrowser"));
+		    theme(gB, cttvApi(), document.getElementById("cttvTargetGenomeBrowser"));
 		});
 	    }
 	};
