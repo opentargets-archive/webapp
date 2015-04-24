@@ -21,7 +21,8 @@ angular.module('cttvDirectives', [])
 		    restrict: 'E',
 
 		    scope: {
-			    	loadprogress : '='
+			    	loadprogress : '=',
+			    	filename = '@'
 			},
 
 	    	link: function (scope, elem, attrs) {
@@ -135,7 +136,7 @@ angular.module('cttvDirectives', [])
 								//"searching": true,
 								//"bInfo" : false,
 								"ordering": true
-						    }, attrs.filename ));
+						    }, scope.filename ));
 
 					});
 
@@ -299,7 +300,8 @@ angular.module('cttvDirectives', [])
 		    restrict: 'E',
 		    
 		    scope: {
-		    	loadprogress : '='
+		    	loadprogress : '=',
+		    	filename : '@'
 		    },
 		    
 		    link: function (scope, elem, attrs) {
@@ -405,7 +407,7 @@ angular.module('cttvDirectives', [])
 						    //"searching": true,
 						    //"bInfo": false,
 						    "ordering": true
-						}, attrs.filename ));
+						}, scope.filename ));
 
 				    });
 			} // end link
