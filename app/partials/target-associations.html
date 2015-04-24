@@ -3,8 +3,8 @@
 <div>
   <h3><span view-title>Diseases associated with {{search.label}}</span></h3>
   <p class="small"><a href="#/target/{{search.query}}">View target profile</a></p>
-  <div class="h6">Found {{nresults}} evidence in {{ndiseases}} diseases</div>
-  <!-- <div class="h6">Found {{nresults}} evidence in {{ndiseases}} {{ndiseases===1 ? "disease" : "diseases"}}</div> -->
+  <!-- <div class="h6">Found {{nresults}} evidence in {{ndiseases}} diseases {{diseasesFilteredMsg}}</div> -->
+  <div class="h6">Found {{nresults}} evidence in {{ndiseases}} {{ndiseases===1 ? "disease" : "diseases"}} {{diseasesFilteredMsg}}</div>
 
   <div class="row">
     
@@ -22,7 +22,8 @@
 		     ng-checked="dataType.selected">
 		     <!-- ng-checked="currentDataTypes.indexOf(dataType) > -1"> 
 		     {{dataType.name | clearUnderscores | upperCaseFirst}} ({{dataType.diseases}})-->
-		     <small>{{dataType.labelFull}} <span>({{dataType.diseases}})</span></small>
+		     <!-- <small>{{dataType.labelFull}} <span>({{dataType.diseases}})</span></small> -->
+		     <small>{{dataType.labelFull}}</small>
 	    </label><br />
 	  </div>	    
 	</accordion-group>

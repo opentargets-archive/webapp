@@ -63,8 +63,6 @@ var geneAssociationsTree = function () {
     
 	// tooltips
 	var nodeTooltip = function (node) {
-	    console.log("SHOW TOOLTIP FOR...");
-	    console.log(node.data());
 	    var obj = {};
 	    var score = node.property("association_score");
 	    obj.header = node.property("label") + " (Association score: " + score + ")";
@@ -161,7 +159,7 @@ var geneAssociationsTree = function () {
 	    	   .text(function (node) {
 	    	       if (node.is_leaf()) {
 	    		   var diseaseName = node.property("label");
-	    		   if (diseaseName.length > 30) {
+	    		   if (diseaseName && diseaseName.length > 30) {
 	    		       diseaseName = diseaseName.substring(0,30) + "...";
 	    		   }
 			   if (node.is_collapsed()) {
@@ -182,10 +180,12 @@ var geneAssociationsTree = function () {
 	var root = treeVis.root();
 	var tas = root.children();
 
-	for (var i=0; i<tas.length; i++) {
-	    tas[i].toggle();
+	if (tas !== undefined) {
+	    for (var i=0; i<tas.length; i++) {
+		tas[i].toggle();
+	    }
+	    sortNodes();
 	}
-	sortNodes();
 
 	treeVis(div.node());
 
@@ -194,7 +194,7 @@ var geneAssociationsTree = function () {
 	var legendBar = div
 	    .append("div")
 	    .append("svg")
-	    .attr("width", 200)
+	    .attr("width", 300)
 	    .attr("height", 20)
 	    .append("g");
 
@@ -212,7 +212,7 @@ var geneAssociationsTree = function () {
 	    .attr("y", 10)
 	    .attr("text-anchor", "start")
 	    .attr("alignment-baseline", "central")
-	    .text("1");
+	    .text("1 Score range");
 	legendBar.selectAll("rect")
 	    .data(legendColors)
 	    .enter()
@@ -269,8 +269,10 @@ var geneAssociationsTree = function () {
 	// collapse all the therapeutic area nodes
 	var root = treeVis.root();
 	var tas = root.children();
-	for (var i=0; i<tas.length; i++) {
-	    tas[i].toggle();
+	if (tas) {
+	    for (var i=0; i<tas.length; i++) {
+		tas[i].toggle();
+	    }
 	}
 	sortNodes();
 	treeVis.update();

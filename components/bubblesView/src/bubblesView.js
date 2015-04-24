@@ -134,15 +134,12 @@ var bubblesView = function () {
     render.update = function () {
 	// Safely unfocus on update
 
-        // If we don't pass any data, return out of the element
-        if (!conf.data) return;
-
 	if (conf.data.children()) {
 	    render.focus(conf.data);
 	}
-
+	
 	var packData = pack.nodes(conf.data.data());
-
+	
 	circle = bubblesView_g.selectAll("circle")
 	    .data(packData, function (d) {
 		if (d._parent === undefined) {
@@ -425,8 +422,12 @@ var bubblesView = function () {
 	view = v;
 
 	circle
-	    .attr("cx", function (d) { return ((d.x - v[0])*k)+offset; })
-	    .attr("cy", function (d) { return ((d.y - v[1])*k)+offset; })
+	    .attr("cx", function (d) {
+		return ((d.x - v[0])*k)+offset;
+	    })
+	    .attr("cy", function (d) {
+		return ((d.y - v[1])*k)+offset;
+	    })
 	    // .attr("transform", function(d) {
 	    // 	return "translate(" + (((d.x - v[0]) * k) + offset) + "," + (((d.y - v[1]) * k) + offset) + ")";
 	    // });

@@ -119,6 +119,7 @@ angular.module('cttvControllers')
 	$scope.nonRedundantDiseases = function (tas) {
 	    var diseasesInDatatypes = {};
 	    var nonRedundantDiseases = {};
+	    var filtered
 	    for (var i=0; i<tas.length; i++) {
 		var ta = tas[i];
 		for (var j=0; j<ta.children.length; j++) {
@@ -137,8 +138,9 @@ angular.module('cttvControllers')
 
 	// This method sets the number of diseases supported by each datatype
 	// It needs to be called only once (on load) and without any filter applied
+	var allDiseases = [];
+	var includedDiseases = [];
 	$scope.setDiseasesInDatatypes = function () {
-	    //console.log("GENE: " + $scope.search.query);
 	    cttvAPIservice.getAssociations ({
 		gene: $scope.search.query,
 		datastructure: "tree"
@@ -147,26 +149,40 @@ angular.module('cttvControllers')
 		    var data = resp.body.data;
 		    var dummy = geneAssociations()
 			.data(data);
-		    var ass = dummy.data().children;
-		    //console.log (" A       S          S      O       C: ");
-		    //console.log (ass);
 
-		// This method is executed with every data change, but we only need it once, so we return if the data has already loaded
-		    // if ($scope.dataTypes[0].diseases) {
-		    //     return;
+		    var ass = dummy.data().children || [];
+
+		    var auxArr = $scope.nonRedundantDiseases(ass);
+		    allDiseases = _.keys(auxArr[0]);
+		    $scope.checkFilteredOutDiseases();
+		    var diseasesInDatatypes = auxArr[1];
+
+		    // TODO: For now we are avoiding to show the number of diseases per datatype because this will cause inconsistencies
+		    // with filtered out datatypes in the bubbles view. We will have to rethink this
+		    // Get the diseases that are in all datatypes
+		    // for (var n=0; n<$scope.dataTypes.length; n++) {
+		        //$scope.dataTypes[n].diseases = diseasesInDatatypes[$scope.dataTypes[n].name] || 0;
 		    // }
-		    var diseasesInDatatypes = $scope.nonRedundantDiseases(ass)[1];
-		    for (var n=0; n<$scope.dataTypes.length; n++) {
-		        $scope.dataTypes[n].diseases = diseasesInDatatypes[$scope.dataTypes[n].name] || 0;
-		    }
 		});
 	};
 	$scope.setDiseasesInDatatypes();
 
+	$scope.checkFilteredOutDiseases = function () {
+	    // if (_.isEmpty(includedDiseases) || _.isEmpty(allDiseases)) {
+	    // 	return
+	    // }
+	    var diff = _.difference(allDiseases, includedDiseases);
+	    $scope.ndiseasesfiltered = diff.length;
+	    $scope.diseasesFilteredMsg = $scope.ndiseasesfiltered ? " (" + $scope.ndiseasesfiltered + " diseases filtered out)" : "";
+	};
+
+	$scope.ndiseases = 0;
 	$scope.setTherapeuticAreas = function (tas) {
 	    $scope.therapeuticAreas = tas;
 	    var nonRedundantDiseases = $scope.nonRedundantDiseases(tas)[0];
-	    $scope.ndiseases = _.keys(nonRedundantDiseases).length;
+	    $scope.ndiseases = _.keys(nonRedundantDiseases).length || 0;
+	    includedDiseases = _.keys(nonRedundantDiseases);
+	    $scope.checkFilteredOutDiseases();
 	};
 	
 	// Therapeutic Areas Nav
@@ -202,7 +218,6 @@ angular.module('cttvControllers')
 	    }
 	    $scope.focusEFO = "cttv_disease";
 	    currentFocus = "cttv_disease";
-	    //console.log("TOGGLE NAV");
 	    $scope.diseasegroupOpen = false;
 	};
 	

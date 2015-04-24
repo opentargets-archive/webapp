@@ -23,29 +23,35 @@ angular.module('cttvDirectives')
 		var ga;
 		var nav;
 
+		var datatypesChangesCounter = 0;
 		// Data types changes
 		scope.$watch(function () { return attrs.datatypes }, function (dts) {
 		    var dts = JSON.parse(attrs.datatypes);
-		    if (ga) {
-		    // var api = cttvApi();
-		    // 	var url = api.url.associations({
-		    // 	    gene: attrs.target,
-		    // 	    datastructure: "tree"
-		    // 	});
-		    // 	api.call (url)
-			cttvAPIservice.getAssociations ({
-			    gene: attrs.target,
-			    datastructure: "tree",
-			    filterbydatatype: _.keys(dts)
-			})
-			    .then (function (resp) {
-				//var data = resp.body.data;
-				scope.$parent.nresults = resp.body.total;
-				ga.datatypes(dts);
-				updateView(resp.body.data || []);
-				ga.update(resp.body.data);
-			    })
+		    var opts = {
+			gene: attrs.target,
+			datastructure: "tree",
+		    };
+		    if (!_.isEmpty (dts)) {
+			opts.filterbydatatype = _.keys(dts);
 		    }
+		    if (datatypesChangesCounter>0) {
+		    	if (ga) {
+			    cttvAPIservice.getAssociations (opts)
+				.then (function (resp) {
+				    var data = resp.body.data;
+				    if (_.isEmpty(data)) {
+					data.association_score = 0.01;
+				    }
+				    scope.$parent.nresults = resp.body.total || 0;
+				    ga.datatypes(dts);
+				    updateView(data);
+				    ga.update(data);
+				})
+			} else {
+		    	    setView();
+			}
+		}
+		    datatypesChangesCounter++;
 		});
 
 		// Highlight changes
@@ -106,11 +112,15 @@ angular.module('cttvDirectives')
 
 		function updateView (data) {
 		    // TODO: This may prevent from delivering directives as products!
-		    ga.data(data);
-		    scope.$parent.setTherapeuticAreas(ga.data().children);
+		    if (data) {
+			ga.data(data);
+			scope.$parent.setTherapeuticAreas(ga.data().children || []);
+		    } else {
+			scope.$parent.setTherapeuticAreas([]);
+		    }
 		};
 
-		scope.$watch(function () {return attrs.target}, function (val) {
+		function setView () {
 		    ////// Bubbles View
 		    // viewport Size
 		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -125,15 +135,21 @@ angular.module('cttvDirectives')
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 
 		    var dts = JSON.parse(attrs.datatypes);
-		    cttvAPIservice.getAssociations ({
+		    var opts = {
 			gene: attrs.target,
-			datastructure: "tree",
-			filterbydatatype: _.keys(dts)
-		    })
+			datastructure: "tree",			
+		    };
+		    if (!_.isEmpty(dts)) {
+			opts.filterbydatatype = _.keys(dts);
+		    }
+		    cttvAPIservice.getAssociations (opts)
 		    // api.call (url)
 		    	.then (function (resp) {
 			    var data = resp.body.data;
-
+			    if (_.isEmpty(data)) {
+				updateView ();
+				return
+			    }
 			    // Bubbles View
 			    scope.$parent.nresults=resp.body.total;
 
@@ -155,12 +171,17 @@ angular.module('cttvDirectives')
 				.target (attrs.target)
 				.diameter (diameter)
 				.datatypes(dts)
-			    
-			    updateView (data || []);
+
+				updateView (data);
 
 			    //scope.$parent.$apply();
 			    ga(bView, fView, elem[0]);
 			});
+
+		};
+
+		scope.$watch(function () {return attrs.target}, function (val) {
+		    setView();
 		});
 	    }
 	}

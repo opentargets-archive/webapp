@@ -12,6 +12,6 @@
     "cttv.targetAssociations": "file:../components/targetAssociations",
     "cttv.targetAssociationsTree": "file:../components/targetAssociationsTree",
     "cttv.targetGenomeBrowser": "file:../components/targetGenomeBrowser",
-    "tnt.genome": "0.0.0"
+    "tnt.genome": "^0.0.3"
   }
 }
