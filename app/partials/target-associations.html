@@ -65,7 +65,7 @@
 
       <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}" highlight="{{highlightEFO}}" disease-is-selected="{{selectedDisease}}" style="display:{{visibility.bubbles}}"></cttv-target-associations-bubbles>
       
-      <cttv-target-associations-table style="display:none;" target="{{search.query}}" datatypes="{{currentDataTypes}}" style="display:{{visibility.table}}" filename="diseases_associated_with_{{search.filename}}"></cttv-target-associations-table>
+      <cttv-target-associations-table style="display:none;" target="{{search.query}}" datatypes="{{currentDataTypes}}" style="display:{{visibility.table}}" filename="diseases_associated_with_{{search.filename}}" loadprogress="loading"></cttv-target-associations-table>
       
       <cttv-target-associations-tree style="display:none" target="{{search.query}}" datatypes="{{currentDataTypes}}" style="display:{{visibility.tree}}"></cttv-target-associations-tree>
     </div>
