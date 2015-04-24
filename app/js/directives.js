@@ -22,7 +22,7 @@ angular.module('cttvDirectives', [])
 
 		    scope: {
 			    	loadprogress : '=',
-			    	filename = '@'
+			    	filename : '@'
 			},
 
 	    	link: function (scope, elem, attrs) {
