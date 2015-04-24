@@ -50,7 +50,7 @@
     "watchify": "^1.0.2"
   },
   "dependencies": {
-    "tnt.genome": "0.0.0",
+    "tnt.genome": "^0.0.3",
     "tnt.tooltip": "0.0.8"
   }
 }
