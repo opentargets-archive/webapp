@@ -32,6 +32,7 @@ angular.module('cttvControllers')
         then(
             function(resp) {
                 $scope.search.label = resp.body.approved_symbol;
+                $scope.search.filename = resp.body.approved_symbol.split(" ").join("_");
             },
             cttvAPIservice.defaultErrorHandler
         );
@@ -41,6 +42,7 @@ angular.module('cttvControllers')
 
 
 	$scope.nresults = 0;
+	$scope.loading = false;
 
 	// datatypes filter
 	$scope.dataTypes = [
@@ -147,6 +149,7 @@ angular.module('cttvControllers')
 		    var data = resp.body.data;
 		    var dummy = geneAssociations()
 			.data(data);
+
 		    var ass = dummy.data().children || [];
 
 		    var auxArr = $scope.nonRedundantDiseases(ass);
@@ -238,7 +241,7 @@ angular.module('cttvControllers')
 
 	$scope.visibility = {};
 	$scope.setDisplay = function (displ) {
-	    console.log("DISPLAY CHANGED TO " + displ);
+	    //console.log("DISPLAY CHANGED TO " + displ);
 	    //$scope.displaytype = displ;
 	    switch (displ) {
 	    case "bubbles" :

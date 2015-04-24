@@ -32,11 +32,13 @@ angular.module('cttvControllers')
         then(
             function(resp) {
                 $scope.search.label = resp.body.label;
+                $scope.search.filename = resp.body.label.split(" ").join("_");
             },
             cttvAPIservice.defaultErrorHandler
         );
 
 
-    $scope.nresults = 0;
+    $scope.nresults = "0";
+    $scope.loading = false;
     
 }]);

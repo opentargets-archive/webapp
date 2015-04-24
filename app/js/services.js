@@ -57,7 +57,6 @@ angular.module('cttvServices', []).
                         }
                      ]
                 }
-
             return obj;
         }
 
