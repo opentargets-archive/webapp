@@ -98,7 +98,7 @@
 
 		// Synonyms
 		var syns = {};
-		var synonyms = resp.synonyms;
+		var synonyms = resp.symbol_synonyms;
 		if (synonyms !== undefined) {
 		    for (var i=0; i<synonyms.length; i++) {
 			syns[synonyms[i]] = 1;
@@ -108,6 +108,12 @@
 		if (prev_symbols !== undefined) {
 		    for (var j=0; j<prev_symbols.length; j++) {
 			syns[prev_symbols[j]] = 1;
+		    }
+		}
+		var name_synonyms = resp.name_synonyms;
+		if (name_synonyms !== undefined) {
+		    for (var j=0; j<name_synonyms.length; j++) {
+			syns[name_synonyms[j]] = 1;
 		    }
 		}
 		$log.log(synonyms);

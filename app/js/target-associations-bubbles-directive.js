@@ -19,8 +19,8 @@ angular.module('cttvDirectives')
 
 		var ga;
 		var nav;
+
 		var datatypesChangesCounter = 0;
-		
 		// Data types changes
 		scope.$watch(function () { return attrs.datatypes }, function (dts) {
 		    var dts = JSON.parse(attrs.datatypes);
@@ -108,15 +108,11 @@ angular.module('cttvDirectives')
 
 		function updateView (data) {
 		    // TODO: This may prevent from delivering directives as products!
-		    if (data) {
-			ga.data(data);
-			scope.$parent.setTherapeuticAreas(ga.data().children || []);
-		    } else {
-			scope.$parent.setTherapeuticAreas([]);
-		    }
+		    ga.data(data);
+		    scope.$parent.setTherapeuticAreas(ga.data().children);
 		};
 
-		function setView () {
+		scope.$watch(function () {return attrs.target}, function (val) {
 		    ////// Bubbles View
 		    // viewport Size
 		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -167,17 +163,12 @@ angular.module('cttvDirectives')
 				.target (attrs.target)
 				.diameter (diameter)
 				.datatypes(dts)
-
-				updateView (data);
+			    
+			    updateView (data || []);
 
 			    //scope.$parent.$apply();
 			    ga(bView, fView, elem[0]);
 			});
-
-		};
-
-		scope.$watch(function () {return attrs.target}, function (val) {
-		    setView();
 		});
 	    }
 	}

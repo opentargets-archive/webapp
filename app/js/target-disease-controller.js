@@ -291,20 +291,6 @@
 
 
 
-        var getSoLabel = function(arr_info, arr_code){
-            var label = "nearest_gene_five_prime_end";
-            // first look for the SO id in the array
-            for(var i=0; i<arr_code.length; i++){
-                if(arr_code[i].substr(0,2).toUpperCase() === "SO"){
-                    label = getEcoLabel( arr_info, arr_code[i]);
-                    break;
-                }
-            }
-            return label;
-        }
-
-
-
         /*
          * 
          */
@@ -326,11 +312,10 @@
                             + " <i class='fa fa-external-link'></i></a>");
 
                     // variant type
-                    //row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[1]) );
-                    row.push( getSoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes) );
+                    row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[1]) );
+                    
                     // evidence source
-                    //row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[2]) );
-                    row.push("CTTV-custom annotation pipeline");
+                    row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[2]) );
 
                     // evidence source
                     row.push( "<a href='https://www.ebi.ac.uk/gwas/search?query="+data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()+"' target='_blank'>"
