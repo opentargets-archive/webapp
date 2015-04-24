@@ -24,13 +24,16 @@ angular.module('cttvDirectives')
 		// Data types changes
 		scope.$watch(function () { return attrs.datatypes }, function (dts) {
 		    var dts = JSON.parse(attrs.datatypes);
+		    var opts = {
+			gene: attrs.target,
+			datastructure: "tree",
+		    };
+		    if (!_.isEmpty (dts)) {
+			opts.filterbydatatype = _.keys(dts);
+		    }
 		    if (datatypesChangesCounter>0) {
-			if (ga) {
-			    cttvAPIservice.getAssociations ({
-				gene: attrs.target,
-				datastructure: "tree",
-				filterbydatatype: _.keys(dts)
-			    })
+		    	if (ga) {
+			    cttvAPIservice.getAssociations (opts)
 				.then (function (resp) {
 				    var data = resp.body.data;
 				    scope.$parent.nresults = resp.body.total || 0;
@@ -43,7 +46,7 @@ angular.module('cttvDirectives')
 			} else {
 		    	    setView();
 			}
-		    }
+		}
 		    datatypesChangesCounter++;
 		});
 
@@ -128,16 +131,20 @@ angular.module('cttvDirectives')
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 
 		    var dts = JSON.parse(attrs.datatypes);
-		    cttvAPIservice.getAssociations ({
+		    var opts = {
 			gene: attrs.target,
-			datastructure: "tree",
-			filterbydatatype: _.keys(dts)
-		    })
+			datastructure: "tree",			
+		    };
+		    if (!_.isEmpty(dts)) {
+			opts.filterbydatatype = _.keys(dts);
+		    }
+		    cttvAPIservice.getAssociations (opts)
 		    // api.call (url)
 		    	.then (function (resp) {
 			    var data = resp.body.data;
 			    if (_.isEmpty(data)) {
-				return 
+				updateView ();
+				return
 			    }
 			    // Bubbles View
 			    scope.$parent.nresults=resp.body.total;

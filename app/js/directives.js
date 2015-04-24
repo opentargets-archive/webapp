@@ -21,11 +21,14 @@ angular.module('cttvDirectives', [])
 
 		var updateTable = function (table, datatypes) {
 		    var dts = JSON.parse(attrs.datatypes);
-		    return cttvAPIservice.getAssociations ({
+		    var opts = {
 			gene: attrs.target,
 			datastructure: "flat",
-			filterbydatatype: _.keys(dts)
-		    })
+		    };
+		    if (!_.isEmpty(dts)) {
+			opts.filterbydatatype = _.keys(dts);
+		    }
+		    return cttvAPIservice.getAssociations (opts)
 		    //api.call(tableUrl)
 			.then(function (resp) {
 			    //resp = JSON.parse(resp.text);
@@ -129,7 +132,7 @@ angular.module('cttvDirectives', [])
 		};
 
 		var table = document.createElement("table");
-		var dtable; // defined when called DataTable
+		var dtable; // defined when called Data
 		table.className = "table table-stripped table-bordered";
 		var firstRendered = false;
 
@@ -192,11 +195,14 @@ angular.module('cttvDirectives', [])
 			    setTreeView();
 			    return;
 			}
-			cttvAPIservice.getAssociations ({
+			var opts = {
 			    gene: attrs.target,
 			    datastructure: "tree",
-			    filterbydatatype: _.keys(dts)
-			})
+			};
+			if (!_.isEmpty(dts)) {
+			    opts.filterbydatatype = _.keys(dts);
+			}
+			cttvAPIservice.getAssociations (opts)
 			    .then (function (resp) {
 				var data = resp.body.data;
 				if (data) {
@@ -227,12 +233,14 @@ angular.module('cttvDirectives', [])
 		    $log.log("DIAMETER FOR TREE: " + diameter);
 
 		    var dts = JSON.parse(attrs.datatypes);
-		    
-		    cttvAPIservice.getAssociations ({
+		    var opts = {
 			gene: attrs.target,
-			datastructure: "tree",
-			filterbydatatype: _.keys(dts)
-		    })
+			datastructure: "tree"
+		    }
+		    if (!_.isEmpty(dts)) {
+			opts.filterbydatatype = _.keys(dts)
+		    }
+		    cttvAPIservice.getAssociations (opts)
 			.then (function (resp) {
 			    var data = resp.body.data;
 			    if (_.isEmpty(data)) {

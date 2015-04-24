@@ -155,20 +155,21 @@ angular.module('cttvControllers')
 		    var diseasesInDatatypes = auxArr[1];
 		    // Get the diseases that are in non filtered datatypes and filtered datatypes
 		    for (var n=0; n<$scope.dataTypes.length; n++) {
-		        $scope.dataTypes[n].diseases = diseasesInDatatypes[$scope.dataTypes[n].name] || 0;
+		        //$scope.dataTypes[n].diseases = diseasesInDatatypes[$scope.dataTypes[n].name] || 0;
 		    }
 		});
 	};
-	$scope.setDiseasesInDatatypes();
+	// TODO: For now we are avoiding to show the number of diseases per datatype because this will cause inconsistencies
+	// with filtered out datatypes in the bubbles view. We will have to rethink this
+	//$scope.setDiseasesInDatatypes();
 
 	$scope.checkFilteredOutDiseases = function () {
-	    if (_.isEmpty(includedDiseases) || _.isEmpty(allDiseases)) {
-		return
-	    }
-
+	    // if (_.isEmpty(includedDiseases) || _.isEmpty(allDiseases)) {
+	    // 	return
+	    // }
 	    var diff = _.difference(allDiseases, includedDiseases);
 	    $scope.ndiseasesfiltered = diff.length;
-	    $scope.diseasesFilteredMsg = $scope.ndiseasesfiltered ? " (" + $scope.ndiseasesfiltered + " diseases filtered)" : "";
+	    $scope.diseasesFilteredMsg = $scope.ndiseasesfiltered ? " (" + $scope.ndiseasesfiltered + " diseases filtered out)" : "";
 	};
 
 	$scope.ndiseases = 0;

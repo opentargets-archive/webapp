@@ -269,8 +269,10 @@ var geneAssociationsTree = function () {
 	// collapse all the therapeutic area nodes
 	var root = treeVis.root();
 	var tas = root.children();
-	for (var i=0; i<tas.length; i++) {
-	    tas[i].toggle();
+	if (tas) {
+	    for (var i=0; i<tas.length; i++) {
+		tas[i].toggle();
+	    }
 	}
 	sortNodes();
 	treeVis.update();
