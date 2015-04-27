@@ -165,7 +165,7 @@ angular.module('cttvDirectives', [])
 					    dtable.columns().eq(0).each (function (i) {
 						var column = dtable.column(i);
 						if (i>3 && i<10) { // first headers are "Disease", "EFO", "Therapeutic area", "Association score" and last one is "Association score breakdown"
-						    if (hasDatatype(column.header().innerText, _.keys(dts))) {
+						    if (hasDatatype(column.header().textContent, _.keys(dts))) {
 							column.visible(true);
 						    } else {
 						    	column.visible(false);
