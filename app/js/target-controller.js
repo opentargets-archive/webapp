@@ -72,10 +72,50 @@ angular.module('cttvControllers')
 					    };
 
 					    // GO terms
-					    var goterms = _.filter(resp.dbxrefs, function (t) {return t.match(/^GO:/)});
-					    var cleanGoterms = _.map(goterms, function (t) {return t.substring(3, t.length)});
-					    var uniqGoterms = _.uniq(cleanGoterms);
-					    $scope.goterms = uniqGoterms;
+					    // var goterms = _.filter(resp.dbxrefs, function (t) {return t.match(/^GO:/)});
+					    // var cleanGoterms = _.map(goterms, function (t) {return t.substring(3, t.length)});
+					    // var uniqGoterms = _.uniq(cleanGoterms);
+					    // $scope.goterms = uniqGoterms;
+					    // var gos = _.pluck(resp.go, 'term');
+					    var gosByOntology = {
+						'F' : [],
+						'C' : [],
+						'P' : []
+					    };
+					    var gos = _.keys(resp.go);
+					    for (var i=0; i<gos.length; i++) {
+						var goid = gos[i]
+						var ontology = resp.go[goid].term.substring(0,1);
+						gosByOntology[ontology].push ({label: resp.go[goid].term.substring(2),
+									       goid: goid
+									      });
+					    }
+					    var goArr = [];
+					    if (gosByOntology["F"].length) {
+						goArr.push (
+						    {
+							"Ontology" : "Molecular Function",
+							"terms" : gosByOntology["F"]
+						    }
+						)
+					    }
+					    if (gosByOntology["P"].length) {
+						goArr.push (
+						    {
+							"Ontology" : "Biological Process",
+							"terms" : gosByOntology["P"]
+						    }
+						)
+					    }
+					    if (gosByOntology["C"].length) {
+						goArr.push (
+						    {
+							"Ontology" : "Cellular Component",
+							"terms" : gosByOntology["C"]
+						    }
+						)
+					    }
+					    $scope.goterms = goArr;
 
 					    // Expression Atlas
 					    $scope.toggleBaselineExpression = function () {

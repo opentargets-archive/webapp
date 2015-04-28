@@ -62,9 +62,12 @@
 			</accordion-group>
 
 			<accordion-group heading="Gene Ontology" is-open="false">
-			<span ng-repeat="go in goterms">
-				<a target="_blank" href="http://amigo.geneontology.org/amigo/term/{{go}}">{{go}}</a>
-			</span>
+			  <div ng-repeat="go in goterms">
+			    <h4>{{go.Ontology}}</h4>
+			    <ul>
+			      <li ng-repeat="goterm in go.terms"><a target="_blank" href="http://amigo.geneontology.org/amigo/term/{{goterm.goid}}">{{goterm.label}}</a></li>
+			    </ul>
+			  </div>
 			</accordion-group>
 
 			<accordion-group>
