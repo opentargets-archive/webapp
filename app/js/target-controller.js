@@ -128,8 +128,13 @@ angular.module('cttvControllers')
 
 					    // Protein structure (PDB)
 					    var pdb = resp.pdb;
-					    var firstStructure = _.sortBy(_.keys(pdb))[0].toLowerCase();
 					    $scope.pdb = {};
+					    console.log(pdb);
+					    if (_.isEmpty(pdb)) {
+						$scope.pdb.nstructures = 0;
+						return;
+					    }
+					    var firstStructure = _.sortBy(_.keys(pdb))[0].toLowerCase();
 					    $scope.pdb.id = firstStructure;
 					    $scope.pdb.nstructures = _.keys(pdb).length;
 					    $http.get("https://www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json")
