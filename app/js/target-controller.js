@@ -129,7 +129,6 @@ angular.module('cttvControllers')
 					    // Protein structure (PDB)
 					    var pdb = resp.pdb;
 					    $scope.pdb = {};
-					    console.log(pdb);
 					    if (_.isEmpty(pdb)) {
 						$scope.pdb.nstructures = 0;
 						return;
@@ -154,7 +153,18 @@ angular.module('cttvControllers')
 					    	    console.log(data);
 					    	});
 
-					    //$scope.pdbs = _.keys(resp.pdb);
+
+					    // Pathways
+					    var pathways = resp.reactome;
+					    console.log(pathways);
+					    var pathwaysArr = [];
+					    for (var p in pathways) {
+						pathwaysArr.push({
+						    "id" : p,
+						    "name"   : pathways[p]["pathway name"]
+						});
+					    }
+					    $scope.pathways = pathwaysArr;
 					    
 					    // Bibliography
 					    var bibliography = _.filter(resp.dbxrefs, function (t) {return t.match(/^PubMed/)});

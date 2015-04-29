@@ -91,9 +91,12 @@
       </accordion-group>
 
       <accordion-group heading="Pathways" is-open="false">
+	<p ng-if="!pathways.length">
+	  No pathways found for {{target.symbol}}
+	</p>
       	<ul>
       	  <li ng-repeat="pathway in pathways">
-	    
+	    <a target="_blank" href="http://www.reactome.org/content/detail/{{pathway.id}}">{{pathway.name}}</a>
       	  </li>
       	</ul>
       </accordion-group>
