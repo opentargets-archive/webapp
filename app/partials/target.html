@@ -61,6 +61,13 @@
 	<cttv-target-genome-browser target="{{genomeBrowserGene}}"></cttv-target-genome-browser>
       </accordion-group>
 
+      <accordion-group>
+	<accordion-heading>
+	  <span ng-click="toggleTranscriptView()">Transcript Information</span>
+	</accordion-heading>
+	<cttv-target-transcripts target="{{transcriptViewerGene}}"></cttv-target-transcripts>
+      </accordion-group>
+      
       <accordion-group heading="Gene Ontology" is-open="false">
 	<div ng-repeat="go in goterms">
 	  <h4>{{go.Ontology}}</h4>

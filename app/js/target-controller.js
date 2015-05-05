@@ -121,9 +121,16 @@ angular.module('cttvControllers')
 					    $scope.toggleBaselineExpression = function () {
 						$scope.eaTarget = resp.ensembl_gene_id;
 					    };
+
+					    // Genome Browser
 					    $scope.toggleGenomeLocation = function () {
 						$scope.chr = resp.chromosome,
 						$scope.genomeBrowserGene = resp.ensembl_gene_id;
+					    }
+
+					    // Transcript Viewer
+					    $scope.toggleTranscriptView = function () {
+						$scope.transcriptViewerGene = resp.ensembl_gene_id;
 					    }
 
 					    // Protein structure (PDB)
@@ -156,7 +163,6 @@ angular.module('cttvControllers')
 
 					    // Pathways
 					    var pathways = resp.reactome;
-					    console.log(pathways);
 					    var pathwaysArr = [];
 					    for (var p in pathways) {
 						pathwaysArr.push({

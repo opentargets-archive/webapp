@@ -482,9 +482,9 @@ angular.module('cttvDirectives', [])
 		    elem[0].appendChild(newDiv);
 
 		    var api = cttvApi()
-            .prefix("/api/latest/")
-            .appname("cttv-web-app")
-            .secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
+			.prefix("/api/latest/")
+			.appname("cttv-web-app")
+			.secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
 		    
 		    var gB = tnt.board.genome()
 			.species("human")
@@ -494,6 +494,30 @@ angular.module('cttvDirectives', [])
 		    var theme = targetGenomeBrowser()
 			.chr(scope.chr);
 		    theme(gB, api, document.getElementById("cttvTargetGenomeBrowser"));
+		});
+	    }
+	};
+    })
+
+    .directive('cttvTargetTranscripts', function () {
+	return {
+	    restrict: 'E',
+	    link: function (scope, elem, attrs) {
+		var w = elem[0].parentNode.offsetWidth - 40;
+		scope.$watch (function () { return attrs.target }, function (target) {
+		    if (target === "") {
+			return;
+		    }
+		    var newDiv = document.createElement("div");
+		    newDiv.id = "cttvTargetTranscriptView";
+		    elem[0].appendChild(newDiv);
+
+		    var tV = tnt.transcript()
+			.width(w)
+			.gene(target);
+		    var tvTheme = targetTranscriptView();
+		    tvTheme (tV, document.getElementById("cttvTargetTranscriptView"));
+		    //tV(document.getElementById("cttvTargetTranscriptView"));
 		});
 	    }
 	};
