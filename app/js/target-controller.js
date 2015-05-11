@@ -124,12 +124,13 @@ angular.module('cttvControllers')
 
 					    // Genome Browser
 					    $scope.toggleGenomeLocation = function () {
-						$scope.chr = resp.chromosome,
+						$scope.chr = resp.chromosome;
 						$scope.genomeBrowserGene = resp.ensembl_gene_id;
 					    }
 
 					    // Transcript Viewer
 					    $scope.toggleTranscriptView = function () {
+						$scope.chr = resp.chromosome;
 						$scope.transcriptViewerGene = resp.ensembl_gene_id;
 					    }
 

@@ -468,7 +468,7 @@ angular.module('cttvDirectives', [])
 	};
     })
 
-    .directive('cttvTargetGenomeBrowser', function () {
+    .directive('cttvTargetGenomeBrowser', ['cttvAPIservice', function (cttvAPIservice) {
 	return {
 	    restrict: 'E',
 	    link: function (scope, elem, attrs) {
@@ -480,11 +480,11 @@ angular.module('cttvDirectives', [])
 		    var newDiv = document.createElement("div");
 		    newDiv.id = "cttvTargetGenomeBrowser";
 		    elem[0].appendChild(newDiv);
-
-		    var api = cttvApi()
-			.prefix("/api/latest/")
-			.appname("cttv-web-app")
-			.secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
+		    
+		    // var api = cttvApi()
+		    // 	.prefix("/api/latest/")
+		    // 	.appname("cttv-web-app")
+		    // 	.secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
 		    
 		    var gB = tnt.board.genome()
 			.species("human")
@@ -493,15 +493,17 @@ angular.module('cttvDirectives', [])
 			.width(w);
 		    var theme = targetGenomeBrowser()
 			.chr(scope.chr);
-		    theme(gB, api, document.getElementById("cttvTargetGenomeBrowser"));
+		    theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
 		});
 	    }
 	};
-    })
+    }])
 
-    .directive('cttvTargetTranscripts', function () {
+    .directive('cttvTargetTranscripts', ['cttvAPIservice', function (cttvAPIservice) {
 	return {
 	    restrict: 'E',
+	    scope : {
+	    },
 	    link: function (scope, elem, attrs) {
 		var w = elem[0].parentNode.offsetWidth - 40;
 		scope.$watch (function () { return attrs.target }, function (target) {
@@ -516,12 +518,11 @@ angular.module('cttvDirectives', [])
 			.width(w)
 			.gene(target);
 		    var tvTheme = targetTranscriptView();
-		    tvTheme (tV, document.getElementById("cttvTargetTranscriptView"));
-		    //tV(document.getElementById("cttvTargetTranscriptView"));
+		    tvTheme (tV, cttvAPIservice.getSelf(), document.getElementById("cttvTargetTranscriptView"));
 		});
 	    }
 	};
-    })
+    }])
 
     .directive('ebiExpressionAtlasBaselineSummary', function () {
 	return {
