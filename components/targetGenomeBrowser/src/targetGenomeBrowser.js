@@ -115,10 +115,10 @@ var cttv_genome_browser = function() {
 	var gene_track = tnt.board.track()
 	    .height(200)
 	    .background_color(gBrowserTheme.background_color())
-	    .display(tnt.board.track.feature.gene()
+	    .display(tnt.board.track.feature.genome.gene()
 		     .foreground_color(gBrowserTheme.foreground_color())
 		    )
-	    .data(tnt.board.track.data.gene());
+	    .data(tnt.board.track.data.genome.gene());
 
 	gene_track.data().update().success (function (genes) {
 	    for (var i=0; i<genes.length; i++) {

@@ -202,6 +202,7 @@ angular.module('cttvDirectives', [])
 				    updateTable(dtable, dts)
 					.then(function () {
 					    dtable.columns().eq(0).each (function (i) {
+
 							// first headers are "Disease", "EFO", "Association score" and last one is "Therapeutic area"
 							if (i>2 && i<9) {
 								var column = dtable.column(i);
@@ -211,6 +212,7 @@ angular.module('cttvDirectives', [])
 							    	column.visible(false);
 							    }
 							}
+
 					    });
 					});
 
@@ -528,36 +530,66 @@ angular.module('cttvDirectives', [])
     /*
      *
      */
-    .directive('cttvTargetGenomeBrowser', function () {
+    .directive('cttvTargetGenomeBrowser', ['cttvAPIservice', function (cttvAPIservice) {
+		return {
+		    restrict: 'E',
+		    link: function (scope, elem, attrs) {
+			var w = elem[0].parentNode.offsetWidth - 40;
+			scope.$watch(function () {return attrs.target }, function (target) {
+			    if (target === "") {
+				return;
+			    }
+			    var newDiv = document.createElement("div");
+			    newDiv.id = "cttvTargetGenomeBrowser";
+			    elem[0].appendChild(newDiv);
+			    
+			    // var api = cttvApi()
+			    // 	.prefix("/api/latest/")
+			    // 	.appname("cttv-web-app")
+			    // 	.secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
+			    
+			    var gB = tnt.board.genome()
+				.species("human")
+				.gene(attrs.target)
+				.context(20)
+				.width(w);
+			    var theme = targetGenomeBrowser()
+				.chr(scope.chr);
+			    theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
+			});
+		    }
+		};
+    }])
+
+
+
+    /*
+     *
+     */
+    .directive('cttvTargetTranscripts', ['cttvAPIservice', function (cttvAPIservice) {
 	return {
 	    restrict: 'E',
+	    scope : {
+	    },
 	    link: function (scope, elem, attrs) {
 		var w = elem[0].parentNode.offsetWidth - 40;
-		scope.$watch(function () {return attrs.target }, function (target) {
+		scope.$watch (function () { return attrs.target }, function (target) {
 		    if (target === "") {
 			return;
 		    }
 		    var newDiv = document.createElement("div");
-		    newDiv.id = "cttvTargetGenomeBrowser";
+		    newDiv.id = "cttvTargetTranscriptView";
 		    elem[0].appendChild(newDiv);
 
-		    var api = cttvApi()
-            .prefix("/api/latest/")
-            .appname("cttv-web-app")
-            .secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
-		    
-		    var gB = tnt.board.genome()
-			.species("human")
-			.gene(attrs.target)
-			.context(20)
-			.width(w);
-		    var theme = targetGenomeBrowser()
-			.chr(scope.chr);
-		    theme(gB, api, document.getElementById("cttvTargetGenomeBrowser"));
+		    var tV = tnt.transcript()
+			.width(w)
+			.gene(target);
+		    var tvTheme = targetTranscriptView();
+		    tvTheme (tV, cttvAPIservice.getSelf(), document.getElementById("cttvTargetTranscriptView"));
 		});
 	    }
 	};
-    })
+    }])
 
 
 
@@ -643,6 +675,9 @@ angular.module('cttvDirectives', [])
 
 
 
+    /*
+     *
+     */
     .directive('cttvProgressSpinner', function(){
     	return {
     		restrict: 'EA',
@@ -658,6 +693,9 @@ angular.module('cttvDirectives', [])
 
 
 
+    /*
+     *
+     */
     .directive('cttvMatrixTable', function(){
     	return {
     		restrict: 'EA',
@@ -683,6 +721,9 @@ angular.module('cttvDirectives', [])
 
 
 
+    /*
+     *
+     */
     .directive('cttvMatrixTableLegend', function(){
     	var template = '<div class="matrix-table-legend matrix-table-legend-layout-h">'
     				 +    '<span class="matrix-table-legend-from" ng-show="labels.length==2">{{labels[0]}}</span>'
@@ -714,11 +755,3 @@ angular.module('cttvDirectives', [])
 
 
 
-/*
-angular.module('myApp.directives', []).
-  directive('appVersion', ['version', function(version) {
-    return function(scope, elm, attrs) {
-      elm.text(version);
-    };
-  }]);
-  */

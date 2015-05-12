@@ -189,6 +189,13 @@ angular.module('cttvServices').
         }
 
 
+	/**
+	   * Get the api object to be used outside of angular
+	 */
+	cttvAPI.getSelf = function () {
+	    return api;
+	};
+
 
         /**
          * Search for evidence using the evidence() API function.

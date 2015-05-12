@@ -12,6 +12,8 @@
     "cttv.targetAssociations": "file:../components/targetAssociations",
     "cttv.targetAssociationsTree": "file:../components/targetAssociationsTree",
     "cttv.targetGenomeBrowser": "file:../components/targetGenomeBrowser",
-    "tnt.genome": "^0.0.3"
+    "cttv.targetTranscriptView": "file:../components/targetTranscriptView",
+    "tnt.genome": "^0.0.5",
+    "tnt.transcript": "^0.0.7"
   }
 }
