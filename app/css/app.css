@@ -7,7 +7,7 @@ html {
 body{
   color: #777;
   background: #AAA;
-
+  /*font-family: 'Ubuntu', 'Helvetica', sans-serif;*/
 }
 
 .changeView {
@@ -362,6 +362,9 @@ a.accordion-toggle{
   background-color: #2d6987;
 }
 
+.opacity-50 {
+  opacity: 0.5;
+}
 
 
 
@@ -465,4 +468,166 @@ a.accordion-toggle{
 .intro-statement-p{
   color:#2B8BAC;
 }
+
+
+
+/*
+ * Tables
+ */
+
+table.matrix-table .dataTables_empty {
+  text-align: center;
+}
+
+/*
+ * Matrix table
+ */
+
+table.matrix-table{
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table.matrix-table thead > tr {
+  margin-bottom: 10px !important;
+}
+
+table.matrix-table thead > tr > th {
+  padding-left: 0px !important;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 11px;
+  height:140px;
+  /*white-space: nowrap;*/
+  background-position: center bottom 5px !important;
+  padding: 5px !important;
+  border: none !important;
+  width: 5%;
+  min-width: 30px;
+  /*vertical-align: middle !important;*/
+}
+
+table.matrix-table thead > tr > th:first-child {
+  padding-right: 5px;
+  background-position: right 5px bottom 5px !important;
+  width: auto;
+}
+
+table.matrix-table thead > tr > th:last-child {
+  padding-left: 5px;
+  background-position: left 5px bottom 5px !important;
+  width: auto;
+}
+
+table.matrix-table thead > tr > th > div {
+  height: 1px;
+  vertical-align: top;
+  margin-bottom: 20px;
+}
+
+table.matrix-table thead > tr > th > div > span{
+  display: block;
+  width: 140px;
+  margin-left: 50%;
+  -webkit-transform-origin: 0% 0%;
+  -moz-transform-origin: 0% 0%;
+  -ms-transform-origin: 0% 0%;
+  -o-transform-origin: 0% 0%;
+  transform-origin: 0% 0%;
+  -webkit-transform: rotate(-90deg) translateY(-50%);
+  -moz-transform:    rotate(-90deg) translateY(-50%); 
+  -ms-transform:     rotate(-90deg) translateY(-50%); 
+  -o-transform:      rotate(-90deg) translateY(-50%);
+  transform:      rotate(-90deg) translateY(-50%);
+}
+
+table.matrix-table thead > tr > th:first-child > div {
+  width:0px;
+  float: right;
+  margin-right: 10px;
+}
+
+table.matrix-table thead > tr > th:last-child > div {
+  width:0px;
+  float: left;
+  margin-left: 10px;
+}
+
+
+table.matrix-table tbody > tr > td {
+  border-collapse: collapse;
+  border: 1px solid #FFF;
+  padding: 0 !important;
+  padding-bottom: 0 !important;
+  font-size: 12px;
+  line-height: 12px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+table.matrix-table tbody > tr > td > span {
+  display: block;
+  width: 100%;
+  height: 16px;
+}
+
+table.matrix-table tbody > tr > td:first-child {
+  border: none;
+  text-align: right;
+  vertical-align: middle;
+  padding-right: 5px !important;
+  overflow: hidden;
+}
+
+table.matrix-table tbody > tr > td:last-child {
+  border: none;
+  vertical-align: middle;
+  padding-left: 5px !important;
+  overflow: hidden;
+}
+
+.matrix-table-legend {
+  /* Do one for horizontal layout */
+}
+
+.matrix-table-legend-layout-h span {
+  float:left;
+}
+
+span.matrix-table-legend-from {
+  padding-right: 5px;
+}
+
+span.matrix-table-legend-to {
+  padding-left: 5px;
+}
+
+span.matrix-table-legend-item {
+  display:block;
+  width:20px; 
+  height:20px;
+  border: 0.5px solid #FFF;
+}
+
+span.matrix-table-legend-background {
+  display:block;
+  width:100%; 
+  height:100%; 
+}
+ 
+/*
+table.dataTable thead > tr > th {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+*/
+
+
+
+
+
+
 

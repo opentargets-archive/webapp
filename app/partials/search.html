@@ -30,7 +30,7 @@
 		<!-- Filters/Facets --> 
 
 		<div class="col-md-2">
-			<h4>Show results for:</h4>
+			<h4>Refine by:</h4>
 			<div class="checkbox">
 				<label ng-class="(filters.gene.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.gene.selected" ng-change="getResults()" ng-disabled="filters.gene.total==0">Target <span class='badge badge-primary'>{{filters.gene.total}}</span></label>
 				<span cttv-progress-spinner class="text-lowlight" ng-show="filters.gene.loading"></span>
@@ -47,24 +47,25 @@
 		<div class="col-md-10">
 
 			<!-- Loading progress spinner -->
-			<div style="height:400px; width:100%; text-align:center; padding-top:50px" ng-show="search.results.data==undefined && search.results!==null">
+			<div style="width:100%; text-align:center; padding-top:50px; position:absolute" ng-show="search.loading">
 				<span cttv-progress-spinner size="3" class="text-lowlight"></span>
 			</div>
 			
+			<div ng-class="search.loading ? 'opacity-50' : ''">
+				<div ng-repeat="result in search.results.data" class="search-result">
+					<h4><a ng-href="#/{{result.type==='genedata'?'target':'disease'}}/{{result.id}}/associations">{{result.title}}</a></h4>
+					<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
+					<span class="search-matches text-lowlight">
+						<span ng-repeat="(key, val) in result.highlight"><span bind-html-unsafe="'<span style=\'color:#888\' title=\'Matching field and text\'>' + ( !$first ? ' ... ' : '') + key.split('_').join(' ') + ': </span>' + val.join(', ')"></span></span>
+					</span>
 
-			<div ng-repeat="result in search.results.data" class="search-result">
-				<h4><a ng-href="#/{{result.type==='genedata'?'target':'disease'}}/{{result.id}}/associations">{{result.title}}</a></h4>
-				<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
-				<span class="search-matches text-lowlight">
-					<span ng-repeat="(key, val) in result.highlight"><span bind-html-unsafe="'<span style=\'color:#888\' title=\'Matching field and text\'>' + ( !$first ? ' ... ' : '') + key.split('_').join(' ') + ': </span>' + val.join(', ')"></span></span>
-				</span>
+					
 
-				
-
-				<span class="search-details">
-					<span class="label" ng-class="(result.type==='genedata') ? 'label-primary' : 'label-warning'">{{result.type==="genedata" ? "target" : "disease"}}</span><!-- &nbsp;|&nbsp;<span class="text-lowlight">Score: {{result.score}}</span> -->
-				</span>	
-			</div>
+					<span class="search-details">
+						<span class="label" ng-class="(result.type==='genedata') ? 'label-primary' : 'label-warning'">{{result.type==="genedata" ? "target" : "disease"}}</span><!-- &nbsp;|&nbsp;<span class="text-lowlight">Score: {{result.score}}</span> -->
+					</span>	
+				</div>
+			<div>
 
 
 			<!-- Furthermore this should only be shown when results are displayed -->

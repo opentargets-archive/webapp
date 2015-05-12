@@ -37,11 +37,9 @@ angular.module('cttvServices').
 
         var api = cttvApi()
             .prefix("/api/latest/")
-            // might be doing some configuration here
-            //.prefix("http://localhost:8008/api/latest/")
             .appname("cttv-web-app")
             .secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
-
+            
 
         
         var token = {
@@ -70,6 +68,19 @@ angular.module('cttvServices').
 
 
 
+        /**/
+        var activeRequests = 0;
+        function countRequest(b){
+            if(b===false){
+                activeRequests--;
+            } else if (b===true){
+                activeRequests++;
+            }
+            $log.debug("activeRequests: "+activeRequests);
+        }
+
+
+
         function isSuccess(status) {
             return 200 <= status && status < 300;
         }
@@ -92,6 +103,9 @@ angular.module('cttvServices').
             var promise = deferred.promise;
             var url = api.url[queryObject.operation](queryObject.params);
 
+            countRequest( queryObject.params.trackCall===false ? undefined : true );
+            //countRequest( true );
+
             var resp = api.call(url, done);
             
 
@@ -108,6 +122,8 @@ angular.module('cttvServices').
             function resolvePromise(response){
               // normalize internal statuses to 0
               var status = Math.max(response.status, 0);
+
+              countRequest( queryObject.params.trackCall===false ? undefined : false );
 
               // we resolve the the promise on the whole response object,
               // so essentially we pass back the un-processed response object:
@@ -284,7 +300,8 @@ angular.module('cttvServices').
 
         cttvAPI.getFilterBy = function(queryObject){
           $log.log("cttvAPI.getFilterBy");
-
+            //queryObject.expandefo = queryObject.expandefo===true ? true : false;
+            queryObject.expandefo = queryObject.expandefo || false;
             return callAPI({
                 operation: cttvAPI.API_FILTERBY_URL, // + "/" + queryObject.gene,
                 params: queryObject

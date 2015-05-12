@@ -2,17 +2,58 @@
 
 /* Directives */
 angular.module('cttvDirectives', [])
+	
 
-    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils) {
+
+	/**
+	 * Matrix (heatmap) view for target associations
+	 */
+    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', '$compile', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, $compile) {
 
 		var hasDatatype = function (myDatatype, datatypes) {
 		    for (var i=0; i<datatypes.length; i++) {
-			var datatype = upperCaseFirst(clearUnderscores(datatypes[i]));
-			if (datatype === myDatatype) {
-			    return true;
-			}
+				var datatype = upperCaseFirst(clearUnderscores(datatypes[i]));
+				if (datatype.trim() === myDatatype.trim()) {
+				    return true;
+				}
 		    }
 		    return false;
+		}
+
+
+		var cols = [
+			"Disease",
+			"EFO",
+			"Association score",
+			"Genetic association",
+			"Somatic mutation",
+			"Known drug",
+			"Rna expression",
+			"Affected pathway",
+			"Animal model",
+			"Therapeutic area"
+		];
+
+
+		/*
+		 Setup the table cols and return the DT object
+		*/
+		var setupTable = function(table, filename){
+			return $(table).DataTable( cttvUtils.setTableToolsParams({
+						//"data": newData,
+						"columns": (function(){var a=[];for(var i=0; i<cols.length; i++){a.push({ "title": "<div><span title='"+cols[i]+"'>"+cols[i]+"</span></div>" })};return a;})(),
+						"columnDefs" : [
+						    {
+							"targets" : [1],
+							"visible" : false
+						    }
+						],
+						"order" : [[3, "desc"]],
+						"autoWidth": false,
+						"ordering": true,
+						"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+						"pageLength": 50
+				    }, filename ));
 		}
 
 
@@ -20,13 +61,39 @@ angular.module('cttvDirectives', [])
 
 		    restrict: 'E',
 
+
 		    scope: {
 			    	loadprogress : '=',
-			    	filename : '@'
+			    	filename : '@',
+			    	datatypes : '@'
 			},
+
+
+			template: '<table class="table matrix-table"></table>'
+					 +'<cttv-matrix-table-legend labels="labs" colors="colors"></cctv-matrix-table-legend>',
+
 
 	    	link: function (scope, elem, attrs) {
 
+
+	    		var colorScale = d3.scale.linear()
+									.domain([0,1])
+									.range(["#e9f3f8", "#2383BA"]);
+
+
+				/*
+				 * Generates and returns the string representation of the span element 
+				 * with color information for each cell
+				 */
+				var getColorStyleString = function(value){
+					return "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
+				}
+
+
+				/*
+				 * Fetch new data and update the table content 
+				 * without destroying and recreating the table 
+				 */
 				var updateTable = function (table, datatypes) {
 
 					scope.loadprogress = true;
@@ -36,6 +103,9 @@ angular.module('cttvDirectives', [])
 						gene: attrs.target,
 						datastructure: "flat",
 				    };
+
+					
+
 				    if (!_.isEmpty(dts)) {
 						opts.filterbydatatype = _.keys(dts);
 				    }
@@ -48,7 +118,6 @@ angular.module('cttvDirectives', [])
 						    $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
 						    $log.log(resp);
 						    var newData = [];
-						    var flowers = {};
 						    for (var i=0; i<resp.data.length; i++) {
 								var data = resp.data[i];
 								if (data.efo_code === "cttv_disease") {
@@ -67,133 +136,98 @@ angular.module('cttvDirectives', [])
 								row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
 								// EFO (hidden)
 								row.push(data.efo_code);
+								
+								// Association score
+								row.push( getColorStyleString( data.association_score ) );
+								// Genetic association
+								row.push( getColorStyleString( datatypes.genetic_association));
+								// Somatic mutation
+								row.push( getColorStyleString( datatypes.somatic_mutation) );
+								// Known drug
+								row.push( getColorStyleString( datatypes.known_drug) );
+								// Expression atlas
+								row.push( getColorStyleString( datatypes.rna_expression) );
+								// Affected pathway
+								row.push( getColorStyleString( datatypes.affected_pathway) );
+								// Animal model
+								row.push( getColorStyleString( datatypes.animal_model) );
 								// Therapeutic area
 								row.push(data.therapeutic_area || "");
-								// Association score
-								row.push(data.association_score);
-								// Genetic association
-								row.push(datatypes.genetic_association);
-								// Somatic mutation
-								row.push(datatypes.somatic_mutation);
-								// Known drug
-								row.push(datatypes.known_drug);
-								// Expression atlas
-								row.push(datatypes.rna_expression);
-								// Affected pathway
-								row.push(datatypes.affected_pathway);
-								// Animal model
-								row.push(datatypes.animal_model);
-								// flower (placeholder)
-								row.push("");
-								var keysDatatypes = _.keys(dts);
-								var flowerData = [
-								    {"value":datatypes.genetic_association, "label":"Genetics", "active": hasDatatype("Genetic association", keysDatatypes)},
-								    {"value":datatypes.somatic_mutation, "label":"Somatic", "active": hasDatatype("Somatic mutation", keysDatatypes)},
-								    {"value":datatypes.known_drug, "label":"Drugs", "active": hasDatatype("Known drug", keysDatatypes)},
-								    {"value":datatypes.rna_expression, "label":"RNA", "active": hasDatatype("Rna expression", keysDatatypes)},
-								    {"value":datatypes.affected_pathway, "label":"Pathways", "active": hasDatatype("Affected pathway", keysDatatypes)},
-								    {"value":datatypes.animal_model, "label":"Models", "active": hasDatatype("Animal model", keysDatatypes)}
-								];
-								// console.log(flowerData);
-								var flower = flowerView()
-							            .values(flowerData)
-							            .fontsize(6)
-							            .diagonal(100);
-								flowers[data.efo_code] = flower;
+
 								newData.push(row);
 						    }
 
-						    dtable = $(table).DataTable( cttvUtils.setTableToolsParams({
-								"data": newData,
-								"columns": [
-								    { "title": "Disease" },
-								    { "title": "EFO"},
-								    { "title": "Therapeutic area" },
-								    { "title": "Association score" },
-								    { "title": "Genetic association" },
-								    { "title": "Somatic mutation" },
-								    { "title": "Known drug" },
-								    { "title": "Rna expression" },
-								    { "title": "Affected pathway" },
-								    { "title": "Animal model" },
-								    { "title": "Association score breakdown", "orderable" : false }
-								],
-								"columnDefs" : [
-								    {
-									"targets" : [1],
-									"visible" : false
-								    }
-								],
-								"fnCreatedRow" : function (row, data, dataIndex) {
-								    var div = document.createElement("div");
-								    $(row).children("td:last-child").append(div);
-								    flowers[data[1]](div);
-								},
-								"order" : [[3, "desc"]],
-								"autoWidth": false,
-								//"lengthChange": false,
-								//"paging": true,
-								//"searching": true,
-								//"bInfo" : false,
-								"ordering": true
-						    }, scope.filename ));
+						    // clear any existing data from the table
+						    // and add the new data
+						    table.clear().rows.add(newData).draw();
+		
+						});
 
-					});
+				};	// end updateTable
 
-				};
 
-				var table = document.createElement("table");
-				var dtable; // defined when called DataTable
-				table.className = "table table-stripped table-bordered";
-				var firstRendered = false;
+
+				// -----------------------
+				// Initialize table etc
+				// -----------------------
+
+				// table itself 
+				var table = elem.children().eq(0)[0];
+				var dtable = setupTable(table, scope.filename);
+				
+				// legend stuff
+				scope.labs = [0,1];
+				scope.colors = [];
+				for(var i=0; i<=10; i+=2){
+					var j=i/10;
+					//scope.labs.push(j);
+					scope.colors.push( colorScale(j) );
+				}
+				
+
 
 				// TODO: This is firing a second time the table creation. Make sure only one table is created at a time
-				scope.$watch(function () { return attrs.datatypes }, function (dts) {
-				    // The table has not rendered first yet
-				    if (!firstRendered) {
-					return;
-				    }
+				/*
+				 * Watch for changes in the datatypes.
+				 * This is fired also at initization:
+				 * no need to watch for changes to target, 
+				 * so we only have one call (might need to check in the future though).
+				 * We're also no longer removing/destroying the table
+				 * which is only created at initialization, again removing the need
+				 * to watch out for double created tables...
+				 */
+				scope.$watch( function () { return attrs.datatypes }, function (dts) {
 				    dts = JSON.parse(dts);
 
-				    elem[0].innerHTML = "";
-				    var table = document.createElement("table");
-				    table.className = "table table-stripped table-bordered";
-				    elem[0].appendChild(table);
-
-				    updateTable(table, dts)
+				    updateTable(dtable, dts)
 					.then(function () {
 					    dtable.columns().eq(0).each (function (i) {
-						var column = dtable.column(i);
-						if (i>3 && i<10) { // first headers are "Disease", "EFO", "Therapeutic area", "Association score" and last one is "Association score breakdown"
-						    if (hasDatatype(column.header().innerText, _.keys(dts))) {
-							column.visible(true);
-						    } else {
-						    	column.visible(false);
-						    }
-						}
+							// first headers are "Disease", "EFO", "Association score" and last one is "Therapeutic area"
+							if (i>2 && i<9) {
+								var column = dtable.column(i);
+							    if (hasDatatype(column.header().innerText, _.keys(dts))) {
+									column.visible(true);
+							    } else {
+							    	column.visible(false);
+							    }
+							}
 					    });
 					});
 
 				    // Hide the columns that are filtered out
 				});
 
-				scope.$watch(function () { return attrs.target }, function (val) {
-				    elem[0].appendChild(table);
-				    updateTable(table, JSON.parse(attrs.datatypes))
-					.then(function () {
-					    // dtable.columns().eq(0).each (function (i) {
-					    // 	var column = dtable.column(i);				
-					    // });
-					    firstRendered = true;
-					});
-				});
-
 	    	} // end link
+
 		}; // end return
-    }])
+
+    }])	// end directive cttvTargetAssociationsTable
 
 
-
+	
+	/* 
+	 * 
+	 */
     .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
 	var gat;
 	return {
@@ -295,6 +329,28 @@ angular.module('cttvDirectives', [])
 	 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 	 */
     .directive('cttvDiseaseAssociations', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
+
+    	var colorScale = d3.scale.linear()
+						.domain([0,1])
+						.range(["#e9f3f8", "#2383BA"]);
+
+		var getColorStyleString = function(value){
+			return "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
+		}
+
+    	var cols = [
+    		"",
+    		"Ensembl ID",
+			"Association score",
+			"Genetic association",
+			"Somatic mutations",
+			"Known drugs",
+			"RNA expression",
+			"Affected pathways",
+			"Animal models",
+			""
+		];
+
 		return {
 		    
 		    restrict: 'E',
@@ -303,6 +359,9 @@ angular.module('cttvDirectives', [])
 		    	loadprogress : '=',
 		    	filename : '@'
 		    },
+
+		    template: '<table class="table matrix-table"></table>'
+					 +'<cttv-matrix-table-legend labels="labs" colors="colors"></cctv-matrix-table-legend>',
 		    
 		    link: function (scope, elem, attrs) {
 			
@@ -318,12 +377,10 @@ angular.module('cttvDirectives', [])
 						scope.loadprogress = false;
 
 						scope.$parent.nresults = resp.body.total;
-						//scope.$parent.$apply();
+
 
 						var data = resp.body.data;
 						var newData = new Array(data.length);
-						//var flowers = new Array(data.length);
-						var flowers = {};
 
 						for (var i=0; i<data.length; i++) {
 						    var datatypes = {};
@@ -340,74 +397,63 @@ angular.module('cttvDirectives', [])
 						    // Ensembl ID
 						    row.push(data[i].gene_id);
 						    // The association score
-						    row.push(data[i].association_score);
+						    row.push( getColorStyleString(data[i].association_score) );
 						    // Genetic Association
-						    row.push(datatypes.genetic_association);
+						    row.push( getColorStyleString(datatypes.genetic_association) );
 						    // Somatic Mutations
-						    row.push(datatypes.somatic_mutation);
+						    row.push( getColorStyleString(datatypes.somatic_mutation) );
 						    // Known Drugs
-						    row.push(datatypes.known_drug);
+						    row.push( getColorStyleString(datatypes.known_drug) );
 						    // RNA expression
-						    row.push(datatypes.rna_expression);
+						    row.push( getColorStyleString(datatypes.rna_expression) );
 						    // Affected pathways
-						    row.push(datatypes.affected_pathway);
+						    row.push( getColorStyleString(datatypes.affected_pathway) );
 						    // Animal models
-						    row.push(datatypes.animal_model);
+						    row.push( getColorStyleString(datatypes.animal_model) );
 						    
 						    // We will insert the flower here
-						    row.push("");
+						    //row.push("");
 
-						    var flowerData = [
-						    	{"value":datatypes.genetic_association,  "label":"Genetics"},
-						    	{"value":datatypes.somatic_mutation,  "label":"Somatic"},
-						    	{"value":datatypes.known_drug,  "label":"Drugs"},
-						    	{"value":datatypes.rna_expression,  "label":"RNA"},
-						    	{"value":datatypes.affected_pathway,  "label":"Pathways"},
-						    	{"value":datatypes.animal_model,  "label":"Models"}
-						    ];
+						    // Push gene name again instead
+						    row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
 
-						    var flower = flowerView()
-						    	.values(flowerData)
-							.fontsize(6)
-						    	.diagonal(100);
-						    
 						    newData[i] = row;
-						    flowers[data[i].gene_id] = flower;
+						    
 						}
 						
-						$("#disease-association-table").dataTable(cttvUtils.setTableToolsParams({
+						
+
+						// -----------------------
+						// Initialize table etc
+						// -----------------------
+
+						// table itself 
+						var table = elem.children().eq(0)[0];
+						var dtable = $(table).dataTable(cttvUtils.setTableToolsParams({
 						    "data" : newData,
-						    "columns": [
-							{ "title": "Gene" },
-							{ "title": "Ensembl ID"},
-						        { "title": "Association score" },
-						        { "title": "Genetic association" },
-						        { "title": "Somatic mutations" },
-						        { "title": "Known drugs" },
-						        { "title": "RNA expression" },
-						        { "title": "Affected pathways" },
-							{ "title": "Animal models" },
-							{ "title": "Association score breakdown", "orderable" : false }
-						    ],
+						    "columns": (function(){var a=[];for(var i=0; i<cols.length; i++){a.push({ "title": "<div><span title='"+cols[i]+"'>"+cols[i]+"</span></div>" })};return a;})(),
 						    "columnDefs" : [
 						    	{
 						    	    "targets" : [1],
 						    	    "visible" : false
 						    	}
 						    ],
-						    "fnCreatedRow" : function (row, data, dataIndex) {
-							var div = document.createElement("div");
-							$(row).children("td:last-child").append(div);
-							flowers[data[1]](div);
-						    },
 						    "order" : [[2, "desc"]],
 						    "autoWidth": false,
-						    //"lengthChange": false,
-						    //"paging": true,
-						    //"searching": true,
-						    //"bInfo": false,
-						    "ordering": true
+						    "ordering": true,
+						    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+							"pageLength": 50
 						}, scope.filename ));
+
+
+						// legend stuff
+						scope.labs = [0,1];
+						scope.colors = [];
+						for(var i=0; i<=10; i+=2){
+							var j=i/10;
+							//scope.labs.push(j);
+							scope.colors.push( colorScale(j) );
+						}
 
 				    });
 			} // end link
@@ -415,6 +461,10 @@ angular.module('cttvDirectives', [])
     }])
 
 
+
+	/*
+	 *
+	 */
     .directive('pmcCitationList', function () {
 	var pmc = require ('biojs-vis-pmccitation');
     	return {
@@ -446,6 +496,11 @@ angular.module('cttvDirectives', [])
     	};
     })
 
+
+
+    /*
+     *
+     */
     .directive('pmcCitation', function () {
 	return {
 	    restrict: 'E',
@@ -468,6 +523,11 @@ angular.module('cttvDirectives', [])
 	};
     })
 
+
+
+    /*
+     *
+     */
     .directive('cttvTargetGenomeBrowser', function () {
 	return {
 	    restrict: 'E',
@@ -499,6 +559,11 @@ angular.module('cttvDirectives', [])
 	};
     })
 
+
+
+    /*
+     *
+     */
     .directive('ebiExpressionAtlasBaselineSummary', function () {
 	return {
 	    restrict: 'E',
@@ -524,6 +589,10 @@ angular.module('cttvDirectives', [])
     })
 
 
+
+    /*
+     *
+     */
     .directive('cttvSearchSuggestions', function(){
     	return {
         	restrict:'EA',
@@ -534,6 +603,7 @@ angular.module('cttvDirectives', [])
         	}
         }	
     })
+
 
 
     /**
@@ -585,6 +655,63 @@ angular.module('cttvDirectives', [])
     		}
     	}
     })
+
+
+
+    .directive('cttvMatrixTable', function(){
+    	return {
+    		restrict: 'EA',
+    		template: '<table class="table matrix-table"></table>',
+    		replace: true,
+    		link: function(scope, elem, attrs){
+
+    			var colorScale = d3.scale.linear()
+									.domain([0,1])
+									.range(["#e9f3f8", "#2383BA"]);
+
+				var getColorStyleString = function(value){
+					return "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
+				}
+
+				elem.on('$destroy', function() {
+			    	// remove objects from memory as required
+			    });
+
+    		}
+    	}
+    })
+
+
+
+    .directive('cttvMatrixTableLegend', function(){
+    	var template = '<div class="matrix-table-legend matrix-table-legend-layout-h">'
+    				 +    '<span class="matrix-table-legend-from" ng-show="labels.length==2">{{labels[0]}}</span>'
+    				 +    '<span class="matrix-table-legend-item" ng-repeat="color in colors">'
+    				 +       '<span class="matrix-table-legend-background" style="background:{{color}};"></span>'
+    				 +    '</span>'
+    				 +    '<span class="matrix-table-legend-to" ng-show="labels.length==2">{{labels[1]}}</span>'
+    				 + '</div>';
+
+    	return {
+    		restrict: 'EA',
+    		template: template,
+    		replace: true,
+    		scope: {
+    			labels: '=',
+    			colors: '='
+    		},
+    		link: function(scope, elem, attrs){
+
+
+
+				elem.on('$destroy', function() {
+			    	// remove objects from memory as required
+			    });
+
+    		}
+    	}
+    })
+
 
 
 /*

@@ -75,7 +75,7 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
                 $document.bind('click', dismissClickHandler);
                 
                 // fire the typeahead search
-                return cttvAPIservice.getQuickSearch({q:$scope.search.query.text, size:3}).
+                return cttvAPIservice.getQuickSearch({q:$scope.search.query.text, size:3, trackCall:false}).
                     then(
                         function(resp){
                             $log.info(resp);

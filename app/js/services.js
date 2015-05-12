@@ -27,7 +27,7 @@ angular.module('cttvServices', []).
         cttvUtilsService.setTableToolsParams = function(obj, title){
 
             //obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
-            obj.sDom = '<"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>';
+            obj.sDom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
             obj.oTableTools= {
                     "sSwfPath": "swfs/copy_csv_xls_pdf.swf",
                     "aButtons": [ 

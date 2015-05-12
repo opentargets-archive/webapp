@@ -254,7 +254,7 @@
             // before getting new results,
             // we make sure we clear any current results (like in the case
             // of applying a filter), which also causes the spinner to show...
-            $scope.search.results = {}; 
+            $scope.search.loading = true; 
             
             
             var queryobject = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
@@ -264,17 +264,16 @@
                 queryobject.filter = $scope.filters.gene.selected ? 'gene' : 'efo';
             }
             
-
-            
             cttvAPIservice.getSearch( queryobject )
                 .then(
                     function(resp) {
-                        //$log.info(resp);
                         $scope.search.results = resp.body;
-                        //$log.log($scope.search);
                     },
                     cttvAPIservice.defaultErrorHandler
-                );
+                )
+                .finally(function(){
+                    $scope.search.loading = false;
+                });
 
         }
 

@@ -24,6 +24,9 @@ angular.module('cttvControllers')
 	//     $scope.search.label = resp.body.label;
 	// });
     
+    $scope.colorScale = d3.scale.linear()
+    .domain([0,1])
+    .range(["#ffffff", "#08519c"]);
 
     // get disease specific info with the efo() method
     cttvAPIservice.getDisease( {

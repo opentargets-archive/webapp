@@ -199,7 +199,8 @@
 
             return cttvAPIservice.getAssociation({
                     gene:$scope.search.target, 
-                    efo:$scope.search.disease
+                    efo:$scope.search.disease,
+                    expandefo: true
                 }).
                 then(
                     function(resp) {              
