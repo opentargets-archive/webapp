@@ -1,28 +1,35 @@
 <div>
-  <view-title>{{'Disease profile: '+disease.label}}</view-title>
-  <h3>{{disease.label}}</h3>
-  <p class="small"><a href="#/disease/{{disease.efo}}/associations">View associations</a></p>
-  
-  <accordion close-others="false">
+    <view-title>{{'Disease profile: '+disease.label}}</view-title>
+    <h3>{{disease.label}}</h3>
+    <p class="small"><a href="#/disease/{{disease.efo}}/associations">View associations</a></p>
 
-    <accordion-group heading="Description" is-open="true">
-      {{disease.description}}
-    </accordion-group>
+    <accordion close-others="false">
 
-    <accordion-group heading="Synonyms" is-open="false">
-      <ul>
-      	<li ng-repeat="syn in disease.synonyms">
-      	  {{syn}}
-      	</li>
-      </ul>
-    </accordion-group>
+        <accordion-group heading="Description" is-open="true">
+            {{disease.description}}
+        </accordion-group>
 
-    <accordion-group heading="EFO Paths" is-open="false">
-      <ul ng-repeat="path in disease.paths">
-      	<li ng-repeat="node in path">
-      	  {{node.label}} <small>(<a href="#/disease/{{node.efo}}/associations">See gene associations</a>), (<a href="#/disease/{{node.efo}}">Go to disease page</a>)</small>
-      	</li>
-      </ul>
-    </accordion-group>
-  </accordion>
+        <accordion-group heading="Synonyms" is-open="false">
+            <ul>
+                <li ng-repeat="syn in disease.synonyms">
+                    {{syn}}
+                </li>
+            </ul>
+        </accordion-group>
+
+        <accordion-group heading="EFO Paths" is-open="false">
+            <h4>Paths</h4>
+            <ul ng-repeat="path in disease.paths">
+                <b>Path {{$index+1}}</b>
+                <li ng-repeat="node in path">
+                    {{node.label}} <small>(<a href="#/disease/{{node.efo}}/associations">See gene associations</a>), (<a href="#/disease/{{node.efo}}">Go to disease page</a>)</small>
+                </li>
+            </ul>
+            <h4 ng-if="disease.children.length > 0">Children</h4>
+            <ul>
+                <li ng-repeat="child in disease.children">{{child.label}} <small>(<a href="#disease/{{child.code}}/associations">See gene associations</a>), (<a href="#/disease/{{child.code}}">Go to diseases page</a>)</small>
+                </li>
+            </ul>
+        </accordion-group>
+    </accordion>
 </div>
