@@ -1,7 +1,7 @@
 /* app css stylesheet */
 
 html {
-  
+
 }
 
 body{
@@ -20,7 +20,7 @@ body{
  */
 
 
-.cttv-centered-text {
+ .cttv-centered-text {
     display: table-cell;
     text-align: center;
 }
@@ -54,8 +54,8 @@ body{
 
 
 .cttv-main-container {
-  width:100%; 
-  background:#FFF; 
+  width:100%;
+  background:#FFF;
   padding-bottom:70px;
 }
 
@@ -65,9 +65,9 @@ body{
  */
 
 
-.masthead {
-  width:100%; 
-  background-color:#DDD; 
+ .masthead {
+  width:100%;
+  background-color:#DDD;
   padding:10px 0px;
   height: auto;
   border-bottom: 1px solid #CFCFCF;
@@ -83,7 +83,7 @@ body{
  */
 
 
-.footer {
+ .footer {
   font-size: 11px;
   color:#DDD;
   padding: 40px 0px;
@@ -106,7 +106,7 @@ body{
 
 
 .dataTables_wrapper{
-  
+
 }
 
 a.accordion-toggle{
@@ -137,19 +137,19 @@ a.accordion-toggle{
 }
 
 /* .cttv-facet .cttv-accordion-leaf .panel-body { */
-/*     padding : 0px; */
-/* } */
+    /*     padding : 0px; */
+    /* } */
 
-.cttv-facet .panel-heading {
-    padding : 5px;
-}
-.cttv-facet .panel-body {
-    padding : 5px;
-}
-.cttv-facet .panel-title {
-    font-size: 10px;
-    color: #777;
-}
+    .cttv-facet .panel-heading {
+        padding : 5px;
+    }
+    .cttv-facet .panel-body {
+        padding : 5px;
+    }
+    .cttv-facet .panel-title {
+        font-size: 10px;
+        color: #777;
+    }
 
 
 /*
@@ -157,7 +157,7 @@ a.accordion-toggle{
  */
 
 
-.search-form{
+ .search-form{
   position:relative;
 }
 
@@ -185,7 +185,7 @@ a.accordion-toggle{
 
 .search-suggestions-box .divider{
   margin: 10px 0px;
-  border-top: 1px solid #CCC; 
+  border-top: 1px solid #CCC;
 }
 
 .search-suggestions-box .item:hover{
@@ -194,7 +194,7 @@ a.accordion-toggle{
 }
 
 .search-suggestions-box .besthit{
-  cursor:pointer; 
+  cursor:pointer;
   padding:4px 0px;
 }
 
@@ -204,12 +204,12 @@ a.accordion-toggle{
 
 /* non-breaking block */
 .nbblock{
-  display:block; 
+  display:block;
   margin-bottom:0px;
 }
 
 .search-suggestions-box .result-item{
-  margin:0; 
+  margin:0;
   padding:4px 5px;
 }
 
@@ -227,9 +227,9 @@ a.accordion-toggle{
  */
 
 
-.gene-disease-header{
-  padding-bottom:20px; 
-  margin-bottom:20px; 
+ .gene-disease-header{
+  padding-bottom:20px;
+  margin-bottom:20px;
   margin-top:40px;
 }
 
@@ -238,20 +238,20 @@ a.accordion-toggle{
 }
 
 .gene-disease-header .overview .item{
-  display: table-cell; 
+  display: table-cell;
   width:45%;
 }
 
 .gene-disease-header .overview .association{
-  display: table-cell; 
-  width:10%; 
-  vertical-align:middle; 
+  display: table-cell;
+  width:10%;
+  vertical-align:middle;
   padding: 2px;
 }
 
 .gene-disease-header .overview .association div{
-  width:100%; 
-  height:1px; 
+  width:100%;
+  height:1px;
   border-bottom:2px solid #DDD;
 }
 
@@ -268,12 +268,12 @@ a.accordion-toggle{
 }
 
 
-/* 
- * Text 
+/*
+ * Text
  */
 
 
-.text-lowlight{
+ .text-lowlight{
   color: #AAA;
 }
 
@@ -287,7 +287,7 @@ a.accordion-toggle{
 
 .small{
   font-size: 12px;
-  line-height: 1.2; 
+  line-height: 1.2;
 }
 
 .text-small{
@@ -307,7 +307,7 @@ a.accordion-toggle{
  */
 
 
-.cttv-blue-background{
+ .cttv-blue-background{
   background: #3E8BAD !important;
   background-color: #3E8BAD !important;
 }
@@ -402,12 +402,12 @@ a.accordion-toggle{
 }
 
 
-/* 
- * Search results 
+/*
+ * Search results
  */
 
 
-.search-result {
+ .search-result {
   margin-bottom: 24px;
 }
 
@@ -438,13 +438,13 @@ a.accordion-toggle{
 
 
 /*
- * Intro page 
+ * Intro page
  */
 
 
-.intro-logo{
-  padding-bottom:40px; 
-  display: block; 
+ .intro-logo{
+  padding-bottom:40px;
+  display: block;
   margin: 0 auto;
 }
 
@@ -457,7 +457,7 @@ a.accordion-toggle{
 }
 
 .intro-statement{
-  font-weight: 200 !important; 
+  font-weight: 200 !important;
   text-align: center;
 }
 
@@ -475,7 +475,7 @@ a.accordion-toggle{
  * Tables
  */
 
-table.matrix-table .dataTables_empty {
+ table.matrix-table .dataTables_empty {
   text-align: center;
 }
 
@@ -483,7 +483,7 @@ table.matrix-table .dataTables_empty {
  * Matrix table
  */
 
-table.matrix-table{
+ table.matrix-table{
   border-collapse: collapse;
   width: 100%;
   table-layout: fixed;
@@ -536,8 +536,8 @@ table.matrix-table thead > tr > th > div > span{
   -o-transform-origin: 0% 0%;
   transform-origin: 0% 0%;
   -webkit-transform: rotate(-90deg) translateY(-50%);
-  -moz-transform:    rotate(-90deg) translateY(-50%); 
-  -ms-transform:     rotate(-90deg) translateY(-50%); 
+  -moz-transform:    rotate(-90deg) translateY(-50%);
+  -ms-transform:     rotate(-90deg) translateY(-50%);
   -o-transform:      rotate(-90deg) translateY(-50%);
   transform:      rotate(-90deg) translateY(-50%);
 }
@@ -574,6 +574,17 @@ table.matrix-table tbody > tr > td > span {
   height: 16px;
 }
 
+table.matrix-table tbody > tr > td > span.no-data {
+    border: 1px solid #EEE;
+    background: #FFF;
+    color: #FFF;
+}
+
+table.matrix-table tbody > tr > td > span.value-0 {
+    background: #EEE;
+    color: #EEE;
+}
+
 table.matrix-table tbody > tr > td:first-child {
   border: none;
   text-align: right;
@@ -607,17 +618,17 @@ span.matrix-table-legend-to {
 
 span.matrix-table-legend-item {
   display:block;
-  width:20px; 
+  width:20px;
   height:20px;
   border: 0.5px solid #FFF;
 }
 
 span.matrix-table-legend-background {
   display:block;
-  width:100%; 
-  height:100%; 
+  width:100%;
+  height:100%;
 }
- 
+
 /*
 table.dataTable thead > tr > th {
   padding-left: 18px;

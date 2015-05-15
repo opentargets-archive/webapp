@@ -1,4 +1,5 @@
 <div>
+<<<<<<< HEAD
   <view-title>{{'Gene profile: '+target.symbol}}</view-title>
   <h3>{{target.symbol}}<br /><small>{{target.name}}</small></h3>
   <p class="small"> <a href="#/target/{{target.id}}/associations">View associations</a></p>
@@ -89,6 +90,23 @@
 	<ebi-expression-atlas-baseline-summary target="{{eaTarget}}"></ebi-expression-atlas-baseline-summary>
       </accordion-group>
 
+      <accordion-group>
+        <accordion-heading>
+          <span>Tissue Expression</span>
+        </accordion-heading>
+        <div class="row">
+          <div class="col-sm-12">
+            <cttv-hpa-tissue-expression target="target.id" filename="bobo"></cttv-hpa-tissue-expression>
+          </div>
+          <!--
+              <div class="col-sm-3">
+                <div class="well">Hello HPA</div>
+              </div
+                 -->
+        </div>
+      </accordion-group>
+
+      
       <accordion-group heading="Protein Structure" is-open="false">
 	<p>There {{pdb.nstructures == 1 ? "is" : "are"}} <strong>{{pdb.nstructures}}</strong> {{pdb.nstructures == 1 ? "structure" : "structure"}} available for {{target.symbol}} in <a target="_blank"  href="https://www.ebi.ac.uk/pdbe">PDBe</a>. <span ng-if="pdb.nstructures>1">Below we show the most representative one. A summary of the other structures can be found in the <a target="_blank" href="http://www.uniprot.org/uniprot/{{uniprot.accessions[0]}}#structure">Uniprot entry for {{uniprot.accessions[0]}}</a></span></p>
 	<h4 ng-if="pdb.nstructures>0">{{pdb.id}} <span><a target="_blank" href="https://www.ebi.ac.uk/pdbe/entry/pdb/{{pdb.id}}"><i class="fa fa-external-link"></i></a></span></h4>
@@ -133,4 +151,6 @@
     </accordion>
 
   </div>
+
 </div>
+
