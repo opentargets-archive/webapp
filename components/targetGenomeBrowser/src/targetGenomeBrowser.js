@@ -11,7 +11,7 @@ var cttv_genome_browser = function() {
     var title   = "";
     var chr = 0;
     
-    var path = tnt.utils.script_path("cttv-target.js");
+    //var path = tnt.utils.script_path("cttv-target.js");
 
     // div_ids to display different elements
     // They have to be set dynamically because the IDs contain the div_id of the main element containing the plug-in

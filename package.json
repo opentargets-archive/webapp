@@ -35,7 +35,7 @@
   },
   "scripts": {
     "preinstall": "(cd components/bubblesView/ && npm install); (cd components/cttvApi && npm install); (cd components/targetAssociations && npm install); (cd components/flowerView && npm install); (cd components/targetAssociationsTree && npm install); (cd components/targetGenomeBrowser && npm install)",
-    "postinstall": "bower install; node_modules/.bin/webdriver-manager update; (cd app && npm install)",
+    "postinstall": "bower install; node_modules/.bin/webdriver-manager update; (cd app && npm install && npm update)",
     "prestart": "npm install",
     "start": "cd server && node server.js",
     "pretest": "npm install",
