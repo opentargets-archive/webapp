@@ -172,7 +172,14 @@ angular.module('cttvControllers')
 						});
 					    }
 					    $scope.pathways = pathwaysArr;
-					    
+
+                        // Drugs
+                        var drugs = resp.drugbank;
+                        console.log("Drugs: ");
+                        console.log(drugs);
+                        $scope.drugs = drugs;
+
+
 					    // Bibliography
 					    var bibliography = _.filter(resp.dbxrefs, function (t) {return t.match(/^PubMed/)});
 					    var cleanBibliography = _.map(bibliography, function (t) {return t.substring(7, t.length)});

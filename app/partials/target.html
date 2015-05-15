@@ -67,7 +67,7 @@
 	</accordion-heading>
 	<cttv-target-transcripts target="{{transcriptViewerGene}}"></cttv-target-transcripts>
       </accordion-group>
-      
+
       <accordion-group heading="Gene Ontology" is-open="false">
 	<div ng-repeat="go in goterms">
 	  <h4>{{go.Ontology}}</h4>
@@ -107,7 +107,18 @@
       	  </li>
       	</ul>
       </accordion-group>
-      
+
+
+      <accordion-group heading="Drugs" is-open="false">
+          <p ng-if="drugs.length">
+              No drugs found for {{target.symbol}}
+          </p>
+          <ul>
+              <li ng-repeat="(drug, obj) in drugs">
+                  <a target="_blank" href="http://www.drugbank.ca/drugs/{{drug}}">{{obj["generic name"]}}</a>
+              </li>
+          </ul>
+      </accordion-group>
 
       <accordion-group heading="Bibliography" is-open="false">
 	<!--[if lt IE 10]>
@@ -120,6 +131,6 @@
       </accordion-group>
 
     </accordion>
-    
+
   </div>
 </div>
