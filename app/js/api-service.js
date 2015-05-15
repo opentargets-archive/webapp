@@ -8,7 +8,7 @@ angular.module('cttvServices').
 
 
 
-    /** 
+    /**
      * The API services, with methods to call the ElasticSearch API
      */
     factory('cttvAPIservice', ['$http', '$log', '$location', '$rootScope', '$q', '$timeout', function($http, $log, $location, $rootScope, $q, $timeout) {
@@ -21,7 +21,7 @@ angular.module('cttvServices').
         var cttvAPI = {
             API_DEFAULT_METHOD : "GET",
             //API_URL : "http://beta.targetvalidation.org/api/latest/",
-	          // API_URL : "http://193.62.52.228/api/latest/",
+            // API_URL : "http://193.62.52.228/api/latest/",
             API_SEARCH_URL : "search",
             API_EVIDENCE_URL : "evidences",
             API_AUTOCOMPLETE_URL : "autocomplete",
@@ -31,6 +31,7 @@ angular.module('cttvServices').
             API_GENE_URL : 'gene',
             API_QUICK_SEARCH_URL : 'quickSearch',
             API_DISEASE_URL: 'disease',
+            API_EXPRESSION_URL: 'expression'
         };
 
 
@@ -39,9 +40,9 @@ angular.module('cttvServices').
             .prefix("/api/latest/")
             .appname("cttv-web-app")
             .secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
-            
 
-        
+
+
         var token = {
 
           set : function(tkn){
@@ -107,7 +108,7 @@ angular.module('cttvServices').
             //countRequest( true );
 
             var resp = api.call(url, done);
-            
+
 
 
             return promise;
@@ -118,7 +119,7 @@ angular.module('cttvServices').
               resolvePromise(response);
               if (!$rootScope.$$phase) $rootScope.$apply();
             }
-            
+
             function resolvePromise(response){
               // normalize internal statuses to 0
               var status = Math.max(response.status, 0);
@@ -132,22 +133,22 @@ angular.module('cttvServices').
 
               // an alternative approach is to resolve the promise on a custom object
               // so that we don't pass back the whole raw response, but rather we make up the object
-              // and choose what we want. 
+              // and choose what we want.
               // In this example, we go for a more angular/jquery approach and send back data and status.
               // This means that we have to handle things differently in our success handler...
-              
+
               // (isSuccess(status) ? deferred.resolve : deferred.reject)({
               //   data : response.body,
               //   status: response.status
               // });
-              
-                
-              
+
+
+
             }
         }
 
 
-        
+
 
 
 
@@ -189,12 +190,14 @@ angular.module('cttvServices').
         }
 
 
-	/**
-	   * Get the api object to be used outside of angular
-	 */
-	cttvAPI.getSelf = function () {
-	    return api;
-	};
+
+        /**
+         * Get the api object to be used outside of angular
+         */
+        cttvAPI.getSelf = function () {
+            return api;
+        };
+
 
 
         /**
@@ -276,16 +279,16 @@ angular.module('cttvServices').
          * queryObject params:
          *  - efo: the EFO code
          */
-	cttvAPI.getDisease = function (queryObject) {
-	    $log.log ("cttvAPI.getDisease");
+        cttvAPI.getDisease = function (queryObject) {
+            $log.log ("cttvAPI.getDisease");
 
-	    return callAPI ({
-		operation: cttvAPI.API_DISEASE_URL,
-		params: queryObject
-	    });
-	};
-	
-        
+            return callAPI ({
+            operation: cttvAPI.API_DISEASE_URL,
+            params: queryObject
+            });
+        };
+
+
         /**
          * Careful not to confuse this with the other above (which btw should be renamed for clarity)
          * This returns the association scores.
@@ -308,7 +311,7 @@ angular.module('cttvServices').
         cttvAPI.getFilterBy = function(queryObject){
           $log.log("cttvAPI.getFilterBy");
             //queryObject.expandefo = queryObject.expandefo===true ? true : false;
-            queryObject.expandefo = queryObject.expandefo || false;
+            queryObject.expandefo = queryObject.expandefo || true;
             return callAPI({
                 operation: cttvAPI.API_FILTERBY_URL, // + "/" + queryObject.gene,
                 params: queryObject
@@ -322,6 +325,17 @@ angular.module('cttvServices').
 
             return callAPI({
                 operation : cttvAPI.API_QUICK_SEARCH_URL,
+                params : queryObject
+            });
+        }
+
+
+
+        cttvAPI.getExpression = function(queryObject){
+            $log.log("cttvAPI.getExpression()");
+
+            return callAPI({
+                operation : cttvAPI.API_EXPRESSION_URL,
                 params : queryObject
             });
         }
@@ -348,8 +362,8 @@ angular.module('cttvServices').
      * This talks to the API service
      */
     factory('cttvAppToAPIService', ['$http', '$log', function($http, $log) {
-        
-        
+
+
         var APP_QUERY_Q = "",
             APP_QUERY_PAGE = 1,
             APP_QUERY_SIZE = 10;
@@ -392,7 +406,7 @@ angular.module('cttvServices').
                     qo.datastructure = 'simple';
                     break;
 
-                   
+
             }
 
             return qo;
@@ -409,7 +423,7 @@ angular.module('cttvServices').
         var parseQueryParameters = function(qry){
             // set the query text
             $scope.search.query.q = qry.q || "";
-            
+
             // set the query size (i.e. results per page)
             //$scope.search.query.size = APP_QUERY_SIZE;
             //if(qry.size){
@@ -431,7 +445,7 @@ angular.module('cttvServices').
             return 'q=' + ($scope.search.query.q.title || $scope.search.query.q);
             // for now we don't want to set pagination via full URL
             // as this is causing some scope problems. If needed, we'll think about it
-            //+ '&size=' + $scope.search.query.size 
+            //+ '&size=' + $scope.search.query.size
             //+ '&page=' + $scope.search.query.page;
         }
         */

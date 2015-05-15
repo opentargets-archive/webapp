@@ -16,6 +16,7 @@ var cttvApi = function () {
     var prefixToken = "auth/request_token?";
     var prefixAutocomplete = "autocomplete?";
     var prefixQuickSearch = "quicksearch?";
+    var prefixExpression = "expression?";
 
     var credentials = {
 	token : "",
@@ -30,7 +31,7 @@ var cttvApi = function () {
 		    "url": tokenUrl
 		});
     };
-    
+
     var _ = {};
     _.call = function (myurl, callback) {
 		// No auth
@@ -75,7 +76,7 @@ var cttvApi = function () {
 		    });
 		}
     };
-    
+
     // Credentials API
     _.appname = function (name) {
 		if (!arguments.length) {
@@ -92,7 +93,7 @@ var cttvApi = function () {
 		credentials.secret = sec;
 		return this;
     };
-    
+
     _.token = function (tok) {
 		if (!arguments.length) {
 		    return credentials.token;
@@ -109,7 +110,7 @@ var cttvApi = function () {
 		prefix = dom;
 		return this;
     };
-    
+
     // URL object
     _.url = {};
 
@@ -146,6 +147,12 @@ var cttvApi = function () {
     _.url.quickSearch = function (obj) {
 		return prefix + prefixQuickSearch + parseUrlParams(obj);
     };
+
+    _.url.expression = function (obj) {
+        return prefix + prefixExpression + parseUrlParams(obj);
+    }
+
+
 
     /**
      * This takes a params object and returns the params concatenated in a string.
