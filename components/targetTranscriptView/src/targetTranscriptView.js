@@ -16,7 +16,7 @@ var transcriptViewerTheme = function () {
     var gwas_data = [];
     
     var theme = function (tv, cttvRestApi, div) {
-
+	
 	// TOOLTIPS
 	var transcript_tooltip = function (data) {
 	    var t = data.transcript;
@@ -164,11 +164,29 @@ var transcriptViewerTheme = function () {
 
 	};
 
+	var track_name = function (display, name) {
+	    var orig_guider = display.guider();
+	    display.guider (function (width) {
+	     	var track = this;
+	    	track.g
+	    	    .append ("text")
+	    	    .attr ("x", 5)
+	    	    .attr ("y", 12)
+	    	    .attr ("font-size", 11)
+	    	    .attr ("fill", "grey")
+	    	    .text (name);
+		orig_guider.call(track, width);
+	    });
+	    return display;
+	};
+	
 	// seq track
+	var seq_display = tnt.board.track.feature.genome.sequence();
+	track_name (seq_display, "Sequence");
 	var seq_track = tnt.board.track()
-	    .height(20)
+	    .height(40)
 	    .background_color("white")
-	    .display(tnt.board.track.feature.genome.sequence())
+	    .display(seq_display)
 	    .data(tnt.board.track.data.genome.sequence()
 		  .limit(150));
 
@@ -177,20 +195,82 @@ var transcriptViewerTheme = function () {
 	    .retriever (function () {
 		return gwas_data;
 	    });
+	var gwas_display = tnt.board.track.feature.pin()
+	    .domain([0.3,1.2])
+	    .foreground_color("#3e8bad")
+	    .on_click (gwas_tooltip);
+	var gwas_guider = gwas_display.guider();
+	gwas_display.guider (function (width) {
+	    var track = this;
+	    var p0_offset = 16.11;
+	    var p05_offset = 43.88
+
+	    // pvalue 0
+	    track.g
+		.append("line")
+		.attr("x1", 0)
+		.attr("y1", p0_offset)
+		//.attr("y1", y_offset)
+		.attr("x2", width)
+	    	.attr("y2", p0_offset)
+		//.attr("y2", y_offset)
+		.attr("stroke", "lightgrey");
+	    track.g
+		.append("text")
+		.attr("x", width - 50)
+		.attr("y", p0_offset + 10)
+		.attr("font-size", 10)
+		.attr("fill", "lightgrey")
+		.text("pvalue 0");
+
+	    // pvalue 0.5
+	    // track.g
+	    // 	.append("line")
+	    // 	.attr("x1", 0)
+	    // 	.attr("y1", p05_offset)
+	    // 	.attr("x2", width)
+	    // 	.attr("y2", p05_offset)
+	    // 	.attr("stroke", "lightgrey")
+	    // track.g
+	    // 	.append("text")
+	    // 	.attr("x", width - 50)
+	    // 	.attr("y", p05_offset + 10)
+	    // 	.attr("font-size", 10)
+	    // 	.attr("fill", "lightgrey")
+	    // 	.text("pvalue 0.5");
+	    
+	    // continue with rest of guider
+	    gwas_guider.call(track, width);
+	    
+	});
+	track_name (gwas_display, "GWAS data");
 	var gwas_track = tnt.board.track()
-	    .height(30)
+	    .height(60)
 	    .background_color("white")
-	    .display(tnt.board.track.feature.pin()
-		     .domain([0,1])
-		     .foreground_color("#3e8bad")
-		     .on_click(gwas_tooltip)
-		    )
+	    .display(gwas_display)
 	    .data (tnt.board.track.data()
 		   .update( gwas_updater )
 		  );
+
+	// Only transcript label track
+	var transcript_label_track = tnt.board.track()
+	    .height(20)
+	    .background_color("white")
+	    .display(tnt.board.track.feature.block())
+	    .data (tnt.board.track.data()
+		   .update (tnt.board.track.data.retriever.sync()
+			    .retriever (function () {
+				return [];
+			    })
+			   )
+		  );
+	track_name (transcript_label_track.display(), "Transcripts");
+
+	// Add the tracks
 	tv
 	    .add_track(gwas_track)
-	    .add_track(seq_track);
+	    .add_track(seq_track)
+	    .add_track(transcript_label_track);
 	
 	tv
 	    .on_load (function (t) {
@@ -200,15 +280,16 @@ var transcriptViewerTheme = function () {
 		    .chr(t[0].seq_region_name);
 		
 		var tracks = tv.tracks();
-		for (var i=3; i<tracks.length; i++) {
+		for (var i=4; i<tracks.length; i++) {
 		    var composite = tracks[i].display();
 		    var displays = composite.displays();
 		    for (var j=0; j<displays.length; j++) {
 			displays[j]
-			    .foreground_color(colors[t[i-3].biotype] || "black")
+			    .foreground_color(colors[t[i-4].biotype] || "black")
 			    .on_click(transcript_tooltip);
 		    }
 		}
+		console.log("ok");
 		createLegend(t);
 	    });
 	tv(div);

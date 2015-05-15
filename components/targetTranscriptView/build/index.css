@@ -33,3 +33,12 @@ div .tnt_tooltip_active {
     cursor: move; }
   .tnt_zmenu th:active {
     cursor: move; }
+
+.cttvGenomeBrowserIcon {
+  padding: 10px;
+  cursor: pointer; }
+
+.tnt_options_pane {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%; }

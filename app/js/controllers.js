@@ -4,16 +4,11 @@
 
     angular.module('cttvControllers', []).
 
-
-
-
-
-
     /**
      * High level controller for the app
      */
     controller('CttvAppCtrl', ['$scope',  function ($scope) {
-        
+
     }])
 
 
@@ -23,63 +18,56 @@
      * Controller for the disease page
      * It loads general information about a given disease
      */
-    .controller ('DiseaseCtrl', ["$scope", "$location", "$log", "cttvAPIservice", function ($scope, $location, $log, cttvAPIservice) {
-	$log.log("DiseaseCtrl()");
-	// var cttvRestApi = cttvApi();
-	var efo_code = $location.url().split("/")[2];
-	// var url = cttvRestApi.url.disease({'efo' : efo_code});
-	// $log.log(url);
-	// cttvRestApi.call(url)
-	cttvAPIservice.getDisease({
-	    'efo': efo_code
-	})
-	    .then (function (resp) {
-		resp = JSON.parse(resp.text);
-        //$log.log(resp);
-		//resp.path_labels.shift(); // remove cttv_disease
-		//resp.path_codes.shift(); // remove cttv_disease
-        
-		var paths = [];
-		for (var i=0; i<resp.path.length; i++) {
-            resp.path[i].shift();
-            var path=[];
-            for(var j=0; j<resp.path[i].length; j++){
-                path.push({
-                    "label" : resp.path[i][j].label,
-                    "efo" : resp.path[i][j].uri.split("/").pop()
-                });
-            }
-            paths.push(path);
-		}
+     .controller ('DiseaseCtrl', ["$scope", "$location", "$log", "cttvAPIservice", function ($scope, $location, $log, cttvAPIservice) {
+         $log.log("DiseaseCtrl()");
+         // var cttvRestApi = cttvApi();
+         var efo_code = $location.url().split("/")[2];
+         cttvAPIservice.getDisease({
+             'efo': efo_code
+         })
+         .then (function (resp) {
+             console.log(resp.body);
+             var data = resp.body;
 
-        $log.warn(resp.path);
-        $log.warn(paths);
+             var paths = [];
+             for (var i=0; i<data.path.length; i++) {
+                 data.path[i].shift();
+                 var path=[];
+                 for(var j=0; j<data.path[i].length; j++){
+                     path.push({
+                         "label" : data.path[i][j].label,
+                         "efo" : data.path[i][j].uri.split("/").pop()
+                     });
+                 }
+                 paths.push(path);
+             }
 
-		if (resp.efo_synonyms.length === 0) {
-		    resp.efo_synonyms.push(resp.label);
-		}
-		$scope.disease = {
-		    "label" : resp.label,
-		    "efo" : efo_code,
-		    "description" : resp.definition || resp.label,
-		    "synonyms" : _.uniq(resp.efo_synonyms),
-		    "paths" : paths
-		};
+             if (data.efo_synonyms.length === 0) {
+                 data.efo_synonyms.push(resp.label);
+             }
+             $scope.disease = {
+                 "label" : data.label,
+                 "efo" : efo_code,
+                 "description" : data.definition || resp.label,
+                 "synonyms" : _.uniq(data.efo_synonyms),
+                 "paths" : paths,
+                 "children" : data.children
+             };
 
-		// Update bindings
-		//$scope.$apply();
-	    })
-    }])
+             // Update bindings
+             //$scope.$apply();
+         })
+     }])
 
     /**
      * SearchAppCtrl
      * Controller for the search/results page
      */
     .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice) {
-        
+
         $log.log('SearchCtrl()');
 
-        
+
         $scope.search = cttvAppToAPIService.createSearchInitObject();
         $scope.filters = {
             gene : {
@@ -155,20 +143,20 @@
                 return;
             }
             */
-            
+
             // before getting new results,
             // we make sure we clear any current results (like in the case
             // of applying a filter), which also causes the spinner to show...
-            $scope.search.loading = true; 
-            
-            
+            $scope.search.loading = true;
+
+
             var queryobject = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
             // if one and only one of the filters is selected, apply the corresponding filter
             // cool way of mimicking a XOR operator ;)
             if( $scope.filters.gene.selected != $scope.filters.efo.selected ){
                 queryobject.filter = $scope.filters.gene.selected ? 'gene' : 'efo';
             }
-            
+
             cttvAPIservice.getSearch( queryobject )
                 .then(
                     function(resp) {
@@ -200,12 +188,12 @@
 
 
     controller('SearchResultsCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
-        
+
     }]).
 
 
     controller('MastheadCtrl', ['$scope', '$location', '$log', function ($scope, $location, $log) {
-        
+
         $log.log('MastheadCtrl()');
         $scope.location = $location;
 
@@ -214,6 +202,3 @@
     controller('D3TestCtrl', ['$scope', '$log', function ($scope, $log) {
         $log.log("D3TestCtrl");
     }])
-
-
-

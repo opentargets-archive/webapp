@@ -149,8 +149,9 @@ var geneAssociations = function () {
 	    render(vis);
 	}
     };
-    
-    // process the data for bubbles display
+
+    // process data
+    // flattening the tree (duplicates?)
     function processData (data) {
 	if (data === undefined) {
 	    return [];
@@ -165,23 +166,44 @@ var geneAssociations = function () {
 	    if (taChildren === undefined) {
 		continue;
 	    }
-	    var newChildren = [];
-	    var nonRedundant = {};
-	    for (var j=0; j<taChildren.length; j++) {
-		var taChild = taChildren[j];
-		var taLeaves = tnt_node(taChild).get_all_leaves();
-		for (var k=0; k<taLeaves.length; k++) {
-		    var leafData = taLeaves[k].data();
-		    if (nonRedundant[leafData.name] === undefined) {
-			nonRedundant[leafData.name] = 1;
-			newChildren.push(leafData);
-		    }
-		}
-	    }
-	    tA.children = newChildren;
+	    therapeuticAreas[i] = tnt_node(tA).flatten(true).data();
 	}
 	return sortData(data);
     };
+    
+    // process the data for bubbles display
+    // All the leaves are set under the therapeutic areas
+    // function processData (data) {
+    // 	if (data === undefined) {
+    // 	    return [];
+    // 	}
+    // 	if (data.children === undefined) {
+    // 	    return data;
+    // 	}
+    // 	var therapeuticAreas = data.children;
+    // 	for (var i=0; i<therapeuticAreas.length; i++) {
+    // 	    var tA = therapeuticAreas[i];
+    // 	    var taChildren = tA.children;
+    // 	    if (taChildren === undefined) {
+    // 		continue;
+    // 	    }
+    // 	    var newChildren = [];
+    // 	    var nonRedundant = {};
+    // 	    for (var j=0; j<taChildren.length; j++) {
+    // 		var taChild = taChildren[j];
+    // 		var taLeaves = tnt_node(taChild).get_all_leaves();
+    // 		for (var k=0; k<taLeaves.length; k++) {
+    // 		    var leafData = taLeaves[k].data();
+    // 		    if (nonRedundant[leafData.name] === undefined) {
+    // 			nonRedundant[leafData.name] = 1;
+    // 			newChildren.push(leafData);
+    // 		    }
+    // 		}
+    // 	    }
+    // 	    tA.children = newChildren;
+    // 	}
+    // 	return sortData(data);
+    // };
 
     function sortData (data) {
 	var dataSorted = _.sortBy(data.children, function (d) {

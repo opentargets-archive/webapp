@@ -4,6 +4,9 @@
   "description": "Web application for CTTV project 003",
   "readme": "README.md",
   "license": "Apache-2.0",
+  "scripts": {
+    "install" : "(cd node_modules/tnt.genome && npm install && gulp build-browser); (cd node_modules/tnt.transcript && npm install && gulp build-browser)"
+  },
   "dependencies": {
     "biojs-vis-pmccitation": "^0.1.7",
     "cttv.Api": "file:../components/cttvApi",
@@ -13,7 +16,7 @@
     "cttv.targetAssociationsTree": "file:../components/targetAssociationsTree",
     "cttv.targetGenomeBrowser": "file:../components/targetGenomeBrowser",
     "cttv.targetTranscriptView": "file:../components/targetTranscriptView",
-    "tnt.genome": "^0.0.5",
-    "tnt.transcript": "^0.0.7"
+    "tnt.genome": "^0.0.7",
+    "tnt.transcript": "^0.0.9"
   }
 }
