@@ -55,7 +55,8 @@ var geneAssociations = function () {
 	    .value("association_score")
 	    .key("efo_code")
 	    .label("label")
-	    .diameter(config.diameter);
+	    .diameter(config.diameter)
+	    .legendText("<text>Current</text> <a xlink:href='#/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\"x=52> score</text></a> <text x=90>range</text>");
 	
 	var tree = bubblesView.data();
 
