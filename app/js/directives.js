@@ -79,9 +79,10 @@ angular.module('cttvDirectives', [])
                 var colorScale = d3.scale.linear()
                                     .domain([0,Number.MIN_VALUE,1])
                                     //.range(["#AAAAAA","#e9f3f8", "#2383BA"]); // blue orig
-                                    .range(["#DDDDDD","#FFFF00", "#fc4e2a"]); // amber-red
+                                    //.range(["#DDDDDD","#FFFF00", "#fc4e2a"]); // amber-red
                                     //.range(["#DDDDDD","#5CE62E", "#40A120"]);    // green
                                     //.range(["#EEEEEE","#a6bddb", "#045a8d"]);
+                                    .range(["#EEEEEE","#eff3ff","#2171b5"])
 
                 /*
                  * Generates and returns the string representation of the span element
@@ -104,6 +105,7 @@ angular.module('cttvDirectives', [])
                     var opts = {
                         gene: attrs.target,
                         datastructure: "flat",
+                        expandefo: false
                     };
 
 
@@ -336,7 +338,8 @@ angular.module('cttvDirectives', [])
 
         var colorScale = d3.scale.linear()
                         .domain([0,1])
-                        .range(["#e9f3f8", "#2383BA"]);
+                        //.range(["#e9f3f8", "#2383BA"]);
+                        .range(["#eff3ff","#2171b5"])
 
         var getColorStyleString = function(value){
             return "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
@@ -794,7 +797,7 @@ angular.module('cttvDirectives', [])
                         l = "low";
                         break;
                     case 2:
-                        l = "mid";
+                        l = "medium";
                         break;
                     case 3:
                         l = "high";
@@ -810,9 +813,9 @@ angular.module('cttvDirectives', [])
         }
 
         var cols = [
-            "",
-            "RNA",
+            "Tissue",
             "Protein",
+            "RNA",
             ""
         ];
 
@@ -826,7 +829,27 @@ angular.module('cttvDirectives', [])
                 filename : '@'
             },
 
-            template: '<table class="table matrix-table"></table>'
+            template: '<table class="table matrix-table'+/*hpa-matrix-table+*/'"></table>' // TODO: comment class back in
+
+                     +'<div class="matrix-table-legend matrix-table-legend-layout-v clearfix" style="margin-bottom:10px;">'
+
+                     +'  <div class="clearfix">'
+                     +'    <span class="matrix-table-legend-item">'
+                     +'        <span class="matrix-table-legend-background no-data">1</span>'
+                     +'    </span>'
+                     +'    <span class="matrix-table-legend-to">No data</span>'
+                     +'  </div>'
+
+                     +'  <div class="clearfix">'
+                     +'    <span class="matrix-table-legend-item">'
+                     +'        <span class="matrix-table-legend-background value-0">2</span>'
+                     +'    </span>'
+                         +'    <span class="matrix-table-legend-to">Not expressed</span>'
+                     +'  </div>'
+
+
+                     +'</div>'
+
                      +'<cttv-matrix-table-legend labels="labs" colors="colors"></cctv-matrix-table-legend>',
 
             link: function (scope, elem, attrs) {
@@ -840,9 +863,6 @@ angular.module('cttvDirectives', [])
                 scope.$watch(
                     'target',
                     function() {
-                        //scope.render(scope.associationData);
-                        $log.debug("---------");
-                        $log.debug(scope.target);
 
                         // move cttvAPIservice.getExpression ({ in here
                             // ......
@@ -867,7 +887,7 @@ angular.module('cttvDirectives', [])
                                         //var newData = new Array(data.length);
                                         $log.debug(resp);
 
-                                        var cols = ["", "RNA", "Protein", ""];
+                                        //var cols = ["", "RNA", "Protein"];
                                         var data = resp.body.data[scope.target].tissues;
                                         var newData = [];
 
@@ -876,8 +896,8 @@ angular.module('cttvDirectives', [])
 
                                             var row = [];
                                             row.push( tissue );
-                                            row.push( getColorStyleString(data[tissue].rna.level) );
                                             row.push( getColorStyleString(data[tissue].protein.level) );
+                                            row.push( getColorStyleString(data[tissue].rna.level) );
                                             row.push("");
                                             newData.push(row);
 
@@ -907,6 +927,7 @@ angular.module('cttvDirectives', [])
                                             //scope.labs.push(i);
                                             scope.colors.push( colorScale(i) );
                                         }
+
 
                                     },
 

@@ -5,9 +5,9 @@ html {
 }
 
 body{
-  color: #777;
-  background: #AAA;
-  /*font-family: 'Ubuntu', 'Helvetica', sans-serif;*/
+    color: #777;
+    background: #AAA;
+    /*font-family: 'Ubuntu', 'Helvetica', sans-serif;*/
 }
 
 .changeView {
@@ -16,11 +16,11 @@ body{
 }
 
 /*
- * Main index page
- */
+* Main index page
+*/
 
 
- .cttv-centered-text {
+.cttv-centered-text {
     display: table-cell;
     text-align: center;
 }
@@ -54,54 +54,54 @@ body{
 
 
 .cttv-main-container {
-  width:100%;
-  background:#FFF;
-  padding-bottom:70px;
+    width:100%;
+    background:#FFF;
+    padding-bottom:70px;
 }
 
 
 /*
- * Masthead
- */
+* Masthead
+*/
 
 
- .masthead {
-  width:100%;
-  background-color:#DDD;
-  padding:10px 0px;
-  height: auto;
-  border-bottom: 1px solid #CFCFCF;
+.masthead {
+    width:100%;
+    background-color:#DDD;
+    padding:10px 0px;
+    height: auto;
+    border-bottom: 1px solid #CFCFCF;
 }
 
 .masthead .container{
-  height: auto;
+    height: auto;
 }
 
 
 /*
- * Footer
- */
+* Footer
+*/
 
 
- .footer {
-  font-size: 11px;
-  color:#DDD;
-  padding: 40px 0px;
-  border-top: 1px solid #A6A6A6;
+.footer {
+    font-size: 11px;
+    color:#DDD;
+    padding: 40px 0px;
+    border-top: 1px solid #A6A6A6;
 }
 
 .footer a{
-  color: inherit;
+    color: inherit;
 }
 
 .footer h6{
-  color: #F9F9F9;
+    color: #F9F9F9;
 }
 
 
 .faqs ul{
-  /*list-style:none;
-  padding-left: 0px;*/
+/*list-style:none;
+padding-left: 0px;*/
 }
 
 
@@ -110,10 +110,10 @@ body{
 }
 
 a.accordion-toggle{
-  text-decoration: none;
-  /* display: block; */
-  width: 100%;
-  height: 100%;
+    text-decoration: none;
+    /* display: block; */
+    width: 100%;
+    height: 100%;
 }
 
 .accordionCell {
@@ -153,106 +153,106 @@ a.accordion-toggle{
 
 
 /*
- * Search suggestions (autocomplete) and form
- */
+* Search suggestions (autocomplete) and form
+*/
 
 
- .search-form{
-  position:relative;
+.search-form{
+    position:relative;
 }
 
 .search-form-spinner {
-  right:40px;
+    right:40px;
 }
 
 .search-suggestions-box{
-  position: absolute;
-  background: #FFF;
-  width: 100%;
+    position: absolute;
+    background: #FFF;
+    width: 100%;
 
-  border: 1px solid rgba(0,0,0,.15);
-  border-radius: 4px;
-  padding: 5px;
-  margin: 2px 0 0;
-  list-style: none;
-  font-size: 14px;
-  box-shadow: 0 6px 12px rgba(0,0,0,.175);
-  background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    padding: 5px;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    background-clip: padding-box;
 
-  font-size: 14px;
-  z-index: 10;
+    font-size: 14px;
+    z-index: 10;
 }
 
 .search-suggestions-box .divider{
-  margin: 10px 0px;
-  border-top: 1px solid #CCC;
+    margin: 10px 0px;
+    border-top: 1px solid #CCC;
 }
 
 .search-suggestions-box .item:hover{
-  background: #EEE;
-  cursor: pointer;
+    background: #EEE;
+    cursor: pointer;
 }
 
 .search-suggestions-box .besthit{
-  cursor:pointer;
-  padding:4px 0px;
+    cursor:pointer;
+    padding:4px 0px;
 }
 
 .search-suggestions-box .text-item{
-  padding:0px 5px;
+    padding:0px 5px;
 }
 
 /* non-breaking block */
 .nbblock{
-  display:block;
-  margin-bottom:0px;
+    display:block;
+    margin-bottom:0px;
 }
 
 .search-suggestions-box .result-item{
-  margin:0;
-  padding:4px 5px;
+    margin:0;
+    padding:4px 5px;
 }
 
 .search-suggestions-box .suggestions-efo .suggestions-efo-title{
-  line-height: 1.1;
+    line-height: 1.1;
 }
 
 .search-suggestions-box .suggestions-efo .suggestions-efo-hierarchy-arrow{
-  margin:0px 4px;
+    margin:0px 4px;
 }
 
 
 /*
- * Gene-Disease Association
- */
+* Gene-Disease Association
+*/
 
 
- .gene-disease-header{
-  padding-bottom:20px;
-  margin-bottom:20px;
-  margin-top:40px;
+.gene-disease-header{
+    padding-bottom:20px;
+    margin-bottom:20px;
+    margin-top:40px;
 }
 
 .gene-disease-header .overview{
-  display: table;
+    display: table;
 }
 
 .gene-disease-header .overview .item{
-  display: table-cell;
-  width:45%;
+    display: table-cell;
+    width:45%;
 }
 
 .gene-disease-header .overview .association{
-  display: table-cell;
-  width:10%;
-  vertical-align:middle;
-  padding: 2px;
+    display: table-cell;
+    width:10%;
+    vertical-align:middle;
+    padding: 2px;
 }
 
 .gene-disease-header .overview .association div{
-  width:100%;
-  height:1px;
-  border-bottom:2px solid #DDD;
+    width:100%;
+    height:1px;
+    border-bottom:2px solid #DDD;
 }
 
 .gene-disease-content{
@@ -260,159 +260,159 @@ a.accordion-toggle{
 }
 
 .gene-disease-content .table-panel{
-  overflow-x: auto;
+    overflow-x: auto;
 }
 
 .gene-disease-content .no-last-el{
-  border-right-width: 1px !important;
+    border-right-width: 1px !important;
 }
 
 
 /*
- * Text
- */
+* Text
+*/
 
 
- .text-lowlight{
-  color: #AAA;
+.text-lowlight{
+    color: #AAA;
 }
 
 .text-highlight{
-  color: #000;
+    color: #000;
 }
 
 .text-nolight{
-  color: #666;
+    color: #666;
 }
 
 .small{
-  font-size: 12px;
-  line-height: 1.2;
+    font-size: 12px;
+    line-height: 1.2;
 }
 
 .text-small{
-  font-size: 12px;
-  line-height: 1.2;
+    font-size: 12px;
+    line-height: 1.2;
 }
 
 .text-disabled {
-  color: #AAA;
-  text-decoration: none;
-  cursor: default;
+    color: #AAA;
+    text-decoration: none;
+    cursor: default;
 }
 
 
 /*
- * Backgrounds
- */
+* Backgrounds
+*/
 
 
- .cttv-blue-background{
-  background: #3E8BAD !important;
-  background-color: #3E8BAD !important;
+.cttv-blue-background{
+    background: #3E8BAD !important;
+    background-color: #3E8BAD !important;
 }
 
 
 .flower-petal{
-  color: #000 !important;
-  background: #3E8BAD !important;
-  background-color: #3E8BAD !important;
+    color: #000 !important;
+    background: #3E8BAD !important;
+    background-color: #3E8BAD !important;
 }
 
 
 .badge:hover {
-  color: #ffffff;
-  text-decoration: none;
-  cursor: pointer;
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
 }
 .badge-error {
-  background-color: #b94a48;
+    background-color: #b94a48;
 }
 .badge-error:hover {
-  background-color: #953b39;
+    background-color: #953b39;
 }
 .badge-warning {
-  background-color: #f89406;
+    background-color: #f89406;
 }
 .badge-warning:hover {
-  background-color: #c67605;
+    background-color: #c67605;
 }
 .badge-success {
-  background-color: #468847;
+    background-color: #468847;
 }
 .badge-success:hover {
-  background-color: #356635;
+    background-color: #356635;
 }
 .badge-info {
-  background-color: #3a87ad;
+    background-color: #3a87ad;
 }
 .badge-info:hover {
-  background-color: #2d6987;
+    background-color: #2d6987;
 }
 .badge-inverse {
-  background-color: #333333;
+    background-color: #333333;
 }
 .badge-inverse:hover {
-  background-color: #1a1a1a;
+    background-color: #1a1a1a;
 }
 .badge-primary {
-  background-color: #337ab7;
+    background-color: #337ab7;
 }
 .badge-primary:hover {
-  background-color: #2d6987;
+    background-color: #2d6987;
 }
 
 .opacity-50 {
-  opacity: 0.5;
+    opacity: 0.5;
 }
 
 
 
 .container {
-  /*height: 1000px;*/
+    /*height: 1000px;*/
 }
 
 .menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+    list-style: none;
+    border-bottom: 0.1em solid black;
+    margin-bottom: 2em;
+    padding: 0 0 0.5em;
 }
 
 .menu:before {
-  content: "[";
+    content: "[";
 }
 
 .menu:after {
-  content: "]";
+    content: "]";
 }
 
 .menu > li {
-  display: inline;
+    display: inline;
 }
 
 .menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
+    content: "|";
+    padding-right: 0.3em;
 }
 
 .menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
+    content: "";
+    padding: 0;
 }
 
 
 /*
- * Search results
- */
+* Search results
+*/
 
 
- .search-result {
-  margin-bottom: 24px;
+.search-result {
+    margin-bottom: 24px;
 }
 
 .search-result h4{
-  margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .search-title {
@@ -420,222 +420,258 @@ a.accordion-toggle{
 }
 
 .search-matches em{
-  color: #999;
-  font-style: normal;
-  font-weight: 500;
-  background-color: #E6E6E6;
-  padding: 0px 2px;
+    color: #999;
+    font-style: normal;
+    font-weight: 500;
+    background-color: #E6E6E6;
+    padding: 0px 2px;
 }
 
 .search-description, .search-details, .search-matches{
-  display: block;
+    display: block;
 }
 
 .search-details, .search-matches{
-  font-size: 12px;
+    font-size: 12px;
 }
 
 
 
 /*
- * Intro page
- */
+* Intro page
+*/
 
 
- .intro-logo{
-  padding-bottom:40px;
-  display: block;
-  margin: 0 auto;
+.intro-logo{
+    padding-bottom:40px;
+    display: block;
+    margin: 0 auto;
 }
 
 .intro-content{
-  margin-top: 100px;
+    margin-top: 100px;
 }
 
 .intro-divider{
-  height:100px;
+    height:100px;
 }
 
 .intro-statement{
-  font-weight: 200 !important;
-  text-align: center;
+    font-weight: 200 !important;
+    text-align: center;
 }
 
 .intro-statement-heading{
-  color:#666;
+    color:#666;
 }
 
 .intro-statement-p{
-  color:#2B8BAC;
+    color:#2B8BAC;
 }
 
 
 
 /*
- * Tables
- */
+* Tables
+*/
 
- table.matrix-table .dataTables_empty {
-  text-align: center;
+table.matrix-table .dataTables_empty {
+    text-align: center;
 }
 
 /*
- * Matrix table
- */
+* Matrix table
+*/
 
- table.matrix-table{
-  border-collapse: collapse;
-  width: 100%;
-  table-layout: fixed;
+table.matrix-table{
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
 }
 
 table.matrix-table thead > tr {
-  margin-bottom: 10px !important;
+    margin-bottom: 10px !important;
 }
 
 table.matrix-table thead > tr > th {
-  padding-left: 0px !important;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 11px;
-  height:140px;
-  /*white-space: nowrap;*/
-  background-position: center bottom 5px !important;
-  padding: 5px !important;
-  border: none !important;
-  width: 5%;
-  min-width: 30px;
-  /*vertical-align: middle !important;*/
+    padding-left: 0px !important;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 11px;
+    height:140px;
+    /*white-space: nowrap;*/
+    background-position: center bottom 5px !important;
+    padding: 5px !important;
+    border: none !important;
+    width: 5%;
+    min-width: 30px;
+    /*vertical-align: middle !important;*/
 }
 
 table.matrix-table thead > tr > th:first-child {
-  padding-right: 5px;
-  background-position: right 5px bottom 5px !important;
-  width: auto;
+    padding-right: 5px;
+    background-position: right 5px bottom 5px !important;
+    width: auto;
 }
 
 table.matrix-table thead > tr > th:last-child {
-  padding-left: 5px;
-  background-position: left 5px bottom 5px !important;
-  width: auto;
+    padding-left: 5px;
+    background-position: left 5px bottom 5px !important;
+    width: auto;
 }
 
 table.matrix-table thead > tr > th > div {
-  height: 1px;
-  vertical-align: top;
-  margin-bottom: 20px;
+    height: 1px;
+    vertical-align: top;
+    margin-bottom: 20px;
 }
 
 table.matrix-table thead > tr > th > div > span{
-  display: block;
-  width: 140px;
-  margin-left: 50%;
-  -webkit-transform-origin: 0% 0%;
-  -moz-transform-origin: 0% 0%;
-  -ms-transform-origin: 0% 0%;
-  -o-transform-origin: 0% 0%;
-  transform-origin: 0% 0%;
-  -webkit-transform: rotate(-90deg) translateY(-50%);
-  -moz-transform:    rotate(-90deg) translateY(-50%);
-  -ms-transform:     rotate(-90deg) translateY(-50%);
-  -o-transform:      rotate(-90deg) translateY(-50%);
-  transform:      rotate(-90deg) translateY(-50%);
+    display: block;
+    width: 140px;
+    margin-left: 50%;
+    -webkit-transform-origin: 0% 0%;
+    -moz-transform-origin: 0% 0%;
+    -ms-transform-origin: 0% 0%;
+    -o-transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
+    -webkit-transform: rotate(-90deg) translateY(-50%);
+    -moz-transform:    rotate(-90deg) translateY(-50%);
+    -ms-transform:     rotate(-90deg) translateY(-50%);
+    -o-transform:      rotate(-90deg) translateY(-50%);
+    transform:      rotate(-90deg) translateY(-50%);
 }
 
 table.matrix-table thead > tr > th:first-child > div {
-  width:0px;
-  float: right;
-  margin-right: 10px;
+    width:0px;
+    float: right;
+    margin-right: 10px;
 }
 
 table.matrix-table thead > tr > th:last-child > div {
-  width:0px;
-  float: left;
-  margin-left: 10px;
+    width:0px;
+    float: left;
+    margin-left: 10px;
 }
 
 
 table.matrix-table tbody > tr > td {
-  border-collapse: collapse;
-  border: 1px solid #FFF;
-  padding: 0 !important;
-  padding-bottom: 0 !important;
-  font-size: 12px;
-  line-height: 12px;
+    border-collapse: collapse;
+    border: 1px solid #FFF !important;
+    padding: 0 !important;
+    padding-bottom: 0 !important;
+    font-size: 12px;
+    line-height: 12px;
 
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 table.matrix-table tbody > tr > td > span {
-  display: block;
-  width: 100%;
-  height: 16px;
+    display: block;
+    width: 100%;
+    height: 16px;
 }
 
-table.matrix-table tbody > tr > td > span.no-data {
+.matrix-table span.no-data, .matrix-table-legend span.no-data{
     border: 1px solid #EEE;
     background: #FFF;
     color: #FFF;
 }
 
-table.matrix-table tbody > tr > td > span.value-0 {
+.matrix-table span.value-0, .matrix-table-legend span.value-0 {
     background: #EEE;
     color: #EEE;
 }
 
 table.matrix-table tbody > tr > td:first-child {
-  border: none;
-  text-align: right;
-  vertical-align: middle;
-  padding-right: 5px !important;
-  overflow: hidden;
+    border: none;
+    text-align: right;
+    vertical-align: middle;
+    padding-right: 5px !important;
+    overflow: hidden;
 }
 
 table.matrix-table tbody > tr > td:last-child {
-  border: none;
-  vertical-align: middle;
-  padding-left: 5px !important;
-  overflow: hidden;
+    border: none;
+    vertical-align: middle;
+    padding-left: 5px;
+    overflow: hidden;
 }
 
 .matrix-table-legend {
-  /* Do one for horizontal layout */
+    /* Do one for horizontal layout */
+    font-size: 12px;
 }
 
 .matrix-table-legend-layout-h span {
-  float:left;
+    float:left;
+}
+
+.matrix-table-legend-layout-v > div > span {
+    float:left;
 }
 
 span.matrix-table-legend-from {
-  padding-right: 5px;
+    padding-right: 5px;
+    padding-top: 2px
 }
 
 span.matrix-table-legend-to {
-  padding-left: 5px;
+    padding-left: 5px;
+    padding-top: 2px
 }
 
 span.matrix-table-legend-item {
-  display:block;
-  width:20px;
-  height:20px;
-  border: 0.5px solid #FFF;
+    display:block;
+    width:20px;
+    height:20px;
+    border: 0.5px solid #FFF;
 }
 
 span.matrix-table-legend-background {
-  display:block;
-  width:100%;
-  height:100%;
+    display:block;
+    width:100%;
+    height:100%;
 }
 
+
+.hpa-matrix-table {
+
+}
+
+.hpa-matrix-table tbody > tr > td:last-child {
+    padding-left: 0px;
+
+    /*
+    border-collapse: collapse;
+    border: 1px solid #FFF;
+    padding: 0 !important;
+    padding-bottom: 0 !important;
+    font-size: 12px;
+    line-height: 12px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    */
+}
+
+.hpa-matrix-table thead > tr > th:last-child {
+    padding: 0px;
+    background-position: center bottom 5px !important;
+    width: 5% !important;
+}
 /*
-table.dataTable thead > tr > th {
-  padding-left: 18px;
-  padding-right: 18px;
-}
-*/
 
+table.matrix-table thead > tr > th:last-child {
+    padding-left: 5px;
+    background-position: left 5px bottom 5px !important;
+    width: auto;
+}
+
+*/
 
 
 

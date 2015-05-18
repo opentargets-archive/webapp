@@ -81,6 +81,25 @@
 
             <accordion-group>
                 <accordion-heading>
+                    <span>Protein Baseline Expression</span>
+                </accordion-heading>
+                <p>Summary of {{target.symbol}} expression in normal human tissue, based on <a href="http://www.proteinatlas.org/{{target.id}}/tissue" target="blank">Protein Atlas <span class="fa fa-external-link"></span></a> normal tissue immunohistochemistry and RNA-seq expression data</p>
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <cttv-hpa-tissue-expression target="target.id" filename="bobo"></cttv-hpa-tissue-expression>
+                    </div>
+
+                    <!-- <div class="col-sm-6">
+                        <div class="well">Hello HPA</div>
+                    </div>-->
+
+                </div>
+            </accordion-group>
+
+
+            <accordion-group>
+                <accordion-heading>
                     <span ng-click="toggleBaselineExpression()">RNA Baseline Expression</span>
                 </accordion-heading>
                 <!--[if lt IE 10]>
@@ -89,24 +108,6 @@
                 </div>
                 <![endif]-->
                 <ebi-expression-atlas-baseline-summary target="{{eaTarget}}"></ebi-expression-atlas-baseline-summary>
-            </accordion-group>
-
-
-            <accordion-group>
-                <accordion-heading>
-                    <span>Tissue Expression</span>
-                </accordion-heading>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <cttv-hpa-tissue-expression target="target.id" filename="bobo"></cttv-hpa-tissue-expression>
-                    </div>
-                    <!--
-                    <div class="col-sm-3">
-                        <div class="well">Hello HPA</div>
-                    </div
-                    -->
-                </div>
-
             </accordion-group>
 
 
