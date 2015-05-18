@@ -9,14 +9,14 @@ var transcriptViewerTheme = function () {
 	"nonsense_mediated_decay" : d3.rgb("#3a99d7"),
 	"retained_intron" : d3.rgb("#039933"),
 	"processed_transcript" : d3.rgb("#FFA500"),
-	
+
     };
-    
+
     var rest = ensembl_rest_api();
     var gwas_data = [];
-    
+
     var theme = function (tv, cttvRestApi, div) {
-	
+
 	// TOOLTIPS
 	var transcript_tooltip = function (data) {
 	    var t = data.transcript;
@@ -36,7 +36,7 @@ var transcriptViewerTheme = function () {
 		"label" : "Strand",
 		"value" : t.strand === 1 ? "Forward" : "Reverse"
 	    });
-	    
+
 	    var t = tnt.tooltip.table()
 		.width(250)
 		.id(1)
@@ -77,7 +77,7 @@ var transcriptViewerTheme = function () {
 		    },
 		    obj : data,
 		    value : "Jump to sequence"
-		});	
+		});
 	    }
 	    if (data.study.length) {
 		obj.rows.push({
@@ -87,7 +87,7 @@ var transcriptViewerTheme = function () {
 	    }
 	    for (var i=0; i<data.study.length; i++) {
 		obj.rows.push({
-		    "label" : "<a href='/#/disease/EFO_" + data.study[i].efo + "'>EFO_" + data.study[i].efo + '</a>',
+		    "label" : "<a href='/#/disease/" + data.study[i].efo + "'>" + data.study[i].efo + '</a>',
 		    "value" : data.study[i].pvalue + " <a target=_blank href='http://europepmc.org/search?query=" + data.study[i].pmid + "'><i class='fa fa-newspaper-o'></i></a>"
 		})
 	    }
@@ -125,7 +125,7 @@ var transcriptViewerTheme = function () {
 		body : "<i class='fa fa-spinner fa-2x fa-spin'></i>"
 	    });
 	};
-	
+
 	// TRANSCRIPT TYPE LEGEND
 	var createLegend = function (t) {
 	    var legend_div = d3.select(div)
@@ -179,7 +179,7 @@ var transcriptViewerTheme = function () {
 	    });
 	    return display;
 	};
-	
+
 	// seq track
 	var seq_display = tnt.board.track.feature.genome.sequence();
 	track_name (seq_display, "Sequence");
@@ -238,10 +238,10 @@ var transcriptViewerTheme = function () {
 	    // 	.attr("font-size", 10)
 	    // 	.attr("fill", "lightgrey")
 	    // 	.text("pvalue 0.5");
-	    
+
 	    // continue with rest of guider
 	    gwas_guider.call(track, width);
-	    
+
 	});
 	track_name (gwas_display, "GWAS data");
 	var gwas_track = tnt.board.track()
@@ -271,14 +271,14 @@ var transcriptViewerTheme = function () {
 	    .add_track(gwas_track)
 	    .add_track(seq_track)
 	    .add_track(transcript_label_track);
-	
+
 	tv
 	    .on_load (function (t) {
 		// Coordinates for the sequence display
 		tv
 		    .species(t[0].species)
 		    .chr(t[0].seq_region_name);
-		
+
 		var tracks = tv.tracks();
 		for (var i=4; i<tracks.length; i++) {
 		    var composite = tracks[i].display();
