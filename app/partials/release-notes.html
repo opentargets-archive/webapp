@@ -10,40 +10,35 @@ This page lists all changes of the CTTV releases.
 
 		<div>
 		
-		<h2>Release 0.3 (release 2015-05-15)</h3>
+		<h2>Release 0.3 (release 2015-05-19)</h3>
 			<h3>Status</h3>
 		    <p>This is a maintenance update of the CTTV platform. The following items were fixed and/or added:</p>
         	<ul>
         	    <li>search box: higher coverage of synonyms from HGNC and UniProt</li>
-        	    <li>disease associations page: data types facet filters are now clickable to refine the evidence types that are shown</li>
-        	    <li>disease associations page: new ‘Tree’ view that allows visualisation of evidence across the therapeutic areas in a tree representing the relationships of diseases</li>        	    
-        	    <li>disease associations page: data types facet filters are also visible on the Table and Tree view</li> 
-        	    <li>disease associations data types filters: the number of associated diseases is indicated next to each data type</li>
-        	    <li>disease associations data types filters: clicking/unclicking on a data type filter updates the Bubble, Table or Tree representation accordingly</li>        	    
-        	    <li>disease associations bubble view: support for multiple EFO paths</li>
-        	    <li>gene to disease association page: export (to excel, pdf) feature added for every data type</li>
-        	    <li>disease page: display multiple EFO paths</li>
-        	    <li>URI changed to be resource oriented for disease, target and association pages</li>
-        	    <li>The word 'gene' was replaced by the preferred word 'target' across the pages</li>
-        	    <li>generally improved consistency across the evidence pages and refined the external links</li>
-        	    <li>added secure authentication to the system so that you will be able to access by a secure, authenticated connection</li>
-        	    <li>added documentation including Release Notes and answers to Frequently Asked Questions </li>
+        	    <li>disease associations page: intermediate disease terms are now shown in the bubble view</li>
+        	    <li>disease associations page: the table view has been improved in the form of a heatmap to make a better use of the space on the page. Scores are represented by a color and the flower has been removed</li>
+        	    <li>target page: transcript information display added to show alternative transcripts of a gene with location of SNPs</li>
+        	    <li>target page: tissue expression display of the Human Protein Atlas baseline expression</li>
+        	    <li>target page: Gene Ontology terms display improved</li>
+        	    <li>target page: Reactome pathway section added</li>
+        	    <li>target page: Drug section added</li>
+        	    <li>disease page: display of immediate EFO children of a disease in the disease path section</li>
         	</ul>
 
-            <p>Data Changes, including updated and refined several of the data sources, particularly in genetics:</p>
+            <p>Data Changes:</p>
             <ul>
-                <li>new version of EVA (version 0.9) disease associations</li>
-                <li>new version of GWAS Catalog disease associations (April 2015)</li>
-                <li>new version of mouse models of human disease (phenoDigm) predictions based on IMPC (version 3.0) and MGI data (February 2015)</li>
-                <li>new version of EFO with increased coverage of diseases including over 1,000 disease terms from EVA mapped to EFO</li>
-                <li>new version of Ensembl (release 79) for genomic location and identifiers</li>
-                <li>updated version of HGNC approved gene symbols</li>            
+                <li>Expression profiles of human genes on the mRNA and protein level from the Human Protein Atlas</li>
+                <li>Ensembl genes mapped to non-reference assembly were discarded to avoid duplication of symbols</li>
             </ul>
             <p>In addition, the following items were fixed:</p>
             <ul>
-        	    <li>search results: duplicated genes</li>  
+        	    <li>search results: duplicated genes</li>
             </ul>		
-		
+            <p>Known bugs:</p>
+            <ul>
+        	    <li>tabular export to pdf can generate overlapping rows</li>  
+            </ul>
+            
 		<h2>Release 0.2 (release 2015-04-27)</h2>
 			<h3>Status</h3>
 		    <p>This is a planned updated version of the CTTV platform. The following items were fixed and/or added:</p>
