@@ -19,7 +19,7 @@ var bubblesView = function () {
 	    render.focus(conf.data);
 	},
 	maxVal : 1,
-	legendText : "Current score range"
+	legendText : "<text>Current score range</text>"
 	//labelOffset : 10
     };
 

@@ -259,9 +259,9 @@ angular.module('cttvDirectives', [])
                 var data = resp.body.data;
                 if (data) {
                     gat
-                    .data(data)
-                    .datatypes(dts)
-                    .update();
+			.data(data)
+			.datatypes(dts)
+			.update();
                 }
                 });
             }
@@ -303,10 +303,11 @@ angular.module('cttvDirectives', [])
                 .diagonal(100);
 
                 gat = geneAssociationsTree()
-                .data(data)
-                .datatypes(dts)
-                .diameter(900)
-                .target(attrs.target);
+                    .data(data)
+                    .datatypes(dts)
+                    .diameter(900)
+		    .legendText("<a xlink:href='#/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a> <text alignment-baseline=central x=40>range</text>")
+                    .target(attrs.target);
                 gat(fView, elem[0]);
             });
         };
@@ -544,11 +545,6 @@ angular.module('cttvDirectives', [])
                 var newDiv = document.createElement("div");
                 newDiv.id = "cttvTargetGenomeBrowser";
                 elem[0].appendChild(newDiv);
-
-                // var api = cttvApi()
-                //     .prefix("/api/latest/")
-                //     .appname("cttv-web-app")
-                //     .secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
 
                 var gB = tnt.board.genome()
                 .species("human")
@@ -921,6 +917,3 @@ angular.module('cttvDirectives', [])
             } // end link
         }; // end return
     }])
-
-
-

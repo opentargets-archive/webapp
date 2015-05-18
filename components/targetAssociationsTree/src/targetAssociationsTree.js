@@ -8,7 +8,8 @@ var geneAssociationsTree = function () {
 	data : undefined,
 	diameter : 1000,
 	cttvApi : undefined,
-	datatypes: undefined
+	datatypes: undefined,
+	legendText : "<text>Score range</text>"
     };
     var treeVis = tnt_tree();
     
@@ -212,7 +213,13 @@ var geneAssociationsTree = function () {
 	    .attr("y", 10)
 	    .attr("text-anchor", "start")
 	    .attr("alignment-baseline", "central")
-	    .text("1 Score range");
+	    .text("1")
+
+	legendBar
+	    .append("g")
+	    .attr("transform", "translate(" + (50+(20*legendColors.length)) + ", 10)")
+	    .html(config.legendText)
+	
 	legendBar.selectAll("rect")
 	    .data(legendColors)
 	    .enter()
@@ -323,6 +330,16 @@ var geneAssociationsTree = function () {
 	return this;
     };
 
+    // Legend text
+    theme.legendText = function (t) {
+	if (!arguments.length) {
+	    return config.legendText;
+	}
+	config.legendText = t;
+	console.log("new text:" + t);
+	return this;
+    };
+    
     return theme;
 };
 
