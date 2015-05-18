@@ -70,7 +70,7 @@ angular.module('cttvDirectives', [])
 
 
             template: '<table class="table matrix-table"></table>'
-                     +'<cttv-matrix-table-legend labels="labs" colors="colors"></cctv-matrix-table-legend>',
+                     +'<cttv-matrix-table-legend labels="labs" legend-text="legendText" colors="colors"></cctv-matrix-table-legend>',
 
 
             link: function (scope, elem, attrs) {
@@ -179,6 +179,7 @@ angular.module('cttvDirectives', [])
 
                 // legend stuff
                 scope.labs = [0,1];
+		scope.legendText = "Score";
                 scope.colors = [];
                 for(var i=0; i<=10; i+=2){
                     var j=i/10;
@@ -366,7 +367,7 @@ angular.module('cttvDirectives', [])
             },
 
             template: '<table class="table matrix-table"></table>'
-                     +'<cttv-matrix-table-legend labels="labs" colors="colors"></cctv-matrix-table-legend>',
+                     +'<cttv-matrix-table-legend labels="labs" legend-text="legendText" colors="colors"></cctv-matrix-table-legend>',
 
             link: function (scope, elem, attrs) {
 
@@ -453,6 +454,7 @@ angular.module('cttvDirectives', [])
 
                         // legend stuff
                         scope.labs = [0,1];
+			scope.legendText = "Score";
                         scope.colors = [];
                         for(var i=0; i<=10; i+=2){
                             var j=i/10;
@@ -729,6 +731,7 @@ angular.module('cttvDirectives', [])
                      +       '<span class="matrix-table-legend-background" style="background:{{color}};"></span>'
                      +    '</span>'
                      +    '<span class="matrix-table-legend-to" ng-show="labels.length==2">{{labels[1]}}</span>'
+                     +    '<a ng-if="legendText!=undefined" href="#/faq#association-score"><span class="matrix-table-legend-text">{{legendText}}</span></a>'
                      + '</div>';
 
         return {
@@ -737,7 +740,8 @@ angular.module('cttvDirectives', [])
             replace: true,
             scope: {
                 labels: '=',
-                colors: '='
+                colors: '=',
+		legendText: '=',
             },
             link: function(scope, elem, attrs){
 
