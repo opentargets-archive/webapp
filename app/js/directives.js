@@ -70,7 +70,7 @@ angular.module('cttvDirectives', [])
 
 
             template: '<table class="table matrix-table"></table>'
-                     +'<cttv-matrix-table-legend labels="labs" colors="colors"></cctv-matrix-table-legend>',
+                     +'<cttv-matrix-table-legend labels="labs" legend-text="legendText" colors="colors"></cctv-matrix-table-legend>',
 
 
             link: function (scope, elem, attrs) {
@@ -181,6 +181,7 @@ angular.module('cttvDirectives', [])
 
                 // legend stuff
                 scope.labs = [0,1];
+		scope.legendText = "Score";
                 scope.colors = [];
                 for(var i=0; i<=10; i+=2){
                     var j=i/10;
@@ -261,9 +262,9 @@ angular.module('cttvDirectives', [])
                 var data = resp.body.data;
                 if (data) {
                     gat
-                    .data(data)
-                    .datatypes(dts)
-                    .update();
+			.data(data)
+			.datatypes(dts)
+			.update();
                 }
                 });
             }
@@ -305,10 +306,11 @@ angular.module('cttvDirectives', [])
                 .diagonal(100);
 
                 gat = geneAssociationsTree()
-                .data(data)
-                .datatypes(dts)
-                .diameter(900)
-                .target(attrs.target);
+                    .data(data)
+                    .datatypes(dts)
+                    .diameter(900)
+		    .legendText("<a xlink:href='#/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a> <text alignment-baseline=central x=40>range</text>")
+                    .target(attrs.target);
                 gat(fView, elem[0]);
             });
         };
@@ -368,7 +370,7 @@ angular.module('cttvDirectives', [])
             },
 
             template: '<table class="table matrix-table"></table>'
-                     +'<cttv-matrix-table-legend labels="labs" colors="colors"></cctv-matrix-table-legend>',
+                     +'<cttv-matrix-table-legend labels="labs" legend-text="legendText" colors="colors"></cctv-matrix-table-legend>',
 
             link: function (scope, elem, attrs) {
 
@@ -455,6 +457,7 @@ angular.module('cttvDirectives', [])
 
                         // legend stuff
                         scope.labs = [0,1];
+			scope.legendText = "Score";
                         scope.colors = [];
                         for(var i=0; i<=10; i+=2){
                             var j=i/10;
@@ -547,11 +550,6 @@ angular.module('cttvDirectives', [])
                 var newDiv = document.createElement("div");
                 newDiv.id = "cttvTargetGenomeBrowser";
                 elem[0].appendChild(newDiv);
-
-                // var api = cttvApi()
-                //     .prefix("/api/latest/")
-                //     .appname("cttv-web-app")
-                //     .secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
 
                 var gB = tnt.board.genome()
                 .species("human")
@@ -736,6 +734,7 @@ angular.module('cttvDirectives', [])
                      +       '<span class="matrix-table-legend-background" style="background:{{color}};"></span>'
                      +    '</span>'
                      +    '<span class="matrix-table-legend-to" ng-show="labels.length==2">{{labels[1]}}</span>'
+                     +    '<a ng-if="legendText!=undefined" href="#/faq#association-score"><span class="matrix-table-legend-text">{{legendText}}</span></a>'
                      + '</div>';
 
         return {
@@ -744,7 +743,8 @@ angular.module('cttvDirectives', [])
             replace: true,
             scope: {
                 labels: '=',
-                colors: '='
+                colors: '=',
+		legendText: '=',
             },
             link: function(scope, elem, attrs){
 
@@ -942,6 +942,3 @@ angular.module('cttvDirectives', [])
             } // end link
         }; // end return
     }])
-
-
-

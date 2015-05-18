@@ -623,6 +623,10 @@ span.matrix-table-legend-to {
     padding-top: 2px
 }
 
+span.matrix-table-legend-text {
+    padding-left: 8px;
+}
+
 span.matrix-table-legend-item {
     display:block;
     width:20px;

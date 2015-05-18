@@ -18,7 +18,8 @@ var bubblesView = function () {
 	breadcrumsClick : function () {
 	    render.focus(conf.data);
 	},
-	maxVal : 1
+	maxVal : 1,
+	legendText : "<text>Current score range</text>"
 	//labelOffset : 10
     };
 
@@ -97,6 +98,7 @@ var bubblesView = function () {
 	    	.attr("fill", "none")
 	    	.attr("stroke", "black")
 	    	.attr("stroke-width", 2);
+
 	    legend
 	    	.append("text")
 		.attr("class", "cttv_bubblesView_currentMaxValue")
@@ -117,7 +119,19 @@ var bubblesView = function () {
 		.attr("x", 85)
 		.attr("y", 5)
 		.attr("text-anchor", "start")
-		.text(conf.maxVal  + " Current score range");
+		.text(conf.maxVal);
+
+	    legend
+		.append("g")
+		.attr("transform", "translate(100, 5)")
+		.html(conf.legendText);
+	    
+	    // legend
+	    // 	.append("a")
+	    // 	.attr("x", 100)
+	    // 	.attr("y", 5)
+	    // 	.attr("text-anchor", "start")
+	    // 	.html("<a href='xlink:href=\"http://www.google.com\"'>Hurrah!</a>");
 
 	}
 	
@@ -496,6 +510,14 @@ var bubblesView = function () {
 	    return conf.maxVal;
 	}
 	conf.maxVal = v;
+	return this;
+    };
+
+    render.legendText = function (t) {
+	if (!arguments.length) {
+	    return conf.legendText;
+	}
+	conf.legendText = t;
 	return this;
     };
     
