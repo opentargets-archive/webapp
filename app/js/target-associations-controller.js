@@ -39,9 +39,6 @@ angular.module('cttvControllers')
 
 
 
-
-
-	$scope.nresults = 0;
 	$scope.loading = false;
 
 	// datatypes filter

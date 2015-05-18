@@ -42,7 +42,6 @@ angular.module('cttvDirectives')
 				    if (_.isEmpty(data)) {
 					data.association_score = 0.01;
 				    }
-				    scope.$parent.nresults = resp.body.total || 0;
 				    ga.datatypes(dts);
 				    updateView(data);
 				    ga.update(data);
@@ -151,7 +150,6 @@ angular.module('cttvDirectives')
 				return
 			    }
 			    // Bubbles View
-			    scope.$parent.nresults=resp.body.total;
 
 			    var bView = bubblesView()
 				.maxVal(1)
