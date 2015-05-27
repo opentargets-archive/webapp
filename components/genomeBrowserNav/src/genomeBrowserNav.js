@@ -10,7 +10,6 @@ var genome_browser_nav = function () {
     var gBrowser;
 
     var theme = function (gB, div) {
-        // console.log("CHR:" + chr);
         gBrowser = gB;
         var opts_pane = d3.select(div)
             .append ("div")
@@ -70,15 +69,27 @@ var genome_browser_nav = function () {
                 }
             });
 
+        // We set up the origin:
+        if (gBrowser.gene() !== undefined) {
+            orig = {
+                species : gBrowser.species(),
+                gene    : gBrowser.gene()
+            };
+        } else {
+            orig = {
+                species : gBrowser.species(),
+                chr     : gBrowser.chr(),
+                from    : gBrowser.from(),
+                to      : gBrowser.to()
+            }
+        }
 
-        orig = {
-            species : gBrowser.species(),
-            chr     : gBrowser.chr(),
-            from    : gBrowser.from(),
-            to      : gBrowser.to()
-        };
-
-
+        // orig = {
+        //     species : gBrowser.species(),
+        //     chr     : gBrowser.chr(),
+        //     from    : gBrowser.from(),
+        //     to      : gBrowser.to()
+        // };
     };
 
     //// API

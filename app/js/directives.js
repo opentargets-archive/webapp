@@ -569,30 +569,30 @@ angular.module('cttvDirectives', [])
     /*
      *
      */
-    .directive('cttvTargetTranscripts', ['cttvAPIservice', function (cttvAPIservice) {
-    return {
-        restrict: 'E',
-        scope : {
-        },
-        link: function (scope, elem, attrs) {
-        var w = elem[0].parentNode.offsetWidth - 40;
-        scope.$watch (function () { return attrs.target }, function (target) {
-            if (target === "") {
-            return;
-            }
-            var newDiv = document.createElement("div");
-            newDiv.id = "cttvTargetTranscriptView";
-            elem[0].appendChild(newDiv);
+    // .directive('cttvTargetTranscripts', ['cttvAPIservice', function (cttvAPIservice) {
+    // return {
+    //     restrict: 'E',
+    //     scope : {
+    //     },
+    //     link: function (scope, elem, attrs) {
+    //     var w = elem[0].parentNode.offsetWidth - 40;
+    //     scope.$watch (function () { return attrs.target }, function (target) {
+    //         if (target === "") {
+    //         return;
+    //         }
+    //         var newDiv = document.createElement("div");
+    //         newDiv.id = "cttvTargetTranscriptView";
+    //         elem[0].appendChild(newDiv);
 
-            var tV = tnt.transcript()
-            .width(w)
-            .gene(target);
-            var tvTheme = targetTranscriptView();
-            tvTheme (tV, cttvAPIservice.getSelf(), document.getElementById("cttvTargetTranscriptView"));
-        });
-        }
-    };
-    }])
+    //         var tV = tnt.transcript()
+    //         .width(w)
+    //         .gene(target);
+    //         var tvTheme = targetTranscriptView();
+    //         tvTheme (tV, cttvAPIservice.getSelf(), document.getElementById("cttvTargetTranscriptView"));
+    //     });
+    //     }
+    // };
+    // }])
 
 
 
