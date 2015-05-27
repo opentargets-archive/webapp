@@ -196,23 +196,23 @@ var cttv_genome_browser = function() {
     .then (function (resp) {
         console.log(resp.body);
         var snps = {};
-        for (var i=0; i<resp.body.data.length; i++) {
-            var this_snp = resp.body.data[i].evidence;
-            var this_disease = resp.body.data[i].biological_object;
-            var snp_name = this_snp.evidence_chain[0].biological_object.about[0].split("/").pop();
-            if (snps[snp_name] === undefined) {
-                snps[snp_name] = {};
-                snps[snp_name].study = [];
-                snps[snp_name].name = snp_name;
-            }
-            snps[snp_name].study.push ({
-                "pmid"   : this_snp.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs[0].split("/").pop(),
-                "pvalue" : this_snp.evidence_chain[1].evidence.association_score.pvalue.value.toExponential(),
-                "name"   : this_snp.evidence_chain[0].biological_object.about[0].split("/").pop(),
-                "efo"    : this_disease.efo_info[0][0].efo_id,
-                "efo_label" : this_disease.efo_info[0][0].label
-            });
-        }
+        // for (var i=0; i<resp.body.data.length; i++) {
+        //     var this_snp = resp.body.data[i].evidence;
+        //     var this_disease = resp.body.data[i].biological_object;
+        //     var snp_name = this_snp.evidence_chain[0].biological_object.about[0].split("/").pop();
+        //     if (snps[snp_name] === undefined) {
+        //         snps[snp_name] = {};
+        //         snps[snp_name].study = [];
+        //         snps[snp_name].name = snp_name;
+        //     }
+        //     snps[snp_name].study.push ({
+        //         "pmid"   :  this_snp.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs[0].split("/").pop(),
+        //         "pvalue" : this_snp.evidence_chain[1].evidence.association_score.pvalue.value.toExponential(),
+        //         "name"   : this_snp.evidence_chain[0].biological_object.about[0].split("/").pop(),
+        //         "efo"    : this_disease.efo_info[0][0].efo_id,
+        //         "efo_label" : this_disease.efo_info[0][0].label
+        //     });
+        // }
         var snp_names = Object.keys(snps);
 
         var min = function (arr) {

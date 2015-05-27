@@ -21,10 +21,10 @@
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="node_modules/tnt.genome/build/index.css">
   
-
+  
   <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
   <script type="text/javascript" src="js/ie_console_noop.js"></script>
-
+  
   <!-- TnT -->
   <script type="text/javascript" src="node_modules/tnt.genome/build/tnt.genome.js"></script>
   <!-- <script type="text/javascript" src="node_modules/tnt.transcript/build/tnt.transcript.js"></script> -->
@@ -195,32 +195,42 @@
     <script type="text/javascript" src="vendor/biojsvispmccitation/biojsvispmccitation.js"></script>
 
     <!-- Expression Atlas -->
-    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlas/atlas.css"/>
-    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlas/jquery-ui-1.10.2.custom.min.css"/>
-    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlas/table-grid.css"/>
-    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlas/heatmap-and-anatomogram.css"/>
-    <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script> -->
-    <script type="text/javascript" src="vendor/expressionAtlas/react.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/jquery-migrate-1.2.0.min.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/factorTooltip.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/factorTooltipModule.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/contrastTooltip.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/contrastTooltipModule.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/helpTooltipsModule.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/genePropertiesTooltipModule.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/highlight.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/anatomogramModule.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/jquery.svg.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/EventEmitter-4.2.7.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/modernizr.minified.2.1.6.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/Biojs.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/AtlasHeatmapReact.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/heatmap.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlas/heatmapContainer.js"></script>
+    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/atlas.css"/>
+    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/jquery-ui-1.10.2.custom.min.css"/>
+    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/table-grid.css"/>
+    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/heatmap-and-anatomogram.css"/>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/react.min.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-migrate-1.2.0.min.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/factorTooltip.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/factorTooltipModule.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/contrastTooltip.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/contrastTooltipModule.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/helpTooltipsModule.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/genePropertiesTooltipModule.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/highlight.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/anatomogramModule.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.svg.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/EventEmitter-4.2.7.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.hc-sticky.min.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/modernizr.minified.2.1.6.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/Biojs.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/AtlasHeatmapReact.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/highcharts.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/highcharts-more.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/exporting.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/cellBaselineVariance.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/heatmap.js"></script>
+    <script type="text/javascript" src="vendor/expressionAtlasProd/heatmapContainer.js"></script>
     <!-- <script type="text/javascript" src="vendor/Biojs.ExpressionAtlasBaselineSummary.js"></script> -->
 
+    <!-- ie9 cors support -->
+    	   <!--[if lte IE 9]>
+	       <script language="JavaScript" type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.3/jquery.xdomainrequest.min.js"></script>
+	       <![endif]-->
+
+    
     <!-- Our angular stuff -->
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/controllers.js"></script>
