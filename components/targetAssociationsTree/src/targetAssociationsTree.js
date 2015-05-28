@@ -219,8 +219,6 @@ var geneAssociationsTree = function () {
             }
         })
     }
-    console.warn ("Max depth: " + maxDepth);
-    console.warn(maxDepth);
 
     // Second pass: Apply branch lengths
     for (var j=0; j<tasNodes.length; j++) {
@@ -234,8 +232,6 @@ var geneAssociationsTree = function () {
             }
         })
     }
-
-    console.log(treeVis.data());
 
     // collapse all the therapeutic area nodes
 	// if (tas !== undefined) {
@@ -283,7 +279,6 @@ var geneAssociationsTree = function () {
             "float"  : "left",
         })
         .style("border-radius", function (d) {
-            console.warn (d);
             if (d.type === "circle") {
                 return "50%"
             }
@@ -460,7 +455,6 @@ var geneAssociationsTree = function () {
 	    return config.legendText;
 	}
 	config.legendText = t;
-	console.log("new text:" + t);
 	return this;
     };
 
