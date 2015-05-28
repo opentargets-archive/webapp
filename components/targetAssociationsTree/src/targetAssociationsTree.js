@@ -12,7 +12,7 @@ var geneAssociationsTree = function () {
 	legendText : "<text>Score range</text>"
     };
     var treeVis = tnt_tree();
-    
+
     // var scale = d3.scale.quantize()
     // 	.domain([1,1])
     // 	.range(["#b2182b", "#ef8a62", "#fddbc7", "#f7f7f7", "#d1e5f0", "#67a9cf", "#2166ac"]);
@@ -61,7 +61,7 @@ var geneAssociationsTree = function () {
 
     function render (flowerView, div) {
 	var data = config.data;
-    
+
 	// tooltips
 	var nodeTooltip = function (node) {
 	    var obj = {};
@@ -77,7 +77,7 @@ var geneAssociationsTree = function () {
 		value: "<a href=" + loc + ">View evidence details</a>"
 	    });
 	    obj.rows.push({
-		value : node.is_collapsed() ? "Expand children" : "Collapse children",
+		value : node.is_collapsed() ? "Expand node" : "Collapse node",
 		link : function (n) {
 		    n.toggle();
 		    treeVis.update();
@@ -146,14 +146,33 @@ var geneAssociationsTree = function () {
 	    t.call(this, obj);
 	};
 
+    // node shapes (squares for Therapeutic areas // circles for the rest)
+    var ta_display = tnt_tree.node_display.square()
+        .size(6)
+        .fill (function (node) {
+            return scale(node.property("association_score"));
+        });
+    var node_display = tnt_tree.node_display.circle()
+        .size(8)
+        .fill (function (node) {
+            return scale(node.property("association_score"));
+        });
 	treeVis
 	    .data(config.data)
-	    .node_display(tnt_tree.node_display.circle()
-	    		  .size(8)
-	    		  .fill(function (node) {
-	    		      return scale(node.property("association_score"));
-	    		  })
-	    		 )
+        .node_display ( tnt_tree.node_display.cond()
+            .add ("ta", function (n) {
+                return (n.property('__depth') === 1);
+            }, ta_display)
+            .add ("node", function (n) {
+                return true;
+            }, node_display)
+        )
+	    // .node_display(tnt_tree.node_display.circle()
+	    // 		  .size(8)
+	    // 		  .fill(function (node) {
+	    // 		      return scale(node.property("association_score"));
+	    // 		  })
+	    // 		 )
 	    .on_click(nodeTooltip)
 	    .label(tnt_tree.label.text()
 		   .height(20)
@@ -164,7 +183,7 @@ var geneAssociationsTree = function () {
 	    		       diseaseName = diseaseName.substring(0,30) + "...";
 	    		   }
 			   if (node.is_collapsed()) {
-			       diseaseName += (" (+" + node.n_hidden() + " children)");
+			       diseaseName += (" (+" + node.n_hidden() + " diseases)");
 			   }
 	    		   return diseaseName;
 	    	       }
@@ -174,69 +193,174 @@ var geneAssociationsTree = function () {
 	    	  )
 	    .layout(tnt_tree.layout.vertical()
 	    	    .width(config.diameter)
-	    	    .scale(false)
+	    	    .scale(true)
 	    	   );
 
-	// collapse all the therapeutic area nodes
-	var root = treeVis.root();
-	var tas = root.children();
+    // Branch lengths:
+    // First pass: Get the max depth:
+    var setDepth = function (node, currDepth) {
+        node.property('__depth', currDepth);
+        var children = node.children(true) || [];
+        for (var i=0; i<children.length; i++) {
+            setDepth(children[i], currDepth+1)
+        }
+    }
+    var currDepth = 0;
+    setDepth(treeVis.root(), 0);
+	var tasNodes = treeVis.root().children();
+    var maxDepth = 0;
+    for (var i=0; i<tasNodes.length; i++) {
+        var taNode = tasNodes[i];
+        var currDepth = 0;
+        taNode.apply (function (n) {
+            var depth = n.property('__depth');
+            if (depth > maxDepth) {
+                maxDepth = depth;
+            }
+        })
+    }
+    console.warn ("Max depth: " + maxDepth);
+    console.warn(maxDepth);
 
-	if (tas !== undefined) {
-	    for (var i=0; i<tas.length; i++) {
-		tas[i].toggle();
-	    }
-	    sortNodes();
-	}
+    // Second pass: Apply branch lengths
+    for (var j=0; j<tasNodes.length; j++) {
+        var taNode = tasNodes[j];
+        taNode.property("branch_length", 1);
+        taNode.apply (function (n) {
+            if (n.children() === undefined) {
+                n.property("branch_length", 1 + (maxDepth - n.property('__depth')));
+            } else {
+                n.property("branch_length", 1);
+            }
+        })
+    }
+
+    console.log(treeVis.data());
+
+    // collapse all the therapeutic area nodes
+	// if (tas !== undefined) {
+	//     for (var i=0; i<tas.length; i++) {
+	// 	tas[i].toggle();
+	//     }
+	//     sortNodes();
+	// }
 
 	treeVis(div.node());
 
 
+    // Apply a legend on the node shapes
+    var shapeLegendDiv = div
+        .append("div")
+        .style({
+            "width" : "50%",
+            "display" : "inline-block"
+        });
+
+    var s = shapeLegendDiv.selectAll("span")
+        .data ([
+            {
+                "type" : "square",
+                "label" : "Therapeutic Area"
+            },
+            {
+                "type" : "circle",
+                "label" : "Disease"
+            }
+        ])
+        .enter()
+        .append("div")
+        .style({
+            "font-size": "12px"
+        });
+
+    s
+        .append("span")
+        .style({
+            "display": "block",
+            "width"  : "15px",
+            "height" : "15px",
+            "border" : "1px solid #777",
+            "float"  : "left",
+        })
+        .style("border-radius", function (d) {
+            console.warn (d);
+            if (d.type === "circle") {
+                return "50%"
+            }
+            return "";
+        })
+        .append("span")
+        .style({
+            "display" : "block",
+            "width"   : "100%",
+            "height"  : "100%",
+            //"float"   : "left",
+        });
+    s
+        .append("span")
+        .style({
+            "padding-right" : "5px",
+            "padding-top"   : "2px",
+            //"float"         : "left",
+            "padding-left"  : "5px"
+        })
+        .text(function (d) {
+            return d.label
+        });
+
+
 	// Apply a legend on the node's color
-	var legendBar = div
-	    .append("div")
-	    .append("svg")
-	    .attr("width", 300)
-	    .attr("height", 20)
-	    .append("g");
+    var legendBar = div
+        .append("div")
+        .style({
+            "float": "left",
+            "width" : "50%"
+        })
 
 	var legendColors = ["#ffffff", "#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
-	legendBar
-	    .append("text")
-	    .attr("x", 0)
-	    .attr("y", 10)
-	    .attr("text-anchor", "start")
-	    .attr("alignment-baseline", "central")
-	    .text("0");
-	legendBar
-	    .append("text")
-	    .attr("x", (30 + (20*legendColors.length)))
-	    .attr("y", 10)
-	    .attr("text-anchor", "start")
-	    .attr("alignment-baseline", "central")
-	    .text("1")
 
-	legendBar
-	    .append("g")
-	    .attr("transform", "translate(" + (50+(20*legendColors.length)) + ", 10)")
-	    .html(config.legendText)
-	
-	legendBar.selectAll("rect")
-	    .data(legendColors)
-	    .enter()
-	    .append("rect")
-	    .attr("x", function (d, i) {
-		return 20 + (i*20);
-	    })
-	    .attr("y", 0)
-	    .attr("width", 20)
-	    .attr("height", 20)
-	    .attr("stroke", "black")
-	    .attr("stroke-width", 1)
-	    .attr("fill", function (d) {
-		return d;
-	    });
+    legendBar
+        .append("span")
+        .style({
+            "display" : "block",
+            "float"   : "left",
+            "padding-left" : "2px"
+        })
+        .text("0");
 
-	
+    legendBar.selectAll(".legendBox")
+        .data(legendColors)
+        .enter()
+        .append("span")
+        .attr("class", "legendBox")
+        .style({
+            "display" : "block",
+            "width" : "20px",
+            "height" : "20px",
+            "border" : "0.5px solid #FFF",
+            "float" : "left",
+        })
+        .style("background", function (d) {
+            return d;
+        })
+
+    legendBar
+        .append("span")
+        .style({
+            "display" : "block",
+            "float" : "left",
+            "padding-left" : "5px",
+        })
+        .text("1");
+    legendBar
+        .append("span")
+        .style({
+            "display" : "block",
+            "float" : "left",
+            "padding-left" : "10px",
+        })
+        .html (config.legendText);
+
 	// Add titles
 	setTitles();
 	// d3.selectAll(".tnt_tree_node")
@@ -246,7 +370,7 @@ var geneAssociationsTree = function () {
 	//     });
 
     }
-    
+
     // deps: tree_vis, flower
     var theme = function (flowerView, div) {
 	var vis = d3.select(div)
@@ -270,22 +394,22 @@ var geneAssociationsTree = function () {
 	}
     };
 
-    
+
     theme.update = function () {
 	treeVis.data(config.data);
 	// collapse all the therapeutic area nodes
-	var root = treeVis.root();
-	var tas = root.children();
-	if (tas) {
-	    for (var i=0; i<tas.length; i++) {
-		tas[i].toggle();
-	    }
-	}
+	// var root = treeVis.root();
+	// var tas = root.children();
+	// if (tas) {
+	//     for (var i=0; i<tas.length; i++) {
+	// 	tas[i].toggle();
+	//     }
+	// }
 	sortNodes();
 	treeVis.update();
 	setTitles();
     };
-    
+
     // size of the tree
     theme.diameter = function (d) {
 	if (!arguments.length) {
@@ -294,7 +418,7 @@ var geneAssociationsTree = function () {
 	config.diameter = d;
 	return this;
     };
-    
+
     //
     theme.target = function (t) {
 	if (!arguments.length) {
@@ -311,7 +435,7 @@ var geneAssociationsTree = function () {
 	config.cttvApi = api;
 	return this;
     };
-    
+
     // data is object
     theme.data = function (d) {
 	if (!arguments.length) {
@@ -339,7 +463,7 @@ var geneAssociationsTree = function () {
 	console.log("new text:" + t);
 	return this;
     };
-    
+
     return theme;
 };
 

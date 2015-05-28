@@ -309,7 +309,7 @@ angular.module('cttvDirectives', [])
                     .data(data)
                     .datatypes(dts)
                     .diameter(900)
-		    .legendText("<a xlink:href='#/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a> <text alignment-baseline=central x=40>range</text>")
+		    .legendText("<a xlink:href='#/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
                     .target(attrs.target);
                 gat(fView, elem[0]);
             });
