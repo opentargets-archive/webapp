@@ -1,0 +1,565 @@
+
+
+
+
+
+
+<!DOCTYPE html>
+
+
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="eng" class="no-js">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="en-GB" http-equiv="Content-Language">
+    <meta content="_top" http-equiv="Window-target">
+    <meta content="http://www.unspam.com/noemailcollection/" name="no-email-collection">
+    <meta name="google-site-verification" content="4xV6HGqtqbEXtsFgcZGrPUSwcHb03eNNu7B_fFuwdUU" />
+
+    
+    
+    
+    
+    
+
+    
+
+    
+    
+    
+
+    
+        <base href="//www.ebi.ac.uk/gxa/"/>
+    
+
+    <!-- compliance style start -->
+
+    <meta name="description" content="EMBL-EBI">
+    <!-- Describe what this page is about -->
+    <meta name="keywords" content="bioinformatics, atlas, gxa, ebi, functional, genomics">
+    <!-- A few keywords that relate to the content of THIS PAGE (not the whol project) -->
+    <meta name="author" content="EMBL-EBI">
+    <!-- Your [project-name] here -->
+
+    <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
+
+    <!-- CSS: implied media=all -->
+    <!-- CSS concatenated and minified via ant build script-->
+
+    <link type="text/css" rel="stylesheet"
+          href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/boilerplate-style.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/ebi-global.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/ebi-visual.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/984-24-col-fluid.css"/>
+    <link type="text/css" rel="stylesheet"
+          href="//www.ebi.ac.uk/web_guidelines/css/compliance/develop/embl-petrol-colours.css"/>
+
+    <style type="text/css">
+            /* You have the option of setting a maximum width for your page, and making sure everything is centered */
+            /* body { max-width: 1600px; margin: 0 auto; } */
+    </style>
+
+    <!-- end CSS-->
+
+    <!-- All JavaScript at the bottom, except for Modernizr / Respond.
+         Modernizr enables HTML5 elements & feature detects; Respond is a polyfill for min/max-width CSS3 Media Queries
+         For optimal performance, use a custom Modernizr build: www.modernizr.com/download/ -->
+
+    <!-- Full build -->
+    <script src="//www.ebi.ac.uk/web_guidelines/js/libs/modernizr.minified.2.1.6.js"></script>
+
+    <!-- compliance style end -->
+
+    <title>Expression Atlas &lt; EMBL-EBI</title>
+
+    <link rel="stylesheet" type="text/css" href="/gxa/resources/css/atlas.css">
+    <link rel="stylesheet" type="text/css"
+          href="/gxa/resources/js/jquery-ui-1.10.2.custom/css/ui-lightness/jquery-ui-1.10.2.custom.min.css">
+    <link rel="stylesheet" type="text/css" href="/gxa/resources/css/table-grid.css">
+    <link rel="stylesheet" type="text/css"
+          href="/gxa/resources/css/heatmap-and-anatomogram.css">
+    <link rel="stylesheet" type="text/css" href="/gxa/resources/js/chosen/chosen.css">
+    <link rel="stylesheet" type="text/css" href="/gxa/resources/js/lib/jquery-tagEditor/jquery.tag-editor.css">
+    <link rel="stylesheet" type="text/css"
+          href="/gxa/resources/css/experiment-design-table.css">
+    <link media="screen" type="text/css" href="/gxa/resources/css/home.css"
+          rel="stylesheet">
+    <link media="screen" type="text/css" href="/gxa/resources/css/jqcloud.css"
+          rel="stylesheet">
+    <link media="screen" type="text/css" href="/gxa/resources/css/arrayQualityMetrics.css"
+          rel="stylesheet">
+    <link media="screen" type="text/css" href="/gxa/resources/css/ae-autocomplete.css"
+          rel="stylesheet">
+
+
+    <script language="JavaScript" type="text/javascript"
+            src="/gxa/resources/js/json2.js"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="/gxa/resources/js/jquery-1.9.1.min.js"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="/gxa/resources/js/jquery-migrate-1.2.0.min.js"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="/gxa/resources/js/jquery-ui-1.10.3.fix-8740.0520a49/dist/jquery-ui.min.js"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="/gxa/resources/js/lib/jquery-tagEditor/jquery.tag-editor.js"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="/gxa/resources/js/experiment-page-buttons-and-tooltips.js"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="/gxa/resources/js/helpTooltipsModule.js"></script>
+    <script language="JavaScript" type="text/javascript"
+            src="/gxa/resources/js/geneQueryTagEditorModule.js"></script>
+
+    <!-- fancybox start -->
+    <link rel="stylesheet"
+          href="/gxa/resources/js/fancyapps-fancyBox-0ffc358/source/jquery.fancybox.css"
+          type="text/css" media="screen"/>
+    <script type="text/javascript"
+            src="/gxa/resources/js/fancyapps-fancyBox-0ffc358/source/jquery.fancybox.pack.js"></script>
+    <!-- fancybox end -->
+
+    <script>
+        (function ($) { //self invoking wrapper function that prevents $ namespace conflicts
+            $(document).ready(function () {
+
+                initExperimentPageButtonsAndTooltips();
+                geneQueryTagEditorModule.init("#local-searchbox");
+
+                searchBoxEnterEventHandler("#submit-searchbox");
+
+                function searchBoxEnterEventHandler(element) {
+                    $('#local-search .tag-editor').on('submit', function (e) {
+                        $(element).click();
+                    });
+                }
+            });
+        })(jQuery);
+    </script>
+
+</head>
+
+<body class="gxaBody">
+
+<div id="skip-to">
+    <ul>
+        <li><a href="#content">Skip to main content</a></li>
+        <li><a href="#gxaLocalNav">Skip to local navigation</a></li>
+        <li><a href="#global-nav">Skip to EBI global navigation menu</a></li>
+        <li><a href="#global-nav-expanded">Skip to expanded EBI global navigation menu (includes all sub-sections)</a>
+        </li>
+    </ul>
+</div>
+
+<div id="wrapper" class="container_24">
+
+    
+
+
+
+<header>
+
+    <div id="global-masthead" class="masthead grid_24">
+        <!--This has to be one line and no newline characters-->
+        <a href="//www.ebi.ac.uk/" title="Go to the EMBL-EBI homepage"><img
+                src="//www.ebi.ac.uk/web_guidelines/images/logos/EMBL-EBI/EMBL_EBI_Logo_white.png"
+                alt="EMBL European Bioinformatics Institute"></a>
+
+        <nav>
+            <ul id="global-nav">
+                <!-- set active class as appropriate -->
+                <li class="first active" id="services"><a href="//www.ebi.ac.uk/services">Services</a></li>
+                <li id="research"><a href="//www.ebi.ac.uk/research">Research</a></li>
+                <li id="training"><a href="//www.ebi.ac.uk/training">Training</a></li>
+                <li id="industry"><a href="//www.ebi.ac.uk/industry">Industry</a></li>
+                <li id="about" class="last"><a href="//www.ebi.ac.uk/about">About us</a></li>
+            </ul>
+        </nav>
+
+    </div>
+
+    <div id="local-masthead" class="masthead grid_24 nomenu" style="background-color: #E1EEE9">
+
+        <!-- local-title -->
+        <!-- NB: for additional title style patterns, see http://frontier.ebi.ac.uk/web/style/patterns -->
+
+        <!-- apply grid_12 alpha class if you have a local search box in the header...
+        <div class="grid_12 alpha" id="local-title">
+        -->
+        <div class="grid_12 alpha" id="local-title">
+            <h1 style="color: #000000; text-shadow: 0px 0px #E1EEE9">
+                <a href="/gxa" title="Back to Expression Atlas homepage">
+                    <img src="/gxa/resources/images/ExpressionAtlas_logo_web.png"
+                         alt="Expression Atlas logo" width="64" height="64" style="vertical-align: bottom">Expression
+                    Atlas
+                </a>
+            </h1>
+
+        </div>
+
+        <!-- /local-title -->
+
+        <!-- local-search -->
+        <!-- NB: if you do not have a local-search, delete the following div, and drop the class="grid_12 alpha" class from local-title above -->
+
+        <div class="grid_12 omega">
+            <form method="get" action="query" name="local-search" id="local-search">
+
+                <fieldset>
+
+                    <div class="left">
+                        <label>
+                            <input id="local-searchbox" name="geneQuery" value="" maxlength="900" placeholder="(enter gene query)"/>
+                        </label>
+                    </div>
+                    <div class="left">
+                        <!-- Include some example searchterms - keep them short and few! -->
+                        <span class="examples">Examples:
+                                        <a href="/gxa/query?geneQuery=ASPM">ASPM</a>,
+                                        <a href="/gxa/query?geneQuery=REACT_284558">REACT_284558</a>,
+                                        <a href="/gxa/query?geneQuery=ENSMUSG00000021789">ENSMUSG00000021789</a>,
+                                        <a href="/gxa/query?geneQuery=%22zinc+finger%22">"zinc finger"</a></span>
+                    </div>
+
+                    <div class="right" style="position: relative; top: -30px;">
+                        <input id="submit-searchbox" class="submit" type="submit" value="Search"/>
+                        <!-- If your search is more complex than just a keyword search, you can link to an Advanced Search,
+                             with whatever features you want available -->
+                        <!--
+                        <span class="adv"><a title="Advanced" id="adv-search" href="../search">Advanced</a></span>
+                        -->
+                    </div>
+
+                </fieldset>
+
+            </form>
+        </div>
+
+        <!-- /local-search -->
+
+        <!-- gxaLocalNav -->
+
+        <nav>
+            <ul class="grid_24" id="gxaLocalNav">
+                <li id="gxaLocalNavHome" class="first active">
+                    <a href="/gxa" title="Expression Atlas homepage">Home</a>
+                </li>
+                <li id="gxaLocalNavRelease-notes">
+                    <a href="/gxa/release-notes.html" title="Release notes">Release notes</a>
+                </li>
+                <li id="gxaLocalNavFAQ">
+                    <a href="/gxa/FAQ.html" title="FAQs">FAQs</a>
+                </li>
+                <li id="gxaLocalNavDownload">
+                    <a href="/gxa/download.html" title="Download">Download</a>
+                </li>
+                <li id="gxaLocalNavHelp" class="last">
+                    <a href="/gxa/help/index.html"
+                       title="Help pages">Help</a>
+                </li>
+                <li id="gxaLocalNavAbout" class="last">
+                    <a href="/gxa/about.html"
+                       title="About Expression Atlas">About</a>
+                </li>
+                <!--
+                <li class="last"><a href="#">About [service-name]</a></li>
+                -->
+                <!-- If you need to include functional (as opposed to purely navigational) links in your local menu,
+                     add them here, and give them a class of "functional". Remember: you'll need a class of "last" for
+                     whichever one will show up last...
+                     For example: -->
+                <li class="functional last" style="float: right"><a id="feedback-link" href="feedback-form" class="icon icon-generic"
+                                               data-icon="\">Feedback</a></li>
+            </ul>
+        </nav>
+
+        <!-- /gxaLocalNav -->
+
+    </div>
+</header>
+
+<style>
+    fieldset {
+        padding: 0;
+        border: 0;
+        margin-top: 0px;
+    }
+
+    .ui-dialog .ui-state-error {
+        padding: 0px;
+    }
+
+    .validateTips {
+        border: 1px solid transparent;
+        padding: 0em;
+    }
+</style>
+
+<div style="display: none;" id="dialog-form" title="Send us feedback - we really appreciate it !">
+
+    <div id="feedback-tips" class="validateTips">Please fill this form and click the Send button.</div>
+
+    <form id="form">
+        <fieldset id="form-fields">
+            <ul>
+                <li>
+                    <div>
+                        <label for="feedback">Your feedback:</label>
+                    </div>
+                    <div>
+                        <textarea rows="4" cols="45" name="feedback" id="feedback"
+                                  class="text ui-widget-content ui-corner-all"></textarea>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <label for="email">Your email address (optional)</label>
+                    </div>
+                    <div>
+                        <input type="text" size="50" maxlength="80" name="email" id="email" value=""
+                               class="text ui-widget-content ui-corner-all"/>
+                        <input type="hidden" name="sendemail" id="sendemail" value="true"/>
+                    </div>
+                </li>
+            </ul>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    function clearLocalNav() {
+        var listItems = $("#gxaLocalNav li");
+        listItems.each(function (idx, li) {
+            var item = $(li);
+            item.removeClass("active");
+        });
+    }
+
+    $(function () {
+
+        $('#submit-searchbox').click(function(e) {
+            if (searchBoxIsEmpty()) {
+                e.preventDefault();
+            }
+        });
+
+        function searchBoxIsEmpty() {
+            return !$('#local-searchbox').val().trim();
+        }
+    });
+
+    $(function () {
+        var feedback = $("#feedback"),
+                email = $("#email"),
+                allFields = $([]).add(feedback).add(email),
+                tips = $(".validateTips");
+
+        function updateTips(text) {
+            tips.text(text).addClass("ui-state-highlight");
+            setTimeout(function () {
+                tips.removeClass("ui-state-highlight", 1500);
+            }, 500);
+        }
+
+        function checkLength(field, fieldName, min, max) {
+            var emailAddress = $.trim(field.val());
+            if (emailAddress.length > max || emailAddress.length < min) {
+                field.addClass("ui-state-error");
+                updateTips("Length of the " + fieldName + " field must be between " +
+                        min + " and " + max + " characters.");
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function checkRegexp(field, regexp, example) {
+            var emailAddress = $.trim(field.val());
+            if (!( regexp.test(emailAddress) )) {
+                field.addClass("ui-state-error");
+                updateTips(example);
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        $("#dialog-form").dialog({
+            autoOpen:false,
+            show:"blind",
+            hide:"explode",
+            height:"320",
+            width:"440px",
+            modal:true,
+            buttons:[
+                {width:"60px", text:"Send", id:"send-button", click:function () {
+                    var bValid = true;
+                    allFields.removeClass("ui-state-error");
+                    bValid = bValid && ($.trim(email.val()).length == 0
+                            || (checkRegexp(email, /^((([a-z]|\d|[!#$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i, "Email format non valid")
+                            && checkLength(email, "email", 6, 80)));
+                    bValid = bValid && checkLength(feedback, "feedback", 3, 10000);
+
+                    if (bValid) {
+                        $.ajax({
+                            type:"POST",
+                            url:"email",
+                            dataType:"json",
+                            data:{
+                                feedback: feedback.val(),
+                                email: email.val()
+                            },
+                            success:function (data) {
+                                updateTips(data);
+                            },
+                            error:function (jqXHR, statusCode) {
+                                document.location = "error-page";
+                            }
+                        });
+
+                        $("#send-button").hide();
+                        $("#form-fields").hide();
+                        $("#cancel-button").button('option', 'label', 'Close');
+
+                    }
+                }
+                },
+                {text:"Cancel", id:"cancel-button", click:function () {
+                    $(this).dialog("close");
+                }
+                }
+            ],
+            close:function () {
+                allFields.val("").removeClass("ui-state-error");
+            }
+        });
+
+        $("#feedback-link").click(function () {
+            $("#dialog-form").dialog("open");
+            return false;
+        });
+    });
+</script>
+
+
+
+    <div id="content" class="grid_24">
+
+        <div id="atlas-content">
+            
+            
+
+
+
+
+
+
+
+<div id="error-content" class="block">
+    <div class="error">
+        
+            
+                Resource not found.
+            
+            
+        
+    </div>
+</div>
+
+<div id="content" class="block">
+<a href="/gxa">Go to Expression Atlas home page</a>
+</div>
+        </div>
+
+    </div>
+
+    
+
+
+<footer>
+    
+    <div id="global-footer" class="grid_24">
+        <nav id="global-nav-expanded">
+            <div class="grid_4 alpha">
+                <h3 class="embl-ebi"><a href="//www.ebi.ac.uk/" title="EMBL-EBI">EMBL-EBI</a></h3>
+            </div>
+
+            <div class="grid_4">
+                <h3 class="services"><a href="//www.ebi.ac.uk/services">Services</a></h3>
+            </div>
+
+            <div class="grid_4">
+                <h3 class="research"><a href="//www.ebi.ac.uk/research">Research</a></h3>
+            </div>
+
+            <div class="grid_4">
+                <h3 class="training"><a href="//www.ebi.ac.uk/training">Training</a></h3>
+            </div>
+
+            <div class="grid_4">
+                <h3 class="industry"><a href="//www.ebi.ac.uk/industry">Industry</a></h3>
+            </div>
+
+            <div class="grid_4 omega">
+                <h3 class="about"><a href="//www.ebi.ac.uk/about">About us</a></h3>
+            </div>
+
+        </nav>
+
+        <section id="ebi-footer-meta" class="extra-padding">
+            <p class="address">EMBL-EBI, Wellcome Trust Genome Campus, Hinxton, Cambridgeshire, CB10 1SD, UK &nbsp;
+                &nbsp; +44 (0)1223 49 44 44</p>
+
+            <p class="legal">Copyright &copy; EMBL-EBI 2013 | EBI is an outstation of the <a href="http://www.embl.org">European
+                Molecular Biology Laboratory</a> | <a href="/about/privacy">Privacy</a> | <a href="/about/cookies">Cookies</a>
+                | <a href="/about/terms-of-use">Terms of use</a></p>
+        </section>
+
+    </div>
+
+</footer>
+
+<script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/cookiebanner.js"></script>
+<script defer="defer" src="//www.ebi.ac.uk/web_guidelines/js/foot.js"></script>
+
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-37676851-1']);
+    _gaq.push(['_trackPageview']);
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+
+
+<script>
+    var $buoop = {c:2};
+    function $buo_f(){
+        var e = document.createElement("script");
+        e.src = "//browser-update.org/update.js";
+        document.body.appendChild(e);
+    };
+    try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+    catch(e){window.attachEvent("onload", $buo_f)}
+</script>
+
+</div>
+
+</body>
+
+</html>
