@@ -69,27 +69,39 @@ angular.module('cttvDirectives', [])
             },
 
 
-            template: '<table class="table matrix-table"></table>'
-                     +'<cttv-matrix-table-legend labels="labs" legend-text="legendText" colors="colors"></cctv-matrix-table-legend>',
+            template: '<cttv-matrix-table></cttv-matrix-table>'
+                     +'<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
+                     +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
 
 
             link: function (scope, elem, attrs) {
 
 
                 var colorScale = d3.scale.linear()
-                                    .domain([0,Number.MIN_VALUE,1])
-                                    //.range(["#AAAAAA","#e9f3f8", "#2383BA"]); // blue orig
+                                    .domain([0,1])
+                                    .range(["#CBDCEA", "#005299"]); // blue orig
                                     //.range(["#DDDDDD","#FFFF00", "#fc4e2a"]); // amber-red
                                     //.range(["#DDDDDD","#5CE62E", "#40A120"]);    // green
                                     //.range(["#EEEEEE","#a6bddb", "#045a8d"]);
-                                    .range(["#EEEEEE","#eff3ff","#2171b5"])
+                                    //.range(["#EEEEEE","#eff3ff","#2171b5"])
 
                 /*
                  * Generates and returns the string representation of the span element
                  * with color information for each cell
                  */
-                var getColorStyleString = function(value){
-                    return "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
+                var getColorStyleString = function(value, href){
+
+                    var str="";
+                    if( value<=0 ){
+                        str = "<span class='no-data' title='No data'>N/A</span>";
+                    } else {
+                        str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
+                        if( href ){
+                            str = "<a href=" + href + ">" + str + "</a>";
+                        }
+                    }
+
+                    return str;
                 }
 
 
@@ -135,26 +147,28 @@ angular.module('cttvDirectives', [])
                                 datatypes.affected_pathway = _.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
                                 datatypes.animal_model = _.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
                                 var row = [];
+
                                 // Disease name
                                 var geneDiseaseLoc = "#/evidence/" + attrs.target + "/" + data.efo_code;
                                 row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
+
                                 // EFO (hidden)
                                 row.push(data.efo_code);
 
                                 // Association score
-                                row.push( getColorStyleString( data.association_score ) );
+                                row.push( getColorStyleString( data.association_score, geneDiseaseLoc ) );
                                 // Genetic association
-                                row.push( getColorStyleString( datatypes.genetic_association));
+                                row.push( getColorStyleString( datatypes.genetic_association, geneDiseaseLoc + "?sec=genetic_associations") );
                                 // Somatic mutation
-                                row.push( getColorStyleString( datatypes.somatic_mutation) );
+                                row.push( getColorStyleString( datatypes.somatic_mutation, geneDiseaseLoc + "?sec=somatic_mutations") );
                                 // Known drug
-                                row.push( getColorStyleString( datatypes.known_drug) );
+                                row.push( getColorStyleString( datatypes.known_drug, geneDiseaseLoc + "?sec=known_drugs") );
                                 // Expression atlas
-                                row.push( getColorStyleString( datatypes.rna_expression) );
+                                row.push( getColorStyleString( datatypes.rna_expression, geneDiseaseLoc + "?sec=rna_expression") );
                                 // Affected pathway
-                                row.push( getColorStyleString( datatypes.affected_pathway) );
+                                row.push( getColorStyleString( datatypes.affected_pathway, geneDiseaseLoc + "?sec=affected_pathways") );
                                 // Animal model
-                                row.push( getColorStyleString( datatypes.animal_model) );
+                                row.push( getColorStyleString( datatypes.animal_model, geneDiseaseLoc + "?sec=animal_models") );
                                 // Therapeutic area
                                 row.push(data.therapeutic_area || "");
 
@@ -180,14 +194,17 @@ angular.module('cttvDirectives', [])
                 var dtable = setupTable(table, scope.filename);
 
                 // legend stuff
-                scope.labs = [0,1];
-		scope.legendText = "Score";
+                //scope.labs = ["a","z"];
+                scope.legendText = "Score";
                 scope.colors = [];
                 for(var i=0; i<=10; i+=2){
                     var j=i/10;
                     //scope.labs.push(j);
-                    scope.colors.push( colorScale(j) );
+                    scope.colors.push( {color:colorScale(j), label:j} );
                 }
+                scope.legendData = [
+                    {label:"No data", class:"no-data"}
+                ];
 
 
 
@@ -309,7 +326,7 @@ angular.module('cttvDirectives', [])
                     .data(data)
                     .datatypes(dts)
                     .diameter(900)
-		    .legendText("<a xlink:href='#/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a> <text alignment-baseline=central x=40>range</text>")
+                    .legendText("<a xlink:href='#/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a> <text alignment-baseline=central x=40>range</text>")
                     .target(attrs.target);
                 gat(fView, elem[0]);
             });
@@ -336,27 +353,41 @@ angular.module('cttvDirectives', [])
      *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
      *   This is useful in conjunction with a spinner where you can have ng-show="loading"
      */
-    .directive('cttvDiseaseAssociations', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
+    .directive('cttvDiseaseAssociations', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionaryService', 'cttvFiltersService', function ($log, cttvAPIservice, cttvUtils, cttvDictionaryService, cttvFiltersService) {
 
         var colorScale = d3.scale.linear()
                         .domain([0,1])
-                        //.range(["#e9f3f8", "#2383BA"]);
-                        .range(["#eff3ff","#2171b5"])
+                        .range(["#CBDCEA", "#005299"]); // blue orig
 
-        var getColorStyleString = function(value){
-            return "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
+        /*
+         * Generates and returns the string representation of the span element
+         * with color information for each cell
+         */
+        var getColorStyleString = function(value, href){
+
+            var str="";
+            if( value<=0 ){
+                str = "<span class='no-data' title='No data'>N/A</span>";
+            } else {
+                str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
+                if( href ){
+                    str = "<a href=" + href + ">" + str + "</a>";
+                }
+            }
+
+            return str;
         }
 
         var cols = [
             "",
-            "Ensembl ID",
-            "Association score",
-            "Genetic association",
-            "Somatic mutations",
-            "Known drugs",
-            "RNA expression",
-            "Affected pathways",
-            "Animal models",
+            cttvDictionaryService.ENSEMBL_ID,
+            cttvDictionaryService.ASSOCIATION_SCORE,
+            cttvDictionaryService.GENETIC_ASSOCIATION,
+            cttvDictionaryService.SOMATIC_MUTATIONS,
+            cttvDictionaryService.KNOWN_DRUGS,
+            cttvDictionaryService.RNA_EXPRESSION,
+            cttvDictionaryService.AFFECTED_PATHWAYS,
+            cttvDictionaryService.MOUSE_MODELS,
             ""
         ];
 
@@ -369,13 +400,20 @@ angular.module('cttvDirectives', [])
                 filename : '@'
             },
 
-            template: '<table class="table matrix-table"></table>'
-                     +'<cttv-matrix-table-legend labels="labs" legend-text="legendText" colors="colors"></cctv-matrix-table-legend>',
+            // template: '<table class="table matrix-table"></table>'
+            //          +'<cttv-matrix-table-legend labels="labs" legend-text="legendText" colors="colors"></cctv-matrix-table-legend>',
+
+            template: '<cttv-matrix-table></cttv-matrix-table>'
+                     +'<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
+                     +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
+                     +'<div>{{filters}}</div>',
 
             link: function (scope, elem, attrs) {
 
                 // set the load progress flag to true before starting the API call
                 scope.loadprogress = true;
+
+                scope.filters = cttvFiltersService.getFilters();
 
                 cttvAPIservice.getAssociations ({
                     efo: attrs.target
@@ -456,16 +494,24 @@ angular.module('cttvDirectives', [])
 
 
                         // legend stuff
-                        scope.labs = [0,1];
-			scope.legendText = "Score";
+                        //scope.labs = ["a","z"];
+                        scope.legendText = "Score";
                         scope.colors = [];
                         for(var i=0; i<=10; i+=2){
                             var j=i/10;
                             //scope.labs.push(j);
-                            scope.colors.push( colorScale(j) );
+                            scope.colors.push( {color:colorScale(j), label:j} );
                         }
+                        scope.legendData = [
+                            {label:"No data", class:"no-data"}
+                        ];
 
                     });
+                $scope.$watch("name", function(newValue, oldValue) {
+                    if ($scope.name.length > 0) {
+                        $scope.greeting = "Greetings " + $scope.name;
+                    }
+                });
             } // end link
         }; // end return
     }])
@@ -697,7 +743,7 @@ angular.module('cttvDirectives', [])
 
 
     /*
-     *
+     *  Esssentially just a wrapper for the table tag, defined in hte template
      */
     .directive('cttvMatrixTable', function(){
         return {
@@ -705,7 +751,7 @@ angular.module('cttvDirectives', [])
             template: '<table class="table matrix-table"></table>',
             replace: true,
             link: function(scope, elem, attrs){
-
+                /*
                 var colorScale = d3.scale.linear()
                                     .domain([0,1])
                                     .range(["#e9f3f8", "#2383BA"]);
@@ -717,7 +763,7 @@ angular.module('cttvDirectives', [])
                 elem.on('$destroy', function() {
                     // remove objects from memory as required
                 });
-
+                */
             }
         }
     })
@@ -727,34 +773,48 @@ angular.module('cttvDirectives', [])
     /*
      *
      */
-    .directive('cttvMatrixTableLegend', function(){
-        var template = '<div class="matrix-table-legend matrix-table-legend-layout-h">'
-                     +    '<span class="matrix-table-legend-from" ng-show="labels.length==2">{{labels[0]}}</span>'
-                     +    '<span class="matrix-table-legend-item" ng-repeat="color in colors">'
-                     +       '<span class="matrix-table-legend-background" style="background:{{color}};"></span>'
+    .directive('cttvMatrixLegend', function(){
+        var template = '<div class="matrix-legend matrix-legend-layout-{{layout}} clearfix">'
+
+                        // label above (v layout) or left (h layout) of legend
+                     +    '<span class="matrix-legend-from" ng-show="layout==\'h\'">{{labels[0] || colors[0].label}}</span>'
+
+                        // create the color swatches
+                     +    '<span class="matrix-legend-item clearfix" ng-repeat="item in colors">'
+                     +       '<span class="matrix-legend-background" ng-style="{\'background\':item.color}" ng-class="item.class"></span>'
+                     +       '<span class="matrix-legend-background-label matrix-legend-to" ng-hide="layout==\'h\'">{{item.label}}</span>'
                      +    '</span>'
-                     +    '<span class="matrix-table-legend-to" ng-show="labels.length==2">{{labels[1]}}</span>'
-                     +    '<a ng-if="legendText!=undefined" href="#/faq#association-score"><span class="matrix-table-legend-text">{{legendText}}</span></a>'
-                     + '</div>';
+
+                        // label below (v layout) or right (h layout) of legend
+                     +    '<span class="matrix-legend-to" ng-show="layout==\'h\'">{{labels[labels.length-1] || colors[colors.length-1].label}}</span>'
+
+                     + '</div>'
+
+                     // extra info
+                     + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="#/faq#association-score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>'
+                    ;
 
         return {
             restrict: 'EA',
             template: template,
-            replace: true,
+            //replace: true,
             scope: {
                 labels: '=',
                 colors: '=',
-		legendText: '=',
+                legendText: '=',
+                layout: '@'
             },
-            link: function(scope, elem, attrs){
-
-
-
-                elem.on('$destroy', function() {
-                    // remove objects from memory as required
-                });
-
+            controller: function($scope){
+                // set the default layout
+                $scope.layout = $scope.layout ? $scope.layout : 'v';
             }
+            //link: function(scope, elem, attrs){
+
+                // elem.on('$destroy', function() {
+                //     // remove objects from memory as required
+                // });
+
+            //}
         }
     })
 
@@ -775,14 +835,19 @@ angular.module('cttvDirectives', [])
     .directive('cttvHpaTissueExpression', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
 
         var colorScale = d3.scale.linear()
-                        .domain([0,3])
+                        .domain([1,3])
                         //.range(["#80bbd7", "#2383BA"]);
                         //.range(["#DDDDDD","#A3CEE2", "#2383BA"]);
 
                         //.range(["#FFFF00", "#FF982A"]); // amber-red
                         //.range(["#5CE62E", "#40A120"]);    // green
                         //.range(["#a6bddb", "#045a8d"]);
-                        .range(["#eff3ff",/*"#bdd7e7","#6baed6",*/"#2171b5"])
+                        //.range(["#eff3ff","#2171b5"])
+                        .range(["#CBDCEA", "#005299"]); // blue orig
+
+        var labelScale = d3.scale.ordinal()
+                        .domain([1,2,3])
+                        .range(["Low", "Medium", "High"]);
 
         var getColorStyleString = function(value){
             var span="";
@@ -791,18 +856,7 @@ angular.module('cttvDirectives', [])
                 span = "<span class='value-0' title='Not expressed'>"+value+"</span>";
             } else if(value>0){
                 var c = colorScale(value);
-                var l = "";
-                switch (value){
-                    case 1:
-                        l = "low";
-                        break;
-                    case 2:
-                        l = "medium";
-                        break;
-                    case 3:
-                        l = "high";
-                        break;
-                }
+                var l = labelScale(value);
                 span = "<span style='color: "+c+"; background: "+c+";' title='Expression: "+l+"'>"+value+"</span>";
             } else {
                 span = "<span class='no-data' title='No data'>N/A</span>"
@@ -829,35 +883,14 @@ angular.module('cttvDirectives', [])
                 filename : '@'
             },
 
-            template: '<table class="table matrix-table'+/*hpa-matrix-table+*/'"></table>' // TODO: comment class back in
-
-                     +'<div class="matrix-table-legend matrix-table-legend-layout-v clearfix" style="margin-bottom:10px;">'
-
-                     +'  <div class="clearfix">'
-                     +'    <span class="matrix-table-legend-item">'
-                     +'        <span class="matrix-table-legend-background no-data">1</span>'
-                     +'    </span>'
-                     +'    <span class="matrix-table-legend-to">No data</span>'
-                     +'  </div>'
-
-                     +'  <div class="clearfix">'
-                     +'    <span class="matrix-table-legend-item">'
-                     +'        <span class="matrix-table-legend-background value-0">2</span>'
-                     +'    </span>'
-                         +'    <span class="matrix-table-legend-to">Not expressed</span>'
-                     +'  </div>'
-
-
-                     +'</div>'
-
-                     +'<cttv-matrix-table-legend labels="labs" colors="colors"></cctv-matrix-table-legend>',
+            template: '<cttv-matrix-table></cttv-matrix-table>'
+                     +'<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
+                     +'<cttv-matrix-legend colors="colors" layout="h"></cttv-matrix-legend>',
 
             link: function (scope, elem, attrs) {
 
                 // set the load progress flag to true before starting the API call
                 //scope.loadprogress = true;
-
-
 
                 // Watch for data changes
                 scope.$watch(
@@ -880,20 +913,10 @@ angular.module('cttvDirectives', [])
                                         // set hte load progress flag to false once we get the results
                                         //scope.loadprogress = false;
 
-                                        //scope.$parent.nresults = resp.body.total;
-
-
-                                        //var data = resp.body.data;
-                                        //var newData = new Array(data.length);
-                                        $log.debug(resp);
-
-                                        //var cols = ["", "RNA", "Protein"];
                                         var data = resp.body.data[scope.target].tissues;
                                         var newData = [];
 
                                         for (var tissue in data) {
-                                            $log.debug(tissue+":"+data[tissue]);
-
                                             var row = [];
                                             row.push( tissue );
                                             row.push( getColorStyleString(data[tissue].protein.level) );
@@ -921,12 +944,16 @@ angular.module('cttvDirectives', [])
 
 
                                         // legend stuff
-                                        scope.labs = ["low", "high"];
                                         scope.colors = [];
                                         for(var i=1; i<=3; i++){
-                                            //scope.labs.push(i);
-                                            scope.colors.push( colorScale(i) );
+                                            scope.colors.push( {color:colorScale(i), label:labelScale(i)} );
+                                            $log.log(i +" : "+ labelScale(i));
                                         }
+
+                                        scope.legendData = [
+                                            {label:"No data", class:"no-data"},
+                                            {label:"Not expressed", class:"value-0"}
+                                        ];
 
 
                                     },
@@ -942,3 +969,74 @@ angular.module('cttvDirectives', [])
             } // end link
         }; // end return
     }])
+
+
+
+    .directive('cttvDatatypesFilters', ['$log', 'cttvAPIservice', 'cttvFiltersService' , function ($log, cttvAPIservice, cttvFiltersService) {
+
+        return {
+
+            restrict: 'EA',
+
+            scope: {
+                //target : '=',
+                //loadprogress : '=',
+                //filename : '@'
+                //datatypes : '='
+                //filters : '='
+            },
+
+            template: '<div>'
+                     +'    <div ng-repeat="filter in filters">'
+                     +'        <div>{{filter.label}}</div>'
+                     +'        <div class="checkbox" ng-repeat="bucket in filter.filters">'
+                     +'            <label>'
+                     +'              <input type="checkbox"'
+                     +'                 value="{{bucket.id}}"'
+                     +'                 ng-checked="bucket.selected"'
+                     +'                 ng-disabled="!bucket.enabled"'
+                     +'                 ng-click="bucket.toggle()"'
+                     //+'                 ng-click="filterDataType(dataType)"'
+                     //+'                 ng-checked="dataType.selected">'
+                     +'                 <small>{{bucket.label}}</small>'
+                     +'            </label>'
+                     +'        </div>'
+                     +'    </div>'
+                     +'</div>',
+
+            link: function (scope, elem, attrs) {
+                scope.filters = cttvFiltersService.getFilters();
+                //scope.updateFilter = function(id){
+                //    cttvFiltersService.getFilter(id).toggle();
+                //}
+            },
+
+            // /controller: function(scope){
+            // /
+            // /}
+
+            /*
+
+    <accordion>
+        <accordion-group>
+          <accordion-heading>
+            <span ng-click="toggleDataTypes()">Data types</span>
+          </accordion-heading>
+          <div class="checkbox" ng-repeat="dataType in dataTypes">
+            <label>
+              <input type="checkbox"
+                 value="{{dataType.name}}"
+                 ng-click="filterDataType(dataType)"
+                 ng-checked="dataType.selected">
+                 <small>{{dataType.labelFull}}</small>
+            </label><br />
+          </div>
+        </accordion-group>
+    </accordion>
+            */
+        };
+
+    }])
+
+
+
