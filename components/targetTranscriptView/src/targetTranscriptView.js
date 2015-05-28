@@ -14,6 +14,7 @@ var transcriptViewerTheme = function () {
 
     var rest = ensembl_rest_api();
     var gwas_data = [];
+    var gwas_extent = [];
 
     var theme = function (tv, cttvRestApi, div) {
 
@@ -37,7 +38,7 @@ var transcriptViewerTheme = function () {
 		"value" : t.strand === 1 ? "Forward" : "Reverse"
 	    });
 
-	    var t = tnt.tooltip.table()
+	    tnt.tooltip.table()
 		.width(250)
 		.id(1)
 		.call(this, obj);
@@ -68,8 +69,6 @@ var transcriptViewerTheme = function () {
 		obj.rows.push({
 		    "label" : "Location",
 		    "link" : function (d) {
-			console.log(d.pos - 50);
-			console.log(d.pos + 50);
 			tv.start({
 			    from : d.pos - 50,
 			    to   : d.pos + 50
@@ -116,7 +115,6 @@ var transcriptViewerTheme = function () {
 		    console.log("NO VARIANT INFO FOR THIS SNP");
 		})
 		.then (function (resp) {
-		    console.log(resp.body);
 		    var obj = gwas_tooltip_data (data, resp.body[data.name]);
 		    t.call(elem, obj, event);
 		});
@@ -289,38 +287,52 @@ var transcriptViewerTheme = function () {
 			    .on_click(transcript_tooltip);
 		    }
 		}
-		console.log("ok");
+		var transcriptStart = d3.min (t, function (d) {
+		    return d.start;
+		});
+		var transcriptEnd = d3.max (t, function (d) {
+		    return d.end;
+		});
+
+		if ((transcriptStart > gwas_extent[0]) || (transcriptEnd < gwas_extent[1])) {
+		    var min = transcriptStart > gwas_extent[0] ? gwas_extent[0] : transcriptStart;
+		    var max = transcriptEnd < gwas_extent[1] ? gwas_extent[1] : transcriptEnd;
+		    tv
+			.start({from:min, to:max});
+		}
 		createLegend(t);
 	    });
 	tv(div);
-
+	
 	var url = cttvRestApi.url.filterby({
 	    gene : tv.gene(),
 	    datasource : "gwas",
 	    size : 1000,
 	    fields : [
-		"unique_association_fields"
+		"biological_object.efo_info", // disease
+		"evidence.evidence_chain"
 	    ]
 	});
-	cttvRestApi.call(url).
-	    then (function (resp) {
+	cttvRestApi.call(url)
+	    .then (function (resp) {
 		var snps = {};
 		for (var i=0; i<resp.body.data.length; i++) {
-		    var this_snp = resp.body.data[i].unique_association_fields;
-		    var snp_name = this_snp.snp.split("/").pop();
+		    var this_snp = resp.body.data[i].evidence;
+		    var this_disease = resp.body.data[i].biological_object;
+		    var snp_name = this_snp.evidence_chain[0].biological_object.about[0].split("/").pop();
 		    if (snps[snp_name] === undefined) {
 			snps[snp_name] = {};
 			snps[snp_name].study = [];
 			snps[snp_name].name = snp_name;
 		    }
 		    snps[snp_name].study.push ({
-			"pmid" : this_snp.pubmed_refs.split("/").pop(),
-			"pvalue" : this_snp.pvalue,
-			"name"   : this_snp.study_name,
-			"efo"    : this_snp.object.split("/").pop()
+			"pmid"   : this_snp.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs[0].split("/").pop(),
+			"pvalue" : this_snp.evidence_chain[1].evidence.association_score.pvalue.value.toExponential(),
+			"name"   : this_snp.evidence_chain[0].biological_object.about[0].split("/").pop(),
+			"efo"    : this_disease.efo_info[0][0].efo_id,
+			"efo_label" : this_disease.efo_info[0][0].label
 		    });
 		}
-		console.log(snps);
 		var snp_names = Object.keys(snps);
 
 		var min = function (arr) {
@@ -340,10 +352,12 @@ var transcriptViewerTheme = function () {
 		var var_url = rest.url.variation ({
 		    species : "human"
 		});
+
 		rest.call(var_url, {
 		    "ids" : snp_names
 		})
 		    .then (function (resp) {
+			var min_pos, max_pos;
 			gwas_data = [];
 			for (var snp_name in resp.body) {
 			    if (resp.body.hasOwnProperty(snp_name)) {
@@ -354,6 +368,10 @@ var transcriptViewerTheme = function () {
 				gwas_data.push(info)
 			    }
 			}
+			gwas_extent = d3.extent(gwas_data, function (d) {
+			    return d.pos
+			});
+			
 			tv.start();
 		    });
 	    });
