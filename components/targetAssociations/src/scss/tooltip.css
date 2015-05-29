@@ -20,4 +20,11 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=1 );
   /* IE6-9 */ }
 
+.cttv_profile_link {
+  width: 20px;
+  height: 20px;
+  background-color: green;
+  border-radius: 6px;
+  content: "P"; }
+
 /*# sourceMappingURL=tooltip.css.map */

@@ -77,29 +77,29 @@ describe ('bubbleView', function () {
 		assert.isUndefined(focusNode);
 	    });
 	});
-	describe ("onclick", function () {
-	    it('has the "onclick" method', function () {
-		assert.isDefined(view.onclick);
-	    });
-	    it('returns the current "onclick" callback on getter', function () {
-		var cbak = view.onclick();
-		assert.isDefined(cbak);
-		assert.isFunction(cbak);
-	    });
-	    it('works as a setter when a new callbck is passed', function () {
-		var cbak = function () {
-		    console.log("onclick event fired");
-		};
-		view.onclick(cbak);
-		var newcbak = view.onclick();
-		assert.equal(cbak, newcbak);
-	    });
-	    it('returns the bubble object on setter', function () {
-		var ret = view.onclick(function () {});
-		assert.isDefined(ret);
-		assert.equal(ret, view);
-	    });
-	});
+	// describe ("onclick", function () {
+	//     it('has the "onclick" method', function () {
+	// 	assert.isDefined(view.onclick);
+	//     });
+	//     it('returns the current "onclick" callback on getter', function () {
+	// 	var cbak = view.onclick();
+	// 	assert.isDefined(cbak);
+	// 	assert.isFunction(cbak);
+	//     });
+	//     it('works as a setter when a new callbck is passed', function () {
+	// 	var cbak = function () {
+	// 	    console.log("onclick event fired");
+	// 	};
+	// 	view.onclick(cbak);
+	// 	var newcbak = view.onclick();
+	// 	assert.equal(cbak, newcbak);
+	//     });
+	//     it('returns the bubble object on setter', function () {
+	// 	var ret = view.onclick(function () {});
+	// 	assert.isDefined(ret);
+	// 	assert.equal(ret, view);
+	//     });
+	// });
 	describe ("data", function () {
 	    it('has the data method', function () {
 		assert.isDefined(view.data);
@@ -210,8 +210,7 @@ describe ('bubbleView', function () {
 	it ('Sets the focus node', function () {
 	    view (fixture.el);
 	    assert.isDefined (view.focus());
-	    assert.propertyVal(view.focus().data(), "name", "Root"); 
+	    assert.propertyVal(view.focus().data(), "name", "Root");
 	});
     });
 });
-

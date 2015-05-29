@@ -2,7 +2,9 @@ var tree_node = require("tnt.tree.node");
 
 var bubblesView = function () {
     "use strict";
-    
+
+    var dispatch = d3.dispatch ("click", "mouseover", "mouseout");
+
     var conf = {
 	diameter : 600,
 	format : d3.format(",d"),
@@ -13,7 +15,8 @@ var bubblesView = function () {
 	key : "name",
 	label: "name",
 	divId : undefined,
-	onclick : function () {},
+    on : function () {},
+	//onclick : function () {},
 	duration: 1000,
 	breadcrumsClick : function () {
 	    render.focus(conf.data);
@@ -43,7 +46,7 @@ var bubblesView = function () {
     // 	.on("zoom", function () {
     // 	    redraw(svg);
     // 	});
-    
+
     /*
      * Render valid JSON data
      */
@@ -55,7 +58,7 @@ var bubblesView = function () {
 	    .append("div")
 	    .attr("id", "cttv_bubblesView_breadcrums")
 	    .attr("height","50");
-	
+
 	svg = d3.select(div)
 	    .append("svg")
 	    .attr("width", conf.diameter)
@@ -64,7 +67,7 @@ var bubblesView = function () {
 
 	bubblesView_g = svg
 	    .append("g");
-	
+
 	pack = d3.layout.pack()
 	    .value(function (d) {
 		return d[conf.value];
@@ -125,7 +128,7 @@ var bubblesView = function () {
 		.append("g")
 		.attr("transform", "translate(100, 5)")
 		.html(conf.legendText);
-	    
+
 	    // legend
 	    // 	.append("a")
 	    // 	.attr("x", 100)
@@ -134,7 +137,7 @@ var bubblesView = function () {
 	    // 	.html("<a href='xlink:href=\"http://www.google.com\"'>Hurrah!</a>");
 
 	}
-	
+
 	render.update();
 
 	var d = conf.data.data();
@@ -151,9 +154,9 @@ var bubblesView = function () {
 	if (conf.data.children()) {
 	    render.focus(conf.data);
 	}
-	
+
 	var packData = pack.nodes(conf.data.data());
-	
+
 	circle = bubblesView_g.selectAll("circle")
 	    .data(packData, function (d) {
 		if (d._parent === undefined) {
@@ -165,25 +168,38 @@ var bubblesView = function () {
 
 	// new circles
 	circle
-            .enter()
+        .enter()
 	    .append("circle")
 	    .attr("class", function (d) {
-		return "bubblesView_" + d[conf.key] + "_" + conf.divId;
+            return "bubblesView_" + d[conf.key] + "_" + conf.divId;
 	    })
 	    .classed("bubblesViewNode", true)
 
 	    .on("dblclick", function () {
-		if (d3.event.defaultPrevented) {
-		    return;
-		}
-		d3.event.stopPropagation();
+            if (d3.event.defaultPrevented) {
+                return;
+            }
+            d3.event.stopPropagation();
 	    })
-	    .on("click", function (d) {
-		if (d3.event.defaultPrevented) {
-		    return;
-		}
-		conf.onclick.call(this, tree_node(d));
-	    });
+        .on ("click", function (d) {
+            if (d3.event.defaultPrevented) {
+                return;
+            }
+            dispatch.click.call(this, tree_node(d));
+        })
+        .on ("mouseover", function (d) {
+            dispatch.mouseover.call(this, tree_node(d));
+        })
+        .on ("mouseout", function (d) {
+            dispatch.mouseout.call(this, tree_node(d));
+        })
+	    // .on("click", function (d) {
+        //     console.warn(" ===> ");
+        //     if (d3.event.defaultPrevented) {
+        //         return;
+        //     }
+        //     conf.onclick.call(this, tree_node(d));
+	    // });
 	circle.exit().remove();
 
 	// // titles
@@ -193,8 +209,8 @@ var bubblesView = function () {
 	//     })
 	//     .enter()
 	//     .append("title")
-        //     .text(function(d) { return d[conf.key] + ": " + conf.format(d[conf.value]); });	
-	
+        //     .text(function(d) { return d[conf.key] + ": " + conf.format(d[conf.value]); });
+
         //newNodes.append ("circle");
 
         //newNodes.append("text");
@@ -242,10 +258,11 @@ var bubblesView = function () {
 	    .style("cursor", "default")
 	    .attr("pointer-events", function (d) {return d.children ? "auto" : "none";})
 	    .on("click", function (d) { // only on those with pointer-events "auto" ie, on therapeutic areas labels
-		if (d3.event.defaultPrevented) {
-		    return;
-		}
-		conf.onclick.call(this, tree_node(d));
+            if (d3.event.defaultPrevented) {
+                return;
+            }
+            dispatch.click.call(this, tree_node(d));
+            //conf.onclick.call(this, tree_node(d));
 	    })
 	    .attr("fill", "navy")
 	    .attr("font-size", 10)
@@ -299,7 +316,7 @@ var bubblesView = function () {
 	    .text(function (d) {
 		return d[conf.label].substring(0, d.r / 3);
 	    });
-	
+
 	// Move labels
 	// label
 	//     .each(function (d, i) {
@@ -322,7 +339,7 @@ var bubblesView = function () {
 		return describeArc(d.x, d.y+10, d.r, 160, -160);
 	    });
 
-	
+
 	// Moving nodes
 	circle
 	    //.attr("class", "node")
@@ -345,10 +362,10 @@ var bubblesView = function () {
 	    // 	return "translate(" + d.x + "," + d.y + ")";
 	    // });
 
-	//	nodes.select("path")			   
+	//	nodes.select("path")
 
 	//nodes.select("text")
-	
+
         // nodes.select("circle")
 	//     .attr ("class", function (d) {
 	//     	return "bubblesView_" + d[conf.key] + "_" + conf.divId;
@@ -359,7 +376,7 @@ var bubblesView = function () {
 	// 	//return d.r - (d.children ? 0 : conf.labelOffset);
 	// 	return d.r;
 	//     });
-	
+
 	//circle = nodes.selectAll("circle");
 
 	// Exiting nodes
@@ -423,13 +440,13 @@ var bubblesView = function () {
 	].join(" ");
 	return d;
     }
-    
+
     function redraw (viz) {
 	viz.attr ("transform",
 		   "translate (" + d3.event.translate + ") " +
 		  "scale (" + d3.event.scale + ")");
     }
-    
+
     function focusTo (v) {
 	var k = conf.diameter / v[2];
 	var offset = conf.diameter / 2;
@@ -520,7 +537,7 @@ var bubblesView = function () {
 	conf.legendText = t;
 	return this;
     };
-    
+
     render.select = function (nodes) {
 	if (!arguments.length) {
 	    return highlight;
@@ -544,7 +561,7 @@ var bubblesView = function () {
 	}
 	return this;
     };
-    
+
     render.focus = function (node) {
 	if (!arguments.length) {
 	    return focus;
@@ -604,7 +621,7 @@ var bubblesView = function () {
 	conf.breadcrumsClick = cb;
 	return this;
     };
-    
+
     render.data = function (newData) {
 	if (!arguments.length) {
 	    return conf.data;
@@ -613,14 +630,14 @@ var bubblesView = function () {
 	return this;
     };
 
-    render.onclick = function (cbak) {
-	if (!arguments.length) {
-	    return conf.onclick;
-	}
-	conf.onclick = cbak;
-	return this;
-    };
-    
+    // render.onclick = function (cbak) {
+	// if (!arguments.length) {
+	//     return conf.onclick;
+	// }
+	// conf.onclick = cbak;
+	// return this;
+    // };
+
     render.key = function (n) {
 	if (!arguments.length) {
 	    return conf.key;
@@ -662,7 +679,8 @@ var bubblesView = function () {
     // };
 
     // render.node = tree_node;
-    return render;
+    //return render;
+    return d3.rebind (render, dispatch, "on");
 };
 
 module.exports = bubblesView;

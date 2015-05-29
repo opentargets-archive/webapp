@@ -36,7 +36,10 @@ gulp.task('default', ['lint', 'test', 'build-browser', 'build-browser-gzip']);
 
 gulp.task('sass', function () {
     return gulp.src('./index.scss')
-	.pipe(sass())
+	.pipe(sass({
+	    errLogToConsole: true
+	}))
+	.pipe(rename(outputFile + '.css'))
 	.pipe(gulp.dest(buildDir));
 });
 
@@ -56,7 +59,7 @@ gulp.task('test', ['build-browser'],  function(done) {
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['./src/**/*.js','./src/**/scss/*.scss','./test/**/*.js'], ['build-browser', 'test', 'lint']);
+    gulp.watch(['./src/**/*.js','./src/scss/*.scss','./test/**/*.js'], ['build-browser', 'test', 'lint']);
 });
 
 
