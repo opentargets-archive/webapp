@@ -36,7 +36,7 @@ var tooltips = function () {
         var obj = {};
         obj.header = "";
         //obj.header = node.property('label') + " (" + node.property("association_score") + ")";
-        obj.body = node.property('label') + " (" + node.property("association_score") + ")";;
+        obj.body = node.property('label') + " (" + node.property("association_score") + ")";
         show_deferred.call(this, obj, ev);
     };
 

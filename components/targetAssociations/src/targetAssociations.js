@@ -77,22 +77,33 @@ var geneAssociations = function () {
     // process data
     // flattening the tree (duplicates?)
     function processData (data) {
-	if (data === undefined) {
-	    return [];
-	}
-	if (data.children === undefined) {
-	    return data;
-	}
-	var therapeuticAreas = data.children;
-	for (var i=0; i<therapeuticAreas.length; i++) {
-	    var tA = therapeuticAreas[i];
-	    var taChildren = tA.children;
-	    if (taChildren === undefined) {
-		continue;
-	    }
-	    therapeuticAreas[i] = tnt_node(tA).flatten(true).data();
-	}
-	return sortData(data);
+        if (data === undefined) {
+            return [];
+        }
+
+        if (data.children === undefined) {
+            return data;
+        }
+        var therapeuticAreas = data.children;
+        for (var i=0; i<therapeuticAreas.length; i++) {
+            var tA = therapeuticAreas[i];
+            var taChildren = tA.children;
+            if (taChildren === undefined) {
+                continue;
+            }
+            var flattenChildren = tnt_node(tA).flatten(true).data().children;
+            var newChildren = [];
+            var nonRedundant = {};
+            for (var j=0; j<flattenChildren.length; j++) {
+                var childData = flattenChildren[j];
+                if (nonRedundant[childData.name] === undefined) {
+                    nonRedundant[childData.name] = 1;
+                    newChildren.push(childData);
+                }
+            }
+            tA.children = newChildren;
+        }
+        return sortData(data);
     };
 
     // process the data for bubbles display

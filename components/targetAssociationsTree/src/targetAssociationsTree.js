@@ -21,18 +21,18 @@ var geneAssociationsTree = function () {
 	.domain([0,1])
 	.range(["#ffffff", "#08519c"]);
 
-    function setTitles () {
-	d3.selectAll(".tnt_tree_node")
-	    .append("title")
-	    .text(function (d) {
-		return d.label;
-	    });
-    }
+    // function setTitles () {
+	// d3.selectAll(".tnt_tree_node")
+	//     .append("title")
+	//     .text(function (d) {
+	// 	return d.label;
+	//     });
+    // }
 
     function sortNodes () {
-	treeVis.root().sort (function (node1, node2) {
-	    return node2.n_hidden() - node1.n_hidden();
-	});
+        treeVis.root().sort (function (node1, node2) {
+            return node2.n_hidden() - node1.n_hidden();
+        });
     }
 
     function render (flowerView, div) {
@@ -255,7 +255,7 @@ var geneAssociationsTree = function () {
         .html (config.legendText);
 
 	// Add titles
-	setTitles();
+	// setTitles();
 	// d3.selectAll(".tnt_tree_node")
 	//     .append("title")
 	//     .text(function (d) {
@@ -267,8 +267,9 @@ var geneAssociationsTree = function () {
     // deps: tree_vis, flower
     var theme = function (flowerView, div) {
         tooltips
-            .flowerView(flowerView)
-            .target(config.target);
+            .treeView (treeVis)
+            .flowerView (flowerView)
+            .target (config.target);
 
 	var vis = d3.select(div)
 	    .append("div")
@@ -304,7 +305,7 @@ var geneAssociationsTree = function () {
 	// }
 	sortNodes();
 	treeVis.update();
-	setTitles();
+	// setTitles();
     };
 
     // size of the tree

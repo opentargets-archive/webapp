@@ -4,6 +4,7 @@ var deferCancel = require ("tnt.utils").defer_cancel;
 var tooltips = function () {
 
     var flowerView;
+    var treeView;
     var target;
     var datatypes;
 
@@ -54,9 +55,10 @@ var tooltips = function () {
         obj.rows.push({
             value : node.is_collapsed() ? "Expand node" : "Collapse node",
             link : function (n) {
+                leafTooltip.close();
                 n.toggle();
-                treeVis.update();
-                setTitles();
+                treeView.update();
+                //setTitles();
             },
             obj: node
         });
@@ -153,6 +155,14 @@ var tooltips = function () {
             return false;
         }
 
+    };
+
+    t.treeView = function (tree) {
+        if (!arguments.length) {
+            return treeView;
+        }
+        treeView = tree;
+        return this;
     };
 
     t.flowerView = function (view) {
