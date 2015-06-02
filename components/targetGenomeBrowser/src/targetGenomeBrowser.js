@@ -1,6 +1,8 @@
 var ensembl_rest_api = require("tnt.ensembl");
 var nav = require("cttv.genomeBrowserNav");
 var browser_tooltips = require("./tooltips.js");
+var promise = require("./promises.js");
+var RSVP = require('rsvp');
 
 var cttv_genome_browser = function() {
     "use strict";
@@ -11,10 +13,12 @@ var cttv_genome_browser = function() {
     var show_links   = true;
     var chr = 0;
 
+    var snps = {};
+    var gwas_extent;
+
     // gwas
     var rest = ensembl_rest_api();
     var gwas_data = [];
-    var gwas_extent = [];
 
     // div_ids to display different elements
     // They have to be set dynamically because the IDs contain the div_id of the main element containing the plug-in
@@ -34,7 +38,9 @@ var cttv_genome_browser = function() {
 
     // tooltips
     var tooltips = browser_tooltips()
-        .cttvRestApi (cttvRestApi);
+        .cttvRestApi (cttvRestApi)
+        .ensemblRestApi (rest)
+        .view (gB);
 
 
     // Transcript data
@@ -94,7 +100,7 @@ var cttv_genome_browser = function() {
     var gwas_display = tnt.board.track.feature.pin()
         .domain([0.3,1.2])
         .foreground_color("#3e8bad")
-        //.on_click (gwas_tooltip);
+        .on_click (tooltips.gwas);
     var gwas_guider = gwas_display.guider();
     gwas_display.guider (function (width) {
         var track = this;
@@ -183,6 +189,21 @@ var cttv_genome_browser = function() {
         .add_track(transcript_label_track)
         .add_track(transcript_track);
 
+
+    // Pipelining test
+    // var testUrl = rest.url.gene ({
+    //     id: gB.gene()
+    // });
+    // var p1 = promise (testUrl);
+    // var p2 = promise (testUrl);
+    // var p3 = rest.call(testUrl);
+    // RSVP.all([p1, p2, p3])
+    // .then (function (resps) {
+    //     console.warn (resps);
+    // });
+
+
+    // Get the non genome data!
     var url = cttvRestApi.url.filterby({
         gene : gB.gene(),
         datasource : "gwas",
@@ -192,53 +213,58 @@ var cttv_genome_browser = function() {
             "evidence.evidence_chain"
         ]
     });
-    cttvRestApi.call(url)
+
+    var snpsPromise = cttvRestApi.call(url)
     .then (function (resp) {
-        console.log(resp.body);
-        var snps = {};
-        // for (var i=0; i<resp.body.data.length; i++) {
-        //     var this_snp = resp.body.data[i].evidence;
-        //     var this_disease = resp.body.data[i].biological_object;
-        //     var snp_name = this_snp.evidence_chain[0].biological_object.about[0].split("/").pop();
-        //     if (snps[snp_name] === undefined) {
-        //         snps[snp_name] = {};
-        //         snps[snp_name].study = [];
-        //         snps[snp_name].name = snp_name;
-        //     }
-        //     snps[snp_name].study.push ({
-        //         "pmid"   :  this_snp.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs[0].split("/").pop(),
-        //         "pvalue" : this_snp.evidence_chain[1].evidence.association_score.pvalue.value.toExponential(),
-        //         "name"   : this_snp.evidence_chain[0].biological_object.about[0].split("/").pop(),
-        //         "efo"    : this_disease.efo_info[0][0].efo_id,
-        //         "efo_label" : this_disease.efo_info[0][0].label
-        //     });
-        // }
-        var snp_names = Object.keys(snps);
-
-        var min = function (arr) {
-            var m;
-            for (var i=0; i<arr.length; i++) {
-                if (m === undefined) {
-                    m = +arr[i].pvalue;
-                } else {
-                    if (m > +arr[i].pvalue) {
-                        m = arr[i].pvalue;
-                    }
-                }
+        for (var i=0; i<resp.body.data.length; i++) {
+            var this_snp = resp.body.data[i].evidence;
+            var this_disease = resp.body.data[i].biological_object;
+            var snp_name = this_snp.evidence_chain[0].biological_object.about[0].split("/").pop();
+            if (snps[snp_name] === undefined) {
+                snps[snp_name] = {};
+                snps[snp_name].study = [];
+                snps[snp_name].name = snp_name;
             }
-            return m;
+            snps[snp_name].study.push ({
+                "pmid"   :  this_snp.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs[0].split("/").pop(),
+                "pvalue" : this_snp.evidence_chain[1].evidence.association_score.pvalue.value.toExponential(),
+                "name"   : this_snp.evidence_chain[0].biological_object.about[0].split("/").pop(),
+                "efo"    : this_disease.efo_info[0][0].efo_id,
+                "efo_label" : this_disease.efo_info[0][0].label
+            });
+        }
+        var snp_names = Object.keys(snps);
+        return {
+            "snps" : snp_names,
+            "gene" : gB.gene()
         };
-
+    })
+    .then (function (objParams) {
+        var snp_names = objParams.snps;
+        var gene = objParams.gene;
         var var_url = rest.url.variation ({
             species : "human"
         });
-
-        rest.call(var_url, {
+        return rest.call(var_url, {
             "ids" : snp_names
         })
-        .then (function (resp) {
+    })
+    .then (function (resp) {
             var min_pos, max_pos;
             gwas_data = [];
+            var min = function (arr) {
+                var m;
+                for (var i=0; i<arr.length; i++) {
+                    if (m === undefined) {
+                        m = +arr[i].pvalue;
+                    } else {
+                        if (m > +arr[i].pvalue) {
+                            m = arr[i].pvalue;
+                        }
+                    }
+                }
+                return m;
+            };
             for (var snp_name in resp.body) {
                 if (resp.body.hasOwnProperty(snp_name)) {
                     var snp = resp.body[snp_name];
@@ -252,9 +278,32 @@ var cttv_genome_browser = function() {
                 return d.pos
             });
 
-            gB.start();
+            //gB.start();
+            //return gwas_extent;
+        })
+    .then (function () {
+        var geneUrl = rest.url.gene ({
+            id: gB.gene()
         });
-    });
+        return rest.call(geneUrl);
+    })
+    .then (function (geneResp) {
+        var gene = geneResp.body;
+        var gwasLength = gwas_extent[1] - gwas_extent[0];
+        var geneLength = gene.end - gene.start;
+
+        var gwasStart = ~~(gwas_extent[0] - (gwasLength/5));
+        var gwasEnd   = ~~(gwas_extent[1] + (gwasLength/5));
+        var geneStart = ~~(gene.start - (geneLength/5));
+        var geneEnd = ~~(gene.end + (geneLength/5));
+
+        var start = d3.min([gwasStart, geneStart]);
+        var end   = d3.max([gwasEnd, geneEnd]);
+
+        // We can finally start!
+        gB.chr(gene.seq_region_name);
+        gB.start({from: start, to: end});
+    })
 
 
 	// The GeneInfo Panel
