@@ -4,7 +4,7 @@ var genome_browser_nav = function () {
     var show_options = true;
     var show_title = true;
     var title = "";
-    var orig = {};
+    var orig;
     var fgColor = "#586471";
     // var chr = 0;
     var gBrowser;
@@ -69,20 +69,23 @@ var genome_browser_nav = function () {
                 }
             });
 
-        // We set up the origin:
-        if (gBrowser.gene() !== undefined) {
-            orig = {
-                species : gBrowser.species(),
-                gene    : gBrowser.gene()
-            };
-        } else {
-            orig = {
-                species : gBrowser.species(),
-                chr     : gBrowser.chr(),
-                from    : gBrowser.from(),
-                to      : gBrowser.to()
+            // We set up the origin:
+            if (!orig) {
+
+                if (gBrowser.gene() !== undefined) {
+                    orig = {
+                        species : gBrowser.species(),
+                        gene    : gBrowser.gene()
+                    };
+                } else {
+                    orig = {
+                        species : gBrowser.species(),
+                        chr     : gBrowser.chr(),
+                        from    : gBrowser.from(),
+                        to      : gBrowser.to()
+                    }
+                }
             }
-        }
 
         // orig = {
         //     species : gBrowser.species(),
@@ -111,11 +114,11 @@ var genome_browser_nav = function () {
 
     theme.show_options = function(b) {
         show_options = b;
-        return theme;
+        return this;
     };
     theme.show_title = function(b) {
         show_title = b;
-        return theme;
+        return this;
     };
 
     theme.title = function (s) {
@@ -123,7 +126,7 @@ var genome_browser_nav = function () {
             return title;
         }
         title = s;
-        return theme;
+        return this;
     };
 
     theme.foreground_color = function (c) {
@@ -131,7 +134,15 @@ var genome_browser_nav = function () {
             return fgColor;
         }
         fgColor = c;
-        return theme;
+        return this;
+    };
+
+    theme.orig = function (p) {
+        if (!arguments.length) {
+            return orig;
+        }
+        orig = p;
+        return this;
     };
 
     // theme.chr = function (c) {

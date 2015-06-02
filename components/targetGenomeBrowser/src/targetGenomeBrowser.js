@@ -1,7 +1,6 @@
 var ensembl_rest_api = require("tnt.ensembl");
 var nav = require("cttv.genomeBrowserNav");
 var browser_tooltips = require("./tooltips.js");
-var promise = require("./promises.js");
 var RSVP = require('rsvp');
 
 var cttv_genome_browser = function() {
@@ -14,7 +13,6 @@ var cttv_genome_browser = function() {
     var chr = 0;
 
     var snps = {};
-    var gwas_extent;
 
     // gwas
     var rest = ensembl_rest_api();
@@ -204,6 +202,17 @@ var cttv_genome_browser = function() {
 
 
     // Get the non genome data!
+
+    // Gene
+    var geneUrl = rest.url.gene ({
+        id: gB.gene()
+    });
+    var genePromise = rest.call(geneUrl)
+    .then (function (geneResp) {
+        return geneResp.body;
+    });
+
+    // SNPs
     var url = cttvRestApi.url.filterby({
         gene : gB.gene(),
         datasource : "gwas",
@@ -274,36 +283,40 @@ var cttv_genome_browser = function() {
                     gwas_data.push(info)
                 }
             }
-            gwas_extent = d3.extent(gwas_data, function (d) {
+            var gwas_extent = d3.extent(gwas_data, function (d) {
                 return d.pos
             });
 
-            //gB.start();
-            //return gwas_extent;
-        })
-    .then (function () {
-        var geneUrl = rest.url.gene ({
-            id: gB.gene()
+            return gwas_extent;
         });
-        return rest.call(geneUrl);
-    })
-    .then (function (geneResp) {
-        var gene = geneResp.body;
-        var gwasLength = gwas_extent[1] - gwas_extent[0];
-        var geneLength = gene.end - gene.start;
 
-        var gwasStart = ~~(gwas_extent[0] - (gwasLength/5));
-        var gwasEnd   = ~~(gwas_extent[1] + (gwasLength/5));
-        var geneStart = ~~(gene.start - (geneLength/5));
-        var geneEnd = ~~(gene.end + (geneLength/5));
+    RSVP.all([genePromise, snpsPromise])
+        .then (function (resps) {
+            var gene = resps[0];
+            var gene_extent = [gene.start, gene.end];
+            var gwas_extent = resps[1];
+            var gwasLength = gwas_extent[1] - gwas_extent[0];
+            var geneLength = gene_extent[1] - gene_extent[0];
+            //
+            var gwasStart = ~~(gwas_extent[0] - (gwasLength/5));
+            var gwasEnd   = ~~(gwas_extent[1] + (gwasLength/5));
+            var geneStart = ~~(gene_extent[0] - (geneLength/5));
+            var geneEnd   = ~~(gene_extent[1] + (geneLength/5));
+            //
+            var start = d3.min([gwasStart, geneStart]);
+            var end   = d3.max([gwasEnd, geneEnd]);
+            //
+            // We can finally start!
+            gB.chr(gene.seq_region_name);
+            navTheme.orig ({
+                from : start,
+                to : end
+            });
+            gB.start({from: start, to: end});
 
-        var start = d3.min([gwasStart, geneStart]);
-        var end   = d3.max([gwasEnd, geneEnd]);
+        });
 
-        // We can finally start!
-        gB.chr(gene.seq_region_name);
-        gB.start({from: start, to: end});
-    })
+
 
 
 	// The GeneInfo Panel
