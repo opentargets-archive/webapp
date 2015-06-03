@@ -6,8 +6,8 @@
     <!-- IE9 -->
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <!--[if lte IE 9]>
-	<script src="bower_components/aight/aight.min.js"></script>
-	<![endif]-->
+    <script src="bower_components/aight/aight.min.js"></script>
+    <![endif]-->
 
   <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" />
@@ -20,7 +20,7 @@
   <link href="node_modules/cttv.flowerView/build/flowerView.css" rel="stylesheet"/>
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="node_modules/tnt.transcript/build/index.css">
-  
+
 
   <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
   <script type="text/javascript" src="js/ie_console_noop.js"></script>
@@ -28,7 +28,7 @@
   <!-- TnT -->
   <script type="text/javascript" src="node_modules/tnt.genome/build/tnt.genome.js"></script>
   <script type="text/javascript" src="node_modules/tnt.transcript/build/tnt.transcript.js"></script>
-  
+
   <!-- CTTV Components -->
   <script type="text/javascript" src="node_modules/cttv.bubblesView/build/cttv.bubblesView.js"></script>
   <script type="text/javascript" src="node_modules/cttv.api/build/cttv.api.js"></script>
@@ -38,7 +38,7 @@
   <script type="text/javascript" src="node_modules/cttv.flowerView/build/cttv.flowerView.js"></script>
   <script type="text/javascript" src="node_modules/cttv.targetAssociationsTree/build/cttv.targetAssociationsTree.js"></script>
 
-  
+
   <!-- Web components -->
   <!-- <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script> -->
   <!-- <link rel="import" href="./web_components/cttv/target-evidence/target_evidence.html"> -->
@@ -55,7 +55,7 @@
       <div class="cttv-main-container">
 
       <!-- Masthead (search) -->
-        
+
         <div class="masthead" ng-show="location.path()!=='/intro'" ng-controller="MastheadCtrl" ng-cloak>
           <div class="container">
             <div class="row">
@@ -64,14 +64,14 @@
               <!-- CTTV logo -->
               <a href="#/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>
             </div>
-            
+
             <div class="col-xs-10" ng-controller="SearchBoxCtrl">
               <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
                 <fieldset>
-                  <div class="has-feedback search-form"> 
-          
+                  <div class="has-feedback search-form">
 
-            
+
+
                     <!-- Search box + search button -->
                     <div class="input-group">
 
@@ -84,7 +84,7 @@
                       </div>
 
                     </div>
-                    
+
                     <!-- Search in progress spinner -->
                     <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
 
@@ -94,12 +94,12 @@
 
                     <span class="small">
                         <i>
-                          Examples: <a href="#/search?q=braf">BRAF</a>, 
-                          <a href="#/search?q=carcinoma">Carcinoma</a>, 
+                          Examples: <a href="#/search?q=braf">BRAF</a>,
+                          <a href="#/search?q=carcinoma">Carcinoma</a>,
                           <a href="#/search?q=pten">PTEN</a>
                         </i>
                     </span>
-                    
+
 
                   </div>
                 </fieldset>
@@ -110,28 +110,28 @@
           </div>
         </div>
 
-      
+
       <!-- End Masthead -->
 
       <div class="container">
-	<div class="cttv-beta-ribbon">BETA</div>
-	   <!-- ie < 9? -->
-	   <!--[if lt IE 9]>
+    <div class="cttv-beta-ribbon">BETA</div>
+       <!-- ie < 9? -->
+       <!--[if lt IE 9]>
                <div class="alert alert-danger">
                  You are using an <strong>outdated browser</strong> and as a result this page is probably not displayed properly. Please <a href="http://whatbrowser.org/">upgrade your browser</a> in order to access our content properly</p>
                </div>
 <![endif]-->
-	   <!-- javascript disabled ?-->
-	   <noscript>
-	     <div class="alert alert-danger">
-	       Javasript is currently disabled or is not supported by this browser. This page relies on JavaScript to present the data in all its glory. Please enable JavaScript for full functionality.
-	     </div>
-	   </noscript>
+       <!-- javascript disabled ?-->
+       <noscript>
+         <div class="alert alert-danger">
+           Javasript is currently disabled or is not supported by this browser. This page relies on JavaScript to present the data in all its glory. Please enable JavaScript for full functionality.
+         </div>
+       </noscript>
 
-           <!-- Content --> 
+           <!-- Content -->
 
             <div ng-view autoscroll="true"></div>
-            
+
             <!-- End Content -->
 
         </div>
@@ -140,11 +140,11 @@
 
       <!-- Footer -->
       <div class="footer">
-        <div class="container"> 
+        <div class="container">
           <div class-"row">
             <div class="col-sm-3">
               <h6>INFO</h6>
-              <p>CTTV Core Beta Version 0.2.0</p>
+              <p>CTTV Core Beta Version 0.3.0</p>
               <p><a href="#/release-notes">Release notes</a></p>
             </div>
             <div class="col-sm-3">
@@ -174,7 +174,7 @@
 
 
 
-    
+
 
 
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
@@ -187,7 +187,7 @@
 
     <!-- lodash -->
     <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
-    
+
     <!-- PMC Citation -->
     <!-- <link type="text/css" rel="stylesheet" href="node_modules/biojs-vis-pmccitation/css/style.css"/> -->
     <!-- <script type="text/javascript" src="node_modules/biojs-vis-pmccitation/build/biojsvispmccitation.js"></script> -->
@@ -226,6 +226,9 @@
     <script type="text/javascript" src="js/controllers.js"></script>
     <script type="text/javascript" src="js/services.js"></script>
     <script type="text/javascript" src="js/api-service.js"></script>
+    <script type="text/javascript" src="js/dictionary-service.js"></script>
+    <script type="text/javascript" src="js/const-service.js"></script>
+    <script type="text/javascript" src="js/filters-service.js"></script>
     <script type="text/javascript" src="js/filters.js"></script>
     <script type="text/javascript" src="js/search-box-controller.js"></script>
     <script type="text/javascript" src="js/target-associations-controller.js"></script>
@@ -250,7 +253,7 @@
       ga('create', 'UA-60169661-1', 'auto');
       //ga('send', 'pageview');
       </script>
-    
+
 </body>
 
 

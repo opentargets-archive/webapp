@@ -1,20 +1,28 @@
- <!-- search app / results -->
+<div class="partial-page">
+    <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
-<div>
-	<!-- <h3 view-title>Targets associated with <span ng-class="(search.label!==undefined) ? '' : 'text-lowlight'">{{search.label || search.query}}<span cttv-progress-spinner size:"1" ng-show="!search.label"></span></span></h3>-->
+    <h3 view-title>Targets associated with {{search.label}}</h3>
 
-	<h3 view-title>Targets associated with {{search.label}}</h3>
+    <p class="small"><a href="#/disease/{{search.query}}">View disease profile</a></p>
+    <div class="h6">Found {{nresults}} evidence</div>
 
-	<p class="small"><a href="#/disease/{{search.query}}">View disease profile</a></p>
-	<div class="h6">Found {{nresults}} evidence</div>
+    <!-- <div id="myflower"></div>-->
 
-	<!-- <div id="myflower"></div> -->
 
-	<!-- Loading progress spinner -->
-	<div style="height:400px; width:100%; text-align:center; padding-top:50px" ng-show="loading">
-		<span cttv-progress-spinner size="3" class="text-lowlight"></span>
-	</div>
+    <div class="row">
+        <div class="col-md-3">
+            <!-- <div ng-click="cttvFiltersService.initFilters()">X reset filters</div> -->
+            <cttv-datatypes-filters></cttv-datatypes-filters>
+        </div>
 
-	<cttv-disease-associations target="{{search.query}}" diameter=800 filename="targets_associated_with_{{search.filename}}" loadprogress="loading"></cttv-disease-associations>
+        <div class="col-md-9">
+            <!-- Loading progress spinner
+            <div style="width:100%; text-align:center; padding-top:50px; position:absolute" ng-show="loading">
+                <span cttv-progress-spinner size="3" class="text-lowlight"></span>
+            </div>-->
+            <cttv-disease-associations target="{{search.query}}" filename="targets_associated_with_{{search.filename}}" loadprogress="loading"></cttv-disease-associations>
+        </div>
+    </div>
+
 </div>
 <!-- end search results-->
