@@ -48,7 +48,8 @@
   },
   "dependencies": {
     "lodash": "^3.6.0",
-    "tnt.tooltip": "^0.0.8",
-    "tnt.tree.node": "^0.0.4"
+    "tnt.tooltip": "^0.0.10",
+    "tnt.tree.node": "^0.0.4",
+    "tnt.utils": "^0.0.1"
   }
 }

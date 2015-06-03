@@ -1,123 +1,42 @@
-var tnt_tooltip = require("tnt.tooltip");
 var tnt_node = require("tnt.tree.node");
 var _ = require("lodash");
+var bubbles_tooltips = require("./tooltips.js");
 
 var geneAssociations = function () {
     var config = {
 	target : "",
 	diameter : 1000,
 	cttvApi : undefined,
-	datatypes : {
-	    "genetic_association": "Genetics",
-	    "somatic_mutations": "Somatic",
-	    "known_drugs": "Drugs",
-	    "rna_expression": "RNA",
-	    "affected_pathways": "Pathways",
-	    "animal_models": "Models"
-	}
     };
 
     var bubblesView;
-    var flowerView;
-    
+    var tooltips = bubbles_tooltips();
+    //var flowerView;
+
     // This code is duplicated several times now (controllers, directives and components)
-    function lookDatasource (arr, dsName) {
-    	for (var i=0; i<arr.length; i++) {
-    	    var ds = arr[i];
-    	    if (ds.datatype === dsName) {
-    		return {
-    		    "count": ds.evidence_count,
-    		    "score": ds.association_score
-    		};
-    	    }
-    	}
-    	return {
-    	    "count": 0,
-    	    "score": 0
-    	};
-    }
-    // This code is duplicated several times now (controllers, directives and components)
-    var hasActiveDatatype =function (checkDatatype) {
-	for (var datatype in config.datatypes) {
-	    if (datatype === checkDatatype) {
-		return true;
-	    }
-	}
-	return false;
-    };
 
     function render (div) {
-	var data = config.data;
+        var data = config.data;
 
-	// Set up the bubbles view correctly
-	bubblesView
-	    .data(config.root)
-	    .value("association_score")
-	    .key("efo_code")
-	    .label("label")
-	    .diameter(config.diameter)
-	    .legendText("<text>Current</text> <a xlink:href='#/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\"x=52> score</text></a> <text x=90>range</text>");
-	
-	var tree = bubblesView.data();
+        // Set up the bubbles view correctly
 
-	// Tooltips
-	var bubble_tooltip = function (node) {
-	    // toplevel root is not shown in the bubbles view
-	    if (node.parent() === undefined) {
-		return;
-	    }
+        bubblesView
+            .data(config.root)
+            .value("association_score")
+            .key("efo_code")
+            .label("label")
+            .diameter(config.diameter)
+            .legendText("<text>Current</text> <a xlink:href='#/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\"x=52> score</text></a> <text x=90>range</text>");
 
-	    var obj = {};
-	    var score = node.property("association_score");
-	    obj.header = node.property("label") + " (Association Score: " + score + ")";
-	    var loc = "#/evidence/" + config.target + "/" + node.property("efo_code");
-	    obj.body="<a class='cttv_flowerLink' href=" + loc + "><div></div></a><a href=" + loc + ">View evidence details</a>";
+        var tree = bubblesView.data();
 
-	    var leafTooltip = tnt_tooltip.plain()
-		.id(1)
-		.width(180);
+        // Tooltips
 
-	    //Hijack of the fill callback
-	    var tableFill = leafTooltip.fill();
-
-	    //Pass a new fill callback that calls the original one and decorates with flowers
-	    leafTooltip.fill(function (data) {
-		tableFill.call(this, data);
-		var flowerData = [];
-		
-	    });
-	    
-	    leafTooltip.fill(function (data) {
-		tableFill.call(this, data);
-		var nodeDatatypes = node.property("datatypes");
-		var datatypes = {};
-		datatypes.genetic_association = lookDatasource(nodeDatatypes, "genetic_association");
-		datatypes.somatic_mutation = lookDatasource(nodeDatatypes, "somatic_mutation");
-		datatypes.known_drug = lookDatasource(nodeDatatypes, "known_drug");
-		datatypes.rna_expression = lookDatasource(nodeDatatypes, "rna_expression");
-		datatypes.affected_pathway = lookDatasource(nodeDatatypes, "affected_pathway");
-		datatypes.animal_model = lookDatasource(nodeDatatypes, "animal_model");
-		var flowerData = [
-		    {"value": datatypes.genetic_association.score, "label": "Genetics", "active": hasActiveDatatype("genetic_association")},
-		    {"value":datatypes.somatic_mutation.score,  "label":"Somatic", "active": hasActiveDatatype("somatic_mutation")},
-		    {"value":datatypes.known_drug.score,  "label":"Drugs", "active": hasActiveDatatype("known_drug")},
-		    {"value":datatypes.rna_expression.score,  "label":"RNA", "active": hasActiveDatatype("rna_expression")},
-		    {"value":datatypes.affected_pathway.score,  "label":"Pathways", "active": hasActiveDatatype("affected_pathway")},
-		    {"value":datatypes.animal_model.score,  "label":"Models", "active": hasActiveDatatype("animal_model")}
-		];
-		// for (var datatype in config.datatypes) {
-		//     if (config.datatypes.hasOwnProperty(datatype)) {
-		// 	flowerData.push({
-		// 	    "value": lookDatasource(nodeDatatypes, datatype).score, "label": config.datatypes[datatype]});
-		//     }
-		// }
-		flowerView.values(flowerData)(this.select("div").node());
-	    });
-	    
-	    leafTooltip.call(this, obj);
-	};
-	bubblesView
-	    .onclick (bubble_tooltip);
+        bubblesView
+            .on("click", tooltips.click)
+            .on("mouseover", tooltips.mouseover)
+            .on("mouseout", tooltips.mouseout);
+	    //.onclick (bubble_tooltip);
 	//.onclick (function (d) {bView.focus(bView.node(d))})
 	// Render
 	bubblesView(div.node());
@@ -127,19 +46,23 @@ var geneAssociations = function () {
 
     var ga = function (bubbles, flower, div) {
 	bubblesView = bubbles;
-	flowerView = flower;
+    tooltips
+        .flowerView(flower)
+        .target(config.target);
+
+	//flowerView = flower;
 	var vis = d3.select(div)
 	    .append("div")
 	    .style("position", "relative");
+
 	if ((config.data === undefined) && (config.cttvApi !== undefined)) {
 	    var api = config.cttvApi;
 	    var url = api.url.associations({
-		gene: config.target,
-		datastructure: "tree"
+            gene: config.target,
+            datastructure: "tree"
 	    });
 	    api.call(url)
 		.then (function (resp) {
-		    //var data = JSON.parse(resp).data;
 		    var data = resp.body.data;
 		    ga.data(data);
 		    // processData(data);
@@ -154,24 +77,35 @@ var geneAssociations = function () {
     // process data
     // flattening the tree (duplicates?)
     function processData (data) {
-	if (data === undefined) {
-	    return [];
-	}
-	if (data.children === undefined) {
-	    return data;
-	}
-	var therapeuticAreas = data.children;
-	for (var i=0; i<therapeuticAreas.length; i++) {
-	    var tA = therapeuticAreas[i];
-	    var taChildren = tA.children;
-	    if (taChildren === undefined) {
-		continue;
-	    }
-	    therapeuticAreas[i] = tnt_node(tA).flatten(true).data();
-	}
-	return sortData(data);
+        if (data === undefined) {
+            return [];
+        }
+
+        if (data.children === undefined) {
+            return data;
+        }
+        var therapeuticAreas = data.children;
+        for (var i=0; i<therapeuticAreas.length; i++) {
+            var tA = therapeuticAreas[i];
+            var taChildren = tA.children;
+            if (taChildren === undefined) {
+                continue;
+            }
+            var flattenChildren = tnt_node(tA).flatten(true).data().children;
+            var newChildren = [];
+            var nonRedundant = {};
+            for (var j=0; j<flattenChildren.length; j++) {
+                var childData = flattenChildren[j];
+                if (nonRedundant[childData.name] === undefined) {
+                    nonRedundant[childData.name] = 1;
+                    newChildren.push(childData);
+                }
+            }
+            tA.children = newChildren;
+        }
+        return sortData(data);
     };
-    
+
     // process the data for bubbles display
     // All the leaves are set under the therapeutic areas
     // function processData (data) {
@@ -210,7 +144,7 @@ var geneAssociations = function () {
 	var dataSorted = _.sortBy(data.children, function (d) {
             return d.children ? -d.children.length : 0;
 	});
-	
+
 	for (var i=0; i<data.children.length; i++) {
 	    data.children[i].children = _.sortBy (data.children[i].children, function (d) {
 	        return -d.association_score;
@@ -231,7 +165,7 @@ var geneAssociations = function () {
 	config.root = tnt_node(config.data);
     	return this;
     };
-    
+
     ga.target = function (t) {
 	if (!arguments.length) {
 	    return config.target;
@@ -258,9 +192,10 @@ var geneAssociations = function () {
 
     ga.datatypes = function (dts) {
     	if (!arguments.length) {
-    	    return config.datatypes;
+    	    return tooltips.datatypes();
     	}
-    	config.datatypes = dts;
+        tooltips.datatypes(dts);
+    	//config.datatypes = dts;
     	return this;
     };
 
@@ -271,7 +206,7 @@ var geneAssociations = function () {
 	    .data(config.root);
 	bubblesView.update();
     };
-    
+
     ga.selectTherapeuticArea = function (efo) {
 	var taNode = config.root.find_node (function (node) {
 	    return node.property("efo_code") == efo || node.property("name") == efo;
@@ -316,7 +251,7 @@ var geneAssociations = function () {
 	}
 	return this;
     };
-    
+
     return ga;
 };
 

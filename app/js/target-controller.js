@@ -155,14 +155,14 @@ angular.module('cttvControllers')
                                 $http.get("https://www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json")
                                     .success (function (data) {
                                         var entryImgs = data[firstStructure].entry.all.image;
-                                    for (var i=0; i<entryImgs.length; i++) {
-                                    if (entryImgs[i].filename === (firstStructure + "_deposited_chain_front")) {
-                                        $scope.pdb.thumbnailUrl = "https://www.ebi.ac.uk/pdbe/static/entry/" + entryImgs[i].filename + data.image_suffix[2]; // 400x400 image
-                                        $scope.pdb.alt = entryImgs[i].alt;
-                                        $scope.pdb.description = $sce.trustAsHtml(entryImgs[i].description);
-                                        return;
-                                    }
-                                    }
+					for (var i=0; i<entryImgs.length; i++) {
+					    if (entryImgs[i].filename === (firstStructure + "_deposited_chain_front")) {
+						$scope.pdb.thumbnailUrl = "https://www.ebi.ac.uk/pdbe/static/entry/" + entryImgs[i].filename + data.image_suffix[2]; // 400x400 image
+						$scope.pdb.alt = entryImgs[i].alt;
+						$scope.pdb.description = $sce.trustAsHtml(entryImgs[i].description);
+						return;
+					    }
+					}
                                     })
                                     .error (function (data) {
                                         console.log("ERROR FROM PDB:");
@@ -181,11 +181,9 @@ angular.module('cttvControllers')
                                 }
                                 $scope.pathways = pathwaysArr;
 
-                        // Drugs
-                        var drugs = resp.drugbank;
-                        console.log("Drugs: ");
-                        console.log(drugs);
-                        $scope.drugs = drugs;
+				// Drugs
+				var drugs = resp.drugbank;
+				$scope.drugs = drugs;
 
                                 // Bibliography
                                 var bibliography = _.filter(resp.dbxrefs, function (t) {return t.match(/^PubMed/)});
@@ -194,14 +192,9 @@ angular.module('cttvControllers')
                                 $scope.pmids = bibliographyStr;
                                 $scope.pmidsLinks = (_.map(cleanBibliography,function (p) {return "EXT_ID:" + p})).join(" OR ");
 
-                                // test
-                                $scope.test="hello world";
-
-                                // Update the bindings
-                                //$scope.$apply();
                             },
                             // error handler
-                            function(){}
+                            function(){
+			    }
                         );
-                    $scope.test1="helllotesst 1";
                 }]);
