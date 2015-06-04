@@ -70,17 +70,18 @@ angular.module('cttvServices').
 
 
         /**/
-        var activeRequests = 0;
+        cttvAPI.activeRequests = 0;
         function countRequest(b){
             if(b===false){
-                activeRequests--;
+                cttvAPI.activeRequests--;
             } else if (b===true){
-                activeRequests++;
+                cttvAPI.activeRequests++;
             }
-            $log.debug("activeRequests: "+activeRequests);
         }
 
-
+        //cttvAPI.activeRequests = function(){
+        //    return activeRequests;
+        //}
 
         function isSuccess(status) {
             return 200 <= status && status < 300;

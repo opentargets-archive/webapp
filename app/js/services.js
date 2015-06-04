@@ -11,7 +11,7 @@ angular.module('cttvServices', []).
      * This talks to the API service
      */
     factory('cttvUtils', ['$log', function($log) {
-        
+
 
         var cttvUtilsService = {};
 
@@ -20,7 +20,7 @@ angular.module('cttvServices', []).
         /**
          * Set the default tabletools (i.e.) options, including the export button
          * @param obj: the datatable config object, or an empty object
-         * @param title: the name to be used to save the file. 
+         * @param title: the name to be used to save the file.
          *               E.g. "bob" will produce bob.pdf and bob.csv when exporting in those formats.
          *
          */
@@ -30,11 +30,11 @@ angular.module('cttvServices', []).
             obj.sDom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
             obj.oTableTools= {
                     "sSwfPath": "swfs/copy_csv_xls_pdf.swf",
-                    "aButtons": [ 
+                    "aButtons": [
                         {
                             "sExtends":    "collection",
                             "sButtonText": "<span class='fa fa-download'>",
-                            "aButtons": [ 
+                            "aButtons": [
                                 {
                                     "sExtends": "copy",
                                     "sButtonText": "<span class='fa fa-files-o' style='padding-right:7px'></span>Copy"
@@ -43,7 +43,7 @@ angular.module('cttvServices', []).
                                     "sExtends": "csv",
                                     "sButtonText": "<span class='fa fa-file-excel-o' style='padding-right:7px'></span>Excel/CSV",
                                     "sTitle": title
-                                },  
+                                },
                                 {
                                     "sExtends": "pdf",
                                     "sButtonText": "<span class='fa fa-file-pdf-o' style='padding-right:7px'></span>PDF",
@@ -63,5 +63,10 @@ angular.module('cttvServices', []).
 
         return cttvUtilsService;
     }]);
+
+
+
+
+
 
 
