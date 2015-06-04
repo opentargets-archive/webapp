@@ -183,7 +183,7 @@ angular.module('cttvServices').
 
             // loop thorugh the facets
             // we probably don't want to do anything with datatypes I guess...
-
+/*
             for (var collection in facets) {
                 if (facets.hasOwnProperty(collection)) {
                     if(collection!=cttvConsts.DATATYPES){
@@ -202,7 +202,8 @@ angular.module('cttvServices').
                     }
                 }
             }
-        }
+*/
+       }
 
         cttvFiltersService.initFilters();
 
