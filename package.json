@@ -39,7 +39,7 @@
     "prestart": "npm install",
     "start": "cd server && node server.js",
     "pretest": "npm install",
-    "test": "(cd components/bubblesView/ && npm test) && (cd components/cttvApi/ && npm test) && (cd components/targetAssociations && gulp test) && (gulp test)",
+    "test": "(cd components/bubblesView/ && npm test) && (cd components/cttvApi/ && npm test) && (cd components/targetAssociations && gulp test) && (cd components/targetGenomeBrowser && gulp test) && (gulp test)",
     "test-single-run": "karma start tests/unit/karma.conf.js  --single-run",
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
