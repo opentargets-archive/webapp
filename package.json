@@ -34,7 +34,7 @@
     "shelljs": "^0.2.6"
   },
   "scripts": {
-    "preinstall": "(cd components/bubblesView/ && npm install); (cd components/cttvApi && npm install); (cd components/targetAssociations && npm install); (cd components/flowerView && npm install); (cd components/targetAssociationsTree && npm install); (cd components/targetGenomeBrowser && npm install)",
+    "preinstall": "(cd components/bubblesView/ && npm install && npm test); (cd components/cttvApi && npm install && npm test); (cd components/targetAssociations && npm install && npm test); (cd components/flowerView && npm install && npm test); (cd components/targetAssociationsTree && npm install && npm test); (cd components/targetGenomeBrowser && npm install && npm test)",
     "postinstall": "bower install; node_modules/.bin/webdriver-manager update; (cd app && npm install && npm update)",
     "prestart": "npm install",
     "start": "cd server && node server.js",
