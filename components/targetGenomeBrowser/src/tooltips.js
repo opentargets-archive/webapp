@@ -10,13 +10,11 @@ var tooltips = function () {
 
     var m = {};
 
-    // Tooltip on GWAS
-    m.gwas = function (data) {
-        var tooltip_data = function (data, ensembl_data) {
-            var obj = {};
-            obj.header = data.name;
-            obj.rows = [];
-            if (ensembl_data) {
+    var snp_data = function (data, ensembl_data) {
+        var obj = {};
+        obj.header = data.name;
+        obj.rows = [];
+        if (ensembl_data) {
             obj.rows.push({
                 "label" : "Ancestral allele",
                 "value" : ensembl_data.ancestral_allele
@@ -44,23 +42,27 @@ var tooltips = function () {
                 obj : data,
                 value : "Jump to sequence"
             });
-            }
-            if (data.study.length) {
+        }
+        if (data.study && data.study.length) {
             obj.rows.push({
                 "label" : "Associations",
                 "value" : ""
             });
-            }
+
             for (var i=0; i<data.study.length; i++) {
-            obj.rows.push({
-                "label" : "<a href='/#/disease/" + data.study[i].efo + "'>" + data.study[i].efo + '</a>',
-                "value" : data.study[i].pvalue + " <a target=_blank href='http://europepmc.org/search?query=" + data.study[i].pmid + "'><i class='fa fa-newspaper-o'></i></a>"
-            })
+                obj.rows.push({
+                    "label" : "<a href='/#/disease/" + data.study[i].efo + "'>" + data.study[i].efo_label + '</a>',
+                    "value" : data.study[i].pvalue + " <a target=_blank href='http://europepmc.org/search?query=" + data.study[i].pmid + "'><i class='fa fa-newspaper-o'></i></a>"
+                })
             }
+        }
 
-            return obj;
-        };
+        return obj;
 
+    };
+
+    // Tooltip on GWAS
+    m.snp = function (data) {
         var t = tnt.tooltip.table()
             .width(250)
             .id(id);
@@ -78,7 +80,7 @@ var tooltips = function () {
             console.log("NO VARIANT INFORMATION FOR THIS SNP");
         })
         .then (function (resp) {
-            var obj = tooltip_data (data, resp.body[data.name]);
+            var obj = snp_data (data, resp.body[data.name]);
             t.call (elem, obj, event);
         });
         spinner.call (elem, {

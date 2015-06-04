@@ -1,6 +1,8 @@
 var ensembl_rest_api = require("tnt.ensembl");
 var nav = require("cttv.genomeBrowserNav");
 var browser_tooltips = require("./tooltips.js");
+var async = require("./callbacks.js");
+var aggregation = require("./aggregation.js");
 var RSVP = require('rsvp');
 
 var cttv_genome_browser = function() {
@@ -90,38 +92,66 @@ var cttv_genome_browser = function() {
     );
 
     // TRACKS!
+
+    // ClinVar track
+    var clinvar_updater = tnt.board.track.data.retriever.sync()
+        .retriever (function () {
+            return async.data.clinvar;
+        });
+
+    var clinvar_display = tnt.board.track.feature.pin()
+        .domain([0.3, 1.2])
+        .foreground_color("#3e8bad")
+        .on("click", tooltips.snp)
+        .layout(tnt.board.track.layout()
+            .elements(aggregation)
+        );
+
+    var clinvar_track = tnt.board.track()
+        .label("ClinVar snps")
+        .height(60)
+        .background_color("white")
+        .display(clinvar_display)
+        .data (tnt.board.track.data()
+            .update( clinvar_updater )
+        );
+
     // Gwas track
     var gwas_updater = tnt.board.track.data.retriever.sync()
         .retriever (function () {
-        return gwas_data;
+            return async.data.gwas;
         });
     var gwas_display = tnt.board.track.feature.pin()
         .domain([0.3,1.2])
         .foreground_color("#3e8bad")
-        .on_click (tooltips.gwas);
-    var gwas_guider = gwas_display.guider();
-    gwas_display.guider (function (width) {
-        var track = this;
-        var p0_offset = 16.11;
-        var p05_offset = 43.88
+        .on("click", tooltips.snp)
+        .layout(tnt.board.track.layout()
+            .elements(aggregation)
+        );
 
-        // pvalue 0
-        track.g
-        .append("line")
-        .attr("x1", 0)
-        .attr("y1", p0_offset)
-        //.attr("y1", y_offset)
-        .attr("x2", width)
-            .attr("y2", p0_offset)
-        //.attr("y2", y_offset)
-        .attr("stroke", "lightgrey");
-        track.g
-        .append("text")
-        .attr("x", width - 50)
-        .attr("y", p0_offset + 10)
-        .attr("font-size", 10)
-        .attr("fill", "lightgrey")
-        .text("pvalue 0");
+    //var gwas_guider = gwas_display.guider();
+    // gwas_display.guider (function (width) {
+    //     var track = this;
+    //     var p0_offset = 16.11;
+    //     var p05_offset = 43.88
+    //
+    //     // pvalue 0
+    //     track.g
+    //     .append("line")
+    //     .attr("x1", 0)
+    //     .attr("y1", p0_offset)
+    //     //.attr("y1", y_offset)
+    //     .attr("x2", width)
+    //         .attr("y2", p0_offset)
+    //     //.attr("y2", y_offset)
+    //     .attr("stroke", "lightgrey");
+    //     track.g
+    //     .append("text")
+    //     .attr("x", width - 50)
+    //     .attr("y", p0_offset + 10)
+    //     .attr("font-size", 10)
+    //     .attr("fill", "lightgrey")
+    //     .text("pvalue 0");
 
         // pvalue 0.5
         // track.g
@@ -140,9 +170,9 @@ var cttv_genome_browser = function() {
         // 	.text("pvalue 0.5");
 
         // continue with rest of guider
-        gwas_guider.call(track, width);
+        //gwas_guider.call(track, width);
 
-    });
+    //});
 
     var gwas_track = tnt.board.track()
         .label("GWAS snps")
@@ -164,7 +194,7 @@ var cttv_genome_browser = function() {
                 }
                 return "red";
             })
-            .on_click (tooltips.gene)
+            .on("click", tooltips.gene)
         )
         .data(transcript_data);
 
@@ -183,6 +213,7 @@ var cttv_genome_browser = function() {
 	gBrowser
         //.add_track(gene_track)
         .add_track(gwas_track)
+        .add_track(clinvar_track)
         .add_track(sequence_track)
         .add_track(transcript_label_track)
         .add_track(transcript_track);
@@ -208,103 +239,60 @@ var cttv_genome_browser = function() {
         id: gB.gene()
     });
     var genePromise = rest.call(geneUrl)
-    .then (function (geneResp) {
-        return geneResp.body;
-    });
+    .then (async.gene);
 
-    // SNPs
+    // SNPs ClinVar
     var url = cttvRestApi.url.filterby({
         gene : gB.gene(),
-        datasource : "gwas",
+        datasource : ["eva"],
         size : 1000,
         fields : [
             "biological_object.efo_info", // disease
             "evidence.evidence_chain"
         ]
     });
+    var snpsClinVarPromise = cttvRestApi.call(url)
+        .then (async.cttv_clinvar)
+        .then (async.ensembl_call_snps)
+        .then (async.ensembl_parse_snps)
+        .then (async.ensembl_parse_clinvar_snps)
 
-    var snpsPromise = cttvRestApi.call(url)
-    .then (function (resp) {
-        for (var i=0; i<resp.body.data.length; i++) {
-            var this_snp = resp.body.data[i].evidence;
-            var this_disease = resp.body.data[i].biological_object;
-            var snp_name = this_snp.evidence_chain[0].biological_object.about[0].split("/").pop();
-            if (snps[snp_name] === undefined) {
-                snps[snp_name] = {};
-                snps[snp_name].study = [];
-                snps[snp_name].name = snp_name;
-            }
-            snps[snp_name].study.push ({
-                "pmid"   :  this_snp.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs[0].split("/").pop(),
-                "pvalue" : this_snp.evidence_chain[1].evidence.association_score.pvalue.value.toExponential(),
-                "name"   : this_snp.evidence_chain[0].biological_object.about[0].split("/").pop(),
-                "efo"    : this_disease.efo_info[0][0].efo_id,
-                "efo_label" : this_disease.efo_info[0][0].label
-            });
-        }
-        var snp_names = Object.keys(snps);
-        return {
-            "snps" : snp_names,
-            "gene" : gB.gene()
-        };
-    })
-    .then (function (objParams) {
-        var snp_names = objParams.snps;
-        var gene = objParams.gene;
-        var var_url = rest.url.variation ({
-            species : "human"
-        });
-        return rest.call(var_url, {
-            "ids" : snp_names
-        })
-    })
-    .then (function (resp) {
-            var min_pos, max_pos;
-            gwas_data = [];
-            var min = function (arr) {
-                var m;
-                for (var i=0; i<arr.length; i++) {
-                    if (m === undefined) {
-                        m = +arr[i].pvalue;
-                    } else {
-                        if (m > +arr[i].pvalue) {
-                            m = arr[i].pvalue;
-                        }
-                    }
-                }
-                return m;
-            };
-            for (var snp_name in resp.body) {
-                if (resp.body.hasOwnProperty(snp_name)) {
-                    var snp = resp.body[snp_name];
-                    var info = snps[snp_name];
-                    info.pos = snp.mappings[0].start;
-                    info.val = 1 - min(info["study"]);
-                    gwas_data.push(info)
-                }
-            }
-            var gwas_extent = d3.extent(gwas_data, function (d) {
-                return d.pos
-            });
+    // SNP GWASs
+    var url = cttvRestApi.url.filterby({
+        gene : gB.gene(),
+        datasource : ["gwas"],
+        size : 1000,
+        fields : [
+            "biological_object.efo_info", // disease
+            "evidence.evidence_chain"
+        ]
+    });
+    var snpsGwasPromise = cttvRestApi.call(url)
+        .then (async.cttv_gwas)
+        .then (async.ensembl_call_snps)
+        .then (async.ensembl_parse_gwas_snps)
 
-            return gwas_extent;
-        });
-
-    RSVP.all([genePromise, snpsPromise])
+    RSVP.all([genePromise, snpsGwasPromise, snpsClinVarPromise])
         .then (function (resps) {
+            console.log(resps);
             var gene = resps[0];
             var gene_extent = [gene.start, gene.end];
             var gwas_extent = resps[1];
+            var clinvar_extent = resps[2];
+
             var gwasLength = gwas_extent[1] - gwas_extent[0];
+            var clinvarLength = clinvar_extent[1] - clinvar_extent[0];
             var geneLength = gene_extent[1] - gene_extent[0];
             //
             var gwasStart = ~~(gwas_extent[0] - (gwasLength/5));
             var gwasEnd   = ~~(gwas_extent[1] + (gwasLength/5));
             var geneStart = ~~(gene_extent[0] - (geneLength/5));
             var geneEnd   = ~~(gene_extent[1] + (geneLength/5));
+            var clinvarStart = ~~(clinvar_extent[0] - (clinvarLength/5));
+            var clinvarEnd = ~~(clinvar_extent[1] + (clinvarLength/5));
             //
-            var start = d3.min([gwasStart, geneStart]);
-            var end   = d3.max([gwasEnd, geneEnd]);
+            var start = d3.min([gwasStart||Infinity, geneStart, clinvarStart||Infinity]);
+            var end   = d3.max([gwasEnd||0, geneEnd, clinvarEnd||0]);
             //
             // We can finally start!
             gB.chr(gene.seq_region_name);
