@@ -13,7 +13,7 @@
     */
     controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, cttvUtils) {
         $log.log('TargetDiseaseCtrl()');
-        
+
         var dbs = {
             EXPRESSION_ATLAS: "expression_atlas",
             UNIPROT: "uniprot",
@@ -48,7 +48,7 @@
                 gene : {},
                 title : ""
             },
-            
+
             flower_data : [], // processFlowerData([]), // so we initialize the flower to something
             test:[],
             categories:[],   // use this for sections of the accordion and flower petals
@@ -98,24 +98,24 @@
 
         $scope.datatypes = datatypes;
 
-        
+
 
 
 
         // =================================================
         //  I N F O
-        // ================================================= 
+        // =================================================
 
 
 
         /**
-         * Get the information for target and disease, 
+         * Get the information for target and disease,
          * i.e. to fill the two boxes at the top of the page
          */
         var getInfo = function(){
             $log.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
 
-            // get gene specific info 
+            // get gene specific info
             cttvAPIservice.getGene( {
                     gene_id:$scope.search.target
                 } ).
@@ -128,7 +128,7 @@
                     cttvAPIservice.defaultErrorHandler
                 );
 
-                
+
             // get disease specific info with the efo() method
             cttvAPIservice.getEfo( {
                     efo:$scope.search.disease
@@ -156,8 +156,8 @@
 
         // =================================================
         //  F L O W E R
-        // =================================================  
-        
+        // =================================================
+
 
 
         function lookDatasource (arr, dsName) {
@@ -198,19 +198,19 @@
             $log.log("getFlowerData()");
 
             return cttvAPIservice.getAssociation({
-                    gene:$scope.search.target, 
+                    gene:$scope.search.target,
                     efo:$scope.search.disease,
                     expandefo: true
                 }).
                 then(
-                    function(resp) {              
+                    function(resp) {
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].datatypes);
                         for(var i=0; i<resp.body.data[0].datatypes.length; i++){
-                            $scope.search.association_scores[resp.body.data[0].datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score; 
+                            $scope.search.association_scores[resp.body.data[0].datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score;
                         }
                     },
                     cttvAPIservice.defaultErrorHandler
-                );            
+                );
         }
 
 
@@ -235,7 +235,7 @@
         var getCommonDiseaseData = function(){
             $scope.search.genetic_associations.common_diseases.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target, 
+                    gene:$scope.search.target,
                     efo:$scope.search.disease,
                     size: 1000,
                     datasource: dbs.GWAS,
@@ -255,7 +255,7 @@
                     function(resp) {
                         $scope.search.genetic_associations.common_diseases.data = resp.body.data;
                         initCommonDiseasesTable();
-                        
+
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
@@ -309,14 +309,14 @@
 
 
         /*
-         * 
+         *
          */
         var formatCommonDiseaseDataToArray = function(data){
             var newdata = [];
             for(var i=0; i<data.length; i++){
                 // create rows:
                 var row = [];
-                
+
                 try{
 
                     // disease
@@ -374,7 +374,7 @@
                 //"order": [[3, 'des']],
                 "autoWidth": false,
                 "paging" : true
-            }, $scope.search.info.title+"-common_diseases") ); 
+            }, $scope.search.info.title+"-common_diseases") );
         }
 
 
@@ -386,7 +386,7 @@
         var getRareDiseaseData = function(){
             $scope.search.genetic_associations.rare_diseases.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target, 
+                    gene:$scope.search.target,
                     efo:$scope.search.disease,
                     size: 1100,
                     datasource: [dbs.UNIPROT, dbs.EVA ],
@@ -408,7 +408,7 @@
                 then(
                     function(resp) {
                         $scope.search.genetic_associations.rare_diseases.data = resp.body.data;
-                        initRareDiseasesTable(); 
+                        initRareDiseasesTable();
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
@@ -427,7 +427,7 @@
             for(var i=0; i<data.length; i++){
                 // create rows:
                 var row = [];
-                
+
                 try{
 
                     var db = data[i].evidence.provenance_type.database.id.toLowerCase();
@@ -496,7 +496,7 @@
                         }
                     }
                     row.push( cons );
-                    
+
 
                     // evidence source
                     // hardcoded label; the URL comes from :
@@ -505,13 +505,13 @@
                     var eso = messages.NA;
                     if( db===dbs.EVA.toLowerCase() ){
                         eso = "Curated in EVA";
-                        eso = "<a href='"+data[i].evidence.urls.linkouts[0].url+"' target='_blank'>" 
-                            + eso 
+                        eso = "<a href='"+data[i].evidence.urls.linkouts[0].url+"' target='_blank'>"
+                            + eso
                             + " <i class='fa fa-external-link'></i></a>";
                     } else if ( db===dbs.UNIPROT.toLowerCase()){
                         eso = "Curated in Uniprot";
-                        eso = "<a href='http://www.uniprot.org/uniprot/"+data[i].evidence.urls.linkouts[0].url.split("/").pop()+"#pathology_and_biotech' target='_blank'>" 
-                            + eso 
+                        eso = "<a href='http://www.uniprot.org/uniprot/"+data[i].evidence.urls.linkouts[0].url.split("/").pop()+"#pathology_and_biotech' target='_blank'>"
+                            + eso
                             + " <i class='fa fa-external-link'></i></a>";
                     }
                     row.push( eso );
@@ -550,14 +550,14 @@
                 "data": formatRareDiseaseDataToArray($scope.search.genetic_associations.rare_diseases.data),
                 "autoWidth": false,
                 "paging" : true
-            }, $scope.search.info.title+"-rare_diseases") ); 
+            }, $scope.search.info.title+"-rare_diseases") );
         }
 
 
 
         // =================================================
         //  D R U G S
-        // =================================================        
+        // =================================================
 
             /*
             drug    1   Target context  .biological_subject.properties.target_type
@@ -575,14 +575,14 @@
             */
 
             /*
-            Drug Information                                                        Gene-Drug Evidence              
+            Drug Information                                                        Gene-Drug Evidence
             Drug    Phase   Type    Mechanism of Action Activity    Clinical Trials Target name Target class    Target context  Protein complex members Evidence type
             */
 
         var getDrugData = function(){
             $scope.search.drugs.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target, 
+                    gene:$scope.search.target,
                     efo:$scope.search.disease,
                     size: 1000,
                     datasource: dbs.CHEMBL,
@@ -590,15 +590,15 @@
                         // 0: disease
                         "biological_object.efo_info",
 
-                        // 1: drug 
-                        "evidence.evidence_chain", //[0].evidence.experiment_specific.molecule_name 
-                        
+                        // 1: drug
+                        "evidence.evidence_chain", //[0].evidence.experiment_specific.molecule_name
+
                         // 2: phase
                         //"evidence.evidence_chain", //[0].evidence.experiment_specific. ???????????????????????
-                        
+
                         // 3: type
                         //"evidence.evidence_chain", //[0].evidence.experiment_specific.molecule_type
-                        
+
                         // 4: Mechanism of action
                         //"evidence.evidence_chain", //[0].evidence.experiment_specific.mechanism_of_action
 
@@ -614,12 +614,12 @@
 
                         // 8: target class
                         //"evidence.evidence_chain", //[0].evidence.experiment_specific.target_class[0]
-                        
+
                         // 9: target context
                         "biological_subject.properties", //.target_type
 
                         // 10: protein complex members
-                        "biological_subject.gene_info", //.symbol [] 
+                        "biological_subject.gene_info", //.symbol []
 
                         // 11: evidence type
                         "evidence.evidence_codes_info"    // Evidence codes???
@@ -630,7 +630,7 @@
                     function(resp) {
                         $scope.search.drugs.data = resp.body.data;
                         initTableDrugs();
-                        
+
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
@@ -654,9 +654,9 @@
                     row.push(data[i].biological_object.efo_info[0][0].label);
 
                     // 1: drug
-                    row.push( "<a href='"+data[i].evidence.urls.linkouts[0].url+"' target='_blank'>"
-                                + data[i].evidence.evidence_chain[0].evidence.experiment_specific.molecule_name
-                                + " <i class='fa fa-external-link'></i></a>");
+                    row.push( "<a href='"+data[i].evidence.evidence_chain[0].evidence.experiment_specific.urls[0].url+"' target='_blank'>"
+                            + data[i].evidence.evidence_chain[0].evidence.experiment_specific.molecule_name
+                            + " <i class='fa fa-external-link'></i></a>");
 
                     // 2: phase
                     row.push("Marketed drug");
@@ -668,10 +668,10 @@
                     var pubs = 0;
                     var action = data[i].evidence.evidence_chain[0].evidence.experiment_specific.mechanism_of_action+"<br />";
                         action += "<span><span class='badge'>"
-                                if(data[i].evidence.evidence_chain[0].evidence.provenance_type 
+                                if(data[i].evidence.evidence_chain[0].evidence.provenance_type
                                     && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature
-                                    && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs){
-                                        pubs = data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs.length;
+                                    && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references){
+                                        pubs = data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references.length;
                                 } else {
                                     pubs = 0;
                                 }
@@ -684,13 +684,13 @@
                         if( pubs>0 ){
                             pub=":<div>";
                             for(var j=0; j<pubs; j++){
-                                var n=data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs[j].split('/').pop();
+                                var n=data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
                                 pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a> "
                             }
                             pub+="</div>";
                         }
                         action+=pub;
-                                
+
                     row.push(action);
 
                     // 5: Activity
@@ -702,7 +702,7 @@
                                 + "%22' target='_blank'>View in clinicaltrials.gov <i class='fa fa-external-link'></i></a>");
 
                     // 7: target name
-                    row.push("<a href='"+data[i].evidence.urls.linkouts[1].url+"' target='_blank'>"+data[i].biological_subject.properties.target_name+" <i class='fa fa-external-link'></i></a>"); // + linkouts[1]
+                    row.push("<a href='"+data[i].evidence.evidence_chain[0].evidence.experiment_specific.urls[1].url+"' target='_blank'>"+data[i].biological_subject.properties.target_name+" <i class='fa fa-external-link'></i></a>"); // + linkouts[1]
 
                     // 8: target class
                     row.push(data[i].evidence.evidence_chain[0].evidence.experiment_specific.target_class[0]);
@@ -738,7 +738,7 @@
 
 
         /*
-         * This is the hardcoded data for the Known Drugs table and 
+         * This is the hardcoded data for the Known Drugs table and
          * will obviously need to change and pull live data when available
          */
         var initTableDrugs = function(){
@@ -748,7 +748,7 @@
                 "autoWidth": false,
                 "paging": true,
                 //"ordering": false
-            }, $scope.search.info.title+"-known_drugs") ); 
+            }, $scope.search.info.title+"-known_drugs") );
 
         }
 
@@ -767,26 +767,26 @@
             pathway 6   Provenance - References .evidence.provenance_type.literature.pubmed_refs
             pathway 7   Date asserted   .evidence.date_asserted
             pathway 8   Evidence codes  .evidence.evidence_codes
-            */        
+            */
 
 
 
         var getPathwaysData = function(){
             $scope.search.pathways.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target, 
+                    gene:$scope.search.target,
                     efo:$scope.search.disease,
                     size: 1000,
                     datasource: dbs.REACTOME,
                     fields: [
                         "biological_object.efo_info",
                         "biological_subject.properties.target_type",    //Target context
-                        "biological_subject.gene_info",    //Protein complex members 
-                        "biological_subject.properties.activity",    //Activity 
+                        "biological_subject.gene_info",    //Protein complex members
+                        "biological_subject.properties.activity",    //Activity
                         "evidence.properties.experiment_specific.additional_properties",    //Additional context
-                        "evidence.urls.linkouts",    //Provenance - SourceDB  
-                        "evidence.provenance_type.literature", //.pubmed_refs",    //Provenance - References 
-                        "evidence.date_asserted",    //Date asserted 
+                        "evidence.urls.linkouts",    //Provenance - SourceDB
+                        "evidence.provenance_type.literature", //.pubmed_refs",    //Provenance - References
+                        "evidence.date_asserted",    //Date asserted
                         "evidence.evidence_codes"    //Evidence codes
                     ]
                 } ).
@@ -812,8 +812,8 @@
             var newdata = [];
             for(var i=0; i<data.length; i++){
                 // create rows:
-                var row = [];  
-                
+                var row = [];
+
                 try{
 
                     // disease
@@ -851,7 +851,7 @@
                                 prop += p + ":&nbsp;" + data[i].evidence.properties.experiment_specific.additional_properties[p] + ", "
                             }
                         }
-                        
+
                     row.push(prop);
 
                     // evidence codes
@@ -888,7 +888,7 @@
                 //"ordering" : true,
                 "autoWidth": false,
                 "paging" : true
-            }, $scope.search.info.title+"-disrupted_pathways") ); 
+            }, $scope.search.info.title+"-disrupted_pathways") );
         }
 
 
@@ -902,7 +902,7 @@
         var getRnaExpressionData = function(){
             $scope.search.rna_expression.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target, 
+                    gene:$scope.search.target,
                     efo:$scope.search.disease,
                     size: 1000,
                     datasource: 'expression_atlas',
@@ -924,7 +924,7 @@
                     function(resp) {
                         $scope.search.rna_expression.data = resp.body.data;
                         initTableRNA();
-                        
+
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
@@ -937,7 +937,7 @@
 
 
         /*
-         * Takes the data object returned by the API and formats it to an array of arrays 
+         * Takes the data object returned by the API and formats it to an array of arrays
          * to be displayed by the RNA-expression dataTable widget.
          */
         var formatRnaDataToArray = function(data){
@@ -945,7 +945,7 @@
             for(var i=0; i<data.length; i++){
                 // create rows:
                 var row = [];
-                
+
                 try{
 
                     // disease
@@ -1001,7 +1001,7 @@
                 "data": formatRnaDataToArray($scope.search.rna_expression.data),
                 "autoWidth": false,
                 "paging" : true
-            }, $scope.search.info.title+"-RNA_expression") ); 
+            }, $scope.search.info.title+"-RNA_expression") );
         }
 
 
@@ -1015,7 +1015,7 @@
         var getMutationData = function(){
             $scope.search.somatic_mutations.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target, 
+                    gene:$scope.search.target,
                     efo:$scope.search.disease,
                     size: 1000,
                     datasource: dbs.CANCER_GENE_CENSUS,
@@ -1029,7 +1029,7 @@
                     function(resp) {
                         $scope.search.somatic_mutations.data = resp.body.data;
                         initTableMutations();
-                        
+
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
@@ -1042,14 +1042,14 @@
 
 
         /*
-         * 
+         *
          */
         var formatMutationsDataToArray = function(data){
             var newdata = [];
             for(var i=0; i<data.length; i++){
                 // create rows:
                 var row = [];
-                
+
                 try{
                     // disease
                     row.push(data[i].biological_object.efo_info[0][0].label);
@@ -1075,7 +1075,7 @@
                 //"order": [[3, 'des']],
                 "autoWidth": false,
                 "paging" : true
-            }, $scope.search.info.title+"-somatic_mutations") ); 
+            }, $scope.search.info.title+"-somatic_mutations") );
         }
 
 
@@ -1085,14 +1085,14 @@
         // =================================================
 
         /*
-        
+
         Probability:
         evidence.association_scrore.probability.value
-        
+
         Mouse phenotypes:
         show the values for each key (e.g. circling, imapired balance, deafness, etc)
         evidence.properties.evidence_chain[1].biological object.properties.experiment_specific
-    
+
         Human phenotypes:
         same as for moouse phenotypes
         biological object.properties.experiment specific
@@ -1103,7 +1103,7 @@
         var getMouseData = function(){
             $scope.search.mouse.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target, 
+                    gene:$scope.search.target,
                     efo:$scope.search.disease,
                     size: 1000,
                     datasource: dbs.PHENODIGM,
@@ -1132,14 +1132,14 @@
 
 
         /*
-         * 
+         *
          */
         var formatMouseDataToArray = function(data){
             var newdata = [];
             for(var i=0; i<data.length; i++){
                 // create rows:
                 var row = [];
-                
+
                 try{
                     // disease
                     row.push(data[i].biological_object.efo_info[0][0].label);
@@ -1195,7 +1195,7 @@
                 "paging" : true,
                 "ordering" : true,
                 "order": [[5, 'des']]
-            }, $scope.search.info.title+"-mouse_models") ); 
+            }, $scope.search.info.title+"-mouse_models") );
         }
 
 
@@ -1228,14 +1228,14 @@
 
         // =================================================
         //  H E L P E R   M E T H O D S
-        // ================================================= 
+        // =================================================
 
 
 
         function checkPath(obj, path){
             var prop;
             var props = path.split('.');
-            
+
             while( prop = props.shift() ){
                 if(!obj.hasOwnProperty(prop)){
                     return false;
@@ -1247,13 +1247,13 @@
 
 
 
-        
+
 
 
 
         // =================================================
         //  S C O P E   M E T H O D S
-        // ================================================= 
+        // =================================================
 
 
 
@@ -1263,14 +1263,14 @@
 
         // =================================================
         //  M A I N   F L O W
-        // ================================================= 
+        // =================================================
 
 
         //$log.warn($location.search());
         //if($location.search().t && $location.search().d){
             $log.info("target-disease-controller");
             var path = $location.path().split("/");
-            $log.info(path);   
+            $log.info(path);
             // parse parameters
             $scope.search.target = path[2];
             $scope.search.disease = path[3];
@@ -1291,7 +1291,7 @@
                         getRareDiseaseData();
                     }
                     if($scope.search.association_scores[datatypes.SOMATIC_MUTATION]){
-                        getMutationData(); 
+                        getMutationData();
                     }
                     if($scope.search.association_scores[datatypes.KNOWN_DRUG]){
                         getDrugData();
@@ -1310,8 +1310,8 @@
             // then try get some data
             // getCommonDiseaseData();
             // getRareDiseaseData();
-            // 
-            // getMutationData(); 
+            //
+            // getMutationData();
             // getDrugData();
             // getRnaExpressionData();
             // getPathwaysData();
