@@ -44,7 +44,7 @@ c.ensembl_parse_clinvar_snps = function (resp) {
         info.val = 1;
         c.data.clinvar.push(info);
     }
-    
+
     var clinvar_extent = d3.extent(c.data.clinvar, function (d) {
         return d.pos
     });
@@ -68,7 +68,7 @@ c.cttv_gwas = function (resp) {
             gwasSNPs[snp_name].name = snp_name;
         }
         gwasSNPs[snp_name].study.push ({
-            "pmid"   :  this_snp.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs[0].split("/").pop(),
+            "pmid"   : this_snp.evidence_chain[1].evidence.provenance_type.literature.references[0].lit_id.split("/").pop(),
             "pvalue" : this_snp.evidence_chain[1].evidence.association_score.pvalue.value.toExponential(),
             "name"   : this_snp.evidence_chain[0].biological_object.about[0].split("/").pop(),
             "efo"    : this_disease.efo_info[0][0].efo_id,
