@@ -594,7 +594,7 @@
                         "evidence.evidence_chain", //[0].evidence.experiment_specific.molecule_name
 
                         // 2: phase
-                        //"evidence.evidence_chain", //[0].evidence.experiment_specific. ???????????????????????
+                        //"evidence.evidence_chain", //[0].evidence.experiment_specific
 
                         // 3: type
                         //"evidence.evidence_chain", //[0].evidence.experiment_specific.molecule_type
@@ -608,20 +608,13 @@
                         // 6: Clinical trials
                         // ?????????????????????????????????
 
-                        // 7: target name
-                        "biological_subject.properties", //.target_name + linkouts[1]
-                        "evidence.urls",
-
-                        // 8: target class
+                        // 7: target class
                         //"evidence.evidence_chain", //[0].evidence.experiment_specific.target_class[0]
 
-                        // 9: target context
-                        "biological_subject.properties", //.target_type
+                        // 8: target context
+                        "biological_subject.gene_info", //.target_type
 
-                        // 10: protein complex members
-                        "biological_subject.gene_info", //.symbol []
-
-                        // 11: evidence type
+                        // 9: evidence type
                         "evidence.evidence_codes_info"    // Evidence codes???
 
                     ]
@@ -659,7 +652,10 @@
                             + " <i class='fa fa-external-link'></i></a>");
 
                     // 2: phase
-                    row.push("Marketed drug");
+                    row.push(data[i].evidence.evidence_chain[1].evidence.experiment_specific.max_phase_for_disease.label);
+
+                    // 2: hidden
+                    row.push(data[i].evidence.evidence_chain[1].evidence.experiment_specific.max_phase_for_disease.numeric_index);
 
                     // 3: type
                     row.push(data[i].evidence.evidence_chain[0].evidence.experiment_specific.molecule_type);
@@ -667,62 +663,84 @@
                     // 4: Mechanism of action
                     var pubs = 0;
                     var action = data[i].evidence.evidence_chain[0].evidence.experiment_specific.mechanism_of_action+"<br />";
-                        action += "<span><span class='badge'>"
-                                if(data[i].evidence.evidence_chain[0].evidence.provenance_type
-                                    && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature
-                                    && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references){
-                                        pubs = data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references.length;
-                                } else {
-                                    pubs = 0;
-                                }
-                        action += pubs+"</span> publications</span>";
+                    action += "<span><span class='badge'>";
+                    if(data[i].evidence.evidence_chain[0].evidence.provenance_type
+                        && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature
+                        && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references){
+                            pubs = data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references.length;
+                    } else {
+                        pubs = 0;
+                    }
+                    action += pubs + (pubs==1 ? "</span> publication</span>" : "</span> publications</span>");
 
-                        // publications:
-                        // we show the publications here in the cells for now
-                        // eventually this should be in a popup or tooltip of some sort
-                        var pub="";
-                        if( pubs>0 ){
-                            pub=":<div>";
-                            for(var j=0; j<pubs; j++){
-                                var n=data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
-                                pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a> "
-                            }
-                            pub+="</div>";
+                    // publications:
+                    // we show the publications here in the cells for now
+                    // eventually this should be in a popup or tooltip of some sort
+                    var pub="";
+                    if( pubs>0 ){
+                        pub=":<div>";
+                        for(var j=0; j<pubs; j++){
+                            var n=data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
+                            pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a> "
                         }
-                        action+=pub;
+                        pub+="</div>";
+                    }
+
+                    if (data[i].evidence.evidence_chain[0].evidence.experiment_specific.urls && data[i].evidence.evidence_chain[0].evidence.experiment_specific.urls[2]) {
+                        var extLink = data[i].evidence.evidence_chain[0].evidence.experiment_specific.urls[2];
+                        pub += "<br /><span><a target=_blank href=" + extLink.url + ">" + extLink.nice_name  + "</a></span>";
+                    }
+
+                    action+=pub;
 
                     row.push(action);
 
                     // 5: Activity
-                    row.push(data[i].biological_subject.properties.activity);
+                    var activity = data[i].biological_subject.properties.activity;
+                    switch (activity) {
+                        case 'drug_positive_modulator' :
+                        activity = "<span><i class='fa fa-plus-square-o fa-2x'></i></span>";
+                        break;
+                        case 'drug_negative_modulator' :
+                        activity = "<span><i class='fa fa-minus-square-o fa-2x'></i></span>";
+                        break;
+                    }
+                    row.push(activity);
 
                     // 6: Clinical trials
                     row.push( "<a href='https://clinicaltrials.gov/search?intr=%22"
                                 + data[i].evidence.evidence_chain[0].evidence.experiment_specific.molecule_name
                                 + "%22' target='_blank'>View in clinicaltrials.gov <i class='fa fa-external-link'></i></a>");
 
-                    // 7: target name
-                    row.push("<a href='"+data[i].evidence.evidence_chain[0].evidence.experiment_specific.urls[1].url+"' target='_blank'>"+data[i].biological_subject.properties.target_name+" <i class='fa fa-external-link'></i></a>"); // + linkouts[1]
-
-                    // 8: target class
+                    // 7: target class
                     row.push(data[i].evidence.evidence_chain[0].evidence.experiment_specific.target_class[0]);
 
-                    // 9: target context
-                    row.push(data[i].biological_subject.properties.target_type);
-
-                    // 10: protein complex members
+                    // 8: target context / protein complex members
                     var prot="";
+                    var prots = []
+                    if (data[i].biological_subject.gene_info.length > 1) {
+                        prot += "complex:<br/>";
+                    } else {
+                        prot += "protein:<br/>";
+                    }
                     if(data[i].biological_subject.gene_info){
                         for(var j=0; j<data[i].biological_subject.gene_info.length; j++){
-                            prot+="<a href='#/target-associations?q="+data[i].biological_subject.gene_info[j].geneid
-                                +"' title='"+data[i].biological_subject.gene_info[j].name+"'>"
+                            prots.push("<a href='#/target/"+data[i].biological_subject.gene_info[j].geneid
+                                +"/associations' title='"+data[i].biological_subject.gene_info[j].name+"'>"
                                 +data[i].biological_subject.gene_info[j].symbol
-                                +"</a>, "
+                                +"</a>");
+                            // prot+="<a href='#/target/"+data[i].biological_subject.gene_info[j].geneid
+                            //     +"/associations' title='"+data[i].biological_subject.gene_info[j].name+"'>"
+                            //     +data[i].biological_subject.gene_info[j].symbol
+                            //     +"</a>, "
                         }
                     }
+                    prot += prots.join (", ");
+
+                    //})
                     row.push(prot);
 
-                    // 11: evidence source
+                    // 9: evidence source
                     row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
 
 
@@ -742,11 +760,18 @@
          * will obviously need to change and pull live data when available
          */
         var initTableDrugs = function(){
-
             $('#drugs-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatDrugsDataToArray($scope.search.drugs.data),
                 "autoWidth": false,
                 "paging": true,
+                "order" : [[2, "desc"]],
+                "aoColumnDefs" : [
+                    {"targets": [3], "visible":false},
+                    {"iDataSort" : 2, "aTargets" : [3]},
+                ],
+                // "aoColumnDefs" : [
+                //     {"iDataSort" : 2, "aTargets" : [3]},
+                // ]
                 //"ordering": false
             }, $scope.search.info.title+"-known_drugs") );
 
