@@ -661,32 +661,34 @@ angular.module('cttvDirectives', [])
     /*
      *
      */
-    .directive('cttvTargetGenomeBrowser', ['cttvAPIservice', function (cttvAPIservice) {
-        return {
-            restrict: 'E',
-            link: function (scope, elem, attrs) {
-            var w = elem[0].parentNode.offsetWidth - 40;
-            scope.$watch(function () {return attrs.target }, function (target) {
-                if (target === "") {
-                return;
-                }
-                var newDiv = document.createElement("div");
-                newDiv.id = "cttvTargetGenomeBrowser";
-                elem[0].appendChild(newDiv);
+     .directive('cttvTargetGenomeBrowser', ['cttvAPIservice', function (cttvAPIservice) {
+         return {
+             restrict: 'E',
+             link: function (scope, elem, attrs) {
+                 var efo = attrs.efo;
+                 console.warn(efo);
+                 var w = (attrs.width || elem[0].parentNode.offsetWidth) - 40;
+                 scope.$watch(function () {return attrs.target }, function (target) {
+                     if (target === "") {
+                         return;
+                     }
+                     var newDiv = document.createElement("div");
+                     newDiv.id = "cttvTargetGenomeBrowser";
+                     elem[0].appendChild(newDiv);
 
-                var gB = tnt.board.genome()
-                .species("human")
-                .gene(attrs.target)
-                .context(20)
-                .width(w);
-                var theme = targetGenomeBrowser()
-                .chr(scope.chr);
-                theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
-            });
-            }
-        };
-    }])
-
+                     var gB = tnt.board.genome()
+                        .species("human")
+                        .gene(attrs.target)
+                        .context(20)
+                        .width(w);
+                     var theme = targetGenomeBrowser()
+                        .chr(scope.chr)
+                        .efo(efo);
+                     theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
+                 });
+             }
+         };
+     }])
 
 
     /*
@@ -1144,6 +1146,3 @@ angular.module('cttvDirectives', [])
         };
 
     }])
-
-
-
