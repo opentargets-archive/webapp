@@ -10,7 +10,7 @@ angular.module('cttvServices').
     /**
      *
      */
-    factory('cttvFiltersService', ['$log', 'cttvDictionary', 'cttvConsts', function($log, cttvDictionary, cttvConsts) {
+    factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', function($log, $location, cttvDictionary, cttvConsts) {
 
         // set the default datatypes:
         // only animal models are filtered out (deselected) by default
@@ -49,13 +49,14 @@ angular.module('cttvServices').
 
             Filter.prototype.toggle = function(){
                 $log.log("toggle "+cttvFiltersService.hasChanged);
-                //this.selected = !this.selected;
                 this.setSelected(!this.selected);
             }
 
             Filter.prototype.setSelected=function(b){
-                this.selected = b;
-                cttvFiltersService.hasChanged++;
+                if(this.enabled){
+                    this.selected = b;
+                    cttvFiltersService.hasChanged++;
+                }
             }
 
 
@@ -80,6 +81,12 @@ angular.module('cttvServices').
             FilterCollection.prototype.getSelectedFilters = function(){
                 return this.filters.filter(function(obj){
                     return obj.selected;
+                });
+            }
+
+            FilterCollection.prototype.getSelectedFiltersRaw = function(){
+                return this.getSelectedFilters().map(function(obj){
+                    return obj.id+"";
                 });
             }
 
@@ -111,7 +118,12 @@ angular.module('cttvServices').
                 $log.log(element);
                 collection.addFilter(new Filter(element));
             });
-            filters.push(collection);
+            if(collection.key===cttvConsts.DATATYPES){
+                filters.unshift(collection);
+            } else {
+                filters.push(collection);
+            }
+
         }
 
 
@@ -142,17 +154,50 @@ angular.module('cttvServices').
             // ]
         };
 
+
+
+        /**
+         * Remove all existing filters from the list.
+         * Reference to the filters array remains intact
+         */
         cttvFiltersService.resetFilters = function(){
             $log.log("resetFilters()");
-            // remove all elements from array: this is important!
             // simply resetting the array to [] will cause errors as Angular will no longer watch the new object
+            // so we use set the length, thus remove every element in the array
             filters.length = 0;
         };
 
-        cttvFiltersService.getActiveFilters = function(){}; // ??
+
+
+        /**
+         * Gets a list of selected filters for API call usage.
+         * Return: object containing arrays of string for each facet category
+         * Example:
+         * {
+         *    datatype: ["known_drug", "rna_expression"]
+         * }
+         */
+        cttvFiltersService.getSelectedFiltersRaw = function(){
+            var raw = {};
+            filters.forEach(function(collection){
+                var f=collection.getSelectedFiltersRaw();
+                if(f.length>0){
+                    raw[collection.key] = f;
+                }
+
+            });
+            return raw;
+        };
+
+
 
         cttvFiltersService.setFilters = function(states){};
 
+
+
+        /**
+         * This should be called when we first get data, which is unfiltered
+         */
         cttvFiltersService.initFilters = function(facets){
             $log.log("initFilters()");
 
@@ -174,36 +219,62 @@ angular.module('cttvServices').
 
             }
 
-
         };
 
+
+
+        var resetFacets = function(){
+            $log.log("resetFacets");
+            filters.splice(1, filters.length-1);
+            $log.log(filters);
+        }
+
+
+        /**
+         * Parse the facets object from the API
+         */
         cttvFiltersService.parseFacets=function(facets){
             $log.debug("parseFacets()");
-            //$log.debug(facets);
+            $log.debug(facets);
 
             // loop thorugh the facets
             // we probably don't want to do anything with datatypes I guess...
-/*
+            // resetFacets();
+            this.resetFilters();
+
+
             for (var collection in facets) {
                 if (facets.hasOwnProperty(collection)) {
-                    if(collection!=cttvConsts.DATATYPES){
-                        $log.debug(collection);
-                        $log.debug(facets[collection]);
-                        // for each collection, we add it:
-                        cttvFiltersService.addCollection({
-                            key: collection,
-                            label: cttvDictionary[collection.toUpperCase()] || collection,
-                            filters: facets[collection].buckets.map(function(obj){
-                                obj.id = obj.key;
-                                obj.count = obj.doc_count;
-                                return obj
-                            })
+
+                    var config={
+                        key: collection,
+                        label: cttvDictionary[collection.toUpperCase()] || collection,
+                    };
+
+                    if(collection === cttvConsts.DATATYPES){
+                        config.filters = datatypes.map( function(obj){
+                            var conf = {};
+                            var dtb = facets[collection].buckets.filter(function(o){return o.key===obj.id})[0] || {};
+                            conf.id = obj.id;
+                            conf.label = cttvDictionary[obj.id.toUpperCase()] || "";
+                            conf.enabled = dtb.key != undefined; // it's actually coming from the API and not {}
+                            conf.selected = obj.selected && conf.enabled;
+                            conf.count = dtb.doc_count;
+                            return conf;
+                        });
+                    } else {
+                        config.filters = facets[collection].buckets.map(function(obj){
+                            var conf = {};
+                            conf.id = obj.key;
+                            conf.label = obj.label;
+                            conf.count = obj.doc_count;
+                            return conf;
                         });
                     }
+                    cttvFiltersService.addCollection(config);
                 }
             }
-*/
-       }
+        }
 
         cttvFiltersService.initFilters();
 
