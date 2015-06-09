@@ -53,7 +53,7 @@
 
       <accordion-group>
 	<accordion-heading>
-	  <span ng-click="toggleGenomeLocation()">Variants</span>
+	  <span ng-click="toggleGenomeLocation()">Variants, isoforms and genomic context</span>
 	</accordion-heading>
 	<p ng-if="ensembl.isHuman">ID: <a target="_blank" href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={{ensembl.id}}">{{ensembl.id}}</a></p>
 	<p ng-if="!ensembl.isHuman">ID: {{ensembl.id}}</p>
