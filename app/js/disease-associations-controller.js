@@ -40,7 +40,7 @@ angular.module('cttvControllers')
             cttvAPIservice.defaultErrorHandler
         );
 
-    $scope.nresults = "0";
+    $scope.nresults = "...";
     //$scope.loading = false;
 
 

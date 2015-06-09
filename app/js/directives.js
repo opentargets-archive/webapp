@@ -448,7 +448,8 @@ angular.module('cttvDirectives', [])
 
             scope: {
                 loadprogress : '=',
-                filename : '@'
+                filename : '@',
+                total : '='
             },
 
             // template: '<table class="table matrix-table"></table>'
@@ -493,9 +494,9 @@ angular.module('cttvDirectives', [])
                     return cttvAPIservice.getAssociations(opts)
                         .then(function (resp) {
 
-                            // set hte load progress flag to false once we get the results
+                            // set the load progress flag to false once we get the results
                             scope.loadprogress = false;
-                            scope.$parent.nresults = resp.body.total;
+                            scope.total = resp.body.data.length;
 
 
                             var data = resp.body.data;
@@ -562,6 +563,7 @@ angular.module('cttvDirectives', [])
                                 //cttvFiltersService.parseFacets(resp.body.facets);
 
                                 //cttvFiltersService.test(resp.body.facets);
+
                             }
 
 
@@ -1175,25 +1177,6 @@ angular.module('cttvDirectives', [])
             // /
             // /}
 
-            /*
-
-    <accordion>
-        <accordion-group>
-          <accordion-heading>
-            <span ng-click="toggleDataTypes()">Data types</span>
-          </accordion-heading>
-          <div class="checkbox" ng-repeat="dataType in dataTypes">
-            <label>
-              <input type="checkbox"
-                 value="{{dataType.name}}"
-                 ng-click="filterDataType(dataType)"
-                 ng-checked="dataType.selected">
-                 <small>{{dataType.labelFull}}</small>
-            </label><br />
-          </div>
-        </accordion-group>
-    </accordion>
-            */
         };
 
     }])

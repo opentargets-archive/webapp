@@ -736,6 +736,13 @@ table.matrix-table thead > tr > th:last-child {
 */
 
 
+
+/*
+ * F A C E T S
+ */
+
+
+
 .cttv-facets{
 
 }
@@ -753,17 +760,22 @@ table.matrix-table thead > tr > th:last-child {
     color: #333;
 }
 
-.cttv-facets panel-default{
-    background: #F00;
-}
+
+
+/*
+ * Restyle accordion for facets
+ * Override the Bootstrap rules for custom l'n'f
+ */
+
 
 
 .cttv-facets .panel{
-    /*margin-bottom: 20px;
-    background-color: #fff;*/
     border-radius: 0px;
     border: none;
     -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -ms-box-shadow: none;
+    -o-box-shadow: none;
     box-shadow: none;
 }
 
