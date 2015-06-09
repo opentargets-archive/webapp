@@ -1,5 +1,5 @@
 <div>
-	<!-- view-title sets the title for the page for this view 
+	<!-- view-title sets the title for the page for this view
 	<view-title>{{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name) +' &#8596; '+ search.info.efo.label + ' association'}}</view-title>-->
 
 	<!-- <h3>Target to disease association</h3> -->
@@ -13,7 +13,7 @@
 		</div>
 
 		<div class="col-sm-9">
-			
+
 			<div class="overview">
 
 				<!-- Gene Info -->
@@ -72,73 +72,82 @@
 							<span cttv-progress-spinner class="pull-right" ng-show="search.genetic_associations.is_loading"></span>
 						</span>
 					</accordion-heading>
-					<div ng-show="search.genetic_associations.common_diseases.data.length>0 || search.genetic_associations.rare_diseases.data.length>0">
-						<!-- <p><span class="small">Association score: {{search.association_scores[datatypes.GENETIC_ASSOCIATION] || 0}}</span></p> -->
+					<tabset>
+						<tab heading="Table">
+							<div ng-show="search.genetic_associations.common_diseases.data.length>0 || search.genetic_associations.rare_diseases.data.length>0">
+								<!-- <p><span class="small">Association score: {{search.association_scores[datatypes.GENETIC_ASSOCIATION] || 0}}</span></p> -->
 
-						<!-- Common disease table -->
-						<div ng-show="search.genetic_associations.common_diseases.data.length>0">
-							<h5>Common diseases</h5>
-							<p>Source: <a href="http://www.ebi.ac.uk/fgpt/gwas/" target="_blank">GWAS Catalog curated database</a></p>
-							<div class="table-panel">
-								<table class='table table-striped table-bordered' id="common-diseases-table">
-									<thead>
-							            <tr>
-							                <th rowspan="2">Disease</th>
-							                <th rowspan="2">SNP</th>
-							                <th colspan="2">Gene-SNP Evidence</th>
-							                <th colspan="3">SNP-Disease Evidence</th>
-							            </tr>
+								<!-- Common disease table -->
+								<div ng-show="search.genetic_associations.common_diseases.data.length>0">
+									<h5>Common diseases</h5>
+									<p>Source: <a href="http://www.ebi.ac.uk/fgpt/gwas/" target="_blank">GWAS Catalog curated database</a></p>
+									<div class="table-panel">
+										<table class='table table-striped table-bordered' id="common-diseases-table">
+											<thead>
+												<tr>
+													<th rowspan="2">Disease</th>
+													<th rowspan="2">SNP</th>
+													<th colspan="2">Gene-SNP Evidence</th>
+													<th colspan="3">SNP-Disease Evidence</th>
+												</tr>
 
-							            <tr>
-							            	<th>Variant type</th>
-							            	<th>Evidence source</th>
-							            	<th>Evidence source</th>
-							            	<th>P-Value</th>
-							            	<th>Publications</th>
-							            </tr>
-							        </thead>
+												<tr>
+													<th>Variant type</th>
+													<th>Evidence source</th>
+													<th>Evidence source</th>
+													<th>P-Value</th>
+													<th>Publications</th>
+												</tr>
+											</thead>
 
-									<tbody>
-									</tbody>
-								</table>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+
+								<!-- common / rare disease table divider -->
+								<div ng-show="search.genetic_associations.common_diseases.data.length>0 && search.genetic_associations.rare_diseases.data.length>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
+
+
+								<!-- Related rare disease table -->
+								<div ng-show="search.genetic_associations.rare_diseases.data.length>0">
+									<h5>Related rare diseases</h5>
+									<p>Source: <a href="http://www.uniprot.org" target="_blank">UniProt</a> and <a href="http://www.ebi.ac.uk/eva/?Home" target="_blank">European Variation Archive (EVA)</a> curated databases</p>
+									<div class="table-panel">
+										<table class='table table-striped table-bordered' id="rare-diseases-table">
+											<thead>
+												<tr>
+													<th rowspan="2">Disease</th>
+													<th rowspan="2">Mutation</th>
+													<th colspan="4">Gene-Disease Evidence</th>
+												</tr>
+
+												<tr>
+													<th>Mutation type</th>
+													<th>Mutation consequence</th>
+													<th>Evidence source</th>
+													<th>Publications</th>
+												</tr>
+											</thead>
+
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
 							</div>
-						</div>
-
-						
-						<!-- common / rare disease table divider -->
-						<div ng-show="search.genetic_associations.common_diseases.data.length>0 && search.genetic_associations.rare_diseases.data.length>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
-						
-
-						<!-- Related rare disease table -->
-						<div ng-show="search.genetic_associations.rare_diseases.data.length>0">
-							<h5>Related rare diseases</h5>
-							<p>Source: <a href="http://www.uniprot.org" target="_blank">UniProt</a> and <a href="http://www.ebi.ac.uk/eva/?Home" target="_blank">European Variation Archive (EVA)</a> curated databases</p>
-							<div class="table-panel">
-								<table class='table table-striped table-bordered' id="rare-diseases-table">
-									<thead>
-							            <tr>
-							                <th rowspan="2">Disease</th>
-							                <th rowspan="2">Mutation</th>
-							                <th colspan="4">Gene-Disease Evidence</th>
-							            </tr>
-
-							            <tr>
-							            	<th>Mutation type</th>
-							            	<th>Mutation consequence</th>
-							            	<th>Evidence source</th>
-							            	<th>Publications</th>
-							            </tr>
-							        </thead>
-
-									<tbody>
-									</tbody>
-								</table>
+							<div ng-show="search.genetic_associations.common_diseases.data.length==0 && search.genetic_associations.rare_diseases.data.length==0">
+								<p>No data available</p>
 							</div>
-						</div>
-					</div>
-					<div ng-show="search.genetic_associations.common_diseases.data.length==0 && search.genetic_associations.rare_diseases.data.length==0">
-						<p>No data available</p>
-					</div>
+						</tab>
+						<tab heading="Browser">
+							<div style="overflow:hidden">
+								<cttv-target-genome-browser width=1140 efo={{search.disease}} target="{{search.info.gene.ensembl_gene_id}}"></cttv-target-genome-browser>
+							</div>
+						</tab>
+					</tabset>
 
 				</accordion-group>
 
@@ -188,30 +197,32 @@
 						</span>
 					</accordion-heading>
 					<div ng-show="search.drugs.data.length>0">
-						<p><!--<span class="small">Association score: {{search.association_scores[datatypes.KNOWN_DRUG] || 0}}</span><br />-->Source: <a href="https://www.ebi.ac.uk/chembl/" target="_blank">CHEMBL</a> curated database</p>
+						<p><!--<span class="small">Association score: {{search.association_scores[datatypes.KNOWN_DRUG] || 0}}</span><br />-->Source: <a href="/#/faq#data-provenance" target="_blank">CHEMBL</a> curated database</p>
 						<div class="table-panel">
 							<table class='table table-striped table-bordered' id="drugs-table">
 								<thead>
 						            <tr>
 						                <th rowspan="2" colspan="1">Disease</th>
-						                <th rowspan="1" colspan="6">Drug Information</th>
-						                <th rowspan="1" colspan="4">Gene-Drug Evidence</th>
+						                <th rowspan="1" colspan="7">Drug Information</th>
+						                <th rowspan="1" colspan="2">Gene-Drug Evidence</th>
 						                <th rowspan="2" colspan="1">Evidence source</th>
 						            </tr>
 						            <tr>
-						            	<!-- Drug information -->             
+						            	<!-- Drug information -->
 						                <th>Drug</th>
 						                <th>Phase</th>
+										<th>Phase (Numeric)</th>
 						                <th>Type</th>
 						                <th>Mechanism of Action</th>
 						                <th>Activity</th>
-						                <th>Clinical Trials</th>
+						                <th>Clinical Indications</th>
 
 						                <!-- Gene-Drug evidence -->
-						                <th>Target name</th>
+						                <!-- <th>Target name</th> -->
 						                <th>Target class</th>
-						                <th>Target context</th>
-						                <th class="no-last-element">Protein complex members</th> <!-- we have to manually set this border, otherwise datatables thinks it's the last element and removes the border-->
+						                <th lass="no-last-element">Target</th><!-- we have to manually set this border, otherwise datatables thinks it's the last element and removes the border-->
+						                <!-- <th class="no-last-element">Protein complex members</th> -->
+
 						            </tr>
 						        </thead>
 
@@ -249,7 +260,7 @@
 						                <th rowspan="2" colspan="1">Experiment overview and data</th>
 						                <th rowspan="2" colspan="1">Publications</th>
 						            </tr>
-						            <tr>      
+						            <tr>
 						                <th>Comparison</th>
 						                <th>Activity</th>
 						                <th>Tissue/cell</th>
@@ -271,7 +282,7 @@
 
 
 
-				<!-- Disrupted pathways --> 
+				<!-- Disrupted pathways -->
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
@@ -292,7 +303,7 @@
 						                <th rowspan="2" colspan="1">Pathway</th>
 						                <th rowspan="1" colspan="7">Gene-disease evidence</th>
 						            </tr>
-						            <tr> 
+						            <tr>
 						                <th>Overview</th>
 						                <th>Activity</th>
 						                <th>Target context</th>
@@ -336,7 +347,7 @@
 						                <th rowspan="1" colspan="3">Model - Disease Evidence</th>
 						            </tr>
 						            <tr>
-						            	<!-- Drug information -->             
+						            	<!-- Drug information -->
 						                <th>Human</th>
 						                <th>Mouse</th>
 						                <th>Mouse model</th>
@@ -358,7 +369,7 @@
 
 
 			</accordion>
-			
+
 		</div>
 	</div>
 

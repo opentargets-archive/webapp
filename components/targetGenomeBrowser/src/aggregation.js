@@ -11,8 +11,9 @@ function aggregation (arr, xScale) {
     var currGroup = [arr[0]];
     var curr = arr[0];
     for (var i=1; i<arr.length; i++) {
-        if ((arr[i]._px - curr. _px) < lim) {
+        if ((arr[i]._px - curr._px) < lim) {
             currGroup.push(arr[i]);
+            curr = arr[i];
         } else {
             groups.push (currGroup);
             currGroup = [arr[i]];

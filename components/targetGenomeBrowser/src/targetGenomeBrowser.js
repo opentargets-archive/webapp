@@ -13,6 +13,7 @@ var cttv_genome_browser = function() {
 
     var show_links   = true;
     var chr = 0;
+    var efo;
 
     var snps = {};
 
@@ -92,7 +93,6 @@ var cttv_genome_browser = function() {
     );
 
     // TRACKS!
-
     // ClinVar track
     var clinvar_updater = tnt.board.track.data.retriever.sync()
         .retriever (function () {
@@ -219,21 +219,7 @@ var cttv_genome_browser = function() {
         .add_track(transcript_track);
 
 
-    // Pipelining test
-    // var testUrl = rest.url.gene ({
-    //     id: gB.gene()
-    // });
-    // var p1 = promise (testUrl);
-    // var p2 = promise (testUrl);
-    // var p3 = rest.call(testUrl);
-    // RSVP.all([p1, p2, p3])
-    // .then (function (resps) {
-    //     console.warn (resps);
-    // });
-
-
-    // Get the non genome data!
-
+    // DATA
     // Gene
     var geneUrl = rest.url.gene ({
         id: gB.gene()
@@ -242,15 +228,8 @@ var cttv_genome_browser = function() {
     .then (async.gene);
 
     // SNPs ClinVar
-    var url = cttvRestApi.url.filterby({
-        gene : gB.gene(),
-        datasource : ["eva"],
-        size : 1000,
-        fields : [
-            "biological_object.efo_info", // disease
-            "evidence.evidence_chain"
-        ]
-    });
+    var opts = getOpts(gB.gene(), ["eva"], efo);
+    var url = cttvRestApi.url.filterby(opts);
     var snpsClinVarPromise = cttvRestApi.call(url)
         .then (async.cttv_clinvar)
         .then (async.ensembl_call_snps)
@@ -258,15 +237,8 @@ var cttv_genome_browser = function() {
         .then (async.ensembl_parse_clinvar_snps)
 
     // SNP GWASs
-    var url = cttvRestApi.url.filterby({
-        gene : gB.gene(),
-        datasource : ["gwas"],
-        size : 1000,
-        fields : [
-            "biological_object.efo_info", // disease
-            "evidence.evidence_chain"
-        ]
-    });
+    var opts = getOpts(gB.gene(), ["gwas"], efo);
+    var url = cttvRestApi.url.filterby(opts);
     var snpsGwasPromise = cttvRestApi.call(url)
         .then (async.cttv_gwas)
         .then (async.ensembl_call_snps)
@@ -274,7 +246,6 @@ var cttv_genome_browser = function() {
 
     RSVP.all([genePromise, snpsGwasPromise, snpsClinVarPromise])
         .then (function (resps) {
-            console.log(resps);
             var gene = resps[0];
             var gene_extent = [gene.start, gene.end];
             var gwas_extent = resps[1];
@@ -318,7 +289,13 @@ var cttv_genome_browser = function() {
 	var links_pane = d3.select(div)
 	    .append("div")
 	    .attr("class", "tnt_links_pane")
-	    .style("display", function() {if (show_links) {return "block"} else {return "none"}});
+	    .style("display", function() {
+            if (show_links) {
+                return "block";
+            } else {
+                return "none";
+            }
+        });
 
 	// ensembl
 	links_pane
@@ -348,7 +325,7 @@ var cttv_genome_browser = function() {
 
     gBrowserTheme.show_links = function(b) {
 	show_links = b;
-	return gBrowserTheme;
+	return this;
     };
 
     gBrowserTheme.foreground_color = function (c) {
@@ -356,9 +333,16 @@ var cttv_genome_browser = function() {
 	    return fgColor;
 	}
 	fgColor = c;
-	return gBrowserTheme;
+	return this;
     };
 
+    gBrowserTheme.efo = function (e) {
+        if (!arguments.length) {
+            return efo;
+        }
+        efo = e;
+        return this;
+    };
 
     var set_div_id = function(div) {
 	div_id = d3.select(div).attr("id");
@@ -373,6 +357,23 @@ var cttv_genome_browser = function() {
 	var url = "http://www.ensembl.org/" + gBrowser.species() + "/Location/View?r=" + gBrowser.chr() + "%3A" + gBrowser.from() + "-" + gBrowser.to();
 	return url;
     };
+
+    function getOpts (gene, datasources, efo) {
+        var opts = {
+            gene : gene,
+            size : 1000,
+            datasource : datasources,
+            fields : [
+                "biological_object.efo_info", // disease
+                "evidence.evidence_chain"
+            ]
+        };
+        if (efo !== undefined) {
+            opts.efo = efo;
+            opts.expandefo = true;
+        }
+        return opts;
+    }
 
 
     // Public methods
