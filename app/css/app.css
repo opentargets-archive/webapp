@@ -295,10 +295,14 @@ a.accordion-toggle{
     line-height: 1.2;
 }
 
-.text-disabled {
+.text-disabled, .disabled{
     color: #AAA;
     text-decoration: none;
     cursor: default;
+}
+
+.disabled {
+    cursor: not-allowed !important;
 }
 
 
@@ -732,7 +736,62 @@ table.matrix-table thead > tr > th:last-child {
 */
 
 
+.cttv-facets{
 
+}
+
+.cttv-facets-headers{
+
+}
+
+.cttv-facets-controls > span{
+    cursor: pointer;
+    margin-right:10px;
+}
+
+.cttv-facets-controls > span:hover{
+    color: #333;
+}
+
+.cttv-facets panel-default{
+    background: #F00;
+}
+
+
+.cttv-facets .panel{
+    /*margin-bottom: 20px;
+    background-color: #fff;*/
+    border-radius: 0px;
+    border: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.cttv-facets .panel-title{
+    font-size: 14px;
+}
+
+.cttv-facets .panel-heading{
+    color:inherit;
+    border-bottom: 1px solid #DDD;
+    padding: 10px 0px;
+}
+
+.cttv-facets .panel-default>.panel-heading{
+    background: none;
+}
+
+.cttv-facets .panel-group .panel-heading+.panel-collapse>.panel-body{
+    border-top: none;
+}
+
+.cttv-facets .panel-default>.panel-heading+.panel-collapse>.panel-body{
+    border-top-color: none;
+}
+
+.cttv-facets .panel-body{
+    padding: 10px 0px;
+}
 
 
 

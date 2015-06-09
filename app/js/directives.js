@@ -369,7 +369,6 @@ angular.module('cttvDirectives', [])
          * with color information for each cell
          */
         var getColorStyleString = function(value, href){
-
             var str="";
             if( value<=0 ){
                 str = "<span class='no-data' title='No data'>0</span>";
@@ -382,6 +381,7 @@ angular.module('cttvDirectives', [])
 
             return str;
         }
+
 
         var cols = [
             // empty col for the gene name
@@ -431,6 +431,17 @@ angular.module('cttvDirectives', [])
         }
 
 
+
+        var getFullFacets = function(target){
+            return cttvAPIservice.getAssociations({
+                efo: target,
+                datastructure: "flat",
+                expandefo: false
+            });
+        }
+
+
+
         return {
 
             restrict: 'E',
@@ -450,9 +461,10 @@ angular.module('cttvDirectives', [])
             link: function (scope, elem, attrs) {
 
                 scope.filters = cttvFiltersService.getFilters();
+                //scope.change = cttvFiltersService.hasChanged;
                 //scope.selectedoptions = cttvFiltersService.getFilters()[0].map(function(obj){return obj.selected});
 
-                var updateTable = function (table, datatypes) {
+                var updateTable = function (table, filters) {
 
                     // set the load progress flag to true before starting the API call
                     scope.loadprogress = true;
@@ -461,12 +473,21 @@ angular.module('cttvDirectives', [])
                     var opts = {
                         efo: attrs.target,
                         datastructure: "flat",
-                        expandefo: false
+                        //expandefo: false
                     };
 
-                    if (!_.isEmpty(datatypes)) {
-                        opts.filterbydatatype = datatypes;
+                    if (!_.isEmpty(filters)) {
+                        for(var i in filters){
+                            if(i==='datatypes'){
+                                opts.filterbydatatype = filters[i];
+                            }
+                            if(i==='pathway_type'){
+                                opts.filterbypathway = filters[i];
+                            }
+                        }
                     }
+
+                    var datatypes = filters.datatypes;
 
                     // return API call
                     return cttvAPIservice.getAssociations(opts)
@@ -491,7 +512,7 @@ angular.module('cttvDirectives', [])
                                 var row = [];
                                 var geneLoc = "";
                                 var geneDiseaseLoc = "#/evidence/" + data[i].gene_id + "/" + attrs.target;
-                                row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
+                                row.push("<a href='" + geneDiseaseLoc + "'>" + data[i].label + "</a>");
                                 // Ensembl ID
                                 row.push(data[i].gene_id);
                                 // The association score
@@ -518,7 +539,7 @@ angular.module('cttvDirectives', [])
 
                             // set the table content:
 
-                            // clear any existing content
+                            // first, clear any existing content
                             table.clear();
 
                             // now here would be a good place to hide/show any columns based on datatypes ??
@@ -538,7 +559,9 @@ angular.module('cttvDirectives', [])
                             // update the filters??
                             if(resp.body.facets){
                                 $log.log("we've got facets to udpate... ");
-                                cttvFiltersService.parseFacets(resp.body.facets);
+                                //cttvFiltersService.parseFacets(resp.body.facets);
+
+                                //cttvFiltersService.test(resp.body.facets);
                             }
 
 
@@ -570,23 +593,49 @@ angular.module('cttvDirectives', [])
                 ];
 
 
+                // reset the filters **before** setting the watch on them
+                // so that it doesn't trigger a reload of the data
+                cttvFiltersService.resetFilters();
+
+
+                // OK so here is the main thing we run when the component is first loaded
+
+                // step 1:
+                // get unfiltered data from API just to get the full facets
+                getFullFacets(attrs.target)
+                    .then(
+
+                // step 2:
+                // update the filters as required
+
+                        function(resp){
+                            // get the facets and update the filters service
+                            cttvFiltersService.parseFacets(resp.body.facets);
+                        },
+
+                        //error -- optional
+                        cttvAPIservice.defaultErrorHandler
+                    );
+
+
+                // step 3:
+                // get filtered data and update table etc...
                 // TODO:
                 // watch on main object should set watch on "selected" property of objects only....
                 // to only respond to user actions...
                 scope.$watch(function(){return scope.filters}, function(newValue, oldValue) {
-                    // the first element in the filters is always datatypes
-                    $log.log("watch()");
-                    $log.log(newValue);
-                    $log.log(oldValue);
-                    if(scope.filters[0]){
-                        $log.log("** get table data? **");
-                        $log.log(scope.filters[0]);
+                //scope.$watch(function(){return cttvFiltersService.hasChanged}, function(newValue, oldValue) {
+                    if(scope.filters.length>0){
+                        $log.log("** get table data??? **");
+                        // $log.log(cttvFiltersService.getSelectedFiltersRaw());
                         // we might also need to debounce here really...
-                        updateTable(dtable, scope.filters[0].getSelectedFilters().map(function(obj){
-                            return obj.id.toLowerCase();
-                        }));
+                        //updateTable(dtable, scope.filters[0].getSelectedFilters().map(function(obj){
+                        //    return obj.id.toLowerCase();
+                        //}));
+                        updateTable(dtable, cttvFiltersService.getSelectedFiltersRaw());
                     }
                 }, true); // deep link to the object - TODO: this will have to change to account only for user clicks...
+
 
 
             } // end link
@@ -1089,26 +1138,28 @@ angular.module('cttvDirectives', [])
                 //filters : '='
             },
 
-            template: '<div>'
-                     +'    <div ng-repeat="filter in filters">'
-                     +'        <div>{{filter.label}}</div>'
-                     +'        <div>'
-                     +'            <span ng-click="filter.selectAll(false)">Clear all <i class="fa fa-times"></i></span>'
-                     +'            <span ng-click="filter.selectAll(true)">Select all <i class="fa fa-check"></i></span>'
-                     +'        </div>'
-                     +'        <div class="checkbox" ng-repeat="bucket in filter.filters">'
-                     +'            <label>'
-                     +'              <input type="checkbox"'
-                     +'                 value="{{bucket.id}}"'
-                     +'                 ng-checked="bucket.selected"'
-                     +'                 ng-disabled="!bucket.enabled"'
-                     +'                 ng-click="bucket.toggle()"'
-                     //+'                 ng-click="filterDataType(dataType)"'
-                     //+'                 ng-checked="dataType.selected">'
-                     +'                 <small>{{bucket.label}}</small>'
-                     +'            </label>'
-                     +'        </div>'
-                     +'    </div>'
+            template: '<div class="cttv-facets">'
+                     +'    <accordion close-others=false>'
+                     +'        <accordion-group ng-init="status = {isOpen: true}" is-open="status.isOpen" ng-repeat="filter in filters">'
+                     +'            <accordion-heading class="cttv-facets-headers">'
+                     +'                {{filter.label | clearUnderscores | upperCaseFirst}} <i class="pull-right text-lowlight fa" ng-class="{\'fa-plus-square\': !status.isOpen, \'fa-minus-square\': status.isOpen}"></i>'
+                     +'            </accordion-heading>'
+                     +'            <div class="cttv-facets-controls">'
+                     +'                <span ng-click="filter.selectAll(false)">Clear all <i class="fa fa-times"></i></span>'
+                     +'                <span ng-click="filter.selectAll(true)">Select all <i class="fa fa-check"></i></span>'
+                     +'            </div>'
+                     +'            <div class="checkbox" ng-repeat="bucket in filter.filters">'
+                     +'                <label ng-class="(!bucket.enabled) ? \'disabled\' : \'\'">'
+                     +'                    <input type="checkbox"'
+                     +'                        value="{{bucket.id}}"'
+                     +'                        ng-checked="bucket.selected"'
+                     +'                        ng-disabled="!bucket.enabled"'
+                     +'                        ng-click="bucket.toggle()" >'
+                     +'                    {{bucket.label}} <span class="text-lowlight small" ng-show="bucket.count>0">({{bucket.count}})</span>'
+                     +'                </label>'
+                     +'            </div>'
+                     +'        </accordion-group>'
+                     +'    </accordion>'
                      +'</div>',
 
             link: function (scope, elem, attrs) {
