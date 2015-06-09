@@ -10,39 +10,33 @@ This page lists all changes of the CTTV releases.
 
 		<div>
 
-		<h2>Release 0.4 (release 2015-06-09)</h2>
+		<h2>Release 0.4 (release 2015-06-10)</h2>
 			<h3>Status</h3>
 		    <p>This is a planned updated version of the CTTV platform. The following items were fixed and/or added:</p>
         	<ul>
-        	    <li>search box: better support of synonyms, including protein names</li>
-        	    <li>search box: better handling of partial word search and non alphanumerical chars</li>
-        	    <li>search results: filter checkboxes for disease and target checked by default</li>        	    
-        	    <li>association score: simplified score calculation easier to understand</li>
-        	    <li>association score: animal model score changed reflecting the score provided in PhenoDigm</li>
-        	    <li>disease associations page: data types facet filters are now clickable to refine the evidence types that are shown</li>
-        	    <li>disease associations page: new ‘Tree’ view that allows visualisation of evidence across the therapeutic areas in a tree representing the relationships of diseases</li>        	    
-        	    <li>disease associations page: data types facet filters are also visible on the Table and Tree view</li> 
-        	    <li>disease associations data types filters: the number of associated diseases is indicated next to each data type</li>
-        	    <li>disease associations data types filters: clicking/unclicking on a data type filter updates the Bubble, Table or Tree representation accordingly</li>        	    
-        	    <li>disease associations bubble view: support for multiple EFO paths</li>
-        	    <li>gene to disease association page: export (to excel, pdf) feature added for every data type</li>
-        	    <li>disease page: display multiple EFO paths</li>
-        	    <li>URI changed to be resource oriented for disease, target and association pages</li>
-        	    <li>The word 'gene' was replaced by the preferred word 'target' across the pages</li>
-        	    <li>generally improved consistency across the evidence pages and refined the external links</li>
-        	    <li>added secure authentication to the system so that you will be able to access by a secure, authenticated connection</li>
-        	    <li>added documentation including Release Notes and answers to Frequently Asked Questions </li>
+        	    <li>target profile page: Variants, isoforms and genomic context section improved to display the location of SNPs associated to diseases. This is now referred as the BioJS variation browser widget</li>
+        	    <li>target association page: 'data types' facet filters added to select sources of evidence. Selecting the filters will refresh the heatmap</li>
+        	    <li>target association page: 'pathways' facet filters added to filter the list of targets in the heatmap according to their appartenance in Reactome pathways</li>
+        	    <li>disease associations page: ‘Tree’ view was modified to show the top-level disease categories at a fixed position</li>
+        	    <li>disease associations page: tooltip added to display the full disease name when mouse over a bubble or a tree node</li>
+        	    <li>disease associations page: clicking on a bubble or a tree node will open a pop-up with a direct link to the disease page</li> 
+        	    <li>gene to disease association page: data tables have been reformatted to display more relevant information</li>
+        	    <li>gene to disease association page: GWAS data table - scientific notations for p-values</li>
+        	    <li>gene to disease association page: RNA expression data table - percentile rank added to indicate the relative expression level of that gene in comparison to all other genes for this experiment</li>
+        	    <li>gene to disease association page: BioJS variation browser widget added to the genetics evidence part of the page. The variation view is enabled when clicking on the 'Browser' tab below the 'Genetic associations' title</li>
         	</ul>
 
             <p>Data Changes, including updated and refined several of the data sources, particularly know drugs and their targets:</p>
             <ul>
-                <li>new version of ChEMBL</li>
+                <li>major update of ChEMBL disease associations (June 2015)</li>
                 <li>new version of GWAS Catalog disease associations (May 2015)</li>
-                <li>new version of EFO with increased coverage of diseases including X disease terms</li>
+                <li>new version of the Expression Atlas disease associations (June 2015)</li>                  
+                <li>new version of EVA disease associations (May 2015)</li>
+                <li>new version of EFO with description for over 150 Orphanet rare disease terms</li>
             </ul>
             <p>In addition, the following items were fixed:</p>
             <ul>
-                <li></li>
+                <li>Gene assigment to haplotypes fixed in mouse models</li>
                 <li></li>
             </ul>
             
