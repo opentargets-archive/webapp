@@ -441,22 +441,8 @@
                     var mut = messages.NA;
                     if(data[i].evidence.evidence_chain && data[i].evidence.evidence_chain[0].biological_object.about){
                         var rsId = data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop();
-
                         var li = db===dbs.EVA.toLowerCase() ? 0 : 1; //data[i].evidence.urls.linkouts.length-1;
-                        if( checkPath(data[i], "evidence.urls.linkouts") ){
-                            if( db===dbs.UNIPROT.toLowerCase() ){
-                                if( data[i].evidence.urls.linkouts[li]===undefined){
-                                    li = 0;
-                                }
-                            }
-                            if( data[i].evidence.urls.linkouts[li] ){
-
-                                var url = ((li==0) ? data[i].evidence.urls.linkouts[0].url : ("http://www.uniprot.org/uniprot/"+data[i].evidence.urls.linkouts[0].url.split("/").pop()+"#pathology_and_biotech"));
-                                mut = "<a href='" + url + "' target='_blank'>"
-                                + rsId
-                                + " <i class='fa fa-external-link'></i></a>";
-                            }
-                        }
+                        mut = "<a href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=" + rsId + " target=_blank>" + rsId + " <i class='fa fa-external-link'></i></a>";
                     } else {
                         console.warn (data[i]);
                     }
@@ -521,10 +507,14 @@
                         pub = "";
                         for (var j=0; j<data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references.length; j++) {
                             var n=data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
+                            if (n == 0) {
+                                continue;
+                            }
                             pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>, ";
                         }
                     } else {
                         pub = "";
+                        console.warn (data[i].evidence);
                         if (data[i].evidence.provenance_type.literature) {
                             for (var j=0; j<data[i].evidence.provenance_type.literature.references.length; j++) {
                                 var n=data[i].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
@@ -721,9 +711,9 @@
                     row.push(activity);
 
                     // 6: Clinical indications
-                    row.push( "<a href='https://clinicaltrials.gov/search?intr=%22"
+                    row.push( "<a href='"
                                 + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
-                                + "%22' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
+                                + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
                     // 7: target class
                     row.push(data[i].evidence.evidence_chain[0].evidence.experiment_specific.target_class[0]);
