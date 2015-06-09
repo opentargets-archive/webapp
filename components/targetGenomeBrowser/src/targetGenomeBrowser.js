@@ -80,17 +80,17 @@ var cttv_genome_browser = function() {
 
     // Aux track for label
     var transcript_label_track = tnt.board.track()
-    .label ("Genes / Transcripts")
-    .height(20)
-    .background_color ("#EEEFFF")
-    .display(tnt.board.track.feature.block())
-    .data(tnt.board.track.data()
-        .update(tnt.board.track.data.retriever.sync()
-            .retriever (function () {
-                return [];
-            })
-        )
-    );
+        .label ("Genes / Transcripts")
+        .height(20)
+        .background_color ("#EEEFFF")
+        .display(tnt.board.track.feature.block())
+        .data(tnt.board.track.data()
+            .update(tnt.board.track.data.retriever.sync()
+                .retriever (function () {
+                    return [];
+                })
+            )
+        );
 
     // TRACKS!
     // ClinVar track
@@ -365,7 +365,8 @@ var cttv_genome_browser = function() {
             datasource : datasources,
             fields : [
                 "biological_object.efo_info", // disease
-                "evidence.evidence_chain"
+                "evidence.evidence_chain",
+                "biological_subject"
             ]
         };
         if (efo !== undefined) {

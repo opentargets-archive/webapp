@@ -10,7 +10,6 @@ var genome_browser_nav = function () {
     var gBrowser;
 
     var theme = function (gB, div) {
-        console.log("in nav -------------");
         gBrowser = gB;
         var opts_pane = d3.select(div)
             .append ("div")
@@ -25,35 +24,30 @@ var genome_browser_nav = function () {
             .append("span")
             .text("Human Chr: " + gB.chr());
 
-        console.log(theme.left);
         var left_button = opts_pane
             .append("i")
             .attr("title", "go left")
             .attr("class", "cttvGenomeBrowserIcon fa fa-arrow-circle-left fa-2x")
             .on("click", theme.left);
 
-        console.log(theme.zoomIn);
         var zoomIn_button = opts_pane
             .append("i")
             .attr("title", "zoom in")
             .attr("class", "cttvGenomeBrowserIcon fa fa-search-plus fa-2x")
             .on("click", theme.zoomIn);
 
-        console.log(theme.zoomOut);
         var zoomOut_button = opts_pane
             .append("i")
             .attr("title", "zoom out")
             .attr("class", "cttvGenomeBrowserIcon fa fa-search-minus fa-2x")
             .on("click", theme.zoomOut);
 
-        console.log(theme.right);
         var right_button = opts_pane
             .append("i")
             .attr("title", "go right")
             .attr("class", "cttvGenomeBrowserIcon fa fa-arrow-circle-right fa-2x")
             .on("click", theme.right);
 
-        console.log(orig);
         var origLabel = opts_pane
             .append("i")
             .attr("title", "reload location")
