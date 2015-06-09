@@ -93,43 +93,8 @@ var geneAssociationsTree = function () {
 	    	    .scale(true)
 	    	   );
 
-    // Branch lengths:
-    // First pass: Get the max depth:
-    var setDepth = function (node, currDepth) {
-        node.property('__depth', currDepth);
-        var children = node.children(true) || [];
-        for (var i=0; i<children.length; i++) {
-            setDepth(children[i], currDepth+1);
-        }
-    };
-    setDepth(treeVis.root(), 0);
-	var tasNodes = treeVis.root().children();
-    var maxDepth = 0;
-    var findMaxDepth = function (n) {
-        var depth = n.property('__depth');
-        if (depth > maxDepth) {
-            maxDepth = depth;
-        }
-    };
-    for (var i=0; i<tasNodes.length; i++) {
-        var taNode = tasNodes[i];
-        taNode.apply (findMaxDepth);
-    }
+    setBranchLengths (treeVis);
 
-    // Second pass: Apply branch lengths
-    var setBranchLength = function (n) {
-        if (n.children() === undefined) {
-            n.property("branch_length", 1 + (maxDepth - n.property('__depth')));
-        } else {
-            n.property("branch_length", 1);
-        }
-    };
-    for (var j=0; j<tasNodes.length; j++) {
-        var taNode = tasNodes[j];
-        taNode.property("branch_length", 1);
-
-        taNode.apply (setBranchLength);
-    }
 
     // collapse all the therapeutic area nodes
 	// if (tas !== undefined) {
@@ -294,18 +259,19 @@ var geneAssociationsTree = function () {
 
 
     theme.update = function () {
-	treeVis.data(config.data);
-	// collapse all the therapeutic area nodes
-	// var root = treeVis.root();
-	// var tas = root.children();
-	// if (tas) {
-	//     for (var i=0; i<tas.length; i++) {
-	// 	tas[i].toggle();
-	//     }
-	// }
-	sortNodes();
-	treeVis.update();
-	// setTitles();
+        treeVis.data(config.data);
+        // collapse all the therapeutic area nodes
+        // var root = treeVis.root();
+        // var tas = root.children();
+        // if (tas) {
+        //     for (var i=0; i<tas.length; i++) {
+        // 	tas[i].toggle();
+        //     }
+        // }
+        setBranchLengths(treeVis);
+        sortNodes();
+        treeVis.update();
+        // setTitles();
     };
 
     // size of the tree
@@ -361,6 +327,49 @@ var geneAssociationsTree = function () {
 	config.legendText = t;
 	return this;
     };
+
+    function setBranchLengths (treeVis) {
+        // Branch lengths:
+        // First pass: Get the max depth:
+        var setDepth = function (node, currDepth) {
+            node.property('__depth', currDepth);
+            var children = node.children(true) || [];
+            for (var i=0; i<children.length; i++) {
+                setDepth(children[i], currDepth+1);
+            }
+        };
+        setDepth(treeVis.root(), 0);
+
+        var tasNodes = treeVis.root().children();
+        var maxDepth = 0;
+        var findMaxDepth = function (n) {
+            var depth = n.property('__depth');
+            if (depth > maxDepth) {
+                maxDepth = depth;
+            }
+        };
+        for (var i=0; i<tasNodes.length; i++) {
+            var taNode = tasNodes[i];
+            taNode.apply (findMaxDepth);
+        }
+
+        // Second pass: Apply branch lengths
+        var setLength = function (n) {
+            if (n.children() === undefined) {
+                n.property("branch_length", 1 + (maxDepth - n.property('__depth')));
+            } else {
+                n.property("branch_length", 1);
+            }
+        };
+        for (var j=0; j<tasNodes.length; j++) {
+            var taNode = tasNodes[j];
+            taNode.property("branch_length", 1);
+
+            taNode.apply (setLength);
+        }
+
+    }
+
 
     return theme;
 };
