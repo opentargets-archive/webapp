@@ -167,7 +167,7 @@ module.exports = Citation = Class(
 		if (this.opt.proxyUrl != undefined){
 			this._proxyUrl = this.opt.proxyUrl;
 		}else{
-			this._proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+			this._proxyUrl = '//cors-anywhere.herokuapp.com/';
 		}
 		
 		this.resetContainer();
@@ -182,7 +182,7 @@ module.exports = Citation = Class(
 	   target: 'YourOwnDivId',
 	   citation_id: undefined,
 	   source: undefined,
-	   restEpmcUrl: 'http://www.ebi.ac.uk/europepmc/webservices/rest/search/',
+	   restEpmcUrl: '//www.ebi.ac.uk/europepmc/webservices/rest/search/',
 	   height: undefined,
 	   width: undefined,
 	   loadingStatusImage: '../css/images/ajax-loader-1.gif',
@@ -191,7 +191,7 @@ module.exports = Citation = Class(
 	   elementOrder: 'TITLE_FIRST',
 	   displayStyle: 'FULL_STYLE',
 	   numRowCompact: 4,
-	   logoImage: 'https://i.imgur.com/YEMLL63.jpg'
+	   logoImage: '//i.imgur.com/YEMLL63.jpg'
 	},
 	
 	_innerWidth:0,
@@ -580,23 +580,23 @@ module.exports = Citation = Class(
 	getAbstractUrl: function(resultElement){ 
 		var abstractUrl="";
 		if (resultElement.source==Citation.PMC_SOURCE){
-			abstractUrl = "http://europepmc.org/abstract/PMC/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/PMC/"+resultElement.id;
 		}else if ((resultElement.source==Citation.DOI_SOURCE) || (resultElement.source==Citation.MED_SOURCE)){
-			abstractUrl = "http://europepmc.org/abstract/med/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/med/"+resultElement.id;
 		}else if (resultElement.source==Citation.ETH_SOURCE){
-			abstractUrl = "http://europepmc.org/theses/ETH/"+resultElement.id;
+			abstractUrl = "//europepmc.org/theses/ETH/"+resultElement.id;
 		}else if (resultElement.source==Citation.PAT_SOURCE){
-			abstractUrl = "http://europepmc.org/patents/pat/"+resultElement.id;
+			abstractUrl = "//europepmc.org/patents/pat/"+resultElement.id;
 		}else if (resultElement.source==Citation.HIR_SOURCE){
-			abstractUrl = "http://europepmc.org/guidelines/HIR/"+resultElement.id;
+			abstractUrl = "//europepmc.org/guidelines/HIR/"+resultElement.id;
 		}else if (resultElement.source==Citation.AGR_SOURCE){
-			abstractUrl = "http://europepmc.org/abstract/AGR/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/AGR/"+resultElement.id;
 		}else if (resultElement.source==Citation.CBA_SOURCE){
-			abstractUrl = "http://europepmc.org/abstract/CBA/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/CBA/"+resultElement.id;
 		}else if (resultElement.source==Citation.CTX_SOURCE){
-			abstractUrl = "http://europepmc.org/abstract/CTX/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/CTX/"+resultElement.id;
 		}else{
-			abstractUrl = "http://europepmc.org/abstract/med/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/med/"+resultElement.id;
 		}
 		return abstractUrl;
 	},
@@ -670,7 +670,7 @@ module.exports = Citation = Class(
 		
 		if (journalTitle!= ""){
 			var filter = "JOURNAL:&quot;"+ journalTitle+"&quot;";
-			journalHTML= "<a class=\"epmc_citation_link\" href=\"http://europepmc.org/search?\query="+filter+"&page=1\">"+journalTitle+"</a>";
+			journalHTML= "<a class=\"epmc_citation_link\" href=\"//europepmc.org/search?\query="+filter+"&page=1\">"+journalTitle+"</a>";
 			
 			var yearOfPubblication = resultElement.journalInfo.yearOfPublication;
 			var issue = resultElement.journalInfo.issue;
@@ -707,7 +707,7 @@ module.exports = Citation = Class(
 				journalTitle = resultElement.bookOrReportDetails.publisher;
 				
 				var filter = "PUBLISHER:&quot;"+ journalTitle+"&quot;";
-				journalHTML= "<a class=\"epmc_citation_link\" href=\"http://europepmc.org/search?\query="+filter+"&page=1\">"+journalTitle+"</a>";
+				journalHTML= "<a class=\"epmc_citation_link\" href=\"//europepmc.org/search?\query="+filter+"&page=1\">"+journalTitle+"</a>";
 				
 				var yearOfPubblication = resultElement.bookOrReportDetails.yearOfPublication;
 				if (yearOfPubblication!=null){
@@ -759,7 +759,7 @@ module.exports = Citation = Class(
 			if (authorName!=undefined && authorName!=""){ 
 				labelAuthNew =  labelAuth + authorName;
 				filter = "AUTH:&quot;"+authorName+"&quot;";
-				authorsHtmlNew =authorsHtml + "<a class=\"epmc_citation_link\" href=\"http://europepmc.org/search?query="+filter+"&page=1\">"+authorName+"</a>";
+				authorsHtmlNew =authorsHtml + "<a class=\"epmc_citation_link\" href=\"//europepmc.org/search?query="+filter+"&page=1\">"+authorName+"</a>";
 				
 				if (this.opt.displayStyle == Citation.COMPACT_STYLE){
 					tempWidth = this.textWidth(jQuery('<span style="font-family:'+fontfamily+';font-size:'+fontSize+'px;">' + labelAuthNew  + '</span>'));
@@ -969,7 +969,7 @@ module.exports = CitationList = Class(
 		if (this.opt.proxyUrl != undefined){
 			this._proxyUrl = this.opt.proxyUrl;
 		}else{
-			this._proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+			this._proxyUrl = '//cors-anywhere.herokuapp.com/';
 		}
 		
 		if (this.opt.numberResults > 25){
@@ -994,7 +994,7 @@ module.exports = CitationList = Class(
 	opt: {
 	   target: 'YourOwnDivId',
 	   query: undefined,
-	   restEpmcUrl: 'http://www.ebi.ac.uk/europepmc/webservices/rest/search/',
+	   restEpmcUrl: '//www.ebi.ac.uk/europepmc/webservices/rest/search/',
 	   height: undefined,
 	   width: undefined,
 	   loadingStatusImage: '../css/images/ajax-loader-1.gif',
@@ -1003,7 +1003,7 @@ module.exports = CitationList = Class(
 	   elementOrder: 'TITLE_FIRST',
 	   displayStyle: 'FULL_STYLE',
 	   numRowCompact: 4,
-	   logoImage: 'https://i.imgur.com/YEMLL63.jpg'
+	   logoImage: '//i.imgur.com/YEMLL63.jpg'
 	},
 	
 	_innerWidth:0,
@@ -1152,23 +1152,23 @@ module.exports = CitationList = Class(
 	getAbstractUrl: function(resultElement){ 
 		var abstractUrl="";
 		if (resultElement.source==CitationList.PMC_SOURCE){
-			abstractUrl = "http://europepmc.org/abstract/PMC/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/PMC/"+resultElement.id;
 		}else if ((resultElement.source==CitationList.DOI_SOURCE) || (resultElement.source==CitationList.MED_SOURCE)){
-			abstractUrl = "http://europepmc.org/abstract/med/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/med/"+resultElement.id;
 		}else if (resultElement.source==CitationList.ETH_SOURCE){
-			abstractUrl = "http://europepmc.org/theses/ETH/"+resultElement.id;
+			abstractUrl = "//europepmc.org/theses/ETH/"+resultElement.id;
 		}else if (resultElement.source==CitationList.PAT_SOURCE){
-			abstractUrl = "http://europepmc.org/patents/pat/"+resultElement.id;
+			abstractUrl = "//europepmc.org/patents/pat/"+resultElement.id;
 		}else if (resultElement.source==CitationList.HIR_SOURCE){
-			abstractUrl = "http://europepmc.org/guidelines/HIR/"+resultElement.id;
+			abstractUrl = "//europepmc.org/guidelines/HIR/"+resultElement.id;
 		}else if (resultElement.source==CitationList.AGR_SOURCE){
-			abstractUrl = "http://europepmc.org/abstract/AGR/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/AGR/"+resultElement.id;
 		}else if (resultElement.source==CitationList.CBA_SOURCE){
-			abstractUrl = "http://europepmc.org/abstract/CBA/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/CBA/"+resultElement.id;
 		}else if (resultElement.source==CitationList.CTX_SOURCE){
-			abstractUrl = "http://europepmc.org/abstract/CTX/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/CTX/"+resultElement.id;
 		}else{
-			abstractUrl = "http://europepmc.org/abstract/med/"+resultElement.id;
+			abstractUrl = "//europepmc.org/abstract/med/"+resultElement.id;
 		}
 		return abstractUrl;
 	},
@@ -1241,7 +1241,7 @@ module.exports = CitationList = Class(
 		
 		if (journalTitle!= ""){
 			var filter = "JOURNAL:&quot;"+ journalTitle+"&quot;";
-			journalHTML= "<a class=\"epmc_citation_link\" href=\"http://europepmc.org/search?\query="+filter+"&page=1\">"+journalTitle+"</a>";
+			journalHTML= "<a class=\"epmc_citation_link\" href=\"//europepmc.org/search?\query="+filter+"&page=1\">"+journalTitle+"</a>";
 			
 			var yearOfPubblication = resultElement.journalInfo.yearOfPublication;
 			var issue = resultElement.journalInfo.issue;
@@ -1278,7 +1278,7 @@ module.exports = CitationList = Class(
 				journalTitle = resultElement.bookOrReportDetails.publisher;
 				
 				var filter = "PUBLISHER:&quot;"+ journalTitle+"&quot;";
-				journalHTML= "<a class=\"epmc_citation_link\" href=\"http://europepmc.org/search?\query="+filter+"&page=1\">"+journalTitle+"</a>";
+				journalHTML= "<a class=\"epmc_citation_link\" href=\"//europepmc.org/search?\query="+filter+"&page=1\">"+journalTitle+"</a>";
 				
 				var yearOfPubblication = resultElement.bookOrReportDetails.yearOfPublication;
 				if (yearOfPubblication!=null){
@@ -1330,7 +1330,7 @@ module.exports = CitationList = Class(
 			if (authorName!=undefined && authorName!=""){ 
 				labelAuthNew =  labelAuth + authorName;
 				filter = "AUTH:&quot;"+authorName+"&quot;";
-				authorsHtmlNew =authorsHtml + "<a class=\"epmc_citation_link\" href=\"http://europepmc.org/search?query="+filter+"&page=1\">"+authorName+"</a>";
+				authorsHtmlNew =authorsHtml + "<a class=\"epmc_citation_link\" href=\"//europepmc.org/search?query="+filter+"&page=1\">"+authorName+"</a>";
 				
 				if (this.opt.displayStyle == CitationList.COMPACT_STYLE){
 					tempWidth = this.textWidth(jQuery('<span style="font-family:'+fontfamily+';font-size:'+fontSize+'px;">' + labelAuthNew  + '</span>'));
@@ -1532,7 +1532,7 @@ module.exports = CitationList = Class(
 		
 		//display the "See All Results" link at the bottom if there are more results to show
 		if (resp.hitCount > this.opt.numberResults){
-			jQuery('<div class=\"epmc_more_resuts\"><a class=\"epmc_citation_link\" href=\"http://europepmc.org/search?\query='+this.opt.query+'&page=1">See All Results...</a></div>').appendTo(this._citationsContainer);
+			jQuery('<div class=\"epmc_more_resuts\"><a class=\"epmc_citation_link\" href=\"//europepmc.org/search?\query='+this.opt.query+'&page=1">See All Results...</a></div>').appendTo(this._citationsContainer);
 			jQuery('.epmc_more_resuts').width(this.opt.width -10);
 		}
 		
