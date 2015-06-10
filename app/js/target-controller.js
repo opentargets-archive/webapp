@@ -150,10 +150,10 @@ angular.module('cttvControllers')
                                 }
 
                                 var firstStructure = _.sortBy(_.keys(pdb))[0].toLowerCase();
-                                console.log("USING URL FOR PDB: //www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json");
+                                console.log("USING URL FOR PDB: /pdbe/static/entry/" + firstStructure + "_json");
                                 $scope.pdb.id = firstStructure;
                                 $scope.pdb.nstructures = _.keys(pdb).length;
-                                $http.get("//www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json")
+                                $http.get("/pdbe/static/entry/" + firstStructure + "_json")
                                 .success (function (data) {
                                     var entryImgs = data[firstStructure].entry.all.image;
                                     for (var i=0; i<entryImgs.length; i++) {
