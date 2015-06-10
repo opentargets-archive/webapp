@@ -150,24 +150,25 @@ angular.module('cttvControllers')
                                 }
 
                                 var firstStructure = _.sortBy(_.keys(pdb))[0].toLowerCase();
+                                console.log("USING URL FOR PDB: //www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json");
                                 $scope.pdb.id = firstStructure;
                                 $scope.pdb.nstructures = _.keys(pdb).length;
-                                $http.get("https://www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json")
-                                    .success (function (data) {
-                                        var entryImgs = data[firstStructure].entry.all.image;
-					for (var i=0; i<entryImgs.length; i++) {
-					    if (entryImgs[i].filename === (firstStructure + "_deposited_chain_front")) {
-						$scope.pdb.thumbnailUrl = "https://www.ebi.ac.uk/pdbe/static/entry/" + entryImgs[i].filename + data.image_suffix[2]; // 400x400 image
-						$scope.pdb.alt = entryImgs[i].alt;
-						$scope.pdb.description = $sce.trustAsHtml(entryImgs[i].description);
-						return;
-					    }
-					}
-                                    })
-                                    .error (function (data) {
-                                        console.log("ERROR FROM PDB:");
-                                        console.log(data);
-                                    });
+                                $http.get("//www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json")
+                                .success (function (data) {
+                                    var entryImgs = data[firstStructure].entry.all.image;
+                                    for (var i=0; i<entryImgs.length; i++) {
+                                        if (entryImgs[i].filename === (firstStructure + "_deposited_chain_front")) {
+                                            $scope.pdb.thumbnailUrl = "//www.ebi.ac.uk/pdbe/static/entry/" + entryImgs[i].filename + data.image_suffix[2]; // 400x400 image
+                                            $scope.pdb.alt = entryImgs[i].alt;
+                                            $scope.pdb.description = $sce.trustAsHtml(entryImgs[i].description);
+                                            return;
+                                        }
+                                    }
+                                })
+                                .error (function (data) {
+                                    console.log("ERROR FROM PDB:");
+                                    console.log(data);
+                                });
 
 
                                 // Pathways
