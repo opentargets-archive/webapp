@@ -18,7 +18,8 @@ var cttv_genome_browser = function() {
     var snps = {};
 
     // gwas
-    var rest = ensembl_rest_api();
+    var rest = ensembl_rest_api()
+        .proxyUrl("/ensembl");
     var gwas_data = [];
 
     // div_ids to display different elements

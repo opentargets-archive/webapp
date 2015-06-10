@@ -1,4 +1,5 @@
-var rest = require("tnt.ensembl")();
+var rest = require("tnt.ensembl")()
+    .proxyUrl("/ensembl");
 
 var c = {};
 c.snps = {};
