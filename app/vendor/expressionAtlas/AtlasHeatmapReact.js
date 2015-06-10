@@ -32,7 +32,7 @@
  * @version 1.0.2
  * @category 1
  *
- * @requires <a href='http://code.jquery.com/jquery-1.6.4.js'>jQuery Core 1.6.4</a>
+ * @requires <a href='//code.jquery.com/jquery-1.6.4.js'>jQuery Core 1.6.4</a>
  * @dependency <script language="JavaScript" type="text/javascript" src="../biojs/dependencies/jquery/jquery-1.6.4.min.js"></script>
  *
  * @param {Object} options An object with the options for AtlasHeatmap component.
@@ -79,7 +79,7 @@ Biojs.AtlasHeatmap = Biojs.extend({
             beforeSend:function () {
                 // TODO: nasty workaround for http://youtrack.jetbrains.com/issue/IDEA-25934 (still not fixed)
                 var resource_host = ("${resources.host}" === "\${resources.host}") ? "wwwdev.ebi.ac.uk" : "${resources.host}";
-                containerDiv.html("<img src='http://" + resource_host + "/gxa/resources/images/loading.gif' />");
+                containerDiv.html("<img src='//" + resource_host + "/gxa/resources/images/loading.gif' />");
             }
         };
 
@@ -140,7 +140,7 @@ Biojs.AtlasHeatmap = Biojs.extend({
     },
 
     opt:{
-        gxaBaseUrl: 'http://www.ebi.ac.uk/gxa',
+        gxaBaseUrl: '//www.ebi.ac.uk/gxa',
         /* params
          This mandatory parameter consists of the query for a particular
          gene or genes by given their properties. For a single gene query,
