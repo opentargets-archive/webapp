@@ -15,17 +15,19 @@ c.cttv_clinvar = function (resp) {
         var this_target = resp.body.data[i].biological_subject;
         var snp_name = this_snp.evidence.evidence_chain[1].biological_subject.properties.experiment_specific.rsId;
         var clinvarId = this_snp.evidence.evidence_chain[0].biological_object.about[0].split("/").pop();
+
         if (clinvarSNPs[snp_name] === undefined) {
-            clinvarSNPs[snp_name] = {};
-            clinvarSNPs[snp_name].name = snp_name;
-            clinvarSNPs[snp_name].clinvarId = clinvarId;
-            clinvarSNPs[snp_name].association = {
+            var association = {
                 "efo" : this_snp.biological_object.efo_info[0][0].efo_id,
                 "label" : this_snp.biological_object.efo_info[0][0].label,
                 "name"  : snp_name,
                 "target" : this_target.about[0],
                 "pmids"  : this_snp.evidence.evidence_chain[1].evidence.provenance_type.literature.references.map(function (d) {return d.lit_id.split("/").pop()})
             };
+            clinvarSNPs[snp_name] = {};
+            clinvarSNPs[snp_name].name = snp_name;
+            clinvarSNPs[snp_name].clinvarId = clinvarId;
+            clinvarSNPs[snp_name].association = association;
         }
     }
     c.snps["clinvar"] = clinvarSNPs;
