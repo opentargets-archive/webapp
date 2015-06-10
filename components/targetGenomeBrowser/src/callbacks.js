@@ -30,9 +30,8 @@ c.cttv_clinvar = function (resp) {
             };
             clinvarSNPs[snp_name] = {};
             clinvarSNPs[snp_name].name = snp_name;
-            clinvarSNPs[snp_name].clinvarId = clinvarId;
             clinvarSNPs[snp_name].association = association;
-            clinvarSNPs[snp_name].association = association;
+            clinvarSNPs[snp_name].clinvarId = clinvarId;
         }
     }
     c.snps["clinvar"] = clinvarSNPs;
