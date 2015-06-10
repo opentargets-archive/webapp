@@ -789,7 +789,8 @@ angular.module('cttvDirectives', [])
             elem[0].appendChild(newDiv);
 
             var instance = new Biojs.AtlasHeatmap ({
-            gxaBaseUrl: 'https://www.ebi.ac.uk/gxa',
+            //gxaBaseUrl: 'https://www.ebi.ac.uk/gxa',
+            gxaBaseUrl : '/gxa',
             params:'geneQuery=' + target + "&species=homo%20sapiens",
             isMultiExperiment: true,
             target : "cttvExpressionAtlas"

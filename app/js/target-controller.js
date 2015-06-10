@@ -150,7 +150,6 @@ angular.module('cttvControllers')
                                 }
 
                                 var firstStructure = _.sortBy(_.keys(pdb))[0].toLowerCase();
-                                console.log("USING URL FOR PDB: /pdbe/static/entry/" + firstStructure + "_json");
                                 $scope.pdb.id = firstStructure;
                                 $scope.pdb.nstructures = _.keys(pdb).length;
                                 $http.get("/pdbe/static/entry/" + firstStructure + "_json")
