@@ -717,7 +717,6 @@ angular.module('cttvDirectives', [])
              restrict: 'E',
              link: function (scope, elem, attrs) {
                  var efo = attrs.efo;
-                 console.warn(efo);
                  var w = (attrs.width || elem[0].parentNode.offsetWidth) - 40;
                  scope.$watch(function () {return attrs.target }, function (target) {
                      if (target === "") {
@@ -733,10 +732,10 @@ angular.module('cttvDirectives', [])
                         .context(20)
                         .width(w);
                     gB.rest().proxyUrl("/ensembl");
-                     var theme = targetGenomeBrowser()
+                    var theme = targetGenomeBrowser()
                         .chr(scope.chr)
                         .efo(efo);
-                     theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
+                    theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
                  });
              }
          };
