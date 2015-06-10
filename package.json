@@ -59,7 +59,7 @@
     "cttv.targetAssociations": "file:components/targetAssociations",
     "cttv.targetAssociationsTree": "file:components/targetAssociationsTree",
     "cttv.targetGenomeBrowser": "file:components/targetGenomeBrowser",
-    "tnt.genome": "0.0.21",
+    "tnt.genome": "0.0.22",
     "tnt.tooltip": "0.0.10",
     "tnt.utils": "0.0.1"
   }

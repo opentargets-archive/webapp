@@ -732,6 +732,7 @@ angular.module('cttvDirectives', [])
                         .gene(attrs.target)
                         .context(20)
                         .width(w);
+                    gB.rest().proxyUrl("/ensembl");
                      var theme = targetGenomeBrowser()
                         .chr(scope.chr)
                         .efo(efo);
