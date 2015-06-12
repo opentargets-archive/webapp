@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "tnt.tooltip": "^0.0.10",
-    "tnt.tree": "^0.0.19",
+    "tnt.tree": "^0.0.21",
     "tnt.utils": "0.0.1"
   }
 }
