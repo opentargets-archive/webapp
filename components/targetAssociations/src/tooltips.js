@@ -27,6 +27,9 @@ var tooltips = function () {
     }, 200);
 
     t.mouseover = function (node) {
+        if (node.parent() === undefined) {
+            return;
+        }
         var ev = d3.event;
         hover_tooltip = tnt_tooltip.plain()
             .id(2)

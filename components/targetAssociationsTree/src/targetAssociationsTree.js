@@ -92,9 +92,6 @@ var geneAssociationsTree = function () {
            })
            .fontsize(14)
            .fontweight(function (node) {
-               if (node.parent()) {
-                   console.warn (node.parent().data())
-               }
                if (node.parent() && node.parent().node_name() === "cttv_disease") {
                    return "bold";
                }
