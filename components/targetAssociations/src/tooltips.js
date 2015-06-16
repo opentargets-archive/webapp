@@ -23,7 +23,9 @@ var tooltips = function () {
         hover_tooltip.call(this, obj, ev);
     }, 200);
     var hide_deferred = deferCancel(function () {
-        hover_tooltip.close();
+        if (hover_tooltip) {
+            hover_tooltip.close();
+        }
     }, 200);
 
     t.mouseover = function (node) {
