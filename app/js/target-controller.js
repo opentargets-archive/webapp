@@ -181,9 +181,9 @@ angular.module('cttvControllers')
                                 }
                                 $scope.pathways = pathwaysArr;
 
-				// Drugs
-				var drugs = resp.drugbank;
-				$scope.drugs = drugs;
+                                // Drugs
+                                var drugs = resp.drugbank;
+                                $scope.drugs = drugs;
 
                                 // Bibliography
                                 var bibliography = _.filter(resp.dbxrefs, function (t) {return t.match(/^PubMed/)});

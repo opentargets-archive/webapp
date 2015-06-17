@@ -650,32 +650,35 @@ angular.module('cttvDirectives', [])
      *
      */
     .directive('pmcCitationList', function () {
-    var pmc = require ('biojs-vis-pmccitation');
+        var pmc = require ('biojs-vis-pmccitation');
         return {
             restrict: 'E',
             templateUrl: "partials/pmcCitation.html",
             link: function (scope, elem, attrs) {
-        scope.$watch(function () { return attrs.pmids}, function (newPMIDs) {
-            var pmids = newPMIDs.split(",");
-            if (pmids[0]) {
-            var terms = [];
-            for (var i=0; i<pmids.length; i++) {
-                terms.push("EXT_ID:" + pmids[i]);
-            }
-            var query = terms.join(" OR ");
-                var config = {
-                    width: 800,
-                    loadingStatusImage: "",
-                    source: pmc.Citation.MED_SOURCE,
-                query: query,
-                    target: 'pmcCitation',
-                    displayStyle: pmc.CitationList.FULL_STYLE,
-                    elementOrder: pmc.CitationList.TITLE_FIRST
-                };
-                var instance = new pmc.CitationList(config);
-                instance.load();
-            }
-        });
+                scope.$watch(function () { return attrs.pmids}, function (newPMIDs) {
+                    if (!newPMIDs) {
+                        return;
+                    }
+                    var pmids = newPMIDs.split(",");
+                    if (pmids[0]) {
+                        var terms = [];
+                        for (var i=0; i<pmids.length; i++) {
+                            terms.push("EXT_ID:" + pmids[i]);
+                        }
+                        var query = terms.join(" OR ");
+                        var config = {
+                            width: 800,
+                            loadingStatusImage: "",
+                            source: pmc.Citation.MED_SOURCE,
+                            query: query,
+                            target: 'pmcCitation',
+                            displayStyle: pmc.CitationList.FULL_STYLE,
+                            elementOrder: pmc.CitationList.TITLE_FIRST
+                        };
+                        var instance = new pmc.CitationList(config);
+                        instance.load();
+                    }
+                });
             }
         };
     })
