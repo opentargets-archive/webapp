@@ -55,6 +55,7 @@
   "dependencies": {
     "cttv.api": "file:components/cttvApi",
     "cttv.bubblesView": "file:components/bubblesView",
+    "cttv.diseaseGraph": "file:components/diseaseGraph",
     "cttv.flowerView": "file:components/flowerView",
     "cttv.targetAssociations": "file:components/targetAssociations",
     "cttv.targetAssociationsTree": "file:components/targetAssociationsTree",

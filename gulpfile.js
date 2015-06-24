@@ -64,7 +64,7 @@ gulp.task('e2eTest', function () {
 gulp.task('test', ['unitTest']);
 
 gulp.task('watch', function() {
-    gulp.watch(['./app/js/*.js', './test/*.js'], ['test', 'lint']);
+    gulp.watch(['./app/js/*.js', './test/*.js', './components/diseaseGraph/src/*.js'], ['build-browser','test']);
 });
 
 

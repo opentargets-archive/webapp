@@ -1,0 +1,37 @@
+.cttv_diseaseGraph_node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+  cursor: move;
+  fill: #5db850;
+}
+
+.cttv_diseaseGraph_child {
+    fill: #21a0df;
+}
+
+.cttv_diseaseGraph_ancestor {
+    fill: #cb1313;
+}
+
+.cttv_diseaseGraph_link {
+  stroke: #999;
+  stroke-width: 3px;
+  stroke-opacity: 1;
+}
+
+.cttv_diseaseGraph_label {
+    fill: white;
+    font-family: Verdana;
+    font-size: 12px;
+    text-anchor: middle;
+    cursor: move;
+}
+
+.cttv_diseaseGraph_background {
+    fill: "#000000";
+}
+
+.guideline {
+    stroke: orangered;
+    stroke-width: 4px;
+}
