@@ -141,7 +141,7 @@ var diseaseGraph = function () {
             .remove();
 
         var label = vis.selectAll(".cttv_diseaseGraph_label")
-            .data(graph.nodes, function (d) {
+            .data(graph.nodes, function (d) {
                 return d.efo;
             });
 
