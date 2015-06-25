@@ -8,8 +8,6 @@ function getGraph (efo_info) {
     var width = 60;
     var height = 40;
 
-    console.warn (efo_info);
-
     // EFO node
     nodes.push({
         "efo" : efo_info.efo,
@@ -64,6 +62,7 @@ function getGraph (efo_info) {
         for (var k=path.length-2; k>=0; k--) {
             var thisNode = path[k];
             var thisChild = path[k+1];
+            // If this node has not been visited yet, store it
             if (index[thisNode.efo] === undefined) {
                 nodes.push({
                     "efo" : thisNode.efo,
@@ -75,14 +74,16 @@ function getGraph (efo_info) {
                 ancestorGroup.leaves.push(ix);
                 index[thisNode.efo] = ix++;
             }
+            // If the child of the node has not been visited yet, store it
             if (index[thisChild.efo] === undefined) {
                 nodes.push({
                     "efo" : thisChild.efo,
-                    "width" : width,
+                    "label" : thisChild.label,
+                    "width" : thisChild.label.length*8,
                     "type" : "ancestor",
                     "height" : height
                 });
-                ancestorGroup.leves.push(ix);
+                ancestorGroup.leaves.push(ix);
                 index[thisChild.efo] = ix++;
             }
 
@@ -99,6 +100,13 @@ function getGraph (efo_info) {
                 });
                 linksIndex[thisNode.efo][thisChild.efo] = true;
                 linksIndex[thisChild.efo][thisNode.efo] = true;
+                // Parent always on top of childrens
+                constraints.push({
+                    "axis" : "y",
+                    "left" : index[thisNode.efo],
+                    "right" : index[thisChild.efo],
+                    "gap" : 50
+                });
             }
         }
     }
@@ -113,7 +121,7 @@ function getGraph (efo_info) {
             "axis" : "y",
             "left" : 0,
             "right" : d,
-            "gap" : 20
+            "gap" : 70
         });
     });
 
@@ -122,7 +130,7 @@ function getGraph (efo_info) {
             "axis" : "y",
             "left" : d,
             "right" : 0,
-            "gap" : 20
+            "gap" : 70
         });
     });
 

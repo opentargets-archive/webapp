@@ -1,5 +1,6 @@
 var getGraph = require("./getGraph.js");
 var graph_tooltips = require("./tooltips.js");
+var legend = require("./legend.js");
 
 var diseaseGraph = function () {
     "use strict";
@@ -9,7 +10,11 @@ var diseaseGraph = function () {
     var color = d3.scale.category10();
 
     var graph;
-    var tooltips = graph_tooltips();
+
+    var vis;
+    var zoom;
+    var cttvApi;
+    var tooltips;
 
     // default dimensions
     var width = 800;
@@ -21,11 +26,29 @@ var diseaseGraph = function () {
         .size([width, height]);
 
     var render = function (container) {
+        tooltips = graph_tooltips()
+            .cttvApi (cttvApi)
+            .actions({
+                "focus" : function (efo) {
+                    var url = cttvApi.url.disease({
+                        "efo" : efo.efo
+                    });
+                    cttvApi
+                        .call(url)
+                        .then (function (resp) {
+                            var data = resp.body;
+                            var obj = parseDisease(data);
+                            render.data(obj);
+                            render.update();
+                        });
+                }
+        });
+
         var div = d3.select(container)
             .append("div")
             .style("position", "relative");
 
-        var zoom = d3.behavior.zoom()
+        zoom = d3.behavior.zoom()
             .on("zoom", redraw);
 
         function redraw() {
@@ -45,11 +68,17 @@ var diseaseGraph = function () {
             .attr('height', "100%")
             .call(zoom);
 
-        var vis = svg
+        vis = svg
             .append("g");
             // .call(zoom)
             // .append("g");
 
+        render.update();
+        //legend(div);
+    };
+
+
+    render.update = function() {
         graph.nodes.forEach(function (v) {
             v.x = 400;
             v.y = 50;
@@ -62,23 +91,30 @@ var diseaseGraph = function () {
             .groups(graph.groups)
             .start(20,20,20);
 
+        // Links
         var link = vis.selectAll(".cttv_diseaseGraph_link")
-            .data(graph.links)
-            .enter().append("line")
+            .data(graph.links, function (d) {
+                return d.source.efo + "_" + d.target.efo;
+            });
+        link
+            .enter()
+            .append("line")
             .attr("class", "cttv_diseaseGraph_link");
 
+        link
+            .exit()
+            .remove();
+
+        // Nodes
         var node = vis.selectAll(".cttv_diseaseGraph_node")
             .data(graph.nodes, function (d) {
                 return d.efo;
-            })
-            .enter().append("rect")
+            });
+
+        node
+            .enter()
+            .append("rect")
             .attr("class", "cttv_diseaseGraph_node")
-            .classed("cttv_diseaseGraph_child", function (d) {
-                return d.type === "child";
-            })
-            .classed("cttv_diseaseGraph_ancestor", function (d) {
-                return d.type === "ancestor";
-            })
             .attr("width", function (d) { return d.width; })
             .attr("height", function (d) { return d.height; })
             .attr("rx", 5).attr("ry", 5)
@@ -87,12 +123,30 @@ var diseaseGraph = function () {
                     return;
                 }
                 tooltips.click.call(this, d);
-                //console.warn(d);
             })
             .call(d3cola.drag);
 
+        node
+            .classed("cttv_diseaseGraph_child", function (d) {
+                return d.type === "child";
+            })
+            .classed("cttv_diseaseGraph_ancestor", function (d) {
+                return d.type === "ancestor";
+            })
+            .call(moveToFront);
+
+
+        node
+            .exit()
+            .remove();
+
         var label = vis.selectAll(".cttv_diseaseGraph_label")
-            .data(graph.nodes)
+            .data(graph.nodes, function (d) {
+                return d.efo;
+            });
+
+        // Labels
+        label
             .enter()
             .append("text")
             .attr("class", "cttv_diseaseGraph_label")
@@ -102,10 +156,12 @@ var diseaseGraph = function () {
             })
             .call(d3cola.drag);
 
-        node.append("title")
-            .text(function (d) {
-                return d.label;
-            });
+        label
+            .call(moveToFront);
+
+        label
+            .exit()
+            .remove();
 
         d3cola.on("tick", function () {
             var extents = getBounds(node);
@@ -204,81 +260,53 @@ var diseaseGraph = function () {
         return this;
     };
 
-    return d3.rebind (render, dispatch, "on");
-};
-
-// Dummy data
-// var graph = {
-//     "nodes":[
-//         {"name":"a","width":60,"height":40},
-//         {"name":"b","width":60,"height":40},
-//         {"name":"c","width":60,"height":40},
-//         {"name":"d","width":60,"height":40},
-//         {"name":"e","width":60,"height":40}
-//     ],
-//     "links":[
-//         {"source":1,"target":2},
-//         {"source":2,"target":0},
-//         {"source":2,"target":3},
-//         {"source":2,"target":4},
-//     ],
-//     "constraints":[
-//         {
-//             "type":"alignment",
-//             "axis":"x",
-//             "offsets":[
-//                 {"node":1, "offset":0},
-//                 {"node":2, "offset":0},
-//                 {"node":3, "offset":0}
-//             ]
-//         },
-//         {
-//             "type":"alignment",
-//             "axis":"y",
-//             "offsets":[
-//                 {"node":0, "offset":0},
-//                 {"node":1, "offset":0},
-//                 {"node":4, "offset":0}
-//             ]
-//         }
-//     ]
-// };
-
-var graph = {
-    "nodes" : [
-        {"name":"a","width":60,"height":40}, // 0
-        {"name":"b","width":60,"height":40}, // 1
-        {"name":"c","width":60,"height":40}, // 2
-        {"name":"d","width":60,"height":40}, // 3
-        {"name":"e","width":60,"height":40}, // 4
-        {"name":"f","width":60,"height":40}  // 5
-    ],
-    "links" : [
-        {"source" : 1, "target" : 0},
-        {"source" : 2, "target" : 0},
-        {"source" : 0, "target" : 3},
-        {"source" : 0, "target" : 4},
-        {"source" : 0, "target" : 5},
-    ],
-    "constraints" : [
-        {
-            "type" : "alignment",
-            "axis" : "y",
-            "offsets" : [
-                { "node" : 3, "offset" : 0 },
-                { "node" : 4, "offset" : 0 },
-                { "node" : 5, "offset" : 0 }
-            ]
-        },
-        {
-            "type" : "alignment",
-            "axis" : "x",
-            "offsets" : [
-                { "node" : 1, "offset" : 0 },
-                { "node" : 2, "offset" : 0 }
-            ]
+    render.cttvApi = function (api) {
+        if (!arguments.length) {
+            return cttvApi;
         }
-    ]
+        cttvApi = api;
+        return this;
+    };
+
+    function moveToFront() {
+        return this.each(function() {
+            this.parentNode.appendChild(this);
+        });
+    }
+
+    function parseDisease(data) {
+        var obj = {
+            "label" : data.label
+        };
+
+        // efo code
+        var efo_url = data.code;
+        var efo_url_parts = efo_url.split("/");
+        var efo_code = efo_url_parts.pop();
+        obj.efo = efo_code;
+
+        // paths
+        var paths = [];
+        for (var i=0; i<data.path.length; i++) {
+            data.path[i].shift();
+            var path=[];
+            for(var j=0; j<data.path[i].length; j++){
+                path.push({
+                    "label" : data.path[i][j].label,
+                    "efo" : data.path[i][j].uri.split("/").pop()
+                });
+            }
+            paths.push(path);
+        }
+        obj.paths = paths;
+
+        // children
+        obj.children = data.children;
+
+        return obj;
+    }
+
+    return d3.rebind (render, dispatch, "on");
 };
 
 module.exports = exports = diseaseGraph;

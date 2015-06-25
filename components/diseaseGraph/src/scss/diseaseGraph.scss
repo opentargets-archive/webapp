@@ -1,3 +1,4 @@
+
 .cttv_diseaseGraph_node {
   stroke: #fff;
   stroke-width: 1.5px;
@@ -28,7 +29,25 @@
 }
 
 .cttv_diseaseGraph_background {
-    fill: "#000000";
+    fill: #fafafa;
+}
+
+.cttv_diseaseGraph_child_legend {
+}
+
+.cttv_diseaseGraph_ancestor_legend {
+
+    position: absolute;
+
+    div {
+        background-color: #21a0df;
+        width: 15px;
+        height: 15px;
+        margin-top: 10px;
+    }
+    text {
+        margin-left: 15px;
+    }
 }
 
 .guideline {

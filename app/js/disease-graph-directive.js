@@ -13,18 +13,18 @@ angular.module('cttvDirectives')
             link: function (scope, elem, attrs) {
                 //console.warn (efo);
                 var w = (attrs.width || elem[0].parentNode.offsetWidth) - 40;
+                var efoGraph = diseaseGraph()
+                    .width(w)
+                    .height(700)
+                    .cttvApi(cttvApiservice.getSelf());
+
                 scope.$watch (function () {return attrs.efo;}, function (efo_str) {
                     //console.warn (efo);
                     if (!efo_str) {
                         return;
                     }
                     var efo = JSON.parse(efo_str);
-                    //var nodes = getNodes(efo);
-                    //var graph = getGraph(efo);
-                    var efoGraph = diseaseGraph()
-                        .width(w)
-                        .height(700)
-                        .data(efo);
+                    efoGraph.data(efo);
                     efoGraph(elem[0]);
                 });
             }
