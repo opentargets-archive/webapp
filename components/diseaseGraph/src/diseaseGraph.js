@@ -194,7 +194,7 @@ var diseaseGraph = function () {
                     return d.x;
                 })
                 .attr("y", function (d) {
-                    var h = this.getBBox().height;
+                    var h = this.getBoundingClientRect().height;
                     return d.y + h/4;
                 });
 
