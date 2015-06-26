@@ -66,8 +66,8 @@ var diseaseGraph = function () {
             .append("rect")
             .attr('class', 'cttv_diseaseGraph_background')
             .attr('width', "100%")
-            .attr('height', "100%")
-            //.call(zoom);
+            .attr('height', "100%");
+            // .call(zoom);
 
         vis = svg
             .append("g");
@@ -124,7 +124,6 @@ var diseaseGraph = function () {
         }
 
         function dragmove(d, i) {
-            var extents = getBounds(node);
             d.px += d3.event.dx;
             d.py += d3.event.dy;
             d.x += d3.event.dx;
@@ -138,13 +137,10 @@ var diseaseGraph = function () {
             d3cola.start();
         }
 
-        node
+        var newNode = node
             .enter()
-            .append("rect")
+            .append("g")
             .attr("class", "cttv_diseaseGraph_node")
-            .attr("width", function (d) { return d.width; })
-            .attr("height", function (d) { return d.height; })
-            .attr("rx", 5).attr("ry", 5)
             .on("click", function (d) {
                 if (d3.event.defaultPrevented) {
                     return;
@@ -154,44 +150,80 @@ var diseaseGraph = function () {
             .call(d3cola.drag);
             //.call(node_drag);
 
-
-        node
+        newNode
+            .append("rect")
+            .attr("class", "cttv_diseaseGraph_box")
+            .attr("x", function (d) {
+                return -d.width/2;
+            })
+            .attr("y", function (d) {
+                return -d.height/2;
+            })
+            .attr("width", function (d) { return d.width; })
+            .attr("height", function (d) { return d.height; })
+            .attr("rx", 5).attr("ry", 5)
             .classed("cttv_diseaseGraph_child", function (d) {
                 return d.type === "child";
             })
             .classed("cttv_diseaseGraph_ancestor", function (d) {
                 return d.type === "ancestor";
-            })
-            .call(moveToFront);
+            });
+            //.call(moveToFront);
+
+        newNode
+            .append("text")
+            .attr("class", "cttv_diseaseGraph_label")
+            .attr("pointer-events", "none")
+            .text(function (d) {
+                return d.label;
+            });
+        node.call(moveToFront);
+
+
+        // node
+        //     .enter()
+        //     .append("rect")
+        //     .attr("class", "cttv_diseaseGraph_node")
+        //     .attr("width", function (d) { return d.width; })
+        //     .attr("height", function (d) { return d.height; })
+        //     .attr("rx", 5).attr("ry", 5)
+        //     .on("click", function (d) {
+        //         if (d3.event.defaultPrevented) {
+        //             return;
+        //         }
+        //         tooltips.click.call(this, d);
+        //     })
+        //     .call(d3cola.drag);
+        //     //.call(node_drag);
 
 
         node
             .exit()
             .remove();
 
-        var label = vis.selectAll(".cttv_diseaseGraph_label")
-            .data(graph.nodes, function (d) {
-                return d.efo;
-            });
+        // var label = vis.selectAll(".cttv_diseaseGraph_label")
+        //     .data(graph.nodes, function (d) {
+        //         return d.efo;
+        //     });
 
         // Labels
-        label
-            .enter()
-            .append("text")
-            .attr("class", "cttv_diseaseGraph_label")
-            .attr("pointer-events", "none")
-            .text(function (d) {
-                return d.label;
-            })
-            .call(d3cola.drag);
-            //.call(node_drag);
-
-        label
-            .call(moveToFront);
-
-        label
-            .exit()
-            .remove();
+        // label
+        //     .enter()
+        //     .append("text")
+        //     .attr("class", "cttv_diseaseGraph_label")
+        //     .attr("pointer-events", "none")
+        //     .text(function (d) {
+        //         return d.label;
+        //     })
+        //     .call(d3cola.drag);
+        //     //.call(node_drag);
+        //
+        // label
+        //     .call(moveToFront);
+        //
+        // label
+        //     .exit()
+        //     .remove();
 
         d3cola.on("tick", tick);
 
@@ -199,21 +231,24 @@ var diseaseGraph = function () {
             adjustScaleLevel();
 
             node
-                .attr("x", function (d) {
-                    return d.x - d.width/2;
-                })
-                .attr("y", function (d) {
-                    return d.y - d.height / 2;
+                // .attr("x", function (d) {
+                //     return d.x - d.width/2;
+                // })
+                // .attr("y", function (d) {
+                //     return d.y - d.height / 2;
+                // });
+                .attr("transform", function (d) {
+                    return "translate("+ [d.x, d.y] + ")";
                 });
 
-            label
-                .attr("x", function (d) {
-                    return d.x;
-                })
-                .attr("y", function (d) {
-                    var h = this.getBoundingClientRect().height;
-                    return d.y + h/4;
-                });
+            // label
+            //     .attr("x", function (d) {
+            //         return d.x;
+            //     })
+            //     .attr("y", function (d) {
+            //         var h = this.getBoundingClientRect().height;
+            //         return d.y + h/4;
+            //     });
 
             link.attr("x1", function (d) {
                     return d.source.x;
