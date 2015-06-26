@@ -1,6 +1,7 @@
 var getGraph = require("./getGraph.js");
 var graph_tooltips = require("./tooltips.js");
 var legend = require("./legend.js");
+var deferCall = require("tnt.utils").defer_cancel;
 
 var diseaseGraph = function () {
     "use strict";
@@ -66,7 +67,7 @@ var diseaseGraph = function () {
             .attr('class', 'cttv_diseaseGraph_background')
             .attr('width', "100%")
             .attr('height', "100%")
-            .call(zoom);
+            //.call(zoom);
 
         vis = svg
             .append("g");
@@ -87,6 +88,7 @@ var diseaseGraph = function () {
         d3cola
             .nodes(graph.nodes)
             .links(graph.links)
+            .alpha(0.5)
             .constraints(graph.constraints)
             .groups(graph.groups)
             .start(20,20,20);
@@ -96,6 +98,7 @@ var diseaseGraph = function () {
             .data(graph.links, function (d) {
                 return d.source.efo + "_" + d.target.efo;
             });
+
         link
             .enter()
             .append("line")
@@ -111,6 +114,30 @@ var diseaseGraph = function () {
                 return d.efo;
             });
 
+        var node_drag = d3.behavior.drag()
+            .on("dragstart", dragstart)
+            .on("drag", dragmove)
+            .on("dragend", dragend);
+
+        function dragstart(d, i) {
+            d3cola.stop(); // stops the force auto positioning before you start dragging
+        }
+
+        function dragmove(d, i) {
+            var extents = getBounds(node);
+            d.px += d3.event.dx;
+            d.py += d3.event.dy;
+            d.x += d3.event.dx;
+            d.y += d3.event.dy;
+            tick(); // this is the key to make it work together with updating both px,py,x,y on d !
+        }
+
+        function dragend(d, i) {
+            //d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+            tick();
+            d3cola.start();
+        }
+
         node
             .enter()
             .append("rect")
@@ -125,6 +152,8 @@ var diseaseGraph = function () {
                 tooltips.click.call(this, d);
             })
             .call(d3cola.drag);
+            //.call(node_drag);
+
 
         node
             .classed("cttv_diseaseGraph_child", function (d) {
@@ -155,6 +184,7 @@ var diseaseGraph = function () {
                 return d.label;
             })
             .call(d3cola.drag);
+            //.call(node_drag);
 
         label
             .call(moveToFront);
@@ -163,31 +193,18 @@ var diseaseGraph = function () {
             .exit()
             .remove();
 
-        d3cola.on("tick", function () {
-            var extents = getBounds(node);
-            var xExtent = extents.x;
-            var yExtent = extents.y;
+        d3cola.on("tick", tick);
 
-            var scaleMin = d3.min([Math.abs (height/(yExtent[1] - yExtent[0])), Math.abs(width/(xExtent[1] - xExtent[0]))]);
-            if (scaleMin > 1) {
-                scaleMin = 1;
-            }
-
-            var extraX = (width - (xExtent[1] - xExtent[0]) * scaleMin) / 2;
-            var startX = (-(xExtent[0]) * scaleMin) + extraX;
-            var extraY = (height - (yExtent[1] - yExtent[0]) * scaleMin) / 2;
-            var startY = (-(yExtent[0]) * scaleMin) + extraY;
-
-            vis.attr("transform", "translate(" + [startX, startY] + ") scale(" + scaleMin + ")");
-
-            zoom.translate([startX, startY]);
-            zoom.scale(scaleMin);
-
-            vis.call(zoom);
+        function tick() {
+            adjustScaleLevel();
 
             node
-                .attr("x", function (d) { return d.x - d.width / 2; })
-                .attr("y", function (d) { return d.y - d.height / 2; });
+                .attr("x", function (d) {
+                    return d.x - d.width/2;
+                })
+                .attr("y", function (d) {
+                    return d.y - d.height / 2;
+                });
 
             label
                 .attr("x", function (d) {
@@ -210,7 +227,34 @@ var diseaseGraph = function () {
                 .attr("y2", function (d) {
                     return d.target.y;
                 });
-        });
+        }
+
+        function adjustScaleLevel() {
+
+            var extents = getBounds(node);
+            var xExtent = extents.x;
+            var yExtent = extents.y;
+
+            var scaleMin = d3.min([Math.abs (height/(yExtent[1] - yExtent[0])), Math.abs(width/(xExtent[1] - xExtent[0]))]);
+            if (scaleMin > 1) {
+                scaleMin = 1;
+            }
+
+            var extraX = (width - (xExtent[1] - xExtent[0]) * scaleMin) / 2;
+            var startX = (-(xExtent[0]) * scaleMin) + extraX;
+            var extraY = (height - (yExtent[1] - yExtent[0]) * scaleMin) / 2;
+            var startY = (-(yExtent[0]) * scaleMin) + extraY;
+
+            vis
+                .attr("transform", "translate(" + [startX, startY] + ") scale(" + scaleMin + ")");
+
+            zoom.translate([startX, startY]);
+            zoom.scale(scaleMin);
+            //
+            // vis.call(zoom);
+        }
+
+        var deferredScale = deferCall (adjustScaleLevel, 200);
 
         function getBounds (nodes) {
             var xs = [];
