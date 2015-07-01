@@ -360,9 +360,7 @@ angular.module('cttvDirectives', [])
      */
     .directive('cttvDiseaseAssociations', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts) {
 
-        var colorScale = d3.scale.linear()
-                        .domain([0,1])
-                        .range(["#CBDCEA", "#005299"]); // blue orig
+        var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
         /*
          * Generates and returns the string representation of the span element
@@ -383,6 +381,9 @@ angular.module('cttvDirectives', [])
         }
 
 
+        /*
+         * Columns definitions
+         */
         var cols = [
             // empty col for the gene name
             {name:"", title:""},
@@ -424,7 +425,14 @@ angular.module('cttvDirectives', [])
                         "autoWidth": false,
                         "ordering": true,
                         "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                        "pageLength": 50
+                        "pageLength": 50,
+                        "language": {
+                            // "lengthMenu": "Display _MENU_ records per page",
+                            // "zeroRecords": "Nothing found - sorry",
+                            "info": "Showing _START_ to _END_ of _TOTAL_ targets",
+                            // "infoEmpty": "No records available",
+                            // "infoFiltered": "(filtered from _MAX_ total records)"
+                        }
                     }, filename ));
 
             return t;
@@ -432,13 +440,69 @@ angular.module('cttvDirectives', [])
 
 
 
-        var getFullFacets = function(target){
-            return cttvAPIservice.getAssociations({
-                efo: target,
-                datastructure: "flat",
-                expandefo: false
-            });
-        }
+        var updateTable = function (table, data, target, filters) {
+
+            var datatypes = filters.datatypes || [];
+
+            var newData = new Array(data.length);
+
+            for (var i=0; i<data.length; i++) {
+                var dts = {};
+                dts.genetic_association = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
+                dts.somatic_mutation = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0;
+                dts.known_drug = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0;
+                dts.rna_expression = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
+                dts.affected_pathway = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
+                dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
+                var row = [];
+                var geneLoc = "";
+                var geneDiseaseLoc = "#/evidence/" + data[i].gene_id + "/" + target;
+                row.push("<a href='" + geneDiseaseLoc + "'>" + data[i].label + "</a>");
+                // Ensembl ID
+                row.push(data[i].gene_id);
+                // The association score
+                row.push( getColorStyleString(data[i].association_score) );
+                // Genetic Association
+                row.push( getColorStyleString(dts.genetic_association) );
+                // Somatic Mutations
+                row.push( getColorStyleString(dts.somatic_mutation) );
+                // Known Drugs
+                row.push( getColorStyleString(dts.known_drug) );
+                // RNA expression
+                row.push( getColorStyleString(dts.rna_expression) );
+                // Affected pathways
+                row.push( getColorStyleString(dts.affected_pathway) );
+                // Animal models
+                row.push( getColorStyleString(dts.animal_model) );
+
+                // Push gene name again instead
+                row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
+
+                newData[i] = row;
+
+            }
+
+
+            // now set the table content:
+
+            // first, clear any existing content
+            table.clear();
+
+            // now here would be a good place to hide/show any columns based on datatypes ??
+            for(var i=3; i<table.columns()[0].length-1; i++){
+                table.column(i).visible( _.isEmpty(datatypes) );
+            }
+
+            if( !_.isEmpty(datatypes) ){
+                datatypes.forEach(function(value){
+                    table.column(value+':name').visible(true);
+                });
+            }
+
+            // render with new data
+            table.rows.add(newData).draw();
+
+        }; // end updateTable
 
 
 
@@ -447,13 +511,9 @@ angular.module('cttvDirectives', [])
             restrict: 'E',
 
             scope: {
-                loadprogress : '=',
                 filename : '@',
-                total : '='
+                data : '='
             },
-
-            // template: '<table class="table matrix-table"></table>'
-            //          +'<cttv-matrix-table-legend labels="labs" legend-text="legendText" colors="colors"></cctv-matrix-table-legend>',
 
             template: '<cttv-matrix-table></cttv-matrix-table>'
                      +'<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
@@ -461,126 +521,9 @@ angular.module('cttvDirectives', [])
 
             link: function (scope, elem, attrs) {
 
-                scope.filters = cttvFiltersService.getFilters();
-                //scope.change = cttvFiltersService.hasChanged;
-                //scope.selectedoptions = cttvFiltersService.getFilters()[0].map(function(obj){return obj.selected});
-
-                var updateTable = function (table, filters) {
-
-                    // set the load progress flag to true before starting the API call
-                    scope.loadprogress = true;
-
-                    // set the API call options
-                    var opts = {
-                        efo: attrs.target,
-                        datastructure: "flat",
-                        //expandefo: false
-                    };
-
-                    if (!_.isEmpty(filters)) {
-                        for(var i in filters){
-                            if(i==='datatypes'){
-                                opts.filterbydatatype = filters[i];
-                            }
-                            if(i==='pathway_type'){
-                                opts.filterbypathway = filters[i];
-                            }
-                        }
-                    }
-
-                    var datatypes = filters.datatypes;
-
-                    // return API call
-                    return cttvAPIservice.getAssociations(opts)
-                        .then(function (resp) {
-
-                            // set the load progress flag to false once we get the results
-                            scope.loadprogress = false;
-                            scope.total = resp.body.data.length;
-
-
-                            var data = resp.body.data;
-                            var newData = new Array(data.length);
-
-                            for (var i=0; i<data.length; i++) {
-                                var dts = {};
-                                dts.genetic_association = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
-                                dts.somatic_mutation = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0;
-                                dts.known_drug = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0;
-                                dts.rna_expression = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
-                                dts.affected_pathway = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
-                                dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
-                                var row = [];
-                                var geneLoc = "";
-                                var geneDiseaseLoc = "#/evidence/" + data[i].gene_id + "/" + attrs.target;
-                                row.push("<a href='" + geneDiseaseLoc + "'>" + data[i].label + "</a>");
-                                // Ensembl ID
-                                row.push(data[i].gene_id);
-                                // The association score
-                                row.push( getColorStyleString(data[i].association_score) );
-                                // Genetic Association
-                                row.push( getColorStyleString(dts.genetic_association) );
-                                // Somatic Mutations
-                                row.push( getColorStyleString(dts.somatic_mutation) );
-                                // Known Drugs
-                                row.push( getColorStyleString(dts.known_drug) );
-                                // RNA expression
-                                row.push( getColorStyleString(dts.rna_expression) );
-                                // Affected pathways
-                                row.push( getColorStyleString(dts.affected_pathway) );
-                                // Animal models
-                                row.push( getColorStyleString(dts.animal_model) );
-
-                                // Push gene name again instead
-                                row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
-
-                                newData[i] = row;
-
-                            }
-
-                            // set the table content:
-
-                            // first, clear any existing content
-                            table.clear();
-
-                            // now here would be a good place to hide/show any columns based on datatypes ??
-                            for(var i=3; i<table.columns()[0].length-1; i++){
-                                table.column(i).visible( _.isEmpty(datatypes) );
-                            }
-
-                            if( !_.isEmpty(datatypes) ){
-                                datatypes.forEach(function(value){
-                                    table.column(value+':name').visible(true);
-                                });
-                            }
-
-                            // render with new data
-                            table.rows.add(newData).draw();
-
-                            // update the filters??
-                            if(resp.body.facets){
-                                $log.log("we've got facets to udpate... ");
-                                //cttvFiltersService.parseFacets(resp.body.facets);
-
-                                //cttvFiltersService.test(resp.body.facets);
-
-                            }
-
-
-                        });
-
-                };    // end updateTable
-
-
-                // -----------------------
-                // Initialize table etc
-                // -----------------------
-
-
                 // table itself
                 var table = elem.children().eq(0)[0];
                 var dtable = setupTable(table, scope.filename);
-
 
                 // legend stuff
                 scope.legendText = "Score";
@@ -595,50 +538,14 @@ angular.module('cttvDirectives', [])
                 ];
 
 
-                // reset the filters **before** setting the watch on them
-                // so that it doesn't trigger a reload of the data
-                cttvFiltersService.resetFilters();
-
-
-                // OK so here is the main thing we run when the component is first loaded
-
-                // step 1:
-                // get unfiltered data from API just to get the full facets
-                getFullFacets(attrs.target)
-                    .then(
-
-                // step 2:
-                // update the filters as required
-
-                        function(resp){
-                            // get the facets and update the filters service
-                            cttvFiltersService.parseFacets(resp.body.facets);
-                        },
-
-                        //error -- optional
-                        cttvAPIservice.defaultErrorHandler
-                    );
-
-
-                // step 3:
-                // get filtered data and update table etc...
-                // TODO:
-                // watch on main object should set watch on "selected" property of objects only....
-                // to only respond to user actions...
-                scope.$watch(function(){return scope.filters}, function(newValue, oldValue) {
-                //scope.$watch(function(){return cttvFiltersService.hasChanged}, function(newValue, oldValue) {
-                    if(scope.filters.length>0){
-                        $log.log("** get table data??? **");
-                        // $log.log(cttvFiltersService.getSelectedFiltersRaw());
-                        // we might also need to debounce here really...
-                        //updateTable(dtable, scope.filters[0].getSelectedFilters().map(function(obj){
-                        //    return obj.id.toLowerCase();
-                        //}));
-                        updateTable(dtable, cttvFiltersService.getSelectedFiltersRaw());
+                //scope.$watch(function(){return scope.data}, function(n,o){
+                scope.$watch("data", function(n,o){
+                    $log.debug("Data:");
+                    if( scope.data ){
+                        $log.debug("Update table - "+scope.data.length);
+                        updateTable(dtable, scope.data, attrs.target, scope.data.selected);
                     }
-                }, true); // deep link to the object - TODO: this will have to change to account only for user clicks...
-
-
+                })
 
             } // end link
         }; // end return
@@ -1128,7 +1035,11 @@ angular.module('cttvDirectives', [])
 
 
 
-    .directive('cttvDatatypesFilters', ['$log', 'cttvAPIservice', 'cttvFiltersService' , function ($log, cttvAPIservice, cttvFiltersService) {
+    /**
+     * Top level container for all the facets.
+     * This contains accordion etc
+     */
+    .directive('cttvFacets', ['$log', 'cttvAPIservice', 'cttvFiltersService' , function ($log, cttvAPIservice, cttvFiltersService) {
 
         return {
 
@@ -1141,33 +1052,12 @@ angular.module('cttvDirectives', [])
                 //datatypes : '='
                 //filters : '='
             },
-
-            template: '<div class="cttv-facets">'
-                     +'    <accordion close-others=false>'
-                     +'        <accordion-group ng-init="status = {isOpen: true}" is-open="status.isOpen" ng-repeat="filter in filters">'
-                     +'            <accordion-heading class="cttv-facets-headers">'
-                     +'                {{filter.label | clearUnderscores | upperCaseFirst}} <i class="pull-right text-lowlight fa" ng-class="{\'fa-plus-square\': !status.isOpen, \'fa-minus-square\': status.isOpen}"></i>'
-                     +'            </accordion-heading>'
-                     +'            <div class="cttv-facets-controls">'
-                     +'                <span ng-click="filter.selectAll(false)">Clear all <i class="fa fa-times"></i></span>'
-                     +'                <span ng-click="filter.selectAll(true)">Select all <i class="fa fa-check"></i></span>'
-                     +'            </div>'
-                     +'            <div class="checkbox" ng-repeat="bucket in filter.filters">'
-                     +'                <label ng-class="(!bucket.enabled) ? \'disabled\' : \'\'">'
-                     +'                    <input type="checkbox"'
-                     +'                        value="{{bucket.id}}"'
-                     +'                        ng-checked="bucket.selected"'
-                     +'                        ng-disabled="!bucket.enabled"'
-                     +'                        ng-click="bucket.toggle()" >'
-                     +'                    {{bucket.label}} <span class="text-lowlight small" ng-show="bucket.count>0">({{bucket.count}})</span>'
-                     +'                </label>'
-                     +'            </div>'
-                     +'        </accordion-group>'
-                     +'    </accordion>'
-                     +'</div>',
+            templateUrl: 'partials/facets.html',
 
             link: function (scope, elem, attrs) {
                 scope.filters = cttvFiltersService.getFilters();
+                scope.selectedFilters = cttvFiltersService.getSelectedFilters();
+                scope.deselectAll = cttvFiltersService.deselectAll;
                 //scope.updateFilter = function(id){
                 //    cttvFiltersService.getFilter(id).toggle();
                 //}
@@ -1176,6 +1066,32 @@ angular.module('cttvDirectives', [])
             // /controller: function(scope){
             // /
             // /}
+
+        };
+
+    }])
+
+
+
+    /**
+     * A directive for Checkbox facets.
+     * Checkboxes can also have nested checkboxes...
+     */
+    .directive('cttvCheckboxFacet', ['$log', 'cttvAPIservice', 'cttvFiltersService' , function ($log, cttvAPIservice, cttvFiltersService) {
+
+        return {
+
+            restrict: 'EA',
+
+            scope: {
+            },
+            //templateUrl: 'partials/facets.html',
+
+            link: function (scope, elem, attrs) {},
+
+            // controller: function(scope){
+            //
+            // }
 
         };
 

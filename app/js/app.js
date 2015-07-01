@@ -15,7 +15,7 @@ angular.module('cttvApp', [
 ]).
 
 
-config(['$routeProvider', 
+config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
             when('/intro', {
@@ -31,7 +31,8 @@ config(['$routeProvider',
     	    }).
     	    when('/disease/:id/associations', {
                 templateUrl: 'partials/disease-associations.html',
-                controller: 'diseaseAssociationsCtrl'
+                controller: 'diseaseAssociationsCtrl',
+                reloadOnSearch: false
     	    }).
     	    when('/evidence/:id/:id', {
                 templateUrl: 'partials/target-disease.html',

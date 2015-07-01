@@ -751,6 +751,11 @@ table.matrix-table thead > tr > th:last-child {
 
 }
 
+.cttv-facets-controls {
+    font-size: 12px;
+    /*border-bottom: 1px dotted #DDD;*/
+}
+
 .cttv-facets-controls > span{
     cursor: pointer;
     margin-right:10px;
@@ -760,6 +765,11 @@ table.matrix-table thead > tr > th:last-child {
     color: #333;
 }
 
+.cttv-facets-selected-summary{
+    border-bottom:1px solid #CCC;
+    margin-bottom:25px;
+    padding-bottom:10px;
+}
 
 
 /*
@@ -804,6 +814,26 @@ table.matrix-table thead > tr > th:last-child {
 .cttv-facets .panel-body{
     padding: 10px 0px;
 }
+
+
+.cttv-2line-header > span:first-child{
+    display:block;
+    font-size:18px;
+    font-weight:200;
+}
+
+.cttv-2line-header > span:last-child{
+    display:block;
+    font-size:36px;
+    font-weight:100;
+}
+
+
+
+
+
+
+
 
 
 

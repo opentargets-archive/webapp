@@ -31,7 +31,11 @@ angular.module('cttvServices').
             API_GENE_URL : 'gene',
             API_QUICK_SEARCH_URL : 'quickSearch',
             API_DISEASE_URL: 'disease',
-            API_EXPRESSION_URL: 'expression'
+            API_EXPRESSION_URL: 'expression',
+            facets: {
+                DATATYPES: 'filterbydatatype',
+                PATHWAY_TYPE: 'filterbypathway',
+            },
         };
 
 
@@ -343,9 +347,30 @@ angular.module('cttvServices').
 
 
 
+        /**
+         * Default error handler function.
+         * It simply logs the error to the console. Can be used in then(succ, err) calls.
+         */
         cttvAPI.defaultErrorHandler = function(error){
           $log.error("----");
           $log.error(error);
+        }
+
+
+
+        /**
+         * Decorates a given object with the API options for the given facets and returns the original object.
+         * This can then be used to configure an API call.
+         * If no object is supplied to the function, a new object is created and returned.
+         */
+        cttvAPI.addFacetsOptions = function(facets, obj){
+            obj = obj || {};
+            for(var i in facets){
+                if( facets.hasOwnProperty(i)){
+                    obj[cttvAPI.facets[i.toUpperCase()]] = facets[i];
+                }
+            }
+            return obj;
         }
 
 

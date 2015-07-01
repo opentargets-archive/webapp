@@ -61,6 +61,46 @@ angular.module('cttvServices', []).
         }
 
 
+
+        cttvUtilsService.colorScales = {
+            BLUE_0_1 : d3.scale.linear()
+                        .domain([0,1])
+                        .range(["#CBDCEA", "#005299"]), // blue orig
+        }
+
+
+
+        cttvUtilsService.location = {
+
+            searchString : function(key, value){
+
+                var url = window.location.href.split("?");
+                // var search = window.location.href.split('?')[1] || "";
+                url[1] = url[1] || "";
+
+                // in no args supplied, return the query string
+                if(arguments.length == 0){
+                    return url[1];
+                }
+
+                // else set the values
+
+                // we want to APPEND the value to the URL,
+                // to keep the order in which the filters are applied
+                // and if the same value is already set in the string, we need to remove it first
+
+                var search = url[1].split("&");
+                search = _.without(search, key+"="+value);
+                search.push(key+"="+value);
+                $log.log(search);
+                url[1] = search.join("&");
+                window.location.href = url.join("?");
+            }
+
+        }
+
+
+
         return cttvUtilsService;
     }]);
 

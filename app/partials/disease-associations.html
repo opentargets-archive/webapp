@@ -1,10 +1,11 @@
 <div class="partial-page">
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
-    <h3 view-title>Targets associated with {{search.label}}</h3>
+    <h3 view-title>Targets associated with {{search.label | upperCaseFirst}}</h3>
+    <!-- <h3 view-title class="cttv-2line-header"><span>Targets associated with</span><span>{{search.label | upperCaseFirst}}</span></h3> -->
 
     <p class="small"><a href="#/disease/{{search.query}}">View disease profile</a></p>
-    <div class="h6">Found {{nresults}} evidence</div>
+    <div class="h6">Found {{search.total}} evidence</div>
 
     <!-- <div id="myflower"></div>-->
 
@@ -12,7 +13,7 @@
     <div class="row">
         <div class="col-md-3">
             <!-- <div ng-click="cttvFiltersService.initFilters()">X reset filters</div> -->
-            <cttv-datatypes-filters></cttv-datatypes-filters>
+            <cttv-facets></cttv-facets>
         </div>
 
         <div class="col-md-9">
@@ -20,7 +21,7 @@
             <div style="width:100%; text-align:center; padding-top:50px; position:absolute" ng-show="loading">
                 <span cttv-progress-spinner size="3" class="text-lowlight"></span>
             </div>-->
-            <cttv-disease-associations target="{{search.query}}" filename="targets_associated_with_{{search.filename}}" loadprogress="loading" total="nresults"></cttv-disease-associations>
+            <cttv-disease-associations target="{{search.query}}" filename="targets_associated_with_{{search.filename}}" data="data"></cttv-disease-associations>
         </div>
     </div>
 
