@@ -625,7 +625,7 @@ angular.module('cttvDirectives', [])
                 // TODO:
                 // watch on main object should set watch on "selected" property of objects only....
                 // to only respond to user actions...
-                scope.$watch(function(){return scope.filters}, function(newValue, oldValue) {
+                scope.$watch(function(){return scope.filters;}, function(newValue, oldValue) {
                 //scope.$watch(function(){return cttvFiltersService.hasChanged}, function(newValue, oldValue) {
                     if(scope.filters.length>0){
                         $log.log("** get table data??? **");
@@ -655,7 +655,7 @@ angular.module('cttvDirectives', [])
             restrict: 'E',
             templateUrl: "partials/pmcCitation.html",
             link: function (scope, elem, attrs) {
-                scope.$watch(function () { return attrs.pmids}, function (newPMIDs) {
+                scope.$watch(function () { return attrs.pmids;}, function (newPMIDs) {
                     if (!newPMIDs) {
                         return;
                     }
@@ -721,7 +721,7 @@ angular.module('cttvDirectives', [])
              link: function (scope, elem, attrs) {
                  var efo = attrs.efo;
                  var w = (attrs.width || elem[0].parentNode.offsetWidth) - 40;
-                 scope.$watch(function () {return attrs.target }, function (target) {
+                 scope.$watch(function () {return attrs.target; }, function (target) {
                      if (target === "") {
                          return;
                      }
@@ -739,6 +739,28 @@ angular.module('cttvDirectives', [])
                         .chr(scope.chr)
                         .efo(efo);
                     theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
+                 });
+             }
+         };
+     }])
+
+     .directive('cttvTargetGeneTree', [function () {
+         return {
+             restrict: 'E',
+             link: function (scope, elem, attrs) {
+                 var w = 1140; // !!
+                 scope.$watch (function () { return attrs.target; }, function (target) {
+                     if (target === "") {
+                         return;
+                     }
+                     var newDiv = document.createElement("div");
+                     newDiv.id = "cttvTargetGeneTree";
+                     elem[0].appendChild(newDiv);
+
+                     var gt = targetGeneTree()
+                        .id(target)
+                        .width(1100);
+                     gt(newDiv);
                  });
              }
          };
@@ -778,30 +800,43 @@ angular.module('cttvDirectives', [])
     /*
      *
      */
-    .directive('ebiExpressionAtlasBaselineSummary', function () {
-    return {
-        restrict: 'E',
-        link: function (scope, elem, attrs) {
-        scope.$watch(function () { return attrs.target }, function (target) {
-            if (target === "") {
-            return;
-            }
-            var newDiv = document.createElement("div");
-            newDiv.id = "cttvExpressionAtlas";
-            newDiv.className = "accordionCell";
-            elem[0].appendChild(newDiv);
+    .directive('ebiExpressionAtlasBaselineSummary', ['cttvAPIservice', function (cttvAPIservice) {
+        return {
+            restrict: 'E',
+            link: function (scope, elem, attrs) {
+                scope.$watch(function () { return attrs.target; }, function (target) {
+                    if (target === "") {
+                        return;
+                    }
+                    var newDiv = document.createElement("div");
+                    newDiv.id = "cttvExpressionAtlas";
+                    newDiv.className = "accordionCell";
+                    elem[0].appendChild(newDiv);
 
-            var instance = new Biojs.AtlasHeatmap ({
-            //gxaBaseUrl: 'https://www.ebi.ac.uk/gxa',
-            gxaBaseUrl : '/gxa',
-            params:'geneQuery=' + target + "&species=homo%20sapiens",
-            isMultiExperiment: true,
-            target : "cttvExpressionAtlas"
-            })
-        });
-        },
-    }
-    })
+                    cttvAPIservice.getToken().then(function (resp) {
+                        console.warn(resp.body);
+                        var token = resp.body.token;
+                        var instance = new Biojs.AtlasHeatmap ({
+                            gxaBaseUrl: '/api/latest/proxy/generic/gxa',
+                            //gxaBaseUrl : '/gxa',
+                            params:'geneQuery=' + target + "&species=homo%20sapiens",
+                            isMultiExperiment: true,
+                            target : "cttvExpressionAtlas"
+                        });
+
+                    });
+
+                    var instance = new Biojs.AtlasHeatmap ({
+                        gxaBaseUrl: '/api/latest/proxy/generic/gxa',
+                        //gxaBaseUrl : '/gxa',
+                        params:'geneQuery=' + target + "&species=homo%20sapiens",
+                        isMultiExperiment: true,
+                        target : "cttvExpressionAtlas"
+                    });
+                });
+            },
+        };
+    }])
 
 
 

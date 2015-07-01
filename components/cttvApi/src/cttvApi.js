@@ -17,19 +17,20 @@ var cttvApi = function () {
     var prefixAutocomplete = "autocomplete?";
     var prefixQuickSearch = "quicksearch?";
     var prefixExpression = "expression?";
+    var prefixProxy = "proxy/generic/";
 
     var credentials = {
-	token : "",
-	appname : "",
-	secret : ""
+    	token : "",
+    	appname : "",
+    	secret : ""
     };
 
     var getToken = function () {
-	var tokenUrl = _.url.requestToken(credentials);
-	//console.log("TOKEN URL: " + tokenUrl);
-		return jsonHttp.get({
-		    "url": tokenUrl
-		});
+        var tokenUrl = _.url.requestToken(credentials);
+        //console.log("TOKEN URL: " + tokenUrl);
+        return jsonHttp.get({
+            "url": tokenUrl
+        });
     };
 
     var _ = {};
@@ -150,7 +151,11 @@ var cttvApi = function () {
 
     _.url.expression = function (obj) {
         return prefix + prefixExpression + parseUrlParams(obj);
-    }
+    };
+
+    _.url.proxy = function (obj) {
+        return prefix + prefixProxy + obj.url;
+    };
 
 
 

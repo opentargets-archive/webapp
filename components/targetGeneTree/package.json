@@ -1,7 +1,7 @@
 {
-  "name": "cttv.targetGenomeBrowser",
+  "name": "cttv.targetGeneTree",
   "version": "0.0.0",
-  "description": "Lightweight genome browser for CTTV targets based on TnT.genome",
+  "description": "Gene tree visualization of a cttv target",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -50,10 +50,9 @@
     "watchify": "^1.0.2"
   },
   "dependencies": {
-    "cttv.genomeBrowserNav": "file:../genomeBrowserNav",
     "rsvp": "^3.0.18",
-    "tnt.ensembl": "^0.0.10",
-    "tnt.genome": "0.0.24",
-    "tnt.tooltip": "^0.0.10"
+    "tnt.ensembl": "0.0.10",
+    "tnt.tooltip": "0.0.10",
+    "tnt.tree": "0.0.22"
   }
 }
