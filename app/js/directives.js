@@ -380,7 +380,7 @@ angular.module('cttvDirectives', [])
             }
 
             return str;
-        }
+        };
 
 
         var cols = [
@@ -411,7 +411,7 @@ angular.module('cttvDirectives', [])
                                 var a=[];
                                 for(var i=0; i<cols.length; i++){
                                     a.push({ "title": "<div><span title='"+cols[i].title+"'>"+cols[i].title+"</span></div>", "name":cols[i].name });
-                                };
+                                }
                                 return a;
                             })(),
                         "columnDefs" : [
@@ -428,7 +428,7 @@ angular.module('cttvDirectives', [])
                     }, filename ));
 
             return t;
-        }
+        };
 
 
 
@@ -436,9 +436,9 @@ angular.module('cttvDirectives', [])
             return cttvAPIservice.getAssociations({
                 efo: target,
                 datastructure: "flat",
-                expandefo: false
+                expandefo: true
             });
-        }
+        };
 
 
 
@@ -474,7 +474,7 @@ angular.module('cttvDirectives', [])
                     var opts = {
                         efo: attrs.target,
                         datastructure: "flat",
-                        //expandefo: false
+                        expandefo: true
                     };
 
                     if (!_.isEmpty(filters)) {
@@ -504,12 +504,12 @@ angular.module('cttvDirectives', [])
 
                             for (var i=0; i<data.length; i++) {
                                 var dts = {};
-                                dts.genetic_association = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
-                                dts.somatic_mutation = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0;
-                                dts.known_drug = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0;
-                                dts.rna_expression = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
-                                dts.affected_pathway = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
-                                dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
+                                dts.genetic_association = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
+                                dts.somatic_mutation = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
+                                dts.known_drug = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
+                                dts.rna_expression = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
+                                dts.affected_pathway = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
+                                dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
                                 var row = [];
                                 var geneLoc = "";
                                 var geneDiseaseLoc = "#/evidence/" + data[i].gene_id + "/" + attrs.target;
@@ -734,7 +734,8 @@ angular.module('cttvDirectives', [])
                         .gene(attrs.target)
                         .context(20)
                         .width(w);
-                    gB.rest().proxyUrl("/ensembl");
+                    //gB.rest().proxyUrl("/ensembl");
+                    gB.rest().proxyUrl("/api/latest/ensembl");
                     var theme = targetGenomeBrowser()
                         .chr(scope.chr)
                         .efo(efo);
@@ -813,21 +814,21 @@ angular.module('cttvDirectives', [])
                     newDiv.className = "accordionCell";
                     elem[0].appendChild(newDiv);
 
-                    cttvAPIservice.getToken().then(function (resp) {
-                        console.warn(resp.body);
-                        var token = resp.body.token;
-                        var instance = new Biojs.AtlasHeatmap ({
-                            gxaBaseUrl: '/api/latest/proxy/generic/gxa',
-                            //gxaBaseUrl : '/gxa',
-                            params:'geneQuery=' + target + "&species=homo%20sapiens",
-                            isMultiExperiment: true,
-                            target : "cttvExpressionAtlas"
-                        });
+                    // cttvAPIservice.getToken().then(function (resp) {
+                    //     console.warn(resp.body);
+                    //     var token = resp.body.token;
+                        // var instance = new Biojs.AtlasHeatmap ({
+                        //     gxaBaseUrl: '/api/latest/proxy/generic/',
+                        //     //gxaBaseUrl : '/gxa',
+                        //     params:'geneQuery=' + target + "&species=homo%20sapiens",
+                        //     isMultiExperiment: true,
+                        //     target : "cttvExpressionAtlas"
+                        // });
 
-                    });
+                    // });
 
                     var instance = new Biojs.AtlasHeatmap ({
-                        gxaBaseUrl: '/api/latest/proxy/generic/gxa',
+                        gxaBaseUrl: '/api/latest/proxy/gxa/',
                         //gxaBaseUrl : '/gxa',
                         params:'geneQuery=' + target + "&species=homo%20sapiens",
                         isMultiExperiment: true,

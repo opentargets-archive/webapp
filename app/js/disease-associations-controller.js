@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
@@ -10,6 +10,7 @@ angular.module('cttvControllers')
  */
 
 .controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService) {
+    'use strict';
     $log.log('diseaseAssociationsCtrl()');
     var q = $location.path().split('/')[2];
     $scope.search = {
@@ -25,8 +26,8 @@ angular.module('cttvControllers')
 	// });
 
     $scope.colorScale = d3.scale.linear()
-    .domain([0,1])
-    .range(["#ffffff", "#08519c"]);
+        .domain([0,1])
+        .range(["#ffffff", "#08519c"]);
 
     // get disease specific info with the efo() method
     cttvAPIservice.getDisease( {

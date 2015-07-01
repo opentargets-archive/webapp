@@ -57,7 +57,7 @@ gulp.task('e2eTest', function () {
         .pipe(protractor({
 	    configFile: "protractor.conf.js"
 	}))
-        .on('error', function(e) { throw e })
+    .on('error', function(e) { throw e });
 });
 
 //gulp.task('test', ['unitTest', 'e2eTest']);
@@ -68,7 +68,8 @@ gulp.task('watch', function() {
 		'./test/*.js',
 		'./components/diseaseGraph/src/*.js',
 		'./components/targetGeneTree/src/*.js',
-	       ], ['build-browser','test']);
+        './components/targetGenomeBrowser/src/*.js'
+    ], ['build-browser','test']);
 });
 
 
@@ -118,4 +119,3 @@ gulp.task('build-browser-gzip', ['build-browser-min'], function() {
         .pipe(rename(outputFile + ".min.gz.js"))
         .pipe(gulp.dest(buildDir));
 });
-

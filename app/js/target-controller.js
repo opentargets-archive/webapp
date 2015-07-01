@@ -151,11 +151,25 @@ angular.module('cttvControllers')
             var firstStructure = _.sortBy(_.keys(pdb))[0].toLowerCase();
             $scope.pdb.id = firstStructure;
             $scope.pdb.nstructures = _.keys(pdb).length;
-            cttvAPIservice.getProxy({
-                "url" : "http://www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json",
-            })
-            .then (function (resp) {
-                var data = resp.body;
+
+            // cttvAPIservice.getProxy({
+            //     "url" : "http://www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json",
+            // })
+            // .then (function (resp) {
+                // var data = resp.body;
+                // var entryImgs = data[firstStructure].entry.all.image;
+                // for (var i=0; i<entryImgs.length; i++) {
+                //     if (entryImgs[i].filename === (firstStructure + "_deposited_chain_front")) {
+                //         $scope.pdb.thumbnailUrl = "//www.ebi.ac.uk/pdbe/static/entry/" + entryImgs[i].filename + data.image_suffix[2]; // 400x400 image
+                //         $scope.pdb.alt = entryImgs[i].alt;
+                //         $scope.pdb.description = $sce.trustAsHtml(entryImgs[i].description);
+                //         return;
+                //     }
+                // }
+            // });
+
+            $http.get("/api/latest/proxy/generic/https://www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json")
+            .success (function (data) {
                 var entryImgs = data[firstStructure].entry.all.image;
                 for (var i=0; i<entryImgs.length; i++) {
                     if (entryImgs[i].filename === (firstStructure + "_deposited_chain_front")) {
@@ -165,27 +179,13 @@ angular.module('cttvControllers')
                         return;
                     }
                 }
+            })
+            .error (function (data) {
+                console.log("ERROR FROM PDB:");
+                console.log(data);
             });
-            //$http.get("/pdbe/static/entry/" + firstStructure + "_json")
-            // .success (function (data) {
-            //     var entryImgs = data[firstStructure].entry.all.image;
-            //     for (var i=0; i<entryImgs.length; i++) {
-            //         if (entryImgs[i].filename === (firstStructure + "_deposited_chain_front")) {
-            //             $scope.pdb.thumbnailUrl = "//www.ebi.ac.uk/pdbe/static/entry/" + entryImgs[i].filename + data.image_suffix[2]; // 400x400 image
-            //             $scope.pdb.alt = entryImgs[i].alt;
-            //             $scope.pdb.description = $sce.trustAsHtml(entryImgs[i].description);
-            //             return;
-            //         }
-            //     }
-            // })
-            // .error (function (data) {
-            //     console.log("ERROR FROM PDB:");
-            //     console.log(data);
-            // });
 
             // Orthologues
-            console.warn ("Orthologues");
-            console.log(tnt);
             var ensemblApi = tnt.ensembl();
             var orthUrl = ensemblApi.url.homologues({
                 id: resp.ensembl_gene_id
