@@ -68,7 +68,7 @@ angular.module('cttvControllers')
         var opts = {
             efo: $scope.search.query,
             datastructure: "flat",
-            //expandefo: true
+            expandefo: true
         };
         cttvAPIservice.addFacetsOptions(filters, opts);
 
