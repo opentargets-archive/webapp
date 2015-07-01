@@ -17,20 +17,26 @@
             </ul>
         </accordion-group>
 
-        <accordion-group heading="EFO Paths" is-open="false">
-            <h4>Paths</h4>
-            <ul ng-repeat="path in disease.paths">
-                <b>Path {{$index+1}}</b>
-                <li ng-repeat="node in path">
-                    {{node.label}} <small>(<a href="#/disease/{{node.efo}}/associations">See gene associations</a>), (<a href="#/disease/{{node.efo}}">Go to disease page</a>)</small>
-                </li>
-            </ul>
-            <h4 ng-if="disease.children.length > 0">Children</h4>
-            <ul>
-                <li ng-repeat="child in disease.children">{{child.label}} <small>(<a href="#disease/{{child.code}}/associations">See gene associations</a>), (<a href="#/disease/{{child.code}}">Go to diseases page</a>)</small>
-                </li>
-            </ul>
+        <accordion-group heading="Disease Context" is-open="true">
+            <tabset>
+                <tab heading="Graph">
+                    <cttv-efo-graph efo="{{disease}}" width=1140></cttv-efo-graph>
+                </tab>
+                <tab heading="Text">
+                    <h4>Paths</h4>
+                    <ul ng-repeat="path in disease.paths">
+                        <b>Path {{$index+1}}</b>
+                        <li ng-repeat="node in path" style="margin-left:{{$index*10}}px">
+                             {{node.label}} <small>(<a href="#/disease/{{node.efo}}/associations">See gene associations</a>), (<a href="#/disease/{{node.efo}}">Go to disease page</a>)</small>
+                        </li>
+                    </ul>
+                    <h4 ng-if="disease.children.length > 0">Children</h4>
+                    <ul>
+                        <li ng-repeat="child in disease.children">{{child.label}} <small>(<a href="#disease/{{child.code}}/associations">See gene associations</a>), (<a href="#/disease/{{child.code}}">Go to diseases page</a>)</small>
+                        </li>
+                    </ul>
+                </tab>
+            </tabset>
         </accordion-group>
     </accordion>
 </div>
-

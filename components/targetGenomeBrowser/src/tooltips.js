@@ -27,10 +27,12 @@ var tooltips = function () {
                 "label" : "Most severe consequence",
                 "value" : ensembl_data.most_severe_consequence
             });
-            obj.rows.push({
+            if (ensembl_data.MAF) {
+                obj.rows.push({
                     "label" : "MAF",
-                "value" : ensembl_data.MAF
-            });
+                    "value" : ensembl_data.MAF
+                });
+            }
             obj.rows.push({
                 "label" : "Location",
                 "link" : function (d) {
@@ -41,6 +43,17 @@ var tooltips = function () {
                 },
                 obj : data,
                 value : "Jump to sequence"
+            });
+        }
+        if (data.association) {
+            obj.rows.push({
+                "label" : "Associations",
+                "value" : ""
+            });
+
+            obj.rows.push({
+                "label" : "<a href=/#/evidence/" + data.association.target + "/" + data.association.efo + ">" + data.association.label + "</a>",
+                "value" : data.association.pmids.length + (data.association.pmids.length === 1 ? " article" : " articles" + "  <a href='http://europepmc.org/search?query=" + data.association.pmids.map(function (d) {return "EXT_ID:"+d}).join("%20OR%20") + "' target=_blank <i class='fa fa-newspaper-o'></i></a>")
             });
         }
         if (data.study && data.study.length) {

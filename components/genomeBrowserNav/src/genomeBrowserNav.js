@@ -20,7 +20,6 @@ var genome_browser_nav = function () {
                 }
                 return "none";
             });
-
         opts_pane
             .append("span")
             .text("Human Chr: " + gB.chr());
@@ -57,36 +56,22 @@ var genome_browser_nav = function () {
                 gBrowser.start(orig)
             });
 
-        var browser_title = d3.select(div)
-            .append("h1")
-            .text(title)
-            .style("color", theme.foreground_color())
-            .style("display", function(){
-                if (show_title) {
-                    return "auto"
-                } else {
-                    return "none"
-                }
-            });
-
             // We set up the origin:
-            if (!orig) {
-
-                if (gBrowser.gene() !== undefined) {
-                    orig = {
-                        species : gBrowser.species(),
-                        gene    : gBrowser.gene()
-                    };
-                } else {
-                    orig = {
-                        species : gBrowser.species(),
-                        chr     : gBrowser.chr(),
-                        from    : gBrowser.from(),
-                        to      : gBrowser.to()
-                    }
+        if (!orig) {
+            if (gBrowser.gene() !== undefined) {
+                orig = {
+                    species : gBrowser.species(),
+                    gene    : gBrowser.gene()
+                };
+            } else {
+                orig = {
+                    species : gBrowser.species(),
+                    chr     : gBrowser.chr(),
+                    from    : gBrowser.from(),
+                    to      : gBrowser.to()
                 }
             }
-
+        }
         // orig = {
         //     species : gBrowser.species(),
         //     chr     : gBrowser.chr(),

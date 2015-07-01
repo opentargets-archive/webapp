@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
@@ -17,6 +17,8 @@ angular.module('cttvControllers')
  */
 
 .controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService) {
+
+    'use strict';
 
     $log.log('diseaseAssociationsCtrl()');
 
@@ -87,7 +89,7 @@ angular.module('cttvControllers')
                 $scope.data.selected = {datatypes: cttvFiltersService.getSelectedFiltersRaw("datatypes")};
 
                 // set the total?
-                $scope.search.total = resp.body.total;
+                $scope.search.total = resp.body.data.length; //resp.body.total;
             },
             cttvAPIservice.defaultErrorHandler
         );

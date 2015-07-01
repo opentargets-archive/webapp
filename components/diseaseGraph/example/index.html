@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>CTTV Components</title>
+
+<div id="body">
+  <!-- css -->
+  <link rel="stylesheet" href="../build/cttv.diseaseGraph.css"/>
+
+  <!-- D3 -->
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <!-- cola -->
+  <script src="./cola.min.js"></script>
+  <script src="../build/cttv.diseaseGraph.js"></script>
+
+  <h1>EFO graph view for CTTV</h1>
+  <div id="efo"></div>
+  <script>
+    var efoGraph = diseaseGraph();
+    efoGraph(document.getElementById("efo"));
+  </script>
+</div>

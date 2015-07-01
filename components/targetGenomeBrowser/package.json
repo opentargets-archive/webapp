@@ -52,8 +52,8 @@
   "dependencies": {
     "cttv.genomeBrowserNav": "file:../genomeBrowserNav",
     "rsvp": "^3.0.18",
-    "tnt.ensembl": "^0.0.4",
-    "tnt.genome": "^0.0.11",
+    "tnt.ensembl": "^0.0.10",
+    "tnt.genome": "0.0.24",
     "tnt.tooltip": "^0.0.10"
   }
 }

@@ -285,6 +285,9 @@ var bubblesView = function () {
 			})
 			.attr("startOffset", "50%")
 			.text(function () {
+                if (Math.PI*d.r/8 < 3) {
+                    return "";
+                }
 			    return d[conf.label] ? d[conf.label].substring(0, Math.PI*d.r/8) : "";
 			});
 		}
@@ -314,7 +317,10 @@ var bubblesView = function () {
 	    .attr("x", function (d) { return d.x; })
 	    .attr("y", function (d) { return d.y; })
 	    .text(function (d) {
-		return d[conf.label].substring(0, d.r / 3);
+            if (d.r/3 < 3) {
+                return "";
+            }
+            return d[conf.label].substring(0, d.r / 3);
 	    });
 
 	// Move labels
@@ -490,17 +496,23 @@ var bubblesView = function () {
 			})
 			.attr("startOffset", "50%")
 			.text(function () {
+                if (Math.PI*d.r*k/8 < 3) {
+                    return "";
+                }
 			    return d[conf.label] ? d[conf.label].substring(0, Math.PI*d.r*k/8) : "";
 			});
 		} else {
 		    d3.select(this)
 		    	.attr("x", function (d) { return ((d.x - v[0])*k)+offset; })
-			.attr("y", function (d) { return ((d.y - v[1])*k)+offset; })
+                .attr("y", function (d) { return ((d.y - v[1])*k)+offset; })
 		    	.text(function (d) {
-			    if (d[conf.label]) {
-				return d[conf.label].substring(0, d.r*k / 3);
-			    }
-			})
+                    if (d[conf.label]) {
+                        if (d.r*k / 3 < 3) {
+                            return "";
+                        }
+                        return d[conf.label].substring(0, d.r*k / 3);
+                    }
+                })
 			.attr("font-size", function (d) {
 			    var circleLength = d.r * k / 3;
 			    var labelLength = d[conf.label] ? d[conf.label].length : 0;

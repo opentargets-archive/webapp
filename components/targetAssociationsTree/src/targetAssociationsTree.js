@@ -5,10 +5,10 @@ var geneAssociationsTree = function () {
     "use strict";
 
     var config = {
-	data : undefined,
-	diameter : 1000,
-	cttvApi : undefined,
-	legendText : "<text>Score range</text>"
+        data : undefined,
+        diameter : 1000,
+        cttvApi : undefined,
+        legendText : "<text>Score range</text>"
     };
 
     var treeVis = tnt_tree();
@@ -18,16 +18,8 @@ var geneAssociationsTree = function () {
     // 	.domain([1,1])
     // 	.range(["#b2182b", "#ef8a62", "#fddbc7", "#f7f7f7", "#d1e5f0", "#67a9cf", "#2166ac"]);
     var scale = d3.scale.linear()
-	.domain([0,1])
-	.range(["#ffffff", "#08519c"]);
-
-    // function setTitles () {
-	// d3.selectAll(".tnt_tree_node")
-	//     .append("title")
-	//     .text(function (d) {
-	// 	return d.label;
-	//     });
-    // }
+        .domain([0,1])
+        .range(["#ffffff", "#08519c"]);
 
     function sortNodes () {
         treeVis.root().sort (function (node1, node2) {
@@ -49,9 +41,18 @@ var geneAssociationsTree = function () {
         .fill (function (node) {
             return scale(node.property("association_score"));
         });
+
 	treeVis
+        .id(function (d) {
+            var id = d.name;
+            while (d.parent) {
+                id += "_" + d.parent.name;
+                d = d.parent;
+            }
+            return id;
+        })
 	    .data(config.data)
-        .node_display ( tnt_tree.node_display()
+        .node_display (tnt_tree.node_display()
             .size(12)
             .display (function (n) {
                 if (n.property('__depth') === 1) {
@@ -61,75 +62,49 @@ var geneAssociationsTree = function () {
                 }
             })
         )
-	    // .node_display(tnt_tree.node_display.circle()
-	    // 		  .size(8)
-	    // 		  .fill(function (node) {
-	    // 		      return scale(node.property("association_score"));
-	    // 		  })
-	    // 		 )
-	    //.on_click(nodeTooltip)
         .on("click", tooltips.click)
         .on("mouseover", tooltips.mouseover)
         .on("mouseout", tooltips.mouseout)
 	    .label(tnt_tree.label.text()
 		   .height(20)
-	    	   .text(function (node) {
-	    	       if (node.is_leaf()) {
-	    		   var diseaseName = node.property("label");
-	    		   if (diseaseName && diseaseName.length > 30) {
-	    		       diseaseName = diseaseName.substring(0,30) + "...";
-	    		   }
-			   if (node.is_collapsed()) {
-			       diseaseName += (" (+" + node.n_hidden() + " diseases)");
-			   }
+           .transform(function (node) {
+                       var d = node.data();
+                       var offset = node.children() && node.children().length % 2 ? 10 : 0
+                       var t = {
+                           translate : [0, (5 - offset)],
+                           rotate : 0
+                       };
+                       return t;
+                   }
+               )
+           .text(function (node) {
+               if (node.is_leaf()) {
+                   var diseaseName = node.property("label");
+                   if (diseaseName && diseaseName.length > 30) {
+                       diseaseName = diseaseName.substring(0,30) + "...";
+                   }
+                   if (node.is_collapsed()) {
+                       diseaseName += (" (+" + node.n_hidden() + " diseases)");
+                   }
 	    		   return diseaseName;
-	    	       }
-	    	       return "";
-	    	   })
-	    	   .fontsize(14)
-	    	  )
+               }
+               return node.property("label");
+           })
+           .fontsize(14)
+           .fontweight(function (node) {
+               if (node.parent() && node.parent().node_name() === "cttv_disease") {
+                   return "bold";
+               }
+               return "normal";
+           })
+        )
 	    .layout(tnt_tree.layout.vertical()
-	    	    .width(config.diameter)
-	    	    .scale(true)
-	    	   );
+            .width(config.diameter)
+            .scale(true)
+        );
 
-    // Branch lengths:
-    // First pass: Get the max depth:
-    var setDepth = function (node, currDepth) {
-        node.property('__depth', currDepth);
-        var children = node.children(true) || [];
-        for (var i=0; i<children.length; i++) {
-            setDepth(children[i], currDepth+1);
-        }
-    };
-    setDepth(treeVis.root(), 0);
-	var tasNodes = treeVis.root().children();
-    var maxDepth = 0;
-    var findMaxDepth = function (n) {
-        var depth = n.property('__depth');
-        if (depth > maxDepth) {
-            maxDepth = depth;
-        }
-    };
-    for (var i=0; i<tasNodes.length; i++) {
-        var taNode = tasNodes[i];
-        taNode.apply (findMaxDepth);
-    }
+    setBranchLengths (treeVis);
 
-    // Second pass: Apply branch lengths
-    var setBranchLength = function (n) {
-        if (n.children() === undefined) {
-            n.property("branch_length", 1 + (maxDepth - n.property('__depth')));
-        } else {
-            n.property("branch_length", 1);
-        }
-    };
-    for (var j=0; j<tasNodes.length; j++) {
-        var taNode = tasNodes[j];
-        taNode.property("branch_length", 1);
-
-        taNode.apply (setBranchLength);
-    }
 
     // collapse all the therapeutic area nodes
 	// if (tas !== undefined) {
@@ -272,7 +247,7 @@ var geneAssociationsTree = function () {
             .target (config.target);
 
 	var vis = d3.select(div)
-	    .append("div")
+        .append("div")
 	    .style("position", "relative");
 
 	if ((config.data === undefined) && (config.target !== undefined) && (config.cttvApi !== undefined)) {
@@ -294,73 +269,116 @@ var geneAssociationsTree = function () {
 
 
     theme.update = function () {
-	treeVis.data(config.data);
-	// collapse all the therapeutic area nodes
-	// var root = treeVis.root();
-	// var tas = root.children();
-	// if (tas) {
-	//     for (var i=0; i<tas.length; i++) {
-	// 	tas[i].toggle();
-	//     }
-	// }
-	sortNodes();
-	treeVis.update();
-	// setTitles();
+        treeVis.data(config.data);
+        // collapse all the therapeutic area nodes
+        // var root = treeVis.root();
+        // var tas = root.children();
+        // if (tas) {
+        //     for (var i=0; i<tas.length; i++) {
+        // 	tas[i].toggle();
+        //     }
+        // }
+        setBranchLengths(treeVis);
+        sortNodes();
+        treeVis.update();
+        // setTitles();
     };
 
     // size of the tree
     theme.diameter = function (d) {
-	if (!arguments.length) {
-	    return config.diameter;
-	}
-	config.diameter = d;
-	return this;
+        if (!arguments.length) {
+            return config.diameter;
+        }
+        config.diameter = d;
+        return this;
     };
 
     //
     theme.target = function (t) {
-	if (!arguments.length) {
-	    return config.target;
-	}
-	config.target = t;
-	return this;
+        if (!arguments.length) {
+            return config.target;
+        }
+        config.target = t;
+        return this;
     };
 
     theme.cttvApi = function (api) {
-	if (!arguments.length) {
-	    return config.cttvApi;
-	}
-	config.cttvApi = api;
-	return this;
+        if (!arguments.length) {
+            return config.cttvApi;
+        }
+        config.cttvApi = api;
+        return this;
     };
 
     // data is object
     theme.data = function (d) {
-	if (!arguments.length) {
-	    return config.data;
-	}
-	config.data = d;
-	return this;
+        if (!arguments.length) {
+            return config.data;
+        }
+        config.data = d;
+        return this;
     };
 
     // datatypes
     theme.datatypes = function (dts) {
-	if (!arguments.length) {
-	    return tooltips.datatypes();
-	}
-    tooltips.datatypes(dts);
-    //config.datatypes = dts;
-	return this;
+        if (!arguments.length) {
+            return tooltips.datatypes();
+        }
+        tooltips.datatypes(dts);
+        //config.datatypes = dts;
+        return this;
     };
 
     // Legend text
     theme.legendText = function (t) {
-	if (!arguments.length) {
-	    return config.legendText;
-	}
-	config.legendText = t;
-	return this;
+        if (!arguments.length) {
+            return config.legendText;
+        }
+        config.legendText = t;
+        return this;
     };
+
+    function setBranchLengths (treeVis) {
+        // Branch lengths:
+        // First pass: Get the max depth:
+        var setDepth = function (node, currDepth) {
+            node.property('__depth', currDepth);
+            var children = node.children(true) || [];
+            for (var i=0; i<children.length; i++) {
+                setDepth(children[i], currDepth+1);
+            }
+        };
+        setDepth(treeVis.root(), 0);
+
+        var tasNodes = treeVis.root().children();
+        var maxDepth = 0;
+        var findMaxDepth = function (n) {
+            var depth = n.property('__depth');
+            if (depth > maxDepth) {
+                maxDepth = depth;
+            }
+        };
+        for (var i=0; i<tasNodes.length; i++) {
+            var taNode = tasNodes[i];
+            taNode.apply (findMaxDepth);
+        }
+
+        // Second pass: Apply branch lengths
+        var setLength = function (n) {
+            if (n.children() === undefined) {
+                n.property("branch_length", 1 + (maxDepth - n.property('__depth')));
+            } else {
+                n.property("branch_length", 1);
+            }
+        };
+        for (var j=0; j<tasNodes.length; j++) {
+            var taNode = tasNodes[j];
+            taNode.property("branch_length", 1);
+
+            taNode.apply (setLength);
+        }
+
+    }
 
     return theme;
 };

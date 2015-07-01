@@ -294,17 +294,17 @@
 
 
 
-        var getSoLabel = function(arr_info, arr_code){
-            var label = "nearest_gene_five_prime_end";
-            // first look for the SO id in the array
-            for(var i=0; i<arr_code.length; i++){
-                if(arr_code[i].substr(0,2).toUpperCase() === "SO"){
-                    label = getEcoLabel( arr_info, arr_code[i]);
-                    break;
-                }
-            }
-            return label;
-        }
+        // var getSoLabel = function(arr_info, arr_code){
+        //     var label = "nearest_gene_five_prime_end";
+        //     // first look for the SO id in the array
+        //     for(var i=0; i<arr_code.length; i++){
+        //         if(arr_code[i].substr(0,2).toUpperCase() === "SO"){
+        //             label = getEcoLabel( arr_info, arr_code[i]);
+        //             break;
+        //         }
+        //     }
+        //     return label;
+        // }
 
 
 
@@ -322,15 +322,15 @@
                     // disease
                     row.push(data[i].biological_object.efo_info[0][0].label);
 
-                    // SNP
+                    // Variant
                     //row.push( "<a href='"+data[i].evidence.evidence_chain[0].biological_object.about[0]+"' target='_blank'>"
                     row.push( "<a href='http://www.ensembl.org/Homo_sapiens/Variation/Explore?v="+data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()+"' target='_blank'>"
                             + data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()
                             + " <i class='fa fa-external-link'></i></a>");
 
                     // variant type
-                    //row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[1]) );
-                    row.push( getSoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes) );
+                    row.push (data[i].evidence.evidence_chain[0].evidence.experiment_specific.functional_consequence_label);
+                    // row.push( getSoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes) );
                     // evidence source
                     //row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[2]) );
                     row.push("CTTV-custom annotation pipeline");
@@ -342,13 +342,15 @@
 
 
                     // p-value
-                    row.push(data[i].evidence.evidence_chain[1].evidence.association_score.pvalue.value);
+                    var pval = data[i].evidence.evidence_chain[1].evidence.association_score.pvalue.value.toPrecision(1);
+                    row.push(pval);
+                    // row.push(data[i].evidence.evidence_chain[1].evidence.association_score.pvalue.value);
 
                     // publications
                     var pub="";
-                    if(data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs){
-                        for(var j=0; j<data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs.length; j++){
-                            var n=data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs[j].split('/').pop();
+                    if (data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references) {
+                        for (var j=0; j<data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references.length; j++){
+                            var n=data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
                             pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
                         }
                     }
@@ -393,15 +395,16 @@
                     fields: [
                         "biological_object.efo_info", // disease
                         //"[0].evidence.urls.linkouts", "evidence.evidence_chain[0].biological_object.about", // mutation
-                        "evidence.evidence_chain", //
+                        "evidence", //
+                        "id",
                         //"evidence.evidence_chain[0].evidence.evidence_codes",    // mutation type
-                        "evidence.evidence_codes_info",
-                        "evidence.evidence_codes",
+                        //"evidence.evidence_codes_info",
+                        //"evidence.evidence_codes",
                         //"evidence.evidence_chain[0].evidence.experiment_specific",    // mutation consequence
-                        "evidence.provenance_type.database", "biological_subject.about",    // evidence source
-                        "evidence.provenance_type.literature.pubmed_refs",                   // publications
-                        "evidence.experiment_specific",
-                        "evidence.urls"
+                        //"evidence.provenance_type.database", "biological_subject.about",    // evidence source
+                        //"evidence.provenance_type.literature.",                   // publications
+                        //"evidence.experiment_specific",
+                        //"evidence.urls"
 
                     ]
                 } ).
@@ -432,36 +435,15 @@
 
                     var db = data[i].evidence.provenance_type.database.id.toLowerCase();
 
-
                     // disease
                     row.push(data[i].biological_object.efo_info[0][0].label);
 
 
-
                     // mutation
-
                     var mut = messages.NA;
-                    //if(data[i].evidence.evidence_chain && data[i].evidence.evidence_chain[0].biological_object.about.length>0){
-                    //    mut = "<a href='"+ data[i].evidence.evidence_chain[0].biological_object.about[0] +"' target='_blank'>"
-                    //         + data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()
-                    //         + " <i class='fa fa-external-link'></i></a>";
-                    //} else {
-                    //    mut = messages.NA;
-                    //}
-                    var li = db===dbs.EVA.toLowerCase() ? 0 : 1; //data[i].evidence.urls.linkouts.length-1;
-                    if( checkPath(data[i], "evidence.urls.linkouts") ){
-                        if( db===dbs.UNIPROT.toLowerCase() ){
-                            if( data[i].evidence.urls.linkouts[li]===undefined){
-                                li = 0;
-                            }
-                        }
-                        if( data[i].evidence.urls.linkouts[li] ){
-
-                            var url = ((li==0) ? data[i].evidence.urls.linkouts[0].url : ("http://www.uniprot.org/uniprot/"+data[i].evidence.urls.linkouts[0].url.split("/").pop()+"#pathology_and_biotech"));
-                            mut = "<a href='" + url + "' target='_blank'>"
-                                + data[i].evidence.urls.linkouts[li].nice_name.split("/").pop()
-                                + " <i class='fa fa-external-link'></i></a>";
-                        }
+                    if(data[i].evidence.evidence_chain && data[i].evidence.evidence_chain[0].biological_object.about){
+                        var rsId = data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop();
+                        mut = "<a href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=" + rsId + " target=_blank>" + rsId + " <i class='fa fa-external-link'></i></a>";
                     }
                     row.push(mut);
 
@@ -471,13 +453,13 @@
                     // for EVA:
                     //  none available at the moment
                     // for uniprot:
-                    var eco = messages.NA;
-                    if( db===dbs.UNIPROT.toLowerCase() ){
-                        if (checkPath(data[i], "evidence.evidence_codes") && data[i].evidence.evidence_codes[1]) {
-                            eco = data[i].evidence.evidence_codes[1];
-                        }
-                    }
-                    row.push( getEcoLabel( data[i].evidence.evidence_codes_info, eco ) );
+                    // var eco = messages.NA;
+                    // if( db===dbs.UNIPROT.toLowerCase() ){
+                    //     if (checkPath(data[i], "evidence.evidence_codes") && data[i].evidence.evidence_codes[1]) {
+                    //         eco = data[i].evidence.evidence_codes[1];
+                    //     }
+                    // }
+                    // row.push( getEcoLabel( data[i].evidence.evidence_codes_info, eco ) );
 
 
                     // mutation consequence:
@@ -486,14 +468,13 @@
                     var cons = messages.NA;
                     if( db===dbs.UNIPROT.toLowerCase() ){
                         // if Uniprot
-                        if( checkPath(data[i], "evidence.evidence_chain") && data[i].evidence.evidence_chain.length>0){
-                            // if( checkPath(data[i].evidence.evidence_chain[0], "evidence.evidence_codes") && data[i].evidence.evidence_chain[0].evidence.evidence_codes.length>=1 ){
-                            //     cons = data[i].evidence.evidence_chain[0].evidence.evidence_codes[1].label;
-                            // }
-                            if(data[i].evidence.evidence_chain[0] && checkPath( data[i].evidence.evidence_chain[0], "evidence.experiment_specific.functional_consequence") ){
-                                cons = data[i].evidence.evidence_chain[0].evidence.experiment_specific.functional_consequence;
-                            }
+                        //cons = data[i].evidence_chain[0]
+                        if (data[i].evidence.evidence_chain && data[i].evidence.evidence_chain[0].evidence.experiment_specific) {
+                            cons = data[i].evidence.evidence_chain[0].evidence.experiment_specific.functional_consequence_label;
                         }
+                    } else {
+                        // if eva
+                        cons = data[i].evidence.evidence_chain[0].biological_object.properties.experiment_specific.functional_consequence_label;
                     }
                     row.push( cons );
 
@@ -505,25 +486,41 @@
                     var eso = messages.NA;
                     if( db===dbs.EVA.toLowerCase() ){
                         eso = "Curated in EVA";
-                        eso = "<a href='"+data[i].evidence.urls.linkouts[0].url+"' target='_blank'>"
+                        eso = "<a href='"+data[i].evidence.evidence_chain[0].evidence.urls.linkouts[0].url+"' target='_blank'>"
                             + eso
                             + " <i class='fa fa-external-link'></i></a>";
-                    } else if ( db===dbs.UNIPROT.toLowerCase()){
-                        eso = "Curated in Uniprot";
-                        eso = "<a href='http://www.uniprot.org/uniprot/"+data[i].evidence.urls.linkouts[0].url.split("/").pop()+"#pathology_and_biotech' target='_blank'>"
-                            + eso
-                            + " <i class='fa fa-external-link'></i></a>";
+                    } else if ( db===dbs.UNIPROT.toLowerCase() && (data[i].evidence.urls) ){
+                        var urls = data[i].evidence.urls;
+                        if (data[i].evidence.urls.linkouts) {
+                            urls = data[i].evidence.urls.linkouts;
+                        }
+                        eso = "<a href="+urls[0].url+" target='_blank'>"
+                         + urls[0].nice_name
+                         + " <i class='fa fa-external-link'></i></a>";
                     }
                     row.push( eso );
 
 
-                    // publications : evidence.provenance_type.literature.pubmed_refs
+                    // publications
                     var pub=messages.NA;
-                    if( checkPath(data[i], "evidence.provenance_type.literature.pubmed_refs") ){
-                        pub="";
-                        for(var j=0; j<data[i].evidence.provenance_type.literature.pubmed_refs.length; j++){
-                            var n=data[i].evidence.provenance_type.literature.pubmed_refs[j].split('/').pop();
-                            pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>, "
+                    var pub;
+                    if (db === dbs.EVA.toLowerCase()) {
+                        pub = "";
+                        for (var j=0; j<data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references.length; j++) {
+                            var n=data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
+                            if (n == 0) {
+                                continue;
+                            }
+                            pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>, ";
+                        }
+                    } else {
+                        pub = "";
+                        // Uniprot
+                        if (data[i].evidence.evidence_chain && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature) {
+                            for (var j=0; j<data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references.length; j++) {
+                                var n=data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
+                                pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>, ";
+                            }
                         }
                     }
                     row.push(pub);
@@ -699,18 +696,18 @@
                     var activity = data[i].biological_subject.properties.activity;
                     switch (activity) {
                         case 'drug_positive_modulator' :
-                        activity = "<span><i class='fa fa-plus-square-o fa-2x'></i></span>";
+                        activity = "positive";
                         break;
                         case 'drug_negative_modulator' :
-                        activity = "<span><i class='fa fa-minus-square-o fa-2x'></i></span>";
+                        activity = "negative";
                         break;
                     }
                     row.push(activity);
 
-                    // 6: Clinical trials
-                    row.push( "<a href='https://clinicaltrials.gov/search?intr=%22"
-                                + data[i].evidence.evidence_chain[0].evidence.experiment_specific.molecule_name
-                                + "%22' target='_blank'>View in clinicaltrials.gov <i class='fa fa-external-link'></i></a>");
+                    // 6: Clinical indications
+                    row.push( "<a href='"
+                                + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
+                                + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
                     // 7: target class
                     row.push(data[i].evidence.evidence_chain[0].evidence.experiment_specific.target_class[0]);
@@ -933,7 +930,7 @@
                     datasource: 'expression_atlas',
                     fields: [
                         "biological_object.efo_info",
-                        "biological_object.properties.biosamples",
+                        //"biological_object.properties.biosamples",
                         "evidence.experiment_specific",
                         //"evidence.experiment_specific.comparison_name", // comparison
                         "biological_subject.properties.activity",  // activity
@@ -942,7 +939,8 @@
                         "evidence.urls.linkouts", // provenance & experiment overview
                         //"evidence.experiment_specific.literature.pubmed_refs",  // literature
                         "evidence.evidence_codes",
-                        "evidence.evidence_codes_info"
+                        "evidence.evidence_codes_info",
+                        "evidence.provenance_type"
                     ]
                 } ).
                 then(
@@ -980,10 +978,13 @@
                     row.push(data[i].evidence.experiment_specific.comparison_name);
 
                     // activity
-                    row.push( "<a href='"+data[i].evidence.urls.linkouts[2].url+"' target='_blank'>"+data[i].biological_subject.properties.activity+"<i class='fa fa-external-link'></i></a>" );
+                    var activityUrl = data[i].evidence.urls.linkouts[2].url;
+                    var activity = data[i].biological_subject.properties.activity.split("_").shift();
+                    row.push( "<a href='"+ activityUrl +"' target='_blank'>" + activity +"<i class='fa fa-external-link'></i></a>" );
 
-                    // tissue
-                    row.push( checkPath(data[i], "biological_object.properties.biosamples") ? data[i].biological_object.properties.biosamples : messages.NA );
+                    // tissue / cell
+                    row.push (data[i].evidence.experiment_specific.tissue_name);
+                    // row.push( checkPath(data[i], "biological_object.properties.biosamples") ? data[i].biological_object.properties.biosamples : messages.NA );
 
                     // evidence source
                     row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_codes[0]) + " <a href='http://www.ebi.ac.uk/gxa/FAQ.html' target='_blank'>[?]</a>" );
@@ -994,15 +995,18 @@
                     // p-value
                     row.push(data[i].evidence.association_score.pvalue.value);
 
+                    // percentile rank
+                    row.push(data[i].evidence.experiment_specific.percentile_rank);
+
                     // experiment overview
-                    row.push("<a href='"+data[i].evidence.urls.linkouts[0].url+"' target='_blank'>" + (data[i].evidence.experiment_specific.study_title || "Experiment overview and raw data") + " <i class='fa fa-external-link'></i></a>");
+                    row.push("<a href='"+data[i].evidence.urls.linkouts[2].url+"' target='_blank'>" + (data[i].evidence.urls.linkouts[2].nice_name || "Experiment overview and raw data") + " <i class='fa fa-external-link'></i></a>");
 
                     // publications
                     var pub="";
-                    if(data[i].evidence.experiment_specific.literature.pubmed_refs){
-                        for(var j=0; j<data[i].evidence.experiment_specific.literature.pubmed_refs.length; j++){
-                            var n=data[i].evidence.experiment_specific.literature.pubmed_refs[j].split('/').pop();
-                            pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
+                    if (data[i].evidence.provenance_type.literature) {
+                        for(var j=0; j<data[i].evidence.provenance_type.literature.references.length; j++){
+                            var n = data[i].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
+                            pub += "<a href='http://europepmc.org/abstract/MED/" + n +"' target='_blank'>"+ n +" <i class='fa fa-external-link'></i></a>"
                         }
                     }
                     row.push(pub);
