@@ -44,9 +44,8 @@ angular.module('cttvControllers')
     // Set page filters:
     // this defines the order in which the facets are going to be displayed
     cttvFiltersService.pageFacetsStack([
-        //cttvFiltersService.facetTypes.PATHWAYS,
-        cttvFiltersService.facetTypes.DATATYPES,
-        cttvFiltersService.facetTypes.PATHWAYS
+        cttvFiltersService.facetTypes.DATATYPES,    // adds a datatypes facet to the page
+        cttvFiltersService.facetTypes.PATHWAYS      // adds a pathways facet to the page
     ]);
 
 
@@ -60,17 +59,16 @@ angular.module('cttvControllers')
      *      datatypes: "known_drug",
      *      pathway_type: [ "REACT_111102", "REACT_116125", "REACT_6900" ]
      * }
-     * getData(filteres);
+     * getData(filters);
      */
     var getData = function(filters){
-        //var filters = cttvFiltersService.parseURL(); //cttvFiltersService.getSelectedFiltersRaw();
         $log.log("getData()");
         var opts = {
             efo: $scope.search.query,
             datastructure: "flat",
             expandefo: true
         };
-        cttvAPIservice.addFacetsOptions(filters, opts);
+        opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
 
         cttvAPIservice.getAssociations(opts).
@@ -84,8 +82,6 @@ angular.module('cttvControllers')
 
                 // set the data
                 $scope.data = resp.body.data;
-                // $scope.data.selected = {datatypes: resp.body.facets.datatypes.buckets.map(function(obj){return obj.key;})}//{datatypes:["genetic_association"]}; // TODO: get this directly...
-                // Nah!!! this shows all the categories, not jsut the selected ones...
                 $scope.data.selected = {datatypes: cttvFiltersService.getSelectedFiltersRaw("datatypes")};
 
                 // set the total?
@@ -135,23 +131,23 @@ angular.module('cttvControllers')
     //  2. Get the data and facets
     //  3. Listen for page changes
 
-    // get the data without caring about filtered out mouse data
+    // Option 1: get the data without caring about filtered out mouse data
     getData( cttvFiltersService.parseURL() );
 
-    /*
-    if(_.keys(cttvFiltersService.parseURL()).length==0){
+    // - OR -
+
+    // Option 2: set the default filterd-out mouse data on page load, in which case we get the data on URL change
+    /*if(_.keys(cttvFiltersService.parseURL()).length==0){
         // NO SEARCH
 
         // no search == no filters specified, so we set default filters: this will trigger a page reload
         cttvFiltersService.setSelectedFilters({datatypes: cttvFiltersService.getDefaultSelectedDatatypes()});
-
     } else {
         // THERE IS A SEARCH
 
         // make the call for data with the selected filters
         getData( cttvFiltersService.parseURL() );
-    }
-    */
+    }*/
 
 
 

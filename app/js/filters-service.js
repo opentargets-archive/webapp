@@ -35,7 +35,7 @@ angular.module('cttvServices').
 
         // this holds all the FilterCollections (from parsed facets from the API)
         // mapped by facet key for easier operations
-        var facetsdata = {};
+        // var facetsdata = {};
 
 
         // array of user selected options, aka "Your filters"
@@ -49,7 +49,7 @@ angular.module('cttvServices').
 
 
 
-        var active = [];
+        // var active = [];
 
 
 
@@ -59,15 +59,18 @@ angular.module('cttvServices').
 
 
 
+        // ----------------------------------
+        //  Private methods
+        // ----------------------------------
+
+
+
         // goes thorugh all the filters and
         // updates the "summary" of selected options, as well as the count
         var updateSelected = function(){
             selected.length=0;  // reset the length, not whole object
             selectedCount = 0;  // other controllers are $watch-ing this...
-            //active.length = 0;
-            // $log.log("updateSelected");
-            // $log.log(facetsdata);
-            //for(var collection in facetsdata){
+
             filters.forEach(function(collection){
                 var f = collection.getSelectedFilters();
                 if(f.length>0){
@@ -88,6 +91,7 @@ angular.module('cttvServices').
         }
 
 
+
         var getSelectedFilters = function(facet){
             var f = selected.filter(function(obj){
                         return obj.key===facet;
@@ -100,26 +104,77 @@ angular.module('cttvServices').
 
 
 
+        // Takes API data for a facet (i.e. a collection of filters) and returns the config object to create that collection
+        var parseFacetData = function(collection, data){
+
+            var config={
+                key: collection,
+                label: cttvDictionary[collection.toUpperCase()] || collection,
+            };
+
+            if(collection === cttvConsts.DATATYPES){
+                // we have datatypes, which is a little complicated
+                // because we have DEFAULT options (i.e. filtering out mouse data)
+                // these should go into the "selected filters" (although the user hasn't selected them)
+
+                config.filters = datatypes.map( function(obj){
+                    var conf = {};
+                    var dtb = data.buckets.filter(function(o){return o.key===obj.key})[0] || {unique_target_count:{}};
+                    conf.key = obj.key;
+                    conf.label = cttvDictionary[obj.key.toUpperCase()] || "";
+                    conf.count = dtb.unique_target_count.value; //dtb.doc_count;
+                    conf.enabled = dtb.key != undefined; // it's actually coming from the API and not {}
+                    conf.selected = isSelected(collection, obj.key); // && conf.count>0;    // do we want to show disabled items (with count==0) as selected or not?
+                    conf.facet = collection;
+                    return conf;
+                });/*.filter( function(obj){
+                    // Use a filter function to keep only those returned by the API??
+                    return obj.count>0;
+                });*/
+            } else {
+                config.filters = data.buckets.map(function(obj){
+                    var conf = {};
+                    conf.key = obj.key;
+                    conf.label = obj.label;
+                    conf.count = obj.unique_target_count.value;
+                    conf.selected = isSelected(collection, obj.key);
+                    conf.facet = collection;
+                    conf.collection = parseFacetData();
+                    return conf;
+                });
+            }
+
+            return config;
+        }
+
+
+
+        // ----------------------------------
+        //  Private classes
+        // ----------------------------------
+
+
+
         /*
-         * Private Filter class
+         * Private Filter class for a generic filter
          * o:Object - optional config object
          */
         function Filter(o){
-            this.facet = o.facet || "";
-            this.key = o.key || "";
-            this.label = o.label || "";
-            this.count = o.count || 0;
+            this.facet = o.facet || ""; // the collection key, e.g. "datatype" or "pathway"
+            this.key = o.key || "";     // the filter id, e.g. "rna_expression" or "react_15518"
+            this.label = o.label || ""; // the label to disply
+            this.count = o.count || 0;  // the count to disply
             this.enabled = this.count>0 && (o.enabled==undefined ? true : o.enabled);
             this.selected = o.selected==undefined ? false : o.selected;
-
-            /// HACK:
-            // this is a temporary HACK!
-            // once the API returns the elasticsearch aggregations like we want, this won't be needed
-            // if( this.selected==true ){
-            //     lastSelection = this.key;
-            // }
+            // the value associated with this
+            this.value = o.value || undefined;
+            // trying to have nested filters?
+            this.collection = o.collection || null;
         }
 
+            /*
+             * Toggles the state selected-deselected and updates the URL accordingly (which triggers an update)
+             */
             Filter.prototype.toggle = function(){
                 this.setSelected(!this.selected);
                 if( this.selected ){
@@ -130,6 +185,9 @@ angular.module('cttvServices').
                 return this.selected;
             }
 
+            /*
+             * Triggers the selected property to the specified value and DOES NOT update the URL
+             */
             Filter.prototype.setSelected=function(b){
                 if(this.enabled){
                     this.selected = b;
@@ -195,30 +253,11 @@ angular.module('cttvServices').
                     return obj.selected;
                 });
             }
-//
-            //FilterCollection.prototype.getSelectedFiltersRaw = function(){
-            //    return this.getSelectedFilters().map(function(obj){
-            //        return obj.key+"";
-            //    });
-            //}
-//
-            //FilterCollection.prototype.removeAllFilters = function(b){
-            //    this.filters.length=0;
-            //}
-
-            // HACK:
-            // this is a temporary HACK!
-            // once the API returns the elasticsearch aggregations like we want, this won't be needed
-            // FilterCollection.prototype.containsFilter = function(key){
-            //     return this.filters.some(function(filter){
-            //         return filter.key === key;
-            //     });
-            // }
 
 
 
         // ---------------------------------
-        //  The actual service
+        //  Public service
         // ---------------------------------
 
 
@@ -227,6 +266,10 @@ angular.module('cttvServices').
 
 
 
+        /**
+         * List of constants for the types of facets we support.
+         * These are passed to the pageFacetsStack() function to define the facets for the given page
+         */
         cttvFiltersService.facetTypes = {
             DATATYPES: 'datatypes',
             PATHWAYS: 'pathway_type',
@@ -240,7 +283,7 @@ angular.module('cttvServices').
          * The order in which they're added is also the order
          * in which they'll appear in the UI.
          *
-         * @param facets - array of facets keys, e.g. "datatypes"
+         * @param facets - array of facets keys, e.g. ["datatypes","pathway_types"]
          */
         cttvFiltersService.pageFacetsStack = function(facets){
             if(!facets){
@@ -282,6 +325,9 @@ angular.module('cttvServices').
 
         /**
          * Very similar, remove the specified filter from the URL search
+         *
+         * @param {string} facet the facet to be added, or to which to append
+         * @param {string | array} bucket they key of the filter (or array of keys) to be added
          */
         cttvFiltersService.removeFilter = function(facet,bucket){
             $log.log("removeFilter( "+facet+", "+bucket+" )");
@@ -309,7 +355,9 @@ angular.module('cttvServices').
 
 
 
-        // Sets the serach of the URL to the specified filters
+        /**
+         * Sets the serach of the URL to the specified filters
+         */
         cttvFiltersService.setSelectedFilters = function(searchObject){
             var search = $location.search();
             for(var i in search){
@@ -323,16 +371,6 @@ angular.module('cttvServices').
 
 
         cttvFiltersService.addCollection = function(obj){
-
-            // let's see if there are any selected filters for this collection
-            // i.e. if any are in the URL of the page
-            //var selection = $location.search()[obj.key] || [];
-            //if( typeof selection === 'string'){
-            //    // if the selection for this collection is only one item, that will be a string
-            //    // so we make it into an array and then handles everything as an array
-            //    selection = [selection];
-            //}
-
 
             var collection = new FilterCollection(obj.key, obj.label);
             obj.filters.forEach(function(element){
@@ -382,6 +420,9 @@ angular.module('cttvServices').
             //     }
             // };
             // return raw;
+
+            // TODO: ok so this first part was also kinda hacked together quickly
+            // and ideally we can clean up a few more functions here...
             if(facet){
                 return getSelectedFilters(facet);
             }
@@ -401,6 +442,7 @@ angular.module('cttvServices').
          * Removes ALL selections
          */
         cttvFiltersService.deselectAll = function(){
+            // TODO: this could be changed so that removeFilter() takes an array as first parameter
             selected.forEach(function(collection){
                 cttvFiltersService.removeFilter(collection.key, null);
             });
@@ -411,13 +453,13 @@ angular.module('cttvServices').
         /**
          * Remove all existing filters from the list.
          * Reference to the filters array remains intact
-         */
+
         cttvFiltersService.resetFilters = function(){
             $log.log("resetFilters()");
             facetsdata = {};
             updateSelected();
         };
-
+        */
 
 
         /**
@@ -444,15 +486,9 @@ angular.module('cttvServices').
 
 
 
-        var setSelectedFilters = function(flt){
-
-        }
-
-
-
         /**
          * This should be called when we first get data, which is unfiltered
-         */
+
         cttvFiltersService.initFilters = function(facets){
             $log.log("initFilters()");
 
@@ -475,55 +511,13 @@ angular.module('cttvServices').
             }
 
         };
-
-
-
-        // Takes API data for a facet (i.e. a collection of filters) and returns the config object to create that collection
-        var parseFacetData = function(collection, data){
-
-            var config={
-                key: collection,
-                label: cttvDictionary[collection.toUpperCase()] || collection,
-            };
-
-            if(collection === cttvConsts.DATATYPES){
-                // we have datatypes, which is a little complicated
-                // because we have DEFAULT options (i.e. filtering out mouse data)
-                // these should go into the "selected filters" (although the user hasn't selected them)
-
-                config.filters = datatypes.map( function(obj){
-                    var conf = {};
-                    var dtb = data.buckets.filter(function(o){return o.key===obj.key})[0] || {unique_target_count:{}};
-                    conf.key = obj.key;
-                    conf.label = cttvDictionary[obj.key.toUpperCase()] || "";
-                    conf.count = dtb.unique_target_count.value; //dtb.doc_count;
-                    conf.enabled = dtb.key != undefined; // it's actually coming from the API and not {}
-                    conf.selected = isSelected(collection, obj.key) && conf.count>0; // || (obj.selected && (dtb.key != undefined)); //conf.enabled;
-                    conf.facet = collection;
-                    return conf;
-                });/*.filter( function(obj){
-                    // Use a filter function to keep only those returned by the API??
-                    return obj.count>0;
-                });*/
-            } else {
-                config.filters = data.buckets.map(function(obj){
-                    var conf = {};
-                    conf.key = obj.key;
-                    conf.label = obj.label;
-                    conf.count = obj.unique_target_count.value;
-                    conf.selected = isSelected(collection, obj.key);
-                    conf.facet = collection;
-                    return conf;
-                });
-            }
-            return config;
-        }
+*/
 
 
 
         /**
          * Parse the facets object from the API
-         */
+         *
         cttvFiltersService.initFacets=function(facets){
             $log.debug("initFacets()");
             // $log.debug(facets);
@@ -543,11 +537,12 @@ angular.module('cttvServices').
             // 2: parse/init user selections and defaluts
             updateSelected();
         }
+        */
 
 
 
         /**
-         *
+         *  This is the main method that parse facets data and sets them up
          */
         cttvFiltersService.updateFacets = function(facets){
             $log.log("cttvFiltersService.updateFacets()");

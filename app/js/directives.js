@@ -8,7 +8,7 @@ angular.module('cttvDirectives', [])
     /**
      * Matrix (heatmap) view for target associations
      */
-    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', '$compile', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, $compile) {
+    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile) {
 
         var hasDatatype = function (myDatatype, datatypes) {
             for (var i=0; i<datatypes.length; i++) {
@@ -515,14 +515,16 @@ angular.module('cttvDirectives', [])
                 data : '='
             },
 
-            template: '<cttv-matrix-table></cttv-matrix-table>'
-                     +'<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
-                     +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
+            template: '<div ng-show="data.length>0">'
+                     +'  <cttv-matrix-table></cttv-matrix-table>'
+                     +'  <cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
+                     +'  <cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
+                     +'</div>'
+                     +'<div ng-show="data.length==0">'+cttvDictionary.NO_DATA+'</div>',
 
             link: function (scope, elem, attrs) {
-
                 // table itself
-                var table = elem.children().eq(0)[0];
+                var table = elem.children().eq(0).children().eq(0)[0];
                 var dtable = setupTable(table, scope.filename);
 
                 // legend stuff
@@ -538,6 +540,7 @@ angular.module('cttvDirectives', [])
                 ];
 
 
+                // Watch for data changes and refresh the view when that happens
                 //scope.$watch(function(){return scope.data}, function(n,o){
                 scope.$watch("data", function(n,o){
                     $log.debug("Data:");

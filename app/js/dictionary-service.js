@@ -13,17 +13,56 @@ angular.module('cttvServices').
     factory('cttvDictionary', ['$log', function($log) {
 
         var dictionary = {
-            ASSOCIATION_SCORE :      "Association score",
-            GENETIC_ASSOCIATION :    "Genetic associations",
-            SOMATIC_MUTATION :       "Somatic mutations",
-            KNOWN_DRUG :             "Known drugs",
-            RNA_EXPRESSION:          "RNA expression",
+
+            // A
             AFFECTED_PATHWAY :       "Affected pathways",
-            MOUSE_MODEL :            "Animal models",
             ANIMAL_MODEL :           "Animal models",
+            ASSOCIATION_SCORE :      "Association score",
+
+            // B
+            // C
+            // D
             DATATYPES :              "Datatypes",
-            ENSEMBL_ID :             "Ensembl ID"
-        }
+
+            // E
+            ENSEMBL_ID :             "Ensembl ID",
+
+            // F
+            // G
+            GENETIC_ASSOCIATION :    "Genetic associations",
+
+            // H
+            // I
+            // J
+            // K
+            KNOWN_DRUG :             "Known drugs",
+
+            // L
+            // M
+            MOUSE_MODEL :            "Animal models",
+
+            // N
+            NO_DATA :                "No data",
+
+            // O
+            // P
+            // Q
+            // R
+            RNA_EXPRESSION:          "RNA expression",
+
+            // S
+            SOMATIC_MUTATION :       "Somatic mutations",
+
+            // T
+            // U
+            // V
+            // W
+            // X
+            // Y
+            // Z
+
+        };
+
 
         dictionary.get = function(w){
             //return en[w] || undefined;
@@ -32,3 +71,5 @@ angular.module('cttvServices').
 
         return dictionary;
     }]);
+
+
