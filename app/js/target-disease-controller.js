@@ -722,7 +722,7 @@
                     }
                     if(data[i].biological_subject.gene_info){
                         for(var j=0; j<data[i].biological_subject.gene_info.length; j++){
-                            prots.push("<a href='#/target/"+data[i].biological_subject.gene_info[j].geneid
+                            prots.push("<a href='/target/"+data[i].biological_subject.gene_info[j].geneid
                                 +"/associations' title='"+data[i].biological_subject.gene_info[j].name+"'>"
                                 +data[i].biological_subject.gene_info[j].symbol
                                 +"</a>");
@@ -857,8 +857,8 @@
                     var prot="";
                     if(data[i].biological_subject.gene_info){
                         for(var j=0; j<data[i].biological_subject.gene_info.length; j++){
-                            prot+="<a href='#/target-associations?q="+data[i].biological_subject.gene_info[j].geneid
-                                +"' title='"+data[i].biological_subject.gene_info[j].name+"'>"
+                            prot+="<a href=/target/"+data[i].biological_subject.gene_info[j].geneid + "/associations"
+                                +" title='"+data[i].biological_subject.gene_info[j].name+"'>"
                                 +data[i].biological_subject.gene_info[j].symbol
                                 +"</a>, "
                         }

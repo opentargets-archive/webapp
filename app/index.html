@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html ng-app="cttvApp">
-  <head>
+<head>
     <title ng-bind-template="CTTV Core{{viewTitle ? ' - '+viewTitle : ''}}"></title>
 
     <!-- IE9 -->
@@ -9,264 +9,266 @@
     <script src="bower_components/aight/aight.min.js"></script>
     <![endif]-->
 
-  <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <base href="/">
 
-  <!-- Components -->
-  <link href="build/cttv-webapp.css" rel="stylesheet" />
-  <!-- <link href="node_modules/cttv.bubblesView/build/bubblesView.css" rel="stylesheet" /> -->
-  <!-- <link href="node_modules/cttv.targetAssociations/build/cttv.targetAssociations.css" rel="stylesheet" /> -->
-  <!-- <link href="node_modules/cttv.targetGenomeBrowser/build/index.css" rel="stylesheet" /> -->
-  <!-- <link href="node_modules/cttv.targetTranscriptView/build/index.css" rel="stylesheet" /> -->
-  <!-- <link href="node_modules/cttv.flowerView/build/flowerView.css" rel="stylesheet"/> -->
-  <link rel="stylesheet" href="css/app.css">
-  <!-- <link rel="stylesheet" href="node_modules/tnt.genome/build/index.css"> -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 
-
-  <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
-  <script type="text/javascript" src="js/ie_console_noop.js"></script>
+    <!-- Components -->
+    <link href="build/cttv-webapp.css" rel="stylesheet" />
+    <!-- <link href="node_modules/cttv.bubblesView/build/bubblesView.css" rel="stylesheet" /> -->
+    <!-- <link href="node_modules/cttv.targetAssociations/build/cttv.targetAssociations.css" rel="stylesheet" /> -->
+    <!-- <link href="node_modules/cttv.targetGenomeBrowser/build/index.css" rel="stylesheet" /> -->
+    <!-- <link href="node_modules/cttv.targetTranscriptView/build/index.css" rel="stylesheet" /> -->
+    <!-- <link href="node_modules/cttv.flowerView/build/flowerView.css" rel="stylesheet"/> -->
+    <link rel="stylesheet" href="css/app.css">
+    <!-- <link rel="stylesheet" href="node_modules/tnt.genome/build/index.css"> -->
 
 
-  <script type="text/javascript" src="build/cttv-webapp.js"></script>
-  <!-- TnT -->
-  <!-- <script type="text/javascript" src="node_modules/tnt.genome/build/tnt.genome.js"></script> -->
-
-  <!-- CTTV Components -->
-  <!-- <script type="text/javascript" src="node_modules/cttv.bubblesView/build/cttv.bubblesView.js"></script> -->
-  <!-- <script type="text/javascript" src="node_modules/cttv.api/build/cttv.api.js"></script> -->
-  <!-- <script type="text/javascript" src="node_modules/cttv.targetAssociations/build/cttv.targetAssociations.js"></script> -->
-  <!-- <script type="text/javascript" src="node_modules/cttv.targetGenomeBrowser/build/cttv.targetGenomeBrowser.js"></script> -->
-  <!-- <script type="text/javascript" src="node_modules/cttv.targetTranscriptView/build/cttv.targetTranscriptView.js"></script> -->
-  <!-- <script type="text/javascript" src="node_modules/cttv.flowerView/build/cttv.flowerView.js"></script> -->
-  <!-- <script type="text/javascript" src="node_modules/cttv.targetAssociationsTree/build/cttv.targetAssociationsTree.js"></script> -->
+    <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
+    <script type="text/javascript" src="js/ie_console_noop.js"></script>
 
 
-  <!-- Web components -->
-  <!-- <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script> -->
-  <!-- <link rel="import" href="./web_components/cttv/target-evidence/target_evidence.html"> -->
-  <!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-header/target_disease_evidence_header.html"> -->
-  <!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-overview/target_disease_evidence_overview.html"> -->
+    <script type="text/javascript" src="build/cttv-webapp.js"></script>
+    <!-- TnT -->
+    <!-- <script type="text/javascript" src="node_modules/tnt.genome/build/tnt.genome.js"></script> -->
 
-  <!-- tables -->
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/tabletools/2.2.1/css/dataTables.tableTools.min.css">
-  </head>
+    <!-- CTTV Components -->
+    <!-- <script type="text/javascript" src="node_modules/cttv.bubblesView/build/cttv.bubblesView.js"></script> -->
+    <!-- <script type="text/javascript" src="node_modules/cttv.api/build/cttv.api.js"></script> -->
+    <!-- <script type="text/javascript" src="node_modules/cttv.targetAssociations/build/cttv.targetAssociations.js"></script> -->
+    <!-- <script type="text/javascript" src="node_modules/cttv.targetGenomeBrowser/build/cttv.targetGenomeBrowser.js"></script> -->
+    <!-- <script type="text/javascript" src="node_modules/cttv.targetTranscriptView/build/cttv.targetTranscriptView.js"></script> -->
+    <!-- <script type="text/javascript" src="node_modules/cttv.flowerView/build/cttv.flowerView.js"></script> -->
+    <!-- <script type="text/javascript" src="node_modules/cttv.targetAssociationsTree/build/cttv.targetAssociationsTree.js"></script> -->
+
+
+    <!-- Web components -->
+    <!-- <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script> -->
+    <!-- <link rel="import" href="./web_components/cttv/target-evidence/target_evidence.html"> -->
+    <!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-header/target_disease_evidence_header.html"> -->
+    <!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-overview/target_disease_evidence_overview.html"> -->
+
+    <!-- tables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/tabletools/2.2.1/css/dataTables.tableTools.min.css">
+</head>
 
 <body>
 
-      <div class="cttv-main-container">
+    <div class="cttv-main-container">
 
-      <!-- Masthead (search) -->
+        <!-- Masthead (search) -->
 
         <div class="masthead" ng-show="location.path()!=='/intro'" ng-controller="MastheadCtrl" ng-cloak>
-          <div class="container">
-            <div class="row">
+            <div class="container">
+                <div class="row">
 
-            <div class="col-xs-2">
-              <!-- CTTV logo -->
-              <a href="#/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>
-            </div>
-
-            <div class="col-xs-10" ng-controller="SearchBoxCtrl">
-              <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
-                <fieldset>
-                  <div class="has-feedback search-form">
-
-
-
-                    <!-- Search box + search button -->
-                    <div class="input-group">
-
-                      <input type="text" placeholder="Search for a target or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
-
-                      <div class="input-group-btn">
-                        <button type="submit" class="btn btn-primary">
-                          <span class="fa fa-search fa-lg"></span>
-                        </button>
-                      </div>
-
+                    <div class="col-xs-2">
+                        <!-- CTTV logo -->
+                        <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>
                     </div>
 
-                    <!-- Search in progress spinner -->
-                    <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
-
-                    <!-- Suggestions box -->
-                    <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
-
-
-                    <span class="small">
-                        <i>
-                          Examples: <a href="#/search?q=braf">BRAF</a>,
-                          <a href="#/search?q=carcinoma">Carcinoma</a>,
-                          <a href="#/search?q=pten">PTEN</a>
-                        </i>
-                    </span>
+                    <div class="col-xs-10" ng-controller="SearchBoxCtrl">
+                        <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
+                            <fieldset>
+                                <div class="has-feedback search-form">
 
 
-                  </div>
-                </fieldset>
-              </form>
+
+                                    <!-- Search box + search button -->
+                                    <div class="input-group">
+
+                                        <input type="text" placeholder="Search for a target or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-primary">
+                                                <span class="fa fa-search fa-lg"></span>
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Search in progress spinner -->
+                                    <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
+
+                                    <!-- Suggestions box -->
+                                    <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
+
+
+                                    <span class="small">
+                                        <i>
+                                            Examples: <a href="/search?q=braf">BRAF</a>,
+                                            <a href="/search?q=carcinoma">Carcinoma</a>,
+                                            <a href="/search?q=pten">PTEN</a>
+                                        </i>
+                                    </span>
+
+
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+
+                </div>
             </div>
-
-          </div>
-          </div>
         </div>
 
 
-      <!-- End Masthead -->
+        <!-- End Masthead -->
 
-      <div class="container">
-    <div class="cttv-beta-ribbon">BETA</div>
-       <!-- ie < 9? -->
-       <!--[if lt IE 9]>
-               <div class="alert alert-danger">
-                 You are using an <strong>outdated browser</strong> and as a result this page is probably not displayed properly. Please <a href="http://whatbrowser.org/">upgrade your browser</a> in order to access our content properly</p>
-               </div>
-<![endif]-->
-       <!-- javascript disabled ?-->
-       <noscript>
-         <div class="alert alert-danger">
-           Javasript is currently disabled or is not supported by this browser. This page relies on JavaScript to present the data in all its glory. Please enable JavaScript for full functionality.
-         </div>
-       </noscript>
-
-           <!-- Content -->
-
-            <div ng-view autoscroll="true"></div>
-
-            <!-- End Content -->
-
-        </div>
-
-      </div>
-
-      <!-- Footer -->
-      <div class="footer">
         <div class="container">
-          <div class-"row">
-            <div class="col-sm-3">
-              <h6>INFO</h6>
-              <p>CTTV Core Beta Version 0.4.0</p>
-              <p><a href="#/release-notes">Release notes</a></p>
-            </div>
-            <div class="col-sm-3">
-              <h6>PARTNERS</h6>
-              <p><a href="http://www.ebi.ac.uk">EMBL-EBI</a></p>
-              <p><a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a></p>
-              <p><a href="http://www.gsk.com">GSK</a></p>
-            </div>
-            <div class="col-sm-3">
-              <h6>SUPPORT</h6>
-              <p>
-                <a href="#/faq"><i class="fa fa-question-circle"></i> FAQs</a><br />
-                <span class="fa fa-envelope"></span> <a href="mailto:support@targetvalidation.org?Subject=CTTV%20Core%20Platform%20-%20help%20request">support<span class="fa fa-at"></span>targetvalidation.org</a></p>
-            </div>
-            <div class="col-sm-3">
-              <h6>CONTACT</h6>
-              <h6>Centre for Therapeutic Target Validation</h6>
-              <p>
-                <span class="fa fa-globe"></span> <a href="http://www.targetvalidation.org">http://www.targetvalidation.org</a><br />
-                <span class="fa fa-phone"></span> +44 (0)1223 494 665<br />
-                <span class="fa fa-twitter"></span> <a href="http://twitter.com/targetvalidate">@targetvalidate</a></p>
-            </div>
-          </div>
+            <div class="cttv-beta-ribbon">BETA</div>
+            <!-- ie < 9? -->
+            <!--[if lt IE 9]>
+            <div class="alert alert-danger">
+            You are using an <strong>outdated browser</strong> and as a result this page is probably not displayed properly. Please <a href="http://whatbrowser.org/">upgrade your browser</a> in order to access our content properly</p>
         </div>
-      </div>
-      <!-- End Footer-->
+        <![endif]-->
+        <!-- javascript disabled ?-->
+        <noscript>
+            <div class="alert alert-danger">
+                Javasript is currently disabled or is not supported by this browser. This page relies on JavaScript to present the data in all its glory. Please enable JavaScript for full functionality.
+            </div>
+        </noscript>
+
+        <!-- Content -->
+
+        <div ng-view autoscroll="true"></div>
+
+        <!-- End Content -->
+
+    </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="container">
+        <div class-"row">
+            <div class="col-sm-3">
+                <h6>INFO</h6>
+                <p>CTTV Core Beta Version 0.4.0</p>
+                <p><a href="/release-notes">Release notes</a></p>
+            </div>
+            <div class="col-sm-3">
+                <h6>PARTNERS</h6>
+                <p><a href="http://www.ebi.ac.uk">EMBL-EBI</a></p>
+                <p><a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a></p>
+                <p><a href="http://www.gsk.com">GSK</a></p>
+            </div>
+            <div class="col-sm-3">
+                <h6>SUPPORT</h6>
+                <p>
+                    <a href="/faq"><i class="fa fa-question-circle"></i> FAQs</a><br />
+                    <span class="fa fa-envelope"></span> <a href="mailto:support@targetvalidation.org?Subject=CTTV%20Core%20Platform%20-%20help%20request">support<span class="fa fa-at"></span>targetvalidation.org</a></p>
+                </div>
+                <div class="col-sm-3">
+                    <h6>CONTACT</h6>
+                    <h6>Centre for Therapeutic Target Validation</h6>
+                    <p>
+                        <span class="fa fa-globe"></span> <a href="http://www.targetvalidation.org">http://www.targetvalidation.org</a><br />
+                        <span class="fa fa-phone"></span> +44 (0)1223 494 665<br />
+                        <span class="fa fa-twitter"></span> <a href="http://twitter.com/targetvalidate">@targetvalidate</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Footer-->
 
 
 
 
 
 
-    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script type="text/javascript" src="bower_components/angulartics/dist/angulartics.min.js"></script>
-    <script type="text/javascript" src="bower_components/angulartics/dist/angulartics-ga.min.js"></script>
-    <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
-    <script type="text/javascript" src="vendor/cola/cola.min.js"></script>
-    <script type="text/javascript" src="js/angularjs-viewhead.js"></script>
+        <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+        <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+        <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+        <script type="text/javascript" src="bower_components/angulartics/dist/angulartics.min.js"></script>
+        <script type="text/javascript" src="bower_components/angulartics/dist/angulartics-ga.min.js"></script>
+        <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
+        <script type="text/javascript" src="vendor/cola/cola.min.js"></script>
+        <script type="text/javascript" src="js/angularjs-viewhead.js"></script>
 
-    <!-- lodash -->
-    <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
+        <!-- lodash -->
+        <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
 
-    <!-- PMC Citation -->
-    <!-- <link type="text/css" rel="stylesheet" href="node_modules/biojs-vis-pmccitation/css/style.css"/> -->
-    <!-- <script type="text/javascript" src="node_modules/biojs-vis-pmccitation/build/biojsvispmccitation.js"></script> -->
-    <link type="text/css" rel="stylesheet" href="vendor/biojsvispmccitation/style.css"/>
-    <script type="text/javascript" src="vendor/biojsvispmccitation/biojsvispmccitation.js"></script>
+        <!-- PMC Citation -->
+        <!-- <link type="text/css" rel="stylesheet" href="node_modules/biojs-vis-pmccitation/css/style.css"/> -->
+        <!-- <script type="text/javascript" src="node_modules/biojs-vis-pmccitation/build/biojsvispmccitation.js"></script> -->
+        <link type="text/css" rel="stylesheet" href="vendor/biojsvispmccitation/style.css"/>
+        <script type="text/javascript" src="vendor/biojsvispmccitation/biojsvispmccitation.js"></script>
 
-    <!-- Expression Atlas -->
-    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/atlas.css"/>
-    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/jquery-ui-1.10.2.custom.min.css"/>
-    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/table-grid.css"/>
-    <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/heatmap-and-anatomogram.css"/>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/react.min.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-migrate-1.2.0.min.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/factorTooltip.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/factorTooltipModule.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/contrastTooltip.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/contrastTooltipModule.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/helpTooltipsModule.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/genePropertiesTooltipModule.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/highlight.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/anatomogramModule.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.svg.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/EventEmitter-4.2.7.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.hc-sticky.min.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/modernizr.minified.2.1.6.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/Biojs.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/AtlasHeatmapReact.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/highcharts.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/highcharts-more.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/exporting.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/cellBaselineVariance.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/heatmap.js"></script>
-    <script type="text/javascript" src="vendor/expressionAtlasProd/heatmapContainer.js"></script>
-    <!-- <script type="text/javascript" src="vendor/Biojs.ExpressionAtlasBaselineSummary.js"></script> -->
+        <!-- Expression Atlas -->
+        <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/atlas.css"/>
+        <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/jquery-ui-1.10.2.custom.min.css"/>
+        <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/table-grid.css"/>
+        <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/heatmap-and-anatomogram.css"/>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/react.min.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-migrate-1.2.0.min.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/factorTooltip.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/factorTooltipModule.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/contrastTooltip.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/contrastTooltipModule.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/helpTooltipsModule.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/genePropertiesTooltipModule.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/highlight.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/anatomogramModule.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.svg.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/EventEmitter-4.2.7.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.hc-sticky.min.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/modernizr.minified.2.1.6.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/Biojs.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/AtlasHeatmapReact.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/highcharts.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/highcharts-more.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/exporting.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/cellBaselineVariance.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/heatmap.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/heatmapContainer.js"></script>
+        <!-- <script type="text/javascript" src="vendor/Biojs.ExpressionAtlasBaselineSummary.js"></script> -->
 
-    <!-- ie9 cors support -->
-    	   <!--[if lte IE 9]>
-	       <script language="JavaScript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.3/jquery.xdomainrequest.min.js"></script>
-	       <![endif]-->
+        <!-- ie9 cors support -->
+        <!--[if lte IE 9]>
+        <script language="JavaScript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.3/jquery.xdomainrequest.min.js"></script>
+        <![endif]-->
 
 
-    <!-- Our angular stuff -->
-    <script type="text/javascript" src="js/app.js"></script>
-    <script type="text/javascript" src="js/controllers.js"></script>
-    <script type="text/javascript" src="js/services.js"></script>
-    <script type="text/javascript" src="js/api-service.js"></script>
-    <script type="text/javascript" src="js/dictionary-service.js"></script>
-    <script type="text/javascript" src="js/const-service.js"></script>
-    <script type="text/javascript" src="js/filters-service.js"></script>
-    <script type="text/javascript" src="js/filters.js"></script>
-    <script type="text/javascript" src="js/search-box-controller.js"></script>
-    <script type="text/javascript" src="js/target-associations-controller.js"></script>
-    <script type="text/javascript" src="js/disease-associations-controller.js"></script>
-    <script type="text/javascript" src="js/target-disease-controller.js"></script>
-    <script type="text/javascript" src="js/target-controller.js"></script>
-    <script type="text/javascript" src="js/disease-controller.js"></script>
-    <script type="text/javascript" src="js/directives.js"></script>
-    <script type="text/javascript" src="js/target-associations-bubbles-directive.js"></script>
-    <script type="text/javascript" src="js/disease-graph-directive.js"></script>
+        <!-- Our angular stuff -->
+        <script type="text/javascript" src="js/app.js"></script>
+        <script type="text/javascript" src="js/controllers.js"></script>
+        <script type="text/javascript" src="js/services.js"></script>
+        <script type="text/javascript" src="js/api-service.js"></script>
+        <script type="text/javascript" src="js/dictionary-service.js"></script>
+        <script type="text/javascript" src="js/const-service.js"></script>
+        <script type="text/javascript" src="js/filters-service.js"></script>
+        <script type="text/javascript" src="js/filters.js"></script>
+        <script type="text/javascript" src="js/search-box-controller.js"></script>
+        <script type="text/javascript" src="js/target-associations-controller.js"></script>
+        <script type="text/javascript" src="js/disease-associations-controller.js"></script>
+        <script type="text/javascript" src="js/target-disease-controller.js"></script>
+        <script type="text/javascript" src="js/target-controller.js"></script>
+        <script type="text/javascript" src="js/disease-controller.js"></script>
+        <script type="text/javascript" src="js/directives.js"></script>
+        <script type="text/javascript" src="js/target-associations-bubbles-directive.js"></script>
+        <script type="text/javascript" src="js/disease-graph-directive.js"></script>
 
-    <!-- DataTable stuff -->
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
+        <!-- DataTable stuff -->
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
 
-    <!-- google analytics -->
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        <!-- google analytics -->
+        <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-      ga('create', 'UA-60169661-1', 'auto');
-      //ga('send', 'pageview');
-      </script>
+        ga('create', 'UA-60169661-1', 'auto');
+        //ga('send', 'pageview');
+        </script>
 
-</body>
+    </body>

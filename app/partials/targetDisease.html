@@ -13,14 +13,14 @@
 		</div>
 
 		<div class="col-sm-9">
-			
+
 			<div class="overview">
 
 				<!-- Gene Info -->
 				<div class="item">
 					<div class="well well-lg">
 						<h5>
-							<a href="#/target/{{search.info.gene.ensembl_gene_id}}">{{search.info.gene.approved_symbol || search.info.gene.ensembl_external_name}}</a><br />
+							<a href="/target/{{search.info.gene.ensembl_gene_id}}">{{search.info.gene.approved_symbol || search.info.gene.ensembl_external_name}}</a><br />
 							<span class="small">{{search.info.gene.approved_name || search.info.gene.ensembl_description}}
 								<br/ >({{search.info.gene.id || search.info.gene.ensembl_gene_id}})
 								<span ng-show="search.info.gene.symbol_synonyms.length>0"><br />Synonyms: {{search.info.gene.symbol_synonyms.join(", ") | limitTo:100}}...</span>
@@ -39,7 +39,7 @@
 				<div class="item">
 					<div class="well well-lg">
 						<h5>
-						  <a href="#/disease/{{search.info.efo.efo_code}}">{{search.info.efo.label}}</a>
+						  <a href="/disease/{{search.info.efo.efo_code}}">{{search.info.efo.label}}</a>
 							<span class="small" ng-show="search.info.efo.efo_synonyms.length>0"><br />Synonyms: {{search.info.efo.efo_synonyms.join(", ") | limitTo:100}}...</span>
 						</h5>
 						<p class="small">{{search.info.efo.definition | limitTo: 200}}<span ng-show="search.info.efo.definition.length>200">...</span></p>
@@ -189,7 +189,7 @@
 						                <th rowspan="2" colspan="1">Evidence source</th>
 						            </tr>
 						            <tr>
-						            	<!-- Drug information -->             
+						            	<!-- Drug information -->
 						                <th>Drug</th>
 						                <th>Phase</th>
 						                <th>Type</th>
@@ -238,7 +238,7 @@
 						                <th rowspan="2" colspan="1">Experiment overview and data</th>
 						                <th rowspan="2" colspan="1">Publications</th>
 						            </tr>
-						            <tr>      
+						            <tr>
 						                <th>Comparison</th>
 						                <th>Activity</th>
 						                <th>Tissue/cell</th>
@@ -260,7 +260,7 @@
 
 
 
-				<!-- Disrupted pathways --> 
+				<!-- Disrupted pathways -->
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
@@ -279,7 +279,7 @@
 					                <th rowspan="2" colspan="1">Pathway</th>
 					                <th rowspan="1" colspan="7">Gene-disease evidence</th>
 					            </tr>
-					            <tr> 
+					            <tr>
 					                <th>Overview</th>
 					                <th>Activity</th>
 					                <th>Target context</th>
@@ -320,7 +320,7 @@
 					                <th rowspan="1" colspan="3">Model - Disease Evidence</th>
 					            </tr>
 					            <tr>
-					            	<!-- Drug information -->             
+					            	<!-- Drug information -->
 					                <th>Human</th>
 					                <th>Mouse</th>
 					                <th>Mouse model</th>
@@ -341,7 +341,7 @@
 
 
 			</accordion>
-			
+
 		</div>
 	</div>
 

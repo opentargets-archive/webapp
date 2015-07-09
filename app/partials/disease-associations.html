@@ -1,13 +1,9 @@
 <div class="partial-page">
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
-    <h3 view-title>Targets associated with {{search.label}}</h3>
+    <h3 class="cttv-content-header" view-title>Targets associated with {{search.label}}<br />
 
-    <p class="small"><a href="#/disease/{{search.query}}">View disease profile</a></p>
-    <div class="h6">Found {{nresults}} evidence</div>
-
-    <!-- <div id="myflower"></div>-->
-
+    <small>Found {{nresults}} targets<a href="/disease/{{search.query}}"><span class="cttv-interpage-link"><i class="fa fa-arrow-circle-right fa-lg"></i> View disease profile</span></a></small></h3>
 
     <div class="row">
         <div class="col-md-3">

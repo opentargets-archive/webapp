@@ -153,7 +153,7 @@ angular.module('cttvDirectives', [])
                                 var row = [];
 
                                 // Disease name
-                                var geneDiseaseLoc = "#/evidence/" + attrs.target + "/" + data.efo_code;
+                                var geneDiseaseLoc = "/evidence/" + attrs.target + "/" + data.efo_code;
                                 row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
 
                                 // EFO (hidden)
@@ -331,17 +331,27 @@ angular.module('cttvDirectives', [])
                                 .data(data)
                                 .datatypes(dts)
                                 .diameter(900)
-                                .legendText("<a xlink:href='#/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
+                                .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
                                 .target(attrs.target);
                             gat(fView, elem[0]);
                         });
                 };
 
-                scope.$watch(function () { return attrs.target }, function (val) {
+                scope.$watch(function () { return attrs.target; }, function (val) {
                     setTreeView();
                 });
+
+                scope.$watch(function () { return attrs.focus; }, function (val) {
+                    if (val === "None") {
+                        return;
+                    }
+
+                    if (gat) {
+                        //ga.selectTherapeuticArea(val);
+                    }
+                });
              }
-         }
+         };
      }])
 
 
@@ -512,7 +522,7 @@ angular.module('cttvDirectives', [])
                                 dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
                                 var row = [];
                                 var geneLoc = "";
-                                var geneDiseaseLoc = "#/evidence/" + data[i].gene_id + "/" + attrs.target;
+                                var geneDiseaseLoc = "/evidence/" + data[i].gene_id + "/" + attrs.target;
                                 row.push("<a href='" + geneDiseaseLoc + "'>" + data[i].label + "</a>");
                                 // Ensembl ID
                                 row.push(data[i].gene_id);
@@ -668,6 +678,7 @@ angular.module('cttvDirectives', [])
                         var query = terms.join(" OR ");
                         var config = {
                             width: 800,
+                            //proxyUrl: '/proxy/',
                             loadingStatusImage: "",
                             source: pmc.Citation.MED_SOURCE,
                             query: query,
@@ -688,27 +699,27 @@ angular.module('cttvDirectives', [])
     /*
      *
      */
-    .directive('pmcCitation', function () {
-    return {
-        restrict: 'E',
-        templateUrl: "partials/pmcCitation.html",
-        link: function (scope, elem, attrs) {
-        var pmc = require ('biojs-vis-pmccitation');
-        var config = {
-            source: pmc.Citation.MED_SOURCE,
-            citation_id: attrs.pmcid,
-            width: 400,
-            proxyUrl: 'https://cors-anywhere.herokuapp.com/',
-            displayStyle: pmc.Citation.FULL_STYLE,
-            elementOrder: pmc.Citation.TITLE_FIRST,
-            target : 'pmcCitation',
-            showAbstract : false
-        };
-        var instance = new pmc.Citation(config);
-        instance.load();
-        }
-    };
-    })
+    //  .directive('pmcCitation', function () {
+    //      return {
+    //          restrict: 'E',
+    //          templateUrl: "partials/pmcCitation.html",
+    //          link: function (scope, elem, attrs) {
+    //              var pmc = require ('biojs-vis-pmccitation');
+    //              var config = {
+    //                  source: pmc.Citation.MED_SOURCE,
+    //                  citation_id: attrs.pmcid,
+    //                  width: 400,
+    //                  proxyUrl: 'https://cors-anywhere.herokuapp.com/',
+    //                  displayStyle: pmc.Citation.FULL_STYLE,
+    //                  elementOrder: pmc.Citation.TITLE_FIRST,
+    //                  target : 'pmcCitation',
+    //                  showAbstract : false
+    //              };
+    //              var instance = new pmc.Citation(config);
+    //              instance.load();
+    //          }
+    //      };
+    //  })
 
 
 
@@ -735,7 +746,8 @@ angular.module('cttvDirectives', [])
                         .context(20)
                         .width(w);
                     //gB.rest().proxyUrl("/ensembl");
-                    gB.rest().proxyUrl("/api/latest/ensembl");
+                    //gB.rest().proxyUrl("/api/latest/ensembl");
+                    gB.rest().proxyUrl("/proxy/rest.ensembl.org");
                     var theme = targetGenomeBrowser()
                         .chr(scope.chr)
                         .efo(efo);
@@ -760,7 +772,8 @@ angular.module('cttvDirectives', [])
 
                      var gt = targetGeneTree()
                         .id(target)
-                        .width(1100);
+                        .width(1100)
+                        .proxy("/proxy/rest.ensembl.org");
                      gt(newDiv);
                  });
              }
@@ -828,7 +841,7 @@ angular.module('cttvDirectives', [])
                     // });
 
                     var instance = new Biojs.AtlasHeatmap ({
-                        gxaBaseUrl: '/api/latest/proxy/gxa/',
+                        gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa',
                         //gxaBaseUrl : '/gxa',
                         params:'geneQuery=' + target + "&species=homo%20sapiens",
                         isMultiExperiment: true,
@@ -987,7 +1000,7 @@ angular.module('cttvDirectives', [])
                      + '</div>'
 
                      // extra info
-                     + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="#/faq#association-score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>'
+                     + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="/faq#association-score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>'
                     ;
 
         return {

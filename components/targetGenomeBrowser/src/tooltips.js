@@ -7,10 +7,12 @@ var tooltips = function () {
     var ensemblRestApi;
     var view;
     var id = 1;
+    var target;
 
     var m = {};
 
     var snp_data = function (data, ensembl_data) {
+        console.log(data);
         var obj = {};
         obj.header = data.name;
         obj.rows = [];
@@ -52,8 +54,8 @@ var tooltips = function () {
             });
 
             obj.rows.push({
-                "label" : "<a href=/#/evidence/" + data.association.target + "/" + data.association.efo + ">" + data.association.label + "</a>",
-                "value" : data.association.pmids.length + (data.association.pmids.length === 1 ? " article" : " articles" + "  <a href='http://europepmc.org/search?query=" + data.association.pmids.map(function (d) {return "EXT_ID:"+d}).join("%20OR%20") + "' target=_blank <i class='fa fa-newspaper-o'></i></a>")
+                "label" : "<a href=/evidence/" + data.association.target + "/" + data.association.efo + ">" + data.association.label + "</a>",
+                "value" : data.association.pmids.length + (data.association.pmids.length === 1 ? " article" : " articles" + "  <a href='http://europepmc.org/search?query=" + data.association.pmids.map(function (d) {return "EXT_ID:"+d}).join("%20OR%20") + "' target=_blank <i class='fa fa-newspaper-o fa-lg'></i></a>")
             });
         }
         if (data.study && data.study.length) {
@@ -64,9 +66,9 @@ var tooltips = function () {
 
             for (var i=0; i<data.study.length; i++) {
                 obj.rows.push({
-                    "label" : "<a href='/#/disease/" + data.study[i].efo + "'>" + data.study[i].efo_label + '</a>',
-                    "value" : data.study[i].pvalue + " <a target=_blank href='http://europepmc.org/search?query=" + data.study[i].pmid + "'><i class='fa fa-newspaper-o'></i></a>"
-                })
+                    "label" : "<a href='/evidence/" + view.gene() + "/"+ data.study[i].efo + "'>" + data.study[i].efo_label + '</a>',
+                    "value" : parseFloat(data.study[i].pvalue).toPrecision(1) + " <a target=_blank href='http://europepmc.org/search?query=" + data.study[i].pmid + "'><i class='fa fa-newspaper-o fa-lg'></i></a>"
+                });
             }
         }
 
@@ -116,8 +118,8 @@ var tooltips = function () {
             var associationsValue;
             var targetValue;
             if (cttvData && cttvData.data && cttvData.data.length > 0) {
-                associationsValue = "<a href='#/target/" + ensemblData.id + "/associations'>" + (cttvData.data.length - 1) + " disease associations</a> ";
-                targetValue = "<a href='#/target/" + ensemblData.id + "'>View CTTV profile</a>";
+                associationsValue = "<a href='/target/" + ensemblData.gene.id + "/associations'>" + (cttvData.data.length) + " disease associations</a> ";
+                targetValue = "<a href='/target/" + ensemblData.gene.id + "'>View CTTV profile</a>";
             }
 
             obj.rows.push ({

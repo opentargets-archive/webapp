@@ -806,4 +806,46 @@ table.matrix-table thead > tr > th:last-child {
 }
 
 
+.cttv-section-intro {
+    font-style: italic;
+    background-color: #EEEEEE;
+    padding: 10px;
+}
 
+.cttv-interpage-link {
+    padding-left: 15px;
+    margin-left: 15px;
+    border-left-style: solid;
+}
+
+.cttv-content-header {
+    padding-bottom: 40px;
+}
+
+/* .cttv_bullet_link {
+    width : 100px;
+    height : 30px;
+    border-radius: 6px;
+    float : right;
+    margin-left: 15px;
+    padding-top: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+
+    background-color: #BBBBBB;
+}
+.cttv_target_associations_link:after {
+    color : white;
+    font-weight: bold;
+    font-size: 12px;
+    vertical-align: 50%;
+    content: "Associations";
+}
+
+.cttv_target_profile_link:after {
+    color: white;
+    font-size: 12px;
+    vertical-align: 50%;
+    content: "Profile";
+}
+ */

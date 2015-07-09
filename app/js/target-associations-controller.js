@@ -24,8 +24,8 @@ angular.module('cttvControllers')
 		$scope.search.label = resp.body.approved_symbol;
 	    });
 	*/
-	
-    // get gene specific info 
+
+    // get gene specific info
     cttvAPIservice.getGene( {
             gene_id:q
         } ).
@@ -42,44 +42,44 @@ angular.module('cttvControllers')
 	$scope.loading = false;
 
 	// datatypes filter
-	$scope.dataTypes = [
-	    {
-		name: "genetic_association",
-		label: "Genetics",
-		labelFull: "Genetic associations",
-		selected: true
-	    },
-	    {
-		name: "somatic_mutation",
-		label: "Somatic",
-		labelFull: "Somatic mutations",
-		selected: true
-	    },
-	    {
-		name: "known_drug",
-		label: "Drugs",
-		labelFull: "Known drugs",
-		selected: true
-	    },
-	    {
-		name: "rna_expression",
-		label: "RNA",
-		labelFull: "RNA expression",
-		selected: true
-	    },
-	    {      
-		name: "affected_pathway",
-		label: "Pathways",
-		labelFull: "Affected pathways",
-		selected: true
-	    },
-	    {
-		name: "animal_model",
-		label: "Models",
-		labelFull: "Mouse models",
-		selected: false
-	    }
-	]
+    $scope.dataTypes = [
+        {
+            name: "genetic_association",
+            label: "Genetics",
+            labelFull: "Genetic associations",
+            selected: true
+        },
+        {
+            name: "somatic_mutation",
+            label: "Somatic",
+            labelFull: "Somatic mutations",
+            selected: true
+        },
+        {
+            name: "known_drug",
+            label: "Drugs",
+            labelFull: "Known drugs",
+            selected: true
+        },
+        {
+            name: "rna_expression",
+            label: "RNA",
+            labelFull: "RNA expression",
+            selected: true
+        },
+        {
+            name: "affected_pathway",
+            label: "Pathways",
+            labelFull: "Affected pathways",
+            selected: true
+        },
+        {
+            name: "animal_model",
+            label: "Models",
+            labelFull: "Mouse models",
+            selected: true
+        }
+    ];
 
 	var currentDataTypes = {};
 	for (var i=0; i<$scope.dataTypes.length; i++) {
@@ -93,8 +93,8 @@ angular.module('cttvControllers')
 
 	$scope.toggleDataTypes = function () {
 	    $scope.toggleNavigation();
-	}
-	
+	};
+
 	$scope.filterDataType = function (dataType) {
 	    var currentDataTypes = {};
 	    for (var i=0; i<$scope.dataTypes.length; i++) {
@@ -102,7 +102,7 @@ angular.module('cttvControllers')
 		    $scope.dataTypes[i].selected = $scope.dataTypes[i].selected === false ? true : false;
 		}
 		if ($scope.dataTypes[i].selected) {
-		    var name = $scope.dataTypes[i].name
+		    var name = $scope.dataTypes[i].name;
 		    var label = $scope.dataTypes[i].label;
 		    currentDataTypes[name] = label;
 		}
@@ -116,7 +116,7 @@ angular.module('cttvControllers')
 	$scope.nonRedundantDiseases = function (tas) {
 	    var diseasesInDatatypes = {};
 	    var nonRedundantDiseases = {};
-	    var filtered
+	    var filtered;
 	    for (var i=0; i<tas.length; i++) {
 		var ta = tas[i];
 		for (var j=0; j<ta.children.length; j++) {
@@ -181,7 +181,7 @@ angular.module('cttvControllers')
 	    includedDiseases = _.keys(nonRedundantDiseases);
 	    $scope.checkFilteredOutDiseases();
 	};
-	
+
 	// Therapeutic Areas Nav
 	$scope.focusEFO = "cttv_source";
 
@@ -189,7 +189,7 @@ angular.module('cttvControllers')
 	$scope.tagroup.tas = {};
 	$scope.tagroup.filled = false;
 	$scope.tagroup.open = true;
-	
+
 	var currentFocus = "cttv_disease";
 
 	$scope.selectTherapeuticArea = function (efo) {
@@ -209,6 +209,19 @@ angular.module('cttvControllers')
 	    $scope.focusEFO = currentFocus;
 	};
 
+    $scope.bubblesSelected = function () {
+        console.log("BUBBLES SELECTED");
+        $(".cttv-nav").show();
+    };
+
+    $scope.treeSelected = function () {
+        $(".cttv-nav").hide();
+    };
+
+    $scope.tableSelected = function () {
+        $(".cttv-nav").hide();
+    }
+
 	$scope.toggleNavigation = function () {
 	    for (var ta in $scope.tagroup.tas) {
 		$scope.tagroup.tas[ta] = false;
@@ -217,7 +230,7 @@ angular.module('cttvControllers')
 	    currentFocus = "cttv_disease";
 	    $scope.diseasegroupOpen = false;
 	};
-	
+
 	$scope.selectedDisease = 0;
 	$scope.selectDisease = function (d) {
 	    $scope.highlightEFO = {efo: d.efo_code,
@@ -231,48 +244,5 @@ angular.module('cttvControllers')
 	    // 	$scope.selectedDisease = true;
 	    // }
 	};
-	
-	// Display toggle (vis / table)
-	// TODO: We shouldn't change html events in the controller. This should go in the directive!
-	//$scope.displaytype = "bubbles";
 
-	$scope.visibility = {};
-	$scope.setDisplay = function (displ) {
-	    //console.log("DISPLAY CHANGED TO " + displ);
-	    //$scope.displaytype = displ;
-	    switch (displ) {
-	    case "bubbles" :
-		// $scope.visibility.bubbles = "block";
-		// $scope.visibility.table = "none";
-		// $scope.visibility.tree = "none";
-
-		$("cttv-target-associations-bubbles").css("display", "block");
-		$("cttv-target-associations-table").css("display", "none");
-		$("cttv-target-associations-tree").css("display", "none");
-		$(".cttv-nav").css("display", "block");
-		break;
-	    case "table" :
-		// $scope.visibility.bubbles = "none";
-		// $scope.visibility.table = "block";
-		// $scope.visibility.bubbles = "none";
-
-		$("cttv-target-associations-bubbles").css("display", "none");
-		$("cttv-target-associations-table").css("display","block");
-		$("cttv-target-associations-tree").css("display", "none");
-		$(".cttv-nav").css("display", "none");
-		break;
-	    case "tree" :
-		// $scope.visibility.bubbles = "none";
-		// $scope.visibility.table = "none";
-		// $scope.visibility.tree = "block";
-
-		$("cttv-target-associations-bubbles").css("display", "none");
-		$("cttv-target-associations-table").css("display","none");
-		$("cttv-target-associations-tree").css("display", "block");
-		$(".cttv-nav").css("display", "none");
-	    	break;
-	    }
-	    
-	}
-
-    }])
+}]);

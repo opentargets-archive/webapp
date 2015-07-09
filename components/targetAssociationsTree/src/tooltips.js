@@ -43,7 +43,7 @@ var tooltips = function () {
         var obj = {};
         var score = node.property("association_score");
         obj.header = node.property("label") + " (Association score: " + score + ")";
-        var loc = "#/evidence/" + target + "/" + node.property("efo_code");
+        var loc = "/evidence/" + target + "/" + node.property("efo_code");
         //obj.body="<div></div><a href=" + loc + ">View evidence details</a><br/><a href=''>Zoom on node</a>";
         obj.rows = [];
         obj.rows.push({
@@ -62,7 +62,7 @@ var tooltips = function () {
             },
             obj: node
         });
-        var diseaseProfileLoc = "#/disease/" + node.property("efo_code");
+        var diseaseProfileLoc = "/disease/" + node.property("efo_code");
         var diseaseAssocLoc = diseaseProfileLoc + "/associations";
         obj.rows.push({
             "value" : "<a href=" + diseaseAssocLoc + "><div class='cttv_associations_link'></div></a><a href=" + diseaseProfileLoc + "><div class='cttv_profile_link'></div>"
