@@ -34,6 +34,7 @@
     "karma-mocha": "^0.1.10",
     "karma-mocha-reporter": "^0.3.1",
     "karma-phantomjs-launcher": "^0.1.4",
+    "karma-safari-launcher": "^0.1.1",
     "mkdirp": "^0.5.1",
     "mocha": "^2.1.0",
     "protractor": "^1.6.1",
@@ -50,7 +51,7 @@
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
-    "protractor": "protractor tests/e2e/protractor.conf.js"
+    "protractor": "protractor ./protractor.conf.js"
   },
   "dependencies": {
     "cttv.api": "file:components/cttvApi",

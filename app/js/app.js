@@ -12,11 +12,10 @@ angular.module('cttvApp', [
     'angulartics.google.analytics',
     'viewhead',
     'cttvServices'
-]).
+])
 
-
-config(['$routeProvider',
-    function($routeProvider) {
+.config(['$routeProvider', '$locationProvider',
+    function($routeProvider, $locationProvider) {
         $routeProvider.
             when('/intro', {
                 templateUrl: 'partials/intro.html'
@@ -67,5 +66,11 @@ config(['$routeProvider',
                 redirectTo: '/intro'
             });
 
-}]);
+            // function supports_history_api() {
+            //     return !!(window.history && history.pushState);
+            // }
 
+
+        $locationProvider.html5Mode(true).hashPrefix('!');
+
+}]);

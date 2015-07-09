@@ -1,9 +1,9 @@
-'use strict';
 
 /* Directives */
 angular.module('cttvDirectives')
 
     .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+        'use strict';
 	return {
 	    restrict: 'E',
 
@@ -25,32 +25,32 @@ angular.module('cttvDirectives')
 
 		var datatypesChangesCounter = 0;
 		// Data types changes
-		scope.$watch(function () { return attrs.datatypes }, function (dts) {
-		    var dts = JSON.parse(attrs.datatypes);
-		    var opts = {
-			gene: attrs.target,
-			datastructure: "tree",
-		    };
-		    if (!_.isEmpty (dts)) {
-			opts.filterbydatatype = _.keys(dts);
-		    }
-		    if (datatypesChangesCounter>0) {
-		    	if (ga) {
-			    cttvAPIservice.getAssociations (opts)
-				.then (function (resp) {
-				    var data = resp.body.data;
-				    if (_.isEmpty(data)) {
-					data.association_score = 0.01;
-				    }
-				    ga.datatypes(dts);
-				    updateView(data);
-				    ga.update(data);
-				})
-			} else {
-		    	    setView();
-			}
-		}
-		    datatypesChangesCounter++;
+		scope.$watch(function () { return attrs.datatypes; }, function (dts) {
+            //var dts = JSON.parse(attrs.datatypes);
+            var opts = {
+                gene: attrs.target,
+                datastructure: "tree",
+            };
+            if (!_.isEmpty (dts)) {
+                opts.filterbydatatype = _.keys(dts);
+            }
+            if (datatypesChangesCounter>0) {
+                if (ga) {
+                    cttvAPIservice.getAssociations (opts)
+                        .then (function (resp) {
+                            var data = resp.body.data;
+                            if (_.isEmpty(data)) {
+                                data.association_score = 0.01;
+                            }
+                            ga.datatypes(dts);
+                            updateView(data);
+                            ga.update(data);
+                        });
+                } else {
+                    setView();
+                }
+            }
+            datatypesChangesCounter++;
 		});
 
 		// Highlight changes
@@ -61,12 +61,12 @@ angular.module('cttvDirectives')
 			// Also put a flower in the nav bar -- TODO: Again, this is interacting with the navigation, which
 			// makes it more difficult to reuse!
 			var datatypes = {};
-			datatypes.genetic_association = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "genetic_association" }), "association_score")||0;
-			datatypes.somatic_mutation = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "somatic_mutation" }), "association_score")||0;
-			datatypes.known_drug = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "known_drug" }), "association_score")||0;
-			datatypes.rna_expression = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "rna_expression" }), "association_score")||0;
-			datatypes.affected_pathway = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "affected_pathway" }), "association_score")||0;
-			datatypes.animal_model = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
+			datatypes.genetic_association = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
+			datatypes.somatic_mutation = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
+			datatypes.known_drug = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
+			datatypes.rna_expression = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
+			datatypes.affected_pathway = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
+			datatypes.animal_model = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
 			var hasActiveDatatype = function (checkDatatype) {
 			    var datatypes = JSON.parse(attrs.datatypes);
 			    for (var datatype in datatypes) {
@@ -93,20 +93,20 @@ angular.module('cttvDirectives')
 			navFlower(document.getElementById("cttv_targetAssociations_flower_" + efo.efo + "_" + efo.parent_efo));
 
 			// This is the link to the evidence page from the flower
-			scope.$parent.targetDiseaseLink = "#/evidence/" + attrs.target + "/" + efo.efo;
+			scope.$parent.targetDiseaseLink = "/evidence/" + attrs.target + "/" + efo.efo;
 
 		    }
 		});
-		
-		// Focus changes
-		scope.$watch(function () { return attrs.focus }, function (val) {
-		    if (val === "None") {
-			return;
-		    }
 
-		    if (ga) {
-			ga.selectTherapeuticArea(val);
-		    }
+		// Focus changes
+		scope.$watch(function () { return attrs.focus; }, function (val) {
+            if (val === "None") {
+                return;
+            }
+
+            if (ga) {
+                ga.selectTherapeuticArea(val);
+            }
 		});
 
 		function updateView (data) {
@@ -117,13 +117,13 @@ angular.module('cttvDirectives')
 		    } else {
 			scope.$parent.setTherapeuticAreas([]);
 		    }
-		};
+		}
 
 		function setView () {
 		    ////// Bubbles View
 		    // viewport Size
-		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
 		    // Element Coord
 		    var elemOffsetTop = elem[0].parentNode.offsetTop;
@@ -136,7 +136,7 @@ angular.module('cttvDirectives')
 		    var dts = JSON.parse(attrs.datatypes);
 		    var opts = {
 			gene: attrs.target,
-			datastructure: "tree",			
+			datastructure: "tree",
 		    };
 		    if (!_.isEmpty(dts)) {
 			opts.filterbydatatype = _.keys(dts);
@@ -147,7 +147,7 @@ angular.module('cttvDirectives')
 			    var data = resp.body.data;
 			    if (_.isEmpty(data)) {
 				updateView ();
-				return
+				return;
 			    }
 			    // Bubbles View
 
@@ -168,7 +168,7 @@ angular.module('cttvDirectives')
 			    ga = geneAssociations()
 				.target (attrs.target)
 				.diameter (diameter)
-				.datatypes(dts)
+				.datatypes(dts);
 
 				updateView (data);
 
@@ -176,11 +176,11 @@ angular.module('cttvDirectives')
 			    ga(bView, fView, elem[0]);
 			});
 
-		};
+		}
 
-		scope.$watch(function () {return attrs.target}, function (val) {
+		scope.$watch(function () { return attrs.target; }, function (val) {
 		    setView();
 		});
 	    }
-	}
+	};
     }]);

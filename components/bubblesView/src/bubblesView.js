@@ -124,10 +124,12 @@ var bubblesView = function () {
 		.attr("text-anchor", "start")
 		.text(conf.maxVal);
 
-	    legend
+	    var gLeg = legend
 		.append("g")
 		.attr("transform", "translate(100, 5)")
 		.html(conf.legendText);
+
+        console.log(gLeg.html());
 
 	    // legend
 	    // 	.append("a")

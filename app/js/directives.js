@@ -153,7 +153,7 @@ angular.module('cttvDirectives', [])
                                 var row = [];
 
                                 // Disease name
-                                var geneDiseaseLoc = "#/evidence/" + attrs.target + "/" + data.efo_code;
+                                var geneDiseaseLoc = "/evidence/" + attrs.target + "/" + data.efo_code;
                                 row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
 
                                 // EFO (hidden)
@@ -309,41 +309,50 @@ angular.module('cttvDirectives', [])
             var diameter = viewportH - elemOffsetTop - bottomMargin;
             $log.log("DIAMETER FOR TREE: " + diameter);
 
-            var dts = JSON.parse(attrs.datatypes);
-            var opts = {
-            gene: attrs.target,
-            datastructure: "tree"
-            }
-            if (!_.isEmpty(dts)) {
-            opts.filterbydatatype = _.keys(dts)
-            }
-            cttvAPIservice.getAssociations (opts)
-            .then (function (resp) {
-                var data = resp.body.data;
-                if (_.isEmpty(data)) {
-                return;
-                }
-                var fView = flowerView()
-                .fontsize(9)
-                .diagonal(100);
+                     var dts = JSON.parse(attrs.datatypes);
+                     var opts = {
+                         gene: attrs.target,
+                         datastructure: "tree"
+                     }
+                     if (!_.isEmpty(dts)) {
+                         opts.filterbydatatype = _.keys(dts)
+                     }
+                     cttvAPIservice.getAssociations (opts)
+                        .then (function (resp) {
+                            var data = resp.body.data;
+                            if (_.isEmpty(data)) {
+                                return;
+                            }
+                            var fView = flowerView()
+                                .fontsize(9)
+                                .diagonal(100);
 
-                gat = geneAssociationsTree()
-                    .data(data)
-                    .datatypes(dts)
-                    .diameter(900)
-                    .legendText("<a xlink:href='#/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
-                    .target(attrs.target);
-                gat(fView, elem[0]);
-            });
-        };
+                            gat = geneAssociationsTree()
+                                .data(data)
+                                .datatypes(dts)
+                                .diameter(900)
+                                .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
+                                .target(attrs.target);
+                            gat(fView, elem[0]);
+                        });
+                };
 
-        scope.$watch(function () { return attrs.target }, function (val) {
-            setTreeView();
-        });
-        }
-    }
-    }])
+                scope.$watch(function () { return attrs.target; }, function (val) {
+                    setTreeView();
+                });
 
+                scope.$watch(function () { return attrs.focus; }, function (val) {
+                    if (val === "None") {
+                        return;
+                    }
+
+                    if (gat) {
+                        //ga.selectTherapeuticArea(val);
+                    }
+                });
+             }
+         };
+     }])
 
 
     /**
@@ -565,27 +574,31 @@ angular.module('cttvDirectives', [])
             restrict: 'E',
             templateUrl: "partials/pmcCitation.html",
             link: function (scope, elem, attrs) {
-        scope.$watch(function () { return attrs.pmids}, function (newPMIDs) {
-            var pmids = newPMIDs.split(",");
-            if (pmids[0]) {
-            var terms = [];
-            for (var i=0; i<pmids.length; i++) {
-                terms.push("EXT_ID:" + pmids[i]);
-            }
-            var query = terms.join(" OR ");
-                var config = {
-                    width: 800,
-                    loadingStatusImage: "",
-                    source: pmc.Citation.MED_SOURCE,
-                query: query,
-                    target: 'pmcCitation',
-                    displayStyle: pmc.CitationList.FULL_STYLE,
-                    elementOrder: pmc.CitationList.TITLE_FIRST
-                };
-                var instance = new pmc.CitationList(config);
-                instance.load();
-            }
-        });
+                scope.$watch(function () { return attrs.pmids;}, function (newPMIDs) {
+                    if (!newPMIDs) {
+                        return;
+                    }
+                    var pmids = newPMIDs.split(",");
+                    if (pmids[0]) {
+                        var terms = [];
+                        for (var i=0; i<pmids.length; i++) {
+                            terms.push("EXT_ID:" + pmids[i]);
+                        }
+                        var query = terms.join(" OR ");
+                        var config = {
+                            width: 800,
+                            //proxyUrl: '/proxy/',
+                            loadingStatusImage: "",
+                            source: pmc.Citation.MED_SOURCE,
+                            query: query,
+                            target: 'pmcCitation',
+                            displayStyle: pmc.CitationList.FULL_STYLE,
+                            elementOrder: pmc.CitationList.TITLE_FIRST
+                        };
+                        var instance = new pmc.CitationList(config);
+                        instance.load();
+                    }
+                });
             }
         };
     })
@@ -595,27 +608,27 @@ angular.module('cttvDirectives', [])
     /*
      *
      */
-    .directive('pmcCitation', function () {
-    return {
-        restrict: 'E',
-        templateUrl: "partials/pmcCitation.html",
-        link: function (scope, elem, attrs) {
-        var pmc = require ('biojs-vis-pmccitation');
-        var config = {
-            source: pmc.Citation.MED_SOURCE,
-            citation_id: attrs.pmcid,
-            width: 400,
-            proxyUrl: 'https://cors-anywhere.herokuapp.com/',
-            displayStyle: pmc.Citation.FULL_STYLE,
-            elementOrder: pmc.Citation.TITLE_FIRST,
-            target : 'pmcCitation',
-            showAbstract : false
-        };
-        var instance = new pmc.Citation(config);
-        instance.load();
-        }
-    };
-    })
+    //  .directive('pmcCitation', function () {
+    //      return {
+    //          restrict: 'E',
+    //          templateUrl: "partials/pmcCitation.html",
+    //          link: function (scope, elem, attrs) {
+    //              var pmc = require ('biojs-vis-pmccitation');
+    //              var config = {
+    //                  source: pmc.Citation.MED_SOURCE,
+    //                  citation_id: attrs.pmcid,
+    //                  width: 400,
+    //                  proxyUrl: 'https://cors-anywhere.herokuapp.com/',
+    //                  displayStyle: pmc.Citation.FULL_STYLE,
+    //                  elementOrder: pmc.Citation.TITLE_FIRST,
+    //                  target : 'pmcCitation',
+    //                  showAbstract : false
+    //              };
+    //              var instance = new pmc.Citation(config);
+    //              instance.load();
+    //          }
+    //      };
+    //  })
 
 
 
@@ -642,10 +655,36 @@ angular.module('cttvDirectives', [])
                         .gene(attrs.target)
                         .context(20)
                         .width(w);
-                     var theme = targetGenomeBrowser()
+                    //gB.rest().proxyUrl("/ensembl");
+                    //gB.rest().proxyUrl("/api/latest/ensembl");
+                    gB.rest().proxyUrl("/proxy/rest.ensembl.org");
+                    var theme = targetGenomeBrowser()
                         .chr(scope.chr)
                         .efo(efo);
-                     theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
+                    theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
+                 });
+             }
+         };
+     }])
+
+     .directive('cttvTargetGeneTree', [function () {
+         return {
+             restrict: 'E',
+             link: function (scope, elem, attrs) {
+                 var w = 1140; // !!
+                 scope.$watch (function () { return attrs.target; }, function (target) {
+                     if (target === "") {
+                         return;
+                     }
+                     var newDiv = document.createElement("div");
+                     newDiv.id = "cttvTargetGeneTree";
+                     elem[0].appendChild(newDiv);
+
+                     var gt = targetGeneTree()
+                        .id(target)
+                        .width(1100)
+                        .proxy("/proxy/rest.ensembl.org");
+                     gt(newDiv);
                  });
              }
          };
@@ -685,30 +724,43 @@ angular.module('cttvDirectives', [])
     /*
      *
      */
-    .directive('ebiExpressionAtlasBaselineSummary', function () {
-    return {
-        restrict: 'E',
-        link: function (scope, elem, attrs) {
-        scope.$watch(function () { return attrs.target }, function (target) {
-            if (target === "") {
-            return;
-            }
-            var newDiv = document.createElement("div");
-            newDiv.id = "cttvExpressionAtlas";
-            newDiv.className = "accordionCell";
-            elem[0].appendChild(newDiv);
+    .directive('ebiExpressionAtlasBaselineSummary', ['cttvAPIservice', function (cttvAPIservice) {
+        return {
+            restrict: 'E',
+            link: function (scope, elem, attrs) {
+                scope.$watch(function () { return attrs.target; }, function (target) {
+                    if (target === "") {
+                        return;
+                    }
+                    var newDiv = document.createElement("div");
+                    newDiv.id = "cttvExpressionAtlas";
+                    newDiv.className = "accordionCell";
+                    elem[0].appendChild(newDiv);
 
-            var instance = new Biojs.AtlasHeatmap ({
-            gxaBaseUrl: 'https://www.ebi.ac.uk/gxa',
-            params:'geneQuery=' + target + "&species=homo%20sapiens",
-            isMultiExperiment: true,
-            target : "cttvExpressionAtlas"
-            })
-        });
-        },
-    }
-    })
+                    // cttvAPIservice.getToken().then(function (resp) {
+                    //     console.warn(resp.body);
+                    //     var token = resp.body.token;
+                        // var instance = new Biojs.AtlasHeatmap ({
+                        //     gxaBaseUrl: '/api/latest/proxy/generic/',
+                        //     //gxaBaseUrl : '/gxa',
+                        //     params:'geneQuery=' + target + "&species=homo%20sapiens",
+                        //     isMultiExperiment: true,
+                        //     target : "cttvExpressionAtlas"
+                        // });
 
+                    // });
+
+                    var instance = new Biojs.AtlasHeatmap ({
+                        gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa',
+                        //gxaBaseUrl : '/gxa',
+                        params:'geneQuery=' + target + "&species=homo%20sapiens",
+                        isMultiExperiment: true,
+                        target : "cttvExpressionAtlas"
+                    });
+                });
+            },
+        };
+    }])
 
 
     /*
@@ -857,7 +909,7 @@ angular.module('cttvDirectives', [])
                      + '</div>'
 
                      // extra info
-                     + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="#/faq#association-score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>'
+                     + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="/faq#association-score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>'
                     ;
 
         return {

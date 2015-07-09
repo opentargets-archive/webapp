@@ -40,8 +40,8 @@ var cttv_genome_browser = function() {
         // Navigation
         navTheme (gB, div);
 
-        console.log("SETTING REST TO GB ONE");
         rest = gB.rest();
+        async.rest = rest; // Ensembl rest api
 
         // tooltips
         var tooltips = browser_tooltips()
@@ -114,7 +114,7 @@ var cttv_genome_browser = function() {
         );
 
         var clinvar_track = tnt.board.track()
-            .label("ClinVar snps")
+            .label("Variants in rare diseases")
             .height(60)
             .background_color("white")
             .display(clinvar_display)
@@ -181,7 +181,7 @@ var cttv_genome_browser = function() {
         //});
 
         var gwas_track = tnt.board.track()
-            .label("GWAS snps")
+            .label("Variants in common diseases")
             .height(60)
             .background_color("white")
             .display(gwas_display)
@@ -233,7 +233,7 @@ var cttv_genome_browser = function() {
             .then (async.gene);
 
         // SNPs ClinVar
-        var opts = getOpts(gB.gene(), ["eva"], efo);
+        var opts = getOpts(gB.gene(), ["eva","uniprot"], efo);
         var url = cttvRestApi.url.filterby(opts);
         var snpsClinVarPromise = cttvRestApi.call(url)
             .then (async.cttv_clinvar)

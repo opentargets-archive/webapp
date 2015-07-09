@@ -1,5 +1,5 @@
-var rest = require("tnt.ensembl")()
-    .proxyUrl("/ensembl");
+// var rest = require("tnt.ensembl")()
+//     .proxyUrl("/ensembl");
 
 var c = {};
 c.snps = {};
@@ -12,6 +12,9 @@ c.cttv_clinvar = function (resp) {
     var clinvarSNPs = {};
     for (var i=0; i<resp.body.data.length; i++) {
         var this_snp = resp.body.data[i];
+        if (this_snp.evidence === undefined) {
+            continue;
+        }
         var this_disease = resp.body.data[i].biological_object;
         var this_target = resp.body.data[i].biological_subject;
         var snp_name = this_snp.evidence.evidence_chain[1].biological_subject.properties.experiment_specific.rsId;
@@ -20,8 +23,8 @@ c.cttv_clinvar = function (resp) {
         if (clinvarSNPs[snp_name] === undefined) {
             var refs = this_snp.evidence.evidence_chain[1].evidence.provenance_type.literature.references;
             var refsText = refs.map(function (d) {
-                return d.lit_id.split("/").pop()
-            })
+                return d.lit_id.split("/").pop();
+            });
             var association = {
                 "efo" : this_snp.biological_object.efo_info[0][0].efo_id,
                 "label" : this_snp.biological_object.efo_info[0][0].label,
@@ -35,18 +38,18 @@ c.cttv_clinvar = function (resp) {
             clinvarSNPs[snp_name].clinvarId = clinvarId;
         }
     }
-    c.snps["clinvar"] = clinvarSNPs;
-    var snp_names = Object.keys(c.snps["clinvar"]);
+    c.snps.clinvar = clinvarSNPs;
+    var snp_names = Object.keys(c.snps.clinvar);
     return snp_names;
 };
 
 c.ensembl_call_snps = function (snp_names) {
-    var var_url = rest.url.variation ({
+    var var_url = c.rest.url.variation ({
         species : "human"
     });
-    return rest.call(var_url, {
+    return c.rest.call(var_url, {
         "ids" : snp_names
-    })
+    });
 };
 
 
@@ -54,14 +57,14 @@ c.ensembl_parse_clinvar_snps = function (resp) {
     c.data.clinvar = [];
     for (var snp_name in resp.body) {
         var snp = resp.body[snp_name];
-        var info = c.snps["clinvar"][snp_name];
+        var info = c.snps.clinvar[snp_name];
         info.pos = snp.mappings[0].start;
         info.val = 1;
         c.data.clinvar.push(info);
     }
 
     var clinvar_extent = d3.extent(c.data.clinvar, function (d) {
-        return d.pos
+        return d.pos;
     });
     return clinvar_extent;
 };
@@ -90,8 +93,8 @@ c.cttv_gwas = function (resp) {
             "efo_label" : this_disease.efo_info[0][0].label
         });
     }
-    c.snps["gwas"] = gwasSNPs;
-    var snp_names = Object.keys(c.snps["gwas"]);
+    c.snps.gwas = gwasSNPs;
+    var snp_names = Object.keys(c.snps.gwas);
     return snp_names;
 };
 
@@ -112,14 +115,14 @@ c.ensembl_parse_gwas_snps = function (resp) {
     for (var snp_name in resp.body) {
         if (resp.body.hasOwnProperty(snp_name)) {
             var snp = resp.body[snp_name];
-            var info = c.snps["gwas"][snp_name];
+            var info = c.snps.gwas[snp_name];
             info.pos = snp.mappings[0].start;
-            info.val = 1 - min(info["study"]);
-            c.data.gwas.push(info)
+            info.val = 1 - min(info.study);
+            c.data.gwas.push(info);
         }
     }
     var gwas_extent = d3.extent(c.data.gwas, function (d) {
-        return d.pos
+        return d.pos;
     });
     return gwas_extent;
 };

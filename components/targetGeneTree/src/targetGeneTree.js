@@ -9,6 +9,8 @@ var targetGeneTree = function () {
     var id;
     var width = 600;
 
+    var proxy = "";
+
     var species = [
         9606, // human
         10090, // mouse
@@ -99,6 +101,10 @@ var targetGeneTree = function () {
             .label(label);
 
         var rest = ensemblRestApi();
+        if (proxy) {
+            rest
+                .proxyUrl(proxy);
+        }
 
         var homologsUrl = rest.url.homologues({
             "id": id,
@@ -106,6 +112,9 @@ var targetGeneTree = function () {
             "format": "full"
         });
         var homologsPromise = rest.call(homologsUrl);
+            // .catch(function (err) {
+            //     console.warn (err);
+            // });
 
         var genetreeUrl = rest.url.gene_tree({
             "member_id" : id,
@@ -113,6 +122,9 @@ var targetGeneTree = function () {
             "species": ["human"]
         });
         var genetreePromise = rest.call(genetreeUrl);
+            // .catch(function (err) {
+            //     console.warn (err);
+            // });
 
         RSVP.all([homologsPromise, genetreePromise])
             .then (function (resps) {
@@ -141,6 +153,9 @@ var targetGeneTree = function () {
 
                 legend(treeDiv.node());
             });
+        RSVP.on("error", function (reason) {
+            console.warn (reason);
+        });
     };
 
     render.id = function (newId) {
@@ -156,6 +171,14 @@ var targetGeneTree = function () {
             return width;
         }
         width = w;
+        return this;
+    };
+
+    render.proxy = function (p) {
+        if (!arguments.length) {
+            return proxy;
+        }
+        proxy = p;
         return this;
     };
 

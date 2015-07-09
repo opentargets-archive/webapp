@@ -20,7 +20,7 @@
 				<div class="item">
 					<div class="well well-lg">
 						<h5>
-							<a href="#/target/{{search.info.gene.ensembl_gene_id}}">{{search.info.gene.approved_symbol || search.info.gene.ensembl_external_name}}</a><br />
+							<a href="/target/{{search.info.gene.ensembl_gene_id}}">{{search.info.gene.approved_symbol || search.info.gene.ensembl_external_name}}</a><br />
 							<span class="small">{{search.info.gene.approved_name || search.info.gene.ensembl_description}}
 								<!-- <br/ >({{search.info.gene.id || search.info.gene.ensembl_gene_id}}) -->
 								<span ng-show="search.info.gene.symbol_synonyms.length>0"><br />Synonyms: {{search.info.gene.symbol_synonyms.join(", ") | limitTo:100}}<span>...</span></span>
@@ -40,7 +40,7 @@
 				<div class="item">
 					<div class="well well-lg">
 						<h5>
-						  <a href="#/disease/{{search.info.efo.efo_code}}">{{search.info.efo.label}}</a>
+						  <a href="/disease/{{search.info.efo.efo_code}}">{{search.info.efo.label}}</a>
 							<span class="small" ng-show="search.info.efo.efo_synonyms.length>0"><br />Synonyms: {{search.info.efo.efo_synonyms.join(", ") | limitTo:100}}...</span>
 						</h5>
 						<p class="small">{{search.info.efo.definition | limitTo: 200}}<span ng-show="search.info.efo.definition.length>200">...</span></p>
