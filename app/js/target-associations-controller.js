@@ -210,7 +210,6 @@ angular.module('cttvControllers')
 	};
 
     $scope.bubblesSelected = function () {
-        console.log("BUBBLES SELECTED");
         $(".cttv-nav").show();
     };
 

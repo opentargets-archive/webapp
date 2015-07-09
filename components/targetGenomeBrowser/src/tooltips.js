@@ -67,7 +67,7 @@ var tooltips = function () {
             for (var i=0; i<data.study.length; i++) {
                 obj.rows.push({
                     "label" : "<a href='/evidence/" + view.gene() + "/"+ data.study[i].efo + "'>" + data.study[i].efo_label + '</a>',
-                    "value" : parseFloat(data.study[i].pvalue).toPrecision(1) + " <a target=_blank href='http://europepmc.org/search?query=" + data.study[i].pmid + "'><i class='fa fa-newspaper-o fa-lg'></i></a>"
+                    "value" : parseFloat(data.study[i].pvalue).toPrecision(1) + " <a target=_blank href='http://europepmc.org/abstract/med/" + data.study[i].pmid + "'><i class='fa fa-newspaper-o fa-lg'></i></a>"
                 });
             }
         }
