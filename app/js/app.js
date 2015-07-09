@@ -20,6 +20,9 @@ angular.module('cttvApp', [
             when('/intro', {
                 templateUrl: 'partials/intro.html'
             }).
+            when('/about', {
+                templateUrl: 'partials/about.html'
+            }).
             when('/search', {
                 templateUrl: 'partials/search.html',
                 controller: 'SearchAppCtrl'

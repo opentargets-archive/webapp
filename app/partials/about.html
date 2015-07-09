@@ -1,4 +1,4 @@
-	
+
 <div class="container-fluid">
   <!-- Stack the columns on mobile by making one full-width and the other half-width -->
   <div class="row">
@@ -20,31 +20,31 @@
     </div>
     <div class="col-xs-10">
 	<h3><a name="about">About the CTTV target validation platform</a></h3>
-	<p>The CTTV platform brings together information on the relationships between potential drug targets and diseases. 
-	The core concept is to identify evidence of an association between a target and disease from various <a href="#data_types">data types</a>. 
-	A target can be a protein, protein complex or RNA molecule, but we integrate evidence through the gene that codes for the target. 
-	In the same way, we describe diseases through a structure of relationships called the Experimental Factor Ontology (<a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a>) that allows us 
+	<p>The CTTV platform brings together information on the relationships between potential drug targets and diseases.
+	The core concept is to identify evidence of an association between a target and disease from various <a href="#data_types">data types</a>.
+	A target can be a protein, protein complex or RNA molecule, but we integrate evidence through the gene that codes for the target.
+	In the same way, we describe diseases through a structure of relationships called the Experimental Factor Ontology (<a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a>) that allows us
 	to bring together evidence across different but related diseases.</p>
 
-	<p>The platform supports workflows starting from either a target or disease and presents the evidence for target – disease associations 
-	in a number of ways through association and evidence pages.  We also present related information on the target or the disease itself through 
+	<p>The platform supports workflows starting from either a target or disease and presents the evidence for target – disease associations
+	in a number of ways through association and evidence pages.  We also present related information on the target or the disease itself through
 	the target profile and disease profile pages.</p>
-	
+
 	<h3><a name="search_box">Search box</a></h3>
-	<p>To find a target of interest, either enter the gene or protein name, symbol or synonym. To find a disease you can search for the common disease 
+	<p>To find a target of interest, either enter the gene or protein name, symbol or synonym. To find a disease you can search for the common disease
 	name or its synonyms (including some abbreviations) provided the disease label and its synonyms are part of the <a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a>.</p>
 
-	<p>In both scenarios, the platform will present a selection of up to 3 possible matches for targets and disease as shortcuts as you type, which can be 
-	selected by clicking on the names as they are presented.  
-	Clicking on a target symbol links to the <a href="#target_association">Target Association page</a> for that target. 
+	<p>In both scenarios, the platform will present a selection of up to 3 possible matches for targets and disease as shortcuts as you type, which can be
+	selected by clicking on the names as they are presented.
+	Clicking on a target symbol links to the <a href="#target_association">Target Association page</a> for that target.
 	To get a fuller search, click the search icon or hit return and an exhaustive search result will be presented.</p>
 
-	<p>Results of a search are presented by order of relevance based on the known synonyms, matching of the symbol, names or synonym. 
+	<p>Results of a search are presented by order of relevance based on the known synonyms, matching of the symbol, names or synonym.
 	Matched terms are highlighted.</p>
 
-	<p>The search gives results for both target and disease together, but the search results can be filtered by target and/or disease by selecting 
+	<p>The search gives results for both target and disease together, but the search results can be filtered by target and/or disease by selecting
 	the filters at the top left. Number of matching targets and number of matching diseases are shown on the left-hand panel.</p>
-	
+
 	<h3><a name="target_association">Target Association page</a></h3>
 	<p>This provides an overview of all diseases associated to a target.</p>
 
@@ -52,38 +52,38 @@
 
 	<p>Mouse over a bubble or a tree node to display the full disease name and the <a href="#association_score">association score</a>.</p>
 
-	<p>Clicking on a Bubble node, Tree node or a Table row label will open a pop-up with several links. 
-	Click on ‘View evidence details’ to view detailed <a href="#target_disease">Target-Disease Evidence page</a> for the association, click on the ‘P’ icon to view 
+	<p>Clicking on a Bubble node, Tree node or a Table row label will open a pop-up with several links.
+	Click on ‘View evidence details’ to view detailed <a href="#target_disease">Target-Disease Evidence page</a> for the association, click on the ‘P’ icon to view
 	the <a href="#disease_profile">Disease Profile page</a> or the ‘A’ icon to view all the target associations of that disease.</p>
 
 	<p>Filters are available on the left of the page to restrict the associations that are displayed by data type or to focus on a therapeutic area.</p>
 
 	<h4>‘Data types' filters</h4>
-	<p>The diseases displayed in these views can be restricted by the <a href="#data_types">data types</a> for which they have evidence.  
-	The number of associated diseases is indicated next to each data type. 
+	<p>The diseases displayed in these views can be restricted by the <a href="#data_types">data types</a> for which they have evidence.
+	The number of associated diseases is indicated next to each data type.
 	Clicking/unclicking on a data type filter updates the Bubble, Table or Tree representation accordingly.</p>
 
 	<h4>Bubble View</h4>
-	<p>This view groups diseases into bubbles by therapeutic area. A disease can belong to multiple therapeutic areas and therefore can be in more than one bubble. 
-	To zoom in on a particular therapeutic area, click on the corresponding therapeutic area filter on the left hand side. 
+	<p>This view groups diseases into bubbles by therapeutic area. A disease can belong to multiple therapeutic areas and therefore can be in more than one bubble.
+	To zoom in on a particular therapeutic area, click on the corresponding therapeutic area filter on the left hand side.
 	To zoom out of a particular therapeutic area, click on the therapeutic area filter again.
 	Hovering over a bubble shows the <a href="#association_score">association score</a> between a specific disease and a target.</p>
-	
+
 	<h4>Table View</h4>
 	<p>This view lists all diseases associated to a particular gene ordered by the <a href="#association_score">association score</a>. Scores are represented by a colour.
 	Cells representing associations with no evidence are coloured white.</p>
-	
-	<p>Data type filters will also work on this view, and associations can be ordered by the association scores for individual <a href="#data_types">data types</a> 
+
+	<p>Data type filters will also work on this view, and associations can be ordered by the association scores for individual <a href="#data_types">data types</a>
 	by clicking the arrow head in the table header.</p>
-	
+
 	<h4>Tree View</h4>
 	<p>The ‘Tree’ view allows visualisation of evidence across the therapeutic areas in a tree representing the relationships of diseases.</p>
-	<p>Top-level disease categories are shown at a fixed position. Clicking on a disease opens a pop-up menu that provides links to various other page, 
-	but also allows branches of the tree to be collapsed down to simplify the visualisation.  
+	<p>Top-level disease categories are shown at a fixed position. Clicking on a disease opens a pop-up menu that provides links to various other page,
+	but also allows branches of the tree to be collapsed down to simplify the visualisation.
 	Clicking on a collapsed disease will allow the branches to be opened again.</p>
 
 	<h3><a name="target_disease">Target-Disease Evidence page</a></h3>
-	<p>This page provides details on the evidence found to associate a target to a particular disease. 
+	<p>This page provides details on the evidence found to associate a target to a particular disease.
 	The CTTV platform integrates multiple sources of information from various public resources described below.</p>
 
 	<h4><a name="association_score"></a>Association score</h4>
@@ -97,40 +97,40 @@
 	</p>
 	<p>This score is also broken down by <a href="#data_types">data types</a> and represented as a flower where each petal represents a different data type.
 	The amount of filled colour in each petal represents the relative score within each data type.
-	The overall association score for a particular target-disease association is calculated from the combination of scores provided 
-	by each data type for that target-disease association. 
-	Each association data type (genetic associations, known drugs, etc.) results from the integration of one or multiple datasources. 
+	The overall association score for a particular target-disease association is calculated from the combination of scores provided
+	by each data type for that target-disease association.
+	Each association data type (genetic associations, known drugs, etc.) results from the integration of one or multiple datasources.
 	The association score for each data type depends on the confidence in each association and also on the number of associations from a particular data source.</p>
-	
-	<p>In the current implementation the association score is calculated as the maximum score available from any data source. 
-	Filtering by data type in the <a href="#target_association">Target Association page</a> will change the overall association score. 
-	Please note that at the moment there are no negative associations listed, and the method to calculate the association score and the data source scores 
+
+	<p>In the current implementation the association score is calculated as the maximum score available from any data source.
+	Filtering by data type in the <a href="#target_association">Target Association page</a> will change the overall association score.
+	Please note that at the moment there are no negative associations listed, and the method to calculate the association score and the data source scores
 	is temporary and will be revised in future implementations.</p>
 
 	<h4><a name="data_types"></a>Data Types</h4>
 
 	<h5><i>Genetic associations</i></h5>
-	<p>Genetic associations can be classified as linking to common or rare diseases: 
+	<p>Genetic associations can be classified as linking to common or rare diseases:
 	<ul>
-	<li>The <a target="_blank" href="http://www.ebi.ac.uk/gwas/">NHGRI-EBI GWAS Catalog&nbsp;<i class="fa fa-external-link"></i></a> provides evidence on the association of targets (genes) and common diseases from published Genome Wide Association Studies (GWAS). 
-	GWAS publications are manually curated to extract lists of the primary associated variants (SNPs) by genomic region with the disease from each study. 
-	The <a target="_blank" href="http://www.ebi.ac.uk/gwas/">GWAS Catalog&nbsp;<i class="fa fa-external-link"></i></a> includes associations with p-values &le; 10<sup>-5</sup>. Although the standard in the field for significance of an association in GWAS is for the p-value 
-	to be &le; 5 x10<sup>-8</sup>, we provide sub-threshold values to broaden the coverage of diseases.  
-	The association is then assigned to the most likely gene by assessing the probable link between SNP and gene via a bespoke CTTV pipeline. 
-	SNPs are assigned to a gene by first considering any deleterious consequence within the genes coding region, then whether it is located within 
+	<li>The <a target="_blank" href="http://www.ebi.ac.uk/gwas/">NHGRI-EBI GWAS Catalog&nbsp;<i class="fa fa-external-link"></i></a> provides evidence on the association of targets (genes) and common diseases from published Genome Wide Association Studies (GWAS).
+	GWAS publications are manually curated to extract lists of the primary associated variants (SNPs) by genomic region with the disease from each study.
+	The <a target="_blank" href="http://www.ebi.ac.uk/gwas/">GWAS Catalog&nbsp;<i class="fa fa-external-link"></i></a> includes associations with p-values &le; 10<sup>-5</sup>. Although the standard in the field for significance of an association in GWAS is for the p-value
+	to be &le; 5 x10<sup>-8</sup>, we provide sub-threshold values to broaden the coverage of diseases.
+	The association is then assigned to the most likely gene by assessing the probable link between SNP and gene via a bespoke CTTV pipeline.
+	SNPs are assigned to a gene by first considering any deleterious consequence within the genes coding region, then whether it is located within
 	the gene's introns or regulatory regions and finally identifying the gene promoter to which it is nearest if there is no other data.</li>
-	<li><a target="_blank" href="http://www.uniprot.org/">EBI UniProt&nbsp;<i class="fa fa-external-link"></i></a> and the <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">EBI European Variation Archive (EVA)&nbsp;<i class="fa fa-external-link"></i></a> supply information on rare genetic diseases (Mendelian diseases). 
-	In this data type, evidence that a target (gene) is associated with a disease comes primarily from deleterious mutations within the protein coding region 
+	<li><a target="_blank" href="http://www.uniprot.org/">EBI UniProt&nbsp;<i class="fa fa-external-link"></i></a> and the <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">EBI European Variation Archive (EVA)&nbsp;<i class="fa fa-external-link"></i></a> supply information on rare genetic diseases (Mendelian diseases).
+	In this data type, evidence that a target (gene) is associated with a disease comes primarily from deleterious mutations within the protein coding region
 	of the gene in diseased individuals and segregation of the disease and mutation within families.</li>
-	<li>The <a target="_blank" href="http://www.uniprot.org/">EBI UniProt&nbsp;<i class="fa fa-external-link"></i></a> database is a comprehensive, high-quality and freely accessible resource of protein sequence and functional information manually curated 
+	<li>The <a target="_blank" href="http://www.uniprot.org/">EBI UniProt&nbsp;<i class="fa fa-external-link"></i></a> database is a comprehensive, high-quality and freely accessible resource of protein sequence and functional information manually curated
 	from the literature and public databases including <a target="_blank" href="http://omim.org/">Online Mendelian Inheritance in Man (OMIM)&nbsp;<i class="fa fa-external-link"></i></a>.</li>
-	<li>The <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">EBI European Variation Archive (EVA)&nbsp;<i class="fa fa-external-link"></i></a> is an open-access database of all types of genetic variation data from human. 
-	For target - disease evidence we take clinically relevant data from <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">EVA&nbsp;<i class="fa fa-external-link"></i></a> where the variation is considered pathogenic, which originates primarily 
+	<li>The <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">EBI European Variation Archive (EVA)&nbsp;<i class="fa fa-external-link"></i></a> is an open-access database of all types of genetic variation data from human.
+	For target - disease evidence we take clinically relevant data from <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">EVA&nbsp;<i class="fa fa-external-link"></i></a> where the variation is considered pathogenic, which originates primarily
 	from the <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">ClinVar&nbsp;<i class="fa fa-external-link"></i></a> archive.</li>
 	</ul>
 	<p>Clicking on the 'Browser' tab displays common disease variants and rare disease mutations associated with diseases shown on alternative transcripts (isoforms)
 	of the gene, in their genomic context.</p>
-	
+
 	<h5><u>Variant Definitions</u></h5>
 
   <table class="table table-striped">
@@ -172,7 +172,7 @@
 	  <tr>
 	    <td>intron variant</td>
 		<td>A transcript variant occurring within an intron.</td>
-	  </tr>	  
+	  </tr>
 	  <tr>
 	    <td>missense variant</td>
 		<td>A sequence variant that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved.</td>
@@ -225,45 +225,45 @@
   </table>
 
 	<h5><i>Somatic mutations</i></h5>
-	<p>The Wellcome Trust Sanger Institute <a target="_blank" href="http://cancer.sanger.ac.uk/cosmic/">COSMIC&nbsp;<i class="fa fa-external-link"></i></a> database provides evidence from 
-	somatic mutations on likely cancer drivers as manually curated in the Cancer 
-	Gene Census. The <a target="_blank" href="http://cancer.sanger.ac.uk/cosmic/">COSMIC&nbsp;<i class="fa fa-external-link"></i></a> Cancer Gene Census is a catalogue of genes for which 
+	<p>The Wellcome Trust Sanger Institute <a target="_blank" href="http://cancer.sanger.ac.uk/cosmic/">COSMIC&nbsp;<i class="fa fa-external-link"></i></a> database provides evidence from
+	somatic mutations on likely cancer drivers as manually curated in the Cancer
+	Gene Census. The <a target="_blank" href="http://cancer.sanger.ac.uk/cosmic/">COSMIC&nbsp;<i class="fa fa-external-link"></i></a> Cancer Gene Census is a catalogue of genes for which
 	mutations have been causally implicated in cancer.</p>
 
 	<h5><i>Known drugs</i></h5>
-	<p>The EBI <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL&nbsp;<i class="fa fa-external-link"></i></a> database provides evidence from known drugs where the drug 
-	can be connected to a disease and a known target. <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL&nbsp;<i class="fa fa-external-link"></i></a> is an open access 
-	database that contains compound bioactivity data against drug targets. 
-	Currently, data on FDA-approved drugs (i.e. those which are approved for 
-	clinical trials in the USA) are being displayed. Clinical indication data from 
+	<p>The EBI <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL&nbsp;<i class="fa fa-external-link"></i></a> database provides evidence from known drugs where the drug
+	can be connected to a disease and a known target. <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL&nbsp;<i class="fa fa-external-link"></i></a> is an open access
+	database that contains compound bioactivity data against drug targets.
+	Currently, data on FDA-approved drugs (i.e. those which are approved for
+	clinical trials in the USA) are being displayed. Clinical indication data from
 	other countries is being reviewed and processed.</p>
 
 	<h5><i>RNA expression</i></h5>
-	<p>The EBI <a target="_blank" href="http://www.ebi.ac.uk/gxa/home">Expression Atlas&nbsp;<i class="fa fa-external-link"></i></a> database provides information on gene expression 
-	patterns under different biological conditions. 
-	For CTTV, the EBI <a target="_blank" href="http://www.ebi.ac.uk/gxa/home">Expression Atlas&nbsp;<i class="fa fa-external-link"></i></a> database supplies evidence from gene 
+	<p>The EBI <a target="_blank" href="http://www.ebi.ac.uk/gxa/home">Expression Atlas&nbsp;<i class="fa fa-external-link"></i></a> database provides information on gene expression
+	patterns under different biological conditions.
+	For CTTV, the EBI <a target="_blank" href="http://www.ebi.ac.uk/gxa/home">Expression Atlas&nbsp;<i class="fa fa-external-link"></i></a> database supplies evidence from gene
 	expression changes in studies that compare disease samples with normal samples,
-	 or in some cases with other disease samples. In addition the <a target="_blank" href="http://www.ebi.ac.uk/gxa/home">Expression Atlas&nbsp;<i class="fa fa-external-link"></i></a> 
-	 provides baseline expression information for each target, which can be found 
+	 or in some cases with other disease samples. In addition the <a target="_blank" href="http://www.ebi.ac.uk/gxa/home">Expression Atlas&nbsp;<i class="fa fa-external-link"></i></a>
+	 provides baseline expression information for each target, which can be found
 	 on the <a href="#target_profile">Target Profile page</a>.</p>
 
-	<p>The RNA expression data table shows gene changes for which the log2 fold 
-	change is greater than 1 or less than -1 and p-value is less than 0.05 (after 
-	Benjamini & Hochberg (1995) FDR correction). The percentile rank column shows 
+	<p>The RNA expression data table shows gene changes for which the log2 fold
+	change is greater than 1 or less than -1 and p-value is less than 0.05 (after
+	Benjamini & Hochberg (1995) FDR correction). The percentile rank column shows
 	the relative rank of the gene expression fold change of that gene in comparison
 	 to all other genes for this experiment.</p>
 
 	<h5><i>Affected pathways</i></h5>
-	<p>The EBI <a target="_blank" href="http://www.reactome.org">Reactome&nbsp;<i class="fa fa-external-link"></i></a> database manually curates and identifies reaction 
+	<p>The EBI <a target="_blank" href="http://www.reactome.org">Reactome&nbsp;<i class="fa fa-external-link"></i></a> database manually curates and identifies reaction
 	pathways that are affected by pathogenic mutations.</p>
 
 	<h5><i>Mouse models</i></h5>
-	<p>The Wellcome Trust Sanger Institute <a target="_blank" href="https://www.sanger.ac.uk/resources/databases/phenodigm/">PhenoDigm&nbsp;<i class="fa fa-external-link"></i></a> database provides animal 
-	models matches ranked by their phenotypic similarity to human diseases. 
+	<p>The Wellcome Trust Sanger Institute <a target="_blank" href="https://www.sanger.ac.uk/resources/databases/phenodigm/">PhenoDigm&nbsp;<i class="fa fa-external-link"></i></a> database provides animal
+	models matches ranked by their phenotypic similarity to human diseases.
 	<a target="_blank" href="https://www.sanger.ac.uk/resources/databases/phenodigm/">PhenoDigm&nbsp;<i class="fa fa-external-link"></i></a> provides evidence on associations of targets and disease via gene
 	knockout mouse models. The orthologous human gene to the one knocked out in
-	the mouse is identified. The phenotypic effects in the mutant mouse are 
-	then mapped to phenotypes associated with human diseases and probable 
+	the mouse is identified. The phenotypic effects in the mutant mouse are
+	then mapped to phenotypes associated with human diseases and probable
 	matches are identified and scored.</p>
 
 	<h5><u>Last update to Data type:</u></h5>
@@ -277,30 +277,30 @@
 	</ul>
 
 	<h5><u>Data Integration</u></h5>
-	<p>Each data piece in each data type is mapped to a target term in the 
-	Experimental Factor Ontology (<a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a>). The <a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a> provides a systematic, 
-	machine-readable description of many components of biological systems 
-	including diseases and phenotypes. It combines parts of several biological 
-	ontologies, such as anatomy, disease and chemical compounds. The scope of 
-	<a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a> is to support the annotation, analysis and visualization of data 
+	<p>Each data piece in each data type is mapped to a target term in the
+	Experimental Factor Ontology (<a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a>). The <a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a> provides a systematic,
+	machine-readable description of many components of biological systems
+	including diseases and phenotypes. It combines parts of several biological
+	ontologies, such as anatomy, disease and chemical compounds. The scope of
+	<a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a> is to support the annotation, analysis and visualization of data
 	handled by many groups at the EBI and as the core ontology for the CTTV.</p>
 
 	<h3><a name="disease_association">Disease Association page</a></h3>
 	<p>This page provides a table view of all potential targets associated to a
-	disease ordered by the <a href="#association_score">association score</a>. Targets can be filtered by data 
-	type and also by the reaction pathways (from <a target="_blank" href="http://www.reactome.org">Reactome&nbsp;<i class="fa fa-external-link"></i></a>) the target belongs to.</p>  
+	disease ordered by the <a href="#association_score">association score</a>. Targets can be filtered by data
+	type and also by the reaction pathways (from <a target="_blank" href="http://www.reactome.org">Reactome&nbsp;<i class="fa fa-external-link"></i></a>) the target belongs to.</p>
 
 	<h3><a name="disease_profile">Disease Profile page</a></h3>
-	<p>The <a href="#disease_profile">Disease Profile page</a> provides a description of a disease, its synonyms 
-	and its relationship to other diseases in the Experimental Factor Ontology. 
-	This page also displays the relationships of a disease to its immediate 
+	<p>The <a href="#disease_profile">Disease Profile page</a> provides a description of a disease, its synonyms
+	and its relationship to other diseases in the Experimental Factor Ontology.
+	This page also displays the relationships of a disease to its immediate
 	parents and children within the <a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a> hierarchy.
 	Clicking on ‘View target associations’ links to the <a href="#disease_association">Disease Association page</a> for that disease.</p>
-	
+
 	<h3><a name="target_profile">Target Profile Page</a></h3>
-	<p>The <a href="#target_profile">Target Profile page</a> summarises all relevant information known about 
-	a particular target including synonyms, protein information from <a target="_blank" href="http://www.uniprot.org/">UniProt&nbsp;<i class="fa fa-external-link"></i></a>, 
-	Gene Ontology terms to describe biological processes and publications 
+	<p>The <a href="#target_profile">Target Profile page</a> summarises all relevant information known about
+	a particular target including synonyms, protein information from <a target="_blank" href="http://www.uniprot.org/">UniProt&nbsp;<i class="fa fa-external-link"></i></a>,
+	Gene Ontology terms to describe biological processes and publications
 	involving the target from <a target="_blank" href="http://europepmc.org/">EUROPE PubMed Central&nbsp;<i class="fa fa-external-link"></i></a>.</p>
 	<ul>
 <li>The Variants, Isoforms and genomic context section displays common disease variants and rare disease mutations associated with diseases on alternative transcripts (isoforms) of the gene.</li>
@@ -311,5 +311,5 @@
 	</ul>
     </div>
   </div>
- 
+
 </div>
