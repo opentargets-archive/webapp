@@ -93,7 +93,7 @@ angular.module('cttvDirectives', [])
 
                     var str="";
                     if( value<=0 ){
-                        str = "<span class='no-data' title='No data'>N/A</span>";
+                        str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, we don't put anything, so the sorting works better
                     } else {
                         str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
                         if( href ){
@@ -369,7 +369,7 @@ angular.module('cttvDirectives', [])
         var getColorStyleString = function(value, href){
             var str="";
             if( value<=0 ){
-                str = "<span class='no-data' title='No data'>0</span>";
+                str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
             } else {
                 str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
                 if( href ){
@@ -925,7 +925,7 @@ angular.module('cttvDirectives', [])
                 var l = labelScale(value);
                 span = "<span style='color: "+c+"; background: "+c+";' title='Expression: "+l+"'>"+value+"</span>";
             } else {
-                span = "<span class='no-data' title='No data'>N/A</span>"
+                span = "<span class='no-data' title='No data'></span>"  // quick hack: where there's no data, don't put anything so the sorting works better
             }
 
 

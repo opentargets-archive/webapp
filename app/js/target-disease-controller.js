@@ -11,7 +11,7 @@
        * Controller for the Gene <-> Disease page
        * It loads the evidence for the given target <-> disease pair
     */
-    controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, cttvUtils) {
+    controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary) {
         $log.log('TargetDiseaseCtrl()');
 
         var dbs = {
@@ -333,12 +333,12 @@
                     // row.push( getSoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes) );
                     // evidence source
                     //row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[2]) );
-                    row.push("CTTV-custom annotation pipeline");
+                    row.push(cttvDictionary.CTTV_PIPELINE);
 
                     // evidence source
                     row.push( "<a href='https://www.ebi.ac.uk/gwas/search?query="+data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()+"' target='_blank'>"
                             + data[i].evidence.evidence_chain[1].evidence.evidence_codes[0]
-                            + " <i class='fa fa-external-link'></i></a>");
+                            + "&nbsp;catalog <i class='fa fa-external-link'></i></a>");
 
 
                     // p-value
@@ -659,8 +659,6 @@
 
                     // 4: Mechanism of action
                     var pubs = 0;
-                    var action = data[i].evidence.evidence_chain[0].evidence.experiment_specific.mechanism_of_action+"<br />";
-                    action += "<span><span class='badge'>";
                     if(data[i].evidence.evidence_chain[0].evidence.provenance_type
                         && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature
                         && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references){
@@ -668,13 +666,18 @@
                     } else {
                         pubs = 0;
                     }
-                    action += pubs + (pubs==1 ? "</span> publication</span>" : "</span> publications</span>");
+
+                    var action = data[i].evidence.evidence_chain[0].evidence.experiment_specific.mechanism_of_action;
+
+
 
                     // publications:
                     // we show the publications here in the cells for now
                     // eventually this should be in a popup or tooltip of some sort
                     var pub="";
                     if( pubs>0 ){
+                        action += "<br /><span><span class='badge'>" + pubs + (pubs==1 ? "</span> publication</span>" : "</span> publications</span>");
+                        //action += pubs + (pubs==1 ? "</span> publication:</span>" : "</span> publications:</span>");
                         pub=":<div>";
                         for(var j=0; j<pubs; j++){
                             var n=data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
@@ -696,18 +699,18 @@
                     var activity = data[i].biological_subject.properties.activity;
                     switch (activity) {
                         case 'drug_positive_modulator' :
-                        activity = "positive";
+                        activity = "agonist";
                         break;
                         case 'drug_negative_modulator' :
-                        activity = "negative";
+                        activity = "antagonist";
                         break;
                     }
                     row.push(activity);
 
-                    // 6: Clinical indications
-                    row.push( "<a href='"
-                                + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
-                                + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
+                    // 6: Clinical indications -- REMOVED!
+                    // row.push( "<a href='"
+                    //             + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
+                    //             + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
                     // 7: target class
                     row.push(data[i].evidence.evidence_chain[0].evidence.experiment_specific.target_class[0]);
@@ -734,11 +737,15 @@
                     }
                     prot += prots.join (", ");
 
-                    //})
                     row.push(prot);
 
                     // 9: evidence source
-                    row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
+
+                    row.push( "Curated from <br /><a href='"
+                                + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
+                                + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
+
+                    //row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
 
 
                     newdata.push(row); // use push() so we don't end up with empty rows

@@ -19,6 +19,7 @@
             <accordion-heading class="cttv-facets-headers">
                 {{filter.label | clearUnderscores | upperCaseFirst}} <i class="pull-right text-lowlight fa" ng-class="{'fa-plus-square': !status.isOpen, 'fa-minus-square': status.isOpen}"></i>
             </accordion-heading>
+
             <div class="cttv-facets-controls">
                 <span ng-click="filter.selectAll(false)">Clear all <i class="fa fa-times"></i></span>
                 <span ng-click="filter.selectAll(true)">Select all <i class="fa fa-check"></i></span>
@@ -33,6 +34,7 @@
                     {{bucket.label}} <span class="text-lowlight small">({{bucket.count}})</span>
                 </label>
             </div>
+
         </accordion-group>
     </accordion>
 </div>

@@ -9,103 +9,127 @@
     <img src="imgs/CTTV_logo_webheader.png" class="intro-logo"/>
 
     <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
-      <fieldset>
-        <div class="form-group has-feedback search-form">
+        <fieldset>
+            <div class="form-group has-feedback search-form">
 
 
-          <!-- Search box + search button -->
-          <div class="input-group">
+                <!-- Search box + search button -->
+                <div class="input-group">
 
-            <input type="text" placeholder="Search for a target or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+                    <input type="text" placeholder="Search for a target or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
-            <div class="input-group-btn">
-              <button type="submit" class="btn btn-primary">
-                <span class="fa fa-search fa-lg"></span>
-              </button>
+                    <div class="input-group-btn">
+                    <button type="submit" class="btn btn-primary">
+                    <span class="fa fa-search fa-lg"></span>
+                    </button>
+                    </div>
+
+                </div>
+
+                <!-- Search in progress spinner -->
+                <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
+
+                <!-- Suggestions box -->
+                <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
+
+
+                <!-- examples -->
+                <span class="small">
+                    <i>
+                    Examples: <a href="#/search?q=braf">BRAF</a>,
+                    <a href="#/search?q=carcinoma">Carcinoma</a>,
+                    <a href="#/search?q=pten">PTEN</a>
+                    </i>
+                </span>
+
             </div>
-
-          </div>
-
-          <!-- Search in progress spinner -->
-          <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
-
-          <!-- Suggestions box -->
-          <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
-
-
-          <!-- examples -->
-          <span class="small">
-              <i>
-                Examples: <a href="#/search?q=braf">BRAF</a>,
-                <a href="#/search?q=carcinoma">Carcinoma</a>,
-                <a href="#/search?q=pten">PTEN</a>
-              </i>
-          </span>
-
-        </div>
-      </fieldset>
+        </fieldset>
     </form>
 
     <div class="intro-divider"></div>
 
     <div class="row text-lowlight">
 
-      <div class="col-sm-6">
-        <h2 class="intro-statement intro-statement-heading">I am interested in target T:</h2>
-        <h2 class="intro-statement intro-statement-p">Which diseases can be treated by modulating target T?</h2>
-      </div>
+        <div class="col-sm-6">
+            <h2 class="intro-statement intro-statement-heading">I am interested in target T:</h2>
+            <h2 class="intro-statement intro-statement-p">Which diseases can be treated by modulating target T?</h2>
+        </div>
 
 
-      <div class="col-sm-6">
-        <h2 class="intro-statement intro-statement-heading">I am interested in disease D:</h2>
-        <h2 class="intro-statement intro-statement-p">Which targets can be modulated to treat disease D?</h2>
-      </div>
+        <div class="col-sm-6">
+            <h2 class="intro-statement intro-statement-heading">I am interested in disease D:</h2>
+            <h2 class="intro-statement intro-statement-p">Which targets can be modulated to treat disease D?</h2>
+        </div>
 
     </div>
 
+
     <div class="intro-divider"></div>
 
-    <div class="container-fluid">
+    <!-- <div class="container-fluid"> -->
+
     <!-- Stack the columns on mobile by making one full-width and the other half-width -->
     <div class="row">
-      <div class="col-xs-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">What's new on release 0.4?</h3>
-      </div>
-      <div class="panel-body">
-      See all changes in the <a href="#/release-notes">release notes</a> document.
-      </div>
-        <ul class="list-group">
-          <li class="list-group-item">Major update of ChEMBL disease associations</li>
-          <li class="list-group-item">Improved associations for GWAS, Expression Atlas and EVA</li>
-          <li class="list-group-item">New filters for data types and pathways in the display of targets associated with a disease</li>
-          <li class="list-group-item">New visualization for variants, gene isoforms and genomic context</li>
-        </ul>
-    </div>
 
-      </div>
-      <div class="col-xs-6">
-      <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">FAQ</h3>
-      </div>
-      <div class="panel-body">
-      See all the <a href="#/faq">frequently asked questions</a>
-      </div>
-        <ul class="list-group">
-          <li class="list-group-item"><a href="#/faq#search-box">What can I search for?</a></li>
-          <li class="list-group-item"><a href="#/faq#data-provenance">Where does the data come from?</a></li>
-          <li class="list-group-item"><a href="#/faq#association-score">How is the association score calculated?</a></li>
-        </ul>
-      </div>
-    </div>
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">About the CTTV target validation platform</h4>
+                </div>
+                <div class="panel-body">
+                    <p>The CTTV platform brings together information on the relationships between potential drug targets and diseases.  The core concept is to identify evidence of an association between a target and disease from various data types.</p>
+
+                    <p>A target can be a protein, protein complex or RNA molecule, but we integrate evidence through the gene that codes for the target. In the same way, we describe diseases through a structure of relationships called the Experimental Factor Ontology (EFO) that allows us to bring together evidence across different but related diseases.</p>
+
+                    <p>The platform supports workflows starting from either a target or disease and presents the evidence for target – disease associations in a number of ways through association and evidence pages.</p>
+
+                    <p>We also present related information on the target or the disease itself through the target profile and disease profile pages.</p>
+
+                    <!-- <p><a href="#">Read more &hellip;</a></p> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">FAQ</h4>
+                </div>
+                <div class="panel-body">
+                    <p>See all the <a href="#/faq">frequently asked questions</a></p>
+
+                    <ul class="plain arrow-icon">
+                        <li><a href="#/faq#search-box">What can I search for?</a></li>
+                        <li><a href="#/faq#data-provenance">Where does the data come from?</a></li>
+                        <li><a href="#/faq#association-score">How is the association score calculated?</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">What's new on release 0.4?</h4>
+                </div>
+                <div class="panel-body">
+                    <p>See all changes in the <a href="#/release-notes">release notes</a> document.</p>
+
+                    <ul class="plain arrow-icon">
+                        <li>Major update of ChEMBL disease associations</li>
+                        <li>Improved associations for GWAS, Expression Atlas and EVA</li>
+                        <li>New filters for data types and pathways in the display of targets associated with a disease</li>
+                        <li>New visualization for variants, gene isoforms and genomic context</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
 
     </div>
 
     <div class="intro-divider"></div>
 
-  </div>
+  <!-- </div> -->
 
   <div class="col-sm-1"></div>
 

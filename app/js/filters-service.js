@@ -139,12 +139,26 @@ angular.module('cttvServices').
                     conf.count = obj.unique_target_count.value;
                     conf.selected = isSelected(collection, obj.key);
                     conf.facet = collection;
-                    conf.collection = parseFacetData();
+                    if(obj.pathway){
+                        conf.collection = parseCollection( parseFacetData(obj.key, obj.pathway) );
+                    }
+
                     return conf;
                 });
             }
 
             return config;
+        }
+
+
+
+        var parseCollection = function(obj){
+            var collection = new FilterCollection(obj.key, obj.label);
+            obj.filters.forEach(function(element){
+                //element.selected = selection.indexOf(element.key)>=0;
+                collection.addFilter(new Filter(element));
+            });
+            return collection;
         }
 
 
@@ -371,15 +385,7 @@ angular.module('cttvServices').
 
 
         cttvFiltersService.addCollection = function(obj){
-
-            var collection = new FilterCollection(obj.key, obj.label);
-            obj.filters.forEach(function(element){
-                //element.selected = selection.indexOf(element.key)>=0;
-                collection.addFilter(new Filter(element));
-            });
-
-
-            filters.push(collection);
+            filters.push( parseCollection(obj) );
         }
 
 

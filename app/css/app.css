@@ -295,6 +295,10 @@ a.accordion-toggle{
     line-height: 1.2;
 }
 
+.large {
+    font-size: 16px;
+}
+
 .text-disabled, .disabled{
     color: #AAA;
     text-decoration: none;
@@ -304,6 +308,45 @@ a.accordion-toggle{
 .disabled {
     cursor: not-allowed !important;
 }
+
+
+h1, h2, h3, h4, h5, h6 {
+    /*font-family: 'Open Sans', 'Helvetica', sans-serif;*/
+}
+
+/*
+ * Lists
+ */
+
+
+ul.plain {
+    padding-left: 0px;
+}
+
+ul.plain li {
+    list-style-type: none;
+    margin-left: 1.1em;
+}
+
+ul.arrow-icon li:before {
+    font-family: 'FontAwesome';
+    content: '\f105';
+    margin-left: -1.1em;
+    display: inline-block;
+    width: 1.1em;
+    color: #CCC;
+}
+
+
+/*
+ * Links
+ */
+
+
+a:hover {
+    text-decoration: none;
+}
+
 
 
 /*

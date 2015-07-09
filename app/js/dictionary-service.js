@@ -21,6 +21,8 @@ angular.module('cttvServices').
 
             // B
             // C
+            CTTV_PIPELINE :          "CTTV pipeline",
+
             // D
             DATATYPES :              "Datatypes",
 

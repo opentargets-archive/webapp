@@ -79,8 +79,8 @@
 
 								<!-- Common disease table -->
 								<div ng-show="search.genetic_associations.common_diseases.data.length>0">
-									<h5>Common diseases</h5>
-									<p>Source: <a href="http://www.ebi.ac.uk/fgpt/gwas/" target="_blank">GWAS Catalog curated database</a></p>
+									<h4>Common diseases</h4>
+									<p>Source: <a href="https://www.ebi.ac.uk/gwas/docs/about" target="_blank">GWAS Catalog curated database</a></p>
 									<div class="table-panel">
 										<table class='table table-striped table-bordered' id="common-diseases-table">
 											<thead>
@@ -113,7 +113,7 @@
 
 								<!-- Related rare disease table -->
 								<div ng-show="search.genetic_associations.rare_diseases.data.length>0">
-									<h5>Related rare diseases</h5>
+									<h4>Rare diseases</h4>
 									<p>Source: <a href="http://www.uniprot.org" target="_blank">UniProt</a> and <a href="http://www.ebi.ac.uk/eva/?Home" target="_blank">European Variation Archive (EVA)</a> curated databases</p>
 									<div class="table-panel">
 										<table class='table table-striped table-bordered' id="rare-diseases-table">
@@ -202,7 +202,7 @@
 								<thead>
 						            <tr>
 						                <th rowspan="2" colspan="1">Disease</th>
-						                <th rowspan="1" colspan="7">Drug Information</th>
+						                <th rowspan="1" colspan="6">Drug Information</th>
 						                <th rowspan="1" colspan="2">Gene-Drug Evidence</th>
 						                <th rowspan="2" colspan="1">Evidence source</th>
 						            </tr>
@@ -214,7 +214,7 @@
 						                <th>Type</th>
 						                <th>Mechanism of Action</th>
 						                <th>Activity</th>
-						                <th>Clinical Indications</th>
+						                <!-- <th>Clinical Indications</th> -->
 
 						                <!-- Gene-Drug evidence -->
 						                <!-- <th>Target name</th> -->

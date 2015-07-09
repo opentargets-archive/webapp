@@ -6,7 +6,7 @@ var app = express();
 app
     .use(serveStatic(__dirname + "/../app"))
     .get(['/api/latest/:id', '/api/latest/*/:id'], function (req, res) {
-	var url = "http://127.0.0.1:8080" + req.originalUrl;
+	var url = "http://127.0.0.1:8008" + req.originalUrl;
 	//var url = "http://beta.targetvalidation.org/" + req.originalUrl;
 	request({
 	    uri: url,
