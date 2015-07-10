@@ -185,14 +185,14 @@ angular.module('cttvControllers')
                     });
             }
             // Orthologues
-            var ensemblApi = tnt.ensembl();
-            var orthUrl = ensemblApi.url.homologues({
-                id: resp.ensembl_gene_id
-            });
-            ensemblApi.call(orthUrl)
-                .then (function (orthResp) {
-                    var data = orthResp.body;
-                });
+            // var ensemblApi = tnt.ensembl();
+            // var orthUrl = ensemblApi.url.homologues({
+            //     id: resp.ensembl_gene_id
+            // });
+            // ensemblApi.call(orthUrl)
+            //     .then (function (orthResp) {
+            //         var data = orthResp.body;
+            //     });
             $scope.targetGeneId = resp.ensembl_gene_id;
 
 
