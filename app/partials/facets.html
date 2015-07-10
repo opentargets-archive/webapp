@@ -1,4 +1,5 @@
 <div class="cttv-facets">
+
     <!-- User selections -->
     <div ng-show="selectedFilters.length>0" class="cttv-facets-selected-summary">
         <h4>Your filters</h4>
@@ -31,7 +32,7 @@
                         ng-checked="bucket.selected"
                         ng-disabled="!bucket.enabled"
                         ng-click="bucket.toggle()" >
-                    {{bucket.label}} <span class="text-lowlight small">({{bucket.count}})</span>
+                    {{bucket.label}} <span class="text-lowlight small">({{bucket.count | metricPrefix:1}})</span>
                 </label>
             </div>
 

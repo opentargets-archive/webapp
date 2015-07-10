@@ -1157,6 +1157,7 @@ angular.module('cttvDirectives', [])
     /**
      * This directive exposes the page scroll, so it can for example
      * be used to create nav bars that become sticky as the user scrolls the page
+     * @param scroll-position - the name of the variable to hold the scroll amount
      * Example:
      *  <div sticky-scroller scroll-position="scroll" ng-class="scroll>80 ? 'fixed' : ''">
      *      Hello
@@ -1167,7 +1168,6 @@ angular.module('cttvDirectives', [])
             restrict: 'EA',
             scope: {
                 scroll: '=scrollPosition',
-                //scrollY: '_$window.scrollY'
             },
             link: function(scope, element, attrs) {
                 var windowEl = angular.element($window);
@@ -1177,12 +1177,6 @@ angular.module('cttvDirectives', [])
                 }
                 windowEl.on('scroll', scope.$apply.bind(scope, handler));
                 handler();
-                // scope.$watch(function(){return angular.element($window)[0].scrollY}, function(newValue,oldValue){
-                //     scope.scrollY = newValue;
-                //     $log.log("scrollY: ");
-                //     $log.log(scope.scrollY);
-                // });
-
             }
         };
     }])
