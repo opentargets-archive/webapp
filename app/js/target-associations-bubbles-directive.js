@@ -26,7 +26,7 @@ angular.module('cttvDirectives')
 		var datatypesChangesCounter = 0;
 		// Data types changes
 		scope.$watch(function () { return attrs.datatypes; }, function (dts) {
-            //var dts = JSON.parse(attrs.datatypes);
+            var dts = JSON.parse(attrs.datatypes);
             var opts = {
                 gene: attrs.target,
                 datastructure: "tree",
