@@ -914,3 +914,7 @@ table.matrix-table thead > tr > th:last-child {
     content: "Profile";
 }
  */
+
+ .fixed {
+    position: fixed;
+ }
