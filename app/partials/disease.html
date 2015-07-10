@@ -1,7 +1,6 @@
 <div>
     <view-title>{{'Disease profile: '+disease.label}}</view-title>
-    <h3>{{disease.label}}</h3>
-    <p class="small"><a href="#/disease/{{disease.efo}}/associations">View associations</a></p>
+    <h3 class="cttv-content-header">{{disease.label}}<br /><small><a href="/disease/{{disease.efo}}/associations"><i class="fa fa-arrow-circle-right fa-lg"></i> View associations</a></small></h3>
 
     <accordion close-others="false">
 
@@ -17,9 +16,10 @@
             </ul>
         </accordion-group>
 
-        <accordion-group heading="Disease Context" is-open="true">
+        <accordion-group heading="Disease Classification" is-open="true">
             <tabset>
                 <tab heading="Graph">
+                    <p class="cttv-section-intro">Graph showing the diseases related with {{disease.label}}. Click on any disease to get more information about it and its associated targets</p>
                     <cttv-efo-graph efo="{{disease}}" width=1140></cttv-efo-graph>
                 </tab>
                 <tab heading="Text">
