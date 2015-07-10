@@ -465,7 +465,7 @@ angular.module('cttvDirectives', [])
                 dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model" }), "association_score")||0;
                 var row = [];
                 var geneLoc = "";
-                var geneDiseaseLoc = "#/evidence/" + data[i].gene_id + "/" + target;
+                var geneDiseaseLoc = "/evidence/" + data[i].gene_id + "/" + target;
                 row.push("<a href='" + geneDiseaseLoc + "'>" + data[i].label + "</a>");
                 // Ensembl ID
                 row.push(data[i].gene_id);
@@ -1180,6 +1180,3 @@ angular.module('cttvDirectives', [])
             }
         };
     }])
-
-
-
