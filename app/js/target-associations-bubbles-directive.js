@@ -13,6 +13,7 @@ angular.module('cttvDirectives')
 	    },
 
 	    link: function (scope, elem, attrs) {
+
 		// event receiver on focus
 		addEventListener('bubblesViewFocus', function (e) {
 		    // TODO: This is effectively clicking in the nav bar
@@ -55,6 +56,7 @@ angular.module('cttvDirectives')
 
 		// Highlight changes
 		scope.$watch(function () { return attrs.diseaseIsSelected }, function () {
+
 		    if (ga && attrs.highlight) {
 			var efo = JSON.parse(attrs.highlight);
 
@@ -122,6 +124,7 @@ angular.module('cttvDirectives')
 		function setView () {
 		    ////// Bubbles View
 		    // viewport Size
+
 		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 

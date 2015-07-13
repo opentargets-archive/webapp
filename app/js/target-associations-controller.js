@@ -209,17 +209,17 @@ angular.module('cttvControllers')
 	    $scope.focusEFO = currentFocus;
 	};
 
-    $scope.bubblesSelected = function () {
-        $(".cttv-nav").show();
-    };
-
-    $scope.treeSelected = function () {
-        $(".cttv-nav").hide();
-    };
-
-    $scope.tableSelected = function () {
-        $(".cttv-nav").hide();
-    }
+    // $scope.bubblesSelected = function () {
+    //     $(".cttv-nav").show();
+    // };
+    //
+    // $scope.treeSelected = function () {
+    //     $(".cttv-nav").show();
+    // };
+    //
+    // $scope.tableSelected = function () {
+    //     $(".cttv-nav").hide();
+    // }
 
 	$scope.toggleNavigation = function () {
 	    for (var ta in $scope.tagroup.tas) {
