@@ -15,6 +15,9 @@ c.cttv_clinvar = function (resp) {
         if (this_snp.evidence === undefined) {
             continue;
         }
+        if (this_snp.evidence.evidence_chain.length < 2) {
+            continue;
+        }
         var this_disease = resp.body.data[i].biological_object;
         var this_target = resp.body.data[i].biological_subject;
         var snp_name = this_snp.evidence.evidence_chain[1].biological_subject.properties.experiment_specific.rsId;
