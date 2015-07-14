@@ -8,8 +8,12 @@
 
     <div class="row">
 
+        <!-- <div class="col-md-3">
+            <cttv-facets></cttv-facets>
+        </div> -->
+
         <div class="col-md-2 cttv-facet">
-            <accordion>
+            <!-- <accordion>
                 <accordion-group is-open="true">
                     <accordion-heading>
                         <span ng-click="toggleDataTypes()">Data types</span>
@@ -20,14 +24,12 @@
                             value="{{dataType.name}}"
                             ng-click="filterDataType(dataType)"
                             ng-checked="dataType.selected">
-                            <!-- ng-checked="currentDataTypes.indexOf(dataType) > -1">
-                            {{dataType.name | clearUnderscores | upperCaseFirst}} ({{dataType.diseases}})-->
-                            <!-- <small>{{dataType.labelFull}} <span>({{dataType.diseases}})</span></small> -->
                             <small>{{dataType.labelFull}}</small>
                         </label><br />
                     </div>
                 </accordion-group>
-            </accordion>
+            </accordion> -->
+            <cttv-facets></cttv-facets>
 
             <accordion>
                 <div class="cttv-nav">

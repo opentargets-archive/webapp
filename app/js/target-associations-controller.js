@@ -1,4 +1,3 @@
-'use strict';
 
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
@@ -8,12 +7,31 @@ angular.module('cttvControllers')
  * Controller for the target associations page
  * It loads a list of associations for the given search
  */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', function ($scope, $location, $log, cttvUtils, cttvAPIservice) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService) {
+        'use strict';
+
 	$log.log('targetAssociationsCtrl()');
+
 	var q = $location.path().split('/')[2];
 	$scope.search = {
 	    query : q
 	};
+
+    // Set filters
+    cttvFiltersService.pageFacetsStack([
+        cttvFiltersService.facetTypes.DATATYPES
+    ]);
+
+    var filters = cttvFiltersService.parseURL();
+    var opts = cttvAPIservice.addFacetsOptions(filters, {});
+
+    // Set up a listener for the URL changes and
+    // when the search change, get new data
+    $scope.$on('$routeUpdate', function(){
+        $log.log("onRouteUpdate");
+        $scope.filterDataTypes (cttvFiltersService.parseURL());
+    });
+
 
 	// given a target id, get the name
 	/*var api = cttvApi();
@@ -26,16 +44,16 @@ angular.module('cttvControllers')
 	*/
 
     // get gene specific info
-    cttvAPIservice.getGene( {
-            gene_id:q
-        } ).
-        then(
-            function(resp) {
-                $scope.search.label = resp.body.approved_symbol;
-                $scope.search.filename = resp.body.approved_symbol.split(" ").join("_");
-            },
-            cttvAPIservice.defaultErrorHandler
-        );
+    // cttvAPIservice.getGene( {
+    //         gene_id:q
+    //     } ).
+    //     then(
+    //         function(resp) {
+    //             $scope.search.label = resp.body.approved_symbol;
+    //             $scope.search.filename = resp.body.approved_symbol.split(" ").join("_");
+    //         },
+    //         cttvAPIservice.defaultErrorHandler
+    //     );
 
 
 
@@ -81,19 +99,36 @@ angular.module('cttvControllers')
         }
     ];
 
-	var currentDataTypes = {};
-	for (var i=0; i<$scope.dataTypes.length; i++) {
-	    if ($scope.dataTypes[i].selected) {
-		var name = $scope.dataTypes[i].name;
-		var label = $scope.dataTypes[i].label;
-		currentDataTypes[name] = label;
-	    }
-	}
-	$scope.currentDataTypes = currentDataTypes;
-
 	$scope.toggleDataTypes = function () {
 	    $scope.toggleNavigation();
 	};
+
+    $scope.filterDataTypes = function (filters) {
+        var currDatatypes = {};
+        if (!Object.keys(filters).length) {
+            for (var k=0; k<$scope.dataTypes.length; k++) {
+                currDatatypes[$scope.dataTypes[k].name] = $scope.dataTypes[k].label;
+            }
+        } else {
+            var filterDatatypes = filters.datatypes;
+            for (var i=0; i<filterDatatypes.length; i++) {
+                var dt = filterDatatypes[i];
+                for (var j=0; j<$scope.dataTypes.length; j++) {
+                    var thisDT = $scope.dataTypes[j];
+                    if (thisDT.name === dt) {
+                        currDatatypes[thisDT.name] = thisDT.label;
+                        break;
+                    }
+                }
+            }
+        }
+        $scope.currentDataTypes = currDatatypes;
+    };
+    $scope.filterDataTypes(filters);
+
+    $scope.updateFacets = function (facets) {
+        cttvFiltersService.updateFacets(facets, "unique_disease_count");
+    };
 
 	$scope.filterDataType = function (dataType) {
 	    var currentDataTypes = {};
@@ -138,11 +173,13 @@ angular.module('cttvControllers')
 	var allDiseases = [];
 	var includedDiseases = [];
 	$scope.setDiseasesInDatatypes = function () {
-	    cttvAPIservice.getAssociations ({
-		gene: $scope.search.query,
-		datastructure: "tree"
+        cttvAPIservice.getAssociations ({
+            gene: $scope.search.query,
+            datastructure: "tree"
 	    })
 		.then (function (resp) {
+            cttvFiltersService.updateFacets(resp.body.facets, "unique_disease_count");
+
 		    var data = resp.body.data;
 		    var dummy = geneAssociations()
 			.data(data);

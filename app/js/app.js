@@ -29,7 +29,8 @@ angular.module('cttvApp', [
             }).
     	    when('/target/:id/associations', {
                 templateUrl: 'partials/target-associations.html',
-                controller: 'targetAssociationsCtrl'
+                controller: 'targetAssociationsCtrl',
+                reloadOnSearch: false
     	    }).
     	    when('/disease/:id/associations', {
                 templateUrl: 'partials/disease-associations.html',

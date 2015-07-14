@@ -27,7 +27,7 @@ angular.module('cttvDirectives')
 		var datatypesChangesCounter = 0;
 		// Data types changes
 		scope.$watch(function () { return attrs.datatypes; }, function (dts) {
-            var dts = JSON.parse(attrs.datatypes);
+            dts = JSON.parse(attrs.datatypes);
             var opts = {
                 gene: attrs.target,
                 datastructure: "tree",
@@ -35,10 +35,12 @@ angular.module('cttvDirectives')
             if (!_.isEmpty (dts)) {
                 opts.filterbydatatype = _.keys(dts);
             }
+
             if (datatypesChangesCounter>0) {
                 if (ga) {
                     cttvAPIservice.getAssociations (opts)
                         .then (function (resp) {
+                            scope.$parent.updateFacets(resp.body.facets);
                             var data = resp.body.data;
                             if (_.isEmpty(data)) {
                                 data.association_score = 0.01;
@@ -55,7 +57,7 @@ angular.module('cttvDirectives')
 		});
 
 		// Highlight changes
-		scope.$watch(function () { return attrs.diseaseIsSelected }, function () {
+		scope.$watch(function () { return attrs.diseaseIsSelected; }, function () {
 
 		    if (ga && attrs.highlight) {
 			var efo = JSON.parse(attrs.highlight);
