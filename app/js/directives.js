@@ -1,4 +1,3 @@
-'use strict';
 
 /* Directives */
 angular.module('cttvDirectives', [])
@@ -9,6 +8,7 @@ angular.module('cttvDirectives', [])
      * Matrix (heatmap) view for target associations
      */
     .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile) {
+        'use strict';
 
         var hasDatatype = function (myDatatype, datatypes) {
             for (var i=0; i<datatypes.length; i++) {
@@ -18,7 +18,7 @@ angular.module('cttvDirectives', [])
                 }
             }
             return false;
-        }
+        };
 
 
         var cols = [
@@ -42,7 +42,12 @@ angular.module('cttvDirectives', [])
         var setupTable = function(table, filename){
             return $(table).DataTable( cttvUtils.setTableToolsParams({
                         //"data": newData,
-                        "columns": (function(){var a=[];for(var i=0; i<cols.length; i++){a.push({ "title": "<div><span title='"+cols[i]+"'>"+cols[i]+"</span></div>" })};return a;})(),
+                        "columns": (function(){
+                            var a=[];
+                            for(var i=0; i<cols.length; i++){
+                                a.push({ "title": "<div><span title='"+cols[i]+"'>"+cols[i]+"</span></div>" });}
+                                return a;
+                            })(),
                         "columnDefs" : [
                             {
                                 "targets" : [1,2],
@@ -143,6 +148,27 @@ angular.module('cttvDirectives', [])
                             $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
                             $log.log(resp);
                             var newData = [];
+
+                            // Iterate
+                            var iterateeEFO = function (str, ta) {
+                                if (str === "") {
+                                    str = ta.efo_code;
+                                } else {
+                                    str += "," + ta.efo_code;
+                                }
+                                return str;
+
+                            };
+                            var iterateeLabel = function (str, ta) {
+                                if (str === "") {
+                                    str = ta.label;
+                                } else {
+                                    str += ", " + ta.label;
+                                }
+                                return str;
+                            };
+
+
                             for (var i=0; i<resp.data.length; i++) {
                                 var data = resp.data[i];
                                 if (data.efo_code === "cttv_disease") {
@@ -165,7 +191,8 @@ angular.module('cttvDirectives', [])
                                 row.push(data.efo_code);
 
                                 // TherapeuticArea EFO (hidden)
-                                row.push("EFO_0000616"); // Neoplasm
+                                var taStr = _.reduce(data.therapeutic_area, iterateeEFO, "");
+                                row.push(taStr); // Neoplasm
 
                                 // Association score
                                 row.push( getColorStyleString( data.association_score, geneDiseaseLoc ) );
@@ -182,7 +209,7 @@ angular.module('cttvDirectives', [])
                                 // Animal model
                                 row.push( getColorStyleString( datatypes.animal_model, geneDiseaseLoc + "?sec=animal_models") );
                                 // Therapeutic area
-                                row.push(data.therapeutic_area || "");
+                                row.push(_.reduce(data.therapeutic_area, iterateeLabel, ""));
 
                                 newData.push(row);
                             }
@@ -282,6 +309,8 @@ angular.module('cttvDirectives', [])
      *
      */
     .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+    'use strict';
+
     var gat;
     return {
         restrict: 'E',
@@ -392,6 +421,7 @@ angular.module('cttvDirectives', [])
      *   This is useful in conjunction with a spinner where you can have ng-show="loading"
      */
     .directive('cttvDiseaseAssociations', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts) {
+        'use strict';
 
         var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
@@ -593,6 +623,8 @@ angular.module('cttvDirectives', [])
      *
      */
     .directive('pmcCitationList', function () {
+    'use strict';
+
     var pmc = require ('biojs-vis-pmccitation');
         return {
             restrict: 'E',
@@ -660,12 +692,14 @@ angular.module('cttvDirectives', [])
      *
      */
      .directive('cttvTargetGenomeBrowser', ['cttvAPIservice', function (cttvAPIservice) {
+         'use strict';
+
          return {
              restrict: 'E',
              link: function (scope, elem, attrs) {
                  var efo = attrs.efo;
                  var w = (attrs.width || elem[0].parentNode.offsetWidth) - 40;
-                 scope.$watch(function () {return attrs.target }, function (target) {
+                 scope.$watch(function () {return attrs.target; }, function (target) {
                      if (target === "") {
                          return;
                      }
@@ -691,6 +725,8 @@ angular.module('cttvDirectives', [])
      }])
 
      .directive('cttvTargetGeneTree', [function () {
+         'use strict';
+
          return {
              restrict: 'E',
              link: function (scope, elem, attrs) {
@@ -748,6 +784,8 @@ angular.module('cttvDirectives', [])
      *
      */
     .directive('ebiExpressionAtlasBaselineSummary', ['cttvAPIservice', function (cttvAPIservice) {
+        'use strict';
+
         return {
             restrict: 'E',
             link: function (scope, elem, attrs) {
@@ -790,6 +828,8 @@ angular.module('cttvDirectives', [])
      *
      */
     .directive('cttvSearchSuggestions', function(){
+        'use strict';
+
         return {
             restrict:'EA',
             templateUrl: 'partials/search-suggestions.html',
@@ -806,6 +846,8 @@ angular.module('cttvDirectives', [])
      * Flower graph
      */
     .directive('cttvGeneDiseaseAssociation', function(){
+        'use strict';
+
         return {
             restrict:'EA',
             //transclude: 'true',
@@ -819,11 +861,11 @@ angular.module('cttvDirectives', [])
                 scope.render = function(data){
                     if(data.length>0){
                         var flower = flowerView()
-                    .values(data)
-                    .diagonal(200)
+                        .values(data)
+                        .diagonal(200);
                         flower(elem[0]);
                     }
-                }
+                };
 
                 // Watch for data changes
                 scope.$watch(
@@ -834,7 +876,7 @@ angular.module('cttvDirectives', [])
                     //true
                 );
             }
-        }
+        };
     })
 
 
@@ -845,6 +887,8 @@ angular.module('cttvDirectives', [])
      * size: size of the spinner icon; values 1-6; 1 is default
      */
     .directive('cttvProgressSpinner', function(){
+        'use strict';
+
         return {
             restrict: 'EA',
             template: '<i class="fa fa-circle-o-notch fa-spin"></i>',
@@ -853,7 +897,7 @@ angular.module('cttvDirectives', [])
                     elem.addClass("fa-"+attrs.size+"x");
                 }
             }
-        }
+        };
     })
 
 
@@ -865,6 +909,8 @@ angular.module('cttvDirectives', [])
      * size: as per cttvProgressSpinner; Default is 3.
      */
     .directive('cttvPageProgressSpinner', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+        'use strict';
+
         return {
             restrict: 'EA',
             template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner class="text-lowlight fa-{{size}}x"></span></div>',
@@ -874,11 +920,11 @@ angular.module('cttvDirectives', [])
             link: function(scope, elem, attrs){
                 scope.size = scope.size ? scope.size : '3';
 
-                scope.$watch(function(){return cttvAPIservice.activeRequests}, function(newValue,oldValue){
+                scope.$watch(function(){return cttvAPIservice.activeRequests;}, function(newValue,oldValue){
                     scope.isloading = newValue>0;
                 });
             }
-        }
+        };
     }])
 
 
@@ -887,6 +933,8 @@ angular.module('cttvDirectives', [])
      *  Esssentially just a wrapper for the table tag, defined in hte template
      */
     .directive('cttvMatrixTable', function(){
+        'use strict';
+
         return {
             restrict: 'EA',
             template: '<table class="table matrix-table"></table>',
@@ -906,7 +954,7 @@ angular.module('cttvDirectives', [])
                 });
                 */
             }
-        }
+        };
     })
 
 
@@ -915,6 +963,8 @@ angular.module('cttvDirectives', [])
      *
      */
     .directive('cttvMatrixLegend', function(){
+        'use strict';
+
         var template = '<div class="matrix-legend matrix-legend-layout-{{layout}} clearfix">'
 
                         // label above (v layout) or left (h layout) of legend
@@ -956,7 +1006,7 @@ angular.module('cttvDirectives', [])
                 // });
 
             //}
-        }
+        };
     })
 
 
@@ -974,6 +1024,7 @@ angular.module('cttvDirectives', [])
      *   This is useful in conjunction with a spinner where you can have ng-show="loading"
      */
     .directive('cttvHpaTissueExpression', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
+        'use strict';
 
         var colorScale = d3.scale.linear()
                         .domain([1,3])
@@ -993,19 +1044,19 @@ angular.module('cttvDirectives', [])
         var getColorStyleString = function(value){
             var span="";
 
-            if(value==0){
+            if(value===0){
                 span = "<span class='value-0' title='Not expressed'>"+value+"</span>";
             } else if(value>0){
                 var c = colorScale(value);
                 var l = labelScale(value);
                 span = "<span style='color: "+c+"; background: "+c+";' title='Expression: "+l+"'>"+value+"</span>";
             } else {
-                span = "<span class='no-data' title='No data'></span>"  // quick hack: where there's no data, don't put anything so the sorting works better
+                span = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
             }
 
 
             return span;
-        }
+        };
 
         var cols = [
             "Tissue",
@@ -1075,7 +1126,13 @@ angular.module('cttvDirectives', [])
                                         var table = elem.children().eq(0)[0];
                                         var dtable = $(table).dataTable(cttvUtils.setTableToolsParams({
                                             "data" : newData,
-                                            "columns": (function(){var a=[];for(var i=0; i<cols.length; i++){a.push({ "title": "<div><span title='"+cols[i]+"'>"+cols[i]+"</span></div>" })};return a;})(),
+                                            "columns": (function(){
+                                                var a=[];
+                                                for(var i=0; i<cols.length; i++){
+                                                    a.push({ "title": "<div><span title='"+cols[i]+"'>"+cols[i]+"</span></div>" });
+                                                }
+                                                return a;
+                                            })(),
                                             "order" : [[0, "asc"]],
                                             "autoWidth": false,
                                             "ordering": true,
@@ -1101,7 +1158,7 @@ angular.module('cttvDirectives', [])
 
                                     // error
                                     cttvAPIservice.defaultErrorHandler
-                                )
+                                );
                         }
                     }
 
@@ -1118,6 +1175,7 @@ angular.module('cttvDirectives', [])
      * This contains accordion etc
      */
     .directive('cttvFacets', ['$log', 'cttvAPIservice', 'cttvFiltersService' , function ($log, cttvAPIservice, cttvFiltersService) {
+        'use strict';
 
         return {
 
@@ -1156,6 +1214,7 @@ angular.module('cttvDirectives', [])
      * Checkboxes can also have nested checkboxes...
      */
     .directive('cttvCheckboxFacet', ['$log', 'cttvAPIservice', 'cttvFiltersService' , function ($log, cttvAPIservice, cttvFiltersService) {
+        'use strict';
 
         return {
 
@@ -1187,6 +1246,8 @@ angular.module('cttvDirectives', [])
      *  </div>
      */
     .directive('stickyScroller', ['$log', '$window', function ($log, $window) {
+        'use strict';
+
         return {
             restrict: 'EA',
             scope: {
@@ -1197,9 +1258,9 @@ angular.module('cttvDirectives', [])
                 var handler = function() {
                     scope.scroll = windowEl[0].scrollY;
                     $log.log(scope.scroll);
-                }
+                };
                 windowEl.on('scroll', scope.$apply.bind(scope, handler));
                 handler();
             }
         };
-    }])
+    }]);
