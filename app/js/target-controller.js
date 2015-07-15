@@ -250,7 +250,6 @@ angular.module('cttvControllers')
 
             $http.get("/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search/query=" + pmidsLinks + "&format=json")
                 .then (function (resp) {
-                    console.warn (resp);
                     $scope.citations.count = resp.data.hitCount;
                     $scope.citations.europepmcLink = "//europepmc.org/search?query=" + pmidsLinks;
                     var citations = resp.data.resultList.result;
