@@ -204,25 +204,31 @@ angular.module('cttvControllers')
 
             // Pathways
             var pathways = resp.reactome;
-            var pathwaysArr = [];
+            var reactomePathways = [];
 
             // Get the new identifiers
             var promises = [];
+            var pathwayArr = [];
             for (var pathway in pathways) {
-                var p = $http.get("http://www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/" + pathway + "/stableIdentifier");
+                var p = $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/" + pathway + "/stableIdentifier");
                 promises.push(p);
+                pathwayArr.push(pathways[pathway]["pathway name"]);
             }
-            $q.all(function (ps) {
-                console.log(ps);
-            });
-
-            for (var p in pathways) {
-                pathwaysArr.push({
-                    "id" : p,
-                    "name"   : pathways[p]["pathway name"]
+            $q
+                .all(promises)
+                .then(function (vals) {
+                    for (var i=0; i<vals.length; i++) {
+                        var val = vals[i].data;
+                        var idRaw = val.split("\t")[1];
+                        var id = idRaw.split('.')[0];
+                        reactomePathways.push({
+                            "id": id,
+                            "name" : pathwayArr[i]
+                        });
+                    }
                 });
-            }
-            $scope.pathways = pathwaysArr;
+
+            $scope.pathways = reactomePathways;
 
             // Drugs
             var drugs = resp.drugbank;
