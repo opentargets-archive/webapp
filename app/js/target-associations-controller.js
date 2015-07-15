@@ -33,27 +33,19 @@ angular.module('cttvControllers')
     });
 
 
-	// given a target id, get the name
-	/*var api = cttvApi();
-	var url = api.url.gene({'gene_id': q});
-	$log.log(url);
-	api.call(url)
-	    .then(function (resp) {
-		$scope.search.label = resp.body.approved_symbol;
-	    });
-	*/
+
 
     // get gene specific info
-    // cttvAPIservice.getGene( {
-    //         gene_id:q
-    //     } ).
-    //     then(
-    //         function(resp) {
-    //             $scope.search.label = resp.body.approved_symbol;
-    //             $scope.search.filename = resp.body.approved_symbol.split(" ").join("_");
-    //         },
-    //         cttvAPIservice.defaultErrorHandler
-    //     );
+    cttvAPIservice.getGene( {
+            gene_id:q
+        } ).
+        then(
+            function(resp) {
+                $scope.search.label = resp.body.approved_symbol;
+                $scope.search.filename = resp.body.approved_symbol.split(" ").join("_");
+            },
+            cttvAPIservice.defaultErrorHandler
+        );
 
 
 
