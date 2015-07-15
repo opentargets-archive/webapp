@@ -129,8 +129,24 @@
             </accordion-group>
 
             <accordion-group heading="Bibliography" is-open="false">
-                <p>Related citations from UniProt</p>
-                <pmc-citation-list pmids="{{pmids}}"></pmc-citation-list>
+                <p class="cttv-section-intro">There are {{citations.count}} citations for {{target.symbol}} in Uniprot. <span ng-if="citations.count>25">Only the first 25 are shown below.</span> To see all the citations in the EuropePMC portal, follow this <a target=_blank href="{{citations.europepmcLink}}">link</a></p>
+                <div class="epmc_Citation_container" ng-repeat="citation in citations.all">
+                    <div class="epmc_Citation_title">
+                        <a class="epmc_citation_link" target=_blank href="//europepmc.org/abstract/med/{{citation.pmid}}">{{citation.title}}</a>
+                    </div>
+                    <div class="epmc_Citation_subdata">
+                        <div class="epmc_Citation_authors">
+                            <a class="empc_citation_link" target=_blank href='//europepmc.org/search?query=AUTH:"{{author}}"&page=1' ng-repeat="author in citation.authors">
+                                {{author}}
+                            </a>
+                        </div>
+                        <div class="epmc_Citation_journal">
+                            <a href='//europepmc.org/search?query=JOURNAL:"{{citation.journalTitle}}"' class="epmc_Citation_link">{{citation.journalTitle}}</a> <span>[{{citation.pubYear}} {{citation.journalVolume}}<span ng-if="citation.issue">({{citation.issue}})</span>:{{citation.pageInfo}}]</span>
+                        </div>
+                        <div class="epmc_Citation_source">PMID:{{citation.pmid}} <span ng-if="citation.pmcid">PMCID:{{citation.pmcid}}</span></div>
+
+                    </div>
+                </div>
             </accordion-group>
 
         </accordion>

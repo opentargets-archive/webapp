@@ -234,12 +234,43 @@ angular.module('cttvControllers')
             var drugs = resp.drugbank;
             $scope.drugs = drugs;
 
+            // Bibliography (2)
+            var bibliography = _.filter(resp.dbxrefs, function (t) {
+                return t.match(/^PubMed/);
+            });
+            var cleanBibliography = _.map (bibliography, function (t) {
+                return t.substring(7, t.lenght);
+            });
+            //var bibliographyStr = cleanBibliography.join (",");
+            var pmidsLinks = (_.map(cleanBibliography, function (p) {
+                return "EXT_ID:" + p;
+            })).join (" OR ");
+            console.log(pmidsLinks);
+            $scope.citations = {};
+
+            $http.get("/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search/query=" + pmidsLinks + "&format=json")
+                .then (function (resp) {
+                    console.warn (resp);
+                    $scope.citations.count = resp.data.hitCount;
+                    $scope.citations.europepmcLink = "//europepmc.org/search?query=" + pmidsLinks;
+                    var citations = resp.data.resultList.result;
+                    for (var i=0; i<citations.length; i++) {
+                        var authorStr = citations[i].authorString;
+                        if (authorStr[authorStr.length-1] === ".") {
+                            authorStr = authorStr.slice(0,-1);
+                        }
+                        var authors = authorStr.split(', ');
+                        citations[i].authors = authors;
+                    }
+                    $scope.citations.all = resp.data.resultList.result;
+                });
+
             // Bibliography
-            var bibliography = _.filter(resp.dbxrefs, function (t) {return t.match(/^PubMed/);});
-            var cleanBibliography = _.map(bibliography, function (t) {return t.substring(7, t.length);});
-            var bibliographyStr = cleanBibliography.join (",");
-            $scope.pmids = bibliographyStr;
-            $scope.pmidsLinks = (_.map(cleanBibliography,function (p) {return "EXT_ID:" + p;})).join(" OR ");
+            // var bibliography = _.filter(resp.dbxrefs, function (t) {return t.match(/^PubMed/);});
+            // var cleanBibliography = _.map(bibliography, function (t) {return t.substring(7, t.length);});
+            // var bibliographyStr = cleanBibliography.join (",");
+            // $scope.pmids = bibliographyStr;
+            // $scope.pmidsLinks = (_.map(cleanBibliography,function (p) {return "EXT_ID:" + p;})).join(" OR ");
 
         },
         // error handler
