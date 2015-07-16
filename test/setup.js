@@ -1,5 +1,5 @@
-window.assert = chai.assert;
-mocha.setup('bdd')
+//window.assert = chai.assert;
+//mocha.setup('bdd')
 // sinon.assert.expose(assert,{prefix: ""});
 
 // beforeEach(function() {
