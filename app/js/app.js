@@ -1,5 +1,3 @@
-'use strict';
-
 
 
 angular.module('cttvApp', [
@@ -16,6 +14,8 @@ angular.module('cttvApp', [
 
 .config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
+        'use strict';
+
         $routeProvider.
             when('/intro', {
                 templateUrl: 'partials/intro.html'

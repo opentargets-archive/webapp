@@ -811,7 +811,7 @@ angular.module('cttvDirectives', [])
 
                     // });
 
-                    var instance = new Biojs.AtlasHeatmap ({
+                    var instance = AtlasHeatmapModule.build ({
                         gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa',
                         //gxaBaseUrl : '/gxa',
                         params:'geneQuery=' + target + "&species=homo%20sapiens",
