@@ -33,10 +33,6 @@ angular.module('cttvServices').
         var filters = [];
 
 
-        // this holds all the FilterCollections (from parsed facets from the API)
-        // mapped by facet key for easier operations
-        // var facetsdata = {};
-
 
         // array of user selected options, aka "Your filters"
         // these are (could be? should be?) FilterCollections i think...
@@ -46,10 +42,6 @@ angular.module('cttvServices').
         // keeps the count of all selected filters
         // controllers will watch this value through the getSelected() function
         var selectedCount = 0;
-
-
-
-        // var active = [];
 
 
 
@@ -103,12 +95,13 @@ angular.module('cttvServices').
         }
 
 
+        //var parsePathwayFacets = function(){}
 
         // Takes API data for a facet (i.e. a collection of filters) and returns the config object to create that collection
         var parseFacetData = function(collection, data){
 
             var config={
-                key: collection,
+                key: collection,    // this is the type, really...
                 label: cttvDictionary[collection.toUpperCase()] || collection,
             };
 
@@ -457,18 +450,6 @@ angular.module('cttvServices').
 
 
         /**
-         * Remove all existing filters from the list.
-         * Reference to the filters array remains intact
-
-        cttvFiltersService.resetFilters = function(){
-            $log.log("resetFilters()");
-            facetsdata = {};
-            updateSelected();
-        };
-        */
-
-
-        /**
          * Parses the search of the URL
          * and returns an API-friendly config object with the filter options
          */
@@ -489,61 +470,6 @@ angular.module('cttvServices').
 
             return raw;
         }
-
-
-
-        /**
-         * This should be called when we first get data, which is unfiltered
-
-        cttvFiltersService.initFilters = function(facets){
-            $log.log("initFilters()");
-
-            cttvFiltersService.resetFilters();
-
-            if(facets){
-                // set the filters based on supplied data, probably from the API...
-
-            } else {
-                // set the defalut filters, which at the moment are datatypes
-                cttvFiltersService.addCollection({
-                    key: cttvDictionary.DATATYPES.toLowerCase(),
-                    label: cttvDictionary.DATATYPES,
-                    filters: datatypes.map( function(obj){
-                        obj.label = cttvDictionary[obj.key.toUpperCase()] || "";
-                        return obj;
-                    })
-                });
-
-            }
-
-        };
-*/
-
-
-
-        /**
-         * Parse the facets object from the API
-         *
-        cttvFiltersService.initFacets=function(facets){
-            $log.debug("initFacets()");
-            // $log.debug(facets);
-
-            // loop thorugh the facets
-            // we probably don't want to do anything with datatypes I guess...
-            // resetFacets();
-            //  this.resetFilters();
-
-            // 1: parse the filters
-            for (var collection in facets) {
-                if (facets.hasOwnProperty(collection)) {
-                    cttvFiltersService.addCollection( parseFacetData(collection, facets[collection]) );
-                }
-            }
-
-            // 2: parse/init user selections and defaluts
-            updateSelected();
-        }
-        */
 
 
 

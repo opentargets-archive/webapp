@@ -16,7 +16,7 @@
     <!-- Facets and filters -->
     <h4>Filter by</h4>
     <accordion close-others=false>
-        <accordion-group ng-init="status = {isOpen: true}" is-open="status.isOpen" ng-repeat="filter in filters">
+        <accordion-group ng-init="status = {isOpen: true}" is-open="status.isOpen" ng-repeat="filter in filters" ng-if="filter.filters.length>0">
             <accordion-heading class="cttv-facets-headers">
                 {{filter.label | clearUnderscores | upperCaseFirst}} <i class="pull-right text-lowlight fa" ng-class="{'fa-plus-square': !status.isOpen, 'fa-minus-square': status.isOpen}"></i>
             </accordion-heading>

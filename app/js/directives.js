@@ -1155,7 +1155,7 @@ angular.module('cttvDirectives', [])
 
 
     /**
-     * This directive exposes the page scroll, so it can for example
+     * This directive exposes the page scroll, so it can, for example,
      * be used to create nav bars that become sticky as the user scrolls the page
      * @param scroll-position - the name of the variable to hold the scroll amount
      * Example:
