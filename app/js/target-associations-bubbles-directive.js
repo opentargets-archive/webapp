@@ -48,10 +48,6 @@ angular.module('cttvDirectives')
                             ga.datatypes(dts);
                             updateView(data);
                             ga.update(data);
-                            console.warn ("THIs is called");
-                            console.log(scope);
-                            scope.$parent.$parent.$parent.showMsg = true;
-                            scope.$parent.apply();
                         },
                         cttvAPIservice.defaultErrorHandler
                     );
