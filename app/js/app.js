@@ -59,10 +59,10 @@ angular.module('cttvApp', [
                 templateUrl: 'partials/evidence.html',
                 controller: 'EvidenceCtrl'
             }).*/
-            when('/target-disease', {
-                templateUrl: 'partials/target-disease.html',
-                controller: 'TargetDiseaseCtrl'
-            }).
+            // when('/target-disease', {
+            //     templateUrl: 'partials/target-disease.html',
+            //     controller: 'TargetDiseaseCtrl'
+            // }).
             when('/release-notes', {
                 templateUrl: 'partials/release-notes.html'
             }).

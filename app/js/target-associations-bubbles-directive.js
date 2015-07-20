@@ -48,7 +48,13 @@ angular.module('cttvDirectives')
                             ga.datatypes(dts);
                             updateView(data);
                             ga.update(data);
-                        });
+                            console.warn ("THIs is called");
+                            console.log(scope);
+                            scope.$parent.$parent.$parent.showMsg = true;
+                            scope.$parent.apply();
+                        },
+                        cttvAPIservice.defaultErrorHandler
+                    );
                 } else {
                     setView();
                 }
@@ -149,37 +155,39 @@ angular.module('cttvDirectives')
 		    cttvAPIservice.getAssociations (opts)
 		    // api.call (url)
 		    	.then (function (resp) {
-			    var data = resp.body.data;
-			    if (_.isEmpty(data)) {
-				updateView ();
-				return;
-			    }
-			    // Bubbles View
+                    var data = resp.body.data;
+                    if (_.isEmpty(data)) {
+                        updateView ();
+                        return;
+                    }
 
-			    var bView = bubblesView()
-				.maxVal(1)
-				.breadcrumsClick(function (d) {
-				    var focusEvent = new CustomEvent("bubblesViewFocus", {
-					"detail" : d
-				    });
-				    this.dispatchEvent(focusEvent);
-				});
+    			    // Bubbles View
+                    var bView = bubblesView()
+                        .maxVal(1)
+                        .breadcrumsClick(function (d) {
+                            var focusEvent = new CustomEvent("bubblesViewFocus", {
+                                "detail" : d
+                            });
+                            this.dispatchEvent(focusEvent);
+                        });
 
-			    var fView = flowerView()
-				.fontsize (10)
-				.diagonal (180);
+                    var fView = flowerView()
+                        .fontsize (10)
+                        .diagonal (180);
 
-			    // setup view
-			    ga = geneAssociations()
-				.target (attrs.target)
-				.diameter (diameter)
-				.datatypes(dts);
+                    // setup view
+                    ga = geneAssociations()
+                        .target (attrs.target)
+                        .diameter (diameter)
+                        .datatypes(dts);
 
-				updateView (data);
+                    updateView (data);
 
-			    //scope.$parent.$apply();
-			    ga(bView, fView, elem[0]);
-			});
+                    //scope.$parent.$apply();
+                    ga(bView, fView, elem[0]);
+                },
+                cttvAPIservice.defaultErrorHandler
+            );
 
 		}
 

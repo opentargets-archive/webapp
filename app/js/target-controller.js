@@ -273,7 +273,6 @@ angular.module('cttvControllers')
 
         },
         // error handler
-        function(){
-        }
+        cttvAPIservice.defaultErrorHandler
     );
 }]);

@@ -113,9 +113,12 @@
                 </div>
             </div>
         </div>
-
-
         <!-- End Masthead -->
+
+    <!-- Authentication error -->
+    <alert type="danger" ng-show="showApiErrorMsg" ng-cloak>Your session has expired, reload the page to authenticate again
+        <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+    </alert>
 
         <div class="container">
             <div class="cttv-beta-ribbon">BETA</div>
