@@ -368,14 +368,14 @@ var bubblesView = function () {
 
 
         // Moving nodes
-        // circle
-        //     //.attr("class", "node")
-        //     .classed ("bubblesViewLeaf", function (d) {
-        //         return !d.children;
-        //     })
-        //     .classed ("bubblesViewRoot", function (d) {
-        //         return !d._parent;
-        //     });
+        circle
+            //.attr("class", "node")
+            .classed ("bubblesViewLeaf", function (d) {
+                return !d.children;
+            })
+            .classed ("bubblesViewRoot", function (d) {
+                return !d._parent;
+            });
             // .transition()
             // .duration(conf.duration)
             // .attr("cx", function (d) {
