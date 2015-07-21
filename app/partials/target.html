@@ -19,8 +19,8 @@
             </accordion-group>
 
             <accordion-group heading="Protein Information (from UniProt)" is-open="false">
-                <tabset>
-                    <tab heading="Text">
+                <!-- <tabset>
+                    <tab heading="Text"> -->
                         <p>ID: {{uniprot.id}}</p>
                         <p>Accessions:</p>
                         <ul>
@@ -43,10 +43,10 @@
                             <li ng-repeat="keyword in uniprot.keywords">{{keyword}}</li>
                         </ul>
                     </tab>
-                    <tab heading="Graphical">
+                    <!-- <tab heading="Graphical">
                         <div id="uniprotProteinFeatureViewer"></div>
                     </tab>
-                </tabset>
+                </tabset> -->
             </accordion-group>
 
             <accordion-group>
