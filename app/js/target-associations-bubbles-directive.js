@@ -2,7 +2,7 @@
 /* Directives */
 angular.module('cttvDirectives')
 
-    .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+    .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
         'use strict';
 	return {
 	    restrict: 'E',
@@ -159,6 +159,7 @@ angular.module('cttvDirectives')
 
     			    // Bubbles View
                     var bView = bubblesView()
+                        .useFullPath(cttvUtils.browser.name !== "IE")
                         .maxVal(1)
                         .breadcrumsClick(function (d) {
                             var focusEvent = new CustomEvent("bubblesViewFocus", {

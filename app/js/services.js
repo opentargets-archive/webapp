@@ -1,4 +1,3 @@
-'use strict';
 
 
 /* Services */
@@ -7,14 +6,57 @@ angular.module('cttvServices', []).
 
 
     /**
-     * A service to handle search in the app.
-     * This talks to the API service
+     * Some utility services.
      */
-    factory('cttvUtils', ['$log', function($log) {
-
+    factory('cttvUtils', ['$log', '$window', function($log, $window) {
+        'use strict';
 
         var cttvUtilsService = {};
 
+        /**
+         * Inspects the browser name and version and
+         * sets browser.name and browser.version properties.
+         */
+        cttvUtilsService.browser = {
+            init: function () {
+                this.name = this.searchString(this.dataBrowser) || "Other";
+                this.version = this.searchVersion(navigator.userAgent) || this.searchVersion(navigator.appVersion) || "Unknown";
+            },
+            searchString: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var dataString = data[i].string;
+                    this.versionSearchString = data[i].subString;
+
+                    if (dataString.indexOf(data[i].subString) !== -1) {
+                        return data[i].identity;
+                    }
+                }
+            },
+            searchVersion: function (dataString) {
+                var index = dataString.indexOf(this.versionSearchString);
+                if (index === -1) {
+                    return;
+                }
+
+                var rv = dataString.indexOf("rv:");
+                if (this.versionSearchString === "Trident" && rv !== -1) {
+                    return parseFloat(dataString.substring(rv + 3));
+                } else {
+                    return parseFloat(dataString.substring(index + this.versionSearchString.length + 1));
+                }
+            },
+
+            dataBrowser: [
+                {string: navigator.userAgent, subString: "Chrome", identity: "Chrome"},
+                {string: navigator.userAgent, subString: "MSIE", identity: "IE"},
+                {string: navigator.userAgent, subString: "Trident", identity: "IE"},
+                {string: navigator.userAgent, subString: "Firefox", identity: "Firefox"},
+                {string: navigator.userAgent, subString: "Safari", identity: "Safari"},
+                {string: navigator.userAgent, subString: "Opera", identity: "Opera"}
+            ]
+
+        };
+        cttvUtilsService.browser.init();
 
 
         /**
@@ -56,9 +98,9 @@ angular.module('cttvServices', []).
                             ],
                         }
                      ]
-                }
+                };
             return obj;
-        }
+        };
 
 
 
@@ -66,7 +108,7 @@ angular.module('cttvServices', []).
             BLUE_0_1 : d3.scale.linear()
                         .domain([0,1])
                         .range(["#CBDCEA", "#005299"]), // blue orig
-        }
+        };
 
 
 
@@ -74,12 +116,12 @@ angular.module('cttvServices', []).
 
             searchString : function(key, value){
 
-                var url = window.location.href.split("?");
+                var url = $window.location.href.split("?");
                 // var search = window.location.href.split('?')[1] || "";
                 url[1] = url[1] || "";
 
                 // in no args supplied, return the query string
-                if(arguments.length == 0){
+                if(arguments.length === 0){
                     return url[1];
                 }
 
@@ -94,19 +136,12 @@ angular.module('cttvServices', []).
                 search.push(key+"="+value);
                 $log.log(search);
                 url[1] = search.join("&");
-                window.location.href = url.join("?");
+                $window.location.href = url.join("?");
             }
 
-        }
+        };
 
 
 
         return cttvUtilsService;
     }]);
-
-
-
-
-
-
-

@@ -22,7 +22,8 @@ var bubblesView = function () {
             render.focus(conf.data);
         },
         maxVal : 1,
-        legendText : "<text>Current score range</text>"
+        legendText : "<text>Current score range</text>",
+        useFullPath : false
         //labelOffset : 10
     };
 
@@ -521,7 +522,7 @@ var bubblesView = function () {
                         // })
                         // When the "base" tag is present in the page, linking by name doesn't work in FF (Safari and Chrome looks good). We prepend window.location.href to get full IRI
                         // https://gist.github.com/leonderijke/c5cf7c5b2e424c0061d2
-                        .attr("xlink:href", window.location.href + "#" + getPathId(d))
+                        .attr("xlink:href", (conf.useFullPath ? window.location.href : "") + "#" + getPathId(d))
                         .attr("startOffset", "50%")
                         .text(function () {
                             if (Math.PI*d.r*k/8 < 3) {
@@ -707,6 +708,14 @@ var bubblesView = function () {
             return conf.diameter;
         }
         conf.diameter = d;
+        return this;
+    };
+
+    render.useFullPath = function (b) {
+        if (!arguments.length) {
+            return conf.useFullPath;
+        }
+        conf.useFullPath = b;
         return this;
     };
 

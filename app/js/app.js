@@ -17,7 +17,7 @@ angular.module('cttvApp', [
         'use strict';
 
         $routeProvider.
-            when('/intro', {
+            when('/', {
                 templateUrl: 'partials/intro.html'
             }).
             when('/about', {
@@ -67,7 +67,7 @@ angular.module('cttvApp', [
                 templateUrl: 'partials/release-notes.html'
             }).
             otherwise({
-                redirectTo: '/intro'
+                redirectTo: '/'
             });
 
             // function supports_history_api() {
