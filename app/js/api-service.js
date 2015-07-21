@@ -354,7 +354,7 @@ angular.module('cttvServices')
          */
         cttvAPI.defaultErrorHandler = function(error){
             console.warn("CTTV API ERROR");
-            if (error.status === 403 || error.status === 401) {
+            if (error.status === 403) {
                 //$rootScope.$emit('cttvApiError', error);
                 $rootScope.showApiErrorMsg = true;
             }
