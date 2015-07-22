@@ -1,5 +1,3 @@
-'use strict';
-
 
 
 angular.module('cttvApp', [
@@ -16,8 +14,10 @@ angular.module('cttvApp', [
 
 .config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
+        'use strict';
+
         $routeProvider.
-            when('/intro', {
+            when('/', {
                 templateUrl: 'partials/intro.html'
             }).
             when('/about', {
@@ -29,7 +29,8 @@ angular.module('cttvApp', [
             }).
     	    when('/target/:id/associations', {
                 templateUrl: 'partials/target-associations.html',
-                controller: 'targetAssociationsCtrl'
+                controller: 'targetAssociationsCtrl',
+                reloadOnSearch: false
     	    }).
     	    when('/disease/:id/associations', {
                 templateUrl: 'partials/disease-associations.html',
@@ -58,15 +59,15 @@ angular.module('cttvApp', [
                 templateUrl: 'partials/evidence.html',
                 controller: 'EvidenceCtrl'
             }).*/
-            when('/target-disease', {
-                templateUrl: 'partials/target-disease.html',
-                controller: 'TargetDiseaseCtrl'
-            }).
+            // when('/target-disease', {
+            //     templateUrl: 'partials/target-disease.html',
+            //     controller: 'TargetDiseaseCtrl'
+            // }).
             when('/release-notes', {
                 templateUrl: 'partials/release-notes.html'
             }).
             otherwise({
-                redirectTo: '/intro'
+                redirectTo: '/'
             });
 
             // function supports_history_api() {

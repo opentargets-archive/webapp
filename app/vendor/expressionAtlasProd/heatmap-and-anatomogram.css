@@ -1,48 +1,42 @@
-.svg #anatomogram {
+.gxaSvg #anatomogram {
     display:inline
 }
 
-.no-svg #anatomogram {
-    display:none
-}
-
-.heatmap-anatomogram-row {
+.gxaHeatmapAnatomogramRow {
     position: relative;
 }
 
-.heatmap-anatomogram-row:after {
+.gxaHeatmapAnatomogramRow:after {
     clear: both;
     content: ".";
     display: block;
     visibility: hidden;
 }
 
-.heatmap-position {
+.gxaHeatmapPosition {
     position: relative;
     margin-left: 270px;
     overflow: hidden;
 }
 
-.heatmap-position-widget {
+.gxaHeatmapPositionWidget {
     margin-left: 270px;
 }
 
-.aside {
+.gxaAside {
     float: left;
     /*padding: 0 20px;*/
 }
 
-.gradient-level-min {
+.gxaGradientLevelMin {
     text-align: right;
-    width: 30px;
 }
 
-.gradient-level-max {
+.gxaGradientLevelMax {
     text-align: left;
-    width: 30px;
 }
 
-.heatmap-matrix-top-left-corner {
+.gxaHeatmapMatrixTopLeftCorner {
     position: relative;
     display: table;
     height: 110px;
@@ -62,7 +56,7 @@
     margin: 5px;
 }
 
-.pvalue-tooltip-styling {
+.gxaPvalueTooltipStyling {
     padding: 2px !important;
     margin: 0px !important;
 }
@@ -85,8 +79,9 @@
     margin: 0 auto;
 }
 
-#gxaExperimentPageHeatmapCountAndLegend {
-    width: 100%;
-    max-width: 1040px;
-    z-index: 75; /* A high enough number to stay above the table when it becomes hcSticky() but low enough to be below Chosen plugin (100) */
+/* TODO: This class is used in jQuery UI - move out to a separate css file */
+#download-profiles-link .ui-button-text,
+.gxaVerticalHeaderCell .ui-button-text,
+#gene-distribution-button .ui-button-text {
+    padding: 0px !important;
 }

@@ -41,35 +41,36 @@ angular.module('cttvServices')
 
 
         var api = cttvApi()
-        .prefix("/api/latest/")
-        .appname("cttv-web-app")
-        .secret("2J23T20O31UyepRj7754pEA2osMOYfFK");
+            .prefix("/api/latest/")
+            .appname("cttv-web-app")
+            .secret("2J23T20O31UyepRj7754pEA2osMOYfFK")
+            .onError(cttvAPI.defaultErrorHandler);
 
 
 
-        var token = {
-
-            set : function(tkn){
-                clearTimeout(token._int);
-                token._int = setTimeout(token._clear, 10000); // 1 min = 60000, 10 mins = 600000
-                token._id = tkn;
-            },
-
-            get : function(){
-                return token._id;
-            },
-
-            _id : "",
-
-            _int : -1,
-
-            _clear : function(){
-                $log.log("clear "+token._id);
-                token._id = "";
-                $log.log("  '"+token._id+"'");
-            }
-
-        };
+        // var token = {
+        //
+        //     set : function(tkn){
+        //         clearTimeout(token._int);
+        //         token._int = setTimeout(token._clear, 10000); // 1 min = 60000, 10 mins = 600000
+        //         token._id = tkn;
+        //     },
+        //
+        //     get : function(){
+        //         return token._id;
+        //     },
+        //
+        //     _id : "",
+        //
+        //     _int : -1,
+        //
+        //     _clear : function(){
+        //         $log.log("clear "+token._id);
+        //         token._id = "";
+        //         $log.log("  '"+token._id+"'");
+        //     }
+        //
+        // };
 
 
 
@@ -114,13 +115,13 @@ angular.module('cttvServices')
 
             var resp = api.call(url, done);
 
-
-
             return promise;
             //return resp.then(handleSuccess, handleError);
 
 
             function done(error, response){
+                // console.log("RESPONSE");
+                // console.log(response);
                 resolvePromise(response);
                 if (!$rootScope.$$phase) $rootScope.$apply();
             }
@@ -352,8 +353,11 @@ angular.module('cttvServices')
          * It simply logs the error to the console. Can be used in then(succ, err) calls.
          */
         cttvAPI.defaultErrorHandler = function(error){
-            $log.error("----");
-            $log.error(error);
+            console.warn("CTTV API ERROR");
+            if (error.status === 403) {
+                //$rootScope.$emit('cttvApiError', error);
+                $rootScope.showApiErrorMsg = true;
+            }
         };
 
 
@@ -370,7 +374,7 @@ angular.module('cttvServices')
                 }
             }
             return obj;
-        }
+        };
 
 
 

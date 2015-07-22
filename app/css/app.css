@@ -10,6 +10,11 @@ body{
     /*font-family: 'Ubuntu', 'Helvetica', sans-serif;*/
 }
 
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 .changeView {
     color: #3a99d7;
     cursor: pointer

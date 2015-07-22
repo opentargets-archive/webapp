@@ -1,22 +1,37 @@
-    'use strict';
+  /* Controllers */
 
-    /* Controllers */
-
-    angular.module('cttvControllers', []).
+    angular.module('cttvControllers', [])
+    .run (['$rootScope', '$window', function ($rootScope, $window) {
+        'use strict';
+        $rootScope.showApiErrorMsg = false;
+        $rootScope.$on("cttvApiError", function (event, data) {
+            if (data.status === 403) {
+                $rootScope.showApiErrorMsg = true;
+            }
+        });
+        $rootScope.reloadPage = function () {
+            $window.location.reload();
+        };
+    }])
 
     /**
      * High level controller for the app
      */
-    controller('CttvAppCtrl', ['$scope',  function ($scope) {
-
-    }])
+    // .controller('CttvAppCtrl', ['$scope', '$window', '$rootScope',  function ($scope, $window, $rootScope) {
+    //     'use strict';
+    //     // $scope.appmsg = "Lalala";
+    //     $scope.showMsg = false;
+    //     $scope.reload = function () {
+    //         $window.location.reload();
+    //     };
+    // }])
 
     /**
      * SearchAppCtrl
      * Controller for the search/results page
      */
     .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice) {
-
+        'use strict';
         $log.log('SearchCtrl()');
 
 
@@ -32,7 +47,7 @@
                 selected : false,
                 loading: false
             }
-        }
+        };
 
         /**
         Something like:
@@ -81,7 +96,7 @@
                     $scope.filters.efo.loading = false;
                 });
 
-        }
+        };
 
 
 
@@ -120,7 +135,7 @@
                     $scope.search.loading = false;
                 });
 
-        }
+        };
 
 
         if($location.search().q){
@@ -145,7 +160,7 @@
 
 
     controller('MastheadCtrl', ['$scope', '$location', '$log', function ($scope, $location, $log) {
-
+        'use strict';
         $log.log('MastheadCtrl()');
         $scope.location = $location;
 
@@ -153,4 +168,4 @@
 
     controller('D3TestCtrl', ['$scope', '$log', function ($scope, $log) {
         $log.log("D3TestCtrl");
-    }])
+    }]);
