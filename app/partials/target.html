@@ -58,7 +58,7 @@
                 <p ng-if="!ensembl.isHuman">ID: {{ensembl.id}}</p>
                 <p>Description: {{ensembl.description}}</p>
                 <p ng-if="ensembl.isHuman">Gene Location: <a target="_blank" href="http://www.ensembl.org/Homo_sapiens/Location/View?db=core;g={{ensembl.id}}">Human {{ensembl.chr}}:{{ensembl.start}}-{{ensembl.end}}</a></p>
-                <cttv-target-genome-browser target="{{genomeBrowserGene}}"></cttv-target-genome-browser>
+                <cttv-target-genome-browser target="{{genomeBrowserGene}}" width="1140"></cttv-target-genome-browser>
             </accordion-group>
 
             <accordion-group>
