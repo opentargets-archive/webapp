@@ -1,9 +1,10 @@
 <div class="partial-page">
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
-    <h3 class="cttv-content-header" view-title>Targets associated with {{search.label | upperCaseFirst}}<br />
-
-    <small>Found {{search.total}} targets<a href="/disease/{{search.query}}"><span class="cttv-interpage-link"><i class="fa fa-arrow-circle-right fa-lg"></i> View disease profile</span></a></small></h3>
+    <view-title>Targets associated with {{search.label}}</view-title><!-- Mhhh... ugly hack -->
+    <h3 class="cttv-content-header">Targets associated with {{search.label}}<br />
+        <small>Found {{search.total}} {{search.total===1 ? "target" : "targets"}}<a href="/disease/{{search.query}}"><span class="cttv-interpage-link"><i class="fa fa-arrow-circle-right fa-lg"></i> View disease profile</span></a></small>
+    </h3>
 
     <div class="row">
         <div class="col-md-3">

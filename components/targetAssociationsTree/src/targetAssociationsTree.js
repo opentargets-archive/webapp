@@ -6,6 +6,7 @@ var geneAssociationsTree = function () {
 
     var config = {
         data : undefined,
+        root : undefined,
         diameter : 1000,
         cttvApi : undefined,
         legendText : "<text>Score range</text>"
@@ -69,7 +70,7 @@ var geneAssociationsTree = function () {
 		   .height(20)
            .transform(function (node) {
                        var d = node.data();
-                       var offset = node.children() && node.children().length % 2 ? 10 : 0
+                       var offset = node.children() && node.children().length % 2 ? 10 : 0;
                        var t = {
                            translate : [0, (5 - offset)],
                            rotate : 0
@@ -102,6 +103,7 @@ var geneAssociationsTree = function () {
             .width(config.diameter)
             .scale(true)
         );
+        config.root = treeVis.root();
 
     setBranchLengths (treeVis);
 
@@ -336,6 +338,17 @@ var geneAssociationsTree = function () {
         }
         config.legendText = t;
         return this;
+    };
+
+    theme.selectTherapeuticArea = function (efo) {
+        var root = config.root;
+        var node = root.find_node (function (n) {
+            return n.property("name") === efo;
+        });
+        if (node) {
+            treeVis.data(node.data());
+            treeVis.update();
+        }
     };
 
     function setBranchLengths (treeVis) {

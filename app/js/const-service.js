@@ -22,7 +22,8 @@ angular.module('cttvServices').
                 ANIMAL_MODEL :        "animal_model",
             },
             DATATYPES: 'datatypes',
-            PATHWAY_TYPES: 'pathway_type'
+            PATHWAY_TYPES: 'pathway_type',
+            DATASOURCES: 'datasources'
         };
 
 

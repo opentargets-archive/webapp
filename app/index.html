@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="cttvApp">
 <head>
-    <title ng-bind-template="CTTV Core{{viewTitle ? ' - '+viewTitle : ''}}"></title>
+    <title ng-bind-template="{{viewTitle ? viewTitle+' - ' : ''}}CTTV Platform"></title>
 
     <!-- IE9 -->
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -13,7 +13,6 @@
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-
 
     <!-- Components -->
     <link href="build/cttv-webapp.css" rel="stylesheet" />
@@ -114,9 +113,12 @@
                 </div>
             </div>
         </div>
-
-
         <!-- End Masthead -->
+
+    <!-- Authentication error -->
+    <alert type="danger" ng-show="showApiErrorMsg" ng-cloak>Your session has expired, reload the page to authenticate again
+        <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+    </alert>
 
         <div class="container">
             <div class="cttv-beta-ribbon">BETA</div>
@@ -200,17 +202,25 @@
         <!-- <link type="text/css" rel="stylesheet" href="node_modules/biojs-vis-pmccitation/css/style.css"/> -->
         <!-- <script type="text/javascript" src="node_modules/biojs-vis-pmccitation/build/biojsvispmccitation.js"></script> -->
         <link type="text/css" rel="stylesheet" href="vendor/biojsvispmccitation/style.css"/>
-        <script type="text/javascript" src="vendor/biojsvispmccitation/biojsvispmccitation.js"></script>
+        <!-- <script type="text/javascript" src="vendor/biojsvispmccitation/biojsvispmccitation.js"></script> -->
+
+    <!-- Protein viewer -->
+    <link type="text/css" rel="stylesheet" href="vendor/proteinFeaturesViewer/main.css"/>
+    <link type="text/css" rel="stylesheet" href="vendor/proteinFeaturesViewer/fontello.css"/>
+    <script type="text/javascript" src="vendor/proteinFeaturesViewer/featuresviewer.js"></script>
 
         <!-- Expression Atlas -->
+        <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-1.9.1.min.js"></script>
         <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/atlas.css"/>
-        <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/jquery-ui-1.10.2.custom.min.css"/>
+        <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/jquery-ui.min.css"/>
         <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/table-grid.css"/>
         <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/heatmap-and-anatomogram.css"/>
-        <script type="text/javascript" src="vendor/expressionAtlasProd/react.min.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/react-0.11.1.min.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-ui.min.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-migrate-1.2.0.min.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.ba-throttle-debounce.min.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.browser.min.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/factorTooltip.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/factorTooltipModule.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/contrastTooltip.js"></script>
@@ -223,15 +233,14 @@
         <script type="text/javascript" src="vendor/expressionAtlasProd/EventEmitter-4.2.7.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.hc-sticky.min.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/modernizr.minified.2.1.6.js"></script>
-        <script type="text/javascript" src="vendor/expressionAtlasProd/Biojs.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/AtlasHeatmapReact.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/highcharts.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/highcharts-more.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/exporting.js"></script>
+        <script type="text/javascript" src="vendor/expressionAtlasProd/react-radiogroup.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/cellBaselineVariance.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/heatmap.js"></script>
         <script type="text/javascript" src="vendor/expressionAtlasProd/heatmapContainer.js"></script>
-        <!-- <script type="text/javascript" src="vendor/Biojs.ExpressionAtlasBaselineSummary.js"></script> -->
 
         <!-- ie9 cors support -->
         <!--[if lte IE 9]>

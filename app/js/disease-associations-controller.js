@@ -89,7 +89,7 @@ angular.module('cttvControllers')
             },
             cttvAPIservice.defaultErrorHandler
         );
-    }
+    };
 
 
 
@@ -152,5 +152,3 @@ angular.module('cttvControllers')
 
 
 }]);
-
-

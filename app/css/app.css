@@ -10,6 +10,11 @@ body{
     /*font-family: 'Ubuntu', 'Helvetica', sans-serif;*/
 }
 
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 .changeView {
     color: #3a99d7;
     cursor: pointer
@@ -858,6 +863,17 @@ table.matrix-table thead > tr > th:last-child {
     padding: 10px 0px;
 }
 
+.cttv-facet-checkbox {
+    /* overrides bootstrap values */
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.cttv-facet-checkbox-label{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .cttv-section-intro {
     font-style: italic;

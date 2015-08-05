@@ -13,6 +13,7 @@ angular.module('cttvDirectives')
 	    },
 
 	    link: function (scope, elem, attrs) {
+
 		// event receiver on focus
 		addEventListener('bubblesViewFocus', function (e) {
 		    // TODO: This is effectively clicking in the nav bar
@@ -26,7 +27,7 @@ angular.module('cttvDirectives')
 		var datatypesChangesCounter = 0;
 		// Data types changes
 		scope.$watch(function () { return attrs.datatypes; }, function (dts) {
-            var dts = JSON.parse(attrs.datatypes);
+            dts = JSON.parse(attrs.datatypes);
             var opts = {
                 gene: attrs.target,
                 datastructure: "tree",
@@ -34,10 +35,12 @@ angular.module('cttvDirectives')
             if (!_.isEmpty (dts)) {
                 opts.filterbydatatype = _.keys(dts);
             }
+
             if (datatypesChangesCounter>0) {
                 if (ga) {
                     cttvAPIservice.getAssociations (opts)
                         .then (function (resp) {
+                            scope.$parent.updateFacets(resp.body.facets);
                             var data = resp.body.data;
                             if (_.isEmpty(data)) {
                                 data.association_score = 0.01;
@@ -45,7 +48,13 @@ angular.module('cttvDirectives')
                             ga.datatypes(dts);
                             updateView(data);
                             ga.update(data);
-                        });
+                            console.warn ("THIs is called");
+                            console.log(scope);
+                            scope.$parent.$parent.$parent.showMsg = true;
+                            scope.$parent.apply();
+                        },
+                        cttvAPIservice.defaultErrorHandler
+                    );
                 } else {
                     setView();
                 }
@@ -54,7 +63,8 @@ angular.module('cttvDirectives')
 		});
 
 		// Highlight changes
-		scope.$watch(function () { return attrs.diseaseIsSelected }, function () {
+		scope.$watch(function () { return attrs.diseaseIsSelected; }, function () {
+
 		    if (ga && attrs.highlight) {
 			var efo = JSON.parse(attrs.highlight);
 
@@ -122,6 +132,7 @@ angular.module('cttvDirectives')
 		function setView () {
 		    ////// Bubbles View
 		    // viewport Size
+
 		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
@@ -129,7 +140,7 @@ angular.module('cttvDirectives')
 		    var elemOffsetTop = elem[0].parentNode.offsetTop;
 
 		    // BottomMargin
-		    var bottomMargin = 50;
+		    var bottomMargin = 270;
 
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 
@@ -144,37 +155,39 @@ angular.module('cttvDirectives')
 		    cttvAPIservice.getAssociations (opts)
 		    // api.call (url)
 		    	.then (function (resp) {
-			    var data = resp.body.data;
-			    if (_.isEmpty(data)) {
-				updateView ();
-				return;
-			    }
-			    // Bubbles View
+                    var data = resp.body.data;
+                    if (_.isEmpty(data)) {
+                        updateView ();
+                        return;
+                    }
 
-			    var bView = bubblesView()
-				.maxVal(1)
-				.breadcrumsClick(function (d) {
-				    var focusEvent = new CustomEvent("bubblesViewFocus", {
-					"detail" : d
-				    });
-				    this.dispatchEvent(focusEvent);
-				});
+    			    // Bubbles View
+                    var bView = bubblesView()
+                        .maxVal(1)
+                        .breadcrumsClick(function (d) {
+                            var focusEvent = new CustomEvent("bubblesViewFocus", {
+                                "detail" : d
+                            });
+                            this.dispatchEvent(focusEvent);
+                        });
 
-			    var fView = flowerView()
-				.fontsize (10)
-				.diagonal (180);
+                    var fView = flowerView()
+                        .fontsize (10)
+                        .diagonal (180);
 
-			    // setup view
-			    ga = geneAssociations()
-				.target (attrs.target)
-				.diameter (diameter)
-				.datatypes(dts);
+                    // setup view
+                    ga = geneAssociations()
+                        .target (attrs.target)
+                        .diameter (diameter)
+                        .datatypes(dts);
 
-				updateView (data);
+                    updateView (data);
 
-			    //scope.$parent.$apply();
-			    ga(bView, fView, elem[0]);
-			});
+                    //scope.$parent.$apply();
+                    ga(bView, fView, elem[0]);
+                },
+                cttvAPIservice.defaultErrorHandler
+            );
 
 		}
 

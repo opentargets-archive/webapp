@@ -20,9 +20,13 @@ var cttvApi = function () {
     var prefixProxy = "proxy/generic/";
 
     var credentials = {
-    	token : "",
-    	appname : "",
-    	secret : ""
+        token : "",
+        appname : "",
+        secret : ""
+    };
+
+    var onError = function (err) {
+        console.log(err);
     };
 
     var getToken = function () {
@@ -35,118 +39,124 @@ var cttvApi = function () {
 
     var _ = {};
     _.call = function (myurl, callback) {
-		// No auth
-		if ((!credentials.token) && (!credentials.appname) && (!credentials.secret)) {
-		    console.log("    CttvApi running in non-authentication mode");
-		    return jsonHttp.get({
-			"url" : myurl
-		    }, callback);
-		}
-		if (!credentials.token) {
-//		    console.log("No credential token, requesting one...");
+        // No auth
+        if ((!credentials.token) && (!credentials.appname) && (!credentials.secret)) {
+            console.log("    CttvApi running in non-authentication mode");
+            return jsonHttp.get({
+                "url" : myurl
+            }, callback);
+        }
+        if (!credentials.token) {
+            //		    console.log("No credential token, requesting one...");
 
-		    return getToken()
-			.then(function (resp) {
-//			    console.log("   ======>> Got a new token: " + resp.body.token);
-			    //credentials.token = resp.body.token;
-			    var headers = {
-				"Auth-token": resp.body.token
-			    };
-			    var myPromise = jsonHttp.get ({
-					"url": myurl,
-					"headers": headers
-			    }, callback).catch(function (err) {
-				console.log(err);
-			    });
-			    return myPromise;
+            return getToken()
+                .then(function (resp) {
+                    //			    console.log("   ======>> Got a new token: " + resp.body.token);
+                    //credentials.token = resp.body.token;
+                    var headers = {
+                        "Auth-token": resp.body.token
+                    };
+                    var myPromise = jsonHttp.get ({
+                        "url": myurl,
+                        "headers": headers
+                    }, callback).catch(onError);
+                    return myPromise;
 
-			});
-		} else {
-//		    console.log("Current token is: " + credentials.token);
-		    return jsonHttp.get({
-				"url" : myurl,
-				"headers": {
-				    "Auth-token": credentials.token
-				}
-		    }, callback).catch(function (err) {
-			// Logic to deal with expired tokens
-			// console.log("     --- Received an api error -- Possibly the token has expired, so I'll request a new one");
-			console.log(err);
-			credentials.token = "";
-			return _.call(myurl, callback);
-		    });
-		}
+                });
+        } else {
+            //		    console.log("Current token is: " + credentials.token);
+            return jsonHttp.get({
+                "url" : myurl,
+                "headers": {
+                    "Auth-token": credentials.token
+                }
+            }, callback).catch(function (err) {
+                // Logic to deal with expired tokens
+                // console.log("     --- Received an api error -- Possibly the token has expired, so I'll request a new one");
+                onError(err);
+                credentials.token = "";
+                return _.call(myurl, callback);
+            });
+        }
+    };
+
+    _.onError = function (cbak) {
+        if (!arguments.length) {
+            return onError;
+        }
+        onError = cbak;
+        return this;
     };
 
     // Credentials API
     _.appname = function (name) {
-		if (!arguments.length) {
-		    return credentials.appname;
-		}
-		credentials.appname = name;
-		return this;
+        if (!arguments.length) {
+            return credentials.appname;
+        }
+        credentials.appname = name;
+        return this;
     };
 
     _.secret = function (sec) {
-		if (!arguments.length) {
-		    return credentials.secret;
-		}
-		credentials.secret = sec;
-		return this;
+        if (!arguments.length) {
+            return credentials.secret;
+        }
+        credentials.secret = sec;
+        return this;
     };
 
     _.token = function (tok) {
-		if (!arguments.length) {
-		    return credentials.token;
-		}
-		credentials.token = tok;
-		return this;
+        if (!arguments.length) {
+            return credentials.token;
+        }
+        credentials.token = tok;
+        return this;
     };
 
     // getter / setter for REST api prefix (TODO: Call it domain?)
     _.prefix = function (dom) {
-		if (!arguments.length) {
-		    return prefix;
-		}
-		prefix = dom;
-		return this;
+        if (!arguments.length) {
+            return prefix;
+        }
+        prefix = dom;
+        return this;
     };
 
     // URL object
     _.url = {};
 
     _.url.gene = function (obj) {
-		return prefix + prefixGene + obj.gene_id;
+        return prefix + prefixGene + obj.gene_id;
     };
 
     _.url.disease = function (obj) {
-		return prefix + prefixDisease + obj.efo;
+        return prefix + prefixDisease + obj.efo;
     };
 
     _.url.search = function (obj) {
-		return prefix + prefixSearch + parseUrlParams(obj);
+        return prefix + prefixSearch + parseUrlParams(obj);
     };
 
     _.url.associations = function (obj) {
-		return prefix + prefixAssociations + parseUrlParams(obj);
+        return prefix + prefixAssociations + parseUrlParams(obj);
     };
 
 
     _.url.filterby = function (obj) {
-		return prefix + prefixFilterby + parseUrlParams(obj);
+        return prefix + prefixFilterby + parseUrlParams(obj);
     };
 
 
     _.url.requestToken = function (obj) {
-		return prefix + prefixToken + "appname=" + obj.appname + "&secret=" + obj.secret;
+        return prefix + prefixToken + "appname=" + obj.appname + "&secret=" + obj.secret;
     };
 
     _.url.autocomplete = function (obj) {
-		return prefix + prefixAutocomplete + parseUrlParams(obj);
+        return prefix + prefixAutocomplete + parseUrlParams(obj);
     };
 
     _.url.quickSearch = function (obj) {
-		return prefix + prefixQuickSearch + parseUrlParams(obj);
+        return prefix + prefixQuickSearch + parseUrlParams(obj);
     };
 
     _.url.expression = function (obj) {
@@ -160,25 +170,25 @@ var cttvApi = function () {
 
 
     /**
-     * This takes a params object and returns the params concatenated in a string.
-     * If a parameter is an array, it adds each item, all with hte same key.
-     * Example:
-     *   obj = {q:'braf',size:20,filters:['id','pvalue']};
-     *   console.log( parseUrlParams(obj) );
-     *   // prints "q=braf&size=20&filters=id&filters=pvalue"
-     */
+    * This takes a params object and returns the params concatenated in a string.
+    * If a parameter is an array, it adds each item, all with hte same key.
+    * Example:
+    *   obj = {q:'braf',size:20,filters:['id','pvalue']};
+    *   console.log( parseUrlParams(obj) );
+    *   // prints "q=braf&size=20&filters=id&filters=pvalue"
+    */
     var parseUrlParams = function(obj){
-    	var opts = [];
-		for(var i in obj){
-			if( obj.hasOwnProperty(i)){
-				if(obj[i].constructor === Array){
-					opts.push(i+"="+(obj[i].join("&"+i+"=")));
-				} else {
-					opts.push(i+"="+obj[i]);
-				}
-			}
-		}
-		return opts.join("&");
+        var opts = [];
+        for(var i in obj){
+            if( obj.hasOwnProperty(i)){
+                if(obj[i].constructor === Array){
+                    opts.push(i+"="+(obj[i].join("&"+i+"=")));
+                } else {
+                    opts.push(i+"="+obj[i]);
+                }
+            }
+        }
+        return opts.join("&");
     };
 
 
