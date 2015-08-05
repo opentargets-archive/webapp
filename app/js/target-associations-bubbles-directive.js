@@ -2,7 +2,7 @@
 /* Directives */
 angular.module('cttvDirectives')
 
-    .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+    .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
         'use strict';
 	return {
 	    restrict: 'E',
@@ -48,10 +48,6 @@ angular.module('cttvDirectives')
                             ga.datatypes(dts);
                             updateView(data);
                             ga.update(data);
-                            console.warn ("THIs is called");
-                            console.log(scope);
-                            scope.$parent.$parent.$parent.showMsg = true;
-                            scope.$parent.apply();
                         },
                         cttvAPIservice.defaultErrorHandler
                     );
@@ -163,6 +159,7 @@ angular.module('cttvDirectives')
 
     			    // Bubbles View
                     var bView = bubblesView()
+                        .useFullPath(cttvUtils.browser.name !== "IE")
                         .maxVal(1)
                         .breadcrumsClick(function (d) {
                             var focusEvent = new CustomEvent("bubblesViewFocus", {

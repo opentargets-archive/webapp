@@ -5,7 +5,7 @@
         'use strict';
         $rootScope.showApiErrorMsg = false;
         $rootScope.$on("cttvApiError", function (event, data) {
-            if (data.status === 401 || data.status === 403) {
+            if (data.status === 403) {
                 $rootScope.showApiErrorMsg = true;
             }
         });

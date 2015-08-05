@@ -62,11 +62,11 @@ angular.module('cttvControllers')
                 keywords : resp.uniprot_keywords
             };
 
-            var FeatureViewer = require("biojs-vis-proteinFeaturesViewer");
-            var fvInstance = new FeatureViewer({
-                el: "#uniprotProteinFeatureViewer",
-                uniprotacc: resp.uniprot_accessions[0]
-            });
+            // var FeatureViewer = require("biojs-vis-proteinFeaturesViewer");
+            // var fvInstance = new FeatureViewer({
+            //     el: "#uniprotProteinFeatureViewer",
+            //     uniprotacc: resp.uniprot_accessions[0]
+            // });
 
             // Ensembl
             var isHuman = resp.ensembl_gene_id.substring(0,4) === "ENSG";
@@ -234,7 +234,7 @@ angular.module('cttvControllers')
             var drugs = resp.drugbank;
             $scope.drugs = drugs;
 
-            // Bibliography (2)
+            // Bibliography
             var bibliography = _.filter(resp.dbxrefs, function (t) {
                 return t.match(/^PubMed/);
             });
@@ -245,7 +245,6 @@ angular.module('cttvControllers')
             var pmidsLinks = (_.map(cleanBibliography, function (p) {
                 return "EXT_ID:" + p;
             })).join (" OR ");
-            console.log(pmidsLinks);
             $scope.citations = {};
 
             $http.get("/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search/query=" + pmidsLinks + "&format=json")

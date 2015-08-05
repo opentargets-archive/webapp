@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html ng-app="cttvApp">
 <head>
+
     <title ng-bind-template="{{viewTitle ? viewTitle+' - ' : ''}}CTTV Platform"></title>
 
     <!-- IE9 -->
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <!--[if lte IE 9]>
     <script src="bower_components/aight/aight.min.js"></script>
     <![endif]-->
 
     <base href="/">
+    <!--[if IE]><script type="text/javascript">
+    // Fix for IE ignoring relative base tags.
+    (function() {
+        var baseTag = document.getElementsByTagName('base')[0];
+        baseTag.href = baseTag.href;
+    })();
+    </script><![endif]-->
+
+    <title ng-bind-template="CTTV Core{{viewTitle ? ' - '+viewTitle : ''}}"></title>
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" />
@@ -27,7 +37,6 @@
 
     <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
     <script type="text/javascript" src="js/ie_console_noop.js"></script>
-
 
     <script type="text/javascript" src="build/cttv-webapp.js"></script>
     <!-- TnT -->
@@ -60,7 +69,7 @@
 
         <!-- Masthead (search) -->
 
-        <div class="masthead" ng-show="location.path()!=='/intro'" ng-controller="MastheadCtrl" ng-cloak>
+        <div class="masthead" ng-show="location.path()!=='/'" ng-controller="MastheadCtrl" ng-cloak>
             <div class="container">
                 <div class="row">
 
@@ -152,7 +161,7 @@
         <div class-"row">
             <div class="col-sm-3">
                 <h6>INFO</h6>
-                <p>CTTV Core Beta Version 0.5.0</p>
+                <p>CTTV Core Beta Version 0.6.0</p>
                 <p><a href="/release-notes">Release notes</a></p>
                 <p><a href="/about">About</a></p>
             </div>
@@ -205,9 +214,9 @@
         <!-- <script type="text/javascript" src="vendor/biojsvispmccitation/biojsvispmccitation.js"></script> -->
 
     <!-- Protein viewer -->
-    <link type="text/css" rel="stylesheet" href="vendor/proteinFeaturesViewer/main.css"/>
+    <!-- <link type="text/css" rel="stylesheet" href="vendor/proteinFeaturesViewer/main.css"/>
     <link type="text/css" rel="stylesheet" href="vendor/proteinFeaturesViewer/fontello.css"/>
-    <script type="text/javascript" src="vendor/proteinFeaturesViewer/featuresviewer.js"></script>
+    <script type="text/javascript" src="vendor/proteinFeaturesViewer/featuresviewer.js"></script> -->
 
         <!-- Expression Atlas -->
         <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-1.9.1.min.js"></script>

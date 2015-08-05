@@ -6,24 +6,25 @@ var bubblesView = function () {
     var dispatch = d3.dispatch ("click", "mouseover", "mouseout");
 
     var conf = {
-	diameter : 600,
-	format : d3.format(",d"),
-	color : d3.scale.category20c(),
-	colorPalette : true,
-	data : undefined,
-	value : "value",
-	key : "name",
-	label: "name",
-	divId : undefined,
-    on : function () {},
-	//onclick : function () {},
-	duration: 1000,
-	breadcrumsClick : function () {
-	    render.focus(conf.data);
-	},
-	maxVal : 1,
-	legendText : "<text>Current score range</text>"
-	//labelOffset : 10
+        diameter : 600,
+        format : d3.format(",d"),
+        color : d3.scale.category20c(),
+        colorPalette : true,
+        data : undefined,
+        value : "value",
+        key : "name",
+        label: "name",
+        divId : undefined,
+        on : function () {},
+        //onclick : function () {},
+        duration: 1000,
+        breadcrumsClick : function () {
+            render.focus(conf.data);
+        },
+        maxVal : 1,
+        legendText : "<text>Current score range</text>",
+        useFullPath : false
+        //labelOffset : 10
     };
 
     var focus; // undef by default
@@ -179,7 +180,7 @@ var bubblesView = function () {
                 return "bubblesView_" + d[conf.key] + "_" + conf.divId;
             })
             .classed("bubblesViewNode", true)
-
+            .attr("r", 0)
             .on("dblclick", function () {
                 if (d3.event.defaultPrevented) {
                     return;
@@ -206,7 +207,8 @@ var bubblesView = function () {
             //     conf.onclick.call(this, tree_node(d));
             // });
 
-        circle.exit().remove();
+        var exitCircles = circle
+            .exit();
 
         // // titles
         // bubblesView_g.selectAll("title")
@@ -249,7 +251,9 @@ var bubblesView = function () {
             .enter()
             .append("text")
             .attr("class", function (d) {
-                if (d.children) return "topLabel";
+                if (d.children) {
+                    return "topLabel";
+                }
                 return "leafLabel";
             })
             .style("cursor", "default")
@@ -259,42 +263,32 @@ var bubblesView = function () {
                     return;
                 }
                 dispatch.click.call(this, tree_node(d));
-                //conf.onclick.call(this, tree_node(d));
             })
             .attr("fill", "navy")
-            .attr("font-size", 10)
+            .attr("font-size", 0)
             .attr("text-anchor", "middle");
 
         // Create new labels on therapeutic areas
-        newLabels
-            .each(function (d, i) {
-                if (d.children) {
-                    d3.select(this)
-                    .append("textPath")
-                    // .attr("xlink:href", function () {
-                    //     var id="#s";
-                    //     if(d[conf.key]) {
-                    //         id += d[conf.key].replace("_", "");
-                    //         if (d._parent && d._parent[conf.key]) {
-                    //             id += d._parent[conf.key].replace("_", "");
-                    //         }
-                    //     }
-                    //     if (id === "#s") return "lakkdelavaca";
-                    //     return id;
-                    // })
-                    .attr("startOffset", "50%")
-                    .text(function () {
-                        if (Math.PI*d.r/8 < 3) {
-                            return "";
-                        }
-                        return d[conf.label] ? d[conf.label].substring(0, Math.PI*d.r/8) : "";
-                    });
-                }
-            });
+        // newLabels
+        //     .each(function (d, i) {
+        //         if (d.children) {
+        //             d3.select(this)
+        //                 .append("textPath")
+        //                 // .attr("xlink:href", window.location.href + "#" + getPathId(d))
+        //                 .attr("startOffset", "50%")
+        //                 .text(function () {
+        //                     if (Math.PI*d.r/8 < 3) {
+        //                         return "";
+        //                     }
+        //                     return d[conf.label] ? d[conf.label].substring(0, Math.PI*d.r/8) : "";
+        //                 });
+        //         }
+        //  });
 
-        label.exit().remove();
+        var exitLabels = label
+            .exit();
 
-        var updateTransition = bubblesView_g.transition()
+        var updateTransition = svg.transition()
             .duration(conf.duration);
 
         updateTransition
@@ -312,31 +306,60 @@ var bubblesView = function () {
         // Move labels
         updateTransition
             .selectAll(".leafLabel")
+            .attr("font-size", function (d) {
+                var circleLength = d.r / 3;
+                var labelLength = d[conf.label] ? d[conf.label].length : 0;
+                if (circleLength < labelLength) {
+                    return 10;
+                }
+                if (circleLength * 0.8 < labelLength) {
+                    return 12;
+                }
+                if (circleLength * 0.6 < labelLength) {
+                    return 14;
+                }
+            })
             .attr("dy", ".3em")
             .attr("x", function (d) { return d.x; })
-            .attr("y", function (d) { return d.y; })
-            .text(function (d) {
-                if (d.r/3 < 3) {
-                    return "";
-                }
-                return d[conf.label].substring(0, d.r / 3);
-            });
+            .attr("y", function (d) { return d.y; });
+            // .text(function (d) {
+            //     if (d.r/3 < 3) {
+            //         return "";
+            //     }
+            //     return d[conf.label].substring(0, d.r / 3);
+            // });
+
+        updateTransition
+            .selectAll(".topLabel")
+            .attr("font-size", 10);
+
+        // This has to be called after the updateTransition (otherwise, updateTransition would override these transitions)
+        exitCircles
+            .transition()
+            .duration(1000)
+            .attr("r", 0)
+            .remove();
+        exitLabels
+            .transition()
+            .duration(1000)
+            .attr("font-size", 0)
+            .remove();
 
             // Move labels
             // label
-            //     .each(function (d, i) {
-            // 	if (!d.children) {
-            // 	    d3.select(this)
-            // 		.transition()
-            // 		.duration(conf.duration)
-            // 		.attr("dy", ".3em")
-            // 		.attr("x", function (d) { return d.x; })
-            // 		.attr("y", function (d) { return d.y; })
-            // 		.text(function (d) {
-            // 		    return d[conf.label].substring(0, d.r / 3);
-            // 		});
-            // 	}
-            //     });
+            // .each(function (d, i) {
+            //     if (!d.children) {
+            //         d3.select(this)
+            //             .transition()
+            //             .duration(conf.duration)
+            //             .attr("dy", ".3em")
+            //             .attr("x", function (d) { return d.x; })
+            //             .attr("y", function (d) { return d.y; })
+            //             .text(function (d) {
+            //                 return d[conf.label].substring(0, d.r / 3);
+            //             });
+            //     }
+            // });
 
         updateTransition
             .selectAll("path")
@@ -405,21 +428,21 @@ var bubblesView = function () {
 
                 var pos = legendScale(maxCurrentVal);
                 legend
-                .select(".cttv_bubblesView_legendBar")
-                .transition()
-                .duration(conf.duration)
-                .attr("width", pos);
+                    .select(".cttv_bubblesView_legendBar")
+                    .transition()
+                    .duration(conf.duration)
+                    .attr("width", pos);
                 legend
-                .select("polygon")
-                .transition()
-                .duration(conf.duration)
-                .attr("points", ((pos+0) + ",5 " + (pos-5) + ",15 " + (pos+5) + ",15"));
+                    .select("polygon")
+                    .transition()
+                    .duration(conf.duration)
+                    .attr("points", ((pos+0) + ",5 " + (pos-5) + ",15 " + (pos+5) + ",15"));
                 legend
-                .select(".cttv_bubblesView_currentMaxValue")
-                .transition()
-                .duration(conf.duration)
-                .attr("x", pos)
-                .text(maxCurrentVal);
+                    .select(".cttv_bubblesView_currentMaxValue")
+                    .transition()
+                    .duration(conf.duration)
+                    .attr("x", pos)
+                    .text(maxCurrentVal);
         }
     };
 
@@ -499,7 +522,7 @@ var bubblesView = function () {
                         // })
                         // When the "base" tag is present in the page, linking by name doesn't work in FF (Safari and Chrome looks good). We prepend window.location.href to get full IRI
                         // https://gist.github.com/leonderijke/c5cf7c5b2e424c0061d2
-                        .attr("xlink:href", window.location.href + "#" + getPathId(d))
+                        .attr("xlink:href", (conf.useFullPath ? window.location.href : "") + "#" + getPathId(d))
                         .attr("startOffset", "50%")
                         .text(function () {
                             if (Math.PI*d.r*k/8 < 3) {
@@ -685,6 +708,14 @@ var bubblesView = function () {
             return conf.diameter;
         }
         conf.diameter = d;
+        return this;
+    };
+
+    render.useFullPath = function (b) {
+        if (!arguments.length) {
+            return conf.useFullPath;
+        }
+        conf.useFullPath = b;
         return this;
     };
 

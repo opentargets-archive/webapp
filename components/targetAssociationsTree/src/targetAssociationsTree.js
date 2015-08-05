@@ -9,7 +9,8 @@ var geneAssociationsTree = function () {
         root : undefined,
         diameter : 1000,
         cttvApi : undefined,
-        legendText : "<text>Score range</text>"
+        legendText : "<text>Score range</text>",
+        therapeuticArea: undefined, // This is the zoomed therapeuticArea
     };
 
     var treeVis = tnt_tree();
@@ -103,7 +104,6 @@ var geneAssociationsTree = function () {
             .width(config.diameter)
             .scale(true)
         );
-        config.root = treeVis.root();
 
     setBranchLengths (treeVis);
 
@@ -282,6 +282,7 @@ var geneAssociationsTree = function () {
         // }
         setBranchLengths(treeVis);
         sortNodes();
+        zoomTo(config.therapeuticArea);
         treeVis.update();
         // setTitles();
     };
@@ -340,8 +341,8 @@ var geneAssociationsTree = function () {
         return this;
     };
 
-    theme.selectTherapeuticArea = function (efo) {
-        var root = config.root;
+    function zoomTo (efo) {
+        var root = treeVis.root();
         var node = root.find_node (function (n) {
             return n.property("name") === efo;
         });
@@ -349,6 +350,15 @@ var geneAssociationsTree = function () {
             treeVis.data(node.data());
             treeVis.update();
         }
+    }
+
+    theme.selectTherapeuticArea = function (efo) {
+        if (!arguments.length) {
+            return config.efo;
+        }
+        config.therapeuticArea = efo;
+        theme.update();
+        return this;
     };
 
     function setBranchLengths (treeVis) {
