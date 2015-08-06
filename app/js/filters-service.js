@@ -65,17 +65,6 @@ angular.module('cttvServices').
             selected.length=0;  // reset the length, not whole object
             selectedCount = 0;  // other controllers are $watch-ing this...
 
-            /*filters.forEach(function(collection){
-                var f = collection.getSelectedFilters();
-                if(f.length>0){
-                    selected.push( new FilterCollection(collection.key, collection.label, f) );
-                    //for(var i=0; i<f.length; i++){
-                    //    active.push(f[i].facet+"="+f[i].key);
-                    //}
-                }
-                selectedCount += f.length;
-            });*/
-
             filters.forEach(function(collection){
                 // loop thorugh all the collection we'got from the parsing of the facets returned by API
                 parseCollectionSelected(collection);
@@ -107,11 +96,6 @@ angular.module('cttvServices').
          * If filters contain sub-filters, these are parsed recursively
          */
         var parseCollectionSelected = function(collection){
-            // var f = collection.getSelectedFilters();
-            // if(f.length>0){
-            //     selected.push( new FilterCollection(collection.key, collection.label, f) );
-            // }
-            // selectedCount += f.length;
 
             // loop thorugh all the collection we'got from the parsing of the facets returned by API
             // 1. now we loop through all the filters of each collection
@@ -119,7 +103,7 @@ angular.module('cttvServices').
             $log.log(collection);
             collection.filters.forEach(function(fs){
                 // 2. if at any point a filter is selected
-                if(fs.selected){
+                /*if(fs.selected){
                     // we check there is a collection (if not we cretate it) and then add the filter to it...
                     getCollectionForSelected(collection.key, collection.label).addFilter(fs);
                     selectedCount++;
@@ -128,6 +112,44 @@ angular.module('cttvServices').
                 if(fs.collection!=null && (fs.collection instanceof FilterCollection)){
                     // loop again...
                     parseCollectionSelected(fs.collection);
+                }*/
+                // ---------------------------
+
+                // 1: simple (unlikely) case - no subfilters
+                if( fs.collection == null ){
+                    if(fs.selected){
+                        // we check there is a collection (if not we cretate it) and then add the filter to it...
+                        getCollectionForSelected(collection.key, collection.label).addFilter(fs);
+                        selectedCount++;
+                    }
+                }
+
+                // 2: normal case - with subfiletrs
+                if( fs.collection != null ){
+                    if( fs.changed != fs.collection.isChanged() ){
+                        if( fs.changed ){
+                            // filter takes precedence
+                            if(fs.selected){
+                                // we check there is a collection (if not we cretate it) and then add the filter to it...
+                                getCollectionForSelected(collection.key, collection.label).addFilter(fs);
+                                selectedCount++;
+                            }
+                        } else {
+                            // collection takes precedence
+                            parseCollectionSelected(fs.collection);
+                        }
+                    }else{
+                        if(fs.selected){
+                            // we check there is a collection (if not we cretate it) and then add the filter to it...
+                            getCollectionForSelected(collection.key, collection.label).addFilter(fs);
+                            selectedCount++;
+                        }
+                        // 3. if a filter has sub filters, we check those too
+                        if(fs.collection!=null && (fs.collection instanceof FilterCollection)){
+                            // loop again...
+                            parseCollectionSelected(fs.collection);
+                        }
+                    }
                 }
             });
         }
@@ -138,11 +160,6 @@ angular.module('cttvServices').
          * Returns true if a filter with the given key is selected
          */
         var isSelected=function(collection, key){
-            // var sel = ($location.search()[collection] && ( $location.search()[collection]===key || $location.search()[collection].indexOf(key)>=0 )) || false;
-            // if( sel ){
-            //     $log.log("isSelected( "+collection+", "+key+" ) : "+sel);
-            // }
-            // return sel;
             return ($location.search()[collection] && ( $location.search()[collection]===key || $location.search()[collection].indexOf(key)>=0 )) || false;
         };
 
@@ -246,6 +263,64 @@ angular.module('cttvServices').
 
 
 
+        // var test = function(){
+        //     $log.log("testFunction( "+Array.prototype.join.call(arguments, ", ")+" )");
+        // }
+
+
+
+        /*
+         * New addFilter() function.
+         * No need to be public really, so now it's private.
+         * Main change: we don't work with the $location service directly here (i.e. no direct URL update).
+         * The idea is to append/remove from selected[] and *then* fire a URL update manually when we want.
+         * This is to allow for multiple operation at once (e.g. auto deselect on child select) but going forwar
+         * could also be use to udpate facets on user click (e.g. "Apply")...
+         */
+        /*var selectFilter = function(facet, bucket){
+            $log.log("** addFilter( "+facet+", "+bucket+" )");
+
+            // if the facet already exists, we have to append to it
+            // var f = cttvFiltersService.parseURL()[facet];   // this is always an array
+            var f = getSelectedFilters(facet);
+
+            if( f ){
+                if(typeof bucket === "string"){
+                    bucket = [bucket];
+                }
+                bucket = _.union(f, bucket);
+            }
+            // then just update search URL
+            $location.search(facet,bucket);
+
+            //update();
+        }*/
+
+
+
+        /*
+         * In other words, this updates the URL (the search part after ?)
+         * It does a complete URL update, based on *all* facets in selected[]
+         */
+        var updateLocationSearch = function(){
+            var raw = {};
+            selected.forEach(function(collection){
+                raw[collection.key] = collection.filters.map(function(obj){return obj.key;});
+            })
+
+            $log.log(raw);
+            $location.search(raw);
+        }
+
+
+
+        var update = function(){
+            updateSelected();
+            updateLocationSearch();
+        }
+
+
+
         // ----------------------------------
         //  Private classes
         // ----------------------------------
@@ -267,6 +342,7 @@ angular.module('cttvServices').
             this.value = o.value || undefined;
             // trying to have nested filters?
             this.collection = o.collection || null;
+            this.changed = false;
         }
 
             /*
@@ -274,17 +350,14 @@ angular.module('cttvServices').
              */
             Filter.prototype.toggle = function(){
                 this.setSelected(!this.selected);
-                if( this.selected ){
+                /*if( this.selected ){
                     // select this filter (i.e. add it to the URL)
-                    cttvFiltersService.addFilter(this.facet, this.key);
-                    // deselect any subfilters
-                    // if(this.collection!=null){
-                    //     this.collection.selectAll(false);
-                    // }
-
+                    selectFilter();
+                    //cttvFiltersService.addFilter(this.facet, this.key);
                 }else{
                     cttvFiltersService.removeFilter(this.facet, this.key);
-                }
+                }*/
+                update();
                 return this.selected;
             };
 
@@ -293,14 +366,9 @@ angular.module('cttvServices').
              */
             Filter.prototype.setSelected=function(b){
                 if(this.enabled){
+                    // flag the changed state
+                    this.changed = (b!=this.selected);
                     this.selected = b;
-                    // addToSelected(this.key, this.collection.key, b);
-                    // updateSelected();
-                    // if(b){
-                    //     cttvFiltersService.addFilter(this.facet, this.key);
-                    // }else{
-                    //     cttvFiltersService.removeFilter(this.facet, this.key);
-                    // }
                 }
                 return this.selected;
             };
@@ -320,10 +388,10 @@ angular.module('cttvServices').
             this.filters = filters || [];
         }
 
+            /**
+             * Add the specified filter (instance of Filter class) to this collection
+             */
             FilterCollection.prototype.addFilter = function(filter){
-                //if(filter.collection==undefined){
-                //    filter.collection = {key:this.key, label:this.label}
-                //}
                 // we should check the filter doesn't already exist...
                 if( this.filters.filter(function(f){ return f.key===filter.key}).length==0 ){
                     this.filters.push(filter);
@@ -335,6 +403,14 @@ angular.module('cttvServices').
              */
             FilterCollection.prototype.selectAll = function(b){
                 $log.log(b);
+                this.filters.forEach(function(f){
+                    f.setSelected(b);
+                    if(!b && f.collection!=null){
+                        f.collection.selectAll(b);
+                    }
+                });
+                update();
+                /*
                 if(b===true){
                     // Case: SELECT ALL
                     // we pass an array of filters to the addFilter method
@@ -350,11 +426,12 @@ angular.module('cttvServices').
                     // remove the whole collection from the URL
                     cttvFiltersService.removeFilter(this.key, null);
                 }
+                */
             };
 
-            // Perhaps we will need these sort of functions if we change facets implementation
-            // when user has to click "apply filters" explicitly
-
+            /**
+             * Returns an array of the filters in this collection that are selected
+             */
             FilterCollection.prototype.getSelectedFilters = function(){
                 return this.filters.filter(function(obj){
                     var sub = false;
@@ -367,6 +444,13 @@ angular.module('cttvServices').
                     return obj.selected || sub;
                 });
             };
+
+            /**
+             * Returns TRUE if any of its filters have a changed state
+             */
+            FilterCollection.prototype.isChanged = function(){
+                return this.filters.filter(function(f){return f.changed}).length > 0;
+            }
 
 
 
@@ -417,7 +501,7 @@ angular.module('cttvServices').
          * @param {string} facet the facet to be added, or to which to append
          * @param {string | array} bucket they key of the filter (or array of keys) to be added
          */
-        cttvFiltersService.addFilter = function(facet,bucket){
+        /*cttvFiltersService.addFilter = function(facet,bucket){
             $log.log("addFilter( "+facet+", "+bucket+" )");
 
             // if the facet already exists, we have to append to it
@@ -433,7 +517,7 @@ angular.module('cttvServices').
             // then just update search URL
             $location.search(facet,bucket);
 
-        };
+        };*/
 
 
 
@@ -443,7 +527,7 @@ angular.module('cttvServices').
          * @param {string} facet the facet to be added, or to which to append
          * @param {string | array} bucket they key of the filter (or array of keys) to be added
          */
-        cttvFiltersService.removeFilter = function(facet,bucket){
+        /*cttvFiltersService.removeFilter = function(facet,bucket){
             $log.log("removeFilter( "+facet+", "+bucket+" )");
 
             // var f = cttvFiltersService.parseURL()[facet];   // this is always an array
@@ -465,7 +549,7 @@ angular.module('cttvServices').
                 // if the bucket is null, we delete the whole facet (e.g. all datatypes) from the URL
                 $location.search(facet,bucket);
             }
-        };
+        };*/
 
 
 
@@ -517,15 +601,6 @@ angular.module('cttvServices').
          * }
          */
         cttvFiltersService.getSelectedFiltersRaw = function(facet){
-            // var raw = {};
-            // for(var collection in facetsdata){
-            //     var f=facetsdata[collection].getSelectedFiltersRaw();
-            //     if(f.length>0){
-            //         raw[facetsdata[collection].key] = f;
-            //     }
-            // };
-            // return raw;
-
             // TODO: ok so this first part was also kinda hacked together quickly
             // and ideally we can clean up a few more functions here...
             if(facet){
@@ -548,9 +623,11 @@ angular.module('cttvServices').
          */
         cttvFiltersService.deselectAll = function(){
             // TODO: this could be changed so that removeFilter() takes an array as first parameter
-            selected.forEach(function(collection){
-                cttvFiltersService.removeFilter(collection.key, null);
-            });
+            // selected.forEach(function(collection){
+            //     cttvFiltersService.removeFilter(collection.key, null);
+            // });
+            selected.length=0;
+            updateLocationSearch();
         };
 
 
@@ -635,5 +712,24 @@ angular.module('cttvServices').
 
 
 
+        /**
+         * Resets the filters, selected filters, page facets and counts.
+         * You may want to call this at the beginning of your page controller,
+         * before setting the pageFacetsStack, so that while your page loads
+         * users wont' see facets from the previous page (remember, this is a service
+         * and it maintains its state through pages)
+         */
+        cttvFiltersService.reset = function(){
+            filters.length = 0;
+            selected.length = 0;
+            selectedCount = 0;
+            pageFacetsStack.length = 0;
+        }
+
+
+
         return cttvFiltersService;
+
+
+
     }]);

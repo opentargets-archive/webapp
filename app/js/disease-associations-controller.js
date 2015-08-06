@@ -40,6 +40,9 @@ angular.module('cttvControllers')
     };
 
 
+    // reset the filters when loading a new page
+    // so we don't see the filters from the previous page...
+    cttvFiltersService.reset();
 
     // Set page filters:
     // this defines the order in which the facets are going to be displayed

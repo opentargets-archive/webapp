@@ -1260,7 +1260,6 @@ angular.module('cttvDirectives', [])
                      +'    <div class="checkbox cttv-facet-checkbox">'
                      +'        <label ng-class="(!bucket.enabled) ? \'disabled\' : \'\'" class="cttv-facet-checkbox-label" style="max-width:80%">'
                      +'            <input type="checkbox"'
-                     // +'                cttv-ui-indeterminate="true"' // (obj.collection.filters.length == obj.collection.getSelectedFilters().length)
                      +'                cttv-ui-indeterminate="{{bucket.collection.getSelectedFilters().length>0 && (bucket.collection.filters.length > bucket.collection.getSelectedFilters().length)}}"'
                      +'                value="{{bucket.id}}"'
                      +'                ng-checked="bucket.selected || (bucket.collection.filters.length>0 && bucket.collection.filters.length == bucket.collection.getSelectedFilters().length)"'

@@ -23,7 +23,9 @@ angular.module('cttvServices').
             },
             DATATYPES: 'datatypes',
             PATHWAY_TYPES: 'pathway_type',
-            DATASOURCES: 'datasources'
+            DATASOURCES: 'datasources',
+            UNIQUE_TARGET_COUNT: 'unique_target_count',
+            UNIQUE_DISEASE_COUNT: 'unique_disease_count'
         };
 
 
