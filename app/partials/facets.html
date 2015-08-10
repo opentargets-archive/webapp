@@ -24,6 +24,10 @@
                 {{facet.label | clearUnderscores | upperCaseFirst}} <i class="pull-right text-lowlight fa" ng-class="{'fa-plus-square': !status.isOpen, 'fa-minus-square': status.isOpen}"></i>
             </accordion-heading>
 
+            <!--
+                The content panel of the facet:
+                Here we put all the templates we've got, with an ng-if statement so only the relevant one is added in
+            -->
 
             <div cttv-datatypes-facet facet='facet' ng-if="facet.key=='datatypes'"></div>
 

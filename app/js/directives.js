@@ -1195,9 +1195,7 @@ angular.module('cttvDirectives', [])
                      +'    <cttv-parent-checkbox-facet bucket="pathway" collapsed="isCollapsed"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
                      //+'          <div cttv-default-facet-contols facet="pathway.collection"></div>'
-                     +'        <div></div>'
                      +'        <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in pathway.collection.filters"></div>'
-                     //+'          <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in pathway.collection"></div>'
                      +'    </div>'
                      +'</div>',
 
@@ -1230,7 +1228,7 @@ angular.module('cttvDirectives', [])
                      +'            ng-checked="bucket.selected"'
                      +'            ng-disabled="!bucket.enabled"'
                      +'            ng-click="bucket.toggle()" >'
-                     +'        {{bucket.label}} <span class="text-lowlight small">({{bucket.count | metricPrefix:1}})</span>'
+                     +'        {{bucket.label | upperCaseFirst | clearUnderscores}} <span class="text-lowlight small">({{bucket.count | metricPrefix:1}})</span>'
                      +'    </label>'
                      +'</div>',
 
@@ -1263,7 +1261,7 @@ angular.module('cttvDirectives', [])
                      +'                cttv-ui-indeterminate="{{bucket.collection.getSelectedFilters().length>0 && (bucket.collection.filters.length > bucket.collection.getSelectedFilters().length)}}"'
                      +'                value="{{bucket.id}}"'
                      +'                ng-checked="bucket.selected || (bucket.collection.filters.length>0 && bucket.collection.filters.length == bucket.collection.getSelectedFilters().length)"'
-                     +'                ng-disabled="!bucket.enabled"'
+                     +'                ng-disabled="!bucket.enabled || bucket.collection.getSelectedFilters().length>0"'
                      +'                ng-click="bucket.toggle()" >'
                      +'            {{bucket.label}}'
                      +'        </label>'

@@ -51,6 +51,13 @@ angular.module('cttvServices').
 
 
 
+        // Back here again :(
+        // this stores all the filters organized by facet type. That's it.
+        // So that we can reference the same filter from several places like in the case of pathways
+        var filtersData = {}
+
+
+
         // ----------------------------------
         //  Private methods
         // ----------------------------------
@@ -97,60 +104,30 @@ angular.module('cttvServices').
          */
         var parseCollectionSelected = function(collection){
 
-            // loop thorugh all the collection we'got from the parsing of the facets returned by API
-            // 1. now we loop through all the filters of each collection
-            $log.log("** ** "+collection.key);
-            $log.log(collection);
+            // loop thorugh all the collection's 'filters
             collection.filters.forEach(function(fs){
-                // 2. if at any point a filter is selected
-                /*if(fs.selected){
+
+                // if this has subfilters and *some* of them are selected, we deselect the 'parent' (i.e. current filter)
+                // then parse parent (if selected) and all the children.
+                // So here we update the selected state based on subfilters if needed
+                if(fs.collection!=null && fs.collection.getSelectedFilters().length>0){
+                    if(fs.collection.getSelectedFilters().length < fs.collection.filters.length){
+                        fs.selected = false;
+                    } else {
+                        fs.selected = true;
+                    }
+                }
+
+                if ( fs.selected ){
                     // we check there is a collection (if not we cretate it) and then add the filter to it...
                     getCollectionForSelected(collection.key, collection.label).addFilter(fs);
                     selectedCount++;
                 }
-                // 3. if a filter has sub filters, we check those too
-                if(fs.collection!=null && (fs.collection instanceof FilterCollection)){
-                    // loop again...
+
+                if(fs.collection!=null && (fs.collection instanceof FilterCollection) ){
                     parseCollectionSelected(fs.collection);
-                }*/
-                // ---------------------------
-
-                // 1: simple (unlikely) case - no subfilters
-                if( fs.collection == null ){
-                    if(fs.selected){
-                        // we check there is a collection (if not we cretate it) and then add the filter to it...
-                        getCollectionForSelected(collection.key, collection.label).addFilter(fs);
-                        selectedCount++;
-                    }
                 }
 
-                // 2: normal case - with subfiletrs
-                if( fs.collection != null ){
-                    if( fs.changed != fs.collection.isChanged() ){
-                        if( fs.changed ){
-                            // filter takes precedence
-                            if(fs.selected){
-                                // we check there is a collection (if not we cretate it) and then add the filter to it...
-                                getCollectionForSelected(collection.key, collection.label).addFilter(fs);
-                                selectedCount++;
-                            }
-                        } else {
-                            // collection takes precedence
-                            parseCollectionSelected(fs.collection);
-                        }
-                    }else{
-                        if(fs.selected){
-                            // we check there is a collection (if not we cretate it) and then add the filter to it...
-                            getCollectionForSelected(collection.key, collection.label).addFilter(fs);
-                            selectedCount++;
-                        }
-                        // 3. if a filter has sub filters, we check those too
-                        if(fs.collection!=null && (fs.collection instanceof FilterCollection)){
-                            // loop again...
-                            parseCollectionSelected(fs.collection);
-                        }
-                    }
-                }
             });
         }
 
@@ -165,12 +142,13 @@ angular.module('cttvServices').
 
 
 
-        var getSelectedFilters = function(facet){
+        /*
+         * Returns an array of the selcted filters for the specified facet (key)
+         */
+        var getSelectedFilters = function(facetKey){
             var f = selected.filter(function(obj){
-                        return obj.key===facet;
+                        return obj.key===facetKey;
                     })[0] || {filters:[]};
-            $log.log("getSelectedFilters: "+facet);
-            $log.log(f);
 
             return f.filters.map(function(obj){
                         return obj.key;
@@ -253,7 +231,7 @@ angular.module('cttvServices').
             var collection = new FilterCollection(obj.key, obj.label);
             obj.filters.forEach(function(element){
                 //element.selected = selection.indexOf(element.key)>=0;
-                var f = new Filter(element)
+                var f = getFilter(element);    //new Filter(element)
                 collection.addFilter(f);    // add filter to the collection
                 // but do we want to add the filter to the selected ones as well? if needed?
                 // is here the best place? mmmh....
@@ -263,60 +241,51 @@ angular.module('cttvServices').
 
 
 
-        // var test = function(){
-        //     $log.log("testFunction( "+Array.prototype.join.call(arguments, ", ")+" )");
-        // }
-
-
-
         /*
-         * New addFilter() function.
-         * No need to be public really, so now it's private.
-         * Main change: we don't work with the $location service directly here (i.e. no direct URL update).
-         * The idea is to append/remove from selected[] and *then* fire a URL update manually when we want.
-         * This is to allow for multiple operation at once (e.g. auto deselect on child select) but going forwar
-         * could also be use to udpate facets on user click (e.g. "Apply")...
-         */
-        /*var selectFilter = function(facet, bucket){
-            $log.log("** addFilter( "+facet+", "+bucket+" )");
-
-            // if the facet already exists, we have to append to it
-            // var f = cttvFiltersService.parseURL()[facet];   // this is always an array
-            var f = getSelectedFilters(facet);
-
-            if( f ){
-                if(typeof bucket === "string"){
-                    bucket = [bucket];
-                }
-                bucket = _.union(f, bucket);
-            }
-            // then just update search URL
-            $location.search(facet,bucket);
-
-            //update();
-        }*/
-
-
-
-        /*
-         * In other words, this updates the URL (the search part after ?)
-         * It does a complete URL update, based on *all* facets in selected[]
+         * Updates the search part of the URL (i.e. after ?), resetting it completely.
+         * It loops through the selected[] array and updates the URL accordingly.
          */
         var updateLocationSearch = function(){
             var raw = {};
             selected.forEach(function(collection){
                 raw[collection.key] = collection.filters.map(function(obj){return obj.key;});
             })
-
-            $log.log(raw);
             $location.search(raw);
         }
 
 
 
+        /*
+         * Calls in sequence updateSelected() and updateLocationSearch()
+         */
         var update = function(){
             updateSelected();
             updateLocationSearch();
+        }
+
+
+
+        /*
+         * Builds a collection from the specified config object and addes it to the filters[] array
+         */
+        var addCollection = function(obj){
+            filters.push( parseCollection(obj) );
+        };
+
+
+
+        /*
+         * Get the specified filter from the object data based on facet (collection) and key passed as an object.
+         * f is essentially a config object
+         */
+        var getFilter = function(f){
+            if(!filtersData[f.facet]){
+                filtersData[f.facet] = {}
+            }
+            if(!filtersData[f.facet][f.key]){
+                filtersData[f.facet][f.key] = new Filter(f);
+            }
+            return filtersData[f.facet][f.key];
         }
 
 
@@ -342,7 +311,6 @@ angular.module('cttvServices').
             this.value = o.value || undefined;
             // trying to have nested filters?
             this.collection = o.collection || null;
-            this.changed = false;
         }
 
             /*
@@ -350,13 +318,6 @@ angular.module('cttvServices').
              */
             Filter.prototype.toggle = function(){
                 this.setSelected(!this.selected);
-                /*if( this.selected ){
-                    // select this filter (i.e. add it to the URL)
-                    selectFilter();
-                    //cttvFiltersService.addFilter(this.facet, this.key);
-                }else{
-                    cttvFiltersService.removeFilter(this.facet, this.key);
-                }*/
                 update();
                 return this.selected;
             };
@@ -367,7 +328,7 @@ angular.module('cttvServices').
             Filter.prototype.setSelected=function(b){
                 if(this.enabled){
                     // flag the changed state
-                    this.changed = (b!=this.selected);
+                    //this.changed = (b!=this.selected);
                     this.selected = b;
                 }
                 return this.selected;
@@ -410,23 +371,6 @@ angular.module('cttvServices').
                     }
                 });
                 update();
-                /*
-                if(b===true){
-                    // Case: SELECT ALL
-                    // we pass an array of filters to the addFilter method
-                    cttvFiltersService.addFilter(
-                        this.key,
-                        this.filters.map(function(filter){
-                            filter.setSelected(true);   // we're setting the selection here for a more responsive UI feel (else have to wait for API response)
-                            return filter.key;
-                        })
-                    );
-                }else{
-                    // Case: DESELECT ALL
-                    // remove the whole collection from the URL
-                    cttvFiltersService.removeFilter(this.key, null);
-                }
-                */
             };
 
             /**
@@ -437,20 +381,12 @@ angular.module('cttvServices').
                     var sub = false;
                     if(obj.collection ){
                         if( obj.collection.getSelectedFilters != undefined){
-                            // sub = obj.collection.getSelectedFilters().length > 0;
                             sub = (obj.collection.filters.length == obj.collection.getSelectedFilters().length);
                         }
                     }
                     return obj.selected || sub;
                 });
             };
-
-            /**
-             * Returns TRUE if any of its filters have a changed state
-             */
-            FilterCollection.prototype.isChanged = function(){
-                return this.filters.filter(function(f){return f.changed}).length > 0;
-            }
 
 
 
@@ -491,85 +427,6 @@ angular.module('cttvServices').
             facets.forEach(function(facet){
                 pageFacetsStack.push(facet);
             });
-        };
-
-
-
-        /**
-         * Adds a filter to the URL
-         *
-         * @param {string} facet the facet to be added, or to which to append
-         * @param {string | array} bucket they key of the filter (or array of keys) to be added
-         */
-        /*cttvFiltersService.addFilter = function(facet,bucket){
-            $log.log("addFilter( "+facet+", "+bucket+" )");
-
-            // if the facet already exists, we have to append to it
-            // var f = cttvFiltersService.parseURL()[facet];   // this is always an array
-            var f = getSelectedFilters(facet);
-
-            if( f ){
-                if(typeof bucket === "string"){
-                    bucket = [bucket];
-                }
-                bucket = _.union(f, bucket);
-            }
-            // then just update search URL
-            $location.search(facet,bucket);
-
-        };*/
-
-
-
-        /**
-         * Very similar, remove the specified filter from the URL search
-         *
-         * @param {string} facet the facet to be added, or to which to append
-         * @param {string | array} bucket they key of the filter (or array of keys) to be added
-         */
-        /*cttvFiltersService.removeFilter = function(facet,bucket){
-            $log.log("removeFilter( "+facet+", "+bucket+" )");
-
-            // var f = cttvFiltersService.parseURL()[facet];   // this is always an array
-            var f = getSelectedFilters(facet);
-
-            if( f ){
-                // if the facet exists, check if it's a string or an array, and remove as appropriate
-                if(bucket!==null){
-                    // bucket is most likely going to be a String
-                    // so in order to support _.difference we make it into an array
-                    if(typeof bucket === "string"){
-                        bucket = [bucket];
-                    }
-                    bucket = _.difference( f, bucket );
-                    if(bucket.length===0){
-                        bucket=null;
-                    }
-                }
-                // if the bucket is null, we delete the whole facet (e.g. all datatypes) from the URL
-                $location.search(facet,bucket);
-            }
-        };*/
-
-
-
-        /**
-         * Sets the serach of the URL to the specified filters
-         */
-        cttvFiltersService.setSelectedFilters = function(searchObject){
-            var search = $location.search();
-            for(var i in search){
-                $location.search(i,null);
-            }
-            for(var j in searchObject){
-                $location.search(j, searchObject[j]);
-            }
-        };
-
-
-
-        cttvFiltersService.addCollection = function(obj){
-            filters.push( parseCollection(obj) );
         };
 
 
@@ -659,15 +516,13 @@ angular.module('cttvServices').
          *  This is the main method that parse facets data and sets them up
          */
         cttvFiltersService.updateFacets = function(facets, countsToUse){
-            countsToUse = countsToUse || "unique_target_count";
             $log.log("cttvFiltersService.updateFacets()");
-            // take facets and update the facets,
-            // then set selections based on user options
-            $log.log(facets);
 
-
+            countsToUse = countsToUse || cttvConsts.UNIQUE_TARGET_COUNT; // "unique_target_count";
             // reset the filters
-            filters.length=0;
+            filters.length = 0;
+            selected.length = 0;
+            selectedCount = 0;
 
 
             // If the page has a list of specified facets, we use that
@@ -680,7 +535,7 @@ angular.module('cttvServices').
             orderedFacets.forEach(function(collection){
                 if (facets.hasOwnProperty(collection)) {
                     try{
-                        cttvFiltersService.addCollection( parseFacetData(collection, facets[collection], countsToUse) );
+                        addCollection( parseFacetData(collection, facets[collection], countsToUse) );
                     } catch(e){
                         $log.log("Error while updating facets: "+e);
                     }
