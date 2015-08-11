@@ -520,6 +520,11 @@ angular.module('cttvServices').
 
             countsToUse = countsToUse || cttvConsts.UNIQUE_TARGET_COUNT; // "unique_target_count";
             // reset the filters
+            for (var key in filtersData){
+                if (filtersData.hasOwnProperty(key)){
+                    delete filtersData[key];
+                }
+            }
             filters.length = 0;
             selected.length = 0;
             selectedCount = 0;
@@ -575,6 +580,11 @@ angular.module('cttvServices').
          * and it maintains its state through pages)
          */
         cttvFiltersService.reset = function(){
+            for (var key in filtersData){
+                if (filtersData.hasOwnProperty(key)){
+                    delete filtersData[key];
+                }
+            }
             filters.length = 0;
             selected.length = 0;
             selectedCount = 0;

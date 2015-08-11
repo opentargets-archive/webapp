@@ -81,6 +81,7 @@ angular.module('cttvControllers')
 
                 // 1: set the facets
                 // we must do this first, so we know which datatypes etc we actually have
+                $log.log(resp.body.facets);
                 cttvFiltersService.updateFacets(resp.body.facets);
 
                 // set the data
