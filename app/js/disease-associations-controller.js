@@ -67,7 +67,7 @@ angular.module('cttvControllers')
     var getData = function(filters){
         $log.log("getData()");
         var opts = {
-            efo: $scope.search.query,
+            disease: $scope.search.query,
             datastructure: "flat",
             expandefo: true
         };

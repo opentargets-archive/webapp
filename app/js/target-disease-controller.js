@@ -20,7 +20,7 @@
             REACTOME: "reactome",
             EVA: "eva",
             PHENODIGM: "phenodigm",
-            GWAS: "gwas",
+            GWAS: "gwas_catalog",
             CANCER_GENE_CENSUS: "cancer_gene_census",
             CHEMBL: "chembl"
         }
@@ -116,8 +116,8 @@
             $log.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
 
             // get gene specific info
-            cttvAPIservice.getGene( {
-                    gene_id:$scope.search.target
+            cttvAPIservice.getTarget( {
+                    target_id:$scope.search.target
                 } ).
                 then(
                     function(resp) {
@@ -130,8 +130,8 @@
 
 
             // get disease specific info with the efo() method
-            cttvAPIservice.getEfo( {
-                    efo:$scope.search.disease
+            cttvAPIservice.getDisease( {
+                    code:$scope.search.disease
                 } ).
                 then(
                     function(resp) {
@@ -198,12 +198,14 @@
             $log.log("getFlowerData()");
 
             return cttvAPIservice.getAssociation({
-                    gene:$scope.search.target,
-                    efo:$scope.search.disease,
-                    expandefo: true
+                    target:$scope.search.target,
+                    disease:$scope.search.disease,
+                    expandefo: true,
+                    facets: false
                 }).
                 then(
                     function(resp) {
+                        $log.log("getFlowerData response");
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].datatypes);
                         for(var i=0; i<resp.body.data[0].datatypes.length; i++){
                             $scope.search.association_scores[resp.body.data[0].datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score;
@@ -229,44 +231,6 @@
 
 
         // -------------------------------------------------
-
-
-
-        var getCommonDiseaseData = function(){
-            $scope.search.genetic_associations.common_diseases.is_loading = true;
-            return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target,
-                    efo:$scope.search.disease,
-                    size: 1000,
-                    datasource: dbs.GWAS,
-                    fields: [
-                        "biological_object.efo_info", // disease
-                        "evidence.evidence_chain",
-                        "evidence.evidence_codes_info"
-                        //"evidence.evidence_chain[0].biological_object.about",       // SNP
-                        //"evidence.evidence_chain[0].evidence.evidence_codes[1]",    // variant type
-                        //"evidence.evidence_chain[0].evidence.evidence_codes[0]",    // evidence source
-                        //"evidence.evidence_chain[1].evidence.evidence_codes",       // evidence source
-                        //"evidence.evidence_chain[1].evidence.association_score.pvalue.value",   // p-value
-                        //"evidence.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs" // publications
-                    ]
-                } ).
-                then(
-                    function(resp) {
-                        $scope.search.genetic_associations.common_diseases.data = resp.body.data;
-                        initCommonDiseasesTable();
-
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                ).
-                finally(function(){
-                    //$scope.search.genetic_associations.common_diseases.is_open = $scope.search.genetic_associations.common_diseases.data.length>0 || false;
-                    $scope.search.genetic_associations.common_diseases.is_loading = false;
-
-                    // update for parent
-                    updateGeneticAssociationsSetting();
-                });
-        }
 
 
 
@@ -308,51 +272,106 @@
 
 
 
+        var getCommonDiseaseData = function(){
+            $scope.search.genetic_associations.common_diseases.is_loading = true;
+            return cttvAPIservice.getFilterBy( {
+                    target:$scope.search.target,
+                    disease:$scope.search.disease,
+                    size: 1000,
+                    datasource: dbs.GWAS,
+                    /*fields: [
+                        "biological_object.efo_info", // disease
+                        "evidence.evidence_chain",
+                        "evidence.evidence_codes_info"
+                        //"evidence.evidence_chain[0].biological_object.about",       // SNP
+                        //"evidence.evidence_chain[0].evidence.evidence_codes[1]",    // variant type
+                        //"evidence.evidence_chain[0].evidence.evidence_codes[0]",    // evidence source
+                        //"evidence.evidence_chain[1].evidence.evidence_codes",       // evidence source
+                        //"evidence.evidence_chain[1].evidence.association_score.pvalue.value",   // p-value
+                        //"evidence.evidence_chain[1].evidence.provenance_type.literature.pubmed_refs" // publications
+                    ]*/
+                    fields:[
+                        "disease",
+                        "evidence",
+                        "variant",
+                        "target",
+                        "sourceID"
+                    ]
+                } ).
+                then(
+                    function(resp) {
+                        $scope.search.genetic_associations.common_diseases.data = resp.body.data;
+                        initCommonDiseasesTable();
+
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                ).
+                finally(function(){
+                    //$scope.search.genetic_associations.common_diseases.is_open = $scope.search.genetic_associations.common_diseases.data.length>0 || false;
+                    $scope.search.genetic_associations.common_diseases.is_loading = false;
+
+                    // update for parent
+                    updateGeneticAssociationsSetting();
+                });
+        }
+
+
+
         /*
          *
          */
         var formatCommonDiseaseDataToArray = function(data){
             var newdata = [];
-            for(var i=0; i<data.length; i++){
+            //for(var i=0; i<data.length; i++){
+            data.forEach(function(item){
+
                 // create rows:
                 var row = [];
 
                 try{
 
                     // disease
-                    row.push(data[i].biological_object.efo_info[0][0].label);
+                    row.push( item.disease.efo_info[0].label );
 
                     // Variant
-                    //row.push( "<a href='"+data[i].evidence.evidence_chain[0].biological_object.about[0]+"' target='_blank'>"
-                    row.push( "<a href='http://www.ensembl.org/Homo_sapiens/Variation/Explore?v="+data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()+"' target='_blank'>"
-                            + data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()
-                            + " <i class='fa fa-external-link'></i></a>");
+                    row.push( "<a href='"+item.variant.id[0]+"' target='_blank'>"+item.variant.id[0].split('/').pop()+"&nbsp;<i class='fa fa-external-link'></i></a>" );
+                    // row.push( "<a href='http://www.ensembl.org/Homo_sapiens/Variation/Explore?v="+data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()+"' target='_blank'>"
+                    //         + data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()
+                    //         + " <i class='fa fa-external-link'></i></a>");
 
                     // variant type
-                    row.push (data[i].evidence.evidence_chain[0].evidence.experiment_specific.functional_consequence_label);
+                    row.push ( "TODO: check this<br />"+item.variant.type );
                     // row.push( getSoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes) );
-                    // evidence source
-                    //row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[2]) );
-                    row.push(cttvDictionary.CTTV_PIPELINE);
 
                     // evidence source
-                    row.push( "<a href='https://www.ebi.ac.uk/gwas/search?query="+data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop()+"' target='_blank'>"
-                            + data[i].evidence.evidence_chain[1].evidence.evidence_codes[0]
-                            + "&nbsp;catalog <i class='fa fa-external-link'></i></a>");
+                    //row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_chain[0].evidence.evidence_codes[2]) );
+                    row.push( cttvDictionary.CTTV_PIPELINE );
+
+                    // evidence source
+                    row.push( "<a href='https://www.ebi.ac.uk/gwas/search?query="+item.variant.id[0].split('/').pop()+"' target='_blank'>"
+                            //+ data[i].evidence.evidence_chain[1].evidence.evidence_codes[0]
+                            //+ item.evidence.variant2disease.provenance_type.database.id
+                            + "TODO: check this!<br />"+item.sourceID
+                            + "&nbsp;<i class='fa fa-external-link'></i></a>");
 
 
                     // p-value
-                    var pval = data[i].evidence.evidence_chain[1].evidence.association_score.pvalue.value.toPrecision(1);
-                    row.push(pval);
-                    // row.push(data[i].evidence.evidence_chain[1].evidence.association_score.pvalue.value);
+                    // var pval = data[i].evidence.evidence_chain[1].evidence.association_score.pvalue.value.toPrecision(1);
+                    // row.push(pval);
+                    row.push( item.evidence.variant2disease.resource_score.value.toPrecision(1) );
 
                     // publications
                     var pub="";
-                    if (data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references) {
-                        for (var j=0; j<data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references.length; j++){
-                            var n=data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
-                            pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
-                        }
+                    // if (data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references) {
+                    //     for (var j=0; j<data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references.length; j++){
+                    //         var n=data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
+                    //         pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
+                    //     }
+                    // }
+                    if( checkPath(item, "evidence.variant2disease.provenance_type.literature.references")){
+                        item.evidence.variant2disease.provenance_type.literature.references.forEach(function(ref){
+                            pub+="<a href='"+ref.lit_id+"' target='_blank'>"+ref.lit_id.split('/').pop()+" <i class='fa fa-external-link'></i></a>"
+                        });
                     }
                     row.push(pub);
 
@@ -361,7 +380,7 @@
                     $log.error("Error parsing common disease data:");
                     $log.error(e);
                 }
-            }
+            });
 
             return newdata;
         }
@@ -388,24 +407,14 @@
         var getRareDiseaseData = function(){
             $scope.search.genetic_associations.rare_diseases.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target,
-                    efo:$scope.search.disease,
+                    target:$scope.search.target,
+                    disease:$scope.search.disease,
                     size: 1100,
                     datasource: [dbs.UNIPROT, dbs.EVA ],
                     fields: [
-                        "biological_object.efo_info", // disease
-                        //"[0].evidence.urls.linkouts", "evidence.evidence_chain[0].biological_object.about", // mutation
-                        "evidence", //
-                        "id",
-                        //"evidence.evidence_chain[0].evidence.evidence_codes",    // mutation type
-                        //"evidence.evidence_codes_info",
-                        //"evidence.evidence_codes",
-                        //"evidence.evidence_chain[0].evidence.experiment_specific",    // mutation consequence
-                        //"evidence.provenance_type.database", "biological_subject.about",    // evidence source
-                        //"evidence.provenance_type.literature.",                   // publications
-                        //"evidence.experiment_specific",
-                        //"evidence.urls"
-
+                        "disease.efo_info",
+                        "evidence",
+                        "variant",
                     ]
                 } ).
                 then(
@@ -427,22 +436,27 @@
 
         var formatRareDiseaseDataToArray = function(data){
             var newdata = [];
-            for(var i=0; i<data.length; i++){
+            data.forEach(function(item){
                 // create rows:
                 var row = [];
 
                 try{
 
-                    var db = data[i].evidence.provenance_type.database.id.toLowerCase();
+                    var db = "";
+                    if( item.evidence.variant2disease ){
+                        db = item.evidence.variant2disease.provenance_type.database.id.toLowerCase();   // or gene2variant
+                    }else if ( item.evidence.provenance_type.database ){
+                        db = item.evidence.provenance_type.database.id.toLowerCase();
+                    }
 
                     // disease
-                    row.push(data[i].biological_object.efo_info[0][0].label);
+                    row.push( item.disease.efo_info[0].label );
 
 
                     // mutation
                     var mut = messages.NA;
-                    if(data[i].evidence.evidence_chain && data[i].evidence.evidence_chain[0].biological_object.about){
-                        var rsId = data[i].evidence.evidence_chain[0].biological_object.about[0].split('/').pop();
+                    if( checkPath(item, "variant.id") && item.variant.id[0]){
+                        var rsId = item.variant.id[0].split('/').pop();
                         mut = "<a href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=" + rsId + " target=_blank>" + rsId + " <i class='fa fa-external-link'></i></a>";
                     }
                     row.push(mut);
@@ -465,7 +479,7 @@
                     // mutation consequence:
                     //  EVA: n/a
                     //  uniprot: evidence.evidence_chain[0].evidence.evidence_codes[1] -> take the label (e.g. "missense variant" or null if no evidence chain)
-                    var cons = messages.NA;
+                    /*var cons = messages.NA;
                     if( db===dbs.UNIPROT.toLowerCase() ){
                         // if Uniprot
                         //cons = data[i].evidence_chain[0]
@@ -476,8 +490,8 @@
                         // if eva
                         cons = data[i].evidence.evidence_chain[0].biological_object.properties.experiment_specific.functional_consequence_label;
                     }
-                    row.push( cons );
-
+                    row.push( cons );*/
+                    row.push( "TODO!" );
 
                     // evidence source
                     // hardcoded label; the URL comes from :
@@ -485,17 +499,20 @@
                     // evidence.linkouts[0].url (identifiers.org -> redirect to ncbi page)
                     var eso = messages.NA;
                     if( db===dbs.EVA.toLowerCase() ){
-                        eso = "Curated in EVA";
-                        eso = "<a href='"+data[i].evidence.evidence_chain[0].evidence.urls.linkouts[0].url+"' target='_blank'>"
-                            + eso
-                            + " <i class='fa fa-external-link'></i></a>";
-                    } else if ( db===dbs.UNIPROT.toLowerCase() && (data[i].evidence.urls) ){
-                        var urls = data[i].evidence.urls;
-                        if (data[i].evidence.urls.linkouts) {
-                            urls = data[i].evidence.urls.linkouts;
+                        eso = "Curated in EVA"+" (TODO: check link)";
+                        if( item.evidence.gene2variant ){
+                            eso = "<a href='"+item.evidence.gene2variant.urls[0].url+"' target='_blank'>"
+                                + eso
+                                + " <i class='fa fa-external-link'></i></a>";
                         }
-                        eso = "<a href="+urls[0].url+" target='_blank'>"
-                         + urls[0].nice_name
+                    } else if ( db===dbs.UNIPROT.toLowerCase() && item.evidence.urls ){
+                        // TO DO: check this!
+                        // var urls = item.evidence.gene2variant.urls;
+                        // if (data[i].evidence.urls.linkouts) {
+                        //     urls = data[i].evidence.urls.linkouts;
+                        // }
+                        eso = "<a href="+item.evidence.urls[0].url+" target='_blank'>"
+                         + "TODO: check<br />"+item.evidence.urls[0].nice_name
                          + " <i class='fa fa-external-link'></i></a>";
                     }
                     row.push( eso );
@@ -505,23 +522,19 @@
                     var pub=messages.NA;
                     var pub;
                     if (db === dbs.EVA.toLowerCase()) {
-                        pub = "";
-                        for (var j=0; j<data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references.length; j++) {
-                            var n=data[i].evidence.evidence_chain[1].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
-                            if (n == 0) {
-                                continue;
-                            }
-                            pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>, ";
-                        }
+                        if( item.evidence.variant2disease ){
+                            pub = "";
+                            item.evidence.variant2disease.provenance_type.literature.references.forEach(function(ref){
+                                pub+="<a href='"+ref.lit_id+"' target='_blank'>"+(ref.lit_id.split('/').pop())+" <i class='fa fa-external-link'></i></a>, ";
+                            });
+                        } else {pub+=" (TODO: check this!)"}
                     } else {
-                        pub = "";
                         // Uniprot
-                        if (data[i].evidence.evidence_chain && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature) {
-                            for (var j=0; j<data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references.length; j++) {
-                                var n=data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
-                                pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>, ";
-                            }
-                        }
+                        if ( checkPath(item, "evidence.provenance_type.literature.references") ) {
+                            pub = item.evidence.provenance_type.literature.references.map(function(ref){
+                                return "<a href='"+ref.lit_id+"' target='_blank'>"+ref.lit_id.split('/').pop()+" <i class='fa fa-external-link'></i></a>";
+                            }).join(", ");
+                        } else {pub+=" (TODO: check this!)"}
                     }
                     row.push(pub);
 
@@ -534,7 +547,7 @@
                     $log.log("Error parsing rare disease data:");
                     $log.log(e);
                 }
-            }
+            });
 
             return newdata;
         }
@@ -579,41 +592,15 @@
         var getDrugData = function(){
             $scope.search.drugs.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target,
-                    efo:$scope.search.disease,
+                    target:$scope.search.target,
+                    disease:$scope.search.disease,
                     size: 1000,
                     datasource: dbs.CHEMBL,
                     fields: [
-                        // 0: disease
-                        "biological_object.efo_info",
-
-                        // 1: drug
-                        "evidence.evidence_chain", //[0].evidence.experiment_specific.molecule_name
-
-                        // 2: phase
-                        //"evidence.evidence_chain", //[0].evidence.experiment_specific
-
-                        // 3: type
-                        //"evidence.evidence_chain", //[0].evidence.experiment_specific.molecule_type
-
-                        // 4: Mechanism of action
-                        //"evidence.evidence_chain", //[0].evidence.experiment_specific.mechanism_of_action
-
-                        // 5: Activity
-                        "biological_subject.properties", //.activity
-
-                        // 6: Clinical trials
-                        // ?????????????????????????????????
-
-                        // 7: target class
-                        //"evidence.evidence_chain", //[0].evidence.experiment_specific.target_class[0]
-
-                        // 8: target context
-                        "biological_subject.gene_info", //.target_type
-
-                        // 9: evidence type
-                        "evidence.evidence_codes_info"    // Evidence codes???
-
+                        "disease.efo_info",
+                        "drug",
+                        "evidence",
+                        "target",
                     ]
                 } ).
                 then(
@@ -634,42 +621,41 @@
 
         var formatDrugsDataToArray = function(data){
             var newdata = [];
-            for(var i=0; i<data.length; i++){
+            data.forEach(function(item){
                 // create rows:
                 var row = [];
 
                 try{
 
                     // 0: disease
-                    row.push(data[i].biological_object.efo_info[0][0].label);
+                    row.push(item.disease.efo_info[0].label);
 
                     // 1: drug
-                    row.push( "<a href='"+data[i].evidence.evidence_chain[0].evidence.experiment_specific.urls[0].url+"' target='_blank'>"
-                            + data[i].evidence.evidence_chain[0].evidence.experiment_specific.molecule_name
+                    row.push( "<a href='"+item.evidence.target2drug.urls[0].url+"' target='_blank'>"
+                            + item.drug.molecule_name
                             + " <i class='fa fa-external-link'></i></a>");
 
                     // 2: phase
-                    row.push(data[i].evidence.evidence_chain[1].evidence.experiment_specific.max_phase_for_disease.label);
+                    row.push(item.drug.max_phase_for_all_diseases.label);
 
                     // 2: hidden
-                    row.push(data[i].evidence.evidence_chain[1].evidence.experiment_specific.max_phase_for_disease.numeric_index);
+                    row.push(item.drug.max_phase_for_all_diseases.numeric_index);
 
                     // 3: type
-                    row.push(data[i].evidence.evidence_chain[0].evidence.experiment_specific.molecule_type);
+                    row.push(item.drug.molecule_type);
 
                     // 4: Mechanism of action
                     var pubs = 0;
-                    if(data[i].evidence.evidence_chain[0].evidence.provenance_type
+                    // TODO:
+                    /*if(data[i].evidence.evidence_chain[0].evidence.provenance_type
                         && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature
                         && data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references){
                             pubs = data[i].evidence.evidence_chain[0].evidence.provenance_type.literature.references.length;
                     } else {
                         pubs = 0;
-                    }
+                    }*/
 
-                    var action = data[i].evidence.evidence_chain[0].evidence.experiment_specific.mechanism_of_action;
-
-
+                    var action = item.evidence.target2drug.mechanism_of_action;
 
                     // publications:
                     // we show the publications here in the cells for now
@@ -686,8 +672,8 @@
                         pub+="</div>";
                     }
 
-                    if (data[i].evidence.evidence_chain[0].evidence.experiment_specific.urls && data[i].evidence.evidence_chain[0].evidence.experiment_specific.urls[2]) {
-                        var extLink = data[i].evidence.evidence_chain[0].evidence.experiment_specific.urls[2];
+                    if ( item.evidence.target2drug.urls && item.evidence.target2drug.urls[2] ) {
+                        var extLink = item.evidence.target2drug.urls[2];
                         pub += "<br /><span><a target=_blank href=" + extLink.url + ">" + extLink.nice_name  + "</a></span>";
                     }
 
@@ -695,15 +681,16 @@
 
                     row.push(action);
 
+
                     // 5: Activity
-                    var activity = data[i].biological_subject.properties.activity;
+                    var activity = item.target.activity;
                     switch (activity) {
                         case 'drug_positive_modulator' :
-                        activity = "agonist";
-                        break;
+                            activity = "agonist";
+                            break;
                         case 'drug_negative_modulator' :
-                        activity = "antagonist";
-                        break;
+                            activity = "antagonist";
+                            break;
                     }
                     row.push(activity);
 
@@ -713,21 +700,23 @@
                     //             + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
                     // 7: target class
-                    row.push(data[i].evidence.evidence_chain[0].evidence.experiment_specific.target_class[0]);
+                    row.push(item.target.target_class[0]);
+
 
                     // 8: target context / protein complex members
-                    var prot="";
+
+                    /*var prot="";
                     var prots = []
-                    if (data[i].biological_subject.gene_info.length > 1) {
+                    if (item.target.gene_info.length > 1) {
                         prot += "complex:<br/>";
                     } else {
                         prot += "protein:<br/>";
                     }
-                    if(data[i].biological_subject.gene_info){
-                        for(var j=0; j<data[i].biological_subject.gene_info.length; j++){
-                            prots.push("<a href='/target/"+data[i].biological_subject.gene_info[j].geneid
-                                +"/associations' title='"+data[i].biological_subject.gene_info[j].name+"'>"
-                                +data[i].biological_subject.gene_info[j].symbol
+                    if(item.target.gene_info){
+                        for(var j=0; j<item.target.gene_info.length; j++){
+                            prots.push("<a href='/target/"+item.target.gene_info[j].geneid
+                                +"/associations' title='"+item.target.gene_info[j].name+"'>"
+                                +item.target.gene_info[j].symbol
                                 +"</a>");
                             // prot+="<a href='#/target/"+data[i].biological_subject.gene_info[j].geneid
                             //     +"/associations' title='"+data[i].biological_subject.gene_info[j].name+"'>"
@@ -738,12 +727,12 @@
                     prot += prots.join (", ");
 
                     row.push(prot);
+                    */
 
                     // 9: evidence source
-
                     row.push( "Curated from <br /><a href='"
-                                + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
-                                + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
+                                + item.evidence.drug2clinic.urls[0].url
+                                + "' target='_blank'>" + item.evidence.drug2clinic.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
                     //row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
 
@@ -753,7 +742,7 @@
                     $log.log("Error parsing drugs data:");
                     $log.log(e);
                 }
-            }
+            });
             return newdata;
         }
 
@@ -803,20 +792,14 @@
         var getPathwaysData = function(){
             $scope.search.pathways.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target,
-                    efo:$scope.search.disease,
+                    target:$scope.search.target,
+                    disease:$scope.search.disease,
                     size: 1000,
                     datasource: dbs.REACTOME,
                     fields: [
-                        "biological_object.efo_info",
-                        "biological_subject.properties.target_type",    //Target context
-                        "biological_subject.gene_info",    //Protein complex members
-                        "biological_subject.properties.activity",    //Activity
-                        "evidence.properties.experiment_specific.additional_properties",    //Additional context
-                        "evidence.urls.linkouts",    //Provenance - SourceDB
-                        "evidence.provenance_type.literature", //.pubmed_refs",    //Provenance - References
-                        "evidence.date_asserted",    //Date asserted
-                        "evidence.evidence_codes"    //Evidence codes
+                        "target",
+                        "disease",
+                        "evidence"
                     ]
                 } ).
                 then(
@@ -839,29 +822,29 @@
          */
         var formatPathwaysDataToArray = function(data){
             var newdata = [];
-            for(var i=0; i<data.length; i++){
+            data.forEach(function(item){
                 // create rows:
                 var row = [];
 
                 try{
 
                     // disease
-                    row.push(data[i].biological_object.efo_info[0][0].label);
+                    row.push("TODO: check field<br />"+item.disease.efo_info[0].label); // TODO: should it be efo_info[0].label ??
 
                     // pathway
-                    row.push("Available soon");
+                    row.push("TODO: need this?<br />Available soon");
 
                     // overview
-                    row.push("<a href='" + data[i].evidence.urls.linkouts[0].url+"' target='_blank'>" + data[i].evidence.urls.linkouts[0].nice_name + " <i class='fa fa-external-link'></i></a>");
+                    row.push("<a href='" + item.evidence.urls[0].url+"' target='_blank'>" + item.evidence.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
                     // activity
-                    row.push(data[i].biological_subject.properties.activity);
+                    row.push("TODO: remove _s ?"+item.target.activity);
 
                     // target context
-                    row.push(data[i].biological_subject.properties.target_type);
+                    row.push("TODO: remove _s ?"+item.target.target_type);
 
                     // protein complex member
-                    var prot="";
+                    /*var prot="";
                     if(data[i].biological_subject.gene_info){
                         for(var j=0; j<data[i].biological_subject.gene_info.length; j++){
                             prot+="<a href=/target/"+data[i].biological_subject.gene_info[j].geneid + "/associations"
@@ -870,30 +853,30 @@
                                 +"</a>, "
                         }
                     }
-                    row.push(prot);
+                    row.push(prot);*/
+                    row.push("TODO: remove column?");
 
                     // mutations
-                    var prop = messages.NA;
-                        if( checkPath(data[i], "evidence.properties.experiment_specific.additional_properties") ){
-                            prop="";
-                            for(var p in data[i].evidence.properties.experiment_specific.additional_properties){
-                                prop += p + ":&nbsp;" + data[i].evidence.properties.experiment_specific.additional_properties[p] + ", "
-                            }
-                        }
-
-                    row.push(prop);
+                    //var prop = messages.NA;
+                    //    if( checkPath(data[i], "evidence.properties.experiment_specific.additional_properties") ){
+                    //        prop="";
+                    //        for(var p in data[i].evidence.properties.experiment_specific.additional_properties){
+                    //            prop += p + ":&nbsp;" + data[i].evidence.properties.experiment_specific.additional_properties[p] + ", "
+                    //        }
+                    //    }
+                    //row.push(prop);
+                    row.push(item.evidence.known_mutations || messages.NA);
 
                     // evidence codes
-                    row.push("Curated in Reactome<br />" + data[i].evidence.evidence_codes.join(", "));
+                    row.push("Curated in Reactome<br />" + item.evidence.evidence_codes.join(", "));
 
                     // publications
                     var pub=messages.NA;
-                    if( checkPath(data[i], "evidence.provenance_type.literature.pubmed_refs") ){
-                        pub="";
-                        for(var j=0; j<data[i].evidence.provenance_type.literature.pubmed_refs.length; j++){
-                            var n=data[i].evidence.provenance_type.literature.pubmed_refs[j].split('/').pop();
-                            pub+="<a href='http://europepmc.org/abstract/MED/"+n+"' target='_blank'>"+n+" <i class='fa fa-external-link'></i></a>"
-                        }
+                    if( checkPath(item, "evidence.provenance_type.literature.references") ){
+                        pub=item.evidence.provenance_type.literature.references.map(function(ref){
+                            return "<a href='"+ref.lit_id+"' target='_blank'>"+ref.lit_id.split('/').pop()+"&nbsp;<i class='fa fa-external-link'></i></a>"
+                        }).join(", ");
+
                     }
                     row.push(pub);
 
@@ -905,7 +888,7 @@
                     $log.error("Error parsing pathways data:");
                     $log.error(e);
                 }
-            }
+            });
             return newdata;
         }
 
@@ -931,23 +914,14 @@
         var getRnaExpressionData = function(){
             $scope.search.rna_expression.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target,
-                    efo:$scope.search.disease,
+                    target:$scope.search.target,
+                    disease:$scope.search.disease,
                     size: 1000,
-                    datasource: 'expression_atlas',
+                    datasource: dbs.EXPRESSION_ATLAS,
                     fields: [
-                        "biological_object.efo_info",
-                        //"biological_object.properties.biosamples",
-                        "evidence.experiment_specific",
-                        //"evidence.experiment_specific.comparison_name", // comparison
-                        "biological_subject.properties.activity",  // activity
-                        //"evidence.experiment_specific.log2_fold_change", // fold change
-                        "evidence.association_score.pvalue.value", // p-value
-                        "evidence.urls.linkouts", // provenance & experiment overview
-                        //"evidence.experiment_specific.literature.pubmed_refs",  // literature
-                        "evidence.evidence_codes",
-                        "evidence.evidence_codes_info",
-                        "evidence.provenance_type"
+                        "disease",
+                        "evidence",
+                        "target"
                     ]
                 } ).
                 then(
@@ -972,49 +946,48 @@
          */
         var formatRnaDataToArray = function(data){
             var newdata = [];
-            for(var i=0; i<data.length; i++){
+            data.forEach(function(item){
                 // create rows:
                 var row = [];
 
                 try{
 
                     // disease
-                    row.push(data[i].biological_object.efo_info[0][0].label);
+                    row.push( item.disease.efo_info[0].label );
 
                     // comparison
-                    row.push(data[i].evidence.experiment_specific.comparison_name);
+                    row.push( item.evidence.comparison_name );
 
                     // activity
-                    var activityUrl = data[i].evidence.urls.linkouts[2].url;
-                    var activity = data[i].biological_subject.properties.activity.split("_").shift();
+                    var activityUrl = item.evidence.urls[0].url;
+                    var activity = item.target.activity.split("_").shift();
                     row.push( "<a href='"+ activityUrl +"' target='_blank'>" + activity +"<i class='fa fa-external-link'></i></a>" );
 
                     // tissue / cell
-                    row.push (data[i].evidence.experiment_specific.tissue_name);
+                    row.push( item.disease.biosample.name );
                     // row.push( checkPath(data[i], "biological_object.properties.biosamples") ? data[i].biological_object.properties.biosamples : messages.NA );
 
                     // evidence source
-                    row.push( getEcoLabel( data[i].evidence.evidence_codes_info, data[i].evidence.evidence_codes[0]) + " <a href='http://www.ebi.ac.uk/gxa/FAQ.html' target='_blank'>[?]</a>" );
+                    row.push( getEcoLabel( item.evidence.evidence_codes_info, item.evidence.evidence_codes[0]) + " <a href='http://www.ebi.ac.uk/gxa/FAQ.html' target='_blank'>[?]</a>" );
 
                     // fold change
-                    row.push(data[i].evidence.experiment_specific.log2_fold_change);
+                    row.push( item.evidence.log2_fold_change.value );
 
                     // p-value
-                    row.push(data[i].evidence.association_score.pvalue.value);
+                    row.push( item.evidence.resource_score.value );
 
                     // percentile rank
-                    row.push(data[i].evidence.experiment_specific.percentile_rank);
+                    row.push( item.evidence.log2_fold_change.percentile_rank );
 
                     // experiment overview
-                    row.push("<a href='"+data[i].evidence.urls.linkouts[2].url+"' target='_blank'>" + (data[i].evidence.urls.linkouts[2].nice_name || "Experiment overview and raw data") + " <i class='fa fa-external-link'></i></a>");
+                    row.push( "<a href='"+item.evidence.urls[2].url+"' target='_blank'>" + (item.evidence.experiment_overview || "Experiment overview and raw data") + " <i class='fa fa-external-link'></i></a>" );
 
                     // publications
                     var pub="";
-                    if (data[i].evidence.provenance_type.literature) {
-                        for(var j=0; j<data[i].evidence.provenance_type.literature.references.length; j++){
-                            var n = data[i].evidence.provenance_type.literature.references[j].lit_id.split('/').pop();
-                            pub += "<a href='http://europepmc.org/abstract/MED/" + n +"' target='_blank'>"+ n +" <i class='fa fa-external-link'></i></a>"
-                        }
+                    if (item.evidence.provenance_type.literature) {
+                        pub = item.evidence.provenance_type.literature.references.map(function(ref){
+                            return "<a href='" + ref.lit_id +"' target='_blank'>"+ ref.lit_id.split('/').pop() +"&nbsp;<i class='fa fa-external-link'></i></a>"
+                        }).join(", ");
                     }
                     row.push(pub);
 
@@ -1024,7 +997,8 @@
                     $log.log("Error parsing RNA-expression data:");
                     $log.log(e);
                 }
-            }
+            });
+            //}
 
             return newdata;
         }
@@ -1049,14 +1023,15 @@
 
 
         var getMutationData = function(){
+            $log.log("getMutationData()")
             $scope.search.somatic_mutations.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target,
-                    efo:$scope.search.disease,
+                    target:$scope.search.target,
+                    disease:$scope.search.disease,
                     size: 1000,
                     datasource: dbs.CANCER_GENE_CENSUS,
                     fields: [
-                        "biological_object.efo_info", // disease
+                        "disease.efo_info", // disease
                         "evidence.evidence_codes_info",  // evidence source
                         "evidence.urls"
                     ]
@@ -1082,21 +1057,19 @@
          */
         var formatMutationsDataToArray = function(data){
             var newdata = [];
-            for(var i=0; i<data.length; i++){
-                // create rows:
-                var row = [];
-
+            data.forEach(function(item){
                 try{
-                    // disease
-                    row.push(data[i].biological_object.efo_info[0][0].label);
-                    // evidence source
-                    row.push( "<a href='"+data[i].evidence.urls.linkouts[0].url+"' target='_blank'>"+data[i].evidence.urls.linkouts[0].nice_name+" <i class='fa fa-external-link'></i></a>" );
-                    newdata.push(row); // push, so we don't end up with empty rows
+                    newdata.push([
+                        // col 0: disease
+                        item.disease.efo_info[0].label,
+                        // col 1: evidence source
+                        "<a href='"+item.evidence.urls[0].url+"' target='_blank'>"+item.evidence.urls[0].nice_name+" <i class='fa fa-external-link'></i></a>"
+                    ])
                 }catch(e){
                     $log.log("Error parsing somatic mutation data:");
                     $log.log(e);
                 }
-            }
+            })
 
             return newdata;
         }
@@ -1121,7 +1094,6 @@
         // =================================================
 
         /*
-
         Probability:
         evidence.association_scrore.probability.value
 
@@ -1132,24 +1104,19 @@
         Human phenotypes:
         same as for moouse phenotypes
         biological object.properties.experiment specific
-
-
         */
 
         var getMouseData = function(){
             $scope.search.mouse.is_loading = true;
             return cttvAPIservice.getFilterBy( {
-                    gene:$scope.search.target,
-                    efo:$scope.search.disease,
+                    target:$scope.search.target,
+                    disease:$scope.search.disease,
                     size: 1000,
                     datasource: dbs.PHENODIGM,
                     fields: [
-                        "biological_object.efo_info", // disease
-                        "biological_object.properties.experiment_specific",
-                        //"evidence.properties.evidence_chain",
-                        "evidence.evidence_chain",
-                        "unique_association_fields",
-                        "evidence.association_score"
+                        "disease",
+                        "evidence",
+                        "scores"
                     ]
                 } ).
                 then(
@@ -1172,43 +1139,32 @@
          */
         var formatMouseDataToArray = function(data){
             var newdata = [];
-            for(var i=0; i<data.length; i++){
+            data.forEach(function(item){
                 // create rows:
                 var row = [];
 
                 try{
                     // disease
-                    row.push(data[i].biological_object.efo_info[0][0].label);
+                    row.push(item.disease.efo_info[0].label);    // or item.disease.efo_info[0].label ???
 
                     // human
-                    var human = "";
-                    var exp = data[i].evidence.evidence_chain[2].biological_object.properties.experiment_specific
-                    for(var e in exp){
-                        human += "<li>" + exp[e] + "</li>";
-                    }
-                    human = "<ul>" + human + "</ul>" ;//human.substr(0, human.length-6);
-                    row.push(human);
+                    row.push( "<ul>" + item.evidence.disease_model_association.human_phenotypes.map(function(hp){return "<li>"+hp.label+"</li>"}).join("") + "</ul>" );
 
                     // mouse
-                    var mouse = "";
-                    exp = data[i].evidence.evidence_chain[2].biological_subject.properties.experiment_specific
-                    for(var e in exp){
-                        mouse += "<li>" + exp[e] + "</li>";
-                    }
-                    mouse = "<ul>" + mouse + "</ul>" ;//mouse.substr(0, mouse.length-2);
-                    row.push(mouse);
+                    row.push( "<ul>" + item.evidence.disease_model_association.model_phenotypes.map(function(hp){return "<li>"+hp.label+"</li>"}).join("") + "</ul>" );
 
                     // mouse model
-                    var mousemodel = processMouseModelLinks( data[i].unique_association_fields.allelic_composition, (data[i].unique_association_fields.allele_ids || "") )
-                                    + "<br/ >"
-                                    + "<span class='small text-lowlight'>"+data[i].unique_association_fields.genetic_background+"</span>"
+                    var mousemodel = processMouseModelLinks( item.evidence.biological_model.allelic_composition, item.evidence.biological_model.allele_ids )
+                                     + "<br/ >"
+                                     + "<span class='small text-lowlight'>"+item.evidence.biological_model.genetic_background+"</span>"
                     row.push(mousemodel);
+
 
                     // evidence source
                     row.push("Phenodigm"); //data[i].unique_association_fields.predictionModel);
 
                     // score
-                    row.push(data[i].evidence.association_score.probability.value);
+                    row.push(item.scores.association_score);
 
 
                     newdata.push(row); // push, so we don't end up with empty rows
@@ -1216,7 +1172,7 @@
                     $log.error("Error parsing mouse data:");
                     $log.error(e);
                 }
-            }
+            });
 
             return newdata;
         }
@@ -1302,7 +1258,6 @@
         // =================================================
 
 
-        //$log.warn($location.search());
         //if($location.search().t && $location.search().d){
             $log.info("target-disease-controller");
             var path = $location.path().split("/");
@@ -1342,16 +1297,6 @@
                         getMouseData();
                     }
                 });
-
-            // then try get some data
-            // getCommonDiseaseData();
-            // getRareDiseaseData();
-            //
-            // getMutationData();
-            // getDrugData();
-            // getRnaExpressionData();
-            // getPathwaysData();
-            // getMouseData();
 
         //  }
 

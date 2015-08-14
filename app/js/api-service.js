@@ -32,6 +32,7 @@ angular.module('cttvServices')
             API_QUICK_SEARCH_URL : 'quickSearch',
             API_DISEASE_URL: 'disease',
             API_EXPRESSION_URL: 'expression',
+            API_TARGET_URL : 'target',
             facets: {
                 DATATYPES: 'filterbydatatype',
                 PATHWAY_TYPE: 'filterbypathway',
@@ -41,7 +42,8 @@ angular.module('cttvServices')
 
 
         var api = cttvApi()
-            .prefix("/api/latest/")
+            //.prefix("/api/latest/")
+            .prefix("https://alpha.targetvalidation.org/api/latest/")
             .appname("cttv-web-app")
             .secret("2J23T20O31UyepRj7754pEA2osMOYfFK")
             .onError(cttvAPI.defaultErrorHandler);
@@ -266,6 +268,7 @@ angular.module('cttvServices')
 
 
         /**
+        * D E P R E C A T E D
         * Get gene details via API gene() method based on ENSG code
         * queryObject params:
         *  - gene: the ENSG code, e.g. "ENSG00000005339"
@@ -280,12 +283,26 @@ angular.module('cttvServices')
         };
 
         /**
+        * Get gene details via API gene() method based on ENSG code
+        * queryObject params:
+        *  - gene: the ENSG code, e.g. "ENSG00000005339"
+        */
+        cttvAPI.getTarget = function(queryObject){
+            $log.log("cttvAPI.getTarget "+queryObject.target_id);
+
+            return callAPI({
+                operation: cttvAPI.API_TARGET_URL, // + "/" + queryObject.gene,
+                params: queryObject
+            });
+        };
+
+        /**
         * Get disease details via API disease() method based on EFO ids
         * queryObject params:
-        *  - efo: the EFO code
+        *  - code: the (EFO) code
         */
         cttvAPI.getDisease = function (queryObject) {
-            $log.log ("cttvAPI.getDisease");
+            $log.log ("cttvAPI.getDisease "+queryObject.code);
 
             return callAPI ({
                 operation: cttvAPI.API_DISEASE_URL,

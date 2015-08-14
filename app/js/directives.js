@@ -125,7 +125,7 @@ angular.module('cttvDirectives', [])
 
                         var dts = JSON.parse(attrs.datatypes);
                         var opts = {
-                            gene: attrs.target,
+                            target: attrs.target,
                             datastructure: "flat",
                             expandefo: false,
                         };
@@ -332,7 +332,7 @@ angular.module('cttvDirectives', [])
                             return;
                         }
                         var opts = {
-                            gene: attrs.target,
+                            target: attrs.target,
                             datastructure: "tree",
                         };
                         if (!_.isEmpty(dts)) {
@@ -372,7 +372,7 @@ angular.module('cttvDirectives', [])
 
                     var dts = JSON.parse(attrs.datatypes);
                     var opts = {
-                        gene: attrs.target,
+                        target: attrs.target,
                         datastructure: "tree"
                     };
                     if (!_.isEmpty(dts)) {
@@ -470,6 +470,8 @@ angular.module('cttvDirectives', [])
             {name:cttvConsts.datatypes.RNA_EXPRESSION, title:cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
             {name:cttvConsts.datatypes.AFFECTED_PATHWAY, title:cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
             {name:cttvConsts.datatypes.ANIMAL_MODEL, title:cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
+            // empty col for sorting by total score (sum)
+            {name:"", title:"total score"},
             // empty col for the gene name
             {name:"", title:""}
         ];
@@ -493,9 +495,13 @@ angular.module('cttvDirectives', [])
                         {
                             "targets" : [1],
                             "visible" : false
+                        },
+                        {
+                            "targets" : [9],
+                            "visible" : false
                         }
                     ],
-                    "order" : [[3, "desc"]],
+                    "order" : [[9, "desc"]],
                     "autoWidth": false,
                     "ordering": true,
                     "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -548,6 +554,13 @@ angular.module('cttvDirectives', [])
                 row.push( getColorStyleString(dts.affected_pathway) );
                 // Animal models
                 row.push( getColorStyleString(dts.animal_model) );
+                // Total score
+                row.push( dts.genetic_association+
+                          dts.somatic_mutation+
+                          dts.known_drug+
+                          dts.rna_expression+
+                          dts.affected_pathway+
+                          dts.animal_model) ;
 
                 // Push gene name again instead
                 row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
@@ -563,7 +576,8 @@ angular.module('cttvDirectives', [])
             table.clear();
 
             // now here would be a good place to hide/show any columns based on datatypes ??
-            for(var i=3; i<table.columns()[0].length-1; i++){
+            for(var i=3; i<table.columns()[0].length-2; i++){
+                // only look at datatypes cols, so the first few and last few (including the total score are left out...)
                 table.column(i).visible( _.isEmpty(datatypes) );
             }
 
@@ -1004,7 +1018,7 @@ angular.module('cttvDirectives', [])
                         if( scope.target ){
 
                             cttvAPIservice.getExpression ({
-                                gene: scope.target
+                                target: scope.target
                             })
                             .then(
 
