@@ -9,7 +9,7 @@ angular.module('cttvControllers')
         $log.log("DiseaseCtrl()");
         var efo_code = $location.url().split("/")[2];
         cttvAPIservice.getDisease({
-            'efo': efo_code
+            code: efo_code
         })
         .then (function (resp) {
             var data = resp.body;

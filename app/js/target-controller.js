@@ -9,14 +9,11 @@ angular.module('cttvControllers')
 .controller ("TargetCtrl", ["$scope", "$location", "$log", "cttvAPIservice", "$http", "$sce", "$q", function ($scope, $location, $log, cttvAPIservice, $http, $sce, $q) {
     "use strict";
     $log.log('TargetCtrl()');
-    // var cttvRestApi = cttvApi();
-    var geneId = $location.url().split("/")[2];
-    // var url = cttvRestApi.url.gene({'gene_id' : geneId});
-    // $log.log(url);
-    // cttvRestApi.call(url)
 
-    cttvAPIservice.getGene({
-        "gene_id": geneId
+    var geneId = $location.url().split("/")[2];
+
+    cttvAPIservice.getTarget({
+        target_id: geneId
     })
     .then(
         // success

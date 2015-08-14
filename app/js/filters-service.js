@@ -500,7 +500,6 @@ angular.module('cttvServices').
 
             for(var i in search){
                 if(search.hasOwnProperty(i)){
-                    //var j = cttvAPIservice.facets[i.toUpperCase()];
                     raw[ i ] = search[i];
                     if(typeof raw[ i ] === "string"){
                         raw[i] = [raw[i]];

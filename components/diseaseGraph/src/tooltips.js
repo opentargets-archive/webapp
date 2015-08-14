@@ -16,7 +16,7 @@ var tooltips = function () {
         var spinner = tnt.tooltip.plain()
             .id(1);
         var url = cttvApi.url.associations({
-            "efo" : efo.efo,
+            "disease" : efo.efo,
             "expandefo": true
         });
         cttvApi.call(url)

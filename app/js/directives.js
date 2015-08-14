@@ -1018,7 +1018,7 @@ angular.module('cttvDirectives', [])
                         if( scope.target ){
 
                             cttvAPIservice.getExpression ({
-                                target: scope.target
+                                gene: scope.target  // TODO: should be TARGET in API!!!
                             })
                             .then(
 

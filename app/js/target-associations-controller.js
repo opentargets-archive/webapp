@@ -17,6 +17,10 @@ angular.module('cttvControllers')
 	    query : q
 	};
 
+    // reset the filters when loading a new page
+    // so we don't see the filters from the previous page...
+    cttvFiltersService.reset();
+
     // Set filters
     cttvFiltersService.pageFacetsStack([
         cttvFiltersService.facetTypes.DATATYPES
@@ -33,8 +37,8 @@ angular.module('cttvControllers')
     });
 
     // get gene specific info
-    cttvAPIservice.getGene( {
-            gene_id:q
+    cttvAPIservice.getTarget( {
+            target_id:q
         } ).
         then(
             function(resp) {
@@ -164,7 +168,7 @@ angular.module('cttvControllers')
 	var includedDiseases = [];
 	$scope.setDiseasesInDatatypes = function () {
         cttvAPIservice.getAssociations ({
-            gene: $scope.search.query,
+            target: $scope.search.query,
             datastructure: "tree"
 	    })
     		.then (function (resp) {

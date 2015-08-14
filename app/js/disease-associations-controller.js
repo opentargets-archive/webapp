@@ -115,7 +115,7 @@ angular.module('cttvControllers')
     // First off, get disease specific info to populate the top of the page
     // This is independent of other data, so we just fire that here
     cttvAPIservice.getDisease( {
-            efo:$scope.search.query
+            code:$scope.search.query
         } ).
         then(
             function(resp) {

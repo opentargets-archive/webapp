@@ -29,7 +29,7 @@ angular.module('cttvDirectives')
 		scope.$watch(function () { return attrs.datatypes; }, function (dts) {
             dts = JSON.parse(attrs.datatypes);
             var opts = {
-                gene: attrs.target,
+                target: attrs.target,
                 datastructure: "tree",
             };
             if (!_.isEmpty (dts)) {
@@ -142,11 +142,11 @@ angular.module('cttvDirectives')
 
 		    var dts = JSON.parse(attrs.datatypes);
 		    var opts = {
-			gene: attrs.target,
-			datastructure: "tree",
+                target: attrs.target,
+                datastructure: "tree",
 		    };
 		    if (!_.isEmpty(dts)) {
-			opts.filterbydatatype = _.keys(dts);
+                opts.filterbydatatype = _.keys(dts);
 		    }
 		    cttvAPIservice.getAssociations (opts)
 		    // api.call (url)

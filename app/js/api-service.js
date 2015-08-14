@@ -285,7 +285,7 @@ angular.module('cttvServices')
         /**
         * Get gene details via API gene() method based on ENSG code
         * queryObject params:
-        *  - gene: the ENSG code, e.g. "ENSG00000005339"
+        *  - target_id: the ENSG code, e.g. "ENSG00000005339"
         */
         cttvAPI.getTarget = function(queryObject){
             $log.log("cttvAPI.getTarget "+queryObject.target_id);
