@@ -501,7 +501,7 @@ angular.module('cttvDirectives', [])
                             "visible" : false
                         }
                     ],
-                    "order" : [[9, "desc"]],
+                    "order" : [[2, "desc"], [9, "desc"]],
                     "autoWidth": false,
                     "ordering": true,
                     "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -1282,7 +1282,6 @@ angular.module('cttvDirectives', [])
                      +'        <span class="text-lowlight small">({{bucket.count | metricPrefix:1}})</span>'
                      +'        <i class="pull-right text-lowlight fa" ng-class="{\'fa-plus\': collapsed, \'fa-minus\': !collapsed}" ng-click="collapsed = !collapsed" style="cursor:pointer" ng-show="bucket.enabled"></i>'
                      +'    </div>'
-
                      +'</div>',
 
             link: function (scope, elem, attrs) {},
@@ -1331,6 +1330,25 @@ angular.module('cttvDirectives', [])
                 scope.$watch(attrs.cttvUiIndeterminate, function(newVal) {
                     elem[0].indeterminate = !!newVal;
                 });
+            }
+        };
+    }])
+
+
+
+    .directive('cttvModal', ['$log' , function ($log) {
+        'use strict';
+
+        return {
+
+            restrict: 'EA',
+            template: '<div>'
+                     +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
+                     +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
+                     +'</div>'
+                     +'<div>Hello content</div>',
+            link: function (scope, elem, attrs) {
+
             }
         };
     }])

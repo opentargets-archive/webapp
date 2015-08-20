@@ -45,6 +45,7 @@ angular.module('cttvServices').
 
             // N
             NO_DATA :                "No data",
+            NA :                     "N/A",
 
             // O
             // P
@@ -56,7 +57,10 @@ angular.module('cttvServices').
             SOMATIC_MUTATION :       "Somatic mutations",
 
             // T
+
             // U
+            UP_OR_DOWN:              "unclassified",
+
             // V
             // W
             // X
