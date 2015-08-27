@@ -308,7 +308,8 @@
                     row.push( "<a href='http://www.ensembl.org/Homo_sapiens/Variation/Explore?v="+item.variant.id[0].split('/').pop()+"' target='_blank'>"+item.variant.id[0].split('/').pop()+"&nbsp;<i class='fa fa-external-link'></i></a>" );
 
                     // variant type
-                    row.push( item.evidence.gene2variant.functional_consequence ); // TODO: pull label from new data, when available
+                    row.push( clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) ) );
+
 
                     // evidence source
                     row.push( cttvDictionary.CTTV_PIPELINE );
@@ -422,7 +423,8 @@
 
                     // mutation consequence
                     if( item.type === 'genetic_association' ){
-                        row.push( item.evidence.gene2variant.functional_consequence ); // TODO: pull label from new data
+                        //row.push( item.evidence.gene2variant.functional_consequence ); // TODO: pull label from new data
+                        row.push( clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) ) );
                     } else if( item.type === 'somatic_mutation' ){
                         row.push( clearUnderscores(item.type) );
                     } else {
@@ -1203,6 +1205,7 @@
                                 //data[2] = pmdata[0].title+"<br />"+pmdata[0].pmid;
                                 data[2]="";
                                 pmdata.forEach(function(pub){
+                                    // format author names
                                     var auth = pub.authorString;
                                     // auth = auth.substr(0,auth.length-1);
                                     auth = auth.split(",");
@@ -1210,9 +1213,10 @@
                                         auth[0] = auth[0] + " et al.";
                                     }
                                     auth = auth[0];
+
                                     data[2] += "<a href='http://europepmc.org/abstract/MED/"+pub.pmid+"'>"+pub.title+"</a>"
                                              + "<br />"
-                                             + "<span class='small'>"+auth +" "+pub.journalTitle+"</span>"
+                                             + "<span class='small'>"+auth +" "+( pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+"</span>"
                                              + "<p class='small'>"+pub.abstractText+"</p>"
 
                                     data[4] = pub.journalInfo.yearOfPublication;
@@ -1293,15 +1297,15 @@
             //$log.log(id);
             //var row = $('#literature-table').DataTable().row(id.data()[5];
             //$log.log(row.data()[5]);
-            $modal.open({
+            var modalInstance = $modal.open({
               animation: true,
               //templateUrl: 'myModalContent.html',
               // template: '<cttv-modal>'+ $('#literature-table').DataTable().row(id).data()[5] +'</cttv-modal>',
-              template: '<div>'
-                     +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
-                     +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
-                     +'</div>'
-                     +'<div>'+$('#literature-table').DataTable().row(id).data()[5]+'</div>',
+              template: '<div onclick="angular.element(this).scope().$dismiss()">'
+                       +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
+                       +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
+                       +'</div>'
+                       +'<div>'+$('#literature-table').DataTable().row(id).data()[5]+'</div>',
               //controller: 'ModalInstanceCtrl',
               size: 'lg',
               resolve: {
@@ -1310,7 +1314,10 @@
                 }
               }
             });
+
         };
+
+
 
         var initTableLiterature = function(){
 
@@ -1319,7 +1326,7 @@
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,
-                "order": [[3, 'des']],   // oreder by number of publications
+                "order": [[3, 'des']],   // order by number of matched sentences
                 "columnDefs" : [
                         {
                             "targets" : [1,5],

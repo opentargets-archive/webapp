@@ -1,7 +1,8 @@
 <div class="cttv-facets">
 
     <!-- User selections -->
-    <div ng-show="selectedFilters.length>0" class="cttv-facets-selected-summary">
+    <!-- <div ng-show="selectedFilters.length>0" class="cttv-facets-selected-summary"> -->
+    <div ng-show="false" class="cttv-facets-selected-summary">
         <h4>Your filters</h4>
         <div class="cttv-facets-controls">
             <span ng-click="deselectAll()">Clear all <i class="fa fa-times"></i></span>
@@ -32,6 +33,8 @@
             <div cttv-datatypes-facet facet='facet' ng-if="facet.key=='datatypes'"></div>
 
             <div cttv-pathways-facet facet='facet' ng-if="facet.key=='pathway_type'"></div>
+
+            <div cttv-score-facet facet='facet' ng-if="facet.key=='data_distribution'"></div>
 
 
         </accordion-group>

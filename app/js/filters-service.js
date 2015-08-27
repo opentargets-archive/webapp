@@ -21,6 +21,7 @@ angular.module('cttvServices').
             {key: cttvConsts.datatypes.KNOWN_DRUG, selected:true},
             {key: cttvConsts.datatypes.RNA_EXPRESSION, selected:true},
             {key: cttvConsts.datatypes.AFFECTED_PATHWAY, selected:true},
+            {key: cttvConsts.datatypes.LITERATURE, selected:true},
             {key: cttvConsts.datatypes.ANIMAL_MODEL, selected:false}
         ];
 
@@ -90,7 +91,7 @@ angular.module('cttvServices').
             var c = selected.filter(function(obj){return obj.key == key;})[0];
             $log.log("getCollectionForSelected( "+key+", "+label+" ) :: "+c);
             if(c==undefined){
-                c = new FilterCollection(key, label);
+                c = new FilterCollection({key: key, label: label});
                 selected.push(c);
             }
             return c;
@@ -192,6 +193,7 @@ angular.module('cttvServices').
                     return obj.count>0;
                 });*/
             } else if (collection === cttvConsts.PATHWAY_TYPES){
+                // pathways
                 config.filters = data.buckets.map(function(obj){
                     var conf = {};
                     conf.key = obj.key;
@@ -206,6 +208,7 @@ angular.module('cttvServices').
                     return conf;
                 });
             } else if (collection === cttvConsts.DATASOURCES){
+                // datasources (in datatype subfacets)
                 config.filters = data.buckets.map(function(obj){
                     var conf = {};
                     conf.key = obj.key;
@@ -216,6 +219,52 @@ angular.module('cttvServices').
                     conf.collection = null;
                     return conf;
                 });
+
+            } else if (collection === cttvConsts.DATA_DISTRIBUTION){
+                // score (data_distribution)
+
+                config.label= cttvDictionary.SCORE;
+
+                // set the 3 filters for the score: min, max, stringency
+                config.filters = [
+                    {
+                        facet : "score_min",
+                        label : "min",
+                        key : $location.search().score_min || "0.2",
+                        selected : true //$location.search().score_min!=undefined
+                    },
+                    {
+                        facet : "score_max",
+                        label : "max",
+                        key : $location.search().score_max || "1",
+                        selected : true //$location.search().score_max!=undefined
+                    },
+                    {
+                        facet : "score_str",
+                        label : "stringency",
+                        key : $location.search().score_str || "3",
+                        selected : true //$location.search().score_str!=undefined
+                    }
+                ];
+
+                // score facet is different than the default checkbox lists
+                // so we need to overwrite the getSelected method
+                config.getSelectedFilters = function(){
+                    // at the moment just return all these as selected, later on we might want to flag it after user changes default value perhaps?
+                    return this.filters;
+                }
+
+                config.data = {
+                    buckets : (function(){var a=[]; for(var i in data.buckets){a.push({label:Number(i), value:data.buckets[i].value})} return a;})()
+                                .sort(function(a,b){
+                                    if(a.label<b.label){return -1}
+                                    if(a.label>b.label){return 1}
+                                    return 0
+                                })
+                }
+                $log.log("*** *** ***");
+                $log.log(config.filters)
+                $log.log(config.data);
             }
 
             return config;
@@ -228,14 +277,15 @@ angular.module('cttvServices').
          * creates it and populates it with the specified filters
          */
         var parseCollection = function(obj){
-            var collection = new FilterCollection(obj.key, obj.label);
+            var collection = new FilterCollection(obj);
+            collection.filters=[]; // overwrite the filters so we can add them in properly
             obj.filters.forEach(function(element){
-                //element.selected = selection.indexOf(element.key)>=0;
                 var f = getFilter(element);    //new Filter(element)
                 collection.addFilter(f);    // add filter to the collection
                 // but do we want to add the filter to the selected ones as well? if needed?
                 // is here the best place? mmmh....
             });
+
             return collection;
         };
 
@@ -248,7 +298,11 @@ angular.module('cttvServices').
         var updateLocationSearch = function(){
             var raw = {};
             selected.forEach(function(collection){
-                raw[collection.key] = collection.filters.map(function(obj){return obj.key;});
+                //raw[collection.key] = collection.filters.map(function(obj){return obj.key;});
+                collection.filters.forEach(function(obj){
+                    raw[obj.facet] = raw[obj.facet] || [];
+                    raw[obj.facet].push( obj.key )
+                })
             })
             $location.search(raw);
         }
@@ -259,6 +313,7 @@ angular.module('cttvServices').
          * Calls in sequence updateSelected() and updateLocationSearch()
          */
         var update = function(){
+            $log.log("update");
             updateSelected();
             updateLocationSearch();
         }
@@ -343,10 +398,23 @@ angular.module('cttvServices').
          * label:String - the label/name to display for this collection
          * filters:Array - array of Filters
          */
-        function FilterCollection(key, label, filters){
-            this.key = key || "";
-            this.label = label || "";
-            this.filters = filters || [];
+        function FilterCollection(config){
+            this.key = config.key || "";
+            this.label = config.label || "";
+            this.filters = config.filters || [];
+            this.data = config.data || undefined;
+            if(config.addFilter){
+                this.addFilter = config.addFilter;
+            }
+            if(config.selectAll){
+                this.selectAll = config.selectAll;
+            }
+            if(config.getSelectedFilters){
+                this.getSelectedFilters = config.getSelectedFilters;
+            }
+            if(config.update){
+                this.update = config.update;
+            }
         }
 
             /**
@@ -389,6 +457,11 @@ angular.module('cttvServices').
             };
 
 
+            FilterCollection.prototype.update = function(){
+                update();
+            }
+
+
 
         // ---------------------------------
         //  Public service
@@ -407,7 +480,7 @@ angular.module('cttvServices').
         cttvFiltersService.facetTypes = {
             DATATYPES: 'datatypes',
             PATHWAYS: 'pathway_type',
-            SCORE: 'score'
+            SCORE: 'data_distribution'
         };
 
 
@@ -506,6 +579,7 @@ angular.module('cttvServices').
                     }
                 }
             }
+            //$log.log(raw);
             return raw;
         };
 
@@ -538,6 +612,7 @@ angular.module('cttvServices').
 
             orderedFacets.forEach(function(collection){
                 if (facets.hasOwnProperty(collection)) {
+                    $log.log("TRY TO ADD "+collection);
                     try{
                         addCollection( parseFacetData(collection, facets[collection], countsToUse) );
                     } catch(e){
@@ -588,6 +663,11 @@ angular.module('cttvServices').
             selected.length = 0;
             selectedCount = 0;
             pageFacetsStack.length = 0;
+        }
+
+
+        cttvFiltersService.update = function(){
+            update();
         }
 
 

@@ -36,7 +36,10 @@ angular.module('cttvServices')
             facets: {
                 DATATYPES: 'filterbydatatype',
                 PATHWAY_TYPE: 'filterbypathway',
-                DATASOURCES: 'filterbydatasource'
+                DATASOURCES: 'filterbydatasource',
+                SCORE_MIN : 'filterbyscorevalue_min',
+                SCORE_MAX : 'filterbyscorevalue_max',
+                SCORE_STR : 'stringency',
             },
         };
 

@@ -37,7 +37,8 @@ angular.module('cttvServices').
             PATHWAY_TYPES: 'pathway_type',
             DATASOURCES: 'datasources',
             UNIQUE_TARGET_COUNT: 'unique_target_count',
-            UNIQUE_DISEASE_COUNT: 'unique_disease_count'
+            UNIQUE_DISEASE_COUNT: 'unique_disease_count',
+            DATA_DISTRIBUTION: 'data_distribution'
         };
 
 

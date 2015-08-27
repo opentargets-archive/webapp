@@ -24,6 +24,7 @@ angular.module('cttvServices').
             CTTV_PIPELINE :          "CTTV pipeline",
 
             // D
+            DATA_DISTRIBUTION :      "Data distribution",
             DATATYPES :              "Datatypes",
 
             // E
@@ -40,12 +41,14 @@ angular.module('cttvServices').
             KNOWN_DRUG :             "Known drugs",
 
             // L
+            LITERATURE :             "Text mining",
+
             // M
             MOUSE_MODEL :            "Animal models",
 
             // N
-            NO_DATA :                "No data",
             NA :                     "N/A",
+            NO_DATA :                "No data",
 
             // O
             // P
@@ -54,6 +57,7 @@ angular.module('cttvServices').
             RNA_EXPRESSION:          "RNA expression",
 
             // S
+            SCORE :                  "Score",
             SOMATIC_MUTATION :       "Somatic mutations",
 
             // T

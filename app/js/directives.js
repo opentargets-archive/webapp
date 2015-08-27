@@ -469,6 +469,7 @@ angular.module('cttvDirectives', [])
             {name:cttvConsts.datatypes.KNOWN_DRUG, title:cttvDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
             {name:cttvConsts.datatypes.RNA_EXPRESSION, title:cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
             {name:cttvConsts.datatypes.AFFECTED_PATHWAY, title:cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
+            {name:cttvConsts.datatypes.LITERATURE, title:cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
             {name:cttvConsts.datatypes.ANIMAL_MODEL, title:cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
             // empty col for sorting by total score (sum)
             {name:"", title:"total score"},
@@ -493,15 +494,11 @@ angular.module('cttvDirectives', [])
                     })(),
                     "columnDefs" : [
                         {
-                            "targets" : [1],
+                            "targets" : [1,10],
                             "visible" : false
                         },
-                        {
-                            "targets" : [9],
-                            "visible" : false
-                        }
                     ],
-                    "order" : [[2, "desc"], [9, "desc"]],
+                    "order" : [[2, "desc"], [10, "desc"]],
                     "autoWidth": false,
                     "ordering": true,
                     "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -533,6 +530,7 @@ angular.module('cttvDirectives', [])
                 dts.known_drug = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
                 dts.rna_expression = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
                 dts.affected_pathway = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
+                dts.literature = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "literature"; }), "association_score")||0;
                 dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
                 var row = [];
                 var geneLoc = "";
@@ -552,6 +550,8 @@ angular.module('cttvDirectives', [])
                 row.push( getColorStyleString(dts.rna_expression) );
                 // Affected pathways
                 row.push( getColorStyleString(dts.affected_pathway) );
+                // Literature
+                row.push( getColorStyleString(dts.literature) );
                 // Animal models
                 row.push( getColorStyleString(dts.animal_model) );
                 // Total score
@@ -1221,6 +1221,118 @@ angular.module('cttvDirectives', [])
 
 
     /**
+     * The Score facet
+     */
+    .directive('cttvScoreFacet', ['$log' , function ($log) {
+        'use strict';
+
+        return {
+
+            restrict: 'EA',
+
+            scope: {
+                facet: '='
+            },
+
+
+            template: '<div>'
+                     +'    <cttv-score-histogram data="facet.data.buckets"></cttv-histogram>'
+                     +'    <label>Min <input type="text" ng-model="facet.filters[0].key"/></label>'
+                     +'    <label>Max <input type="text" ng-model="facet.filters[1].key"/></label>'
+                     +'    <label>Str <input type="text" ng-model="facet.filters[2].key"/></label>'
+                     +'    <button type="button" class="btn btn-primary" ng-click="facet.update()">Apply</button>'
+                     +'</div>',
+
+
+            link: function (scope, elem, attrs) {},
+        };
+    }])
+
+
+
+    /**
+     * The histogram
+     */
+    .directive('cttvScoreHistogram', ['$log' , function ($log) {
+        'use strict';
+
+        return {
+
+            restrict: 'EA',
+
+            scope: {
+                data: '='
+            },
+
+
+            template: '<div>'
+                     +'   <span ng-repeat="bucket in data">: {{bucket.value}} :</span>'
+                     //+'   <svg></svg>'
+                     +'</div>',
+
+
+            link: function (scope, elem, attrs) {
+                // $log.log("histogram")
+                // $log.log(elem.children().eq(0)[0]);
+                // $log.log(d3.select(elem.children().eq(0)[0]));
+                //$log.log(d3.select(elem.children().eq(0)[0]));
+               // $log.log(d3.select("body"));
+
+                var data = scope.data;
+                //var data = [1157, 18, 0, 168, 653];
+
+                var margin = {top: 10, right: 30, bottom: 30, left: 30},
+                    width = 260 - margin.left - margin.right,
+                    height = 100 - margin.top - margin.bottom,
+                    barWidth = width / data.length;
+
+                var x = d3.scale.linear()
+                    .domain([0, 1])
+                    .range([0, width]);
+
+                var y = d3.scale.linear()
+                    .domain([0, d3.max( function(d){return d.value;} )])
+                    .range([height, 0]);
+
+                var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom");
+
+                var svg = d3.select(elem.children().eq(0)[0]).append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                var bar = svg.selectAll(".bar")
+                    .data(data)
+                    .enter().append("g")
+                    .attr("class", "bar")
+                    .attr("transform", function(d) { return "translate(" + x(d.label) + "," + y(d.value) + ")"; });
+
+                bar.append("rect")
+                    .attr("x", 1)
+                    .attr("width", barWidth - 1)
+                    .attr("height", function(d) { return height - y(d.value); });
+
+                bar.append("text")
+                    .attr("x", barWidth / 2)
+                    .attr("y", 6)
+                    .attr("dy", ".75em")
+                    .attr("text-anchor", "middle")
+                    .text(function(d) { return d.value; });
+
+                svg.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(xAxis);
+            },
+        };
+    }])
+
+
+
+    /**
      * A directive for plain Checkbox facets.
      * @param bucket the instance of Filter object from the FilterService; this is likely in an ng-repeat thing like ng-repeat="bucket in filters"
      */
@@ -1309,7 +1421,7 @@ angular.module('cttvDirectives', [])
             link: function (scope, elem, attrs) {},
         };
     }])
-*/
+    */
 
 
     /**
