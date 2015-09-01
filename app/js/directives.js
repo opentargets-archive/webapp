@@ -314,7 +314,7 @@ angular.module('cttvDirectives', [])
     /*
     *
     */
-    .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+    .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', 'cttvConsts', function ($log, cttvAPIservice, cttvConsts) {
         'use strict';
 
         var gat;
@@ -390,11 +390,12 @@ angular.module('cttvDirectives', [])
                                 .diagonal(100);
 
                                 gat = geneAssociationsTree()
-                                .data(data)
-                                .datatypes(dts)
-                                .diameter(900)
-                                .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
-                                .target(attrs.target);
+                                    .data(data)
+                                    .datatypes(dts)
+                                    .names(cttvConsts)
+                                    .diameter(900)
+                                    .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
+                                    .target(attrs.target);
                                 gat(fView, elem[0]);
                             },
                             cttvAPIservice.defaultErrorHandler
@@ -1495,5 +1496,3 @@ angular.module('cttvDirectives', [])
             }
         };
     }]);
-
-

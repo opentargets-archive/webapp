@@ -332,6 +332,14 @@ var geneAssociationsTree = function () {
         return this;
     };
 
+    theme.names = function (lbs) {
+        if (!arguments.length) {
+            return tooltips.names();
+        }
+        tooltips.names(lbs);
+        return this;
+    };
+
     // Legend text
     theme.legendText = function (t) {
         if (!arguments.length) {

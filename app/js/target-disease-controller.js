@@ -1,8 +1,7 @@
-    'use strict';
 
     /* Controllers */
 
-    angular.module('cttvControllers').
+    angular.module('cttvControllers')
 
 
 
@@ -11,7 +10,8 @@
        * Controller for the Gene <-> Disease page
        * It loads the evidence for the given target <-> disease pair
     */
-    controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'clearUnderscoresFilter', '$modal', '$compile', '$http', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, clearUnderscores, $modal, $compile, $http) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'clearUnderscoresFilter', '$modal', '$compile', '$http', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, clearUnderscores, $modal, $compile, $http) {
+        'use strict';
         $log.log('TargetDiseaseCtrl()');
 
         var dbs = cttvConsts.dbs;
@@ -126,13 +126,13 @@
                     cttvAPIservice.defaultErrorHandler
                 );
 
-        }
+        };
 
 
 
         var updateTitle = function(){
             $scope.search.info.title = (($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name)+"-"+$scope.search.info.efo.label).split(" ").join("_");
-        }
+        };
 
 
 
@@ -164,13 +164,15 @@
          */
         function processFlowerData(data){
             var fd = [];
-                fd.push({"label":"Genetics", "value":lookDatasource(data, datatypes.GENETIC_ASSOCIATION).score });
-                fd.push({"label":"Somatic", "value":lookDatasource(data, datatypes.SOMATIC_MUTATION).score});
-                fd.push({"label":"Drugs", "value":lookDatasource(data, datatypes.KNOWN_DRUG).score});
-                fd.push({"label":"RNA", "value":lookDatasource(data, datatypes.RNA_EXPRESSION).score});
-                fd.push({"label":"Pathways", "value":lookDatasource(data, datatypes.AFFECTED_PATHWAY).score});
-                fd.push({"label":"Text mining", "value":lookDatasource(data, datatypes.LITERATURE).score});
-                fd.push({"label":"Mouse data", "value":lookDatasource(data, datatypes.ANIMAL_MODEL).score});
+
+            for (var i=0; i<cttvConsts.datatypesOrder.length; i++) {
+                var key = cttvConsts.datatypesOrder[i];
+                fd.push({
+                    "value": lookDatasource(data, cttvConsts.datatypes[key]).score,
+                    "label": cttvConsts.datatypesLabels[key]
+                });
+            }
+
             return fd;
         }
 
@@ -195,7 +197,7 @@
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
-        }
+        };
 
 
 
@@ -219,7 +221,7 @@
         var updateGeneticAssociationsSetting = function(){
             $scope.search.genetic_associations.is_open = $scope.search.genetic_associations.common_diseases.is_open || $scope.search.genetic_associations.rare_diseases.is_open;
             $scope.search.genetic_associations.is_loading = $scope.search.genetic_associations.common_diseases.is_loading || $scope.search.genetic_associations.rare_diseases.is_loading;
-        }
+        };
 
 
 
@@ -236,7 +238,7 @@
                 }
             }
             return label;
-        }
+        };
 
 
 
@@ -284,7 +286,7 @@
                     // update for parent
                     updateGeneticAssociationsSetting();
                 });
-        }
+        };
 
 
 
@@ -340,7 +342,7 @@
             });
 
             return newdata;
-        }
+        };
 
 
 
@@ -353,7 +355,7 @@
                 "autoWidth": false,
                 "paging" : true
             }, $scope.search.info.title+"-common_diseases") );
-        }
+        };
 
 
 
@@ -388,7 +390,7 @@
                     // update for parent
                     updateGeneticAssociationsSetting();
                 });
-        }
+        };
 
 
 
@@ -442,7 +444,7 @@
 
 
                     // publications
-                    var pub=""
+                    var pub="";
                     if( item.type === 'genetic_association' ){
                         pub = item.evidence.variant2disease.provenance_type.literature.references.map(function(ref){
                             return "<a href='"+ref.lit_id+"' target='_blank'>"+(ref.lit_id.split('/').pop())+" <i class='fa fa-external-link'></i></a>";
@@ -466,7 +468,7 @@
             });
 
             return newdata;
-        }
+        };
 
 
 
@@ -477,7 +479,7 @@
                 "autoWidth": false,
                 "paging" : true
             }, $scope.search.info.title+"-rare_diseases") );
-        }
+        };
 
 
 
@@ -531,8 +533,7 @@
                     //$scope.search.drugs.is_open = $scope.search.drugs.data.length>0 || false;
                     $scope.search.drugs.is_loading = false;
                 });
-        }
-
+        };
 
 
         var formatDrugsDataToArray = function(data){
@@ -773,7 +774,7 @@
                 }
             });
             return newdata;
-        }
+        };
 
 
 
@@ -784,7 +785,7 @@
                 "autoWidth": false,
                 "paging" : true
             }, $scope.search.info.title+"-disrupted_pathways") );
-        }
+        };
 
 
 
@@ -819,7 +820,7 @@
                     //$scope.search.rna_expression.is_open = $scope.search.rna_expression.data.length>0 || false;
                     $scope.search.rna_expression.is_loading = false;
                 });
-        }
+        };
 
 
 
@@ -884,7 +885,7 @@
             //}
 
             return newdata;
-        }
+        };
 
 
 
@@ -895,7 +896,7 @@
                 "autoWidth": false,
                 "paging" : true
             }, $scope.search.info.title+"-RNA_expression") );
-        }
+        };
 
 
 
@@ -906,7 +907,7 @@
 
 
         var getMutationData = function(){
-            $log.log("getMutationData()")
+            $log.log("getMutationData()");
             $scope.search.somatic_mutations.is_loading = true;
             return cttvAPIservice.getFilterBy( {
                     target:$scope.search.target,

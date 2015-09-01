@@ -89,6 +89,12 @@ angular.module('cttvControllers')
             label: "Models",
             labelFull: "Mouse models",
             selected: true
+        },
+        {
+            name: "literature",
+            label: "Text Mining",
+            labelFull: "Text Mining",
+            selected: true
         }
     ];
 

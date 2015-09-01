@@ -1,5 +1,3 @@
-'use strict';
-
 
 /* Services */
 
@@ -11,7 +9,7 @@ angular.module('cttvServices').
      * The API services, with methods to call the ElasticSearch API
      */
     factory('cttvConsts', ['$log', function($log) {
-
+        'use strict';
         var consts = {
             datatypes : {
                 GENETIC_ASSOCIATION : "genetic_association",
@@ -32,6 +30,18 @@ angular.module('cttvServices').
                 CANCER_GENE_CENSUS :  "cancer_gene_census",
                 CHEMBL :              "chembl",
                 DISGENET :            "disgenet"
+            },
+            datatypesOrder: [
+                "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "ANIMAL_MODEL"
+            ],
+            datatypesLabels: {
+                GENETIC_ASSOCIATION: "Genetics",
+                SOMATIC_MUTATION: "Somatic",
+                KNOWN_DRUG: "Drugs",
+                RNA_EXPRESSION: "RNA",
+                AFFECTED_PATHWAY: "Pathways",
+                ANIMAL_MODEL: "Mouse",
+                LITERATURE: "Text Mining"
             },
             DATATYPES: 'datatypes',
             PATHWAY_TYPES: 'pathway_type',
