@@ -25,15 +25,39 @@ angular.module('cttvDirectives', [])
             "Disease",
             "EFO",
             "TherapeuticArea EFO",
-            "Association score",
-            "Genetic association",
-            "Somatic mutation",
-            "Known drug",
-            "Rna expression",
-            "Affected pathway",
-            "Animal model",
-            "Therapeutic area"
+            {name:"", title:cttvDictionary.ASSOCIATION_SCORE},
+            // here are the datatypes:
+            {name:cttvConsts.datatypes.GENETIC_ASSOCIATION, title:cttvDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
+            {name:cttvConsts.datatypes.SOMATIC_MUTATION, title:cttvDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
+            {name:cttvConsts.datatypes.KNOWN_DRUG, title:cttvDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
+            {name:cttvConsts.datatypes.RNA_EXPRESSION, title:cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
+            {name:cttvConsts.datatypes.AFFECTED_PATHWAY, title:cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
+            {name:cttvConsts.datatypes.LITERATURE, title:cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
+            {name:cttvConsts.datatypes.ANIMAL_MODEL, title:cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
+            {name:"", title:"Therapeutic area"}
         ];
+
+        /*
+        var cols = [
+            // empty col for the gene name
+            {name:"", title:""},
+            {name:"", title:cttvDictionary.ENSEMBL_ID},
+            {name:"", title:cttvDictionary.ASSOCIATION_SCORE},
+            // here are the datatypes:
+            {name:cttvConsts.datatypes.GENETIC_ASSOCIATION, title:cttvDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
+            {name:cttvConsts.datatypes.SOMATIC_MUTATION, title:cttvDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
+            {name:cttvConsts.datatypes.KNOWN_DRUG, title:cttvDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
+            {name:cttvConsts.datatypes.RNA_EXPRESSION, title:cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
+            {name:cttvConsts.datatypes.AFFECTED_PATHWAY, title:cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
+            {name:cttvConsts.datatypes.LITERATURE, title:cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
+            {name:cttvConsts.datatypes.ANIMAL_MODEL, title:cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
+            // empty col for sorting by total score (sum)
+            {name:"", title:"total score"},
+            // empty col for the gene name
+            {name:"", title:""}
+        ];
+        */
+
 
 
         /*
@@ -1230,11 +1254,13 @@ angular.module('cttvDirectives', [])
 
 
             template: '<div>'
-                     +'    <cttv-score-histogram data="facet.data.buckets"></cttv-histogram>'
-                     +'    <label>Min <input type="text" ng-model="facet.filters[0].key"/></label>'
-                     +'    <label>Max <input type="text" ng-model="facet.filters[1].key"/></label>'
-                     +'    <label>Str <input type="text" ng-model="facet.filters[2].key"/></label>'
-                     +'    <button type="button" class="btn btn-primary" ng-click="facet.update()">Apply</button>'
+                     +'    <cttv-score-histogram data="facet.data.buckets" min="facet.filters[0].key" max="facet.filters[1].key"></cttv-score-histogram>'
+                     +'    <div><span class="pull-left">{{facet.filters[0].key}}</span><span class="pull-right">{{facet.filters[1].key}}</span></div>'
+                     //+'       <input type="text" ng-model="facet.data.min"/>'
+                     //+'       <label>{{facet.filters[0].label}}: {{facet.data.min}} {{facet.filters[1].label}}: {{facet.data.max}}</label>'
+                     //+'    <label>Stringency <input type="text" ng-model="facet.filters[2].key"/></label>'
+                     +'    <cttv-slider min=1 max=10 value="facet.filters[2].key"></cttv-slider>'
+                     +'    <div><button type="button" class="btn btn-primary btn-xs" ng-click="facet.update()">Apply</button></div>'
                      +'</div>',
 
 
@@ -1247,7 +1273,7 @@ angular.module('cttvDirectives', [])
     /**
      * The histogram
      */
-    .directive('cttvScoreHistogram', ['$log' , function ($log) {
+    .directive('cttvScoreHistogram', ['$log', '$timeout', function ($log, $timeout) {
         'use strict';
 
         return {
@@ -1255,42 +1281,42 @@ angular.module('cttvDirectives', [])
             restrict: 'EA',
 
             scope: {
-                data: '='
+                data: '=',
+                min: '=',
+                max: '='
             },
 
 
             template: '<div>'
-                     +'   <span ng-repeat="bucket in data">: {{bucket.value}} :</span>'
-                     //+'   <svg></svg>'
                      +'</div>',
 
 
             link: function (scope, elem, attrs) {
-                // $log.log("histogram")
-                // $log.log(elem.children().eq(0)[0]);
-                // $log.log(d3.select(elem.children().eq(0)[0]));
-                //$log.log(d3.select(elem.children().eq(0)[0]));
-               // $log.log(d3.select("body"));
 
                 var data = scope.data;
-                //var data = [1157, 18, 0, 168, 653];
 
-                var margin = {top: 10, right: 30, bottom: 30, left: 30},
+                //$timeout(brushed,4000);
+
+                var margin = {top: 10, right: 10, bottom: 20, left: 10},
                     width = 260 - margin.left - margin.right,
-                    height = 100 - margin.top - margin.bottom,
+                    height = 150 - margin.top - margin.bottom,
                     barWidth = width / data.length;
+
+                var tick = 1/data.length;
 
                 var x = d3.scale.linear()
                     .domain([0, 1])
                     .range([0, width]);
+                    //.ticks(data.length);
 
                 var y = d3.scale.linear()
-                    .domain([0, d3.max( function(d){return d.value;} )])
+                    .domain([0, d3.max( data, function(d){return d.value;} )])
                     .range([height, 0]);
 
                 var xAxis = d3.svg.axis()
                     .scale(x)
-                    .orient("bottom");
+                    .orient("bottom")
+                    .ticks(data.length);
 
                 var svg = d3.select(elem.children().eq(0)[0]).append("svg")
                     .attr("width", width + margin.left + margin.right)
@@ -1302,7 +1328,7 @@ angular.module('cttvDirectives', [])
                     .data(data)
                     .enter().append("g")
                     .attr("class", "bar")
-                    .attr("transform", function(d) { return "translate(" + x(d.label) + "," + y(d.value) + ")"; });
+                    .attr("transform", function(d,i) { return "translate(" + x( i/data.length ) + "," + y(d.value) + ")"; });
 
                 bar.append("rect")
                     .attr("x", 1)
@@ -1320,6 +1346,208 @@ angular.module('cttvDirectives', [])
                     .attr("class", "x axis")
                     .attr("transform", "translate(0," + height + ")")
                     .call(xAxis);
+
+
+                // brushing
+                var roundToScale = function(n){
+                    $log.log(n+" / "+tick);
+                    return (Math.round(n/tick)*tick).toFixed(1);
+                }
+
+                var update = function(o){
+                    scope.min = o.min;
+                    scope.max = o.max;
+                }
+
+                var mybrush = d3.svg.brush()
+                    .x(x)
+                    .extent([scope.min, scope.max])
+                    .on("brush", function(){ scope.$apply(onBrush) })
+                    .on("brushend", onBrushEnd);
+
+                var gBrush = svg.append("g")
+                    .attr("class", "brush")
+                    .call(mybrush);
+
+                gBrush.selectAll("rect")
+                    .attr("height", height);
+
+
+                function onBrushEnd(){
+                    d3.select(this).call(mybrush.extent([scope.min, scope.max]));
+                }
+
+
+                function onBrush(){
+                    var extent0 = mybrush.extent(),
+                        extent1;
+
+                    //extent1 = [ roundToScale(extent0[0]) , roundToScale(extent0[1]) ];
+                    extent1 = [ extent0[0].toFixed(2), extent0[1].toFixed(2) ];
+                    update( {min:extent1[0], max:extent1[1]} );
+
+                }
+
+                // DEPRECATED!
+                function brushed() {
+                    //$log.log("brushhhh");
+                    var extent0 = mybrush.extent(),
+                        extent1;
+
+                    //$log.log(extent0);
+                    //$log.log( roundToScale(extent0[0]) +" -> "+ x( roundToScale(extent0[0]) ) );
+                    //$log.log(d3.event);
+                    extent1 = [ roundToScale(extent0[0]) , roundToScale(extent0[1]) ];
+                    update( {min:extent1[0], max:extent1[1]} );
+                    /*
+                    // if dragging, preserve the width of the extent
+                    if (d3.event.mode === "move") {
+                        var d0 = x( roundToScale(extent0[0]) ) ,
+                        d1 = x( roundToScale(extent0[1]) ;
+                        extent1 = [d0, d1];
+                    }
+
+                    // otherwise, if resizing, round both dates
+                    else {
+                        extent1 = extent0.map(d3.time.day.round);
+
+                        // if empty when rounded, use floor & ceil instead
+                        if (extent1[0] >= extent1[1]) {
+                            extent1[0] = d3.time.day.floor(extent0[0]);
+                            extent1[1] = d3.time.day.ceil(extent0[1]);
+                        }
+                    }
+*/
+
+                    $log.log(d3.select(this));
+                    //d3.select(this).call(mybrush.extent(extent1));
+                    //mybrush.extent(extent1);
+                    d3.select(svg).call(mybrush.extent(extent1));
+                }
+            },
+        };
+    }])
+
+
+
+    /**
+     * The histogram
+     */
+    .directive('cttvSlider', ['$log', function ($log) {
+        'use strict';
+
+        return {
+
+            restrict: 'EA',
+
+            scope: {
+                min: '@',
+                max: '@',
+                value: '=?',    // optional initial position, or min if nothing specified
+                config: '=?'    // optional configuration
+            },
+
+
+            //template: '<div></div>',
+
+
+            link: function (scope, elem, attrs) {
+
+                var margin = {top: 10, right: 10, bottom: 10, left: 10},
+                    width = 260 - margin.left - margin.right,
+                    height = 50 - margin.bottom - margin.top;
+
+                var config = scope.config || {}
+
+                var ticks = config.ticks || scope.max-scope.min;
+                var tick = (scope.max-scope.min) / ticks;
+
+                scope.value = scope.value || scope.min;
+
+                // n: number
+                // t: tick
+                var roundToScale = function(n,t){
+                    return (Math.round(n/t)*t).toFixed(1);
+                }
+
+                var x = d3.scale.linear()
+                    .domain([scope.min, scope.max])
+                    .range([0, width])
+                    .clamp(true);
+
+                var brush = d3.svg.brush()
+                    .x(x)
+                    .extent([0, 0])
+                    .on("brush", onBrush);
+                    //.on("brushend", function(){ scope.$apply(onBrushEnd) });
+
+                var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom")
+                    .ticks(ticks)
+                    //.tickFormat(function(d) { return d + "°"; })
+                    .tickSize(0)
+                    .tickPadding(12);
+
+                var svg = d3.select(elem.eq(0)[0]).append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+                svg.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height / 2 + ")")
+                    .call(xAxis)
+                    .select(".domain")
+                    .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+                    .attr("class", "halo");
+
+
+                var slider = svg.append("g")
+                    .attr("class", "slider")
+                    .call(brush);
+
+                slider.selectAll(".extent,.resize")
+                    .remove();
+
+                var handle = slider.append("circle")
+                    .attr("class", "handle")
+                    .attr("transform", "translate(0," + height / 2 + ")")
+                    .attr("r", 9);
+
+                // init: move slider to initial position
+                slider
+                    .call(brush.event)
+                    .transition() // gratuitous intro!
+                    .duration(750)
+                    .call(brush.extent([scope.value, scope.value]))
+                    .call(brush.event);
+
+                // attach event after initial animation is triggered (hack, I confess)
+                brush.on("brushend", function(){ scope.$apply(onBrushEnd) });
+
+                function onBrush() {
+                    var value = brush.extent()[0];
+
+                    if (d3.event.sourceEvent) { // not a programmatic event
+                        value = roundToScale( x.invert(d3.mouse(this)[0]), tick);
+                        brush.extent([value, value]);
+                    }
+
+                    // move the handle
+                    handle.attr("cx", x(value));
+                }
+
+                function onBrushEnd() {
+                    // update the scope value when finishing brushing
+                    if (d3.event.sourceEvent) { // not a programmatic event
+                        $log.log("onBrushEnd " + brush.extent()[0] + scope.value );
+                        scope.value = parseInt(brush.extent()[0]); // TODO: this is a hack to make stringency work... make parseInt configurable from directive
+                    }
+                }
+
             },
         };
     }])

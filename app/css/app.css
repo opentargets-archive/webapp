@@ -936,21 +936,58 @@ table.matrix-table thead > tr > th:last-child {
 }
 
 
-
-.bar rect {
+cttv-score-histogram .bar rect {
   fill: steelblue;
   shape-rendering: crispEdges;
 }
 
-.bar text {
+cttv-score-histogram .bar text {
   fill: #fff;
 }
 
-.axis path, .axis line {
+cttv-score-histogram .axis path, cttv-score-histogram .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
 
+cttv-score-histogram .brush .extent {
+  stroke: #000;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
 
 
+
+cttv-slider .axis {
+  /*font: 10px sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;*/
+  stroke: #000;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+cttv-slider .axis .domain {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .3;
+  stroke-width: 10px;
+  stroke-linecap: round;
+}
+
+cttv-slider .axis .halo {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 8px;
+  stroke-linecap: round;
+}
+
+cttv-slider .slider .handle {
+  fill: #fff;
+  stroke: #000;
+  stroke-opacity: .5;
+  stroke-width: 1.25px;
+  cursor: crosshair;
+}

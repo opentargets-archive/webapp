@@ -47,7 +47,7 @@ angular.module('cttvControllers')
     // Set page filters:
     // this defines the order in which the facets are going to be displayed
     cttvFiltersService.pageFacetsStack([
-        //cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
+        cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
         cttvFiltersService.facetTypes.DATATYPES,    // adds a datatypes facet to the page
         cttvFiltersService.facetTypes.PATHWAYS      // adds a pathways facet to the page
     ]);
@@ -75,7 +75,7 @@ angular.module('cttvControllers')
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
         // TEST:
-        // cttvFiltersService.updateFacets(JSON.parse('{"data_distribution": {"buckets": {"0.0": {"value": 803},"0.2": {"value": 8},"0.4": {"value": 5},"0.8": {"value": 234},"0.6": {"value": 2}}}}'));
+        //cttvFiltersService.updateFacets(JSON.parse('{"data_distribution": {"buckets": {"0.0": {"value": 803},"0.2": {"value": 8},"0.4": {"value": 5},"0.8": {"value": 234},"0.6": {"value": 2}}}}'));
 
 
 
