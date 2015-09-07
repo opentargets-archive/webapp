@@ -138,10 +138,10 @@ angular.module('cttvControllers')
             };
 
             // Transcript Viewer
-            $scope.toggleTranscriptView = function () {
-                $scope.chr = resp.chromosome;
-                $scope.transcriptViewerGene = resp.ensembl_gene_id;
-            };
+            // $scope.toggleTranscriptView = function () {
+            //     $scope.chr = resp.chromosome;
+            //     $scope.transcriptViewerGene = resp.ensembl_gene_id;
+            // };
 
             // Protein structure (PDB)
             var pdb = resp.pdb;
@@ -187,6 +187,8 @@ angular.module('cttvControllers')
                         console.log(data);
                     });
             }
+
+
             // Orthologues
             // var ensemblApi = tnt.ensembl();
             // var orthUrl = ensemblApi.url.homologues({

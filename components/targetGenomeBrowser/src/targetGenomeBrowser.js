@@ -242,7 +242,7 @@ var cttv_genome_browser = function() {
             .then (async.ensembl_parse_clinvar_snps);
 
         // SNP GWASs
-        var opts = getOpts(gB.gene(), ["gwas"], efo);
+        var opts = getOpts(gB.gene(), ["gwas_catalog"], efo);
         var url = cttvRestApi.url.filterby(opts);
         var snpsGwasPromise = cttvRestApi.call(url)
             .then (async.cttv_gwas)
@@ -364,17 +364,20 @@ var cttv_genome_browser = function() {
 
     function getOpts (gene, datasources, efo) {
         var opts = {
-            gene : gene,
+            target : gene,
             size : 1000,
             datasource : datasources,
             fields : [
-                "biological_object.efo_info", // disease
-                "evidence.evidence_chain",
-                "biological_subject"
+                "target.gene_info",
+                "disease.efo_info",
+                "variant",
+                "evidence",
+                "unique_association_fields",
+                "type"
             ]
         };
         if (efo !== undefined) {
-            opts.efo = efo;
+            opts.disease = efo;
             opts.expandefo = true;
         }
         return opts;

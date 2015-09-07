@@ -952,13 +952,6 @@ angular.module('cttvDirectives', [])
 
         var colorScale = d3.scale.linear()
             .domain([1,3])
-            //.range(["#80bbd7", "#2383BA"]);
-            //.range(["#DDDDDD","#A3CEE2", "#2383BA"]);
-
-            //.range(["#FFFF00", "#FF982A"]); // amber-red
-            //.range(["#5CE62E", "#40A120"]);    // green
-            //.range(["#a6bddb", "#045a8d"]);
-            //.range(["#eff3ff","#2171b5"])
             .range(["#CBDCEA", "#005299"]); // blue orig
 
         var labelScale = d3.scale.ordinal()
