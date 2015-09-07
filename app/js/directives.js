@@ -304,17 +304,15 @@ angular.module('cttvDirectives', [])
             scope.$watch( function () { return attrs.datatypes; }, function (dts) {
 
                 dts = JSON.parse(dts);
-                console.log(dts);
+
                 updateTable(dtable, dts)
                 .then(
                     function () {
                         dtable.columns().eq(0).each (function (i) {
 
                             // first headers are "Disease", "EFO", "TA EFO", "Association score" and last one is "Therapeutic area"
-                            console.log(_.keys(dts));
                             if (i>3 && i<11) {
                                 var column = dtable.column(i);
-                                console.log(column.header().textContent);
                                 if (hasDatatype(column.header().textContent, _.keys(dts))) {
                                     column.visible(true);
                                 } else {
@@ -534,7 +532,6 @@ angular.module('cttvDirectives', [])
                         for(var i=0; i<cols.length; i++){
                             a.push({ "title": "<div><span title='"+cols[i].title+"'>"+cols[i].title+"</span></div>", "name":cols[i].name });
                         }
-                        console.debug(a);
                         return a;
                     })(),
                     "columnDefs" : [
