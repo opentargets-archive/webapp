@@ -5,6 +5,7 @@ var tooltips = function () {
 
     var flowerView;
     var treeView;
+    var names;
     var target;
     var datatypes;
 
@@ -23,14 +24,14 @@ var tooltips = function () {
     t.mouseover = function (node) {
         var ev = d3.event;
         hover_tooltip = tnt_tooltip.plain()
-        .id(2)
-        .width(tooltip_width)
-        .show_closer(false)
-        .allow_drag(false);
+            .id(2)
+            .width(tooltip_width)
+            .show_closer(false)
+            .allow_drag(false);
 
         var obj = {};
         obj.header = "";
-        obj.body = node.property("label") + " (" + node.property("association_score") + ")";
+        obj.body = node.property("label") + " (" + node.property("association_score").toFixed(2) + ")";
         show_deferred.call(this, obj, ev);
     };
 
@@ -42,7 +43,7 @@ var tooltips = function () {
     t.click = function (node) {
         var obj = {};
         var score = node.property("association_score");
-        obj.header = node.property("label") + " (Association score: " + score + ")";
+        obj.header = node.property("label") + " (Association score: " + score.toFixed(2) + ")";
         var loc = "/evidence/" + target + "/" + node.property("efo_code");
         //obj.body="<div></div><a href=" + loc + ">View evidence details</a><br/><a href=''>Zoom on node</a>";
         obj.rows = [];
@@ -112,15 +113,20 @@ var tooltips = function () {
         // Pass a new fill callback that calls the original one and decorates with flowers
         leafTooltip.fill (function (data) {
             origFill.call(this, data);
-            var dts = node.property("datatypes");
-            var flowerData = [
-                {"value":lookDatasource(dts, "genetic_association").score, "label":"Genetics", "active": hasActiveDatatype("genetic_association",datatypes)},
-                {"value":lookDatasource(dts, "somatic_mutation").score,  "label":"Somatic", "active": hasActiveDatatype("somatic_mutation", datatypes)},
-                {"value":lookDatasource(dts, "known_drug").score,  "label":"Drugs", "active": hasActiveDatatype("known_drug", datatypes)},
-                {"value":lookDatasource(dts, "rna_expression").score,  "label":"RNA", "active": hasActiveDatatype("rna_expression", datatypes)},
-                {"value":lookDatasource(dts, "affected_pathway").score,  "label":"Pathways", "active": hasActiveDatatype("affected_pathway", datatypes)},
-                {"value":lookDatasource(dts, "animal_model").score,  "label":"Models", "active": hasActiveDatatype("animal_model", datatypes)}
-            ];
+            var nodeDatatypes = node.property("datatypes");
+
+            var flowerData = [];
+            for (var i=0; i<names.datatypesOrder.length; i++) {
+                var dkey = names.datatypes[names.datatypesOrder[i]];
+                var key = names.datatypesOrder[i];
+
+                var datasource = lookDatasource(nodeDatatypes, dkey);
+                flowerData.push({
+                    "value": datasource.score,
+                    "label": names.datatypesLabels[key],
+                    "active": hasActiveDatatype(names.datatypes[key])
+                });
+            }
 
             flowerView
                 .diagonal(150)
@@ -178,6 +184,14 @@ var tooltips = function () {
             return datatypes;
         }
         datatypes = dts;
+        return this;
+    };
+
+    t.names = function (lbs) {
+        if (!arguments.length) {
+            return names;
+        }
+        names = lbs;
         return this;
     };
 

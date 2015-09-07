@@ -152,7 +152,7 @@ var geneAssociations = function () {
 	}
 	data.children = dataSorted;
 	return data;
-    };
+    }
 
     // Getters / Setters
     ga.data = function (d) {
@@ -195,8 +195,15 @@ var geneAssociations = function () {
     	    return tooltips.datatypes();
     	}
         tooltips.datatypes(dts);
-    	//config.datatypes = dts;
     	return this;
+    };
+
+    ga.names = function (dts) {
+        if (!arguments.length) {
+            return tooltips.names();
+        }
+        tooltips.names(dts);
+        return this;
     };
 
     // Other methods to interact with the bubblesView
