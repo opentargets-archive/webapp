@@ -1081,7 +1081,7 @@
             });
 
             return newdata;
-        }
+        };
 
 
 
@@ -1094,7 +1094,7 @@
                 "ordering" : true,
                 "order": [[5, 'des']]
             }, $scope.search.info.title+"-mouse_models") );
-        }
+        };
 
 
 
@@ -1102,8 +1102,8 @@
          * Takes a string like "Casr<Nuf>/Casr<+>" and returns "Casr<sup>Nuf</sup>/Casr<sup>+</sup>"
          */
         var processMouseModelData = function(mmd){
-            return mmd.replace(/<(.*?)>/g, function(match){return "<sup>"+match.substr(1,match.length-2)+"</sup>"});
-        }
+            return mmd.replace(/<(.*?)>/g, function(match){return "<sup>"+match.substr(1,match.length-2)+"</sup>";});
+        };
 
 
 
