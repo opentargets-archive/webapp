@@ -10,7 +10,7 @@
        * Controller for the Gene <-> Disease page
        * It loads the evidence for the given target <-> disease pair
     */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'clearUnderscoresFilter', '$modal', '$compile', '$http', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, clearUnderscores, $modal, $compile, $http) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'clearUnderscoresFilter', '$modal', '$compile', '$http', '$q', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, clearUnderscores, $modal, $compile, $http, $q) {
         'use strict';
         $log.log('TargetDiseaseCtrl()');
 
@@ -446,9 +446,11 @@
                     // publications
                     var pub="";
                     if( item.type === 'genetic_association' ){
-                        pub = item.evidence.variant2disease.provenance_type.literature.references.map(function(ref){
-                            return "<a href='"+ref.lit_id+"' target='_blank'>"+(ref.lit_id.split('/').pop())+" <i class='fa fa-external-link'></i></a>";
-                        }).join(", ");
+                        if (item.evidence.variant2disease.provenance_type.literature) {
+                            pub = item.evidence.variant2disease.provenance_type.literature.references.map(function(ref){
+                                return "<a href='"+ref.lit_id+"' target='_blank'>"+(ref.lit_id.split('/').pop())+" <i class='fa fa-external-link'></i></a>";
+                            }).join(", ");
+                        }
                     } else {
                         $log.log(item.evidence);
                         pub = item.evidence.provenance_type.literature.references.map(function(ref){
@@ -1134,6 +1136,87 @@
           - Year: number
         */
 
+        function parseResponse (recs, dt) {
+            /*var r = dt.row( function ( idx, data, node ) {
+                return data[1] === '9188529' ? true : false;
+            });
+            $log.log(r.data());
+            var d = r.data();
+            d[2] = "hello literature";
+            r.data(d);
+            dt.draw();
+            */
+
+            dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+                var data = this.data();
+                // ... do something with data(), or this.node(), etc
+                //data[1]; // the literature ID
+                var pmdata = recs.filter(function(item){
+                    return item.pmid == data[1];
+                });
+
+                if(pmdata.length>0){
+                    // format publication data:
+                    //data[2] = pmdata[0].title+"<br />"+pmdata[0].pmid;
+                    var re = /abstract: (.*?)\./g;
+                    data[2]="";
+
+                    // pmdata.forEach(function(pub){
+                    var pub = pmdata[0];
+                    // format author names
+                    var auth = pub.authorString;
+                    // auth = auth.substr(0,auth.length-1);
+                    auth = auth.split(",");
+                    if(auth.length>1){
+                        auth[0] = auth[0] + " et al.";
+                    }
+                    auth = auth[0];
+
+                    var match;
+                    var abstract = pub.abstractText;
+                    while ((match = re.exec(data[5])) !== null) {
+                        var matchedText = match[1];
+                        var indexStart = abstract.indexOf(matchedText);
+                        var indexEnd = indexStart + matchedText.length;
+                        if (indexStart >= 0) {
+                            abstract = abstract.slice(0, indexStart) + '<b>' + abstract.slice(indexStart, indexEnd) + '</b>' + abstract.slice(indexEnd);
+                        }
+                    }
+
+
+                    data[2] += "<a target=_blank href='http://europepmc.org/abstract/MED/"+pub.pmid+"'>"+pub.title+"</a>"
+                    + "<br />"
+                    + "<span class='small'>"+auth +" "+( pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+"</span>"
+                    + "<p class='small'>"+abstract+"</p>"
+
+                    data[4] = pub.journalInfo.yearOfPublication;
+                    // });
+
+                }else{
+                    data[2] = cttvDictionary.NA;
+                }
+
+                this.data(data);
+
+            } );
+
+            dt.draw();
+
+            /*$scope.citations.count = resp.data.hitCount;
+            $scope.citations.europepmcLink = "//europepmc.org/search?query=" + pmids;
+            var citations = resp.data.resultList.result;
+            for (var i=0; i<citations.length; i++) {
+                var authorStr = citations[i].authorString;
+                if (authorStr[authorStr.length-1] === ".") {
+                    authorStr = authorStr.slice(0,-1);
+                }
+                var authors = authorStr.split(', ');
+                citations[i].authors = authors;
+            }
+            $scope.citations.all = resp.data.resultList.result;*/
+
+        }
+
         var getLiteratureData = function(){
             $scope.search.literature.is_loading = true;
             return cttvAPIservice.getFilterBy( {
@@ -1149,6 +1232,10 @@
                 } ).
                 then(
                     function(resp) {
+                        var all = [];
+                        resp.body.data.map (function (paper) {
+                            all.push(paper.evidence.literature_ref.lit_id.split("/").pop());
+                        });
                         $scope.search.literature.data = resp.body.data;
                         var dt = initTableLiterature();
                         getLiteratureAbstractsData(dt);
@@ -1158,8 +1245,7 @@
                 finally(function(){
                     $scope.search.literature.is_loading = false;
                 });
-        }
-
+        };
 
 
         var getLiteratureAbstractsData = function(dt){
@@ -1171,84 +1257,63 @@
             // })).join (" OR ");
             // $scope.citations = {};
 
-            var pmids = $scope.search.literature.data.map(function(p){
-                return "EXT_ID:" + p.evidence.literature_ref.lit_id.split("/").pop();
-            }).join (" OR ");
 
-            $log.log("PMIDS:");
-            $log.log(pmids);
+            // if ($scope.search.literature.data.length > 20) {
+            //     $scope.search.literature.data = $scope.search.literature.data.slice(0, 20);
+            // }
 
-            $http.get("/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search/pagesize="+$scope.search.literature.data.length+"&query=" + pmids + "&format=json&resulttype=core")
-                .then (
-                    function (resp) {
-                        $log.log(resp);
-                        /*var r = dt.row( function ( idx, data, node ) {
-                            return data[1] === '9188529' ? true : false;
-                        });
-                        $log.log(r.data());
-                        var d = r.data();
-                        d[2] = "hello literature";
-                        r.data(d);
-                        dt.draw();
-                        */
+            // The expans_efo option may be retrieving the same article multiple times
+            // Filter unique entries:
+            var uniq = {};
+            $scope.search.literature.data.map (function (rec) {
+                uniq[rec.evidence.literature_ref.lit_id.split("/").pop()] = 1;
+            });
+            var uniqPMIDs = Object.keys(uniq);
+            // Chunk!
+            var chunkSize = 200;
+            //var chunks = Math.ceil($scope.search.literature.data.length / chunkSize);
+            var chunks = Math.ceil(uniqPMIDs.length / chunkSize);
 
-                        dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
-                            var data = this.data();
-                            // ... do something with data(), or this.node(), etc
-                            //data[1]; // the literature ID
+            var callChunks = [];
+            for (var i=0; i<chunks; i++) {
+                //var thisRecords = $scope.search.literature.data.slice(i*chunkSize, (i+1)*chunkSize);
+                var thisRecords = uniqPMIDs.slice(i*chunkSize, (i+1)*chunkSize);
+                var thisPMIDs = thisRecords.map(function (id) {
+                    //var id = p.evidence.literature_ref.lit_id.split("/").pop();
+                    return "EXT_ID:" + id;
+                }).join(" OR ");
+                var url = "/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search/pagesize=" + thisRecords.length + "&query=" + thisPMIDs + "&format=json&resulttype=core";
+                callChunks.push($http.get(url));
+            }
 
-                            var pmdata = resp.data.resultList.result.filter(function(item){
-                                return item.pmid == data[1];
-                            });
+            $q.all(callChunks)
+                .then (function (results) {
+                    var allRes = [];
+                    // TODO: This is inefficient since parseResponse scans the whole table. It would be better to combine all the results at this stage and call parseResponse once
+                    for (var i=0; i<results.length; i++) {
+                        allRes = allRes.concat(results[i].data.resultList.result);
+                    }
+                    parseResponse(allRes, dt);
+                },
+                cttvAPIservice.defaultErrorHandler
+            );
 
-                            if(pmdata.length>0){
-                                // format publication data:
-                                //data[2] = pmdata[0].title+"<br />"+pmdata[0].pmid;
-                                data[2]="";
-                                pmdata.forEach(function(pub){
-                                    // format author names
-                                    var auth = pub.authorString;
-                                    // auth = auth.substr(0,auth.length-1);
-                                    auth = auth.split(",");
-                                    if(auth.length>1){
-                                        auth[0] = auth[0] + " et al.";
-                                    }
-                                    auth = auth[0];
 
-                                    data[2] += "<a href='http://europepmc.org/abstract/MED/"+pub.pmid+"'>"+pub.title+"</a>"
-                                             + "<br />"
-                                             + "<span class='small'>"+auth +" "+( pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+"</span>"
-                                             + "<p class='small'>"+pub.abstractText+"</p>"
+            // var pmids = $scope.search.literature.data.map(function(p){
+            //     return "EXT_ID:" + p.evidence.literature_ref.lit_id.split("/").pop();
+            // }).join (" OR ");
 
-                                    data[4] = pub.journalInfo.yearOfPublication;
-                                });
+            // $log.log("PMIDS:");
+            // $log.log(pmids);
 
-                            }else{
-                                data[2] = cttvDictionary.NA;
-                            }
-
-                            this.data(data);
-
-                        } );
-
-                        dt.draw();
-
-                        /*$scope.citations.count = resp.data.hitCount;
-                        $scope.citations.europepmcLink = "//europepmc.org/search?query=" + pmids;
-                        var citations = resp.data.resultList.result;
-                        for (var i=0; i<citations.length; i++) {
-                            var authorStr = citations[i].authorString;
-                            if (authorStr[authorStr.length-1] === ".") {
-                                authorStr = authorStr.slice(0,-1);
-                            }
-                            var authors = authorStr.split(', ');
-                            citations[i].authors = authors;
-                        }
-                        $scope.citations.all = resp.data.resultList.result;*/
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                );
-        }
+            // $http.get("/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search/pagesize="+$scope.search.literature.data.length+"&query=" + pmids + "&format=json&resulttype=core")
+            //     .then (
+            //         function (resp) {
+            //             parseResponse(resp, dt);
+            //         },
+            //         cttvAPIservice.defaultErrorHandler
+            //     );
+        };
 
 
 
@@ -1266,22 +1331,21 @@
                     row.push( item.evidence.literature_ref.lit_id.split("/").pop() );
 
                     // publications
-                    row.push( "&hellip;" );
+                    row.push( "<i class='fa fa-spinner fa-spin'></i>" );
 
                     // matched sentences
                     //row.push( '<button type="button" class="btn btn-default" ng-click="window.alert(\'hello\')">'+item.evidence.literature_ref.mined_sentences.length+'</button>' );
                     row.push( '<a onclick="angular.element(this).scope().open('+newdata.length+')">'+item.evidence.literature_ref.mined_sentences.length+'</a>' );
 
                     // year
-                    row.push("&hellip;");
+                    row.push("<i class='fa fa-spinner fa-spin'></i>");
 
                     // details (hidden)
                     row.push(
                         "<ul>"+
                         item.evidence.literature_ref.mined_sentences.map(function(sent){
                             return "<li>"+sent.section+": "+sent.text+"</li>";
-                        }).join("")
-                        +"</ul>"
+                        }).join("") + "</ul>"
                     );
 
                     newdata.push(row); // push, so we don't end up with empty rows
@@ -1292,7 +1356,7 @@
             });
 
             return newdata;
-        }
+        };
 
         $scope.open = function(id){
             //$log.log(id);
@@ -1311,7 +1375,7 @@
               size: 'lg',
               resolve: {
                 items: function () {
-                  return $scope.search.info;
+                    return $scope.search.info;
                 }
               }
             });
@@ -1327,7 +1391,7 @@
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,
-                "order": [[3, 'des']],   // order by number of matched sentences
+                "order": [[4, 'desc'], [3, 'desc']],   // order by number of matched sentences
                 "columnDefs" : [
                         {
                             "targets" : [1,5],
@@ -1335,7 +1399,7 @@
                         }
                     ],
             }, $scope.search.info.title+"-text_mining") );
-        }
+        };
 
 
 
