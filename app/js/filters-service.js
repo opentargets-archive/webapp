@@ -230,7 +230,7 @@ angular.module('cttvServices').
                     {
                         facet : "score_min",
                         label : "min",
-                        key : $location.search().score_min || "0.2",
+                        key : $location.search().score_min || "0",
                         selected : true //$location.search().score_min!=undefined
                     },
                     {
@@ -242,7 +242,7 @@ angular.module('cttvServices').
                     {
                         facet : "score_str",
                         label : "stringency",
-                        key : $location.search().score_str || "3",
+                        key : $location.search().score_str || "2",
                         selected : true //$location.search().score_str!=undefined
                     }
                 ];
@@ -260,11 +260,13 @@ angular.module('cttvServices').
                                     if(a.label<b.label){return -1}
                                     if(a.label>b.label){return 1}
                                     return 0
-                                })
+                                }),
+                    min : 0,
+                    max : 1
                 }
-                $log.log("*** *** ***");
-                $log.log(config.filters)
-                $log.log(config.data);
+                // $log.log("*** *** ***");
+                // $log.log(config.filters)
+                // $log.log(config.data);
             }
 
             return config;
