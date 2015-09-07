@@ -31,7 +31,7 @@ angular.module('cttvDirectives', [])
             "Somatic mutations" : "somatic_mutation",
             "Known drugs" : "known_drug",
             "RNA expression" : "rna_expression",
-            "Affected_pathways" : "affected_pathway",
+            "Affected pathways" : "affected_pathway",
             "Text mining" : "literature",
             "Animal models" : "animal_model"
         };
@@ -776,13 +776,22 @@ angular.module('cttvDirectives', [])
 
                     // });
 
-                    var instance = AtlasHeatmapModule.build ({
-                        gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa',
-                        //gxaBaseUrl : '/gxa',
-                        params:'geneQuery=' + target + "&species=homo%20sapiens",
+                    var atlasHeatmapBuilder = window.exposed;
+                    atlasHeatmapBuilder({
+                        gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa/',
+                        params: 'geneQuery=' + target + "&species=homo%20sapiens",
                         isMultiExperiment: true,
-                        target : "cttvExpressionAtlas"
+                        target: "cttvExpressionAtlas"
                     });
+
+
+                    // var instance = AtlasHeatmapModule.build ({
+                    //     gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa',
+                    //     //gxaBaseUrl : '/gxa',
+                    //     params:'geneQuery=' + target + "&species=homo%20sapiens",
+                    //     isMultiExperiment: true,
+                    //     target : "cttvExpressionAtlas"
+                    // });
                 });
             },
         };
