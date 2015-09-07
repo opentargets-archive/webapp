@@ -7,7 +7,7 @@ angular.module('cttvDirectives', [])
     /**
     * Matrix (heatmap) view for target associations
     */
-    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile) {
+    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', 'cttvConsts', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile, cttvConsts) {
         'use strict';
 
         var hasDatatype = function (myDatatype, datatypes) {
@@ -22,10 +22,10 @@ angular.module('cttvDirectives', [])
 
 
         var cols = [
-            "Disease",
-            "EFO",
-            "TherapeuticArea EFO",
-            {name:"", title:cttvDictionary.ASSOCIATION_SCORE},
+            {name: "", title: ""},
+            {name: "", title: "EFO"},
+            {name: "", title: "TherapeuticArea EFO"},
+            {name: "", title:cttvDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
             {name:cttvConsts.datatypes.GENETIC_ASSOCIATION, title:cttvDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
             {name:cttvConsts.datatypes.SOMATIC_MUTATION, title:cttvDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
@@ -34,7 +34,7 @@ angular.module('cttvDirectives', [])
             {name:cttvConsts.datatypes.AFFECTED_PATHWAY, title:cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
             {name:cttvConsts.datatypes.LITERATURE, title:cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
             {name:cttvConsts.datatypes.ANIMAL_MODEL, title:cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
-            {name:"", title:"Therapeutic area"}
+            {name:"", title:""}
         ];
 
         /*
@@ -69,8 +69,9 @@ angular.module('cttvDirectives', [])
                 "columns": (function(){
                     var a=[];
                     for(var i=0; i<cols.length; i++){
-                        a.push({ "title": "<div><span title='"+cols[i]+"'>"+cols[i]+"</span></div>" });}
-                        return a;
+                        a.push({ "title": "<div><span title='"+cols[i].title+"'>"+cols[i].title+"</span></div>", name: cols[i].name });
+                    }
+                    return a;
                     })(),
                     "columnDefs" : [
                         {
@@ -87,7 +88,8 @@ angular.module('cttvDirectives', [])
                     "ordering": true,
                     "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                     "pageLength": 50
-                }, filename ));
+                },
+                filename ));
             };
 
 
@@ -220,6 +222,7 @@ angular.module('cttvDirectives', [])
 
                                     // Association score
                                     row.push( getColorStyleString( data.association_score, geneDiseaseLoc ) );
+
                                     // Genetic association
                                     row.push( getColorStyleString( datatypes.genetic_association, geneDiseaseLoc + "?sec=genetic_associations") );
                                     // Somatic mutation
@@ -230,6 +233,8 @@ angular.module('cttvDirectives', [])
                                     row.push( getColorStyleString( datatypes.rna_expression, geneDiseaseLoc + "?sec=rna_expression") );
                                     // Affected pathway
                                     row.push( getColorStyleString( datatypes.affected_pathway, geneDiseaseLoc + "?sec=affected_pathways") );
+                                    // Literature
+                                    row.push(getColorStyleString(datatypes.litearture, geneDiseaseLoc + "?sec=literature"));
                                     // Animal model
                                     row.push( getColorStyleString( datatypes.animal_model, geneDiseaseLoc + "?sec=animal_models") );
                                     // Therapeutic area
@@ -515,6 +520,7 @@ angular.module('cttvDirectives', [])
                         for(var i=0; i<cols.length; i++){
                             a.push({ "title": "<div><span title='"+cols[i].title+"'>"+cols[i].title+"</span></div>", "name":cols[i].name });
                         }
+                        console.debug(a);
                         return a;
                     })(),
                     "columnDefs" : [
