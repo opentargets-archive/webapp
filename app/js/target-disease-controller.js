@@ -1120,7 +1120,7 @@
                 }
             }
             return mmds.join("/");
-        }
+        };
 
 
 
@@ -1156,9 +1156,8 @@
                 });
 
                 if(pmdata.length>0){
-                    // format publication data:
-                    //data[2] = pmdata[0].title+"<br />"+pmdata[0].pmid;
-                    var re = /abstract: (.*?)\./g;
+                    console.warn(data[5]);
+                    var re = /abstract: (.*?)\.<\/li>/g;
                     data[2]="";
 
                     // pmdata.forEach(function(pub){
@@ -1176,11 +1175,7 @@
                     var abstract = pub.abstractText;
                     while ((match = re.exec(data[5])) !== null) {
                         var matchedText = match[1];
-                        var indexStart = abstract.indexOf(matchedText);
-                        var indexEnd = indexStart + matchedText.length;
-                        if (indexStart >= 0) {
-                            abstract = abstract.slice(0, indexStart) + '<b>' + abstract.slice(indexStart, indexEnd) + '</b>' + abstract.slice(indexEnd);
-                        }
+                        abstract = abstract.replace(matchedText, "<b>" + matchedText + "</b>");
                     }
 
 
@@ -1232,9 +1227,21 @@
                 } ).
                 then(
                     function(resp) {
+                        var unicode_re = /u([\dABCDEF]{4})/gi;
+                        var match;
+
                         var all = [];
                         resp.body.data.map (function (paper) {
                             all.push(paper.evidence.literature_ref.lit_id.split("/").pop());
+                            // WARNING: Unicode characters are encoded in the response, we convert them to symbol
+                            paper.evidence.literature_ref.mined_sentences.map (function (sentence) {
+                                var text = sentence.text;
+                                while ((match = unicode_re.exec(text)) !== null) {
+                                    console.log(match[1] + " -- " + String.fromCharCode(parseInt(match[1], 16)));
+                                    sentence.text = sentence.text.replace('u'+match[1], String.fromCharCode(parseInt(match[1], 16)))
+                                }
+                            });
+
                         });
                         $scope.search.literature.data = resp.body.data;
                         var dt = initTableLiterature();
