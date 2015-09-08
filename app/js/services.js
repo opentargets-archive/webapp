@@ -110,8 +110,28 @@ angular.module('cttvServices', []).
                         .range(["#CBDCEA", "#005299"]), // blue orig
         };
 
-        cttvUtilsService.location = {
-            addSearch : function (searchObj) {
+        cttvUtilsService.search = {
+            translateKeys : function (searchObj) {
+                for (var key in searchObj) {
+                    switch (key) {
+                        case "score_min":
+                        searchObj.filterbyscorevalue_min = searchObj.score_min;
+                        delete searchObj.score_min;
+                        break;
+                        case "score_max":
+                        searchObj.filterbyscorevalue_max = searchObj.score_max;
+                        delete searchObj.score_max;
+                        break;
+                        case "score_str":
+                        searchObj.stringency = searchObj.score_str;
+                        delete searchObj.score_str;
+                        break;
+                    }
+                }
+                return searchObj;
+            },
+
+            format : function (searchObj) {
                 var opts = [];
                 for (var key in searchObj) {
                     opts.push(key + "=" + searchObj[key]);
@@ -121,7 +141,6 @@ angular.module('cttvServices', []).
             },
 
             searchString : function(key, value){
-
                 var url = $window.location.href.split("?");
                 // var search = window.location.href.split('?')[1] || "";
                 url[1] = url[1] || "";

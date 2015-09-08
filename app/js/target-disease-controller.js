@@ -14,6 +14,9 @@
         'use strict';
         $log.log('TargetDiseaseCtrl()');
 
+        var searchObj = cttvUtils.search.translateKeys($location.search());
+        console.log(searchObj);
+
         var dbs = cttvConsts.dbs;
         var datatypes = cttvConsts.datatypes;
 
@@ -187,13 +190,13 @@
                 expandefo: true,
                 facets: false
             };
-            var searchObj = $location.search();
             _.extend(opts, searchObj);
 
             return cttvAPIservice.getAssociation(opts).
                 then(
                     function(resp) {
                         $log.log("getFlowerData response");
+                        console.warn(resp);
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].datatypes);
                         for(var i=0; i<resp.body.data[0].datatypes.length; i++){
                             $scope.search.association_scores[resp.body.data[0].datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score;
@@ -259,7 +262,6 @@
         // }
 
 
-
         var getCommonDiseaseData = function(){
             $scope.search.genetic_associations.common_diseases.is_loading = true;
             var opts = {
@@ -275,10 +277,13 @@
                     "sourceID"
                 ]
             };
-            _.extend(opts, $location.search());
+            _.extend(opts, searchObj);
+            console.log(opts);
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
+                        console.warn("GENETIC ASSOCIATIONS");
+                        console.warn(resp);
                         $scope.search.genetic_associations.common_diseases.data = resp.body.data;
                         initCommonDiseasesTable();
 
@@ -384,7 +389,7 @@
                 ]
             };
 
-            _.extend(opts, $location.search());
+            _.extend(opts, searchObj);
 
             return cttvAPIservice.getFilterBy( opts ).
                 then(
@@ -533,7 +538,7 @@
                     "target",
                 ]
             };
-            _.extend(opts, $location.search());
+            _.extend(opts, searchObj);
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
@@ -727,7 +732,7 @@
                     "evidence"
                 ]
             };
-            _.extend(opts, $location.search());
+            _.extend(opts, searchObj);
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
@@ -823,7 +828,7 @@
                     "target"
                 ]
             };
-            _.extend(opts, $location.search());
+            _.extend(opts, searchObj);
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
@@ -938,7 +943,7 @@
                     "evidence.provenance_type"
                 ]
             };
-            _.extend(opts, $location.search());
+            _.extend(opts, searchObj);
             $scope.search.somatic_mutations.is_loading = true;
             return cttvAPIservice.getFilterBy( opts ).
                 then(
@@ -1042,7 +1047,7 @@
                     "scores"
                 ]
             };
-            _.extend(opts, $location.search());
+            _.extend(opts, searchObj);
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
@@ -1243,7 +1248,7 @@
                     "scores"
                 ]
             };
-            _.extend(opts, $location.search());
+            _.extend(opts, searchObj);
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {

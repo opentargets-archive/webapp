@@ -574,7 +574,7 @@ angular.module('cttvDirectives', [])
                 var row = [];
                 var geneLoc = "";
                 var geneDiseaseLoc = "/evidence/" + data[i].gene_id + "/" + target;
-                row.push("<a href='" + geneDiseaseLoc + cttvUtils.location.addSearch($location.search()) + "'>" + data[i].label + "</a>");
+                row.push("<a href='" + geneDiseaseLoc + cttvUtils.search.format($location.search()) + "'>" + data[i].label + "</a>");
                 // Ensembl ID
                 row.push(data[i].gene_id);
                 // The association score
@@ -602,7 +602,7 @@ angular.module('cttvDirectives', [])
                           dts.animal_model) ;
 
                 // Push gene name again instead
-                row.push("<a href=" + geneDiseaseLoc + cttvUtils.location.addSearch($location.search()) + ">" + data[i].label + "</a>");
+                row.push("<a href=" + geneDiseaseLoc + cttvUtils.search.format($location.search()) + ">" + data[i].label + "</a>");
 
                 newData[i] = row;
 
