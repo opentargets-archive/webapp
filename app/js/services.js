@@ -110,9 +110,15 @@ angular.module('cttvServices', []).
                         .range(["#CBDCEA", "#005299"]), // blue orig
         };
 
-
-
         cttvUtilsService.location = {
+            addSearch : function (searchObj) {
+                var opts = [];
+                for (var key in searchObj) {
+                    opts.push(key + "=" + searchObj[key]);
+                }
+                var searchStr = opts.join("&");
+                return "?" + searchStr;
+            },
 
             searchString : function(key, value){
 

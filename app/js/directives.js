@@ -7,7 +7,7 @@ angular.module('cttvDirectives', [])
     /**
     * Matrix (heatmap) view for target associations
     */
-    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', 'cttvConsts', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile, cttvConsts) {
+    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', 'cttvConsts', '$location', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile, cttvConsts, $location) {
         'use strict';
 
         var cols = [
@@ -350,8 +350,6 @@ angular.module('cttvDirectives', [])
 
 }])    // end directive cttvTargetAssociationsTable
 
-
-
     /*
     *
     */
@@ -473,11 +471,10 @@ angular.module('cttvDirectives', [])
     *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
     *   This is useful in conjunction with a spinner where you can have ng-show="loading"
     */
-    .directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', function ($log, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts) {
+    .directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', '$location', function ($log, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts, $location) {
         'use strict';
 
         var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
-
         /*
         * Generates and returns the string representation of the span element
         * with color information for each cell
@@ -577,7 +574,7 @@ angular.module('cttvDirectives', [])
                 var row = [];
                 var geneLoc = "";
                 var geneDiseaseLoc = "/evidence/" + data[i].gene_id + "/" + target;
-                row.push("<a href='" + geneDiseaseLoc + "'>" + data[i].label + "</a>");
+                row.push("<a href='" + geneDiseaseLoc + cttvUtils.location.addSearch($location.search()) + "'>" + data[i].label + "</a>");
                 // Ensembl ID
                 row.push(data[i].gene_id);
                 // The association score
@@ -605,7 +602,7 @@ angular.module('cttvDirectives', [])
                           dts.animal_model) ;
 
                 // Push gene name again instead
-                row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
+                row.push("<a href=" + geneDiseaseLoc + cttvUtils.location.addSearch($location.search()) + ">" + data[i].label + "</a>");
 
                 newData[i] = row;
 

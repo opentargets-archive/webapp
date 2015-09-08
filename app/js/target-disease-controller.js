@@ -181,12 +181,16 @@
         var getFlowerData = function(){
             $log.log("getFlowerData()");
 
-            return cttvAPIservice.getAssociation({
-                    target:$scope.search.target,
-                    disease:$scope.search.disease,
-                    expandefo: true,
-                    facets: false
-                }).
+            var opts = {
+                target:$scope.search.target,
+                disease:$scope.search.disease,
+                expandefo: true,
+                facets: false
+            };
+            var searchObj = $location.search();
+            _.extend(opts, searchObj);
+
+            return cttvAPIservice.getAssociation(opts).
                 then(
                     function(resp) {
                         $log.log("getFlowerData response");
@@ -258,19 +262,21 @@
 
         var getCommonDiseaseData = function(){
             $scope.search.genetic_associations.common_diseases.is_loading = true;
-            return cttvAPIservice.getFilterBy( {
-                    target:$scope.search.target,
-                    disease:$scope.search.disease,
-                    size: 1000,
-                    datasource: dbs.GWAS,
-                    fields:[
-                        "disease",
-                        "evidence",
-                        "variant",
-                        "target",
-                        "sourceID"
-                    ]
-                } ).
+            var opts = {
+                target:$scope.search.target,
+                disease:$scope.search.disease,
+                size: 1000,
+                datasource: dbs.GWAS,
+                fields:[
+                    "disease",
+                    "evidence",
+                    "variant",
+                    "target",
+                    "sourceID"
+                ]
+            };
+            _.extend(opts, $location.search());
+            return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
                         $scope.search.genetic_associations.common_diseases.data = resp.body.data;
@@ -365,18 +371,22 @@
 
         var getRareDiseaseData = function(){
             $scope.search.genetic_associations.rare_diseases.is_loading = true;
-            return cttvAPIservice.getFilterBy( {
-                    target:$scope.search.target,
-                    disease:$scope.search.disease,
-                    size: 1100,
-                    datasource: [dbs.UNIPROT, dbs.EVA ],
-                    fields: [
-                        "disease.efo_info",
-                        "evidence",
-                        "variant",
-                        "type"
-                    ]
-                } ).
+            var opts = {
+                target:$scope.search.target,
+                disease:$scope.search.disease,
+                size: 1100,
+                datasource: [dbs.UNIPROT, dbs.EVA ],
+                fields: [
+                    "disease.efo_info",
+                    "evidence",
+                    "variant",
+                    "type"
+                ]
+            };
+
+            _.extend(opts, $location.search());
+
+            return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
                         $scope.search.genetic_associations.rare_diseases.data = resp.body.data;
@@ -511,18 +521,20 @@
 
         var getDrugData = function(){
             $scope.search.drugs.is_loading = true;
-            return cttvAPIservice.getFilterBy( {
-                    target:$scope.search.target,
-                    disease:$scope.search.disease,
-                    size: 1000,
-                    datasource: dbs.CHEMBL,
-                    fields: [
-                        "disease.efo_info",
-                        "drug",
-                        "evidence",
-                        "target",
-                    ]
-                } ).
+            var opts = {
+                target:$scope.search.target,
+                disease:$scope.search.disease,
+                size: 1000,
+                datasource: dbs.CHEMBL,
+                fields: [
+                    "disease.efo_info",
+                    "drug",
+                    "evidence",
+                    "target",
+                ]
+            };
+            _.extend(opts, $location.search());
+            return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
                         $scope.search.drugs.data = resp.body.data;
@@ -704,17 +716,19 @@
 
         var getPathwaysData = function(){
             $scope.search.pathways.is_loading = true;
-            return cttvAPIservice.getFilterBy( {
-                    target:$scope.search.target,
-                    disease:$scope.search.disease,
-                    size: 1000,
-                    datasource: dbs.REACTOME,
-                    fields: [
-                        "target",
-                        "disease",
-                        "evidence"
-                    ]
-                } ).
+            var opts = {
+                target:$scope.search.target,
+                disease:$scope.search.disease,
+                size: 1000,
+                datasource: dbs.REACTOME,
+                fields: [
+                    "target",
+                    "disease",
+                    "evidence"
+                ]
+            };
+            _.extend(opts, $location.search());
+            return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
                         $scope.search.pathways.data = resp.body.data;
@@ -726,8 +740,7 @@
                     //$scope.search.pathways.is_open = $scope.search.pathways.data.length>0 || false; // might trigger an error...
                     $scope.search.pathways.is_loading = false;
                 });
-        }
-
+        };
 
 
         /*
@@ -799,17 +812,19 @@
 
         var getRnaExpressionData = function(){
             $scope.search.rna_expression.is_loading = true;
-            return cttvAPIservice.getFilterBy( {
-                    target:$scope.search.target,
-                    disease:$scope.search.disease,
-                    size: 1000,
-                    datasource: dbs.EXPRESSION_ATLAS,
-                    fields: [
-                        "disease",
-                        "evidence",
-                        "target"
-                    ]
-                } ).
+            var opts = {
+                target:$scope.search.target,
+                disease:$scope.search.disease,
+                size: 1000,
+                datasource: dbs.EXPRESSION_ATLAS,
+                fields: [
+                    "disease",
+                    "evidence",
+                    "target"
+                ]
+            };
+            _.extend(opts, $location.search());
+            return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
                         $scope.search.rna_expression.data = resp.body.data;
@@ -910,20 +925,22 @@
 
         var getMutationData = function(){
             $log.log("getMutationData()");
+            var opts = {
+                target:$scope.search.target,
+                disease:$scope.search.disease,
+                size: 1000,
+                datasource: [dbs.CANCER_GENE_CENSUS/*, dbs.EVA()*/],    // TODO: pull EVA data too, when it's ready
+                fields: [
+                    "disease.efo_info", // disease
+                    "evidence.evidence_codes_info",  // evidence source
+                    "evidence.urls",
+                    "evidence.known_mutations",
+                    "evidence.provenance_type"
+                ]
+            };
+            _.extend(opts, $location.search());
             $scope.search.somatic_mutations.is_loading = true;
-            return cttvAPIservice.getFilterBy( {
-                    target:$scope.search.target,
-                    disease:$scope.search.disease,
-                    size: 1000,
-                    datasource: [dbs.CANCER_GENE_CENSUS/*, dbs.EVA()*/],    // TODO: pull EVA data too, when it's ready
-                    fields: [
-                        "disease.efo_info", // disease
-                        "evidence.evidence_codes_info",  // evidence source
-                        "evidence.urls",
-                        "evidence.known_mutations",
-                        "evidence.provenance_type"
-                    ]
-                } ).
+            return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
                         $scope.search.somatic_mutations.data = resp.body.data;
@@ -936,7 +953,7 @@
                     //$scope.search.somatic_mutations.is_open = $scope.search.somatic_mutations.data.length>0 || false;
                     $scope.search.somatic_mutations.is_loading = false;
                 });
-        }
+        };
 
 
 
@@ -1014,17 +1031,19 @@
 
         var getMouseData = function(){
             $scope.search.mouse.is_loading = true;
-            return cttvAPIservice.getFilterBy( {
-                    target:$scope.search.target,
-                    disease:$scope.search.disease,
-                    size: 1000,
-                    datasource: dbs.PHENODIGM,
-                    fields: [
-                        "disease",
-                        "evidence",
-                        "scores"
-                    ]
-                } ).
+            var opts = {
+                target:$scope.search.target,
+                disease:$scope.search.disease,
+                size: 1000,
+                datasource: dbs.PHENODIGM,
+                fields: [
+                    "disease",
+                    "evidence",
+                    "scores"
+                ]
+            };
+            _.extend(opts, $location.search());
+            return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
                         $scope.search.mouse.data = resp.body.data;
@@ -1036,7 +1055,7 @@
                     //$scope.search.mouse.is_open = $scope.search.mouse.data.length>0 || false;
                     $scope.search.mouse.is_loading = false;
                 });
-        }
+        };
 
 
 
@@ -1156,7 +1175,6 @@
                 });
 
                 if(pmdata.length>0){
-                    console.warn(data[5]);
                     var re = /abstract: (.*?)\.<\/li>/g;
                     data[2]="";
 
@@ -1214,17 +1232,19 @@
 
         var getLiteratureData = function(){
             $scope.search.literature.is_loading = true;
-            return cttvAPIservice.getFilterBy( {
-                    target:$scope.search.target,
-                    disease:$scope.search.disease,
-                    size: 1000,
-                    datasource: dbs.DISGENET,   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
-                    fields: [
-                        "disease",  // take disease.efo_info[0].label and disease.efo_info[0].efo_id
-                        "evidence",
-                        "scores"
-                    ]
-                } ).
+            var opts = {
+                target:$scope.search.target,
+                disease:$scope.search.disease,
+                size: 1000,
+                datasource: dbs.DISGENET,   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
+                fields: [
+                    "disease",  // take disease.efo_info[0].label and disease.efo_info[0].efo_id
+                    "evidence",
+                    "scores"
+                ]
+            };
+            _.extend(opts, $location.search());
+            return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
                         var unicode_re = /u([\dABCDEF]{4})/gi;
@@ -1237,8 +1257,7 @@
                             paper.evidence.literature_ref.mined_sentences.map (function (sentence) {
                                 var text = sentence.text;
                                 while ((match = unicode_re.exec(text)) !== null) {
-                                    console.log(match[1] + " -- " + String.fromCharCode(parseInt(match[1], 16)));
-                                    sentence.text = sentence.text.replace('u'+match[1], String.fromCharCode(parseInt(match[1], 16)))
+                                    sentence.text = sentence.text.replace('u'+match[1], String.fromCharCode(parseInt(match[1], 16)));
                                 }
                             });
 
