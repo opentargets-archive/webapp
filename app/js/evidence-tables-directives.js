@@ -13,9 +13,18 @@ angular.module('cttvDirectives')
     return {
         restrict: 'EA',
         templateUrl: 'partials/known-drug-table.html',
-        scope: {},
+        scope: {
+        },
+        controller: ['$scope', function ($scope) {
+            console.log($scope);
+            function init() {
+                $scope.drugs = ["one", "two"];
+            }
+
+            init();
+        }],
         link: function (scope, elem, attrs) {
-            scope.drugs = ["one", "two"];
+            console.log(scope);
             scope.$watchGroup([function () {return attrs.target;}, function () {return attrs.disease;}], function () {
                 console.log(attrs.target + " -- " + attrs.disease);
                 if (!attrs.target && !attrs.disease) {
@@ -86,7 +95,7 @@ angular.module('cttvDirectives')
 
                 function formatDrugsDataToArray (data){
                     var newdata = [];
-                    var unique_drugs = {};
+                    var all_drugs = [];
                     data.forEach(function(item){
                         // create rows:
                         var row = [];
@@ -94,7 +103,10 @@ angular.module('cttvDirectives')
                         try{
 
                             // Fill the unique drugs
-                            unique_drugs[item.drug.molecule_name] = 1;
+                            all_drugs.push({
+                                id: item.drug.molecule_name,
+                                url: item.evidence.target2drug.urls[0].url
+                            });
 
                             // 0: disease
                             row.push(item.disease.efo_info[0].label);
@@ -183,8 +195,14 @@ angular.module('cttvDirectives')
                         }
                     });
 
-                    console.log(Object.keys(unique_drugs));
-                    scope.drugs = Object.keys(unique_drugs);
+                    var all_drugs_sorted = _.sortBy(all_drugs, function (rec) {
+                        return rec.id;
+                    });
+                    console.log(all_drugs_sorted);
+
+                    scope.drugs = _.uniq(all_drugs_sorted, true, function (rec) {
+                        return rec.id;
+                    });
                     return newdata;
                 }
 

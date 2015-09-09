@@ -1,9 +1,8 @@
-<p>
-    <span "ng-repeat"="drug in drugs2">
-        <p>- {{target}}</p>
+<p>Unique drugs listed below:
+    <span ng-repeat="drug in drugs">
+        [<a href={{drug.url}} target=_blank>{{drug.id}}</a>]
     </span>
 </p>
-
 <div class="table-panel">
     <table class='table table-striped table-bordered'>
         <thead>
