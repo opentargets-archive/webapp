@@ -166,6 +166,19 @@ angular.module('cttvServices', []).
 
         };
 
+        cttvUtilsService.checkPath = function (obj, path){
+            var prop;
+            var props = path.split('.');
+
+            while( prop = props.shift() ){
+                if(!obj.hasOwnProperty(prop)){
+                    return false;
+                }
+                obj = obj[prop];
+            }
+            return true;
+        };
+
 
 
         return cttvUtilsService;

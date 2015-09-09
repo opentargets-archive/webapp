@@ -40,7 +40,7 @@
 				<div class="item">
 					<div class="well well-lg">
 						<h5>
-						  <a href="/disease/{{search.info.efo.efo_code}}">{{search.info.efo.label}}</a>
+							<a href="/disease/{{search.info.efo.efo_code}}">{{search.info.efo.label}}</a>
 							<span class="small" ng-show="search.info.efo.efo_synonyms.length>0"><br />Synonyms: {{search.info.efo.efo_synonyms.join(", ") | limitTo:100}}...</span>
 						</h5>
 						<p class="small">{{search.info.efo.definition | limitTo: 200}}<span ng-show="search.info.efo.definition.length>200">...</span></p>
@@ -167,13 +167,13 @@
 						<div class="table-panel">
 							<table class='table table-striped table-bordered' id="mutations-table">
 								<thead>
-						            <tr>
-						                <th>Disease</th>
-                                        <th>Mutation type</th>
-						                <th>Evidence source</th>
-                                        <th>Publications</th>
-						            </tr>
-						        </thead>
+									<tr>
+										<th>Disease</th>
+										<th>Mutation type</th>
+										<th>Evidence source</th>
+										<th>Publications</th>
+									</tr>
+								</thead>
 
 								<tbody>
 								</tbody>
@@ -185,58 +185,25 @@
 					</div>
 				</accordion-group>
 
-
-
-				<!-- Known drugs -->
+				<!-- Known drugs (as a directive) -->
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
-							<span ng-class="{ 'text-disabled': search.drugs.data.length==0 }">Known drugs</span>
-							<!--<span class='badge' ng-show="search.drugs.data.length>0">{{search.drugs.data.length}}</span>-->
-							<span class='badge flower-petal' ng-show="search.association_scores[datatypes.KNOWN_DRUG]" title="Association score">{{search.association_scores[datatypes.KNOWN_DRUG] | currency : "" : 2}}</span>
+							<span ng-class="{ 'text-disabled': search.drugs==false }">Known drugs</span>
+							<span class="badge flower-petal" ng-show="search.association_scores[datatypes.KNOWN_DRUG]" title="Association score">{{search.association_scores[datatypes.KNOWN_DRUG] | currency: "" : 2}}</span>
 							<span cttv-progress-spinner class="pull-right" ng-show="search.drugs.is_loading"></span>
 						</span>
 					</accordion-heading>
-					<div ng-show="search.drugs.data.length>0">
-						<p><!--<span class="small">Association score: {{search.association_scores[datatypes.KNOWN_DRUG] || 0}}</span><br />-->Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a> curated database</p>
-						<div class="table-panel">
-							<table class='table table-striped table-bordered' id="drugs-table">
-								<thead>
-						            <tr>
-						                <th rowspan="2" colspan="1">Disease</th>
-						                <th rowspan="1" colspan="6">Drug Information</th>
-						                <th rowspan="1" colspan="1">Gene-Drug Evidence</th>
-						                <th rowspan="2" colspan="1">Evidence source</th>
-						            </tr>
-						            <tr>
-						            	<!-- Drug information -->
-						                <th>Drug</th>
-						                <th>Phase</th>
-										<th>Phase (Numeric)</th>
-						                <th>Type</th>
-						                <th>Mechanism of Action</th>
-						                <th>Activity</th>
-						                <!-- <th>Clinical Indications</th> -->
 
-						                <!-- Gene-Drug evidence -->
-						                <!-- <th>Target name</th> -->
-						                <th class="no-last-el">Target class</th>
-						                <!-- <th class="no-last-element">Target</th> --><!-- we have to manually set this border, otherwise datatables thinks it's the last element and removes the border-->
-						                <!-- <th class="no-last-element">Protein complex members</th> -->
-
-						            </tr>
-						        </thead>
-
-								<tbody>
-								</tbody>
-							</table>
-						</div>
+					<div ng-show="search.drugs==true">
+						<p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a>
+							<known-drug-table disease="{{disease}}" target="{{target}}"></known-drug-table>
+						</p>
 					</div>
-					<div ng-show="search.drugs.data.length==0">
+					<div ng-show="search.drugs==false">
 						<p>No data available</p>
 					</div>
 				</accordion-group>
-
 
 
 				<!-- RNA Expression table -->
@@ -255,22 +222,22 @@
 						<div class="table-panel">
 							<table class='table table-striped table-bordered' id="rna-expression-table">
 								<thead>
-						            <tr>
-						                <th rowspan="2" colspan="1">Disease</th>
-						                <th rowspan="1" colspan="7">Gene-disease evidence</th>
-						                <th rowspan="2" colspan="1">Experiment overview and data</th>
-						                <th rowspan="2" colspan="1">Publications</th>
-						            </tr>
-						            <tr>
-						                <th>Comparison</th>
-						                <th>Activity</th>
-						                <th>Tissue/cell</th>
-						                <th>Evidence source</th>
-						                <th>Log2 fold change</th>
-						                <th>P-value</th>
+									<tr>
+										<th rowspan="2" colspan="1">Disease</th>
+										<th rowspan="1" colspan="7">Gene-disease evidence</th>
+										<th rowspan="2" colspan="1">Experiment overview and data</th>
+										<th rowspan="2" colspan="1">Publications</th>
+									</tr>
+									<tr>
+										<th>Comparison</th>
+										<th>Activity</th>
+										<th>Tissue/cell</th>
+										<th>Evidence source</th>
+										<th>Log2 fold change</th>
+										<th>P-value</th>
 										<th class="no-last-el">Percentile rank</th>
-						            </tr>
-						        </thead>
+									</tr>
+								</thead>
 
 								<tbody>
 								</tbody>
@@ -300,18 +267,18 @@
 						<div class="table-panel">
 							<table class='table table-striped table-bordered' id="pathways-table">
 								<thead>
-						            <tr>
-						                <th rowspan="2" colspan="1">Disease</th>
-						                <th rowspan="1" colspan="7">Gene-disease evidence</th>
-						            </tr>
-						            <tr>
-						                <th>Overview</th>
-						                <th>Activity</th>
-						                <th>Mutations</th>
-						                <th>Evidence source</th>
-						                <th>Publications</th>
-						            </tr>
-						        </thead>
+									<tr>
+										<th rowspan="2" colspan="1">Disease</th>
+										<th rowspan="1" colspan="7">Gene-disease evidence</th>
+									</tr>
+									<tr>
+										<th>Overview</th>
+										<th>Activity</th>
+										<th>Mutations</th>
+										<th>Evidence source</th>
+										<th>Publications</th>
+									</tr>
+								</thead>
 
 								<tbody>
 								</tbody>
@@ -325,40 +292,40 @@
 
 
 
-                <!-- Text mining -->
-                <accordion-group is-open="false">
-                    <accordion-heading>
-                        <span class="text-nolight">
-                            <span ng-class="{ 'text-disabled': search.literature.data.length==0 }">Text mining</span>
-                            <span class='badge flower-petal' ng-show="search.association_scores[datatypes.LITERATURE]" title="Association score">{{search.association_scores[datatypes.LITERATURE] | currency : "" : 2}}</span>
-                            <span cttv-progress-spinner class="pull-right" ng-show="search.literature.is_loading"></span>
-                        </span>
-                    </accordion-heading>
-                    <div ng-show="search.literature.data.length>0">
-                        <p>Source: <a href="/faq" target="_blank">Disgenet</a> curated database</p>
+				<!-- Text mining -->
+				<accordion-group is-open="false">
+					<accordion-heading>
+						<span class="text-nolight">
+							<span ng-class="{ 'text-disabled': search.literature.data.length==0 }">Text mining</span>
+							<span class='badge flower-petal' ng-show="search.association_scores[datatypes.LITERATURE]" title="Association score">{{search.association_scores[datatypes.LITERATURE] | currency : "" : 2}}</span>
+							<span cttv-progress-spinner class="pull-right" ng-show="search.literature.is_loading"></span>
+						</span>
+					</accordion-heading>
+					<div ng-show="search.literature.data.length>0">
+						<p>Source: <a href="/faq" target="_blank">Disgenet</a> curated database</p>
 
-                        <div class="table-panel">
-                            <table class='table table-striped table-bordered' id="literature-table">
-                                <thead>
-                                    <tr>
-                                        <th>Disease</th>
-                                        <th>Publication ID</th> <!-- hidden column -->
-                                        <th>Publication</th>
-                                        <th>Matched sentences</th>
-                                        <th>Year</th>
-                                        <th>Details</th> <!-- hidden column -->
-                                    </tr>
-                                </thead>
+						<div class="table-panel">
+							<table class='table table-striped table-bordered' id="literature-table">
+								<thead>
+									<tr>
+										<th>Disease</th>
+										<th>Publication ID</th> <!-- hidden column -->
+										<th>Publication</th>
+										<th>Matched sentences</th>
+										<th>Year</th>
+										<th>Details</th> <!-- hidden column -->
+									</tr>
+								</thead>
 
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div ng-show="search.literature.data.length==0">
-                        <p>No data available</p>
-                    </div>
-                </accordion-group>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div ng-show="search.literature.data.length==0">
+						<p>No data available</p>
+					</div>
+				</accordion-group>
 
 
 
@@ -377,20 +344,20 @@
 						<div class="table-panel">
 							<table class='table table-striped table-bordered' id="mouse-table">
 								<thead>
-						            <tr>
-						                <th rowspan="2" colspan="1">Disease</th>
-						                <th rowspan="1" colspan="2">Phenotype - Phenotype Evidence</th>
-						                <th rowspan="1" colspan="3">Model - Disease Evidence</th>
-						            </tr>
-						            <tr>
-						            	<!-- Drug information -->
-						                <th>Human</th>
-						                <th>Mouse</th>
-						                <th>Mouse model</th>
-						                <th>Evidence source</th>
-						                <th>Score</th>
-						            </tr>
-						        </thead>
+									<tr>
+										<th rowspan="2" colspan="1">Disease</th>
+										<th rowspan="1" colspan="2">Phenotype - Phenotype Evidence</th>
+										<th rowspan="1" colspan="3">Model - Disease Evidence</th>
+									</tr>
+									<tr>
+										<!-- Drug information -->
+										<th>Human</th>
+										<th>Mouse</th>
+										<th>Mouse model</th>
+										<th>Evidence source</th>
+										<th>Score</th>
+									</tr>
+								</thead>
 
 								<tbody>
 								</tbody>

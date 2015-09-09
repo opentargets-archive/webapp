@@ -1739,4 +1739,4 @@ angular.module('cttvDirectives', [])
                 handler();
             }
         };
-    }]);
+    }])

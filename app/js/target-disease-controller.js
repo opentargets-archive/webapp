@@ -14,6 +14,8 @@
         'use strict';
         $log.log('TargetDiseaseCtrl()');
 
+        var checkPath = cttvUtils.checkPath;
+
         var searchObj = cttvUtils.search.translateKeys($location.search());
         console.log(searchObj);
 
@@ -488,9 +490,7 @@
         };
 
 
-
         var initRareDiseasesTable = function(){
-
             $('#rare-diseases-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatRareDiseaseDataToArray($scope.search.genetic_associations.rare_diseases.data),
                 "autoWidth": false,
@@ -500,206 +500,11 @@
 
 
 
-        // =================================================
-        //  D R U G S
-        // =================================================
-
-            /*
-            drug    1   Target context  .biological_subject.properties.target_type
-            drug    2   Protein complex members .biological_subject.about
-            drug    3   Drug information    .evidence.evidence_chain[0].evidence.experiment_specific
-            drug    4   Mechanism of action of drug .biological_subject.properties.activity
-            drug    5   Mechanism of action references  .evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs
-            drug    6   Evidence codes: target to drug  .evidence.evidence_chain[0].evidence.evidence_codes
-            drug    7   Provenance - target .evidence.urls.linkouts[1]
-            drug    8   Provenance - drug   .evidence.urls.linkouts[0]
-            drug    9   Provenace - marketed drug indication; SourceDB  .evidence.evidence_chain[1].evidence.experiment_specific
-            drug    10  Date asserted   .evidence.date_asserted
-            drug    11  Evidence codes: drug to disease .evidence.evidence_chain[1].evidence.evidence_codes
-            drug    12  Association score   .evidence.evidence_chain[0].evidence.association_score
-            */
-
-            /*
-            Drug Information                                                        Gene-Drug Evidence
-            Drug    Phase   Type    Mechanism of Action Activity    Clinical Trials Target name Target class    Target context  Protein complex members Evidence type
-            */
-
-        var getDrugData = function(){
-            $scope.search.drugs.is_loading = true;
-            var opts = {
-                target:$scope.search.target,
-                disease:$scope.search.disease,
-                size: 1000,
-                datasource: dbs.CHEMBL,
-                fields: [
-                    "disease.efo_info",
-                    "drug",
-                    "evidence",
-                    "target",
-                ]
-            };
-            _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
-                then(
-                    function(resp) {
-                        $scope.search.drugs.data = resp.body.data;
-                        initTableDrugs();
-
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                ).
-                finally(function(){
-                    //$scope.search.drugs.is_open = $scope.search.drugs.data.length>0 || false;
-                    $scope.search.drugs.is_loading = false;
-                });
+        // DRUGS
+        var getDrugData = function () {
+            $scope.target = $scope.search.target;
+            $scope.disease = $scope.search.disease;
         };
-
-
-        var formatDrugsDataToArray = function(data){
-            var newdata = [];
-            data.forEach(function(item){
-                // create rows:
-                var row = [];
-
-                try{
-
-                    // 0: disease
-                    row.push(item.disease.efo_info[0].label);
-
-                    // 1: drug
-                    row.push( "<a href='"+item.evidence.target2drug.urls[0].url+"' target='_blank'>"
-                            + item.drug.molecule_name
-                            + " <i class='fa fa-external-link'></i></a>");
-
-                    // 2: phase
-                    row.push(item.drug.max_phase_for_all_diseases.label);
-
-                    // 2: hidden
-                    row.push(item.drug.max_phase_for_all_diseases.numeric_index);
-
-                    // 3: type
-                    row.push(item.drug.molecule_type);
-
-                    // 4: Mechanism of action
-                    var pubs = 0;
-                    if( checkPath(item, "evidence.target2drug.provenance_type.literature.references") ){
-                        pubs = item.evidence.target2drug.provenance_type.literature.references.length
-                    }
-
-                    var action = item.evidence.target2drug.mechanism_of_action;
-
-                    // publications:
-                    // we show the publications here in the cells for now
-                    // eventually this should be in a popup or tooltip of some sort
-                    var pub="";
-                    if( pubs>0 ){
-                        action += "<br /><span><span class='badge'>" + pubs + (pubs==1 ? "</span> publication</span>" : "</span> publications</span>");
-                        pub=":<div>";
-                        item.evidence.target2drug.provenance_type.literature.references.forEach(function(lit){
-                            pub+="<a href='"+lit.lit_id+"' target='_blank'>"+lit.lit_id.split('/').pop()+" <i class='fa fa-external-link'></i></a> "
-                        });
-                        pub+="</div>";
-
-                    }
-
-                    if ( item.evidence.target2drug.urls && item.evidence.target2drug.urls[2] ) {
-                        var extLink = item.evidence.target2drug.urls[2];
-                        pub += "<br /><span><a target=_blank href=" + extLink.url + ">" + extLink.nice_name  + "</a></span>";
-                    }
-
-                    action+=pub;
-
-                    row.push(action);
-
-
-                    // 5: Activity
-                    var activity = item.target.activity;
-                    switch (activity) {
-                        case 'drug_positive_modulator' :
-                            activity = "agonist";
-                            break;
-                        case 'drug_negative_modulator' :
-                            activity = "antagonist";
-                            break;
-                    }
-                    row.push(activity);
-
-                    // 6: Clinical indications -- REMOVED!
-                    // row.push( "<a href='"
-                    //             + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
-                    //             + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
-
-                    // 7: target class
-                    row.push(item.target.target_class[0]);
-
-
-                    // 8: target context / protein complex members
-
-                    /*var prot="";
-                    var prots = []
-                    if (item.target.gene_info.length > 1) {
-                        prot += "complex:<br/>";
-                    } else {
-                        prot += "protein:<br/>";
-                    }
-                    if(item.target.gene_info){
-                        for(var j=0; j<item.target.gene_info.length; j++){
-                            prots.push("<a href='/target/"+item.target.gene_info[j].geneid
-                                +"/associations' title='"+item.target.gene_info[j].name+"'>"
-                                +item.target.gene_info[j].symbol
-                                +"</a>");
-                            // prot+="<a href='#/target/"+data[i].biological_subject.gene_info[j].geneid
-                            //     +"/associations' title='"+data[i].biological_subject.gene_info[j].name+"'>"
-                            //     +data[i].biological_subject.gene_info[j].symbol
-                            //     +"</a>, "
-                        }
-                    }
-                    prot += prots.join (", ");
-
-                    row.push(prot);
-                    */
-
-                    // 9: evidence source
-                    row.push( "Curated from <br /><a href='"
-                                + item.evidence.drug2clinic.urls[0].url
-                                + "' target='_blank'>" + item.evidence.drug2clinic.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
-
-                    //row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
-
-
-                    newdata.push(row); // use push() so we don't end up with empty rows
-                }catch(e){
-                    $log.log("Error parsing drugs data:");
-                    $log.log(e);
-                }
-            });
-            return newdata;
-        }
-
-
-
-        /*
-         * This is the hardcoded data for the Known Drugs table and
-         * will obviously need to change and pull live data when available
-         */
-        var initTableDrugs = function(){
-            $('#drugs-table').dataTable( cttvUtils.setTableToolsParams({
-                "data": formatDrugsDataToArray($scope.search.drugs.data),
-                "autoWidth": false,
-                "paging": true,
-                "order" : [[2, "desc"]],
-                "aoColumnDefs" : [
-                    {"targets": [3], "visible":false},
-                    {"iDataSort" : 2, "aTargets" : [3]},
-                ],
-                // "aoColumnDefs" : [
-                //     {"iDataSort" : 2, "aTargets" : [3]},
-                // ]
-                //"ordering": false
-            }, $scope.search.info.title+"-known_drugs") );
-
-        }
-
 
 
         // =================================================
@@ -985,7 +790,7 @@
                     var pub=cttvDictionary.NA;
                     if( checkPath(item, "evidence.provenance_type.literature.references") ){
                         pub=item.evidence.provenance_type.literature.references.map(function(ref){
-                            return "<a href='"+ref.lit_id+"' target='_blank'>"+ref.lit_id.split('/').pop()+"&nbsp;<i class='fa fa-external-link'></i></a>"
+                            return "<a href='"+ref.lit_id+"' target='_blank'>"+ref.lit_id.split('/').pop()+"&nbsp;<i class='fa fa-external-link'></i></a>";
                         }).join(", ");
 
                     }
@@ -997,10 +802,10 @@
                     $log.log("Error parsing somatic mutation data:");
                     $log.log(e);
                 }
-            })
+            });
 
             return newdata;
-        }
+        };
 
 
 
@@ -1013,7 +818,7 @@
                 "autoWidth": false,
                 "paging" : true
             }, $scope.search.info.title+"-somatic_mutations") );
-        }
+        };
 
 
 
@@ -1440,18 +1245,18 @@
 
 
 
-        function checkPath(obj, path){
-            var prop;
-            var props = path.split('.');
-
-            while( prop = props.shift() ){
-                if(!obj.hasOwnProperty(prop)){
-                    return false;
-                }
-                obj = obj[prop];
-            }
-            return true;
-        }
+        // function checkPath(obj, path){
+        //     var prop;
+        //     var props = path.split('.');
+        //
+        //     while( prop = props.shift() ){
+        //         if(!obj.hasOwnProperty(prop)){
+        //             return false;
+        //         }
+        //         obj = obj[prop];
+        //     }
+        //     return true;
+        // }
 
 
 
@@ -1465,7 +1270,7 @@
 
 
 
-        $scope.bla=function(){}
+        $scope.bla=function(){};
 
 
 
@@ -1504,7 +1309,10 @@
                         getMutationData();
                     }
                     if($scope.search.association_scores[datatypes.KNOWN_DRUG]){
+                        $scope.search.drugs = true;
                         getDrugData();
+                    } else {
+                        $scope.search.drugs = false;
                     }
                     if($scope.search.association_scores[datatypes.RNA_EXPRESSION]){
                         getRnaExpressionData();

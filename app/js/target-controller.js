@@ -10,10 +10,10 @@ angular.module('cttvControllers')
     "use strict";
     $log.log('TargetCtrl()');
 
-    var geneId = $location.url().split("/")[2];
+    $scope.targetId = $location.url().split("/")[2];
 
     cttvAPIservice.getTarget({
-        target_id: geneId
+        target_id: $scope.targetId
     })
     .then(
         // success
@@ -232,8 +232,9 @@ angular.module('cttvControllers')
             $scope.pathways = reactomePathways;
 
             // Drugs
-            var drugs = resp.drugbank;
-            $scope.drugs = drugs;
+            // var drugs = resp.drugbank;
+            // $scope.drugs = drugs;
+
 
             // Bibliography
             var bibliography = _.filter(resp.dbxrefs, function (t) {
