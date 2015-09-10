@@ -1294,7 +1294,7 @@ angular.module('cttvDirectives', [])
 
 
     /**
-     * The histogram
+     * The score histogram
      */
     .directive('cttvScoreHistogram', ['$log', '$timeout', function ($log, $timeout) {
         'use strict';
@@ -1322,7 +1322,7 @@ angular.module('cttvDirectives', [])
 
                 var margin = {top: 10, right: 10, bottom: 20, left: 10},
                     width = 260 - margin.left - margin.right,
-                    height = 150 - margin.top - margin.bottom,
+                    height = 80 - margin.top - margin.bottom,
                     barWidth = width / data.length;
 
                 var tick = 1/data.length;
