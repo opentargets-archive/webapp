@@ -15,53 +15,53 @@
     <!--[if IE]><script type="text/javascript">
     // Fix for IE ignoring relative base tags.
     (function() {
-        var baseTag = document.getElementsByTagName('base')[0];
-        baseTag.href = baseTag.href;
-    })();
-    </script><![endif]-->
+    var baseTag = document.getElementsByTagName('base')[0];
+    baseTag.href = baseTag.href;
+})();
+</script><![endif]-->
 
-    <title ng-bind-template="CTTV Core{{viewTitle ? ' - '+viewTitle : ''}}"></title>
+<title ng-bind-template="CTTV Core{{viewTitle ? ' - '+viewTitle : ''}}"></title>
 
-    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+<link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 
-    <!-- Components -->
-    <link href="build/cttv-webapp.css" rel="stylesheet" />
-    <!-- <link href="node_modules/cttv.bubblesView/build/bubblesView.css" rel="stylesheet" /> -->
-    <!-- <link href="node_modules/cttv.targetAssociations/build/cttv.targetAssociations.css" rel="stylesheet" /> -->
-    <!-- <link href="node_modules/cttv.targetGenomeBrowser/build/index.css" rel="stylesheet" /> -->
-    <!-- <link href="node_modules/cttv.targetTranscriptView/build/index.css" rel="stylesheet" /> -->
-    <!-- <link href="node_modules/cttv.flowerView/build/flowerView.css" rel="stylesheet"/> -->
-    <link rel="stylesheet" href="css/app.css">
-    <!-- <link rel="stylesheet" href="node_modules/tnt.genome/build/index.css"> -->
-
-
-    <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
-    <script type="text/javascript" src="js/ie_console_noop.js"></script>
-
-    <script type="text/javascript" src="build/cttv-webapp.js"></script>
-    <!-- TnT -->
-    <!-- <script type="text/javascript" src="node_modules/tnt.genome/build/tnt.genome.js"></script> -->
-
-    <!-- CTTV Components -->
-    <!-- <script type="text/javascript" src="node_modules/cttv.bubblesView/build/cttv.bubblesView.js"></script> -->
-    <!-- <script type="text/javascript" src="node_modules/cttv.api/build/cttv.api.js"></script> -->
-    <!-- <script type="text/javascript" src="node_modules/cttv.targetAssociations/build/cttv.targetAssociations.js"></script> -->
-    <!-- <script type="text/javascript" src="node_modules/cttv.targetGenomeBrowser/build/cttv.targetGenomeBrowser.js"></script> -->
-    <!-- <script type="text/javascript" src="node_modules/cttv.targetTranscriptView/build/cttv.targetTranscriptView.js"></script> -->
-    <!-- <script type="text/javascript" src="node_modules/cttv.flowerView/build/cttv.flowerView.js"></script> -->
-    <!-- <script type="text/javascript" src="node_modules/cttv.targetAssociationsTree/build/cttv.targetAssociationsTree.js"></script> -->
+<!-- Components -->
+<link href="build/cttv-webapp.css" rel="stylesheet" />
+<!-- <link href="node_modules/cttv.bubblesView/build/bubblesView.css" rel="stylesheet" /> -->
+<!-- <link href="node_modules/cttv.targetAssociations/build/cttv.targetAssociations.css" rel="stylesheet" /> -->
+<!-- <link href="node_modules/cttv.targetGenomeBrowser/build/index.css" rel="stylesheet" /> -->
+<!-- <link href="node_modules/cttv.targetTranscriptView/build/index.css" rel="stylesheet" /> -->
+<!-- <link href="node_modules/cttv.flowerView/build/flowerView.css" rel="stylesheet"/> -->
+<link rel="stylesheet" href="css/app.css">
+<!-- <link rel="stylesheet" href="node_modules/tnt.genome/build/index.css"> -->
 
 
-    <!-- Web components -->
-    <!-- <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script> -->
-    <!-- <link rel="import" href="./web_components/cttv/target-evidence/target_evidence.html"> -->
-    <!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-header/target_disease_evidence_header.html"> -->
-    <!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-overview/target_disease_evidence_overview.html"> -->
+<!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
+<script type="text/javascript" src="js/ie_console_noop.js"></script>
 
-    <!-- tables -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/tabletools/2.2.1/css/dataTables.tableTools.min.css">
+<script type="text/javascript" src="build/cttv-webapp.js"></script>
+<!-- TnT -->
+<!-- <script type="text/javascript" src="node_modules/tnt.genome/build/tnt.genome.js"></script> -->
+
+<!-- CTTV Components -->
+<!-- <script type="text/javascript" src="node_modules/cttv.bubblesView/build/cttv.bubblesView.js"></script> -->
+<!-- <script type="text/javascript" src="node_modules/cttv.api/build/cttv.api.js"></script> -->
+<!-- <script type="text/javascript" src="node_modules/cttv.targetAssociations/build/cttv.targetAssociations.js"></script> -->
+<!-- <script type="text/javascript" src="node_modules/cttv.targetGenomeBrowser/build/cttv.targetGenomeBrowser.js"></script> -->
+<!-- <script type="text/javascript" src="node_modules/cttv.targetTranscriptView/build/cttv.targetTranscriptView.js"></script> -->
+<!-- <script type="text/javascript" src="node_modules/cttv.flowerView/build/cttv.flowerView.js"></script> -->
+<!-- <script type="text/javascript" src="node_modules/cttv.targetAssociationsTree/build/cttv.targetAssociationsTree.js"></script> -->
+
+
+<!-- Web components -->
+<!-- <script type="text/javascript" src="bower_components/webcomponentsjs/webcomponents.js"></script> -->
+<!-- <link rel="import" href="./web_components/cttv/target-evidence/target_evidence.html"> -->
+<!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-header/target_disease_evidence_header.html"> -->
+<!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-overview/target_disease_evidence_overview.html"> -->
+
+<!-- tables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/tabletools/2.2.1/css/dataTables.tableTools.min.css">
 </head>
 
 <body>
@@ -125,10 +125,10 @@
         </div>
         <!-- End Masthead -->
 
-    <!-- Authentication error -->
-    <alert type="danger" ng-show="showApiErrorMsg" ng-cloak>Your session has expired, reload the page to authenticate again
-        <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
-    </alert>
+        <!-- Authentication error -->
+        <alert type="danger" ng-show="showApiErrorMsg" ng-cloak>Your session has expired, reload the page to authenticate again
+            <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+        </alert>
 
         <div class="container">
             <div class="cttv-beta-ribbon">BETA</div>
@@ -178,6 +178,7 @@
                     <a href="/faq"><i class="fa fa-question-circle"></i> FAQs</a><br />
                     <span class="fa fa-envelope"></span> <a href="mailto:support@targetvalidation.org?Subject=CTTV%20Core%20Platform%20-%20help%20request">support<span class="fa fa-at"></span>targetvalidation.org</a></p>
             </div>
+
             <div class="col-sm-3">
                 <h6>CONTACT</h6>
                 <h6>Centre for Therapeutic Target Validation</h6>
@@ -191,6 +192,7 @@
     </div>
 </div>
 
+
         <!-- End Footer-->
 
 
@@ -200,7 +202,7 @@
         <script type="text/javascript" src="bower_components/angulartics/dist/angulartics.min.js"></script>
         <script type="text/javascript" src="bower_components/angulartics/dist/angulartics-ga.min.js"></script>
         <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
-        <script type="text/javascript" src="bower_components/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
         <script type="text/javascript" src="vendor/cola/cola.min.js"></script>
         <script type="text/javascript" src="js/angularjs-viewhead.js"></script>
 
@@ -213,10 +215,13 @@
         <link type="text/css" rel="stylesheet" href="vendor/biojsvispmccitation/style.css"/>
         <!-- <script type="text/javascript" src="vendor/biojsvispmccitation/biojsvispmccitation.js"></script> -->
 
-    <!-- Protein viewer -->
-    <link type="text/css" rel="stylesheet" href="vendor/proteinFeaturesViewer/main.css"/>
-    <link type="text/css" rel="stylesheet" href="vendor/proteinFeaturesViewer/fontello.css"/>
-    <script type="text/javascript" src="vendor/proteinFeaturesViewer/featuresviewer.js"></script>
+        <!-- Protein viewer -->
+        <link type="text/css" rel="stylesheet" href="vendor/proteinFeaturesViewer/main.css"/>
+        <link type="text/css" rel="stylesheet" href="vendor/proteinFeaturesViewer/fontello.css"/>
+        <script type="text/javascript" src="vendor/proteinFeaturesViewer/featuresviewer.js"></script>
+
+        <!-- Pathway viewer -->
+        <script type="text/javascript" language="javascript" src="http://reactomedev.oicr.on.ca/DiagramJs/diagram/diagram.nocache.js"></script>
 
         <!-- Expression Atlas -->
         <script language="JavaScript" type="text/javascript" src="vendor/expressionAtlasBundle/vendor.bundle.js"></script>
@@ -284,7 +289,7 @@
 
 
         <!-- DataTable stuff -->
-        <script type="text/javascript" src="https://cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
 
