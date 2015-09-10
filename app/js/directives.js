@@ -741,6 +741,50 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    .directive('reactomePathwayViewer', [function () {
+        //'use strict';
+
+        return {
+            restrict: 'E',
+            link: function (scope, elem, attrs) {
+
+                var w = 900;
+                var h = 500;
+                // We need to wait until reactome seed is loaded
+                var centinel = setInterval (function () {
+                    if (Reactome) {
+                        clearInterval(centinel);
+                        console.log(Reactome);
+
+                        var newDiv = document.createElement("div");
+                        newDiv.id = "pathwayDiagramContainer";
+                        elem[0].appendChild(newDiv);
+
+                        pathwayDiagram = Reactome.Diagram.create ({
+                            "proxyPrefix": "http://reactomedev.oicr.on.ca",
+                            "placeHolder": "pathwayDiagramContainer",
+                            "width": 1100,
+                            "height": 700,
+                        });
+
+                        scope.$watch (function () { return attrs.pathway; }, function (pathway) {
+                            if (pathway === "") {
+                                return;
+                            }
+                            pathwayDiagram.resize(1100, 700);
+                            pathwayDiagram.loadDiagram(pathway);
+                            if (attrs.subpathway) {
+                                pathwayDiagram.onDiagramLoaded(function (loaded) {
+                                    pathwayDiagram.selectItem(attrs.subpathway);
+                                });
+
+                            }
+                        });
+                    }
+                },500);
+            }
+        };
+    }])
 
     /*
     *

@@ -202,34 +202,63 @@ angular.module('cttvControllers')
             //     });
             $scope.targetGeneId = resp.ensembl_gene_id;
 
-
             // Pathways
-            var pathways = resp.reactome;
-            var reactomePathways = [];
+            // Genome Browser
+            $scope.togglePathwayViewer = function () {
+                var pathways = resp.reactome;
+                var reactomePathways = [];
 
-            // Get the new identifiers
-            var promises = [];
-            var pathwayArr = [];
-            for (var pathway in pathways) {
-                var p = $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/" + pathway + "/stableIdentifier");
-                promises.push(p);
-                pathwayArr.push(pathways[pathway]["pathway name"]);
-            }
-            $q
-                .all(promises)
-                .then(function (vals) {
-                    for (var i=0; i<vals.length; i++) {
-                        var val = vals[i].data;
-                        var idRaw = val.split("\t")[1];
-                        var id = idRaw.split('.')[0];
-                        reactomePathways.push({
-                            "id": id,
-                            "name" : pathwayArr[i]
-                        });
+                // Get the new identifiers
+                var promises = [];
+                var pathwayArr = [];
+                for (var pathway in pathways) {
+                    var p = $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/" + pathway + "/stableIdentifier");
+                    promises.push(p);
+                    pathwayArr.push(pathways[pathway]["pathway name"]);
+                }
+                $q
+                    .all(promises)
+                    .then(function (vals) {
+                        for (var i=0; i<vals.length; i++) {
+                            var val = vals[i].data;
+                            var idRaw = val.split("\t")[1];
+                            var id = idRaw.split('.')[0];
+                            reactomePathways.push({
+                                "id": id,
+                                "name" : pathwayArr[i]
+                            });
+                        }
+                        $scope.pathways = reactomePathways;
+                        console.log($scope.pathways);
+                        $scope.setPathwayViewer($scope.pathways[0]);
+                    });
+
+            };
+            $scope.setPathwayViewer = function (pathway) {
+                var config = {
+                    headers: {
+                        'Accept': "application/json"
                     }
-                });
+                };
+                $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryEventAncestors/" + pathway.id.substring(6), config)
+                    .then (function (resp) {
+                        var topLevelReactomeId;
+                        while (!topLevelReactomeId) {
+                            var p = resp.data[0].databaseObject.pop();
+                            if (p.hasDiagram) {
+                                topLevelReactomeId = p.dbId;
+                            }
+                        }
+                        $scope.pathway = {
+                            id: topLevelReactomeId,
+                            subName: pathway.name,
+                            subId: pathway.id,
+                        };
+                    });
+            };
 
-            $scope.pathways = reactomePathways;
+
+
 
             // Drugs
             // var drugs = resp.drugbank;
