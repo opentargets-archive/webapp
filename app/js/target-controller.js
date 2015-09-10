@@ -229,7 +229,6 @@ angular.module('cttvControllers')
                             });
                         }
                         $scope.pathways = reactomePathways;
-                        console.log($scope.pathways);
                         $scope.setPathwayViewer($scope.pathways[0]);
                     });
 

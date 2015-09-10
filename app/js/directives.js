@@ -750,8 +750,14 @@ angular.module('cttvDirectives', [])
 
                 var w = 900;
                 var h = 500;
+                var currentPathwayId;
+                var count = 0;
                 // We need to wait until reactome seed is loaded
                 var centinel = setInterval (function () {
+                    count++;
+                    if (count > 10) {
+                        clearInterval(centinel);
+                    }
                     if (Reactome) {
                         clearInterval(centinel);
                         console.log(Reactome);
@@ -767,17 +773,25 @@ angular.module('cttvDirectives', [])
                             "height": 700,
                         });
 
-                        scope.$watch (function () { return attrs.pathway; }, function (pathway) {
+                        scope.$watchGroup ([function () { return attrs.pathway; }, function () { return attrs.subpathway;}], function () {
+                            var pathway = attrs.pathway;
+                            var subpathway = attrs.subpathway;
                             if (pathway === "") {
                                 return;
                             }
-                            pathwayDiagram.resize(1100, 700);
-                            pathwayDiagram.loadDiagram(pathway);
-                            if (attrs.subpathway) {
-                                pathwayDiagram.onDiagramLoaded(function (loaded) {
-                                    pathwayDiagram.selectItem(attrs.subpathway);
-                                });
-
+                            if (pathway !== currentPathwayId) {
+                                currentPathwayId = pathway;
+                                pathwayDiagram.resize(1100, 700);
+                                pathwayDiagram.loadDiagram(pathway);
+                                if (subpathway) {
+                                    pathwayDiagram.onDiagramLoaded(function (pathwayId) {
+                                        pathwayDiagram.selectItem(subpathway);
+                                    });
+                                }
+                            } else {
+                                if (subpathway) {
+                                    pathwayDiagram.selectItem(subpathway);
+                                }
                             }
                         });
                     }
