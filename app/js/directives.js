@@ -1278,11 +1278,14 @@ angular.module('cttvDirectives', [])
 
             template: '<div>'
                      +'    <cttv-score-histogram data="facet.data.buckets" min="facet.filters[0].key" max="facet.filters[1].key"></cttv-score-histogram>'
-                     +'    <div><span class="pull-left">{{facet.filters[0].key}}</span><span class="pull-right">{{facet.filters[1].key}}</span></div>'
+                     +'    <div class="clearfix"><span class="pull-left small">Min: {{facet.filters[0].key}}</span><span class="pull-right small">Max: {{facet.filters[1].key}}</span></div>'
                      //+'       <input type="text" ng-model="facet.data.min"/>'
                      //+'       <label>{{facet.filters[0].label}}: {{facet.data.min}} {{facet.filters[1].label}}: {{facet.data.max}}</label>'
                      //+'    <label>Stringency <input type="text" ng-model="facet.filters[2].key"/></label>'
-                     +'    <cttv-slider min=1 max=10 value="facet.filters[2].key"></cttv-slider>'
+                     +'    <div>'
+                     +'        <span class="small">Stringency:</span>'
+                     +'        <cttv-slider min=1 max=10 config="{tick:1, ticks:9, snap:true}" value="facet.filters[2].key"></cttv-slider>'
+                     +'    </div>'
                      +'    <div><button type="button" class="btn btn-primary btn-xs" ng-click="facet.update()">Apply</button></div>'
                      +'</div>',
 
@@ -1318,7 +1321,6 @@ angular.module('cttvDirectives', [])
 
                 var data = scope.data;
 
-                //$timeout(brushed,4000);
 
                 var margin = {top: 10, right: 10, bottom: 20, left: 10},
                     width = 260 - margin.left - margin.right,
@@ -1370,13 +1372,6 @@ angular.module('cttvDirectives', [])
                     .attr("transform", "translate(0," + height + ")")
                     .call(xAxis);
 
-
-                // brushing
-                var roundToScale = function(n){
-                    $log.log(n+" / "+tick);
-                    return (Math.round(n/tick)*tick).toFixed(1);
-                }
-
                 var update = function(o){
                     scope.min = o.min;
                     scope.max = o.max;
@@ -1388,9 +1383,15 @@ angular.module('cttvDirectives', [])
                     .on("brush", function(){ scope.$apply(onBrush) })
                     .on("brushend", onBrushEnd);
 
+                // brush graphics
                 var gBrush = svg.append("g")
                     .attr("class", "brush")
                     .call(mybrush);
+
+                gBrush.selectAll(".resize").append("circle")
+                    .attr("class", "handle")
+                    .attr("transform", "translate(0," + height/2 + ")")
+                    .attr("r", 4);
 
                 gBrush.selectAll("rect")
                     .attr("height", height);
@@ -1402,51 +1403,10 @@ angular.module('cttvDirectives', [])
 
 
                 function onBrush(){
-                    var extent0 = mybrush.extent(),
-                        extent1;
-
-                    //extent1 = [ roundToScale(extent0[0]) , roundToScale(extent0[1]) ];
-                    extent1 = [ extent0[0].toFixed(2), extent0[1].toFixed(2) ];
-                    update( {min:extent1[0], max:extent1[1]} );
-
+                    var extent0 = mybrush.extent();
+                    update( {min:extent0[0].toFixed(2), max:extent0[1].toFixed(2)} );
                 }
 
-                // DEPRECATED!
-                function brushed() {
-                    //$log.log("brushhhh");
-                    var extent0 = mybrush.extent(),
-                        extent1;
-
-                    //$log.log(extent0);
-                    //$log.log( roundToScale(extent0[0]) +" -> "+ x( roundToScale(extent0[0]) ) );
-                    //$log.log(d3.event);
-                    extent1 = [ roundToScale(extent0[0]) , roundToScale(extent0[1]) ];
-                    update( {min:extent1[0], max:extent1[1]} );
-                    /*
-                    // if dragging, preserve the width of the extent
-                    if (d3.event.mode === "move") {
-                        var d0 = x( roundToScale(extent0[0]) ) ,
-                        d1 = x( roundToScale(extent0[1]) ;
-                        extent1 = [d0, d1];
-                    }
-
-                    // otherwise, if resizing, round both dates
-                    else {
-                        extent1 = extent0.map(d3.time.day.round);
-
-                        // if empty when rounded, use floor & ceil instead
-                        if (extent1[0] >= extent1[1]) {
-                            extent1[0] = d3.time.day.floor(extent0[0]);
-                            extent1[1] = d3.time.day.ceil(extent0[1]);
-                        }
-                    }
-*/
-
-                    $log.log(d3.select(this));
-                    //d3.select(this).call(mybrush.extent(extent1));
-                    //mybrush.extent(extent1);
-                    d3.select(svg).call(mybrush.extent(extent1));
-                }
             },
         };
     }])
@@ -1456,7 +1416,7 @@ angular.module('cttvDirectives', [])
     /**
      * The histogram
      */
-    .directive('cttvSlider', ['$log', function ($log) {
+    .directive('cttvSlider', ['$log', 'cttvUtils', function ($log, cttvUtils) {
         'use strict';
 
         return {
@@ -1476,22 +1436,19 @@ angular.module('cttvDirectives', [])
 
             link: function (scope, elem, attrs) {
 
-                var margin = {top: 10, right: 10, bottom: 10, left: 10},
+                var margin = {top: 0, right: 10, bottom: 10, left: 10},
                     width = 260 - margin.left - margin.right,
-                    height = 50 - margin.bottom - margin.top;
+                    height = 30 - margin.bottom - margin.top;
 
                 var config = scope.config || {}
 
-                var ticks = config.ticks || scope.max-scope.min;
-                var tick = (scope.max-scope.min) / ticks;
+
+                var tick = config.tick;
+                var ticks = config.ticks || (scope.max-scope.min)/tick;
+                var snap = config.snap || false;
 
                 scope.value = scope.value || scope.min;
 
-                // n: number
-                // t: tick
-                var roundToScale = function(n,t){
-                    return (Math.round(n/t)*t).toFixed(1);
-                }
 
                 var x = d3.scale.linear()
                     .domain([scope.min, scope.max])
@@ -1502,7 +1459,6 @@ angular.module('cttvDirectives', [])
                     .x(x)
                     .extent([0, 0])
                     .on("brush", onBrush);
-                    //.on("brushend", function(){ scope.$apply(onBrushEnd) });
 
                 var xAxis = d3.svg.axis()
                     .scale(x)
@@ -1517,7 +1473,6 @@ angular.module('cttvDirectives', [])
                     .attr("height", height + margin.top + margin.bottom)
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
 
                 svg.append("g")
                     .attr("class", "x axis")
@@ -1555,7 +1510,10 @@ angular.module('cttvDirectives', [])
                     var value = brush.extent()[0];
 
                     if (d3.event.sourceEvent) { // not a programmatic event
-                        value = roundToScale( x.invert(d3.mouse(this)[0]), tick);
+                        value = x.invert(d3.mouse(this)[0]);
+                        if(snap){
+                            value = cttvUtils.roundToNearest( value, tick );
+                        }
                         brush.extent([value, value]);
                     }
 
@@ -1566,8 +1524,7 @@ angular.module('cttvDirectives', [])
                 function onBrushEnd() {
                     // update the scope value when finishing brushing
                     if (d3.event.sourceEvent) { // not a programmatic event
-                        $log.log("onBrushEnd " + brush.extent()[0] + scope.value );
-                        scope.value = parseInt(brush.extent()[0]); // TODO: this is a hack to make stringency work... make parseInt configurable from directive
+                        scope.value = brush.extent()[0];
                     }
                 }
 

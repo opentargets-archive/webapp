@@ -48,7 +48,12 @@ angular.module('cttvServices').
             DATASOURCES: 'datasources',
             UNIQUE_TARGET_COUNT: 'unique_target_count',
             UNIQUE_DISEASE_COUNT: 'unique_disease_count',
-            DATA_DISTRIBUTION: 'data_distribution'
+            DATA_DISTRIBUTION: 'data_distribution',
+            defaults : {
+                STRINGENCY : 1,
+                SCORE_MIN : 0,
+                SCORE_MAX : 1
+            }
         };
 
 

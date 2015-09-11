@@ -70,6 +70,7 @@ angular.module('cttvServices').
          * updates the "summary" of selected options, as well as the count
          */
         var updateSelected = function(){
+            $log.log("updateSelected");
             selected.length=0;  // reset the length, not whole object
             selectedCount = 0;  // other controllers are $watch-ing this...
 
@@ -162,6 +163,7 @@ angular.module('cttvServices').
          * Takes API data for a facet (i.e. a collection of filters) and returns the config object to create that collection
          */
         var parseFacetData = function(collection, data, countsToUse){
+            $log.log("parseFacetData");
             var config={
                 key: collection,    // this is the type, really...
                 label: cttvDictionary[collection.toUpperCase()] || collection,
@@ -221,29 +223,34 @@ angular.module('cttvServices').
                 });
 
             } else if (collection === cttvConsts.DATA_DISTRIBUTION){
+                $log.log("  "+cttvConsts.DATA_DISTRIBUTION);
                 // score (data_distribution)
 
                 config.label= cttvDictionary.SCORE;
+                var search = cttvFiltersService.parseURL();
+                    search.score_min = search.score_min || [cttvConsts.defaults.SCORE_MIN];
+                    search.score_max = search.score_max || [cttvConsts.defaults.SCORE_MAX];
+                    search.score_str = search.score_str || [cttvConsts.defaults.STRINGENCY];
 
                 // set the 3 filters for the score: min, max, stringency
                 config.filters = [
                     {
                         facet : "score_min",
                         label : "min",
-                        key : $location.search().score_min || "0",
-                        selected : true //$location.search().score_min!=undefined
+                        key : search.score_min[0],
+                        selected : true
                     },
                     {
                         facet : "score_max",
                         label : "max",
-                        key : $location.search().score_max || "1",
-                        selected : true //$location.search().score_max!=undefined
+                        key : search.score_max[0],
+                        selected : true
                     },
                     {
                         facet : "score_str",
                         label : "stringency",
-                        key : $location.search().score_str || "2",
-                        selected : true //$location.search().score_str!=undefined
+                        key : search.score_str[0],
+                        selected : true
                     }
                 ];
 
@@ -261,8 +268,8 @@ angular.module('cttvServices').
                                     if(a.label>b.label){return 1}
                                     return 0
                                 }),
-                    min : 0,
-                    max : 1
+                    //min : 0,
+                    //max : 1
                 }
                 // $log.log("*** *** ***");
                 // $log.log(config.filters)
@@ -298,6 +305,7 @@ angular.module('cttvServices').
          * It loops through the selected[] array and updates the URL accordingly.
          */
         var updateLocationSearch = function(){
+            $log.log("updateLocationSearch");
             var raw = {};
             selected.forEach(function(collection){
                 //raw[collection.key] = collection.filters.map(function(obj){return obj.key;});

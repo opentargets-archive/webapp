@@ -179,7 +179,11 @@ angular.module('cttvServices', []).
             return true;
         };
 
-
+        // n: number
+        // t: tick
+        cttvUtilsService.roundToNearest = function(n,t){
+            return (Math.round(n/t)*t);
+        }
 
         return cttvUtilsService;
     }]);
