@@ -16,7 +16,6 @@ angular.module('cttvDirectives')
         scope: {
         },
         controller: ['$scope', function ($scope) {
-            console.log($scope);
             function init() {
                 $scope.drugs = ["one", "two"];
             }
@@ -24,9 +23,7 @@ angular.module('cttvDirectives')
             init();
         }],
         link: function (scope, elem, attrs) {
-            console.log(scope);
             scope.$watchGroup([function () {return attrs.target;}, function () {return attrs.disease;}], function () {
-                console.log(attrs.target + " -- " + attrs.disease);
                 if (!attrs.target && !attrs.disease) {
                     return;
                 }
@@ -198,7 +195,6 @@ angular.module('cttvDirectives')
                     var all_drugs_sorted = _.sortBy(all_drugs, function (rec) {
                         return rec.id;
                     });
-                    console.log(all_drugs_sorted);
 
                     scope.drugs = _.uniq(all_drugs_sorted, true, function (rec) {
                         return rec.id;

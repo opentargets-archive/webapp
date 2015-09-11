@@ -104,11 +104,16 @@
                 <p ng-if="!pathways.length">
                     No pathways found for {{target.symbol}}
                 </p>
+                <accordion-heading>
+                    <span ng-click="togglePathwayViewer()">Pathways</span>
+                </accordion-heading>
                 <ul>
                     <li ng-repeat="pathway in pathways">
-                        <a target="_blank" href="http://www.reactome.org/content/detail/{{pathway.id}}">{{pathway.name}}</a>
+                        <a target="_blank" href="http://www.reactome.org/content/detail/{{pathway.id}}">{{pathway.name}}</a> <i ng-click="setPathwayViewer(pathway)" class="fa fa-sitemap changeView"></i>
                     </li>
                 </ul>
+                <p>Diagram for <b>{{pathway.subName}}</b> pathway</p>
+                <reactome-pathway-viewer pathway="{{pathway.id}}" subpathway="{{pathway.subId}}"></reactome-pathway-viewer>
             </accordion-group>
 
             <accordion-group heading="Drugs" is-open="false">
