@@ -280,12 +280,9 @@
                 ]
             };
             _.extend(opts, searchObj);
-            console.log(opts);
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
-                        console.warn("GENETIC ASSOCIATIONS");
-                        console.warn(resp);
                         $scope.search.genetic_associations.common_diseases.data = resp.body.data;
                         initCommonDiseasesTable();
 
