@@ -742,7 +742,7 @@ angular.module('cttvDirectives', [])
     }])
 
     .directive('reactomePathwayViewer', [function () {
-        //'use strict';
+        'use strict';
 
         return {
             restrict: 'E',
@@ -766,12 +766,7 @@ angular.module('cttvDirectives', [])
                         newDiv.id = "pathwayDiagramContainer";
                         elem[0].appendChild(newDiv);
 
-                        pathwayDiagram = Reactome.Diagram.create ({
-                            "proxyPrefix": "http://reactomedev.oicr.on.ca",
-                            "placeHolder": "pathwayDiagramContainer",
-                            "width": 1100,
-                            "height": 700,
-                        });
+                        var pathwayDiagram;
 
                         scope.$watchGroup ([function () { return attrs.pathway; }, function () { return attrs.subpathway;}], function () {
                             var pathway = attrs.pathway;
@@ -779,9 +774,16 @@ angular.module('cttvDirectives', [])
                             if (pathway === "") {
                                 return;
                             }
+                            if (!pathwayDiagram) {
+                                pathwayDiagram = Reactome.Diagram.create ({
+                                    "proxyPrefix": "http://reactomedev.oicr.on.ca",
+                                    "placeHolder": "pathwayDiagramContainer",
+                                    "width": 1100,
+                                    "height": 700,
+                                });
+                            }
                             if (pathway !== currentPathwayId) {
                                 currentPathwayId = pathway;
-                                pathwayDiagram.resize(1100, 700);
                                 pathwayDiagram.loadDiagram(pathway);
                                 if (subpathway) {
                                     pathwayDiagram.onDiagramLoaded(function (pathwayId) {

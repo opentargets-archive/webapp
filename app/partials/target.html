@@ -10,6 +10,7 @@
                 {{target.description}}
             </accordion-group>
 
+            <!-- Synomyms -->
             <accordion-group heading="Gene and Protein Synonyms" is-open="false">
                 <ul>
                     <li ng-repeat="syn in synonyms">
@@ -18,6 +19,8 @@
                 </ul>
             </accordion-group>
 
+
+            <!-- Uniprot information -->
             <accordion-group heading="Protein Information (from UniProt)" is-open="false">
                 <tabset>
                     <tab heading="Text">
@@ -49,6 +52,7 @@
                 </tabset>
             </accordion-group>
 
+            <!-- Variants, isoforms and genomic context -->
             <accordion-group>
                 <accordion-heading>
                     <span ng-click="toggleGenomeLocation()">Variants, isoforms and genomic context</span>
@@ -61,6 +65,7 @@
                 <cttv-target-genome-browser target="{{genomeBrowserGene}}" width="1140"></cttv-target-genome-browser>
             </accordion-group>
 
+            <!-- Protein baseline expression -->
             <accordion-group>
                 <accordion-heading>
                     <span>Protein Baseline Expression</span>
@@ -74,7 +79,7 @@
                 </div>
             </accordion-group>
 
-
+            <!-- RNA baseline expression -->
             <accordion-group>
                 <accordion-heading>
                     <span ng-click="toggleBaselineExpression()">RNA Baseline Expression</span>
@@ -82,6 +87,7 @@
                 <ebi-expression-atlas-baseline-summary target="{{eaTarget}}"></ebi-expression-atlas-baseline-summary>
             </accordion-group>
 
+            <!-- Gene Ontology -->
             <accordion-group heading="Gene Ontology" is-open="false">
                 <div ng-repeat="go in goterms">
                     <h4>{{go.Ontology}}</h4>
@@ -92,6 +98,7 @@
             </accordion-group>
 
 
+            <!-- Protein Structure -->
             <accordion-group heading="Protein Structure" is-open="false">
                 <p>There {{pdb.nstructures == 1 ? "is" : "are"}} <strong>{{pdb.nstructures}}</strong> {{pdb.nstructures == 1 ? "structure" : "structures"}} available for {{target.symbol}} in <a target="_blank"  href="https://www.ebi.ac.uk/pdbe">PDBe</a>. <span ng-if="pdb.nstructures>1">Below we show the most representative one. A summary of the other structures can be found in the <a target="_blank" href="http://www.uniprot.org/uniprot/{{uniprot.accessions[0]}}#structure">Uniprot entry for {{uniprot.accessions[0]}}</a></span></p>
                 <h4 ng-if="pdb.nstructures>0">{{pdb.id}} <span><a target="_blank" href="https://www.ebi.ac.uk/pdbe/entry/pdb/{{pdb.id}}"><i class="fa fa-external-link"></i></a></span></h4>
@@ -100,6 +107,7 @@
                 <p ng-bind-html="pdb.description"></p>
             </accordion-group>
 
+            <!-- Pathways -->
             <accordion-group heading="Pathways" is-open="false">
                 <p ng-if="!pathways.length">
                     No pathways found for {{target.symbol}}
@@ -109,13 +117,16 @@
                 </accordion-heading>
                 <ul>
                     <li ng-repeat="pathway in pathways">
-                        <a target="_blank" href="http://www.reactome.org/content/detail/{{pathway.id}}">{{pathway.name}}</a> <i ng-click="setPathwayViewer(pathway)" class="fa fa-sitemap changeView"></i>
+                        {{pathway.name}} <i title="Display pathway below" ng-click="setPathwayViewer(pathway)" class="fa fa-sitemap changeView"></i> <a title="View pathway in Reactome website" target="_blank" href="http://www.reactome.org/content/detail/{{pathway.id}}"><i class="fa fa-external-link"></i></a>
                     </li>
                 </ul>
-                <p>Diagram for <b>{{pathway.subName}}</b> pathway</p>
-                <reactome-pathway-viewer pathway="{{pathway.id}}" subpathway="{{pathway.subId}}"></reactome-pathway-viewer>
+                <div>
+                    <p ng-show="pathway.id">Diagram for <b>{{pathway.subName}}</b> pathway</p>
+                    <reactome-pathway-viewer pathway="{{pathway.id}}" subpathway="{{pathway.subId}}"></reactome-pathway-viewer>
+                </div>
             </accordion-group>
 
+            <!-- Drugs -->
             <accordion-group heading="Drugs" is-open="false">
                 <div>
                     <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a>
@@ -136,11 +147,13 @@
                 </ul>
             </accordion-group> -->
 
+            <!-- Gene tree -->
             <accordion-group heading="Target Family" is-open="false">
                 <p class=cttv-section-intro>Phylogenetic tree showing the history of the human gene {{target.symbol}}. The tree shows human paralogs and orthologs in selected species. Click on any node to get more information about the homology relationship. Check / Uncheck species to prune the tree accordingly</p>
                 <cttv-target-gene-tree target="{{targetGeneId}}"></cttv-gene-tree>
             </accordion-group>
 
+            <!-- Bibliography -->
             <accordion-group heading="Bibliography" is-open="false">
                 <p class="cttv-section-intro">There are {{citations.count}} citations for {{target.symbol}} in Uniprot. <span ng-if="citations.count>25">Only the first 25 are shown below.</span> To see all the citations in the EuropePMC portal, follow this <a target=_blank href="{{citations.europepmcLink}}">link</a></p>
                 <div class="epmc_Citation_container" ng-repeat="citation in citations.all">
