@@ -226,10 +226,14 @@ angular.module('cttvServices')
 
 
         /**
-        * Get... mmmh.... this is actually filerby()
+        * TODO:
+        * this needs to be consolidated with the getAssociation() method as they are the exact same thing...
         */
         cttvAPI.getAssociations = function(queryObject){
             $log.log("cttvAPI.getAssociations()");
+            $log.log(queryObject);
+            //queryObject.expandefo = queryObject.expandefo || true;
+            queryObject[ cttvAPI.facets.SCORE_STR ] = queryObject[ cttvAPI.facets.SCORE_STR ] || [1] ;
 
             return callAPI({
                 operation : cttvAPI.API_ASSOCIATION_URL,
@@ -337,6 +341,7 @@ angular.module('cttvServices')
             $log.log("cttvAPI.getFilterBy");
             //queryObject.expandefo = queryObject.expandefo===true ? true : false;
             queryObject.expandefo = queryObject.expandefo || true;
+
             return callAPI({
                 operation: cttvAPI.API_FILTERBY_URL, // + "/" + queryObject.gene,
                 params: queryObject

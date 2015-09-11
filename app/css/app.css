@@ -957,6 +957,14 @@ cttv-score-histogram .brush .extent {
   shape-rendering: crispEdges;
 }
 
+cttv-score-histogram .handle {
+  fill: #fff;
+  stroke: #000;
+  /*stroke-opacity: .5;*/
+  stroke-width: 1px;
+  cursor: ew-resize;
+}
+
 
 
 cttv-slider .axis {
@@ -989,5 +997,5 @@ cttv-slider .slider .handle {
   stroke: #000;
   stroke-opacity: .5;
   stroke-width: 1.25px;
-  cursor: crosshair;
+  cursor: ew-resize;
 }
