@@ -764,6 +764,7 @@ angular.module('cttvDirectives', [])
 
                         var newDiv = document.createElement("div");
                         newDiv.id = "pathwayDiagramContainer";
+                        newDiv.className += " pwp-DiagramCanvas";
                         elem[0].appendChild(newDiv);
 
                         var pathwayDiagram;
@@ -776,7 +777,7 @@ angular.module('cttvDirectives', [])
                             }
                             if (!pathwayDiagram) {
                                 pathwayDiagram = Reactome.Diagram.create ({
-                                    "proxyPrefix": "http://reactomedev.oicr.on.ca",
+                                    "proxyPrefix": "/proxy/reactomedev.oicr.on.ca",
                                     "placeHolder": "pathwayDiagramContainer",
                                     "width": 1100,
                                     "height": 700,

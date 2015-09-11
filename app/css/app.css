@@ -20,6 +20,13 @@ body{
     cursor: pointer;
 }
 
+
+/* Needed for the rounded corner in the viewport for Chrome */
+.pwp-DiagramCanvas {
+    border-radius: 15px;
+}
+
+
 /*
 * Main index page
 */
