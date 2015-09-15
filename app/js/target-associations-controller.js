@@ -7,7 +7,7 @@ angular.module('cttvControllers')
  * Controller for the target associations page
  * It loads a list of associations for the given search
  */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts) {
         'use strict';
 
 	$log.log('targetAssociationsCtrl()');
@@ -30,12 +30,17 @@ angular.module('cttvControllers')
     var filters = cttvFiltersService.parseURL();
     var opts = cttvAPIservice.addFacetsOptions(filters, {});
 
+
+
     // Set up a listener for the URL changes and
     // when the search change, get new data
     $scope.$on('$routeUpdate', function(){
         $log.log("onRouteUpdate");
-        $scope.filterDataTypes (cttvFiltersService.parseURL());
+        //$scope.filterDataTypes (cttvFiltersService.parseURL());
+        $scope.filter(cttvFiltersService.parseURL());
     });
+
+
 
     // get gene specific info
     cttvAPIservice.getTarget( {
@@ -53,6 +58,7 @@ angular.module('cttvControllers')
 
 	$scope.loading = false;
 
+    /*
 	// datatypes filter
     $scope.dataTypes = [
         {
@@ -98,20 +104,51 @@ angular.module('cttvControllers')
             selected: true
         }
     ];
+    */
 
 	$scope.toggleDataTypes = function () {
 	    $scope.toggleNavigation();
 	};
 
-    $scope.filterDataTypes = function (filters) {
 
+    /**
+     * Parse the filters.
+     * That means it takes the list of filters as specified in the URL
+     */
+    $scope.filter = function(filters){
+        $log.log("filter()");
+
+        $scope.filters = filters;
+
+        // we parse for datatypes regardless of whether there are any,
+        // since the function there takes care of that case
+        parseDataTypes( filters );
+
+        $scope.score = {};
+        /*
+        // if there are any score settings, we need to parse and pass these to the directives for the visualizations
+        if( filters[cttvConsts.SCORE_MIN] ){
+            $scope.score[cttvConsts.SCORE_MIN] = filters[cttvConsts.SCORE_MIN];
+        }
+        if( filters[cttvConsts.SCORE_MAX] ){
+            $scope.score[cttvConsts.SCORE_MAX] = filters[cttvConsts.SCORE_MAX];
+        }
+        if( filters[cttvConsts.SCORE_STR] ){
+            $scope.score[cttvConsts.SCORE_STR] = filters[cttvConsts.SCORE_STR];
+        }
+        */
+    }
+
+    /*
+    $scope.filterDataTypes = function (filters) {
         var currDatatypes = {};
-        if (!Object.keys(filters).length) {
+        //if (!Object.keys(filters).length) {
+        if( !filters[cttvConsts.DATATYPES] ){
             for (var k=0; k<$scope.dataTypes.length; k++) {
                 currDatatypes[$scope.dataTypes[k].name] = $scope.dataTypes[k].label;
             }
         } else {
-            var filterDatatypes = filters.datatypes;
+            var filterDatatypes = filters[cttvConsts.DATATYPES];
             for (var i=0; i<filterDatatypes.length; i++) {
                 var dt = filterDatatypes[i];
                 for (var j=0; j<$scope.dataTypes.length; j++) {
@@ -124,13 +161,37 @@ angular.module('cttvControllers')
             }
         }
         $scope.currentDataTypes = currDatatypes;
-    };
-    $scope.filterDataTypes(filters);
+    };*/
+
+
+    /*
+     * Private function; creates hash object for selected datatypes (or all) with corresponding labels for flower graph
+     */
+    var parseDataTypes = function (filters) {
+        var currDatatypes = {};
+
+        var filterDatatypes = filters[cttvConsts.DATATYPES] || cttvConsts.datatypesOrder.map(function(d){
+            return cttvConsts.datatypes[d];
+        });
+        filterDatatypes.forEach(function(dt){
+            currDatatypes[dt] = cttvConsts.datatypesLabels[dt.toUpperCase()];   // TODO: these labels should be in some sort of "aggregates", but at hte moment living in the consts service
+        });
+
+        $scope.currentDataTypes = currDatatypes;
+    }
+
+
+
+
+    //$scope.filterDataTypes(filters);
+    $scope.filter(filters);
 
     $scope.updateFacets = function (facets) {
         cttvFiltersService.updateFacets(facets, "unique_disease_count");
     };
 
+    /*
+    // trying to comment this out as it doesn't seem to be used
 	$scope.filterDataType = function (dataType) {
 	    var currentDataTypes = {};
 	    for (var i=0; i<$scope.dataTypes.length; i++) {
@@ -144,7 +205,8 @@ angular.module('cttvControllers')
 		}
 	    }
 	    $scope.currentDataTypes=currentDataTypes;
-	};
+	};*/
+
 
 	// This method filters out redundant diseases in different therapeutic areas (redundant diseases in the same therapeutic area is filtered out in the targetAssociation component (that controls the bubble view)
 	// It returns an array of the non-redundant diseases and another structure with the number of diseases per datatype
@@ -168,6 +230,7 @@ angular.module('cttvControllers')
 	    }
 	    return [nonRedundantDiseases, diseasesInDatatypes];
 	};
+
 
 	// This method sets the number of diseases supported by each datatype
 	// It needs to be called only once (on load) and without any filter applied

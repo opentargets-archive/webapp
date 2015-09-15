@@ -228,8 +228,8 @@ angular.module('cttvServices').
 
                 config.label= cttvDictionary.SCORE;
                 var search = cttvFiltersService.parseURL();
-                    search.score_min = search.score_min || [cttvConsts.defaults.SCORE_MIN];
-                    search.score_max = search.score_max || [cttvConsts.defaults.SCORE_MAX];
+                    search.score_min = search.score_min || [cttvConsts.defaults.SCORE_MIN.toFixed(2)];
+                    search.score_max = search.score_max || [cttvConsts.defaults.SCORE_MAX.toFixed(2)];
                     search.score_str = search.score_str || [cttvConsts.defaults.STRINGENCY];
 
                 // set the 3 filters for the score: min, max, stringency
@@ -253,6 +253,7 @@ angular.module('cttvServices').
                         selected : true
                     }
                 ];
+
 
                 // score facet is different than the default checkbox lists
                 // so we need to overwrite the getSelected method
@@ -289,6 +290,7 @@ angular.module('cttvServices').
             var collection = new FilterCollection(obj);
             collection.filters=[]; // overwrite the filters so we can add them in properly
             obj.filters.forEach(function(element){
+
                 var f = getFilter(element);    //new Filter(element)
                 collection.addFilter(f);    // add filter to the collection
                 // but do we want to add the filter to the selected ones as well? if needed?
@@ -334,6 +336,7 @@ angular.module('cttvServices').
          * Builds a collection from the specified config object and addes it to the filters[] array
          */
         var addCollection = function(obj){
+            $log.log("addCollection");
             filters.push( parseCollection(obj) );
         };
 
@@ -344,6 +347,7 @@ angular.module('cttvServices').
          * f is essentially a config object
          */
         var getFilter = function(f){
+            $log.log("getFilter()");
             if(!filtersData[f.facet]){
                 filtersData[f.facet] = {}
             }
@@ -431,10 +435,12 @@ angular.module('cttvServices').
              * Add the specified filter (instance of Filter class) to this collection
              */
             FilterCollection.prototype.addFilter = function(filter){
+
                 // we should check the filter doesn't already exist...
                 if( this.filters.filter(function(f){ return f.key===filter.key}).length==0 ){
                     this.filters.push(filter);
                 }
+
             };
 
             /**
@@ -486,11 +492,12 @@ angular.module('cttvServices').
         /**
          * List of constants for the types of facets we support.
          * These are passed to the pageFacetsStack() function to define the facets for the given page
+         * Each constant represents the corresponding 'key' in the facets as returned by the ElasticSearch API
          */
         cttvFiltersService.facetTypes = {
-            DATATYPES: 'datatypes',
-            PATHWAYS: 'pathway_type',
-            SCORE: 'data_distribution'
+            DATATYPES: cttvConsts.DATATYPES,        // 'datatypes'
+            PATHWAYS: cttvConsts.PATHWAY_TYPES,     // 'pathway_type'
+            SCORE: cttvConsts.DATA_DISTRIBUTION    // 'data_distribution'
         };
 
 
@@ -600,6 +607,11 @@ angular.module('cttvServices').
          */
         cttvFiltersService.updateFacets = function(facets, countsToUse){
             $log.log("cttvFiltersService.updateFacets()");
+
+            // if there are no facets, return
+            if(!facets){
+                return;
+            }
 
             countsToUse = countsToUse || cttvConsts.UNIQUE_TARGET_COUNT; // "unique_target_count";
             // reset the filters

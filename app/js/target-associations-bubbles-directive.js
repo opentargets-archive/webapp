@@ -9,7 +9,9 @@ angular.module('cttvDirectives')
 
 	    scope: {
 			"onFocus": '&onFocus',
-			loadprogress : '='
+			loadprogress : '=',
+            //score : '=',
+            facets : '='
 	    },
 
 	    link: function (scope, elem, attrs) {
@@ -25,8 +27,19 @@ angular.module('cttvDirectives')
 		var nav;
 
 		var datatypesChangesCounter = 0;
+
+
+        // scope.$watch('score', function(old, current){
+        //     $log.log("score changed ");
+        //     $log.log(current);
+        // });
+
+
+
 		// Data types changes
+        /*
 		scope.$watch(function () { return attrs.datatypes; }, function (dts) {
+
             dts = JSON.parse(attrs.datatypes);
             var opts = {
                 target: attrs.target,
@@ -57,6 +70,49 @@ angular.module('cttvDirectives')
             }
             datatypesChangesCounter++;
 		});
+        */
+
+
+
+        // try only watching for facet changes
+        scope.$watch('facets', function (fct) {
+            // $log.log(" -> facets changed");
+            // $log.log(fct);
+
+            var opts = {
+                target: attrs.target,
+                datastructure: "tree",
+            };
+            opts = cttvAPIservice.addFacetsOptions(fct, opts);
+
+
+
+            if (datatypesChangesCounter>0) {
+                if (ga) {
+                    cttvAPIservice.getAssociations (opts)
+                        .then (function (resp) {
+                            $log.log(resp);
+                            scope.$parent.updateFacets(resp.body.facets);
+                            var data = resp.body.data;
+                            if (_.isEmpty(data)) {
+                                data.association_score = 0.01;
+                            }
+                            ga.datatypes(fct.datatypes);
+                            updateView(data);
+                            ga.update(data);
+                        },
+                        cttvAPIservice.defaultErrorHandler
+                    );
+                } else {
+                    setView();
+                }
+            }
+            datatypesChangesCounter++;
+        });
+
+
+
+
 
 		// Highlight changes
 		scope.$watch(function () { return attrs.diseaseIsSelected; }, function () {
@@ -158,17 +214,28 @@ angular.module('cttvDirectives')
 
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 
+
 		    var dts = JSON.parse(attrs.datatypes);
-		    var opts = {
+		    /*var opts = {
                 target: attrs.target,
                 datastructure: "tree",
 		    };
 		    if (!_.isEmpty(dts)) {
                 opts.filterbydatatype = _.keys(dts);
 		    }
+            */
+
+            var opts = {
+                target: attrs.target,
+                datastructure: "tree",
+            };
+            opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
+
+
 		    cttvAPIservice.getAssociations (opts)
 		    // api.call (url)
 		    	.then (function (resp) {
+                    $log.log(" -- set view stuff --");
                     var data = resp.body.data;
                     if (_.isEmpty(data)) {
                         updateView ();

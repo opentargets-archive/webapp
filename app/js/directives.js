@@ -52,28 +52,6 @@ angular.module('cttvDirectives', [])
         };
 
 
-        /*
-        var cols = [
-            // empty col for the gene name
-            {name:"", title:""},
-            {name:"", title:cttvDictionary.ENSEMBL_ID},
-            {name:"", title:cttvDictionary.ASSOCIATION_SCORE},
-            // here are the datatypes:
-            {name:cttvConsts.datatypes.GENETIC_ASSOCIATION, title:cttvDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
-            {name:cttvConsts.datatypes.SOMATIC_MUTATION, title:cttvDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
-            {name:cttvConsts.datatypes.KNOWN_DRUG, title:cttvDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
-            {name:cttvConsts.datatypes.RNA_EXPRESSION, title:cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
-            {name:cttvConsts.datatypes.AFFECTED_PATHWAY, title:cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
-            {name:cttvConsts.datatypes.LITERATURE, title:cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
-            {name:cttvConsts.datatypes.ANIMAL_MODEL, title:cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
-            // empty col for sorting by total score (sum)
-            {name:"", title:"total score"},
-            // empty col for the gene name
-            {name:"", title:""}
-        ];
-        */
-
-
 
         /*
         Setup the table cols and return the DT object
@@ -126,10 +104,10 @@ angular.module('cttvDirectives', [])
 
             link: function (scope, elem, attrs) {
 
-
-                var colorScale = d3.scale.linear()
-                .domain([0,1])
-                .range(["#CBDCEA", "#005299"]); // blue orig
+                var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+                // var colorScale = d3.scale.linear()
+                // .domain([0,1])
+                // .range(["#CBDCEA", "#005299"]); // blue orig
                 //.range(["#DDDDDD","#FFFF00", "#fc4e2a"]); // amber-red
                 //.range(["#DDDDDD","#5CE62E", "#40A120"]);    // green
                 //.range(["#EEEEEE","#a6bddb", "#045a8d"]);
@@ -162,6 +140,7 @@ angular.module('cttvDirectives', [])
                 var updateTable = function (table, datatypes) {
                     scope.loadprogress = true;
 
+                    /*
                     var dts = JSON.parse(attrs.datatypes);
                     var opts = {
                         target: attrs.target,
@@ -172,6 +151,15 @@ angular.module('cttvDirectives', [])
                     if (!_.isEmpty(dts)) {
                         opts.filterbydatatype = _.keys(dts);
                     }
+                    */
+
+
+                    var opts = {
+                        target: attrs.target,
+                        datastructure: "flat",
+                        expandefo: false
+                    };
+                    opts = cttvAPIservice.addFacetsOptions(datatypes, opts);    // TODO: careful here, as datatypes is actually just the
 
                     //$log.debug( attrs.datatypes );
                     //$log.debug( dts );
@@ -275,7 +263,6 @@ angular.module('cttvDirectives', [])
             // table itself
             var table = elem.children().eq(0)[0];
             var dtable = setupTable(table, scope.filename);
-            $log.log(dtable);
             // legend stuff
             //scope.labs = ["a","z"];
             scope.legendText = "Score";
@@ -301,7 +288,7 @@ angular.module('cttvDirectives', [])
             * which is only created at initialization, again removing the need
             * to watch out for double created tables...
             */
-            scope.$watch( function () { return attrs.datatypes; }, function (dts) {
+            /*scope.$watch( function () { return attrs.datatypes; }, function (dts) {
 
                 dts = JSON.parse(dts);
 
@@ -311,6 +298,33 @@ angular.module('cttvDirectives', [])
                         dtable.columns().eq(0).each (function (i) {
 
                             // first headers are "Disease", "EFO", "TA EFO", "Association score" and last one is "Therapeutic area"
+                            if (i>3 && i<11) {
+                                var column = dtable.column(i);
+                                if (hasDatatype(column.header().textContent, _.keys(dts))) {
+                                    column.visible(true);
+                                } else {
+                                    column.visible(false);
+                                }
+                            }
+
+                        });
+                    },
+                    cttvAPIservice.defaultErrorHandler
+                );
+
+                // Hide the columns that are filtered out
+            });*/
+
+            scope.$watch( 'facets', function (fct) {
+
+                updateTable(dtable, fct)
+                .then(
+                    function () {
+                        var dts = JSON.parse(attrs.datatypes);
+                        $log.log(dts);
+                        dtable.columns().eq(0).each (function (i) {
+
+                            //first headers are "Disease", "EFO", "TA EFO", "Association score" and last one is "Therapeutic area"
                             if (i>3 && i<11) {
                                 var column = dtable.column(i);
                                 if (hasDatatype(column.header().textContent, _.keys(dts))) {
@@ -349,6 +363,8 @@ angular.module('cttvDirectives', [])
     }; // end return
 
 }])    // end directive cttvTargetAssociationsTable
+
+
 
     /*
     *
@@ -417,6 +433,9 @@ angular.module('cttvDirectives', [])
                     if (!_.isEmpty(dts)) {
                         opts.filterbydatatype = _.keys(dts);
                     }
+
+                    $log.log("treeview opts: ");
+                    $log.log(opts);
                     cttvAPIservice.getAssociations (opts)
                         .then (
                             function (resp) {
@@ -457,6 +476,7 @@ angular.module('cttvDirectives', [])
             }
         };
     }])
+
 
 
     /**
@@ -679,6 +699,9 @@ angular.module('cttvDirectives', [])
             } // end link
         }; // end return
     }])
+
+
+
     /*
     *
     */
@@ -1376,6 +1399,8 @@ angular.module('cttvDirectives', [])
 
 
             link: function (scope, elem, attrs) {
+
+                $log.log(scope.min+" - "+scope.max);
 
                 var data = scope.data;
 

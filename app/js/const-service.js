@@ -49,10 +49,13 @@ angular.module('cttvServices').
             UNIQUE_TARGET_COUNT: 'unique_target_count',
             UNIQUE_DISEASE_COUNT: 'unique_disease_count',
             DATA_DISTRIBUTION: 'data_distribution',
+            SCORE_MIN: 'score_min',
+            SCORE_MAX: 'score_max',
+            SCORE_STR: 'score_str',
             defaults : {
                 STRINGENCY : 1,
-                SCORE_MIN : 0,
-                SCORE_MAX : 1
+                SCORE_MIN : 0.0,
+                SCORE_MAX : 1.0
             }
         };
 
