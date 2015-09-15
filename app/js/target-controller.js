@@ -206,6 +206,7 @@ angular.module('cttvControllers')
             // Genome Browser
             $scope.togglePathwayViewer = function () {
                 var pathways = resp.reactome;
+                console.log(pathways);
                 var reactomePathways = [];
 
                 // Get the new identifiers
@@ -219,6 +220,7 @@ angular.module('cttvControllers')
                 $q
                     .all(promises)
                     .then(function (vals) {
+                        console.log(vals);
                         for (var i=0; i<vals.length; i++) {
                             var val = vals[i].data;
                             var idRaw = val.split("\t")[1];
@@ -229,7 +231,9 @@ angular.module('cttvControllers')
                             });
                         }
                         $scope.pathways = reactomePathways;
-                        $scope.setPathwayViewer($scope.pathways[0]);
+                        if ($scope.pathways[0]) {
+                            $scope.setPathwayViewer($scope.pathways[0]);
+                        }
                     });
 
             };
@@ -241,18 +245,28 @@ angular.module('cttvControllers')
                 };
                 $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryEventAncestors/" + pathway.id.substring(6), config)
                     .then (function (resp) {
+                        console.log(resp);
                         var topLevelReactomeId;
                         while (!topLevelReactomeId) {
                             var p = resp.data[0].databaseObject.pop();
+                            if (!p) {
+                                break;
+                            }
                             if (p.hasDiagram) {
                                 topLevelReactomeId = p.dbId;
                             }
                         }
-                        $scope.pathway = {
-                            id: topLevelReactomeId,
-                            subName: pathway.name,
-                            subId: pathway.id,
-                        };
+                        if (topLevelReactomeId) {
+                            $scope.pathway = {
+                                id: topLevelReactomeId,
+                                subName: pathway.name,
+                                subId: pathway.id,
+                            };
+                        } else {
+                            $scope.pathway = {
+                                id: "",
+                            };
+                        }
                     });
             };
 
