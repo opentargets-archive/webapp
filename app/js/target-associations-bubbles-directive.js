@@ -10,7 +10,6 @@ angular.module('cttvDirectives')
 	    scope: {
 			"onFocus": '&onFocus',
 			loadprogress : '=',
-            //score : '=',
             facets : '='
 	    },
 
@@ -76,8 +75,6 @@ angular.module('cttvDirectives')
 
         // try only watching for facet changes
         scope.$watch('facets', function (fct) {
-            // $log.log(" -> facets changed");
-            // $log.log(fct);
 
             var opts = {
                 target: attrs.target,

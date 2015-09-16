@@ -58,6 +58,9 @@ angular.module('cttvServices').
         var filtersData = {}
 
 
+        var status = 1; // 1 == OK, 0 == not ok
+
+
 
         // ----------------------------------
         //  Private methods
@@ -692,6 +695,13 @@ angular.module('cttvServices').
             update();
         }
 
+
+        cttvFiltersService.status = function(stt){
+            if(stt){
+                status = (stt==cttvConsts.OK.toLowerCase()) ? 1 : 0;
+            }
+            return status;
+        }
 
 
         return cttvFiltersService;

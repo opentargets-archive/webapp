@@ -56,7 +56,8 @@ angular.module('cttvServices').
                 STRINGENCY : 1,
                 SCORE_MIN : 0.0,
                 SCORE_MAX : 1.0
-            }
+            },
+            OK : 'ok'
         };
 
 

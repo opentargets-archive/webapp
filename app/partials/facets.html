@@ -31,9 +31,9 @@
                 Here we put all the templates we've got, with an ng-if statement so only the relevant one is added in
             -->
 
-            <div cttv-datatypes-facet facet='facet' ng-if="facet.key=='datatypes'"></div>
+            <div cttv-datatypes-facet facet='facet' status='{{respStatus}}' ng-if="facet.key=='datatypes'"></div>
 
-            <div cttv-pathways-facet facet='facet' ng-if="facet.key=='pathway_type'"></div>
+            <div cttv-pathways-facet facet='facet' status='{{respStatus}}' ng-if="facet.key=='pathway_type'"></div>
 
             <div cttv-score-facet facet='facet' ng-if="facet.key=='data_distribution'"></div>
 
