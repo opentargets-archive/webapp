@@ -1043,7 +1043,8 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1000,
-                datasource: dbs.DISGENET,   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
+                datasource: [dbs.DISGENET, dbs.EPMC],   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
+                //datasource: [dbs.EPMC, dbs.DISGENET],
                 fields: [
                     "disease",  // take disease.efo_info[0].label and disease.efo_info[0].efo_id
                     "evidence",
