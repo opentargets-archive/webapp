@@ -1390,7 +1390,7 @@ angular.module('cttvDirectives', [])
                      //+'    <label>Stringency <input type="text" ng-model="facet.filters[2].key"/></label>'
                      +'    <div>'
                      +'        <span class="small">Stringency:</span>'
-                     +'        <cttv-slider min=1 max=10 config="{tick:1, ticks:9, snap:true}" value="facet.filters[2].key"></cttv-slider>'
+                     +'        <cttv-slider min=1 max=10 config="{tick:1, ticks:9, snap:true}" value="facet.filters[2].key" ></cttv-slider>'
                      +'    </div>'
                      +'    <div><button type="button" class="btn btn-primary btn-xs" ng-click="facet.update()">Apply</button></div>'
                      +'</div>',
@@ -1425,13 +1425,12 @@ angular.module('cttvDirectives', [])
 
             link: function (scope, elem, attrs) {
 
-                $log.log(scope.min+" - "+scope.max);
 
                 var data = scope.data;
 
 
                 var margin = {top: 10, right: 10, bottom: 20, left: 10},
-                    width = 160 - margin.left - margin.right,
+                    width = elem[0].childNodes[0].offsetWidth - margin.left - margin.right, // initialize to the full div width
                     height = 80 - margin.top - margin.bottom,
                     barWidth = width / data.length;
 
@@ -1521,8 +1520,39 @@ angular.module('cttvDirectives', [])
 
 
 
+    .directive('cttvSizeListener', ['$log', 'cttvUtils', function ($log, cttvUtils) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+
+            scope: {
+                onresize : '=?'
+            },
+
+            //template: '<iframe style="width:100%; height:100%; visibility:hidden"></iframe>',
+            template: "<div style='width:100%; height:0; margin:0; padding:0; overflow:hidden; visibility:hidden; z-index:-1'>"
+                     +"    <iframe style='width:100%; height:0; border:0; visibility:visible; margin:0' />"
+                     //+"    <iframe style='width:0; height:100%; border:0; visibility:visible; margin:0' />"
+                     +"</div>",
+
+            link: function (scope, elem, attrs) {
+                var iframe = elem[0].children[0].children[0].contentWindow || elem[0].children[0].children[0];
+
+                iframe.onresize = function(evt){
+                    $log.log("onresize( "+evt.target.innerWidth+" x "+evt.target.innerHeight+" )");
+                    if(scope.onresize){
+                        scope.onresize({w:evt.target.innerWidth, h:evt.target.innerHeight});
+                    }
+                }
+            }
+        }
+    }])
+
+
+
     /**
-     * The histogram
+     * A generic slider
      */
     .directive('cttvSlider', ['$log', 'cttvUtils', function ($log, cttvUtils) {
         'use strict';
@@ -1532,20 +1562,28 @@ angular.module('cttvDirectives', [])
             restrict: 'EA',
 
             scope: {
-                min: '@',
-                max: '@',
+                min: '@?',
+                max: '@?',
                 value: '=?',    // optional initial position, or min if nothing specified
-                config: '=?'    // optional configuration
+                config: '=?'    // optional configuration:
+                                // tick: Number
+                                // ticks: Number
+                                // snap: Boolean
+                                // mode: String ["linear" | "ordinal"]
+                                // values: Array
+                                // labels: Array
             },
 
 
-            //template: '<div></div>',
-
+            //template: '<iframe style="width:100%; height:100%; visibility:hidden"></iframe>',
+            template: '<cttv-size-listener onresize="resize"></cttv-size-listener>',
 
             link: function (scope, elem, attrs) {
 
+
+
                 var margin = {top: 0, right: 10, bottom: 10, left: 10},
-                    width = 160 - margin.left - margin.right,
+                    width = (scope.config.width || elem[0].offsetWidth) - margin.left - margin.right,   // initialize width to the div width
                     height = 30 - margin.bottom - margin.top;
 
                 var config = scope.config || {}
@@ -1589,6 +1627,10 @@ angular.module('cttvDirectives', [])
                     .select(".domain")
                     .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
                     .attr("class", "halo");
+
+                    svg.attr("viewBox", "0 0 " + width + " " + height)
+                    .attr("perserveAspectRatio", "xMinYMin");
+                    //.call(scope.resize);
 
 
                 var slider = svg.append("g")
@@ -1634,6 +1676,17 @@ angular.module('cttvDirectives', [])
                     if (d3.event.sourceEvent) { // not a programmatic event
                         scope.value = brush.extent()[0];
                     }
+                }
+
+                scope.resize=function(dim){
+                    $log.log(dim.w);
+                    width = dim.w - margin.left - margin.right,   // initialize width to the div width
+
+                    x.domain([scope.min, scope.max])
+                    .range([0, width]);
+
+                    svg.attr("width", width + margin.left + margin.right);
+
                 }
 
             },
