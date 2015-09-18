@@ -1265,7 +1265,7 @@ angular.module('cttvDirectives', [])
                 scope.filters = cttvFiltersService.getFilters();
                 scope.selectedFilters = cttvFiltersService.getSelectedFilters();
                 scope.deselectAll = cttvFiltersService.deselectAll;
-                scope.respStatus = 1; //cttvFiltersService.status(); // TODO: handle response status
+                //scope.respStatus = 1; //cttvFiltersService.status(); // TODO: handle response status
                 //scope.updateFilter = function(id){
                 //    cttvFiltersService.getFilter(id).toggle();
                 //}
@@ -1315,17 +1315,17 @@ angular.module('cttvDirectives', [])
 
             scope: {
                 facet: '=',
-                status: '@'
+                partial: '@'
             },
 
             // template: '<div cttv-default-facet-contols facet="facet"></div>'
             //          +'<div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in facet.filters"></div>',
             template: '<div cttv-default-facet-contols facet="facet"></div>'
                      +'<div ng-init="isCollapsed=true" ng-repeat="datatype in facet.filters">'
-                     +'    <cttv-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed" status="{{status}}"></cttv-parent-checkbox-facet>'
+                     +'    <cttv-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
                      //+'        <div></div>'
-                     +'        <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in datatype.collection.filters" status="{{status}}"></div>'
+                     +'        <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in datatype.collection.filters" partial="{{partial}}"></div>'
                      +'    </div>'
                      +'</div>',
 
@@ -1347,16 +1347,16 @@ angular.module('cttvDirectives', [])
 
             scope: {
                 facet: '=',
-                status: '@'
+                partial: '@'
             },
 
 
             template: '<div cttv-default-facet-contols facet="facet"></div>'
                      +'<div ng-init="isCollapsed=true" ng-repeat="pathway in facet.filters">'
-                     +'    <cttv-parent-checkbox-facet bucket="pathway" collapsed="isCollapsed" status="{{status}}"></cttv-parent-checkbox-facet>'
+                     +'    <cttv-parent-checkbox-facet bucket="pathway" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
                      //+'          <div cttv-default-facet-contols facet="pathway.collection"></div>'
-                     +'        <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in pathway.collection.filters" status="{{status}}"></div>'
+                     +'        <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in pathway.collection.filters" partial="{{partial}}"></div>'
                      +'    </div>'
                      +'</div>',
 
@@ -1708,7 +1708,7 @@ angular.module('cttvDirectives', [])
 
             scope: {
                 bucket: '=',
-                status: '@'    // optional 'OK' status
+                partial: '@'    // optional 'OK' status
             },
 
             template: '<div class="checkbox cttv-facet-checkbox">'
@@ -1718,7 +1718,7 @@ angular.module('cttvDirectives', [])
                      +'            ng-checked="bucket.selected"'
                      +'            ng-disabled="!bucket.enabled"'
                      +'            ng-click="bucket.toggle()" >'
-                     +'        {{bucket.label | upperCaseFirst | clearUnderscores}} <span class="text-lowlight small">({{bucket.count | metricPrefix:1}}<span ng-if="status==0">+</span>)</span>'
+                     +'        {{bucket.label | upperCaseFirst | clearUnderscores}} <span class="text-lowlight small">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
                      +'    </label>'
                      +'</div>',
 
@@ -1742,7 +1742,7 @@ angular.module('cttvDirectives', [])
             scope: {
                 bucket: '=',
                 collapsed: '=',
-                status: '@'
+                partial: '@'
             },
 
             template: '<div>'
@@ -1756,7 +1756,7 @@ angular.module('cttvDirectives', [])
                      +'                ng-click="bucket.toggle()" >'
                      +'            {{bucket.label}}'
                      +'        </label>'
-                     +'        <span class="text-lowlight small">({{bucket.count | metricPrefix:1}}<span ng-if="status==0">+</span>)</span>'
+                     +'        <span class="text-lowlight small" title="{{bucket.count | metricPrefix:1}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
                      +'        <i class="pull-right text-lowlight fa" ng-class="{\'fa-plus\': collapsed, \'fa-minus\': !collapsed}" ng-click="collapsed = !collapsed" style="cursor:pointer" ng-show="bucket.enabled"></i>'
                      +'    </div>'
                      +'</div>',

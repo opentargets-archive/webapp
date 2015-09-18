@@ -88,8 +88,8 @@ angular.module('cttvControllers')
                 // we must do this first, so we know which datatypes etc we actually have
                 $log.log(resp.body.status[0]);
                 $log.log(resp.body);
-                cttvFiltersService.updateFacets(resp.body.facets);
-                cttvFiltersService.status(resp.body.status[0]);
+                cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
+                // cttvFiltersService.status(resp.body.status);
 
                 // set the data
                 $scope.data = resp.body.data;
