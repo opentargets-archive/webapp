@@ -389,6 +389,7 @@ angular.module('cttvDirectives', [])
                         var opts = {
                             target: attrs.target,
                             datastructure: "tree",
+                            expandefo: true,
                         };
                         if (!_.isEmpty(dts)) {
                             opts.filterbydatatype = _.keys(dts);
@@ -428,7 +429,8 @@ angular.module('cttvDirectives', [])
                     var dts = JSON.parse(attrs.datatypes);
                     var opts = {
                         target: attrs.target,
-                        datastructure: "tree"
+                        datastructure: "tree",
+                        expandefo: true
                     };
                     if (!_.isEmpty(dts)) {
                         opts.filterbydatatype = _.keys(dts);
@@ -439,6 +441,9 @@ angular.module('cttvDirectives', [])
                     cttvAPIservice.getAssociations (opts)
                         .then (
                             function (resp) {
+                                console.warn ("RESP FOR TREE");
+                                console.warn(resp);
+
                                 var data = resp.body.data;
                                 if (_.isEmpty(data)) {
                                     return;
@@ -731,7 +736,6 @@ angular.module('cttvDirectives', [])
                     //gB.rest().proxyUrl("/api/latest/ensembl");
                     gB.rest().proxyUrl("/proxy/rest.ensembl.org");
                     var theme = targetGenomeBrowser()
-                        .chr(scope.chr)
                         .efo(efo);
                     theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
                 });
@@ -795,6 +799,7 @@ angular.module('cttvDirectives', [])
                         scope.$watchGroup ([function () { return attrs.pathway; }, function () { return attrs.subpathway;}], function () {
                             var pathway = attrs.pathway;
                             var subpathway = attrs.subpathway;
+                            var target = attrs.target;
                             if (pathway === "") {
                                 return;
                             }
@@ -811,6 +816,7 @@ angular.module('cttvDirectives', [])
                                 pathwayDiagram.loadDiagram(pathway);
                                 if (subpathway) {
                                     pathwayDiagram.onDiagramLoaded(function (pathwayId) {
+                                        pathwayDiagram.flagItems(target);
                                         pathwayDiagram.selectItem(subpathway);
                                     });
                                 }

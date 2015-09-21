@@ -44,6 +44,7 @@ angular.module('cttvDirectives')
             var opts = {
                 target: attrs.target,
                 datastructure: "tree",
+                expandefo: true,
             };
             if (!_.isEmpty (dts)) {
                 opts.filterbydatatype = _.keys(dts);
@@ -164,6 +165,8 @@ angular.module('cttvDirectives')
 			//     {"value":datatypes.animal_model,  "label":"Models", "active": hasActiveDatatype("animal_model")},
             //     {"value":datatypes.literature, "label":"Literature", "active": hasActiveDatatype("literature")}
 			// ];
+            console.log("FLOWER DATA:");
+            console.log(flowerData);
 			var navFlower = flowerView()
 			    .fontsize(9)
 			    .diagonal(130)
@@ -219,6 +222,7 @@ angular.module('cttvDirectives')
 		    /*var opts = {
                 target: attrs.target,
                 datastructure: "tree",
+                expandefo: true,
 		    };
 		    if (!_.isEmpty(dts)) {
                 opts.filterbydatatype = _.keys(dts);
@@ -236,6 +240,9 @@ angular.module('cttvDirectives')
 		    // api.call (url)
 		    	.then (function (resp) {
                     $log.log(" -- set view stuff --");
+                    console.warn ("RESP FOR BUBBLES");
+                    console.warn(resp);
+
                     var data = resp.body.data;
                     if (_.isEmpty(data)) {
                         updateView ();
