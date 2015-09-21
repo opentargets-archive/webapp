@@ -23,7 +23,7 @@ angular.module('cttvControllers')
 
     // Set filters
     cttvFiltersService.pageFacetsStack([
-        //cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
+        cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
         cttvFiltersService.facetTypes.DATATYPES
     ]);
 
@@ -125,18 +125,6 @@ angular.module('cttvControllers')
         parseDataTypes( filters );
 
         $scope.score = {};
-        /*
-        // if there are any score settings, we need to parse and pass these to the directives for the visualizations
-        if( filters[cttvConsts.SCORE_MIN] ){
-            $scope.score[cttvConsts.SCORE_MIN] = filters[cttvConsts.SCORE_MIN];
-        }
-        if( filters[cttvConsts.SCORE_MAX] ){
-            $scope.score[cttvConsts.SCORE_MAX] = filters[cttvConsts.SCORE_MAX];
-        }
-        if( filters[cttvConsts.SCORE_STR] ){
-            $scope.score[cttvConsts.SCORE_STR] = filters[cttvConsts.SCORE_STR];
-        }
-        */
     }
 
     /*

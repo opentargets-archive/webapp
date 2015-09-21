@@ -58,6 +58,9 @@ angular.module('cttvServices').
         var filtersData = {}
 
 
+        var status = []; // 1 == OK, 0 == not ok
+
+
 
         // ----------------------------------
         //  Private methods
@@ -167,6 +170,8 @@ angular.module('cttvServices').
             var config={
                 key: collection,    // this is the type, really...
                 label: cttvDictionary[collection.toUpperCase()] || collection,
+                //isPartial: status.indexOf(collection)!=-1
+                isPartial: Math.min(1, (status.indexOf(collection)+1))
             };
 
             if(collection === cttvConsts.DATATYPES){
@@ -417,6 +422,7 @@ angular.module('cttvServices').
             this.label = config.label || "";
             this.filters = config.filters || [];
             this.data = config.data || undefined;
+            this.isPartial = config.isPartial || 0;
             if(config.addFilter){
                 this.addFilter = config.addFilter;
             }
@@ -605,7 +611,7 @@ angular.module('cttvServices').
         /**
          *  This is the main method that parse facets data and sets them up
          */
-        cttvFiltersService.updateFacets = function(facets, countsToUse){
+        cttvFiltersService.updateFacets = function(facets, countsToUse, status){
             $log.log("cttvFiltersService.updateFacets()");
 
             // if there are no facets, return
@@ -613,7 +619,12 @@ angular.module('cttvServices').
                 return;
             }
 
+            // set the count to use
             countsToUse = countsToUse || cttvConsts.UNIQUE_TARGET_COUNT; // "unique_target_count";
+
+            // set the status
+            cttvFiltersService.status(status);
+
             // reset the filters
             for (var key in filtersData){
                 if (filtersData.hasOwnProperty(key)){
@@ -692,6 +703,27 @@ angular.module('cttvServices').
             update();
         }
 
+
+        /**
+         * Example status:
+         * "status": ["ok"]
+         * "status": ["partial-facet-datatypes"]
+         * "status": ["partial-facet-datatypes", "partial-facet-pathway"]
+         */
+        cttvFiltersService.status = function(stt){
+            if(stt){
+                //status = stt; //(stt==cttvConsts.OK.toLowerCase()) ? 1 : 0;
+                if(stt[0] == cttvConsts.OK.toLowerCase()){
+                    status = [stt[0]];
+                } else {
+                    status = stt.map(function(item){
+                        return item.substring(14);
+                    })
+                }
+
+            }
+            return status;
+        }
 
 
         return cttvFiltersService;

@@ -71,7 +71,7 @@ angular.module('cttvServices', []).
             //obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
             obj.sDom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
             obj.oTableTools= {
-                    "sSwfPath": "swfs/copy_csv_xls_pdf.swf",
+                    "sSwfPath": "swfs/copy_csv_xls.swf",
                     "aButtons": [
                         {
                             "sExtends":    "collection",
@@ -85,12 +85,12 @@ angular.module('cttvServices', []).
                                     "sExtends": "csv",
                                     "sButtonText": "<span class='fa fa-file-excel-o' style='padding-right:7px'></span>Excel/CSV",
                                     "sTitle": title
-                                },
+                                }/*,
                                 {
                                     "sExtends": "pdf",
                                     "sButtonText": "<span class='fa fa-file-pdf-o' style='padding-right:7px'></span>PDF",
                                     "sTitle": title
-                                }/*,
+                                },
                                 {
                                     "sExtends": "print",
                                     "sButtonText": "<span class='fa fa-print' style='padding-right:7px'></span>Print"

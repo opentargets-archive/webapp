@@ -26,6 +26,8 @@ angular.module('cttvDirectives', [])
             {name:"", title:""}
         ];
 
+
+        // TODO: remove this once the API returns full row data:
         var reverseDict = {
             "Genetic associations" : "genetic_association",
             "Somatic mutations" : "somatic_mutation",
@@ -36,6 +38,7 @@ angular.module('cttvDirectives', [])
             "Animal models" : "animal_model"
         };
 
+        // TODO: remove this once the API returns full row data:
         var hasDatatype = function (myDatatype, datatypes) {
             var thisDatatype = reverseDict[myDatatype];
             for (var i=0; i<datatypes.length; i++) {
@@ -85,15 +88,17 @@ angular.module('cttvDirectives', [])
             filename ));
         };
 
+
+
         return {
 
             restrict: 'E',
 
-
             scope: {
                 loadprogress : '=',
                 filename : '@',
-                datatypes : '@'
+                datatypes : '@',
+                facets : '='
             },
 
 
@@ -104,14 +109,8 @@ angular.module('cttvDirectives', [])
 
             link: function (scope, elem, attrs) {
 
+
                 var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
-                // var colorScale = d3.scale.linear()
-                // .domain([0,1])
-                // .range(["#CBDCEA", "#005299"]); // blue orig
-                //.range(["#DDDDDD","#FFFF00", "#fc4e2a"]); // amber-red
-                //.range(["#DDDDDD","#5CE62E", "#40A120"]);    // green
-                //.range(["#EEEEEE","#a6bddb", "#045a8d"]);
-                //.range(["#EEEEEE","#eff3ff","#2171b5"])
 
                 /*
                 * Generates and returns the string representation of the span element
@@ -137,21 +136,8 @@ angular.module('cttvDirectives', [])
                 * Fetch new data and update the table content
                 * without destroying and recreating the table
                 */
-                var updateTable = function (table, datatypes) {
+                var updateTable = function (table, facets) {
                     scope.loadprogress = true;
-
-                    /*
-                    var dts = JSON.parse(attrs.datatypes);
-                    var opts = {
-                        target: attrs.target,
-                        datastructure: "flat",
-                        expandefo: false,
-                    };
-
-                    if (!_.isEmpty(dts)) {
-                        opts.filterbydatatype = _.keys(dts);
-                    }
-                    */
 
 
                     var opts = {
@@ -159,11 +145,8 @@ angular.module('cttvDirectives', [])
                         datastructure: "flat",
                         expandefo: false
                     };
-                    opts = cttvAPIservice.addFacetsOptions(datatypes, opts);    // TODO: careful here, as datatypes is actually just the
+                    opts = cttvAPIservice.addFacetsOptions(facets, opts);
 
-                    //$log.debug( attrs.datatypes );
-                    //$log.debug( dts );
-                    //$log.debug( opts.filterbydatatype );
 
                     return cttvAPIservice.getAssociations (opts)
                     .then(function (resp) {
@@ -316,14 +299,13 @@ angular.module('cttvDirectives', [])
             });*/
 
             scope.$watch( 'facets', function (fct) {
-
                 updateTable(dtable, fct)
+                // TODO: remove this (column hiding code) once the API returns full row data:
                 .then(
                     function () {
-                        var dts = JSON.parse(attrs.datatypes);
-                        $log.log(dts);
-                        dtable.columns().eq(0).each (function (i) {
 
+                        var dts = JSON.parse(attrs.datatypes);
+                        dtable.columns().eq(0).each (function (i) {
                             //first headers are "Disease", "EFO", "TA EFO", "Association score" and last one is "Therapeutic area"
                             if (i>3 && i<11) {
                                 var column = dtable.column(i);
@@ -338,8 +320,6 @@ angular.module('cttvDirectives', [])
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
-
-                // Hide the columns that are filtered out
             });
 
             scope.$watch (function () { return attrs.focus; }, function (val) {
@@ -375,12 +355,16 @@ angular.module('cttvDirectives', [])
         var gat;
         return {
             restrict: 'E',
-            scope: {},
+            scope: {
+                facets : '='
+            },
             link: function (scope, elem, attrs) {
 
                 var datatypesChangesCounter = 0;
-                scope.$watch(function () { return attrs.datatypes; }, function (dts) {
+
+                /*scope.$watch(function () { return attrs.datatypes; }, function (dts) {
                     dts = JSON.parse(dts);
+                    $log.log("$$$ "); $log.log(dts);
                     if (datatypesChangesCounter>0) {
                         if (!gat) {
                             setTreeView();
@@ -394,6 +378,44 @@ angular.module('cttvDirectives', [])
                         if (!_.isEmpty(dts)) {
                             opts.filterbydatatype = _.keys(dts);
                         }
+                        cttvAPIservice.getAssociations (opts)
+                            .then (function (resp) {
+                                var data = resp.body.data;
+                                if (data) {
+                                    gat
+                                        .data(data)
+                                        .datatypes(dts)
+                                        .update();
+                                    }
+                                },
+                                cttvAPIservice.defaultErrorHandler
+                            );
+                    }
+                    datatypesChangesCounter++;
+                });*/
+
+
+                scope.$watch( 'facets', function (fct) {
+                    var dts = JSON.parse(attrs.datatypes);
+                    if (datatypesChangesCounter>0) {
+                        if (!gat) {
+                            setTreeView();
+                            return;
+                        }
+                        // var opts = {
+                        //     target: attrs.target,
+                        //     datastructure: "tree",
+                        // };
+                        // if (!_.isEmpty(dts)) {
+                        //     opts.filterbydatatype = _.keys(dts);
+                        // }
+
+                        var opts = {
+                            target: attrs.target,
+                            datastructure: "tree"
+                        };
+                        opts = cttvAPIservice.addFacetsOptions(fct, opts);
+
                         cttvAPIservice.getAssociations (opts)
                             .then (function (resp) {
                                 var data = resp.body.data;
@@ -427,14 +449,20 @@ angular.module('cttvDirectives', [])
                     $log.log("DIAMETER FOR TREE: " + diameter);
 
                     var dts = JSON.parse(attrs.datatypes);
+                    // var opts = {
+                    //     target: attrs.target,
+                    //     datastructure: "tree"
+                    // };
+                    // if (!_.isEmpty(dts)) {
+                    //     opts.filterbydatatype = _.keys(dts);
+                    // }
+
                     var opts = {
                         target: attrs.target,
                         datastructure: "tree",
                         expandefo: true
                     };
-                    if (!_.isEmpty(dts)) {
-                        opts.filterbydatatype = _.keys(dts);
-                    }
+                    opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
 
                     $log.log("treeview opts: ");
                     $log.log(opts);
@@ -1235,27 +1263,19 @@ angular.module('cttvDirectives', [])
 
             restrict: 'EA',
 
-            scope: {
-                //target : '=',
-                //loadprogress : '=',
-                //filename : '@'
-                //datatypes : '='
-                //filters : '='
-            },
+            scope: {},
+
             templateUrl: 'partials/facets.html',
 
             link: function (scope, elem, attrs) {
                 scope.filters = cttvFiltersService.getFilters();
                 scope.selectedFilters = cttvFiltersService.getSelectedFilters();
                 scope.deselectAll = cttvFiltersService.deselectAll;
+                //scope.respStatus = 1; //cttvFiltersService.status(); // TODO: handle response status
                 //scope.updateFilter = function(id){
                 //    cttvFiltersService.getFilter(id).toggle();
                 //}
             },
-
-            // /controller: function(scope){
-            // /
-            // /}
 
         };
 
@@ -1300,17 +1320,18 @@ angular.module('cttvDirectives', [])
             restrict: 'EA',
 
             scope: {
-                facet: '='
+                facet: '=',
+                partial: '@'
             },
 
             // template: '<div cttv-default-facet-contols facet="facet"></div>'
             //          +'<div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in facet.filters"></div>',
             template: '<div cttv-default-facet-contols facet="facet"></div>'
                      +'<div ng-init="isCollapsed=true" ng-repeat="datatype in facet.filters">'
-                     +'    <cttv-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed"></cttv-parent-checkbox-facet>'
+                     +'    <cttv-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
                      //+'        <div></div>'
-                     +'        <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in datatype.collection.filters"></div>'
+                     +'        <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in datatype.collection.filters" partial="{{partial}}"></div>'
                      +'    </div>'
                      +'</div>',
 
@@ -1331,16 +1352,17 @@ angular.module('cttvDirectives', [])
             restrict: 'EA',
 
             scope: {
-                facet: '='
+                facet: '=',
+                partial: '@'
             },
 
 
             template: '<div cttv-default-facet-contols facet="facet"></div>'
                      +'<div ng-init="isCollapsed=true" ng-repeat="pathway in facet.filters">'
-                     +'    <cttv-parent-checkbox-facet bucket="pathway" collapsed="isCollapsed"></cttv-parent-checkbox-facet>'
+                     +'    <cttv-parent-checkbox-facet bucket="pathway" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
                      //+'          <div cttv-default-facet-contols facet="pathway.collection"></div>'
-                     +'        <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in pathway.collection.filters"></div>'
+                     +'        <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in pathway.collection.filters" partial="{{partial}}"></div>'
                      +'    </div>'
                      +'</div>',
 
@@ -1374,7 +1396,7 @@ angular.module('cttvDirectives', [])
                      //+'    <label>Stringency <input type="text" ng-model="facet.filters[2].key"/></label>'
                      +'    <div>'
                      +'        <span class="small">Stringency:</span>'
-                     +'        <cttv-slider min=1 max=10 config="{tick:1, ticks:9, snap:true}" value="facet.filters[2].key"></cttv-slider>'
+                     +'        <cttv-slider min=1 max=10 config="{tick:1, ticks:9, snap:true}" value="facet.filters[2].key" ></cttv-slider>'
                      +'    </div>'
                      +'    <div><button type="button" class="btn btn-primary btn-xs" ng-click="facet.update()">Apply</button></div>'
                      +'</div>',
@@ -1409,13 +1431,12 @@ angular.module('cttvDirectives', [])
 
             link: function (scope, elem, attrs) {
 
-                $log.log(scope.min+" - "+scope.max);
 
                 var data = scope.data;
 
 
                 var margin = {top: 10, right: 10, bottom: 20, left: 10},
-                    width = 260 - margin.left - margin.right,
+                    width = elem[0].childNodes[0].offsetWidth - margin.left - margin.right, // initialize to the full div width
                     height = 80 - margin.top - margin.bottom,
                     barWidth = width / data.length;
 
@@ -1505,8 +1526,39 @@ angular.module('cttvDirectives', [])
 
 
 
+    .directive('cttvSizeListener', ['$log', 'cttvUtils', function ($log, cttvUtils) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+
+            scope: {
+                onresize : '=?'
+            },
+
+            //template: '<iframe style="width:100%; height:100%; visibility:hidden"></iframe>',
+            template: "<div style='width:100%; height:0; margin:0; padding:0; overflow:hidden; visibility:hidden; z-index:-1'>"
+                     +"    <iframe style='width:100%; height:0; border:0; visibility:visible; margin:0' />"
+                     //+"    <iframe style='width:0; height:100%; border:0; visibility:visible; margin:0' />"
+                     +"</div>",
+
+            link: function (scope, elem, attrs) {
+                var iframe = elem[0].children[0].children[0].contentWindow || elem[0].children[0].children[0];
+
+                iframe.onresize = function(evt){
+                    $log.log("onresize( "+evt.target.innerWidth+" x "+evt.target.innerHeight+" )");
+                    if(scope.onresize){
+                        scope.onresize({w:evt.target.innerWidth, h:evt.target.innerHeight});
+                    }
+                }
+            }
+        }
+    }])
+
+
+
     /**
-     * The histogram
+     * A generic slider
      */
     .directive('cttvSlider', ['$log', 'cttvUtils', function ($log, cttvUtils) {
         'use strict';
@@ -1516,20 +1568,28 @@ angular.module('cttvDirectives', [])
             restrict: 'EA',
 
             scope: {
-                min: '@',
-                max: '@',
+                min: '@?',
+                max: '@?',
                 value: '=?',    // optional initial position, or min if nothing specified
-                config: '=?'    // optional configuration
+                config: '=?'    // optional configuration:
+                                // tick: Number
+                                // ticks: Number
+                                // snap: Boolean
+                                // mode: String ["linear" | "ordinal"]
+                                // values: Array
+                                // labels: Array
             },
 
 
-            //template: '<div></div>',
-
+            //template: '<iframe style="width:100%; height:100%; visibility:hidden"></iframe>',
+            template: '<cttv-size-listener onresize="resize"></cttv-size-listener>',
 
             link: function (scope, elem, attrs) {
 
+
+
                 var margin = {top: 0, right: 10, bottom: 10, left: 10},
-                    width = 260 - margin.left - margin.right,
+                    width = (scope.config.width || elem[0].offsetWidth) - margin.left - margin.right,   // initialize width to the div width
                     height = 30 - margin.bottom - margin.top;
 
                 var config = scope.config || {}
@@ -1573,6 +1633,10 @@ angular.module('cttvDirectives', [])
                     .select(".domain")
                     .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
                     .attr("class", "halo");
+
+                    svg.attr("viewBox", "0 0 " + width + " " + height)
+                    .attr("perserveAspectRatio", "xMinYMin");
+                    //.call(scope.resize);
 
 
                 var slider = svg.append("g")
@@ -1620,6 +1684,17 @@ angular.module('cttvDirectives', [])
                     }
                 }
 
+                scope.resize=function(dim){
+                    $log.log(dim.w);
+                    width = dim.w - margin.left - margin.right,   // initialize width to the div width
+
+                    x.domain([scope.min, scope.max])
+                    .range([0, width]);
+
+                    svg.attr("width", width + margin.left + margin.right);
+
+                }
+
             },
         };
     }])
@@ -1638,7 +1713,8 @@ angular.module('cttvDirectives', [])
             restrict: 'EA',
 
             scope: {
-                bucket: '='
+                bucket: '=',
+                partial: '@'    // optional 'OK' status
             },
 
             template: '<div class="checkbox cttv-facet-checkbox">'
@@ -1648,7 +1724,7 @@ angular.module('cttvDirectives', [])
                      +'            ng-checked="bucket.selected"'
                      +'            ng-disabled="!bucket.enabled"'
                      +'            ng-click="bucket.toggle()" >'
-                     +'        {{bucket.label | upperCaseFirst | clearUnderscores}} <span class="text-lowlight small">({{bucket.count | metricPrefix:1}})</span>'
+                     +'        {{bucket.label | upperCaseFirst | clearUnderscores}} <span class="text-lowlight small">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
                      +'    </label>'
                      +'</div>',
 
@@ -1671,7 +1747,8 @@ angular.module('cttvDirectives', [])
 
             scope: {
                 bucket: '=',
-                collapsed: '='
+                collapsed: '=',
+                partial: '@'
             },
 
             template: '<div>'
@@ -1685,7 +1762,7 @@ angular.module('cttvDirectives', [])
                      +'                ng-click="bucket.toggle()" >'
                      +'            {{bucket.label}}'
                      +'        </label>'
-                     +'        <span class="text-lowlight small">({{bucket.count | metricPrefix:1}})</span>'
+                     +'        <span class="text-lowlight small" title="{{bucket.count | metricPrefix:1}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
                      +'        <i class="pull-right text-lowlight fa" ng-class="{\'fa-plus\': collapsed, \'fa-minus\': !collapsed}" ng-click="collapsed = !collapsed" style="cursor:pointer" ng-show="bucket.enabled"></i>'
                      +'    </div>'
                      +'</div>',

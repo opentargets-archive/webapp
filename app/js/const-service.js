@@ -29,7 +29,8 @@ angular.module('cttvServices').
                 GWAS :                "gwas_catalog",
                 CANCER_GENE_CENSUS :  "cancer_gene_census",
                 CHEMBL :              "chembl",
-                DISGENET :            "disgenet"
+                DISGENET :            "disgenet",
+                EPMC:                 "europepmc"
             },
             datatypesOrder: [
                 "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "ANIMAL_MODEL"
@@ -56,7 +57,8 @@ angular.module('cttvServices').
                 STRINGENCY : 1,
                 SCORE_MIN : 0.0,
                 SCORE_MAX : 1.0
-            }
+            },
+            OK : 'ok'
         };
 
 

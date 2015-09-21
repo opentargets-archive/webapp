@@ -973,6 +973,10 @@ cttv-score-histogram .handle {
 }
 
 
+cttv-slider {
+    width:100%;
+    display:block;
+}
 
 cttv-slider .axis {
   /*font: 10px sans-serif;
