@@ -225,22 +225,27 @@ angular.module('cttvControllers')
 	var allDiseases = [];
 	var includedDiseases = [];
 	$scope.setDiseasesInDatatypes = function () {
+        console.log("initial setup");
         cttvAPIservice.getAssociations ({
             target: $scope.search.query,
             datastructure: "tree",
             expandefo: true,
 	    })
     		.then (function (resp) {
+                console.log("INITIAL RESPONSE FOR ASSOCIATIONS: ");
+                console.log(resp);
                 cttvFiltersService.updateFacets(resp.body.facets, "unique_disease_count");
 
     		    var data = resp.body.data;
     		    var dummy = geneAssociations()
-    			.data(data);
+                    .data(data);
 
     		    var ass = dummy.data().children || [];
+                console.log(ass);
 
     		    var auxArr = $scope.nonRedundantDiseases(ass);
     		    allDiseases = _.keys(auxArr[0]);
+                console.log(allDiseases);
     		    $scope.checkFilteredOutDiseases();
     		    var diseasesInDatatypes = auxArr[1];
 

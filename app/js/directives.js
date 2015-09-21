@@ -143,7 +143,7 @@ angular.module('cttvDirectives', [])
                     var opts = {
                         target: attrs.target,
                         datastructure: "flat",
-                        expandefo: false
+                        expandefo: true
                     };
                     opts = cttvAPIservice.addFacetsOptions(facets, opts);
 

@@ -80,6 +80,7 @@ angular.module('cttvDirectives')
             var opts = {
                 target: attrs.target,
                 datastructure: "tree",
+                expandefo: true,
             };
             opts = cttvAPIservice.addFacetsOptions(fct, opts);
 
@@ -229,6 +230,7 @@ angular.module('cttvDirectives')
             var opts = {
                 target: attrs.target,
                 datastructure: "tree",
+                expandefo: true,
             };
             opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
 

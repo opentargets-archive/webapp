@@ -104,7 +104,7 @@ var geneAssociations = function () {
             tA.children = newChildren;
         }
         return sortData(data);
-    };
+    }
 
     // process the data for bubbles display
     // All the leaves are set under the therapeutic areas
