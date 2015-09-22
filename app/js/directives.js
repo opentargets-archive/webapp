@@ -156,7 +156,6 @@ angular.module('cttvDirectives', [])
                         resp = resp.body;
                         $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
                         $log.log(resp);
-                        //scope.$parent.setTotalDiseases(resp.length);
 
                         scope.n.diseases = resp.data.length;
                         var newData = [];
@@ -336,9 +335,9 @@ angular.module('cttvDirectives', [])
                         val = "";
                     }
                     dtable
-                    .column(2)
-                    .search(val)
-                    .draw();
+                        .column(2)
+                        .search(val)
+                        .draw();
                 }
             });
 
