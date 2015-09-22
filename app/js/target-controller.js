@@ -59,9 +59,9 @@ angular.module('cttvControllers')
                 keywords : resp.uniprot_keywords
             };
 
-
-            var FeatureViewer = require("biojs-vis-proteinFeaturesViewer");
+            var FeatureViewer = require("biojs-vis-proteinfeaturesviewer");
             var fvInstance = new FeatureViewer({
+                // proxy: "/proxy/",
                 el: "#uniprotProteinFeatureViewer",
                 uniprotacc: resp.uniprot_accessions[0],
                 exclusions: ['seqInfo']
