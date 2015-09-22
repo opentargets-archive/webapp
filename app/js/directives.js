@@ -304,7 +304,7 @@ angular.module('cttvDirectives', [])
                 .then(
                     function () {
 
-                        var dts = JSON.parse(attrs.datatypes);
+                        /*var dts = JSON.parse(attrs.datatypes);
                         dtable.columns().eq(0).each (function (i) {
                             //first headers are "Disease", "EFO", "TA EFO", "Association score" and last one is "Therapeutic area"
                             if (i>3 && i<11) {
@@ -316,7 +316,7 @@ angular.module('cttvDirectives', [])
                                 }
                             }
 
-                        });
+                        });*/
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
@@ -663,7 +663,7 @@ angular.module('cttvDirectives', [])
             table.clear();
 
             // now here would be a good place to hide/show any columns based on datatypes ??
-            for(var i=3; i<table.columns()[0].length-2; i++){
+            /*for(var i=3; i<table.columns()[0].length-2; i++){
                 // only look at datatypes cols, so the first few and last few (including the total score are left out...)
                 table.column(i).visible( _.isEmpty(datatypes) );
             }
@@ -672,7 +672,7 @@ angular.module('cttvDirectives', [])
                 datatypes.forEach(function(value){
                     table.column(value+':name').visible(true);
                 });
-            }
+            }*/
 
             // render with new data
             table.rows.add(newData).draw();
@@ -996,7 +996,8 @@ angular.module('cttvDirectives', [])
 
         return {
             restrict: 'EA',
-            template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner class="text-lowlight fa-{{size}}x"></span></div>',
+            //template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner class="text-lowlight fa-{{size}}x"></span></div>',
+            template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner size=3 class="text-lowlight"></span></div>',
             scope: {
                 size: '@'
             },
@@ -1648,8 +1649,8 @@ angular.module('cttvDirectives', [])
                 // init: move slider to initial position
                 slider
                     .call(brush.event)
-                    .transition() // gratuitous intro!
-                    .duration(750)
+                    //.transition() // gratuitous intro!
+                    //.duration(750)
                     .call(brush.extent([scope.value, scope.value]))
                     .call(brush.event);
 

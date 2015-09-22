@@ -564,8 +564,9 @@ a:hover {
 * Tables
 */
 
-table.matrix-table .dataTables_empty {
-    text-align: center;
+table.dataTable thead > tr > th{
+    padding-left: 8px !important;
+    padding-right: 8px !important;
 }
 
 
@@ -573,6 +574,10 @@ table.matrix-table .dataTables_empty {
 /*
 * Matrix table
 */
+
+table.matrix-table .dataTables_empty {
+    text-align: center;
+}
 
 table.matrix-table{
     border-collapse: collapse;

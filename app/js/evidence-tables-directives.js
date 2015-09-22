@@ -105,6 +105,10 @@ angular.module('cttvDirectives')
                                 url: item.evidence.target2drug.urls[0].url
                             });
 
+                            // data origin: public / private
+                            //row.push( "<span class='fa fa-users' title='public data'></span>" );
+                            row.push("");
+
                             // 0: disease
                             row.push(item.disease.efo_info[0].label);
 
@@ -213,10 +217,10 @@ angular.module('cttvDirectives')
                         "data": formatDrugsDataToArray(scope.data),
                         "autoWidth": false,
                         "paging": true,
-                        "order" : [[2, "desc"]],
+                        "order" : [[3, "desc"]],
                         "aoColumnDefs" : [
-                            {"targets": [3], "visible":false},
-                            {"iDataSort" : 2, "aTargets" : [3]},
+                            {"targets": [4], "visible":false},
+                            {"iDataSort" : 3, "aTargets" : [4]},
                         ],
                         // "aoColumnDefs" : [
                         //     {"iDataSort" : 2, "aTargets" : [3]},

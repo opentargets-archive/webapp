@@ -609,7 +609,10 @@ angular.module('cttvServices').
 
 
         /**
-         *  This is the main method that parse facets data and sets them up
+         * This is the main method that parse facets data and sets them up
+         * @param facets [Object] the facet object return by the API
+         * @param countsToUse [String] the count to be used for display: "unique_target_count" or "unique_disease_count"
+         * @param status [Array] this contains ["ok"] if all facets were computed correctly by the API. In case of errors, it contains the list of facets reporting incorrect values, e.g. ["partial-facet-datatypes"]
          */
         cttvFiltersService.updateFacets = function(facets, countsToUse, status){
             $log.log("cttvFiltersService.updateFacets()");

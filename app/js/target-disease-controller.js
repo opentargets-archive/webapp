@@ -313,6 +313,10 @@
 
                 try{
 
+                    // data origin: public / private
+                    //row.push( "<span class='fa fa-users' title='public data'></span>" );
+                    row.push("");
+
                     // disease
                     row.push( item.disease.efo_info[0].label );
 
@@ -322,7 +326,6 @@
                     // variant type
                     row.push( clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) ) );
 
-
                     // evidence source
                     row.push( cttvDictionary.CTTV_PIPELINE );
 
@@ -330,7 +333,6 @@
                     row.push( "<a href='https://www.ebi.ac.uk/gwas/search?query="+item.variant.id[0].split('/').pop()+"' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "&nbsp;<i class='fa fa-external-link'></i></a>");
-
 
                     // p-value
                     row.push( item.evidence.variant2disease.resource_score.value.toPrecision(1) );
@@ -363,7 +365,17 @@
                 //"ordering" : true,
                 //"order": [[3, 'des']],
                 "autoWidth": false,
-                "paging" : true
+                "paging" : true,
+                /*"columns": [
+                    { "width": "2%" },
+                    { "width": "10%" },
+                    { "width": "10%" },
+                    { "width": "10%" },
+                    { "width": "10%" },
+                    { "width": "12%" },
+                    { "width": "6%" },
+                    { "width": "15%" }
+                ]*/
             }, $scope.search.info.title+"-common_diseases") );
         };
 
@@ -560,6 +572,7 @@
                 var row = [];
 
                 try{
+
 
                     // disease
                     row.push(item.disease.efo_info[0].label);

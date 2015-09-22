@@ -83,7 +83,6 @@ angular.module('cttvDirectives')
             opts = cttvAPIservice.addFacetsOptions(fct, opts);
 
 
-
             if (datatypesChangesCounter>0) {
                 if (ga) {
                     cttvAPIservice.getAssociations (opts)
@@ -94,7 +93,10 @@ angular.module('cttvDirectives')
                             if (_.isEmpty(data)) {
                                 data.association_score = 0.01;
                             }
-                            ga.datatypes(fct.datatypes);
+                            $log.log("***");
+                            $log.log(fct.datatypes);
+                            //ga.datatypes(fct.datatypes);
+                            ga.datatypes( JSON.parse(attrs.datatypes) );
                             updateView(data);
                             ga.update(data);
                         },
@@ -232,7 +234,6 @@ angular.module('cttvDirectives')
 		    cttvAPIservice.getAssociations (opts)
 		    // api.call (url)
 		    	.then (function (resp) {
-                    $log.log(" -- set view stuff --");
                     var data = resp.body.data;
                     if (_.isEmpty(data)) {
                         updateView ();
