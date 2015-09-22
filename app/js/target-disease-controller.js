@@ -1001,11 +1001,11 @@
 
                     var match;
                     var abstract = pub.abstractText;
+
                     while ((match = re.exec(data[5])) !== null) {
                         var matchedText = match[1];
                         abstract = abstract.replace(matchedText, "<b>" + matchedText + "</b>");
                     }
-
 
                     data[2] += "<a target=_blank href='http://europepmc.org/abstract/MED/"+pub.pmid+"'>"+pub.title+"</a>"
                     + "<br />"
@@ -1167,7 +1167,7 @@
                     // disease
                     row.push(item.disease.efo_info[0].label);
 
-                    // pubblication ID (hidden)
+                    // publication ID (hidden)
                     row.push( item.evidence.literature_ref.lit_id.split("/").pop() );
 
                     // publications
@@ -1189,6 +1189,10 @@
                     );
 
                     newdata.push(row); // push, so we don't end up with empty rows
+
+                    // source
+                    row.push(item.evidence.provenance_type.database.id);
+
                 }catch(e){
                     $log.error("Error parsing literature data:");
                     $log.error(e);
