@@ -98,7 +98,8 @@ angular.module('cttvDirectives', [])
                 loadprogress : '=',
                 filename : '@',
                 datatypes : '@',
-                facets : '='
+                facets : '=',
+                n : '=ndiseases'
             },
 
 
@@ -108,7 +109,6 @@ angular.module('cttvDirectives', [])
 
 
             link: function (scope, elem, attrs) {
-
 
                 var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
@@ -150,11 +150,15 @@ angular.module('cttvDirectives', [])
 
                     return cttvAPIservice.getAssociations (opts)
                     .then(function (resp) {
+
                         //resp = JSON.parse(resp.text);
                         scope.loadprogress = false;
                         resp = resp.body;
                         $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
                         $log.log(resp);
+                        //scope.$parent.setTotalDiseases(resp.length);
+
+                        scope.n.diseases = resp.data.length;
                         var newData = [];
 
                         // Iterate
