@@ -89,14 +89,14 @@ angular.module('cttvDirectives')
                 if (ga) {
                     cttvAPIservice.getAssociations (opts)
                         .then (function (resp) {
+                            $log.log("***");
+                            $log.log(fct.datatypes);
                             $log.log(resp);
                             scope.$parent.updateFacets(resp.body.facets);
                             var data = resp.body.data;
                             if (_.isEmpty(data)) {
                                 data.association_score = 0.01;
                             }
-                            $log.log("***");
-                            $log.log(fct.datatypes);
                             //ga.datatypes(fct.datatypes);
                             ga.datatypes( JSON.parse(attrs.datatypes) );
                             updateView(data);
@@ -165,8 +165,8 @@ angular.module('cttvDirectives')
 			//     {"value":datatypes.animal_model,  "label":"Models", "active": hasActiveDatatype("animal_model")},
             //     {"value":datatypes.literature, "label":"Literature", "active": hasActiveDatatype("literature")}
 			// ];
-            console.log("FLOWER DATA:");
-            console.log(flowerData);
+            $log.log("FLOWER DATA:");
+            $log.log(flowerData);
 			var navFlower = flowerView()
 			    .fontsize(9)
 			    .diagonal(130)

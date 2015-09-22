@@ -276,7 +276,8 @@
                     "evidence",
                     "variant",
                     "target",
-                    "sourceID"
+                    "sourceID",
+                    "access_level"
                 ]
             };
             _.extend(opts, searchObj);
