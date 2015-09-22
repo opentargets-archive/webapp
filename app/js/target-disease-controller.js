@@ -995,7 +995,7 @@
                 });
 
                 if(pmdata.length>0){
-                    var re = /abstract: (.*?)\.<\/li>/g;
+                    var re = /abstract: (.*?)\.\s*<\/li>/g;
                     data[2]="";
 
                     // pmdata.forEach(function(pub){
@@ -1003,11 +1003,14 @@
                     // format author names
                     var auth = pub.authorString;
                     // auth = auth.substr(0,auth.length-1);
-                    auth = auth.split(",");
-                    if(auth.length>1){
-                        auth[0] = auth[0] + " et al.";
+                    var authArr = [];
+                    if (auth) {
+                        authArr = auth.split(",");
                     }
-                    auth = auth[0];
+                    if(auth && auth.length>1){
+                        authArr[0] = authArr[0] + " et al.";
+                    }
+                    auth = authArr[0];
 
                     var match;
                     var abstract = pub.abstractText;
@@ -1052,10 +1055,11 @@
 
         var getLiteratureData = function(){
             $scope.search.literature.is_loading = true;
+            $scope.search.literature.maxShow = 200;
             var opts = {
                 target:$scope.search.target,
                 disease:$scope.search.disease,
-                size: 1000,
+                size: $scope.search.literature.maxShow,
                 datasource: [dbs.DISGENET, dbs.EPMC],   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
                 //datasource: [dbs.EPMC, dbs.DISGENET],
                 fields: [
@@ -1068,6 +1072,8 @@
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
+                        console.log(resp);
+                        $scope.search.literature.total = resp.body.total;
                         var unicode_re = /u([\dABCDEF]{4})/gi;
                         var match;
 

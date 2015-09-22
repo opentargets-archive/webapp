@@ -113,6 +113,7 @@ angular.module('cttvServices')
             var deferred = $q.defer();
             var promise = deferred.promise;
             var url = api.url[queryObject.operation](queryObject.params);
+            console.warn(url);
 
             countRequest( queryObject.params.trackCall===false ? undefined : true );
             //countRequest( true );

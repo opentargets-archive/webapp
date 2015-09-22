@@ -98,7 +98,8 @@ angular.module('cttvDirectives', [])
                 loadprogress : '=',
                 filename : '@',
                 datatypes : '@',
-                facets : '='
+                facets : '=',
+                n : '=ndiseases'
             },
 
 
@@ -108,7 +109,6 @@ angular.module('cttvDirectives', [])
 
 
             link: function (scope, elem, attrs) {
-
 
                 var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
@@ -143,18 +143,22 @@ angular.module('cttvDirectives', [])
                     var opts = {
                         target: attrs.target,
                         datastructure: "flat",
-                        expandefo: false
+                        expandefo: true
                     };
                     opts = cttvAPIservice.addFacetsOptions(facets, opts);
 
 
                     return cttvAPIservice.getAssociations (opts)
                     .then(function (resp) {
+
                         //resp = JSON.parse(resp.text);
                         scope.loadprogress = false;
                         resp = resp.body;
                         $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
                         $log.log(resp);
+                        //scope.$parent.setTotalDiseases(resp.length);
+
+                        scope.n.diseases = resp.data.length;
                         var newData = [];
 
                         // Iterate
@@ -373,6 +377,7 @@ angular.module('cttvDirectives', [])
                         var opts = {
                             target: attrs.target,
                             datastructure: "tree",
+                            expandefo: true,
                         };
                         if (!_.isEmpty(dts)) {
                             opts.filterbydatatype = _.keys(dts);
@@ -458,7 +463,8 @@ angular.module('cttvDirectives', [])
 
                     var opts = {
                         target: attrs.target,
-                        datastructure: "tree"
+                        datastructure: "tree",
+                        expandefo: true
                     };
                     opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
 
@@ -467,6 +473,9 @@ angular.module('cttvDirectives', [])
                     cttvAPIservice.getAssociations (opts)
                         .then (
                             function (resp) {
+                                console.warn ("RESP FOR TREE");
+                                console.warn(resp);
+
                                 var data = resp.body.data;
                                 if (_.isEmpty(data)) {
                                     return;
@@ -759,7 +768,6 @@ angular.module('cttvDirectives', [])
                     //gB.rest().proxyUrl("/api/latest/ensembl");
                     gB.rest().proxyUrl("/proxy/rest.ensembl.org");
                     var theme = targetGenomeBrowser()
-                        .chr(scope.chr)
                         .efo(efo);
                     theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
                 });
@@ -823,6 +831,7 @@ angular.module('cttvDirectives', [])
                         scope.$watchGroup ([function () { return attrs.pathway; }, function () { return attrs.subpathway;}], function () {
                             var pathway = attrs.pathway;
                             var subpathway = attrs.subpathway;
+                            var target = attrs.target;
                             if (pathway === "") {
                                 return;
                             }
@@ -839,6 +848,7 @@ angular.module('cttvDirectives', [])
                                 pathwayDiagram.loadDiagram(pathway);
                                 if (subpathway) {
                                     pathwayDiagram.onDiagramLoaded(function (pathwayId) {
+                                        pathwayDiagram.flagItems(target);
                                         pathwayDiagram.selectItem(subpathway);
                                     });
                                 }

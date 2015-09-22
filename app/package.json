@@ -14,7 +14,6 @@
     "cttv.flowerView": "file:../components/flowerView",
     "cttv.targetAssociations": "file:../components/targetAssociations",
     "cttv.targetAssociationsTree": "file:../components/targetAssociationsTree",
-    "cttv.targetGenomeBrowser": "file:../components/targetGenomeBrowser",
-    "tnt.genome": "^0.0.21"
+    "cttv.targetGenomeBrowser": "file:../components/targetGenomeBrowser"
   }
 }

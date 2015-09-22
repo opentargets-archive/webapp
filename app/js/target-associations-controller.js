@@ -125,7 +125,7 @@ angular.module('cttvControllers')
         parseDataTypes( filters );
 
         $scope.score = {};
-    }
+    };
 
     /*
     $scope.filterDataTypes = function (filters) {
@@ -166,7 +166,7 @@ angular.module('cttvControllers')
         });
 
         $scope.currentDataTypes = currDatatypes;
-    }
+    };
 
 
 
@@ -227,21 +227,25 @@ angular.module('cttvControllers')
 	$scope.setDiseasesInDatatypes = function () {
         cttvAPIservice.getAssociations ({
             target: $scope.search.query,
-            datastructure: "tree"
+            datastructure: "flat",
+            expandefo: true,
 	    })
     		.then (function (resp) {
                 cttvFiltersService.updateFacets(resp.body.facets, "unique_disease_count");
 
-    		    var data = resp.body.data;
-    		    var dummy = geneAssociations()
-    			.data(data);
+    		    // var data = resp.body.data;
+    		    // var dummy = geneAssociations()
+                //     .data(data);
+                //
+    		    // var ass = dummy.data().children || [];
+                // console.log(ass);
+                //
+    		    // var auxArr = $scope.nonRedundantDiseases(ass);
+    		    // allDiseases = _.keys(auxArr[0]);
+                // console.log(allDiseases);
+    		    // $scope.checkFilteredOutDiseases();
 
-    		    var ass = dummy.data().children || [];
-
-    		    var auxArr = $scope.nonRedundantDiseases(ass);
-    		    allDiseases = _.keys(auxArr[0]);
-    		    $scope.checkFilteredOutDiseases();
-    		    var diseasesInDatatypes = auxArr[1];
+    		    //var diseasesInDatatypes = auxArr[1];
 
     		    // TODO: For now we are avoiding to show the number of diseases per datatype because this will cause inconsistencies
     		    // with filtered out datatypes in the bubbles view. We will have to rethink this
@@ -255,23 +259,31 @@ angular.module('cttvControllers')
 	};
 	$scope.setDiseasesInDatatypes();
 
-	$scope.checkFilteredOutDiseases = function () {
-	    // if (_.isEmpty(includedDiseases) || _.isEmpty(allDiseases)) {
-	    // 	return
-	    // }
-	    var diff = _.difference(allDiseases, includedDiseases);
-	    $scope.ndiseasesfiltered = diff.length;
-	    $scope.diseasesFilteredMsg = $scope.ndiseasesfiltered ? " (" + $scope.ndiseasesfiltered + " diseases filtered out)" : "";
-	};
+	// $scope.checkFilteredOutDiseases = function () {
+	//     // if (_.isEmpty(includedDiseases) || _.isEmpty(allDiseases)) {
+	//     // 	return
+	//     // }
+	//     var diff = _.difference(allDiseases, includedDiseases);
+	//     $scope.ndiseasesfiltered = diff.length;
+	//     $scope.diseasesFilteredMsg = $scope.ndiseasesfiltered ? " (" + $scope.ndiseasesfiltered + " diseases filtered out)" : "";
+	// };
 
-	$scope.ndiseases = 0;
 	$scope.setTherapeuticAreas = function (tas) {
 	    $scope.therapeuticAreas = tas;
-	    var nonRedundantDiseases = $scope.nonRedundantDiseases(tas)[0];
-	    $scope.ndiseases = _.keys(nonRedundantDiseases).length || 0;
-	    includedDiseases = _.keys(nonRedundantDiseases);
-	    $scope.checkFilteredOutDiseases();
+	    // var nonRedundantDiseases = $scope.nonRedundantDiseases(tas)[0];
+	    // $scope.ndiseases = _.keys(nonRedundantDiseases).length || 0;
+	    // includedDiseases = _.keys(nonRedundantDiseases);
+	    // $scope.checkFilteredOutDiseases();
 	};
+
+    $scope.n = {};
+    $scope.n.diseases = 0;
+    // $interval (function () {
+    //     console.log($scope.loading);
+    // }, 100);
+    // $scope.setTotalDiseases = function (diseases) {
+    //     $scope.ndiseases = diseases.length;
+    // };
 
 	// Therapeutic Areas Nav
 	$scope.focusEFO = "cttv_source";
@@ -321,18 +333,18 @@ angular.module('cttvControllers')
 	    $scope.diseasegroupOpen = false;
 	};
 
-	$scope.selectedDisease = 0;
-	$scope.selectDisease = function (d) {
-	    $scope.highlightEFO = {efo: d.efo_code,
-				   parent_efo: d._parent.efo_code,
-				   datatypes: d.datatypes
-				  };
-	    $scope.selectedDisease++;
-	    // if ($scope.selectedDisease === true) {
-	    // 	$scope.selectedDisease = false;
-	    // } else {
-	    // 	$scope.selectedDisease = true;
-	    // }
-	};
+    $scope.selectedDisease = 0;
+    $scope.selectDisease = function (d) {
+        $scope.highlightEFO = {efo: d.efo_code,
+            parent_efo: d._parent.efo_code,
+            datatypes: d.datatypes
+        };
+        $scope.selectedDisease++;
+        // if ($scope.selectedDisease === true) {
+        // 	$scope.selectedDisease = false;
+        // } else {
+        // 	$scope.selectedDisease = true;
+        // }
+    };
 
 }]);

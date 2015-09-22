@@ -57,7 +57,7 @@
                 <accordion-heading>
                     <span ng-click="toggleGenomeLocation()">Variants, isoforms and genomic context</span>
                 </accordion-heading>
-                <p class="cttv-section-intro">Genomic variants associated with {{target.symbol}}. Only variants information associating {{target.symbol}} with any disease are displayed. Click on any variant, gene or transcript to get more information about it. Pan or zoom the browser to see neighboring genes.</p>
+                <p class="cttv-section-intro">Genomic variants associated with {{target.symbol}}. Only variants information associating {{target.symbol}} with any disease are displayed. Click on any variant, gene or transcript to get more information about it. Pan or zoom the browser to see neighboring genes. The number above gene variants means that more than 1 overlap the same region at the current zoom level.</p>
                 <p ng-if="ensembl.isHuman">ID: <a target="_blank" href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={{ensembl.id}}">{{ensembl.id}}</a></p>
                 <p ng-if="!ensembl.isHuman">ID: {{ensembl.id}}</p>
                 <p>Description: {{ensembl.description}}</p>
@@ -122,7 +122,7 @@
                 </ul>
                 <div>
                     <p ng-show="pathway.id">Diagram for <b>{{pathway.subName}}</b> pathway</p>
-                    <reactome-pathway-viewer pathway="{{pathway.id}}" subpathway="{{pathway.subId}}"></reactome-pathway-viewer>
+                    <reactome-pathway-viewer pathway="{{pathway.id}}" subpathway="{{pathway.subId}}" target="{{target.symbol}}"></reactome-pathway-viewer>
                 </div>
             </accordion-group>
 
@@ -149,7 +149,7 @@
 
             <!-- Gene tree -->
             <accordion-group heading="Target Family" is-open="false">
-                <p class=cttv-section-intro>Phylogenetic tree showing the history of the human gene {{target.symbol}}. The tree shows human paralogs and orthologs in selected species. Click on any node to get more information about the homology relationship. Check / Uncheck species to prune the tree accordingly</p>
+                <p class=cttv-section-intro>Phylogenetic tree showing the history of the human gene {{target.symbol}} based on protein sequences. The tree shows human paralogs and orthologs in selected species. Click on any node to get more information about the homology relationship. Check / Uncheck species to prune the tree accordingly</p>
                 <cttv-target-gene-tree target="{{targetGeneId}}"></cttv-gene-tree>
             </accordion-group>
 

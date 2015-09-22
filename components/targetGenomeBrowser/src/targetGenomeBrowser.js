@@ -4,15 +4,16 @@ var browser_tooltips = require("./tooltips.js");
 var async = require("./callbacks.js");
 var aggregation = require("./aggregation.js");
 var RSVP = require('rsvp');
+var biotypes = require("./biotypes.js");
+
 
 var cttv_genome_browser = function() {
     "use strict";
 
     var navTheme = nav()
-    .show_options(true);
+        .show_options(true);
 
     var show_links   = true;
-    var chr = 0;
     var efo;
 
     var snps = {};
@@ -29,6 +30,7 @@ var cttv_genome_browser = function() {
     var div_id;
 
     var fgColor = "#586471";
+    var geneTrackHeight = 0;
 
     var gBrowser;
 
@@ -36,9 +38,6 @@ var cttv_genome_browser = function() {
         // Set the different #ids for the html elements (needs to be lively because they depend on the div_id)
         set_div_id(div);
         gBrowser = gB;
-
-        // Navigation
-        navTheme (gB, div);
 
         rest = gB.rest();
         async.rest = rest; // Ensembl rest api
@@ -52,6 +51,65 @@ var cttv_genome_browser = function() {
 
         // Transcript data
         var transcript_data = tnt.board.track.data.genome.transcript();
+
+        // Gene colors and legend
+        transcript_data.update().success (function (genes) {
+
+            genes.map(gene_color);
+
+            // And we setup/update the legend
+            var biotypes_array = genes.map(function(e){
+                return biotypes.legend[e.gene.biotype];
+            });
+            // also the ones for the transcript of the matching gene
+            var transcript_biotypes = genes.filter (function (e2) {
+                return e2.gene.id === gB.gene();
+            }).map (function (e) {
+                return biotypes.legend[e.transcript.biotype];
+            });
+
+            biotypes_array = biotypes_array.concat(transcript_biotypes);
+
+            var biotypes_hash = {};
+            for (var i=0; i<biotypes_array.length; i++) {
+                biotypes_hash[biotypes_array[i]] = 1;
+            }
+            var curr_biotypes = [];
+            for (var p in biotypes_hash) {
+                if (biotypes_hash.hasOwnProperty(p)) {
+                    curr_biotypes.push(p);
+                }
+            }
+            var biotype_legend = legend_div.selectAll(".tnt_biotype_legend")
+                .data(curr_biotypes, function(d){return d;});
+
+            var new_legend = biotype_legend
+                .enter()
+                .append("div")
+                .attr("class", "tnt_biotype_legend")
+                .style("display", "inline");
+
+            new_legend
+                .append("div")
+                .style("display", "inline-block")
+                .style("margin", "0px 2px 0px 15px")
+                .style("width", "10px")
+                .style("height", "10px")
+                .style("border", "1px solid #000")
+                .style("background", function(d){
+                    return biotypes.color[d];
+                });
+
+            new_legend
+            .append("text")
+            .text(function(d){return d;});
+
+            biotype_legend
+            .exit()
+            .remove();
+        });
+
+
         transcript_data.update().success(function (transcripts) {
             var newGenes = {};
             for (var i=0; i<transcripts.length; i++) {
@@ -59,20 +117,30 @@ var cttv_genome_browser = function() {
                 var mygene = t.gene.external_name;
                 if (gB.gene() === t.gene.id) {
                     newGenes[t.external_name] = t;
+                    for (var j=0; j<t.exons.length; j++) {
+                        var e = t.exons[j];
+                        e.featureColor = t.featureColor;
+                    }
                     continue;
                 } else if (newGenes[mygene] === undefined) {
                     t.exons = [{
                         start : t.gene.start,
                         end : t.gene.end,
                         offset : 0,
-                        isGene : true
+                        isGene : true,
+                        featureColor: t.featureColor
                     }];
-                    t.start = t.gene.start;
-                    t.end = t.gene.end;
                     t.introns = [];
                     t.display_label = t.gene.strand === 1 ? (mygene + ">") : ("<" + mygene);
                     t.isGene = true;
                     newGenes[mygene] = t;
+                } else {
+                    var newStart = d3.min([newGenes[mygene].start, t.start]);
+                    newGenes[mygene].start = newStart;
+                    newGenes[mygene].exons[0].start = newStart;
+                    var newEnd = d3.max([newGenes[mygene].end, t.end]);
+                    newGenes[mygene].end = newEnd;
+                    newGenes[mygene].exons[0].end = newEnd;
                 }
             }
             var elems = [];
@@ -84,19 +152,6 @@ var cttv_genome_browser = function() {
             return elems;
         });
 
-        // Aux track for label
-        var transcript_label_track = tnt.board.track()
-            .label ("Genes / Transcripts")
-            .height(20)
-            .background_color ("#EEEFFF")
-            .display(tnt.board.track.feature.block())
-            .data(tnt.board.track.data()
-                .update(tnt.board.track.data.retriever.sync()
-                    .retriever (function () {
-                        return [];
-                    })
-                )
-            );
 
         // TRACKS!
         // ClinVar track
@@ -189,20 +244,53 @@ var cttv_genome_browser = function() {
             .update( gwas_updater )
         );
 
+        // Aux track for label
+        var transcript_label_track = tnt.board.track()
+            .label ("Genes / Transcripts")
+            .height(20)
+            .background_color ("#FFFFFF")
+            .display(tnt.board.track.feature.block())
+            .data(tnt.board.track.data()
+                .update(tnt.board.track.data.retriever.sync()
+                    .retriever (function () {
+                        return [];
+                    })
+                )
+            );
+
         // Transcript / Gene track
         var transcript_track = tnt.board.track()
-            .height(300)
-            .background_color("#EEEFFF")
+            .height(geneTrackHeight)
+            .background_color("#FFFFFF")
             .display(tnt.board.track.feature.genome.transcript()
                 .foreground_color (function (t) {
-                    if (t.isGene) {
-                        return "#005588";
-                    }
-                    return "red";
+                    return t.featureColor;
+                //     if (t.isGene) {
+                //         return "#005588";
+                //     }
+                //     return "red";
                 })
                 .on("click", tooltips.gene)
             )
             .data(transcript_data);
+
+        // Update the track based on the number of needed slots for the genes
+        transcript_track.display().layout()
+            .fixed_slot_type("expanded")
+            .on_layout_run (function (types, current) {
+                var needed_height = types.expanded.needed_slots * types.expanded.slot_height;
+                if (needed_height !== geneTrackHeight) {
+                    if (needed_height < 200) { // Minimum of 200
+                        geneTrackHeight = 200;
+                    } else {
+                        geneTrackHeight = needed_height;
+                    }
+                    geneTrackHeight = needed_height;
+                    transcript_track.height(needed_height);
+                    gB.reorder(gB.tracks());
+                }
+        });
+
 
         // Sequence track
         var sequence_track = tnt.board.track()
@@ -214,8 +302,25 @@ var cttv_genome_browser = function() {
             .limit(150)
         );
 
+        // The order of the elements are: Nav div // genome browser div // legend div
+        // nav div
+        var navDiv = d3.select(div)
+            .append("div");
 
         gBrowser(div);
+
+        // The legend for the gene colors
+        var legend_div = d3.select(div)
+            .append("div")
+            .attr("class", "tnt_legend_div");
+
+        legend_div
+            .append("text")
+            .text("Gene legend:");
+
+         d3.selectAll("tnt_biotype")
+             .data(transcript_track.data().elements());
+
         gBrowser
             //.add_track(gene_track)
             .add_track(gwas_track)
@@ -276,19 +381,21 @@ var cttv_genome_browser = function() {
                     from : start,
                     to : end
                 });
+                // Navigation
+                navTheme (gB, navDiv.node());
                 gB.start({from: start, to: end});
 
         });
 
 
         // The GeneInfo Panel
-        d3.select(div).select(".tnt_groupDiv")
-            .append("div")
-            .attr("class", "ePeek_gene_info")
-            .attr("id", "tnt_" + div_id + "_gene_info") // Both needed?
-            .style("width", gBrowser.width() + "px");
+        // d3.select(div).select(".tnt_groupDiv")
+        //     .append("div")
+        //     .attr("class", "ePeek_gene_info")
+        //     .attr("id", "tnt_" + div_id + "_gene_info") // Both needed?
+        //     .style("width", gBrowser.width() + "px");
 
-                        // Links div
+        // Links div
         var links_pane = d3.select(div)
             .append("div")
             .attr("class", "tnt_links_pane")
@@ -318,14 +425,6 @@ var cttv_genome_browser = function() {
     ///*********************////
     // API
 
-
-    gBrowserTheme.chr = function (c) {
-        if (!arguments.length) {
-            return chr;
-        }
-        chr = c;
-        return this;
-    };
 
     gBrowserTheme.show_links = function(b) {
         show_links = b;
@@ -381,6 +480,15 @@ var cttv_genome_browser = function() {
             opts.expandefo = true;
         }
         return opts;
+    }
+
+    function gene_color (transcript) {
+        if (transcript.gene.id === gBrowser.gene()) {
+            transcript.featureColor = biotypes.color[biotypes.legend[transcript.transcript.biotype]];
+        } else {
+            transcript.featureColor = biotypes.color[biotypes.legend[transcript.gene.biotype]];
+            return;
+        }
     }
 
 
