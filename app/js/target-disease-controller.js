@@ -174,7 +174,8 @@
                 var key = cttvConsts.datatypesOrder[i];
                 fd.push({
                     "value": lookDatasource(data, cttvConsts.datatypes[key]).score,
-                    "label": cttvConsts.datatypesLabels[key]
+                    "label": cttvConsts.datatypesLabels[key],
+                    "active": true,
                 });
             }
 
