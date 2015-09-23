@@ -1062,6 +1062,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: $scope.search.literature.maxShow,
+                expandefo: true,
                 datasource: [dbs.DISGENET, dbs.EPMC],   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
                 //datasource: [dbs.EPMC, dbs.DISGENET],
                 fields: [
