@@ -137,15 +137,15 @@ angular.module('cttvDirectives')
 			// datatypes.AFFECTED_PATHWAY = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
 			// datatypes.ANIMAL_MODEL = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
             // datatypes.LITERATURE = _.result(_.find(efo.datatypes, function (d) { return d.literature === "literature"; }), "association_score")||0;
-            var hasActiveDatatype = function (checkDatatype) {
-                var datatypes = JSON.parse(attrs.datatypes);
-                for (var datatype in datatypes) {
-                    if (datatype === checkDatatype) {
-                        return true;
-                    }
-                }
-                return false;
-            };
+            // var hasActiveDatatype = function (checkDatatype) {
+            //     var datatypes = JSON.parse(attrs.datatypes);
+            //     for (var datatype in datatypes) {
+            //         if (datatype === checkDatatype) {
+            //             return true;
+            //         }
+            //     }
+            //     return false;
+            // };
 
             var flowerData = [];
             for (var i=0; i<cttvConsts.datatypesOrder.length; i++) {
@@ -153,7 +153,7 @@ angular.module('cttvDirectives')
                 flowerData.push({
                     "value": datatypes[key],
                     "label": cttvConsts.datatypesLabels[key],
-                    "active": hasActiveDatatype(cttvConsts.datatypes[key])
+                    "active": true, //hasActiveDatatype(cttvConsts.datatypes[key])
                 });
             }
 			// var flowerData = [

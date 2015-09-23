@@ -90,7 +90,7 @@ var tooltips = function () {
                 flowerData.push({
                     "value": datasource.score,
                     "label": names.datatypesLabels[key],
-                    "active": hasActiveDatatype(names.datatypes[key])
+                    "active": true, //hasActiveDatatype(names.datatypes[key])
                 });
 
             }
@@ -121,14 +121,14 @@ var tooltips = function () {
             };
         }
 
-        function hasActiveDatatype (checkDatatype) {
-            for (var datatype in datatypes) {
-                if (datatype === checkDatatype) {
-                    return true;
-                }
-            }
-            return false;
-        }
+        // function hasActiveDatatype (checkDatatype) {
+        //     for (var datatype in datatypes) {
+        //         if (datatype === checkDatatype) {
+        //             return true;
+        //         }
+        //     }
+        //     return false;
+        // }
 
 
     };
