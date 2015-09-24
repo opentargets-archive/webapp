@@ -58,7 +58,12 @@ angular.module('cttvServices').
                 SCORE_MIN : 0.0,
                 SCORE_MAX : 1.0
             },
-            OK : 'ok'
+            OK : 'ok',
+            ACCESS_LEVEL_PUBLIC: 'public',
+            ACCESS_LEVEL_PRIVATE: 'private',
+            config : {
+                SHOW_ACCESS_LEVEL : true
+            }
         };
 
 

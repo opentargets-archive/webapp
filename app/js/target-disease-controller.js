@@ -6,10 +6,10 @@
 
 
     /**
-       * GeneDiseaseCtrl
-       * Controller for the Gene <-> Disease page
-       * It loads the evidence for the given target <-> disease pair
-    */
+     * GeneDiseaseCtrl
+     * Controller for the Gene <-> Disease page
+     * It loads the evidence for the given target <-> disease pair
+     */
     .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'clearUnderscoresFilter', '$modal', '$compile', '$http', '$q', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, clearUnderscores, $modal, $compile, $http, $q) {
         'use strict';
         $log.log('TargetDiseaseCtrl()');
@@ -21,6 +21,10 @@
 
         var dbs = cttvConsts.dbs;
         var datatypes = cttvConsts.datatypes;
+
+        //
+        var accessLevelPrivate = "<span class='cttv-access-private' title='private data'></span>"; //"<span class='fa fa-users' title='private data'>G</span>";
+        var accessLevelPublic = "<span class='cttv-access-public' title='public data'></span>"; //"<span class='fa fa-users' title='public data'>P</span>";
 
         $scope.search = {
             info : {
@@ -316,8 +320,7 @@
                 try{
 
                     // data origin: public / private
-                    //row.push( "<span class='fa fa-users' title='public data'></span>" );
-                    row.push("");
+                    row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                     // disease
                     row.push( item.disease.efo_info[0].label );
@@ -364,10 +367,16 @@
 
             $('#common-diseases-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatCommonDiseaseDataToArray($scope.search.genetic_associations.common_diseases.data),
-                //"ordering" : true,
-                //"order": [[3, 'des']],
+                "ordering" : true,
+                "order": [[1, 'asc']],
                 "autoWidth": false,
                 "paging" : true,
+                "columnDefs" : [
+                    {
+                        "targets" : [0],    // the access-level (public/private icon)
+                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL    // TODO: this should come from config, so we can hide it for our installation
+                    }
+                ],
                 /*"columns": [
                     { "width": "2%" },
                     { "width": "10%" },
@@ -378,6 +387,7 @@
                     { "width": "6%" },
                     { "width": "15%" }
                 ]*/
+
             }, $scope.search.info.title+"-common_diseases") );
         };
 
@@ -398,7 +408,8 @@
                     "disease.efo_info",
                     "evidence",
                     "variant",
-                    "type"
+                    "type",
+                    "access_level"
                 ]
             };
 
@@ -436,6 +447,11 @@
                     }else if ( item.evidence.provenance_type.database ){
                         db = item.evidence.provenance_type.database.id.toLowerCase();
                     }
+
+
+                    // data origin: public / private
+                    row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
+
 
                     // disease
                     row.push( item.disease.efo_info[0].label );
@@ -504,11 +520,24 @@
         var initRareDiseasesTable = function(){
             $('#rare-diseases-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatRareDiseaseDataToArray($scope.search.genetic_associations.rare_diseases.data),
+                "ordering" : true,
+                "order": [[1, 'asc']],
                 "autoWidth": false,
-                "paging" : true
+                "paging" : true,
+                "columnDefs" : [
+                    {
+                        "targets" : [0],    // the access-level (public/private icon)
+                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL
+                    }
+                ],
             }, $scope.search.info.title+"-rare_diseases") );
         };
 
+
+
+        // =================================================
+        //  D R U G S
+        // =================================================
 
 
         // DRUGS
@@ -545,7 +574,8 @@
                 fields: [
                     "target",
                     "disease",
-                    "evidence"
+                    "evidence",
+                    "access_level"
                 ]
             };
             _.extend(opts, searchObj);
@@ -575,6 +605,8 @@
 
                 try{
 
+                    // data origin: public / private
+                    row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                     // disease
                     row.push(item.disease.efo_info[0].label);
@@ -618,9 +650,16 @@
         var initTablePathways = function(){
             $('#pathways-table').dataTable( cttvUtils.setTableToolsParams({
                 "data" : formatPathwaysDataToArray($scope.search.pathways.data),
-                //"ordering" : true,
+                "ordering" : true,
+                "order": [[1, 'asc']],
                 "autoWidth": false,
-                "paging" : true
+                "paging" : true,
+                "columnDefs" : [
+                    {
+                        "targets" : [0],    // the access-level (public/private icon)
+                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL
+                    }
+                ],
             }, $scope.search.info.title+"-disrupted_pathways") );
         };
 
@@ -642,7 +681,8 @@
                 fields: [
                     "disease",
                     "evidence",
-                    "target"
+                    "target",
+                    "access_level"
                 ]
             };
             _.extend(opts, searchObj);
@@ -674,6 +714,9 @@
                 var row = [];
 
                 try{
+
+                    // data origin: public / private
+                    row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                     // disease
                     row.push( item.disease.efo_info[0].label );
@@ -732,8 +775,15 @@
 
             $('#rna-expression-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatRnaDataToArray($scope.search.rna_expression.data),
+                "order": [[1, 'asc']],
                 "autoWidth": false,
-                "paging" : true
+                "paging" : true,
+                "columnDefs" : [
+                    {
+                        "targets" : [0],    // the access-level (public/private icon)
+                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL
+                    }
+                ],
             }, $scope.search.info.title+"-RNA_expression") );
         };
 
@@ -757,7 +807,8 @@
                     "evidence.evidence_codes_info",  // evidence source
                     "evidence.urls",
                     "evidence.known_mutations",
-                    "evidence.provenance_type"
+                    "evidence.provenance_type",
+                    "access_level"
                 ]
             };
             _.extend(opts, searchObj);
@@ -787,6 +838,9 @@
             data.forEach(function(item){
                 var row = [];
                 try{
+
+                    // data origin: public / private
+                    row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                     // col 0: disease
                     row.push(item.disease.efo_info[0].label);
@@ -826,9 +880,15 @@
             $('#mutations-table').dataTable( cttvUtils.setTableToolsParams({
                 "data": formatMutationsDataToArray($scope.search.somatic_mutations.data),
                 //"ordering" : true,
-                //"order": [[3, 'des']],
+                "order": [[1, 'asc']],
                 "autoWidth": false,
-                "paging" : true
+                "paging" : true,
+                "columnDefs" : [
+                    {
+                        "targets" : [0],    // the access-level (public/private icon)
+                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL
+                    }
+                ],
             }, $scope.search.info.title+"-somatic_mutations") );
         };
 
@@ -861,7 +921,8 @@
                 fields: [
                     "disease",
                     "evidence",
-                    "scores"
+                    "scores",
+                    "access_level"
                 ]
             };
             _.extend(opts, searchObj);
@@ -891,6 +952,10 @@
                 var row = [];
 
                 try{
+
+                    // data origin: public / private
+                    row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
+
                     // disease
                     row.push(item.disease.efo_info[0].label);    // or item.disease.efo_info[0].label ???
 
@@ -933,7 +998,13 @@
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,
-                "order": [[5, 'des']]
+                "order": [[6, 'des']],
+                "columnDefs" : [
+                    {
+                        "targets" : [0],    // the access-level (public/private icon)
+                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL    // TODO: this should come from config, so we can hide it for our installation
+                    }
+                ],
             }, $scope.search.info.title+"-mouse_models") );
         };
 
@@ -987,18 +1058,18 @@
             r.data(d);
             dt.draw();
             */
-
+            // ------------
             dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 var data = this.data();
                 // ... do something with data(), or this.node(), etc
                 //data[1]; // the literature ID
                 var pmdata = recs.filter(function(item){
-                    return item.pmid == data[1];
+                    return item.pmid == data[2];
                 });
 
                 if(pmdata.length>0){
                     var re = /abstract: (.*?)\.\s*<\/li>/g;
-                    data[2]="";
+                    data[3]="";
 
                     // pmdata.forEach(function(pub){
                     var pub = pmdata[0];
@@ -1017,21 +1088,21 @@
                     var match;
                     var abstract = pub.abstractText;
 
-                    while ((match = re.exec(data[5])) !== null) {
+                    while ((match = re.exec(data[6])) !== null) {
                         var matchedText = match[1];
                         abstract = abstract.replace(matchedText, "<b>" + matchedText + "</b>");
                     }
 
-                    data[2] += "<a target=_blank href='http://europepmc.org/abstract/MED/"+pub.pmid+"'>"+pub.title+"</a>"
+                    data[3] += "<a target=_blank href='http://europepmc.org/abstract/MED/"+pub.pmid+"'>"+pub.title+"</a>"
                     + "<br />"
                     + "<span class='small'>"+auth +" "+( pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+"</span>"
                     + "<p class='small'>"+abstract+"</p>"
 
-                    data[4] = pub.journalInfo.yearOfPublication;
+                    data[5] = pub.journalInfo.yearOfPublication;
                     // });
 
                 }else{
-                    data[2] = cttvDictionary.NA;
+                    data[3] = cttvDictionary.NA;
                 }
 
                 this.data(data);
@@ -1068,7 +1139,8 @@
                 fields: [
                     "disease",  // take disease.efo_info[0].label and disease.efo_info[0].efo_id
                     "evidence",
-                    "scores"
+                    "scores",
+                    "access_level"
                 ]
             };
             _.extend(opts, searchObj);
@@ -1180,6 +1252,10 @@
                 var row = [];
 
                 try{
+
+                    // data origin: public / private
+                    row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
+
                     // disease
                     row.push(item.disease.efo_info[0].label);
 
@@ -1207,7 +1283,7 @@
                     newdata.push(row); // push, so we don't end up with empty rows
 
                     // source
-                    row.push(item.evidence.provenance_type.database.id);
+                    row.push(checkPath(item, "evidence.provenance_type.database.id") ? item.evidence.provenance_type.database.id : "");
 
                 }catch(e){
                     $log.error("Error parsing literature data:");
@@ -1230,7 +1306,7 @@
                        +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
                        +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
                        +'</div>'
-                       +'<div>'+$('#literature-table').DataTable().row(id).data()[5]+'</div>',
+                       +'<div>'+$('#literature-table').DataTable().row(id).data()[6]+'</div>',
               //controller: 'ModalInstanceCtrl',
               size: 'lg',
               resolve: {
@@ -1251,13 +1327,17 @@
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,
-                "order": [[4, 'desc'], [3, 'desc']],   // order by number of matched sentences
+                "order": [[5, 'desc'], [4, 'desc']],   // order by number of matched sentences
                 "columnDefs" : [
-                        {
-                            "targets" : [1,5],
-                            "visible" : false,
-                        }
-                    ],
+                    {
+                        "targets" : [2,6],
+                        "visible" : false,
+                    },
+                    {
+                        "targets" : [0],    // the access-level (public/private icon)
+                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL    // TODO: this should come from config, so we can hide it for our installation
+                    }
+                ],
             }, $scope.search.info.title+"-text_mining") );
         };
 

@@ -23,6 +23,11 @@ angular.module('cttvDirectives')
             init();
         }],
         link: function (scope, elem, attrs) {
+
+            // this probably shouldn't live here, so we'll see later on...
+            var accessLevelPrivate = "<span class='cttv-access-private' title='private data'></span>";
+            var accessLevelPublic = "<span class='cttv-access-public' title='public data'></span>";
+
             scope.$watchGroup([function () {return attrs.target;}, function () {return attrs.disease;}], function () {
                 if (!attrs.target && !attrs.disease) {
                     return;
@@ -65,6 +70,7 @@ angular.module('cttvDirectives')
                             "drug",
                             "evidence",
                             "target",
+                            "access_level"
                         ]
                     };
                     if (attrs.target) {
@@ -106,8 +112,7 @@ angular.module('cttvDirectives')
                             });
 
                             // data origin: public / private
-                            //row.push( "<span class='fa fa-users' title='public data'></span>" );
-                            row.push("");
+                            row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                             // 0: disease
                             row.push(item.disease.efo_info[0].label);
@@ -221,6 +226,10 @@ angular.module('cttvDirectives')
                         "aoColumnDefs" : [
                             {"targets": [4], "visible":false},
                             {"iDataSort" : 3, "aTargets" : [4]},
+                            {
+                                "targets" : [0],    // the access-level (public/private icon)
+                                "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL    // TODO: this should come from config, so we can hide it for our installation
+                            }
                         ],
                         // "aoColumnDefs" : [
                         //     {"iDataSort" : 2, "aTargets" : [3]},
