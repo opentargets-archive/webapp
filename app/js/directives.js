@@ -1400,7 +1400,7 @@ angular.module('cttvDirectives', [])
                      //+'    <label>Stringency <input type="text" ng-model="facet.filters[2].key"/></label>'
                      +'    <div>'
                      +'        <span class="small">Stringency:</span>'
-                     +'        <cttv-slider min=1 max=10 config="{tick:1, ticks:9, snap:true}" value="facet.filters[2].key" ></cttv-slider>'
+                     +'        <cttv-slider min=1 max=10 config="{snap:true, values:[0.5, 1, 3, 5], labels:[\'min\', \'default\',\'high\',\'max\']}" value="facet.filters[2].key" ></cttv-slider>'
                      +'    </div>'
                      +'    <div><button type="button" class="btn btn-primary btn-xs" ng-click="facet.update()">Apply</button></div>'
                      +'</div>',
@@ -1415,7 +1415,7 @@ angular.module('cttvDirectives', [])
     /**
      * The score histogram
      */
-    .directive('cttvScoreHistogram', ['$log', '$timeout', function ($log, $timeout) {
+    .directive('cttvScoreHistogram', ['$log', 'cttvUtils', function ($log, cttvUtils) {
         'use strict';
 
         return {
@@ -1521,7 +1521,11 @@ angular.module('cttvDirectives', [])
 
                 function onBrush(){
                     var extent0 = mybrush.extent();
-                    update( {min:extent0[0].toFixed(2), max:extent0[1].toFixed(2)} );
+                    update( {
+                        min: cttvUtils.roundToNearest(extent0[0], tick).toFixed(2), // extent0[0].toFixed(2),
+                        max: cttvUtils.roundToNearest(extent0[1], tick).toFixed(2),// extent0[1].toFixed(2)
+                    } );
+                    //mybrush.extent(scope.min, scope.max);
                 }
 
             },
@@ -1584,14 +1588,12 @@ angular.module('cttvDirectives', [])
                                 // labels: Array
             },
 
-
-            //template: '<iframe style="width:100%; height:100%; visibility:hidden"></iframe>',
             template: '<cttv-size-listener onresize="resize"></cttv-size-listener>',
 
+            /*
             link: function (scope, elem, attrs) {
 
-
-
+                // set up dimentions
                 var margin = {top: 0, right: 10, bottom: 10, left: 10},
                     width = (scope.config.width || elem[0].offsetWidth) - margin.left - margin.right,   // initialize width to the div width
                     height = 30 - margin.bottom - margin.top;
@@ -1698,6 +1700,134 @@ angular.module('cttvDirectives', [])
                     svg.attr("width", width + margin.left + margin.right);
 
                 }
+
+            },*/
+
+            link: function (scope, elem, attrs) {
+
+                // set up dimentions
+                var margin = {top: 0, right: 10, bottom: 10, left: 10},
+                    width = (scope.config.width || elem[0].offsetWidth) - margin.left - margin.right,   // initialize width to the div width
+                    height = 35 - margin.bottom - margin.top;
+
+                // check the configuration
+                var config = scope.config || {}
+
+                var mode = config.mode || "linear";
+                var ticks = config.ticks || config.values.length || 10;
+                var tick = config.tick || 1;
+                var snap = config.snap || false;
+                var values = config.values || [ (scope.min || 0), (scope.max || 1) ];
+                var labels = config.labels;
+
+                scope.value = scope.value || scope.min;
+
+                // the scale/mapping of actual values that the slider is returning
+                var v = d3.scale.linear()
+                    .domain(values.map(function(item, i){ return i; }))
+                    .range(values.map(function(item){ return item; }))
+                    .clamp(true);
+
+                // the scale of the slider, 0 to 1 and 0 to width
+                var x = d3.scale.linear()
+                    .domain([0, (ticks-1)])
+                    .range([0, width])
+                    .clamp(true);
+
+                var brush = d3.svg.brush()
+                    .x(x)
+                    .extent([0, 0])
+                    .on("brush", onBrush);
+
+
+                var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom")
+                    .ticks(ticks)
+                    .tickFormat(function(d) {
+                        //return d+"\""; // config.labels[d] || ;
+                        return labels[d];
+                     })
+                    .tickSize(0)
+                    .tickPadding(12);
+
+
+                var svg = d3.select(elem.eq(0)[0]).append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                svg.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height / 2 + ")")
+                    .call(xAxis)
+                    .select(".domain")
+                    .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+                    .attr("class", "halo");
+
+                    // svg.attr("viewBox", "0 0 " + width + " " + height)
+                    // .attr("perserveAspectRatio", "xMinYMin");
+                    // .call(scope.resize);
+
+
+                var slider = svg.append("g")
+                    .attr("class", "slider")
+                    .call(brush);
+
+                slider.selectAll(".extent,.resize")
+                    .remove();
+
+                var handle = slider.append("circle")
+                    .attr("class", "handle")
+                    .attr("transform", "translate(0," + height / 2 + ")")
+                    .attr("r", 9);
+
+                // init: move slider to initial position
+                slider
+                    .call(brush.event)
+                    .call(brush.extent([v.invert(scope.value), v.invert(scope.value)]))
+                    .call(brush.event);
+
+                // attach event after initial animation is triggered (hack, I confess)
+                brush.on("brushend", function(){ scope.$apply(onBrushEnd) });
+
+                function onBrush() {
+                    var value = brush.extent()[0];
+                    //$log.log(x);
+                    $log.log(x.invert(d3.mouse(this)[0]));
+
+                    if (d3.event.sourceEvent) { // not a programmatic event
+                        value = x.invert(d3.mouse(this)[0]);
+                        if(snap){
+                            value = cttvUtils.roundToNearest( value, tick );
+                        }
+                        brush.extent([value, value]);
+                    }
+
+                    // move the handle
+                    handle.attr("cx", x(value));
+                }
+
+                function onBrushEnd() {
+                    // update the scope value when finishing brushing
+                    if (d3.event.sourceEvent) { // not a programmatic event
+                        $log.log( brush.extent()[0] );
+                        scope.value = v( brush.extent()[0] );
+                        $log.log( scope.value );
+                    }
+                }
+
+                /*scope.resize=function(dim){
+                    $log.log(dim.w);
+                    width = dim.w - margin.left - margin.right,   // initialize width to the div width
+
+                    x.domain([scope.min, scope.max])
+                    .range([0, width]);
+
+                    svg.attr("width", width + margin.left + margin.right);
+
+                }*/
 
             },
         };

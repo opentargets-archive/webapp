@@ -595,6 +595,8 @@ table.dataTable thead .sorting {
 
 .cttv-access-public:after {
     content: "P";
+    /*content: "\f023";
+    font-family: FontAwesome;*/
 }
 
 .cttv-access-private:after {
@@ -1021,6 +1023,15 @@ cttv-slider .axis {
   stroke: #000;
   fill-opacity: .125;
   shape-rendering: crispEdges;
+}
+
+cttv-slider .axis text{
+    font-size: 10px;
+    /*font-style: normal;
+    font-variant: normal;
+    font-weight: normal;*/
+    height: 20px;
+    line-height: normal;
 }
 
 cttv-slider .axis .domain {
