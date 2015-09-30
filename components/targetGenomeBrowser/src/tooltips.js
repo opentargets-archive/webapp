@@ -46,17 +46,24 @@ var tooltips = function () {
                 obj : data,
                 value : "Jump to sequence"
             });
+            obj.rows.push({
+                "label": "target",
+                "value": data.target.symbol
+            });
         }
-        if (data.association) {
+        if (data.associations && data.associations.length) {
             obj.rows.push({
                 "label" : "Associations",
                 "value" : ""
             });
 
-            obj.rows.push({
-                "label" : "<a href=/evidence/" + data.association.target + "/" + data.association.efo + ">" + data.association.label + "</a>",
-                "value" : data.association.pmids.length + (data.association.pmids.length === 1 ? " article" : " articles" + "  <a href='http://europepmc.org/search?query=" + data.association.pmids.map(function (d) {return "EXT_ID:"+d}).join("%20OR%20") + "' target=_blank <i class='fa fa-newspaper-o fa-lg'></i></a>")
-            });
+            for (var i=0; i<data.associations.length; i++) {
+                var association = data.associations[i];
+                obj.rows.push({
+                    "label" : "<a href=/evidence/" + association.target + "/" + association.efo + ">" + association.label + "</a>",
+                    "value" : association.pmids.length + (association.pmids.length === 1 ? " article" : " articles") + "  <a href='http://europepmc.org/search?query=" + association.pmids.map(function (d) {return "EXT_ID:"+d;}).join("%20OR%20") + "' target=_blank <i class='fa fa-newspaper-o fa-lg'></i></a>"
+                });
+            }
         }
         if (data.study && data.study.length) {
             obj.rows.push({

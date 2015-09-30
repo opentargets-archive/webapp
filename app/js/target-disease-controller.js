@@ -403,7 +403,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1100,
-                datasource: [dbs.UNIPROT, dbs.EVA ],
+                datasource: [dbs.UNIPROT, dbs.EVA, dbs.UNIPROT_LITERATURE],
                 fields: [
                     "disease.efo_info",
                     "evidence",

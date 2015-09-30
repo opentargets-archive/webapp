@@ -24,9 +24,9 @@ function aggregation (arr, xScale) {
     for (var g=0; g<groups.length; g++) {
         if (groups[g].length > 1) {
             var med = groups[g][~~(groups[g].length / 2)];
-            med.label = groups[g].length
+            med.label = groups[g].length;
         }
     }
-};
+}
 
 module.exports = exports = aggregation;
