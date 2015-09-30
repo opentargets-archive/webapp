@@ -184,7 +184,6 @@ var cttv_genome_browser = function() {
                         return RSVP.all(allGenesPromises);
                     })
                     .then (function (resps) {
-                        console.log(resps);
                         var flattenedSNPs = [];
                         for (var i=0; i<resps.length; i++) {
                             var resp = resps[i];
@@ -199,6 +198,7 @@ var cttv_genome_browser = function() {
             });
 
         var foreground_color = function (d) {
+            // highlight means same disease
             if (d.highlight && (gB.gene() === d.target.geneid)) {
                 return "#FF0000"; // red
             } else if (d.highlight) {
