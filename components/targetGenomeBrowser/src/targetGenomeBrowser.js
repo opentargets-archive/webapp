@@ -17,8 +17,6 @@ var cttv_genome_browser = function() {
     var show_links   = true;
     var efo;
 
-    var snps = {};
-
     var ensemblRestApi;
 
     var gwas_data = [];

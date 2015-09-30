@@ -106,16 +106,6 @@ var pipelines = function () {
                 snps[snp_name].associations.push(association);
                 snps[snp_name].efo.push(this_disease.efo_id);
 
-                // clinvarSNPs[snp_name] = {};
-                // clinvarSNPs[snp_name].name = snp_name;
-                // clinvarSNPs[snp_name].target = this_target;
-                // clinvarSNPs[snp_name].efo = this_disease.efo_id;
-                // clinvarSNPs[snp_name].association = association;
-                // clinvarSNPs[snp_name].clinvarId = clinvarId;
-                // if (highlight[snp_name]) {
-                //     clinvarSNPs[snp_name].highlight = true;
-                // }
-
             } else {
                 console.error(rec);
             }

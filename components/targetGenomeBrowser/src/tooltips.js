@@ -60,7 +60,7 @@ var tooltips = function () {
             for (var i=0; i<data.associations.length; i++) {
                 var association = data.associations[i];
                 obj.rows.push({
-                    "label" : "<a href=/evidence/" + association.target + "/" + association.efo + ">" + association.label + "</a>",
+                    "label" : "<a href=/evidence/" + data.target.geneid + "/" + association.efo + ">" + association.label + "</a>",
                     "value" : association.pmids.length + (association.pmids.length === 1 ? " article" : " articles") + "  <a href='http://europepmc.org/search?query=" + association.pmids.map(function (d) {return "EXT_ID:"+d;}).join("%20OR%20") + "' target=_blank <i class='fa fa-newspaper-o fa-lg'></i></a>"
                 });
             }
@@ -73,7 +73,7 @@ var tooltips = function () {
 
             for (var i=0; i<data.study.length; i++) {
                 obj.rows.push({
-                    "label" : "<a href='/evidence/" + view.gene() + "/"+ data.study[i].efo + "'>" + data.study[i].efo_label + '</a>',
+                    "label" : "<a href='/evidence/" + data.target.geneid + "/"+ data.study[i].efo + "'>" + data.study[i].efo_label + '</a>',
                     "value" : parseFloat(data.study[i].pvalue).toPrecision(1) + " <a target=_blank href='http://europepmc.org/abstract/med/" + data.study[i].pmid + "'><i class='fa fa-newspaper-o fa-lg'></i></a>"
                 });
             }
@@ -193,8 +193,10 @@ var tooltips = function () {
             .id(id);
 
         var url = cttvRestApi.url.associations ({
-            "gene" : gene.gene.id,
-            "datastructure" : "flat"
+            "target" : gene.gene.id,
+            "datastructure" : "flat",
+            "filterbyscorevalue_min": 0,
+            "stringency": 1
         });
         cttvRestApi.call(url)
         .catch (function (x) {
