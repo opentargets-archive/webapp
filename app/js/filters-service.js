@@ -659,6 +659,9 @@ angular.module('cttvServices').
 
             // update the filters state?
             updateSelected();
+            $log.log("--------------");
+            $log.log(filtersData);
+            $log.log("--------------");
         };
 
 

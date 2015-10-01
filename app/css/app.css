@@ -603,6 +603,12 @@ table.dataTable thead .sorting {
     content: "G";
 }
 
+.cttv-literature-modal {
+    padding: 10px;
+}
+
+
+
 /*
 * Matrix table
 */
@@ -981,18 +987,32 @@ table.matrix-table thead > tr > th:last-child {
 
 
 cttv-score-histogram .bar rect {
-  fill: steelblue;
+  /*fill: steelblue;*/
   shape-rendering: crispEdges;
 }
 
 cttv-score-histogram .bar text {
-  fill: #fff;
+  /*fill: #fff;*/
+  font-size: 12px;
+}
+
+cttv-score-histogram .bar .selected {
+    fill: steelblue;
+}
+
+cttv-score-histogram .bar .deselected {
+    fill: #CCC;
 }
 
 cttv-score-histogram .axis path, cttv-score-histogram .axis line {
-  fill: none;
+  /*fill: none;
   stroke: #000;
-  shape-rendering: crispEdges;
+  shape-rendering: crispEdges;*/
+  display: none;
+}
+
+cttv-score-histogram .axis text{
+  fill: #AAA;
 }
 
 cttv-score-histogram .brush .extent {
@@ -1027,26 +1047,22 @@ cttv-slider .axis {
 
 cttv-slider .axis text{
     font-size: 10px;
-    /*font-style: normal;
-    font-variant: normal;
-    font-weight: normal;*/
     height: 20px;
     line-height: normal;
+    fill:none;
 }
 
 cttv-slider .axis .domain {
   fill: none;
-  stroke: #000;
+  /*stroke: #000;
   stroke-opacity: .3;
-  stroke-width: 10px;
-  stroke-linecap: round;
+  stroke-width: 10px;*/
 }
 
 cttv-slider .axis .halo {
   fill: none;
   stroke: #ddd;
-  stroke-width: 8px;
-  stroke-linecap: round;
+  stroke-width: 6px;
 }
 
 cttv-slider .slider .handle {
@@ -1056,3 +1072,20 @@ cttv-slider .slider .handle {
   stroke-width: 1.25px;
   cursor: ew-resize;
 }
+
+cttv-score-presets .label {
+    font-size: 10px;
+    color: inherit;
+    display:block;
+    font-weight: normal;
+    padding: 0px;
+}
+
+cttv-score-presets .well-sm{
+    padding: 5px 0px;
+    border: none;
+    box-shadow: none;
+}
+
+
+

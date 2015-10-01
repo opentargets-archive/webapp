@@ -801,7 +801,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1000,
-                datasource: [dbs.CANCER_GENE_CENSUS/*, dbs.EVA()*/],    // TODO: pull EVA data too, when it's ready
+                datasource: [dbs.CANCER_GENE_CENSUS, dbs.EVA_SOMATIC],    // TODO: pull EVA data too, when it's ready
                 fields: [
                     "disease.efo_info", // disease
                     "evidence.evidence_codes_info",  // evidence source
@@ -846,7 +846,7 @@
                     row.push(item.disease.efo_info[0].label);
 
                     // col 1: know mutations
-                    row.push(item.evidence.known_mutations);
+                    row.push(item.evidence.known_mutations || cttvDictionary.NA);
 
                     // col 2: evidence source
                     row.push("<a href='"+item.evidence.urls[0].url+"' target='_blank'>"+item.evidence.urls[0].nice_name+" <i class='fa fa-external-link'></i></a>");
@@ -1306,7 +1306,10 @@
                        +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
                        +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
                        +'</div>'
-                       +'<div>'+$('#literature-table').DataTable().row(id).data()[6]+'</div>',
+                       +'<div class="cttv-literature-modal">'
+                       +'<h5>Matched sentences</h5>'
+                       +'<div>'+$('#literature-table').DataTable().row(id).data()[6]+'</div>'
+                       +'</div>',
               //controller: 'ModalInstanceCtrl',
               size: 'lg',
               resolve: {

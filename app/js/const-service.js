@@ -30,7 +30,8 @@ angular.module('cttvServices').
                 CANCER_GENE_CENSUS :  "cancer_gene_census",
                 CHEMBL :              "chembl",
                 DISGENET :            "disgenet",
-                EPMC:                 "europepmc"
+                EPMC :                "europepmc",
+                EVA_SOMATIC :         "eva_somatic"
             },
             datatypesOrder: [
                 "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "ANIMAL_MODEL"
@@ -62,7 +63,7 @@ angular.module('cttvServices').
             ACCESS_LEVEL_PUBLIC: 'public',
             ACCESS_LEVEL_PRIVATE: 'private',
             config : {
-                SHOW_ACCESS_LEVEL : true
+                SHOW_ACCESS_LEVEL : false
             }
         };
 

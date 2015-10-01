@@ -28,7 +28,7 @@ angular.module('cttvDirectives')
             var accessLevelPrivate = "<span class='cttv-access-private' title='private data'></span>";
             var accessLevelPublic = "<span class='cttv-access-public' title='public data'></span>";
 
-            scope.$watchGroup([function () {return attrs.target;}, function () {return attrs.disease;}], function () {
+            scope.$watchGroup([function () {return attrs.target;}, function () {return attrs.disease;}], function () {
                 if (!attrs.target && !attrs.disease) {
                     return;
                 }
@@ -123,7 +123,8 @@ angular.module('cttvDirectives')
                             " <i class='fa fa-external-link'></i></a>");
 
                             // 2: phase
-                            row.push(item.drug.max_phase_for_all_diseases.label);
+                            //row.push(item.drug.max_phase_for_all_diseases.label);
+                            row.push(item.evidence.drug2clinic.max_phase_for_disease.label);
 
                             // 2: hidden
                             row.push(item.drug.max_phase_for_all_diseases.numeric_index);

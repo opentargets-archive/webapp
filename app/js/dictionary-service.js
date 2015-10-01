@@ -57,7 +57,7 @@ angular.module('cttvServices').
             RNA_EXPRESSION:          "RNA expression",
 
             // S
-            SCORE :                  "Score",
+            SCORE :                  "Association strength", // "Score",
             SOMATIC_MUTATION :       "Somatic mutations",
 
             // T
