@@ -17,6 +17,14 @@ var cttv_genome_browser = function() {
     var show_links   = true;
     var efo;
 
+
+    var snpColors = {
+        TargetDisease: "#FF0000", // red
+        Target: "#3e9999", // blue
+        Disease: "#FFD400", // orange
+        Other: "#cccccc" // grey
+    };
+
     var ensemblRestApi;
 
     var gwas_data = [];
@@ -75,7 +83,7 @@ var cttv_genome_browser = function() {
                     curr_biotypes.push(p);
                 }
             }
-            var biotype_legend = legend_div.selectAll(".tnt_biotype_legend")
+            var biotype_legend = gene_legend_div.selectAll(".tnt_biotype_legend")
                 .data(curr_biotypes, function(d){
                     return d;
                 });
@@ -89,7 +97,7 @@ var cttv_genome_browser = function() {
             new_legend
                 .append("div")
                 .style("display", "inline-block")
-                .style("margin", "0px 2px 0px 15px")
+                .style("margin", "0px 5px 0px 15px")
                 .style("width", "10px")
                 .style("height", "10px")
                 .style("border", "1px solid #000")
@@ -198,13 +206,13 @@ var cttv_genome_browser = function() {
         var foreground_color = function (d) {
             // highlight means same disease
             if (d.highlight && (gB.gene() === d.target.geneid)) {
-                return "#FF0000"; // red
+                return snpColors.TargetDisease;
             } else if (d.highlight) {
-                return "#FFD400"; // orange
+                return snpColors.Disease;
             } else if (gB.gene() === d.target.geneid) {
-                return "#3e9999"; // blue
+                return snpColors.Target;
             }
-            return "#cccccc";  // grey
+            return snpColors.Other;
         };
 
         var clinvar_display = tnt.board.track.feature.pin()
@@ -387,16 +395,30 @@ var cttv_genome_browser = function() {
         gBrowser(div);
 
         // The legend for the gene colors
-        var legend_div = d3.select(div)
+        var gene_legend_div = d3.select(div)
             .append("div")
             .attr("class", "tnt_legend_div");
 
-        legend_div
+        gene_legend_div
             .append("text")
+            .attr("class", "tnt_legend_header")
             .text("Gene legend:");
 
          d3.selectAll("tnt_biotype")
-             .data(transcript_track.data().elements());
+            .data(transcript_track.data().elements());
+
+        // The legen for the snps colors
+        var snp_legend_div = d3.select(div)
+            .append("div")
+            .attr("class", "tnt_legend_div");
+        snp_legend_div
+            .append("text")
+            .attr("class", "tnt_legend_header")
+            .text("SNPs legend:");
+
+
+
+
 
         gBrowser
             //.add_track(gene_track)
@@ -415,6 +437,18 @@ var cttv_genome_browser = function() {
             .then (function (resp) {
                 return resp.body;
             });
+
+        var diseasePromise;
+        if (efo) {
+            var efoUrl = cttvRestApi.url.disease({
+                code: efo
+            });
+
+            diseasePromise = cttvRestApi.call(efoUrl)
+                .then (function (resp) {
+                    return resp.body;
+                });
+        }
 
         // // SNPs ClinVar
         // var opts = getOpts(gB.gene(), ["eva","uniprot"], efo);
@@ -437,9 +471,11 @@ var cttv_genome_browser = function() {
             .cttvRestApi (cttvRestApi)
             .common (gB.gene());
 
-        RSVP.all ([genePromise, snpsGwasPromise, snpsClinvarPromise])
+        RSVP.all ([genePromise, snpsGwasPromise, snpsClinvarPromise, diseasePromise])
             .then (function (resps) {
+                var disease = resps[3];
                 var gene = resps[0];
+                fillSNPLegend (gene, disease);
                 var gene_extent = [gene.start, gene.end];
                 var gwas_extent = resps[1].extent;
                 var clinvar_extent = resps[2].extent;
@@ -470,6 +506,53 @@ var cttv_genome_browser = function() {
 
         });
 
+
+        var fillSNPLegend = function (gene, disease) {
+            var snp_legend_data = [];
+            if (disease) {
+                snp_legend_data.push({
+                    label: "SNP in " + gene.display_name + " associated with " + disease.label,
+                    color: snpColors.TargetDisease
+                });
+                snp_legend_data.push({
+                    label: "SNP associated with " + disease.label + " in other genes",
+                    color: snpColors.Disease
+                });
+            }
+            snp_legend_data.push({
+                label: "SNP in " + gene.display_name,
+                color: snpColors.Target
+            });
+            snp_legend_data.push({
+                label: "SNP in other genes",
+                color: snpColors.Other
+            });
+
+            var snp_new_legend = snp_legend_div.selectAll(".tnt_snp_legend")
+                .data(snp_legend_data)
+                .enter()
+                .append("div")
+                .attr("class", "tnt_snp_legend");
+
+            snp_new_legend
+                .append("div")
+                .attr("class", "tnt_legend_item")
+                .style("display", "inline-block")
+                .style("margin", "0px 5px 0px 15px")
+                .style("width", "10px")
+                .style("height", "10px")
+                .style("border", "1px solid #000")
+                .style("background", function(d){
+                    return d.color;
+                });
+
+            snp_new_legend
+                .append("text")
+                .text(function(d) {
+                    return d.label;
+                });
+
+        };
 
         // Links div
         var links_pane = d3.select(div)
@@ -532,6 +615,7 @@ var cttv_genome_browser = function() {
     /// UTILITY METHODS     ////
     ///*********************////
     // Private methods
+
     var buildEnsemblLink = function() {
         var url = "http://www.ensembl.org/" + gBrowser.species() + "/Location/View?r=" + gBrowser.chr() + "%3A" + gBrowser.from() + "-" + gBrowser.to();
         return url;

@@ -1056,3 +1056,10 @@ cttv-slider .slider .handle {
   stroke-width: 1.25px;
   cursor: ew-resize;
 }
+
+.tnt_legend_div {
+    margin-top: 10px;
+}
+.tnt_legend_header {
+    font-weight: bold;
+}
