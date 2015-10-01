@@ -11,8 +11,8 @@ var legend = function () {
         "Oryctolagus_cuniculus" : true, // Rabbit
         "Rattus_norvegicus" : true, // Rat
         "Sus_scrofa" : true, // Pig
-        "Xenopus_tropicalis" : true, // Frog
-        "Danio_rerio" : true // Zebrafish
+        "Xenopus_tropicalis" : false, // Frog
+        "Danio_rerio" : false // Zebrafish
     };
 
     var scientific2common = {
@@ -68,12 +68,10 @@ var legend = function () {
             .enter()
             .append("span")
             .style("display", "block");
-            checkbox
+
+        checkbox
             .append("input")
             .attr("type", "checkbox")
-            .attr("checked", function (d) {
-                return d.checked;
-            })
             .attr("name", "spcheck")
             .attr("value", function (d) {
                 return d.name;
@@ -94,6 +92,13 @@ var legend = function () {
                     currentSps = allSps;
                 }
                 update(currentSps);
+            })
+            .each (function (d) {
+                console.log(this);
+                if (d.checked) {
+                    d3.select(this)
+                        .attr("checked", true);
+                }
             });
 
         checkbox
@@ -124,6 +129,16 @@ var legend = function () {
         }
         update = cbak;
         return this;
+    };
+
+    l.selectedSpecies = function () {
+        var selected = [];
+        for (var sp in species) {
+            if (species.hasOwnProperty(sp) && species[sp]) {
+                selected.push(speciesTaxonIds[sp]);
+            }
+        }
+        return selected;
     };
 
     return l;
