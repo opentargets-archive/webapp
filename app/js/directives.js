@@ -1277,7 +1277,7 @@ angular.module('cttvDirectives', [])
             templateUrl: 'partials/facets.html',
 
             link: function (scope, elem, attrs) {
-                scope.dataDistribution =
+                //scope.dataDistribution =
                 scope.filters = cttvFiltersService.getFilters();
                 scope.selectedFilters = cttvFiltersService.getSelectedFilters();
                 scope.deselectAll = cttvFiltersService.deselectAll;
