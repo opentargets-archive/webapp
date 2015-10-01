@@ -89,32 +89,32 @@ var bubblesView = function () {
             legend
                 .append("rect")
                 .attr("x", 0)
-                .attr("y", 0)
+                .attr("y", -5)
                 .attr("width", 80)
-                .attr("height", 5)
+                .attr("height", 10)
                 .attr("fill", "#c6dcec");
             legend
                 .append("rect")
                 .attr("class", "cttv_bubblesView_legendBar")
                 .attr("x", 0)
-                .attr("y", 0)
-                .attr("width", 0)
-                .attr("height", 5)
-                .attr("fill", d3.rgb(62,139,173));
-            legend
-                .append("polygon")
-                .attr("points", "0,5 -5,15 5,15")
-                .attr("fill", "none")
-                .attr("stroke", "black")
-                .attr("stroke-width", 2);
-
-            legend
-                .append("text")
-                .attr("class", "cttv_bubblesView_currentMaxValue")
-                .attr("x", 0)
                 .attr("y", -5)
-                .attr("text-anchor", "middle")
-                .text("0");
+                .attr("width", 0)
+                .attr("height", 10)
+                .attr("fill", d3.rgb(62,139,173));
+            // legend
+            //     .append("polygon")
+            //     .attr("points", "0,5 -5,15 5,15")
+            //     .attr("fill", "none")
+            //     .attr("stroke", "black")
+            //     .attr("stroke-width", 2);
+
+            // legend
+            //     .append("text")
+            //     .attr("class", "cttv_bubblesView_currentMaxValue")
+            //     .attr("x", 0)
+            //     .attr("y", -5)
+            //     .attr("text-anchor", "middle")
+            //     .text("0");
 
             legend
                 .append("text")

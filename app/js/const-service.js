@@ -23,6 +23,7 @@ angular.module('cttvServices').
             dbs : {
                 EXPRESSION_ATLAS :    "expression_atlas",
                 UNIPROT :             "uniprot",
+                UNIPROT_LITERATURE:   "uniprot_literature",
                 REACTOME :            "reactome",
                 EVA :                 "eva",
                 PHENODIGM :           "phenodigm",

@@ -6,13 +6,16 @@ var expect = chai.expect;
 
 
 // Index Page
+var HomePage = require("./Pages/HomePage.js");
 describe('cttv index page', function() {
     beforeEach (function () {
-        browser.get('index.html', 10000);
+        this.timeout=10000;
+        homePage = new HomePage();
     });
 
     it('should have a title', function() {
-        expect(browser.getTitle()).to.eventually.equal('CTTV Core - Home');
+        this.timeout = 5000;
+        expect(browser.getTitle()).to.eventually.contain('CTTV Platform');
     });
 
     describe ('footer', function () {
@@ -27,7 +30,6 @@ describe('cttv index page', function() {
         it('links the FAQ', function () {
             var footerFAQlink = element(by.css('.footer a[href="/faq"]'));
             footerFAQlink.click();
-            //browser.waitForAngular();
             expect(browser.getCurrentUrl()).to.eventually.contain("/faq");
         });
         it('contains a link to the Release Notes', function () {

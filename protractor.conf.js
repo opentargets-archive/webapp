@@ -2,10 +2,12 @@ exports.config = {
     allScriptsTimeout: 11000,
 
     specs: [
-        //'test/e2e/*.js'
-        'test/e2e/index.js',
+
+        // 'test/e2e/*.js'
+        // 'test/e2e/home.js',
         'test/e2e/targetAssociation.js',
-        'test/e2e/targetProfile.js'
+        // 'test/e2e/evidence.js',
+        // 'test/e2e/targetProfile.js'
     ],
 
     // multiCapabilities: [
@@ -15,7 +17,7 @@ exports.config = {
     // ],
 
     capabilities: {
-        'browserName': 'chrome'
+        'browserName': 'firefox'
     },
 
     getPageTimeout: 10000,

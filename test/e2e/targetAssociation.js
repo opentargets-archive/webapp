@@ -4,50 +4,80 @@ var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var expect = chai.expect;
 
-
+// Test common sections
+var commonTests = require("./common.js");
 
 
 // Target Associations Page
+var TargetAssociationPage = require("./Pages/TargetAssociationPage.js");
 describe ('cttv target association page', function () {
     beforeEach(function () {
-        browser.get('/target/ENSG00000157764/associations');
+        this.timeout(5000);
+        page = new TargetAssociationPage();
     });
+
+    // Describe common sections
+    commonTests();
+
+    // Associations Header
+    describe ('Associations header', function () {
+        beforeEach(function () {
+            header = page.header;
+            // browser.waitForAngular();
+        });
+        it("exists", function () {
+            expect(header.isPresent()).to.eventually.equal(true);
+        });
+        it ("has the correct message", function () {
+            expect(header.getText()).to.eventually.contain("Diseases associated with BRAF");
+        });
+        it ("has the same number of associated disease as in the table", function () {
+            page.selectTable;
+
+            var text;
+            // Wait for the number of diseases to update
+            header.getText()
+                .then(function (val) {
+                    text = val;
+                    return val;
+                })
+                .then(function (val) {
+                    return page.tableHeader;
+                })
+                .then (function (tableHeader) {
+                    return tableHeader.getText();
+                })
+                .then (function (tableVal) {
+                    var nInHeader = text.split("\n")[1].split(" ")[1];
+                    var nInTable = tableVal.split(" ")[5];
+                    expect(nInHeader).to.be.equal(nInTable);
+                });
+        });
+
+    });
+
+    // Bubbles View
     describe ('bubbles view', function () {
         beforeEach(function () {
-            svg = element(by.css('cttv-target-associations-bubbles svg'));
-            waitForLoad(svg);
+            bubbles = page.bubblesView;
         });
         it('the container exists', function () {
-            var container = element(by.css("cttv-target-associations-bubbles"));
-            expect(container.isPresent()).to.eventually.equal(true);
+            expect(bubbles.isPresent()).to.eventually.equal(true);
         });
         it('the container renders a svg', function () {
+            var svg = page.bubblesViewSvg;
             expect(svg.isPresent()).to.eventually.equal(true);
         });
         it('has dimensions', function () {
-            expect(svg.getAttribute('width')).to.eventually.be.above(0);
-            expect(svg.getAttribute('height')).to.eventually.be.above(0);
+            var svg = page.bubblesViewSvg;
+            expect(svg.getAttribute('width')).to.eventually.be.above(10);
+            expect(svg.getAttribute('height')).to.eventually.be.above(10);
         });
         describe ('legend', function () {
             it ('is present', function () {
-                var legend = element.all(by.css("svg g")).get(2);
+                var legend = page.bubblesViewLegend;
                 expect(legend.isPresent());
             });
         });
     });
 });
-
-// Aux functions
-function waitForLoad(elem) {
-    browser.wait (function () {
-        var deferred = protractor.promise.defer();
-        //element(by.css('cttv-target-associations-bubbles svg'))
-        elem
-            .isPresent()
-            .then(function (val) {
-                deferred.fulfill(val);
-            }
-        );
-        return deferred.promise;
-    }, 3000);
-}
