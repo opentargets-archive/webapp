@@ -94,7 +94,6 @@ var legend = function () {
                 update(currentSps);
             })
             .each (function (d) {
-                console.log(this);
                 if (d.checked) {
                     d3.select(this)
                         .attr("checked", true);
