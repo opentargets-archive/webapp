@@ -27,7 +27,7 @@
                     <li><a href="#disease_association">Disease Association page</a></li>
                     <li><a href="#disease_profile">Disease Profile page</a></li>
                     <li><a href="#target_profile">Target Profile page</a></li>
-					<li><a href="#scoring">Scoring</a></li>
+                    <li><a href="#scoring">Scoring target-disease associations</a></li>
                 </ul>
             </div>
         </div>
@@ -71,9 +71,24 @@
 	Click on ‘View evidence details’ to view detailed <a href="#target_disease">Target-Disease Evidence page</a> for the association, click on the ‘P’ icon to view
 	the <a href="#disease_profile">Disease Profile page</a> or the ‘A’ icon to view all the target associations of that disease.</p>
 
-	<p>Filters are available on the left of the page to restrict the associations that are displayed by data type or to focus on a therapeutic area.</p>
+	<p>Filters are available on the left of the page to restrict the associations that are displayed by score, data type or to focus on a therapeutic area.</p>
 
-	<h4>‘Data types' filters</h4>
+	<h4>Association strength filter</h4>
+	<p>Target associations can be filtered by strength from the lowest evidence-supported association strength ('low') to the strongest evidence-supported association strength ('high').
+	Clicking on any of the proposed options ('none', 'low', 'medium' or 'high') will change the number of diseases reported and will update the data distribution histogram accordingly.</p>
+	<ul>
+	<li>By default, all the association between a target a set of diseases are shown on the Target Association page ('none').
+	It's reflected in the association strength panel with the 'none' radio button selected by default along with the data distribution histogram of all diseases binned by association score.</li>
+	<li>Clicking on the 'low' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.2. This is reflected in the data distribution histogram where the lower bin (0.0-0.2) is in grey.</li>
+	<li>Clicking on the 'medium' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.6. The overall score of an association between a target and a disease is rescaled by dividing by 3 each datatype score to report the strongest associations. This is reflected in the data distribution histogram where the score bin range (0.8-1.0) is highlighted and the new distribution of the disease association score.</li>
+	<li>Clicking on the 'high' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.8. The overall score of an association between a target and a disease is also rescaled by dividing by 5 each datatype score to report the strongest associations. This is reflected in the data distribution histogram where the score bins range (0.8-1.0) is highlighted and the new distribution of the disease association score.</li>
+	</ul>
+	
+	<h4>Data distribution</h4>
+	<p>By default and in combination with the Association strengh filter, the score distribution of all the disease associated with a target is displayed as an histogram.</p>
+	<p>Any change in the Association strength filter will be reflected in the histogram.</p>
+	
+	<h4>'Data types' filters</h4>
 	<p>The diseases displayed in these views can be restricted by the <a href="#data_types">data types</a> for which they have evidence.
 	The number of associated diseases is indicated next to each data type.
 	Clicking/unclicking on a data type filter updates the Bubble, Table or Tree representation accordingly.</p>
@@ -250,6 +265,7 @@
 	clinical trials in the USA) are being displayed. Clinical indication data from
 	other countries is being reviewed and processed.</p>
 
+
 	<h5><i>RNA expression</i></h5>
 	<p>The EBI <a target="_blank" href="http://www.ebi.ac.uk/gxa/home">Expression Atlas&nbsp;<i class="fa fa-external-link"></i></a> database provides information on gene expression
 	patterns under different biological conditions.
@@ -265,13 +281,13 @@
 	the relative rank of the gene expression fold change of that gene in comparison
 	 to all other genes for this experiment.</p>
 
-	<h5><i>Literature Mining</i></h5>
-	<p>Evidence of a positive association between a gene and a disease can be extracted automatically by mining the up-to-date and extended scientific literature corpus.</p>
-	<p>Europe PubMed Central (Europe PMC for short) is a unique, free, information resource for biomedical and health researchers that provides access to 30.4 million+ abstracts and 3.3 million+ full text research articles from PubMed and PubMed Central. For CTTV, Europe PMC supplies evidence of links between genes and diseases by mining the titles, abstracts and full text research articles using an entity-to-entity recognition approach.</p>
-	<p>As a complement of Europe PMC text mined information, CTTV integrates also MEDLINE literature mined information from DisGeNET via a NLP-based approach.<p>
+	<h5><i>Biomedical literature mining</i></h5>
+	<p>Evidence of disease associated genes can be extracted automatically by mining the up-to-date and worldwide biomedical literature corpus.</p>
+	<p><a target="_blank" href="http://europepmc.org/">Europe PubMed Central&nbsp;<i class="fa fa-external-link"></i></a> (Europe PMC for short) is a unique, free, information resource for biomedical and health researchers that provides access to 30.4 million+ abstracts and 3.3 million+ full text research articles from PubMed and PubMed Central. For CTTV, Europe PMC supplies evidence of links between genes and diseases by mining the titles, abstracts and full text research articles using an entity-to-entity recognition approach.</p>
+	<p>As a complement of Europe PMC text mined information, CTTV integrates also MEDLINE literature mined information from <a target="_blank" href="http://www.disgenet.org/">DisGeNET&nbsp;<i class="fa fa-external-link"></i></a> via a NLP-based approach.<p>
 	<p>The Literature Mining data table shows the most relevant research articles based on the number of times an association between a gene and a disease is found across the article and highlights the relevant sentences.</p>
-	
-	
+
+
 	<h5><i>Affected pathways</i></h5>
 	<p>The EBI <a target="_blank" href="http://www.reactome.org">Reactome&nbsp;<i class="fa fa-external-link"></i></a> database manually curates and identifies reaction
 	pathways that are affected by pathogenic mutations.</p>
@@ -328,6 +344,28 @@
 <li>The Drug section displays FDA-approved drugs that interact with the target from the <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL&nbsp;<i class="fa fa-external-link"></i></a> database. In the <a href="#target_profile">Target Profile page</a>, all drugs towards this target are displayed independent of disease.</li>
 <li>The Bibliography section page comes from the sources of literature data used to annotate the corresponding protein entry in <a target="_blank" href="http://www.uniprot.org/">EBI UniProt&nbsp;<i class="fa fa-external-link"></i></a> and is provided through <a target="_blank" href="http://europepmc.org/">EUROPE PubMed Central&nbsp;<i class="fa fa-external-link"></i></a>.
 	</ul>
+	
+    <h3><a name="scoring">Scoring target-disease associations</a></h3>
+	<p>One of the aims of the CTTV platform is to allow prioritisation of targets based on their associated evidence. 
+	A scoring system has been developed to help you to answer to questions such as:
+	<ul>
+	<li>Which target has the most/best evidence for association with a specific disease?</li>
+	<li>What is the relative weight of evidence between different targets for a disease?</li>
+	</ul>
+	The score quantifies what CTTV believe to be the key factors relating to the confidence in the evidence.</p>
+	<h4>Basic scoring concepts</h4>
+	<p>Initially derived from genetic evidence, a score is composed of building blocks provided by each individual data sources:
+	<math>
+		Score = f &#215; S &#215; C
+	</math>
+	With:
+	<ul>
+		<li>f corresponds to a frequency / association specificity component,</li>
+		<li>S denotes the severity or impact of the mutation on the target gene and</li>
+		<li>C represents a numerical confidence value specific to this evidence string</li>
+	</ul>
+   Negative scores correspond to negative evidence (although not implemented in the current version). 
+   A score of 0 corresponds to no evidence.</p>
     </div>
   </div>
 
