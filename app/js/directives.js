@@ -1591,7 +1591,9 @@ angular.module('cttvDirectives', [])
                         scope.max = o.max;
                     }
 
+
                     if(scope.controls.toLowerCase()==="true"){
+
                         var mybrush = d3.svg.brush()
                             .x(x)
                             .extent([scope.min, scope.max])
@@ -1611,13 +1613,11 @@ angular.module('cttvDirectives', [])
                         gBrush.selectAll("rect")
                             .attr("height", height);
 
-
-                        function onBrushEnd(){
+                        var onBrushEnd = function(){
                             d3.select(this).call(mybrush.extent([scope.min, scope.max]));
                         }
 
-
-                        function onBrush(){
+                        var onBrush = function(){
                             var extent0 = mybrush.extent();
                             update( {
                                 min: cttvUtils.roundToNearest(extent0[0], tick).toFixed(2), // extent0[0].toFixed(2),
@@ -1625,6 +1625,7 @@ angular.module('cttvDirectives', [])
                             } );
                             //mybrush.extent(scope.min, scope.max);
                         }
+
                     }
                 }
 
@@ -1678,7 +1679,7 @@ angular.module('cttvDirectives', [])
      * A generic slider
      */
     .directive('cttvSlider', ['$log', 'cttvUtils', function ($log, cttvUtils) {
-        'use strict';
+        //'use strict';
 
         return {
 
@@ -1901,7 +1902,7 @@ angular.module('cttvDirectives', [])
                         // attach event after initial animation is triggered (hack, I confess)
                         brush.on("brushend", function(){ scope.$apply(onBrushEnd) });
 
-                        function onBrush() {
+                        var onBrush = function() {
                             var value = brush.extent()[0];
 
                             if (d3.event.sourceEvent) { // not a programmatic event
@@ -1916,7 +1917,7 @@ angular.module('cttvDirectives', [])
                             handle.attr("cx", x(value));
                         }
 
-                        function onBrushEnd() {
+                        var onBrushEnd = function() {
                             // update the scope value when finishing brushing
                             if (d3.event.sourceEvent) { // not a programmatic event
                                 scope.value = v( brush.extent()[0] );

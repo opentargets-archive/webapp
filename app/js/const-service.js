@@ -64,7 +64,19 @@ angular.module('cttvServices').
             ACCESS_LEVEL_PUBLIC: 'public',
             ACCESS_LEVEL_PRIVATE: 'private',
             config : {
-                SHOW_ACCESS_LEVEL : false
+                SHOW_ACCESS_LEVEL : false,
+                evidence_sources : {
+                    genetic_association : {
+                        common : [],
+                        rare : []
+                    },
+                    somatic_mutation : [],
+                    known_drug : [],
+                    rna_expression : [],
+                    affected_pathway : [],
+                    animal_model : [],
+                    literature : []
+                }
             }
         };
 
