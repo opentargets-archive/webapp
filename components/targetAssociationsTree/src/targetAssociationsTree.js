@@ -187,7 +187,8 @@ var geneAssociationsTree = function () {
             "width" : "50%"
         });
 
-	var legendColors = ["#ffffff", "#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
+	//var legendColors = ["#ffffff", "#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
+    var legendColors = ["#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
 
     legendBar
         .append("span")
@@ -207,7 +208,7 @@ var geneAssociationsTree = function () {
             "display" : "block",
             "width" : "20px",
             "height" : "20px",
-            "border" : "0.5px solid #FFF",
+            "border" : "1px solid #FFF",
             "float" : "left",
         })
         .style("background", function (d) {

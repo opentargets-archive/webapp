@@ -10,7 +10,7 @@
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'clearUnderscoresFilter', '$modal', '$compile', '$http', '$q', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, clearUnderscores, $modal, $compile, $http, $q) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', '$modal', '$compile', '$http', '$q', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, $modal, $compile, $http, $q) {
         'use strict';
         $log.log('TargetDiseaseCtrl()');
 
@@ -19,7 +19,7 @@
         var searchObj = cttvUtils.search.translateKeys($location.search());
         console.log(searchObj);
 
-        var dbs = cttvConsts.dbs;
+        // var dbs = cttvConsts.dbs;
         var datatypes = cttvConsts.datatypes;
 
         //
@@ -203,7 +203,6 @@
                 then(
                     function(resp) {
                         $log.log("getFlowerData response");
-                        console.warn(resp);
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].datatypes);
                         for(var i=0; i<resp.body.data[0].datatypes.length; i++){
                             $scope.search.association_scores[resp.body.data[0].datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score;
@@ -275,7 +274,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1000,
-                datasource: dbs.GWAS,
+                datasource: cttvConfig.evidence_sources.genetic_association.common,
                 fields:[
                     "disease",
                     "evidence",
@@ -374,7 +373,7 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL    // TODO: this should come from config, so we can hide it for our installation
+                        "visible" : cttvConfig.show_access_level    // TODO: this should come from config, so we can hide it for our installation
                     }
                 ],
                 /*"columns": [
@@ -403,7 +402,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1100,
-                datasource: [dbs.UNIPROT, dbs.EVA, dbs.UNIPROT_LITERATURE],
+                datasource: cttvConfig.evidence_sources.genetic_association.rare,
                 fields: [
                     "disease.efo_info",
                     "evidence",
@@ -527,7 +526,7 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL
+                        "visible" : cttvConfig.show_access_level
                     }
                 ],
             }, $scope.search.info.title+"-rare_diseases") );
@@ -570,7 +569,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1000,
-                datasource: dbs.REACTOME,
+                datasource: cttvConfig.evidence_sources.pathway,
                 fields: [
                     "target",
                     "disease",
@@ -657,7 +656,7 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL
+                        "visible" : cttvConfig.show_access_level
                     }
                 ],
             }, $scope.search.info.title+"-disrupted_pathways") );
@@ -677,7 +676,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1000,
-                datasource: dbs.EXPRESSION_ATLAS,
+                datasource: cttvConfig.evidence_sources.rna_expression,
                 fields: [
                     "disease",
                     "evidence",
@@ -781,7 +780,7 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL
+                        "visible" : cttvConfig.show_access_level
                     }
                 ],
             }, $scope.search.info.title+"-RNA_expression") );
@@ -801,7 +800,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1000,
-                datasource: [dbs.CANCER_GENE_CENSUS, dbs.EVA_SOMATIC],    // TODO: pull EVA data too, when it's ready
+                datasource: cttvConfig.evidence_sources.somatic_mutation ,
                 fields: [
                     "disease.efo_info", // disease
                     "evidence.evidence_codes_info",  // evidence source
@@ -886,7 +885,7 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL
+                        "visible" : cttvConfig.show_access_level
                     }
                 ],
             }, $scope.search.info.title+"-somatic_mutations") );
@@ -917,7 +916,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1000,
-                datasource: dbs.PHENODIGM,
+                datasource: cttvConfig.evidence_sources.animal_model,
                 fields: [
                     "disease",
                     "evidence",
@@ -1002,7 +1001,7 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL    // TODO: this should come from config, so we can hide it for our installation
+                        "visible" : cttvConfig.show_access_level    // TODO: this should come from config, so we can hide it for our installation
                     }
                 ],
             }, $scope.search.info.title+"-mouse_models") );
@@ -1134,7 +1133,7 @@
                 disease:$scope.search.disease,
                 size: $scope.search.literature.maxShow,
                 expandefo: true,
-                datasource: [dbs.DISGENET, dbs.EPMC],   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
+                datasource: cttvConfig.evidence_sources.literature,   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
                 //datasource: [dbs.EPMC, dbs.DISGENET],
                 fields: [
                     "disease",  // take disease.efo_info[0].label and disease.efo_info[0].efo_id
@@ -1338,7 +1337,7 @@
                     },
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL    // TODO: this should come from config, so we can hide it for our installation
+                        "visible" : cttvConfig.show_access_level    // TODO: this should come from config, so we can hide it for our installation
                     }
                 ],
             }, $scope.search.info.title+"-text_mining") );
