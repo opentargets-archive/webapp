@@ -71,9 +71,24 @@
 	Click on ‘View evidence details’ to view detailed <a href="#target_disease">Target-Disease Evidence page</a> for the association, click on the ‘P’ icon to view
 	the <a href="#disease_profile">Disease Profile page</a> or the ‘A’ icon to view all the target associations of that disease.</p>
 
-	<p>Filters are available on the left of the page to restrict the associations that are displayed by data type or to focus on a therapeutic area.</p>
+	<p>Filters are available on the left of the page to restrict the associations that are displayed by score, data type or to focus on a therapeutic area.</p>
 
-	<h4>‘Data types' filters</h4>
+	<h4>Association strength filter</h4>
+	<p>Target associations can be selected by strength starting from all associations ('none') and then from the lowest evidence-supported association strength ('low') to the strongest evidence-supported association strength ('high').
+	Clicking on any of the proposed options ('none', 'low', 'medium' or 'high') will change the number of diseases reported and will update the data distribution histogram accordingly.</p>
+	<ul>
+	<li>By default, all the association between a target a set of diseases are shown on the Target Association page. 
+	It's reflected in the association strength panel with the 'none' radio button selected by default along with the data distribution histogram of all diseases binned by association score.</li>
+	<li>Clicking on the 'low' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.2. This is reflected in the data distribution histogram where the lower bin (0.0-0.2) is in grey.</li>
+	<li>Clicking on the 'medium' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.6. The overall score of an association between a target and a disease is rescaled by dividing by 3 each datatype score to report the strongest associations. This is reflected in the data distribution histogram where the score bin range (0.8-1.0) is highlighted.</li>
+	<li>Clicking on the 'high' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.8. The overall score of an association between a target and a disease is also rescaled by dividing by 5 each datatype score to report the strongest associations. This is reflected in the data distribution histogram where the score bins range (0.8-1.0) is highlighted.</li>
+	</ul>
+	
+	<h4>Data distribution</h4>
+	<p>By default and in combination with the Association strengh filter, the score distribution of all the disease associated with a target is displayed as an histogram.</p>
+	<p>Any change in the Association strength filter will be reflected in the histogram.</p>
+	
+	<h4>'Data types' filters</h4>
 	<p>The diseases displayed in these views can be restricted by the <a href="#data_types">data types</a> for which they have evidence.
 	The number of associated diseases is indicated next to each data type.
 	Clicking/unclicking on a data type filter updates the Bubble, Table or Tree representation accordingly.</p>
