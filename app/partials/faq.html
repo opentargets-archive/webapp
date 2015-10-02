@@ -22,13 +22,13 @@
 
     </div>
     <div class="col-sm-9 faqs">
-    <h2><a name="about">Frequently asked questions</a></h2>
+    <h2>Frequently asked questions</h2>
 
     <h3><a id="search-box" name="search_box">What can I search for?</a></h3>
 		<p>To find a target you can search for the gene or protein name and symbol (including their synonyms) as annotated in major biological databases.</p>
 		<p>To find a disease you can search for the common disease name and its synonyms (including some abbreviations) as described in the <a href="http://www.ebi.ac.uk/efo/" target="_blank">EFO</a> ontology</p>
 
-    <h3><a id="data-provenance" name="data-provenance">Where does the data come from?</h3>
+    <h3><a id="data-provenance" name="data-provenance">Where does the data come from?</a></h3>
         <p>The data in the CTTV Core platform comes from a number of different sources: 
         <ul>
         <li>The <a href="http://www.ebi.ac.uk/fgpt/gwas/" target="_blank">GWAS Catalog&nbsp;<i class="fa fa-external-link"></i></a> provides evidence on the association of targets (genes) and diseases from Genome Wide Association Studies (GWAS).  The GWAS Catalog provides a list of the most associated variants (SNPs) by genomic region with the disease form each study.  The association is assigned the most likely gene by assessing the probable link between SNP and gene. SNPs are assigned to a gene by first considering any deleterious consequence within the genes coding region, then whether it is located within the gene's introns or regulatory regions and finally identifying the gene promoter to which it is nearest if there is no other data. </li>
@@ -43,25 +43,25 @@
         </ul>
         </p>
 
-    <h3><a id="association-score" name="association-score">How is the association score calculated?</h3>
+    <h3><a id="association-score" name="association-score">How is the association score calculated?</a></h3>
         <p>The overall association score between a target and a disease is a numerical value indicating the strength of the association.</p>
 		<p>The value is in the range 0 to 1, with 1 indicating the strongest association.</p>
 		<p>The association score is produced by combining the scores for the target and disease from the individual datatypes (genetic associations, known drugs, etc.), which themselves can combine several data sources. Each association from each data source provides a score that includes terms for the frequency that the association is seen compared to other associations, the strength or severity of the effect, and the confidence of the study that provided the association.  See detailed breakdown of data source scores(link) These scores also range between 0 and 1 and are summed after applying scaling factors to give datatype scores. 
 			In this summing process the max score is capped at 1. Datatype scores are then summed again after scaling to give the overall association score.</p>
 
-    <h3><a id="association-score-filter" name="association-score-filter">What is the association strength filter?</h3>
+    <h3><a id="association-score-filter" name="association-score-filter">What is the association strength filter?</a></h3>
         <p>The score filter allows associations to be filtered by score. 
            There are 4 filter settings that refine the associations shown from all associations at the minimum to only the strongest at the max setting. 
            Applying the 2 highest filter setting also stretches the score range to provide higher resolutions at the highest scores.
         </p>
                     
-    <h3><a id="association-score-filter-datatype" name="association-score-filter-datatype">Will the score change if I filter by datatype?</h3>
+    <h3><a id="association-score-filter-datatype" name="association-score-filter-datatype">Will the score change if I filter by datatype?</a></h3>
         <p>Filtering by data type now does not change the association score but instead requires that the associations have evidence form that data type. </p>
         
-	<h3><a id="disease-citation" name="disease-citation">How are the articles shown in the Bibliography chosen?</h3>
+	<h3><a id="disease-citation" name="disease-citation">How are the articles shown in the Bibliography chosen?</a></h3>
         <p>The list of citations appearing in the Bibliography section of the target page comes from the the literature citations that are the sources of data used to annotate the corresponding protein entry in UniProt.</p>
 			
-    <h3><a id="security" name="security">Is the information I enter into the CTTV Beta platform confidential?</h3>
+    <h3><a id="security" name="security">Is the information I enter into the CTTV Beta platform confidential?</a></h3>
         <p>GSK, Sanger and the EBI are bound by a mutual confidentiality agreement. All information that you type in and retrieve from the Beta site is confidential and won't be disclosed to anyone outside these three organisations. </p>
         <p>However, if you have signed a confidentiality agreement with a third party about a particular project, please don't use the CTTV platform to retrieve information about this project.</p>
         <p>We use standard encryption methods to keep the site secure. </p>
