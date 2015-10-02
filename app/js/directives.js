@@ -138,6 +138,9 @@ angular.module('cttvDirectives', [])
                 * without destroying and recreating the table
                 */
                 var updateTable = function (table, facets) {
+
+                    $log.log("*** update heatmap ***");
+
                     scope.loadprogress = true;
 
 
