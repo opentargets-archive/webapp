@@ -246,6 +246,7 @@ angular.module('cttvDirectives')
                     $log.warn(resp);
 
                     var data = resp.body.data;
+                    scope.$parent.updateFacets(resp.body.facets);
                     if (_.isEmpty(data)) {
                         updateView ();
                         return;

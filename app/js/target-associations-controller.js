@@ -58,53 +58,6 @@ angular.module('cttvControllers')
 
 	$scope.loading = false;
 
-    /*
-	// datatypes filter
-    $scope.dataTypes = [
-        {
-            name: "genetic_association",
-            label: "Genetics",
-            labelFull: "Genetic associations",
-            selected: true
-        },
-        {
-            name: "somatic_mutation",
-            label: "Somatic",
-            labelFull: "Somatic mutations",
-            selected: true
-        },
-        {
-            name: "known_drug",
-            label: "Drugs",
-            labelFull: "Known drugs",
-            selected: true
-        },
-        {
-            name: "rna_expression",
-            label: "RNA",
-            labelFull: "RNA expression",
-            selected: true
-        },
-        {
-            name: "affected_pathway",
-            label: "Pathways",
-            labelFull: "Affected pathways",
-            selected: true
-        },
-        {
-            name: "animal_model",
-            label: "Models",
-            labelFull: "Mouse models",
-            selected: true
-        },
-        {
-            name: "literature",
-            label: "Text Mining",
-            labelFull: "Text Mining",
-            selected: true
-        }
-    ];
-    */
 
 	$scope.toggleDataTypes = function () {
 	    $scope.toggleNavigation();
@@ -175,6 +128,7 @@ angular.module('cttvControllers')
     $scope.filter(filters);
 
     $scope.updateFacets = function (facets) {
+        $log.log("**** updateFacets() ****");
         cttvFiltersService.updateFacets(facets, "unique_disease_count");
     };
 
@@ -257,7 +211,7 @@ angular.module('cttvControllers')
             cttvAPIservice.defaultErrorHandler
         );
 	};
-	$scope.setDiseasesInDatatypes();
+	//$scope.setDiseasesInDatatypes();
 
 	// $scope.checkFilteredOutDiseases = function () {
 	//     // if (_.isEmpty(includedDiseases) || _.isEmpty(allDiseases)) {
