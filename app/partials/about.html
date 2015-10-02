@@ -74,14 +74,14 @@
 	<p>Filters are available on the left of the page to restrict the associations that are displayed by score, data type or to focus on a therapeutic area.</p>
 
 	<h4>Association strength filter</h4>
-	<p>Target associations can be selected by strength starting from all associations ('none') and then from the lowest evidence-supported association strength ('low') to the strongest evidence-supported association strength ('high').
+	<p>Target associations can be filtered by strength from the lowest evidence-supported association strength ('low') to the strongest evidence-supported association strength ('high').
 	Clicking on any of the proposed options ('none', 'low', 'medium' or 'high') will change the number of diseases reported and will update the data distribution histogram accordingly.</p>
 	<ul>
-	<li>By default, all the association between a target a set of diseases are shown on the Target Association page. 
+	<li>By default, all the association between a target a set of diseases are shown on the Target Association page ('none').
 	It's reflected in the association strength panel with the 'none' radio button selected by default along with the data distribution histogram of all diseases binned by association score.</li>
 	<li>Clicking on the 'low' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.2. This is reflected in the data distribution histogram where the lower bin (0.0-0.2) is in grey.</li>
-	<li>Clicking on the 'medium' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.6. The overall score of an association between a target and a disease is rescaled by dividing by 3 each datatype score to report the strongest associations. This is reflected in the data distribution histogram where the score bin range (0.8-1.0) is highlighted.</li>
-	<li>Clicking on the 'high' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.8. The overall score of an association between a target and a disease is also rescaled by dividing by 5 each datatype score to report the strongest associations. This is reflected in the data distribution histogram where the score bins range (0.8-1.0) is highlighted.</li>
+	<li>Clicking on the 'medium' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.6. The overall score of an association between a target and a disease is rescaled by dividing by 3 each datatype score to report the strongest associations. This is reflected in the data distribution histogram where the score bin range (0.8-1.0) is highlighted and the new distribution of the disease association score.</li>
+	<li>Clicking on the 'high' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.8. The overall score of an association between a target and a disease is also rescaled by dividing by 5 each datatype score to report the strongest associations. This is reflected in the data distribution histogram where the score bins range (0.8-1.0) is highlighted and the new distribution of the disease association score.</li>
 	</ul>
 	
 	<h4>Data distribution</h4>
@@ -265,6 +265,7 @@
 	clinical trials in the USA) are being displayed. Clinical indication data from
 	other countries is being reviewed and processed.</p>
 
+
 	<h5><i>RNA expression</i></h5>
 	<p>The EBI <a target="_blank" href="http://www.ebi.ac.uk/gxa/home">Expression Atlas&nbsp;<i class="fa fa-external-link"></i></a> database provides information on gene expression
 	patterns under different biological conditions.
@@ -280,13 +281,13 @@
 	the relative rank of the gene expression fold change of that gene in comparison
 	 to all other genes for this experiment.</p>
 
-	<h5><i>Literature Mining</i></h5>
-	<p>Evidence of a positive association between a gene and a disease can be extracted automatically by mining the up-to-date and extended scientific literature corpus.</p>
-	<p>Europe PubMed Central (Europe PMC for short) is a unique, free, information resource for biomedical and health researchers that provides access to 30.4 million+ abstracts and 3.3 million+ full text research articles from PubMed and PubMed Central. For CTTV, Europe PMC supplies evidence of links between genes and diseases by mining the titles, abstracts and full text research articles using an entity-to-entity recognition approach.</p>
-	<p>As a complement of Europe PMC text mined information, CTTV integrates also MEDLINE literature mined information from DisGeNET via a NLP-based approach.<p>
+	<h5><i>Biomedical literature mining</i></h5>
+	<p>Evidence of disease associated genes can be extracted automatically by mining the up-to-date and worldwide biomedical literature corpus.</p>
+	<p><a target="_blank" href="http://europepmc.org/">Europe PubMed Central&nbsp;<i class="fa fa-external-link"></i></a> (Europe PMC for short) is a unique, free, information resource for biomedical and health researchers that provides access to 30.4 million+ abstracts and 3.3 million+ full text research articles from PubMed and PubMed Central. For CTTV, Europe PMC supplies evidence of links between genes and diseases by mining the titles, abstracts and full text research articles using an entity-to-entity recognition approach.</p>
+	<p>As a complement of Europe PMC text mined information, CTTV integrates also MEDLINE literature mined information from <a target="_blank" href="http://www.disgenet.org/">DisGeNET&nbsp;<i class="fa fa-external-link"></i></a> via a NLP-based approach.<p>
 	<p>The Literature Mining data table shows the most relevant research articles based on the number of times an association between a gene and a disease is found across the article and highlights the relevant sentences.</p>
-	
-	
+
+
 	<h5><i>Affected pathways</i></h5>
 	<p>The EBI <a target="_blank" href="http://www.reactome.org">Reactome&nbsp;<i class="fa fa-external-link"></i></a> database manually curates and identifies reaction
 	pathways that are affected by pathogenic mutations.</p>
