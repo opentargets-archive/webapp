@@ -27,7 +27,7 @@
                     <li><a href="#disease_association">Disease Association page</a></li>
                     <li><a href="#disease_profile">Disease Profile page</a></li>
                     <li><a href="#target_profile">Target Profile page</a></li>
-					<li><a href="#scoring">Scoring</a></li>
+                    <li><a href="#scoring">Scoring target-disease associations</a></li>
                 </ul>
             </div>
         </div>
@@ -344,6 +344,28 @@
 <li>The Drug section displays FDA-approved drugs that interact with the target from the <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL&nbsp;<i class="fa fa-external-link"></i></a> database. In the <a href="#target_profile">Target Profile page</a>, all drugs towards this target are displayed independent of disease.</li>
 <li>The Bibliography section page comes from the sources of literature data used to annotate the corresponding protein entry in <a target="_blank" href="http://www.uniprot.org/">EBI UniProt&nbsp;<i class="fa fa-external-link"></i></a> and is provided through <a target="_blank" href="http://europepmc.org/">EUROPE PubMed Central&nbsp;<i class="fa fa-external-link"></i></a>.
 	</ul>
+	
+    <h3><a name="scoring">Scoring target-disease associations</a></h3>
+	<p>One of the aims of the CTTV platform is to allow prioritisation of targets based on their associated evidence. 
+	A scoring system has been developed to help you to answer to questions such as:
+	<ul>
+	<li>Which target has the most/best evidence for association with a specific disease?</li>
+	<li>What is the relative weight of evidence between different targets for a disease?</li>
+	</ul>
+	The score quantifies what CTTV believe to be the key factors relating to the confidence in the evidence.</p>
+	<h4>Basic scoring concepts</h4>
+	<p>Initially derived from genetic evidence, a score is composed of building blocks provided by each individual data sources:
+	<math>
+		Score = f &#215; S &#215; C
+	</math>
+	With:
+	<ul>
+		<li>f corresponds to a frequency / association specificity component,</li>
+		<li>S denotes the severity or impact of the mutation on the target gene and</li>
+		<li>C represents a numerical confidence value specific to this evidence string</li>
+	</ul>
+   Negative scores correspond to negative evidence (although not implemented in the current version). 
+   A score of 0 corresponds to no evidence.</p>
     </div>
   </div>
 
