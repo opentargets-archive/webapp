@@ -1135,12 +1135,13 @@
                 expandefo: true,
                 datasource: cttvConfig.evidence_sources.literature,   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
                 //datasource: [dbs.EPMC, dbs.DISGENET],
-                fields: [
-                    "disease",  // take disease.efo_info[0].label and disease.efo_info[0].efo_id
-                    "evidence",
-                    "scores",
-                    "access_level"
-                ]
+                // fields: [
+                //     "disease",  // take disease.efo_info[0].label and disease.efo_info[0].efo_id
+                //     "evidence",
+                //     "scores",
+                //     "access_level",
+                //     "scoreID"
+                // ]
             };
             _.extend(opts, searchObj);
             return cttvAPIservice.getFilterBy( opts ).
@@ -1172,6 +1173,20 @@
                 finally(function(){
                     $scope.search.literature.is_loading = false;
                 });
+        };
+
+
+        var formatSource = function (id) {
+            var formatted;
+            switch (id) {
+                case 'europepmc':
+                formatted = "Europe PMC";
+                break;
+                case 'disgenet':
+                formatted = "DisGeNET";
+                break;
+            }
+            return formatted;
         };
 
 
@@ -1282,13 +1297,14 @@
                     newdata.push(row); // push, so we don't end up with empty rows
 
                     // source
-                    row.push(checkPath(item, "evidence.provenance_type.database.id") ? item.evidence.provenance_type.database.id : "");
+                    row.push(checkPath(item, "sourceID") ? formatSource(item.sourceID) : "");
 
                 }catch(e){
                     $log.error("Error parsing literature data:");
                     $log.error(e);
                 }
             });
+
 
             return newdata;
         };
