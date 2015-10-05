@@ -1,7 +1,13 @@
-<div class="cttv-facets">
+<div class="cttv-facets" ng-show="true">
+
+    <!-- Data distribution
+
+    <cttv-score-histogram data="facet.data.buckets" min="facet.filters[0].key" max="facet.filters[1].key" controls="false"></cttv-score-histogram>-->
+
 
     <!-- User selections -->
-    <div ng-show="selectedFilters.length>0" class="cttv-facets-selected-summary">
+    <!-- <div ng-show="selectedFilters.length>0" class="cttv-facets-selected-summary"> -->
+    <div ng-show="false" class="cttv-facets-selected-summary">
         <h4>Your filters</h4>
         <div class="cttv-facets-controls">
             <span ng-click="deselectAll()">Clear all <i class="fa fa-times"></i></span>
@@ -10,31 +16,32 @@
             <h5>{{collection.label | clearUnderscores | upperCaseFirst}}</h5>
             <div class="checkbox" ng-repeat="bucket in collection.filters" ng-click="bucket.toggle()" style="cursor:pointer" title="Remove filter">
                 <i class="fa fa-times-circle"></i> {{bucket.label}}
+                <!-- <div ng-repeat="subfilter in bucket.collection.filters" ng-if="subfilter.selected">
+                    <span>&nbsp;&nbsp;</span><i class="fa fa-times-circle"></i> {{subfilter.label}}
+                </div> -->
             </div>
         </div>
     </div>
+
     <!-- Facets and filters -->
     <h4>Filter by</h4>
     <accordion close-others=false>
-        <accordion-group ng-init="status = {isOpen: true}" is-open="status.isOpen" ng-repeat="filter in filters">
+        <accordion-group ng-init="status = {isOpen: true}" is-open="status.isOpen" ng-repeat="facet in filters" ng-if="facet.filters.length>0">
             <accordion-heading class="cttv-facets-headers">
-                {{filter.label | clearUnderscores | upperCaseFirst}} <i class="pull-right text-lowlight fa" ng-class="{'fa-plus-square': !status.isOpen, 'fa-minus-square': status.isOpen}"></i>
+                {{facet.label | clearUnderscores | upperCaseFirst}}<i class="pull-right text-lowlight fa" ng-class="{'fa-plus-square': !status.isOpen, 'fa-minus-square': status.isOpen}"></i>
             </accordion-heading>
 
-            <div class="cttv-facets-controls">
-                <span ng-click="filter.selectAll(false)">Clear all <i class="fa fa-times"></i></span>
-                <span ng-click="filter.selectAll(true)">Select all <i class="fa fa-check"></i></span>
-            </div>
-            <div class="checkbox" ng-repeat="bucket in filter.filters">
-                <label ng-class="(!bucket.enabled) ? 'disabled' : ''">
-                    <input type="checkbox"
-                        value="{{bucket.id}}"
-                        ng-checked="bucket.selected"
-                        ng-disabled="!bucket.enabled"
-                        ng-click="bucket.toggle()" >
-                    {{bucket.label}} <span class="text-lowlight small">({{bucket.count | metricPrefix:1}})</span>
-                </label>
-            </div>
+            <!--
+                The content panel of the facet:
+                Here we put all the templates we've got, with an ng-if statement so only the relevant one is added in
+            -->
+
+            <div cttv-datatypes-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='datatypes'"></div>
+
+            <div cttv-pathways-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='pathway_type'"></div>
+
+            <div cttv-score-facet facet='facet' ng-if="facet.key=='data_distribution'"></div>
+
 
         </accordion-group>
     </accordion>

@@ -32,7 +32,7 @@ var diseaseGraph = function () {
             .actions({
                 "focus" : function (efo) {
                     var url = cttvApi.url.disease({
-                        "efo" : efo.efo
+                        "code" : efo.efo
                     });
                     cttvApi
                         .call(url)

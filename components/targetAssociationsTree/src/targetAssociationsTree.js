@@ -187,7 +187,8 @@ var geneAssociationsTree = function () {
             "width" : "50%"
         });
 
-	var legendColors = ["#ffffff", "#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
+	//var legendColors = ["#ffffff", "#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
+    var legendColors = ["#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
 
     legendBar
         .append("span")
@@ -207,7 +208,7 @@ var geneAssociationsTree = function () {
             "display" : "block",
             "width" : "20px",
             "height" : "20px",
-            "border" : "0.5px solid #FFF",
+            "border" : "1px solid #FFF",
             "float" : "left",
         })
         .style("background", function (d) {
@@ -255,7 +256,7 @@ var geneAssociationsTree = function () {
 	if ((config.data === undefined) && (config.target !== undefined) && (config.cttvApi !== undefined)) {
 	    var api = config.cttvApi;
 	    var url = api.url.associations({
-		gene : config.target,
+		target : config.target,
 		datastructure : "tree",
 		// TODO: Add datatypes here!
 	    });
@@ -323,12 +324,20 @@ var geneAssociationsTree = function () {
     };
 
     // datatypes
-    theme.datatypes = function (dts) {
+    // theme.datatypes = function (dts) {
+    //     if (!arguments.length) {
+    //         return tooltips.datatypes();
+    //     }
+    //     tooltips.datatypes(dts);
+    //     //config.datatypes = dts;
+    //     return this;
+    // };
+
+    theme.names = function (lbs) {
         if (!arguments.length) {
-            return tooltips.datatypes();
+            return tooltips.names();
         }
-        tooltips.datatypes(dts);
-        //config.datatypes = dts;
+        tooltips.names(lbs);
         return this;
     };
 
@@ -361,6 +370,14 @@ var geneAssociationsTree = function () {
         return this;
     };
 
+    theme.filters = function (f) {
+        if (!arguments.length) {
+            return tooltips.filters();
+        }
+        tooltips.filters(f);
+        return this;
+    };
+
     function setBranchLengths (treeVis) {
         // Branch lengths:
         // First pass: Get the max depth:
@@ -373,7 +390,7 @@ var geneAssociationsTree = function () {
         };
         setDepth(treeVis.root(), 0);
 
-        var tasNodes = treeVis.root().children();
+        var tasNodes = treeVis.root().children() || [];
         var maxDepth = 0;
         var findMaxDepth = function (n) {
             var depth = n.property('__depth');

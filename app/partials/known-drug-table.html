@@ -1,0 +1,38 @@
+<p>Unique drugs listed below:
+    <span ng-repeat="drug in drugs">
+        [<a href={{drug.url}} target=_blank>{{drug.id}}</a>]
+    </span>
+</p>
+<div class="table-panel">
+    <table class='table table-striped table-bordered'>
+        <thead>
+            <tr>
+                <th rowspan="2" colspan="1"></th>
+                <th rowspan="2" colspan="1">Disease</th>
+                <th rowspan="1" colspan="6">Drug Information</th>
+                <th rowspan="1" colspan="1">Gene-Drug Evidence</th>
+                <th rowspan="2" colspan="1">Evidence source</th>
+            </tr>
+            <tr>
+                <!-- Drug information -->
+                <th>Drug</th>
+                <th>Phase</th>
+                <th>Phase (Numeric)</th>
+                <th>Type</th>
+                <th>Mechanism of Action</th>
+                <th>Activity</th>
+                <!-- <th>Clinical Indications</th> -->
+
+                <!-- Gene-Drug evidence -->
+                <!-- <th>Target name</th> -->
+                <th class="no-last-el">Target class</th>
+                <!-- <th class="no-last-element">Target</th> --><!-- we have to manually set this border, otherwise datatables thinks it's the last element and removes the border-->
+                <!-- <th class="no-last-element">Protein complex members</th> -->
+
+            </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+    </table>
+</div>

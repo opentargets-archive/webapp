@@ -20,6 +20,7 @@ var genome_browser_nav = function () {
                 }
                 return "none";
             });
+
         opts_pane
             .append("span")
             .text("Human Chr: " + gB.chr());

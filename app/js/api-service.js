@@ -32,20 +32,24 @@ angular.module('cttvServices')
             API_QUICK_SEARCH_URL : 'quickSearch',
             API_DISEASE_URL: 'disease',
             API_EXPRESSION_URL: 'expression',
+            API_TARGET_URL : 'target',
             facets: {
                 DATATYPES: 'filterbydatatype',
                 PATHWAY_TYPE: 'filterbypathway',
+                DATASOURCES: 'filterbydatasource',
+                SCORE_MIN : 'filterbyscorevalue_min',
+                SCORE_MAX : 'filterbyscorevalue_max',
+                SCORE_STR : 'stringency',
             },
         };
 
 
-
         var api = cttvApi()
-            .prefix("/api/latest/")
+            //.prefix("/api/latest/")
+            .prefix("https://alpha.targetvalidation.org/api/latest/")
             .appname("cttv-web-app")
             .secret("2J23T20O31UyepRj7754pEA2osMOYfFK")
             .onError(cttvAPI.defaultErrorHandler);
-
 
 
         // var token = {
@@ -109,6 +113,7 @@ angular.module('cttvServices')
             var deferred = $q.defer();
             var promise = deferred.promise;
             var url = api.url[queryObject.operation](queryObject.params);
+            console.warn(url);
 
             countRequest( queryObject.params.trackCall===false ? undefined : true );
             //countRequest( true );
@@ -222,10 +227,15 @@ angular.module('cttvServices')
 
 
         /**
-        * Get... mmmh.... this is actually filerby()
+        * TODO:
+        * this needs to be consolidated with the getAssociation() method as they are the exact same thing...
         */
         cttvAPI.getAssociations = function(queryObject){
             $log.log("cttvAPI.getAssociations()");
+            $log.log(queryObject);
+            //queryObject.expandefo = queryObject.expandefo || true;
+            queryObject[ cttvAPI.facets.SCORE_STR ] = queryObject[ cttvAPI.facets.SCORE_STR ] || [1] ;
+            queryObject[ cttvAPI.facets.SCORE_MIN ] = queryObject[ cttvAPI.facets.SCORE_MIN ] || [0.0] ;
 
             return callAPI({
                 operation : cttvAPI.API_ASSOCIATION_URL,
@@ -267,6 +277,7 @@ angular.module('cttvServices')
 
 
         /**
+        * D E P R E C A T E D
         * Get gene details via API gene() method based on ENSG code
         * queryObject params:
         *  - gene: the ENSG code, e.g. "ENSG00000005339"
@@ -281,12 +292,26 @@ angular.module('cttvServices')
         };
 
         /**
+        * Get gene details via API gene() method based on ENSG code
+        * queryObject params:
+        *  - target_id: the ENSG code, e.g. "ENSG00000005339"
+        */
+        cttvAPI.getTarget = function(queryObject){
+            $log.log("cttvAPI.getTarget "+queryObject.target_id);
+
+            return callAPI({
+                operation: cttvAPI.API_TARGET_URL, // + "/" + queryObject.gene,
+                params: queryObject
+            });
+        };
+
+        /**
         * Get disease details via API disease() method based on EFO ids
         * queryObject params:
-        *  - efo: the EFO code
+        *  - code: the (EFO) code
         */
         cttvAPI.getDisease = function (queryObject) {
-            $log.log ("cttvAPI.getDisease");
+            $log.log ("cttvAPI.getDisease "+queryObject.code);
 
             return callAPI ({
                 operation: cttvAPI.API_DISEASE_URL,
@@ -306,6 +331,9 @@ angular.module('cttvServices')
         cttvAPI.getAssociation = function(queryObject){
             $log.log("cttvAPI.getAssociation");
 
+            queryObject[ cttvAPI.facets.SCORE_STR ] = queryObject[ cttvAPI.facets.SCORE_STR ] || [1] ;
+            queryObject[ cttvAPI.facets.SCORE_MIN ] = queryObject[ cttvAPI.facets.SCORE_MIN ] || [0.0] ;
+
             return callAPI({
                 operation: cttvAPI.API_ASSOCIATION_URL,
                 params: queryObject
@@ -318,6 +346,7 @@ angular.module('cttvServices')
             $log.log("cttvAPI.getFilterBy");
             //queryObject.expandefo = queryObject.expandefo===true ? true : false;
             queryObject.expandefo = queryObject.expandefo || true;
+
             return callAPI({
                 operation: cttvAPI.API_FILTERBY_URL, // + "/" + queryObject.gene,
                 params: queryObject
@@ -353,7 +382,7 @@ angular.module('cttvServices')
          * It simply logs the error to the console. Can be used in then(succ, err) calls.
          */
         cttvAPI.defaultErrorHandler = function(error){
-            console.warn("CTTV API ERROR");
+            $log.warn("CTTV API ERROR");
             if (error.status === 403) {
                 //$rootScope.$emit('cttvApiError', error);
                 $rootScope.showApiErrorMsg = true;

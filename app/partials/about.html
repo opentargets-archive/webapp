@@ -27,6 +27,7 @@
                     <li><a href="#disease_association">Disease Association page</a></li>
                     <li><a href="#disease_profile">Disease Profile page</a></li>
                     <li><a href="#target_profile">Target Profile page</a></li>
+                    <li><a href="#scoring">Scoring target-disease associations</a></li>
                 </ul>
             </div>
         </div>
@@ -70,9 +71,24 @@
 	Click on ‘View evidence details’ to view detailed <a href="#target_disease">Target-Disease Evidence page</a> for the association, click on the ‘P’ icon to view
 	the <a href="#disease_profile">Disease Profile page</a> or the ‘A’ icon to view all the target associations of that disease.</p>
 
-	<p>Filters are available on the left of the page to restrict the associations that are displayed by data type or to focus on a therapeutic area.</p>
+	<p>Filters are available on the left of the page to restrict the associations that are displayed by score, data type or to focus on a therapeutic area.</p>
 
-	<h4>‘Data types' filters</h4>
+	<h4>Association strength filter</h4>
+	<p>Target associations can be filtered by strength from the lowest evidence-supported association strength ('low') to the strongest evidence-supported association strength ('high').
+	Clicking on an option ('none', 'low', 'medium' or 'high') will change the number of diseases reported and will update the data distribution histogram accordingly.</p>
+	<ul>
+	<li>By default, all the associations between a target and a set of diseases are shown on the Target Association page ('none').
+	In the association strength panel the 'none' radio button will be selected by default and the data distribution histogram will show all diseases selected, binned by association score.</li>
+	<li>Clicking on the 'low' radio button narrows the score range of associations and excludes associations with a score lower than 0.2. This is reflected in the data distribution histogram where the lower bin (0.0-0.2) is now grey.</li>
+	<li>Clicking on the 'medium' radio button narrows the score range of associations and excludes associations with a score lower than 0.6. The overall score of an association between a target and a disease is rescaled by dividing each datatype score by 3 to give higher resolution to the strongest associations. This is reflected in the data distribution histogram where the score bin range (0.6-1.0) is highlighted in blue and the new distribution of the disease association score.</li>
+	<li>Clicking on the 'high' radio button narrows the score range of associations and excludes associations with a score lower than 0.8. The overall score of an association between a target and a disease is also rescaled by dividing each datatype score by 5 to resolve the strongest associations. This is reflected in the data distribution histogram where the score bins range (0.8-1.0) is highlighted in blue and the new distribution of the disease association score.</li>
+	</ul>
+	
+	<h4>Data distribution</h4>
+	<p>By default, and in combination with the Association strength filter, the score distribution of all the diseases associated with a target is displayed as a histogram.</p>
+	<p>Any change in the Association strength filter will be reflected in the histogram.</p>
+	
+	<h4>'Data types' filters</h4>
 	<p>The diseases displayed in these views can be restricted by the <a href="#data_types">data types</a> for which they have evidence.
 	The number of associated diseases is indicated next to each data type.
 	Clicking/unclicking on a data type filter updates the Bubble, Table or Tree representation accordingly.</p>
@@ -92,7 +108,7 @@
 
 	<h4>Tree View</h4>
 	<p>The ‘Tree’ view allows visualisation of evidence across the therapeutic areas in a tree representing the relationships of diseases.</p>
-	<p>Top-level disease categories are shown at a fixed position. Clicking on a disease opens a pop-up menu that provides links to various other page,
+	<p>Top-level disease categories are shown at a fixed position. Clicking on a disease opens a pop-up menu that provides links to various other pages,
 	but also allows branches of the tree to be collapsed down to simplify the visualisation.
 	Clicking on a collapsed disease will allow the branches to be opened again.</p>
 
@@ -101,25 +117,17 @@
 	The CTTV platform integrates multiple sources of information from various public resources described below.</p>
 
 	<h4><a name="association_score"></a>Association score</h4>
-	<p>The association score between a target and a disease is a numerical value
-	indicating the confidence of their association. The value is in the range -1 to 1, where:
-	<ul>
-	<li>1 - is the maximum confidence of an association between the gene and the disease</li>
-	<li>0 - there is no known association between the gene and the disease</li>
-	<li>-1 - is the maximum confidence of a negative association between the gene and the disease</li>
-	</ul>
-	</p>
-	<p>This score is also broken down by <a href="#data_types">data types</a> and represented as a flower where each petal represents a different data type.
+	<p>The overall association score between a target and a disease is a numerical value indicating the strength of the association.</p>
+	<p>The value is in the range 0 to 1, with 1 indicating the strongest association.</p>
+	<p>The overall association score is produced by combining the scores for the target and disease from the 
+	individual <a href="#data_types">data types</a> (genetic associations, known drugs, etc.), and represented as a flower where each petal represents a different data type.
 	The amount of filled colour in each petal represents the relative score within each data type.
-	The overall association score for a particular target-disease association is calculated from the combination of scores provided
-	by each data type for that target-disease association.
-	Each association data type (genetic associations, known drugs, etc.) results from the integration of one or multiple datasources.
+	Each association data type results from the integration of one or multiple datasources.
 	The association score for each data type depends on the confidence in each association and also on the number of associations from a particular data source.</p>
 
-	<p>In the current implementation the association score is calculated as the maximum score available from any data source.
-	Filtering by data type in the <a href="#target_association">Target Association page</a> will change the overall association score.
+	Filtering by data type in the <a href="#target_association">Target Association page</a> won't change the overall association score.
 	Please note that at the moment there are no negative associations listed, and the method to calculate the association score and the data source scores
-	is temporary and will be revised in future implementations.</p>
+	may be revised in future implementations.</p>
 
 	<h4><a name="data_types"></a>Data Types</h4>
 
@@ -239,11 +247,16 @@
   </table>
 
 	<h5><i>Somatic mutations</i></h5>
-	<p>The Wellcome Trust Sanger Institute <a target="_blank" href="http://cancer.sanger.ac.uk/cosmic/">COSMIC&nbsp;<i class="fa fa-external-link"></i></a> database provides evidence from
+	<p>These mutations that may have clinical or treatment implications are extracted from the following resources:</p>
+	<ul>
+	<li>The Wellcome Trust Sanger Institute <a target="_blank" href="http://cancer.sanger.ac.uk/cosmic/">COSMIC&nbsp;<i class="fa fa-external-link"></i></a> database provides evidence from
 	somatic mutations on likely cancer drivers as manually curated in the Cancer
 	Gene Census. The <a target="_blank" href="http://cancer.sanger.ac.uk/cosmic/">COSMIC&nbsp;<i class="fa fa-external-link"></i></a> Cancer Gene Census is a catalogue of genes for which
-	mutations have been causally implicated in cancer.</p>
-
+	mutations have been causally implicated in cancer.</li>
+	<li>The <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">EBI European Variation Archive (EVA)&nbsp;<i class="fa fa-external-link"></i></a> is an open-access database of all types of genetic variation data from human.
+	For target - disease evidence we take clinically relevant somatic mutations from <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">EVA&nbsp;<i class="fa fa-external-link"></i></a> where the variation is considered pathogenic, which originates primarily
+	from the <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">ClinVar&nbsp;<i class="fa fa-external-link"></i></a> archive.</li></i>
+    </ul>
 	<h5><i>Known drugs</i></h5>
 	<p>The EBI <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL&nbsp;<i class="fa fa-external-link"></i></a> database provides evidence from known drugs where the drug
 	can be connected to a disease and a known target. <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL&nbsp;<i class="fa fa-external-link"></i></a> is an open access
@@ -251,6 +264,7 @@
 	Currently, data on FDA-approved drugs (i.e. those which are approved for
 	clinical trials in the USA) are being displayed. Clinical indication data from
 	other countries is being reviewed and processed.</p>
+
 
 	<h5><i>RNA expression</i></h5>
 	<p>The EBI <a target="_blank" href="http://www.ebi.ac.uk/gxa/home">Expression Atlas&nbsp;<i class="fa fa-external-link"></i></a> database provides information on gene expression
@@ -267,6 +281,13 @@
 	the relative rank of the gene expression fold change of that gene in comparison
 	 to all other genes for this experiment.</p>
 
+	<h5><i>Biomedical literature mining</i></h5>
+	<p>Evidence of disease associated genes can be extracted automatically by mining the up-to-date and worldwide biomedical literature corpus.</p>
+	<p><a target="_blank" href="http://europepmc.org/">Europe PubMed Central&nbsp;<i class="fa fa-external-link"></i></a> (Europe PMC for short) is a unique, free, information resource for biomedical and health researchers that provides access to 30.4 million+ abstracts and 3.3 million+ full text research articles from PubMed and PubMed Central. For CTTV, Europe PMC supplies evidence of links between genes and diseases by mining the titles, abstracts and full text research articles using an entity-to-entity recognition approach.</p>
+	<p>As a complement of Europe PMC text mined information, CTTV integrates also MEDLINE literature mined information from <a target="_blank" href="http://www.disgenet.org/">DisGeNET&nbsp;<i class="fa fa-external-link"></i></a> via a NLP-based approach.<p>
+	<p>The Literature Mining data table shows the most relevant research articles based on the number of times an association between a gene and a disease is found across the article and highlights the relevant sentences.</p>
+
+
 	<h5><i>Affected pathways</i></h5>
 	<p>The EBI <a target="_blank" href="http://www.reactome.org">Reactome&nbsp;<i class="fa fa-external-link"></i></a> database manually curates and identifies reaction
 	pathways that are affected by pathogenic mutations.</p>
@@ -282,12 +303,12 @@
 
 	<h5><u>Last update to Data type:</u></h5>
 	<ul>
-	<li>major update of <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL&nbsp;<i class="fa fa-external-link"></i></a> Known drug disease associations (June 2015)</li>
-	<li>new version of <a target="_blank" href="http://www.ebi.ac.uk/gwas/">GWAS Catalog&nbsp;<i class="fa fa-external-link"></i></a> disease associations (May 2015)</li>
-	<li>new version of the <a target="_blank" href="http://www.ebi.ac.uk/gxa/home">Expression Atlas&nbsp;<i class="fa fa-external-link"></i></a> disease associations (June 2015)</li>
-	<li>new version of <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">EVA&nbsp;<i class="fa fa-external-link"></i></a> disease associations (May 2015)</li>
-	<li>new version of <a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a> with descriptions for over 150 Orphanet rare disease terms</li>
-	<li>new version of mouse models of human disease (<a target="_blank" href="https://www.sanger.ac.uk/resources/databases/phenodigm/">PhenoDigm&nbsp;<i class="fa fa-external-link"></i></a>) predictions based on <a target="_blank" href="https://www.mousephenotype.org">IMPC&nbsp;<i class="fa fa-external-link"></i></a> (version 3.0) and <a target="_blank" href="http://www.informatics.jax.org/">MGI&nbsp;<i class="fa fa-external-link"></i></a> data (February 2015)</li>
+	<li>new update of <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL&nbsp;<i class="fa fa-external-link"></i></a> Known drug disease associations (September 2015)</li>
+	<li>new version of <a target="_blank" href="http://www.ebi.ac.uk/gwas/">GWAS Catalog&nbsp;<i class="fa fa-external-link"></i></a> disease associations (September 2015)</li>
+	<li>major update of the <a target="_blank" href="http://www.ebi.ac.uk/gxa/home">Expression Atlas&nbsp;<i class="fa fa-external-link"></i></a> disease associations (September 2015)</li>
+	<li>new version of <a target="_blank" href="http://www.ncbi.nlm.nih.gov/clinvar/">EVA&nbsp;<i class="fa fa-external-link"></i></a> disease associations (September 2015)</li>
+	<li>new version of <a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a> (2.64 September 2015)</li>
+	<li>new version of mouse models of human disease (<a target="_blank" href="https://www.sanger.ac.uk/resources/databases/phenodigm/">PhenoDigm&nbsp;<i class="fa fa-external-link"></i></a>) predictions based on <a target="_blank" href="https://www.mousephenotype.org">IMPC&nbsp;<i class="fa fa-external-link"></i></a> (version 3.0) and <a target="_blank" href="http://www.informatics.jax.org/">MGI&nbsp;<i class="fa fa-external-link"></i></a> data (September 2015)</li>
 	</ul>
 
 	<h5><u>Data Integration</u></h5>
@@ -310,6 +331,7 @@
 	This page also displays the relationships of a disease to its immediate
 	parents and children within the <a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a> hierarchy.
 	Clicking on ‘View target associations’ links to the <a href="#disease_association">Disease Association page</a> for that disease.</p>
+	<p>The Drug section on this page provides a list of all FDA-approved drugs to treat this disease.</p>
 
 	<h3><a name="target_profile">Target Profile Page</a></h3>
 	<p>The <a href="#target_profile">Target Profile page</a> summarises all relevant information known about
@@ -323,6 +345,74 @@
 <li>The Drug section displays FDA-approved drugs that interact with the target from the <a target="_blank" href="https://www.ebi.ac.uk/chembl/">ChEMBL&nbsp;<i class="fa fa-external-link"></i></a> database. In the <a href="#target_profile">Target Profile page</a>, all drugs towards this target are displayed independent of disease.</li>
 <li>The Bibliography section page comes from the sources of literature data used to annotate the corresponding protein entry in <a target="_blank" href="http://www.uniprot.org/">EBI UniProt&nbsp;<i class="fa fa-external-link"></i></a> and is provided through <a target="_blank" href="http://europepmc.org/">EUROPE PubMed Central&nbsp;<i class="fa fa-external-link"></i></a>.
 	</ul>
+	
+    <h3><a name="scoring">Scoring target-disease associations</a></h3>
+	<p>One of the aims of the CTTV platform is to allow prioritisation of targets based on their associated evidence. 
+	A scoring system has been developed to help you to answer questions such as:
+	<ul>
+	<li>Which target has the most/best evidence for association with a specific disease?</li>
+	<li>What is the relative weight of evidence between different targets for a disease?</li>
+	</ul>
+	The score quantifies what CTTV believe to be the key factors relating to the confidence in the evidence.</p>
+   Negative scores will correspond to negative evidence (although not implemented in the current version). 
+   A score of 0 corresponds to no evidence.</p>
+   <h4>Current scoring scheme per datasource</h4>
+	The current association score between a target and a disease is the sum of its individual datatype evidence scores capped to 1. 
+	The table below summarises the current implementation. The CTTV is working on a statistical framework to refine the scoring scheme.
+     <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Datatype</th>
+        <th>Controbuting Factors to Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Known Drugs</td>
+        <td><ul><li>ChEMBL score: drug development pipeline progression score (Pre-clinical, Phase I, Phase II, Phase III, Phase IV, Approved)</li></ul></td>
+      </tr>
+      <tr>
+        <td>RNA Expression</td>
+        <td><ul><li>Expression Atlas score: p-value &#215; abs(log2(fold_change)) / 10 &#215; rank</li></ul></td>
+      </tr>
+      <tr>
+        <td>Genetic Association</td>
+        <td><ul>
+		<li>GWAS Catalog normalised score: target to variant mapping score &#215; GWAS association pvalue &#215; sample_size &#215; severity score</li>
+		<li>eVA normalised score: target to variant mapping score &#215; pathogenecity score from ClinVar</li>
+		<li>UniProt score: 0.5 (maybe affected by) or 1 (is affected by) depending on the curation confidence level</li>
+		</ul>
+		</td>
+      </tr>
+	  <tr>
+		<td>Somatic Mutations</td>
+        <td><ul>
+		<li>COSMIC score: 1 (curated)</li>
+		<li>eVA normalised score: target to variant score &#215; pathogenecity score from ClinVar</li>
+		</ul>
+		</td>
+	  </tr>
+	  <tr>
+	    <td>Literature Mining</td>
+        <td>
+		<ul>
+		<li>Europe PMC normalised co-occurence score: title co-occurences score + abstract co-occurences score + full text co-occurences score</li>
+		<li>DisGeNET co-occurence score: <a target="_blank" href="http://database.oxfordjournals.org/content/2015/bav028">publication&nbsp;<i class="fa fa-external-link"></i></a></td></li>
+		</ul>
+	  </tr>
+	  <tr>
+	    <td>Affected Pathways</td>
+		<td><ul><li>Reactome score: 1 (curated)</li></ul></td>
+	  </tr>
+	  <tr>
+	    <td>Animal Models</td>
+		<td>
+		<ul>
+		<li>Phenodigm similarity score: <a target="_blank" href="http://database.oxfordjournals.org/content/2013/bat025">publication&nbsp;<i class="fa fa-external-link"></i></a></td></li>
+		</ul>
+	  </tr>
+	  </tbody>
+  </table>
     </div>
   </div>
 

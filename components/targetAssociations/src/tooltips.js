@@ -5,16 +5,10 @@ var deferCancel = require ("tnt.utils").defer_cancel;
 var tooltips = function () {
 
     var flowerView;
-    var datatypes;
+    //var datatypes;
+    var filters;
+    var names;
     var target;
-    var datatypes = {
-	    "genetic_association": "Genetics",
-	    "somatic_mutations": "Somatic",
-	    "known_drugs": "Drugs",
-	    "rna_expression": "RNA",
-	    "affected_pathways": "Pathways",
-	    "animal_models": "Models"
-	};
 
     var t = {};
     var hover_tooltip;
@@ -41,7 +35,7 @@ var tooltips = function () {
         var obj = {};
         obj.header = "";
         //obj.header = node.property('label') + " (" + node.property("association_score") + ")";
-        obj.body = node.property('label') + " (" + node.property("association_score") + ")";
+        obj.body = node.property('label') + " (" + node.property("association_score").toFixed(2) + ")";
         show_deferred.call(this, obj, ev);
     };
 
@@ -57,9 +51,9 @@ var tooltips = function () {
 
         var obj = {};
         var score = node.property("association_score");
-        obj.header = node.property("label") + " (Association Score: " + score + ")";
+        obj.header = node.property("label") + " (Association Score: " + score.toFixed(2) + ")";
         obj.rows = [];
-        var evidenceLoc = "/evidence/" + target + "/" + node.property("efo_code");
+        var evidenceLoc = "/evidence/" + target + "/" + node.property("efo_code") + (filters.score_str ? "?score_str=" + filters.score_str[0] : "");
         obj.rows.push({
             "value" : "<a class='cttv_flowerLink' href=" + evidenceLoc + "><div class='tnt_flowerView'></div></a>"
         });
@@ -70,7 +64,7 @@ var tooltips = function () {
         var diseaseAssocLoc = diseaseProfileLoc + "/associations";
         obj.rows.push({
             "value" : "<a href=" + diseaseAssocLoc + "><div class='cttv_associations_link'></div></a><a href=" + diseaseProfileLoc + "><div class='cttv_profile_link'></div>"
-        })
+        });
 
         //obj.body="<a class='cttv_flowerLink' href=" + loc + "><div class='tnt_flowerView'></div></a><a href=" + loc + ">View evidence details</a>";
 
@@ -83,40 +77,30 @@ var tooltips = function () {
 
         //Pass a new fill callback that calls the original one and decorates with flowers
         leafTooltip.fill(function (data) {
-        tableFill.call(this, data);
-        var flowerData = [];
+            tableFill.call(this, data);
+            var nodeDatatypes = node.property("datatypes");
 
-        });
+            //var datatypes = {};
+            var flowerData = [];
+            for (var i=0; i<names.datatypesOrder.length; i++) {
+                var dkey = names.datatypes[names.datatypesOrder[i]];
+                var key = names.datatypesOrder[i];
 
-        leafTooltip.fill(function (data) {
-        tableFill.call(this, data);
-        var nodeDatatypes = node.property("datatypes");
-        var datatypes = {};
-        datatypes.genetic_association = lookDatasource(nodeDatatypes, "genetic_association");
-        datatypes.somatic_mutation = lookDatasource(nodeDatatypes, "somatic_mutation");
-        datatypes.known_drug = lookDatasource(nodeDatatypes, "known_drug");
-        datatypes.rna_expression = lookDatasource(nodeDatatypes, "rna_expression");
-        datatypes.affected_pathway = lookDatasource(nodeDatatypes, "affected_pathway");
-        datatypes.animal_model = lookDatasource(nodeDatatypes, "animal_model");
-        var flowerData = [
-            {"value": datatypes.genetic_association.score, "label": "Genetics", "active": hasActiveDatatype("genetic_association")},
-            {"value":datatypes.somatic_mutation.score,  "label":"Somatic", "active": hasActiveDatatype("somatic_mutation")},
-            {"value":datatypes.known_drug.score,  "label":"Drugs", "active": hasActiveDatatype("known_drug")},
-            {"value":datatypes.rna_expression.score,  "label":"RNA", "active": hasActiveDatatype("rna_expression")},
-            {"value":datatypes.affected_pathway.score,  "label":"Pathways", "active": hasActiveDatatype("affected_pathway")},
-            {"value":datatypes.animal_model.score,  "label":"Models", "active": hasActiveDatatype("animal_model")}
-        ];
-        // for (var datatype in config.datatypes) {
-        //     if (config.datatypes.hasOwnProperty(datatype)) {
-        // 	flowerData.push({
-        // 	    "value": lookDatasource(nodeDatatypes, datatype).score, "label": config.datatypes[datatype]});
-        //     }
-        // }
+                //datatypes[dkey] = lookDatasource(nodeDatatypes, dkey);
+                var datasource = lookDatasource(nodeDatatypes, dkey);
+                flowerData.push({
+                    "value": datasource.score,
+                    "label": names.datatypesLabels[key],
+                    "active": true, //hasActiveDatatype(names.datatypes[key])
+                });
 
-        flowerView
-            .values (flowerData);
-        flowerView(this.select("div .tnt_flowerView").node());
-        //flowerView.values(flowerData)(this.select("div").node());
+            }
+
+
+            flowerView
+                .values (flowerData);
+            flowerView(this.select("div .tnt_flowerView").node());
+            //flowerView.values(flowerData)(this.select("div").node());
         });
 
         leafTooltip.call(this, obj);
@@ -138,14 +122,14 @@ var tooltips = function () {
             };
         }
 
-        function hasActiveDatatype (checkDatatype) {
-            for (var datatype in datatypes) {
-                if (datatype === checkDatatype) {
-                    return true;
-                }
-            }
-            return false;
-        }
+        // function hasActiveDatatype (checkDatatype) {
+        //     for (var datatype in datatypes) {
+        //         if (datatype === checkDatatype) {
+        //             return true;
+        //         }
+        //     }
+        //     return false;
+        // }
 
 
     };
@@ -165,11 +149,27 @@ var tooltips = function () {
         return this;
     };
 
-    t.datatypes = function (dts) {
+    t.filters = function (dts) {
         if (!arguments.length) {
-            return datatypes;
+            return filters;
         }
-        datatypes = dts;
+        filters = dts;
+        return this;
+    };
+
+    t.names = function (allDts) {
+        if (!arguments.length) {
+            return names;
+        }
+        names = allDts;
+        return this;
+    };
+
+    t.dtsLabels = function (lbs) {
+        if (!arguments.length) {
+            return labels;
+        }
+        labels = lbs;
         return this;
     };
 

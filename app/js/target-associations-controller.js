@@ -7,7 +7,7 @@ angular.module('cttvControllers')
  * Controller for the target associations page
  * It loads a list of associations for the given search
  */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts) {
         'use strict';
 
 	$log.log('targetAssociationsCtrl()');
@@ -17,24 +17,34 @@ angular.module('cttvControllers')
 	    query : q
 	};
 
+    // reset the filters when loading a new page
+    // so we don't see the filters from the previous page...
+    cttvFiltersService.reset();
+
     // Set filters
     cttvFiltersService.pageFacetsStack([
+        cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
         cttvFiltersService.facetTypes.DATATYPES
     ]);
 
     var filters = cttvFiltersService.parseURL();
     var opts = cttvAPIservice.addFacetsOptions(filters, {});
 
+
+
     // Set up a listener for the URL changes and
     // when the search change, get new data
     $scope.$on('$routeUpdate', function(){
         $log.log("onRouteUpdate");
-        $scope.filterDataTypes (cttvFiltersService.parseURL());
+        //$scope.filterDataTypes (cttvFiltersService.parseURL());
+        $scope.filter(cttvFiltersService.parseURL());
     });
 
+
+
     // get gene specific info
-    cttvAPIservice.getGene( {
-            gene_id:q
+    cttvAPIservice.getTarget( {
+            target_id:q
         } ).
         then(
             function(resp) {
@@ -48,58 +58,38 @@ angular.module('cttvControllers')
 
 	$scope.loading = false;
 
-	// datatypes filter
-    $scope.dataTypes = [
-        {
-            name: "genetic_association",
-            label: "Genetics",
-            labelFull: "Genetic associations",
-            selected: true
-        },
-        {
-            name: "somatic_mutation",
-            label: "Somatic",
-            labelFull: "Somatic mutations",
-            selected: true
-        },
-        {
-            name: "known_drug",
-            label: "Drugs",
-            labelFull: "Known drugs",
-            selected: true
-        },
-        {
-            name: "rna_expression",
-            label: "RNA",
-            labelFull: "RNA expression",
-            selected: true
-        },
-        {
-            name: "affected_pathway",
-            label: "Pathways",
-            labelFull: "Affected pathways",
-            selected: true
-        },
-        {
-            name: "animal_model",
-            label: "Models",
-            labelFull: "Mouse models",
-            selected: true
-        }
-    ];
 
 	$scope.toggleDataTypes = function () {
 	    $scope.toggleNavigation();
 	};
 
+
+    /**
+     * Parse the filters.
+     * That means it takes the list of filters as specified in the URL
+     */
+    $scope.filter = function(filters){
+        $log.log("filter()");
+
+        $scope.filters = filters;
+
+        // we parse for datatypes regardless of whether there are any,
+        // since the function there takes care of that case
+        parseDataTypes( filters );
+
+        $scope.score = {};
+    };
+
+    /*
     $scope.filterDataTypes = function (filters) {
         var currDatatypes = {};
-        if (!Object.keys(filters).length) {
+        //if (!Object.keys(filters).length) {
+        if( !filters[cttvConsts.DATATYPES] ){
             for (var k=0; k<$scope.dataTypes.length; k++) {
                 currDatatypes[$scope.dataTypes[k].name] = $scope.dataTypes[k].label;
             }
         } else {
-            var filterDatatypes = filters.datatypes;
+            var filterDatatypes = filters[cttvConsts.DATATYPES];
             for (var i=0; i<filterDatatypes.length; i++) {
                 var dt = filterDatatypes[i];
                 for (var j=0; j<$scope.dataTypes.length; j++) {
@@ -112,13 +102,38 @@ angular.module('cttvControllers')
             }
         }
         $scope.currentDataTypes = currDatatypes;
+    };*/
+
+
+    /*
+     * Private function; creates hash object for selected datatypes (or all) with corresponding labels for flower graph
+     */
+    var parseDataTypes = function (filters) {
+        var currDatatypes = {};
+
+        var filterDatatypes = filters[cttvConsts.DATATYPES] || cttvConsts.datatypesOrder.map(function(d){
+            return cttvConsts.datatypes[d];
+        });
+        filterDatatypes.forEach(function(dt){
+            currDatatypes[dt] = cttvConsts.datatypesLabels[dt.toUpperCase()];   // TODO: these labels should be in some sort of "aggregates", but at hte moment living in the consts service
+        });
+
+        $scope.currentDataTypes = currDatatypes;
     };
-    $scope.filterDataTypes(filters);
+
+
+
+
+    //$scope.filterDataTypes(filters);
+    $scope.filter(filters);
 
     $scope.updateFacets = function (facets) {
+        $log.log("**** updateFacets() ****");
         cttvFiltersService.updateFacets(facets, "unique_disease_count");
     };
 
+    /*
+    // trying to comment this out as it doesn't seem to be used
 	$scope.filterDataType = function (dataType) {
 	    var currentDataTypes = {};
 	    for (var i=0; i<$scope.dataTypes.length; i++) {
@@ -132,7 +147,8 @@ angular.module('cttvControllers')
 		}
 	    }
 	    $scope.currentDataTypes=currentDataTypes;
-	};
+	};*/
+
 
 	// This method filters out redundant diseases in different therapeutic areas (redundant diseases in the same therapeutic area is filtered out in the targetAssociation component (that controls the bubble view)
 	// It returns an array of the non-redundant diseases and another structure with the number of diseases per datatype
@@ -157,28 +173,33 @@ angular.module('cttvControllers')
 	    return [nonRedundantDiseases, diseasesInDatatypes];
 	};
 
+
 	// This method sets the number of diseases supported by each datatype
 	// It needs to be called only once (on load) and without any filter applied
 	var allDiseases = [];
 	var includedDiseases = [];
 	$scope.setDiseasesInDatatypes = function () {
         cttvAPIservice.getAssociations ({
-            gene: $scope.search.query,
-            datastructure: "tree"
+            target: $scope.search.query,
+            datastructure: "flat",
+            expandefo: true,
 	    })
     		.then (function (resp) {
                 cttvFiltersService.updateFacets(resp.body.facets, "unique_disease_count");
 
-    		    var data = resp.body.data;
-    		    var dummy = geneAssociations()
-    			.data(data);
+    		    // var data = resp.body.data;
+    		    // var dummy = geneAssociations()
+                //     .data(data);
+                //
+    		    // var ass = dummy.data().children || [];
+                // console.log(ass);
+                //
+    		    // var auxArr = $scope.nonRedundantDiseases(ass);
+    		    // allDiseases = _.keys(auxArr[0]);
+                // console.log(allDiseases);
+    		    // $scope.checkFilteredOutDiseases();
 
-    		    var ass = dummy.data().children || [];
-
-    		    var auxArr = $scope.nonRedundantDiseases(ass);
-    		    allDiseases = _.keys(auxArr[0]);
-    		    $scope.checkFilteredOutDiseases();
-    		    var diseasesInDatatypes = auxArr[1];
+    		    //var diseasesInDatatypes = auxArr[1];
 
     		    // TODO: For now we are avoiding to show the number of diseases per datatype because this will cause inconsistencies
     		    // with filtered out datatypes in the bubbles view. We will have to rethink this
@@ -190,25 +211,33 @@ angular.module('cttvControllers')
             cttvAPIservice.defaultErrorHandler
         );
 	};
-	$scope.setDiseasesInDatatypes();
+	//$scope.setDiseasesInDatatypes();
 
-	$scope.checkFilteredOutDiseases = function () {
-	    // if (_.isEmpty(includedDiseases) || _.isEmpty(allDiseases)) {
-	    // 	return
-	    // }
-	    var diff = _.difference(allDiseases, includedDiseases);
-	    $scope.ndiseasesfiltered = diff.length;
-	    $scope.diseasesFilteredMsg = $scope.ndiseasesfiltered ? " (" + $scope.ndiseasesfiltered + " diseases filtered out)" : "";
-	};
+	// $scope.checkFilteredOutDiseases = function () {
+	//     // if (_.isEmpty(includedDiseases) || _.isEmpty(allDiseases)) {
+	//     // 	return
+	//     // }
+	//     var diff = _.difference(allDiseases, includedDiseases);
+	//     $scope.ndiseasesfiltered = diff.length;
+	//     $scope.diseasesFilteredMsg = $scope.ndiseasesfiltered ? " (" + $scope.ndiseasesfiltered + " diseases filtered out)" : "";
+	// };
 
-	$scope.ndiseases = 0;
 	$scope.setTherapeuticAreas = function (tas) {
 	    $scope.therapeuticAreas = tas;
-	    var nonRedundantDiseases = $scope.nonRedundantDiseases(tas)[0];
-	    $scope.ndiseases = _.keys(nonRedundantDiseases).length || 0;
-	    includedDiseases = _.keys(nonRedundantDiseases);
-	    $scope.checkFilteredOutDiseases();
+	    // var nonRedundantDiseases = $scope.nonRedundantDiseases(tas)[0];
+	    // $scope.ndiseases = _.keys(nonRedundantDiseases).length || 0;
+	    // includedDiseases = _.keys(nonRedundantDiseases);
+	    // $scope.checkFilteredOutDiseases();
 	};
+
+    $scope.n = {};
+    $scope.n.diseases = 0;
+    // $interval (function () {
+    //     console.log($scope.loading);
+    // }, 100);
+    // $scope.setTotalDiseases = function (diseases) {
+    //     $scope.ndiseases = diseases.length;
+    // };
 
 	// Therapeutic Areas Nav
 	$scope.focusEFO = "cttv_source";
@@ -258,18 +287,18 @@ angular.module('cttvControllers')
 	    $scope.diseasegroupOpen = false;
 	};
 
-	$scope.selectedDisease = 0;
-	$scope.selectDisease = function (d) {
-	    $scope.highlightEFO = {efo: d.efo_code,
-				   parent_efo: d._parent.efo_code,
-				   datatypes: d.datatypes
-				  };
-	    $scope.selectedDisease++;
-	    // if ($scope.selectedDisease === true) {
-	    // 	$scope.selectedDisease = false;
-	    // } else {
-	    // 	$scope.selectedDisease = true;
-	    // }
-	};
+    $scope.selectedDisease = 0;
+    $scope.selectDisease = function (d) {
+        $scope.highlightEFO = {efo: d.efo_code,
+            parent_efo: d._parent.efo_code,
+            datatypes: d.datatypes
+        };
+        $scope.selectedDisease++;
+        // if ($scope.selectedDisease === true) {
+        // 	$scope.selectedDisease = false;
+        // } else {
+        // 	$scope.selectedDisease = true;
+        // }
+    };
 
 }]);

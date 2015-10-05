@@ -4,9 +4,9 @@ var bubbles_tooltips = require("./tooltips.js");
 
 var geneAssociations = function () {
     var config = {
-	target : "",
-	diameter : 1000,
-	cttvApi : undefined,
+        target : "",
+    	diameter : 1000,
+    	cttvApi : undefined,
     };
 
     var bubblesView;
@@ -36,12 +36,12 @@ var geneAssociations = function () {
             .on("click", tooltips.click)
             .on("mouseover", tooltips.mouseover)
             .on("mouseout", tooltips.mouseout);
-	    //.onclick (bubble_tooltip);
-	//.onclick (function (d) {bView.focus(bView.node(d))})
-	// Render
-	bubblesView(div.node());
+    	    //.onclick (bubble_tooltip);
+        	//.onclick (function (d) {bView.focus(bView.node(d))})
+        	// Render
+    	bubblesView(div.node());
 
-	//return therapeuticAreasSorted;
+        //return therapeuticAreasSorted;
     }
 
     var ga = function (bubbles, flower, div) {
@@ -58,7 +58,7 @@ var geneAssociations = function () {
 	if ((config.data === undefined) && (config.cttvApi !== undefined)) {
 	    var api = config.cttvApi;
 	    var url = api.url.associations({
-            gene: config.target,
+            target: config.target,
             datastructure: "tree"
 	    });
 	    api.call(url)
@@ -104,7 +104,7 @@ var geneAssociations = function () {
             tA.children = newChildren;
         }
         return sortData(data);
-    };
+    }
 
     // process the data for bubbles display
     // All the leaves are set under the therapeutic areas
@@ -152,7 +152,7 @@ var geneAssociations = function () {
 	}
 	data.children = dataSorted;
 	return data;
-    };
+    }
 
     // Getters / Setters
     ga.data = function (d) {
@@ -190,13 +190,20 @@ var geneAssociations = function () {
 	return this;
     };
 
-    ga.datatypes = function (dts) {
+    ga.filters = function (dts) {
     	if (!arguments.length) {
-    	    return tooltips.datatypes();
+    	    return tooltips.filters();
     	}
-        tooltips.datatypes(dts);
-    	//config.datatypes = dts;
+        tooltips.filters(dts);
     	return this;
+    };
+
+    ga.names = function (dts) {
+        if (!arguments.length) {
+            return tooltips.names();
+        }
+        tooltips.names(dts);
+        return this;
     };
 
     // Other methods to interact with the bubblesView

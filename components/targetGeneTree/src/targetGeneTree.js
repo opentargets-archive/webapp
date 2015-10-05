@@ -11,19 +11,19 @@ var targetGeneTree = function () {
 
     var proxy = "";
 
-    var species = [
-        9606, // human
-        10090, // mouse
-        9823, // pig
-        9615, // dog
-        9544, // macaque
-        // 9541, // crab-eating macaque --- NOT IN ENSEMBL
-        10116, // rat
-        10141, // guinea pig
-        9986, // rabbit
-        8364, // frog
-        7955, // zebrafish
-    ];
+    // var species = [
+    //     9606, // human
+    //     10090, // mouse
+    //     9823, // pig
+    //     9615, // dog
+    //     9544, // macaque
+    //     // 9541, // crab-eating macaque --- NOT IN ENSEMBL
+    //     10116, // rat
+    //     10141, // guinea pig
+    //     9986, // rabbit
+    //     8364, // frog
+    //     7955, // zebrafish
+    // ];
 
     var colorScale = d3.scale.linear()
         .domain([0,100])
@@ -31,6 +31,7 @@ var targetGeneTree = function () {
 
     var tooltips = tree_tooltips();
     var legend = tree_legend();
+    var species = legend.selectedSpecies();
 
     var render = function (div) {
 

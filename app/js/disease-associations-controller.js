@@ -40,10 +40,14 @@ angular.module('cttvControllers')
     };
 
 
+    // reset the filters when loading a new page
+    // so we don't see the filters from the previous page...
+    cttvFiltersService.reset();
 
     // Set page filters:
     // this defines the order in which the facets are going to be displayed
     cttvFiltersService.pageFacetsStack([
+        cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
         cttvFiltersService.facetTypes.DATATYPES,    // adds a datatypes facet to the page
         cttvFiltersService.facetTypes.PATHWAYS      // adds a pathways facet to the page
     ]);
@@ -64,11 +68,15 @@ angular.module('cttvControllers')
     var getData = function(filters){
         $log.log("getData()");
         var opts = {
-            efo: $scope.search.query,
+            disease: $scope.search.query,
             datastructure: "flat",
             expandefo: true
         };
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
+
+        // TEST:
+        //cttvFiltersService.updateFacets(JSON.parse('{"data_distribution": {"buckets": {"0.0": {"value": 803},"0.2": {"value": 8},"0.4": {"value": 5},"0.8": {"value": 234},"0.6": {"value": 2}}}}'));
+
 
 
         cttvAPIservice.getAssociations(opts).
@@ -78,7 +86,10 @@ angular.module('cttvControllers')
 
                 // 1: set the facets
                 // we must do this first, so we know which datatypes etc we actually have
-                cttvFiltersService.updateFacets(resp.body.facets);
+                $log.log(resp.body.status[0]);
+                $log.log(resp.body);
+                cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
+                // cttvFiltersService.status(resp.body.status);
 
                 // set the data
                 $scope.data = resp.body.data;
@@ -89,6 +100,8 @@ angular.module('cttvControllers')
             },
             cttvAPIservice.defaultErrorHandler
         );
+
+
     };
 
 
@@ -111,7 +124,7 @@ angular.module('cttvControllers')
     // First off, get disease specific info to populate the top of the page
     // This is independent of other data, so we just fire that here
     cttvAPIservice.getDisease( {
-            efo:$scope.search.query
+            code:$scope.search.query
         } ).
         then(
             function(resp) {

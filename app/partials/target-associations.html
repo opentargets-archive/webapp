@@ -4,7 +4,7 @@
     <h3 class="cttv-content-header"><span view-title>Diseases associated with {{search.label}}</span><br />
     <!-- <p class="small"><a href="#/target/{{search.query}}">View target profile</a></p> -->
     <!-- <div class="h6">Found {{nresults}} evidence in {{ndiseases}} diseases {{diseasesFilteredMsg}}</div> -->
-    <small>Found {{ndiseases}} {{ndiseases===1 ? "disease" : "diseases"}} {{diseasesFilteredMsg}} <a href="/target/{{search.query}}"><span class="cttv-interpage-link"><i class="fa fa-arrow-circle-right fa-lg"></i> View {{search.label}} profile</span></a></small></h3>
+    <small>Found {{n.diseases}} {{n.diseases===1 ? "disease" : "diseases"}} <a href="/target/{{search.query}}"><span class="cttv-interpage-link"><i class="fa fa-arrow-circle-right fa-lg"></i> View {{search.label}} profile</span></a></small></h3>
 
     <div class="row">
 
@@ -43,11 +43,12 @@
                                         <accordion-heading>
                                             <span ng-click="selectDisease(d)">{{d.label}}</span>
                                         </accordion-heading>
-                                        <a href=/evidence/{{search.query}}/{{d.efo_code}}>
+                                        <a href=/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}>
                                             <div id="cttv_targetAssociations_flower_{{d.efo_code}}_{{d._parent.efo_code}}">
                                             </div>
                                         </a>
-                                        <a class="cttv-centered-text" href="/evidence/{{search.query}}/{{d.efo_code}}">View evidence details</a>
+                                        <a class="cttv-centered-text"
+                                         href="/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}">View evidence details</a>
                                     </accordion-group>
                                 </accordion>
                             </accordion-group>
@@ -59,19 +60,19 @@
 
         <div class="col-md-10">
             <tabset>
+
                 <tab heading="Bubbles">
-
-                    <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}" highlight="{{highlightEFO}}" disease-is-selected="{{selectedDisease}}"></cttv-target-associations-bubbles>
-
+                    <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}" highlight="{{highlightEFO}}" disease-is-selected="{{selectedDisease}}" facets="filters"></cttv-target-associations-bubbles>
                 </tab>
-                <tab heading="Table">
-                    <cttv-target-associations-table target="{{search.query}}" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}" filename="diseases_associated_with_{{search.filename}}" loadprogress="loading"></cttv-target-associations-table>
 
+                <tab heading="Table">
+                    <cttv-target-associations-table target="{{search.query}}" ndiseases="n" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}" filename="diseases_associated_with_{{search.filename}}" loadprogress="loading" facets="filters"></cttv-target-associations-table>
                 </tab>
 
                 <tab heading="Tree">
-                    <cttv-target-associations-tree target="{{search.query}}" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}"></cttv-target-associations-tree>
+                    <cttv-target-associations-tree target="{{search.query}}" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}" facets="filters"></cttv-target-associations-tree>
                 </tab>
+
             </tabset>
 
         </div>

@@ -12,12 +12,13 @@ var cttvApi = function () {
     var prefixAssociations = "association?";
     var prefixSearch = "search?";
     var prefixGene = "gene/";
-    var prefixDisease = "efo/";
+    var prefixDisease = "disease/"; // updated from "efo" to "disease"
     var prefixToken = "auth/request_token?";
     var prefixAutocomplete = "autocomplete?";
     var prefixQuickSearch = "quicksearch?";
     var prefixExpression = "expression?";
     var prefixProxy = "proxy/generic/";
+    var prefixTarget = "target/"; // this replaces prefixGene
 
     var credentials = {
         token : "",
@@ -129,8 +130,12 @@ var cttvApi = function () {
         return prefix + prefixGene + obj.gene_id;
     };
 
+    _.url.target = function (obj) {
+        return prefix + prefixTarget + obj.target_id
+    }
+
     _.url.disease = function (obj) {
-        return prefix + prefixDisease + obj.efo;
+        return prefix + prefixDisease + obj.code;
     };
 
     _.url.search = function (obj) {

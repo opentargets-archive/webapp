@@ -9,14 +9,11 @@ angular.module('cttvControllers')
 .controller ("TargetCtrl", ["$scope", "$location", "$log", "cttvAPIservice", "$http", "$sce", "$q", function ($scope, $location, $log, cttvAPIservice, $http, $sce, $q) {
     "use strict";
     $log.log('TargetCtrl()');
-    // var cttvRestApi = cttvApi();
-    var geneId = $location.url().split("/")[2];
-    // var url = cttvRestApi.url.gene({'gene_id' : geneId});
-    // $log.log(url);
-    // cttvRestApi.call(url)
 
-    cttvAPIservice.getGene({
-        "gene_id": geneId
+    $scope.targetId = $location.url().split("/")[2];
+
+    cttvAPIservice.getTarget({
+        target_id: $scope.targetId
     })
     .then(
         // success
@@ -62,11 +59,13 @@ angular.module('cttvControllers')
                 keywords : resp.uniprot_keywords
             };
 
-            // var FeatureViewer = require("biojs-vis-proteinFeaturesViewer");
-            // var fvInstance = new FeatureViewer({
-            //     el: "#uniprotProteinFeatureViewer",
-            //     uniprotacc: resp.uniprot_accessions[0]
-            // });
+            var FeatureViewer = require("biojs-vis-proteinfeaturesviewer");
+            var fvInstance = new FeatureViewer({
+                // proxy: "/proxy/",
+                el: "#uniprotProteinFeatureViewer",
+                uniprotacc: resp.uniprot_accessions[0],
+                exclusions: ['seqInfo']
+            });
 
             // Ensembl
             var isHuman = resp.ensembl_gene_id.substring(0,4) === "ENSG";
@@ -141,10 +140,10 @@ angular.module('cttvControllers')
             };
 
             // Transcript Viewer
-            $scope.toggleTranscriptView = function () {
-                $scope.chr = resp.chromosome;
-                $scope.transcriptViewerGene = resp.ensembl_gene_id;
-            };
+            // $scope.toggleTranscriptView = function () {
+            //     $scope.chr = resp.chromosome;
+            //     $scope.transcriptViewerGene = resp.ensembl_gene_id;
+            // };
 
             // Protein structure (PDB)
             var pdb = resp.pdb;
@@ -190,6 +189,8 @@ angular.module('cttvControllers')
                         console.log(data);
                     });
             }
+
+
             // Orthologues
             // var ensemblApi = tnt.ensembl();
             // var orthUrl = ensemblApi.url.homologues({
@@ -201,38 +202,81 @@ angular.module('cttvControllers')
             //     });
             $scope.targetGeneId = resp.ensembl_gene_id;
 
-
             // Pathways
-            var pathways = resp.reactome;
-            var reactomePathways = [];
+            // Genome Browser
+            $scope.togglePathwayViewer = function () {
+                var pathways = resp.reactome;
+                console.log(pathways);
+                var reactomePathways = [];
 
-            // Get the new identifiers
-            var promises = [];
-            var pathwayArr = [];
-            for (var pathway in pathways) {
-                var p = $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/" + pathway + "/stableIdentifier");
-                promises.push(p);
-                pathwayArr.push(pathways[pathway]["pathway name"]);
-            }
-            $q
-                .all(promises)
-                .then(function (vals) {
-                    for (var i=0; i<vals.length; i++) {
-                        var val = vals[i].data;
-                        var idRaw = val.split("\t")[1];
-                        var id = idRaw.split('.')[0];
-                        reactomePathways.push({
-                            "id": id,
-                            "name" : pathwayArr[i]
-                        });
+                // Get the new identifiers
+                var promises = [];
+                var pathwayArr = [];
+                for (var pathway in pathways) {
+                    var p = $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/" + pathway + "/stableIdentifier");
+                    promises.push(p);
+                    pathwayArr.push(pathways[pathway]["pathway name"]);
+                }
+                $q
+                    .all(promises)
+                    .then(function (vals) {
+                        console.log(vals);
+                        for (var i=0; i<vals.length; i++) {
+                            var val = vals[i].data;
+                            var idRaw = val.split("\t")[1];
+                            var id = idRaw.split('.')[0];
+                            reactomePathways.push({
+                                "id": id,
+                                "name" : pathwayArr[i]
+                            });
+                        }
+                        $scope.pathways = reactomePathways;
+                        if ($scope.pathways[0]) {
+                            $scope.setPathwayViewer($scope.pathways[0]);
+                        }
+                    });
+
+            };
+            $scope.setPathwayViewer = function (pathway) {
+                var config = {
+                    headers: {
+                        'Accept': "application/json"
                     }
-                });
+                };
+                $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryEventAncestors/" + pathway.id.substring(6), config)
+                    .then (function (resp) {
+                        console.log(resp);
+                        var topLevelReactomeId;
+                        while (!topLevelReactomeId) {
+                            var p = resp.data[0].databaseObject.pop();
+                            if (!p) {
+                                break;
+                            }
+                            if (p.hasDiagram) {
+                                topLevelReactomeId = p.dbId;
+                            }
+                        }
+                        if (topLevelReactomeId) {
+                            $scope.pathway = {
+                                id: topLevelReactomeId,
+                                subName: pathway.name,
+                                subId: pathway.id,
+                            };
+                        } else {
+                            $scope.pathway = {
+                                id: "",
+                            };
+                        }
+                    });
+            };
 
-            $scope.pathways = reactomePathways;
+
+
 
             // Drugs
-            var drugs = resp.drugbank;
-            $scope.drugs = drugs;
+            // var drugs = resp.drugbank;
+            // $scope.drugs = drugs;
+
 
             // Bibliography
             var bibliography = _.filter(resp.dbxrefs, function (t) {

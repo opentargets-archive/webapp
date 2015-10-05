@@ -17,8 +17,15 @@ body{
 
 .changeView {
     color: #3a99d7;
-    cursor: pointer
+    cursor: pointer;
 }
+
+
+/* Needed for the rounded corner in the viewport for Chrome */
+.pwp-DiagramCanvas {
+    border-radius: 15px;
+}
+
 
 /*
 * Main index page
@@ -557,8 +564,47 @@ a:hover {
 * Tables
 */
 
-table.matrix-table .dataTables_empty {
+table.dataTable thead > tr > th{
+    padding-left: 8px !important;
+    /*padding-right: 8px !important;*/
+}
+
+table.dataTable thead .sorting {
+    /*background-image: url('../images/sort_both.png') !important;
+    background-repeat: no-repeat !important;
+    background-origin: content-box !important;
+    background-position-x: right !important;
+    background-position-y: bottom !important;*/
+}
+
+.cttv-access-public, .cttv-access-private {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-color: #CCC;
+    border-radius: 8px;
     text-align: center;
+    font-size: 10px;
+    padding-top: 1px;
+    color: #FFF;
+}
+
+.cttv-access-private {
+    background-color: #f36633;
+}
+
+.cttv-access-public:after {
+    content: "P";
+    /*content: "\f023";
+    font-family: FontAwesome;*/
+}
+
+.cttv-access-private:after {
+    content: "G";
+}
+
+.cttv-literature-modal {
+    padding: 10px;
 }
 
 
@@ -566,6 +612,10 @@ table.matrix-table .dataTables_empty {
 /*
 * Matrix table
 */
+
+table.matrix-table .dataTables_empty {
+    text-align: center;
+}
 
 table.matrix-table{
     border-collapse: collapse;
@@ -722,7 +772,7 @@ span.matrix-legend-text {
 
 span.matrix-legend-item {
     display:block;
-    border: 0.5px solid #FFF;
+    border: 1px solid #FFF;
 }
 
 span.matrix-legend-background {
@@ -863,6 +913,17 @@ table.matrix-table thead > tr > th:last-child {
     padding: 10px 0px;
 }
 
+.cttv-facet-checkbox {
+    /* overrides bootstrap values */
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.cttv-facet-checkbox-label{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .cttv-section-intro {
     font-style: italic;
@@ -920,6 +981,116 @@ table.matrix-table thead > tr > th:last-child {
 }
  */
 
- .fixed {
+.fixed {
     position: fixed;
- }
+}
+
+
+cttv-score-histogram .bar rect {
+  /*fill: steelblue;*/
+  shape-rendering: crispEdges;
+}
+
+cttv-score-histogram .bar text {
+  /*fill: #fff;*/
+  font-size: 12px;
+}
+
+cttv-score-histogram .bar .selected {
+    fill: steelblue;
+}
+
+cttv-score-histogram .bar .deselected {
+    fill: #CCC;
+}
+
+cttv-score-histogram .axis path, cttv-score-histogram .axis line {
+  /*fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;*/
+  display: none;
+}
+
+cttv-score-histogram .axis text{
+  fill: #AAA;
+}
+
+cttv-score-histogram .brush .extent {
+  stroke: #000;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+cttv-score-histogram .handle {
+  fill: #fff;
+  stroke: #000;
+  /*stroke-opacity: .5;*/
+  stroke-width: 1px;
+  cursor: ew-resize;
+}
+
+
+cttv-slider {
+    width:100%;
+    display:block;
+}
+
+cttv-slider .axis {
+  /*font: 10px sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;*/
+  stroke: #000;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+cttv-slider .axis text{
+    font-size: 10px;
+    height: 20px;
+    line-height: normal;
+    fill:none;
+}
+
+cttv-slider .axis .domain {
+  fill: none;
+  /*stroke: #000;
+  stroke-opacity: .3;
+  stroke-width: 10px;*/
+}
+
+cttv-slider .axis .halo {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 6px;
+}
+
+cttv-slider .slider .handle {
+  fill: #fff;
+  stroke: #000;
+  stroke-opacity: .5;
+  stroke-width: 1.25px;
+  cursor: ew-resize;
+}
+
+cttv-score-presets .label {
+    font-size: 10px;
+    color: inherit;
+    display:block;
+    font-weight: normal;
+    padding: 0px;
+}
+
+cttv-score-presets .well-sm{
+    padding: 5px 0px;
+    border: none;
+    box-shadow: none;
+}
+
+.tnt_legend_div {
+    margin-top: 10px;
+}
+.tnt_legend_header {
+    font-weight: bold;
+}
+

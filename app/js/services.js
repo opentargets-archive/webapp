@@ -71,7 +71,7 @@ angular.module('cttvServices', []).
             //obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
             obj.sDom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
             obj.oTableTools= {
-                    "sSwfPath": "swfs/copy_csv_xls_pdf.swf",
+                    "sSwfPath": "swfs/copy_csv_xls.swf",
                     "aButtons": [
                         {
                             "sExtends":    "collection",
@@ -85,12 +85,12 @@ angular.module('cttvServices', []).
                                     "sExtends": "csv",
                                     "sButtonText": "<span class='fa fa-file-excel-o' style='padding-right:7px'></span>Excel/CSV",
                                     "sTitle": title
-                                },
+                                }/*,
                                 {
                                     "sExtends": "pdf",
                                     "sButtonText": "<span class='fa fa-file-pdf-o' style='padding-right:7px'></span>PDF",
                                     "sTitle": title
-                                }/*,
+                                },
                                 {
                                     "sExtends": "print",
                                     "sButtonText": "<span class='fa fa-print' style='padding-right:7px'></span>Print"
@@ -110,12 +110,37 @@ angular.module('cttvServices', []).
                         .range(["#CBDCEA", "#005299"]), // blue orig
         };
 
+        cttvUtilsService.search = {
+            translateKeys : function (searchObj) {
+                for (var key in searchObj) {
+                    switch (key) {
+                        case "score_min":
+                        searchObj.filterbyscorevalue_min = searchObj.score_min;
+                        delete searchObj.score_min;
+                        break;
+                        case "score_max":
+                        searchObj.filterbyscorevalue_max = searchObj.score_max;
+                        delete searchObj.score_max;
+                        break;
+                        case "score_str":
+                        searchObj.stringency = searchObj.score_str;
+                        delete searchObj.score_str;
+                        break;
+                    }
+                }
+                return searchObj;
+            },
 
-
-        cttvUtilsService.location = {
+            format : function (searchObj) {
+                var opts = [];
+                for (var key in searchObj) {
+                    opts.push(key + "=" + searchObj[key]);
+                }
+                var searchStr = opts.join("&");
+                return "?" + searchStr;
+            },
 
             searchString : function(key, value){
-
                 var url = $window.location.href.split("?");
                 // var search = window.location.href.split('?')[1] || "";
                 url[1] = url[1] || "";
@@ -141,7 +166,24 @@ angular.module('cttvServices', []).
 
         };
 
+        cttvUtilsService.checkPath = function (obj, path){
+            var prop;
+            var props = path.split('.');
 
+            while( prop = props.shift() ){
+                if(!obj.hasOwnProperty(prop)){
+                    return false;
+                }
+                obj = obj[prop];
+            }
+            return true;
+        };
+
+        // n: number
+        // t: tick
+        cttvUtilsService.roundToNearest = function(n,t){
+            return (Math.round(n/t)*t);
+        }
 
         return cttvUtilsService;
     }]);

@@ -1,26 +1,31 @@
 //var ensembl_rest_api = require("tnt.ensembl");
 var nav = require("cttv.genomeBrowserNav");
 var browser_tooltips = require("./tooltips.js");
-var async = require("./callbacks.js");
 var aggregation = require("./aggregation.js");
 var RSVP = require('rsvp');
+var biotypes = require("./biotypes.js");
+
+var pipelines = require("./pipelines.js");
+
 
 var cttv_genome_browser = function() {
     "use strict";
 
     var navTheme = nav()
-    .show_options(true);
+        .show_options(true);
 
     var show_links   = true;
-    var chr = 0;
     var efo;
 
-    var snps = {};
 
-    // gwas
-    // var rest = ensembl_rest_api()
-    //     .proxyUrl("/ensembl");
-    var rest;
+    var snpColors = {
+        TargetDisease: "#FF0000", // red
+        Target: "#3e9999", // blue
+        Disease: "#FFD400", // orange
+        Other: "#cccccc" // grey
+    };
+
+    var ensemblRestApi;
 
     var gwas_data = [];
 
@@ -29,6 +34,7 @@ var cttv_genome_browser = function() {
     var div_id;
 
     var fgColor = "#586471";
+    var geneTrackHeight = 0;
 
     var gBrowser;
 
@@ -37,21 +43,78 @@ var cttv_genome_browser = function() {
         set_div_id(div);
         gBrowser = gB;
 
-        // Navigation
-        navTheme (gB, div);
-
-        rest = gB.rest();
-        async.rest = rest; // Ensembl rest api
+        ensemblRestApi = gB.rest();
 
         // tooltips
         var tooltips = browser_tooltips()
             .cttvRestApi (cttvRestApi)
-            .ensemblRestApi (rest)
+            .ensemblRestApi (ensemblRestApi)
             .view (gB);
 
 
         // Transcript data
         var transcript_data = tnt.board.track.data.genome.transcript();
+
+        // Gene colors and legend
+        transcript_data.update().success (function (genes) {
+
+            genes.map(gene_color);
+
+            // And we setup/update the legend
+            var biotypes_array = genes.map(function(e){
+                return biotypes.legend[e.gene.biotype];
+            });
+            // also the ones for the transcript of the matching gene
+            var transcript_biotypes = genes.filter (function (e2) {
+                return e2.gene.id === gB.gene();
+            }).map (function (e) {
+                return biotypes.legend[e.transcript.biotype];
+            });
+
+            biotypes_array = biotypes_array.concat(transcript_biotypes);
+
+            var biotypes_hash = {};
+            for (var i=0; i<biotypes_array.length; i++) {
+                biotypes_hash[biotypes_array[i]] = 1;
+            }
+            var curr_biotypes = [];
+            for (var p in biotypes_hash) {
+                if (biotypes_hash.hasOwnProperty(p)) {
+                    curr_biotypes.push(p);
+                }
+            }
+            var biotype_legend = gene_legend_div.selectAll(".tnt_biotype_legend")
+                .data(curr_biotypes, function(d){
+                    return d;
+                });
+
+            var new_legend = biotype_legend
+                .enter()
+                .append("div")
+                .attr("class", "tnt_biotype_legend")
+                .style("display", "inline");
+
+            new_legend
+                .append("div")
+                .style("display", "inline-block")
+                .style("margin", "0px 5px 0px 15px")
+                .style("width", "10px")
+                .style("height", "10px")
+                .style("border", "1px solid #000")
+                .style("background", function(d){
+                    return biotypes.color[d];
+                });
+
+            new_legend
+                .append("text")
+                .text(function(d){return d;});
+
+            biotype_legend
+                .exit()
+                .remove();
+        });
+
+
         transcript_data.update().success(function (transcripts) {
             var newGenes = {};
             for (var i=0; i<transcripts.length; i++) {
@@ -59,20 +122,30 @@ var cttv_genome_browser = function() {
                 var mygene = t.gene.external_name;
                 if (gB.gene() === t.gene.id) {
                     newGenes[t.external_name] = t;
+                    for (var j=0; j<t.exons.length; j++) {
+                        var e = t.exons[j];
+                        e.featureColor = t.featureColor;
+                    }
                     continue;
                 } else if (newGenes[mygene] === undefined) {
                     t.exons = [{
                         start : t.gene.start,
                         end : t.gene.end,
                         offset : 0,
-                        isGene : true
+                        isGene : true,
+                        featureColor: t.featureColor
                     }];
-                    t.start = t.gene.start;
-                    t.end = t.gene.end;
                     t.introns = [];
                     t.display_label = t.gene.strand === 1 ? (mygene + ">") : ("<" + mygene);
                     t.isGene = true;
                     newGenes[mygene] = t;
+                } else {
+                    var newStart = d3.min([newGenes[mygene].start, t.start]);
+                    newGenes[mygene].start = newStart;
+                    newGenes[mygene].exons[0].start = newStart;
+                    var newEnd = d3.max([newGenes[mygene].end, t.end]);
+                    newGenes[mygene].end = newEnd;
+                    newGenes[mygene].exons[0].end = newEnd;
                 }
             }
             var elems = [];
@@ -84,34 +157,74 @@ var cttv_genome_browser = function() {
             return elems;
         });
 
-        // Aux track for label
-        var transcript_label_track = tnt.board.track()
-            .label ("Genes / Transcripts")
-            .height(20)
-            .background_color ("#EEEFFF")
-            .display(tnt.board.track.feature.block())
-            .data(tnt.board.track.data()
-                .update(tnt.board.track.data.retriever.sync()
-                    .retriever (function () {
-                        return [];
-                    })
-                )
-            );
 
         // TRACKS!
         // ClinVar track
-        var clinvar_updater = tnt.board.track.data.retriever.sync()
-            .retriever (function () {
-                return async.data.clinvar;
+        var regionEnsemblPromise = function (loc) {
+            var regionUrl = ensemblRestApi.url.region ({
+                species: loc.species,
+                chr: loc.chr,
+                from: loc.from,
+                to: loc.to,
+                features: ["gene"]
             });
+            return ensemblRestApi.call(regionUrl)
+                .then (function (resp) {
+                    return resp.body;
+                });
+        };
+
+        var clinvar_updater = tnt.board.track.data.retriever.async()
+            .retriever (function (loc) {
+                return regionEnsemblPromise(loc)
+                    .then (function (genes) {
+                        var allGenesPromises = [];
+                        for (var i=0; i<genes.length; i++) {
+                            var gene = genes[i];
+                            var p = pipelines()
+                                .ensemblRestApi (ensemblRestApi)
+                                .cttvRestApi (cttvRestApi)
+                                .rare(gene.id, efo);
+                            allGenesPromises.push(p);
+                        }
+                        return RSVP.all(allGenesPromises);
+                    })
+                    .then (function (resps) {
+                        var flattenedSNPs = [];
+                        for (var i=0; i<resps.length; i++) {
+                            var resp = resps[i];
+                            for (var snp in resp.snps) {
+                                if (resp.snps.hasOwnProperty(snp)) {
+                                    flattenedSNPs.push (resp.snps[snp]);
+                                }
+                            }
+                        }
+                        return flattenedSNPs;
+                    });
+            });
+
+        var foreground_color = function (d) {
+            // highlight means same disease
+            if (d.highlight && (gB.gene() === d.target.geneid)) {
+                return snpColors.TargetDisease;
+            } else if (d.highlight) {
+                return snpColors.Disease;
+            } else if (gB.gene() === d.target.geneid) {
+                return snpColors.Target;
+            }
+            return snpColors.Other;
+        };
 
         var clinvar_display = tnt.board.track.feature.pin()
             .domain([0.3, 1.2])
-            .foreground_color("#3e8bad")
+            .foreground_color (foreground_color)
+            .index(function (d) {
+                return d.name;
+            })
             .on("click", tooltips.snp)
             .layout(tnt.board.track.layout()
-            .elements(aggregation)
-        );
+                .elements(aggregation)
+            );
 
         var clinvar_track = tnt.board.track()
             .label("Variants in rare diseases")
@@ -119,21 +232,52 @@ var cttv_genome_browser = function() {
             .background_color("white")
             .display(clinvar_display)
             .data (tnt.board.track.data()
-            .update( clinvar_updater )
-        );
+                .update( clinvar_updater )
+            );
+
+        // Async Gwas updater for ALL genes
+        var gwas_updater = tnt.board.track.data.retriever.async()
+            .retriever (function (loc) {
+                return regionEnsemblPromise(loc)
+                    .then (function (genes) {
+                        var allGenesPromises = [];
+                        for (var i=0; i<genes.length; i++) {
+                            var gene = genes[i];
+                            var p = pipelines()
+                                .ensemblRestApi (ensemblRestApi)
+                                .cttvRestApi (cttvRestApi)
+                                .common(gene.id, efo);
+                            allGenesPromises.push(p);
+                        }
+
+                        return RSVP.all(allGenesPromises);
+                    })
+                    .then (function (resps) {
+                        var flattenedSNPs = [];
+                        for (var i=0; i<resps.length; i++) {
+                            var resp = resps[i];
+                            for (var snp in resp.snps) {
+                                if (resp.snps.hasOwnProperty(snp)) {
+                                    flattenedSNPs.push(resp.snps[snp]);
+                                }
+                            }
+                        }
+                        return flattenedSNPs;
+                    });
+            });
 
         // Gwas track
-        var gwas_updater = tnt.board.track.data.retriever.sync()
-            .retriever (function () {
-                return async.data.gwas;
-            });
+
         var gwas_display = tnt.board.track.feature.pin()
             .domain([0.3,1.2])
-            .foreground_color("#3e8bad")
+            .index(function (d) {
+                return d.name;
+            })
+            .foreground_color (foreground_color)
             .on("click", tooltips.snp)
             .layout(tnt.board.track.layout()
-            .elements(aggregation)
-        );
+                .elements(aggregation)
+            );
 
         //var gwas_guider = gwas_display.guider();
         // gwas_display.guider (function (width) {
@@ -186,23 +330,52 @@ var cttv_genome_browser = function() {
             .background_color("white")
             .display(gwas_display)
             .data (tnt.board.track.data()
-            .update( gwas_updater )
-        );
+                .update (gwas_updater)
+            );
+
+        // Aux track for label
+        var transcript_label_track = tnt.board.track()
+            .label ("Genes / Transcripts")
+            .height(20)
+            .background_color ("#FFFFFF")
+            .display(tnt.board.track.feature.block())
+            .data(tnt.board.track.data()
+                .update(tnt.board.track.data.retriever.sync()
+                    .retriever (function () {
+                        return [];
+                    })
+                )
+            );
 
         // Transcript / Gene track
         var transcript_track = tnt.board.track()
-            .height(300)
-            .background_color("#EEEFFF")
+            .height(geneTrackHeight)
+            .background_color("#FFFFFF")
             .display(tnt.board.track.feature.genome.transcript()
                 .foreground_color (function (t) {
-                    if (t.isGene) {
-                        return "#005588";
-                    }
-                    return "red";
+                    return t.featureColor;
                 })
                 .on("click", tooltips.gene)
             )
             .data(transcript_data);
+
+        // Update the track based on the number of needed slots for the genes
+        transcript_track.display().layout()
+            .fixed_slot_type("expanded")
+            .on_layout_run (function (types, current) {
+                var needed_height = types.expanded.needed_slots * types.expanded.slot_height;
+                if (needed_height !== geneTrackHeight) {
+                    if (needed_height < 200) { // Minimum of 200
+                        geneTrackHeight = 200;
+                    } else {
+                        geneTrackHeight = needed_height;
+                    }
+                    geneTrackHeight = needed_height;
+                    transcript_track.height(needed_height);
+                    gB.reorder(gB.tracks());
+                }
+        });
+
 
         // Sequence track
         var sequence_track = tnt.board.track()
@@ -211,11 +384,42 @@ var cttv_genome_browser = function() {
             .background_color("white")
             .display(tnt.board.track.feature.genome.sequence())
             .data(tnt.board.track.data.genome.sequence()
-            .limit(150)
-        );
+                .limit(150)
+            );
 
+        // The order of the elements are: Nav div // genome browser div // legend div
+        // nav div
+        var navDiv = d3.select(div)
+            .append("div");
 
         gBrowser(div);
+
+        // The legend for the gene colors
+        var gene_legend_div = d3.select(div)
+            .append("div")
+            .attr("class", "tnt_legend_div");
+
+        gene_legend_div
+            .append("text")
+            .attr("class", "tnt_legend_header")
+            .text("Gene legend:");
+
+         d3.selectAll("tnt_biotype")
+            .data(transcript_track.data().elements());
+
+        // The legen for the snps colors
+        var snp_legend_div = d3.select(div)
+            .append("div")
+            .attr("class", "tnt_legend_div");
+        snp_legend_div
+            .append("text")
+            .attr("class", "tnt_legend_header")
+            .text("SNPs legend:");
+
+
+
+
+
         gBrowser
             //.add_track(gene_track)
             .add_track(gwas_track)
@@ -226,35 +430,55 @@ var cttv_genome_browser = function() {
 
         // DATA
         // Gene
-        var geneUrl = rest.url.gene ({
+        var geneUrl = ensemblRestApi.url.gene ({
             id: gB.gene()
         });
-        var genePromise = rest.call(geneUrl)
-            .then (async.gene);
+        var genePromise = ensemblRestApi.call(geneUrl)
+            .then (function (resp) {
+                return resp.body;
+            });
 
-        // SNPs ClinVar
-        var opts = getOpts(gB.gene(), ["eva","uniprot"], efo);
-        var url = cttvRestApi.url.filterby(opts);
-        var snpsClinVarPromise = cttvRestApi.call(url)
-            .then (async.cttv_clinvar)
-            .then (async.ensembl_call_snps)
-            .then (async.ensembl_parse_snps)
-            .then (async.ensembl_parse_clinvar_snps);
+        var diseasePromise;
+        if (efo) {
+            var efoUrl = cttvRestApi.url.disease({
+                code: efo
+            });
 
-        // SNP GWASs
-        var opts = getOpts(gB.gene(), ["gwas"], efo);
-        var url = cttvRestApi.url.filterby(opts);
-        var snpsGwasPromise = cttvRestApi.call(url)
-            .then (async.cttv_gwas)
-            .then (async.ensembl_call_snps)
-            .then (async.ensembl_parse_gwas_snps);
+            diseasePromise = cttvRestApi.call(efoUrl)
+                .then (function (resp) {
+                    return resp.body;
+                });
+        }
 
-        RSVP.all([genePromise, snpsGwasPromise, snpsClinVarPromise])
+        // // SNPs ClinVar
+        // var opts = getOpts(gB.gene(), ["eva","uniprot"], efo);
+        // var url = cttvRestApi.url.filterby(opts);
+        // var snpsClinVarPromise = cttvRestApi.call(url)
+        //     .then (async.cttv_clinvar)
+        //     .then (async.ensembl_call_snps)
+        //     .then (async.ensembl_parse_snps)
+        //     .then (async.ensembl_parse_clinvar_snps)
+        //     .then (async.ensembl_parse_clinvar_extent);
+        //
+        var snpsClinvarPromise = pipelines()
+            .ensemblRestApi (ensemblRestApi)
+            .cttvRestApi (cttvRestApi)
+            .rare (gB.gene());
+
+        // // SNP GWASs
+        var snpsGwasPromise = pipelines()
+            .ensemblRestApi (ensemblRestApi)
+            .cttvRestApi (cttvRestApi)
+            .common (gB.gene());
+
+        RSVP.all ([genePromise, snpsGwasPromise, snpsClinvarPromise, diseasePromise])
             .then (function (resps) {
+                var disease = resps[3];
                 var gene = resps[0];
+                fillSNPLegend (gene, disease);
                 var gene_extent = [gene.start, gene.end];
-                var gwas_extent = resps[1];
-                var clinvar_extent = resps[2];
+                var gwas_extent = resps[1].extent;
+                var clinvar_extent = resps[2].extent;
 
                 var gwasLength = gwas_extent[1] - gwas_extent[0];
                 var clinvarLength = clinvar_extent[1] - clinvar_extent[0];
@@ -276,19 +500,61 @@ var cttv_genome_browser = function() {
                     from : start,
                     to : end
                 });
+                // Navigation
+                navTheme (gB, navDiv.node());
                 gB.start({from: start, to: end});
 
         });
 
 
-        // The GeneInfo Panel
-        d3.select(div).select(".tnt_groupDiv")
-            .append("div")
-            .attr("class", "ePeek_gene_info")
-            .attr("id", "tnt_" + div_id + "_gene_info") // Both needed?
-            .style("width", gBrowser.width() + "px");
+        var fillSNPLegend = function (gene, disease) {
+            var snp_legend_data = [];
+            if (disease) {
+                snp_legend_data.push({
+                    label: "SNP in " + gene.display_name + " associated with " + disease.label,
+                    color: snpColors.TargetDisease
+                });
+                snp_legend_data.push({
+                    label: "SNP associated with " + disease.label + " in other genes",
+                    color: snpColors.Disease
+                });
+            }
+            snp_legend_data.push({
+                label: "SNP in " + gene.display_name,
+                color: snpColors.Target
+            });
+            snp_legend_data.push({
+                label: "SNP in other genes",
+                color: snpColors.Other
+            });
 
-                        // Links div
+            var snp_new_legend = snp_legend_div.selectAll(".tnt_snp_legend")
+                .data(snp_legend_data)
+                .enter()
+                .append("div")
+                .attr("class", "tnt_snp_legend");
+
+            snp_new_legend
+                .append("div")
+                .attr("class", "tnt_legend_item")
+                .style("display", "inline-block")
+                .style("margin", "0px 5px 0px 15px")
+                .style("width", "10px")
+                .style("height", "10px")
+                .style("border", "1px solid #000")
+                .style("background", function(d){
+                    return d.color;
+                });
+
+            snp_new_legend
+                .append("text")
+                .text(function(d) {
+                    return d.label;
+                });
+
+        };
+
+        // Links div
         var links_pane = d3.select(div)
             .append("div")
             .attr("class", "tnt_links_pane")
@@ -318,14 +584,6 @@ var cttv_genome_browser = function() {
     ///*********************////
     // API
 
-
-    gBrowserTheme.chr = function (c) {
-        if (!arguments.length) {
-            return chr;
-        }
-        chr = c;
-        return this;
-    };
 
     gBrowserTheme.show_links = function(b) {
         show_links = b;
@@ -357,29 +615,21 @@ var cttv_genome_browser = function() {
     /// UTILITY METHODS     ////
     ///*********************////
     // Private methods
+
     var buildEnsemblLink = function() {
         var url = "http://www.ensembl.org/" + gBrowser.species() + "/Location/View?r=" + gBrowser.chr() + "%3A" + gBrowser.from() + "-" + gBrowser.to();
         return url;
     };
 
-    function getOpts (gene, datasources, efo) {
-        var opts = {
-            gene : gene,
-            size : 1000,
-            datasource : datasources,
-            fields : [
-                "biological_object.efo_info", // disease
-                "evidence.evidence_chain",
-                "biological_subject"
-            ]
-        };
-        if (efo !== undefined) {
-            opts.efo = efo;
-            opts.expandefo = true;
-        }
-        return opts;
-    }
 
+    function gene_color (transcript) {
+        if (transcript.gene.id === gBrowser.gene()) {
+            transcript.featureColor = biotypes.color[biotypes.legend[transcript.transcript.biotype]];
+        } else {
+            transcript.featureColor = biotypes.color[biotypes.legend[transcript.gene.biotype]];
+            return;
+        }
+    }
 
     // Public methods
 

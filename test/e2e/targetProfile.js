@@ -38,20 +38,23 @@ var expect = chai.expect;
 
 
 // Target Profile Page with page Object
-var TargetProfilePage = require("./targetProfilePage.js");
+var TargetProfilePage = require("./Pages/TargetProfilePage.js");
 describe ('cttv target profile page 2', function () {
     beforeEach (function () {
-        this.timeout(10000);
+        this.timeout(15000);
         page = new TargetProfilePage();
         page.waitForSpinner();
     });
 
     describe ('pathways', function () {
-        beforeEach (function () {
-            pathways = page.pathwaySection;
-        });
+        // beforeEach (function () {
+        //     this.timeout = 10000;
+        //     pathways = page.pathwaySection;
+        // });
 
         it ("has a pathways section", function () {
+            this.timeout(10000);
+            var pathways = page.pathwaySection;
             expect(pathways.isPresent()).to.eventually.equal(true);
         });
 
@@ -76,7 +79,8 @@ describe ('cttv target profile page', function () {
             expect(pathwaySection.isPresent()).to.eventually.equal(true);
         });
         it ("has correct links in all the entries", function () {
-            waitForSpinner();
+            this.timeout(20000);
+            page.waitForSpinner();
 
             // Open the pathways panel
             var pathwayPanelLink = element(by.css("div[heading=Pathways] .accordion-toggle"));
@@ -85,7 +89,7 @@ describe ('cttv target profile page', function () {
 
 
             expect(element(by.css("div[heading=Pathways] .panel-body")).isPresent()).to.eventually.equal(true);
-            waitForVisible(element(by.css("div[heading=Pathways] .panel-body")));
+            page.waitForVisible(element(by.css("div[heading=Pathways] .panel-body")));
 
             var appWindow = browser.getWindowHandle();
 
@@ -124,44 +128,43 @@ describe ('cttv target profile page', function () {
 });
 
 // Aux functions
-function waitForLoad(elem) {
-    browser.wait (function () {
-        var deferred = protractor.promise.defer();
-        //element(by.css('cttv-target-associations-bubbles svg'))
-        elem
-            .isPresent()
-            .then(function (val) {
-                deferred.fulfill(val);
-            }
-        );
-        return deferred.promise;
-    }, 3000);
-}
-
-function waitForVisible(elem) {
-    browser.wait (function () {
-        var deferred = protractor.promise.defer();
-        elem
-            .isDisplayed()
-            .then (function (val) {
-                deferred.fulfill(val);
-            }
-        );
-        return deferred.promise;
-    }, 3000);
-}
-
-function waitForSpinner() {
-    browser.wait (function () {
-        var deferred = protractor.promise.defer();
-        var spinner = element(by.tagName("cttv-page-progress-spinner"));
-        spinner
-            .isDisplayed()
-            .then (function (val) {
-                console.log(val);
-                deferred.fulfill(!val);
-            }
-        );
-        return deferred.promise;
-    }, 3000);
-}
+// function waitForLoad(elem) {
+//     browser.wait (function () {
+//         var deferred = protractor.promise.defer();
+//         //element(by.css('cttv-target-associations-bubbles svg'))
+//         elem
+//             .isPresent()
+//             .then(function (val) {
+//                 deferred.fulfill(val);
+//             }
+//         );
+//         return deferred.promise;
+//     }, 3000);
+// }
+//
+// function waitForVisible(elem) {
+//     browser.wait (function () {
+//         var deferred = protractor.promise.defer();
+//         elem
+//             .isDisplayed()
+//             .then (function (val) {
+//                 deferred.fulfill(val);
+//             }
+//         );
+//         return deferred.promise;
+//     }, 3000);
+// }
+//
+// function waitForSpinner() {
+//     browser.wait (function () {
+//         var deferred = protractor.promise.defer();
+//         var spinner = element(by.tagName("cttv-page-progress-spinner"));
+//         spinner
+//             .isDisplayed()
+//             .then (function (val) {
+//                 deferred.fulfill(!val);
+//             }
+//         );
+//         return deferred.promise;
+//     }, 3000);
+// }
