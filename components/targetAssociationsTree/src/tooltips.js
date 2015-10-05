@@ -7,7 +7,7 @@ var tooltips = function () {
     var treeView;
     var names;
     var target;
-    var datatypes;
+    var filters;
 
     var t = {};
 
@@ -41,10 +41,11 @@ var tooltips = function () {
 
 
     t.click = function (node) {
+        console.log(filters);
         var obj = {};
         var score = node.property("association_score");
         obj.header = node.property("label") + " (Association score: " + score.toFixed(2) + ")";
-        var loc = "/evidence/" + target + "/" + node.property("efo_code");
+        var loc = "/evidence/" + target + "/" + node.property("efo_code") + '?score_str=' + filters.score_str[0];
         //obj.body="<div></div><a href=" + loc + ">View evidence details</a><br/><a href=''>Zoom on node</a>";
         obj.rows = [];
         obj.rows.push({
@@ -124,7 +125,7 @@ var tooltips = function () {
                 flowerData.push({
                     "value": datasource.score,
                     "label": names.datatypesLabels[key],
-                    "active": hasActiveDatatype(names.datatypes[key])
+                    "active": true,//hasActiveDatatype(names.datatypes[key])
                 });
             }
 
@@ -153,7 +154,7 @@ var tooltips = function () {
         }
 
         function hasActiveDatatype (checkDatatype) {
-            for (var datatype in datatypes) {
+            for (var datatype in filters.datatypes) {
                 if (datatype === checkDatatype) {
                     return true;
                 }
@@ -179,11 +180,11 @@ var tooltips = function () {
         return this;
     };
 
-    t.datatypes = function (dts) {
+    t.filters = function (dts) {
         if (!arguments.length) {
-            return datatypes;
+            return filters;
         }
-        datatypes = dts;
+        filters = dts;
         return this;
     };
 

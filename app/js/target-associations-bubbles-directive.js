@@ -119,66 +119,67 @@ angular.module('cttvDirectives')
 		scope.$watch(function () { return attrs.diseaseIsSelected; }, function () {
 
 		    if (ga && attrs.highlight) {
-			var efo = JSON.parse(attrs.highlight);
+                var efo = JSON.parse(attrs.highlight);
 
-			// Also put a flower in the nav bar -- TODO: Again, this is interacting with the navigation, which
-			// makes it more difficult to reuse!
-			var datatypes = {};
-            for (var j=0; j<cttvConsts.datatypesOrder.length; j++) {
-                var dkey = cttvConsts.datatypesOrder[j];
-                datatypes[dkey] = _.result(_.find(efo.datatypes, function (d) {
-                    return d.datatype === cttvConsts.datatypes[dkey];
-                }), "association_score")||0;
-            }
-			// datatypes.GENETIC_ASSOCIATION = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
-			// datatypes.SOMATIC_MUTATION = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
-			// datatypes.KNOWN_DRUG = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
-			// datatypes.RNA_EXPRESSION = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
-			// datatypes.AFFECTED_PATHWAY = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
-			// datatypes.ANIMAL_MODEL = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
-            // datatypes.LITERATURE = _.result(_.find(efo.datatypes, function (d) { return d.literature === "literature"; }), "association_score")||0;
-            // var hasActiveDatatype = function (checkDatatype) {
-            //     var datatypes = JSON.parse(attrs.datatypes);
-            //     for (var datatype in datatypes) {
-            //         if (datatype === checkDatatype) {
-            //             return true;
-            //         }
-            //     }
-            //     return false;
-            // };
+    			// Also put a flower in the nav bar -- TODO: Again, this is interacting with the navigation, which
+    			// makes it more difficult to reuse!
+    			var datatypes = {};
+                for (var j=0; j<cttvConsts.datatypesOrder.length; j++) {
+                    var dkey = cttvConsts.datatypesOrder[j];
+                    datatypes[dkey] = _.result(_.find(efo.datatypes, function (d) {
+                        return d.datatype === cttvConsts.datatypes[dkey];
+                    }), "association_score")||0;
+                }
+    			// datatypes.GENETIC_ASSOCIATION = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
+    			// datatypes.SOMATIC_MUTATION = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
+    			// datatypes.KNOWN_DRUG = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
+    			// datatypes.RNA_EXPRESSION = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
+    			// datatypes.AFFECTED_PATHWAY = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
+    			// datatypes.ANIMAL_MODEL = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
+                // datatypes.LITERATURE = _.result(_.find(efo.datatypes, function (d) { return d.literature === "literature"; }), "association_score")||0;
+                // var hasActiveDatatype = function (checkDatatype) {
+                //     var datatypes = JSON.parse(attrs.datatypes);
+                //     for (var datatype in datatypes) {
+                //         if (datatype === checkDatatype) {
+                //             return true;
+                //         }
+                //     }
+                //     return false;
+                // };
 
-            var flowerData = [];
-            for (var i=0; i<cttvConsts.datatypesOrder.length; i++) {
-                var key = cttvConsts.datatypesOrder[i];
-                flowerData.push({
-                    "value": datatypes[key],
-                    "label": cttvConsts.datatypesLabels[key],
-                    "active": true, //hasActiveDatatype(cttvConsts.datatypes[key])
-                });
-            }
-			// var flowerData = [
-			//     {"value":datatypes.genetic_association, "label": "Genetics", "active": hasActiveDatatype("genetic_association")},
-			//     {"value":datatypes.somatic_mutation,  "label":"Somatic", "active": hasActiveDatatype("somatic_mutation")},
-			//     {"value":datatypes.known_drug,  "label":"Drugs", "active": hasActiveDatatype("known_drug")},
-			//     {"value":datatypes.rna_expression,  "label":"RNA", "active": hasActiveDatatype("rna_expression")},
-			//     {"value":datatypes.affected_pathway,  "label":"Pathways", "active": hasActiveDatatype("affected_pathway")},
-			//     {"value":datatypes.animal_model,  "label":"Models", "active": hasActiveDatatype("animal_model")},
-            //     {"value":datatypes.literature, "label":"Literature", "active": hasActiveDatatype("literature")}
-			// ];
-            $log.log("FLOWER DATA:");
-            $log.log(flowerData);
-			var navFlower = flowerView()
-			    .fontsize(9)
-			    .diagonal(130)
-			    .values(flowerData);
+                var flowerData = [];
+                for (var i=0; i<cttvConsts.datatypesOrder.length; i++) {
+                    var key = cttvConsts.datatypesOrder[i];
+                    flowerData.push({
+                        "value": datatypes[key],
+                        "label": cttvConsts.datatypesLabels[key],
+                        "active": true, //hasActiveDatatype(cttvConsts.datatypes[key])
+                    });
+                }
+    			// var flowerData = [
+    			//     {"value":datatypes.genetic_association, "label": "Genetics", "active": hasActiveDatatype("genetic_association")},
+    			//     {"value":datatypes.somatic_mutation,  "label":"Somatic", "active": hasActiveDatatype("somatic_mutation")},
+    			//     {"value":datatypes.known_drug,  "label":"Drugs", "active": hasActiveDatatype("known_drug")},
+    			//     {"value":datatypes.rna_expression,  "label":"RNA", "active": hasActiveDatatype("rna_expression")},
+    			//     {"value":datatypes.affected_pathway,  "label":"Pathways", "active": hasActiveDatatype("affected_pathway")},
+    			//     {"value":datatypes.animal_model,  "label":"Models", "active": hasActiveDatatype("animal_model")},
+                //     {"value":datatypes.literature, "label":"Literature", "active": hasActiveDatatype("literature")}
+    			// ];
+                $log.log("FLOWER DATA:");
+                $log.log(flowerData);
+    			var navFlower = flowerView()
+    			    .fontsize(9)
+    			    .diagonal(130)
+    			    .values(flowerData);
 
-			// The parent_efo is needed to dis-ambiguate between same EFOs in different therapeuticAreas
-			navFlower(document.getElementById("cttv_targetAssociations_flower_" + efo.efo + "_" + efo.parent_efo));
+    			// The parent_efo is needed to dis-ambiguate between same EFOs in different therapeuticAreas
+    			navFlower(document.getElementById("cttv_targetAssociations_flower_" + efo.efo + "_" + efo.parent_efo));
 
-			// This is the link to the evidence page from the flower
-			scope.$parent.targetDiseaseLink = "/evidence/" + attrs.target + "/" + efo.efo;
+    			// This is the link to the evidence page from the flower
+                // var link = "/evidence/" + attrs.target + "/" + efo.efo + '?score_str=' + scope.facets.score_str[0];
+    			// scope.$parent.targetDiseaseLink = link;
 
-		    }
+    		}
 		});
 
 		// Focus changes
@@ -218,7 +219,7 @@ angular.module('cttvDirectives')
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 
 
-		    var dts = JSON.parse(attrs.datatypes);
+		    //var dts = JSON.parse(attrs.datatypes);
 		    /*var opts = {
                 target: attrs.target,
                 datastructure: "tree",
@@ -271,7 +272,8 @@ angular.module('cttvDirectives')
                     ga = geneAssociations()
                         .target (attrs.target)
                         .diameter (diameter)
-                        .datatypes(dts)
+                        //.datatypes(dts)
+                        .filters(scope.facets)
                         .names(cttvConsts);
 
                     updateView (data);
