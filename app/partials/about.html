@@ -75,17 +75,17 @@
 
 	<h4>Association strength filter</h4>
 	<p>Target associations can be filtered by strength from the lowest evidence-supported association strength ('low') to the strongest evidence-supported association strength ('high').
-	Clicking on any of the proposed options ('none', 'low', 'medium' or 'high') will change the number of diseases reported and will update the data distribution histogram accordingly.</p>
+	Clicking on an option ('none', 'low', 'medium' or 'high') will change the number of diseases reported and will update the data distribution histogram accordingly.</p>
 	<ul>
-	<li>By default, all the association between a target a set of diseases are shown on the Target Association page ('none').
-	It's reflected in the association strength panel with the 'none' radio button selected by default along with the data distribution histogram of all diseases binned by association score.</li>
-	<li>Clicking on the 'low' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.2. This is reflected in the data distribution histogram where the lower bin (0.0-0.2) is in grey.</li>
-	<li>Clicking on the 'medium' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.6. The overall score of an association between a target and a disease is rescaled by dividing by 3 each datatype score to report the strongest associations. This is reflected in the data distribution histogram where the score bin range (0.8-1.0) is highlighted and the new distribution of the disease association score.</li>
-	<li>Clicking on the 'high' radio button will narrow the score range of associations and exclude the associations with a score lower than 0.8. The overall score of an association between a target and a disease is also rescaled by dividing by 5 each datatype score to report the strongest associations. This is reflected in the data distribution histogram where the score bins range (0.8-1.0) is highlighted and the new distribution of the disease association score.</li>
+	<li>By default, all the associations between a target and a set of diseases are shown on the Target Association page ('none').
+	In the association strength panel the 'none' radio button will be selected by default and the data distribution histogram will show all diseases selected, binned by association score.</li>
+	<li>Clicking on the 'low' radio button narrows the score range of associations and excludes associations with a score lower than 0.2. This is reflected in the data distribution histogram where the lower bin (0.0-0.2) is now grey.</li>
+	<li>Clicking on the 'medium' radio button narrows the score range of associations and excludes associations with a score lower than 0.6. The overall score of an association between a target and a disease is rescaled by dividing each datatype score by 3 to give higher resolution to the strongest associations. This is reflected in the data distribution histogram where the score bin range (0.6-1.0) is highlighted in blue and the new distribution of the disease association score.</li>
+	<li>Clicking on the 'high' radio button narrows the score range of associations and excludes associations with a score lower than 0.8. The overall score of an association between a target and a disease is also rescaled by dividing each datatype score by 5 to resolve the strongest associations. This is reflected in the data distribution histogram where the score bins range (0.8-1.0) is highlighted in blue and the new distribution of the disease association score.</li>
 	</ul>
 	
 	<h4>Data distribution</h4>
-	<p>By default and in combination with the Association strengh filter, the score distribution of all the disease associated with a target is displayed as an histogram.</p>
+	<p>By default, and in combination with the Association strength filter, the score distribution of all the diseases associated with a target is displayed as a histogram.</p>
 	<p>Any change in the Association strength filter will be reflected in the histogram.</p>
 	
 	<h4>'Data types' filters</h4>
@@ -108,7 +108,7 @@
 
 	<h4>Tree View</h4>
 	<p>The ‘Tree’ view allows visualisation of evidence across the therapeutic areas in a tree representing the relationships of diseases.</p>
-	<p>Top-level disease categories are shown at a fixed position. Clicking on a disease opens a pop-up menu that provides links to various other page,
+	<p>Top-level disease categories are shown at a fixed position. Clicking on a disease opens a pop-up menu that provides links to various other pages,
 	but also allows branches of the tree to be collapsed down to simplify the visualisation.
 	Clicking on a collapsed disease will allow the branches to be opened again.</p>
 
@@ -127,7 +127,7 @@
 
 	Filtering by data type in the <a href="#target_association">Target Association page</a> won't change the overall association score.
 	Please note that at the moment there are no negative associations listed, and the method to calculate the association score and the data source scores
-	is temporary and will be revised in future implementations.</p>
+	may be revised in future implementations.</p>
 
 	<h4><a name="data_types"></a>Data Types</h4>
 
@@ -348,7 +348,7 @@
 	
     <h3><a name="scoring">Scoring target-disease associations</a></h3>
 	<p>One of the aims of the CTTV platform is to allow prioritisation of targets based on their associated evidence. 
-	A scoring system has been developed to help you to answer to questions such as:
+	A scoring system has been developed to help you to answer questions such as:
 	<ul>
 	<li>Which target has the most/best evidence for association with a specific disease?</li>
 	<li>What is the relative weight of evidence between different targets for a disease?</li>
@@ -358,12 +358,12 @@
    A score of 0 corresponds to no evidence.</p>
    <h4>Current scoring scheme per datasource</h4>
 	The current association score between a target and a disease is the sum of its individual datatype evidence scores capped to 1. 
-	The table below summarises the current implementation. The CTTV is working on a statistical framework to improve the scoring scheme.
+	The table below summarises the current implementation. The CTTV is working on a statistical framework to refine the scoring scheme.
      <table class="table table-striped">
     <thead>
       <tr>
         <th>Datatype</th>
-        <th>Score</th>
+        <th>Controbuting Factors to Score</th>
       </tr>
     </thead>
     <tbody>
