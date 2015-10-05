@@ -257,8 +257,8 @@ angular.module('cttvDirectives', [])
             //scope.labs = ["a","z"];
             scope.legendText = "Score";
             scope.colors = [];
-            for(var i=0; i<=10; i+=2){
-                var j=i/10;
+            for(var i=0; i<=100; i+=25){
+                var j=i/100;
                 //scope.labs.push(j);
                 scope.colors.push( {color:colorScale(j), label:j} );
             }

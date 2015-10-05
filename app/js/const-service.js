@@ -63,7 +63,7 @@ angular.module('cttvServices').
             OK : 'ok',
             ACCESS_LEVEL_PUBLIC: 'public',
             ACCESS_LEVEL_PRIVATE: 'private',
-            config : {
+            /*config : {
                 SHOW_ACCESS_LEVEL : false,
                 evidence_sources : {
                     genetic_association : {
@@ -77,7 +77,7 @@ angular.module('cttvServices').
                     animal_model : [],
                     literature : []
                 }
-            }
+            }*/
         };
 
 

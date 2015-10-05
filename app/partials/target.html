@@ -155,7 +155,7 @@
 
             <!-- Bibliography -->
             <accordion-group heading="Bibliography" is-open="false">
-                <p class="cttv-section-intro">There are {{citations.count}} citations for {{target.symbol}} in Uniprot. <span ng-if="citations.count>25">Only the first 25 are shown below.</span> To see all the citations in the EuropePMC portal, follow this <a target=_blank href="{{citations.europepmcLink}}">link</a></p>
+                <p class="cttv-section-intro">There are {{citations.count}} citations for {{target.symbol}} in UniProt. <span ng-if="citations.count>25">Only the first 25 are shown below.</span> To see all the citations in the EuropePMC portal, follow this <a target=_blank href="{{citations.europepmcLink}}">link</a></p>
                 <div class="epmc_Citation_container" ng-repeat="citation in citations.all">
                     <div class="epmc_Citation_title">
                         <a class="epmc_citation_link" target=_blank href="//europepmc.org/abstract/med/{{citation.pmid}}">{{citation.title}}</a>

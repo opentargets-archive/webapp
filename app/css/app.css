@@ -772,7 +772,7 @@ span.matrix-legend-text {
 
 span.matrix-legend-item {
     display:block;
-    border: 0.5px solid #FFF;
+    border: 1px solid #FFF;
 }
 
 span.matrix-legend-background {

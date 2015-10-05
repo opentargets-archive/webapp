@@ -3,7 +3,7 @@
 angular.module('cttvDirectives')
 
 /* Directive to display the known drug evidence table */
-.directive('knownDrugTable', ['$log', 'cttvAPIservice', 'cttvConsts', 'cttvUtils', '$location', function ($log, cttvAPIservice, cttvConsts, cttvUtils, $location) {
+.directive('knownDrugTable', ['$log', 'cttvAPIservice', 'cttvConsts', 'cttvUtils', 'cttvConfig', '$location', function ($log, cttvAPIservice, cttvConsts, cttvUtils, cttvConfig, $location) {
 
     'use strict';
     var dbs = cttvConsts.dbs;
@@ -64,7 +64,7 @@ angular.module('cttvDirectives')
                         // target:attrs.target,
                         // disease:attrs.disease,
                         size: 1000,
-                        datasource: dbs.CHEMBL,
+                        datasource: cttvConfig.evidence_sources.known_drug,
                         fields: [
                             "disease.efo_info",
                             "drug",
@@ -229,7 +229,7 @@ angular.module('cttvDirectives')
                             {"iDataSort" : 3, "aTargets" : [4]},
                             {
                                 "targets" : [0],    // the access-level (public/private icon)
-                                "visible" : cttvConsts.config.SHOW_ACCESS_LEVEL    // TODO: this should come from config, so we can hide it for our installation
+                                "visible" : cttvConfig.show_access_level    // TODO: this should come from config, so we can hide it for our installation
                             }
                         ],
                         // "aoColumnDefs" : [

@@ -331,6 +331,7 @@
 	This page also displays the relationships of a disease to its immediate
 	parents and children within the <a target="_blank" href="https://www.ebi.ac.uk/efo/">EFO&nbsp;<i class="fa fa-external-link"></i></a> hierarchy.
 	Clicking on ‘View target associations’ links to the <a href="#disease_association">Disease Association page</a> for that disease.</p>
+	<p>The Drug section on this page provides a list of all FDA-approved drugs to treat this disease.</p>
 
 	<h3><a name="target_profile">Target Profile Page</a></h3>
 	<p>The <a href="#target_profile">Target Profile page</a> summarises all relevant information known about
@@ -353,19 +354,65 @@
 	<li>What is the relative weight of evidence between different targets for a disease?</li>
 	</ul>
 	The score quantifies what CTTV believe to be the key factors relating to the confidence in the evidence.</p>
-	<h4>Basic scoring concepts</h4>
-	<p>Initially derived from genetic evidence, a score is composed of building blocks provided by each individual data sources:
-	<math>
-		Score = f &#215; S &#215; C
-	</math>
-	With:
-	<ul>
-		<li>f corresponds to a frequency / association specificity component,</li>
-		<li>S denotes the severity or impact of the mutation on the target gene and</li>
-		<li>C represents a numerical confidence value specific to this evidence string</li>
-	</ul>
-   Negative scores correspond to negative evidence (although not implemented in the current version). 
+   Negative scores will correspond to negative evidence (although not implemented in the current version). 
    A score of 0 corresponds to no evidence.</p>
+   <h4>Current scoring scheme per datasource</h4>
+	The current association score between a target and a disease is the sum of its individual datatype evidence scores capped to 1. 
+	The table below summarises the current implementation. The CTTV is working on a statistical framework to improve the scoring scheme.
+     <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Datatype</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Known Drugs</td>
+        <td><ul><li>ChEMBL score: drug development pipeline progression score (Pre-clinical, Phase I, Phase II, Phase III, Phase IV, Approved)</li></ul></td>
+      </tr>
+      <tr>
+        <td>RNA Expression</td>
+        <td><ul><li>Expression Atlas score: p-value &#215; abs(log2(fold_change)) / 10 &#215; rank</li></ul></td>
+      </tr>
+      <tr>
+        <td>Genetic Association</td>
+        <td><ul>
+		<li>GWAS Catalog normalised score: target to variant mapping score &#215; GWAS association pvalue &#215; sample_size &#215; severity score</li>
+		<li>eVA normalised score: target to variant mapping score &#215; pathogenecity score from ClinVar</li>
+		<li>UniProt score: 0.5 (maybe affected by) or 1 (is affected by) depending on the curation confidence level</li>
+		</ul>
+		</td>
+      </tr>
+	  <tr>
+		<td>Somatic Mutations</td>
+        <td><ul>
+		<li>COSMIC score: 1 (curated)</li>
+		<li>eVA normalised score: target to variant score &#215; pathogenecity score from ClinVar</li>
+		</ul>
+		</td>
+	  </tr>
+	  <tr>
+	    <td>Literature Mining</td>
+        <td>
+		<ul>
+		<li>Europe PMC normalised co-occurence score: title co-occurences score + abstract co-occurences score + full text co-occurences score</li>
+		<li>DisGeNET co-occurence score: <a target="_blank" href="http://database.oxfordjournals.org/content/2015/bav028">publication&nbsp;<i class="fa fa-external-link"></i></a></td></li>
+		</ul>
+	  </tr>
+	  <tr>
+	    <td>Affected Pathways</td>
+		<td><ul><li>Reactome score: 1 (curated)</li></ul></td>
+	  </tr>
+	  <tr>
+	    <td>Animal Models</td>
+		<td>
+		<ul>
+		<li>Phenodigm similarity score: <a target="_blank" href="http://database.oxfordjournals.org/content/2013/bat025">publication&nbsp;<i class="fa fa-external-link"></i></a></td></li>
+		</ul>
+	  </tr>
+	  </tbody>
+  </table>
     </div>
   </div>
 
