@@ -5,7 +5,8 @@ var deferCancel = require ("tnt.utils").defer_cancel;
 var tooltips = function () {
 
     var flowerView;
-    var datatypes;
+    //var datatypes;
+    var filters;
     var names;
     var target;
 
@@ -52,7 +53,7 @@ var tooltips = function () {
         var score = node.property("association_score");
         obj.header = node.property("label") + " (Association Score: " + score.toFixed(2) + ")";
         obj.rows = [];
-        var evidenceLoc = "/evidence/" + target + "/" + node.property("efo_code");
+        var evidenceLoc = "/evidence/" + target + "/" + node.property("efo_code") + "?score_str=" + filters.score_str;
         obj.rows.push({
             "value" : "<a class='cttv_flowerLink' href=" + evidenceLoc + "><div class='tnt_flowerView'></div></a>"
         });
@@ -148,11 +149,11 @@ var tooltips = function () {
         return this;
     };
 
-    t.datatypes = function (dts) {
+    t.filters = function (dts) {
         if (!arguments.length) {
-            return datatypes;
+            return filters;
         }
-        datatypes = dts;
+        filters = dts;
         return this;
     };
 

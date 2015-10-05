@@ -190,11 +190,11 @@ var geneAssociations = function () {
 	return this;
     };
 
-    ga.datatypes = function (dts) {
+    ga.filters = function (dts) {
     	if (!arguments.length) {
-    	    return tooltips.datatypes();
+    	    return tooltips.filters();
     	}
-        tooltips.datatypes(dts);
+        tooltips.filters(dts);
     	return this;
     };
 

@@ -201,7 +201,7 @@ angular.module('cttvDirectives', [])
                             var row = [];
 
                             // Disease name
-                            var geneDiseaseLoc = "/evidence/" + attrs.target + "/" + data.efo_code;
+                            var geneDiseaseLoc = "/evidence/" + attrs.target + "/" + data.efo_code + (facets.score_str ? "?score_str=" + facets.score_str[0] : "");
                             row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
 
                             // EFO (hidden)
@@ -404,7 +404,7 @@ angular.module('cttvDirectives', [])
 
 
                 scope.$watch( 'facets', function (fct) {
-                    var dts = JSON.parse(attrs.datatypes);
+                    //var dts = JSON.parse(attrs.datatypes);
                     if (datatypesChangesCounter>0) {
                         if (!gat) {
                             setTreeView();
@@ -430,7 +430,8 @@ angular.module('cttvDirectives', [])
                                 if (data) {
                                     gat
                                         .data(data)
-                                        .datatypes(dts)
+                                        //.datatypes(dts)
+                                        .filters(fct)
                                         .update();
                                     }
                                 },
@@ -456,7 +457,7 @@ angular.module('cttvDirectives', [])
                     var diameter = viewportH - elemOffsetTop - bottomMargin;
                     $log.log("DIAMETER FOR TREE: " + diameter);
 
-                    var dts = JSON.parse(attrs.datatypes);
+                    //var dts = JSON.parse(attrs.datatypes);
                     // var opts = {
                     //     target: attrs.target,
                     //     datastructure: "tree"
@@ -488,13 +489,16 @@ angular.module('cttvDirectives', [])
                                 .fontsize(9)
                                 .diagonal(100);
 
+                                console.log(scope);
+
                                 gat = geneAssociationsTree()
                                     .data(data)
-                                    .datatypes(dts)
+                                    //.datatypes(dts)
                                     .names(cttvConsts)
                                     .diameter(900)
                                     .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
-                                    .target(attrs.target);
+                                    .target(attrs.target)
+                                    .filters (scope.facets);
                                 gat(fView, elem[0]);
                             },
                             cttvAPIservice.defaultErrorHandler
@@ -532,7 +536,7 @@ angular.module('cttvDirectives', [])
     *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
     *   This is useful in conjunction with a spinner where you can have ng-show="loading"
     */
-    .directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', '$location', function ($log, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts, $location) {
+    .directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', function ($log, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts) {
         'use strict';
 
         var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
@@ -638,8 +642,8 @@ angular.module('cttvDirectives', [])
                 dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
                 var row = [];
                 var geneLoc = "";
-                var geneDiseaseLoc = "/evidence/" + data[i].gene_id + "/" + target;
-                row.push("<a href='" + geneDiseaseLoc + cttvUtils.search.format($location.search()) + "'>" + data[i].label + "</a>");
+                var geneDiseaseLoc = "/evidence/" + data[i].gene_id + "/" + target + "?score_str=" + filters.score_str[0];
+                row.push("<a href='" + geneDiseaseLoc + "'>" + data[i].label + "</a>");
                 // Ensembl ID
                 row.push(data[i].gene_id);
                 // The association score
@@ -667,7 +671,7 @@ angular.module('cttvDirectives', [])
                           dts.animal_model) ;
 
                 // Push gene name again instead
-                row.push("<a href=" + geneDiseaseLoc + cttvUtils.search.format($location.search()) + ">" + data[i].label + "</a>");
+                row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
 
                 newData[i] = row;
 
@@ -715,6 +719,7 @@ angular.module('cttvDirectives', [])
             +'<div ng-show="data.length==0">'+cttvDictionary.NO_DATA+'</div>',
 
             link: function (scope, elem, attrs) {
+
                 // table itself
                 var table = elem.children().eq(0).children().eq(0)[0];
                 var dtable = setupTable(table, scope.filename);
@@ -734,10 +739,14 @@ angular.module('cttvDirectives', [])
 
                 // Watch for data changes and refresh the view when that happens
                 scope.$watch("data", function(n,o){
+                    //console.log(scope);
+                    var filters = cttvFiltersService.parseURL();
+                    console.log(filters);
                     $log.debug("Data:");
                     if( scope.data ){
                         $log.debug("Update table - "+scope.data.length);
-                        updateTable(dtable, scope.data, attrs.target, scope.data.selected);
+                        console.log(scope.data.selected);
+                        updateTable(dtable, scope.data, attrs.target, filters);
                     }
                 });
 

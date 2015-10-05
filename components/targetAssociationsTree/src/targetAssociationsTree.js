@@ -324,14 +324,14 @@ var geneAssociationsTree = function () {
     };
 
     // datatypes
-    theme.datatypes = function (dts) {
-        if (!arguments.length) {
-            return tooltips.datatypes();
-        }
-        tooltips.datatypes(dts);
-        //config.datatypes = dts;
-        return this;
-    };
+    // theme.datatypes = function (dts) {
+    //     if (!arguments.length) {
+    //         return tooltips.datatypes();
+    //     }
+    //     tooltips.datatypes(dts);
+    //     //config.datatypes = dts;
+    //     return this;
+    // };
 
     theme.names = function (lbs) {
         if (!arguments.length) {
@@ -367,6 +367,14 @@ var geneAssociationsTree = function () {
         }
         config.therapeuticArea = efo;
         theme.update();
+        return this;
+    };
+
+    theme.filters = function (f) {
+        if (!arguments.length) {
+            return tooltips.filters();
+        }
+        tooltips.filters(f);
         return this;
     };
 
