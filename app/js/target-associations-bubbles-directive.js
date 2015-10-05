@@ -98,7 +98,9 @@ angular.module('cttvDirectives')
                                 data.association_score = 0.01;
                             }
                             //ga.datatypes(fct.datatypes);
-                            ga.filters( JSON.parse(attrs.datatypes) );
+                            //ga.datatypes( JSON.parse(attrs.datatypes) );
+                            ga.filters (scope.facets);
+
                             updateView(data);
                             ga.update(data);
                         },

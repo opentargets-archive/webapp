@@ -129,13 +129,17 @@ var pipelines = function () {
     };
 
     var extent = function (data) {
-        //var min_pos, max_pos;
 
-        var xt = d3.extent(data, function (d) {
+        var a = [];
+        for (var snp in data) {
+            if (data.hasOwnProperty(snp)) {
+                a.push(data[snp]);
+            }
+        }
+
+        var xt = d3.extent(a, function (d) {
             return d.pos;
         });
-        // console.log(xt);
-        //return xt;
         return {
             extent: xt,
             snps: snps
@@ -180,7 +184,6 @@ var pipelines = function () {
     };
 
     var cttv_gwas = function (resp) {
-
         for (var i=0; i<resp.body.data.length; i++) {
             var rec = resp.body.data[i];
             var this_snp = rec.variant.id[0];
