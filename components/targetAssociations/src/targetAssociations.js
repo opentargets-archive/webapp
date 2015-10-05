@@ -4,9 +4,9 @@ var bubbles_tooltips = require("./tooltips.js");
 
 var geneAssociations = function () {
     var config = {
-	target : "",
-	diameter : 1000,
-	cttvApi : undefined,
+        target : "",
+    	diameter : 1000,
+    	cttvApi : undefined,
     };
 
     var bubblesView;
@@ -36,12 +36,12 @@ var geneAssociations = function () {
             .on("click", tooltips.click)
             .on("mouseover", tooltips.mouseover)
             .on("mouseout", tooltips.mouseout);
-	    //.onclick (bubble_tooltip);
-	//.onclick (function (d) {bView.focus(bView.node(d))})
-	// Render
-	bubblesView(div.node());
+    	    //.onclick (bubble_tooltip);
+        	//.onclick (function (d) {bView.focus(bView.node(d))})
+        	// Render
+    	bubblesView(div.node());
 
-	//return therapeuticAreasSorted;
+        //return therapeuticAreasSorted;
     }
 
     var ga = function (bubbles, flower, div) {

@@ -53,7 +53,7 @@ var tooltips = function () {
         var score = node.property("association_score");
         obj.header = node.property("label") + " (Association Score: " + score.toFixed(2) + ")";
         obj.rows = [];
-        var evidenceLoc = "/evidence/" + target + "/" + node.property("efo_code") + "?score_str=" + filters.score_str;
+        var evidenceLoc = "/evidence/" + target + "/" + node.property("efo_code") + (filters.score_str ? "?score_str=" + filters.score_str[0] : "");
         obj.rows.push({
             "value" : "<a class='cttv_flowerLink' href=" + evidenceLoc + "><div class='tnt_flowerView'></div></a>"
         });
