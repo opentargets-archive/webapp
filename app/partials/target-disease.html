@@ -355,7 +355,7 @@
 						</span>
 					</accordion-heading>
 					<div ng-show="search.mouse.data.length>0">
-						<p><span class="small">Association score: {{search.association_scores[datatypes.ANIMAL_MODEL] || 0}}</span><br />Source: <a href="/faq" target="_blank">Phenodigm</a></p>
+						<p><!--<span class="small">Association score: {{search.association_scores[datatypes.ANIMAL_MODEL] || 0}}</span><br />-->Source: <a href="/faq" target="_blank">Phenodigm</a></p>
 						<div class="table-panel">
 							<table class='table table-striped table-bordered' id="mouse-table">
 								<thead>
@@ -371,7 +371,7 @@
 										<th>Mouse</th>
 										<th>Mouse model</th>
 										<th>Evidence source</th>
-										<th>Score</th>
+										<th>Score</th> <!-- hidden score -->
 									</tr>
 								</thead>
 
