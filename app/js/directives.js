@@ -147,7 +147,8 @@ angular.module('cttvDirectives', [])
                     var opts = {
                         target: attrs.target,
                         datastructure: "flat",
-                        expandefo: true
+                        expandefo: true,
+                        facets: false
                     };
                     opts = cttvAPIservice.addFacetsOptions(facets, opts);
 
@@ -1440,7 +1441,8 @@ angular.module('cttvDirectives', [])
 
 
             template: '<div>'
-                     +'       <cttv-score-presets preset="preset"></cttv-score-presets>'
+                     +'    <div class="clearfix"><cttv-help-icon href="/faq#association-score" class="pull-right"/></div>'
+                     +'    <cttv-score-presets preset="preset"></cttv-score-presets>'
                      +'    <h6>Data distribution</h6>'
                      +'    <cttv-score-histogram data="facet.data.buckets" min="facet.filters[0].key" max="facet.filters[1].key" controls="false"></cttv-score-histogram>'
                     // +'    <div class="clearfix"><span class="pull-left small">Min: {{facet.filters[0].key}}</span><span class="pull-right small">Max: {{facet.filters[1].key}}</span></div>'
@@ -2114,3 +2116,20 @@ angular.module('cttvDirectives', [])
             }
         };
     }])
+
+
+
+    .directive('cttvHelpIcon', [function () {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {
+                href: '@'
+            },
+            template : '<a href="{{href}}"><span class="fa fa-question-circle"></span></a>',
+            link: function(scope, element, attrs) {}
+        };
+    }])
+
+

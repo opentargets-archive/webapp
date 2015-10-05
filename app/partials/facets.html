@@ -1,4 +1,4 @@
-<div class="cttv-facets">
+<div class="cttv-facets" ng-show="true">
 
     <!-- Data distribution
 
@@ -26,9 +26,9 @@
     <!-- Facets and filters -->
     <h4>Filter by</h4>
     <accordion close-others=false>
-        <accordion-group ng-init="status = {isOpen: true ,test:0}" is-open="status.isOpen" ng-repeat="facet in filters" ng-if="facet.filters.length>0">
+        <accordion-group ng-init="status = {isOpen: true}" is-open="status.isOpen" ng-repeat="facet in filters" ng-if="facet.filters.length>0">
             <accordion-heading class="cttv-facets-headers">
-                {{facet.label | clearUnderscores | upperCaseFirst}} <i class="pull-right text-lowlight fa" ng-class="{'fa-plus-square': !status.isOpen, 'fa-minus-square': status.isOpen}"></i>
+                {{facet.label | clearUnderscores | upperCaseFirst}}<i class="pull-right text-lowlight fa" ng-class="{'fa-plus-square': !status.isOpen, 'fa-minus-square': status.isOpen}"></i>
             </accordion-heading>
 
             <!--

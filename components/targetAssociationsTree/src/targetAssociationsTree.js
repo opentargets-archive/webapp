@@ -382,7 +382,7 @@ var geneAssociationsTree = function () {
         };
         setDepth(treeVis.root(), 0);
 
-        var tasNodes = treeVis.root().children();
+        var tasNodes = treeVis.root().children() || [];
         var maxDepth = 0;
         var findMaxDepth = function (n) {
             var depth = n.property('__depth');

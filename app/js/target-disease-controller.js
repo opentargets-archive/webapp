@@ -974,7 +974,7 @@
                     // evidence source
                     row.push("Phenodigm");
 
-                    // score
+                    // score -- hidden column now
                     row.push((item.scores.association_score).toFixed(2));
 
 
@@ -1002,6 +1002,10 @@
                     {
                         "targets" : [0],    // the access-level (public/private icon)
                         "visible" : cttvConfig.show_access_level    // TODO: this should come from config, so we can hide it for our installation
+                    },
+                    {
+                        "targets" : [6],    // score
+                        "visible" : false
                     }
                 ],
             }, $scope.search.info.title+"-mouse_models") );
