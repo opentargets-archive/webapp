@@ -38,7 +38,7 @@
     "mkdirp": "^0.5.1",
     "mocha": "^2.1.0",
     "protractor": "^1.6.1",
-    "request": "^2.55.0",
+    "request": "^2.64.0",
     "serve-static": "^1.9.2",
     "shelljs": "^0.2.6"
   },
