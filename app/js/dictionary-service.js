@@ -14,6 +14,7 @@ angular.module('cttvServices').
 
         var dictionary = {
 
+
             // A
             AFFECTED_PATHWAY :       "Affected pathways",
             ANIMAL_MODEL :           "Animal models",
@@ -21,18 +22,26 @@ angular.module('cttvServices').
 
             // B
             // C
+            CANCER_GENE_CENSUS :     "Cancer Gene Census",
+            CHEMBL :                 "CHEMBL",
             CTTV_PIPELINE :          "CTTV pipeline",
 
             // D
             DATA_DISTRIBUTION :      "Data distribution",
             DATATYPES :              "Datatypes",
+            DISGENET :               "DisGeNET",
 
             // E
             ENSEMBL_ID :             "Ensembl ID",
+            EPMC :                   "Europe PMC",
+            EXPRESSION_ATLAS :       "Expression Atlas",
+            EVA :                    "European Variation Archive (EVA)",
+            EVA_SOMATIC :            "European Variation Archive (EVA)",
 
             // F
             // G
             GENETIC_ASSOCIATION :    "Genetic associations",
+            GWAS :                   "GWAS catalog",
 
             // H
             // I
@@ -52,8 +61,11 @@ angular.module('cttvServices').
 
             // O
             // P
+            PHENODIGM :              "Phenodigm",
+
             // Q
             // R
+            REACTOME :               "Reactome",
             RNA_EXPRESSION:          "RNA expression",
 
             // S
@@ -63,6 +75,8 @@ angular.module('cttvServices').
             // T
 
             // U
+            UNIPROT :                "UniProt",
+            UNIPROT_LITERATURE:      "UniProt literature",
             UP_OR_DOWN:              "unclassified",
 
             // V

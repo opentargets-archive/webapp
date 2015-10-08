@@ -81,7 +81,7 @@
 								<!-- Common disease table -->
 								<div ng-show="search.genetic_associations.common_diseases.data.length>0">
 									<h4>Common diseases</h4>
-									<p>Source: <a href="/faq" target="_blank">GWAS Catalog curated database</a></p>
+									<p>Source: <a href="/faq#data-provenance" target="_blank">GWAS Catalog curated database</a></p>
 									<div class="table-panel">
 										<table class='table table-striped table-bordered' id="common-diseases-table">
 											<thead>
@@ -116,7 +116,7 @@
 								<!-- Related rare disease table -->
 								<div ng-show="search.genetic_associations.rare_diseases.data.length>0">
 									<h4>Rare diseases</h4>
-									<p>Source: <a href="/faq" target="_blank">UniProt</a> and <a href="/faq" target="_blank">European Variation Archive (EVA)</a> curated databases</p>
+									<p>Source: <a href="/faq#data-provenance" target="_blank">UniProt</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated databases</p>
 									<div class="table-panel">
 										<table class='table table-striped table-bordered' id="rare-diseases-table">
 											<thead>
@@ -159,7 +159,7 @@
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
-							<span ng-class="{ 'text-disabled': search.somatic_mutations.data.length==0 }">Somatic mutations</span>
+							<span ng-class="{ 'text-disabled': search.somatic_mutations.data.length==0 }">{{search.somatic_mutations.heading}}</span>
 							<!--<span class='badge' ng-show="search.somatic_mutations.data.length>0">{{search.somatic_mutations.data.length}}</span>-->
 							<!-- Score pill -->
                             <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.SOMATIC_MUTATION]" title="Association score">{{search.association_scores[datatypes.SOMATIC_MUTATION] | currency : "" : 2}}</span> -->
@@ -167,7 +167,10 @@
 						</span>
 					</accordion-heading>
 					<div ng-show="search.somatic_mutations.data.length>0">
-						<p><!--<span class="small">Association score: {{search.association_scores[datatypes.SOMATIC_MUTATION] || 0}}</span><br />-->Source: <a href="/faq" target="_blank">Cancer Gene Census</a> and <a href="/faq" target="_blank">European Variation Archive (EVA)</a> curated database</p>
+						<!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Cancer Gene Census</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated database</p> -->
+
+                        <p>Source: <span ng-repeat="source in search.somatic_mutations.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+
 						<div class="table-panel">
 							<table class='table table-striped table-bordered' id="mutations-table">
 								<thead>
@@ -190,33 +193,41 @@
 					</div>
 				</accordion-group>
 
+
+
 				<!-- Known drugs (as a directive) -->
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
-							<span ng-class="{ 'text-disabled': search.drugs==false }">Known drugs</span>
+							<!-- <span ng-class="{ 'text-disabled': search.drugs==false }">{{search.drugs.heading}}</span> -->
+                            <span>{{search.drugs}}</span>
 							<!-- Score pill -->
                             <!-- <span class="badge flower-petal" ng-show="search.association_scores[datatypes.KNOWN_DRUG]" title="Association score">{{search.association_scores[datatypes.KNOWN_DRUG] | currency: "" : 2}}</span> -->
 							<span cttv-progress-spinner class="pull-right" ng-show="search.drugs.is_loading"></span>
 						</span>
 					</accordion-heading>
-
+                    <div>{{search}}</div>
+                    <!--
 					<div ng-show="search.drugs==true">
+                        {{search.drugs.one}}
 						<p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a>
 							<known-drug-table disease="{{disease}}" target="{{target}}"></known-drug-table>
 						</p>
 					</div>
+
 					<div ng-show="search.drugs==false">
 						<p>No data available</p>
 					</div>
+                    -->
 				</accordion-group>
+
 
 
 				<!-- RNA Expression table -->
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
-							<span ng-class="{ 'text-disabled': search.rna_expression.data.length==0 }">RNA expression</span>
+							<span ng-class="{ 'text-disabled': search.rna_expression.data.length==0 }">{{search.rna_expression.heading}}</span>
 							<!-- <span class='badge' ng-show="search.rna_expression.data.length>0">{{search.rna_expression.data.length}}</span> -->
 							<!-- Score pill -->
                             <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.RNA_EXPRESSION]" title="Association score">{{search.association_scores[datatypes.RNA_EXPRESSION] | currency : "" : 2}}</span> -->
@@ -224,7 +235,9 @@
 						</span>
 					</accordion-heading>
 					<div ng-show="search.rna_expression.data.length>0">
-						<p><!--<span class="small">Association score: {{search.association_scores[datatypes.RNA_EXPRESSION] || 0}}</span><br />-->Source: <a href="/faq" target="_blank">Expression Atlas</a> curated database</p>
+						<!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Expression Atlas</a> curated database</p> -->
+                        <p>Source: <span ng-repeat="source in search.rna_expression.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+
 						<!-- <h4>Header info for table</h4> -->
 						<div class="table-panel">
 							<table class='table table-striped table-bordered' id="rna-expression-table">
@@ -263,7 +276,7 @@
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
-							<span ng-class="{ 'text-disabled': search.pathways.data.length==0 }">Affected pathways</span>
+							<span ng-class="{ 'text-disabled': search.pathways.data.length==0 }">{{search.pathways.heading}}</span>
 							<!-- <span class='badge' ng-show="search.pathways.data.length>0">{{search.pathways.data.length}}</span> -->
 							<!-- Score pill -->
                             <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.AFFECTED_PATHWAY]" title="Association score">{{search.association_scores[datatypes.AFFECTED_PATHWAY] | currency : "" : 2}}</span> -->
@@ -271,7 +284,8 @@
 						</span>
 					</accordion-heading>
 					<div ng-show="search.pathways.data.length>0">
-						<p><!--<span class="small">Association score: {{search.association_scores[datatypes.AFFECTED_PATHWAY] || 0}}</span><br />-->Source: <a href="/faq" target="_blank">Reactome</a> curated database</p>
+						<!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Reactome</a> curated database</p> -->
+                        <p>Source: <span ng-repeat="source in search.pathways.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
 						<!-- <h4>Header info for table</h4> -->
 						<div class="table-panel">
 							<table class='table table-striped table-bordered' id="pathways-table">
@@ -306,14 +320,18 @@
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
-							<span ng-class="{ 'text-disabled': search.literature.data.length==0 }">Text mining</span>
+							<span ng-class="{ 'text-disabled': search.literature.data.length==0 }">{{search.literature.heading}}</span>
 							<!-- Score pill -->
                             <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.LITERATURE]" title="Association score">{{search.association_scores[datatypes.LITERATURE] | currency : "" : 2}}</span> -->
 							<span cttv-progress-spinner class="pull-right" ng-show="search.literature.is_loading"></span>
 						</span>
 					</accordion-heading>
 					<div ng-show="search.literature.data.length>0">
-						<p>Source: <a href="/faq#data-provenance" target="_blank">DisGeNET</a> and <a href="/faq#data-provenance" target="_blank">Europe PMC</a></p>
+						<!-- <p>Source: <a href="/faq#data-provenance" target="_blank">DisGeNET</a> and <a href="/faq#data-provenance" target="_blank">Europe PMC</a></p> -->
+                        <!-- <p>Source: <span ng-repeat="source in search.literature.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span></p> -->
+
+                        <p>Source: <span ng-repeat="source in search.literature.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+
 						<p ng-show="search.literature.total>search.literature.maxShow">{{search.literature.total}} records found. Showing the most relevant {{search.literature.data.length}}</p>
 
 						<div class="table-panel">
@@ -347,7 +365,7 @@
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
-							<span ng-class="{ 'text-disabled': search.mouse.data.length==0 }">Mouse models</span>
+							<span ng-class="{ 'text-disabled': search.mouse.data.length==0 }">{{search.mouse.heading}}</span>
 							<!-- <span class='badge' ng-show="search.mouse.data.length>0">{{search.mouse.data.length}}</span> -->
 							<!-- Score pill -->
                             <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.ANIMAL_MODEL]" title="Association score">{{search.association_scores[datatypes.ANIMAL_MODEL] | currency : "" : 2}}</span> -->
@@ -355,8 +373,9 @@
 						</span>
 					</accordion-heading>
 					<div ng-show="search.mouse.data.length>0">
-						<p><!--<span class="small">Association score: {{search.association_scores[datatypes.ANIMAL_MODEL] || 0}}</span><br />-->Source: <a href="/faq" target="_blank">Phenodigm</a></p>
-						<div class="table-panel">
+						<!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Phenodigm</a></p> -->
+                        <p>Source: <span ng-repeat="source in search.mouse.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span></p>
+                        <div class="table-panel">
 							<table class='table table-striped table-bordered' id="mouse-table">
 								<thead>
 									<tr>

@@ -63,22 +63,32 @@ angular.module('cttvServices').
             OK : 'ok',
             ACCESS_LEVEL_PUBLIC: 'public',
             ACCESS_LEVEL_PRIVATE: 'private',
-            /*config : {
-                SHOW_ACCESS_LEVEL : false,
-                evidence_sources : {
-                    genetic_association : {
-                        common : [],
-                        rare : []
-                    },
-                    somatic_mutation : [],
-                    known_drug : [],
-                    rna_expression : [],
-                    affected_pathway : [],
-                    animal_model : [],
-                    literature : []
-                }
-            }*/
         };
+
+        consts.invert = function(val){
+            var a = invLookup(consts, val);
+            return a;
+        }
+
+        function invLookup(o ,v){
+            var k = undefined;
+            for(var i in o){
+                if(o.hasOwnProperty(i)){
+                    //$log.log(v+") "+i+" = "+o[i]);
+                    if(o[i]==v){
+                        k = i;
+                        //$log.log("   "+k);
+                        return k;
+                    }
+                    if( typeof o[i] == 'object' ){
+                        k = invLookup(o[i],v);
+                        if(k){return k;}
+                    }
+                }
+            }
+            return k;
+        }
+
 
 
         return consts;

@@ -29,7 +29,10 @@ angular.module('cttvDirectives')
             var accessLevelPublic = "<span class='cttv-access-public' title='public data'></span>";
 
             scope.$watchGroup([function () {return attrs.target;}, function () {return attrs.disease;}], function () {
-                if (!attrs.target && !attrs.disease) {
+                //if (!attrs.target && !attrs.disease) {
+                // Wa want to get data when we have both target and disease
+                // so it should return here if one or the other are undefined
+                if(!attrs.target || !attrs.disease){
                     return;
                 }
                 getDrugData();
