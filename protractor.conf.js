@@ -4,9 +4,9 @@ exports.config = {
     specs: [
 
         // 'test/e2e/*.js'
-        // 'test/e2e/home.js',
-        'test/e2e/targetAssociation.js',
-        // 'test/e2e/evidence.js',
+        //'test/e2e/home.js',
+        //'test/e2e/targetAssociation.js',
+         'test/e2e/evidence.js',
         // 'test/e2e/targetProfile.js'
     ],
 
@@ -17,7 +17,7 @@ exports.config = {
     // ],
 
     capabilities: {
-        'browserName': 'firefox'
+        'browserName': 'chrome',
     },
 
     getPageTimeout: 10000,
@@ -27,7 +27,8 @@ exports.config = {
     //    seleniumServerJar: './node_modules/protractor/selenium/selenium-server-standalone-2.44.0.jar',
     seleniumAddress : 'http://localhost:4444/wd/hub',
 
-    baseUrl: 'http://localhost:8000/',
+    baseUrl: 'http://cttv:dj8mixijk04jpdg@127.0.0.1:8000/',
+    //baseUrl: 'https://beta.targetvalidation.org/',
 
     framework: 'mocha',
     mochaOpts : {
