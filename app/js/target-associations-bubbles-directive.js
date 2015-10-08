@@ -100,6 +100,7 @@ angular.module('cttvDirectives')
                             //ga.datatypes(fct.datatypes);
                             //ga.datatypes( JSON.parse(attrs.datatypes) );
                             ga.filters (scope.facets);
+
                             updateView(data);
                             ga.update(data);
                         },
