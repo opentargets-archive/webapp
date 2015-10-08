@@ -52,7 +52,7 @@ var cttvApi = function () {
 
             return getToken()
                 .then(function (resp) {
-                    //			    console.log("   ======>> Got a new token: " + resp.body.token);
+                    //console.log("   ======>> Got a new token: " + resp.body.token);
                     //credentials.token = resp.body.token;
                     var headers = {
                         "Auth-token": resp.body.token
