@@ -199,26 +199,24 @@
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
-							<!-- <span ng-class="{ 'text-disabled': search.drugs==false }">{{search.drugs.heading}}</span> -->
-                            <span>{{search.drugs}}</span>
+							<span ng-class="{ 'text-disabled': search.drugs==false }">{{search.drugs.heading}}</span>
 							<!-- Score pill -->
                             <!-- <span class="badge flower-petal" ng-show="search.association_scores[datatypes.KNOWN_DRUG]" title="Association score">{{search.association_scores[datatypes.KNOWN_DRUG] | currency: "" : 2}}</span> -->
 							<span cttv-progress-spinner class="pull-right" ng-show="search.drugs.is_loading"></span>
 						</span>
 					</accordion-heading>
-                    <div>{{search}}</div>
-                    <!--
-					<div ng-show="search.drugs==true">
-                        {{search.drugs.one}}
-						<p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a>
-							<known-drug-table disease="{{disease}}" target="{{target}}"></known-drug-table>
-						</p>
+
+					<!-- <div ng-show="search.drugs==true"> -->
+                    <div ng-show="search.drugs.data.length>0">
+						<p>Source: <span ng-repeat="source in search.drugs.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+
+                        <known-drug-table disease="{{disease}}" target="{{target}}" load-flag="search.drugs.is_loading" data="search.drugs.data"></known-drug-table>
 					</div>
 
 					<div ng-show="search.drugs==false">
 						<p>No data available</p>
 					</div>
-                    -->
+
 				</accordion-group>
 
 

@@ -72,13 +72,12 @@
                 source_label : cttvConfig.evidence_sources.pathway.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
             },
             drugs : {
-                bob: "bob",
                 data : [],
                 is_open : false,
                 is_loading: false,
                 heading : cttvDictionary.KNOWN_DRUG,
-                // source : cttvConfig.evidence_sources.known_drug,
-                // source_label : cttvConfig.evidence_sources.known_drug.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
+                source : cttvConfig.evidence_sources.known_drug,
+                source_label : cttvConfig.evidence_sources.known_drug.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
             },
             somatic_mutations : {
                 data : [],
@@ -1452,10 +1451,7 @@
                         getMutationData();
                     }
                     if($scope.search.association_scores[datatypes.KNOWN_DRUG]){
-                        $scope.search.drugs = true;
                         getDrugData();
-                    } else {
-                        $scope.search.drugs = false;
                     }
                     if($scope.search.association_scores[datatypes.RNA_EXPRESSION]){
                         getRnaExpressionData();
