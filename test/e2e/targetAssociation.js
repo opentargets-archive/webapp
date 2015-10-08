@@ -22,6 +22,7 @@ describe ('cttv target association page', function () {
     // Associations Header
     describe ('Associations header', function () {
         beforeEach(function () {
+            this.timeout(7000);
             header = page.header;
             // browser.waitForAngular();
         });
