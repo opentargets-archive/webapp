@@ -914,7 +914,8 @@ angular.module('cttvDirectives', [])
 
                     var atlasHeatmapBuilder = window.exposed;
                     atlasHeatmapBuilder({
-                        gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa/',
+                        proxyPrefix: "/proxy",
+                        //gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa/',
                         params: 'geneQuery=' + target + "&species=homo%20sapiens",
                         isMultiExperiment: true,
                         target: "cttvExpressionAtlas"
@@ -2140,5 +2141,3 @@ angular.module('cttvDirectives', [])
             link: function(scope, element, attrs) {}
         };
     }])
-
-
