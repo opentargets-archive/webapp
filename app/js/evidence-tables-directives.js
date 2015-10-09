@@ -14,6 +14,8 @@ angular.module('cttvDirectives')
         restrict: 'EA',
         templateUrl: 'partials/known-drug-table.html',
         scope: {
+            loadFlag : '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
+            data : '=?'         // optional data link to pass the data out of the directive
         },
         controller: ['$scope', function ($scope) {
             function init() {
@@ -29,7 +31,10 @@ angular.module('cttvDirectives')
             var accessLevelPublic = "<span class='cttv-access-public' title='public data'></span>";
 
             scope.$watchGroup([function () {return attrs.target;}, function () {return attrs.disease;}], function () {
-                if (!attrs.target && !attrs.disease) {
+                //if (!attrs.target && !attrs.disease) {
+                // Wa want to get data when we have both target and disease
+                // so it should return here if one or the other are undefined
+                if(!attrs.target && !attrs.disease){ /* TODO */
                     return;
                 }
                 getDrugData();
@@ -60,6 +65,7 @@ angular.module('cttvDirectives')
 
                 function getDrugData (){
                     // $scope.search.drugs.is_loading = true;
+                    scope.loadFlag = true;
                     var opts = {
                         // target:attrs.target,
                         // disease:attrs.disease,
@@ -90,8 +96,7 @@ angular.module('cttvDirectives')
                         cttvAPIservice.defaultErrorHandler
                     ).
                     finally(function(){
-                        //$scope.search.drugs.is_open = $scope.search.drugs.data.length>0 || false;
-                        //$scope.search.drugs.is_loading = false;
+                        scope.loadFlag = false;
                     });
                 }
 

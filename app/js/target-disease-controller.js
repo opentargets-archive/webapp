@@ -44,46 +44,71 @@
             genetic_associations : {
                 is_open : false,
                 is_loading: false,
+                heading : cttvDictionary.GENETIC_ASSOCIATION,
                 common_diseases : {
                     data : [],
                     is_open : false,
-                    is_loading: false
+                    is_loading: false,
+                    heading : cttvDictionary.COMMON_DISEASES,
+                    source : cttvConfig.evidence_sources.genetic_association.common,
+                    source_label : cttvConfig.evidence_sources.genetic_association.common.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
                 },
                 rare_diseases : {
                     data : [],
                     is_open : false,
-                    is_loading: false
+                    is_loading: false,
+                    heading : cttvDictionary.RARE_DISEASES,
+                    source : cttvConfig.evidence_sources.genetic_association.rare,
+                    source_label : cttvConfig.evidence_sources.genetic_association.rare.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
                 }
             },
             rna_expression : {
                 data : [],
                 is_open : false,
-                is_loading: false
+                is_loading: false,
+                heading : cttvDictionary.RNA_EXPRESSION,
+                source : cttvConfig.evidence_sources.rna_expression,
+                source_label : cttvConfig.evidence_sources.rna_expression.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
             },
             pathways : {
                 data : [],
                 is_open : false,
-                is_loading: false
+                is_loading: false,
+                heading : cttvDictionary.AFFECTED_PATHWAY,
+                source : cttvConfig.evidence_sources.pathway,
+                source_label : cttvConfig.evidence_sources.pathway.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
             },
             drugs : {
                 data : [],
                 is_open : false,
-                is_loading: false
+                is_loading: false,
+                heading : cttvDictionary.KNOWN_DRUG,
+                source : cttvConfig.evidence_sources.known_drug,
+                source_label : cttvConfig.evidence_sources.known_drug.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
             },
             somatic_mutations : {
                 data : [],
                 is_open : false,
-                is_loading: false
+                is_loading: false,
+                heading : cttvDictionary.SOMATIC_MUTATION,
+                source : cttvConfig.evidence_sources.somatic_mutation,
+                source_label : cttvConfig.evidence_sources.somatic_mutation.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
             },
             literature : {
                 data : [],
                 is_open : false,
-                is_loading: false
+                is_loading: false,
+                heading : cttvDictionary.LITERATURE,
+                source : cttvConfig.evidence_sources.literature,
+                source_label : cttvConfig.evidence_sources.literature.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
             },
             mouse : {
                 data : [],
                 is_open : false,
-                is_loading: false
+                is_loading: false,
+                heading : cttvDictionary.ANIMAL_MODEL,
+                source : cttvConfig.evidence_sources.animal_model,
+                source_label : cttvConfig.evidence_sources.animal_model.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
             },
         };
 
@@ -569,7 +594,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1000,
-                datasource: cttvConfig.evidence_sources.pathway,
+                datasource: $scope.search.pathways.source, //cttvConfig.evidence_sources.pathway,
                 fields: [
                     "target",
                     "disease",
@@ -676,7 +701,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1000,
-                datasource: cttvConfig.evidence_sources.rna_expression,
+                datasource: $scope.search.rna_expression.source, //cttvConfig.evidence_sources.rna_expression,
                 fields: [
                     "disease",
                     "evidence",
@@ -800,7 +825,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1000,
-                datasource: cttvConfig.evidence_sources.somatic_mutation ,
+                datasource: $scope.search.somatic_mutations.source, //cttvConfig.evidence_sources.somatic_mutation ,
                 fields: [
                     "disease.efo_info", // disease
                     "evidence.evidence_codes_info",  // evidence source
@@ -916,7 +941,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: 1000,
-                datasource: cttvConfig.evidence_sources.animal_model,
+                datasource: $scope.search.mouse.source, //cttvConfig.evidence_sources.animal_model,
                 fields: [
                     "disease",
                     "evidence",
@@ -1137,7 +1162,7 @@
                 disease:$scope.search.disease,
                 size: $scope.search.literature.maxShow,
                 expandefo: true,
-                datasource: cttvConfig.evidence_sources.literature,   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
+                datasource: $scope.search.literature.source, //cttvConfig.evidence_sources.literature,   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
                 //datasource: [dbs.EPMC, dbs.DISGENET],
                 // fields: [
                 //     "disease",  // take disease.efo_info[0].label and disease.efo_info[0].efo_id
@@ -1418,8 +1443,6 @@
             // and fire the info search
             getInfo();
 
-            // TODO: this is just for testing. Remove after use
-            //getLiteratureData();
 
             // get the data for the flower graph
             getFlowerData()
@@ -1435,10 +1458,7 @@
                         getMutationData();
                     }
                     if($scope.search.association_scores[datatypes.KNOWN_DRUG]){
-                        $scope.search.drugs = true;
                         getDrugData();
-                    } else {
-                        $scope.search.drugs = false;
                     }
                     if($scope.search.association_scores[datatypes.RNA_EXPRESSION]){
                         getRnaExpressionData();
