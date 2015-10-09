@@ -6,6 +6,15 @@ var expect = chai.expect;
 
 
 module.exports = function () {
+    describe ('masthead', function () {
+        it ('should exist');
+        it ('should have a search box');
+        describe ('logo', function() {
+            it ('should exist');
+            it ('should link to the home page');
+        });
+    });
+    
     describe ('footer', function () {
         beforeEach (function () {
             footer = page.footer;
