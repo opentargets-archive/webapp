@@ -66,7 +66,7 @@
 				<accordion-group is-open="false">
 					<accordion-heading>
 						<span class="text-nolight">
-							<span ng-class="{ 'text-disabled': search.genetic_associations.common_diseases.data.length==0 && search.genetic_associations.rare_diseases.data.length==0 }">Genetic associations</span>
+							<span ng-class="{ 'text-disabled': search.genetic_associations.common_diseases.data.length==0 && search.genetic_associations.rare_diseases.data.length==0 }">{{search.genetic_associations.heading}}</span>
                             <!-- Score pill -->
 							<!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.GENETIC_ASSOCIATION]" title="Association score">{{search.association_scores[datatypes.GENETIC_ASSOCIATION] | currency : "" : 2}}</span> -->
 							<!-- <span class='badge' ng-show="search.genetic_associations.rare_diseases.data.length" style="background:#3E8BAD">{{search.genetic_associations.rare_diseases.data.length}}</span> -->
@@ -80,8 +80,11 @@
 
 								<!-- Common disease table -->
 								<div ng-show="search.genetic_associations.common_diseases.data.length>0">
-									<h4>Common diseases</h4>
-									<p>Source: <a href="/faq#data-provenance" target="_blank">GWAS Catalog curated database</a></p>
+									<h4>{{search.genetic_associations.common_diseases.heading}}</h4>
+									<!-- <p>Source: <a href="/faq#data-provenance" target="_blank">GWAS Catalog curated database</a></p> -->
+
+                                    <p>Source: <span ng-repeat="source in search.genetic_associations.common_diseases.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+
 									<div class="table-panel">
 										<table class='table table-striped table-bordered' id="common-diseases-table">
 											<thead>
@@ -115,8 +118,11 @@
 
 								<!-- Related rare disease table -->
 								<div ng-show="search.genetic_associations.rare_diseases.data.length>0">
-									<h4>Rare diseases</h4>
-									<p>Source: <a href="/faq#data-provenance" target="_blank">UniProt</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated databases</p>
+									<h4>{{search.genetic_associations.rare_diseases.heading}}</h4>
+									<!-- <p>Source: <a href="/faq#data-provenance" target="_blank">UniProt</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated databases</p> -->
+
+                                    <p>Source: <span ng-repeat="source in search.genetic_associations.common_diseases.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+
 									<div class="table-panel">
 										<table class='table table-striped table-bordered' id="rare-diseases-table">
 											<thead>

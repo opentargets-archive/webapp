@@ -44,15 +44,22 @@
             genetic_associations : {
                 is_open : false,
                 is_loading: false,
+                heading : cttvDictionary.GENETIC_ASSOCIATION,
                 common_diseases : {
                     data : [],
                     is_open : false,
-                    is_loading: false
+                    is_loading: false,
+                    heading : cttvDictionary.COMMON_DISEASES,
+                    source : cttvConfig.evidence_sources.genetic_association.common,
+                    source_label : cttvConfig.evidence_sources.genetic_association.common.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
                 },
                 rare_diseases : {
                     data : [],
                     is_open : false,
-                    is_loading: false
+                    is_loading: false,
+                    heading : cttvDictionary.RARE_DISEASES,
+                    source : cttvConfig.evidence_sources.genetic_association.rare,
+                    source_label : cttvConfig.evidence_sources.genetic_association.rare.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
                 }
             },
             rna_expression : {

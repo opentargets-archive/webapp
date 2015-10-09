@@ -24,6 +24,7 @@ angular.module('cttvServices').
             // C
             CANCER_GENE_CENSUS :     "Cancer Gene Census",
             CHEMBL :                 "CHEMBL",
+            COMMON_DISEASES :        "Common diseases",
             CTTV_PIPELINE :          "CTTV pipeline",
 
             // D
@@ -65,6 +66,7 @@ angular.module('cttvServices').
 
             // Q
             // R
+            RARE_DISEASES :          "Rare diseases",
             REACTOME :               "Reactome",
             RNA_EXPRESSION:          "RNA expression",
 

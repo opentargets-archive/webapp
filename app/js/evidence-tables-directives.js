@@ -96,8 +96,6 @@ angular.module('cttvDirectives')
                         cttvAPIservice.defaultErrorHandler
                     ).
                     finally(function(){
-                        //$scope.search.drugs.is_open = $scope.search.drugs.data.length>0 || false;
-                        //$scope.search.drugs.is_loading = false;
                         scope.loadFlag = false;
                     });
                 }
