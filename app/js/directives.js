@@ -741,11 +741,11 @@ angular.module('cttvDirectives', [])
                 scope.$watch("data", function(n,o){
                     //console.log(scope);
                     var filters = cttvFiltersService.parseURL();
-                    console.log(filters);
+                    // console.log(filters);
                     $log.debug("Data:");
                     if( scope.data ){
                         $log.debug("Update table - "+scope.data.length);
-                        console.log(scope.data.selected);
+                        //console.log(scope.data.selected);
                         updateTable(dtable, scope.data, attrs.target, filters);
                     }
                 });
@@ -1350,7 +1350,7 @@ angular.module('cttvDirectives', [])
             // template: '<div cttv-default-facet-contols facet="facet"></div>'
             //          +'<div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in facet.filters"></div>',
             template: '<div cttv-default-facet-contols facet="facet"></div>'
-                     +'<div ng-init="isCollapsed=true" ng-repeat="datatype in facet.filters">'
+                     +'<div ng-init="isCollapsed=true&&(!datatype.collection.isLastClicked())" ng-repeat="datatype in facet.filters">'
                      +'    <cttv-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
                      //+'        <div></div>'
@@ -1381,7 +1381,7 @@ angular.module('cttvDirectives', [])
 
 
             template: '<div cttv-default-facet-contols facet="facet"></div>'
-                     +'<div ng-init="isCollapsed=true" ng-repeat="pathway in facet.filters">'
+                     +'<div ng-init="isCollapsed=true&&(!pathway.collection.isLastClicked())" ng-repeat="pathway in facet.filters">' // TODO: try "isCollapsed=true&&(!facet.isLastClicked())"
                      +'    <cttv-parent-checkbox-facet bucket="pathway" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
                      //+'          <div cttv-default-facet-contols facet="pathway.collection"></div>'
@@ -1473,8 +1473,8 @@ angular.module('cttvDirectives', [])
                 // TODO: work out a custom option if the user messes up with the URL directly...
                 scope.preset = -1; // set to -1 (custom) to start with...
                 var init = scope.$watch('facet.filters', function(val, old){
-                    $log.log("facet ready?" + scope.preset);
-                    $log.log(scope.facet.filters);
+                    // $log.log("facet ready?" + scope.preset);
+                    // $log.log(scope.facet.filters);
                     if( scope.facet.filters[0] && scope.facet.filters[1] && scope.facet.filters[2] ){
                         score_presets.forEach(function(item, i){
                             // $log.log(i+" "+item.min+"=="+scope.facet.filters[0].key +" : "+ (item.min==scope.facet.filters[0].key) );
@@ -1486,7 +1486,7 @@ angular.module('cttvDirectives', [])
                                 scope.preset = i;
                             }
                         });
-                        $log.log("Preset: "+scope.preset);
+                        // $log.log("Preset: "+scope.preset);
                         init(); // remove the watch after first initialization...
                     }
                 });
@@ -1592,7 +1592,7 @@ angular.module('cttvDirectives', [])
                         .attr("y", -13)
                         .attr("dy", ".75em")
                         .attr("text-anchor", "middle")
-                        .attr("class", function(d){ $log.log(d.label); return (d.label>=scope.min && d.label<scope.max) ? "selected" : "deselected" })
+                        .attr("class", function(d){ return (d.label>=scope.min && d.label<scope.max) ? "selected" : "deselected" })
                         .text(function(d) { return d.value; });
 
                     svg.append("g")
