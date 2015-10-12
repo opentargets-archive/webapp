@@ -1253,7 +1253,7 @@
                     //var id = p.evidence.literature_ref.lit_id.split("/").pop();
                     return "EXT_ID:" + id;
                 }).join(" OR ");
-                var url = "/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search/pagesize=" + thisRecords.length + "&query=" + thisPMIDs + "&format=json&resulttype=core";
+                var url = "/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search?pagesize=" + thisRecords.length + "&query=" + thisPMIDs + "&format=json&resulttype=core";
                 callChunks.push($http.get(url));
             }
 

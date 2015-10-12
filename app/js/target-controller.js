@@ -291,7 +291,7 @@ angular.module('cttvControllers')
             })).join (" OR ");
             $scope.citations = {};
 
-            $http.get("/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search/query=" + pmidsLinks + "&format=json")
+            $http.get("/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search?query=" + pmidsLinks + "&format=json")
                 .then (function (resp) {
                     $scope.citations.count = resp.data.hitCount;
                     $scope.citations.europepmcLink = "//europepmc.org/search?query=" + pmidsLinks;
