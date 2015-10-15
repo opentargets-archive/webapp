@@ -202,6 +202,7 @@ angular.module('cttvDirectives', [])
 
                             // Disease name
                             var geneDiseaseLoc = "/evidence/" + attrs.target + "/" + data.efo_code + (facets.score_str ? "?score_str=" + facets.score_str[0] : "");
+
                             row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
 
                             // EFO (hidden)
@@ -215,19 +216,19 @@ angular.module('cttvDirectives', [])
                             row.push( getColorStyleString( data.association_score, geneDiseaseLoc ) );
 
                             // Genetic association
-                            row.push( getColorStyleString( datatypes.genetic_association, geneDiseaseLoc + "?sec=genetic_associations") );
+                            row.push( getColorStyleString( datatypes.genetic_association, geneDiseaseLoc + (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=genetic_associations") );
                             // Somatic mutation
-                            row.push( getColorStyleString( datatypes.somatic_mutation, geneDiseaseLoc + "?sec=somatic_mutations") );
+                            row.push( getColorStyleString( datatypes.somatic_mutation, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=somatic_mutations") );
                             // Known drug
-                            row.push( getColorStyleString( datatypes.known_drug, geneDiseaseLoc + "?sec=known_drugs") );
+                            row.push( getColorStyleString( datatypes.known_drug, geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=known_drugs") );
                             // Expression atlas
-                            row.push( getColorStyleString( datatypes.rna_expression, geneDiseaseLoc + "?sec=rna_expression") );
+                            row.push( getColorStyleString( datatypes.rna_expression, geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=rna_expression") );
                             // Affected pathway
-                            row.push( getColorStyleString( datatypes.affected_pathway, geneDiseaseLoc + "?sec=affected_pathways") );
+                            row.push( getColorStyleString( datatypes.affected_pathway, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=affected_pathways") );
                             // Literature
-                            row.push(getColorStyleString(datatypes.literature, geneDiseaseLoc + "?sec=literature"));
+                            row.push(getColorStyleString(datatypes.literature, geneDiseaseLoc +            (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature"));
                             // Animal model
-                            row.push( getColorStyleString( datatypes.animal_model, geneDiseaseLoc + "?sec=animal_models") );
+                            row.push( getColorStyleString( datatypes.animal_model, geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models") );
                             // Therapeutic area
                             row.push(_.reduce(data.therapeutic_area, iterateeLabel, ""));
 
@@ -647,21 +648,22 @@ angular.module('cttvDirectives', [])
                 // Ensembl ID
                 row.push(data[i].gene_id);
                 // The association score
-                row.push( getColorStyleString(data[i].association_score) );
-                // Genetic Association
-                row.push( getColorStyleString(dts.genetic_association) );
-                // Somatic Mutations
-                row.push( getColorStyleString(dts.somatic_mutation) );
-                // Known Drugs
-                row.push( getColorStyleString(dts.known_drug) );
-                // RNA expression
-                row.push( getColorStyleString(dts.rna_expression) );
-                // Affected pathways
-                row.push( getColorStyleString(dts.affected_pathway) );
+                row.push( getColorStyleString(data[i].association_score, geneDiseaseLoc ) );
+                // Genetic association
+                row.push( getColorStyleString( dts.genetic_association, geneDiseaseLoc + (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=genetic_associations") );
+                // Somatic mutation
+                row.push( getColorStyleString( dts.somatic_mutation, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=somatic_mutations") );
+                // Known drug
+                row.push( getColorStyleString( dts.known_drug, geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=known_drugs") );
+                // Expression atlas
+                row.push( getColorStyleString( dts.rna_expression, geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=rna_expression") );
+                // Affected pathway
+                row.push( getColorStyleString( dts.affected_pathway, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=affected_pathways") );
                 // Literature
-                row.push( getColorStyleString(dts.literature) );
-                // Animal models
-                row.push( getColorStyleString(dts.animal_model) );
+                row.push( getColorStyleString( dts.literature, geneDiseaseLoc +(geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature"));
+                // Animal model
+                row.push( getColorStyleString( dts.animal_model, geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models") );
+
                 // Total score
                 row.push( dts.genetic_association+
                           dts.somatic_mutation+

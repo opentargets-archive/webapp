@@ -15,7 +15,7 @@ describe ('cttv target - disease evidence page', function () {
     });
 
     // Describe common sections
-    commonTests();
+    // commonTests(); // TODO: comment back once ready
 
     // Flower
     describe ('flower', function () {
@@ -45,4 +45,39 @@ describe ('cttv target - disease evidence page', function () {
         });
     });
 
+
+    // Target info box
+    describe ('overview', function(){
+        beforeEach(function () {
+            this.timeout(10000);
+            overview = page.overview;
+            overviewItems = page.overviewItems;
+        });
+
+        it ("exists", function () {
+            this.timeout(10000);
+            expect(overview.isPresent()).to.eventually.equal(true);
+        });
+
+        it ("has items", function () {
+            this.timeout(10000);
+            expect(overviewItems.getText().count()).to.eventually.equal(2);
+        });
+
+        it ("has target info", function(){
+            this.timeout(10000);
+            expect( overviewItems.first().element(by.tagName('h5')).getText() ).to.eventually.not.be.empty;
+        });
+
+        it ("has disease info", function(){
+            this.timeout(10000);
+            expect( overviewItems.last().element(by.tagName('h5')).getText() ).to.eventually.not.be.empty;
+        });
+    });
+
+
+
+
+
 });
+

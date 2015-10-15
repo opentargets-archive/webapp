@@ -137,7 +137,6 @@
                 } ).
                 then(
                     function(resp) {
-                        $log.warn(resp);
                         $scope.search.info.gene = resp.body;
                         updateTitle();
                     },
@@ -151,7 +150,6 @@
                 } ).
                 then(
                     function(resp) {
-                        $log.warn(resp);
                         $scope.search.info.efo = resp.body;
                         // TODO: This is not returned by the api yet. Maybe we need to remove it later
                         $scope.search.info.efo.efo_code = $scope.search.disease;
