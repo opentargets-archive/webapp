@@ -23,7 +23,7 @@ angular.module('cttvControllers')
 
     // Set filters
     cttvFiltersService.pageFacetsStack([
-        cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
+        //cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
         cttvFiltersService.facetTypes.DATATYPES
     ]);
 
