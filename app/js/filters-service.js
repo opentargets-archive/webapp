@@ -62,6 +62,10 @@ angular.module('cttvServices').
 
 
 
+        var lastClicked;
+
+
+
         // ----------------------------------
         //  Private methods
         // ----------------------------------
@@ -93,7 +97,7 @@ angular.module('cttvServices').
          */
         var getCollectionForSelected = function(key, label){
             var c = selected.filter(function(obj){return obj.key == key;})[0];
-            $log.log("getCollectionForSelected( "+key+", "+label+" ) :: "+c);
+            //$log.log("getCollectionForSelected( "+key+", "+label+" ) :: "+c);
             if(c==undefined){
                 c = new FilterCollection({key: key, label: label});
                 selected.push(c);
@@ -166,7 +170,7 @@ angular.module('cttvServices').
          * Takes API data for a facet (i.e. a collection of filters) and returns the config object to create that collection
          */
         var parseFacetData = function(collection, data, countsToUse){
-            $log.log("parseFacetData");
+            //$log.log("parseFacetData");
             var config={
                 key: collection,    // this is the type, really...
                 label: cttvDictionary[collection.toUpperCase()] || collection,
@@ -352,7 +356,7 @@ angular.module('cttvServices').
          * f is essentially a config object
          */
         var getFilter = function(f){
-            $log.log("getFilter()");
+            //$log.log("getFilter()");
             if(!filtersData[f.facet]){
                 filtersData[f.facet] = {}
             }
@@ -393,6 +397,7 @@ angular.module('cttvServices').
             Filter.prototype.toggle = function(){
                 this.setSelected(!this.selected);
                 update();
+                lastClicked = this.toString() || undefined;
                 return this.selected;
             };
 
@@ -408,6 +413,9 @@ angular.module('cttvServices').
                 return this.selected;
             };
 
+            Filter.prototype.toString=function(){
+                return this.facet+":"+this.key;
+            }
 
 
         /**
@@ -481,6 +489,14 @@ angular.module('cttvServices').
 
             FilterCollection.prototype.update = function(){
                 update();
+            }
+
+
+            FilterCollection.prototype.isLastClicked = function(){
+                return this.filters.some(function(f){
+                    //$log.log("  "+f.toString() + " === "+ lastClicked);
+                    return f.toString() == lastClicked;
+                });
             }
 
 
@@ -659,9 +675,9 @@ angular.module('cttvServices').
 
             // update the filters state?
             updateSelected();
-            $log.log("--------------");
-            $log.log(filtersData);
-            $log.log("--------------");
+            // $log.log("--------------");
+            // $log.log(filtersData);
+            // $log.log("--------------");
         };
 
 

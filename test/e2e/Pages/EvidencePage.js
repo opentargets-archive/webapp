@@ -30,7 +30,25 @@ EvidencePage.prototype = Object.create(Page.prototype, {
             var labels = this.flower.all(by.tagName("text"));
             return labels;
         }
+    },
+
+
+
+    // Overview
+    overview: {
+        get: function(){
+            return element(by.css("div .overview"));
+        }
+    },
+
+    overviewItems:{
+        get: function(){
+            return this.overview.all(by.css("div .item"));
+        }
     }
+
+
+
 });
 
 module.exports = EvidencePage;
