@@ -1,5 +1,3 @@
-'use strict';
-
 
 
 angular.module('cttvApp', [
@@ -7,53 +5,77 @@ angular.module('cttvApp', [
     'ui.bootstrap',
     'cttvControllers',
     'cttvDirectives',
+    'cttvFilters',
     'angulartics',
-    'angulartics.google.analytics',
-    'viewhead'
-]).
+    //'angulartics.google.analytics',
+    'angulartics.piwik',
+    'viewhead',
+    'cttvServices'
+])
 
+.config(['$routeProvider', '$locationProvider',
+    function($routeProvider, $locationProvider) {
+        'use strict';
 
-config(['$routeProvider', 
-    function($routeProvider) {
         $routeProvider.
-            when('/intro', {
+            when('/', {
                 templateUrl: 'partials/intro.html'
+            }).
+            when('/about', {
+                templateUrl: 'partials/about.html'
             }).
             when('/search', {
                 templateUrl: 'partials/search.html',
                 controller: 'SearchAppCtrl'
             }).
-            when('/target-associations', {
+    	    when('/target/:id/associations', {
                 templateUrl: 'partials/target-associations.html',
-                controller: 'AssociationsCtrl'
-            }).
-            when('/disease-associations', {
-                templateUrl: 'partials/disease-associations.html',
-                controller: 'AssociationsCtrl'
-            }).
-    	    when('/gene-disease', {
-                templateUrl: 'partials/geneDisease.html',
-                controller: 'GeneDiseaseCtrl'
+                controller: 'targetAssociationsCtrl',
+                reloadOnSearch: false
     	    }).
-	    when('/target/:id', {
-		templateUrl: 'partials/target.html',
-		controller: 'TargetCtrl'
-	    }).
-	    when('/disease/:id', {
-		templateUrl: 'partials/disease.html',
-		controller: 'DiseaseCtrl'
-	    }).
+    	    when('/disease/:id/associations', {
+                templateUrl: 'partials/disease-associations.html',
+                controller: 'diseaseAssociationsCtrl',
+                reloadOnSearch: false
+    	    }).
+    	    when('/evidence/:id/:id', {
+                templateUrl: 'partials/target-disease.html',
+                controller: 'TargetDiseaseCtrl'
+    	    }).
+    	    // when('/gene-disease', {
+            //     redirectTo: '/target-disease'   // for backward compatibility
+    	    // }).
+    	    when('/target/:id', {
+        		templateUrl: 'partials/target.html',
+        		controller: 'TargetCtrl'
+    	    }).
+    	    when('/disease/:id', {
+        		templateUrl: 'partials/disease.html',
+        		controller: 'DiseaseCtrl'
+    	    }).
+            when('/faq', {
+                templateUrl: 'partials/faq.html'
+            }).
             /*when('/evidence/:id', {
                 templateUrl: 'partials/evidence.html',
                 controller: 'EvidenceCtrl'
             }).*/
-            when('/d3test', {
-                templateUrl: 'partials/d3test.html',
-                controller: 'D3TestCtrl'
+            // when('/target-disease', {
+            //     templateUrl: 'partials/target-disease.html',
+            //     controller: 'TargetDiseaseCtrl'
+            // }).
+            when('/release-notes', {
+                templateUrl: 'partials/release-notes.html'
             }).
             otherwise({
-                redirectTo: '/intro'
+                redirectTo: '/'
             });
 
-}]);
+            // function supports_history_api() {
+            //     return !!(window.history && history.pushState);
+            // }
 
+
+        $locationProvider.html5Mode(true).hashPrefix('!');
+
+}]);

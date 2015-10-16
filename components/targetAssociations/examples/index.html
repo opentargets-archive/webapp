@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" href="../build/index.css" />
+  <link rel="stylesheet" href="bubblesView.css"/>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="../build/cttv.geneAssociations.js"></script>
+  <script src="cttv.bubblesView.js"></script>
+  <script src="../node_modules/cttv.api/build/cttv.api.js"></script>
+  <script src="data.js"></script>
+</head>
+
+<body>
+  <div id="mydiv"></div>
+  <script>
+    var bView = bubblesView()
+    .data(bubblesView.node(data1))
+    .value("values")
+    .key("key")
+    .diameter(800);
+    var ga = geneAssociations({
+    "bubblesView": bView,
+    "cttvApi" : cttvApi
+    });
+    ga(document.getElementById("mydiv"));
+  </script>
+</body>

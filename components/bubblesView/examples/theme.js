@@ -1,7 +1,7 @@
 var theme = function () {
 
     var _ = function (bubblesView, div) {
-
+	bubblesView.data(tnt.tree.node(mydata1));
 	var menu = d3.select(div)
 	    .append("div");
 	
@@ -47,11 +47,11 @@ var theme = function () {
 		var n = this.value;
 		switch (n) {
 		case "EFO" :
-		    bubblesView.data(bubblesView.node(data1));
+		    bubblesView.data(tnt.tree.node(mydata1));
 		    bubblesView.update();
 		    break;
 		case "Simplified" :
-		    bubblesView.data(bubblesView.node(data2));
+		    bubblesView.data(tnt.tree.node(mydata2));
 		    bubblesView.update();
 		    break;
 		}
@@ -82,4 +82,30 @@ var theme = function () {
     };
 
     return _;
+};
+
+var mydata1 = {
+    "name" : "cttv_disease",
+    "value" : 18,
+    "children" : [
+	{
+	    "name": "first",
+	    "value" : 12
+	},
+	{
+	    "name": "second",
+	    "value" : 6
+	}
+    ]
+};
+
+var mydata2 = {
+    "name" : "cttv_disease",
+    "value" : 12,
+    "children" : [
+	{
+	    "name": "first",
+	    "value": 12
+	}
+    ]
 };

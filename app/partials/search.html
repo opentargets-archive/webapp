@@ -2,71 +2,60 @@
 
 <div>
 	<h3 view-title>Search results for {{(search.query.q.title || search.query.q)}}</h3>
-	<div class="h6">Found {{search.results.total}} results ({{search.results.took/1000}} seconds)</div>
+	<div class="h6">Found {{search.results.total || 0}} results <span ng-show="search.results.took!==undefined">({{search.results.took/1000}} seconds)</span></div>
 
-	
-	<!-- <table class="table table-striped table-hover table-bordered"> -->
-	<!-- 
-	<table class="table table-striped table-hover">
-		<thead>
-			<tr>
-				<th>Title</th>
-				<th>Description</th>
-				<th>Type</th>
-				<th>Score</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="result in search.results.data">	
-				<td><a href="#/evidence?q={{result.id}}&label={{result.title}}"><strong>{{result.title}}</strong></a></td>
-				<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.description}}</a></td>
-				<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.type | limitTo: ((result.type==='genename')?4:3) | uppercase}}</a></td>
-				<td><a href="#/evidence?q={{result.id}}&label={{result.title}}">{{result.score}}</a></td>
-			</tr>
-		</tbody>
-	</table>
-	-->
 	<div class="row">
 
-		<!-- Filters/Facets --> 
+		<!-- Filters/Facets -->
 
 		<div class="col-md-2">
-			<h4>Filters</h4>
+			<h4>Refine by:</h4>
 			<div class="checkbox">
-				<label><input type="checkbox" ng-model="filters.gene.selected" ng-change="getResults()" ng-disabled="filters.gene.total==0">Gene <span class='badge'>{{filters.gene.total}}</span></label>
+				<label ng-class="(filters.gene.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.gene.selected" ng-change="getResults()" ng-disabled="filters.gene.total==0">Target <span class='badge badge-primary'>{{filters.gene.total}}</span></label>
+				<span cttv-progress-spinner class="text-lowlight" ng-show="filters.gene.loading"></span>
 			</div>
 			<div class="checkbox">
-				<label><input type="checkbox" ng-model="filters.efo.selected" ng-change="getResults()" ng-disabled="filters.efo.total==0">Disease <span class='badge'>{{filters.efo.total}}</span></label>
+				<label ng-class="(filters.efo.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.efo.selected" ng-change="getResults()" ng-disabled="filters.efo.total==0">Disease <span class='badge badge-warning'>{{filters.efo.total}}</span></label>
+				<span cttv-progress-spinner class="text-lowlight" ng-show="filters.efo.loading"></span>
 			</div>
 		</div>
 
 		<!-- Search results -->
-		
+
 
 		<div class="col-md-10">
 
-			<div ng-repeat="result in search.results.data" class="search-result">
-				<h4><a ng-href="#/{{result.type==='genedata'?'target-associations':'disease-associations'}}?q={{result.id}}&label={{result.title}}">{{result.title}}</a></h4>
-				<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
-				<span class="search-matches text-lowlight">
-					<span ng-repeat="(key, val) in result.highlight"><span bind-html-unsafe="'<span style=\'color:#888\' title=\'Matching field and text\'>' + ( !$first ? ' ... ' : '') + key.split('_').join(' ') + ': </span>' + val.join(', ')"></span></span>
-				</span>
-
-				
-
-				<span class="search-details">
-					<span class="label" ng-class="(result.type==='genedata') ? 'label-primary' : 'label-warning'">{{result.type==="genedata" ? "gene" : "disease"}}</span>&nbsp;|&nbsp;<span class="text-lowlight">Score: {{result.score}}</span>
-				</span>	
+			<!-- Loading progress spinner -->
+			<div style="width:100%; text-align:center; padding-top:50px; position:absolute" ng-show="search.loading">
+				<span cttv-progress-spinner size="3" class="text-lowlight"></span>
 			</div>
+
+			<div ng-class="search.loading ? 'opacity-50' : ''">
+				<div ng-repeat="result in search.results.data" class="search-result">
+					<h4><a ng-href="/{{result.type==='genedata'?'target':'disease'}}/{{result.id}}/associations">{{result.title}}</a></h4>
+					<span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
+					<span class="search-matches text-lowlight">
+						<span ng-repeat="(key, val) in result.highlight"><span bind-html-unsafe="'<span style=\'color:#888\' title=\'Matching field and text\'>' + ( !$first ? ' ... ' : '') + key.split('_').join(' ') + ': </span>' + val.join(', ')"></span></span>
+					</span>
+
+
+
+					<span class="search-details">
+						<span class="label" ng-class="(result.type==='genedata') ? 'label-primary' : 'label-warning'">{{result.type==="genedata" ? "target" : "disease"}}</span><!-- &nbsp;|&nbsp;<span class="text-lowlight">Score: {{result.score}}</span> -->
+					</span>
+				</div>
+			<div>
+
+
 			<!-- Furthermore this should only be shown when results are displayed -->
-			<pagination boundary-links="true" total-items="search.results.total" ng-model="search.query.page" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="getResults()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" num-pages="numPages" style="{{numPages<=1 ? 'display:none' : ''}}"></pagination>
+			<pagination boundary-links="true" total-items="search.results.total" ng-model="search.query.page" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="getResults();" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" num-pages="numPages" style="{{numPages<=1 ? 'display:none' : ''}}"></pagination>
 		</div>
 
 	</div>
-	
 
 
 
-	
+
+
 </div>
 <!-- end search results-->

@@ -10,7 +10,10 @@
     "test": "gulp test"
   },
   "keywords": [
-    "cttv"
+    "cttv",
+    "tnt",
+    "genome",
+    "browser"
   ],
   "author": "Miguel Pignatelli",
   "license": "Apache-2.0",
@@ -42,12 +45,15 @@
     "mkdirp": "^0.5.0",
     "mocha": "~1.20.1",
     "requirejs": "^2.1.15",
-    "tnt.genome": "file:../../../tnt.genome",
+    "font-awesome": "^4.3.0",
     "uglify-js": "~2.4.15",
     "watchify": "^1.0.2"
   },
   "dependencies": {
-    "font-awesome": "^4.3.0",
-    "tnt.tooltip": "0.0.7"
+    "cttv.genomeBrowserNav": "file:../genomeBrowserNav",
+    "rsvp": "^3.0.18",
+    "tnt.ensembl": "^0.0.10",
+    "tnt.genome": "0.0.29",
+    "tnt.tooltip": "^0.0.10"
   }
 }

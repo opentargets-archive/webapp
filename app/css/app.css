@@ -1,13 +1,40 @@
 /* app css stylesheet */
 
 html {
-  
+
 }
 
 body{
-  color: #777;
-  background: #AAA;
+    color: #777;
+    background: #AAA;
+    /*font-family: 'Ubuntu', 'Helvetica', sans-serif;*/
+}
 
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.changeView {
+    color: #3a99d7;
+    cursor: pointer;
+}
+
+
+/* Needed for the rounded corner in the viewport for Chrome */
+.pwp-DiagramCanvas {
+    border-radius: 15px;
+}
+
+
+/*
+* Main index page
+*/
+
+
+.cttv-centered-text {
+    display: table-cell;
+    text-align: center;
 }
 
 .cttv-beta-ribbon {
@@ -37,47 +64,68 @@ body{
     text-shadow: 0 0 5px #444;
 }
 
+
+.cttv-main-container {
+    width:100%;
+    background:#FFF;
+    padding-bottom:70px;
+}
+
+
+/*
+* Masthead
+*/
+
+
 .masthead {
-  width:100%; 
-  background-color:#DDD; 
-  padding:10px 0px;
-  height: auto;
-  border-bottom: 1px solid #CFCFCF;
+    width:100%;
+    background-color:#DDD;
+    padding:10px 0px;
+    height: auto;
+    border-bottom: 1px solid #CFCFCF;
 }
 
 .masthead .container{
-  height: auto;
+    height: auto;
 }
+
+
+/*
+* Footer
+*/
 
 
 .footer {
-  font-size: 11px;
-  color:#DDD;
-  padding: 40px 0px;
-  border-top: 1px solid #A6A6A6;
-  /*padding-left:20px;
-  padding-bottom:5px;
-  bottom: 0px;
-
-  position:relative;
-  margin-top: -100px;*/
-  /* height: 100px; */
+    font-size: 11px;
+    color:#DDD;
+    padding: 40px 0px;
+    border-top: 1px solid #A6A6A6;
 }
 
 .footer a{
-  color: inherit;
+    color: inherit;
+}
+
+.footer h6{
+    color: #F9F9F9;
+}
+
+
+.faqs ul{
+/*list-style:none;
+padding-left: 0px;*/
 }
 
 
 .dataTables_wrapper{
-  
+
 }
 
 a.accordion-toggle{
-  text-decoration: none;
-  /* display: block; */
-  width: 100%;
-  height: 100%;
+    text-decoration: none;
+    /* display: block; */
+    width: 100%;
+    height: 100%;
 }
 
 .accordionCell {
@@ -100,118 +148,330 @@ a.accordion-toggle{
     background-color: #f5f5f5;
 }
 
-.cttv-facet .cttv-accordion-leaf .panel-body {
-    padding : 0px;
+/* .cttv-facet .cttv-accordion-leaf .panel-body { */
+    /*     padding : 0px; */
+    /* } */
+
+    .cttv-facet .panel-heading {
+        padding : 5px;
+    }
+    .cttv-facet .panel-body {
+        padding : 5px;
+    }
+    .cttv-facet .panel-title {
+        font-size: 10px;
+        color: #777;
+    }
+
+
+/*
+* Search suggestions (autocomplete) and form
+*/
+
+
+.search-form{
+    position:relative;
 }
 
-.cttv-facet .panel-heading {
-    padding : 5px;
-}
-.cttv-facet .panel-body {
-    padding : 5px;
-}
-.cttv-facet .panel-title {
-    font-size: 10px;
-    color: #777;
+.search-form-spinner {
+    right:40px;
 }
 
 .search-suggestions-box{
-  position: absolute;
-  background: #FFF;
-  width: 100%;
+    position: absolute;
+    background: #FFF;
+    width: 100%;
 
-  border: 1px solid rgba(0,0,0,.15);
-  border-radius: 4px;
-  padding: 5px;
-  margin: 2px 0 0;
-  list-style: none;
-  font-size: 14px;
-  box-shadow: 0 6px 12px rgba(0,0,0,.175);
-  background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    padding: 5px;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    background-clip: padding-box;
 
-  font-size: 14px;
-  z-index: 10;
+    font-size: 14px;
+    z-index: 10;
 }
 
 .search-suggestions-box .divider{
-  margin: 10px 0px;
-  border-top: 1px solid #CCC;
-  /*border-bottom: 1px solid #EEE;*/
+    margin: 10px 0px;
+    border-top: 1px solid #CCC;
 }
 
 .search-suggestions-box .item:hover{
-  background: #EEE;
-  cursor: pointer;
+    background: #EEE;
+    cursor: pointer;
+}
+
+.search-suggestions-box .besthit{
+    cursor:pointer;
+    padding:4px 0px;
+}
+
+.search-suggestions-box .text-item{
+    padding:0px 5px;
 }
 
 /* non-breaking block */
 .nbblock{
-  display:block; 
-  margin-bottom:0px;
+    display:block;
+    margin-bottom:0px;
 }
 
+.search-suggestions-box .result-item{
+    margin:0;
+    padding:4px 5px;
+}
+
+.search-suggestions-box .suggestions-efo .suggestions-efo-title{
+    line-height: 1.1;
+}
+
+.search-suggestions-box .suggestions-efo .suggestions-efo-hierarchy-arrow{
+    margin:0px 4px;
+}
+
+
+/*
+* Gene-Disease Association
+*/
+
+
+.gene-disease-header{
+    padding-bottom:20px;
+    margin-bottom:20px;
+    margin-top:40px;
+}
+
+.gene-disease-header .overview{
+    display: table;
+}
+
+.gene-disease-header .overview .item{
+    display: table-cell;
+    width:45%;
+}
+
+.gene-disease-header .overview .association{
+    display: table-cell;
+    width:10%;
+    vertical-align:middle;
+    padding: 2px;
+}
+
+.gene-disease-header .overview .association div{
+    width:100%;
+    height:1px;
+    border-bottom:2px solid #DDD;
+}
+
+.gene-disease-content{
+
+}
+
+.gene-disease-content .table-panel{
+    overflow-x: auto;
+}
+
+.gene-disease-content .no-last-el{
+    border-right-width: 1px !important;
+}
+
+
+/*
+* Text
+*/
+
+
 .text-lowlight{
-  color: #AAA;
+    color: #AAA;
 }
 
 .text-highlight{
-  color: #000;
+    color: #000;
 }
 
 .text-nolight{
-  color: #666;
+    color: #666;
 }
 
 .small{
-  font-size: 12px;
-  line-height: 1.2; 
+    font-size: 12px;
+    line-height: 1.2;
 }
 
-.text-disabled {
-  color: #AAA;
-  text-decoration: none;
-  cursor: default;
+.text-small{
+    font-size: 12px;
+    line-height: 1.2;
 }
+
+.large {
+    font-size: 16px;
+}
+
+.text-disabled, .disabled{
+    color: #AAA;
+    text-decoration: none;
+    cursor: default;
+}
+
+.disabled {
+    cursor: not-allowed !important;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    /*font-family: 'Open Sans', 'Helvetica', sans-serif;*/
+}
+
+/*
+ * Lists
+ */
+
+
+ul.plain {
+    padding-left: 0px;
+}
+
+ul.plain li {
+    list-style-type: none;
+    margin-left: 1.1em;
+}
+
+ul.arrow-icon li:before {
+    font-family: 'FontAwesome';
+    content: '\f105';
+    margin-left: -1.1em;
+    display: inline-block;
+    width: 1.1em;
+    color: #CCC;
+}
+
+
+/*
+ * Links
+ */
+
+
+a:hover {
+    text-decoration: none;
+}
+
+
+
+/*
+* Backgrounds
+*/
+
+
+.cttv-blue-background{
+    background: #3E8BAD !important;
+    background-color: #3E8BAD !important;
+}
+
+
+.flower-petal{
+    color: #000 !important;
+    background: #3E8BAD !important;
+    background-color: #3E8BAD !important;
+}
+
+
+.badge:hover {
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+}
+.badge-error {
+    background-color: #b94a48;
+}
+.badge-error:hover {
+    background-color: #953b39;
+}
+.badge-warning {
+    background-color: #f89406;
+}
+.badge-warning:hover {
+    background-color: #c67605;
+}
+.badge-success {
+    background-color: #468847;
+}
+.badge-success:hover {
+    background-color: #356635;
+}
+.badge-info {
+    background-color: #3a87ad;
+}
+.badge-info:hover {
+    background-color: #2d6987;
+}
+.badge-inverse {
+    background-color: #333333;
+}
+.badge-inverse:hover {
+    background-color: #1a1a1a;
+}
+.badge-primary {
+    background-color: #337ab7;
+}
+.badge-primary:hover {
+    background-color: #2d6987;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+
 
 .container {
-  /*height: 1000px;*/
+    /*height: 1000px;*/
 }
 
 .menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+    list-style: none;
+    border-bottom: 0.1em solid black;
+    margin-bottom: 2em;
+    padding: 0 0 0.5em;
 }
 
 .menu:before {
-  content: "[";
+    content: "[";
 }
 
 .menu:after {
-  content: "]";
+    content: "]";
 }
 
 .menu > li {
-  display: inline;
+    display: inline;
 }
 
 .menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
+    content: "|";
+    padding-right: 0.3em;
 }
 
 .menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
+    content: "";
+    padding: 0;
 }
 
+
+/*
+* Search results
+*/
+
+
 .search-result {
-  margin-bottom: 24px;
+    margin-bottom: 24px;
 }
 
 .search-result h4{
-  margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .search-title {
@@ -219,18 +479,618 @@ a.accordion-toggle{
 }
 
 .search-matches em{
-  color: #999;
-  font-style: normal;
-  font-weight: 500;
-  background-color: #E6E6E6;
-  padding: 0px 2px;
+    color: #999;
+    font-style: normal;
+    font-weight: 500;
+    background-color: #E6E6E6;
+    padding: 0px 2px;
 }
 
 .search-description, .search-details, .search-matches{
-  display: block;
+    display: block;
 }
 
 .search-details, .search-matches{
+    font-size: 12px;
+}
+
+
+
+/*
+* Intro page
+*/
+
+
+.intro-logo{
+    padding-bottom:40px;
+    display: block;
+    margin: 0 auto;
+}
+
+.intro-content{
+    margin-top: 100px;
+}
+
+.intro-divider{
+    height:100px;
+}
+
+.intro-statement{
+    font-weight: 200 !important;
+    text-align: center;
+}
+
+.intro-statement-heading{
+    color:#666;
+}
+
+.intro-statement-p{
+    color:#2B8BAC;
+}
+
+
+
+/*
+ * Page stuff
+ */
+
+
+/* define the container for an angular partial*/
+.partial-page{
+    position:relative;
+}
+
+
+
+/*
+ * Spinners
+ */
+
+
+.page-progress-spinner{
+    width:100%;
+    height: 100%;
+    text-align:center;
+    padding-top:150px;
+    position:absolute;
+    background-color:rgba(255,255,255,0.5);
+    z-index: 1000;
+    left: 0px;
+}
+
+
+
+/*
+* Tables
+*/
+
+table.dataTable thead > tr > th{
+    padding-left: 8px !important;
+    /*padding-right: 8px !important;*/
+}
+
+table.dataTable thead .sorting {
+    /*background-image: url('../images/sort_both.png') !important;
+    background-repeat: no-repeat !important;
+    background-origin: content-box !important;
+    background-position-x: right !important;
+    background-position-y: bottom !important;*/
+}
+
+.cttv-access-public, .cttv-access-private {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-color: #CCC;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 10px;
+    padding-top: 1px;
+    color: #FFF;
+}
+
+.cttv-access-private {
+    background-color: #f36633;
+}
+
+.cttv-access-public:after {
+    content: "P";
+    /*content: "\f023";
+    font-family: FontAwesome;*/
+}
+
+.cttv-access-private:after {
+    content: "G";
+}
+
+.cttv-literature-modal {
+    padding: 10px;
+}
+
+
+
+/*
+* Matrix table
+*/
+
+table.matrix-table .dataTables_empty {
+    text-align: center;
+}
+
+table.matrix-table{
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+table.matrix-table thead > tr {
+    margin-bottom: 10px !important;
+}
+
+table.matrix-table thead > tr > th {
+    padding-left: 0px !important;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 11px;
+    height:140px;
+    /*white-space: nowrap;*/
+    background-position: center bottom 5px !important;
+    padding: 5px !important;
+    border: none !important;
+    width: 48px; /*5%;*/
+    min-width: 30px;
+    /*vertical-align: middle !important;*/
+}
+
+table.matrix-table thead > tr > th:hover {
+    background-color: #F6F6F6;
+}
+
+table.matrix-table thead > tr > th:first-child {
+    padding-right: 5px;
+    background-position: right 5px bottom 5px !important;
+    width: auto;
+}
+
+table.matrix-table thead > tr > th:last-child {
+    padding-left: 5px;
+    background-position: left 5px bottom 5px !important;
+    width: auto;
+}
+
+table.matrix-table thead > tr > th > div {
+    height: 1px;
+    vertical-align: top;
+    margin-bottom: 20px;
+}
+
+table.matrix-table thead > tr > th > div > span{
+    display: block;
+    width: 140px;
+    margin-left: 50%;
+    -webkit-transform-origin: 0% 0%;
+    -moz-transform-origin: 0% 0%;
+    -ms-transform-origin: 0% 0%;
+    -o-transform-origin: 0% 0%;
+    transform-origin: 0% 0%;
+    -webkit-transform: rotate(-90deg) translateY(-50%);
+    -moz-transform:    rotate(-90deg) translateY(-50%);
+    -ms-transform:     rotate(-90deg) translateY(-50%);
+    -o-transform:      rotate(-90deg) translateY(-50%);
+    transform:      rotate(-90deg) translateY(-50%);
+}
+
+table.matrix-table thead > tr > th:first-child > div {
+    width:0px;
+    float: right;
+    margin-right: 10px;
+}
+
+table.matrix-table thead > tr > th:last-child > div {
+    width:0px;
+    float: left;
+    margin-left: 10px;
+}
+
+
+table.matrix-table tbody > tr > td {
+    border-collapse: collapse;
+    border: 1px solid #FFF !important;
+    padding: 0;
+    padding-bottom: 0 !important;
+    font-size: 12px;
+    line-height: 12px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+table.matrix-table tbody > tr > td span {
+    display: block;
+    width: 100%;
+    height: 16px;
+}
+
+table.matrix-table tbody :hover{
+    text-decoration:none;
+}
+
+table.matrix-table tbody > tr:hover {
+    background-color: #F6F6F6;
+}
+
+.matrix-table span.no-data, .matrix-legend span.no-data{
+    border: 1px solid #EEE;
+    background: #FFF;
+    color: #FFF;
+}
+
+.matrix-table span.value-0, .matrix-legend span.value-0 {
+    background: #EEE;
+    color: #EEE;
+}
+
+table.matrix-table tbody > tr > td:first-child {
+    border: none;
+    text-align: right;
+    vertical-align: middle;
+    padding-right: 5px !important;
+    overflow: hidden;
+}
+
+table.matrix-table tbody > tr > td:last-child {
+    border: none;
+    vertical-align: middle;
+    padding-left: 5px;
+    overflow: hidden;
+}
+
+.matrix-legend, .matrix-legend-info{
+    /* Do one for horizontal layout */
+    font-size: 12px;
+    margin: 5px;
+}
+
+.matrix-legend-layout-h span {
+    float:left;
+}
+
+span.matrix-legend-from {
+    padding-right: 5px;
+    padding-top: 2px
+}
+
+span.matrix-legend-to {
+    padding-left: 5px;
+    padding-top: 2px
+}
+
+span.matrix-legend-text {
+    padding-left: 0px;
+}
+
+span.matrix-legend-item {
+    display:block;
+    border: 1px solid #FFF;
+}
+
+span.matrix-legend-background {
+    display:block;
+    width:20px;
+    height:20px;
+}
+
+span.matrix-legend-background-label {
+    display:block;
+}
+
+.matrix-legend-layout-v .matrix-legend-item {
+    /*width: inherit;*/
+}
+
+.matrix-legend-layout-v .matrix-legend-item > span {
+    float:left;
+}
+
+.matrix-legend-info span{
+    padding-right:5px;
+}
+
+.hpa-matrix-table {
+
+}
+
+.hpa-matrix-table tbody > tr > td:last-child {
+    padding-left: 0px;
+
+    /*
+    border-collapse: collapse;
+    border: 1px solid #FFF;
+    padding: 0 !important;
+    padding-bottom: 0 !important;
+    font-size: 12px;
+    line-height: 12px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    */
+}
+
+.hpa-matrix-table thead > tr > th:last-child {
+    padding: 0px;
+    background-position: center bottom 5px !important;
+    width: 5% !important;
+}
+/*
+
+table.matrix-table thead > tr > th:last-child {
+    padding-left: 5px;
+    background-position: left 5px bottom 5px !important;
+    width: auto;
+}
+
+*/
+
+
+
+/*
+ * F A C E T S
+ */
+
+
+
+.cttv-facets{
+
+}
+
+.cttv-facets-headers{
+
+}
+
+.cttv-facets-controls {
+    font-size: 12px;
+    /*border-bottom: 1px dotted #DDD;*/
+}
+
+.cttv-facets-controls > span{
+    cursor: pointer;
+    margin-right:10px;
+}
+
+.cttv-facets-controls > span:hover{
+    color: #333;
+}
+
+.cttv-facets-selected-summary{
+    border-bottom:1px solid #CCC;
+    margin-bottom:25px;
+    padding-bottom:10px;
+}
+
+
+/*
+ * Restyle accordion for facets
+ * Override the Bootstrap rules for custom l'n'f
+ */
+
+
+
+.cttv-facets .panel{
+    border-radius: 0px;
+    border: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -ms-box-shadow: none;
+    -o-box-shadow: none;
+    box-shadow: none;
+}
+
+.cttv-facets .panel-title{
+    font-size: 14px;
+}
+
+.cttv-facets .panel-heading{
+    color:inherit;
+    border-bottom: 1px solid #DDD;
+    padding: 10px 0px;
+}
+
+.cttv-facets .panel-default>.panel-heading{
+    background: none;
+}
+
+.cttv-facets .panel-group .panel-heading+.panel-collapse>.panel-body{
+    border-top: none;
+}
+
+.cttv-facets .panel-default>.panel-heading+.panel-collapse>.panel-body{
+    border-top-color: none;
+}
+
+.cttv-facets .panel-body{
+    padding: 10px 0px;
+}
+
+.cttv-facet-checkbox {
+    /* overrides bootstrap values */
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.cttv-facet-checkbox-label{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cttv-section-intro {
+    font-style: italic;
+    background-color: #EEEEEE;
+    padding: 10px;
+}
+
+.cttv-interpage-link {
+    padding-left: 15px;
+    margin-left: 15px;
+    border-left-style: solid;
+}
+
+.cttv-content-header {
+    padding-bottom: 40px;
+}
+
+/* .cttv_bullet_link {
+    width : 100px;
+    height : 30px;
+    border-radius: 6px;
+    float : right;
+    margin-left: 15px;
+    padding-top: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+
+    background-color: #BBBBBB;
+}
+.cttv_target_associations_link:after {
+    color : white;
+    font-weight: bold;
+    font-size: 12px;
+    vertical-align: 50%;
+    content: "Associations";
+}
+.cttv-2line-header > span:first-child{
+    display:block;
+    font-size:18px;
+    font-weight:200;
+}
+
+.cttv-2line-header > span:last-child{
+    display:block;
+    font-size:36px;
+    font-weight:100;
+}
+
+
+.cttv_target_profile_link:after {
+    color: white;
+    font-size: 12px;
+    vertical-align: 50%;
+    content: "Profile";
+}
+ */
+
+.fixed {
+    position: fixed;
+}
+
+
+cttv-score-histogram .bar rect {
+  /*fill: steelblue;*/
+  shape-rendering: crispEdges;
+}
+
+cttv-score-histogram .bar text {
+  /*fill: #fff;*/
   font-size: 12px;
+}
+
+cttv-score-histogram .bar .selected {
+    fill: steelblue;
+}
+
+cttv-score-histogram .bar .deselected {
+    fill: #CCC;
+}
+
+cttv-score-histogram .axis path, cttv-score-histogram .axis line {
+  /*fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;*/
+  display: none;
+}
+
+cttv-score-histogram .axis text{
+  fill: #AAA;
+}
+
+cttv-score-histogram .brush .extent {
+  stroke: #000;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+cttv-score-histogram .handle {
+  fill: #fff;
+  stroke: #000;
+  /*stroke-opacity: .5;*/
+  stroke-width: 1px;
+  cursor: ew-resize;
+}
+
+
+cttv-slider {
+    width:100%;
+    display:block;
+}
+
+cttv-slider .axis {
+  /*font: 10px sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;*/
+  stroke: #000;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+cttv-slider .axis text{
+    font-size: 10px;
+    height: 20px;
+    line-height: normal;
+    fill:none;
+}
+
+cttv-slider .axis .domain {
+  fill: none;
+  /*stroke: #000;
+  stroke-opacity: .3;
+  stroke-width: 10px;*/
+}
+
+cttv-slider .axis .halo {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 6px;
+}
+
+cttv-slider .slider .handle {
+  fill: #fff;
+  stroke: #000;
+  stroke-opacity: .5;
+  stroke-width: 1.25px;
+  cursor: ew-resize;
+}
+
+cttv-score-presets .label {
+    font-size: 10px;
+    color: inherit;
+    display:block;
+    font-weight: normal;
+    padding: 0px;
+}
+
+cttv-score-presets .well-sm{
+    padding: 5px 0px;
+    border: none;
+    box-shadow: none;
+}
+
+.tnt_legend_div {
+    margin-top: 10px;
+}
+.tnt_legend_header {
+    font-weight: bold;
 }
 

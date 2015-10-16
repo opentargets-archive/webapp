@@ -1,85 +1,182 @@
 <div>
-	<view-title>{{'Gene profile: '+target.label}}</view-title>
-  <h3>{{target.label}} <small>({{target.id}}) <a href="#/target-associations?q={{target.id}}&label={{target.symbol}}">View associations</a></small></h3>
+    <cttv-page-progress-spinner></cttv-page-progress-spinner>
+    <view-title>{{'Gene profile: '+target.symbol}}</view-title>
+    <h3 class="cttv-content-header">{{target.symbol}}<br /><small>{{target.name}}  <a href="/target/{{target.id}}/associations"><span class="cttv-interpage-link"> <i class="fa fa-arrow-circle-right fa-lg"></i> View associated diseases</span></a></small></h3>
+<!--     <p class="small"> <a href="#/target/{{target.id}}/associations">View associations</a></p>
+ -->
+    <div class"row" style="padding-bottom:20px; margin-bottom:20px">
+        <accordion close-others="false">
+            <accordion-group heading="Description" is-open="true">
+                {{target.description}}
+            </accordion-group>
 
-  <div class"row" style="padding-bottom:20px; margin-bottom:20px">
-    <accordion close-others="false">
-      <accordion-group heading="Description" is-open="true">
-	{{target.description}}
-      </accordion-group>
+            <!-- Synomyms -->
+            <accordion-group heading="Gene and Protein Synonyms" is-open="false">
+                <ul>
+                    <li ng-repeat="syn in synonyms">
+                        {{syn}}
+                    </li>
+                </ul>
+            </accordion-group>
 
-      <accordion-group heading="Synonyms" is-open="false">
-	<ul>
-	  <li ng-repeat="syn in synonyms">
-	    {{syn}}
-	  </li>
-	</ul>
-      </accordion-group>
-      
-      <accordion-group heading="Uniprot" is-open="false">
-	<p>ID: {{uniprot.id}}</p>
-	<p>Accessions:</p>
-	<ul>
-	  <li ng-repeat="accession in uniprot.accessions"><a target="_blank" href="http://www.uniprot.org/uniprot/{{accession}}">{{accession}}</a></li>
-	</ul>
-	<p>Subunit:</p>
-	<ul>
-	  <li ng-repeat="subunit in uniprot.subunits">
-	    {{subunit}}
-	  </li>
-	</ul>
-	<p>Subcellular location:</p>
-	<ul>
-	  <li ng-repeat="location in uniprot.locations">
-	    {{location}}
-	  </li>
-	</ul>
-	<p>Uniprot Keywords:</p>
-	<ul>
-	  <li ng-repeat="keyword in uniprot.keywords">{{keyword}}</li>
-	</ul>
-      </accordion-group>
 
-      <accordion-group heading="Ensembl" is-open="false">
-	<p ng-if="ensembl.isHuman">ID: <a target="_blank" href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={{ensembl.id}}">{{ensembl.id}}</a></p>
-	<p ng-if="!ensembl.isHuman">ID: {{ensembl.id}}</p>
-	<p>Description: {{ensembl.description}}</p>
-	<p ng-if="ensembl.isHuman">Gene Location: <a target="_blank" href="http://www.ensembl.org/Homo_sapiens/Location/View?db=core;g={{ensembl.id}}">Human {{ensembl.chr}}:{{ensembl.start}}-{{ensembl.end}}</a></p>
-      </accordion-group>
+            <!-- Uniprot information -->
+            <accordion-group heading="Protein Information (from UniProt)" is-open="false">
+                <tabset>
+                    <tab heading="Text">
+                        <p>ID: {{uniprot.id}}</p>
+                        <p>Accessions:</p>
+                        <ul>
+                            <li ng-repeat="accession in uniprot.accessions"><a target="_blank" href="http://www.uniprot.org/uniprot/{{accession}}">{{accession}}</a></li>
+                        </ul>
+                        <p>Subunit:</p>
+                        <ul>
+                            <li ng-repeat="subunit in uniprot.subunits">
+                                {{subunit}}
+                            </li>
+                        </ul>
+                        <p>Subcellular location:</p>
+                        <ul>
+                            <li ng-repeat="location in uniprot.locations">
+                                {{location}}
+                            </li>
+                        </ul>
+                        <p>Uniprot Keywords:</p>
+                        <ul>
+                            <li ng-repeat="keyword in uniprot.keywords">{{keyword}}</li>
+                        </ul>
+                    </tab>
+                    <tab heading="Graphical">
+                        <div id="uniprotProteinFeatureViewer"></div>
+                    </tab>
+                </tabset>
+            </accordion-group>
 
-      <accordion-group>
-	<accordion-heading>
-	  <span ng-click="toggleGenomeLocation()">Genomic Location</span>
-	</accordion-heading>
-	<cttv-target-genome-browser target="{{genomeBrowserGene}}"></cttv-target-genome-browser>
-      </accordion-group>
-	  
-      <accordion-group heading="Gene Ontology" is-open="false">
-	<span ng-repeat="go in goterms">
-	  <a target="_blank" href="http://amigo.geneontology.org/amigo/term/{{go}}">{{go}}</a>
-	</span>
-      </accordion-group>
-      
-      <accordion-group>
-	<accordion-heading>
-	  <span ng-click="toggleBaselineExpression()">RNA Baseline expression</span>
-	</accordion-heading>
-	<!--[if lt IE 10]>
-            <div class="alert alert-danger">
-              This widget doesn't work on Internet Explorer prior to version 10. We are aware of this problem and working to fix this issue. In the meantime, please follow <a target="_blank" href="http://www.ebi.ac.uk/gxa/genes/{{ensembl.id}}">this link</a> to get the expression of this gene from the Expression Atlas website
-            </div>
-	    <![endif]-->
-	<ebi-expression-atlas-baseline-summary target="{{eaTarget}}"></ebi-expression-atlas-baseline-summary>
-      </accordion-group>
+            <!-- Variants, isoforms and genomic context -->
+            <accordion-group>
+                <accordion-heading>
+                    <span ng-click="toggleGenomeLocation()">Variants, isoforms and genomic context</span>
+                </accordion-heading>
+                <p class="cttv-section-intro">Genomic variants associated with {{target.symbol}}. Only variants information associating {{target.symbol}} with any disease are displayed. Click on any variant, gene or transcript to get more information about it. Pan or zoom the browser to see neighboring genes. The number above gene variants means that more than 1 overlap the same region at the current zoom level.</p>
+                <p ng-if="ensembl.isHuman">ID: <a target="_blank" href="http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g={{ensembl.id}}">{{ensembl.id}}</a></p>
+                <p ng-if="!ensembl.isHuman">ID: {{ensembl.id}}</p>
+                <p>Description: {{ensembl.description}}</p>
+                <p ng-if="ensembl.isHuman">Gene Location: <a target="_blank" href="http://www.ensembl.org/Homo_sapiens/Location/View?db=core;g={{ensembl.id}}">Human {{ensembl.chr}}:{{ensembl.start}}-{{ensembl.end}}</a></p>
+                <cttv-target-genome-browser target="{{genomeBrowserGene}}" width="1140"></cttv-target-genome-browser>
+            </accordion-group>
 
-      <accordion-group heading="Bibliography" is-open="false">
-	<!--[if lt IE 10]>
-            <div class="alert alert-danger">
-              This widget doesn't work on Internet Explorer prior to version 10. We are aware of this problem and working to fix this issue. In the meantime, please follow <a target="_blank" href="http://europepmc.org/search?query={{pmidsLinks}}">this link</a> to get the publication information from EuroPMC directly
-            </div>
-	    <![endif]-->
-	<pmc-citation-list pmids="{{pmids}}"></pmc-citation-list>
-      </accordion-group>
-    </accordion>
-  </div>
+            <!-- Protein baseline expression -->
+            <accordion-group>
+                <accordion-heading>
+                    <span>Protein Baseline Expression</span>
+                </accordion-heading>
+                <p class="cttv-section-intro">Summary of {{target.symbol}} expression in normal human tissue, based on <a href="http://www.proteinatlas.org/{{target.id}}/tissue" target="blank">Human Protein Atlas <span class="fa fa-external-link"></span></a> normal tissue immunohistochemistry and RNA-seq expression data</p>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <cttv-hpa-tissue-expression target="target.id" filename="bobo"></cttv-hpa-tissue-expression>
+                    </div>
+
+                </div>
+            </accordion-group>
+
+            <!-- RNA baseline expression -->
+            <accordion-group>
+                <accordion-heading>
+                    <span ng-click="toggleBaselineExpression()">RNA Baseline Expression</span>
+                </accordion-heading>
+                <ebi-expression-atlas-baseline-summary target="{{eaTarget}}"></ebi-expression-atlas-baseline-summary>
+            </accordion-group>
+
+            <!-- Gene Ontology -->
+            <accordion-group heading="Gene Ontology" is-open="false">
+                <div ng-repeat="go in goterms">
+                    <h4>{{go.Ontology}}</h4>
+                    <ul>
+                        <li ng-repeat="goterm in go.terms"><a target="_blank" href="http://amigo.geneontology.org/amigo/term/{{goterm.goid}}">{{goterm.label}}</a></li>
+                    </ul>
+                </div>
+            </accordion-group>
+
+
+            <!-- Protein Structure -->
+            <accordion-group heading="Protein Structure" is-open="false">
+                <p>There {{pdb.nstructures == 1 ? "is" : "are"}} <strong>{{pdb.nstructures}}</strong> {{pdb.nstructures == 1 ? "structure" : "structures"}} available for {{target.symbol}} in <a target="_blank"  href="https://www.ebi.ac.uk/pdbe">PDBe</a>. <span ng-if="pdb.nstructures>1">Below we show the most representative one. A summary of the other structures can be found in the <a target="_blank" href="http://www.uniprot.org/uniprot/{{uniprot.accessions[0]}}#structure">Uniprot entry for {{uniprot.accessions[0]}}</a></span></p>
+                <h4 ng-if="pdb.nstructures>0">{{pdb.id}} <span><a target="_blank" href="https://www.ebi.ac.uk/pdbe/entry/pdb/{{pdb.id}}"><i class="fa fa-external-link"></i></a></span></h4>
+                <p>{{pdb.alt}}</p>
+                <img ng-src="{{pdb.thumbnailUrl}}" />
+                <p ng-bind-html="pdb.description"></p>
+            </accordion-group>
+
+            <!-- Pathways -->
+            <accordion-group heading="Pathways" is-open="false">
+                <p ng-if="!pathways.length">
+                    No pathways found for {{target.symbol}}
+                </p>
+                <accordion-heading>
+                    <span ng-click="togglePathwayViewer()">Pathways</span>
+                </accordion-heading>
+                <ul>
+                    <li ng-repeat="pathway in pathways">
+                        {{pathway.name}} <i title="Display pathway below" ng-click="setPathwayViewer(pathway)" class="fa fa-sitemap changeView"></i> <a title="View pathway in Reactome website" target="_blank" href="http://www.reactome.org/content/detail/{{pathway.id}}"><i class="fa fa-external-link"></i></a>
+                    </li>
+                </ul>
+                <div>
+                    <p ng-show="pathway.id">Diagram for <b>{{pathway.subName}}</b> pathway</p>
+                    <reactome-pathway-viewer pathway="{{pathway.id}}" subpathway="{{pathway.subId}}" target="{{target.symbol}}"></reactome-pathway-viewer>
+                </div>
+            </accordion-group>
+
+            <!-- Drugs -->
+            <accordion-group heading="Drugs" is-open="false">
+                <div>
+                    <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a>
+                        <known-drug-table target="{{targetId}}"></known-drug-table>
+                    </p>
+                </div>
+
+            </accordion-group>
+
+            <!-- <accordion-group heading="Drugs" is-open="false">
+                <p ng-if="drugs.length">
+                    No drugs found for {{target.symbol}}
+                </p>
+                <ul>
+                    <li ng-repeat="(drug, obj) in drugs">
+                        <a target="_blank" href="http://www.drugbank.ca/drugs/{{drug}}">{{obj["generic name"]}}</a>
+                    </li>
+                </ul>
+            </accordion-group> -->
+
+            <!-- Gene tree -->
+            <accordion-group heading="Target Family" is-open="false">
+                <p class=cttv-section-intro>Phylogenetic tree showing the history of the human gene {{target.symbol}} based on protein sequences. The tree shows human paralogs and orthologs in selected species. Click on any node to get more information about the homology relationship. Check / Uncheck species to prune the tree accordingly</p>
+                <cttv-target-gene-tree target="{{targetGeneId}}"></cttv-gene-tree>
+            </accordion-group>
+
+            <!-- Bibliography -->
+            <accordion-group heading="Bibliography" is-open="false">
+                <p class="cttv-section-intro">There are {{citations.count}} citations for {{target.symbol}} in UniProt. <span ng-if="citations.count>25">Only the first 25 are shown below.</span> To see all the citations in the EuropePMC portal, follow this <a target=_blank href="{{citations.europepmcLink}}">link</a></p>
+                <div class="epmc_Citation_container" ng-repeat="citation in citations.all track by $index">
+                    <div class="epmc_Citation_title">
+                        <a class="epmc_citation_link" target=_blank href="//europepmc.org/abstract/med/{{citation.pmid}}">{{citation.title}}</a>
+                    </div>
+                    <div class="epmc_Citation_subdata">
+                        <div class="epmc_Citation_authors">
+                            <a class="empc_citation_link" target=_blank href='//europepmc.org/search?query=AUTH:"{{author}}"&page=1' ng-repeat="author in citation.authors track by $index">
+                                {{author}}
+                            </a>
+                        </div>
+                        <div class="epmc_Citation_journal">
+                            <a href='//europepmc.org/search?query=JOURNAL:"{{citation.journalTitle}}"' class="epmc_Citation_link">{{citation.journalTitle}}</a> <span>[{{citation.pubYear}} {{citation.journalVolume}}<span ng-if="citation.issue">({{citation.issue}})</span>:{{citation.pageInfo}}]</span>
+                        </div>
+                        <div class="epmc_Citation_source">PMID:{{citation.pmid}} <span ng-if="citation.pmcid">PMCID:{{citation.pmcid}}</span></div>
+                        <span class="label label-success">{{citation.citedByCount}} citation<span ng-if="citation.citedByCount != 1">s</span></span>
+                    </div>
+                </div>
+            </accordion-group>
+
+        </accordion>
+
+    </div>
+
 </div>

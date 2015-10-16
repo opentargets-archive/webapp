@@ -9,6 +9,21 @@ $dim : 1000px;
     width: $dim;
 }
 
+#cttv_bubblesView_breadcrums {
+    position: absolute;
+    left: 5px;
+    top: 10px;
+}
+
+.cttv_bubblesView_breadcrumLabel {
+    padding-right: 10px;
+}
+
+.cttv_bubblesView_link {
+    color : blue;
+    cursor : pointer;
+}
+
 @mixin circle-fill ($color, $opacity) {
     fill : $color;
     fill-opacity : $opacity;
@@ -26,7 +41,7 @@ $dim : 1000px;
     margin-bottom : 10px;
 }
 
-circle {
+.bubblesViewNode {
     @include circle-fill(rgb(31, 119, 180), .25);
 }
 
@@ -36,11 +51,11 @@ circle {
     margin-top: 10px;
 }
 
-.leaf circle {
+.bubblesViewLeaf circle {
     @include circle-fill(rgb(62,139,173), 1);
 }
 
-.root {
+.bubblesViewRoot {
     @include circle-fill(white, 0);
 }
 

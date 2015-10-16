@@ -1,12 +1,25 @@
- <!-- search app / results -->
+<div class="partial-page">
+    <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
-<div>
-	<h3><span view-title>Genes associated with {{search.label}}</span> <small>({{search.query}}) <a href="#/disease/{{search.query}}">View disease profile</a></small></h3>
-	<div class="h6">Found {{nresults}} evidence</div>
+    <view-title>Targets associated with {{search.label}}</view-title><!-- Mhhh... ugly hack -->
+    <h3 class="cttv-content-header">Targets associated with {{search.label}}<br />
+        <small>Found {{search.total}} {{search.total===1 ? "target" : "targets"}}<a href="/disease/{{search.query}}"><span class="cttv-interpage-link"><i class="fa fa-arrow-circle-right fa-lg"></i> View disease profile</span></a></small>
+    </h3>
 
-	<!-- <div id="myflower"></div> -->
-	
-	<table class="table table-striped table-bordered" id="disease-association-table"></table>
-	<cttv-disease-associations target="{{search.query}}" diameter=800></cttv-disease-associations>
+    <div class="row">
+        <div class="col-sm-3">
+            <!-- <div ng-click="cttvFiltersService.initFilters()">X reset filters</div> -->
+            <cttv-facets></cttv-facets>
+        </div>
+
+        <div class="col-sm-9">
+            <!-- Loading progress spinner
+            <div style="width:100%; text-align:center; padding-top:50px; position:absolute" ng-show="loading">
+                <span cttv-progress-spinner size="3" class="text-lowlight"></span>
+            </div>-->
+            <cttv-disease-associations target="{{search.query}}" filename="targets_associated_with_{{search.filename}}" data="data"></cttv-disease-associations>
+        </div>
+    </div>
+
 </div>
 <!-- end search results-->

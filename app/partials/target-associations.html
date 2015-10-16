@@ -1,57 +1,81 @@
 <!-- search app / results -->
 
 <div>
-  <h3><span view-title>Diseases associated with {{search.label}}</span> <small>({{search.query}}) <a href="#/target/{{search.query}}">View gene profile</a></small></h3>
-  <div class="h6">Found {{nresults}} evidence</div>
+    <h3 class="cttv-content-header"><span view-title>Diseases associated with {{search.label}}</span><br />
+    <!-- <p class="small"><a href="#/target/{{search.query}}">View target profile</a></p> -->
+    <!-- <div class="h6">Found {{nresults}} evidence in {{ndiseases}} diseases {{diseasesFilteredMsg}}</div> -->
+    <small>Found {{n.diseases}} {{n.diseases===1 ? "disease" : "diseases"}} <a href="/target/{{search.query}}"><span class="cttv-interpage-link"><i class="fa fa-arrow-circle-right fa-lg"></i> View {{search.label}} profile</span></a></small></h3>
 
-  <div class="row">
-    
-    <div class="col-md-2 cttv-facet">
-      <accordion>
-	<accordion-group heading="Data types">
-	  <div class="checkbox">
-	    <label><input type="checkbox" disabled="disabled" checked><small>Genetic associations</small></label>
-	    <label><input type="checkbox" disabled="disabled" checked><small>Somatic mutations</small></label>
-	    <label><input type="checkbox" disabled="disabled" checked><small>Known drugs</small></label>
-    	    <label><input type="checkbox" disabled="disabled" checked><small>RNA expression</small></label>
-	    <label><input type="checkbox" disabled="disabled" checked><small>Affected pathways</small></label>
-	    <label><input type="checkbox" disabled="disabled" checked><small>Animals models</small></label>
-	  </div>	    
-	</accordion-group>
+    <div class="row">
 
-	<accordion-group heading="Therapeutic Areas" is-open="true">
-	  <accordion>
-	    <!-- <accordion-group class="cttv-accordion-leaf"> -->
-	    <!--   <accordion-heading> -->
-	    <!-- 	<span ng-click="selectRoot()">None</span> -->
-	    <!--   </accordion-heading> -->
-	    <!-- </accordion-group> -->
-	    <accordion-group ng-repeat="ta in therapeuticAreas" class="therapeuticArea">
-	      <accordion-heading>
-		<span ng-click="selectTherapeuticArea(ta.efo)">{{ta.name}} ({{ta.score}})</span>
-	      </accordion-heading>
-	      <accordion>
-		<accordion-group ng-repeat="d in ta.diseases" class="cttv-accordion-leaf">
-		  <accordion-heading>
-		    <span ng-click="selectDisease(d.efo)">{{d.name}}</span>
-		  </accordion-heading>
-		</accordion-group>
-	      </accordion>
-	    </accordion-group>
-	  </accordion>
-	</accordion-group>
-      </accordion>
+        <div class="col-md-2 cttv-facet">
+            <!-- <accordion>
+                <accordion-group is-open="true">
+                    <accordion-heading>
+                        <span ng-click="toggleDataTypes()">Data types</span>
+                    </accordion-heading>
+                    <div class="checkbox" ng-repeat="dataType in dataTypes">
+                        <label>
+                            <input type="checkbox"
+                            value="{{dataType.name}}"
+                            ng-click="filterDataType(dataType)"
+                            ng-checked="dataType.selected">
+                            <small>{{dataType.labelFull}}</small>
+                        </label><br />
+                    </div>
+                </accordion-group>
+            </accordion> -->
+            <cttv-facets></cttv-facets>
 
+            <accordion>
+                <div class="cttv-nav">
+                    <accordion-group is-open="tagroup.open">
+                        <accordion-heading>
+                            <span ng-click="toggleNavigation()">Therapeutic Areas Navigation</span>
+                        </accordion-heading>
+                        <accordion>
+                            <accordion-group ng-repeat="ta in therapeuticAreas" class="therapeuticArea" is-open="tagroup.tas[ta.name]">
+                                <accordion-heading>
+                                    <span id="cttv_targetAssociations_navBar_{{ta.name}}" ng-click="selectTherapeuticArea(ta.name)">{{ta.label}} ({{ta.children.length}})</span>
+                                </accordion-heading>
+                                <accordion>
+                                    <accordion-group ng-repeat="d in ta.children" class="cttv-accordion-leaf" is-open="diseasegroupOpen">
+                                        <accordion-heading>
+                                            <span ng-click="selectDisease(d)">{{d.label}}</span>
+                                        </accordion-heading>
+                                        <a href=/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}>
+                                            <div id="cttv_targetAssociations_flower_{{d.efo_code}}_{{d._parent.efo_code}}">
+                                            </div>
+                                        </a>
+                                        <a class="cttv-centered-text"
+                                         href="/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}">View evidence details</a>
+                                    </accordion-group>
+                                </accordion>
+                            </accordion-group>
+                        </accordion>
+                    </accordion-group>
+                </div>
+            </accordion>
+        </div>
+
+        <div class="col-md-10">
+            <tabset>
+
+                <tab heading="Bubbles">
+                    <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}" highlight="{{highlightEFO}}" disease-is-selected="{{selectedDisease}}" facets="filters"></cttv-target-associations-bubbles>
+                </tab>
+
+                <tab heading="Table">
+                    <cttv-target-associations-table target="{{search.query}}" ndiseases="n" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}" filename="diseases_associated_with_{{search.filename}}" loadprogress="loading" facets="filters"></cttv-target-associations-table>
+                </tab>
+
+                <tab heading="Tree">
+                    <cttv-target-associations-tree target="{{search.query}}" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}" facets="filters"></cttv-target-associations-tree>
+                </tab>
+
+            </tabset>
+
+        </div>
     </div>
-
-    <div class="col-md-8">
-      <i class="fa fa-picture-o cttv-change-view" ng-click="setDisplay('bubbles')"></i>
-      <i class="fa fa-table cttv-change-view" ng-click="setDisplay('table')"></i>
-      <cttv-target-associations target="{{search.query}}" display="{{displaytype}}">
-	<div class="cttvBubbles"></div>
-	<div class="cttvTable"></div>
-      </cttv-target-associations>
-    </div>
-  </div>
 </div>
 <!-- end search results-->

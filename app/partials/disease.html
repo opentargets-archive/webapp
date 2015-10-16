@@ -1,23 +1,50 @@
 <div>
-  <view-title>{{'Disease profile: '+disease.label}}</view-title>
-  <h3>{{disease.label}} <small>({{disease.efo}})  <a href="#/disease-associations?q={{disease.efo}}&label={{disease.label}}">View associations</a></small></h3>
-  <accordion close-others="false">
-    <accordion-group heading="Description" is-open="true">
-      {{disease.description}}
-    </accordion-group>
-    <accordion-group heading="Synonyms" is-open="false">
-      <ul>
-	<li ng-repeat="syn in disease.synonyms">
-	  {{syn}}
-	</li>
-      </ul>
-    </accordion-group>
-    <accordion-group heading="EFO Path" is-open="false">
-      <ul>
-	<li ng-repeat="node in disease.path">
-	  {{node.label}} <small>(<a href="#/disease-associations?q={{node.efo}}&label={{node.label}}">See gene associations</a>), (<a href="#/disease/{{node.efo}}">Go to disease page</a>)</small>
-	</li>
-      </ul>
-    </accordion-group>
-  </accordion>
+    <view-title>{{'Disease profile: '+disease.label}}</view-title>
+    <h3 class="cttv-content-header">{{disease.label}}<br /><small><a href="/disease/{{disease.efo}}/associations"><i class="fa fa-arrow-circle-right fa-lg"></i> View associations</a></small></h3>
+
+    <accordion close-others="false">
+
+        <accordion-group heading="Description" is-open="true">
+            {{disease.description}}
+        </accordion-group>
+
+        <accordion-group heading="Synonyms" is-open="false">
+            <ul>
+                <li ng-repeat="syn in disease.synonyms">
+                    {{syn}}
+                </li>
+            </ul>
+        </accordion-group>
+
+        <accordion-group heading="Drugs" is-open="false">
+            <div>
+                <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a>
+                    <known-drug-table disease="{{disease.efo}}"></known-drug-table>
+                </p>
+            </div>
+        </accordion-group>
+
+        <accordion-group heading="Disease Classification" is-open="true">
+            <tabset>
+                <tab heading="Graph">
+                    <p class="cttv-section-intro">Graph showing the diseases related with {{disease.label}}. Click on any disease to get more information about it and its associated targets</p>
+                    <cttv-efo-graph efo="{{disease}}" width=1140></cttv-efo-graph>
+                </tab>
+                <tab heading="Text">
+                    <h4>Paths</h4>
+                    <ul ng-repeat="path in disease.paths">
+                        <b>Path {{$index+1}}</b>
+                        <li ng-repeat="node in path" style="margin-left:{{$index*10}}px">
+                             {{node.label}} <small>(<a href="#/disease/{{node.efo}}/associations">See gene associations</a>), (<a href="#/disease/{{node.efo}}">Go to disease page</a>)</small>
+                        </li>
+                    </ul>
+                    <h4 ng-if="disease.children.length > 0">Children</h4>
+                    <ul>
+                        <li ng-repeat="child in disease.children">{{child.label}} <small>(<a href="#disease/{{child.code}}/associations">See gene associations</a>), (<a href="#/disease/{{child.code}}">Go to diseases page</a>)</small>
+                        </li>
+                    </ul>
+                </tab>
+            </tabset>
+        </accordion-group>
+    </accordion>
 </div>
