@@ -49,7 +49,13 @@
 		<p>The association score is produced by combining the scores for the target and disease from the individual datatypes (genetic associations, known drugs, etc.), which themselves can combine several data sources. 
 		Each association from each data source provides a score that includes terms for the frequency that the association is seen compared to other associations, the strength or severity of the effect, and the confidence of the study that provided the association.  
 		See detailed breakdown of data source <a href="about#scoring">scores</a>. These scores also range between 0 and 1 and are summed after applying scaling factors to give datatype scores. 
-			Datatype scores are then summed again after scaling to give the overall association score.</p>
+			In this summing process the max score is capped at 1. Datatype scores are then summed again after scaling to give the overall association score.</p>
+
+    <h3><a id="association-score-filter" name="association-score-filter">What is the association strength filter?</a></h3>
+        <p>The score filter allows associations to be filtered by score. 
+           There are 4 filter settings that refine the associations shown from all associations when no filter is applied to only the strongest associations at the high filter setting. Low, mid and high association strength filters apply a score threshold to excluding associations below threshold and this is also reflected by the excluded associations becoming greyed out in the score histogram.
+           Applying the 2 highest filter settings also stretches the score range to provide higher resolution at the highest scores. This changes the distribution of scores which is reflected by a change in the distribution of scores in the histogram.
+        </p>
                     
     <h3><a id="association-score-filter-datatype" name="association-score-filter-datatype">Will the score change if I filter by datatype?</a></h3>
         <p>Filtering by data type now does not change the association score but instead requires that the associations have evidence from that data type. </p>
