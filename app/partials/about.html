@@ -71,22 +71,7 @@
 	Click on ‘View evidence details’ to view detailed <a href="#target_disease">Target-Disease Evidence page</a> for the association, click on the ‘P’ icon to view
 	the <a href="#disease_profile">Disease Profile page</a> or the ‘A’ icon to view all the target associations of that disease.</p>
 
-	<p>Filters are available on the left of the page to restrict the associations that are displayed by score, data type or to focus on a therapeutic area.</p>
-
-	<h4>Association strength filter</h4>
-	<p>Target associations can be filtered by strength from the lowest evidence-supported association strength ('low') to the strongest evidence-supported association strength ('high').
-	Clicking on an option ('none', 'low', 'medium' or 'high') will change the number of diseases reported and will update the data distribution histogram accordingly.</p>
-	<ul>
-	<li>By default, all the associations between a target and a set of diseases are shown on the Target Association page ('none').
-	In the association strength panel the 'none' radio button will be selected by default and the data distribution histogram will show all diseases selected, binned by association score.</li>
-	<li>Clicking on the 'low' radio button narrows the score range of associations and excludes associations with a score lower than 0.2. This is reflected in the data distribution histogram where the lower bin (0.0-0.2) is now grey.</li>
-	<li>Clicking on the 'medium' radio button narrows the score range of associations and excludes associations with a score lower than 0.6. The overall score of an association between a target and a disease is rescaled by dividing each datatype score by 3 to give higher resolution to the strongest associations. This is reflected in the data distribution histogram where the score bin range (0.6-1.0) is highlighted in blue and the new distribution of the disease association score.</li>
-	<li>Clicking on the 'high' radio button narrows the score range of associations and excludes associations with a score lower than 0.8. The overall score of an association between a target and a disease is also rescaled by dividing each datatype score by 5 to resolve the strongest associations. This is reflected in the data distribution histogram where the score bins range (0.8-1.0) is highlighted in blue and the new distribution of the disease association score.</li>
-	</ul>
-	
-	<h4>Data distribution</h4>
-	<p>By default, and in combination with the Association strength filter, the score distribution of all the diseases associated with a target is displayed as a histogram.</p>
-	<p>Any change in the Association strength filter will be reflected in the histogram.</p>
+	<p>Filters are available on the left of the page to restrict the associations that are displayed by data type or to focus on a therapeutic area.</p>
 	
 	<h4>'Data types' filters</h4>
 	<p>The diseases displayed in these views can be restricted by the <a href="#data_types">data types</a> for which they have evidence.
@@ -337,21 +322,21 @@
 	<p>One of the aims of the CTTV platform is to allow prioritisation of targets based on their associated evidence. 
 	A scoring system has been developed to help you to answer questions such as:
 	<ul>
-	<li>Which target has the most/best evidence for association with a specific disease?</li>
+	<li>Which targets have the most evidence for association with a specific disease?</li>
 	<li>What is the relative weight of evidence between different targets for a disease?</li>
 	</ul>
 	The score quantifies what CTTV believe to be the key factors relating to the confidence in the evidence.</p>
 	
 	<h4><a name="association_score"></a>Association score</h4>
 	<p>The overall association score between a target and a disease is a numerical value indicating the strength of the association.</p>
-	<p>The value is in the range 0 to 1, with 1 indicating the strongest association.</p>
+	<p>The value is in the range 0 to 1, with 1 indicating the strongest associations.</p>
 	<p>Negative scores will correspond to negative evidence (although not implemented in the current version). 
     <p>A score of 0 corresponds to no evidence.</p>
 	<p>The overall association score is produced by combining the scores for the target and disease from the 
-	individual <a href="#data_types">data types</a> (genetic associations, known drugs, etc.), and represented as a flower where each petal represents a different data type.
+	individual <a href="#data_types">data types</a> (genetic associations, known drugs, etc.), and is represented as a flower where each petal represents a different data type.
 	The amount of filled colour in each petal represents the relative score within each data type.
 	Each association data type results from the integration of one or multiple datasources.
-	The association score for each data type depends on the confidence in each association and also on the number of associations from a particular data source.
+	The association score for each data type depends on the underlying strenght of each association and also on the number of associations (approximating replication) from a particular data source.
 
 	Filtering by data type in the <a href="#target_association">Target Association page</a> or the <a href="#disease_association">Disease Association page</a> 
 	won't change the overall association score.
@@ -359,7 +344,7 @@
 	may be revised in future implementations.</p>
    
    <h4>Current scoring scheme per datasource</h4>
-	The current association score between a target and a disease is the sum of its individual datatype evidence scores capped to 1. 
+	The current association score between a target and a disease is the sum of its individual datatype evidence scores. 
 	The table below summarises the current implementation. The CTTV is working on a statistical framework to refine the scoring scheme.
      <table class="table table-striped">
     <thead>
