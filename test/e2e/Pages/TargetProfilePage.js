@@ -1,37 +1,51 @@
-var Page = require("./Page.js");
+var SectionBasedPage = require("./SectionBasedPage.js");
 
 var TargetProfilePage = function () {
-    Page.call(this);
+    SectionBasedPage.call(this);
     browser.get("/target/ENSG00000157764");
     this.waitForSpinner();
 };
 
 
-TargetProfilePage.prototype = Object.create(Page.prototype, {
-    pathwaySection: {
+TargetProfilePage.prototype = Object.create(SectionBasedPage.prototype, {
+    uniprotTabs: {
         get: function () {
-            return element(by.css("div[heading=Pathways]"));
-        },
-    },
-    pathwayPanelLink: {
-        get: function () {
-            return element(by.css("div[heading=Pathways] .accordion-toggle"));
+            var uniprotBody = this.sectionBody('Uniprot');
+            var tabs = uniprotBody.element(by.css('ul.nav-tabs')).all(by.tagName('li'));
+
+            this.waitForVisible(tabs);
+            return tabs;
         }
     },
-    pathwayPanelBody: {
+
+    uniprotGraphicalTab: {
         get: function () {
-            var elem = element(by.css("div[heading=Pathways] .panel-body"));
-            this.waitForVisible(elem);
-            return elem;
+            var tabs = this.uniprotTabs;
+            return tabs.filter(function (elem, index) {
+                return elem.getAttribute("heading").then (function (h) {
+                    return h === 'Graphical';
+                });
+            });
         }
     },
+
     pathwayLinks: {
         get: function () {
-            return this.pathwayPanelBody.all(by.repeater('pathway in pathways'));
+            var pathwaysBody = this.sectionBody('Pathways');
+            var list = pathwaysBody.element(by.tagName('ul'));
+            this.waitForVisible(list);
+            return pathwaysBody.all(by.repeater('pathway in pathways'));
         }
     }
 });
 
+
+
+
+// Add any partials needed
+// Uniprot widget
+UniprotWidget = require("./partials/uniprotWidget.js");
+TargetProfilePage.prototype.extend (UniprotWidget.prototype);
 
 module.exports = TargetProfilePage;
 
