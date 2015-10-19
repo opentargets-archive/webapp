@@ -118,7 +118,7 @@ angular.module('cttvDirectives', [])
                 * with color information for each cell
                 */
                 var getColorStyleString = function(value, href){
-
+                    value = value.toExponential(2);
                     var str="";
                     if( value<=0 ){
                         str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, we don't put anything, so the sorting works better
@@ -547,6 +547,7 @@ angular.module('cttvDirectives', [])
         */
         var getColorStyleString = function(value, href){
             var str="";
+            value = value.toExponential(2);
             if( value<=0 ){
                 str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
             } else {
