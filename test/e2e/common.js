@@ -14,15 +14,18 @@ module.exports = function () {
             it ('should link to the home page');
         });
     });
-    
+
     describe ('footer', function () {
         beforeEach (function () {
+            this.timeout(10000);
             footer = page.footer;
         });
         it('has a footer', function () {
+            this.timeout(10000);
             expect(footer.isPresent()).to.eventually.equal(true);
         });
         it('contains a link to the FAQ', function () {
+            this.timeout (10000);
             var footerFAQlink = page.footerFAQlink;
             //var footerFAQlink = element(by.css('.footer a[href="/faq"]'));
             expect(footerFAQlink.isPresent()).to.eventually.equal(true);
@@ -45,6 +48,7 @@ module.exports = function () {
             //expect(browser.getCurrentUrl()).to.eventually.contain("/faq");
         });
         it('contains a link to the Release Notes', function () {
+            this.timeout (10000);
             var footerRNlink = page.footerReleaseNotesLink;
             //var footerRNlink = element(by.css('.footer a[href="/release-notes"]'));
             expect(footerRNlink.isPresent()).to.eventually.equal(true);
