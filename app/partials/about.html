@@ -322,12 +322,13 @@
     <h3><a name="scoring">Scoring target-disease associations</a></h3>
     <p>This section is currently under revision. It will be updated soon.</p>
 	<!--
-    <p>One of the aims of the CTTV platform is to allow prioritisation of targets based on their associated evidence.
-	A scoring system has been developed to help you to answer questions such as:
+    <p>One of the aims of the CTTV platform is to allow prioritisation of targets based on their associated evidence. -->
+	<!-- A scoring system has been developed to help you to answer questions such as:
 	<ul>
 	<li>Which targets have the most evidence for association with a specific disease?</li>
 	<li>What is the relative weight of evidence between different targets for a disease?</li>
-	</ul>
+	</ul> -->
+    <!--
 	The score quantifies what CTTV believe to be the key factors relating to the confidence in the evidence.</p>
 
 	<h4><a name="association_score"></a>Association score</h4>
@@ -339,7 +340,7 @@
 	individual <a href="#data_types">data types</a> (genetic associations, known drugs, etc.), and is represented as a flower where each petal represents a different data type.
 	The amount of filled colour in each petal represents the relative score within each data type.
 	Each association data type results from the integration of one or multiple datasources.
-	The association score for each data type depends on the underlying strenght of each association and also on the number of associations (approximating replication) from a particular data source.
+	The association score for each data type depends on the underlying strength of each association and also on the number of associations (approximating replication) from a particular data source.
 
 	Filtering by data type in the <a href="#target_association">Target Association page</a> or the <a href="#disease_association">Disease Association page</a>
 	won't change the overall association score.
@@ -347,8 +348,8 @@
 	may be revised in future implementations.</p>
 
    <h4>Current scoring scheme per datasource</h4>
-	The current association score between a target and a disease is the sum of its individual datatype evidence scores.
-	The table below summarises the current implementation. The CTTV is working on a statistical framework to refine the scoring scheme.
+	The current association score between a target and a disease is the harmonic sum of its individual datatype evidence scores.
+	The table below summarises the factors that contribute to the score in the individual datatypes in the current implementation. The CTTV is working on a statistical framework to refine the scoring scheme.
      <table class="table table-striped">
     <thead>
       <tr>
