@@ -856,7 +856,7 @@ angular.module('cttvDirectives', [])
                             }
                             if (!pathwayDiagram) {
                                 pathwayDiagram = Reactome.Diagram.create ({
-                                    "proxyPrefix": "/proxy/reactomedev.oicr.on.ca",
+                                    "proxyPrefix": "/proxy/www.reactome.org",
                                     "placeHolder": "pathwayDiagramContainer",
                                     "width": 1100,
                                     "height": 700,
