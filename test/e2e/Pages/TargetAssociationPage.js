@@ -34,7 +34,7 @@ TargetAssociationPage.prototype = Object.create(Page.prototype, {
     },
     selectTable: {
         get: function () {
-            return this.tableSelection.click();
+            return this.tableSelection.element(by.tagName('a')).click();
         }
     },
 
