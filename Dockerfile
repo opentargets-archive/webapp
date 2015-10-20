@@ -12,9 +12,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install node
-RUN apt-get install -y curl && \
-curl --silent --location https://deb.nodesource.com/setup_0.12 | bash - && \
-apt-get install --yes nodejs
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl --silent --location https://deb.nodesource.com/setup_0.12 | bash - && \
+    apt-get install --yes nodejs
 
 
 # forward request and error logs to docker log collector
