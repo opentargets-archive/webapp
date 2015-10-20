@@ -359,6 +359,11 @@ a:hover {
     text-decoration: none;
 }
 
+a:focus {
+    /* Remove the thick blue outline from clicked links */
+    outline: none;
+}
+
 
 
 /*
