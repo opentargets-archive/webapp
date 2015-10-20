@@ -3,10 +3,9 @@ exports.config = {
 
     specs: [
 
-        'test/e2e/*.js'
-        'test/e2e/home.js',
-        'test/e2e/targetAssociation.js',
-        'test/e2e/evidence.js',
+        // 'test/e2e/home.js',
+        // 'test/e2e/targetAssociation.js',
+        // 'test/e2e/evidence.js',
         'test/e2e/targetProfile.js'
     ],
 
