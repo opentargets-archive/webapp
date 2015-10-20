@@ -23,6 +23,7 @@ COPY ./app /var/www/app
 
 COPY ./nginx_conf/auth /usr/share/nginx_auth/
 COPY ./nginx_conf/server.* /usr/share/nginx_crt/
+COPY ./nginx_conf/nginx.conf /etc/nginx/nginx.conf
 
 VOLUME ["/var/cache/nginx"]
 
