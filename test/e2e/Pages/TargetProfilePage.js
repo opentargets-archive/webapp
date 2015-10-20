@@ -45,7 +45,9 @@ TargetProfilePage.prototype = Object.create(SectionBasedPage.prototype, {
 // Add any partials needed
 // Uniprot widget
 UniprotWidget = require("./partials/uniprotWidget.js");
+GenomeBrowser = require("./partials/genomeBrowser.js");
 TargetProfilePage.prototype.extend (UniprotWidget.prototype);
+TargetProfilePage.prototype.extend (GenomeBrowser.prototype);
 
 module.exports = TargetProfilePage;
 

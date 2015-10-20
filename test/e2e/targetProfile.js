@@ -25,10 +25,31 @@ describe ('cttv target profile page', function () {
             expect (uniprotSection.isPresent()).to.eventually.equal(true);
         });
 
+        it ('has a Variants, isoforms and genomic context section', function () {
+            var vigSection = page.section('Variants');
+            expect(vigSection.isPresent()).to.eventually.equal(true);
+        });
+
         it ('has a pathways section', function () {
             var pathwaysSection = page.section('Pathways');
             expect(pathwaysSection.isPresent()).to.eventually.equal(true);
         });
+    });
+
+    describe ('Variants, isoforms and genomic context', function () {
+        beforeEach (function () {
+            this.timeout(15000);
+            sectionName = 'Variants';
+            page.openSection (sectionName);
+        });
+
+        describe ('graphical view', function () {
+            beforeEach (function () {
+                container = page.sectionBody(sectionName);
+            });
+            require('./genomeBrowser.js')();
+        });
+
     });
 
     describe ('uniprot', function () {
@@ -85,44 +106,41 @@ describe ('cttv target profile page', function () {
                 var a = path.element(by.tagName("a"));
                 expect(a.isPresent()).to.eventually.equal(true);
 
-                var name;
+                //var name;
                 path.getText()
                     .then (function (myName) {
-                        name = myName;
-                    })
-                    .then (function () {
-                        return a.click();
-                    })
-                    .then (function () {
-                        var handles = browser.getAllWindowHandles();
-                        return handles;
-                    })
-                    .then (function (handles) {
-                        return browser.switchTo().window(handles[handles.length-1]);
-                    })
-                    .then (function () {
-                        // browser.driver.sleep(1000);
-                        // Wait for the title of the page to be there...
-                        browser.wait (function () {
-                            var deferred = protractor.promise.defer();
-                            browser.driver
-                                .getTitle()
-                                .then (function (title) {
-                                    console.log(title);
-                                    return deferred.fulfill(title.length > 10);
-                                });
-                            return deferred.promise;
-                        }, 10000);
+                        a.click()
+                            .then (function () {
+                                var handles = browser.getAllWindowHandles();
+                                return handles;
+                            })
+                            .then (function (handles) {
+                                return browser.switchTo().window(handles[handles.length-1]);
+                            })
+                            .then (function () {
+                                // browser.driver.sleep(1000);
+                                // Wait for the title of the page to be there...
+                                browser.wait (function () {
+                                    var deferred = protractor.promise.defer();
+                                    browser.driver
+                                        .getTitle()
+                                        .then (function (title) {
+                                            console.log(title);
+                                            return deferred.fulfill(title.length > 10);
+                                        });
+                                        return deferred.promise;
+                                    }, 10000);
 
-                        return browser.driver.getTitle();
-                    })
-                    .then (function (title) {
-                        console.log("TITLE: " + title + "  -- contains -- " + name);
-                        browser.switchTo().window(appWindow);
-                        expect(title).to.contain(name);
+                                    return browser.driver.getTitle();
+                                })
+                                .then (function (title) {
+                                    console.log("TITLE: " + title + "  -- contains -- " + myName);
+                                    browser.switchTo().window(appWindow);
+                                    expect(title).to.contain(myName);
+                                });
                     });
+                //...
             });
-            //...
         });
     });
 });
