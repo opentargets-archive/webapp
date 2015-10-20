@@ -11,6 +11,13 @@ RUN apt-get update && \
     apt-get install -y ca-certificates nginx=${NGINX_VERSION} && \
     rm -rf /var/lib/apt/lists/*
 
+# Install node
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl --silent --location https://deb.nodesource.com/setup_0.12 | bash - && \
+    apt-get install --yes nodejs
+
+
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
@@ -19,10 +26,12 @@ RUN ln -sf /dev/stderr /var/log/nginx/error.log
 RUN mkdir -p /var/www/app /usr/share/nginx_auth /usr/share/nginx_crt
 
 #copy code
-COPY ./app /var/www/app
+COPY ../webapp /opt/share/webapp
+RUN cd /opt/share/webapp && node install && node test && cp -r ./app /var/www/app
 
 COPY ./nginx_conf/auth /usr/share/nginx_auth/
 COPY ./nginx_conf/server.* /usr/share/nginx_crt/
+COPY ./nginx_conf/nginx.conf /etc/nginx/nginx.conf
 
 VOLUME ["/var/cache/nginx"]
 

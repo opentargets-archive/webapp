@@ -22,15 +22,15 @@ CttvPage.prototype = Object.create ({},{
         }
     },
 
-    openSection: {
-        value: function (section) {
-            var openLink = section.element(by.css(".accordion-toggle"));
-            openLink.click();
-            var body = section.element(by.css(".panel-body"));
-            this.waitForVisible(body);
-            return body;
-        }
-    },
+    // openSection: {
+    //     value: function (section) {
+    //         var openLink = section.element(by.css(".accordion-toggle"));
+    //         openLink.click();
+    //         var body = section.element(by.css(".panel-body"));
+    //         this.waitForVisible(body);
+    //         return body;
+    //     }
+    // },
     window: {
         get: function () {
             return browser.getWindowHandle();
@@ -53,7 +53,7 @@ CttvPage.prototype = Object.create ({},{
         }
     },
     waitForLoad: {
-        value: function (elem) {
+        value: function (elem, timeout) {
             browser.wait (function () {
                 var deferred = protractor.promise.defer();
                 //element(by.css('cttv-target-associations-bubbles svg'))
@@ -63,11 +63,24 @@ CttvPage.prototype = Object.create ({},{
                         deferred.fulfill(val);
                     });
                 return deferred.promise;
-            }, 10000);
+            }, timeout || 10000);
+        }
+    },
+    waitForContent: {
+        value: function (elem, timeout) {
+            browser.wait (function () {
+                var deferred = protractor.promise.defer();
+                elem
+                    .all(by.css("*"))
+                    .then (function (els) {
+                        return deferred.fulfill(!!els.length);
+                    });
+                return deferred.promise;
+            }, timeout || 10000);
         }
     },
     waitForVisible: {
-        value: function (elem) {
+        value: function (elem, timeout) {
             browser.wait (function () {
                 var deferred = protractor.promise.defer();
                 elem
@@ -76,7 +89,7 @@ CttvPage.prototype = Object.create ({},{
                         deferred.fulfill(val);
                     });
                 return deferred.promise;
-            }, 10000);
+            }, timeout || 10000);
         }
     },
 });
