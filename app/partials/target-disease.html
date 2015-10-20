@@ -115,8 +115,11 @@
 
 								<!-- Related rare disease table -->
 								<div ng-show="search.genetic_associations.rare_diseases.data.length>0">
-									<h4>Rare diseases</h4>
-									<p>Source: <a href="/faq" target="_blank">UniProt</a> and <a href="/faq" target="_blank">European Variation Archive (EVA)</a> curated databases</p>
+									<h4>{{search.genetic_associations.rare_diseases.heading}}</h4>
+									<!-- <p>Source: <a href="/faq#data-provenance" target="_blank">UniProt</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated databases</p> -->
+
+                                    <p>Source: <span ng-repeat="source in search.genetic_associations.rare_diseases.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+
 									<div class="table-panel">
 										<table class='table table-striped table-bordered' id="rare-diseases-table">
 											<thead>
