@@ -23,10 +23,10 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Create directories
-RUN mkdir -p /var/www/app /usr/share/nginx_auth /usr/share/nginx_crt
+RUN mkdir -p /var/www/app /usr/share/nginx_auth /usr/share/nginx_crt /opt/share
 
 #copy code
-COPY ../webapp /opt/share/webapp
+COPY * /opt/share/webapp
 RUN cd /opt/share/webapp && node install && node test && cp -r ./app /var/www/app
 
 COPY ./nginx_conf/auth /usr/share/nginx_auth/
