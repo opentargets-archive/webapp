@@ -24,11 +24,11 @@ $dim : 1000px;
     cursor : pointer;
 }
 
-@mixin circle-fill ($color, $opacity) {
+@mixin circle-fill ($color, $opacity, $stroke-width) {
     fill : $color;
     fill-opacity : $opacity;
-    /* stroke-width: 1px; */
-    /* stroke: black; */
+    stroke-width: $stroke-width;
+    stroke: black;
 }
 
 @mixin circle-highlight () {
@@ -42,7 +42,8 @@ $dim : 1000px;
 }
 
 .bubblesViewNode {
-    @include circle-fill(rgb(31, 119, 180), .25);
+    //@include circle-fill(rgb(31, 119, 180), .25, .5px);
+    @include circle-fill(rgb(192,192,192), .25, .5px);
 }
 
 .cttv_bubblesView {
@@ -51,16 +52,25 @@ $dim : 1000px;
     margin-top: 10px;
 }
 
-.bubblesViewLeaf circle {
-    @include circle-fill(rgb(62,139,173), 1);
+.bubblesViewLeaf {
+    @include circle-fill(rgb(62,139,173), 1, .5px);
 }
 
 .bubblesViewRoot {
-    @include circle-fill(white, 0);
+    @include circle-fill(white, 0, 0px);
 }
 
 .highlight {
     @include circle-highlight;
+}
+
+
+.lightLabel {
+    fill: #F0F0F0;
+}
+
+.darkLabel {
+    fill: navy;
 }
 
 h2 {
@@ -73,7 +83,7 @@ h6 {
     font-size : 12px;
     margin-top : 10px;
     @include header();
-    
+
 }
 
 small {
