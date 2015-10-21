@@ -9,20 +9,21 @@ var bubblesView = function () {
         diameter : 600,
         format : d3.format(",d"),
         color : d3.scale.category20c(),
-        colorPalette : true,
+        colorPalette : function () {
+            return "blue";
+        },
         data : undefined,
         value : "value",
         key : "name",
         label: "name",
         divId : undefined,
         on : function () {},
-        //onclick : function () {},
         duration: 1000,
         breadcrumsClick : function () {
             render.focus(conf.data);
         },
         maxVal : 1,
-        legendText : "<text>Current score range</text>",
+        // legendText : "<text>Current score range</text>",
         useFullPath : false
         //labelOffset : 10
     };
@@ -31,7 +32,7 @@ var bubblesView = function () {
     var highlight; // undef by default
     var view;
     var svg;
-    var legend;
+    // var legend;
     var bubblesView_g;
     var breadcrums;
     var pack;
@@ -82,67 +83,47 @@ var bubblesView = function () {
             .size([conf.diameter, conf.diameter])
             .padding(1.5);
 
-        if (conf.maxVal !== undefined) {
-            legend = svg
-                .append("g")
-                .attr("transform", "translate(20, " + (conf.diameter - 20) + ")");
-            legend
-                .append("rect")
-                .attr("x", 0)
-                .attr("y", -5)
-                .attr("width", 80)
-                .attr("height", 10)
-                .attr("fill", "#c6dcec");
-            legend
-                .append("rect")
-                .attr("class", "cttv_bubblesView_legendBar")
-                .attr("x", 0)
-                .attr("y", -5)
-                .attr("width", 0)
-                .attr("height", 10)
-                .attr("fill", d3.rgb(62,139,173));
-            // legend
-            //     .append("polygon")
-            //     .attr("points", "0,5 -5,15 5,15")
-            //     .attr("fill", "none")
-            //     .attr("stroke", "black")
-            //     .attr("stroke-width", 2);
-
+        // legend
+        // if (conf.maxVal !== undefined) {
+        //     legend = svg
+        //         .append("g")
+        //         .attr("transform", "translate(20, " + (conf.diameter - 20) + ")");
+        //     legend
+        //         .append("rect")
+        //         .attr("x", 0)
+        //         .attr("y", -5)
+        //         .attr("width", 80)
+        //         .attr("height", 10)
+        //         .attr("fill", "#c6dcec");
+        //     legend
+        //         .append("rect")
+        //         .attr("class", "cttv_bubblesView_legendBar")
+        //         .attr("x", 0)
+        //         .attr("y", -5)
+        //         .attr("width", 0)
+        //         .attr("height", 10)
+        //         .attr("fill", d3.rgb(62,139,173));
+            //
             // legend
             //     .append("text")
-            //     .attr("class", "cttv_bubblesView_currentMaxValue")
-            //     .attr("x", 0)
-            //     .attr("y", -5)
-            //     .attr("text-anchor", "middle")
-            //     .text("0");
+            //     .attr("x", -5)
+            //     .attr("y", 5)
+            //     .attr("text-anchor", "end")
+            //     .text(0);
+            //
+            // legend
+            //     .append("text")
+            //     .attr("x", 85)
+            //     .attr("y", 5)
+            //     .attr("text-anchor", "start")
+            //     .text(conf.maxVal);
+            //
+            // var gLeg = legend
+            //     .append("g")
+            //     .attr("transform", "translate(100, 5)")
+            //     .html(conf.legendText);
 
-            legend
-                .append("text")
-                .attr("x", -5)
-                .attr("y", 5)
-                .attr("text-anchor", "end")
-                .text(0);
-
-            legend
-                .append("text")
-                .attr("x", 85)
-                .attr("y", 5)
-                .attr("text-anchor", "start")
-                .text(conf.maxVal);
-
-            var gLeg = legend
-                .append("g")
-                .attr("transform", "translate(100, 5)")
-                .html(conf.legendText);
-
-    	    // legend
-    	    // 	.append("a")
-    	    // 	.attr("x", 100)
-    	    // 	.attr("y", 5)
-    	    // 	.attr("text-anchor", "start")
-    	    // 	.html("<a href='xlink:href=\"http://www.google.com\"'>Hurrah!</a>");
-
-        }
+        // }
 
         render.update();
 
@@ -264,7 +245,20 @@ var bubblesView = function () {
                 }
                 dispatch.click.call(this, tree_node(d));
             })
-            .attr("fill", "navy")
+            //.attr("fill", "navy")
+            .classed ("lightLabel", function (d) {
+                return (d.association_score > 0.5) && !d.children;
+            })
+            .classed ("darkLabel", function (d) {
+                return (d.association_score < 0.5);
+            })
+            // .attr ("fill", function (d) {
+            //     if (d.association_score > 0.5 && !d.children) {
+            //         return "#F0F0F0";
+            //     } else {
+            //         return "navy";
+            //     }
+            // })
             .attr("font-size", 0)
             .attr("text-anchor", "middle");
 
@@ -374,8 +368,24 @@ var bubblesView = function () {
             .classed ("bubblesViewLeaf", function (d) {
                 return !d.children;
             })
+            .classed ("bubblesViewInternal", function (d) {
+                return !!d.children;
+            })
             .classed ("bubblesViewRoot", function (d) {
                 return !d._parent;
+            })
+            .style("fill", function (d) {
+                if (d.association_score && !d.children) {
+                    return conf.colorPalette(d.association_score);
+                }
+            })
+            .style("stroke", function (d) {
+                if (d.association_score && !d.children) {
+                    return d3.rgb(conf.colorPalette(d.association_score)).darker();
+                }
+                else {
+                    return "grey";
+                }
             });
             // .transition()
             // .duration(conf.duration)
@@ -413,37 +423,37 @@ var bubblesView = function () {
             //     .remove();
 
         // Size legend
-        var maxCurrentVal = 0;
-        conf.data.apply(function (node) {
-            var score = node.property("association_score");
-            if (score && score > maxCurrentVal) {
-                maxCurrentVal = score;
-            }
-        });
-
-        if (conf.maxVal !== undefined) {
-            var legendScale = d3.scale.linear()
-                .range([0,80])
-                .domain([0,conf.maxVal]);
-
-                var pos = legendScale(maxCurrentVal);
-                legend
-                    .select(".cttv_bubblesView_legendBar")
-                    .transition()
-                    .duration(conf.duration)
-                    .attr("width", pos);
-                legend
-                    .select("polygon")
-                    .transition()
-                    .duration(conf.duration)
-                    .attr("points", ((pos+0) + ",5 " + (pos-5) + ",15 " + (pos+5) + ",15"));
-                legend
-                    .select(".cttv_bubblesView_currentMaxValue")
-                    .transition()
-                    .duration(conf.duration)
-                    .attr("x", pos)
-                    .text(maxCurrentVal);
-        }
+        // var maxCurrentVal = 0;
+        // conf.data.apply(function (node) {
+        //     var score = node.property("association_score");
+        //     if (score && score > maxCurrentVal) {
+        //         maxCurrentVal = score;
+        //     }
+        // });
+        //
+        // if (conf.maxVal !== undefined) {
+        //     var legendScale = d3.scale.linear()
+        //         .range([0,80])
+        //         .domain([0,conf.maxVal]);
+        //
+        //         var pos = legendScale(maxCurrentVal);
+        //         legend
+        //             .select(".cttv_bubblesView_legendBar")
+        //             .transition()
+        //             .duration(conf.duration)
+        //             .attr("width", pos);
+        //         legend
+        //             .select("polygon")
+        //             .transition()
+        //             .duration(conf.duration)
+        //             .attr("points", ((pos+0) + ",5 " + (pos-5) + ",15 " + (pos+5) + ",15"));
+        //         legend
+        //             .select(".cttv_bubblesView_currentMaxValue")
+        //             .transition()
+        //             .duration(conf.duration)
+        //             .attr("x", pos)
+        //             .text(maxCurrentVal);
+        // }
     };
 
     ////////////////////////
@@ -525,7 +535,7 @@ var bubblesView = function () {
                         .attr("xlink:href", (conf.useFullPath ? window.location.href : "") + "#" + getPathId(d))
                         .attr("startOffset", "50%")
                         .text(function () {
-                            if (Math.PI*d.r*k/8 < 3) {
+                            if (Math.PI*d.r*k/8 < 5) {
                                 return "";
                             }
                             return d[conf.label] ? d[conf.label].substring(0, Math.PI*d.r*k/8) : "";
@@ -716,6 +726,14 @@ var bubblesView = function () {
             return conf.useFullPath;
         }
         conf.useFullPath = b;
+        return this;
+    };
+
+    render.colorPalette = function (palette) {
+        if (!arguments.length) {
+            return conf.colorPalette;
+        }
+        conf.colorPalette = palette;
         return this;
     };
 
