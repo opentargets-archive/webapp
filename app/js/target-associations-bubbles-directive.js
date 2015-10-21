@@ -223,7 +223,7 @@ angular.module('cttvDirectives')
 		    var elemOffsetTop = elem[0].parentNode.offsetTop;
 
 		    // BottomMargin
-		    var bottomMargin = 270;
+		    var bottomMargin = 310;
 
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 
