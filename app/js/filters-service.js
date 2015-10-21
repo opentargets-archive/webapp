@@ -19,8 +19,8 @@ angular.module('cttvServices').
             {key: cttvConsts.datatypes.GENETIC_ASSOCIATION, selected:true},
             {key: cttvConsts.datatypes.SOMATIC_MUTATION, selected:true},
             {key: cttvConsts.datatypes.KNOWN_DRUG, selected:true},
-            {key: cttvConsts.datatypes.RNA_EXPRESSION, selected:true},
             {key: cttvConsts.datatypes.AFFECTED_PATHWAY, selected:true},
+            {key: cttvConsts.datatypes.RNA_EXPRESSION, selected:true},
             {key: cttvConsts.datatypes.LITERATURE, selected:true},
             {key: cttvConsts.datatypes.ANIMAL_MODEL, selected:false}
         ];
