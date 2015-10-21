@@ -223,7 +223,8 @@ angular.module('cttvServices').
                 config.filters = data.buckets.map(function(obj){
                     var conf = {};
                     conf.key = obj.key;
-                    conf.label = obj.key;
+                    //conf.label = obj.key;
+                    conf.label = cttvDictionary[ cttvConsts.invert(obj.key) ] || obj.key;
                     conf.count = obj[countsToUse].value;
                     conf.selected = isSelected(collection, obj.key);
                     conf.facet = collection;
