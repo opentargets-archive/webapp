@@ -9,7 +9,9 @@ var bubblesView = function () {
         diameter : 600,
         format : d3.format(",d"),
         color : d3.scale.category20c(),
-        colorPalette : true,
+        colorPalette : function () {
+            return "blue";
+        },
         data : undefined,
         value : "value",
         key : "name",
@@ -82,6 +84,7 @@ var bubblesView = function () {
             .size([conf.diameter, conf.diameter])
             .padding(1.5);
 
+        // legend
         if (conf.maxVal !== undefined) {
             legend = svg
                 .append("g")
@@ -264,7 +267,20 @@ var bubblesView = function () {
                 }
                 dispatch.click.call(this, tree_node(d));
             })
-            .attr("fill", "navy")
+            //.attr("fill", "navy")
+            .classed ("lightLabel", function (d) {
+                return (d.association_score > 0.5) && !d.children;
+            })
+            .classed ("darkLabel", function (d) {
+                return (d.association_score < 0.5);
+            })
+            // .attr ("fill", function (d) {
+            //     if (d.association_score > 0.5 && !d.children) {
+            //         return "#F0F0F0";
+            //     } else {
+            //         return "navy";
+            //     }
+            // })
             .attr("font-size", 0)
             .attr("text-anchor", "middle");
 
@@ -374,8 +390,24 @@ var bubblesView = function () {
             .classed ("bubblesViewLeaf", function (d) {
                 return !d.children;
             })
+            .classed ("bubblesViewInternal", function (d) {
+                return !!d.children;
+            })
             .classed ("bubblesViewRoot", function (d) {
                 return !d._parent;
+            })
+            .style("fill", function (d) {
+                if (d.association_score && !d.children) {
+                    return conf.colorPalette(d.association_score);
+                }
+            })
+            .style("stroke", function (d) {
+                if (d.association_score && !d.children) {
+                    return d3.rgb(conf.colorPalette(d.association_score)).darker();
+                }
+                else {
+                    return "grey";
+                }
             });
             // .transition()
             // .duration(conf.duration)
@@ -525,7 +557,7 @@ var bubblesView = function () {
                         .attr("xlink:href", (conf.useFullPath ? window.location.href : "") + "#" + getPathId(d))
                         .attr("startOffset", "50%")
                         .text(function () {
-                            if (Math.PI*d.r*k/8 < 3) {
+                            if (Math.PI*d.r*k/8 < 5) {
                                 return "";
                             }
                             return d[conf.label] ? d[conf.label].substring(0, Math.PI*d.r*k/8) : "";
@@ -716,6 +748,14 @@ var bubblesView = function () {
             return conf.useFullPath;
         }
         conf.useFullPath = b;
+        return this;
+    };
+
+    render.colorPalette = function (palette) {
+        if (!arguments.length) {
+            return conf.colorPalette;
+        }
+        conf.colorPalette = palette;
         return this;
     };
 

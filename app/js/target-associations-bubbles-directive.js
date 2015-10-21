@@ -13,7 +13,12 @@ angular.module('cttvDirectives')
             facets : '='
 	    },
 
+        template: '<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
+        +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
+
+
 	    link: function (scope, elem, attrs) {
+            var bubblesContainer = elem.children().eq(0).children().eq(0)[0];
 
 		// event receiver on focus
 		addEventListener('bubblesViewFocus', function (e) {
@@ -206,6 +211,8 @@ angular.module('cttvDirectives')
         }
 
 		function setView () {
+
+
 		    ////// Bubbles View
 		    // viewport Size
 
@@ -219,6 +226,8 @@ angular.module('cttvDirectives')
 		    var bottomMargin = 270;
 
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
+
+            var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
 
 		    //var dts = JSON.parse(attrs.datatypes);
@@ -259,6 +268,7 @@ angular.module('cttvDirectives')
                     var bView = bubblesView()
                         .useFullPath(cttvUtils.browser.name !== "IE")
                         .maxVal(1)
+                        .colorPalette(colorScale)
                         .breadcrumsClick(function (d) {
                             var focusEvent = new CustomEvent("bubblesViewFocus", {
                                 "detail" : d
@@ -281,7 +291,20 @@ angular.module('cttvDirectives')
                     updateView (data);
 
                     //scope.$parent.$apply();
-                    ga(bView, fView, elem[0]);
+                    ga(bView, fView, bubblesContainer);
+
+                    // Setting up legend
+                    scope.legendText = "Score";
+                    scope.colors = [];
+                    for(var i=0; i<=100; i+=25){
+                        var j=i/100;
+                        //scope.labs.push(j);
+                        scope.colors.push( {color:colorScale(j), label:j} );
+                    }
+                    scope.legendData = [
+                        //{label:"Therapeutic Area", class:"no-data"}
+                    ];
+
                 },
                 cttvAPIservice.defaultErrorHandler
             );
