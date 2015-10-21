@@ -3,7 +3,7 @@
     <view-title>{{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name) +' &#8596; '+ search.info.efo.label + ' association'}}</view-title>-->
 
     <!-- <h3>Target to disease association</h3> -->
-    <h3 view-title>{{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}} associations with {{search.info.efo.label}}</h3>
+    <h3 view-title>Evidence for {{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}} in {{search.info.efo.label}}</h3>
 
     <!-- page header with flower and overview -->
     <div class="row gene-disease-header">
@@ -24,11 +24,11 @@
                                 {{search.info.gene.approved_symbol || search.info.gene.ensembl_external_name}}<br />
                                 <span class="small">{{search.info.gene.approved_name || search.info.gene.ensembl_description}}
                                     <!-- <br/ >({{search.info.gene.id || search.info.gene.ensembl_gene_id}}) -->
-                                    <span ng-show="search.info.gene.symbol_synonyms.length>0"><br />Synonyms: {{search.info.gene.symbol_synonyms.join(", ") | limitTo:100}}<span>...</span></span>
+                                    <span ng-show="search.info.gene.symbol_synonyms.length>0"><br />Synonyms: {{search.info.gene.symbol_synonyms.join(", ") | limitTo:100}}<span ng-show="search.info.gene.symbol_synonyms.join(', ').length>100">&hellip;</span></span>
                                 </span>
                             </h5>
                             <!-- The actual content paragraph -->
-                            <p class="small">{{search.info.gene.uniprot_function[0] | limitTo: 200}}<span ng-show="search.info.gene.uniprot_function[0].length>200">...</span></p>
+                            <p class="small">{{search.info.gene.uniprot_function[0] | limitTo: 200}}<span ng-show="search.info.gene.uniprot_function[0].length>200">&hellip;</span></p>
                         </div>
                     </a>
                 </div>
@@ -41,12 +41,12 @@
                 <!-- Disease Info -->
                 <div class="item">
                     <a href="/disease/{{search.info.efo.efo_code}}">
-                        <div class="well well-lg">
+                        <div class="well well-lg" title="hello">
                             <h5>
                                 {{search.info.efo.label}}
-                                <span class="small" ng-show="search.info.efo.efo_synonyms.length>0"><br />Synonyms: {{search.info.efo.efo_synonyms.join(", ") | limitTo:100}}...</span>
+                                <span class="small" ng-show="search.info.efo.efo_synonyms.length>0" title="Bob"><br />Synonyms: {{search.info.efo.efo_synonyms.join(", ") | limitTo:100}}<span ng-show="search.info.efo.efo_synonyms.join(', ').length>100">&hellip;</span></span>
                             </h5>
-                            <p class="small">{{search.info.efo.definition | limitTo: 200}}<span ng-show="search.info.efo.definition.length>200">...</span></p>
+                            <p class="small">{{search.info.efo.definition | limitTo: 200}}<span ng-show="search.info.efo.definition.length>200">&hellip;</span></p>
                         </div>
                     </a>
                 </div>
