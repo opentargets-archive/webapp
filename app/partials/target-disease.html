@@ -231,6 +231,50 @@
 
 
 
+                <!-- Disrupted pathways -->
+                <accordion-group is-open="false">
+                    <accordion-heading>
+                        <span class="text-nolight">
+                            <span ng-class="{ 'text-disabled': search.pathways.data.length==0 }">{{search.pathways.heading}}</span>
+                            <!-- <span class='badge' ng-show="search.pathways.data.length>0">{{search.pathways.data.length}}</span> -->
+                            <!-- Score pill -->
+                            <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.AFFECTED_PATHWAY]" title="Association score">{{search.association_scores[datatypes.AFFECTED_PATHWAY] | currency : "" : 2}}</span> -->
+                            <span cttv-progress-spinner class="pull-right" ng-show="search.pathways.is_loading"></span>
+                        </span>
+                    </accordion-heading>
+                    <div ng-show="search.pathways.data.length>0">
+                        <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Reactome</a> curated database</p> -->
+                        <p>Source: <span ng-repeat="source in search.pathways.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+                        <!-- <h4>Header info for table</h4> -->
+                        <div class="table-panel">
+                            <table class='table table-striped table-bordered' id="pathways-table">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2"></th>  <!-- nameless col for access level -->
+                                        <th rowspan="2" colspan="1">Disease</th>
+                                        <th rowspan="1" colspan="7">Gene-disease evidence</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Overview</th>
+                                        <th>Activity</th>
+                                        <th>Mutations</th>
+                                        <th>Evidence source</th>
+                                        <th>Publications</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div ng-show="search.pathways.data.length==0">
+                        <p>No data available</p>
+                    </div>
+                </accordion-group>
+
+
+
                 <!-- RNA Expression table -->
                 <accordion-group is-open="false">
                     <accordion-heading>
@@ -274,50 +318,6 @@
                         </div>
                     </div>
                     <div ng-show="search.rna_expression.data.length==0">
-                        <p>No data available</p>
-                    </div>
-                </accordion-group>
-
-
-
-                <!-- Disrupted pathways -->
-                <accordion-group is-open="false">
-                    <accordion-heading>
-                        <span class="text-nolight">
-                            <span ng-class="{ 'text-disabled': search.pathways.data.length==0 }">{{search.pathways.heading}}</span>
-                            <!-- <span class='badge' ng-show="search.pathways.data.length>0">{{search.pathways.data.length}}</span> -->
-                            <!-- Score pill -->
-                            <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.AFFECTED_PATHWAY]" title="Association score">{{search.association_scores[datatypes.AFFECTED_PATHWAY] | currency : "" : 2}}</span> -->
-                            <span cttv-progress-spinner class="pull-right" ng-show="search.pathways.is_loading"></span>
-                        </span>
-                    </accordion-heading>
-                    <div ng-show="search.pathways.data.length>0">
-                        <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Reactome</a> curated database</p> -->
-                        <p>Source: <span ng-repeat="source in search.pathways.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
-                        <!-- <h4>Header info for table</h4> -->
-                        <div class="table-panel">
-                            <table class='table table-striped table-bordered' id="pathways-table">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2"></th>  <!-- nameless col for access level -->
-                                        <th rowspan="2" colspan="1">Disease</th>
-                                        <th rowspan="1" colspan="7">Gene-disease evidence</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Overview</th>
-                                        <th>Activity</th>
-                                        <th>Mutations</th>
-                                        <th>Evidence source</th>
-                                        <th>Publications</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div ng-show="search.pathways.data.length==0">
                         <p>No data available</p>
                     </div>
                 </accordion-group>
