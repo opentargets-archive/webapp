@@ -19,8 +19,8 @@ angular.module('cttvServices').
             {key: cttvConsts.datatypes.GENETIC_ASSOCIATION, selected:true},
             {key: cttvConsts.datatypes.SOMATIC_MUTATION, selected:true},
             {key: cttvConsts.datatypes.KNOWN_DRUG, selected:true},
-            {key: cttvConsts.datatypes.RNA_EXPRESSION, selected:true},
             {key: cttvConsts.datatypes.AFFECTED_PATHWAY, selected:true},
+            {key: cttvConsts.datatypes.RNA_EXPRESSION, selected:true},
             {key: cttvConsts.datatypes.LITERATURE, selected:true},
             {key: cttvConsts.datatypes.ANIMAL_MODEL, selected:false}
         ];
@@ -223,7 +223,8 @@ angular.module('cttvServices').
                 config.filters = data.buckets.map(function(obj){
                     var conf = {};
                     conf.key = obj.key;
-                    conf.label = obj.key;
+                    //conf.label = obj.key;
+                    conf.label = cttvDictionary[ cttvConsts.invert(obj.key) ] || obj.key;
                     conf.count = obj[countsToUse].value;
                     conf.selected = isSelected(collection, obj.key);
                     conf.facet = collection;
