@@ -48,7 +48,7 @@ angular.module('cttvServices').
             // I
             // J
             // K
-            KNOWN_DRUG :             "Known drugs",
+            KNOWN_DRUG :             "Drugs",
 
             // L
             LITERATURE :             "Text mining",
