@@ -8,7 +8,7 @@ RUN echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/a
 ENV NGINX_VERSION 1.9.5-1~jessie
 
 RUN apt-get update && \
-    apt-get install -y ca-certificates nginx=${NGINX_VERSION} && \
+    apt-get install -y ca-certificates nginx=${NGINX_VERSION} build-essential && \
     rm -rf /var/lib/apt/lists/*
 
 # Install node
@@ -17,6 +17,11 @@ RUN apt-get update && \
     curl --silent --location https://deb.nodesource.com/setup_0.12 | bash - && \
     apt-get install --yes nodejs
 
+# Install libsass
+# RUN git clone https://github.com/sass/libsass.git && \
+#     cd libsass && \
+#     make -j5 &&
+#     make install
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
@@ -26,8 +31,8 @@ RUN ln -sf /dev/stderr /var/log/nginx/error.log
 RUN mkdir -p /var/www/app /usr/share/nginx_auth /usr/share/nginx_crt /opt/share/webapp
 
 #copy code
-COPY * /opt/share/webapp/
-RUN cd /opt/share/webapp && node install && node test && cp -r ./app /var/www/app
+COPY . /opt/share/webapp/
+RUN cd /opt/share/webapp && npm install && cp -r ./app /var/www/app
 
 COPY ./nginx_conf/auth /usr/share/nginx_auth/
 COPY ./nginx_conf/server.* /usr/share/nginx_crt/
