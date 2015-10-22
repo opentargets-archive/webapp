@@ -10,7 +10,7 @@
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', '$modal', '$compile', '$http', '$q', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, $modal, $compile, $http, $q) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$modal', '$compile', '$http', '$q', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $modal, $compile, $http, $q) {
         'use strict';
         $log.log('TargetDiseaseCtrl()');
 
@@ -1207,11 +1207,11 @@
             var formatted;
             switch (id) {
                 case 'europepmc':
-                formatted = "Europe PMC";
-                break;
+                    formatted = cttvDictionary.EPMC; //"Europe PMC"; // using the dictionary to avoid duplicate hardcoded content
+                    break;
                 case 'disgenet':
-                formatted = "DisGeNET";
-                break;
+                    formatted = cttvDictionary.DISGENET; //"DisGeNET";
+                    break;
             }
             return formatted;
         };
@@ -1317,7 +1317,7 @@
                     row.push(
                         "<ul>"+
                         item.evidence.literature_ref.mined_sentences.map(function(sent){
-                            return "<li>"+sent.section+": "+sent.text+"</li>";
+                            return "<li>"+upperCaseFirst(sent.section)+": "+sent.text+"</li>";
                         }).join("") + "</ul>"
                     );
 
