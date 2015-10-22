@@ -41,10 +41,10 @@
                 <!-- Disease Info -->
                 <div class="item">
                     <a href="/disease/{{search.info.efo.efo_code}}">
-                        <div class="well well-lg" title="hello">
+                        <div class="well well-lg">
                             <h5>
                                 {{search.info.efo.label}}
-                                <span class="small" ng-show="search.info.efo.efo_synonyms.length>0" title="Bob"><br />Synonyms: {{search.info.efo.efo_synonyms.join(", ") | limitTo:100}}<span ng-show="search.info.efo.efo_synonyms.join(', ').length>100">&hellip;</span></span>
+                                <span class="small" ng-show="search.info.efo.efo_synonyms.length>0"><br />Synonyms: {{search.info.efo.efo_synonyms.join(", ") | limitTo:100}}<span ng-show="search.info.efo.efo_synonyms.join(', ').length>100">&hellip;</span></span>
                             </h5>
                             <p class="small">{{search.info.efo.definition | limitTo: 200}}<span ng-show="search.info.efo.definition.length>200">&hellip;</span></p>
                         </div>
