@@ -89,9 +89,12 @@ angular.module('cttvDirectives')
                     return cttvAPIservice.getFilterBy( opts ).
                     then(
                         function(resp) {
-                            scope.data = resp.body.data;
-                            initTableDrugs();
-
+                            if( resp.body.data ){
+                                scope.data = resp.body.data;
+                                initTableDrugs();
+                            } else {
+                                $log.warn("Empty response : drug data");
+                            }
                         },
                         cttvAPIservice.defaultErrorHandler
                     ).
