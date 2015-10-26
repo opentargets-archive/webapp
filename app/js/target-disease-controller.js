@@ -311,9 +311,12 @@
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
-                        $scope.search.genetic_associations.common_diseases.data = resp.body.data;
-                        initCommonDiseasesTable();
-
+                        if( resp.body.data ){
+                            $scope.search.genetic_associations.common_diseases.data = resp.body.data;
+                            initCommonDiseasesTable();
+                        } else {
+                            $log.warn("Empty response : common disease");
+                        }
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
@@ -387,7 +390,7 @@
 
         var initCommonDiseasesTable = function(){
 
-            $('#common-diseases-table').dataTable( cttvUtils.setTableToolsParams({
+            $('#common-diseases-table').DataTable( cttvUtils.setTableToolsParams({
                 "data": formatCommonDiseaseDataToArray($scope.search.genetic_associations.common_diseases.data),
                 "ordering" : true,
                 "order": [[1, 'asc']],
@@ -440,8 +443,12 @@
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
-                        $scope.search.genetic_associations.rare_diseases.data = resp.body.data;
-                        initRareDiseasesTable();
+                        if( resp.body.data ){
+                            $scope.search.genetic_associations.rare_diseases.data = resp.body.data;
+                            initRareDiseasesTable();
+                        } else {
+                            $log.warn("Empty response : rare disease");
+                        }
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
@@ -540,7 +547,7 @@
 
 
         var initRareDiseasesTable = function(){
-            $('#rare-diseases-table').dataTable( cttvUtils.setTableToolsParams({
+            $('#rare-diseases-table').DataTable( cttvUtils.setTableToolsParams({
                 "data": formatRareDiseaseDataToArray($scope.search.genetic_associations.rare_diseases.data),
                 "ordering" : true,
                 "order": [[1, 'asc']],
@@ -604,8 +611,12 @@
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
-                        $scope.search.pathways.data = resp.body.data;
-                        initTablePathways();
+                        if( resp.body.data ){
+                            $scope.search.pathways.data = resp.body.data;
+                            initTablePathways();
+                        } else {
+                            $log.warn("Empty response : pathway data");
+                        }
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
@@ -670,7 +681,7 @@
 
 
         var initTablePathways = function(){
-            $('#pathways-table').dataTable( cttvUtils.setTableToolsParams({
+            $('#pathways-table').DataTable( cttvUtils.setTableToolsParams({
                 "data" : formatPathwaysDataToArray($scope.search.pathways.data),
                 "ordering" : true,
                 "order": [[1, 'asc']],
@@ -711,9 +722,12 @@
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
-                        $scope.search.rna_expression.data = resp.body.data;
-                        initTableRNA();
-
+                        if( resp.body.data ){
+                            $scope.search.rna_expression.data = resp.body.data;
+                            initTableRNA();
+                        } else {
+                            $log.warn("Empty response : RNA expression");
+                        }
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
@@ -795,7 +809,7 @@
 
         var initTableRNA = function(){
 
-            $('#rna-expression-table').dataTable( cttvUtils.setTableToolsParams({
+            $('#rna-expression-table').DataTable( cttvUtils.setTableToolsParams({
                 "data": formatRnaDataToArray($scope.search.rna_expression.data),
                 "order": [[1, 'asc']],
                 "autoWidth": false,
@@ -838,9 +852,12 @@
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
-                        $scope.search.somatic_mutations.data = resp.body.data;
-                        initTableMutations();
-
+                        if( resp.body.data ){
+                            $scope.search.somatic_mutations.data = resp.body.data;
+                            initTableMutations();
+                        } else {
+                            $log.warn("Empty response : somatic mutations");
+                        }
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
@@ -899,7 +916,7 @@
 
         var initTableMutations = function(){
 
-            $('#mutations-table').dataTable( cttvUtils.setTableToolsParams({
+            $('#mutations-table').DataTable( cttvUtils.setTableToolsParams({
                 "data": formatMutationsDataToArray($scope.search.somatic_mutations.data),
                 //"ordering" : true,
                 "order": [[1, 'asc']],
@@ -951,8 +968,12 @@
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
-                        $scope.search.mouse.data = resp.body.data;
-                        initTableMouse();
+                        if( resp.body.data ){
+                            $scope.search.mouse.data = resp.body.data;
+                            initTableMouse();
+                        } else {
+                            $log.warn("Empty response : mouse data");
+                        }
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
@@ -1015,7 +1036,7 @@
 
         var initTableMouse = function(){
 
-            $('#mouse-table').dataTable( cttvUtils.setTableToolsParams({
+            $('#mouse-table').DataTable( cttvUtils.setTableToolsParams({
                 "data": formatMouseDataToArray($scope.search.mouse.data),
                 "autoWidth": false,
                 "paging" : true,
@@ -1175,25 +1196,30 @@
                 then(
                     function(resp) {
                         console.log(resp);
-                        $scope.search.literature.total = resp.body.total;
-                        var unicode_re = /u([\dABCDEF]{4})/gi;
-                        var match;
 
-                        var all = [];
-                        resp.body.data.map (function (paper) {
-                            all.push(paper.evidence.literature_ref.lit_id.split("/").pop());
-                            // WARNING: Unicode characters are encoded in the response, we convert them to symbol
-                            paper.evidence.literature_ref.mined_sentences.map (function (sentence) {
-                                var text = sentence.text;
-                                while ((match = unicode_re.exec(text)) !== null) {
-                                    sentence.text = sentence.text.replace('u'+match[1], String.fromCharCode(parseInt(match[1], 16)));
-                                }
+                        if( resp.body.data ){
+                            $scope.search.literature.total = resp.body.total;
+                            var unicode_re = /u([\dABCDEF]{4})/gi;
+                            var match;
+
+                            var all = [];
+                            resp.body.data.map (function (paper) {
+                                all.push(paper.evidence.literature_ref.lit_id.split("/").pop());
+                                // WARNING: Unicode characters are encoded in the response, we convert them to symbol
+                                paper.evidence.literature_ref.mined_sentences.map (function (sentence) {
+                                    var text = sentence.text;
+                                    while ((match = unicode_re.exec(text)) !== null) {
+                                        sentence.text = sentence.text.replace('u'+match[1], String.fromCharCode(parseInt(match[1], 16)));
+                                    }
+                                });
+
                             });
-
-                        });
-                        $scope.search.literature.data = resp.body.data;
-                        var dt = initTableLiterature();
-                        getLiteratureAbstractsData(dt);
+                            $scope.search.literature.data = resp.body.data;
+                            var dt = initTableLiterature();
+                            getLiteratureAbstractsData(dt);
+                        } else {
+                            $log.warn("Empty response : literature");
+                        }
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
