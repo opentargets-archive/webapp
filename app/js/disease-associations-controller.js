@@ -16,7 +16,7 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService) {
+.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary) {
 
     'use strict';
 
@@ -129,7 +129,7 @@ angular.module('cttvControllers')
         then(
             function(resp) {
                 $scope.search.label = resp.body.label;
-                $scope.search.filename = resp.body.label.split(" ").join("_");
+                $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.label.split(" ").join("_");
             },
             cttvAPIservice.defaultErrorHandler
         );

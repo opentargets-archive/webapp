@@ -97,7 +97,7 @@ angular.module('cttvDirectives', [])
 
             scope: {
                 loadprogress : '=',
-                filename : '@',
+                filename : '=',
                 datatypes : '@',
                 facets : '=',
                 n : '=ndiseases'
@@ -255,6 +255,7 @@ angular.module('cttvDirectives', [])
             // table itself
             var table = elem.children().eq(0)[0];
             var dtable = setupTable(table, scope.filename);
+
             // legend stuff
             //scope.labs = ["a","z"];
             scope.legendText = "Score";
@@ -344,6 +345,30 @@ angular.module('cttvDirectives', [])
                         .column(2)
                         .search(val)
                         .draw();
+                }
+            });
+
+            // Watch for filename changes
+            // when available, we update the option for the CSV button, via a little hack:
+            // we update the button action, wrapping the original action in a call where the 4th argument is updated with the correct title
+            scope.$watch( 'filename', function(val){
+                if(val){
+                    // replace spaces with underscores
+                    val = val.split(" ").join("_");
+
+                    // update the export function to
+                    var act = dtable.button(".buttons-csv").action();   // the original export function
+
+                    dtable.button(".buttons-csv").action(
+                        function(){
+                            //var opts = arguments[3];
+                            //opts.title = val;
+                            //act(arguments[0], arguments[1], arguments[2], opts);
+                            arguments[3].title = val;
+                            act.apply(this, arguments);
+                        }
+                    );
+
                 }
             });
 
@@ -710,7 +735,7 @@ angular.module('cttvDirectives', [])
             restrict: 'E',
 
             scope: {
-                filename : '@',
+                filename : '=',
                 data : '='
             },
 
@@ -750,6 +775,30 @@ angular.module('cttvDirectives', [])
                         $log.debug("Update table - "+scope.data.length);
                         //console.log(scope.data.selected);
                         updateTable(dtable, scope.data, attrs.target, filters);
+                    }
+                });
+
+                // Watch for filename changes
+                // when available, we update the option for the CSV button, via a little hack:
+                // we update the button action, wrapping the original action in a call where the 4th argument is updated with the correct title
+                scope.$watch( 'filename', function(val){
+                    if(val){
+                        // replace spaces with underscores
+                        val = val.split(" ").join("_");
+
+                        // update the export function to
+                        var act = dtable.button(".buttons-csv").action();   // the original export function
+
+                        dtable.button(".buttons-csv").action(
+                            function(){
+                                //var opts = arguments[3];
+                                //opts.title = val;
+                                //act(arguments[0], arguments[1], arguments[2], opts);
+                                arguments[3].title = val;
+                                act.apply(this, arguments);
+                            }
+                        );
+
                     }
                 });
 
