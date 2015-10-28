@@ -1,5 +1,12 @@
 $dim : 1000px;
 
+// Colors
+$gray-background: rgb(62,139,173);
+$gray-lightlabel: #F0F0F0;
+$gray-lightfill: rgb(192, 192, 192);
+$blue-darklabel: navy;
+
+
 :host {
     display: block;
     //background : blue;
@@ -43,7 +50,7 @@ $dim : 1000px;
 
 .bubblesViewNode {
     //@include circle-fill(rgb(31, 119, 180), .25, .5px);
-    @include circle-fill(rgb(192,192,192), .25, .5px);
+    @include circle-fill($gray-lightfill, .25, .5px);
 }
 
 .cttv_bubblesView {
@@ -53,7 +60,7 @@ $dim : 1000px;
 }
 
 .bubblesViewLeaf {
-    @include circle-fill(rgb(62,139,173), 1, .5px);
+    @include circle-fill($gray-background, 1, .5px);
 }
 
 .bubblesViewRoot {
@@ -66,11 +73,18 @@ $dim : 1000px;
 
 
 .lightLabel {
-    fill: #F0F0F0;
+    fill: $gray-lightlabel;
 }
 
 .darkLabel {
-    fill: navy;
+    fill: $blue-darklabel;
+}
+
+.topLabel {
+    text-shadow: 0px 1px 0px $gray-lightfill,
+               1px 0px 0px $gray-lightfill,
+               0px -1px 0px $gray-lightfill,
+               -1px 0px 0px $gray-lightfill;
 }
 
 h2 {
