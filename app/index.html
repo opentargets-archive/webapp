@@ -58,9 +58,17 @@
 <!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-header/target_disease_evidence_header.html"> -->
 <!-- <link rel="import" href="./web_components/cttv/target-disease-evidence/target-disease-evidence-overview/target_disease_evidence_overview.html"> -->
 
-<!-- tables -->
+<!-- tables
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/tabletools/2.2.1/css/dataTables.tableTools.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.9,b-1.0.3,b-html5-1.0.3/datatables.min.css"/>-->
+
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9,b-1.0.3,b-html5-1.0.3/datatables.min.css"/> -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9/datatables.min.css"/>
+<link rel="stylesheet" type="text/css" href="./vendor/datatables/buttons.dataTables.min.css"/> <!-- TODO: while we get the fix in official release, same for JS-->
+
+
+
 </head>
 
 <body>
@@ -291,10 +299,16 @@
 
 
 
-        <!-- DataTable stuff -->
+        <!-- DataTable stuff
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>-->
+
+
+        <!--<script type="text/javascript" src="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9,b-1.0.3,b-html5-1.0.3/datatables.js"></script>-->
+        <script type="text/javascript" src="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9/datatables.min.js"></script>
+        <script type="text/javascript" src="./vendor/datatables/dataTables.buttons.min.js"></script>  <!-- TODO: remove this nightly build when fixes are included in official release -->
+        <script type="text/javascript" src="./vendor/datatables/buttons.html5.min.js"></script>  <!--TODO: remove this when fixes are included in official release -->
 
         <!-- Piwik -->
         <script type="text/javascript">

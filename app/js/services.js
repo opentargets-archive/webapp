@@ -69,36 +69,24 @@ angular.module('cttvServices', []).
         cttvUtilsService.setTableToolsParams = function(obj, title){
 
             //obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
-            obj.sDom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
-            obj.oTableTools= {
-                    "sSwfPath": "swfs/copy_csv_xls.swf",
-                    "aButtons": [
-                        {
-                            "sExtends":    "collection",
-                            "sButtonText": "<span class='fa fa-download'>",
-                            "aButtons": [
-                                {
-                                    "sExtends": "copy",
-                                    "sButtonText": "<span class='fa fa-files-o' style='padding-right:7px'></span>Copy"
-                                },
-                                {
-                                    "sExtends": "csv",
-                                    "sButtonText": "<span class='fa fa-file-excel-o' style='padding-right:7px'></span>Excel/CSV",
-                                    "sTitle": title
-                                }/*,
-                                {
-                                    "sExtends": "pdf",
-                                    "sButtonText": "<span class='fa fa-file-pdf-o' style='padding-right:7px'></span>PDF",
-                                    "sTitle": title
-                                },
-                                {
-                                    "sExtends": "print",
-                                    "sButtonText": "<span class='fa fa-print' style='padding-right:7px'></span>Print"
-                                }*/
-                            ],
-                        }
-                     ]
-                };
+            //obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
+
+            obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>rt<"pull-left small" l><"pull-right small" p>>',
+            obj.buttons = [
+                // {
+                //     extend: 'copyHtml5',
+                //     text: "<span class='fa fa-files-o' title='Copy to clipboard'><span>",
+                // },
+                {
+                    extend: 'csvHtml5',
+                    text: "<span class='fa fa-file-excel-o' title='Download as .csv'><span>",//"<span class='fa fa-download'></span>",
+                    title: title//,
+                    //exportOptions: {
+                    //    columns: ':visible'
+                    //}
+                }
+            ];
+
             return obj;
         };
 

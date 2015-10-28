@@ -7,7 +7,7 @@ angular.module('cttvControllers')
  * Controller for the target associations page
  * It loads a list of associations for the given search
  */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary) {
         'use strict';
 
 	$log.log('targetAssociationsCtrl()');
@@ -49,7 +49,7 @@ angular.module('cttvControllers')
         then(
             function(resp) {
                 $scope.search.label = resp.body.approved_symbol;
-                $scope.search.filename = resp.body.approved_symbol.split(" ").join("_");
+                $scope.search.filename = cttvDictionary.EXP_TARGET_ASSOC_LABEL + resp.body.approved_symbol.split(" ").join("_");
             },
             cttvAPIservice.defaultErrorHandler
         );

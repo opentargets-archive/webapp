@@ -651,8 +651,24 @@ table.matrix-table thead > tr > th {
     /*vertical-align: middle !important;*/
 }
 
+/* Fix for the new DataTables styling */
+table.matrix-table thead > tr > th:after {
+    right: 22px !important;
+}
+
+table.matrix-table thead > tr > th:first-child:after {
+    right: 10px !important;
+}
+
+table.matrix-table thead > tr > th:last-child:after {
+    left: 10px !important;
+}
+
+
+
 table.matrix-table thead > tr > th:hover {
-    background-color: #F6F6F6;
+    /*background-color: #F6F6F6;*/
+    background-color: rgba(210,210,210,0.2);    /* values to match F4F4F4 */
 }
 
 table.matrix-table thead > tr > th:first-child {
@@ -682,23 +698,23 @@ table.matrix-table thead > tr > th > div > span{
     -ms-transform-origin: 0% 0%;
     -o-transform-origin: 0% 0%;
     transform-origin: 0% 0%;
-    -webkit-transform: rotate(-90deg) translateY(-50%);
-    -moz-transform:    rotate(-90deg) translateY(-50%);
-    -ms-transform:     rotate(-90deg) translateY(-50%);
-    -o-transform:      rotate(-90deg) translateY(-50%);
-    transform:      rotate(-90deg) translateY(-50%);
+    -webkit-transform: rotate(-60deg) translateY(-50%);
+    -moz-transform:    rotate(-60deg) translateY(-50%);
+    -ms-transform:     rotate(-60deg) translateY(-50%);
+    -o-transform:      rotate(-60deg) translateY(-50%);
+    transform:         rotate(-60deg) translateY(-50%);
 }
 
 table.matrix-table thead > tr > th:first-child > div {
     width:0px;
     float: right;
-    margin-right: 10px;
+    margin-right: 11px;
 }
 
 table.matrix-table thead > tr > th:last-child > div {
     width:0px;
     float: left;
-    margin-left: 10px;
+    margin-left: 11px;
 }
 
 
@@ -832,6 +848,23 @@ span.matrix-legend-background-label {
     background-position: center bottom 5px !important;
     width: 5% !important;
 }
+
+/* Fix for the new DataTables styling */
+cttv-hpa-tissue-expression table.matrix-table thead > tr > th:last-child,
+cttv-hpa-tissue-expression table.matrix-table tbody > tr > td:last-child,
+cttv-hpa-tissue-expression table.matrix-table tbody > tr > td:last-child:hover  {
+    /* display: none !important; */
+    visibility: hidden;
+}
+
+.hpa-matrix-table thead > tr > th:last-child {
+    display: none !important;
+}
+
+
+
+
+
 /*
 
 table.matrix-table thead > tr > th:last-child {
