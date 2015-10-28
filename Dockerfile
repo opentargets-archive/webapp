@@ -25,9 +25,12 @@ RUN ln -sf /dev/stderr /var/log/nginx/error.log
 # Create directories
 RUN mkdir -p /var/www/app /usr/share/nginx_auth /usr/share/nginx_crt /opt/share/webapp
 
-#copy code
+#copy code and install node & bower deps
 COPY . /opt/share/webapp/
-RUN cd /opt/share/webapp && npm install && cp -r ./app /var/www
+RUN cd /opt/share/webapp && \
+    echo 'unsafe-perm = true' > .npmrc && \
+    npm install && \
+    cp -r ./app /var/www
 
 COPY ./nginx_conf/auth /usr/share/nginx_auth/
 COPY ./nginx_conf/server.* /usr/share/nginx_crt/
