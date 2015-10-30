@@ -36,7 +36,7 @@
     "shelljs": "^0.2.6"
   },
   "scripts": {
-    "postinstall": "bower install; gulp build-browser",
+    "postinstall": "bower install --allow-root; gulp build-browser",
     "start": "cd server && node server.js",
     "pretest": "npm install",
     "test": "gulp test",
