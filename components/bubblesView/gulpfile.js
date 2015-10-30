@@ -11,7 +11,7 @@ var karma = require("karma").server;
 
 // gulp helper
 var gzip = require('gulp-gzip');
-var clean = require('gulp-rimraf');
+var del = require("del");
 var rename = require('gulp-rename');
 
 // path tools
@@ -35,8 +35,11 @@ var outputFileMin = join(buildDir,outputFileMinSt);
 gulp.task('default', ['lint', 'test', 'build-browser', 'build-browser-gzip']);
 
 gulp.task('sass', function () {
-    return gulp.src('./src/scss/*scss')
-	.pipe(sass())
+    return gulp.src('index.scss')
+	.pipe(sass({
+	    errLogToConsole: true
+	}))
+	.pipe(rename(outputFile + '.css'))
 	.pipe(gulp.dest(buildDir));
 });
 
@@ -62,7 +65,7 @@ gulp.task('watch', function() {
 
 // will remove everything in build
 gulp.task('clean', function() {
-  return gulp.src(buildDir).pipe(clean());
+    return del([buildDir]);
 });
 
 // just makes sure that the build dir exists
@@ -75,9 +78,9 @@ gulp.task('init', ['clean'], function() {
 // browserify debug
 gulp.task('build-browser',['init', 'sass'], function() {
   return gulp.src(browserFile)
-  .pipe(browserify({debug:true}))
-  .pipe(rename(outputFileSt))
-  .pipe(gulp.dest(buildDir));
+	.pipe(browserify({debug:true}))
+	.pipe(rename(outputFileSt))
+	.pipe(gulp.dest(buildDir));
 });
 
 // browserify min

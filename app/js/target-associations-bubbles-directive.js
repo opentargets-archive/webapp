@@ -7,17 +7,19 @@ angular.module('cttvDirectives')
 	return {
 	    restrict: 'E',
 
+        require: '?^resize',
+
 	    scope: {
 			"onFocus": '&onFocus',
 			loadprogress : '=',
             facets : '='
-	    },
+        },
 
         template: '<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
         +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
 
 
-	    link: function (scope, elem, attrs) {
+	    link: function (scope, elem, attrs, resizeCtrl) {
             var bubblesContainer = elem.children().eq(0).children().eq(0)[0];
 
 		// event receiver on focus
@@ -200,6 +202,13 @@ angular.module('cttvDirectives')
             }
 		});
 
+        // Dim changes
+        scope.$watch(function () {if (resizeCtrl) { return resizeCtrl.dims();}}, function (val) {
+            if (ga) {
+                ga.diameter(val.height - 310);
+            }
+        }, true);
+
         function updateView (data) {
             // TODO: This may prevent from delivering directives as products!
             if (data) {
@@ -211,8 +220,6 @@ angular.module('cttvDirectives')
         }
 
 		function setView () {
-
-
 		    ////// Bubbles View
 		    // viewport Size
 
@@ -228,7 +235,6 @@ angular.module('cttvDirectives')
 		    var diameter = viewportH - elemOffsetTop - bottomMargin;
 
             var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
-
 
 		    //var dts = JSON.parse(attrs.datatypes);
 		    /*var opts = {
