@@ -171,7 +171,24 @@ angular.module('cttvServices', []).
         // t: tick
         cttvUtilsService.roundToNearest = function(n,t){
             return (Math.round(n/t)*t);
-        }
+        };
+
+        // Defers a call x ms
+        // If a new call is made before the time expires, discard the initial one and start deferring again
+        // cttvUtilsService.defer = function (cbak, ms) {
+        //     var tick;
+        //
+        //     var defer_cancel = function () {
+        //         var args = Array.prototype.slice.call(arguments);
+        //         var that = this;
+        //         clearTimeout(tick);
+        //         tick = setTimeout (function () {
+        //             cbak.apply (that, args);
+        //         }, time);
+        //     };
+        //
+        //     return defer_cancel;
+        // };
 
         return cttvUtilsService;
     }]);
