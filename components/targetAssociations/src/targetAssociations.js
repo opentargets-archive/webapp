@@ -156,46 +156,50 @@ var geneAssociations = function () {
 
     // Getters / Setters
     ga.data = function (d) {
-    	if (!arguments.length) {
-    	    return config.data;
-    	}
-    	//processData(d);
-	config.data = processData(d);
-	//config.data = d;
-	config.root = tnt_node(config.data);
-    	return this;
+        if (!arguments.length) {
+            return config.data;
+        }
+        //processData(d);
+        config.data = processData(d);
+        //config.data = d;
+        config.root = tnt_node(config.data);
+        return this;
     };
 
     ga.target = function (t) {
-	if (!arguments.length) {
-	    return config.target;
-	}
-	config.target = t;
-	return this;
+        if (!arguments.length) {
+            return config.target;
+        }
+        config.target = t;
+        return this;
     };
 
     ga.diameter = function (d) {
-	if (!arguments.length) {
-	    return config.diameter;
-	}
-	config.diameter = d;
-	return this;
+        if (!arguments.length) {
+            return config.diameter;
+        }
+        config.diameter = d;
+        // Hot plug
+        if (bubblesView) {
+            bubblesView.diameter(d);
+        }
+        return this;
     };
 
     ga.cttvApi = function (api) {
-	if (!arguments.length) {
-	    return config.cttvApi;
-	}
-	config.cttvApi = api;
-	return this;
+        if (!arguments.length) {
+            return config.cttvApi;
+        }
+        config.cttvApi = api;
+        return this;
     };
 
     ga.filters = function (dts) {
-    	if (!arguments.length) {
-    	    return tooltips.filters();
-    	}
+        if (!arguments.length) {
+            return tooltips.filters();
+        }
         tooltips.filters(dts);
-    	return this;
+        return this;
     };
 
     ga.names = function (dts) {
@@ -208,10 +212,10 @@ var geneAssociations = function () {
 
     // Other methods to interact with the bubblesView
     ga.update = function (data) {
-	ga.data (data);
-	bubblesView
-	    .data(config.root);
-	bubblesView.update();
+        ga.data (data);
+        bubblesView
+            .data(config.root);
+        bubblesView.update();
     };
 
     ga.selectTherapeuticArea = function (efo) {
