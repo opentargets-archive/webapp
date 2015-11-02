@@ -1,6 +1,6 @@
 <div>
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
-    <view-title>{{'Disease profile: '+disease.label}}</view-title>
+    <view-title>{{disease.label+' profile'}}</view-title>
     <h3 class="cttv-content-header">{{disease.label}}<br /><small><a href="/disease/{{disease.efo}}/associations"><i class="fa fa-arrow-circle-right fa-lg"></i> View associations</a></small></h3>
 
     <accordion close-others="false">
@@ -41,7 +41,7 @@
                     </ul>
                     <h4 ng-if="disease.children.length > 0">Children</h4>
                     <ul>
-                        <li ng-repeat="child in disease.children">{{child.label}} <small>(<a href="/disease/{{child.code}}/associations">See gene associations</a>), (<a href="/disease/{{child.code}}">Go to diseases page</a>)</small>
+                        <li ng-repeat="child in disease.children">{{child.label}} <small>(<a href="/disease/{{child.code}}/associations">See target associations</a>), (<a href="/disease/{{child.code}}">Go to diseases page</a>)</small>
                         </li>
                     </ul>
                 </tab>

@@ -147,7 +147,7 @@ angular.module('cttvDirectives', [])
                     var opts = {
                         target: attrs.target,
                         datastructure: "flat",
-                        expandefo: true,
+                        expandefo: false,
                         facets: false
                     };
                     opts = cttvAPIservice.addFacetsOptions(facets, opts);
@@ -1438,7 +1438,7 @@ angular.module('cttvDirectives', [])
                      +'    <cttv-parent-checkbox-facet bucket="pathway" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
                      //+'          <div cttv-default-facet-contols facet="pathway.collection"></div>'
-                     +'        <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in pathway.collection.filters" partial="{{partial}}"></div>'
+                     +'        <div cttv-checkbox-facet multiline="true" bucket="bucket" ng-repeat="bucket in pathway.collection.filters" partial="{{partial}}"></div>'
                      +'    </div>'
                      +'</div>',
 
@@ -2026,18 +2026,21 @@ angular.module('cttvDirectives', [])
 
             scope: {
                 bucket: '=',
-                partial: '@'    // optional 'OK' status
+                partial: '@',    // optional 'OK' status
+                multiline: '@?'  // optional multiline option
             },
 
-            template: '<div class="checkbox cttv-facet-checkbox">'
-                     +'    <label ng-class="(!bucket.enabled) ? \'disabled\' : \'\'">'
+            template: '<div class="checkbox cttv-facet-checkbox clearfix">'
+                     +'    <label ng-class="(!bucket.enabled ? \'disabled\' : \'\') +\' \'+ (multiline?\'cttv-facet-checkbox-label-multiline\':\'cttv-facet-checkbox-label\')" title="{{bucket.label}}">'
                      +'        <input type="checkbox"'
                      +'            ng-value="{{bucket.id}}"'
                      +'            ng-checked="bucket.selected"'
                      +'            ng-disabled="!bucket.enabled"'
                      +'            ng-click="bucket.toggle()" >'
-                     +'        {{bucket.label | upperCaseFirst | clearUnderscores}} <span class="text-lowlight small">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
-                     +'    </label>'
+                     +'<span>{{bucket.label | upperCaseFirst | clearUnderscores}}</span>'
+                     +'<span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:1}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
+                     +'</label>'
+                     +'<span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:1}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
                      +'</div>',
 
             link: function (scope, elem, attrs) {},
@@ -2064,18 +2067,25 @@ angular.module('cttvDirectives', [])
             },
 
             template: '<div>'
-                     +'    <div class="checkbox cttv-facet-checkbox">'
-                     +'        <label ng-class="(!bucket.enabled) ? \'disabled\' : \'\'" class="cttv-facet-checkbox-label" style="max-width:80%">'
-                     +'            <input type="checkbox"'
-                     +'                cttv-ui-indeterminate="{{bucket.collection.getSelectedFilters().length>0 && (bucket.collection.filters.length > bucket.collection.getSelectedFilters().length)}}"'
-                     +'                value="{{bucket.id}}"'
-                     +'                ng-checked="bucket.selected || (bucket.collection.filters.length>0 && bucket.collection.filters.length == bucket.collection.getSelectedFilters().length)"'
-                     +'                ng-disabled="!bucket.enabled || bucket.collection.getSelectedFilters().length>0"'
-                     +'                ng-click="bucket.toggle()" >'
-                     +'            {{bucket.label}}'
-                     +'        </label>'
-                     +'        <span class="text-lowlight small" title="{{bucket.count | metricPrefix:1}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
-                     +'        <i class="pull-right text-lowlight fa" ng-class="{\'fa-plus\': collapsed, \'fa-minus\': !collapsed}" ng-click="collapsed = !collapsed" style="cursor:pointer" ng-show="bucket.enabled"></i>'
+                     +'    <div class="checkbox cttv-facet-checkbox clearfix">'
+                     // +'        <span style="width:12px" class="text-lowlight pull-right">'
+                     // +'            <i class="fa" ng-class="{\'fa-caret-right\': collapsed, \'fa-caret-down\': !collapsed}" ng-click="collapsed = !collapsed" style="cursor:pointer; padding:0px 4px;" ng-show="bucket.enabled"></i>'
+                     // +'        </span>'
+                     +'        <span style="width:auto">'
+                     +'            <label ng-class="(!bucket.enabled) ? \'disabled\' : \'\'" class="cttv-facet-checkbox-label" title="{{bucket.label}}">'
+                     +'                <input type="checkbox"'
+                     +'                    cttv-ui-indeterminate="{{bucket.collection.getSelectedFilters().length>0 && (bucket.collection.filters.length > bucket.collection.getSelectedFilters().length)}}"'
+                     +'                    value="{{bucket.id}}"'
+                     +'                    ng-checked="bucket.selected || (bucket.collection.filters.length>0 && bucket.collection.filters.length == bucket.collection.getSelectedFilters().length)"'
+                     +'                    ng-disabled="!bucket.enabled || bucket.collection.getSelectedFilters().length>0"'
+                     +'                    ng-click="bucket.toggle()" >'
+                     +'                {{bucket.label}}'
+                     +'            </label>'
+                     +'            <span class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:1}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
+                     +'        </span>'
+                     +'        <span style="width:12px" class="text-lowlight pull-right">'
+                     +'            <i class="fa" ng-class="{\'fa-caret-right\': collapsed, \'fa-caret-down\': !collapsed}" ng-click="collapsed = !collapsed" style="cursor:pointer; padding:0px 4px;" ng-show="bucket.enabled"></i>'
+                     +'        </span>'
                      +'    </div>'
                      +'</div>',
 
