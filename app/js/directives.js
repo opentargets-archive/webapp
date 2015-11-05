@@ -2038,9 +2038,9 @@ angular.module('cttvDirectives', [])
                      +'            ng-disabled="!bucket.enabled"'
                      +'            ng-click="bucket.toggle()" >'
                      +'<span>{{bucket.label | upperCaseFirst | clearUnderscores}}</span>'
-                     +'<span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:1}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
+                     +'<span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>'
                      +'</label>'
-                     +'<span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:1}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
+                     +'<span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>'
                      +'</div>',
 
             link: function (scope, elem, attrs) {},
@@ -2081,7 +2081,7 @@ angular.module('cttvDirectives', [])
                      +'                    ng-click="bucket.toggle()" >'
                      +'                {{bucket.label}}'
                      +'            </label>'
-                     +'            <span class="text-lowlight cttv-facet-count pull-left" title="{{bucket.count | metricPrefix:1}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:1}}<span ng-if="partial==1">+</span>)</span>'
+                     +'            <span class="text-lowlight cttv-facet-count pull-left" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>'
                      +'        </span>'
                      +'        <span style="width:12px" class="text-lowlight pull-right">'
                      +'            <i class="fa" ng-class="{\'fa-caret-right\': collapsed, \'fa-caret-down\': !collapsed}" ng-click="collapsed = !collapsed" style="cursor:pointer; padding:0px 4px;" ng-show="bucket.enabled"></i>'
