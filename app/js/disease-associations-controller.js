@@ -70,7 +70,6 @@ angular.module('cttvControllers')
         var opts = {
             disease: $scope.search.query,
             datastructure: "flat",
-            expandefo: true
         };
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
 

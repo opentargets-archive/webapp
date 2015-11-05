@@ -17,7 +17,7 @@ var tooltips = function () {
             .id(1);
         var url = cttvApi.url.associations({
             "disease" : efo.efo,
-            "expandefo": true
+            //"expandefo": true
         });
         cttvApi.call(url)
             .then(function (resp) {

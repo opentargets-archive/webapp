@@ -217,7 +217,6 @@
             var opts = {
                 target:$scope.search.target,
                 disease:$scope.search.disease,
-                expandefo: true,
                 facets: false
             };
             _.extend(opts, searchObj);
@@ -1180,7 +1179,6 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: $scope.search.literature.maxShow,
-                expandefo: true,
                 datasource: $scope.search.literature.source, //cttvConfig.evidence_sources.literature,   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
                 //datasource: [dbs.EPMC, dbs.DISGENET],
                 // fields: [
