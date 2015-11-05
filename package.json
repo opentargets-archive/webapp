@@ -29,8 +29,10 @@
     "karma-cli": "0.0.4",
     "karma-mocha": "^0.1.10",
     "karma-mocha-reporter": "^0.3.1",
+    "karma-phantomjs-launcher": "^0.2.1",
     "mkdirp": "^0.5.1",
     "mocha": "^2.1.0",
+    "phantomjs": "^1.9.18",
     "request": "^2.64.0",
     "serve-static": "^1.9.2",
     "shelljs": "^0.2.6"
