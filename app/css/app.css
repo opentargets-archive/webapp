@@ -153,18 +153,18 @@ a.accordion-toggle{
 }
 
 .cttv-facet .therapeuticArea .panel-heading {
-    background-color: #c6dcec;
+    /*background-color: #c6dcec;*/
 }
 
 .cttv-facet .cttv-accordion-leaf .panel-heading {
-    background-color: #f5f5f5;
+    /*background-color: #f5f5f5;*/
 }
 
 /* .cttv-facet .cttv-accordion-leaf .panel-body { */
     /*     padding : 0px; */
     /* } */
 
-    .cttv-facet .panel-heading {
+    /*.cttv-facet .panel-heading {
         padding : 5px;
     }
     .cttv-facet .panel-body {
@@ -173,7 +173,7 @@ a.accordion-toggle{
     .cttv-facet .panel-title {
         font-size: 10px;
         color: #777;
-    }
+    }*/
 
 
 /*
@@ -996,6 +996,55 @@ table.matrix-table thead > tr > th:last-child {
     margin-top: 2px;
 }
 
+/*
+ Facet-style Therapeutic Area navigation
+*/
+
+.cttv-nav accordion {
+    /* overrides bootstrap values */
+    margin-top: 0px;
+    margin-bottom: 0px;
+    clear:both;
+    font-size: 12px;
+}
+
+/*.cttv-nav .therapeuticArea{
+    height: 16px;
+}
+
+.cttv-nav .cttv-accordion-leaf{
+    height: 16px;
+}*/
+
+.cttv-nav accordion accordion .panel-group {
+    margin: 0px;
+}
+
+.cttv-nav accordion accordion .panel-body {
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.cttv-nav accordion accordion .jumbotron {
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    margin-bottom: 0px;
+}
+
+.cttv-nav accordion h4 {
+    font-size: 12px !important;
+    font-weight: 400;
+
+}
+
+.cttv-nav accordion .panel-heading {
+    border-bottom: none;
+    height:auto;
+    padding: 1px 0px;
+}
+
 .cttv-section-intro {
     font-style: italic;
     background-color: #EEEEEE;
@@ -1015,7 +1064,6 @@ table.matrix-table thead > tr > th:last-child {
 .cttv-facet-count {
     font-size:11px;
     margin-left:3px;
-    float:left;
 }
 
 .cttv-facet-checkbox-label-multiline{
@@ -1028,6 +1076,9 @@ table.matrix-table thead > tr > th:last-child {
     display: inline;
 }
 
+.cttv-facet-checkbox-label-multiline span{
+    line-height: 6px;
+}
 /* .cttv_bullet_link {
     width : 100px;
     height : 30px;
