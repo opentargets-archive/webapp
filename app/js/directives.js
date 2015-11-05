@@ -147,7 +147,6 @@ angular.module('cttvDirectives', [])
                     var opts = {
                         target: attrs.target,
                         datastructure: "flat",
-                        expandefo: false,
                         facets: false
                     };
                     opts = cttvAPIservice.addFacetsOptions(facets, opts);
@@ -407,7 +406,6 @@ angular.module('cttvDirectives', [])
                         var opts = {
                             target: attrs.target,
                             datastructure: "tree",
-                            expandefo: true,
                         };
                         if (!_.isEmpty(dts)) {
                             opts.filterbydatatype = _.keys(dts);
@@ -495,7 +493,6 @@ angular.module('cttvDirectives', [])
                     var opts = {
                         target: attrs.target,
                         datastructure: "tree",
-                        expandefo: true
                     };
                     opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
 
@@ -897,34 +894,27 @@ angular.module('cttvDirectives', [])
 
                         var pathwayDiagram;
 
-                        scope.$watchGroup ([function () { return attrs.pathway; }, function () { return attrs.subpathway;}], function () {
+                        scope.$watch (function () { return attrs.pathway; }, function () {
                             var pathway = attrs.pathway;
-                            var subpathway = attrs.subpathway;
+                            //var subpathway = attrs.subpathway;
                             var target = attrs.target;
                             if (pathway === "") {
                                 return;
                             }
                             if (!pathwayDiagram) {
                                 pathwayDiagram = Reactome.Diagram.create ({
-                                    "proxyPrefix": "/proxy/www.reactome.org",
+                                    "proxyPrefix" : "/proxy/www.reactome.org",
                                     "placeHolder": "pathwayDiagramContainer",
                                     "width": 1100,
                                     "height": 700,
+                                });
+                                pathwayDiagram.onDiagramLoaded(function (pathwayId) {
+                                    pathwayDiagram.flagItems(target);
                                 });
                             }
                             if (pathway !== currentPathwayId) {
                                 currentPathwayId = pathway;
                                 pathwayDiagram.loadDiagram(pathway);
-                                if (subpathway) {
-                                    pathwayDiagram.onDiagramLoaded(function (pathwayId) {
-                                        pathwayDiagram.flagItems(target);
-                                        pathwayDiagram.selectItem(subpathway);
-                                    });
-                                }
-                            } else {
-                                if (subpathway) {
-                                    pathwayDiagram.selectItem(subpathway);
-                                }
                             }
                         });
                     }

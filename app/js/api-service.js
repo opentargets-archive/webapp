@@ -233,7 +233,6 @@ angular.module('cttvServices')
         cttvAPI.getAssociations = function(queryObject){
             $log.log("cttvAPI.getAssociations()");
             $log.log(queryObject);
-            //queryObject.expandefo = queryObject.expandefo || true;
             queryObject[ cttvAPI.facets.SCORE_STR ] = queryObject[ cttvAPI.facets.SCORE_STR ] || [1] ;
             queryObject[ cttvAPI.facets.SCORE_MIN ] = queryObject[ cttvAPI.facets.SCORE_MIN ] || [0.0] ;
 
@@ -344,7 +343,6 @@ angular.module('cttvServices')
 
         cttvAPI.getFilterBy = function(queryObject){
             $log.log("cttvAPI.getFilterBy");
-            //queryObject.expandefo = queryObject.expandefo===true ? true : false;
             queryObject.expandefo = queryObject.expandefo || true;
 
             return callAPI({
