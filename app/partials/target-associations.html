@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-2 cttv-facet">
+        <div class="col-md-3 cttv-facet">
             <!-- <accordion>
                 <accordion-group is-open="true">
                     <accordion-heading>
@@ -27,38 +27,78 @@
             </accordion> -->
             <cttv-facets></cttv-facets>
 
-            <accordion>
-                <div class="cttv-nav">
+
+            <div class="cttv-facets">
+
+                <!-- The main accordion, with only one section: Therapeutic areas navigation -->
+                <accordion>
+
                     <accordion-group is-open="tagroup.open">
-                        <accordion-heading>
-                            <span ng-click="toggleNavigation()">Therapeutic Areas Navigation</span>
+
+                        <accordion-heading class="cttv-facets-headers">
+                            <span ng-click="toggleNavigation()">Therapeutic Areas</span>
+                            <i style="font-size:16px" class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !tagroup.open, 'fa-caret-down': tagroup.open}"></i>
                         </accordion-heading>
-                        <accordion>
-                            <accordion-group ng-repeat="ta in therapeuticAreas" class="therapeuticArea" is-open="tagroup.tas[ta.name]">
-                                <accordion-heading>
-                                    <span id="cttv_targetAssociations_navBar_{{ta.name}}" ng-click="selectTherapeuticArea(ta.name)">{{ta.label}} ({{ta.children.length}})</span>
-                                </accordion-heading>
-                                <accordion>
-                                    <accordion-group ng-repeat="d in ta.children" class="cttv-accordion-leaf" is-open="diseasegroupOpen">
-                                        <accordion-heading>
-                                            <span ng-click="selectDisease(d)">{{d.label}}</span>
-                                        </accordion-heading>
-                                        <a href=/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}>
-                                            <div id="cttv_targetAssociations_flower_{{d.efo_code}}_{{d._parent.efo_code}}">
+
+                        <div class="cttv-nav">
+
+                            <!-- top level: therapeutic areas -->
+                            <accordion>
+
+                                <accordion-group ng-repeat="ta in therapeuticAreas" class="therapeuticArea" is-open="tagroup.tas[ta.name]">
+
+                                    <accordion-heading>
+
+                                        <!-- little caret icon, floated right before any other text content -->
+                                        <span style="width:12px; display:block" class="text-lowlight pull-right">
+                                            <i class="fa" ng-class="{'fa-caret-right': !tagroup.tas[ta.name], 'fa-caret-down': !!tagroup.tas[ta.name]}" style="cursor:pointer; padding:0px 4px;"></i>
+                                        </span>
+
+                                        <!-- the actual text-->
+                                        <span id="cttv_targetAssociations_navBar_{{ta.name}}" ng-click="selectTherapeuticArea(ta.name)" style="display:block; padding-right:15px;">{{ta.label | upperCaseFirst}} <span class="text-lowlight cttv-facet-count">({{ta.children.length}})</span></span>
+
+                                    </accordion-heading>
+
+                                    <!-- second level: diseases -->
+                                    <accordion>
+                                        <accordion-group ng-repeat="d in ta.children" class="cttv-accordion-leaf" is-open="diseasegroupOpen">
+
+                                            <accordion-heading>
+
+                                                <!-- little arrow icon floated left -->
+                                                <span class="pull-left"><i class="fa fa-angle-right text-lowlight" style="padding-left: 3px; padding-right:5px"></i></span>
+
+                                                <!-- little caret icon, floated right before any other text content -->
+                                                <span style="width:12px; display:block" class="text-lowlight pull-right">
+                                                    <i class="fa" ng-class="{'fa-caret-right': !diseasegroupOpen, 'fa-caret-down': !!diseasegroupOpen}" style="padding:0px 4px;"></i>
+                                                </span>
+
+                                                <!-- the actual text-->
+                                                <span ng-click="selectDisease(d)" style="display:block; padding-left:15px; padding-right:15px;">{{d.label}}</span>
+
+                                            </accordion-heading>
+
+                                            <div class="jumbotron" style="text-align:center">
+                                                <a href=/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}>
+                                                    <div id="cttv_targetAssociations_flower_{{d.efo_code}}_{{d._parent.efo_code}}" ></div>
+                                                </a>
+                                                <a href="/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}">View evidence details</a>
                                             </div>
-                                        </a>
-                                        <a class="cttv-centered-text"
-                                         href="/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}">View evidence details</a>
-                                    </accordion-group>
-                                </accordion>
-                            </accordion-group>
-                        </accordion>
+
+                                        </accordion-group>
+                                    </accordion>
+                                </accordion-group>
+                            </accordion>
+                        </div>
+
                     </accordion-group>
-                </div>
-            </accordion>
+
+                </accordion>
+            </div>
+
         </div>
 
-        <div class="col-md-10">
+        <div class="col-md-9">
             <tabset>
 
                 <tab heading="Bubbles">
