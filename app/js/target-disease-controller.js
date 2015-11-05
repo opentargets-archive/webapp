@@ -3,8 +3,6 @@
 
     angular.module('cttvControllers')
 
-
-
     /**
      * GeneDiseaseCtrl
      * Controller for the Gene <-> Disease page
@@ -217,7 +215,6 @@
             var opts = {
                 target:$scope.search.target,
                 disease:$scope.search.disease,
-                expandefo: true,
                 facets: false
             };
             _.extend(opts, searchObj);
@@ -369,12 +366,30 @@
 
                     // publications
                     var pub="";
-                    if( checkPath(item, "evidence.variant2disease.provenance_type.literature.references")){
-                        pub=item.evidence.variant2disease.provenance_type.literature.references.map(function(ref){
-                            return "<a href='"+ref.lit_id+"' target='_blank'>"+ref.lit_id.split('/').pop()+" <i class='fa fa-external-link'></i></a>"
-                        }).join(", ");
+                    var pmidsList = [];
+                    if (checkPath(item, "evidence.variant2disease.provenance_type.literature.references")) {
+                        pub = item.evidence.variant2disease.provenance_type.literature.references.length;
+                        if (pub===1) {
+                            pub = pub + " publication";
+                            var pmid = item.evidence.variant2disease.provenance_type.literature.references[0].lit_id.split("/").pop();
+                            pmidsList = [pmid];
+                            pub = pub + ' <a target=_blank href="//europepmc.org/abstract/MED/' + pmid + '"><i class="fa fa-external-link"></i></a>';
+                        } else {
+                            pub = pub + " publications";
+                            pmidsList = item.evidence.variant2disease.provenance_type.literature.references.map (function (ref) {
+                                return ref.lit_id.split('/').pop();
+                            });
+                            var pmids = pmidsList.map (function (ref) {
+                                return 'EXT_ID:' + ref;
+                            }).join (" OR ");
+                            pub = pub + ' <a target=_blank href="//europepmc.org/search?query=' + pmids + '"><i class="fa fa-external-link"></i></a>';
+                        }
                     }
                     row.push(pub);
+
+                    // Publication IDs (hidden)
+                    row.push(pmidsList.join(", "));
+
 
                     newdata.push(row);
                 }catch(e){
@@ -400,6 +415,10 @@
                     {
                         "targets" : [0],    // the access-level (public/private icon)
                         "visible" : cttvConfig.show_access_level    // TODO: this should come from config, so we can hide it for our installation
+                    },
+                    {
+                        "targets": [8],
+                        "visible": false
                     }
                 ],
                 /*"columns": [
@@ -495,7 +514,6 @@
                     row.push(mut);
 
 
-
                     // mutation consequence
                     if( item.type === 'genetic_association' ){
                         //row.push( item.evidence.gene2variant.functional_consequence ); // TODO: pull label from new data
@@ -517,20 +535,45 @@
 
 
                     // publications
-                    var pub="";
-                    if( item.type === 'genetic_association' ){
+                    var refs = [];
+                    var pmidsList = [];
+                    if( item.type === 'genetic_association'){
                         if (item.evidence.variant2disease.provenance_type.literature) {
-                            pub = item.evidence.variant2disease.provenance_type.literature.references.map(function(ref){
-                                return "<a href='"+ref.lit_id+"' target='_blank'>"+(ref.lit_id.split('/').pop())+" <i class='fa fa-external-link'></i></a>";
-                            }).join(", ");
+                            refs = item.evidence.variant2disease.provenance_type.literature.references;
                         }
+                        //row.push(pub);
+
                     } else {
                         $log.log(item.evidence);
-                        pub = item.evidence.provenance_type.literature.references.map(function(ref){
-                            return "<a href='"+ref.lit_id+"' target='_blank'>"+(ref.lit_id.split('/').pop())+" <i class='fa fa-external-link'></i></a>";
-                        }).join(", ");
+                        refs = item.evidence.provenance_type.literature.references;
+                    }
+                    var pub = refs.length;
+                    if (pub===0) {
+                        pub = "";
+                    } else if (pub===1) {
+                        var pmid;
+                        if (refs[0]) {
+                            pmid = refs[0].lit_id.split('/').pop();
+                            pmidsList = [pmid];
+                        }
+                        pub = pub + " publication";
+                        pub = pub + ' <a target=_blank href="//europepmc.org/abstract/MED/' + pmid + '"><i class="fa fa-external-link"></i></a>';
+                    } else {
+                        pmidsList = refs.map(function (ref) {
+                            return ref.lit_id.split('/').pop();
+                        });
+                        var pmids = pmidsList.map(function (ref) {
+                            return "EXT_ID:" + ref;
+                        }).join (" OR ");
+                        pub = pub + " publications";
+                        pub = pub + ' <a target=_blank href="//europepmc.org/search?query=' + pmids + '"><i class="fa fa-external-link"></i></a>';
                     }
                     row.push( pub );
+
+                    // pub ids (hidden)
+                    row.push(pmidsList.join(", "));
+
+
 
                     // add the row to data
                     newdata.push(row);
@@ -557,6 +600,10 @@
                     {
                         "targets" : [0],    // the access-level (public/private icon)
                         "visible" : cttvConfig.show_access_level
+                    },
+                    {
+                        "targets": [6],
+                        "visible": false
                     }
                 ],
             }, $scope.search.info.title+"-rare_diseases") );
@@ -786,12 +833,30 @@
 
                     // publications
                     var pub="";
+                    var pmidsList = [];
                     if (item.evidence.provenance_type.literature) {
-                        pub = item.evidence.provenance_type.literature.references.map(function(ref){
-                            return "<a href='" + ref.lit_id +"' target='_blank'>"+ ref.lit_id.split('/').pop() +"&nbsp;<i class='fa fa-external-link'></i></a>"
-                        }).join(", ");
+                        pub = item.evidence.provenance_type.literature.references.length;
+                        if (pub===1) {
+                            var pmid = item.evidence.provenance_type.literature.references[0].lit_id.split('/').pop();
+                            pmidsList = [pmid];
+                            pub = pub + " publication";
+                            pub = pub + ' <a target=_blank href="//europepmc.org/abstract/MED/' + pmid + '"><i class="fa fa-external-link"></i></a>';
+                        } else {
+                            pmidsList = item.evidence.provenance_type.literature.references.map (function (ref) {
+                                return ref.lit_id.split('/').pop();
+                            });
+                            var pmids = pmidsList.map (function (ref) {
+                                return 'EXT_ID:' + ref;
+                            }).join(' OR ');
+
+                            pub = pub +  " publications";
+                            pub = pub + ' <a target=_blank href="//europepmc.org/search?query=' + pmids + '"><i class="fa fa-external-link"></i></a>';
+                        }
                     }
                     row.push(pub);
+
+                    // Publication Ids (hidden)
+                    row.push(pmidsList.join(", "));
 
                     newdata.push(row); // push, so we don't end up with empty rows
 
@@ -818,6 +883,10 @@
                     {
                         "targets" : [0],    // the access-level (public/private icon)
                         "visible" : cttvConfig.show_access_level
+                    },
+                    {
+                        "targets": [11],
+                        "visible": false
                     }
                 ],
             }, $scope.search.info.title+"-RNA_expression") );
@@ -1180,7 +1249,6 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: $scope.search.literature.maxShow,
-                expandefo: true,
                 datasource: $scope.search.literature.source, //cttvConfig.evidence_sources.literature,   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
                 //datasource: [dbs.EPMC, dbs.DISGENET],
                 // fields: [

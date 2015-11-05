@@ -182,7 +182,6 @@ angular.module('cttvControllers')
         cttvAPIservice.getAssociations ({
             target: $scope.search.query,
             datastructure: "flat",
-            expandefo: true,
 	    })
     		.then (function (resp) {
                 cttvFiltersService.updateFacets(resp.body.facets, "unique_disease_count");
