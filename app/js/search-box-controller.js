@@ -7,12 +7,12 @@
  */
 angular.module('cttvControllers').
 
-controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout) {
-        
+controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts) {
+
         var APP_SEARCH_URL = "search";
         var APP_EVIDENCE_URL = "evidence";
         var APP_AUTOCOMPLETE_URL = "autocomplete"
-        
+
         $scope.search = {
             query: {
                 text: ""
@@ -23,11 +23,11 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             progress: false
         }
 
-        
+
         $scope.hasFocus = true;
 
-        
-        // 
+
+        //
         // initialize the handling of clicks outside the panel to close the suggestions panel itself
         //
 
@@ -50,37 +50,37 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
         $scope.$on('$destroy', function(){
             $document.unbind('click', dismissClickHandler);
         });
-        
+
         // We want clicks on the actual panel to, say, click thrugh,
         // and not bubble up to the document and close the panel,
         // so we stop propagation
         $element.bind('click', function(evt){
             evt.stopPropagation();
         });
-        
+
 
 
         /**
          * Get suggestions for typeahead
-         * @param {String} query 
+         * @param {String} query
          * @returns {Object} promise object with success() or error(), or null
          */
         $scope.getSuggestions = function(query){
 
             //clear the data here, so the box disappears or the content is cleared...
             $scope.search.results = {};
-            
+
             if(query.length>1){
                 $scope.search.progress = true;  // flag for search in progress
                 $document.bind('click', dismissClickHandler);
-                
+
                 // fire the typeahead search
                 return cttvAPIservice.getQuickSearch({q:$scope.search.query.text, size:3, trackCall:false}).
                     then(
                         function(resp){
                             $log.info(resp);
-                            $scope.search.results = resp.body.data;  // store the results
-                        }, 
+                            $scope.search.results = parseResponseData(resp.body.data);  // store the results
+                        },
                         cttvAPIservice.defaultErrorHandler
                     ).
                     finally(function(){
@@ -114,10 +114,10 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             return v;
         }
 
-        
+
 
         /*
-         * Set the URL to specified string. 
+         * Set the URL to specified string.
          * This is used internally to implement a href (link)
          * @param {String} url
          */
@@ -129,12 +129,38 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
 
 
 
+        /*
+         * Execute some pre-processing of the data
+         */
+        var parseResponseData = function(data){
+
+            // check the EFOs path and remove excess data
+            $log.log(data.efo);
+            data.efo.forEach(function(efo){
+
+                // first we don't want that "CTTV Root" thingy at the beginning, if it's there
+                if( efo.path[0][0].uri==cttvConsts.CTTV_ROOT_URI ){
+                    efo.path[0] = efo.path[0].slice(1);
+                }
+
+                // then we only want to show the last 3 elements
+                // we store it at a new index in the array
+                efo.path[1] = efo.path[0].slice(-3);
+
+            });
+            $log.log(data.efo);
+
+            return data;
+        }
+
+
+
         /**
          * Public method to link to association page for either a gene or a disease
          * @param {Object} s - config objects:
          *  - type {String} : either "genedata" or "efo", determins which page we link to
          *  - q {String} : the query for the actual gene or disease
-         *  - label {String} : this will be deprecated in the future; 
+         *  - label {String} : this will be deprecated in the future;
          *                     it sets the query label for the landing page, but it will be no longer needed
          *                     since that is now returned by the API.
          */
@@ -145,7 +171,7 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             } else if ( s.type.toLowerCase()=="efo" ){
                 $location.url("/disease/" + s.q + "/associations");
             }
-            
+
             $scope.search.query.text = "";
         }
 
@@ -162,12 +188,12 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             }
             $location.search( 'q=' + $scope.search.query.text);
 
-            
+
             // reset the query field:
             // the search result page should probably still show this, the problem is that the scope of this search box is separate
             // so if we then go to the gene, or association page, this would still show the original query...
             // So, for now we RESET the field, then I'll think about it.
-            $scope.search.query.text = "";  
+            $scope.search.query.text = "";
         }
 
     }]);

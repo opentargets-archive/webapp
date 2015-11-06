@@ -237,6 +237,17 @@ a.accordion-toggle{
     padding:4px 5px;
 }
 
+.search-suggestions-box .suggestions-targets .suggestions-targets-item{
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.search-suggestions-box .suggestions-targets .suggestions-targets-item span:first-child{
+    padding-right:7px;
+}
+
 .search-suggestions-box .suggestions-efo .suggestions-efo-title{
     line-height: 1.1;
 }
@@ -245,6 +256,14 @@ a.accordion-toggle{
     margin:0px 4px;
 }
 
+.search-suggestions-box .suggestions-efo .suggestions-efo-hierarchy-label{
+    max-width: 30%;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: text-bottom;
+}
 
 /*
 * Gene-Disease Association
