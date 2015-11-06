@@ -63,6 +63,7 @@ angular.module('cttvServices').
             OK : 'ok',
             ACCESS_LEVEL_PUBLIC: 'public',
             ACCESS_LEVEL_PRIVATE: 'private',
+            CTTV_ROOT_URI: 'http://www.targetvalidation.org/cttv_root'
         };
 
         consts.invert = function(val){
