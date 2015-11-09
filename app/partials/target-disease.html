@@ -338,11 +338,23 @@
                             <span cttv-progress-spinner class="pull-right" ng-show="search.literature.is_loading"></span>
                         </span>
                     </accordion-heading>
+
                     <div ng-show="search.literature.data.length>0">
+
                         <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">DisGeNET</a> and <a href="/faq#data-provenance" target="_blank">Europe PMC</a></p> -->
                         <!-- <p>Source: <span ng-repeat="source in search.literature.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span></p> -->
 
-                        <p>Source: <span ng-repeat="source in search.literature.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+                        <div class="clearfix">
+                            <div class="pull-right" ng-show="loading">
+                                Loading abstracts
+                                <progressbar style="width:150px; margin-bottom:0px" animate="false" value="loaded" type="success"><b>{{loaded}}%</b></progressbar>
+                            </div>
+
+
+                            <p>Source: <span ng-repeat="source in search.literature.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span></span></p>
+                        </div>
+
+
 
                         <p ng-show="search.literature.total>search.literature.maxShow">{{search.literature.total}} records found. Showing the most relevant {{search.literature.data.length}}</p>
 
@@ -358,6 +370,7 @@
                                         <th>Year</th>
                                         <th>Details</th> <!-- hidden column -->
                                         <th>Source</th>
+                                        <th>EFO</th> <!-- hidden column -->
                                     </tr>
                                 </thead>
 
