@@ -8,14 +8,13 @@
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$modal', '$compile', '$http', '$q', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $modal, $compile, $http, $q) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$modal', '$compile', '$http', '$q', '$timeout', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $modal, $compile, $http, $q, $timeout) {
         'use strict';
         $log.log('TargetDiseaseCtrl()');
 
         var checkPath = cttvUtils.checkPath;
 
         var searchObj = cttvUtils.search.translateKeys($location.search());
-        console.log(searchObj);
 
         // var dbs = cttvConsts.dbs;
         var datatypes = cttvConsts.datatypes;
@@ -1165,16 +1164,6 @@
         */
 
         function parseResponse (recs, dt) {
-            /*var r = dt.row( function ( idx, data, node ) {
-                return data[1] === '9188529' ? true : false;
-            });
-            $log.log(r.data());
-            var d = r.data();
-            d[2] = "hello literature";
-            r.data(d);
-            dt.draw();
-            */
-            // ------------
             dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 var data = this.data();
                 // ... do something with data(), or this.node(), etc
@@ -1184,7 +1173,7 @@
                 });
 
                 if(pmdata.length>0){
-                    var re = /abstract: (.*?)\.\s*<\/li>/g;
+                    //var re = /Abstract: (.*?)\.\s*<\/li>/g;
                     data[3]="";
 
                     // pmdata.forEach(function(pub){
@@ -1201,24 +1190,51 @@
                     }
                     auth = authArr[0];
 
-                    var match;
+                    // var match;
                     var abstract = pub.abstractText;
+                    var title = pub.title;
 
-                    while ((match = re.exec(data[6])) !== null) {
-                        var matchedText = match[1];
-                        abstract = abstract.replace(matchedText, "<b>" + matchedText + "</b>");
+                    // while ((match = re.exec(data[8])) !== null) {
+                    //     var matchedText = match[1];
+                    //     abstract = abstract.replace(matchedText, "<b>" + matchedText + "</b>");
+                    // }
+                    var abstractSentences;
+                    if ($scope.search.literature.abstractSentences[data[2]][data[7]]) {
+                        abstractSentences = $scope.search.literature.abstractSentences[data[2]][data[7]][data[8]];
+                    }
+                    if (abstractSentences && abstract) {
+                        // console.log(data[2]);
+                        // console.log(abstractSentences);
+                        abstractSentences.map (function (f) {
+                            // console.log("ORIG: " + abstract);
+                            // console.log("    vs " + f.raw);
+                            // console.log("    == " + f.formatted);
+                            var pos = abstract.indexOf(f.raw);
+                            // console.log("    POS: " + pos);
+                            abstract = abstract.replace(f.raw, "<b>" + f.formatted + '</b>');
+
+                            // If not in the abstract, try the title
+                            if (pos === -1) {
+                                // console.log("LOOKING IN TITLE:");
+                                // console.log("'" + title + "'");
+                                // console.log( "  ====> '" + f.raw + "'");
+                                pos = title.indexOf(f.raw);
+                                // console.log(" =====> " + pos);
+                                title = title.replace(f.raw, f.formatted);
+                            }
+                        });
                     }
 
-                    data[3] += "<a target=_blank href='http://europepmc.org/abstract/MED/"+pub.pmid+"'>"+pub.title+"</a>"
+                    data[3] += "<a target=_blank href='http://europepmc.org/abstract/MED/"+pub.pmid+"'>"+title+"</a>"
                     + "<br />"
-                    + "<span class='small'>"+auth +" "+( pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+"</span>"
-                    + "<p class='small'>"+abstract+"</p>"
+                    + "<span class='small'>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+"</span>"
+                    + "<p class='small'>" + (abstract || "no abstract available") + "</p>"
 
                     data[5] = pub.journalInfo.yearOfPublication;
                     // });
 
                 }else{
-                    data[3] = cttvDictionary.NA;
+                    //data[3] = cttvDictionary.NA;
                 }
 
                 this.data(data);
@@ -1270,19 +1286,130 @@
                             var unicode_re = /u([\dABCDEF]{4})/gi;
                             var match;
 
-                            var all = [];
-                            resp.body.data.map (function (paper) {
-                                all.push(paper.evidence.literature_ref.lit_id.split("/").pop());
+                            var sortedByDate = resp.body.data.sort (function (a, b) {
+                                return new Date(b.evidence.date_asserted) - new Date(a.evidence.date_asserted);
+                            });
+
+                            var abstractSentences = {};
+                            sortedByDate.map (function (paper) {
+                                //all.push(paper.evidence.literature_ref.lit_id.split("/").pop());
                                 // WARNING: Unicode characters are encoded in the response, we convert them to symbol
+
                                 paper.evidence.literature_ref.mined_sentences.map (function (sentence) {
+                                    sentence.breakpoints = [];
                                     var text = sentence.text;
                                     while ((match = unicode_re.exec(text)) !== null) {
+                                        var pos = match.index;
                                         sentence.text = sentence.text.replace('u'+match[1], String.fromCharCode(parseInt(match[1], 16)));
+                                        sentence.breakpoints.push({
+                                            "type": "unicode",
+                                            "pos": pos,
+                                            "extra": "",
+                                            "span": 1
+                                        });
+
                                     }
                                 });
-
                             });
-                            $scope.search.literature.data = resp.body.data;
+
+                            // create breakpoints for each sentence (unicodeChars, targets and diseases)
+                            // Order the breakpoints
+                            sortedByDate.map (function (paper) {
+                                var pubmedId = paper.evidence.literature_ref.lit_id.split("/").pop();
+                                if (!abstractSentences[pubmedId]) {
+                                    abstractSentences[pubmedId] = {};
+                                }
+                                paper.evidence.literature_ref.mined_sentences.map (function (sentence) {
+                                    // Non asciii characters are also breakpoints
+                                    for (var i=0; i<sentence.text.length; i++) {
+                                        if (sentence.text.charCodeAt(i) >= 945) {
+                                            // console.warn ("NON ASCIII char found: " + sentence.text[i] + "(" + sentence.text.charCodeAt(i) + ")");
+                                            sentence.breakpoints.push({
+                                                "type": "nonAsciii",
+                                                "pos" : i,
+                                                "extra": 0,
+                                                "span": -1
+                                            });
+                                        }
+                                     }
+                                     if (sentence.t_start !== sentence.t_end) {
+                                         sentence.breakpoints.push({
+                                            "type": "t_start",
+                                            "pos": sentence.t_start,
+                                            "extra": '<span class="label label-primary">',
+                                            "span": 34
+                                        });
+                                        sentence.breakpoints.push({
+                                            "type": "t_end",
+                                            "pos": sentence.t_end+1,
+                                            "extra": "</span>",
+                                            "span": 7
+                                        });
+                                     }
+
+                                    if (sentence.d_start !== sentence.d_end) {
+                                        sentence.breakpoints.push({
+                                            "type": "d_start",
+                                            "pos": sentence.d_start,
+                                            "extra": '<span class="label label-warning">',
+                                            "span": 34
+                                        });
+                                        sentence.breakpoints.push({
+                                            "type": "d_end",
+                                            "pos": sentence.d_end+1,
+                                            "extra": "</span>",
+                                            "span": 7
+                                        });
+                                    }
+                                    // Sort the breakpoints by pos
+                                    sentence.breakpoints = sentence.breakpoints.sort(function (a, b) {
+                                        return a.pos - b.pos;
+                                    });
+
+                                    // Calculate the acc of offsets
+                                    sentence.breakpoints = _.reduce(sentence.breakpoints, function (bps, bp, i) {
+                                        bp.acc = i? (bps[i-1].acc + bps[i-1].span) : 0;
+                                        bps.push (bp);
+                                        return bps;
+                                    }, []);
+
+                                    // console.log(sentence.breakpoints);
+                                    // console.log(sentence);
+                                    var text = sentence.text;
+                                    // console.log("ORIG: " + text);
+                                    sentence.breakpoints.map (function (bp) {
+                                        // console.log(bp);
+                                        if (bp.extra) {
+                                            text = text.slice(0, bp.pos+bp.acc) + bp.extra + text.slice(bp.pos+bp.acc);
+                                        }
+                                        // console.log("=> " + text);
+                                    });
+
+
+                                    if (sentence.section === "abstract" || sentence.section === "title") {
+                                        var efo = paper.disease.id;
+                                        if (!abstractSentences[pubmedId][formatSource(paper.sourceID)]) {
+                                            abstractSentences[pubmedId][formatSource(paper.sourceID)] = {};
+                                        }
+                                        if (!abstractSentences[pubmedId][formatSource(paper.sourceID)][efo]) {
+                                            abstractSentences[pubmedId][formatSource(paper.sourceID)][efo] = [];
+                                        }
+                                        abstractSentences[pubmedId][formatSource(paper.sourceID)][efo].push ({
+                                            'raw': sentence.text.trim(),
+                                            'formatted': text
+                                        });
+                                    }
+
+                                    sentence.formattedText = text;
+                                    //sentence.formattedText = sentence.formattedText + ' <span class="label label-primary">kk</span>';
+                                    // console.log(sentence.formattedText);
+
+                                });
+                            });
+
+                            //$scope.search.literature.data = resp.body.data;
+                            $scope.search.literature.data = sortedByDate;
+                            $scope.search.literature.abstractSentences = abstractSentences;
                             var dt = initTableLiterature();
                             getLiteratureAbstractsData(dt);
                         } else {
@@ -1310,8 +1437,9 @@
             return formatted;
         };
 
-
         var getLiteratureAbstractsData = function(dt){
+            $scope.loading = true;
+            $scope.loaded = 0;
             //$scope.search.literature.data
 
 
@@ -1333,12 +1461,13 @@
             });
             var uniqPMIDs = Object.keys(uniq);
             // Chunk!
-            var chunkSize = 200;
+            var chunkSize = 10;
             //var chunks = Math.ceil($scope.search.literature.data.length / chunkSize);
             var chunks = Math.ceil(uniqPMIDs.length / chunkSize);
 
-            var callChunks = [];
+            //var callChunks = [];
             for (var i=0; i<chunks; i++) {
+                var done = 0;
                 //var thisRecords = $scope.search.literature.data.slice(i*chunkSize, (i+1)*chunkSize);
                 var thisRecords = uniqPMIDs.slice(i*chunkSize, (i+1)*chunkSize);
                 var thisPMIDs = thisRecords.map(function (id) {
@@ -1346,20 +1475,32 @@
                     return "EXT_ID:" + id;
                 }).join(" OR ");
                 var url = "/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search?pagesize=" + thisRecords.length + "&query=" + thisPMIDs + "&format=json&resulttype=core";
-                callChunks.push($http.get(url));
+                //callChunks.push($http.get(url));
+                $http.get(url)
+                    .then (function (res) {
+                        done++;
+                        parseResponse(res.data.resultList.result, dt);
+                        $scope.loaded = ~~(done * 100 / chunks);
+                        if ($scope.loaded === 100) {
+                            $timeout (function () {
+                                $scope.loading = false;
+                            }, 2000);
+
+                        }
+                    });
             }
 
-            $q.all(callChunks)
-                .then (function (results) {
-                    var allRes = [];
-                    // TODO: This is inefficient since parseResponse scans the whole table. It would be better to combine all the results at this stage and call parseResponse once
-                    for (var i=0; i<results.length; i++) {
-                        allRes = allRes.concat(results[i].data.resultList.result);
-                    }
-                    parseResponse(allRes, dt);
-                },
-                cttvAPIservice.defaultErrorHandler
-            );
+            // $q.all(callChunks)
+            //     .then (function (results) {
+            //         var allRes = [];
+            //         // TODO: This is inefficient since parseResponse scans the whole table. It would be better to combine all the results at this stage and call parseResponse once
+            //         for (var i=0; i<results.length; i++) {
+            //             allRes = allRes.concat(results[i].data.resultList.result);
+            //         }
+            //         parseResponse(allRes, dt);
+            //     },
+            //     cttvAPIservice.defaultErrorHandler
+            // );
 
 
             // var pmids = $scope.search.literature.data.map(function(p){
@@ -1411,14 +1552,18 @@
                     row.push(
                         "<ul>"+
                         item.evidence.literature_ref.mined_sentences.map(function(sent){
-                            return "<li>"+upperCaseFirst(sent.section)+": "+sent.text+"</li>";
+                            return "<li>"+upperCaseFirst(sent.section)+": "+sent.formattedText+"</li>";
                         }).join("") + "</ul>"
                     );
 
-                    newdata.push(row); // push, so we don't end up with empty rows
-
                     // source
                     row.push(checkPath(item, "sourceID") ? formatSource(item.sourceID) : "");
+
+                    // EFO (hidden)
+                    row.push (item.disease.id);
+
+                    newdata.push(row); // push, so we don't end up with empty rows
+
 
                 }catch(e){
                     $log.error("Error parsing literature data:");
@@ -1469,7 +1614,7 @@
                 "order": [[5, 'desc'], [4, 'desc']],   // order by number of matched sentences
                 "columnDefs" : [
                     {
-                        "targets" : [2,6],
+                        "targets" : [2,6,8],
                         "visible" : false,
                     },
                     {
