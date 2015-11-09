@@ -41,7 +41,7 @@
                                 {{location}}
                             </li>
                         </ul>
-                        <p>Uniprot Keywords:</p>
+                        <p>UniProt Keywords:</p>
                         <ul>
                             <li ng-repeat="keyword in uniprot.keywords">{{keyword}}</li>
                         </ul>
@@ -100,7 +100,7 @@
 
             <!-- Protein Structure -->
             <accordion-group heading="Protein Structure" attr-section-name="ProteinStructure" is-open="false">
-                <p>There {{pdb.nstructures == 1 ? "is" : "are"}} <strong>{{pdb.nstructures}}</strong> {{pdb.nstructures == 1 ? "structure" : "structures"}} available for {{target.symbol}} in <a target="_blank"  href="https://www.ebi.ac.uk/pdbe">PDBe</a>. <span ng-if="pdb.nstructures>1">Below we show the most representative one. A summary of the other structures can be found in the <a target="_blank" href="http://www.uniprot.org/uniprot/{{uniprot.accessions[0]}}#structure">Uniprot entry for {{uniprot.accessions[0]}}</a></span></p>
+                <p>There {{pdb.nstructures == 1 ? "is" : "are"}} <strong>{{pdb.nstructures}}</strong> {{pdb.nstructures == 1 ? "structure" : "structures"}} available for {{target.symbol}} in <a target="_blank"  href="https://www.ebi.ac.uk/pdbe">PDBe</a>. <span ng-if="pdb.nstructures>1">Below we show the most representative one. A summary of the other structures can be found in the <a target="_blank" href="http://www.uniprot.org/uniprot/{{uniprot.accessions[0]}}#structure">UniProt entry for {{uniprot.accessions[0]}}</a></span></p>
                 <h4 ng-if="pdb.nstructures>0">{{pdb.id}} <span><a target="_blank" href="https://www.ebi.ac.uk/pdbe/entry/pdb/{{pdb.id}}"><i class="fa fa-external-link"></i></a></span></h4>
                 <p>{{pdb.alt}}</p>
                 <img ng-src="{{pdb.thumbnailUrl}}" />
