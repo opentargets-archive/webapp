@@ -89,7 +89,9 @@ var geneAssociations = function () {
             var tA = therapeuticAreas[i];
             var taChildren = tA.children;
             if (taChildren === undefined) {
-                continue;
+                // If the TA doesn't have a child, just create one for it with the same information as the TA
+                tA.children = [_.clone(tA)];
+                //continue;
             }
             var flattenChildren = tnt_node(tA).flatten(true).data().children;
             var newChildren = [];
