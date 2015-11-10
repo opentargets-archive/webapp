@@ -12,7 +12,7 @@
     </h4>
 
     <!-- This is the longer description -->
-    <p class="text-item nbblock small">{{ ( search.results.besthit.type=="genedata" ? search.results.besthit.uniprot_function[0] : search.results.besthit.definition) | limitTo:300}}<span ng-show="search.results.besthit.uniprot_function[0].length>300 || search.results.besthit.definition.length>300">...</span></p>
+    <p class="text-item nbblock small">{{ ( search.results.besthit.type=="genedata" ? search.results.besthit.uniprot_function[0] : search.results.besthit.definition) | limitTo:300}}<span ng-show="search.results.besthit.uniprot_function[0].length>300 || search.results.besthit.definition.length>300">&hellip;</span></p>
   </div>
 
   <div ng-if="search.results.besthit===null">
