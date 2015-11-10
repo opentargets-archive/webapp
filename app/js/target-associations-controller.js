@@ -230,7 +230,7 @@ angular.module('cttvControllers')
 	};
 
     $scope.n = {};
-    $scope.n.diseases = 0;
+    $scope.n.diseases = "..."; // this should be a number, but initialize to ... for better user feedback
     // $interval (function () {
     //     console.log($scope.loading);
     // }, 100);
