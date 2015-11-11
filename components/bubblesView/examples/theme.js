@@ -79,7 +79,6 @@ var theme = function () {
 
         // Function to be called on resize events
         function resize () {
-            console.log("WINDOW RESIZE!");
             var container = d3.select(div);
             var chart = d3.select(div).select("svg");
 
@@ -94,7 +93,6 @@ var theme = function () {
             var diameter = viewportH - elemOffsetTop - bottomMargin;
 
 
-            console.log("VIEWPORT: " + viewportW + "x" + viewportH + " (" + diameter + ")");
 
 
             //var targetWidth = chart.node().parentNode.clientWidth;
@@ -109,8 +107,6 @@ var theme = function () {
 
         }
 
-        console.log("WINDOW");
-        console.log(window);
         d3.select(window)
             .on("resize", function () {
                 resize();

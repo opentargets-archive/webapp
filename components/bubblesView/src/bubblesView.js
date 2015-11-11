@@ -415,14 +415,6 @@ var bubblesView = function () {
         return this;
     };
 
-    render.legendText = function (t) {
-        if (!arguments.length) {
-            return conf.legendText;
-        }
-        conf.legendText = t;
-        return this;
-    };
-
     render.select = function (nodes) {
         if (!arguments.length) {
             return highlight;
