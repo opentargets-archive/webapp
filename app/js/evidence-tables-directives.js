@@ -226,14 +226,13 @@ angular.module('cttvDirectives')
 
                     scope.showMoreOrLess = function () {
                         scope.show.moreOrLess = true;
-                        if (scope.show.limit === scope.drugs.length) {
+                        if (scope.show.limit === scope.drugs.length) { // It is already open
                             scope.show.limit = showLim;
                             scope.show.ellipsis = "[Show more]";
-                        } else {
+                        } else {  // It is closed
                             scope.show.limit = scope.drugs.length;
                             scope.show.ellipsis = "[Show less]";
                         }
-                        console.log("SHOW LIMIT SET TO " + scope.show.limit);
                     };
 
                     return newdata;
