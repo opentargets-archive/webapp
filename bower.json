@@ -32,7 +32,8 @@
     "aight": "2.0",
     "lodash": "3.10.1",
     "angulartics": "0.20.1",
-    "jquery": "2.1.4"
+    "jquery": "2.1.4",
+    "d3": "~3.5.8"
   },
   "resolutions": {
     "angular": "1.4.7"
