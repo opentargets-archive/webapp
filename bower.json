@@ -24,8 +24,8 @@
   ],
   "dependencies": {
     "angular-read-more": "1.0.3",
-    "angular-route": "1.4.3",
-    "angular": "1.4.3",
+    "angular-route": "1.4.7",
+    "angular": "1.4.7",
     "components-font-awesome": "4.4.0",
     "bootstrap": "3.3.5",
     "angular-bootstrap": "0.14.3",
@@ -36,6 +36,6 @@
     "d3": "~3.5.8"
   },
   "resolutions": {
-    "angular": "1.4.3"
+    "angular": "1.4.7"
   }
 }
