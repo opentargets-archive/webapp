@@ -307,9 +307,6 @@ a.accordion-toggle{
     border-bottom:2px solid #DDD;
 }
 
-.gene-disease-content{
-
-}
 
 .gene-disease-content .table-panel{
     overflow-x: auto;
@@ -362,9 +359,6 @@ a.accordion-toggle{
 }
 
 
-h1, h2, h3, h4, h5, h6 {
-    /*font-family: 'Open Sans', 'Helvetica', sans-serif;*/
-}
 
 /*
  * Lists
@@ -372,7 +366,7 @@ h1, h2, h3, h4, h5, h6 {
 
 
 ul.plain {
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 ul.plain li {
@@ -380,7 +374,7 @@ ul.plain li {
     margin-left: 1.1em;
 }
 
-ul.arrow-icon li:before {
+.arrow-icon li:before {
     font-family: 'FontAwesome';
     content: '\f105';
     margin-left: -1.1em;
@@ -472,10 +466,6 @@ a:focus {
 
 
 
-.container {
-    /*height: 1000px;*/
-}
-
 .menu {
     list-style: none;
     border-bottom: 0.1em solid black;
@@ -516,12 +506,9 @@ a:focus {
 }
 
 .search-result h4{
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
-.search-title {
-
-}
 
 .search-matches em{
     color: #999;
@@ -673,7 +660,7 @@ table.matrix-table thead > tr {
 }
 
 table.matrix-table thead > tr > th {
-    padding-left: 0px !important;
+    padding-left: 0 !important;
     font-weight: 400;
     font-size: 12px;
     line-height: 11px;
@@ -729,11 +716,11 @@ table.matrix-table thead > tr > th > div > span{
     display: block;
     width: 140px;
     margin-left: 50%;
-    -webkit-transform-origin: 0% 0%;
-    -moz-transform-origin: 0% 0%;
-    -ms-transform-origin: 0% 0%;
-    -o-transform-origin: 0% 0%;
-    transform-origin: 0% 0%;
+    -webkit-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    transform-origin: 0 0;
     -webkit-transform: rotate(-60deg) translateY(-50%);
     -moz-transform:    rotate(-60deg) translateY(-50%);
     -ms-transform:     rotate(-60deg) translateY(-50%);
@@ -742,13 +729,13 @@ table.matrix-table thead > tr > th > div > span{
 }
 
 table.matrix-table thead > tr > th:first-child > div {
-    width:0px;
+    width:0;
     float: right;
     margin-right: 11px;
 }
 
 table.matrix-table thead > tr > th:last-child > div {
-    width:0px;
+    width:0;
     float: left;
     margin-left: 11px;
 }
@@ -1254,4 +1241,12 @@ cttv-score-presets .well-sm{
 }
 .tnt_legend_header {
     font-weight: bold;
+}
+
+.show-more-links {
+    cursor: pointer;
+}
+
+.show-more-dots {
+    color: darkgrey;
 }
