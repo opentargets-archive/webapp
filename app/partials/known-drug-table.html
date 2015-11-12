@@ -1,9 +1,10 @@
-<p>Unique drugs listed below:
-    <span ng-repeat="drug in drugs">
+<p>Found {{drugs.length}} unique drugs:
+    <span ng-repeat="drug in drugs | limitTo: show.limit">
         <!-- <span style="padding-right:10px">[<a href={{drug.url}} target=_blank>{{drug.id}}</a>]</span> -->
         <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="label label-primary">{{drug.id}}</i>
         </a></span>
     </span>
+    <span ng-click="showMoreOrLess()" ng-show="show.moreOrLess"><span class="show-more-dots">...</span> <a class="ng-binding show-more-links">{{show.ellipsis}}</a></span>
 </p>
 <div class="table-panel">
     <table class='table table-striped table-bordered'>
