@@ -1250,3 +1250,17 @@ cttv-score-presets .well-sm{
 .show-more-dots {
     color: darkgrey;
 }
+
+.cttv-drug {
+    background-color: #e0ebeb;
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 1.5em;
+    /*background: linear-gradient(90deg, #ffe5e5 50%, #f0f5f5 50%);*/
+}
