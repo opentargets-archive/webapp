@@ -1,6 +1,8 @@
 <p>Unique drugs listed below:
     <span ng-repeat="drug in drugs">
-        [<a href={{drug.url}} target=_blank>{{drug.id}}</a>]
+        <!-- <span style="padding-right:10px">[<a href={{drug.url}} target=_blank>{{drug.id}}</a>]</span> -->
+        <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="label label-primary">{{drug.id}}</i>
+        </a></span>
     </span>
 </p>
 <div class="table-panel">
