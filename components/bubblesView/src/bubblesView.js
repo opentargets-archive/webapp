@@ -176,8 +176,12 @@ var bubblesView = function () {
                 }
                 return "leafLabel";
             })
-            .style("cursor", "default")
-            .attr("pointer-events", function (d) {return d.children ? "auto" : "none";})
+            .style({
+                "cursor": "default",
+                "pointer-events": "none"
+            })
+            //.attr("pointer-events", function (d) {return d.children ? "auto" : "none";})
+
             .on("click", function (d) { // only on those with pointer-events "auto" ie, on therapeutic areas labels
                 if (d3.event.defaultPrevented) {
                     return;
@@ -412,14 +416,6 @@ var bubblesView = function () {
             return conf.maxVal;
         }
         conf.maxVal = v;
-        return this;
-    };
-
-    render.legendText = function (t) {
-        if (!arguments.length) {
-            return conf.legendText;
-        }
-        conf.legendText = t;
         return this;
     };
 

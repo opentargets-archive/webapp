@@ -7,7 +7,7 @@ angular.module('cttvControllers')
  * Controller for the target associations page
  * It loads a list of associations for the given search
  */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', '$timeout', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary, $timeout) {
         'use strict';
 
 	$log.log('targetAssociationsCtrl()');
@@ -222,7 +222,12 @@ angular.module('cttvControllers')
 	// };
 
 	$scope.setTherapeuticAreas = function (tas) {
-	    $scope.therapeuticAreas = tas;
+        $scope.bubblesUpdating = true;
+        $timeout(function () {
+            $scope.bubblesUpdating = false;
+            $scope.therapeuticAreas = tas;
+        }, 1000);
+
 	    // var nonRedundantDiseases = $scope.nonRedundantDiseases(tas)[0];
 	    // $scope.ndiseases = _.keys(nonRedundantDiseases).length || 0;
 	    // includedDiseases = _.keys(nonRedundantDiseases);
@@ -248,22 +253,22 @@ angular.module('cttvControllers')
 
 	var currentFocus = "cttv_disease";
 
-	$scope.selectTherapeuticArea = function (efo) {
-	    // Keep track of the state
-	    if (!$scope.tagroup.filled) {
-	    $scope.tagroup.filled = true;
-		for (var i=0; i<$scope.therapeuticAreas.length; i++) {
-		    var therapeuticArea = $scope.therapeuticAreas[i];
-		    $scope.tagroup.tas[therapeuticArea.name] = false;
-		}
-	    }
-	    if (efo === currentFocus) {
-	    	currentFocus = "cttv_disease";
-	    } else {
-	    	currentFocus = efo;
-	    }
-	    $scope.focusEFO = currentFocus;
-	};
+    $scope.selectTherapeuticArea = function (efo) {
+        // Keep track of the state
+        if (!$scope.tagroup.filled) {
+            $scope.tagroup.filled = true;
+            for (var i=0; i<$scope.therapeuticAreas.length; i++) {
+                var therapeuticArea = $scope.therapeuticAreas[i];
+                $scope.tagroup.tas[therapeuticArea.name] = false;
+            }
+        }
+        if (efo === currentFocus) {
+            currentFocus = "cttv_disease";
+        } else {
+            currentFocus = efo;
+        }
+        $scope.focusEFO = currentFocus;
+    };
 
     // $scope.bubblesSelected = function () {
     //     $(".cttv-nav").show();

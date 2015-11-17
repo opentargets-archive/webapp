@@ -3,122 +3,137 @@
 <div class="partial-page">
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
-    <h3 class="cttv-content-header"><span view-title>Diseases associated with {{search.label}}</span><br />
-    <!-- <p class="small"><a href="#/target/{{search.query}}">View target profile</a></p> -->
-    <!-- <div class="h6">Found {{nresults}} evidence in {{ndiseases}} diseases {{diseasesFilteredMsg}}</div> -->
-    <small>Found {{n.diseases}} {{n.diseases===1 ? "disease" : "diseases"}} <a href="/target/{{search.query}}"><span class="cttv-interpage-link"><i class="fa fa-arrow-circle-right fa-lg"></i> View {{search.label}} profile</span></a></small></h3>
+    <div ng-show="n.diseases==0">
+        <h3>
+            No diseases found for {{search.label}}
+        </h3>
+        Try searching a different target or disease above
+    </div>
 
-    <div class="row">
+    <div ng-show="n.diseases>0">
 
-        <div class="col-md-3 cttv-facet">
-            <!-- <accordion>
-                <accordion-group is-open="true">
-                    <accordion-heading>
-                        <span ng-click="toggleDataTypes()">Data types</span>
-                    </accordion-heading>
-                    <div class="checkbox" ng-repeat="dataType in dataTypes">
-                        <label>
-                            <input type="checkbox"
-                            value="{{dataType.name}}"
-                            ng-click="filterDataType(dataType)"
-                            ng-checked="dataType.selected">
-                            <small>{{dataType.labelFull}}</small>
-                        </label><br />
-                    </div>
-                </accordion-group>
-            </accordion> -->
-            <cttv-facets></cttv-facets>
+        <h3 class="cttv-content-header"><span view-title>Diseases associated with {{search.label}}</span><br />
+        <!-- <p class="small"><a href="#/target/{{search.query}}">View target profile</a></p> -->
+        <!-- <div class="h6">Found {{nresults}} evidence in {{ndiseases}} diseases {{diseasesFilteredMsg}}</div> -->
 
 
-            <div class="cttv-facets">
 
-                <!-- The main accordion, with only one section: Therapeutic areas navigation -->
-                <accordion>
+        <small>Found {{n.diseases}} {{n.diseases===1 ? "disease" : "diseases"}} <a href="/target/{{search.query}}"><span class="cttv-interpage-link"><i class="fa fa-arrow-circle-right fa-lg"></i> View {{search.label}} profile</span></a></small></h3>
 
-                    <accordion-group is-open="tagroup.open">
+        <div class="row">
 
-                        <accordion-heading class="cttv-facets-headers">
-                            <span ng-click="toggleNavigation()">Therapeutic Areas</span>
-                            <i style="font-size:16px" class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !tagroup.open, 'fa-caret-down': tagroup.open}"></i>
+            <div class="col-md-3 cttv-facet">
+                <!-- <accordion>
+                    <accordion-group is-open="true">
+                        <accordion-heading>
+                            <span ng-click="toggleDataTypes()">Data types</span>
                         </accordion-heading>
-
-                        <div class="cttv-nav">
-
-                            <!-- top level: therapeutic areas -->
-                            <accordion>
-
-                                <accordion-group ng-repeat="ta in therapeuticAreas" class="therapeuticArea" is-open="tagroup.tas[ta.name]">
-
-                                    <accordion-heading>
-
-                                        <!-- little caret icon, floated right before any other text content -->
-                                        <span style="width:12px; display:block" class="text-lowlight pull-right">
-                                            <i class="fa" ng-class="{'fa-caret-right': !tagroup.tas[ta.name], 'fa-caret-down': !!tagroup.tas[ta.name]}" style="cursor:pointer; padding:0px 4px;"></i>
-                                        </span>
-
-                                        <!-- the actual text-->
-                                        <span id="cttv_targetAssociations_navBar_{{ta.name}}" ng-click="selectTherapeuticArea(ta.name)" style="display:block; padding-right:15px;">{{ta.label | upperCaseFirst}} <span class="text-lowlight cttv-facet-count">({{ta.children.length}})</span></span>
-
-                                    </accordion-heading>
-
-                                    <!-- second level: diseases -->
-                                    <accordion>
-                                        <accordion-group ng-repeat="d in ta.children" class="cttv-accordion-leaf" is-open="diseasegroupOpen">
-
-                                            <accordion-heading>
-
-                                                <!-- little arrow icon floated left -->
-                                                <span class="pull-left"><i class="fa fa-angle-right text-lowlight" style="padding-left: 3px; padding-right:5px"></i></span>
-
-                                                <!-- little caret icon, floated right before any other text content -->
-                                                <span style="width:12px; display:block" class="text-lowlight pull-right">
-                                                    <i class="fa" ng-class="{'fa-caret-right': !diseasegroupOpen, 'fa-caret-down': !!diseasegroupOpen}" style="padding:0px 4px;"></i>
-                                                </span>
-
-                                                <!-- the actual text-->
-                                                <span ng-click="selectDisease(d)" style="display:block; padding-left:15px; padding-right:15px;">{{d.label}}</span>
-
-                                            </accordion-heading>
-
-                                            <div class="jumbotron" style="text-align:center">
-                                                <a href=/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}>
-                                                    <div id="cttv_targetAssociations_flower_{{d.efo_code}}_{{d._parent.efo_code}}" ></div>
-                                                </a>
-                                                <a href="/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}">View evidence details</a>
-                                            </div>
-
-                                        </accordion-group>
-                                    </accordion>
-                                </accordion-group>
-                            </accordion>
+                        <div class="checkbox" ng-repeat="dataType in dataTypes">
+                            <label>
+                                <input type="checkbox"
+                                value="{{dataType.name}}"
+                                ng-click="filterDataType(dataType)"
+                                ng-checked="dataType.selected">
+                                <small>{{dataType.labelFull}}</small>
+                            </label><br />
                         </div>
-
                     </accordion-group>
+                </accordion> -->
+                <cttv-facets></cttv-facets>
 
-                </accordion>
+
+                <div class="cttv-facets">
+
+                    <!-- The main accordion, with only one section: Therapeutic areas navigation -->
+                    <accordion>
+
+                        <accordion-group is-open="tagroup.open">
+
+                            <accordion-heading class="cttv-facets-headers">
+                                <span ng-click="toggleNavigation()">Therapeutic Areas</span>
+                                <i style="font-size:16px" class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !tagroup.open, 'fa-caret-down': tagroup.open}"></i>
+                            </accordion-heading>
+
+                            <div class="cttv-nav">
+
+                                <!-- top level: therapeutic areas -->
+                                <accordion>
+
+                                    <div ng-show="bubblesUpdating"><i class="fa fa-spinner fa-2x fa-spin"></i></div>
+
+                                    <accordion-group ng-show="!bubblesUpdating" ng-repeat="ta in therapeuticAreas" class="therapeuticArea" is-open="tagroup.tas[ta.name]">
+
+                                        <accordion-heading>
+
+                                            <!-- little caret icon, floated right before any other text content -->
+                                            <span style="width:12px; display:block" class="text-lowlight pull-right" ng-click="selectTherapeuticArea(ta.name)">
+                                                <i class="fa" ng-class="{'fa-caret-right': !tagroup.tas[ta.name], 'fa-caret-down': !!tagroup.tas[ta.name]}" style="cursor:pointer; padding:0px 4px;"></i>
+                                            </span>
+
+                                            <!-- the actual text-->
+                                            <span id="cttv_targetAssociations_navBar_{{ta.name}}" ng-click="selectTherapeuticArea(ta.name)" style="display:block; padding-right:15px;">{{ta.label | upperCaseFirst}} <span class="text-lowlight cttv-facet-count">({{ta.children.length}})</span></span>
+
+                                        </accordion-heading>
+
+                                        <!-- second level: diseases -->
+                                        <accordion>
+                                            <accordion-group ng-repeat="d in ta.children" class="cttv-accordion-leaf" is-open="diseasegroupOpen">
+
+                                                <accordion-heading>
+
+                                                    <!-- little arrow icon floated left -->
+                                                    <span class="pull-left"><i class="fa fa-angle-right text-lowlight" style="padding-left: 3px; padding-right:5px"></i></span>
+
+                                                    <!-- little caret icon, floated right before any other text content -->
+                                                    <span style="width:12px; display:block" class="text-lowlight pull-right">
+                                                        <i class="fa" ng-class="{'fa-caret-right': !diseasegroupOpen, 'fa-caret-down': !!diseasegroupOpen}" style="padding:0px 4px;"></i>
+                                                    </span>
+
+                                                    <!-- the actual text-->
+                                                    <span ng-click="selectDisease(d)" style="display:block; padding-left:15px; padding-right:15px;">{{d.label}}</span>
+
+                                                </accordion-heading>
+
+                                                <div class="jumbotron" style="text-align:center">
+                                                    <a href=/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}>
+                                                        <div id="cttv_targetAssociations_flower_{{d.efo_code}}_{{d._parent.efo_code}}" ></div>
+                                                    </a>
+                                                    <a href="/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}">View evidence details</a>
+                                                </div>
+
+                                            </accordion-group>
+                                        </accordion>
+                                    </accordion-group>
+                                </accordion>
+                            </div>
+
+                        </accordion-group>
+
+                    </accordion>
+                </div>
+
             </div>
 
-        </div>
+            <div class="col-md-9">
+                <tabset>
 
-        <div class="col-md-9">
-            <tabset>
+                    <tab heading="Bubbles">
+                        <resize>
+                            <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}" highlight="{{highlightEFO}}" disease-is-selected="{{selectedDisease}}" facets="filters"></cttv-target-associations-bubbles>
+                        </resize>
+                    </tab>
 
-                <tab heading="Bubbles">
-                    <resize>
-                        <cttv-target-associations-bubbles target="{{search.query}}" focus="{{focusEFO}}" on-focus="therapeuticArea" datatypes="{{currentDataTypes}}" highlight="{{highlightEFO}}" disease-is-selected="{{selectedDisease}}" facets="filters"></cttv-target-associations-bubbles>
-                    </resize>
-                </tab>
+                    <tab heading="Table">
+                        <cttv-target-associations-table target="{{search.query}}" ndiseases="n" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}" filename="search.filename" loadprogress="loading" facets="filters"></cttv-target-associations-table>
+                    </tab>
 
-                <tab heading="Table">
-                    <cttv-target-associations-table target="{{search.query}}" ndiseases="n" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}" filename="search.filename" loadprogress="loading" facets="filters"></cttv-target-associations-table>
-                </tab>
+                    <tab heading="Tree">
+                        <cttv-target-associations-tree target="{{search.query}}" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}" facets="filters"></cttv-target-associations-tree>
+                    </tab>
 
-                <tab heading="Tree">
-                    <cttv-target-associations-tree target="{{search.query}}" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}" facets="filters"></cttv-target-associations-tree>
-                </tab>
+                </tabset>
 
-            </tabset>
-
+            </div>
         </div>
     </div>
 </div>

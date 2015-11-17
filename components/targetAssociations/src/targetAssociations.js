@@ -25,8 +25,7 @@ var geneAssociations = function () {
             .value("association_score")
             .key("efo_code")
             .label("label")
-            .diameter(config.diameter)
-            .legendText("<text>Current</text> <a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\"x=52> score</text></a> <text x=90>range</text>");
+            .diameter(config.diameter);
 
         var tree = bubblesView.data();
 
@@ -36,42 +35,39 @@ var geneAssociations = function () {
             .on("click", tooltips.click)
             .on("mouseover", tooltips.mouseover)
             .on("mouseout", tooltips.mouseout);
-    	    //.onclick (bubble_tooltip);
-        	//.onclick (function (d) {bView.focus(bView.node(d))})
         	// Render
     	bubblesView(div.node());
 
-        //return therapeuticAreasSorted;
     }
 
     var ga = function (bubbles, flower, div) {
-	bubblesView = bubbles;
-    tooltips
-        .flowerView(flower)
-        .target(config.target);
+        bubblesView = bubbles;
+        tooltips
+            .flowerView(flower)
+            .target(config.target);
 
-	//flowerView = flower;
-	var vis = d3.select(div)
-	    .append("div")
-	    .style("position", "relative");
+        //flowerView = flower;
+        var vis = d3.select(div)
+            .append("div")
+            .style("position", "relative");
 
-	if ((config.data === undefined) && (config.cttvApi !== undefined)) {
-	    var api = config.cttvApi;
-	    var url = api.url.associations({
-            target: config.target,
-            datastructure: "tree"
-	    });
-	    api.call(url)
-		.then (function (resp) {
-		    var data = resp.body.data;
-		    ga.data(data);
-		    // processData(data);
-		    // config.data = data;
-		    render(vis);
-		});
-	} else {
-	    render(vis);
-	}
+        if ((config.data === undefined) && (config.cttvApi !== undefined)) {
+            var api = config.cttvApi;
+            var url = api.url.associations({
+                target: config.target,
+                datastructure: "tree"
+            });
+            api.call(url)
+                .then (function (resp) {
+                    var data = resp.body.data;
+                    ga.data(data);
+                    // processData(data);
+                    // config.data = data;
+                    render(vis);
+            });
+        } else {
+            render(vis);
+        }
     };
 
     // process data
@@ -89,7 +85,9 @@ var geneAssociations = function () {
             var tA = therapeuticAreas[i];
             var taChildren = tA.children;
             if (taChildren === undefined) {
-                continue;
+                // If the TA doesn't have a child, just create one for it with the same information as the TA
+                tA.children = [_.clone(tA)];
+                //continue;
             }
             var flattenChildren = tnt_node(tA).flatten(true).data().children;
             var newChildren = [];
@@ -106,52 +104,18 @@ var geneAssociations = function () {
         return sortData(data);
     }
 
-    // process the data for bubbles display
-    // All the leaves are set under the therapeutic areas
-    // function processData (data) {
-    // 	if (data === undefined) {
-    // 	    return [];
-    // 	}
-    // 	if (data.children === undefined) {
-    // 	    return data;
-    // 	}
-    // 	var therapeuticAreas = data.children;
-    // 	for (var i=0; i<therapeuticAreas.length; i++) {
-    // 	    var tA = therapeuticAreas[i];
-    // 	    var taChildren = tA.children;
-    // 	    if (taChildren === undefined) {
-    // 		continue;
-    // 	    }
-    // 	    var newChildren = [];
-    // 	    var nonRedundant = {};
-    // 	    for (var j=0; j<taChildren.length; j++) {
-    // 		var taChild = taChildren[j];
-    // 		var taLeaves = tnt_node(taChild).get_all_leaves();
-    // 		for (var k=0; k<taLeaves.length; k++) {
-    // 		    var leafData = taLeaves[k].data();
-    // 		    if (nonRedundant[leafData.name] === undefined) {
-    // 			nonRedundant[leafData.name] = 1;
-    // 			newChildren.push(leafData);
-    // 		    }
-    // 		}
-    // 	    }
-    // 	    tA.children = newChildren;
-    // 	}
-    // 	return sortData(data);
-    // };
-
     function sortData (data) {
-	var dataSorted = _.sortBy(data.children, function (d) {
+        var dataSorted = _.sortBy(data.children, function (d) {
             return d.children ? -d.children.length : 0;
-	});
+        });
 
-	for (var i=0; i<data.children.length; i++) {
-	    data.children[i].children = _.sortBy (data.children[i].children, function (d) {
-	        return -d.association_score;
-	    });
-	}
-	data.children = dataSorted;
-	return data;
+        for (var i=0; i<data.children.length; i++) {
+            data.children[i].children = _.sortBy (data.children[i].children, function (d) {
+                return -d.association_score;
+            });
+        }
+        data.children = dataSorted;
+        return data;
     }
 
     // Getters / Setters
@@ -237,30 +201,30 @@ var geneAssociations = function () {
     };
 
     ga.selectDisease = function (efo) {
-	// This code is for diseases with multiple parents
-	// var nodes = nodeData.find_all(function (node) {
-	//  return node.property("efo_code") === efo;
-	// });
-	// var lca;
-	// if (nodes.length > 1) {
-	//  lca = tree.lca(nodes);
-	// } else {
-	//  lca = nodes[0].parent();
-	// }
-	var dNode = config.root.find_node (function (node) {
-	    if (node.parent() === undefined) {
-		return false;
-	    }
-	    return efo.efo === node.property("efo_code") && efo.parent_efo === node.parent().property("efo_code");
-	});
-	if (dNode.property("selected") === true) {
-	    dNode.property("selected", undefined);
-	    bubblesView.select(config.root);
-	} else {
-	    dNode.property("selected", true);
-	    bubblesView.select([dNode]);
-	}
-	return this;
+        // This code is for diseases with multiple parents
+        // var nodes = nodeData.find_all(function (node) {
+        //  return node.property("efo_code") === efo;
+        // });
+        // var lca;
+        // if (nodes.length > 1) {
+        //  lca = tree.lca(nodes);
+        // } else {
+        //  lca = nodes[0].parent();
+        // }
+        var dNode = config.root.find_node (function (node) {
+            if (node.parent() === undefined) {
+                return false;
+            }
+            return efo.efo === node.property("efo_code") && efo.parent_efo === node.parent().property("efo_code");
+        });
+        if (dNode.property("selected") === true) {
+            dNode.property("selected", undefined);
+            bubblesView.select(config.root);
+        } else {
+            dNode.property("selected", true);
+            bubblesView.select([dNode]);
+        }
+        return this;
     };
 
     return ga;

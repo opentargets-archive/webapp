@@ -10,7 +10,8 @@ angular.module('cttvApp', [
     //'angulartics.google.analytics',
     'angulartics.piwik',
     'viewhead',
-    'cttvServices'
+    'cttvServices',
+    'hm.readmore'
 ])
 
 .config(['$routeProvider', '$locationProvider',
