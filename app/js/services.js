@@ -79,7 +79,7 @@ angular.module('cttvServices', []).
                 // },
                 {
                     extend: 'csvHtml5',
-                    text: "<span class='fa fa-file-excel-o' title='Download as .csv'><span>",//"<span class='fa fa-download'></span>",
+                    text: "<span class='fa fa-download' title='Download as .csv'><span>",//"<span class='fa fa-download'></span>",
                     title: title//,
                     //exportOptions: {
                     //    columns: ':visible'
@@ -172,6 +172,39 @@ angular.module('cttvServices', []).
         cttvUtilsService.roundToNearest = function(n,t){
             return (Math.round(n/t)*t);
         };
+
+
+
+        cttvUtilsService.getPmidsList = function(refs){
+            refs = refs || [];  // to avoid undefined errors
+            return refs.map(function (ref) {
+                return ref.lit_id.split('/').pop();
+            });
+        }
+
+
+
+        cttvUtilsService.getPublicationsString = function(pmidsList){
+            pmidsList = pmidsList || [];  // to avoid undefined errors
+            var pub = "";
+            if (pmidsList.length>0){
+                pub = "<span class='cttv-publications-string'>";
+                    pub += "<span class='badge'>"+pmidsList.length+"</span>";
+                    pub += ( pmidsList.length===1 ? " publication" : " publications" );
+                    if (pmidsList.length===1) {
+                        pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/abstract/MED/' + pmidsList[0] + '">'+pub+'</a>';
+                    } else {
+                        var pmids = pmidsList.map(function (ref) {
+                            return "EXT_ID:" + ref;
+                        }).join (" OR ");
+                        pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">'+pub+'</a>';
+                    }
+                pub += "</span>"
+            }
+            return pub;
+        }
+
+
 
         // Defers a call x ms
         // If a new call is made before the time expires, discard the initial one and start deferring again

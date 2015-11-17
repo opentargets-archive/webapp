@@ -126,9 +126,9 @@ angular.module('cttvDirectives')
                             row.push(item.disease.efo_info[0].label);
 
                             // 1: drug
-                            row.push( "<a href='"+item.evidence.target2drug.urls[0].url+"' target='_blank'>" +
+                            row.push( "<a class='cttv-external-link' href='"+item.evidence.target2drug.urls[0].url+"' target='_blank'>" +
                             item.drug.molecule_name +
-                            " <i class='fa fa-external-link'></i></a>");
+                            "</a>");
 
                             // 2: phase
                             //row.push(item.drug.max_phase_for_all_diseases.label);
@@ -141,16 +141,34 @@ angular.module('cttvDirectives')
                             row.push(item.drug.molecule_type);
 
                             // 4: Mechanism of action
+                            var action = item.evidence.target2drug.mechanism_of_action;
+
+                            // publications:
+                            var refs = [];
+                            if( checkPath(item, "evidence.target2drug.provenance_type.literature.references") ){
+                                refs = item.evidence.target2drug.provenance_type.literature.references;
+                            }
+
+                            if( refs.length>0){
+                                action += "<br />"+cttvUtils.getPublicationsString( cttvUtils.getPmidsList( refs ) );
+                            }
+
+                            if ( item.evidence.target2drug.urls && item.evidence.target2drug.urls[2] ) {
+                                var extLink = item.evidence.target2drug.urls[2];
+                                action += "<br /><span><a class='cttv-external-link' target=_blank href=" + extLink.url + ">" + extLink.nice_name  + "</a></span>";
+                            }
+
+                            row.push( action );
+
+                            // col 5: pub ids (hidden)
+                            //row.push(pmidsList.join(", "));
+
+                            /*
                             var pubs = 0;
                             if( checkPath(item, "evidence.target2drug.provenance_type.literature.references") ){
                                 pubs = item.evidence.target2drug.provenance_type.literature.references.length;
                             }
 
-                            var action = item.evidence.target2drug.mechanism_of_action;
-
-                            // publications:
-                            // we show the publications here in the cells for now
-                            // eventually this should be in a popup or tooltip of some sort
                             var pub="";
                             if( pubs>0 ){
                                 action += "<br /><span><span class='badge'>" + pubs + (pubs==1 ? "</span> publication</span>" : "</span> publications</span>");
@@ -170,6 +188,7 @@ angular.module('cttvDirectives')
                             action+=pub;
 
                             row.push(action);
+                            */
 
 
                             // 5: Activity
@@ -196,9 +215,9 @@ angular.module('cttvDirectives')
                             // 8: target context / protein complex members
 
                             // 9: evidence source
-                            row.push( "Curated from <br /><a href='" +
+                            row.push( "Curated from <br /><a class='cttv-external-link' href='" +
                             item.evidence.drug2clinic.urls[0].url +
-                            "' target='_blank'>" + item.evidence.drug2clinic.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
+                            "' target='_blank'>" + item.evidence.drug2clinic.urls[0].nice_name + "</a>");
 
                             //row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
 
@@ -232,12 +251,22 @@ angular.module('cttvDirectives')
                         "autoWidth": false,
                         "paging": true,
                         "order" : [[3, "desc"]],
-                        "aoColumnDefs" : [
+                        //"aoColumnDefs" : [
+                        "columnDefs" : [
                             {"targets": [4], "visible":false},
                             {"iDataSort" : 3, "aTargets" : [4]},
                             {
                                 "targets" : [0],    // the access-level (public/private icon)
-                                "visible" : cttvConfig.show_access_level    // TODO: this should come from config, so we can hide it for our installation
+                                "visible" : cttvConfig.show_access_level,
+                                "width" : "3%"
+                            },
+                            {
+                                "targets": [3],
+                                "width": "6%"
+                            },
+                            {
+                                "targets": [2,5,6,7,8,9],
+                                "width": "13%"
                             }
                         ],
                         // "aoColumnDefs" : [
