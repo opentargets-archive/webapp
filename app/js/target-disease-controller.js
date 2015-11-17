@@ -347,7 +347,7 @@
                     row.push( item.disease.efo_info[0].label );
 
                     // Variant
-                    row.push( "<a href='http://www.ensembl.org/Homo_sapiens/Variation/Explore?v="+item.variant.id[0].split('/').pop()+"' target='_blank'>"+item.variant.id[0].split('/').pop()+"&nbsp;<i class='fa fa-external-link'></i></a>" );
+                    row.push( "<a class='cttv-external-link' href='http://www.ensembl.org/Homo_sapiens/Variation/Explore?v="+item.variant.id[0].split('/').pop()+"' target='_blank'>"+item.variant.id[0].split('/').pop()+"</a>" );
 
                     // variant type
                     row.push( clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) ) );
@@ -356,37 +356,24 @@
                     row.push( cttvDictionary.CTTV_PIPELINE );
 
                     // evidence source
-                    row.push( "<a href='https://www.ebi.ac.uk/gwas/search?query="+item.variant.id[0].split('/').pop()+"' target='_blank'>"
+                    row.push( "<a class='cttv-external-link' href='https://www.ebi.ac.uk/gwas/search?query="+item.variant.id[0].split('/').pop()+"' target='_blank'>"
                             + clearUnderscores(item.sourceID)
-                            + "&nbsp;<i class='fa fa-external-link'></i></a>");
+                            + "</a>");
 
                     // p-value
                     row.push( item.evidence.variant2disease.resource_score.value.toPrecision(1) );
+                    //row.push( item.evidence.variant2disease.resource_score.value.toExponential(1) );
 
                     // publications
-                    var pub="";
-                    var pmidsList = [];
-                    if (checkPath(item, "evidence.variant2disease.provenance_type.literature.references")) {
-                        pub = item.evidence.variant2disease.provenance_type.literature.references.length;
-                        if (pub===1) {
-                            pub = pub + " publication";
-                            var pmid = item.evidence.variant2disease.provenance_type.literature.references[0].lit_id.split("/").pop();
-                            pmidsList = [pmid];
-                            pub = pub + ' <a target=_blank href="//europepmc.org/abstract/MED/' + pmid + '"><i class="fa fa-external-link"></i></a>';
-                        } else {
-                            pub = pub + " publications";
-                            pmidsList = item.evidence.variant2disease.provenance_type.literature.references.map (function (ref) {
-                                return ref.lit_id.split('/').pop();
-                            });
-                            var pmids = pmidsList.map (function (ref) {
-                                return 'EXT_ID:' + ref;
-                            }).join (" OR ");
-                            pub = pub + ' <a target=_blank href="//europepmc.org/search?query=' + pmids + '"><i class="fa fa-external-link"></i></a>';
-                        }
+                    var refs = [];
+                    if ( checkPath(item, "evidence.variant2disease.provenance_type.literature.references") ) {
+                        refs = item.evidence.variant2disease.provenance_type.literature.references;
                     }
-                    row.push(pub);
 
-                    // Publication IDs (hidden)
+                    var pmidsList = cttvUtils.getPmidsList( refs );
+                    row.push( cttvUtils.getPublicationsString( pmidsList ) );
+
+                    // Publication ids (hidden)
                     row.push(pmidsList.join(", "));
 
 
@@ -413,23 +400,23 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConfig.show_access_level    // TODO: this should come from config, so we can hide it for our installation
+                        "visible" : cttvConfig.show_access_level,
+                        "width" : "3%"
                     },
                     {
                         "targets": [8],
                         "visible": false
+                    },
+                    {
+                        "targets": [3,4,5,7],
+                        "width": "14%"
+                    },
+                    {
+                        "targets": [2,6],
+                        "width": "10%"
                     }
-                ],
-                /*"columns": [
-                    { "width": "2%" },
-                    { "width": "10%" },
-                    { "width": "10%" },
-                    { "width": "10%" },
-                    { "width": "10%" },
-                    { "width": "12%" },
-                    { "width": "6%" },
-                    { "width": "15%" }
-                ]*/
+
+                ]
 
             }, $scope.search.info.title+"-common_diseases") );
         };
@@ -508,7 +495,7 @@
                     var mut = cttvDictionary.NA;
                     if( checkPath(item, "variant.id") && item.variant.id[0]){
                         var rsId = item.variant.id[0].split('/').pop();
-                        mut = "<a href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=" + rsId + " target=_blank>" + rsId + " <i class='fa fa-external-link'></i></a>";
+                        mut = "<a class='cttv-external-link' href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=" + rsId + " target=_blank>" + rsId + "</a>";
                     }
                     row.push(mut);
 
@@ -526,52 +513,31 @@
 
                     // evidence source
                     if( item.type === 'genetic_association' ){
-                        row.push( "<a href='" + item.evidence.variant2disease.urls[0].url + "' target=_blank>" + item.evidence.variant2disease.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>" );
+                        row.push( "<a class='cttv-external-link' href='" + item.evidence.variant2disease.urls[0].url + "' target=_blank>" + item.evidence.variant2disease.urls[0].nice_name + "</a>" );
                     } else {
-                        row.push( "<a href='" + item.evidence.urls[0].url + "' target=_blank>" + item.evidence.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>" );
+                        row.push( "<a class='cttv-external-link' href='" + item.evidence.urls[0].url + "' target=_blank>" + item.evidence.urls[0].nice_name + "</a>" );
                     }
 
 
 
                     // publications
                     var refs = [];
-                    var pmidsList = [];
+
                     if( item.type === 'genetic_association'){
-                        if (item.evidence.variant2disease.provenance_type.literature) {
+                        if ( checkPath(item, "evidence.variant2disease.provenance_type.literature") ) {
                             refs = item.evidence.variant2disease.provenance_type.literature.references;
                         }
-                        //row.push(pub);
-
                     } else {
-                        $log.log(item.evidence);
-                        refs = item.evidence.provenance_type.literature.references;
-                    }
-                    var pub = refs.length;
-                    if (pub===0) {
-                        pub = "";
-                    } else if (pub===1) {
-                        var pmid;
-                        if (refs[0]) {
-                            pmid = refs[0].lit_id.split('/').pop();
-                            pmidsList = [pmid];
+                        if( checkPath(item, "evidence.provenance_type.literature.references") ){
+                            refs = item.evidence.provenance_type.literature.references;
                         }
-                        pub = pub + " publication";
-                        pub = pub + ' <a target=_blank href="//europepmc.org/abstract/MED/' + pmid + '"><i class="fa fa-external-link"></i></a>';
-                    } else {
-                        pmidsList = refs.map(function (ref) {
-                            return ref.lit_id.split('/').pop();
-                        });
-                        var pmids = pmidsList.map(function (ref) {
-                            return "EXT_ID:" + ref;
-                        }).join (" OR ");
-                        pub = pub + " publications";
-                        pub = pub + ' <a target=_blank href="//europepmc.org/search?query=' + pmids + '"><i class="fa fa-external-link"></i></a>';
                     }
-                    row.push( pub );
 
-                    // pub ids (hidden)
+                    var pmidsList = cttvUtils.getPmidsList( refs );
+                    row.push( cttvUtils.getPublicationsString( pmidsList ) );
+
+                    // Publication ids (hidden)
                     row.push(pmidsList.join(", "));
-
 
 
                     // add the row to data
@@ -598,11 +564,20 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConfig.show_access_level
+                        "visible" : cttvConfig.show_access_level,
+                        "width" : "3%"
                     },
                     {
                         "targets": [6],
                         "visible": false
+                    },
+                    {
+                        "targets": [2,5],
+                        "width": "14%"
+                    },
+                    {
+                        "targets": [3,4],
+                        "width": "22%"
                     }
                 ],
             }, $scope.search.info.title+"-rare_diseases") );
@@ -691,7 +666,7 @@
                     row.push(item.disease.efo_info[0].label);
 
                     // overview
-                    row.push("<a href='" + item.evidence.urls[0].url+"' target='_blank'>" + item.evidence.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
+                    row.push("<a class='cttv-external-link' href='" + item.evidence.urls[0].url+"' target='_blank'>" + item.evidence.urls[0].nice_name + "</a>");
 
                     // activity
                     row.push( cttvDictionary[item.target.activity.toUpperCase()] || clearUnderscores(item.target.activity) ); // "up_or_down"->"unclassified" via dictionary
@@ -703,14 +678,15 @@
                     row.push("Curated in " + item.evidence.provenance_type.database.id );
 
                     // publications
-                    var pub=cttvDictionary.NA;
+                    var refs = [];
                     if( checkPath(item, "evidence.provenance_type.literature.references") ){
-                        pub=item.evidence.provenance_type.literature.references.map(function(ref){
-                            return "<a href='"+ref.lit_id+"' target='_blank'>"+ref.lit_id.split('/').pop()+"&nbsp;<i class='fa fa-external-link'></i></a>"
-                        }).join(", ");
-
+                        refs = item.evidence.provenance_type.literature.references;
                     }
-                    row.push(pub);
+                    var pmidsList = cttvUtils.getPmidsList( refs );
+                    row.push( cttvUtils.getPublicationsString( pmidsList ) );
+
+                    // Publication ids (hidden)
+                    row.push(pmidsList.join(", "));
 
 
 
@@ -736,7 +712,20 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConfig.show_access_level
+                        "visible" : cttvConfig.show_access_level,
+                        "width" : "3%"
+                    },
+                    {
+                        "targets" : [7],
+                        "visible" : false
+                    },
+                    {
+                        "targets" : [3,4,5,6],
+                        "width" : "14%"
+                    },
+                    {
+                        "targets" : [1],
+                        "width" : "18%"
                     }
                 ],
             }, $scope.search.info.title+"-disrupted_pathways") );
@@ -809,7 +798,7 @@
                     // activity
                     var activityUrl = item.evidence.urls[0].url;
                     var activity = item.target.activity.split("_").shift();
-                    row.push( "<a href='"+ activityUrl +"' target='_blank'>" + activity +"<i class='fa fa-external-link'></i></a>" );
+                    row.push( "<a class='cttv-external-link' href='"+ activityUrl +"' target='_blank'>" + activity +"</a>" );
 
                     // tissue / cell
                     row.push( item.disease.biosample.name );
@@ -822,40 +811,25 @@
                     row.push( item.evidence.log2_fold_change.value );
 
                     // p-value
-                    row.push( item.evidence.resource_score.value );
+                    row.push( (item.evidence.resource_score.value).toExponential(2) );
 
                     // percentile rank
                     row.push( item.evidence.log2_fold_change.percentile_rank );
 
                     // experiment overview
-                    row.push( "<a href='"+item.evidence.urls[2].url+"' target='_blank'>" + (item.evidence.experiment_overview || "Experiment overview and raw data") + " <i class='fa fa-external-link'></i></a>" );
+                    row.push( "<a class='cttv-external-link' href='"+item.evidence.urls[2].url+"' target='_blank'>" + (item.evidence.experiment_overview || "Experiment overview and raw data") + "</a>" );
 
                     // publications
-                    var pub="";
-                    var pmidsList = [];
-                    if (item.evidence.provenance_type.literature) {
-                        pub = item.evidence.provenance_type.literature.references.length;
-                        if (pub===1) {
-                            var pmid = item.evidence.provenance_type.literature.references[0].lit_id.split('/').pop();
-                            pmidsList = [pmid];
-                            pub = pub + " publication";
-                            pub = pub + ' <a target=_blank href="//europepmc.org/abstract/MED/' + pmid + '"><i class="fa fa-external-link"></i></a>';
-                        } else {
-                            pmidsList = item.evidence.provenance_type.literature.references.map (function (ref) {
-                                return ref.lit_id.split('/').pop();
-                            });
-                            var pmids = pmidsList.map (function (ref) {
-                                return 'EXT_ID:' + ref;
-                            }).join(' OR ');
-
-                            pub = pub +  " publications";
-                            pub = pub + ' <a target=_blank href="//europepmc.org/search?query=' + pmids + '"><i class="fa fa-external-link"></i></a>';
-                        }
+                    var refs = [];
+                    if( checkPath(item, "evidence.provenance_type.literature.references") ){
+                        refs = item.evidence.provenance_type.literature.references;
                     }
-                    row.push(pub);
+                    var pmidsList = cttvUtils.getPmidsList( refs );
+                    row.push( cttvUtils.getPublicationsString( pmidsList ) );
 
-                    // Publication Ids (hidden)
+                    // Publication ids (hidden)
                     row.push(pmidsList.join(", "));
+
 
                     newdata.push(row); // push, so we don't end up with empty rows
 
@@ -881,11 +855,28 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConfig.show_access_level
+                        "visible" : cttvConfig.show_access_level,
+                        "width" : "3%"
                     },
                     {
                         "targets": [11],
                         "visible": false
+                    },
+                    {
+                        "targets" : [6,7,8],
+                        "width" : "6%"
+                    },
+                    {
+                        "targets" : [9,10],
+                        "width" : "12%"
+                    },
+                    {
+                        "targets" : [2,5],
+                        "width" : "13%"
+                    },
+                    {
+                        "targets" : [3,4],
+                        "width" : "10%"
                     }
                 ],
             }, $scope.search.info.title+"-RNA_expression") );
@@ -946,28 +937,29 @@
                 var row = [];
                 try{
 
-                    // data origin: public / private
+                    // col 0: data origin: public / private
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
-                    // col 0: disease
+                    // col 1: disease
                     row.push(item.disease.efo_info[0].label);
 
-                    // col 1: know mutations
+                    // col 2: know mutations
                     row.push(item.evidence.known_mutations || cttvDictionary.NA);
 
-                    // col 2: evidence source
-                    row.push("<a href='"+item.evidence.urls[0].url+"' target='_blank'>"+item.evidence.urls[0].nice_name+" <i class='fa fa-external-link'></i></a>");
+                    // col 3: evidence source
+                    row.push("<a href='"+item.evidence.urls[0].url+"' target='_blank' class='cttv-external-link'>"+item.evidence.urls[0].nice_name+"</a>");
 
-                    // cols 3: publications
-
-                    var pub=cttvDictionary.NA;
+                    // cols 4: publications
+                    var refs = [];
                     if( checkPath(item, "evidence.provenance_type.literature.references") ){
-                        pub=item.evidence.provenance_type.literature.references.map(function(ref){
-                            return "<a href='"+ref.lit_id+"' target='_blank'>"+ref.lit_id.split('/').pop()+"&nbsp;<i class='fa fa-external-link'></i></a>";
-                        }).join(", ");
-
+                        refs = item.evidence.provenance_type.literature.references;
                     }
-                    row.push(pub);
+                    var pmidsList = cttvUtils.getPmidsList( refs );
+                    row.push( cttvUtils.getPublicationsString( pmidsList ) );
+
+                    // col 5: pub ids (hidden)
+                    row.push(pmidsList.join(", "));
+
 
 
                     newdata.push(row); // push, so we don't end up with empty rows
@@ -993,8 +985,26 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConfig.show_access_level
-                    }
+                        "visible" : cttvConfig.show_access_level,
+                        "width" : "3%"
+                    },
+                    {
+                        "targets" : [5],    // the access-level (public/private icon)
+                        "visible" : false
+                    },
+                    // now set the widths
+                    {
+                        "targets" : [1,2,3],
+                        "width" : "26%"
+                    },
+                    /*{
+                        "targets" : [4],
+                        "width" : "22%"
+                    },
+                    {
+                        "targets" : [0],
+                        "width" : "0%"
+                    }*/
                 ],
             }, $scope.search.info.title+"-somatic_mutations") );
         };
@@ -1084,7 +1094,7 @@
 
 
                     // evidence source
-                    row.push("Phenodigm");
+                    row.push(cttvDictionary.PHENODIGM);
 
                     // score -- hidden column now
                     row.push((item.scores.association_score).toFixed(2));
@@ -1113,11 +1123,20 @@
                 "columnDefs" : [
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConfig.show_access_level    // TODO: this should come from config, so we can hide it for our installation
+                        "visible" : cttvConfig.show_access_level,
+                        "width" : "3%"
                     },
                     {
                         "targets" : [6],    // score
                         "visible" : false
+                    },
+                    {
+                        "targets" : [2,3,4],
+                        "width" : "20%"
+                    },
+                    {
+                        "targets" : [5],
+                        "width" : "10%"
                     }
                 ],
             }, $scope.search.info.title+"-mouse_models") );
@@ -1619,7 +1638,20 @@
                     },
                     {
                         "targets" : [0],    // the access-level (public/private icon)
-                        "visible" : cttvConfig.show_access_level    // TODO: this should come from config, so we can hide it for our installation
+                        "visible" : cttvConfig.show_access_level ,
+                        "width" : "3%"
+                    },
+                    {
+                        "targets" : [1],
+                        "width" : "12%"
+                    },
+                    {
+                        "targets" : [4,7],
+                        "width" : "10%"
+                    },
+                    {
+                        "targets" : [5],
+                        "width" : "8%"
                     }
                 ],
             }, $scope.search.info.title+"-text_mining") );
