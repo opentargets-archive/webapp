@@ -1536,7 +1536,7 @@ angular.module('cttvDirectives', [])
 
                 //scope.$watch('facet.filters[2].key', function(val, old){
                 scope.$watch('preset', function(val, old){
-                    if( old!=undefined && old!=val){
+                    if( old!==undefined && old!=val){
                         // set the stringency
                         scope.facet.filters[2].key = score_presets[val].stringency.toFixed(0);
                         // set the min
@@ -1546,7 +1546,7 @@ angular.module('cttvDirectives', [])
                         // fire the update
                         scope.facet.update();
                     }
-                })
+                });
 
             },
         };
@@ -2178,7 +2178,6 @@ angular.module('cttvDirectives', [])
             }
         };
     }])
-
 
     .directive('resize', ['$window', function ($window) {
         'use strict';

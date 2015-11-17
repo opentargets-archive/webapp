@@ -7,7 +7,9 @@
     <div class"row" style="padding-bottom:20px; margin-bottom:20px">
         <accordion close-others="false">
             <accordion-group heading="Description" attr-section-name="Description" is-open="true">
-                {{target.description}}
+                <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links">
+                <!--{{target.description}}-->
+                </hm-read-more>
             </accordion-group>
 
             <!-- Synomyms -->
