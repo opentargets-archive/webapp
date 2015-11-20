@@ -99,6 +99,14 @@ body{
     height: auto;
 }
 
+.cttv-logotype {
+    font-size: 24px;
+    font-weight: 100;
+    color: #888;
+    line-height: 24px;
+}
+
+
 
 /*
 * Footer
