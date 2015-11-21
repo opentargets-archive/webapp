@@ -83,7 +83,11 @@
                             <div class="col-xs-2">
                                 <!-- CTTV logo -->
                                 <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>
+                                <!-- <a href="/" style="display:block; height:34px;"><img style="top:2px; position:relative;" src="imgs/cttv_logo_888888_75x35.png"/><span class="cttv-logotype"> | Core Platform</span></a>-->
                             </div>
+
+                            <!--<div class="col-xs-2">
+                            </div>-->
 
                             <div class="col-xs-10" ng-controller="SearchBoxCtrl">
                                 <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
@@ -95,7 +99,7 @@
                                             <!-- Search box + search button -->
                                             <div class="input-group">
 
-                                                <input type="text" placeholder="Search for a target or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+                                                <input type="text" placeholder="Search for a target or disease, like 'BRAF' or Asthma'" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
                                                 <div class="input-group-btn">
                                                     <button type="submit" class="btn btn-primary">
@@ -281,7 +285,7 @@
             <script type="text/javascript" src="js/app.js?v=16112015"></script>
             <script type="text/javascript" src="js/controllers.js?v=16112015"></script>
             <script type="text/javascript" src="js/services.js?v=16112015"></script>
-            <script type="text/javascript" src="js/api-service.js"></script>
+            <script type="text/javascript" src="js/api-service.js?v=16112015"></script>
             <script type="text/javascript" src="js/dictionary-service.js?v=16112015"></script>
             <script type="text/javascript" src="js/const-service.js?v=16112015"></script>
             <script type="text/javascript" src="js/config-service.js?v=16112015"></script>
@@ -299,8 +303,6 @@
             <script type="text/javascript" src="js/disease-graph-directive.js?v=16112015"></script>
 
 
-
-
             <!-- DataTable stuff
             <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
             <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
@@ -311,6 +313,15 @@
             <script type="text/javascript" src="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9/datatables.min.js?v=16112015"></script>
             <script type="text/javascript" src="./vendor/datatables/dataTables.buttons.min.js?v=16112015"></script>  <!-- TODO: remove this nightly build when fixes are included in official release -->
             <script type="text/javascript" src="./vendor/datatables/buttons.html5.min.js?v=16112015"></script>  <!--TODO: remove this when fixes are included in official release -->
+
+            <!-- Cookie notification -->
+            <script type="text/javascript" id="cookiebanner" src="http://cookiebanner.eu/js/cookiebanner.min.js"
+                    data-height="50px"
+                    data-link="#337ab7"
+                    data-fontfamily="inherit"
+                    data-close-text="<i style='font-size:18px' class='fa fa-check-circle'></i>"
+                    data-moreinfo="http://ec.europa.eu/ipg/basics/legal/cookies/index_en.htm" >
+            </script>
 
 
             <!-- ribbon control  -->
