@@ -47,7 +47,7 @@ body{
     overflow: hidden;
     white-space: nowrap;
     color: white;
-    display: block;
+    display: none;
     padding: 5px 50px;
     margin: 1px 0;
     font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;

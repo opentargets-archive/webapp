@@ -167,18 +167,18 @@ angular.module('cttvDirectives', [])
                         // Iterate
                         var iterateeEFO = function (str, ta) {
                             if (str === "") {
-                                str = ta.efo_code;
+                                str = ta;
                             } else {
-                                str += "," + ta.efo_code;
+                                str += "," + ta;
                             }
                             return str;
 
                         };
                         var iterateeLabel = function (str, ta) {
                             if (str === "") {
-                                str = ta.label;
+                                str = ta;
                             } else {
-                                str += ", " + ta.label;
+                                str += ", " + ta;
                             }
                             return str;
                         };
@@ -200,15 +200,15 @@ angular.module('cttvDirectives', [])
                             var row = [];
 
                             // Disease name
-                            var geneDiseaseLoc = "/evidence/" + attrs.target + "/" + data.efo_code + (facets.score_str ? "?score_str=" + facets.score_str[0] : "");
+                            var geneDiseaseLoc = "/evidence/" + attrs.target + "/" + data.disease.id + (facets.score_str ? "?score_str=" + facets.score_str[0] : "");
 
-                            row.push("<a href=" + geneDiseaseLoc + ">" + data.label + "</a>");
+                            row.push("<a href=" + geneDiseaseLoc + ">" + data.disease.name + "</a>");
 
                             // EFO (hidden)
-                            row.push(data.efo_code);
+                            row.push(data.disease.id);
 
                             // TherapeuticArea EFO (hidden)
-                            var taStr = _.reduce(data.therapeutic_area, iterateeEFO, "");
+                            var taStr = _.reduce(data.disease.therapeutic_area.codes, iterateeEFO, "");
                             row.push(taStr); // Neoplasm
 
                             // Association score
@@ -229,7 +229,7 @@ angular.module('cttvDirectives', [])
                             // Animal model
                             row.push( getColorStyleString( datatypes.animal_model, geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models") );
                             // Therapeutic area
-                            row.push(_.reduce(data.therapeutic_area, iterateeLabel, ""));
+                            row.push(_.reduce(data.disease.therapeutic_area.labels, iterateeLabel, ""));
 
                             newData.push(row);
                         }
@@ -666,10 +666,10 @@ angular.module('cttvDirectives', [])
                 dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
                 var row = [];
                 var geneLoc = "";
-                var geneDiseaseLoc = "/evidence/" + data[i].gene_id + "/" + target + (filters.score_str ? "?score_str=" + filters.score_str[0] : "");
-                row.push("<a href='" + geneDiseaseLoc + "'>" + data[i].label + "</a>");
+                var geneDiseaseLoc = "/evidence/" + data[i].target.id + "/" + data[i].disease.id + (filters.score_str ? "?score_str=" + filters.score_str[0] : "");
+                row.push("<a href='" + geneDiseaseLoc + "'>" + data[i].target.symbol + "</a>");
                 // Ensembl ID
-                row.push(data[i].gene_id);
+                row.push(data[i].target.id);
                 // The association score
                 row.push( getColorStyleString(data[i].association_score, geneDiseaseLoc ) );
                 // Genetic association
@@ -696,7 +696,7 @@ angular.module('cttvDirectives', [])
                           dts.animal_model) ;
 
                 // Push gene name again instead
-                row.push("<a href=" + geneDiseaseLoc + ">" + data[i].label + "</a>");
+                row.push("<a href=" + geneDiseaseLoc + ">" + data[i].target.name + "</a>");
 
                 newData[i] = row;
 
