@@ -23,12 +23,11 @@ var geneAssociations = function () {
         bubblesView
             .data(config.root)
             .value("association_score")
-            .key("efo_code")
-            .label("label")
+            .key("disease.id")
+            .label("disease.name")
             .diameter(config.diameter);
 
         var tree = bubblesView.data();
-
         // Tooltips
 
         bubblesView
@@ -184,7 +183,7 @@ var geneAssociations = function () {
 
     ga.selectTherapeuticArea = function (efo) {
 	var taNode = config.root.find_node (function (node) {
-	    return node.property("efo_code") == efo || node.property("name") == efo;
+	    return node.property(function (n) { return n.disease.name }) == efo || node.property(function (n) { return n.disease.name }) == efo;
 	});
 	if (taNode.property("focused") === true) {
 	    taNode.property("focused", undefined);
@@ -215,7 +214,7 @@ var geneAssociations = function () {
             if (node.parent() === undefined) {
                 return false;
             }
-            return efo.efo === node.property("efo_code") && efo.parent_efo === node.parent().property("efo_code");
+            return efo.efo === node.property(function (n) { return n.disease.id }) && efo.parent_efo === node.parent().property(function (n) { return n.disease.id});
         });
         if (dNode.property("selected") === true) {
             dNode.property("selected", undefined);
