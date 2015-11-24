@@ -23,8 +23,8 @@ var geneAssociations = function () {
         bubblesView
             .data(config.root)
             .value("association_score")
-            .key("disease.id")
-            .label("disease.name")
+            .key("__disease_id")
+            .label("__disease_name")
             .diameter(config.diameter);
 
         var tree = bubblesView.data();
@@ -88,11 +88,17 @@ var geneAssociations = function () {
                 tA.children = [_.clone(tA)];
                 //continue;
             }
-            var flattenChildren = tnt_node(tA).flatten(true).data().children;
+            tA.__disease_id = tA.disease.id;
+            tA.__disease_name = tA.disease.name;
+            var ta_node = tnt_node(tA);
+            var flattenChildren = ta_node.flatten(true).data().children;
             var newChildren = [];
             var nonRedundant = {};
             for (var j=0; j<flattenChildren.length; j++) {
                 var childData = flattenChildren[j];
+                // Put some properties to have direct access to disease name and id (will be used by bubblesView)
+                childData.__disease_id = childData.disease.id;
+                childData.__disease_name = childData.disease.name;
                 if (nonRedundant[childData.name] === undefined) {
                     nonRedundant[childData.name] = 1;
                     newChildren.push(childData);
