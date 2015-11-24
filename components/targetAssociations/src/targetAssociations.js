@@ -24,7 +24,7 @@ var geneAssociations = function () {
             .data(config.root)
             .value("association_score")
             .key("__disease_id")
-            .label("__disease_name")
+            .label("name")
             .diameter(config.diameter);
 
         var tree = bubblesView.data();
@@ -89,7 +89,7 @@ var geneAssociations = function () {
                 //continue;
             }
             tA.__disease_id = tA.disease.id;
-            tA.__disease_name = tA.disease.name;
+            tA.name = tA.disease.name;
             var ta_node = tnt_node(tA);
             var flattenChildren = ta_node.flatten(true).data().children;
             var newChildren = [];
@@ -98,7 +98,7 @@ var geneAssociations = function () {
                 var childData = flattenChildren[j];
                 // Put some properties to have direct access to disease name and id (will be used by bubblesView)
                 childData.__disease_id = childData.disease.id;
-                childData.__disease_name = childData.disease.name;
+                childData.name = childData.disease.name;
                 if (nonRedundant[childData.name] === undefined) {
                     nonRedundant[childData.name] = 1;
                     newChildren.push(childData);
@@ -189,7 +189,7 @@ var geneAssociations = function () {
 
     ga.selectTherapeuticArea = function (efo) {
 	var taNode = config.root.find_node (function (node) {
-	    return node.property(function (n) { return n.disease.name }) == efo || node.property(function (n) { return n.disease.name }) == efo;
+	    return node.property("name") == efo;
 	});
 	if (taNode.property("focused") === true) {
 	    taNode.property("focused", undefined);
