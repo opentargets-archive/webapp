@@ -344,7 +344,7 @@
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                     // disease
-                    row.push( item.disease.efo_info[0].label );
+                    row.push( item.disease.efo_info.label );
 
                     // Variant
                     row.push( "<a class='cttv-external-link' href='http://www.ensembl.org/Homo_sapiens/Variation/Explore?v="+item.variant.id[0].split('/').pop()+"' target='_blank'>"+item.variant.id[0].split('/').pop()+"</a>" );
@@ -483,12 +483,13 @@
                     }
 
 
+
                     // data origin: public / private
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
 
                     // disease
-                    row.push( item.disease.efo_info[0].label );
+                    row.push( item.disease.efo_info.label );
 
 
                     // mutation
@@ -502,7 +503,6 @@
 
                     // mutation consequence
                     if( item.type === 'genetic_association' ){
-                        //row.push( item.evidence.gene2variant.functional_consequence ); // TODO: pull label from new data
                         row.push( clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) ) );
                     } else if( item.type === 'somatic_mutation' ){
                         row.push( clearUnderscores(item.type) );
@@ -663,7 +663,7 @@
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                     // disease
-                    row.push(item.disease.efo_info[0].label);
+                    row.push(item.disease.efo_info.label);
 
                     // overview
                     row.push("<a class='cttv-external-link' href='" + item.evidence.urls[0].url+"' target='_blank'>" + item.evidence.urls[0].nice_name + "</a>");
@@ -790,7 +790,7 @@
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                     // disease
-                    row.push( item.disease.efo_info[0].label );
+                    row.push( item.disease.efo_info.label );
 
                     // comparison
                     row.push( item.evidence.comparison_name );
@@ -941,7 +941,7 @@
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                     // col 1: disease
-                    row.push(item.disease.efo_info[0].label);
+                    row.push(item.disease.efo_info.label);
 
                     // col 2: know mutations
                     row.push(item.evidence.known_mutations || cttvDictionary.NA);
@@ -1078,7 +1078,7 @@
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                     // disease
-                    row.push(item.disease.efo_info[0].label);    // or item.disease.efo_info[0].label ???
+                    row.push(item.disease.efo_info.label);    // or item.disease.efo_info.label ???
 
                     // human
                     row.push( "<ul>" + item.evidence.disease_model_association.human_phenotypes.map(function(hp){return "<li>"+hp.label+"</li>"}).join("") + "</ul>" );
@@ -1552,7 +1552,7 @@
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                     // disease
-                    row.push(item.disease.efo_info[0].label);
+                    row.push(item.disease.efo_info.label);
 
                     // publication ID (hidden)
                     row.push( item.evidence.literature_ref.lit_id.split("/").pop() );

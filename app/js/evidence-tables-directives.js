@@ -123,7 +123,7 @@ angular.module('cttvDirectives')
                             row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                             // 0: disease
-                            row.push(item.disease.efo_info[0].label);
+                            row.push(item.disease.efo_info.label);
 
                             // 1: drug
                             row.push( "<a class='cttv-external-link' href='"+item.evidence.target2drug.urls[0].url+"' target='_blank'>" +
@@ -162,33 +162,6 @@ angular.module('cttvDirectives')
 
                             // col 5: pub ids (hidden)
                             //row.push(pmidsList.join(", "));
-
-                            /*
-                            var pubs = 0;
-                            if( checkPath(item, "evidence.target2drug.provenance_type.literature.references") ){
-                                pubs = item.evidence.target2drug.provenance_type.literature.references.length;
-                            }
-
-                            var pub="";
-                            if( pubs>0 ){
-                                action += "<br /><span><span class='badge'>" + pubs + (pubs==1 ? "</span> publication</span>" : "</span> publications</span>");
-                                pub=":<div>";
-                                item.evidence.target2drug.provenance_type.literature.references.forEach(function(lit){
-                                    pub+="<a href='"+lit.lit_id+"' target='_blank'>"+lit.lit_id.split('/').pop()+" <i class='fa fa-external-link'></i></a> ";
-                                });
-                                pub+="</div>";
-
-                            }
-
-                            if ( item.evidence.target2drug.urls && item.evidence.target2drug.urls[2] ) {
-                                var extLink = item.evidence.target2drug.urls[2];
-                                pub += "<br /><span><a target=_blank href=" + extLink.url + ">" + extLink.nice_name  + "</a></span>";
-                            }
-
-                            action+=pub;
-
-                            row.push(action);
-                            */
 
 
                             // 5: Activity
