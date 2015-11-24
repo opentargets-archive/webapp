@@ -567,7 +567,7 @@ angular.module('cttvDirectives', [])
 
         'use strict';
 
-        //var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+        var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
         /*
         * Generates and returns the string representation of the span element
