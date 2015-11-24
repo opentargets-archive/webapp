@@ -74,7 +74,7 @@ var pipelines = function () {
                 if (variantDB.dbxref) {
                     clinvarId = variantDB.dbxref.url.split("/").pop();
                 }
-                var this_disease = rec.disease.efo_info[0];
+                var this_disease = rec.disease.efo_info;
                 var this_target = rec.target.gene_info;
 
                 var refs = [];
@@ -95,6 +95,7 @@ var pipelines = function () {
                 if (highlight[snp_name]) {
                     snps[snp_name].highlight = true;
                 }
+
 
                 var association = {
                     "efo": this_disease.efo_id,
@@ -187,7 +188,7 @@ var pipelines = function () {
         for (var i=0; i<resp.body.data.length; i++) {
             var rec = resp.body.data[i];
             var this_snp = rec.variant.id[0];
-            var this_disease = rec.disease.efo_info[0];
+            var this_disease = rec.disease.efo_info;
             var snp_name = this_snp.split("/").pop();
             var this_target = rec.target.gene_info;
             if (snps[snp_name] === undefined) {

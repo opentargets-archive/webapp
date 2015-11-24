@@ -1,5 +1,5 @@
 {
-  "name": "cttv-webapp",
+  "name": "cttvWebapp",
   "version": "0.0.1",
   "description": "Web application for CTTV project 003",
   "readme": "README.md",
@@ -11,8 +11,11 @@
     "connect": "^3.3.5",
     "del": "^1.2.0",
     "express": "^4.12.3",
+    "google-closure-compiler": "^20151015.0.0",
     "gulp": "^3.8.10",
     "gulp-browserify": "^0.5.1",
+    "gulp-closure-compiler": "^0.3.1",
+    "gulp-concat": "^2.6.0",
     "gulp-css-purge": "^1.0.27",
     "gulp-gzip": "^1.1.0",
     "gulp-ignore": "^1.2.1",
@@ -21,6 +24,7 @@
     "gulp-mocha": "^2.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.0.1",
+    "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.2.0",
     "gulp-watch": "^3.0.0",
     "http-server": "^0.6.1",
@@ -38,7 +42,7 @@
     "shelljs": "^0.2.6"
   },
   "scripts": {
-    "postinstall": "bower install --allow-root; gulp build-browser",
+    "postinstall": "bower install --allow-root; gulp build-webapp",
     "start": "cd server && node server.js",
     "pretest": "npm install",
     "test": "gulp test",

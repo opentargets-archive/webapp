@@ -81,7 +81,9 @@ var geneAssociationsTree = function () {
                )
            .text(function (node) {
                if (node.is_leaf()) {
-                   var diseaseName = node.property(function (n) { return n.disease.name });
+                   var diseaseName = node.property(function (n) {
+                       return n.disease.name;
+                   });
                    if (diseaseName && diseaseName.length > 30) {
                        diseaseName = diseaseName.substring(0,30) + "...";
                    }
@@ -90,7 +92,10 @@ var geneAssociationsTree = function () {
                    }
 	    		   return diseaseName;
                }
-               return node.property("label");//todo: fix this to show the disease.name field
+               //return node.property("label");//todo: fix this to show the disease.name field
+               return node.property(function (n) {
+                   return n.disease ? n.disease.name : "";
+               });
            })
            .fontsize(14)
            .fontweight(function (node) {
