@@ -160,7 +160,7 @@ angular.module('cttvControllers')
 	    for (var i=0; i<tas.length; i++) {
 		var ta = tas[i];
 		for (var j=0; j<ta.children.length; j++) {
-		    nonRedundantDiseases[ta.children[j].efo_code] = 1;
+		    nonRedundantDiseases[ta.children[j].disease.id] = 1;
 		    var dts = ta.children[j].datatypes;
 		    for (var k=0; k<dts.length; k++) {
 			if (diseasesInDatatypes[dts[k].datatype] === undefined) {
@@ -293,8 +293,8 @@ angular.module('cttvControllers')
 
     $scope.selectedDisease = 0;
     $scope.selectDisease = function (d) {
-        $scope.highlightEFO = {efo: d.efo_code,
-            parent_efo: d._parent.efo_code,
+        $scope.highlightEFO = {efo: d.disease.id,
+            parent_efo: d._parent.disease.id,
             datatypes: d.datatypes
         };
         $scope.selectedDisease++;

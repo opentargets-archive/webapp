@@ -71,7 +71,7 @@
                                             </span>
 
                                             <!-- the actual text-->
-                                            <span id="cttv_targetAssociations_navBar_{{ta.name}}" ng-click="selectTherapeuticArea(ta.name)" style="display:block; padding-right:15px;">{{ta.label | upperCaseFirst}} <span class="text-lowlight cttv-facet-count">({{ta.children.length}})</span></span>
+                                            <span id="cttv_targetAssociations_navBar_{{ta.name}}" ng-click="selectTherapeuticArea(ta.name)" style="display:block; padding-right:15px;">{{ta.disease.name | upperCaseFirst}} <span class="text-lowlight cttv-facet-count">({{ta.children.length}})</span></span>
 
                                         </accordion-heading>
 
@@ -90,15 +90,15 @@
                                                     </span>
 
                                                     <!-- the actual text-->
-                                                    <span ng-click="selectDisease(d)" style="display:block; padding-left:15px; padding-right:15px;">{{d.label}}</span>
+                                                    <span ng-click="selectDisease(d)" style="display:block; padding-left:15px; padding-right:15px;">{{d.disease.name}}</span>
 
                                                 </accordion-heading>
 
                                                 <div class="jumbotron" style="text-align:center">
-                                                    <a href=/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}>
-                                                        <div id="cttv_targetAssociations_flower_{{d.efo_code}}_{{d._parent.efo_code}}" ></div>
+                                                    <a href=/evidence/{{search.query}}/{{d.disease.id}}?score_str={{filters.score_str[0]}}>
+                                                        <div id="cttv_targetAssociations_flower_{{d.disease.id}}_{{d._parent.disease.id}}" ></div>
                                                     </a>
-                                                    <a href="/evidence/{{search.query}}/{{d.efo_code}}?score_str={{filters.score_str[0]}}">View evidence details</a>
+                                                    <a href="/evidence/{{search.query}}/{{d.disease.id}}?score_str={{filters.score_str[0]}}">View evidence details</a>
                                                 </div>
 
                                             </accordion-group>

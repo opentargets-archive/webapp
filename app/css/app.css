@@ -47,7 +47,7 @@ body{
     overflow: hidden;
     white-space: nowrap;
     color: white;
-    display: block;
+    display: none;
     padding: 5px 50px;
     margin: 1px 0;
     font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -98,6 +98,14 @@ body{
 .masthead .container{
     height: auto;
 }
+
+.cttv-logotype {
+    font-size: 24px;
+    font-weight: 100;
+    color: #888;
+    line-height: 24px;
+}
+
 
 
 /*
@@ -398,7 +406,18 @@ a:focus {
     outline: none;
 }
 
+.cttv-external-link{
+    /*white-space: nowrap;*/
+}
 
+.cttv-external-link::after {
+    /*font: normal normal normal 14px/1 FontAwesome;*/
+    font-family: 'FontAwesome';
+    content: "\00A0\f08e";  /* non-breaking space + fontawesome link icon */
+    padding-left: 0px;
+    font-size: inherit;
+    color: inherit;
+}
 
 /*
 * Backgrounds
@@ -639,7 +658,53 @@ table.dataTable thead .sorting {
     padding: 10px;
 }
 
+/* Evidence tables */
 
+.cttv-evidence-table{
+
+}
+
+.cttv-evidence-table>thead>tr>th {
+    border-bottom: none;
+    border-top: none;
+    border-right: 1px solid #DDD;
+    padding: 6px !important;
+    padding-right: 26px !important;
+    line-height: 15px;
+    font-weight: 300;
+    font-size: 16px;
+}
+
+.cttv-evidence-table thead th:last-child {
+    border-right: none;
+}
+
+.cttv-evidence-table tbody {
+    font-size: 12px;
+}
+
+.cttv-publications-string {
+    white-space:nowrap;
+}
+
+.cttv-evidence-table .badge{
+    background: #DDD;
+    color: #777;
+}
+
+.cttv-evidence-table ul {
+    padding-left: 15px;
+}
+
+.cttv-evidence-table tbody tr td {
+    padding: 8px 8px 16px 8px !important;   /* allow extra padding at the bottom of each row */
+    line-height: 14px;
+}
+
+a.dt-button{
+    padding: 2px 7px !important;
+    font-size: 16px !important;
+}
 
 /*
 * Matrix table
