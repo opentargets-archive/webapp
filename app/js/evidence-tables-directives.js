@@ -123,7 +123,7 @@ angular.module('cttvDirectives')
                             row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
                             // 0: disease
-                            row.push(item.disease.efo_info[0].label);
+                            row.push(item.disease.efo_info.efo_id);
 
                             // 1: drug
                             row.push( "<a class='cttv-external-link' href='"+item.evidence.target2drug.urls[0].url+"' target='_blank'>" +
