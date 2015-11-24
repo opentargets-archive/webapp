@@ -7,7 +7,11 @@ angular.module('cttvDirectives', [])
     /**
     * Matrix (heatmap) view for target associations
     */
-    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', 'cttvConsts', '$location', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile, cttvConsts, $location) {
+    // .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', 'cttvConsts', '$location', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile, cttvConsts, $location) {
+
+    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location) {
+
+
         'use strict';
 
         var cols = [
@@ -559,10 +563,13 @@ angular.module('cttvDirectives', [])
     *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
     *   This is useful in conjunction with a spinner where you can have ng-show="loading"
     */
-    .directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', function ($log, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts) {
+    // .directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', function ($log, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts) {
+    .directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvConsts', function ($log, cttvUtils, cttvConsts) {
+
         'use strict';
 
-        var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+        //var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+
         /*
         * Generates and returns the string representation of the span element
         * with color information for each cell
@@ -980,7 +987,7 @@ angular.module('cttvDirectives', [])
     /*
     *
     */
-    .directive('cttvSearchSuggestions', function(){
+    .directive('cttvSearchSuggestions', [function(){
         'use strict';
 
         return {
@@ -991,14 +998,14 @@ angular.module('cttvDirectives', [])
 
             }
         };
-    })
+    }])
 
 
 
     /**
     * Flower graph
     */
-    .directive('cttvGeneDiseaseAssociation', function(){
+    .directive('cttvGeneDiseaseAssociation', [function(){
         'use strict';
 
         return {
@@ -1030,7 +1037,7 @@ angular.module('cttvDirectives', [])
                 );
             }
         };
-    })
+    }])
 
 
 
@@ -1039,7 +1046,7 @@ angular.module('cttvDirectives', [])
     * Options:
     * size: size of the spinner icon; values 1-6; 1 is default
     */
-    .directive('cttvProgressSpinner', function(){
+    .directive('cttvProgressSpinner', [function(){
         'use strict';
 
         return {
@@ -1051,7 +1058,7 @@ angular.module('cttvDirectives', [])
                 }
             }
         };
-    })
+    }])
 
 
 
@@ -1086,7 +1093,7 @@ angular.module('cttvDirectives', [])
     /*
     *  Esssentially just a wrapper for the table tag, defined in hte template
     */
-    .directive('cttvMatrixTable', function(){
+    .directive('cttvMatrixTable', [function(){
         'use strict';
 
         return {
@@ -1109,14 +1116,14 @@ angular.module('cttvDirectives', [])
                 */
             }
         };
-    })
+    }])
 
 
 
     /*
     *
     */
-    .directive('cttvMatrixLegend', function(){
+    .directive('cttvMatrixLegend', [function(){
         'use strict';
 
         var template = '<div class="matrix-legend matrix-legend-layout-{{layout}} clearfix">'
@@ -1161,7 +1168,7 @@ angular.module('cttvDirectives', [])
 
             //}
         };
-    })
+    }])
 
 
 
