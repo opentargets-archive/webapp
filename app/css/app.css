@@ -142,6 +142,15 @@ padding-left: 0px;*/
 }
 
 
+/*
+* Cookies notice
+*/
+
+.cookiebanner {
+    font-family: inherit !important;
+    font-weight: 200;
+}
+
 .dataTables_wrapper{
 
 }
