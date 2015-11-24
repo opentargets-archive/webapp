@@ -110,6 +110,8 @@ var bubblesView = function () {
                 if (d._parent === undefined) {
                     return d[conf.key];
                 }
+                var id = d[conf.key] + "_" + d._parent[conf.key];
+                console.log(id);
                 return d[conf.key] + "_" + d._parent[conf.key];
             });
 
