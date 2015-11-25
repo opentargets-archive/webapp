@@ -150,7 +150,7 @@ gulp.task('build-webapp', ['init', 'build-components-min'], function () {
             debug: true
         }))
         .pipe(concat(webappFileMin))
-        //.pipe(uglify())
+        .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(buildDir));
 });
