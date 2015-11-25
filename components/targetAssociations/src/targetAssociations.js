@@ -24,7 +24,7 @@ var geneAssociations = function () {
             .data(config.root)
             .value("association_score")
             .key("__disease_id")
-            .label("name")
+            .label("__disease_name")
             .diameter(config.diameter);
 
         var tree = bubblesView.data();
@@ -79,6 +79,7 @@ var geneAssociations = function () {
         if (data.children === undefined) {
             return data;
         }
+        data.name = ""; // the root doesn't include a name
         var therapeuticAreas = data.children;
         for (var i=0; i<therapeuticAreas.length; i++) {
             var tA = therapeuticAreas[i];
@@ -88,8 +89,9 @@ var geneAssociations = function () {
                 tA.children = [_.clone(tA)];
                 //continue;
             }
+            //tA.__disease_id = tA.disease.id;
             tA.__disease_id = tA.disease.id;
-            tA.name = tA.disease.name;
+            tA.__disease_name = tA.disease.name;
             var ta_node = tnt_node(tA);
             var flattenChildren = ta_node.flatten(true).data().children;
             var newChildren = [];
@@ -97,8 +99,9 @@ var geneAssociations = function () {
             for (var j=0; j<flattenChildren.length; j++) {
                 var childData = flattenChildren[j];
                 // Put some properties to have direct access to disease name and id (will be used by bubblesView)
+                //childData.name = childData.disease.id;
                 childData.__disease_id = childData.disease.id;
-                childData.name = childData.disease.name;
+                childData.__disease_name = childData.disease.name;
                 if (nonRedundant[childData.name] === undefined) {
                     nonRedundant[childData.name] = 1;
                     newChildren.push(childData);
@@ -188,21 +191,24 @@ var geneAssociations = function () {
     };
 
     ga.selectTherapeuticArea = function (efo) {
-	var taNode = config.root.find_node (function (node) {
-	    return node.property("name") == efo;
-	});
-	if (taNode.property("focused") === true) {
-	    taNode.property("focused", undefined);
-	    bubblesView.focus(config.root);
-	} else {
-	    taNode.property("focused", true);
-	    // release prev focused node
-	    bubblesView.focus().property("focused", undefined);
-	    // focus the new node
-	    bubblesView.focus(taNode);
-	}
-	bubblesView.select(config.root);
-	return this;
+        var taNode = config.root.find_node (function (node) {
+            return node.property("name") == efo;
+        });
+        if (!taNode) {
+            taNode = config.root;
+        }
+        if (taNode.property("focused") === true) {
+            taNode.property("focused", undefined);
+            bubblesView.focus(config.root);
+        } else {
+            taNode.property("focused", true);
+            // release prev focused node
+            bubblesView.focus().property("focused", undefined);
+            // focus the new node
+            bubblesView.focus(taNode);
+        }
+        bubblesView.select(config.root);
+        return this;
     };
 
     ga.selectDisease = function (efo) {

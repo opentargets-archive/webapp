@@ -282,14 +282,14 @@ angular.module('cttvControllers')
     //     $(".cttv-nav").hide();
     // }
 
-	$scope.toggleNavigation = function () {
-	    for (var ta in $scope.tagroup.tas) {
-		$scope.tagroup.tas[ta] = false;
-	    }
-	    $scope.focusEFO = "cttv_disease";
-	    currentFocus = "cttv_disease";
-	    $scope.diseasegroupOpen = false;
-	};
+    $scope.toggleNavigation = function () {
+        for (var ta in $scope.tagroup.tas) {
+            $scope.tagroup.tas[ta] = false;
+        }
+        $scope.focusEFO = "cttv_disease";
+        currentFocus = "cttv_disease";
+        $scope.diseasegroupOpen = false;
+    };
 
     $scope.selectedDisease = 0;
     $scope.selectDisease = function (d) {
