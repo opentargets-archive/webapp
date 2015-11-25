@@ -314,9 +314,8 @@ angular.module('cttvDirectives', [])
     /*
     *
     */
-    .directive('cttvMatrixLegend', [function(){
+    .directive ('cttvMatrixLegend', function () {
         'use strict';
-
         var template = '<div class="matrix-legend matrix-legend-layout-{{layout}} clearfix">'
 
         // label above (v layout) or left (h layout) of legend
@@ -336,31 +335,23 @@ angular.module('cttvDirectives', [])
         // extra info
         + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="/faq#association-score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>'
         ;
-
         return {
             restrict: 'EA',
             template: template,
-            //replace: true,
             scope: {
                 labels: '=',
                 colors: '=',
                 legendText: '=',
                 layout: '@'
             },
-            controller: function($scope){
+
+            controller: ['$scope', function($scope){
                 // set the default layout
                 $scope.layout = $scope.layout ? $scope.layout : 'v';
-            }
-            //link: function(scope, elem, attrs){
+            }]
 
-            // elem.on('$destroy', function() {
-            //     // remove objects from memory as required
-            // });
-
-            //}
         };
-    }])
-
+    })
 
 
     /**
@@ -1384,7 +1375,7 @@ angular.module('cttvDirectives', [])
 
         return {
             scope : {},
-            controller: function ($scope) {
+            controller: ['$scope', function ($scope) {
                 this.dims = function () {
                     return {
                         'height': w[0].innerHeight,
@@ -1395,7 +1386,7 @@ angular.module('cttvDirectives', [])
                 w.bind('resize', function () {
                     $scope.$apply();
                 });
-            }
+            }]
         };
     }])
 

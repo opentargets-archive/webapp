@@ -203,8 +203,11 @@
             </div>
             <!-- End Footer-->
 
-            <!-- <script type="text/javascript" src="bower_components/angular/angular.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="bower_components/angular-route/angular-route.js?v=16112015"></script> -->
+
+            <!-- Angular && web app -->
+            <script src="build/cttvWebapp.min.js?v=25112015" type="text/javascript"></script> <!-- extra directive -->
+            <!-- <script type="text/javascript" src="bower_components/angular/angular.min.js?v=16112015"></script> -->
+            <!-- <script type="text/javascript" src="bower_components/angular-route/angular-route.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="bower_components/angulartics/dist/angulartics.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="bower_components/angulartics/dist/angulartics-piwik.min.js?v=16112015"></script> -->
@@ -212,19 +215,41 @@
             <!-- <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="vendor/cola/cola.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="js/angularjs-viewhead.js?v=16112015"></script> -->
-
+            <!-- lodash -->
+            <!-- <script type="text/javascript" src="bower_components/lodash/lodash.min.js?v=16112015"></script> -->
             <!-- readmore -->
             <!-- <script type="text/javascript" src="bower_components/angular-animate/angular-animate.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="bower_components/angular-read-more/dist/readmore.min.js?v=16112015"></script> -->
 
-            <!-- Angular -->
-            <script src="build/cttvWebapp.min.js" type="text/javascript"></script>
+            <!-- Our angular stuff -->
+            <!-- <script src="js/app.js" type="text/javascript"></script>
+            <script type="text/javascript" src="js/app.js?v=16112015"></script>
+            <script type="text/javascript" src="js/controllers.js?v=16112015"></script>
+            <script type="text/javascript" src="js/services.js?v=16112015"></script>
+            <script type="text/javascript" src="js/api-service.js"></script>
+            <script type="text/javascript" src="js/dictionary-service.js?v=16112015"></script>
+            <script type="text/javascript" src="js/const-service.js?v=16112015"></script>
+            <script type="text/javascript" src="js/config-service.js?v=16112015"></script>
+            <script type="text/javascript" src="js/filters-service.js?v=16112015"></script>
+            <script type="text/javascript" src="js/filters.js?v=16112015"></script>
+            <script type="text/javascript" src="js/search-box-controller.js?v=16112015"></script>
+            <script type="text/javascript" src="js/target-associations-controller.js?v=16112015"></script>
+            <script type="text/javascript" src="js/disease-associations-controller.js?v=16112015"></script>
+            <script type="text/javascript" src="js/target-disease-controller.js?v=16112015"></script>
+            <script type="text/javascript" src="js/target-controller.js?v=16112015"></script>
+            <script type="text/javascript" src="js/disease-controller.js?v=16112015"></script>
+            <script type="text/javascript" src="js/directives.js?v=16112015"></script> -->
+            <!-- <script src="js/extra-directive.js" type="text/javascript"></script> -->
+            <!-- <script src="js/disease-associations-table-directive.js" type="text/javascript"></script> --> -->
+            <!-- <script src="js/target-associations-table-directive.js" type="text/javascript"></script> -->
+            <!-- <script src="js/target-associations-tree-directive.js" type="text/javascript"></script> -->
+            <!-- <script src="js/target-associations-bubbles-directive.js" type="text/javascript"></script> -->
+            <!-- <script type="text/javascript" src="js/evidence-tables-directives.js?v=16112015"></script> -->
+            <!-- <script type="text/javascript" src="js/target-associations-bubbles-directive.js?v=16112015"></script> -->
+            <!-- <script type="text/javascript" src="js/disease-graph-directive.js?v=16112015"></script> -->
 
             <!-- Components -->
             <script type="text/javascript" src="build/components-cttvWebapp.min.js?v=19112015"></script>
-
-            <!-- lodash -->
-            <!-- <script type="text/javascript" src="bower_components/lodash/lodash.min.js?v=16112015"></script> -->
 
             <!-- PMC Citation -->
             <!-- <link type="text/css" rel="stylesheet" href="node_modules/biojs-vis-pmccitation/css/style.css"/> -->
@@ -246,65 +271,10 @@
             <script language="JavaScript" type="text/javascript" src="vendor/expressionAtlasBundle/vendor.bundle.js?v=16112015"></script>
             <script language="JavaScript" type="text/javascript" src="vendor/expressionAtlasBundle/expression-atlas-heatmap.bundle.js?v=16112015"></script>
 
-            <!-- <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-1.9.1.min.js"></script>
-            <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/atlas.css"/>
-            <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/jquery-ui.min.css"/>
-            <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/table-grid.css"/>
-            <link type="text/css" rel="stylesheet" href="vendor/expressionAtlasProd/heatmap-and-anatomogram.css"/>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/react-0.11.1.min.js"></script>
-
-            <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-ui.min.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/jquery-migrate-1.2.0.min.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.ba-throttle-debounce.min.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.browser.min.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/factorTooltip.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/factorTooltipModule.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/contrastTooltip.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/contrastTooltipModule.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/helpTooltipsModule.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/genePropertiesTooltipModule.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/highlight.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/anatomogramModule.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.svg.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/EventEmitter-4.2.7.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/jquery.hc-sticky.min.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/modernizr.minified.2.1.6.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/AtlasHeatmapReact.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/highcharts.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/highcharts-more.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/exporting.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/react-radiogroup.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/cellBaselineVariance.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/heatmap.js"></script>
-            <script type="text/javascript" src="vendor/expressionAtlasProd/heatmapContainer.js"></script> -->
-
             <!-- ie9 cors support -->
             <!--[if lte IE 9]>
             <script language="JavaScript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.3/jquery.xdomainrequest.min.js"></script>
             <![endif]-->
-
-
-            <!-- Our angular stuff -->
-            <!-- <script type="text/javascript" src="js/app.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/controllers.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/services.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/api-service.js"></script> -->
-            <!-- <script type="text/javascript" src="js/dictionary-service.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/const-service.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/config-service.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/filters-service.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/filters.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/search-box-controller.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/target-associations-controller.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/disease-associations-controller.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/target-disease-controller.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/target-controller.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/disease-controller.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/directives.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/evidence-tables-directives.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/target-associations-bubbles-directive.js?v=16112015"></script> -->
-            <!-- <script type="text/javascript" src="js/disease-graph-directive.js?v=16112015"></script> -->
-
 
             <!-- DataTable stuff
             <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
