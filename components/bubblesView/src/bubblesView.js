@@ -451,8 +451,9 @@ var bubblesView = function () {
         // Breadcrums
         var up = [];
         node.upstream (function (ancestor) {
-            if (ancestor.parent() === undefined) {
-                up.push(ancestor.property(conf.label) || "All");
+            if (ancestor.parent() === undefined) { // Root
+                //up.push(ancestor.property(conf.label) || "All");
+                up.push("All");
             } else {
                 up.push(node.property(conf.label));
             }
