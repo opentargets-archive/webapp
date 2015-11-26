@@ -43,6 +43,7 @@ var webapp3rdparty = webappName + "-3rdParty.js";
 var webapp3rdpartyFull = join (buildDir, webapp3rdparty);
 var webapp3rdpartyMin = webapp3rdparty + ".min.js";
 var webapp3rdpartyMinFull = join (buildDir, webapp3rdpartyMin);
+var webapp3rdpartyCss = webappName + "-3rdParty.css";
 
 // components output
 var componentsFile = componentsName + ".js";
@@ -79,10 +80,10 @@ gulp.task('lint', function() {
 
 gulp.task('unitTest', function (done) {
     karma.start({
-	configFile: __dirname + '/karma.conf.js',
-	singleRun: true
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
     }, function() {
-	done();
+        done();
     });
 });
 
@@ -105,7 +106,7 @@ gulp.task('clean', function () {
 });
 
 // just makes sure that the build dir exists
-gulp.task('init', ['clean'], function() {
+gulp.task('init', function() {
     mkdirp(buildDir, function (err) {
         if (err) {
             console.error(err);
@@ -154,14 +155,31 @@ gulp.task('build-components-gzip', ['build-components-min'], function() {
         .pipe(gulp.dest(buildDir));
 });
 
-gulp.task('build-3rdparty', function () {
-    return gulp.src(webappFiles.thirdParty)
+gulp.task('copy-fontawesome', function () {
+    var fontawesomePath = buildDir + '/fontawesome/';
+    mkdirp(fontawesomePath, function (err) {
+            if (err) {
+                console.error(err);
+            }
+        });
+    return gulp.src('bower_components/components-font-awesome/**/*')
+        .pipe(gulp.dest(fontawesomePath));
+});
+
+gulp.task('build-3rdparty-styles', ['copy-fontawesome'], function () {
+    return gulp.src(webappFiles.thirdParty.css)
+        .pipe(concat(webapp3rdpartyCss))
+        .pipe(gulp.dest(buildDir));
+});
+
+gulp.task('build-3rdparty', ['build-3rdparty-styles'], function () {
+    return gulp.src(webappFiles.thirdParty.js)
         .pipe(concat(webapp3rdparty))
         .pipe(gulp.dest(buildDir));
 });
 
 gulp.task('build-webapp-styles', function () {
-    return gulp.src(webappFiles.css)
+    return gulp.src(webappFiles.cttv.css)
         .pipe(sourcemaps.init())
         .pipe(concat(webappName + ".min.css"))
         .pipe(minifyCss({compatibility: 'ie9'}))
@@ -170,7 +188,7 @@ gulp.task('build-webapp-styles', function () {
 });
 
 gulp.task('build-webapp', ['build-webapp-styles'], function () {
-    return gulp.src(webappFiles.cttv)
+    return gulp.src(webappFiles.cttv.js)
         .pipe(sourcemaps.init({
             debug: true
         }))
