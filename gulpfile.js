@@ -90,15 +90,14 @@ gulp.task('unitTest', function (done) {
 //gulp.task('test', ['unitTest', 'e2eTest']);
 gulp.task('test', ['unitTest']);
 
-gulp.task('watch', function() {
-    gulp.watch(['./app/js/*.js',
-		'./test/*.js',
-		'./components/diseaseGraph/src/*.js',
-		'./components/targetGeneTree/src/*.js',
-        './components/targetGenomeBrowser/src/*.js'
-    ], ['build-components','test']);
+gulp.task('watch-components', function () {
+    return gulp.watch([
+        './components/targetAssociationsTree/src/**/*',
+        './components/diseaseGraph/src/**/*',
+        './components/targetGeneTree/src/**/*',
+        './components/targetGenomeBrowser/src/**/*'
+    ], ['build-components-min']);
 });
-
 
 // will remove everything in build
 gulp.task('clean', function () {
