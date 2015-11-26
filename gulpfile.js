@@ -11,6 +11,7 @@ var closureCompiler = require('gulp-closure-compiler');
 var browserify = require('gulp-browserify');
 var sass = require('gulp-sass');
 var csspurge = require('gulp-css-purge');
+var minifyCss = require('gulp-minify-css');
 
 var gzip = require('gulp-gzip');
 var del = require("del");
@@ -36,6 +37,12 @@ var webappFileFull = join (buildDir, webappFile);
 var webappFileMin = webappName + ".min.js";
 var webappFileMinFull = join (buildDir, webappFileMin);
 var webappFileGz = webappFileMin + "gz";
+
+// 3rd party
+var webapp3rdparty = webappName + "-3rdParty.js";
+var webapp3rdpartyFull = join (buildDir, webapp3rdparty);
+var webapp3rdpartyMin = webapp3rdparty + ".min.js";
+var webapp3rdpartyMinFull = join (buildDir, webapp3rdpartyMin);
 
 // components output
 var componentsFile = componentsName + ".js";
@@ -107,18 +114,21 @@ gulp.task('init', ['clean'], function() {
 });
 
 // sass-import
-gulp.task('sass', function () {
+gulp.task('components-sass', function () {
     return gulp.src("components.scss")
-        .pipe(sass({
+    .pipe(sass({
 	    errLogToConsole: true
 	}))
 	.pipe(csspurge())
-	.pipe(rename(componentsName + '.css'))
-        .pipe(gulp.dest(buildDir));
+    .pipe(sourcemaps.init())
+    .pipe(minifyCss({compatibility: 'ie9'}))
+	.pipe(rename(componentsName + '.min.css'))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest(buildDir));
 });
 
 // browserify debug
-gulp.task('build-components',['sass'], function() {
+gulp.task('build-components',['components-sass'], function() {
     return gulp.src(componentsConfig)
 	.pipe(browserify({debug:true}))
 	.pipe(rename(componentsFile))
@@ -128,24 +138,39 @@ gulp.task('build-components',['sass'], function() {
 // browserify min
 gulp.task('build-components-min',['build-components'], function() {
     return gulp.src(componentsFileFull)
+    .pipe(rename(componentsFileMin))
+    .pipe(sourcemaps.init({
+        debug: true
+    }))
 	.pipe(uglify())
-	.pipe(rename(componentsFileMin))
+    .pipe(sourcemaps.write('./'))
 	.pipe(gulp.dest(buildDir));
 });
 
-gulp.task('build-components-gzip', ['build-browser-min'], function() {
+gulp.task('build-components-gzip', ['build-components-min'], function() {
     return gulp.src(componentsFileMinFull)
         .pipe(gzip({append: false, gzipOptions: { level: 9 }}))
         .pipe(rename(componentsFileGz))
         .pipe(gulp.dest(buildDir));
 });
 
-gulp.task('build-webapp', ['init', 'build-components-min'], function () {
-    return gulp.src(webappFiles)
-        // .pipe(closureCompiler({
-        //     compilerPath: 'node_modules/google-closure-compiler/compiler.jar',
-        //     fileName: webappFileMin
-        // }))
+gulp.task('build-3rdparty', function () {
+    return gulp.src(webappFiles.thirdParty)
+        .pipe(concat(webapp3rdparty))
+        .pipe(gulp.dest(buildDir));
+});
+
+gulp.task('build-webapp-styles', function () {
+    return gulp.src(webappFiles.css)
+        .pipe(sourcemaps.init())
+        .pipe(concat(webappName + ".min.css"))
+        .pipe(minifyCss({compatibility: 'ie9'}))
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(buildDir));
+});
+
+gulp.task('build-webapp', ['build-webapp-styles'], function () {
+    return gulp.src(webappFiles.cttv)
         .pipe(sourcemaps.init({
             debug: true
         }))
@@ -154,3 +179,5 @@ gulp.task('build-webapp', ['init', 'build-components-min'], function () {
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(buildDir));
 });
+
+gulp.task('build-all', ['init', 'build-3rdparty', 'build-components-min', 'build-webapp']);

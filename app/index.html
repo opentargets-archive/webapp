@@ -22,17 +22,18 @@
 
         <title ng-bind-template="CTTV Core{{viewTitle ? ' - '+viewTitle : ''}}"></title>
 
-        <link href="bower_components/bootstrap/dist/css/bootstrap.min.css?v=16112015" rel="stylesheet" />
-        <link href="bower_components/components-font-awesome/css/font-awesome.min.css?v=16112015" rel="stylesheet" />
+        <link rel="stylesheet" href="build/cttvWebapp.min.css" rel="stylesheet" />
+        <!-- <link href="bower_components/bootstrap/dist/css/bootstrap.min.css?v=16112015" rel="stylesheet" /> -->
+        <!-- <link href="bower_components/components-font-awesome/css/font-awesome.min.css?v=16112015" rel="stylesheet" /> -->
 
         <!-- Components -->
-        <link rel="stylesheet" href="build/components-cttvWebapp.css?v=19112015"  />
+        <link rel="stylesheet" href="build/components-cttvWebapp.min.css?v=19112015"  />
         <!-- <link href="node_modules/cttv.bubblesView/build/bubblesView.css" rel="stylesheet" /> -->
         <!-- <link href="node_modules/cttv.targetAssociations/build/cttv.targetAssociations.css" rel="stylesheet" /> -->
         <!-- <link href="node_modules/cttv.targetGenomeBrowser/build/index.css" rel="stylesheet" /> -->
         <!-- <link href="node_modules/cttv.targetTranscriptView/build/index.css" rel="stylesheet" /> -->
         <!-- <link href="node_modules/cttv.flowerView/build/flowerView.css" rel="stylesheet"/> -->
-        <link rel="stylesheet" href="css/app.css?v=16112015">
+        <!-- <link rel="stylesheet" href="css/app.css?v=16112015"> -->
         <!-- <link rel="stylesheet" href="node_modules/tnt.genome/build/index.css"> -->
 
 
@@ -65,7 +66,8 @@
 
         <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9,b-1.0.3,b-html5-1.0.3/datatables.min.css"/> -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9/datatables.min.css?v=16112015"/>
-        <link rel="stylesheet" type="text/css" href="./vendor/datatables/buttons.dataTables.min.css?v=16112015"/> <!-- TODO: while we get the fix in official release, same for JS-->
+        <!-- TODO: while we get the fix in official release, same for JS-->
+        <!-- <link rel="stylesheet" type="text/css" href="./vendor/datatables/buttons.dataTables.min.css?v=16112015"/>  -->
 
     </head>
 
@@ -205,6 +207,7 @@
 
 
             <!-- Angular && web app -->
+            <script src="build/cttvWebapp-3rdParty.js?v=25112015" type="text/javascript"></script>
             <script src="build/cttvWebapp.min.js?v=25112015" type="text/javascript"></script> <!-- extra directive -->
             <!-- <script type="text/javascript" src="bower_components/angular/angular.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="bower_components/angular-route/angular-route.min.js?v=16112015"></script> -->
@@ -240,7 +243,7 @@
             <script type="text/javascript" src="js/disease-controller.js?v=16112015"></script>
             <script type="text/javascript" src="js/directives.js?v=16112015"></script> -->
             <!-- <script src="js/extra-directive.js" type="text/javascript"></script> -->
-            <!-- <script src="js/disease-associations-table-directive.js" type="text/javascript"></script> --> -->
+            <!-- <script src="js/disease-associations-table-directive.js" type="text/javascript"></script> -->
             <!-- <script src="js/target-associations-table-directive.js" type="text/javascript"></script> -->
             <!-- <script src="js/target-associations-tree-directive.js" type="text/javascript"></script> -->
             <!-- <script src="js/target-associations-bubbles-directive.js" type="text/javascript"></script> -->
@@ -263,7 +266,7 @@
             <script type="text/javascript" src="vendor/proteinFeaturesViewer/featuresviewer.min.js?v=16112015"></script>
 
             <!-- Pathway viewer -->
-            <script type="text/javascript" language="javascript" src="/proxy/www.reactome.org/DiagramJs/diagram/diagram.nocache.js?v=151105"></script>
+            <script type="text/javascript" language="javascript" src="/proxy/www.reactome.org/DiagramJs/diagram/diagram.nocache.js?v=251105"></script>
 
             <!-- Expression Atlas -->
             <!-- <script language="JavaScript" type="text/javascript" src="//www.ebi.ac.uk/gxa/resources/js-bundles/vendor.bundle.js"></script> -->
