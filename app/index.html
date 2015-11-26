@@ -290,12 +290,12 @@
             <script type="text/javascript" src="./vendor/datatables/dataTables.buttons.min.js?v=16112015"></script>  <!-- TODO: remove this nightly build when fixes are included in official release -->
             <script type="text/javascript" src="./vendor/datatables/buttons.html5.min.js?v=16112015"></script>  <!--TODO: remove this when fixes are included in official release -->
 
-            <!-- Cookie notification -->
+            <!-- Cookie notification-->
             <script type="text/javascript" id="cookiebanner" src="./vendor/cookiebanner/cookiebanner.min.js"
                     data-height="50px"
                     data-link="#337ab7"
                     data-fontfamily="inherit"
-                    data-close-text="<i style='font-size:18px' class='fa fa-check-circle'></i>"
+                    data-close-text="<span class='btn btn-success btn-xs'><i class='fa fa-check-circle'></i> I agree</span>"
                     data-moreinfo="http://ec.europa.eu/ipg/basics/legal/cookies/index_en.htm" >
             </script>
 
@@ -311,8 +311,9 @@
                     document.getElementById('cttv-beta-ribbon').innerHTML=location.hostname.split('.')[0].toUpperCase()
                 }
             }
-                window.onload = showRibbon;
+            window.onload = showRibbon;
             </script>
+
             <!-- Piwik -->
             <script type="text/javascript">
             var _paq = _paq || [];
