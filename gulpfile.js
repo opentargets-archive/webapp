@@ -157,15 +157,26 @@ gulp.task('build-components-gzip', ['build-components-min'], function() {
 gulp.task('copy-fontawesome', function () {
     var fontawesomePath = buildDir + '/fontawesome/';
     mkdirp(fontawesomePath, function (err) {
-            if (err) {
-                console.error(err);
-            }
-        });
+        if (err) {
+            console.error(err);
+        }
+    });
     return gulp.src('bower_components/components-font-awesome/**/*')
         .pipe(gulp.dest(fontawesomePath));
 });
 
-gulp.task('build-3rdparty-styles', ['copy-fontawesome'], function () {
+gulp.task('copy-bootstrap', function () {
+    var bootstrapPath = buildDir + '/bootstrap/';
+    mkdirp (bootstrapPath, function (err) {
+        if (err) {
+            console.error(err);
+        }
+    });
+    return gulp.src('bower_components/bootstrap/**/*')
+        .pipe(gulp.dest(bootstrapPath));
+});
+
+gulp.task('build-3rdparty-styles', ['copy-bootstrap', 'copy-fontawesome'], function () {
     return gulp.src(webappFiles.thirdParty.css)
         .pipe(concat(webapp3rdpartyCss))
         .pipe(gulp.dest(buildDir));
