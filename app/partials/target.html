@@ -169,7 +169,7 @@
                             </a>
                         </div>
                         <div class="epmc_Citation_journal">
-                            <a href='//europepmc.org/search?query=JOURNAL:"{{citation.journalTitle}}"' class="epmc_Citation_link">{{citation.journalTitle}}</a> <span>[{{citation.pubYear}} {{citation.journalVolume}}<span ng-if="citation.issue">({{citation.issue}})</span>:{{citation.pageInfo}}]</span>
+                            <a href='//europepmc.org/search?query=JOURNAL:"{{citation.journalTitle}}"' class="epmc_Citation_link">{{citation.journalTitle}}</a> <span>{{citation.pubYear}} {{citation.journalVolume}}<span ng-if="citation.issue">({{citation.issue}})</span>:{{citation.pageInfo}}</span>
                         </div>
                         <div class="epmc_Citation_source">PMID:{{citation.pmid}} <span ng-if="citation.pmcid">PMCID:{{citation.pmcid}}</span></div>
                         <span class="label label-success">{{citation.citedByCount}} citation<span ng-if="citation.citedByCount != 1">s</span></span>
