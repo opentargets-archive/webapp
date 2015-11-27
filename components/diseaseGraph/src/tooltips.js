@@ -51,9 +51,10 @@ var tooltips = function () {
                     });
                     for (var i=0; i<d3.min([data.length, 10]); i++) {
                         var thisAssociation = data[i];
+
                         obj.rows.push({
-                            "label": "<a href=/target/" + thisAssociation.gene_id + "/associations>" + thisAssociation.label + "</a>",
-                            "value": "<a href=/evidence/" + thisAssociation.gene_id + "/" + efo.efo + ">" + "See Evidence"
+                            "label": "<a href=/target/" + thisAssociation.target.id + "/associations>" + thisAssociation.target.symbol + "</a>",
+                            "value": "<a href=/evidence/" + thisAssociation.target.id + "/" + thisAssociation.disease.id + ">" + "See Evidence"
                         });
                     }
                 }
