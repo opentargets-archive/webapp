@@ -205,7 +205,7 @@ a.accordion-toggle{
 }
 
 .accordionCell {
-    overflow : scroll
+    overflow : auto;
 }
 
 .accordion-toggle { /* Needed for ie9? */
