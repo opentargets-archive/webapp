@@ -17,7 +17,8 @@ var webappFiles = {
         ],
 
         'css': [
-            'bower_components/bootstrap/dist/css/bootstrap.css'
+            'bower_components/bootstrap/dist/css/bootstrap.css',
+            // 'app/vendor/datatables/buttons.dataTables.min.css'
         ],
         'cssCopyDir': [
             'bower_components/components-font-awesome/**/*'
@@ -52,10 +53,10 @@ var webappFiles = {
         ],
 
         css: [
-            'app/bower_components/bootstrap/dist/css/bootstrap.css',
-            'app/bower_components/components-font-awesome/css/font-awesome.css',
+            // 'app/bower_components/bootstrap/dist/css/bootstrap.css',
+            // 'app/bower_components/components-font-awesome/css/font-awesome.css',
             'app/css/app.css',
-            'app/vendor/datatables/buttons.dataTables.min.css'
+            // 'app/vendor/datatables/buttons.dataTables.min.css'
         ]
     },
 
