@@ -17,8 +17,7 @@ var webappFiles = {
         ],
 
         'css': [
-            'bower_components/bootstrap/dist/css/bootstrap.css',
-            'app/vendor/datatables/buttons.dataTables.min.css'
+            'bower_components/bootstrap/dist/css/bootstrap.css'
         ],
         'cssCopyDir': [
             'bower_components/components-font-awesome/**/*'
