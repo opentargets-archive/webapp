@@ -102,7 +102,7 @@ gulp.task('watch-components', function () {
 gulp.task('watch-cttv', function () {
     return gulp.watch([
         './app/js/**/*',
-        './app/css/**/*',
+        './app/css/**/*'
     ], ['build-webapp']);
 });
 
