@@ -142,14 +142,56 @@ padding-left: 0px;*/
 }
 
 
+
 /*
-* Cookies notice
-*/
+ * Cookies notice
+ */
 
 .cookiebanner {
     font-family: inherit !important;
     font-weight: 200;
 }
+
+.cookiebanner-close {
+
+}
+
+
+/*
+ * FontAwesome styles
+ */
+
+
+/*.fa-spin {
+  -webkit-animation: fa-spin 1s infinite linear;
+  animation: fa-spin 0.7s infinite linear;
+}
+.fa-pulse {
+  -webkit-animation: fa-spin 1s infinite steps(8);
+  animation: fa-spin 1s infinite steps(8);
+}
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}*/
+
+
 
 .dataTables_wrapper{
 
@@ -163,7 +205,7 @@ a.accordion-toggle{
 }
 
 .accordionCell {
-    overflow : scroll
+    overflow : auto;
 }
 
 .accordion-toggle { /* Needed for ie9? */
