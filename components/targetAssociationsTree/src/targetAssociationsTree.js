@@ -34,14 +34,20 @@ var geneAssociationsTree = function () {
 
     // node shapes (squares for Therapeutic areas // circles for the rest)
     var ta_display = tnt_tree.node_display.square()
-        .size(6)
+        .size(4)
         .fill (function (node) {
             return scale(node.property("association_score"));
+        })
+        .stroke (function (node) {
+            return d3.rgb(scale(node.property("association_score"))).darker(2);
         });
     var node_display = tnt_tree.node_display.circle()
-        .size(8)
+        .size(5)
         .fill (function (node) {
             return scale(node.property("association_score"));
+        })
+        .stroke (function (node) {
+            return d3.rgb(scale(node.property("association_score"))).darker(2);
         });
 
 	treeVis
@@ -53,9 +59,13 @@ var geneAssociationsTree = function () {
             }
             return id;
         })
+        //.branch_color("#777")
+        .branch_color (function (n) {
+            return d3.rgb(scale(n.property("association_score"))).darker(1);
+        })
 	    .data(config.data)
         .node_display (tnt_tree.node_display()
-            .size(12)
+            .size(8)
             .display (function (n) {
                 if (n.property('__depth') === 1) {
                     ta_display.display().call(this, n);
@@ -68,18 +78,18 @@ var geneAssociationsTree = function () {
         .on("mouseover", tooltips.mouseover)
         .on("mouseout", tooltips.mouseout)
 	    .label(tnt_tree.label.text()
-		   .height(20)
-           .transform(function (node) {
-                       var d = node.data();
-                       var offset = node.children() && node.children().length % 2 ? 10 : 0;
-                       var t = {
-                           translate : [0, (5 - offset)],
-                           rotate : 0
-                       };
-                       return t;
-                   }
-               )
-           .text(function (node) {
+		   .height(15)
+               .transform(function (node) {
+                   var d = node.data();
+                   var offset = node.children() && node.children().length % 2 ? 10 : 0;
+                   var t = {
+                       translate : [0, (5 - offset)],
+                       rotate : 0
+                   };
+                   return t;
+               }
+           )
+           .text (function (node) {
                if (node.is_leaf()) {
                    var diseaseName = node.property(function (n) {
                        return n.disease.name;
@@ -90,14 +100,41 @@ var geneAssociationsTree = function () {
                    if (node.is_collapsed()) {
                        diseaseName += (" (+" + node.n_hidden() + " diseases)");
                    }
-	    		   return diseaseName;
+                   return diseaseName;
                }
-               //return node.property("label");//todo: fix this to show the disease.name field
-               return node.property(function (n) {
+               // Internal
+               var label = node.property( function (n) {
                    return n.disease ? n.disease.name : "";
                });
+               if (!label.length) {
+                   return "";
+               }
+
+               var myX = node.property('y');
+               var minNodeDistance = Infinity;
+               node.apply (function (n) {
+                   var vsX = n.property('y');
+                   var vsLabel = n.property (function (k) {
+                       return k.disease ? k.disease.name : "";
+                   });
+                   if (vsLabel !== label) {
+                       var dX = vsX - myX;
+                       if (dX < minNodeDistance) {
+                           minNodeDistance = dX;
+                       }
+                   }
+               });
+
+               var maxLabelSize = minNodeDistance / 7;
+               if (label.length > maxLabelSize) {
+                   label = label.substring(0, ~~(minNodeDistance / 6) - 3) + "..." ;
+               }
+               return label;
            })
-           .fontsize(14)
+           .color(function (node) {
+               return d3.rgb(scale(node.property("association_score"))).darker(2);
+           })
+           .fontsize(12)
            .fontweight(function (node) {
                if (node.parent() && node.parent().node_name() === "cttv_disease") {
                    return "bold";
@@ -416,6 +453,7 @@ var geneAssociationsTree = function () {
                 n.property("branch_length", 1);
             }
         };
+
         for (var j=0; j<tasNodes.length; j++) {
             var taNode = tasNodes[j];
             taNode.property("branch_length", 1);

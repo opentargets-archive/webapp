@@ -1211,6 +1211,7 @@
 
                     // var match;
                     var abstract = pub.abstractText;
+
                     var title = pub.title;
 
                     // while ((match = re.exec(data[8])) !== null) {
@@ -1246,8 +1247,8 @@
 
                     data[3] += "<a target=_blank href='http://europepmc.org/abstract/MED/"+pub.pmid+"'>"+title+"</a>"
                     + "<br />"
-                    + "<span class='small'>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+"</span>"
-                    + "<p class='small'>" + (abstract || "no abstract available") + "</p>"
+                    + "<span class=small>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo + "</span>"
+                    + "<p class=small>" + (abstract || "no abstract available") + "</p>"
 
                     data[5] = pub.journalInfo.yearOfPublication;
                     // });
