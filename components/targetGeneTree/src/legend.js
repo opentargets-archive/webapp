@@ -54,14 +54,32 @@ var legend = function () {
 
     var l = function (container) {
 
+        d3.select(container)
+            .append("div")
+            .attr("class", "hamburger-frame")
+            .on("click", function () {
+                if (div.style("height") === "0px") {
+                    div
+                        .transition()
+                        .duration(1000)
+                        .style("height", "350px");
+                } else {
+                    div
+                        .transition()
+                        .duration(1000)
+                        .style("height", "0px");
+                }
+            });
+
+
+        var burger = d3.select(container)
+            .append("div")
+            .attr("class", "hamburger-menu");
+
         var div = d3.select(container)
             .append("div")
-            .style({
-                "position": "absolute",
-                "left" : "10px",
-                "top" : "10px",
-                "background-color" : "#FFFFFF",
-            });
+            .attr("class", "cttv_targetTree_legend");
+
 
         var checkbox = div.selectAll("input")
             .data(speciesArr)
