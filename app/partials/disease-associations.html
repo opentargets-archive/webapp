@@ -10,10 +10,12 @@
 
     <div ng-show="search.total>0">
 
-        <view-title>Targets associated with {{search.label}}</view-title><!-- Mhhh... ugly hack -->
-        <h3 class="cttv-content-header">Targets associated with {{search.label}}<br />
-            <small>Found {{search.total}} {{search.total===1 ? "target" : "targets"}}<a href="/disease/{{search.query}}"><span class="cttv-interpage-link"><i class="fa fa-arrow-circle-right fa-lg"></i> View disease profile</span></a></small>
-        </h3>
+        <div class="cttv-content-header">
+            <h3 view-title>Targets associated with {{search.label}}</h3>
+            <p>Found {{search.total}} {{search.total===1 ? "target" : "targets"}}<a href="/disease/{{search.query}}"><span class="cttv-interpage-link"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span> View disease profile</span></a>
+            </p>
+        </div>
+
 
         <div class="row">
             <div class="col-sm-3">
