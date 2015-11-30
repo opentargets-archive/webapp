@@ -99,6 +99,13 @@ gulp.task('watch-components', function () {
     ], ['build-components-min']);
 });
 
+gulp.task('watch-cttv', function () {
+    return gulp.watch([
+        './app/js/**/*',
+        './app/css/**/*'
+    ], ['build-webapp']);
+});
+
 // will remove everything in build
 gulp.task('clean', function () {
     return del ([buildDir]);
