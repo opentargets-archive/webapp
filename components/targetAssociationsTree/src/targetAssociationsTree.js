@@ -59,7 +59,10 @@ var geneAssociationsTree = function () {
             }
             return id;
         })
-        .branch_color("#777")
+        //.branch_color("#777")
+        .branch_color (function (n) {
+            return d3.rgb(scale(n.property("association_score"))).darker(1);
+        })
 	    .data(config.data)
         .node_display (tnt_tree.node_display()
             .size(8)

@@ -126,6 +126,8 @@ angular.module('cttvControllers')
                     }
                 );
             }
+            console.log ("GO ARR::::");
+            console.log(goArr);
             $scope.goterms = goArr;
 
             // Expression Atlas
