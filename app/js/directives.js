@@ -243,6 +243,7 @@ angular.module('cttvDirectives', [])
         return {
             restrict: 'EA',
             template: '<i class="fa fa-circle-o-notch fa-spin"></i>',
+            //template: '<div class="fa-spin" style="width:30px; height: 30px;"><svg width="100%" height="100%" viewBox="0 70 140 70" preserveAspectRatio="xMaxYMax"><path fill="#666666" d="M70,10c33.1,0,60,26,60,60h10c0-39-31.3-70-70-70S0,31,0,70h10C10,36,36.9,10,70,10z"/></svg></div>',
             link: function(scope, elem, attrs){
                 if(attrs.size){
                     elem.addClass("fa-"+attrs.size+"x");

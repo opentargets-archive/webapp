@@ -2,6 +2,7 @@
 
 html, body {
     height:100%;
+    line-height: 1.35;
 }
 
 body{
@@ -400,12 +401,12 @@ a.accordion-toggle{
 
 .small{
     font-size: 12px;
-    line-height: 1.2;
+    /*line-height: 1.2;*/
 }
 
 .text-small{
     font-size: 12px;
-    line-height: 1.2;
+    /*line-height: 1.2;*/
 }
 
 .large {
@@ -1190,7 +1191,7 @@ table.matrix-table thead > tr > th:last-child {
 .cttv-interpage-link {
     padding-left: 15px;
     margin-left: 15px;
-    border-left-style: solid;
+    border-left: 1px solid #CCC;
 }
 
 .cttv-content-header {
@@ -1198,6 +1199,11 @@ table.matrix-table thead > tr > th:last-child {
 }
 
 .cttv-content-header h3 {
+    margin-bottom: 0px;
+}
+
+.cttv-content-header h3,
+.cttv-content-header h4 {
     font-weight: 300;
 }
 

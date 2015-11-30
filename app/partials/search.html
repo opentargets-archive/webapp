@@ -1,14 +1,20 @@
 <!-- search app / results -->
 
 <div>
-	<h3 view-title>Search results for {{(search.query.q.title || search.query.q)}}</h3>
-	<div class="h6">Found {{search.results.total || 0}} results <span ng-show="search.results.took!==undefined">({{search.results.took/1000}} seconds)</span></div>
+	<!-- <h3 view-title>Search results for {{(search.query.q.title || search.query.q)}}</h3>
+	<div class="h6">Found {{search.results.total || 0}} results <span ng-show="search.results.took!==undefined">({{search.results.took/1000}} seconds)</span></div> -->
+
+	<div class="cttv-content-header">
+        <h3 view-title>Search results for {{(search.query.q.title || search.query.q)}}</h3>
+        <p>Found {{search.results.total || 0}} results<span class="cttv-interpage-link text-lowlight" ng-show="search.results.took!==undefined"><span class="small">{{search.results.took/1000}} seconds</span></span>
+        </p>
+    </div>
 
 	<div class="row">
 
 		<!-- Filters/Facets -->
 
-		<div class="col-md-2">
+		<div class="col-sm-2">
 			<h4>Refine by:</h4>
 			<div class="checkbox">
 				<label ng-class="(filters.gene.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.gene.selected" ng-change="getResults()" ng-disabled="filters.gene.total==0">Target <span class='badge badge-primary'>{{filters.gene.total}}</span></label>
@@ -23,7 +29,7 @@
 		<!-- Search results -->
 
 
-		<div class="col-md-10">
+		<div class="col-sm-10">
 
 			<!-- Loading progress spinner -->
 			<div style="width:100%; text-align:center; padding-top:50px; position:absolute" ng-show="search.loading">

@@ -41,7 +41,7 @@ var tooltips = function () {
 
 
     t.click = function (node) {
-        console.log(filters);
+        //console.log(filters);
         var obj = {};
         var score = node.property("association_score");
         obj.header = node.property(function (n) { return n.disease.name });+ " (Association score: " + score.toFixed(2) + ")";

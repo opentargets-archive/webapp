@@ -22,17 +22,20 @@
 
         <title ng-bind-template="CTTV Core{{viewTitle ? ' - '+viewTitle : ''}}"></title>
 
-        <link href="bower_components/bootstrap/dist/css/bootstrap.min.css?v=16112015" rel="stylesheet" />
-        <link href="bower_components/components-font-awesome/css/font-awesome.min.css?v=16112015" rel="stylesheet" />
+        <link rel="stylesheet" href="build/cttvWebapp-3rdParty.css?v=25112015" />
+        <!-- Don't bundle font-awexome.min.css or the woff files would be broken -->
+        <link href="build/fontawesome/css/font-awesome.min.css?v=16112015" rel="stylesheet" />
+        <link href="build/bootstrap/dist/css/bootstrap.min.css?v=16112015" rel="stylesheet" />
+        <link rel="stylesheet" href="build/cttvWebapp.min.css?v=25112015" />
 
         <!-- Components -->
-        <link rel="stylesheet" href="build/components-cttvWebapp.css?v=19112015"  />
+        <link rel="stylesheet" href="build/components-cttvWebapp.min.css?v=19112015" />
         <!-- <link href="node_modules/cttv.bubblesView/build/bubblesView.css" rel="stylesheet" /> -->
         <!-- <link href="node_modules/cttv.targetAssociations/build/cttv.targetAssociations.css" rel="stylesheet" /> -->
         <!-- <link href="node_modules/cttv.targetGenomeBrowser/build/index.css" rel="stylesheet" /> -->
         <!-- <link href="node_modules/cttv.targetTranscriptView/build/index.css" rel="stylesheet" /> -->
         <!-- <link href="node_modules/cttv.flowerView/build/flowerView.css" rel="stylesheet"/> -->
-        <link rel="stylesheet" href="css/app.css?v=16112015">
+        <!-- <link rel="stylesheet" href="css/app.css?v=16112015"> -->
         <!-- <link rel="stylesheet" href="node_modules/tnt.genome/build/index.css"> -->
 
 
@@ -65,7 +68,8 @@
 
         <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9,b-1.0.3,b-html5-1.0.3/datatables.min.css"/> -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9/datatables.min.css?v=16112015"/>
-        <link rel="stylesheet" type="text/css" href="./vendor/datatables/buttons.dataTables.min.css?v=16112015"/> <!-- TODO: while we get the fix in official release, same for JS-->
+        <!-- TODO: while we get the fix in official release, same for JS-->
+        <!-- <link rel="stylesheet" type="text/css" href="./vendor/datatables/buttons.dataTables.min.css?v=16112015"/> -->
 
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'>
 
@@ -209,6 +213,7 @@
 
 
             <!-- Angular && web app -->
+            <script src="build/cttvWebapp-3rdParty.js?v=25112015" type="text/javascript"></script>
             <script src="build/cttvWebapp.min.js?v=25112015" type="text/javascript"></script> <!-- extra directive -->
             <!-- <script type="text/javascript" src="bower_components/angular/angular.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="bower_components/angular-route/angular-route.min.js?v=16112015"></script> -->
@@ -253,7 +258,7 @@
             <!-- <script type="text/javascript" src="js/disease-graph-directive.js?v=16112015"></script> -->
 
             <!-- Components -->
-            <script type="text/javascript" src="build/components-cttvWebapp.min.js?v=19112015"></script>
+            <script type="text/javascript" src="build/components-cttvWebapp.min.js?v=26112015"></script>
 
             <!-- PMC Citation -->
             <!-- <link type="text/css" rel="stylesheet" href="node_modules/biojs-vis-pmccitation/css/style.css"/> -->
@@ -267,7 +272,7 @@
             <script type="text/javascript" src="vendor/proteinFeaturesViewer/featuresviewer.min.js?v=16112015"></script>
 
             <!-- Pathway viewer -->
-            <script type="text/javascript" language="javascript" src="/proxy/www.reactome.org/DiagramJs/diagram/diagram.nocache.js?v=151105"></script>
+            <script type="text/javascript" language="javascript" src="/proxy/www.reactome.org/DiagramJs/diagram/diagram.nocache.js?v=251105"></script>
 
             <!-- Expression Atlas -->
             <!-- <script language="JavaScript" type="text/javascript" src="//www.ebi.ac.uk/gxa/resources/js-bundles/vendor.bundle.js"></script> -->
@@ -304,19 +309,22 @@
             <!-- ribbon control  -->
             <script type="text/javascript">
             function showRibbon() {
-                if (location.hostname.startsWith('www')) {
-                    document.getElementById('cttv-beta-ribbon').style.display = 'none';
-                }
-                else {
-                    document.getElementById('cttv-beta-ribbon').style.display = 'block';
-                    document.getElementById('cttv-beta-ribbon').innerHTML=location.hostname.split('.')[0].toUpperCase()
+                var ribbon = document.getElementById('cttv-beta-ribbon');
+                if(ribbon){
+                    if (location.hostname.startsWith('www')) {
+                        ribbon.style.display = 'none';
+                    }
+                    else {
+                        ribbon.style.display = 'block';
+                        ribbon.innerHTML=location.hostname.split('.')[0].toUpperCase()
+                    }
                 }
             }
             window.onload = showRibbon;
             </script>
 
             <!-- Piwik -->
-            <script type="text/javascript">
+            <!-- <script type="text/javascript">
             var _paq = _paq || [];
             _paq.push(['trackPageView']);
             _paq.push(['enableLinkTracking']);
@@ -328,7 +336,7 @@
                 g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
             })();
             </script>
-            <noscript><p><img src="//www.ebi.ac.uk/web/piwik/piwik.php?idsite=4" style="border:0;" alt="" /></p></noscript>
+            <noscript><p><img src="//www.ebi.ac.uk/web/piwik/piwik.php?idsite=4" style="border:0;" alt="" /></p></noscript> -->
             <!-- End Piwik Code -->
 
             <!-- google analytics -->

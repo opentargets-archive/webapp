@@ -1,25 +1,38 @@
 <div>
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
     <view-title>{{target.symbol+' profile'}}</view-title>
-    <h3 class="cttv-content-header">{{target.symbol}}<br /><small>{{target.name}}  <a href="/target/{{target.id}}/associations"><span class="cttv-interpage-link"> <i class="fa fa-arrow-circle-right fa-lg"></i> View associated diseases</span></a></small></h3>
-<!--     <p class="small"> <a href="#/target/{{target.id}}/associations">View associations</a></p>
- -->
+
+    <div class="cttv-content-header">
+        <h3 view-title>{{target.symbol}}</h3>
+
+        <p ng-show="target.symbol">{{target.name}}<a href="/target/{{target.id}}/associations"><span class="cttv-interpage-link"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span> View associated diseases</span></a>
+        </p>
+
+        <h4 class="text-lowlight">
+            <hm-read-more  hm-text="{{synonyms.join(', ')}}" hm-limit="200" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
+        </h4>
+
+        <p>
+            <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
+        </p>
+    </div>
+
+
+
     <div class"row" style="padding-bottom:20px; margin-bottom:20px">
         <accordion close-others="false">
-            <accordion-group heading="Description" attr-section-name="Description" is-open="true">
-                <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links">
-                <!--{{target.description}}-->
-                </hm-read-more>
-            </accordion-group>
+            <!-- <accordion-group heading="Description" attr-section-name="Description" is-open="true">
+                <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
+            </accordion-group> -->
 
             <!-- Synomyms -->
-            <accordion-group heading="Gene and Protein Synonyms" attr-section-name="Synonyms" is-open="false">
+            <!-- <accordion-group heading="Gene and Protein Synonyms" attr-section-name="Synonyms" is-open="false">
                 <ul>
                     <li ng-repeat="syn in synonyms">
                         {{syn}}
                     </li>
                 </ul>
-            </accordion-group>
+            </accordion-group> -->
 
 
             <!-- Uniprot information -->
