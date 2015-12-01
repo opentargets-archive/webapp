@@ -12,13 +12,11 @@
 
     <div ng-show="n.diseases>0">
 
-        <h3 class="cttv-content-header"><span view-title>Diseases associated with {{search.label}}</span><br />
-        <!-- <p class="small"><a href="#/target/{{search.query}}">View target profile</a></p> -->
-        <!-- <div class="h6">Found {{nresults}} evidence in {{ndiseases}} diseases {{diseasesFilteredMsg}}</div> -->
-
-
-
-        <small>Found {{n.diseases}} {{n.diseases===1 ? "disease" : "diseases"}} <a href="/target/{{search.query}}"><span class="cttv-interpage-link"><i class="fa fa-arrow-circle-right fa-lg"></i> View {{search.label}} profile</span></a></small></h3>
+        <div class="cttv-content-header">
+            <h3 view-title>Diseases associated with {{search.label}}</h3>
+            <p>Found {{n.diseases}} {{n.diseases===1 ? "disease" : "diseases"}} <a href="/target/{{search.query}}"><span class="cttv-interpage-link"><!--<i class="fa fa-arrow-circle-right fa-lg"></i>--><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span> View {{search.label}} profile</span></a>
+            </p>
+        </div>
 
         <div class="row">
 
@@ -51,7 +49,8 @@
 
                             <accordion-heading class="cttv-facets-headers">
                                 <span ng-click="toggleNavigation()">Therapeutic Areas</span>
-                                <i style="font-size:16px" class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !tagroup.open, 'fa-caret-down': tagroup.open}"></i>
+                                <i style="font-size:16px" class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !tagroup.open, 'fa-caret-down': tagroup.open}" ng-show="!bubblesUpdating"></i>
+                                <span cttv-progress-spinner ng-show="bubblesUpdating" class="pull-right"></span>
                             </accordion-heading>
 
                             <div class="cttv-nav">
@@ -59,7 +58,8 @@
                                 <!-- top level: therapeutic areas -->
                                 <accordion>
 
-                                    <div ng-show="bubblesUpdating"><i class="fa fa-spinner fa-2x fa-spin"></i></div>
+                                    <!-- <div ng-show="bubblesUpdating"><i class="fa fa-spinner fa-2x fa-spin"></i></div> -->
+                                    <!-- <div cttv-progress-spinner ng-show="bubblesUpdating" size=2></div> -->
 
                                     <accordion-group ng-show="!bubblesUpdating" ng-repeat="ta in therapeuticAreas" class="therapeuticArea" is-open="tagroup.tas[ta.name]">
 

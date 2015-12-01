@@ -1,9 +1,7 @@
 <div>
-    <!-- view-title sets the title for the page for this view
-    <view-title>{{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name) +' &#8596; '+ search.info.efo.label + ' association'}}</view-title>-->
-
-    <!-- <h3>Target to disease association</h3> -->
-    <h3 view-title>Evidence for {{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}} in {{search.info.efo.label}}</h3>
+    <div class="cttv-content-header">
+        <h3 view-title>Evidence for {{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}} in {{search.info.efo.label}}</h3>
+    </div>
 
     <!-- page header with flower and overview -->
     <div class="row gene-disease-header">
@@ -371,7 +369,7 @@
                                         <th>Matched sentences</th>
                                         <th>Year</th>
                                         <th>Details</th> <!-- hidden column -->
-                                        <th>Source</th>
+                                        <th>Source</th> <!-- hidden column -->
                                         <th>EFO</th> <!-- hidden column -->
                                     </tr>
                                 </thead>

@@ -1,11 +1,28 @@
 <div>
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
     <view-title>{{disease.label+' profile'}}</view-title>
-    <h3 class="cttv-content-header">{{disease.label}}<br /><small><a href="/disease/{{disease.efo}}/associations"><i class="fa fa-arrow-circle-right fa-lg"></i> View associations</a></small></h3>
+
+    <div class="cttv-content-header">
+        <h3>{{disease.label}}</h3>
+
+        <p ng-show="disease.label"><a href="/disease/{{disease.efo}}/associations"><span><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span> View associated targets</span></a>
+        </p>
+
+        <h4 class="text-lowlight">
+            <hm-read-more  hm-text="{{disease.synonyms.join(', ')}}" hm-limit="200" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
+        </h4>
+
+        <p>
+            <hm-read-more  hm-text="{{disease.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
+        </p>
+    </div>
+
+
+
 
     <accordion close-others="false">
 
-        <accordion-group attr-section-name="Description" heading="Description" is-open="true">
+        <!-- <accordion-group attr-section-name="Description" heading="Description" is-open="true">
             {{disease.description}}
         </accordion-group>
 
@@ -15,7 +32,7 @@
                     {{syn}}
                 </li>
             </ul>
-        </accordion-group>
+        </accordion-group> -->
 
         <accordion-group attr-section-name="Drugs" heading="Drugs" is-open="false">
             <div>
