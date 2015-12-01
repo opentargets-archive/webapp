@@ -16,6 +16,7 @@ var legends = {
     "protein_coding"                     : "protein coding",
     "pseudogene"                         : "pseudogene",
     "processed_pseudogene"               : "pseudogene",
+    "transcribed_processed_pseudogene"   : "pseudogene",
     "unprocessed_pseudogene"             : "pseudogene",
     "polymorphic_pseudogene"             : "pseudogene",
     "unitary_pseudogene"                 : "pseudogene",
