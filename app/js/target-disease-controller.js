@@ -1721,8 +1721,21 @@
 
             // get the data for the flower graph
             getFlowerData()
+
+            // then get data for all then
+            getCommonDiseaseData();
+            getRareDiseaseData();
+            getMutationData();
+            getDrugData();
+            getRnaExpressionData();
+            getPathwaysData();
+            getLiteratureData();
+            getMouseData();
+
+            /*getFlowerData()
                 .then(function(){
                     $log.info($scope.search.association_scores);
+
                     // then try get some data for the tables where we know we have data...
 
                     if($scope.search.association_scores[datatypes.GENETIC_ASSOCIATION]){
@@ -1747,8 +1760,6 @@
                     if($scope.search.association_scores[datatypes.ANIMAL_MODEL]){
                         getMouseData();
                     }
-                });
-
-        //  }
+                });*/
 
     }]);
