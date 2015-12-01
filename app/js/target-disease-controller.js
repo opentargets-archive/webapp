@@ -502,7 +502,7 @@
 
 
                     // mutation consequence
-                    if( item.type === 'genetic_association' ){
+                    if( item.type === 'genetic_association' && checkPath(item, "evidence.gene2variant") ){
                         row.push( clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) ) );
                     } else if( item.type === 'somatic_mutation' ){
                         row.push( clearUnderscores(item.type) );
@@ -512,7 +512,7 @@
 
 
                     // evidence source
-                    if( item.type === 'genetic_association' ){
+                    if( item.type === 'genetic_association' && checkPath(item, "evidence.variant2disease") ){
                         row.push( "<a class='cttv-external-link' href='" + item.evidence.variant2disease.urls[0].url + "' target=_blank>" + item.evidence.variant2disease.urls[0].nice_name + "</a>" );
                     } else {
                         row.push( "<a class='cttv-external-link' href='" + item.evidence.urls[0].url + "' target=_blank>" + item.evidence.urls[0].nice_name + "</a>" );
