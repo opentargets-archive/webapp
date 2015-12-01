@@ -156,9 +156,9 @@ angular.module('cttvDirectives')
             //row.push("<a href=" + geneDiseaseLoc + ">" + data[i].target.name + "</a>");
             // just for for internal use to see direct and indirect associations
                 if (data[i].is_direct === true) {
-                    row.push("<a href=" + geneDiseaseLoc + '> <i class="fa fa-circle"></i> ' + data[i].target.name + "</a>");
+                    row.push("<a href=" + geneDiseaseLoc + '>' + data[i].target.name + "</a>");
                 } else {
-                    row.push("<a href=" + geneDiseaseLoc + '><i class="fa fa-circle-o"></i> ' + data[i].target.name + "</a>");
+                    row.push("<a href=" + geneDiseaseLoc + '>' + data[i].target.name + "</a>");
                 }
 
 

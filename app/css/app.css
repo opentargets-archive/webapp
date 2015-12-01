@@ -162,6 +162,45 @@ padding-left: 0px;*/
 
 
 /*
+ * Override componenets tooltip settings
+ */
+/*
+div .tnt_tooltip{
+    border:1px solid #CCC !important;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.tnt_tooltip_active {
+
+}
+
+.tnt_tooltip_closer {
+    border-radius: 0px;
+    background: none;
+}
+
+.tnt_tooltip_closer::before {
+    content: "\f111";
+    color:#f00;
+}
+
+.tnt_tooltip_closer::after{
+    content:"\f00d";
+    color:#0f0;
+}
+
+.tnt_zmenu {
+    border-style: hidden;
+}
+
+.tnt_zmenu_header {
+
+}
+*/
+
+/*
  * FontAwesome styles
  */
 
@@ -402,6 +441,10 @@ a.accordion-toggle{
 .small{
     font-size: 12px;
     /*line-height: 1.2;*/
+}
+
+.bold {
+    font-weight: 600;
 }
 
 .text-small{
@@ -730,6 +773,14 @@ table.dataTable thead .sorting {
     line-height: 15px;
     font-weight: 300;
     font-size: 16px;
+}
+
+.cttv-evidence-table>thead>tr>th {
+
+}
+
+.sorting::after, .sorting_asc::after, .sorting_desc::after {
+    font-size:12px;
 }
 
 .cttv-evidence-table thead th:last-child {
