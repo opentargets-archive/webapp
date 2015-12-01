@@ -71,6 +71,8 @@
         <!-- TODO: while we get the fix in official release, same for JS-->
         <!-- <link rel="stylesheet" type="text/css" href="./vendor/datatables/buttons.dataTables.min.css?v=16112015"/> -->
 
+        <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'>
+
     </head>
 
     <body>
@@ -84,16 +86,16 @@
                     <div class="container">
                         <div class="row">
 
-                            <div class="col-xs-2">
+                            <div class="col-xs-5">
                                 <!-- CTTV logo -->
-                                <a href="/"><img src="imgs/CTTV_logo_webheader.png?v=25112015" width="113px" height="51px"/></a>
-                                <!-- <a href="/" style="display:block; height:34px;"><img style="top:2px; position:relative;" src="imgs/cttv_logo_888888_75x35.png"/><span class="cttv-logotype"> | Core Platform</span></a>-->
+                                <!-- <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>-->
+                                <a href="/" style="display:block; height:34px;"><img style="top:2px; position:relative;" src="imgs/logo/cttv_logo_text_color_205x35.png"/><span class="cttv-logotype"></span></a>
                             </div>
 
-                            <!--<div class="col-xs-2">
-                            </div>-->
+                            <div class="col-xs-2">
+                            </div>
 
-                            <div class="col-xs-10" ng-controller="SearchBoxCtrl">
+                            <div class="col-xs-5" ng-controller="SearchBoxCtrl">
                                 <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
                                     <fieldset>
                                         <div class="has-feedback search-form">
@@ -103,7 +105,7 @@
                                             <!-- Search box + search button -->
                                             <div class="input-group">
 
-                                                <input type="text" placeholder="Search for a target or disease, like 'BRAF' or Asthma'" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+                                                <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
                                                 <div class="input-group-btn">
                                                     <button type="submit" class="btn btn-primary">
@@ -120,13 +122,13 @@
                                             <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
 
 
-                                            <span class="small">
+                                            <!--<span class="small">
                                                 <i>
                                                     Examples: <a href="/search?q=braf">BRAF</a>,
                                                     <a href="/search?q=asthma">asthma</a>,
                                                     <a href="/search?q=pten">PTEN</a>
                                                 </i>
-                                            </span>
+                                            </span>-->
 
 
                                         </div>
@@ -145,7 +147,9 @@
                 </alert>
 
                 <div class="container">
-                    <div id="cttv-beta-ribbon" class="cttv-beta-ribbon"></div>
+                    <!-- Remove beta ribbon -->
+                    <!-- <div id="cttv-beta-ribbon" class="cttv-beta-ribbon"></div> -->
+
                     <!-- ie < 9? -->
                     <!--[if lt IE 9]>
                     <div class="alert alert-danger">
@@ -175,27 +179,27 @@
                 <div class="container">
                     <div class-"row">
                         <div class="col-sm-3">
-                            <h6>INFO</h6>
+                            <h6>Info</h6>
                             <p>CTTV Core Beta Version 0.7.0</p>
                             <p><a href="/release-notes">Release notes</a></p>
                             <p><a href="/about">About</a></p>
                         </div>
                         <div class="col-sm-3">
-                            <h6>PARTNERS</h6>
+                            <h6>Partners</h6>
                             <p><a href="http://www.ebi.ac.uk">EMBL-EBI</a></p>
                             <p><a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a></p>
                             <p><a href="http://www.gsk.com">GSK</a></p>
                         </div>
                         <div class="col-sm-3">
-                            <h6>SUPPORT</h6>
+                            <h6>Support</h6>
                             <p>
                                 <a href="/faq"><i class="fa fa-question-circle"></i> FAQs</a><br />
                                 <span class="fa fa-envelope"></span> <a href="mailto:support@targetvalidation.org?Subject=CTTV%20Core%20Platform%20-%20help%20request">support<span class="fa fa-at"></span>targetvalidation.org</a></p>
                         </div>
 
                         <div class="col-sm-3">
-                            <h6>CONTACT</h6>
-                            <h6>Centre for Therapeutic Target Validation</h6>
+                            <h6>Contact</h6>
+                            <p>Centre for Therapeutic Target Validation</p>
                             <p>
                                 <span class="fa fa-globe"></span> <a href="http://www.targetvalidation.org">http://www.targetvalidation.org</a><br />
                                 <!-- <span class="fa fa-phone"></span> +44 (0)1223 494 665<br /> -->
@@ -297,7 +301,7 @@
                     data-height="50px"
                     data-link="#337ab7"
                     data-fontfamily="inherit"
-                    data-close-text="<span class='btn btn-success btn-xs'><i class='fa fa-check-circle'></i> I agree</span>"
+                    data-close-text="<span class='btn btn-success btn-xs'><i class='fa fa-check-circle'></i> OK</span>"
                     data-moreinfo="http://ec.europa.eu/ipg/basics/legal/cookies/index_en.htm" >
             </script>
 
@@ -305,12 +309,15 @@
             <!-- ribbon control  -->
             <script type="text/javascript">
             function showRibbon() {
-                if (location.hostname.startsWith('www')) {
-                    document.getElementById('cttv-beta-ribbon').style.display = 'none';
-                }
-                else {
-                    document.getElementById('cttv-beta-ribbon').style.display = 'block';
-                    document.getElementById('cttv-beta-ribbon').innerHTML=location.hostname.split('.')[0].toUpperCase()
+                var ribbon = document.getElementById('cttv-beta-ribbon');
+                if(ribbon){
+                    if (location.hostname.startsWith('www')) {
+                        ribbon.style.display = 'none';
+                    }
+                    else {
+                        ribbon.style.display = 'block';
+                        ribbon.innerHTML=location.hostname.split('.')[0].toUpperCase()
+                    }
                 }
             }
             window.onload = showRibbon;
