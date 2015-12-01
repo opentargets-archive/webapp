@@ -159,7 +159,8 @@ angular.module('cttvDirectives', [])
                         //gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa/',
                         params: 'geneQuery=' + target + "&species=homo%20sapiens",
                         isMultiExperiment: true,
-                        target: "cttvExpressionAtlas"
+                        target: "cttvExpressionAtlas",
+                        disableGoogleAnalytics: true
                     });
 
 
