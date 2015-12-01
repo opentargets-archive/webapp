@@ -8,12 +8,12 @@
         <p ng-show="target.symbol">{{target.name}}<a href="/target/{{target.id}}/associations"><span class="cttv-interpage-link"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span> View associated diseases</span></a>
         </p>
 
-        <h4 class="text-lowlight">
-            <hm-read-more  hm-text="{{synonyms.join(', ')}}" hm-limit="200" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
-        </h4>
-
         <p>
             <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
+        </p>
+
+        <p>
+            Synonyms: <span class="cttv-profile-synonym-list text-lowlight" ng-repeat="syn in synonyms">{{syn}}</span>
         </p>
     </div>
 
