@@ -1569,10 +1569,15 @@
                     row.push("<i class='fa fa-spinner fa-spin'></i>");
 
                     // details (hidden)
+                    // first sort the data to preferred order
+
+                    /*item.evidence.literature_ref.mined_sentences.sort(function(a,b){
+                        return cat_list.indexOf(a.section.toLowerCase()) - cat_list.indexOf(b.section.toLowerCase());
+                    });*/
                     row.push(
                         "<ul>"+
                         item.evidence.literature_ref.mined_sentences.map(function(sent){
-                            return "<li>"+upperCaseFirst(sent.section)+": "+sent.formattedText+"</li>";
+                            return "<li><span class='bold'>"+upperCaseFirst(sent.section)+"</span>: "+sent.formattedText+"</li>";
                         }).join("") + "</ul>"
                     );
 
@@ -1634,7 +1639,7 @@
                 "order": [[5, 'desc'], [4, 'desc']],   // order by number of matched sentences
                 "columnDefs" : [
                     {
-                        "targets" : [2,6,8],
+                        "targets" : [2,6,7,8],
                         "visible" : false,
                     },
                     {
@@ -1652,7 +1657,7 @@
                     },
                     {
                         "targets" : [5],
-                        "width" : "8%"
+                        "width" : "10%"
                     }
                 ],
             }, $scope.search.info.title+"-text_mining") );
@@ -1716,8 +1721,21 @@
 
             // get the data for the flower graph
             getFlowerData()
+
+            // then get data for all then
+            getCommonDiseaseData();
+            getRareDiseaseData();
+            getMutationData();
+            getDrugData();
+            getRnaExpressionData();
+            getPathwaysData();
+            getLiteratureData();
+            getMouseData();
+
+            /*getFlowerData()
                 .then(function(){
                     $log.info($scope.search.association_scores);
+
                     // then try get some data for the tables where we know we have data...
 
                     if($scope.search.association_scores[datatypes.GENETIC_ASSOCIATION]){
@@ -1742,8 +1760,6 @@
                     if($scope.search.association_scores[datatypes.ANIMAL_MODEL]){
                         getMouseData();
                     }
-                });
-
-        //  }
+                });*/
 
     }]);
