@@ -6,7 +6,7 @@
   <div class="col-sm-1"></div>
   <div class="col-sm-10" ng-controller="SearchBoxCtrl">
 
-    <img src="imgs/CTTV_logo_webheader.png" class="intro-logo"/>
+    <img src="imgs/logo/CTTV_logo_webheader.png" class="intro-logo"/>
 
     <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
         <fieldset>
@@ -16,7 +16,7 @@
                 <!-- Search box + search button -->
                 <div class="input-group">
 
-                    <input type="text" placeholder="Search for a target or disease" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+                    <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
                     <div class="input-group-btn">
                     <button type="submit" class="btn btn-primary">
@@ -34,13 +34,13 @@
 
 
           <!-- examples -->
-          <span class="small">
+          <!-- <span class="small">
               <i>
                 Examples: <a href="/search?q=braf">BRAF</a>,
                 <a href="/search?q=asthma">asthma</a>,
                 <a href="/search?q=pten">PTEN</a>
               </i>
-          </span>
+          </span> -->
 
 
             </div>

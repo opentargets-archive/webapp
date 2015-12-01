@@ -142,6 +142,8 @@ var targetGeneTree = function () {
                 tree_vis.data(subtree.data());
                 tree_vis(div);
 
+                d3.select(div).style("min-height", "400px");
+
                 var treeDiv = d3.select(div).select("div");
 
                 // Update the tree when the species are selected / deselected
