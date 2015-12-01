@@ -6,6 +6,7 @@ var RSVP = require('rsvp');
 var biotypes = require("./biotypes.js");
 
 var pipelines = require("./pipelines.js");
+var spinner = require("./spinner.js");
 
 
 var cttv_genome_browser = function() {
@@ -50,7 +51,6 @@ var cttv_genome_browser = function() {
             .cttvRestApi (cttvRestApi)
             .ensemblRestApi (ensemblRestApi)
             .view (gB);
-
 
         // Transcript data
         var transcript_data = tnt.board.track.data.genome.transcript();
@@ -114,7 +114,6 @@ var cttv_genome_browser = function() {
                 .remove();
         });
 
-
         transcript_data.update().success(function (transcripts) {
             var newGenes = {};
             for (var i=0; i<transcripts.length; i++) {
@@ -174,33 +173,42 @@ var cttv_genome_browser = function() {
                 });
         };
 
+        var clinvar_spinner = spinner();
+
         var clinvar_updater = tnt.board.track.data.retriever.async()
             .retriever (function (loc) {
-                return regionEnsemblPromise(loc)
-                    .then (function (genes) {
-                        var allGenesPromises = [];
-                        for (var i=0; i<genes.length; i++) {
-                            var gene = genes[i];
-                            var p = pipelines()
-                                .ensemblRestApi (ensemblRestApi)
-                                .cttvRestApi (cttvRestApi)
-                                .rare(gene.id, efo);
-                            allGenesPromises.push(p);
-                        }
-                        return RSVP.all(allGenesPromises);
-                    })
-                    .then (function (resps) {
-                        var flattenedSNPs = [];
-                        for (var i=0; i<resps.length; i++) {
-                            var resp = resps[i];
-                            for (var snp in resp.snps) {
-                                if (resp.snps.hasOwnProperty(snp)) {
-                                    flattenedSNPs.push (resp.snps[snp]);
+                return new Promise (function (resolve, reject) {
+                    clinvar_spinner.on(clinvar_track.g, clinvar_track.background_color());
+                    resolve(1);
+                })
+                .then (function () {
+                    return regionEnsemblPromise(loc)
+                        .then (function (genes) {
+                            var allGenesPromises = [];
+                            for (var i=0; i<genes.length; i++) {
+                                var gene = genes[i];
+                                var p = pipelines()
+                                    .ensemblRestApi (ensemblRestApi)
+                                    .cttvRestApi (cttvRestApi)
+                                    .rare(gene.id, efo);
+                                allGenesPromises.push(p);
+                            }
+                            return RSVP.all(allGenesPromises);
+                        })
+                        .then (function (resps) {
+                            clinvar_spinner.off(clinvar_track.g);
+                            var flattenedSNPs = [];
+                            for (var i=0; i<resps.length; i++) {
+                                var resp = resps[i];
+                                for (var snp in resp.snps) {
+                                    if (resp.snps.hasOwnProperty(snp)) {
+                                        flattenedSNPs.push (resp.snps[snp]);
+                                    }
                                 }
                             }
-                        }
-                        return flattenedSNPs;
-                    });
+                            return flattenedSNPs;
+                        });
+                });
             });
 
         var foreground_color = function (d) {
@@ -236,34 +244,42 @@ var cttv_genome_browser = function() {
             );
 
         // Async Gwas updater for ALL genes
+        var gwas_spinner = spinner();
         var gwas_updater = tnt.board.track.data.retriever.async()
             .retriever (function (loc) {
-                return regionEnsemblPromise(loc)
-                    .then (function (genes) {
-                        var allGenesPromises = [];
-                        for (var i=0; i<genes.length; i++) {
-                            var gene = genes[i];
-                            var p = pipelines()
-                                .ensemblRestApi (ensemblRestApi)
-                                .cttvRestApi (cttvRestApi)
-                                .common(gene.id, efo);
-                            allGenesPromises.push(p);
-                        }
+                return new Promise (function (resolve, reject) {
+                    gwas_spinner.on(gwas_track.g, gwas_track.background_color());
+                    resolve(1);
+                })
+                .then (function () {
+                    return regionEnsemblPromise(loc)
+                        .then (function (genes) {
+                            var allGenesPromises = [];
+                            for (var i=0; i<genes.length; i++) {
+                                var gene = genes[i];
+                                var p = pipelines()
+                                    .ensemblRestApi (ensemblRestApi)
+                                    .cttvRestApi (cttvRestApi)
+                                    .common(gene.id, efo);
+                                allGenesPromises.push(p);
+                            }
 
-                        return RSVP.all(allGenesPromises);
-                    })
-                    .then (function (resps) {
-                        var flattenedSNPs = [];
-                        for (var i=0; i<resps.length; i++) {
-                            var resp = resps[i];
-                            for (var snp in resp.snps) {
-                                if (resp.snps.hasOwnProperty(snp)) {
-                                    flattenedSNPs.push(resp.snps[snp]);
+                            return RSVP.all(allGenesPromises);
+                        })
+                        .then (function (resps) {
+                            gwas_spinner.off(gwas_track.g);
+                            var flattenedSNPs = [];
+                            for (var i=0; i<resps.length; i++) {
+                                var resp = resps[i];
+                                for (var snp in resp.snps) {
+                                    if (resp.snps.hasOwnProperty(snp)) {
+                                        flattenedSNPs.push(resp.snps[snp]);
+                                    }
                                 }
                             }
-                        }
-                        return flattenedSNPs;
-                    });
+                            return flattenedSNPs;
+                        });
+                });
             });
 
         // Gwas track
@@ -361,6 +377,7 @@ var cttv_genome_browser = function() {
 
         // Update the track based on the number of needed slots for the genes
         transcript_track.display().layout()
+            .keep_slots(false)
             .fixed_slot_type("expanded")
             .on_layout_run (function (types, current) {
                 var needed_height = types.expanded.needed_slots * types.expanded.slot_height;
@@ -372,7 +389,7 @@ var cttv_genome_browser = function() {
                     }
                     geneTrackHeight = needed_height;
                     transcript_track.height(needed_height);
-                    gB.reorder(gB.tracks());
+                    gB.reorder(gB.tracks()); // reorder re-computes track heights
                 }
         });
 
@@ -415,10 +432,6 @@ var cttv_genome_browser = function() {
             .append("text")
             .attr("class", "tnt_legend_header")
             .text("SNPs legend:");
-
-
-
-
 
         gBrowser
             //.add_track(gene_track)
@@ -494,6 +507,8 @@ var cttv_genome_browser = function() {
                 var start = d3.min([gwasStart||Infinity, geneStart, clinvarStart||Infinity]);
                 var end   = d3.max([gwasEnd||0, geneEnd, clinvarEnd||0]);
                 //
+                var zoomOut = (gene.end - gene.start) + 100;
+                gB.zoom_out(zoomOut);
                 // We can finally start!
                 gB.chr(gene.seq_region_name);
                 navTheme.orig ({
