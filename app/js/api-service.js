@@ -47,8 +47,8 @@ angular.module('cttvServices')
         var api = cttvApi()
             .prefix("/api/latest/")
             //.prefix("https://beta.targetvalidation.org/api/latest/")
-            .appname("cttv-web-app")
-            .secret("2J23T20O31UyepRj7754pEA2osMOYfFK")
+            // .appname("cttv-web-app")
+            // .secret("2J23T20O31UyepRj7754pEA2osMOYfFK")
             .onError(cttvAPI.defaultErrorHandler);
 
 
@@ -109,13 +109,14 @@ angular.module('cttvServices')
         *              - size: number of results
         */
         var callAPI = function(queryObject){
+            var params = queryObject.params;
 
             var deferred = $q.defer();
             var promise = deferred.promise;
-            var url = api.url[queryObject.operation](queryObject.params);
+            var url = api.url[queryObject.operation](params);
             console.warn(url);
 
-            countRequest( queryObject.params.trackCall===false ? undefined : true );
+            countRequest( params.trackCall===false ? undefined : true );
             //countRequest( true );
 
             var resp = api.call(url, done);
@@ -135,7 +136,7 @@ angular.module('cttvServices')
                 // normalize internal statuses to 0
                 var status = Math.max(response.status, 0);
 
-                countRequest( queryObject.params.trackCall===false ? undefined : false );
+                countRequest( params.trackCall===false ? undefined : false );
 
                 // we resolve the the promise on the whole response object,
                 // so essentially we pass back the un-processed response object:
