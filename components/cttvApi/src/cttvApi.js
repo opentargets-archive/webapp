@@ -39,10 +39,16 @@ var cttvApi = function () {
     };
 
     var _ = {};
-    _.call = function (myurl, callback) {
+    _.call = function (myurl, callback, data) {
         // No auth
         if ((!credentials.token) && (!credentials.appname) && (!credentials.secret)) {
             console.log("    CttvApi running in non-authentication mode");
+            if (data){ // post
+                return jsonHttp.post({
+                    "url": myurl,
+                    "body": data
+                });
+            }
             return jsonHttp.get({
                 "url" : myurl
             }, callback);
@@ -57,10 +63,20 @@ var cttvApi = function () {
                     var headers = {
                         "Auth-token": resp.body.token
                     };
-                    var myPromise = jsonHttp.get ({
-                        "url": myurl,
-                        "headers": headers
-                    }, callback).catch(onError);
+                    var myPromise;
+                    if (data) { // post
+                        myPromise = jsonHttp.post ({
+                            "url": myurl,
+                            "headers": headers,
+                            "body": data
+                        });
+                    } else { // get
+                        myPromise = jsonHttp.get ({
+                            "url": myurl,
+                            "headers": headers
+                        }, callback).catch(onError);
+
+                    }
                     return myPromise;
 
                 });
@@ -76,7 +92,7 @@ var cttvApi = function () {
                 // console.log("     --- Received an api error -- Possibly the token has expired, so I'll request a new one");
                 onError(err);
                 credentials.token = "";
-                return _.call(myurl, callback);
+                return _.call(myurl, callback, data);
             });
         }
     };
@@ -131,8 +147,8 @@ var cttvApi = function () {
     };
 
     _.url.target = function (obj) {
-        return prefix + prefixTarget + obj.target_id
-    }
+        return prefix + prefixTarget + obj.target_id;
+    };
 
     _.url.disease = function (obj) {
         return prefix + prefixDisease + obj.code;
