@@ -778,7 +778,31 @@ table.dataTable thead .sorting {
     padding: 10px;
 }
 
+.sorting::after, .sorting_asc::after, .sorting_desc::after {
+    font-size:12px;
+    bottom: 5px !important;
+    right: 6px !important;
+    content: '\f0dc' !important;
+    font-family: 'FontAwesome' !important;
+    opacity: 1 !important;
+    color: #DDD;
+}
+
+.sorting_asc::after{
+    color: #337ab7;
+    content: '\f0dd' !important;
+}
+
+.sorting_desc::after {
+    color: #337ab7;
+    content: '\f0de' !important;
+}
+
+
+
 /* Evidence tables */
+
+
 
 .cttv-evidence-table{
 
@@ -797,10 +821,6 @@ table.dataTable thead .sorting {
 
 .cttv-evidence-table>thead>tr>th {
 
-}
-
-.sorting::after, .sorting_asc::after, .sorting_desc::after {
-    font-size:12px;
 }
 
 .cttv-evidence-table thead th:last-child {
@@ -869,15 +889,15 @@ table.matrix-table thead > tr > th {
 
 /* Fix for the new DataTables styling */
 table.matrix-table thead > tr > th:after {
-    right: 22px !important;
+    right: 25px !important;
 }
 
 table.matrix-table thead > tr > th:first-child:after {
-    right: 10px !important;
+    right: 25px !important;
 }
 
 table.matrix-table thead > tr > th:last-child:after {
-    left: 10px !important;
+    left: 25px !important;
 }
 
 
@@ -924,13 +944,13 @@ table.matrix-table thead > tr > th > div > span{
 table.matrix-table thead > tr > th:first-child > div {
     width:0;
     float: right;
-    margin-right: 11px;
+    margin-right: 24px;
 }
 
 table.matrix-table thead > tr > th:last-child > div {
     width:0;
     float: left;
-    margin-left: 11px;
+    margin-left: 24px;
 }
 
 
@@ -951,6 +971,11 @@ table.matrix-table tbody > tr > td span {
     display: block;
     width: 100%;
     height: 16px;
+}
+
+table.matrix-table tbody > tr > td:last-child span,
+table.matrix-table tbody > tr > td:first-child span {
+    display: inline;
 }
 
 table.matrix-table tbody :hover{

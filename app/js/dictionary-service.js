@@ -30,6 +30,7 @@ angular.module('cttvServices').
             // D
             DATA_DISTRIBUTION :              "Data distribution",
             DATATYPES :                      "Datatypes",
+            DISEASE :                        "Disease",
             DISGENET :                       "DisGeNET",
 
             // E
@@ -77,6 +78,9 @@ angular.module('cttvServices').
             SOMATIC_MUTATION :               "Somatic mutations",
 
             // T
+            TARGET_NAME :                    "Target name",
+            TARGET_SYMBOL :                  "Target symbol",
+            THERAPEUTIC_AREA :               "Therapeutic area",
 
             // U
             UNIPROT :                        "UniProt",
