@@ -185,14 +185,18 @@ var cttv_genome_browser = function() {
                     return regionEnsemblPromise(loc)
                         .then (function (genes) {
                             var allGenesPromises = [];
+                            var geneIds = [];
                             for (var i=0; i<genes.length; i++) {
-                                var gene = genes[i];
+                                geneIds.push(genes[i].id);
+                            }
+                                // var gene = genes[i];
                                 var p = pipelines()
                                     .ensemblRestApi (ensemblRestApi)
                                     .cttvRestApi (cttvRestApi)
-                                    .rare(gene.id, efo);
+                                    // .rare(gene.id, efo);
+                                    .rare(geneIds, efo);
                                 allGenesPromises.push(p);
-                            }
+                            // }
                             return RSVP.all(allGenesPromises);
                         })
                         .then (function (resps) {
@@ -255,14 +259,17 @@ var cttv_genome_browser = function() {
                     return regionEnsemblPromise(loc)
                         .then (function (genes) {
                             var allGenesPromises = [];
+                            var geneIds = [];
                             for (var i=0; i<genes.length; i++) {
+                                geneIds.push(genes[i].id);
+                            }
                                 var gene = genes[i];
                                 var p = pipelines()
                                     .ensemblRestApi (ensemblRestApi)
                                     .cttvRestApi (cttvRestApi)
-                                    .common(gene.id, efo);
+                                    .common(geneIds, efo);
                                 allGenesPromises.push(p);
-                            }
+                            // }
 
                             return RSVP.all(allGenesPromises);
                         })
@@ -507,8 +514,8 @@ var cttv_genome_browser = function() {
                 var start = d3.min([gwasStart||Infinity, geneStart, clinvarStart||Infinity]);
                 var end   = d3.max([gwasEnd||0, geneEnd, clinvarEnd||0]);
                 //
-                var zoomOut = (gene.end - gene.start) + 100;
-                gB.zoom_out(zoomOut);
+                // var zoomOut = (gene.end - gene.start) + 100;
+                // gB.zoom_out(zoomOut);
                 // We can finally start!
                 gB.chr(gene.seq_region_name);
                 navTheme.orig ({
