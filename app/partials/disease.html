@@ -8,12 +8,12 @@
         <p ng-show="disease.label"><a href="/disease/{{disease.efo}}/associations"><span><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span> View associated targets</span></a>
         </p>
 
-        <h4 class="text-lowlight">
-            <hm-read-more  hm-text="{{disease.synonyms.join(', ')}}" hm-limit="200" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
-        </h4>
-
         <p>
             <hm-read-more  hm-text="{{disease.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
+        </p>
+
+        <p>
+            Synonyms: <span class="cttv-profile-synonym-list" ng-repeat="syn in disease.synonyms">{{syn}}</span>
         </p>
     </div>
 
