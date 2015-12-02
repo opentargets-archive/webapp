@@ -11,42 +11,42 @@ var pipelines = function () {
 
     var p = {};
 
-    p.rare = function (gene, efo) {
+    p.rare = function (genes, efo) {
         var opts, url;
         if (efo) {
-            opts = getOpts (gene, ["uniprot", "eva"], efo);
-            url = rest.cttv.url.filterby (opts);
-            return rest.cttv.call(url)
+            opts = getOpts (genes, ["uniprot", "eva"], efo);
+            url = rest.cttv.url.filterby ();
+            return rest.cttv.call(url, undefined, opts)
                 .then (function (resp) {
                     cttv_highlight(resp);
                     return p.rare(gene);
                 });
         }
-        opts = getOpts(gene, ["uniprot", "eva"]);
-        url = rest.cttv.url.filterby(opts);
 
-        return rest.cttv.call(url)
+        opts = getOpts(genes, ["uniprot", "eva"]);
+        url = rest.cttv.url.filterby();
+        return rest.cttv.call(url, undefined, opts)
             .then (cttv_clinvar)
             .then (ensembl_call_snps)
             .then (ensembl_parse_clinvar_snps)
             .then (extent);
     };
 
-    p.common = function (gene, efo) {
+    p.common = function (genes, efo) {
         var opts, url;
         if (efo) {
-            opts = getOpts (gene, ["gwas_catalog"], efo);
-            url = rest.cttv.url.filterby (opts);
-            return rest.cttv.call(url)
+            opts = getOpts (genes, ["gwas_catalog"], efo);
+            url = rest.cttv.url.filterby ();
+            return rest.cttv.call(url, undefined, opts)
                 .then (function (resp) {
                     cttv_highlight(resp);
                     return p.common (gene);
                 });
         }
-        opts = getOpts(gene, ["gwas_catalog"]);
-        url = rest.cttv.url.filterby (opts);
+        opts = getOpts(genes, ["gwas_catalog"]);
+        url = rest.cttv.url.filterby ();
 
-        return rest.cttv.call(url)
+        return rest.cttv.call(url, undefined, opts)
             .then (cttv_gwas)
             .then (ensembl_call_snps)
             .then (ensembl_parse_gwas_snps)
@@ -63,7 +63,6 @@ var pipelines = function () {
     };
 
     var cttv_clinvar = function (resp) {
-
         for (var i=0; i<resp.body.data.length; i++) {
             var rec = resp.body.data[i];
             if (rec.type === "genetic_association") {
@@ -178,10 +177,18 @@ var pipelines = function () {
             species : "human"
         });
 
-        return rest.ensembl
-            .call(var_url, {
-                "ids" : snp_names
-            });
+        if (snp_names.length) {
+            return rest.ensembl
+                .call(var_url, {
+                    "ids" : snp_names
+                });
+        }
+
+        // If there are not snps, don't call ensembl
+        return new Promise (function (resolve, reject) {
+            resolve({body:{}});
+        });
+
     };
 
     var cttv_gwas = function (resp) {
@@ -233,9 +240,11 @@ var pipelines = function () {
         return this;
     };
 
-    function getOpts (gene, datasources, efo) {
+    function getOpts (genes, datasources, efo) {
         var opts = {
-            target : gene,
+            //target : genes,
+            //_post: genes,
+            target: [genes],
             size : 1000,
             datasource : datasources,
             fields : [
@@ -248,8 +257,8 @@ var pipelines = function () {
             ]
         };
         if (efo !== undefined) {
-            opts.disease = efo;
-            opts.expandefo = true;
+            opts.efo = efo;
+            opts.expandefo = false;
         }
         return opts;
     }
