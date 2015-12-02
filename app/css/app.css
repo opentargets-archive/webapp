@@ -491,6 +491,26 @@ ul.plain li {
     color: #CCC;
 }
 
+.cttv-profile-synonym-list {
+    /*padding-right: 10px;*/
+    background-color: #e0ebeb;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    border-radius: 1.5em;
+    margin-right: 8px;
+    display: inline-block;
+    margin-bottom: 3px;
+}
+
+/*.cttv-profile-synonym-list:before {
+    font-family: 'FontAwesome';
+    padding-right: 3px;
+    font-size: 0.8em;
+    content: '\f02b';
+}*/
+
+
+
 
 /*
  * Links
