@@ -1543,6 +1543,8 @@
 
         var formatLiteratureDataToArray = function(data){
             var newdata = [];
+            var cat_list = ["title", "abstract", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
+
             data.forEach(function(item){
                 // create rows:
                 var row = [];
@@ -1570,14 +1572,28 @@
 
                     // details (hidden)
                     // first sort the data to preferred order
+                    item.evidence.literature_ref.mined_sentences.sort(function(a,b){
+                        var a = a.section.toLowerCase();
+                        var b = b.section.toLowerCase();
 
-                    /*item.evidence.literature_ref.mined_sentences.sort(function(a,b){
-                        return cat_list.indexOf(a.section.toLowerCase()) - cat_list.indexOf(b.section.toLowerCase());
-                    });*/
+                        var ai = cat_list.length;
+                        var bi = cat_list.length;
+                        cat_list.forEach(function(li, i){
+                            if( a.substr(0, li.length) === li ){
+                                ai = i;
+                            }
+                            if( b.substr(0, li.length) === li ){
+                                bi = i;
+                            }
+                        })
+
+                        return +(ai > bi) || +(ai === bi) - 1;
+                    });
+
                     row.push(
                         "<ul>"+
                         item.evidence.literature_ref.mined_sentences.map(function(sent){
-                            return "<li><span class='bold'>"+upperCaseFirst(sent.section)+"</span>: "+sent.formattedText+"</li>";
+                            return "<li><span class='bold'>"+upperCaseFirst( clearUnderscores(sent.section) )+"</span>: "+sent.formattedText+"</li>";
                         }).join("") + "</ul>"
                     );
 
