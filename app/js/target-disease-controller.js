@@ -526,6 +526,11 @@
                     if( item.type === 'genetic_association'){
                         if ( checkPath(item, "evidence.variant2disease.provenance_type.literature") ) {
                             refs = item.evidence.variant2disease.provenance_type.literature.references;
+                        } else if( checkPath(item, "evidence.provenance_type.literature.references") ){
+                            // this code might be redundant here:
+                            // perhaps we don't need to check against genetic_association,
+                            // but just check whether there is variant2disease field etc...
+                            refs = item.evidence.provenance_type.literature.references;
                         }
                     } else {
                         if( checkPath(item, "evidence.provenance_type.literature.references") ){
