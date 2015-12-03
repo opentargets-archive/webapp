@@ -13,7 +13,7 @@ angular.module('cttvDirectives')
     'use strict';
 
     var cols = [
-        {name: "", title: ""},
+        {name: "", title: cttvDictionary.DISEASE},
         {name: "", title: "EFO"},
         {name: "", title: "TherapeuticArea EFO"},
         {name: "", title:cttvDictionary.ASSOCIATION_SCORE},
@@ -25,7 +25,7 @@ angular.module('cttvDirectives')
         {name:cttvConsts.datatypes.RNA_EXPRESSION, title:cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
         {name:cttvConsts.datatypes.LITERATURE, title:cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
         {name:cttvConsts.datatypes.ANIMAL_MODEL, title:cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
-        {name:"", title:""}
+        {name:"", title: cttvDictionary.THERAPEUTIC_AREA}
     ];
 
 
@@ -204,7 +204,7 @@ angular.module('cttvDirectives')
                         // Disease name
                         var geneDiseaseLoc = "/evidence/" + attrs.target + "/" + data.disease.id + (facets.score_str ? "?score_str=" + facets.score_str[0] : "");
 
-                        row.push("<a href=" + geneDiseaseLoc + ">" + data.disease.name + "</a>");
+                        row.push("<a href='" + geneDiseaseLoc + "' title='"+data.disease.name+"'>" + data.disease.name + "</a>");
 
                         // EFO (hidden)
                         row.push(data.disease.id);
@@ -231,7 +231,8 @@ angular.module('cttvDirectives')
                         // Animal model
                         row.push( getColorStyleString( datatypes.animal_model, geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models") );
                         // Therapeutic area
-                        row.push(_.reduce(data.disease.therapeutic_area.labels, iterateeLabel, ""));
+                        var area = _.reduce(data.disease.therapeutic_area.labels, iterateeLabel, "");
+                        row.push("<span title='"+area+"'>"+area+"</span>");
 
                         newData.push(row);
                     }

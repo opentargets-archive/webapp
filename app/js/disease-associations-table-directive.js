@@ -44,8 +44,8 @@ angular.module('cttvDirectives')
     * Columns definitions
     */
     var cols = [
-        // empty col for the gene name
-        {name:"", title:""},
+        // empty col for the gene symbol
+        {name:"", title:cttvDictionary.TARGET_SYMBOL},
         {name:"", title:cttvDictionary.ENSEMBL_ID},
         {name:"", title:cttvDictionary.ASSOCIATION_SCORE},
         // here are the datatypes:
@@ -59,7 +59,7 @@ angular.module('cttvDirectives')
         // empty col for sorting by total score (sum)
         {name:"", title:"total score"},
         // empty col for the gene name
-        {name:"", title:""}
+        {name:"", title:cttvDictionary.TARGET_NAME}
     ];
 
 
@@ -124,7 +124,7 @@ angular.module('cttvDirectives')
             var row = [];
             var geneLoc = "";
             var geneDiseaseLoc = "/evidence/" + data[i].target.id + "/" + data[i].disease.id + (filters.score_str ? "?score_str=" + filters.score_str[0] : "");
-            row.push("<a href='" + geneDiseaseLoc + "'>" + data[i].target.symbol + "</a>");
+            row.push("<a href='" + geneDiseaseLoc + "' title='"+data[i].target.symbol+"'>" + data[i].target.symbol + "</a>");
             // Ensembl ID
             row.push(data[i].target.id);
             // The association score
@@ -153,7 +153,7 @@ angular.module('cttvDirectives')
                       dts.animal_model) ;
 
             // Push gene name again instead
-            row.push("<a href=" + geneDiseaseLoc + ">" + data[i].target.name + "</a>");
+            row.push("<a href='" + geneDiseaseLoc + "' title='"+data[i].target.name+"'>" + data[i].target.name + "</a>");
             // just for for internal use to see direct and indirect associations
             //    if (data[i].is_direct === true) {
             //        row.push("<a href=" + geneDiseaseLoc + '> <i class="fa fa-circle"></i> ' + data[i].target.name + "</a>");
