@@ -34,6 +34,20 @@ angular.module('cttvServices').
                 EPMC :                "europepmc",
                 EVA_SOMATIC :         "eva_somatic"
             },
+            dbs_info_url : {
+                EXPRESSION_ATLAS :    "/data_sources#atlas",
+                UNIPROT :             "/data_sources#uniprot",
+                UNIPROT_LITERATURE:   "/data_sources#unilit",
+                REACTOME :            "/data_sources#reactome",
+                EVA :                 "/data_sources#eva",
+                PHENODIGM :           "/data_sources#mouse",
+                GWAS :                "/data_sources#gwas",
+                CANCER_GENE_CENSUS :  "/data_sources#census",
+                CHEMBL :              "/data_sources#chembl",
+                DISGENET :            "/data_sources",  // no longer used
+                EPMC :                "/data_sources#text_mining",
+                EVA_SOMATIC :         "/data_sources#eva"
+            },
             datatypesOrder: [
                 "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "ANIMAL_MODEL"
             ],

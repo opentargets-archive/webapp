@@ -29,7 +29,8 @@ angular.module('cttvServices').
 
             // D
             DATA_DISTRIBUTION :              "Data distribution",
-            DATATYPES :                      "Datatypes",
+            DATATYPES :                      "Data types",
+            DATA_TYPES :                     "Data types",
             DISEASE :                        "Disease",
             DISGENET :                       "DisGeNET",
 
@@ -65,6 +66,7 @@ angular.module('cttvServices').
 
             // O
             // P
+            PATHWAY_TYPES :                  "Pathway types",
             PHENODIGM :                      "Phenodigm",
 
             // Q
@@ -81,6 +83,7 @@ angular.module('cttvServices').
             TARGET_NAME :                    "Target name",
             TARGET_SYMBOL :                  "Target symbol",
             THERAPEUTIC_AREA :               "Therapeutic area",
+            THERAPEUTIC_AREAS :              "Therapeutic areas",
 
             // U
             UNIPROT :                        "UniProt",

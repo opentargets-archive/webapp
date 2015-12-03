@@ -173,8 +173,7 @@ angular.module('cttvServices').
             //$log.log("parseFacetData");
             var config={
                 key: collection,    // this is the type, really...
-                label: cttvDictionary[collection.toUpperCase()] || collection,
-                //isPartial: status.indexOf(collection)!=-1
+                label: cttvDictionary[collection.toUpperCase()] || collection,  // set default label based on what the API has returned for this
                 isPartial: Math.min(1, (status.indexOf(collection)+1))
             };
 
@@ -182,7 +181,7 @@ angular.module('cttvServices').
                 // we have datatypes, which is a little complicated
                 // because we have DEFAULT options (i.e. filtering out mouse data)
                 // these should go into the "selected filters" (although the user hasn't selected them)
-
+                config.label = cttvDictionary.DATA_TYPES;
                 config.filters = datatypes.map( function(obj){
                     var conf = {};
                     var def = {};
@@ -204,6 +203,7 @@ angular.module('cttvServices').
                     return obj.count>0;
                 });*/
             } else if (collection === cttvConsts.PATHWAY_TYPES){
+                config.label = cttvDictionary.PATHWAY_TYPES;
                 // pathways
                 config.filters = data.buckets.map(function(obj){
                     var conf = {};
@@ -233,9 +233,7 @@ angular.module('cttvServices').
                 });
 
             } else if (collection === cttvConsts.DATA_DISTRIBUTION){
-                $log.log("  "+cttvConsts.DATA_DISTRIBUTION);
                 // score (data_distribution)
-
                 config.label= cttvDictionary.SCORE;
                 var search = cttvFiltersService.parseURL();
                     search.score_min = search.score_min || [cttvConsts.defaults.SCORE_MIN.toFixed(2)];
