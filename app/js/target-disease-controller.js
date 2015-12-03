@@ -48,7 +48,7 @@
                     is_loading: false,
                     heading : cttvDictionary.COMMON_DISEASES,
                     source : cttvConfig.evidence_sources.genetic_association.common,
-                    source_label : cttvConfig.evidence_sources.genetic_association.common.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
+                    source_label : cttvConfig.evidence_sources.genetic_association.common.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
                 },
                 rare_diseases : {
                     data : [],
@@ -56,7 +56,7 @@
                     is_loading: false,
                     heading : cttvDictionary.RARE_DISEASES,
                     source : cttvConfig.evidence_sources.genetic_association.rare,
-                    source_label : cttvConfig.evidence_sources.genetic_association.rare.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
+                    source_label : cttvConfig.evidence_sources.genetic_association.rare.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
                 }
             },
             rna_expression : {
@@ -65,7 +65,7 @@
                 is_loading: false,
                 heading : cttvDictionary.RNA_EXPRESSION,
                 source : cttvConfig.evidence_sources.rna_expression,
-                source_label : cttvConfig.evidence_sources.rna_expression.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
+                source_label : cttvConfig.evidence_sources.rna_expression.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
             },
             pathways : {
                 data : [],
@@ -73,7 +73,7 @@
                 is_loading: false,
                 heading : cttvDictionary.AFFECTED_PATHWAY,
                 source : cttvConfig.evidence_sources.pathway,
-                source_label : cttvConfig.evidence_sources.pathway.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
+                source_label : cttvConfig.evidence_sources.pathway.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
             },
             drugs : {
                 data : [],
@@ -81,7 +81,7 @@
                 is_loading: false,
                 heading : cttvDictionary.KNOWN_DRUG,
                 source : cttvConfig.evidence_sources.known_drug,
-                source_label : cttvConfig.evidence_sources.known_drug.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
+                source_label : cttvConfig.evidence_sources.known_drug.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
             },
             somatic_mutations : {
                 data : [],
@@ -89,7 +89,7 @@
                 is_loading: false,
                 heading : cttvDictionary.SOMATIC_MUTATION,
                 source : cttvConfig.evidence_sources.somatic_mutation,
-                source_label : cttvConfig.evidence_sources.somatic_mutation.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
+                source_label : cttvConfig.evidence_sources.somatic_mutation.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
             },
             literature : {
                 data : [],
@@ -97,7 +97,7 @@
                 is_loading: false,
                 heading : cttvDictionary.LITERATURE,
                 source : cttvConfig.evidence_sources.literature,
-                source_label : cttvConfig.evidence_sources.literature.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
+                source_label : cttvConfig.evidence_sources.literature.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
             },
             mouse : {
                 data : [],
@@ -105,7 +105,7 @@
                 is_loading: false,
                 heading : cttvDictionary.ANIMAL_MODEL,
                 source : cttvConfig.evidence_sources.animal_model,
-                source_label : cttvConfig.evidence_sources.animal_model.map(function(s){return cttvDictionary[ cttvConsts.invert(s) ];})
+                source_label : cttvConfig.evidence_sources.animal_model.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
             },
         };
 
@@ -1362,6 +1362,7 @@
                                             "type": "t_start",
                                             "pos": sentence.t_start,
                                             "extra": '<span class="label label-primary">',
+                                            //"extra": '<span class="bg-info">',
                                             "span": 34
                                         });
                                         sentence.breakpoints.push({
@@ -1377,6 +1378,7 @@
                                             "type": "d_start",
                                             "pos": sentence.d_start,
                                             "extra": '<span class="label label-warning">',
+                                            //"extra": '<span class="bg-warning">',
                                             "span": 34
                                         });
                                         sentence.breakpoints.push({

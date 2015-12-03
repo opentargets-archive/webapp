@@ -48,7 +48,7 @@
                         <accordion-group is-open="tagroup.open">
 
                             <accordion-heading class="cttv-facets-headers">
-                                <span ng-click="toggleNavigation()">Therapeutic Areas</span>
+                                <span ng-click="toggleNavigation()">{{labels.therapeutic_areas}}</span>
                                 <i style="font-size:16px" class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !tagroup.open, 'fa-caret-down': tagroup.open}" ng-show="!bubblesUpdating"></i>
                                 <span cttv-progress-spinner ng-show="bubblesUpdating" class="pull-right"></span>
                             </accordion-heading>

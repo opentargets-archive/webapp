@@ -85,7 +85,7 @@
                                     <h4>{{search.genetic_associations.common_diseases.heading}}</h4>
                                     <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">GWAS Catalog curated database</a></p> -->
 
-                                    <p>Source: <span ng-repeat="source in search.genetic_associations.common_diseases.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+                                    <p>Source: <span ng-repeat="source in search.genetic_associations.common_diseases.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
                                     <div class="table-panel">
                                         <table class='table cttv-evidence-table' id="common-diseases-table">
@@ -125,7 +125,7 @@
                                     <h4>{{search.genetic_associations.rare_diseases.heading}}</h4>
                                     <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">UniProt</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated databases</p> -->
 
-                                    <p>Source: <span ng-repeat="source in search.genetic_associations.rare_diseases.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+                                    <p>Source: <span ng-repeat="source in search.genetic_associations.rare_diseases.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
                                     <div class="table-panel">
                                         <table class='table cttv-evidence-table' id="rare-diseases-table">
@@ -180,7 +180,7 @@
                     <div ng-show="search.somatic_mutations.data.length>0">
                         <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Cancer Gene Census</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated database</p> -->
 
-                        <p>Source: <span ng-repeat="source in search.somatic_mutations.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+                        <p>Source: <span ng-repeat="source in search.somatic_mutations.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
                         <div class="table-panel">
                             <table class='table cttv-evidence-table' id="mutations-table">
@@ -220,7 +220,7 @@
 
                     <!-- <div ng-show="search.drugs==true"> -->
                     <div ng-show="search.drugs.data.length>0">
-                        <p>Source: <span ng-repeat="source in search.drugs.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+                        <p>Source: <span ng-repeat="source in search.drugs.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
                         <known-drug-table disease="{{disease}}" target="{{target}}" load-flag="search.drugs.is_loading" data="search.drugs.data"></known-drug-table>
                     </div>
@@ -246,7 +246,7 @@
                     </accordion-heading>
                     <div ng-show="search.pathways.data.length>0">
                         <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Reactome</a> curated database</p> -->
-                        <p>Source: <span ng-repeat="source in search.pathways.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+                        <p>Source: <span ng-repeat="source in search.pathways.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
                         <!-- <h4>Header info for table</h4> -->
                         <div class="table-panel">
                             <table class='table cttv-evidence-table' id="pathways-table">
@@ -291,7 +291,7 @@
                     </accordion-heading>
                     <div ng-show="search.rna_expression.data.length>0">
                         <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Expression Atlas</a> curated database</p> -->
-                        <p>Source: <span ng-repeat="source in search.rna_expression.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span><span></p>
+                        <p>Source: <span ng-repeat="source in search.rna_expression.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
                         <!-- <h4>Header info for table</h4> -->
                         <div class="table-panel">
@@ -351,7 +351,7 @@
                             </div>
 
 
-                            <p>Source: <span ng-repeat="source in search.literature.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span ng-if="!$last">, </span></span></p>
+                            <p>Source: <span ng-repeat="source in search.literature.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span></span></p>
                         </div>
 
 
@@ -399,7 +399,7 @@
                     </accordion-heading>
                     <div ng-show="search.mouse.data.length>0">
                         <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Phenodigm</a></p> -->
-                        <p>Source: <span ng-repeat="source in search.mouse.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span></p>
+                        <p>Source: <span ng-repeat="source in search.mouse.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a></a><span></p>
                         <div class="table-panel">
                             <table class='table cttv-evidence-table' id="mouse-table">
                                 <thead>

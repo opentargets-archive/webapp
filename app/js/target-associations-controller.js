@@ -17,6 +17,12 @@ angular.module('cttvControllers')
 	    query : q
 	};
 
+    $scope.labels = {
+        therapeutic_areas : cttvDictionary.THERAPEUTIC_AREAS
+    };
+
+
+
     // reset the filters when loading a new page
     // so we don't see the filters from the previous page...
     cttvFiltersService.reset();
