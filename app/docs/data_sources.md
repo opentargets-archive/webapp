@@ -22,7 +22,7 @@ likely gene by assessing the probable link between SNP and gene using a CTTV cus
 deleterious consequence within the gene's coding region, then whether it is located within the gene's introns or regulatory regions and finally identifying
 the gene promoter to which it is nearest if there is no other data available.
 
-### <a name="uniprot"></a>
+### <a name="uniprot"></a>UniProt
 The EMBL-EBI [UniProt](http://www.uniprot.org) database is a comprehensive, high-quality and freely accessible resource of protein sequence and functional
 information manually curated from the literature and public databases including Online Mendelian Inheritance in Man (OMIM). The UniProt database supplies
 curated information on rare genetic diseases (Mendelian diseases). In this data, evidence that a target is associated with a disease comes primarily
