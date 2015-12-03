@@ -22,9 +22,6 @@ angular.module('cttvApp', [
             when('/', {
                 templateUrl: 'partials/intro.html'
             }).
-            when('/about', {
-                templateUrl: 'partials/about.html'
-            }).
             when('/search', {
                 templateUrl: 'partials/search.html',
                 controller: 'SearchAppCtrl'
@@ -43,9 +40,6 @@ angular.module('cttvApp', [
                 templateUrl: 'partials/target-disease.html',
                 controller: 'TargetDiseaseCtrl'
     	    }).
-    	    // when('/gene-disease', {
-            //     redirectTo: '/target-disease'   // for backward compatibility
-    	    // }).
     	    when('/target/:id', {
         		templateUrl: 'partials/target.html',
         		controller: 'TargetCtrl'
@@ -54,20 +48,33 @@ angular.module('cttvApp', [
         		templateUrl: 'partials/disease.html',
         		controller: 'DiseaseCtrl'
     	    }).
+
+            // Docs
             when('/faq', {
-                templateUrl: 'partials/faq.html'
+                templateUrl: 'docs/faq.html'
             }).
-            /*when('/evidence/:id', {
-                templateUrl: 'partials/evidence.html',
-                controller: 'EvidenceCtrl'
-            }).*/
-            // when('/target-disease', {
-            //     templateUrl: 'partials/target-disease.html',
-            //     controller: 'TargetDiseaseCtrl'
-            // }).
+            when('/data_sources', {
+                templateUrl: 'docs/data_sources.html'
+            }).
+            when('/terms_of_use', {
+                templateUrl: 'docs/terms_of_use.html',
+            }).
             when('/release-notes', {
                 templateUrl: 'partials/release-notes.html'
             }).
+            when('/scoring', {
+                templateUrl: 'docs/scoring.html'
+            }).
+            when('/about', {
+                templateUrl: 'docs/about.html'
+            }).
+            when('/personal-data-collected-examples', {
+                templateUrl: 'docs/personal-data-collected-examples.html'
+            }).
+            when('/variants', {
+                templateUrl: 'docs/variants'
+            }).
+
             otherwise({
                 redirectTo: '/'
             });

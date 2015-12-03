@@ -19,7 +19,7 @@ var pipelines = function () {
             return rest.cttv.call(url, undefined, opts)
                 .then (function (resp) {
                     cttv_highlight(resp);
-                    return p.rare(gene);
+                    return p.rare(genes);
                 });
         }
 
@@ -40,7 +40,7 @@ var pipelines = function () {
             return rest.cttv.call(url, undefined, opts)
                 .then (function (resp) {
                     cttv_highlight(resp);
-                    return p.common (gene);
+                    return p.common (genes);
                 });
         }
         opts = getOpts(genes, ["gwas_catalog"]);
@@ -257,7 +257,7 @@ var pipelines = function () {
             ]
         };
         if (efo !== undefined) {
-            opts.efo = efo;
+            opts.disease = efo;
             opts.expandefo = false;
         }
         return opts;
