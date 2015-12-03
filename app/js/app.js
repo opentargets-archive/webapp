@@ -57,6 +57,9 @@ angular.module('cttvApp', [
             when('/faq', {
                 templateUrl: 'partials/faq.html'
             }).
+            when('/data_sources', {
+                templateUrl: 'docs/data_sources.html'
+            }).
             /*when('/evidence/:id', {
                 templateUrl: 'partials/evidence.html',
                 controller: 'EvidenceCtrl'
