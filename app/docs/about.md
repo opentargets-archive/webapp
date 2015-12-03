@@ -1,4 +1,4 @@
-About the CTTV target validation platform
+About the CTTV Target Validation Platform
 =========================================
 The Center for Therapeutic Target Validation (CTTV) platform brings together evidence which associates potential
 drug targets with diseases. Its aim is to help users identify and prioritise potential targets for further investigation.
