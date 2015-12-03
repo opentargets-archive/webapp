@@ -1,3 +1,13 @@
+  * [What can I search for?](#what_can_I search_for)
+  * [What is a target?](#target)
+  * [How are diseases described?](#diseases)
+  * [What is the Experimental Factor Ontology?](#efo)
+  * [ Where does the data come from?](#data)
+  * [How is the association score calculated?](#score)
+  * [How are the articles shown in the Bibliography on the Target Profile page chosen?](#biblio)
+  * [How do you use the information I enter into the CTTV Target Validation platform?](#data_use)
+  * [How do I cite the CTTV Target Validation Platform?](#citation)
+
 Frequently asked questions
 ==========================
 <a name="what_can_I search_for"></a>What can I search for?
@@ -6,7 +16,7 @@ To find a target you can search for the gene or protein name and symbol (includi
 as annotated in the major biological databases. To find a disease you can search for the common disease
 name and its synonyms (including some abbreviations) as described in the [EFO ontology](http://www.ebi.ac.uk/efo/)
 
-What is a target?
+<a name="target"></a>What is a target?
 -----------------
 A target can be a protein, protein complex or RNA molecule, but we integrate evidence through the gene that codes for
 the target. We use [Ensembl gene identifiers](http://www.ensembl.org/info/genome/genebuild/genome_annotation.html)
@@ -26,12 +36,12 @@ phenotypes. It combines parts of several biological ontologies, such as anatomy,
 scope of EFO is to support the annotation, analysis and visualization of data handled by many groups at the [EMBL-EBI](http://www.ebi.ac.uk)
 and as the core ontology for the [Centre for Therapeutic Target Validation](http://about.targetvalidation.org).
 
-Where does the data come from?
+<a name="data"></a>Where does the data come from?
 ------------------------------
 The evidence in the CTTV platform comes from a number of public databases of biological data. These are
 described in detail on the [data sources](/data_sources) page.
 
-How is the association score calculated?
+<a name="score"></a>How is the association score calculated?
 ----------------------------------------
 To indicate the relative strength for each piece of evidence associating a target with a disease we calculate a score
 between 0 and 1. These scores are combined within each data type to give an overall score for the
@@ -41,13 +51,13 @@ The data type scores are combined to give an overall association score. The valu
 the depth of the blue colour shown in the views of the Disease Association page and the Target Association page. More
 details are given on the [scoring](/scoring) page.
 
-How are the articles shown in the Bibliography on the Target Profile page chosen?
+<a name="biblio">How are the articles shown in the Bibliography on the Target Profile page chosen?
 ---------------------------------------------------------------------------------
 The list of citations appearing in the Bibliography section of the Target Profile page (e.g.
 www.targetvalidation.org/target/ENSG00000157764) comes from the literature citations used to annotate the corresponding
 protein entry in [UniProt](http://www.uniprot.org).
 
-How do you use the information I enter into the CTTV Target Validation platform?
+<a name="data_use">How do you use the information I enter into the CTTV Target Validation platform?
 --------------------------------------------------------------------------------
 We do not analyse the nature of any specific queries (target or disease names) processed via the website except for the
 purposes of improving the site. We use standard encryption methods including https:// to maintain the security of the
@@ -57,6 +67,6 @@ Some of the components of the site are provided by third parties (e.g. the UniPr
 provided by third parties, mostly from other groups in the EMBL-EBI (e.g. the genome browser uses the Ensembl REST API). In addition we provide
 links out to other web sites such as [COSMIC](http://cancer.sanger.ac.uk/cosmic). Use of these services is covered by their own terms of use.
 
-How do I cite the CTTV Target Validation Platform?
+<a name="citation">How do I cite the CTTV Target Validation Platform?
 --------------------------------------------------
 See [here](/about#citation)
