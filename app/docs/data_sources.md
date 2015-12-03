@@ -16,8 +16,8 @@ for common disese and mutations in clinical samples from European Variation Arch
 ### <a name="gwas"></a>GWAS Catalog
 The [GWAS catalog](https://www.ebi.ac.uk/gwas/) provides evidence on the association of targets (genes) and diseases from Genome Wide Association Studies (GWAS).
 GWAS Catalog provides a list of the most associated variants (SNPs) by genomic region with the disease from each study. The GWAS Catalog data includes
-associations with p-values ² 10-5. Although the standard in the field for significance of an association in GWAS is for the
-p-value to be ² 5 x10-8, we provide sub-threshold values to broaden the coverage of diseases. The association is assigned the most
+associations with p-values â‰¤ 10-5. Although the standard in the field for significance of an association in GWAS is for the
+p-value to be â‰¤ 5 x10-8, we provide sub-threshold values to broaden the coverage of diseases. The association is assigned the most
 likely gene by assessing the probable link between SNP and gene using a CTTV custom annotation pipeline. SNPs are assigned to a gene by first considering any
 deleterious consequence within the gene's coding region, then whether it is located within the gene's introns or regulatory regions and finally identifying
 the gene promoter to which it is nearest if there is no other data available.
