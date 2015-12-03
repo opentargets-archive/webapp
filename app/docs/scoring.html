@@ -1,0 +1,89 @@
+<h1 id="scoring-target-disease-associations">Scoring target-disease associations</h1>
+<p>One of the aims of the CTTV platform is to allow prioritisation of targets based on their associated evidence. We have
+developed a scoring system to help you to answer questions such as:</p>
+<ul>
+<li>Which targets have the most evidence for association with a specific disease?</li>
+<li>What is the relative weight of evidence between different targets for a disease?</li>
+</ul>
+<p>The score quantifies what CTTV believe to be the key factors relating to the confidence in the evidence.</p>
+<h2 id="-a-name-association_score-a-the-association-score"><a name="Association_score"></a>The Association Score</h2>
+<p>The overall association score between a target and a disease is a numerical value indicating the strength of the association. The value is in the range 0 to 1,
+with 1 indicating the strongest associations. Negative scores will correspond to negative evidence (although not implemented in the current version). A score of 0
+corresponds to no evidence.</p>
+<p>The overall association score is produced by combining the scores for the target and disease from the individual <a href="/data_sources">data types</a> (genetic associations,
+known drugs, etc.), and is represented as a flower where each petal represents a different data type. The amount of filled colour in each petal represents
+the relative score within each data type.</p>
+<p>Each association data type results from the integration of one or multiple data sources, and the association score for each data type depends on the
+underlying strength of each piece of evidence supporting an associations.</p>
+<h2 id="computing-the-association-score">Computing the Association Score</h2>
+<p>To compute the association score, we first start by generating a score for each piece of evidence within a data type. This score summarises the strength of this
+evidence by accounting for factors specific to the data type that affect the relative strength.  Specifically we define the score as</p>
+<p><strong>S</strong> = <em>f</em> . <em>S</em> . <em>C</em> . <em>a</em></p>
+<p>where</p>
+<ul>
+<li><strong>S</strong> is the score,</li>
+<li><em>f</em> is a term that take into account the frequency of the occurrence of the evidence in the database,</li>
+<li><em>S</em> is a term that represents the strength of the effect, for instance the severity of the mutation in a genetic evidence,</li>
+<li><em>C</em> is a term that reflects the confidence of the observation for the evidence,</li>
+<li><em>a</em> is a heuristic term used to adjust the score to reflect the relative contribution of the data type to the overall association score.</li>
+</ul>
+<p>The factors involved in computing the evidence score are summarised in the table <a href="#factors">below</a></p>
+<p>To calculate an overall score for the data type we try to reflect both the fact that seeing multiple occurrences of evidence that supports
+an association provides replication, while at the same time if many pieces of evidence supporting the association have been seen, adding an
+additional one does not have great value. Hence we calculate the sum of the harmonic series of the individual evidence scores ordered by value.</p>
+<p>To obtain the overall association scores for a target and a disease, we calculate the sum of the harmonic series of the individual data type scores
+adjusting the contribution of each data type using a heuristic weighting.</p>
+<p>At each score stage of score calculation, the value of the score is capped to 1 which represents a highly confident association.  Thus highly confident curated evidence
+always scores 1.</p>
+<p>The current scoring implementation is actively being developed and CTTV is working on a statistical framework to refine the scoring scheme.</p>
+<p><a name="factors"></a></p>
+<table>
+<thead>
+<tr>
+<th>Data type</th>
+<th>Contributing Factors to Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Drugs</td>
+<td>ChEMBL Score: Drug development pipeline progression score (Pre-clinical, Phase I, Phase II, Phase III, Phase IV, Approved)</td>
+</tr>
+<tr>
+<td>RNA Expression</td>
+<td>Expression Atlas score: p-value, abs(log2(fold_change)),  rank</td>
+</tr>
+<tr>
+<td>Genetic Associations</td>
+<td>GWAS Catalog score: <a href="/variants">target to variant mapping score</a>, GWAS association p value,  sample_size, severity score</td>
+</tr>
+<tr>
+<td></td>
+<td>EVA normalised score: <a href="/variants">target to variant mapping score</a>, pathogenicity score from ClinVar</td>
+</tr>
+<tr>
+<td></td>
+<td>UniProt score: 0.5 (maybe affected by) or 1 (is affected by) depending on curation confidence</td>
+</tr>
+<tr>
+<td>Somatic Mutations</td>
+<td>COSMIC score: 1 (curated)</td>
+</tr>
+<tr>
+<td></td>
+<td>EVA score: target to variant score, pathogenicity score from ClinVar</td>
+</tr>
+<tr>
+<td>Literature Mining</td>
+<td>Europe PMC normalised co-occurrence score: title co-occurrences score + abstract co-occurrences score + full text co-occurrences score</td>
+</tr>
+<tr>
+<td>Affected Pathways</td>
+<td>Reactome score: 1 (curated)</td>
+</tr>
+<tr>
+<td>Animal Models</td>
+<td><a href="http://database.oxfordjournals.org/content/2013/bat025">Phenodigm similarity score</a></td>
+</tr>
+</tbody>
+</table>
