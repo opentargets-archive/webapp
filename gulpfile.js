@@ -13,6 +13,8 @@ var sass = require('gulp-sass');
 var csspurge = require('gulp-css-purge');
 var minifyCss = require('gulp-minify-css');
 
+var markdown = require("gulp-markdown");
+
 var gzip = require('gulp-gzip');
 var del = require("del");
 var rename = require('gulp-rename');
@@ -120,6 +122,12 @@ gulp.task('init', function() {
     });
 });
 
+gulp.task ('build-docs', function () {
+    return gulp.src("app/docs/*.md")
+        .pipe(markdown())
+        .pipe(gulp.dest("app/docs/"));
+});
+
 // sass-import
 gulp.task('components-sass', function () {
     return gulp.src("components.scss")
@@ -215,4 +223,4 @@ gulp.task('build-webapp', ['build-webapp-styles'], function () {
         .pipe(gulp.dest(buildDir));
 });
 
-gulp.task('build-all', ['init', 'build-3rdparty', 'build-components-min', 'build-webapp']);
+gulp.task('build-all', ['init', 'build-docs', 'build-3rdparty', 'build-components-min', 'build-webapp']);
