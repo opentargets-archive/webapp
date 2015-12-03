@@ -62,13 +62,13 @@ by data types using the corresponding filter on the left hand side.
 
 This view lists all diseases associated to a particular gene ordered by the association score. Scores are represented by the depth
 of blue colour. Cells representing associations with no evidence are coloured white. In this view we show evidence from the
-lower parts of the disease hierarchy aggregated into higher terms. So for instance in the [BRAF Target Association](https://www.targetvalidation.org/target/ENSG00000157764/associations)
+lower parts of the disease hierarchy aggregated into higher terms. So for instance in the [BRAF Target Association](/target/ENSG00000157764/associations)
 page, evidence is shown for higher level terms such as skin disease, or carcinoma.
 
 The filters work as before on this view and in addition the associations can be ordered by the association scores for individual data
 types by clicking the arrow in the table header. To order by several data types, shift-click the table headers. There is also a search box
 available and typing into the box will restrict the diseases displayed to those that match the search string. For example try typing "Mela"
-into the search box on the [BRAF](https://www.targetvalidation.org/target/ENSG00000157764/associations) table view to restrict the diseases
+into the search box on the [BRAF](/target/ENSG00000157764/associations) table view to restrict the diseases
 to types of melanoma.
 
 ### Tree View
@@ -88,7 +88,7 @@ by the association scores for individual data types by clicking the arrow in the
 the table headers.
 
 There is also a search box available and typing into the box will restrict the targets displayed to those that match the search string.
-For example try typing "IL" into the search box on the [Asthma](https://www.targetvalidation.org/disease/EFO_0000270/associations) table
+For example try typing "IL" into the search box on the [Asthma](/disease/EFO_0000270/associations) table
 view to restrict the targets largely to Interleukins.
 
 <a name="evidence"></a>Target-Disease Evidence page
