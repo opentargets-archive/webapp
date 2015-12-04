@@ -57,7 +57,7 @@ details are given on the [scoring](/scoring) page.
 #### <a name="biblio"></a>How are the articles shown in the Bibliography on the Target Profile page chosen?
 
 The list of citations appearing in the Bibliography section of the Target Profile page (e.g.
-www.targetvalidation.org/target/ENSG00000157764) comes from the literature citations used to annotate the corresponding
+[BRAF](/target/ENSG00000157764) comes from the literature citations used to annotate the corresponding
 protein entry in [UniProt](http://www.uniprot.org).
 
 #### <a name="data_use"></a>How do you use the information I enter into the CTTV Target Validation platform?
