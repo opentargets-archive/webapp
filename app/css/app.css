@@ -466,6 +466,9 @@ a.accordion-toggle{
     cursor: not-allowed !important;
 }
 
+.text-content-highlight {
+    padding: 0px 2px;
+}
 
 
 /*
@@ -603,6 +606,13 @@ a:focus {
     opacity: 0.5;
 }
 
+.highlight-warning {
+    background-color: #f6d7b3;  /* 25% of standard warning color */
+}
+
+.highlight-primary {
+    background-color: #b7d3e7;  /* 25% of standard primary color */
+}
 
 
 .menu {

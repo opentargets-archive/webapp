@@ -1361,8 +1361,8 @@
                                          sentence.breakpoints.push({
                                             "type": "t_start",
                                             "pos": sentence.t_start,
-                                            "extra": '<span class="label label-primary">',
-                                            //"extra": '<span class="bg-info">',
+                                            "extra": '<span class="highlight-primary">',
+                                            //"extra": '<span class="text-content-highlight highlight-primary">', // #337ab7    //b7d3e7
                                             "span": 34
                                         });
                                         sentence.breakpoints.push({
@@ -1377,8 +1377,8 @@
                                         sentence.breakpoints.push({
                                             "type": "d_start",
                                             "pos": sentence.d_start,
-                                            "extra": '<span class="label label-warning">',
-                                            //"extra": '<span class="bg-warning">',
+                                            "extra": '<span class="highlight-warning">',
+                                            //"extra": '<span class="text-content-highlight highlight-warning">', //#ec971f  //#f6d7b3
                                             "span": 34
                                         });
                                         sentence.breakpoints.push({
