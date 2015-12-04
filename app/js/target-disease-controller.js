@@ -1357,34 +1357,28 @@
                                     //     }
                                     //  }
                                      if (sentence.t_start !== sentence.t_end) {
-                                         var ot = '<span class="highlight-primary">';
                                          sentence.breakpoints.push({
                                             "type": "t_start",
                                             "pos": sentence.t_start,
-                                            "extra": ot,
-                                            "span": ot.length
+                                            "extra": '<span class="highlight-primary text-content-highlight">'
                                         });
                                         sentence.breakpoints.push({
                                             "type": "t_end",
                                             "pos": sentence.t_end+1,
-                                            "extra": "</span>",
-                                            "span": 7
+                                            "extra": "</span>"
                                         });
                                      }
 
                                     if (sentence.d_start !== sentence.d_end) {
-                                        var od = '<span class="highlight-warning">';
                                         sentence.breakpoints.push({
                                             "type": "d_start",
                                             "pos": sentence.d_start,
-                                            "extra": od,
-                                            "span": od.length
+                                            "extra": '<span class="highlight-warning text-content-highlight">'
                                         });
                                         sentence.breakpoints.push({
                                             "type": "d_end",
                                             "pos": sentence.d_end+1,
-                                            "extra": "</span>",
-                                            "span": 7
+                                            "extra": "</span>"
                                         });
                                     }
                                     // Sort the breakpoints by pos
@@ -1394,7 +1388,7 @@
 
                                     // Calculate the acc of offsets
                                     sentence.breakpoints = _.reduce(sentence.breakpoints, function (bps, bp, i) {
-                                        bp.acc = i? (bps[i-1].acc + bps[i-1].span) : 0;
+                                        bp.acc = i? (bps[i-1].acc + bps[i-1].extra.length) : 0;
                                         bps.push (bp);
                                         return bps;
                                     }, []);
