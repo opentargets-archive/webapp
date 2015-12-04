@@ -1,5 +1,5 @@
-Variant Definitions
--------------------
+## Variant Definitions
+
 
 |Variant term |Definition|
 |-------------|----------|
