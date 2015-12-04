@@ -12,7 +12,7 @@ The Personal Data we may collect from you could include:
   * Connection Information (e.g.IP address, web cookies, host information, approximate host location, pages visited).
 
 We may use your Personal Data:
-  * To provide you with information about our services, activities or our online content ?by offering to subscribe you to newsletters,
+  * To provide you with information about our services, activities or our online content by offering to subscribe you to newsletters,
   publications, event announcements, etc.,
   * To personalise the way our web content is presented to you,
   * To use IP addresses to identify your location for statistical reporting purposes and, if necessary, to block disruptive use,
