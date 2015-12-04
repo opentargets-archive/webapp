@@ -20,6 +20,7 @@ describe relationships between diseases. For more details see [How are diseases 
   * [Target-Disease Evidence page](#evidence)
   * [Target Profile Page](#target_profile)
   * [Disease Profile page](#disease_profile)
+  * [Association Score](#scoring)
   * [Filters](#filters)
   * [Citation](#citation)
   * [Support and Further Information](#support)
@@ -192,6 +193,9 @@ to other diseases in the ontology. This page also displays the relationships of 
 [EFO](/faq#efo) hierarchy. Clicking on ‘View target associations’ links to the Disease Association page for that disease.
 
 The Drug section on this page provides a list of all FDA-approved and marketed drugs to treat this disease.
+
+### <a name="scoring"></a>Association Score
+Details of the score calculation are given on the [scoring](/scoring) page.
 
 ### <a name="filters"></a>Filters
 
