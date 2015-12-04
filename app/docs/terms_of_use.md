@@ -1,8 +1,8 @@
-Terms of Use for the CTTV Target Validation Platform
-====================================================
+## Terms of Use for the CTTV Target Validation Platform
 
-General
--------
+
+#### General
+
   1. These Terms of Use reflect CTTV’s objective to develop, implement and rapidly disseminate to the wider scientific community, new informatics tools,
 experimental methods, platforms and associated data related to target validation. They impose no additional constraints on the use of the contributed
 data than those provided by the data owner.
@@ -26,8 +26,8 @@ data than those provided by the data owner.
   11. Software that can be run from the CTTV webpages may be used by any individual for any purpose unless specific exceptions are stated on the web page.
   12. CTTV does not accept responsibility for the consequences of any breach of the confidentiality of CTTV site by third parties.
 
-Data Services
--------------
+#### Data Services
+
   1. The online data services and databases of CTTV are generated in part from data contributed by the community who remain the data owners.
   2. CTTV itself places no additional restrictions on the use or redistribution of the data available via its online services other than those
   provided by the original data owners.
@@ -37,8 +37,8 @@ Data Services
   property rights, biodiversity-related access and benefit-sharing rights. It is the responsibility of users of the CTTV target validation platform
   to ensure that their exploitation of the data does not infringe any of the rights of such third parties.
 
-Privacy
--------
+#### Privacy
+
   1. We do not analyse the nature of any specific queries (target or disease names) processed via the website except for the purposes of improving the site.
   2. CTTV has implemented appropriate technical and organisational measures to ensure a level of security which we deem appropriate, taking into account the
   categories of data we collect and the way we process it.
