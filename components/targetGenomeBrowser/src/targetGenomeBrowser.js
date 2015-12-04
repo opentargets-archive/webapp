@@ -43,6 +43,7 @@ var cttv_genome_browser = function() {
         // Set the different #ids for the html elements (needs to be lively because they depend on the div_id)
         set_div_id(div);
         gBrowser = gB;
+        gB.zoom_in(150);
 
         ensemblRestApi = gB.rest();
 
