@@ -257,7 +257,7 @@ var pipelines = function () {
             ]
         };
         if (efo !== undefined) {
-            opts.disease = efo;
+            opts.disease = [efo];
             opts.expandefo = false;
         }
         return opts;
