@@ -14,9 +14,17 @@ and most synonyms as explained in [What can I search for](/faq#what_can_I search
 We map diseases to terms in the [Experimental Factor Ontology](http://www.ebi.ac.uk/efo/) (EFO), which enables us to
 describe relationships between diseases. For more details see [How are diseases described?](/faq#diseases)
 
+  * [Getting Started](#getting_started)
+  * [Target Association page](#target_assoc)
+  * [Disease Association page](#disease_assoc)
+  * [Target-Disease Evidence page](#evidence)
+  * [Target Profile Page](#target_profile)
+  * [Disease Profile page](#disease_profile)
+  * [Filters](#filters)
+  * [Citation](#citation)
+  * [Support and Further Information](#support)
 
-### Getting Started
-
+### <a name="getting_started"></a>Getting Started
 
 The platform supports workflows starting from either a target or disease and presents the evidence for target – disease
 associations in a number of ways through Association and Evidence pages. We also present related information on the target
@@ -26,8 +34,7 @@ A search box is available on the home page or at the top of every other page. To
 the gene or protein name, symbol or synonym. To find a disease you can search for the common disease name or its synonyms
 (including some abbreviations) provided the disease label and its synonyms are part of the [EFO](http://www.ebi.ac.uk/efo/).
 
-### Target Association page
-
+### <a name="target_assoc"></a>Target Association page
 
 After searching for a target and selecting the target you will be taken to the Target Association page which provides an
 overview of all diseases associated to a target.
@@ -79,7 +86,7 @@ association score at that node. Top-level disease categories are shown at a fixe
 that provides links to various other pages, but also allows branches of the tree to be collapsed down to simplify the visualisation.
 Clicking on a collapsed disease will allow the branches to be opened again.
 
-### Disease Association page
+### <a name="disease_assoc"></a>Disease Association page
 
 This page provides a table view of all potential targets associated to a disease ordered by the association score. The depth of blue colour
 for the cells in the association score and for the individual data types again indicates the strength of the association. Targets can be filtered
