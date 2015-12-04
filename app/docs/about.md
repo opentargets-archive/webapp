@@ -157,7 +157,7 @@ evidence from the [Phenodigm](/data_sources#mouse) database.
 
 ### <a name="target_profile"></a>Target Profile Page
 
-The Target Profile page summarizes relevant information about a particular target outside of the context of a specific disease association.
+The Target Profile page summarises relevant information about a particular target outside of the context of a specific disease association.
 The Target profile can be accessed either by clicking the target name in the Target-Disease Evidence page, or the "View BRAF profile" link
 in the Target Association page.
 
