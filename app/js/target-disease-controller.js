@@ -1357,12 +1357,12 @@
                                     //     }
                                     //  }
                                      if (sentence.t_start !== sentence.t_end) {
+                                         var ot = '<span class="highlight-primary">';
                                          sentence.breakpoints.push({
                                             "type": "t_start",
                                             "pos": sentence.t_start,
-                                            "extra": '<span class="highlight-primary">',
-                                            //"extra": '<span class="text-content-highlight highlight-primary">', // #337ab7    //b7d3e7
-                                            "span": 34
+                                            "extra": ot,
+                                            "span": ot.length
                                         });
                                         sentence.breakpoints.push({
                                             "type": "t_end",
@@ -1373,12 +1373,12 @@
                                      }
 
                                     if (sentence.d_start !== sentence.d_end) {
+                                        var od = '<span class="highlight-warning">';
                                         sentence.breakpoints.push({
                                             "type": "d_start",
                                             "pos": sentence.d_start,
-                                            "extra": '<span class="highlight-warning">',
-                                            //"extra": '<span class="text-content-highlight highlight-warning">', //#ec971f  //#f6d7b3
-                                            "span": 34
+                                            "extra": od,
+                                            "span": od.length
                                         });
                                         sentence.breakpoints.push({
                                             "type": "d_end",
