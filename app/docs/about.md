@@ -40,7 +40,7 @@ Three views of the associations are available organised by the tabs at the top:
 Filters are available on the left of the page to restrict the associations that are displayed by data type or to focus
 on a therapeutic area (see [filters](#filters)).
 
-##### Bubbles View
+#### Bubbles View
 
 This view groups diseases into 'bubbles' by therapeutic area. Each large bubble corresponds to a therapeutic area and
 consists of smaller bubbles representing diseases within this area. A disease can belong to several therapeutic areas
@@ -58,7 +58,7 @@ To zoom in on a particular therapeutic area, click on the corresponding therapeu
 To zoom out of a particular therapeutic area, click on the therapeutic area filter again. You can also filter the bubbles
 by data types using the corresponding filter on the left hand side.
 
-##### Table View
+#### Table View
 
 This view lists all diseases associated to a particular gene ordered by the association score. Scores are represented by the depth
 of blue colour. Cells representing associations with no evidence are coloured white. In this view we show evidence from the
@@ -71,7 +71,7 @@ available and typing into the box will restrict the diseases displayed to those 
 into the search box on the [BRAF](/target/ENSG00000157764/associations) table view to restrict the diseases
 to types of melanoma.
 
-##### Tree View
+#### Tree View
 
 The ‘Tree’ view allows visualisation of evidence across the therapeutic areas in a tree representing the relationships of diseases.
 Therapeutic areas have a square symbol, while the other disease nodes are circles. The depth of the blue fill of the node indicates the
@@ -109,7 +109,7 @@ the header will open out a section indicating there is "No data available".
 In each of the evidence tables, the columns may be sorted by the data, by clicking on the arrows in the table header. The tables can also be
 searched for matches to text by typing in the 'Search:' box. Details of the content of the tables follow:
 
-##### Genetic associations
+#### Genetic associations
 This section splits into common disease evidence from Genome Wide Association Studies ([GWAS catalog](/data_sources#gwas)),
 and rare disease evidence from Mendelian disease ([UniProt](/data_sources#uniprot) and [European Variation Archive](/data_sources#eva)).
 
@@ -118,32 +118,32 @@ links the SNP to the target.
 
 For rare disease, we report the mutation if it is available and the curated cosequence of the mutation.
 
-##### Somatic mutations
+#### Somatic mutations
 Somatic mutation evidence is provided primarily for cancers, from the [Cancer Gene Census](/data_sources#census). This data is a summary of multiple
 and sometimes many somatic mutations that support the association of a target to disease, and we provide the details of the mutation types
 observed that contribute to the overall summary annotation.
 
 In addition somatic mutation data can also come from the [European Variation Archive](/data_sources#eva_somatic)
 
-##### Drugs
+#### Drugs
 This section lists FDA approved and marketed drugs that associate a specific target to a specific disease. The drug to target association
 and drug to disease associations are curated by [ChEMBL](/data_sources#chembl) from multiple evidence sources as listed.
 
-##### Affected pathways
+#### Affected pathways
 Evidence in this section reflects specific curation in [Reactome](/data_sources#reactome) of a molecular mechanism that affects a pathway leading to disease.
 
-##### RNA expression
+#### RNA expression
 
 The RNA expression data table shows gene changes for which the log2 fold change is greater than 1 or less than -1 and p-value is less than 0.05
 (after Benjamini & Hochberg (1995) FDR correction). The percentile rank column shows the relative rank of the gene expression fold change of
 that gene in comparison to all other genes for this experiment.
 
-##### Text mining
+#### Text mining
 The Literature Mining data table shows the most relevant research articles based on the number of times an association between a gene and a
 disease is found in sentences across the article and highlights the terms in the relevant sentences.  Clicking on the number in the Matched
 sentences column will reveal a pop-up with all relevant sentences from the article.
 
-##### Animal models
+#### Animal models
 The table shows the mapping of the human and mouse phenotypes together withthe identity of the mouse knockout mutation that provides the
 evidence from the [Phenodigm](/data_sources#mouse) database.
 
