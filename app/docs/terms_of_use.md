@@ -51,10 +51,10 @@ data than those provided by the data owner.
   or as long as is set out in (i) any relevant contract you hold with CTTV (ii) in any relevant data retention policy, or (iii) applicable legislation.
   6. As part of its website offering CTTV may make use of services or web components provided by others to provide access to certain public domain data
   (e.g. Ensembl REST API), or may provide links out to other websites. Use of these services or web sites is covered by the Terms of use of the specific
-  services or websites.
-  7.If you post or send offensive, inappropriate or objectionable content anywhere on or to our websites or otherwise engage in any disruptive behaviour
+  services or websites. 
+  7. If you post or send offensive, inappropriate or objectionable content anywhere on or to our websites or otherwise engage in any disruptive behaviour
   on any of our services, we may use your personal information to stop such behaviour. Where we reasonably believe that you are or may be in breach of
-  any applicable laws we may use your personal information to inform relevant third parties about the content and your behaviour.
-  8.CTTV’s websites uses cookies to record information about your online preferences that allow us to personalise your experience of the website. You
+  any applicable laws we may use your personal information to inform relevant third parties about the content and your behaviour. 
+  8. CTTV’s websites uses cookies to record information about your online preferences that allow us to personalise your experience of the website. You
   can control your use of cookies from your web browser, but if you choose not to accept cookies from CTTV’s websites, you will not be able to take full
   advantage of all of the website's features.
