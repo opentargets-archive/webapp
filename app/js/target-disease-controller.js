@@ -1346,17 +1346,16 @@
                                 }
                                 paper.evidence.literature_ref.mined_sentences.map (function (sentence) {
                                     // Non asciii characters are also breakpoints
-                                    for (var i=0; i<sentence.text.length; i++) {
-                                        if (sentence.text.charCodeAt(i) >= 945) {
-                                            // console.warn ("NON ASCIII char found: " + sentence.text[i] + "(" + sentence.text.charCodeAt(i) + ")");
-                                            sentence.breakpoints.push({
-                                                "type": "nonAsciii",
-                                                "pos" : i,
-                                                "extra": 0,
-                                                "span": -1
-                                            });
-                                        }
-                                     }
+                                    // for (var i=0; i<sentence.text.length; i++) {
+                                    //     if (sentence.text.charCodeAt(i) >= 945) {
+                                    //         sentence.breakpoints.push({
+                                    //             "type": "nonAsciii",
+                                    //             "pos" : i,
+                                    //             "extra": 0,
+                                    //             "span": -1
+                                    //         });
+                                    //     }
+                                    //  }
                                      if (sentence.t_start !== sentence.t_end) {
                                          sentence.breakpoints.push({
                                             "type": "t_start",

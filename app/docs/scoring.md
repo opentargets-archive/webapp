@@ -1,5 +1,5 @@
-Scoring target-disease associations
-===================================
+## Scoring target-disease associations
+
 
 One of the aims of the CTTV platform is to allow prioritisation of targets based on their associated evidence. We have
 developed a scoring system to help you to answer questions such as:
@@ -9,8 +9,8 @@ developed a scoring system to help you to answer questions such as:
 
 The score quantifies what CTTV believe to be the key factors relating to the confidence in the evidence.
 
-<a name="Association_score"></a>The Association Score
---------------------
+#### <a name="Association_score"></a>The Association Score
+
 
 The overall association score between a target and a disease is a numerical value indicating the strength of the association. The value is in the range 0 to 1,
 with 1 indicating the strongest associations. Negative scores will correspond to negative evidence (although not implemented in the current version). A score of 0
@@ -23,8 +23,8 @@ the relative score within each data type.
 Each association data type results from the integration of one or multiple data sources, and the association score for each data type depends on the
 underlying strength of each piece of evidence supporting an associations.
 
-Computing the Association Score
------
+#### Computing the Association Score
+
 
 To compute the association score, we first start by generating a score for each piece of evidence within a data type. This score summarises the strength of this
 evidence by accounting for factors specific to the data type that affect the relative strength.  Specifically we define the score as

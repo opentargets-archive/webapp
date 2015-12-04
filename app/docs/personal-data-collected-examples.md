@@ -1,5 +1,5 @@
-Examples of Personal Data Collected by CTTV
-===========================================
+## Examples of Personal Data Collected by CTTV
+
 Some examples of the personal data that we collect within the CTTV services, how this data is used, who this data may be disclosed to,
 and when we may contact you are described below.
 
