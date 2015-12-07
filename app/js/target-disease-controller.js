@@ -1239,7 +1239,8 @@
                             // console.log("    == " + f.formatted);
                             var pos = abstract.indexOf(f.raw);
                             // console.log("    POS: " + pos);
-                            abstract = abstract.replace(f.raw, "<b>" + f.formatted + '</b>');
+                            //abstract = abstract.replace(f.raw, "<b>" + f.formatted + '</b>');
+                            abstract = abstract.replace(f.raw, f.formatted);
 
                             // If not in the abstract, try the title
                             if (pos === -1) {
