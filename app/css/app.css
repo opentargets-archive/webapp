@@ -804,12 +804,12 @@ table.dataTable thead .sorting {
 
 .sorting_asc::after{
     color: #337ab7;
-    content: '\f0dd' !important;
+    content: '\f0de' !important;
 }
 
 .sorting_desc::after {
     color: #337ab7;
-    content: '\f0de' !important;
+    content: '\f0dd' !important;
 }
 
 
