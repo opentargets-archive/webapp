@@ -22,8 +22,6 @@ We may use your Personal Data:
 
 We may disclose your Personal Data:
 
-  * In statistical reports to our Governance Board,
-  * In forming part of the scientific record of data submitted to our data archives,
   * To your employer, university, law enforcement or other government bodies, in exceptional circumstances where your activity
   is disruptive or may be illegal under your local laws.
 
