@@ -135,7 +135,7 @@
                 then(
                     function(resp) {
                         $scope.search.info.gene = resp.body;
-                        updateTitle();
+                        //updateTitle();
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
@@ -150,7 +150,7 @@
                         $scope.search.info.efo = resp.body;
                         // TODO: This is not returned by the api yet. Maybe we need to remove it later
                         $scope.search.info.efo.efo_code = $scope.search.disease;
-                        updateTitle();
+                        //updateTitle();
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
@@ -159,8 +159,10 @@
 
 
 
-        var updateTitle = function(){
-            $scope.search.info.title = (($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name)+"-"+$scope.search.info.efo.label).split(" ").join("_");
+        var updateTitle = function(t, d){
+            //$scope.search.info.title = (($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name)+"-"+$scope.search.info.efo.label).split(" ").join("_");
+            $scope.search.info.title = (t+"-"+d).split(" ").join("_");
+            $log.log( "updateTitle() : " + $scope.search.info.title );
         };
 
 
@@ -226,6 +228,7 @@
                         for(var i=0; i<resp.body.data[0].datatypes.length; i++){
                             $scope.search.association_scores[resp.body.data[0].datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score;
                         }
+                        updateTitle( resp.body.data[0].target.symbol, resp.body.data[0].disease.name );
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
@@ -1737,16 +1740,19 @@
 
             // get the data for the flower graph
             getFlowerData()
+                .then(function(){
+                    // then get data for all then
+                    getCommonDiseaseData();
+                    getRareDiseaseData();
+                    getMutationData();
+                    getDrugData();
+                    getRnaExpressionData();
+                    getPathwaysData();
+                    getLiteratureData();
+                    getMouseData();
+                });
 
-            // then get data for all then
-            getCommonDiseaseData();
-            getRareDiseaseData();
-            getMutationData();
-            getDrugData();
-            getRnaExpressionData();
-            getPathwaysData();
-            getLiteratureData();
-            getMouseData();
+
 
             /*getFlowerData()
                 .then(function(){
