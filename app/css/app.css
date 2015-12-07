@@ -470,6 +470,10 @@ a.accordion-toggle{
     padding: 0px 2px;
 }
 
+.cttv-author-et-al {
+    font-style: italic;
+}
+
 
 /*
  * Lists

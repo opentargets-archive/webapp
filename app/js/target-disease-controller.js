@@ -1213,7 +1213,7 @@
                         authArr = auth.split(",");
                     }
                     if(auth && auth.length>1){
-                        authArr[0] = authArr[0] + " et al.";
+                        authArr[0] = authArr[0] + " <span class='cttv-author-et-al'>et al.</span>";
                     }
                     auth = authArr[0];
 
