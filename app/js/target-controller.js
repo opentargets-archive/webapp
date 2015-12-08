@@ -238,6 +238,7 @@ angular.module('cttvControllers')
             $scope.setPathwayViewer = function (pathway) {
                 $scope.pathway = {
                     id: pathway.id,
+                    name: pathway.name
                 };
             };
 
