@@ -35,7 +35,7 @@ A search box is available on the home page or at the top of every other page. To
 the gene or protein name, symbol or synonym. To find a disease you can search for the common disease name or its synonyms
 (including some abbreviations) provided the disease label and its synonyms are part of the [EFO](http://www.ebi.ac.uk/efo/).
 
-A getting started slide pack is available [here](about.targetvalidation.org/project/cttv-core-target-validation-platform/CTTV_Platform_Getting_Started.pdf)
+A getting started slide pack is available [here](about.targetvalidation.org/project/cttv-core-target-validation-platform/cttv_platform_getting_started.pdf)
 
 ### <a name="target_assoc"></a>Target Association page
 
