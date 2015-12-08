@@ -12,7 +12,6 @@ var tooltips = function () {
     var m = {};
 
     var snp_data = function (data, ensembl_data) {
-        console.log(data);
         var obj = {};
         obj.header = data.name;
         obj.rows = [];
@@ -60,7 +59,7 @@ var tooltips = function () {
             for (var i=0; i<data.associations.length; i++) {
                 var association = data.associations[i];
                 obj.rows.push({
-                    "label" : "<a href=/evidence/" + data.target.geneid + "/" + association.efo + ">" + association.label + "</a>",
+                    "label" : "<a href=/evidence/" + data.target.geneid + "/" + (association.efo.split("/").pop()) + ">" + association.label + "</a>",
                     "value" : association.pmids.length + (association.pmids.length === 1 ? " article" : " articles") + "  <a href='http://europepmc.org/search?query=" + association.pmids.map(function (d) {return "EXT_ID:"+d;}).join("%20OR%20") + "' target=_blank <i class='fa fa-newspaper-o fa-lg'></i></a>"
                 });
             }
@@ -73,8 +72,8 @@ var tooltips = function () {
 
             for (var i=0; i<data.study.length; i++) {
                 obj.rows.push({
-                    "label" : "<a href='/evidence/" + data.target.geneid + "/"+ data.study[i].efo + "'>" + data.study[i].efo_label + '</a>',
-                    "value" : parseFloat(data.study[i].pvalue).toPrecision(1) + " <a target=_blank href='http://europepmc.org/abstract/med/" + data.study[i].pmid + "'><i class='fa fa-newspaper-o fa-lg'></i></a>"
+                    "label" : "<a href='/evidence/" + data.target.geneid + "/"+ (data.study[i].efo.split("/").pop()) + "'>" + data.study[i].efo_label + '</a>',
+                    "value" : parseFloat(data.study[i].pvalue).toPrecision(1) + " <a target=_blank href='http://europepmc.org/abstract/med/" + (data.study[i].pmid.split("/").pop()) + "'><i class='fa fa-newspaper-o fa-lg'></i></a>"
                 });
             }
         }
@@ -116,17 +115,18 @@ var tooltips = function () {
     m.gene = function (gene) {
 
         // Gene tooltip data
-        var tooltip_obj = function (ensemblData, cttvData) {
+        var tooltip_obj = function (ensemblData, cttvData, transcriptData) {
+
             var obj = {};
-            obj.header = ensemblData.gene.external_name + " (" + ensemblData.gene.id + ")";
+            obj.header = (ensemblData.display_name || ensemblData.external_name) + " (" + ensemblData.id + ")";
             obj.rows = [];
 
             // Associations and target links maybe
             var associationsValue;
             var targetValue;
             if (cttvData && cttvData.data && cttvData.data.length > 0) {
-                associationsValue = "<a href='/target/" + ensemblData.gene.id + "/associations'>" + (cttvData.data.length) + " disease associations</a> ";
-                targetValue = "<a href='/target/" + ensemblData.gene.id + "'>View CTTV profile</a>";
+                associationsValue = "<a href='/target/" + ensemblData.id + "/associations'>" + (cttvData.data.length) + " disease associations</a> ";
+                targetValue = "<a href='/target/" + ensemblData.id + ensemblData.id + "'>View CTTV profile</a>";
             }
 
             obj.rows.push ({
@@ -135,11 +135,11 @@ var tooltips = function () {
             });
             obj.rows.push( {
                 "label" : "Biotype",
-                "value" : ensemblData.gene.biotype
+                "value" : ensemblData.biotype
             });
             obj.rows.push({
                 "label" : "Location",
-                "value" : "<a target='_blank' href='http://www.ensembl.org/Homo_sapiens/Location/View?db=core;g=" + ensemblData.id + "'>" + ensemblData.gene.seq_region_name + ":" + ensemblData.gene.start + "-" + ensemblData.gene.end + "</a>"
+                "value" : "<a target='_blank' href='http://www.ensembl.org/Homo_sapiens/Location/View?db=core;g=" + ensemblData.id + "'>" + ensemblData.seq_region_name + ":" + ensemblData.start + "-" + ensemblData.end + "</a>"
             });
             if (associationsValue !== undefined) {
                 obj.rows.push({
@@ -155,10 +155,10 @@ var tooltips = function () {
             }
             obj.rows.push( {
                 "label" : "Description",
-                "value" : ensemblData.gene.description
+                "value" : ensemblData.description
             });
 
-            if (!ensemblData.isGene) {
+            if (transcriptData) {
                 obj.rows.push({
                     "label" : "Transcript",
                     "value" : ""
@@ -166,17 +166,17 @@ var tooltips = function () {
 
                 obj.rows.push({
                     "label" : "Name",
-                    "value" : ensemblData.transcript.external_name
+                    "value" : transcriptData.display_name
                 });
 
                 obj.rows.push({
                     "label" : "ID",
-                    "value" : "<a target='_blank' href='http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=" + ensemblData.id + "'>" + ensemblData.id + "</a>"
+                    "value" : "<a target='_blank' href='http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=" + transcriptData.id + "'>" + transcriptData.id + "</a>"
                 });
 
                 obj.rows.push({
                     "label" : "biotype",
-                    "value" : ensemblData.transcript.biotype
+                    "value" : transcriptData.biotype
                 });
             }
 
@@ -193,7 +193,7 @@ var tooltips = function () {
             .id(id);
 
         var url = cttvRestApi.url.associations ({
-            "target" : gene.gene.id,
+            "target" : (gene.isGene ? gene.id : gene.gene.id),
             "datastructure" : "flat",
             "filterbyscorevalue_min": 0,
             "stringency": 1
@@ -204,11 +204,17 @@ var tooltips = function () {
             t.call(elem, obj, event);
         })
         .then(function (resp) {
-            var obj = tooltip_obj (gene, resp.body);
+            var obj;
+            if (gene.isGene) {
+                obj = tooltip_obj (gene, resp.body);
+            } else {
+                obj = tooltip_obj (gene.gene, resp.body, gene); // gene is a transcript
+            }
+            // var obj = tooltip_obj (gene, resp.body);
             t.call(elem, obj, event);
         });
         s.call(elem, {
-            header : gene.gene.external_name + " (" + gene.gene.id + ")",
+            header : (gene.isGene? gene.external_name + " (" + gene.gene_id + ")" : gene.gene.display_name + "(" + gene.gene.id + ")"),
             body : "<i class='fa fa-spinner fa-2x fa-spin'></i>"
         });
 

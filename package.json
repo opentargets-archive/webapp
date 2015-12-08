@@ -59,9 +59,9 @@
     "cttv.targetAssociationsTree": "file:components/targetAssociationsTree",
     "cttv.targetGeneTree": "file:components/targetGeneTree",
     "cttv.targetGenomeBrowser": "file:components/targetGenomeBrowser",
-    "tnt.ensembl": "0.0.5",
-    "tnt.genome": "0.0.37",
-    "tnt.tooltip": "0.0.10",
+    "tnt.ensembl": "0.0.12",
+    "tnt.genome": "0.0.39",
+    "tnt.tooltip": "0.0.11",
     "tnt.utils": "0.0.1"
   }
 }
