@@ -3,6 +3,7 @@
     <head>
 
         <title ng-bind-template="{{viewTitle ? viewTitle+' - ' : ''}}CTTV Platform"></title>
+        <link rel="shortcut icon" href="imgs/favicons/CTTV_favicon_trans.png" type="image/png" />
         <meta http-equiv="content-type" content="text/html; charset=UTF8">
         <meta name="google-site-verification" content="L6ztwjop7Soke4dHLg6YAEwUK6IrTKtQEp8cIUamlKg" />
 
@@ -68,10 +69,11 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/tabletools/2.2.1/css/dataTables.tableTools.min.css">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.9,b-1.0.3,b-html5-1.0.3/datatables.min.css"/>-->
 
-        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9,b-1.0.3,b-html5-1.0.3/datatables.min.css"/> -->
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9/datatables.min.css?v=16112015"/>
-        <!-- TODO: while we get the fix in official release, same for JS-->
-        <link rel="stylesheet" type="text/css" href="./vendor/datatables/buttons.dataTables.min.css?v=16112015"/>
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9,b-1.0.3,b-html5-1.0.3/datatables.min.css"/>-->
+        <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9/datatables.min.css?v=16112015"/> TODO: while we get the fix in official release, same for JS-->
+        <!-- <link rel="stylesheet" type="text/css" href="./vendor/datatables/buttons.dataTables.min.css?v=16112015"/>  TODO: while we get the fix in official release, same for JS -->
+        <!-- NEW datatable -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/bs/jq-2.1.4,dt-1.10.10,b-1.1.0,b-html5-1.1.0/datatables.min.css"/>
 
         <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'> -->
 
@@ -295,10 +297,13 @@
             <script type="text/javascript" src="https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.min.js"></script>-->
 
 
-            <!--<script type="text/javascript" src="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9,b-1.0.3,b-html5-1.0.3/datatables.js"></script>-->
-            <script type="text/javascript" src="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9/datatables.min.js?v=16112015"></script>
-            <script type="text/javascript" src="./vendor/datatables/dataTables.buttons.min.js?v=16112015"></script>  <!-- TODO: remove this nightly build when fixes are included in official release -->
-            <script type="text/javascript" src="./vendor/datatables/buttons.html5.min.js?v=16112015"></script>  <!--TODO: remove this when fixes are included in official release -->
+            <!-- <script type="text/javascript" src="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9,b-1.0.3,b-html5-1.0.3/datatables.js"></script> -->
+            <!-- <script type="text/javascript" src="https://cdn.datatables.net/r/bs/jq-2.1.4,dt-1.10.9/datatables.min.js?v=16112015"></script> -->
+            <!-- <script type="text/javascript" src="./vendor/datatables/dataTables.buttons.min.js?v=16112015"></script>  TODO: remove this nightly build when fixes are included in official release -->
+            <!-- <script type="text/javascript" src="./vendor/datatables/buttons.html5.min.js?v=16112015"></script>       TODO: remove this when fixes are included in official release -->
+            <!-- NEW datatable -->
+            <script type="text/javascript" src="https://cdn.datatables.net/s/bs/jq-2.1.4,dt-1.10.10,b-1.1.0,b-html5-1.1.0/datatables.min.js"></script>
+
 
             <!-- Cookie notification-->
             <script type="text/javascript" id="cookiebanner" src="./vendor/cookiebanner/cookiebanner.min.js"
