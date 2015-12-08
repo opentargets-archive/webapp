@@ -126,7 +126,7 @@ var tooltips = function () {
             var targetValue;
             if (cttvData && cttvData.data && cttvData.data.length > 0) {
                 associationsValue = "<a href='/target/" + ensemblData.id + "/associations'>" + (cttvData.data.length) + " disease associations</a> ";
-                targetValue = "<a href='/target/" + ensemblData.id + ensemblData.id + "'>View CTTV profile</a>";
+                targetValue = "<a href='/target/" + ensemblData.id + "'>View CTTV profile</a>";
             }
 
             obj.rows.push ({
