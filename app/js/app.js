@@ -6,9 +6,9 @@ angular.module('cttvApp', [
     'cttvControllers',
     'cttvDirectives',
     'cttvFilters',
-    // 'angulartics',
+    'angulartics',
     //'angulartics.google.analytics',
-    // 'angulartics.piwik',
+    'angulartics.piwik',
     'viewhead',
     'cttvServices',
     'hm.readmore'
