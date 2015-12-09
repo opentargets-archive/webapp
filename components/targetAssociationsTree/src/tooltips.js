@@ -53,7 +53,7 @@ var tooltips = function () {
             value : "<a class=cttv_flowerLink href=" + loc + "><div class=tnt_flowerView></div></a>"
         });
         obj.rows.push({
-            value: "<a href=" + loc + ">View evidence details</a>"
+            value: "<a href=" + loc + "><span style=font-weight:bold>View evidence details</span></a>"
         });
         var diseaseProfileLoc = "/disease/" + node.property(function (n) { return n.disease.id; });
         var diseaseAssocLoc = diseaseProfileLoc + "/associations";
