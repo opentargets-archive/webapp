@@ -183,7 +183,7 @@ Information available here includes:
   Target Profile page, all drugs for this target are displayed independent of disease,
   * Target Family
   * Bibliography information including the sources of literature data used to annotate the corresponding protein entry in
-  EMBL-EBI [UniProt](http://www.uniprot.org) and is provided through [EUROPE PubMed Central](https://europepmc.org/).
+  [UniProt](http://www.uniprot.org) and is provided through [EUROPE PubMed Central](https://europepmc.org/).
 
 ### <a name="disease_profile"></a>Disease Profile page
 
