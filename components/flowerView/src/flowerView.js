@@ -41,6 +41,7 @@ var flowerView = function () {
         	    var rads = r * 180 / Math.PI;
         	    var offset = 15;
         	    svg.append("text")
+                .attr("class", "cttv_petal_label")
         		.attr("x", origin[0])
         		.attr("y", origin[1])
         		.attr("font-size", conf.fontsize)
