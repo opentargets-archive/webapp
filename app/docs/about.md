@@ -61,8 +61,8 @@ disease bubble and the depth of its blue colour: The larger the bubble and the d
 
 Mouse over a bubble to display the full name of the disease and the score associating it with the target. Clicking on a
 bubble opens a pop-up with several links: Click on the flower icon or to ‘View evidence details’ to view the detailed
-[Target-Disease Evidence](#evidence) page for the association, click on the ‘P’ icon to view the Disease Profile page
-or the ‘A’ icon to view all the target associations of that disease.
+[Target-Disease Evidence](#evidence) page for the association, click on 'Profile’ to view the Disease Profile page
+or ‘Associations’ to view all the target associations of that disease.
 
 To zoom in on a particular therapeutic area, click on the corresponding therapeutic area filter on the left hand side.
 To zoom out of a particular therapeutic area, click on the therapeutic area filter again. You can also filter the bubbles
@@ -123,7 +123,7 @@ searched for matches to text by typing in the 'Search:' box. Details of the cont
 This section splits into common disease evidence from Genome Wide Association Studies ([GWAS catalog](/data_sources#gwas)),
 and rare disease evidence from Mendelian disease ([UniProt](/data_sources#uniprot) and [European Variation Archive](/data_sources#eva)).
 
-For GWAS data we provide the identity of the SNP that was reported as the strongest association withe reported p value and the evidence that
+For GWAS data we provide the identity of the SNP that was reported as the strongest association with the reported p value and the evidence that
 links the SNP to the target.
 
 For rare disease, we report the mutation if it is available and the curated cosequence of the mutation.
@@ -157,7 +157,6 @@ sentences column will reveal a pop-up with all relevant sentences from the artic
 The table shows the mapping of the human and mouse phenotypes together withthe identity of the mouse knockout mutation that provides the
 evidence from the [Phenodigm](/data_sources#mouse) database.
 
-
 ### <a name="target_profile"></a>Target Profile Page
 
 The Target Profile page summarises relevant information about a particular target outside of the context of a specific disease association.
@@ -183,7 +182,7 @@ Information available here includes:
   Target Profile page, all drugs for this target are displayed independent of disease,
   * Target Family
   * Bibliography information including the sources of literature data used to annotate the corresponding protein entry in
-  EMBL-EBI [UniProt](http://www.uniprot.org) and is provided through [EUROPE PubMed Central](https://europepmc.org/).
+  [UniProt](http://www.uniprot.org) and is provided through [EUROPE PubMed Central](https://europepmc.org/).
 
 ### <a name="disease_profile"></a>Disease Profile page
 
