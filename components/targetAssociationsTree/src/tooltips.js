@@ -53,8 +53,15 @@ var tooltips = function () {
             value : "<a class=cttv_flowerLink href=" + loc + "><div class=tnt_flowerView></div></a>"
         });
         obj.rows.push({
-            value: "<a href=" + loc + ">View evidence details</a>"
+            value: "<a href=" + loc + "><span style=font-weight:bold>View evidence details</span></a>"
         });
+        var diseaseProfileLoc = "/disease/" + node.property(function (n) { return n.disease.id; });
+        var diseaseAssocLoc = diseaseProfileLoc + "/associations";
+
+        obj.rows.push({
+            "value": '<a href="' + diseaseProfileLoc + '"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span> Profile</a> | <a href="' + diseaseAssocLoc + '">Associations <span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span></a>'
+        });
+
         obj.rows.push({
             value : node.is_collapsed() ? "Expand node" : "Collapse node",
             link : function (n) {
@@ -64,11 +71,6 @@ var tooltips = function () {
                 //setTitles();
             },
             obj: node
-        });
-        var diseaseProfileLoc = "/disease/" + node.property(function (n) { return n.disease.id });
-        var diseaseAssocLoc = diseaseProfileLoc + "/associations";
-        obj.rows.push({
-            "value" : "<a href=" + diseaseAssocLoc + "><div class='cttv_associations_link'></div></a><a href=" + diseaseProfileLoc + "><div class='cttv_profile_link'></div>"
         });
 
 

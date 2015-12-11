@@ -126,7 +126,7 @@
             <!-- Pathways -->
             <accordion-group heading="Pathways" attr-section-name="Pathways" is-open="false">
                 <p ng-if="!pathways.length">
-                    No pathways found for {{target.symbol}}
+                    No pathways found
                 </p>
                 <accordion-heading>
                     <span ng-click="togglePathwayViewer()">Pathways</span>
@@ -137,7 +137,7 @@
                     </li>
                 </ul>
                 <div class=accordionCell>
-                    <p ng-show="pathway.id">Diagram for <b>{{pathway.subName}}</b> pathway</p>
+                    <p ng-show="pathway.id">Diagram for <b>{{pathway.name}}</b> pathway</p>
                     <reactome-pathway-viewer pathway="{{pathway.id}}" target="{{target.symbol}}"></reactome-pathway-viewer>
                 </div>
             </accordion-group>
