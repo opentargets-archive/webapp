@@ -119,9 +119,13 @@ var pipelines = function () {
         // data = [];
         for (var snp_name in resp.body) {
             var snp = resp.body[snp_name];
-            var info = snps[snp_name];
-            info.pos = snp.mappings[0].start;
-            info.val = 1;
+            if (snp.mappings.length) {
+                var info = snps[snp_name];
+                info.pos = snp.mappings.length ? snp.mappings[0].start : undefined;
+                info.val = 1;
+            } else {
+                delete (snps[snp_name]);
+            }
             // data.push(info);
         }
 
