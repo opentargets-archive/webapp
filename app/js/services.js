@@ -79,7 +79,7 @@ angular.module('cttvServices', []).
                 // },
                 {
                     extend: 'csvHtml5',
-                    text: "<span class='fa fa-download' title='Download as .csv'><span>",//"<span class='fa fa-download'></span>",
+                    text: "<span class='fa fa-download' title='Download as .csv'><span>",
                     title: title//,
                     //exportOptions: {
                     //    columns: ':visible'
