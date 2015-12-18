@@ -53,18 +53,21 @@ var tooltips = function () {
         var score = node.property("association_score");
         obj.header = node.property(function (n) { return n.disease.name }) + " (Association Score: " + score.toFixed(2) + ")";
         obj.rows = [];
-        var evidenceLoc = "/evidence/" + target + "/" + node.property(function (n) { return n.disease.id }) + (filters.score_str ? "?score_str=" + filters.score_str[0] : "");
-        obj.rows.push({
-            "value" : "<a class='cttv_flowerLink' href=" + evidenceLoc + "><div class='tnt_flowerView'></div></a>"
-        });
-        obj.rows.push({
-            "value" : "<a href=" + evidenceLoc + "><span style=font-weight:bold>View evidence details</span></a>"
-        });
+
         var diseaseProfileLoc = "/disease/" + node.property(function (n) { return n.disease.id });
         var diseaseAssocLoc = diseaseProfileLoc + "/associations";
         obj.rows.push({
             "value": '<a href="' + diseaseProfileLoc + '"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span> Profile</a> | <a href="' + diseaseAssocLoc + '">Associations <span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span></a>'
         });
+
+        var evidenceLoc = "/evidence/" + target + "/" + node.property(function (n) { return n.disease.id }) + (filters.score_str ? "?score_str=" + filters.score_str[0] : "");
+        obj.rows.push({
+            "value" : "<a class='cttv_flowerLink' href=" + evidenceLoc + "><div class='tnt_flowerView'></div>View evidence details</a>",
+        });
+        //obj.rows.push({
+        //    "value" : "<a href=" + evidenceLoc + "><span>View evidence details</span></a>"
+        //});
+
 
         //obj.body="<a class='cttv_flowerLink' href=" + loc + "><div class='tnt_flowerView'></div></a><a href=" + loc + ">View evidence details</a>";
 
