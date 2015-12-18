@@ -287,7 +287,7 @@ div .tnt_tooltip{
 
 .fa-spin {
   -webkit-animation: fa-spin 1s infinite linear;
-  animation: fa-spin 0.7s infinite linear;
+  animation: fa-spin 0.5s infinite linear;
 }
 /*.fa-pulse {
   -webkit-animation: fa-spin 1s infinite steps(8);
@@ -376,6 +376,8 @@ a.accordion-toggle{
 
 .search-form-spinner {
     right:40px;
+    line-height: inherit;   /* to override bootstrap form feedback */
+    padding: 8px 0px;
 }
 
 .search-suggestions-box{
@@ -822,6 +824,12 @@ a:focus {
     background-color:rgba(255,255,255,0.5);
     z-index: 1000;
     left: 0px;
+}
+
+.cttv-progress-spinner-svg-container {
+    display:inline-block;
+    width: 18px;
+    height: 18px;
 }
 
 
