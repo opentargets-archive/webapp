@@ -881,6 +881,11 @@ table.dataTable thead .sorting {
     font-family: 'FontAwesome' !important;
     opacity: 1 !important;
     color: #DDD;
+
+    -webkit-transition: color 0.3s;
+    -moz-transition: color 0.3s;
+    -ms-transition: color 0.3s;
+    -o-transition: color 0.3s3
 }
 
 .sorting_asc::after{
@@ -893,7 +898,13 @@ table.dataTable thead .sorting {
     content: '\f0dd' !important;
 }
 
-
+.sorting:hover::after {
+    color: #999;
+    -webkit-transition: color 0.3s;
+    -moz-transition: color 0.3s;
+    -ms-transition: color 0.3s;
+    -o-transition: color 0.3s;
+}
 
 /* Evidence tables */
 
