@@ -74,11 +74,11 @@ angular.module('cttvServices', []).
             obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>rt<"pull-left small" l><"pull-right small" p>>',
             obj.buttons = [
                 // {
-                //     extend: 'copyHtml5',
+                //     extend: 'copy', //extend: 'copyHtml5',
                 //     text: "<span class='fa fa-files-o' title='Copy to clipboard'><span>",
                 // },
                 {
-                    extend: 'csvHtml5',
+                    extend: 'csv', //extend: 'csvHtml5',
                     text: "<span class='fa fa-download' title='Download as .csv'><span>",
                     title: title//,
                     //exportOptions: {
