@@ -55,6 +55,7 @@
     "cttv.bubblesView": "file:components/bubblesView",
     "cttv.diseaseGraph": "file:components/diseaseGraph",
     "cttv.flowerView": "file:components/flowerView",
+    "cttv.spinner": "file:components/spinner",
     "cttv.targetAssociations": "file:components/targetAssociations",
     "cttv.targetAssociationsTree": "file:components/targetAssociationsTree",
     "cttv.targetGeneTree": "file:components/targetGeneTree",

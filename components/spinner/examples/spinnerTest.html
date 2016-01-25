@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../build/cttv.spinner.css" />
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="../build/cttv.spinner.js"></script>
+    </style>
+  </head>
+  <body>
+    <div id="spinner"></div>
+    <script>
+
+      var sp = spinner()
+      .size(50)
+      .stroke(3);
+      sp(document.getElementById("spinner"));
+    </script>
+  </body>
+</html>

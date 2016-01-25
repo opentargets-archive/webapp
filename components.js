@@ -11,6 +11,11 @@ var bubblesView = require("cttv.bubblesView");
 var geneAssociations = require("cttv.targetAssociations");
 var geneAssociationsTree = require("cttv.targetAssociationsTree");
 var flowerView = require("cttv.flowerView");
+
+var spinner = require("cttv.spinner");
+
 var diseaseGraph = require("cttv.diseaseGraph");
 var targetGeneTree = require("cttv.targetGeneTree");
 var cttvApi = require("cttv.api");
+
+
