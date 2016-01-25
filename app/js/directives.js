@@ -244,18 +244,19 @@ angular.module('cttvDirectives', [])
 
         return {
             restrict: 'EA',
-            //template: '<i class="fa fa-circle-o-notch fa-spin"></i>',
-            template: '<span class="fa-spin cttv-progress-spinner-svg-container"><svg width="100%" height="100%" viewBox="0 70 140 70" preserveAspectRatio="xMaxYMax"><path fill="#666666" d="M70,10c33.1,0,60,26,60,60h10c0-39-31.3-70-70-70S0,31,0,70h10C10,36,36.9,10,70,10z"/></span></div>',
+            //template: '<span class="fa-spin cttv-progress-spinner-svg-container"><svg width="100%" height="100%" viewBox="0 70 140 70" preserveAspectRatio="xMaxYMax"><path fill="#666666" d="M70,10c33.1,0,60,26,60,60h10c0-39-31.3-70-70-70S0,31,0,70h10C10,36,36.9,10,70,10z"/></span></div>',
+            template: '<span></span>',
             link: function(scope, elem, attrs){
-                if(attrs.size){
-                    // elem.addClass("fa-"+attrs.size+"x");
-
-                    elem.children(".cttv-progress-spinner-svg-container").css("width", attrs.size);
-                    elem.children(".cttv-progress-spinner-svg-container").css("height", attrs.size);
-                    // console.log("SPINNER STYLE:");
-                    // console.log(attrs.size);
-                    // console.log(elem.css("width")+" x "+elem.css("height"));
-                }
+                var size = attrs.size || 18;
+                var stroke = attrs.stroke || 2;
+                var sp = spinner()
+                    .size(size)
+                    .stroke(stroke);
+                sp(elem[0]);
+                // if(attrs.size){
+                //     elem.children(".cttv-progress-spinner-svg-container").css("width", attrs.size);
+                //     elem.children(".cttv-progress-spinner-svg-container").css("height", attrs.size);
+                // }
             }
         };
     }])
@@ -274,7 +275,7 @@ angular.module('cttvDirectives', [])
         return {
             restrict: 'EA',
             //template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner class="text-lowlight fa-{{size}}x"></span></div>',
-            template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner size="50px" class="text-lowlight"></span></div>',
+            template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner size="50" stroke="3" class="text-lowlight"></span></div>',
             scope: {
                 size: '@'
             },
