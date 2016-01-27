@@ -31,7 +31,7 @@ angular.module('cttvDirectives', [])
 
                     //gB.rest().proxyUrl("/ensembl");
                     //gB.rest().proxyUrl("/api/latest/ensembl");
-                    // gB.rest().proxyUrl("/proxy/rest.ensembl.org");
+                    gB.rest().proxyUrl("/proxy/rest.ensembl.org");
                     var theme = targetGenomeBrowser()
                         .efo(efo);
                     theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
@@ -57,8 +57,8 @@ angular.module('cttvDirectives', [])
 
                     var gt = targetGeneTree()
                         .id(target)
-                        .width(1100);
-                        // .proxy("/proxy/rest.ensembl.org");
+                        .width(1100)
+                        .proxy("/proxy/rest.ensembl.org");
                     gt(newDiv);
                 });
             }
