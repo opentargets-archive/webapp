@@ -24,18 +24,15 @@
   ],
   "dependencies": {
     "angular-read-more": "1.0.3",
-    "angular-route": "1.4.7",
-    "angular": "1.4.7",
+    "angular-route": "1.4.9",
+    "angular": "1.4.9",
     "components-font-awesome": "4.4.0",
     "bootstrap": "3.3.5",
-    "angular-bootstrap": "^0.13.0",
+    "angular-bootstrap": "0.13.0",
     "aight": "2.0",
     "lodash": "3.10.1",
     "angulartics": "0.20.1",
-    "jquery": "2.1.4",
-    "d3": "~3.5.8"
-  },
-  "resolutions": {
-    "angular": "1.4.7"
+    "d3": "~3.5.8",
+    "jquery": "~2.2.0"
   }
 }
