@@ -11,7 +11,7 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
 
         var APP_SEARCH_URL = "search";
         var APP_EVIDENCE_URL = "evidence";
-        var APP_AUTOCOMPLETE_URL = "autocomplete"
+        var APP_AUTOCOMPLETE_URL = "autocomplete";
 
         $scope.search = {
             query: {
@@ -21,7 +21,7 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
 
             },
             progress: false
-        }
+        };
 
 
         $scope.hasFocus = true;
@@ -91,7 +91,7 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             }
 
             return null;
-        }
+        };
 
 
 
@@ -101,7 +101,7 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
          */
         $scope.hasResults=function(){
             return Object.keys($scope.search.results).length>0;
-        }
+        };
 
 
 
@@ -112,7 +112,7 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
         $scope.isVisible = function(){
             var v = $scope.hasFocus && $scope.hasResults() && $scope.search.query.text.length>1;
             return v;
-        }
+        };
 
 
 
@@ -125,7 +125,7 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             if($location.url() != url){
                 $location.url(url);
             }
-        }
+        };
 
 
 
@@ -135,30 +135,29 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
         var parseResponseData = function(data){
 
             // check the EFOs path and remove excess data
-            $log.log(data.efo);
-            data.efo.forEach(function(efo){
+            data.disease.forEach(function(efo){
 
                 // first we don't want that "CTTV Root" thingy at the beginning, if it's there
-                if( efo.path[0][0].uri==cttvConsts.CTTV_ROOT_URI ){
-                    efo.path[0] = efo.path[0].slice(1);
+                if( efo.data.efo_path_labels[0][0]==cttvConsts.CTTV_ROOT_NAME ){
+                    efo.data.efo_path_labels[0] = efo.data.efo_path_labels[0].slice(1);
+                    efo.data.efo_path_codes[0] = efo.data.efo_path_codes[0].slice(1);
                 }
 
                 // then we only want to show the last 3 elements
                 // we store it at a new index in the array
-                efo.path[1] = efo.path[0].slice(-3);
+                efo.data.efo_path_labels[1] = efo.data.efo_path_labels[0].slice(-3);
 
             });
-            $log.log(data.efo);
 
             return data;
-        }
+        };
 
 
 
         /**
          * Public method to link to association page for either a gene or a disease
          * @param {Object} s - config objects:
-         *  - type {String} : either "genedata" or "efo", determins which page we link to
+         *  - type {String} : either "target" or "disease", determins which page we link to
          *  - q {String} : the query for the actual gene or disease
          *  - label {String} : this will be deprecated in the future;
          *                     it sets the query label for the landing page, but it will be no longer needed
@@ -166,14 +165,14 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
          */
         $scope.linkTo =function(s){
             // parse the options:
-            if( s.type.toLowerCase()=="genedata" ){
+            if( s.type.toLowerCase()=="target" ){
                 $location.url("/target/" + s.q + "/associations");
-            } else if ( s.type.toLowerCase()=="efo" ){
+            } else if ( s.type.toLowerCase()=="disease" ){
                 $location.url("/disease/" + s.q + "/associations");
             }
 
             $scope.search.query.text = "";
-        }
+        };
 
 
 
@@ -197,6 +196,3 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
         }
 
     }]);
-
-
-

@@ -77,16 +77,17 @@ angular.module('cttvServices').
             OK : 'ok',
             ACCESS_LEVEL_PUBLIC: 'public',
             ACCESS_LEVEL_PRIVATE: 'private',
-            CTTV_ROOT_URI: 'http://www.targetvalidation.org/cttv_root'
+            CTTV_ROOT_URI: 'http://www.targetvalidation.org/cttv_root',
+            CTTV_ROOT_NAME: "CTTV Root"
         };
 
         consts.invert = function(val){
             var a = invLookup(consts, val);
             return a;
-        }
+        };
 
         function invLookup(o ,v){
-            var k = undefined;
+            var k;
             for(var i in o){
                 if(o.hasOwnProperty(i)){
                     //$log.log(v+") "+i+" = "+o[i]);
