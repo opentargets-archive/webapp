@@ -1,18 +1,18 @@
 <div class="search-suggestions-box ng-hide" ng-cloak>
 
   <!-- Besthit -->
-  <div ng-if="search.results.besthit!==null && search.results.besthit!==undefined" ng-click="linkTo({type:search.results.besthit.type, q:search.results.besthit.id, label:search.results.besthit.label||search.results.besthit.approved_symbol})" class="text-item besthit">
+  <div ng-if="search.results.besthit!==null && search.results.besthit!==undefined" ng-click="linkTo({type:search.results.besthit.data.type, q:search.results.besthit.data.id, label:search.results.besthit.data.name})" class="text-item besthit">
 
     <h4 class="text-item">
       <span class="nbblock">
-        <a><span bind-html-unsafe="(search.results.besthit.type=='genedata' ? search.results.besthit.approved_symbol : search.results.besthit.label) | typeaheadHighlight:search.query.text"></span></a>
-        <span class="label cttv-text-small" ng-class="(search.results.besthit.type=='genedata') ? 'label-primary' : 'label-warning'">{{search.results.besthit.type=="genedata" ? "target" : "disease"}}</span>
+        <a><span bind-html-unsafe="search.results.besthit.data.name | typeaheadHighlight:search.query.text"></span></a>
+        <span class="label cttv-text-small" ng-class="(search.results.besthit.data.type=='target') ? 'label-primary' : 'label-warning'">{{search.results.besthit.data.type=="target" ? "target" : "disease"}}</span>
       </span>
-      <span class="text-small text-lowlight" ng-if="search.results.besthit.type=='genedata'">{{search.results.besthit.approved_name}}</span>
+      <span class="text-small text-lowlight" ng-if="search.results.besthit.data.type=='target'">{{search.results.besthit.data.full_name}}</span>
     </h4>
 
     <!-- This is the longer description -->
-    <p class="text-item nbblock small">{{ ( search.results.besthit.type=="genedata" ? search.results.besthit.uniprot_function[0] : search.results.besthit.definition) | limitTo:300}}<span ng-show="search.results.besthit.uniprot_function[0].length>300 || search.results.besthit.definition.length>300">&hellip;</span></p>
+    <p class="text-item nbblock small">{{ search.results.besthit.data.description | limitTo:300 }}<span ng-show="search.results.besthit.data.description.length>300">&hellip;</span></p>
   </div>
 
   <div ng-if="search.results.besthit===null">
@@ -22,32 +22,32 @@
 
 
   <!-- Genes -->
-  <div class="suggestions-targets" ng-show="search.results.genes.length>0">
+  <div class="suggestions-targets" ng-show="search.results.target.length>0">
 
     <div class="divider"></div>
 
     <div class="text-lowlight text-item">Targets</div>
-    <div ng-repeat="item in search.results.genes" class="item result-item">
-      <div class="suggestions-targets-item" ng-click="linkTo({type:item.type, q:item.id, label:item.approved_symbol})">
-        <span bind-html-unsafe="item.approved_symbol | typeaheadHighlight:search.query.text" class="text-nolight"></span><span bind-html-unsafe="item.approved_name | typeaheadHighlight:search.query.text" class="text-lowlight small"></span>
+    <div ng-repeat="item in search.results.target" class="item result-item">
+      <div class="suggestions-targets-item" ng-click="linkTo({type:item.data.type, q:item.data.id, label:item.data.name})">
+        <span bind-html-unsafe="item.data.name | typeaheadHighlight:search.query.text" class="text-nolight"></span><span bind-html-unsafe="item.data.full_name | typeaheadHighlight:search.query.text" class="text-lowlight small"></span>
       </div>
     </div>
   </div>
 
 
   <!-- Diseases (EFOs) -->
-  <div class="suggestions-efo" ng-show="search.results.efo.length>0" >
+  <div class="suggestions-efo" ng-show="search.results.disease.length>0" >
 
     <div class="divider"></div>
 
     <div class="text-lowlight text-item">Diseases</div>
-    <div ng-repeat="item in search.results.efo" class="item result-item">
-      <div ng-click="linkTo({type:item.type, q:item.id, label:item.label})">
-        <div bind-html-unsafe="item.label | typeaheadHighlight:search.query.text" class="suggestions-efo-title"></div>
+    <div ng-repeat="item in search.results.disease" class="item result-item">
+      <div ng-click="linkTo({type:item.data.type, q:item.data.id, label:item.data.name})">
+        <div bind-html-unsafe="item.data.name | typeaheadHighlight:search.query.text" class="suggestions-efo-title"></div>
 
         <!-- show the EFO hierarchy links -->
         <span class="small text-lowlight">
-          <span ng-show="item.path[0].length>item.path[1].length">[&hellip;]<span class="fa fa-angle-right fa-md suggestions-efo-hierarchy-arrow"></span></span><span ng-repeat="link in item.path[1]"><span ng-click="linkTo({type:'efo', q:link.uri.split('/').pop(), label:link.label}); $event.stopPropagation()" title="{{link.label}}" class="suggestions-efo-hierarchy-label"><a>{{link.label}}</a></span><span ng-show="!$last" class="fa fa-angle-right fa-md suggestions-efo-hierarchy-arrow"></span></span>
+          <span ng-show="item.data.efo_path_labels[0].length>item.data.efo_path_labels[1].length">[&hellip;]<span class="fa fa-angle-right fa-md suggestions-efo-hierarchy-arrow"></span></span><span ng-repeat="link in item.data.efo_path_labels[1]"><span ng-click="linkTo({type:'efo', q:item.data.efo_path_codes[$index], label:link}); $event.stopPropagation()" title="{{link}}" class="suggestions-efo-hierarchy-label"><a>{{link}}</a></span><span ng-show="!$last" class="fa fa-angle-right fa-md suggestions-efo-hierarchy-arrow"></span></span>
         </span>
       </div>
     </div>
@@ -55,4 +55,3 @@
 
 
 </div>
-

@@ -6,19 +6,6 @@ jsonHttp = http.use(json).use(promises(Promise));
 http = http.use(promises(Promise));
 
 var cttvApi = function () {
-    // prefixes
-    var prefix = "https://beta.targetvalidation.org/api/latest/";
-    var prefixFilterby = "filterby?";
-    var prefixAssociations = "association?";
-    var prefixSearch = "search?";
-    var prefixGene = "gene/";
-    var prefixDisease = "disease/"; // updated from "efo" to "disease"
-    var prefixToken = "auth/request_token?";
-    var prefixAutocomplete = "autocomplete?";
-    var prefixQuickSearch = "quicksearch?";
-    var prefixExpression = "expression?";
-    var prefixProxy = "proxy/generic/";
-    var prefixTarget = "target/"; // this replaces prefixGene
 
     var credentials = {
         token : "",
@@ -141,6 +128,20 @@ var cttvApi = function () {
 
     // URL object
     _.url = {};
+
+    // prefixes
+    var prefix = "https://www.targetvalidation.org/api/latest/";
+    var prefixFilterby = "public/evidence/filterby?";
+    var prefixAssociations = "public/association/filterby?";
+    var prefixSearch = "public/search?";
+    var prefixGene = "private/target/";
+    var prefixDisease = "private/disease/"; // updated from "efo" to "disease"
+    var prefixToken = "public/auth/request_token?";
+    var prefixAutocomplete = "private/autocomplete?";
+    var prefixQuickSearch = "private/quicksearch?";
+    var prefixExpression = "private/expression?";
+    var prefixProxy = "proxy/generic/";
+    var prefixTarget = "private/target/"; // this replaces prefixGene
 
     _.url.gene = function (obj) {
         return prefix + prefixGene + obj.gene_id;
