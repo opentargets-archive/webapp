@@ -1,0 +1,93 @@
+
+.search-form{
+    position:relative;
+    max-width: 600px;
+    margin: 0px auto;
+}
+
+.search-form-spinner {
+    right:40px;
+    line-height: inherit;   /* to override bootstrap form feedback */
+    padding: 8px 0px;
+}
+
+.search-suggestions-box{
+    position: absolute;
+    background: $primary-background-color;
+    width: 100%;
+
+    /*border: 1px solid rgba(0,0,0,.15);*/
+    border: 1px solid #CCC;
+    border-radius: 4px;
+    padding: 5px;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+    @include box-shadow( 0 5px 10px $clr-ui-shadow );
+    background-clip: padding-box;
+
+    font-size: 14px;
+    z-index: 10;
+
+
+    .divider{
+        margin: 10px 0px;
+        border-top: 1px solid #CCC;
+    }
+
+    .item:hover{
+        background: #EEE;
+        cursor: pointer;
+    }
+
+    .besthit{
+        cursor:pointer;
+        padding:4px 0px;
+    }
+
+    .text-item{
+        padding:0px 5px;
+    }
+
+
+
+    .result-item{
+        margin:0;
+        padding:4px 5px;
+    }
+
+    .suggestions-targets {
+        .suggestions-targets-item{
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            span:first-child{
+                padding-right:7px;
+            }
+        }
+    }
+
+    .suggestions-efo {
+        .suggestions-efo-title{
+            line-height: 1.1;
+        }
+
+        .suggestions-efo-hierarchy-arrow{
+            margin:0px 4px;
+        }
+
+        .suggestions-efo-hierarchy-label{
+            max-width: 28%;
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            vertical-align: text-bottom;
+        }
+    }
+
+}
+
+

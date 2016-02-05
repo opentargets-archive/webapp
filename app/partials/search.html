@@ -35,12 +35,19 @@
             <div ng-class="search.loading ? 'opacity-50' : ''">
                 <div ng-repeat="result in search.results.data" class="search-result">
                     <h4><a ng-href="/{{result.type==='genedata'?'target':'disease'}}/{{result.id}}/associations">{{result.title}}</a></h4>
-                    <span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">...</span></span>
-                    <span class="search-matches text-lowlight">
-                        <span ng-repeat="(key, val) in result.highlight"><span bind-html-unsafe="'<span style=\'color:#888\' title=\'Matching field and text\'>' + ( !$first ? ' ... ' : '') + key.split('_').join(' ') + ': </span>' + val.join(', ')"></span></span>
+
+                    <span class="search-description">{{result.description | limitTo: 300 }}<span ng-show="result.description.length>300">&hellip;</span></span>
+
+                    <!-- <span class="search-matches text-lowlight">
+                        <span class="bobb1" ng-repeat="(key, val) in result.highlight"><span bind-html-unsafe="'<span class=\'bobb2\' title=\'Matching field and text\'>' + ( !$first ? ' ... ' : '') + key.split('_').join(' ') + ': </span>' + val.join(', ')"></span></span>
+                    </span> -->
+
+                    <span class="search-matches">
+                        <span class="search-match-sec" ng-repeat="(key, val) in result.highlight">
+                            <span class="search-match-sec-title">{{( !$first ? ' &hellip; ' : '') + key.split('_').join(' ')}}: </span>
+                            <span class="search-match-sec-content" bind-html-unsafe="val.join(', ')"></span>
+                        </span>
                     </span>
-
-
 
                     <span class="search-details">
                         <span class="label" ng-class="(result.type==='genedata') ? 'label-primary' : 'label-warning'">{{result.type==="genedata" ? "target" : "disease"}}</span><!-- &nbsp;|&nbsp;<span class="text-lowlight">Score: {{result.score}}</span> -->

@@ -1,0 +1,294 @@
+/*
+ * F A C E T S
+ */
+
+
+
+.cttv-facet .therapeuticArea .panel-heading {
+    /*background-color: #c6dcec;*/
+}
+
+.cttv-facet .cttv-accordion-leaf .panel-heading {
+    /*background-color: #f5f5f5;*/
+}
+
+/* .cttv-facet .cttv-accordion-leaf .panel-body { */
+    /*     padding : 0px; */
+    /* } */
+
+    /*.cttv-facet .panel-heading {
+        padding : 5px;
+    }
+    .cttv-facet .panel-body {
+        padding : 5px;
+    }
+    .cttv-facet .panel-title {
+        font-size: 10px;
+        color: $bodytext-color;
+    }*/
+
+.cttv-facets{
+    font-size: 12px;
+}
+
+.cttv-facets-headers{
+
+}
+
+.cttv-facets-controls {
+    font-size: 11px;
+    background-color: $clr-ui-background;
+    @include border-radius( 3px );
+    padding: 2px;
+    margin-bottom: 2px;
+    text-align: right;
+
+
+    > span{
+        cursor: pointer;
+        margin-right:10px;
+    }
+
+    > span:hover{
+        color: $clr-text-em;
+    }
+}
+.cttv-facets-selected-summary{
+    border-bottom:1px solid $clr-ui-border; // was #CCC
+    margin-bottom:25px;
+    padding-bottom:10px;
+}
+
+
+/*
+ * Restyle accordion for facets
+ * Override the Bootstrap rules for custom l'n'f
+ */
+
+
+
+.cttv-facets {
+    .panel{
+        @include border-radius( 0px );
+        border: none;
+        @include box-shadow(none);
+    }
+
+    .panel-title{
+        font-size: 14px;
+    }
+
+    .panel-heading{
+        color:inherit;
+        border-bottom: 1px solid $clr-ui-border;
+        padding: 10px 0px;
+    }
+
+    .panel-group .panel-heading+.panel-collapse>.panel-body{
+        border-top: none;
+    }
+
+    .panel-default{
+        >.panel-heading{
+            background: none;
+        }
+
+        >.panel-heading+.panel-collapse>.panel-body{
+            border-top-color: none;
+        }
+    }
+
+    .panel-body{
+        padding: 5px 0px;
+    }
+}
+
+.cttv-facet-checkbox {
+    /* overrides bootstrap values */
+    margin-top: 0px;
+    margin-bottom: 0px;
+    clear:both;
+}
+
+.cttv-facet-checkbox-label{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    float:left;
+    /*padding-right: 5px;*/
+    max-width: 75%;
+
+    display: inline;
+}
+
+.cttv-facet-checkbox-label > input,
+.cttv-facet-checkbox-label-multiline > input{
+    /* overrides bootstrap values */
+    margin: 0px;
+    margin-top: 2px;
+}
+
+/*
+ Facet-style Therapeutic Area navigation
+*/
+
+.cttv-nav accordion {
+    /* overrides bootstrap values */
+    margin-top: 0px;
+    margin-bottom: 0px;
+    clear:both;
+    font-size: 12px;
+
+
+    /*.cttv-nav .therapeuticArea{
+        height: 16px;
+    }
+
+    .cttv-nav .cttv-accordion-leaf{
+        height: 16px;
+    }*/
+
+
+    h4 {
+        font-size: 12px !important;
+        font-weight: 400;
+
+    }
+
+    .panel-heading {
+        border-bottom: none;
+        height:auto;
+        padding: 1px 0px;
+    }
+
+    accordion {
+        .panel-group {
+            margin: 0px;
+        }
+
+        .panel-body {
+            margin-left: 12px;
+            margin-right: 12px;
+        }
+
+        .jumbotron {
+            padding-top: 10px;
+            padding-right: 10px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            margin-bottom: 0px;
+        }
+    }
+}
+
+
+.cttv-facet-count {
+    font-size:11px;
+    margin-left:3px;
+}
+
+.cttv-facet-checkbox-label-multiline{
+    display: inline;
+    float:left;
+
+    > .cttv-facet-count{
+        float:none;
+        display: inline;
+    }
+
+    span{
+        line-height: 6px;
+    }
+}
+
+/* .cttv_bullet_link {
+    width : 100px;
+    height : 30px;
+    @include border-radius( 6px );
+    float : right;
+    margin-left: 15px;
+    padding-top: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+
+    background-color: #BBBBBB;
+}
+.cttv_target_associations_link:after {
+    color : white;
+    font-weight: bold;
+    font-size: 12px;
+    vertical-align: 50%;
+    content: "Associations";
+}
+.cttv-2line-header > span:first-child{
+    display:block;
+    font-size:18px;
+    font-weight:200;
+}
+
+.cttv-2line-header > span:last-child{
+    display:block;
+    font-size:36px;
+    font-weight:100;
+}
+
+
+.cttv_target_profile_link:after {
+    color: white;
+    font-size: 12px;
+    vertical-align: 50%;
+    content: "Profile";
+}
+ */
+
+
+
+cttv-score-histogram {
+    .bar {
+        rect {
+          /*fill: $clr-ui-foreground;*/
+          shape-rendering: crispEdges;
+        }
+
+        text {
+          /*fill: #fff;*/
+          font-size: 12px;
+        }
+
+        .selected {
+            fill: $clr-ui-foreground;
+        }
+
+        .deselected {
+            fill: $clr-ui-border;
+        }
+    }
+
+    .axis {
+        path, line {
+          /*fill: none;
+          stroke: #000;
+          shape-rendering: crispEdges;*/
+          display: none;
+        }
+
+        text{
+          fill: $clr-text-dim;
+        }
+    }
+
+    .brush .extent {
+      stroke: $clr-artboard-foregroud;
+      fill-opacity: .125;
+      shape-rendering: crispEdges;
+    }
+
+    .handle {
+      fill: $clr-artboard-backgroud;
+      stroke: $clr-artboard-foregroud;
+      /*stroke-opacity: .5;*/
+      stroke-width: 1px;
+      cursor: ew-resize;
+    }
+}
+

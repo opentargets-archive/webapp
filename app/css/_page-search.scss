@@ -1,0 +1,45 @@
+
+
+
+/*
+ * Search results
+ */
+
+
+.search-result {
+    margin-bottom: 24px;
+}
+
+.search-result h4{
+    margin-bottom: 0;
+}
+
+
+.search-matches {
+    color: $clr-text-dim;
+
+    .search-match-sec {
+
+        .search-match-sec-title {
+            color: $clr-text;
+        }
+
+        .search-match-sec-content em {
+            color: scale-color( $clr-text-dim, $lightness: (100% - lightness($clr-ui-background-secondary))*-1 ); // make the text slightly darker to stand out against the gentle highlighted background
+            font-style: normal;
+            font-weight: 500;
+            background-color: $clr-ui-background-secondary;
+            padding: 0px 2px;
+        }
+    }
+}
+
+.search-description, .search-details, .search-matches{
+    display: block;
+}
+
+.search-details, .search-matches{
+    font-size: 12px;
+}
+
+
