@@ -49,8 +49,8 @@ angular.module('cttvServices')
             //.prefix("https://beta.targetvalidation.org/api/latest/")
             .appname("cttv-web-app")
             .secret("2J23T20O31UyepRj7754pEA2osMOYfFK")
-            .verbose(true)
-            .expiry(1);
+            .verbose(true);
+            //.expiry(1);
             // .onError(cttvAPI.defaultErrorHandler);
 
 
