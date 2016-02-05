@@ -15,18 +15,6 @@
     }])
 
     /**
-     * High level controller for the app
-     */
-    // .controller('CttvAppCtrl', ['$scope', '$window', '$rootScope',  function ($scope, $window, $rootScope) {
-    //     'use strict';
-    //     // $scope.appmsg = "Lalala";
-    //     $scope.showMsg = false;
-    //     $scope.reload = function () {
-    //         $window.location.reload();
-    //     };
-    // }])
-
-    /**
      * SearchAppCtrl
      * Controller for the search/results page
      */
@@ -99,7 +87,6 @@
         };
 
 
-
         $scope.getResults = function(){
 
             /*
@@ -127,6 +114,8 @@
             cttvAPIservice.getSearch( queryobject )
                 .then(
                     function(resp) {
+                        console.log("SEARCH RESULTS:");
+                        console.log(resp);
                         $scope.search.results = resp.body;
                     },
                     cttvAPIservice.defaultErrorHandler
