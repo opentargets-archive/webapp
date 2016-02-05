@@ -15,7 +15,7 @@ RUN apt-get update && \
 RUN apt-get update && \
     apt-get install -y curl && \
     curl --silent --location https://deb.nodesource.com/setup_0.12 | bash - && \
-    apt-get install --yes nodejs git
+    apt-get install --yes nodejs git tar bzip2
 
 
 # forward request and error logs to docker log collector
