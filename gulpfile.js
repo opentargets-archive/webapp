@@ -191,11 +191,15 @@ gulp.task('copy-bootstrap', function () {
         .pipe(gulp.dest(bootstrapPath));
 });
 
+
+
 gulp.task('build-3rdparty-styles', ['copy-bootstrap', 'copy-fontawesome'], function () {
     return gulp.src(webappFiles.thirdParty.css)
         .pipe(concat(webapp3rdpartyCss))
         .pipe(gulp.dest(buildDir));
 });
+
+
 
 gulp.task('build-3rdparty', ['build-3rdparty-styles'], function () {
     return gulp.src(webappFiles.thirdParty.js)
@@ -203,14 +207,22 @@ gulp.task('build-3rdparty', ['build-3rdparty-styles'], function () {
         .pipe(gulp.dest(buildDir));
 });
 
+
+
 gulp.task('build-webapp-styles', function () {
     return gulp.src(webappFiles.cttv.css)
+        .pipe(sass({
+            errLogToConsole: true
+        }))
+        .pipe(csspurge())
         .pipe(sourcemaps.init())
         .pipe(concat(webappName + ".min.css"))
         .pipe(minifyCss({compatibility: 'ie9'}))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(buildDir));
 });
+
+
 
 gulp.task('build-webapp', ['build-webapp-styles'], function () {
     return gulp.src(webappFiles.cttv.js)
@@ -223,4 +235,8 @@ gulp.task('build-webapp', ['build-webapp-styles'], function () {
         .pipe(gulp.dest(buildDir));
 });
 
+
+
 gulp.task('build-all', ['init', 'build-docs', 'build-3rdparty', 'build-components-min', 'build-webapp']);
+
+

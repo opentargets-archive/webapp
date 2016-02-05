@@ -1,0 +1,193 @@
+
+
+
+/*
+ * Defines the main element of the single page,
+ * e.g. masthead, footer, etc
+ */
+
+
+
+html, body {
+    height:100%;
+    line-height: 1.35;
+}
+
+body{
+    color: $clr-text;
+    background: $body-background;
+}
+
+/*
+* Main index page
+*/
+
+
+.cttv-centered-text {
+    display: table-cell;
+    text-align: center;
+}
+
+.cttv-beta-ribbon {
+    background-color: #a00;
+    overflow: hidden;
+    white-space: nowrap;
+    color: white;
+    display: none;
+    padding: 5px 50px;
+    margin: 1px 0;
+    font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-align: center;
+    border: 1px solid #faa;
+
+    position: absolute;
+    left: -40px;
+    top: 10px;
+
+    @include transform( rotate(-45deg) );
+
+    @include box-shadow( 0 0 10px #888 );
+
+    text-shadow: 0 0 5px #444;
+}
+
+
+.cttv-main-container {
+    width:100%;
+    background: $primary-background-color;
+    padding-bottom:70px;
+    padding-bottom:260px;
+}
+
+.cttv-page-wrapper {
+    min-height:100%;
+    position:relative;
+}
+
+
+/*
+* Masthead
+*/
+
+
+.masthead {
+    width:100%;
+    background-color: $clr-ui-background-secondary; //$masthead-background;
+    padding:10px 0;
+    height: auto;
+    border-bottom: 1px solid $masthead-border;
+
+    .container{
+        height: auto;
+    }
+}
+
+.cttv-logotype {
+    font-size: 24px;
+    font-weight: 100;
+    color: #888;
+    line-height: 24px;
+}
+
+
+
+/*
+* Footer
+*/
+
+
+.footer {
+    font-size: 11px;
+    font-weight: 300;
+    color: $footer-text;
+    padding: 30px 0;
+    border-top: 1px solid $footer-border;
+
+    background: $footer-background;
+    width:100%;
+    height:220px;
+    position:absolute;
+    bottom:0;
+    left:0;
+
+    a{
+        color: inherit;
+    }
+
+    h6{
+        color: $footer-text-dim;
+        font-weight: 400;
+        font-size: 14px;
+    }
+}
+
+
+
+
+
+/*
+ * Cookies notice
+ */
+
+.cookiebanner {
+    font-family: inherit !important;
+    font-weight: 200;
+}
+
+.cookiebanner-close {
+
+}
+
+/* define the container for an angular partial*/
+.partial-page{
+    position:relative;
+}
+
+
+
+
+/* non-breaking block */
+.nbblock{
+    display:block;
+    margin-bottom:0px;
+}
+
+
+
+
+.cttv-section-intro {
+    font-style: italic;
+    background-color: $clr-ui-background-secondary; // was #EEE
+    padding: 10px;
+}
+
+.cttv-interpage-link {
+    padding-left: 15px;
+    margin-left: 15px;
+    border-left: 1px solid $clr-ui-border; // was #CCC
+}
+
+.cttv-content-header {
+    padding-bottom: 30px;
+
+    h4 {
+        font-weight: 300;
+    }
+
+    h3 {
+        @extend h4;
+        margin-bottom: 0px;
+    }
+}
+
+
+
+
+
+
+.fixed {
+    position: fixed;
+}
+
+
+

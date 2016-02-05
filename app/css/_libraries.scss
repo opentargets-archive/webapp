@@ -1,0 +1,27 @@
+
+
+
+/*
+ * Update or define rules for specific 3rd party libraries elements
+ */
+
+
+
+/*
+ * Angular stuff
+ */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+
+
+/*
+ * FontAwesome styles
+ */
+
+
+.fa-spin {
+  -webkit-animation: fa-spin 0.5s infinite linear;
+  animation: fa-spin 0.5s infinite linear;
+}

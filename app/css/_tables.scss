@@ -1,0 +1,393 @@
+
+
+
+/*
+ * Tables and heatmaps
+ */
+
+
+
+table.dataTable thead > tr > th{
+    padding-left: 8px !important;
+    /*padding-right: 8px !important;*/
+}
+
+table.dataTable thead .sorting {
+    /*background-image: url('../images/sort_both.png') !important;
+    background-repeat: no-repeat !important;
+    background-origin: content-box !important;
+    background-position-x: right !important;
+    background-position-y: bottom !important;*/
+}
+
+.cttv-access-public, .cttv-access-private {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-color: #CCC;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 10px;
+    padding-top: 1px;
+    color: #FFF;
+}
+
+.cttv-access-private {
+    background-color: $clr-private-data;
+
+    &:after {
+        content: "G";
+    }
+}
+
+.cttv-access-public:after {
+    content: "P";
+    /*content: "\f023";
+    font-family: FontAwesome;*/
+}
+
+
+
+.cttv-literature-modal {
+    padding: 10px;
+}
+
+.sorting::after, .sorting_asc::after, .sorting_desc::after {
+    font-size:12px;
+    bottom: 5px !important;
+    right: 6px !important;
+    content: '\f0dc' !important;
+    font-family: 'FontAwesome' !important;
+    opacity: 1 !important;
+    color: #DDD;
+    @include transition( color 0.3s );
+}
+
+.sorting_asc::after{
+    color: $clr-ui-selected;
+    content: '\f0de' !important;
+}
+
+.sorting_desc::after {
+    color: $clr-ui-selected;
+    content: '\f0dd' !important;
+}
+
+.sorting:hover::after {
+    color: #999;
+    @include transition( color 0.3s );
+}
+
+
+
+/* Evidence tables */
+
+
+
+.cttv-evidence-table{
+
+    >thead>tr>th {
+        border-bottom: none;
+        border-top: none;
+        border-right: 1px solid #DDD;
+        padding: 6px !important;
+        padding-right: 26px !important;
+        line-height: 15px;
+        font-weight: 300;
+        font-size: 16px;
+    }
+
+    thead th:last-child {
+        border-right: none;
+    }
+
+    tbody {
+        font-size: 12px;
+
+        tr td {
+            padding: 8px 8px 16px 8px !important;   /* allow extra padding at the bottom of each row */
+            line-height: 14px;
+        }
+    }
+
+    .badge{
+        background: #DDD;
+        color: #777;
+    }
+
+    ul {
+        padding-left: 15px;
+    }
+
+}
+
+
+.cttv-publications-string {
+    white-space:nowrap;
+}
+
+
+a.dt-button{
+    padding: 2px 7px !important;
+    font-size: 16px !important;
+}
+
+
+
+/*
+ * Matrix table
+ */
+
+
+
+table.matrix-table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+
+    .dataTables_empty {
+        text-align: center;
+    }
+
+    thead {
+        > tr {
+            margin-bottom: 10px !important;
+
+            > th {
+                padding-left: 0 !important;
+                font-weight: 400;
+                font-size: 12px;
+                line-height: 11px;
+                height:140px;
+                /*white-space: nowrap;*/
+                background-position: center bottom 5px !important;
+                padding: 5px !important;
+                border: none !important;
+                width: 48px; /*5%;*/
+                min-width: 30px;
+                /*vertical-align: middle !important;*/
+
+                /* Fix for the new DataTables styling */
+                &:after {
+                    right: 25px !important;
+                }
+
+                &:first-child:after {
+                    right: 25px !important;
+                }
+
+                &:last-child:after {
+                    left: 25px !important;
+                }
+
+                &:hover {
+                    background-color: rgba(210,210,210,0.2);    /* values to match F4F4F4 */
+                }
+
+                &:first-child {
+                    padding-right: 5px;
+                    background-position: right 5px bottom 5px !important;
+                    width: auto;
+
+                    > div {
+                        width:0;
+                        float: right;
+                        margin-right: 24px;
+                    }
+                }
+
+                &:last-child {
+                    padding-left: 5px;
+                    background-position: left 5px bottom 5px !important;
+                    width: auto;
+
+                    > div {
+                        width:0;
+                        float: left;
+                        margin-left: 24px;
+                    }
+                }
+
+                > div {
+                    height: 1px;
+                    vertical-align: top;
+                    margin-bottom: 20px;
+
+                    > span{
+                        display: block;
+                        width: 140px;
+                        margin-left: 50%;
+                        @include transform-origin( 0 0 );
+                        @include transform( rotate(-60deg) translateY(-50%) );
+                    }
+                }
+
+            }
+        }
+    }
+
+
+    tbody {
+        > tr > td {
+            border-collapse: collapse;
+            border: 1px solid #FFF !important;
+            padding: 0;
+            padding-bottom: 0 !important;
+            font-size: 12px;
+            line-height: 12px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        > tr > td span {
+            display: block;
+            width: 100%;
+            height: 16px;
+        }
+
+        > tr > td:last-child span,
+        > tr > td:first-child span {
+            display: inline;
+        }
+
+        &:hover{
+            text-decoration:none;
+        }
+
+        > tr:hover {
+            background-color: #F6F6F6;
+        }
+
+        > tr > td:first-child {
+            border: none;
+            text-align: right;
+            vertical-align: middle;
+            padding-right: 5px !important;
+            overflow: hidden;
+        }
+
+        > tr > td:last-child {
+            border: none;
+            vertical-align: middle;
+            padding-left: 5px;
+            overflow: hidden;
+        }
+    }
+}
+
+
+
+.matrix-table span.no-data, .matrix-legend span.no-data{
+    border: 1px solid #EEE;
+    background: #FFF;
+    color: #FFF;
+}
+
+.matrix-table span.value-0, .matrix-legend span.value-0 {
+    background: #EEE;
+    color: #EEE;
+}
+
+
+
+.matrix-legend, .matrix-legend-info{
+    /* Do one for horizontal layout */
+    font-size: 12px;
+    margin: 5px;
+}
+
+.matrix-legend-layout-h span {
+    float:left;
+}
+
+span.matrix-legend-from {
+    padding-right: 5px;
+    padding-top: 2px
+}
+
+span.matrix-legend-to {
+    padding-left: 5px;
+    padding-top: 2px
+}
+
+span.matrix-legend-text {
+    padding-left: 0px;
+}
+
+span.matrix-legend-item {
+    display:block;
+    /*border: 1px solid #FFF;*/
+}
+
+span.matrix-legend-background {
+    display:block;
+    width:20px;
+    height:20px;
+}
+
+span.matrix-legend-background-label {
+    display:block;
+}
+
+.matrix-legend-layout-v .matrix-legend-item {
+    /*width: inherit;*/
+
+    > span {
+        float:left;
+    }
+}
+
+.matrix-legend-info span{
+    padding-right:5px;
+}
+
+cttv-target-associations-tree .legendBox {
+    border: none !important;
+}
+
+
+
+/*
+ * HPA heatmap
+ */
+
+
+
+.hpa-matrix-table {
+
+    tbody > tr > td:last-child {
+        padding-left: 0px;
+    }
+
+    thead > tr > th:last-child {
+        padding: 0px;
+        background-position: center bottom 5px !important;
+        width: 5% !important;
+
+        display: none !important;
+    }
+}
+
+/* Fix for the new DataTables styling */
+cttv-hpa-tissue-expression table.matrix-table thead > tr > th:last-child,
+cttv-hpa-tissue-expression table.matrix-table tbody > tr > td:last-child,
+cttv-hpa-tissue-expression table.matrix-table tbody > tr > td:last-child:hover  {
+    /* display: none !important; */
+    visibility: hidden;
+}
+
+
+
+/*
+
+table.matrix-table thead > tr > th:last-child {
+    padding-left: 5px;
+    background-position: left 5px bottom 5px !important;
+    width: auto;
+}
+
+*/
+
+
