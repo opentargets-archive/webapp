@@ -95,7 +95,15 @@ angular.module('cttvServices', []).
         cttvUtilsService.colorScales = {
             BLUE_0_1 : d3.scale.linear()
                         .domain([0,1])
-                        .range(["#CBDCEA", "#005299"]), // blue orig
+                        //.range(["#CBDCEA", "#005299"]), // blue orig
+                        //.range(["#AEDEF7", "#0091EB"]),
+                        .range(["#97D5F5", "#0081D2"]),
+                        //.range(["#FFD0CB", "#FF6350"]), // brand red
+
+            BLUE_1_3 : d3.scale.linear()
+                        .domain([1,3])
+                        .range(["#AEDEF7", "#0091EB"])
+
         };
 
         cttvUtilsService.search = {
