@@ -56,7 +56,7 @@ body{
     width:100%;
     background: $primary-background-color;
     padding-bottom:70px;
-    padding-bottom:260px;
+    padding-bottom:220px;
 }
 
 .cttv-page-wrapper {
@@ -72,14 +72,25 @@ body{
 
 .masthead {
     width:100%;
-    background-color: $clr-ui-background-secondary; //$masthead-background;
-    padding:10px 0;
+    background-color: $masthead-background;
+    //padding: 8px 0;
     height: auto;
     border-bottom: 1px solid $masthead-border;
+    position: relative;
+    box-shadow: 0 1px 5px 0 $clr-ui-shadow;
+    z-index: 10; // this will need some sort of variable presumably?
 
     .container{
         height: auto;
     }
+
+    .global-search {
+        margin: 8px 0px;
+    }
+}
+
+.ot_logo {
+    margin: 8px 0px;
 }
 
 .cttv-logotype {
@@ -89,6 +100,32 @@ body{
     line-height: 24px;
 }
 
+.masthead-navigation-container {
+    text-align: right;
+}
+
+.masthead-navigation {
+    list-style: none;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 0px; //override browser default for ul elements
+    height: 50px;
+
+    li {
+        display: inline-block;
+        &:hover {
+            background: $btn-primary-bg-hover;
+        }
+
+        a, a:focus {
+            color: #fff;
+            padding: 0px 10px;
+            height: 50px;
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }
+}
 
 
 /*
@@ -141,6 +178,7 @@ body{
 /* define the container for an angular partial*/
 .partial-page{
     position:relative;
+    padding-bottom: 40px;
 }
 
 
@@ -168,7 +206,10 @@ body{
 }
 
 .cttv-content-header {
-    padding-bottom: 30px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid $clr-ui-border;
+    box-shadow: 0 1px 5px 0 $clr-ui-shadow;
+    background: $clr-ui-background;
 
     h4 {
         font-weight: 300;
@@ -178,6 +219,7 @@ body{
         @extend h4;
         margin-bottom: 0px;
     }
+
 }
 
 

@@ -77,10 +77,13 @@
 
         <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'> -->
 
+        <!-- App CSS at the end, to override anything required
+        <link rel="stylesheet" href="build/cttvWebapp.min.css?v=08122015" />-->
+
     </head>
 
     <body>
-        <div class="cttv-page-wrapper">
+        <div class="cttv-page-wrapper" id="cttv-page-app">
 
             <!-- main page content -->
             <div class="cttv-main-container">
@@ -90,16 +93,24 @@
                     <div class="container">
                         <div class="row">
 
-                            <div class="col-xs-5">
+                            <div class="col-xs-4">
                                 <!-- CTTV logo -->
                                 <!-- <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>-->
-                                <a href="/" style="display:block; height:34px;"><img style="top:2px; position:relative;" src="imgs/logo/cttv_logo_text_color_205x35.png"/><span class="cttv-logotype"></span></a>
+                                <div class="ot_logo">
+                                    <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_146x34_w.png"/></a>
+                                </div>
                             </div>
 
-                            <div class="col-xs-2">
+                            <div class="col-xs-4 masthead-navigation-container">
+                                <ul class="masthead-navigation">
+                                    <li><a href="/about">About</a></li>
+                                    <li><a href="/about">FAQs</a></li>
+                                    <li><a href="/about">API</a></li>
+                                    <li><a href="/about">Docs</a></li>
+                                </ul>
                             </div>
 
-                            <div class="col-xs-5" ng-controller="SearchBoxCtrl">
+                            <div class="col-xs-4" ng-controller="SearchBoxCtrl">
                                 <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
                                     <fieldset>
                                         <div class="has-feedback search-form">
@@ -150,7 +161,9 @@
                     <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
                 </alert>
 
-                <div class="container">
+                <!--<div class="container">-->
+                <div>
+
                     <!-- Remove beta ribbon -->
                     <!-- <div id="cttv-beta-ribbon" class="cttv-beta-ribbon"></div> -->
 
@@ -161,6 +174,7 @@
                     </div>
                     <![endif]-->
                     <!-- javascript disabled ?-->
+
                     <noscript>
                         <div class="alert alert-danger">
                             Javascript is currently disabled or is not supported by this browser. This page relies on JavaScript to present the data in all its glory. Please enable JavaScript for full functionality.
@@ -186,7 +200,7 @@
 
 
                         <div class="col-sm-15 col-sm-3">
-                            <h6>CTTV Platform</h6>
+                            <h6>Platform</h6>
                             <p>Version 1.0 - 2015-12-08</p>
                             <p><a href="/release-notes">Release notes</a></p>
                             <p><a href="/about">About</a></p>
@@ -198,23 +212,24 @@
                             <p><a href="http://www.ebi.ac.uk">EMBL-EBI</a></p>
                             <p><a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a></p>
                             <p><a href="http://www.gsk.com">GSK</a></p>
+                            <p><a href="https://www.biogen.com/">Biogen</a></p>
                         </div>
 
                         <div class="col-sm-15 col-sm-3">
                             <h6>Support</h6>
                             <p><a href="/faq"><i class="fa fa-question-circle"></i> FAQs</a></p>
-                            <p><span class="fa fa-envelope"></span> <a href="mailto:support@targetvalidation.org?Subject=CTTV%20Core%20Platform%20-%20help%20request">support<span class="fa fa-at"></span>targetvalidation.org</a></p>
+                            <p><a href="mailto:support@targetvalidation.org?Subject=CTTV%20Core%20Platform%20-%20help%20request"><span class="fa fa-envelope"></span> support<span class="fa fa-at"></span>targetvalidation.org</a></p>
                         </div>
 
                         <div class="col-sm-15 col-sm-3">
                             <h6>Contact</h6>
                             <p><!-- <span class="fa fa-phone"></span> +44 (0)1223 494 665<br /> --></p>
-                            <p><span class="fa fa-envelope"></span> <a href="mailto:contact@targetvalidation.org">contact<span class="fa fa-at"></span>targetvalidation.org</a></p>
-                            <p><span class="fa fa-twitter"></span> <a href="http://twitter.com/targetvalidate"><span class="fa fa-at"></span>targetvalidate</a></p>
+                            <p><a href="mailto:contact@targetvalidation.org"><span class="fa fa-envelope"></span> contact<span class="fa fa-at"></span>targetvalidation.org</a></p>
+                            <p><a href="http://twitter.com/targetvalidate"><span class="fa fa-twitter"></span> <span class="fa fa-at"></span>targetvalidate</a></p>
                         </div>
 
                         <div class="col-sm-15 col-sm-3">
-                            <h6><a href="http://about.targetvalidation.org">Centre for Therapeutic Target Validation</a></h6>
+                            <h6><a href="http://about.targetvalidation.org">Open Targets</a></h6>
                             <p><a href="http://about.targetvalidation.org/about">Overview</a></p>
                             <p><a href="http://about.targetvalidation.org/projects">Projects</a></p>
                             <p><a href="http://about.targetvalidation.org/news">News</a></p>
@@ -280,7 +295,7 @@
             <!-- PMC Citation -->
             <!-- <link type="text/css" rel="stylesheet" href="node_modules/biojs-vis-pmccitation/css/style.css"/> -->
             <!-- <script type="text/javascript" src="node_modules/biojs-vis-pmccitation/build/biojsvispmccitation.js"></script> -->
-            <link type="text/css" rel="stylesheet" href="vendor/biojsvispmccitation/style.css?v=08122015"/>
+            <!-- <link type="text/css" rel="stylesheet" href="vendor/biojsvispmccitation/style.css?v=08122015"/> -->
             <!-- <script type="text/javascript" src="vendor/biojsvispmccitation/biojsvispmccitation.js"></script> -->
 
             <!-- Protein viewer -->
