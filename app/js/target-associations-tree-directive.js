@@ -66,13 +66,17 @@ angular.module('cttvDirectives')
 
                         var opts = {
                             target: attrs.target,
-                            datastructure: "tree"
+                            outputstructure: "false",
+                            direct: false,
+                            facets: false,
+                            size: 1000
                         };
                         opts = cttvAPIservice.addFacetsOptions(fct, opts);
 
                         cttvAPIservice.getAssociations (opts)
                             .then (function (resp) {
-                                var data = resp.body.data;
+                                // var data = resp.body.data;
+                                var data = cttvAPIservice.flat2tree(resp.body);
                                 if (data) {
                                     gat
                                         .data(data)
@@ -114,7 +118,10 @@ angular.module('cttvDirectives')
 
                     var opts = {
                         target: attrs.target,
-                        datastructure: "tree",
+                        outputstructure: "flat",
+                        direct: false,
+                        facets: false,
+                        size: 1000
                     };
                     opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
 
@@ -126,7 +133,8 @@ angular.module('cttvDirectives')
                                 console.warn ("RESP FOR TREE");
                                 console.warn(resp);
 
-                                var data = resp.body.data;
+                                var data = cttvAPIservice.flat2tree(resp.body);
+                                // var data = resp.body.data;
                                 if (_.isEmpty(data)) {
                                     return;
                                 }

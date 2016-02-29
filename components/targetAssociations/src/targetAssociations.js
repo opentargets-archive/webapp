@@ -54,7 +54,7 @@ var geneAssociations = function () {
             var api = config.cttvApi;
             var url = api.url.associations({
                 target: config.target,
-                datastructure: "tree"
+                outputstructure: "tree"
             });
             api.call(url)
                 .then (function (resp) {

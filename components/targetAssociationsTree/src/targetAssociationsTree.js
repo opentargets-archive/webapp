@@ -299,7 +299,7 @@ var geneAssociationsTree = function () {
 	    var api = config.cttvApi;
 	    var url = api.url.associations({
 		target : config.target,
-		datastructure : "tree",
+		outputstructure : "tree",
 		// TODO: Add datatypes here!
 	    });
 	    api.call(url)

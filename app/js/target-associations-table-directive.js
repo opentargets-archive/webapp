@@ -145,10 +145,9 @@ angular.module('cttvDirectives')
 
                 scope.loadprogress = true;
 
-
                 var opts = {
                     target: attrs.target,
-                    datastructure: "flat",
+                    outputstructure: "flat",
                     facets: false
                 };
                 opts = cttvAPIservice.addFacetsOptions(facets, opts);

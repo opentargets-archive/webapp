@@ -69,7 +69,9 @@ angular.module('cttvControllers')
         $log.log("getData()");
         var opts = {
             disease: $scope.search.query,
-            datastructure: "flat",
+            outputstructure: "flat",
+            facets: true,
+            direct: true
         };
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
@@ -85,7 +87,7 @@ angular.module('cttvControllers')
 
                 // 1: set the facets
                 // we must do this first, so we know which datatypes etc we actually have
-                $log.log(resp.body.status[0]);
+                // $log.log(resp.body.status[0]);
                 $log.log(resp.body);
                 cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
                 // cttvFiltersService.status(resp.body.status);
@@ -95,7 +97,7 @@ angular.module('cttvControllers')
                 $scope.data.selected = {datatypes: cttvFiltersService.getSelectedFiltersRaw("datatypes")};
 
                 // set the total?
-                $scope.search.total = resp.body.data.length; //resp.body.total;
+                $scope.search.total = resp.body.total; //resp.body.total;
             },
             cttvAPIservice.defaultErrorHandler
         );

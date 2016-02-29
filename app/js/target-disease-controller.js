@@ -435,7 +435,7 @@
             var opts = {
                 target:$scope.search.target,
                 disease:$scope.search.disease,
-                size: 1100,
+                size: 1000,
                 datasource: cttvConfig.evidence_sources.genetic_association.rare,
                 fields: [
                     "disease.efo_info",
