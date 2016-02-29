@@ -56,12 +56,12 @@
  * The statement section
  */
 
-/*.intro-content{
+.intro-content{
     margin-top: 100px;
 }
 .intro-divider{
     height:100px;
-}*/
+}
 
 .intro-section-statement{
     //max-width:800px;
@@ -76,6 +76,11 @@
     > .container {
         max-width: 800px
     }
+}
+
+.intro-statement{
+    font-weight: 200 !important;
+    text-align: center;
 }
 
 .intro-statement-heading{
