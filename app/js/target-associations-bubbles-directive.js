@@ -85,7 +85,10 @@ angular.module('cttvDirectives')
 
             var opts = {
                 target: attrs.target,
-                datastructure: "tree",
+                outputstructure: "tree",
+                direct: false,
+                facets: true,
+                size: 1000
             };
             opts = cttvAPIservice.addFacetsOptions(fct, opts);
 
@@ -98,7 +101,8 @@ angular.module('cttvDirectives')
                             $log.log(fct.datatypes);
                             $log.log(resp);
                             scope.$parent.updateFacets(resp.body.facets);
-                            var data = resp.body.data;
+                            // var data = resp.body.data;
+                            var data = cttvAPIservice.flat2tree(resp.body);
                             if (_.isEmpty(data)) {
                                 data.association_score = 0.01;
                             }
@@ -246,10 +250,12 @@ angular.module('cttvDirectives')
 
             var opts = {
                 target: attrs.target,
-                datastructure: "tree",
+                outputstructure: "flat",
+                direct: false,
+                facets: true,
+                size: 1000
             };
             opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
-
 
 		    cttvAPIservice.getAssociations (opts)
 		    // api.call (url)
@@ -259,7 +265,11 @@ angular.module('cttvDirectives')
                     $log.warn ("RESP FOR BUBBLES");
                     $log.warn(resp);
 
-                    var data = resp.body.data;
+                    var data = cttvAPIservice.flat2tree(resp.body);
+                    console.log(" --------------------------- TREE: ");
+                    console.log(tree);
+
+                    // var data = resp.body.data;
                     scope.$parent.updateFacets(resp.body.facets);
                     if (_.isEmpty(data)) {
                         updateView ();

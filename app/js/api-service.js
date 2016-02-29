@@ -129,7 +129,8 @@ angular.module('cttvServices')
             //return resp.then(handleSuccess, handleError);
 
 
-            function done(response){
+            function done(response) {
+            //function done(error, response){
                 // console.log("RESPONSE");
                 // console.log(response);
                 resolvePromise(response);
@@ -206,6 +207,10 @@ angular.module('cttvServices')
         };
 
 
+        cttvAPI.flat2tree = function (flat) {
+            return api.utils.flat2tree(flat);
+        };
+
 
         /**
         * Get the api object to be used outside of angular
@@ -238,7 +243,7 @@ angular.module('cttvServices')
         cttvAPI.getAssociations = function(queryObject){
             $log.log("cttvAPI.getAssociations()");
             $log.log(queryObject);
-            queryObject[ cttvAPI.facets.SCORE_STR ] = queryObject[ cttvAPI.facets.SCORE_STR ] || [1] ;
+            // queryObject[ cttvAPI.facets.SCORE_STR ] = queryObject[ cttvAPI.facets.SCORE_STR ] || [1] ; // No need for stringency for now
             queryObject[ cttvAPI.facets.SCORE_MIN ] = queryObject[ cttvAPI.facets.SCORE_MIN ] || [0.0] ;
 
             return callAPI({
@@ -335,7 +340,7 @@ angular.module('cttvServices')
         cttvAPI.getAssociation = function(queryObject){
             $log.log("cttvAPI.getAssociation");
 
-            queryObject[ cttvAPI.facets.SCORE_STR ] = queryObject[ cttvAPI.facets.SCORE_STR ] || [1] ;
+            // queryObject[ cttvAPI.facets.SCORE_STR ] = queryObject[ cttvAPI.facets.SCORE_STR ] || [1] ;
             queryObject[ cttvAPI.facets.SCORE_MIN ] = queryObject[ cttvAPI.facets.SCORE_MIN ] || [0.0] ;
 
             return callAPI({
