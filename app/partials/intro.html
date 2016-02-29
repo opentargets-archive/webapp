@@ -1,97 +1,127 @@
 <view-title>Home</view-title>
 
+<div class="container">
+    <div class="row intro-content">
 
-<!-- First page should go here -->
+        <div class="col-sm-1"></div>
 
-<div class="intro-section intro-section-search"> <!-- section -->
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12" ng-controller="SearchBoxCtrl">
+        <div class="col-sm-10" ng-controller="SearchBoxCtrl">
 
-                <img src="imgs/logo/ot_logo_webheader_280x104.png" class="intro-logo"/>
+            <img src="imgs/logo/ot_logo_webheader_280x104.png" class="intro-logo"/>
 
-                <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
-                    <fieldset>
-                        <div class="form-group has-feedback search-form">
+            <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
+                <fieldset>
+                    <div class="form-group has-feedback search-form">
 
 
-                            <!-- Search box + search button -->
-                            <div class="input-group">
+                        <!-- Search box + search button -->
+                        <div class="input-group">
 
-                                <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+                            <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
-                                <div class="input-group-btn">
-                                <button type="submit" class="btn btn-primary">
-                                <span class="fa fa-search fa-lg"></span>
-                                </button>
-                                </div>
-
+                            <div class="input-group-btn">
+                            <button type="submit" class="btn btn-primary">
+                            <span class="fa fa-search fa-lg"></span>
+                            </button>
                             </div>
 
-                            <!-- Search in progress spinner -->
-                            <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
-
-                            <!-- Suggestions box -->
-                            <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
-
-
-                      <!-- examples -->
-                      <!-- <span class="small">
-                          <i>
-                            Examples: <a href="/search?q=braf">BRAF</a>,
-                            <a href="/search?q=asthma">asthma</a>,
-                            <a href="/search?q=pten">PTEN</a>
-                          </i>
-                      </span> -->
-
-
                         </div>
-                    </fieldset>
-                </form>
+
+                        <!-- Search in progress spinner -->
+                        <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
+
+                        <!-- Suggestions box -->
+                        <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
+
+
+                  <!-- examples -->
+                  <!-- <span class="small">
+                      <i>
+                        Examples: <a href="/search?q=braf">BRAF</a>,
+                        <a href="/search?q=asthma">asthma</a>,
+                        <a href="/search?q=pten">PTEN</a>
+                      </i>
+                  </span> -->
+
+
+                    </div>
+                </fieldset>
+            </form>
+
+            <div class="intro-divider"></div>
+
+            <div class="row text-lowlight">
+
+                <div class="col-sm-6">
+                    <h2 class="intro-statement intro-statement-heading">I am interested in target T:</h2>
+                    <h2 class="intro-statement intro-statement-p">Which diseases can be treated by modulating target T?</h2>
+                </div>
+
+
+                <div class="col-sm-6">
+                    <h2 class="intro-statement intro-statement-heading">I am interested in disease D:</h2>
+                    <h2 class="intro-statement intro-statement-p">Which targets can be modulated to treat disease D?</h2>
+                </div>
+
             </div>
+
+
+            <div class="intro-divider"></div>
+
+        <!-- <div class="container-fluid"> -->
+
+            <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+            <div class="row">
+
+                <div class="col-sm-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">About the CTTV target validation platform</h4>
+                        </div>
+                        <div class="panel-body">
+                            <p>The CTTV platform brings together information on the relationships between potential drug targets and diseases.  The core concept is to identify evidence of an association between a target and disease from various data types.</p>
+
+                            <p>A target can be a protein, protein complex or RNA molecule, but we integrate evidence through the gene that codes for the target. In the same way, we describe diseases through a structure of relationships called the Experimental Factor Ontology (EFO) that allows us to bring together evidence across different but related diseases.</p>
+
+                            <p>The platform supports workflows starting from either a target or disease and presents the evidence for target – disease associations in a number of ways through association and evidence pages.</p>
+
+                            <p>We also present related information on the target or the disease itself through the target profile and disease profile pages.</p>
+
+                            <p><a href="/about">Read more &hellip;</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">FAQ</h4>
+                        </div>
+                        <div class="panel-body">
+                            <p>See all the <a href="/faq">frequently asked questions</a></p>
+
+                            <ul class="plain arrow-icon">
+                                <li><a href="/faq#what_can_I search_for">What can I search for?</a></li>
+                                <li><a href="/faq#data">Where does the data come from?</a></li>
+                                <li><a href="/faq#score">How is the association score calculated?</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="intro-divider"></div>
+
         </div>
-    </div>
-</div> <!-- section -->
 
-            <!-- <div class="intro-divider"></div> -->
-<div class="intro-section intro-section-stats"> <!-- section -->
-    <div class="container">
-        <div class="row">
+        <div class="col-sm-1"></div>
 
-            <div class="col-sm-4">
-                <h2 class="intro-stats-heading"><span class="number-circle label-warning">6.8k</span> diseases</h2>
-            </div>
+    </div> <!-- close row -->
 
-            <div class="col-sm-4">
-                <h2 class="intro-stats-heading"><span class="number-circle label-primary">24k</span> genes</h2>
-            </div>
-
-            <div class="col-sm-4">
-                <h2 class="intro-stats-heading"><span class="number-circle label-success">2M</span> associations</h2>
-            </div>
-
-        </div>
-    </div>
 </div>
 
-            <!-- <div class="intro-divider"></div> -->
 
-            <!-- <div class="container-fluid"> -->
-
-<div class="intro-section intro-section-statement"> <!-- section -->
-    <div class="container">
-        <div class="row">
-
-            <div class="col-sm-12">
-                    <h1 class="intro-statement-heading">OpenTargets</h1>
-                    <h2 class="intro-statement-heading">An innovative pre-competitive collaboration between Sanger, EBI, GSK and Biogen</h2>
-                    <a href="about" class="btn btn-primary">More...</a>
-            </div>
-
-        </div>
-
-
-    </div>
-
-</div>
 <!-- End first page -->
