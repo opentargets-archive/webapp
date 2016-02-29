@@ -121,14 +121,15 @@ angular.module('cttvServices')
             countRequest( params.trackCall===false ? undefined : true );
             //countRequest( true );
 
-            var resp = api.call(url, done)
+            var resp = api.call(url)
+                .then (done)
                 .catch(cttvAPI.defaultErrorHandler);
 
             return promise;
             //return resp.then(handleSuccess, handleError);
 
 
-            function done(error, response){
+            function done(response){
                 // console.log("RESPONSE");
                 // console.log(response);
                 resolvePromise(response);
