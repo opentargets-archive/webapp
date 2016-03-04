@@ -1,0 +1,35 @@
+
+
+
+/*
+ * Lists
+ */
+
+
+ul.plain {
+    padding-left: 0;
+
+    li {
+        list-style-type: none;
+        margin-left: 1.1em;
+    }
+}
+
+
+
+.faqs ul{
+    /*list-style:none;
+    padding-left: 0px;*/
+}
+
+
+.arrow-icon li:before {
+    font-family: 'FontAwesome';
+    content: '\f105';
+    margin-left: -1.1em;
+    display: inline-block;
+    width: 1.1em;
+    color: $clr-ui-border;  // was #CCC
+}
+
+
