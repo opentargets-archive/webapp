@@ -1,0 +1,54 @@
+
+
+
+/*
+ * Update or define rules for specific 3rd party libraries elements
+ */
+
+
+
+/*
+ * Angular stuff
+ */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+
+
+/*
+ * FontAwesome styles
+ */
+
+
+.fa-spin {
+  -webkit-animation: fa-spin 0.5s infinite linear;
+  animation: fa-spin 0.5s infinite linear;
+}
+
+
+
+/*
+ * Bootstrap
+ */
+
+.btn-primary, .badge-primary, .label-primary{
+    background-color: $btn-primary-bg;
+}
+
+.btn-primary{
+    border-color: $btn-primary-border;
+    &:hover{
+        background-color: $btn-primary-bg-hover;
+        border-color: $btn-primary-border-hover;
+    }
+}
+
+.pagination li a , .pagination li a:focus{
+    color: $btn-primary-bg;
+}
+
+.pagination .active a , .pagination .active a:focus{
+    background-color: $btn-primary-bg;
+    border-color: $btn-primary-border;
+}

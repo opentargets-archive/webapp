@@ -380,9 +380,7 @@ angular.module('cttvDirectives', [])
     .directive('cttvHpaTissueExpression', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
         'use strict';
 
-        var colorScale = d3.scale.linear()
-            .domain([1,3])
-            .range(["#CBDCEA", "#005299"]); // blue orig
+        var colorScale = cttvUtils.colorScales.BLUE_1_3; //blue orig
 
         var labelScale = d3.scale.ordinal()
             .domain([1,2,3])

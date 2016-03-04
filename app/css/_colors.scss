@@ -1,0 +1,105 @@
+
+
+
+/*
+ * Color variables
+ */
+
+
+
+$primary-color: #5A5F5F;            // text grey
+$secondary-color: #0091EB;          // links blue
+//$secondary-color: adjust-color( #0091EB, $lightness: -5% );
+
+$primary-background-color: #FFF;    // white
+$secondary-background-color: #EEE;  // gray
+
+$primary-brand-color: #3E8BAD;      // flower blue
+$secondary-brand-color: #8b435f;    // cttv logo red
+
+
+
+/*
+ * Main elements colors
+ */
+$body-background: $primary-background-color;
+
+$masthead-background: $secondary-color;
+$masthead-border: adjust-color($secondary-color, $lightness: -5%);
+
+$footer-background: $primary-color; //scale-color($secondary-background-color, $lightness: -57%);
+$footer-border: scale-color($secondary-background-color, $lightness: -64%);
+$footer-text: inv-color($footer-background);
+$footer-text-dim: scale-color( $footer-text, $lightness: -13%);
+
+
+
+/*
+ * Text colors
+ */
+
+$clr-text: $primary-color;
+$clr-text-em: scale-color( $clr-text, $lightness: -50% ); // darker (000)
+$clr-text-dim: scale-color( $clr-text, $lightness: 38% ); // lighter (AAA)
+$clr-text-inv: inv-color($footer-background);
+$clr-text-inv-dim: scale-color( $clr-text-inv, $lightness: -13%);
+
+$clr-link: $secondary-color;
+$clr-link-hover: adjust-color( $secondary-color, $lightness: -5% );
+
+
+
+/*
+ * UI elements colors
+ */
+
+$clr-ui-background: #F5F5F5;    // bootstrap grey
+$clr-ui-background-secondary: scale-color( $clr-ui-background, $lightness: -3% ); //e6e6e6
+$clr-ui-border: #DDD;           // border grey
+$clr-ui-shadow: rgba(0,0,0,0.2);
+$clr-ui-lightbox-w: rgba(255,255,255,.5);
+$clr-ui-foreground: #005299; // visualization blue
+$clr-ui-selected: $secondary-color;
+
+$clr-artboard-foregroud: #000;
+$clr-artboard-backgroud: #FFF;
+
+$clr-private-data: #f36633; // GSK orange
+
+/* some bootstrap elements */
+$btn-primary-bg: $secondary-color;
+$btn-primary-border: adjust-color( $btn-primary-bg, $lightness: -5% );
+$btn-primary-bg-hover: adjust-color( $btn-primary-bg, $lightness: -5% );
+$btn-primary-border-hover: adjust-color( $btn-primary-bg, $lightness: -10% );
+
+
+/*
+ * Transparent colors
+ */
+
+
+
+/*
+ * Bootstrap colors
+ */
+
+$clr-error: #b94a48;
+$clr-error-hover: #953b39;
+
+$clr-warning: #f89406;
+$clr-warning-hover: #c67605;
+$clr-warning-highlight: #f6d7b3;    /* 25% of standard full color */
+
+$clr-success: #5cb85c;
+$clr-success-hover: #449d44;
+
+$clr-info: #3a87ad;
+$clr-info-hover: #2d6987;
+
+$clr-inverse: #333333;
+$clr-inverse-hover: #1a1a1a;
+
+$clr-primary: $secondary-color; //ok, this is confusing //#337ab7;
+$clr-primary-hover: adjust-color( $clr-primary, $lightness: -5% );
+$clr-primary-highlight: #b7d3e7;    /* 25% of standard full color */
+
