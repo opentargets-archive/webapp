@@ -28,7 +28,7 @@
     "angular": "1.4.9",
     "components-font-awesome": "4.4.0",
     "bootstrap": "3.3.5",
-    "angular-bootstrap": "0.13.0",
+    "angular-bootstrap": "0.13.4",
     "aight": "2.0",
     "lodash": "3.10.1",
     "angulartics": "~0.20.2",
