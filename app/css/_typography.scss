@@ -1,0 +1,100 @@
+/*
+* Text
+*/
+
+
+.text-lowlight{
+    color: $clr-text-dim;
+}
+
+.text-highlight{
+    color: $clr-text-em;
+}
+
+.text-nolight{
+    color: $clr-text; /*#666;*/
+}
+
+.small{
+    font-size: 12px;
+    /*line-height: 1.2;*/
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.text-small{
+    font-size: 12px;
+    /*line-height: 1.2;*/
+}
+
+.large {
+    font-size: 16px;
+}
+
+.text-disabled, .disabled{
+    color: $clr-text-dim;
+    text-decoration: none;
+    cursor: default;
+}
+
+.disabled {
+    cursor: not-allowed !important;
+}
+
+.text-content-highlight {
+    padding: 0px 2px;
+}
+
+.cttv-author-et-al {
+    font-style: italic;
+}
+
+::selection {
+    background: #FF6350;
+    color: #FFD0CB;
+}
+
+::moz-selection {
+    /* do NOT use sass for this as this will break the scarcely supported ::selection; so change color slightly to trick SASS */
+    background: #FF6351;
+    color: #FFD0CC;
+}
+
+/*
+ * Links
+ */
+
+
+a {
+
+    color: $clr-link;
+
+    &:hover {
+        text-decoration: none;
+        color: $clr-link-hover;
+    }
+
+    &:focus {
+        /* Remove the thick blue outline from clicked links */
+        outline: none;
+        text-decoration: none;
+        color: $clr-link;
+    }
+}
+
+.cttv-external-link{
+    /*white-space: nowrap;*/
+}
+
+.cttv-external-link::after {
+    /*font: normal normal normal 14px/1 FontAwesome;*/
+    font-family: 'FontAwesome';
+    content: "\00A0\f08e";  /* non-breaking space + fontawesome link icon */
+    padding-left: 0px;
+    font-size: inherit;
+    color: inherit;
+}
+
+
