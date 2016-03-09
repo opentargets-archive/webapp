@@ -11,7 +11,8 @@ angular.module('cttvApp', [
     'angulartics.piwik',
     'viewhead',
     'cttvServices',
-    'hm.readmore'
+    'hm.readmore',
+    'ngSanitize'
 ])
 
 .config(['$routeProvider', '$locationProvider',
