@@ -138,15 +138,16 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             data.disease.forEach(function(efo){
 
                 // first we don't want that "CTTV Root" thingy at the beginning, if it's there
-                if( efo.data.efo_path_labels[0][0]==cttvConsts.CTTV_ROOT_NAME ){
+                if( efo.data.efo_path_labels[0][0]==cttvConsts.CTTV_ROOT_NAME && efo.data.efo_path_labels[0].length==efo.data.efo_path_codes[0].length ){
                     efo.data.efo_path_labels[0] = efo.data.efo_path_labels[0].slice(1);
                     efo.data.efo_path_codes[0] = efo.data.efo_path_codes[0].slice(1);
                 }
 
-                // then we only want to show the last 3 elements
-                // we store it at a new index in the array
-                efo.data.efo_path_labels[1] = efo.data.efo_path_labels[0].slice(-3);
-
+                // then we only want to show the last 3 elements (labels and codes)
+                // we store it as a new array
+                efo.data.efo_path = efo.data.efo_path_labels[0].map(function(v, i){
+                    return {label: v, code: efo.data.efo_path_codes[0][i]};
+                }).slice(-3); // the slicing at the end is not optimal, but safe :P
             });
 
             return data;
