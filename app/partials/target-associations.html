@@ -23,14 +23,14 @@
 
         <div class="container">
 
-            <div ng-show="n.diseases>0">
+            <div ng-show="n.diseases==0">
                 <h4>
                     No diseases found for {{search.label}}
                 </h4>
                 <p>Try searching a different target or disease above</p>
             </div>
 
-            <div class="row" ng-show="n.diseases==0">
+            <div class="row" ng-show="n.diseases>0">
 
                 <div class="col-md-3 cttv-facet">
                     <!-- <accordion>
