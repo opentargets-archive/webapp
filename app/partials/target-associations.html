@@ -3,14 +3,14 @@
 <div class="partial-page">
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
-    <div ng-show="n.diseases==0">
+    <!-- <div ng-show="n.diseases==0">
         <h3>
             No diseases found for {{search.label}}
         </h3>
         Try searching a different target or disease above
     </div>
 
-    <div ng-show="n.diseases>0">
+    <div ng-show="n.diseases>0"> -->
 
 
         <div class="cttv-content-header">
@@ -22,7 +22,15 @@
         </div>
 
         <div class="container">
-            <div class="row">
+
+            <div ng-show="n.diseases>0">
+                <h4>
+                    No diseases found for {{search.label}}
+                </h4>
+                <p>Try searching a different target or disease above</p>
+            </div>
+
+            <div class="row" ng-show="n.diseases==0">
 
                 <div class="col-md-3 cttv-facet">
                     <!-- <accordion>
@@ -140,6 +148,6 @@
                 </div>
             </div>
         </div>
-    </div>
+
 </div>
 <!-- end search results-->

@@ -1,39 +1,48 @@
 <div class="partial-page">
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
-    <div ng-show="search.total==0">
-        <h3>
+    <!-- <div ng-if="search.total==0" class="container">
+        <h3 view-title>
             No targets found for {{search.label}}
         </h3>
         Try searching a different disease or target above
     </div>
 
-    <div ng-show="search.total>0">
+    <div ng-if="search.total>0">-->
 
-        <div class="cttv-content-header">
-            <div class="container">
-                <h3 view-title>{{search.total}} {{search.total===1 ? "target" : "targets"}} associated with {{search.label}}</h3>
-                <p><!-- Found {{search.total}} {{search.total===1 ? "target" : "targets"}}<span class="cttv-interpage-link">--><a href="/disease/{{search.query}}"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span> View disease profile</span></a>
-                </p>
-            </div>
+
+    <div class="cttv-content-header">
+        <div class="container">
+            <h3 view-title>{{search.total}} {{search.total===1 ? "target" : "targets"}} associated with {{search.label}}</h3>
+            <p><!-- Found {{search.total}} {{search.total===1 ? "target" : "targets"}}<span class="cttv-interpage-link">--><a href="/disease/{{search.query}}"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span> View disease profile</span></a>
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div ng-if="search.total==0">
+            <h4>
+                No targets found for {{search.label}}
+            </h4>
+            <p>Try searching a different disease or target above</p>
         </div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-3">
-                    <!-- <div ng-click="cttvFiltersService.initFilters()">X reset filters</div> -->
-                    <cttv-facets></cttv-facets>
-                </div>
+        <div class="row" ng-if="search.total>0">
+            <div class="col-sm-3">
+                <!-- <div ng-click="cttvFiltersService.initFilters()">X reset filters</div> -->
+                <cttv-facets></cttv-facets>
+            </div>
 
-                <div class="col-sm-9">
-                    <!-- Loading progress spinner
-                    <div style="width:100%; text-align:center; padding-top:50px; position:absolute" ng-show="loading">
-                    <span cttv-progress-spinner size="3" class="text-lowlight"></span>
-                    </div>-->
-                    <cttv-disease-associations target="{{search.query}}" filename="search.filename" data="data"></cttv-disease-associations>
-                </div>
+            <div class="col-sm-9">
+                <!-- Loading progress spinner
+                <div style="width:100%; text-align:center; padding-top:50px; position:absolute" ng-show="loading">
+                <span cttv-progress-spinner size="3" class="text-lowlight"></span>
+                </div>-->
+                <cttv-disease-associations target="{{search.query}}" filename="search.filename" data="data"></cttv-disease-associations>
             </div>
         </div>
     </div>
+
 </div>
 <!-- end search results-->
