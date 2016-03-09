@@ -48,7 +48,7 @@
                     <span class="search-matches">
                         <span class="search-match-sec" ng-repeat="(key, val) in result.highlight">
                             <span class="search-match-sec-title">{{( !$first ? ' &hellip; ' : '') + key.split('_').join(' ')}}: </span>
-                            <span class="search-match-sec-content" bind-html-unsafe="val.join(', ')"></span>
+                            <span class="search-match-sec-content" ng-bind-html="val.join(', ')"></span>
                         </span>
                     </span>
 
