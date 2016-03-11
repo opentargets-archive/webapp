@@ -88,71 +88,79 @@
             <!-- main page content -->
             <div class="cttv-main-container">
 
-                <!-- Masthead (search) -->
-                <div class="masthead ng-cloak" ng-show="location.path()!=='/'" ng-controller="MastheadCtrl">
-                    <div class="container">
-                        <div class="row">
 
-                            <div class="col-xs-4">
-                                <!-- CTTV logo -->
-                                <!-- <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>-->
-                                <div class="ot_logo">
-                                    <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_146x34_w.png"/></a>
-                                </div>
-                            </div>
+                <div ng-controller="MastheadCtrl">
 
-                            <div class="col-xs-4 masthead-navigation-container">
-                                <ul class="masthead-navigation">
-                                    <li><a href="/about">About</a></li>
-                                    <li><a href="/about">FAQs</a></li>
-                                    <li><a href="/about">API</a></li>
-                                    <li><a href="/about">Docs</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="col-xs-4" ng-controller="SearchBoxCtrl">
-                                <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
-                                    <fieldset>
-                                        <div class="has-feedback search-form">
-
-
-
-                                            <!-- Search box + search button -->
-                                            <div class="input-group">
-
-                                                <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
-
-                                                <div class="input-group-btn">
-                                                    <button type="submit" class="btn btn-primary">
-                                                        <span class="fa fa-search fa-lg"></span>
-                                                    </button>
-                                                </div>
-
-                                            </div>
-
-                                            <!-- Search in progress spinner -->
-                                            <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
-
-                                            <!-- Suggestions box -->
-                                            <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
-
-
-                                            <!--<span class="small">
-                                                <i>
-                                                    Examples: <a href="/search?q=braf">BRAF</a>,
-                                                    <a href="/search?q=asthma">asthma</a>,
-                                                    <a href="/search?q=pten">PTEN</a>
-                                                </i>
-                                            </span>-->
-
-
-                                        </div>
-                                    </fieldset>
-                                </form>
-                            </div>
-
+                    <!-- Masthead (homepage) -->
+                    <div ng-if="location.path()=='/'" class="ng-cloak masthead-navigation-container">
+                        <div class="container">
+                            <masthead-navigation-menu></masthead-navigation-menu>
                         </div>
                     </div>
+
+                    <!-- Masthead (other pages) -->
+                    <div ng-if="location.path()!=='/'" class="masthead ng-cloak">
+                        <div class="container">
+
+                            <div class="row" >
+
+                                <div class="col-xs-4">
+                                    <!-- CTTV logo -->
+                                    <!-- <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>-->
+                                    <div class="ot_logo">
+                                        <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_146x34_w.png"/></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-4 masthead-navigation-container">
+                                    <masthead-navigation-menu></masthead-navigation-menu>
+                                </div>
+
+                                <div class="col-xs-4" ng-controller="SearchBoxCtrl">
+                                    <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
+                                        <fieldset>
+                                            <div class="has-feedback search-form">
+
+
+
+                                                <!-- Search box + search button -->
+                                                <div class="input-group">
+
+                                                    <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+
+                                                    <div class="input-group-btn">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <span class="fa fa-search fa-lg"></span>
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- Search in progress spinner -->
+                                                <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
+
+                                                <!-- Suggestions box -->
+                                                <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
+
+
+                                                <!--<span class="small">
+                                                    <i>
+                                                        Examples: <a href="/search?q=braf">BRAF</a>,
+                                                        <a href="/search?q=asthma">asthma</a>,
+                                                        <a href="/search?q=pten">PTEN</a>
+                                                    </i>
+                                                </span>-->
+
+
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- End Masthead -->
 
@@ -204,6 +212,8 @@
                             <p>Version 1.0 - 2015-12-08</p>
                             <p><a href="/release-notes">Release notes</a></p>
                             <p><a href="/about">About</a></p>
+                            <p><a href="/api-docs" target="_self">API</a></p>
+                            <p><a href="/docs">Docs</a></p>
                             <p><a href="/terms_of_use">Terms of use</a></p>
                         </div>
 

@@ -113,12 +113,12 @@ body{
 
     li {
         display: inline-block;
-        &:hover {
-            background: $btn-primary-bg-hover;
-        }
+        // &:hover {
+        //     background: $btn-primary-bg-hover;
+        // }
 
         a, a:focus {
-            color: #fff;
+            //color: #fff;
             padding: 0px 10px;
             height: 50px;
             display: table-cell;
@@ -127,6 +127,17 @@ body{
     }
 }
 
+.masthead .masthead-navigation {
+    li {
+        &:hover {
+            background: $btn-primary-bg-hover;
+        }
+
+        a, a:focus {
+            color: #fff;
+        }
+    }
+}
 
 /*
 * Footer
