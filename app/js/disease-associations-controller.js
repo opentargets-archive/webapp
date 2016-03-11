@@ -71,7 +71,7 @@ angular.module('cttvControllers')
             disease: $scope.search.query,
             outputstructure: "flat",
             facets: true,
-            direct: true
+            direct: false
         };
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
