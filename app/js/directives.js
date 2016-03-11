@@ -1415,3 +1415,22 @@ angular.module('cttvDirectives', [])
             link: function(scope, element, attrs) {}
         };
     }])
+
+
+    .directive('mastheadNavigationMenu', [function () {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {
+                href: '@'
+            },
+            template :    '<ul class="masthead-navigation">'
+                        + '    <li><a href="/about">About</a></li>'
+                        + '    <li><a href="/faq">FAQs</a></li>'
+                        + '    <li><a href="/api-docs" target="_self">API</a></li>' // must force target to link outside of Angular routing
+                        + '    <li><a href="/docs">Docs</a></li>'
+                        + '</ul>',
+            link: function(scope, element, attrs) {}
+        };
+    }])

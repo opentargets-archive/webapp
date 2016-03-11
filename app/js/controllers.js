@@ -153,7 +153,6 @@
         'use strict';
         $log.log('MastheadCtrl()');
         $scope.location = $location;
-
     }]).
 
     controller('D3TestCtrl', ['$scope', '$log', function ($scope, $log) {
