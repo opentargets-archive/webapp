@@ -36,7 +36,7 @@ the gene or protein name, symbol or synonym. To find a disease you can search fo
 (including some abbreviations) provided the disease label and its synonyms are part of the [EFO](http://www.ebi.ac.uk/efo/).
 
 A getting started slide pack is available [here](http://about.targetvalidation.org/sites/targetvalidation.org/files/documents/cttv_platform_getting_started.pdf)
-https://www.targetvalidation.org/about.targetvalidation.org/project/cttv-core-target-validation-platform/cttv_platform_getting_started.pdf
+
 ### <a name="target_assoc"></a>Target Association page
 
 After searching for a target and selecting the target you will be taken to the Target Association page which provides an
