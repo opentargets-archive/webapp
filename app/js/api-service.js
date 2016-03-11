@@ -34,11 +34,11 @@ angular.module('cttvServices')
             API_EXPRESSION_URL: 'expression',
             API_TARGET_URL : 'target',
             facets: {
-                DATATYPES: 'filterbydatatype',
-                PATHWAY_TYPE: 'filterbypathway',
-                DATASOURCES: 'filterbydatasource',
-                SCORE_MIN : 'filterbyscorevalue_min',
-                SCORE_MAX : 'filterbyscorevalue_max',
+                DATATYPES: 'datatype', // 'filterbydatatype',
+                PATHWAY_TYPE: 'pathway', //filterbypathway',
+                DATASOURCES: 'datasource', //filterbydatasource',
+                SCORE_MIN : 'scorevalue_min', //filterbyscorevalue_min',
+                SCORE_MAX : 'scorevalue_max', //filterbyscorevalue_max',
                 SCORE_STR : 'stringency',
             },
         };
