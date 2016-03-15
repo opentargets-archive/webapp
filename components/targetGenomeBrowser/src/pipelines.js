@@ -16,7 +16,7 @@ var pipelines = function () {
         if (efo) {
             opts = getOpts (genes, ["uniprot", "eva"], efo);
             url = rest.cttv.url.filterby ();
-            return rest.cttv.call(url, undefined, opts)
+            return rest.cttv.call(url, opts)
                 .then (function (resp) {
                     cttv_highlight(resp);
                     return p.rare(genes);
@@ -25,7 +25,7 @@ var pipelines = function () {
 
         opts = getOpts(genes, ["uniprot", "eva"]);
         url = rest.cttv.url.filterby();
-        return rest.cttv.call(url, undefined, opts)
+        return rest.cttv.call(url, opts)
             .then (cttv_clinvar)
             .then (ensembl_call_snps)
             .then (ensembl_parse_clinvar_snps)
@@ -37,7 +37,7 @@ var pipelines = function () {
         if (efo) {
             opts = getOpts (genes, ["gwas_catalog"], efo);
             url = rest.cttv.url.filterby ();
-            return rest.cttv.call(url, undefined, opts)
+            return rest.cttv.call(url, opts)
                 .then (function (resp) {
                     cttv_highlight(resp);
                     return p.common (genes);
@@ -46,7 +46,7 @@ var pipelines = function () {
         opts = getOpts(genes, ["gwas_catalog"]);
         url = rest.cttv.url.filterby ();
 
-        return rest.cttv.call(url, undefined, opts)
+        return rest.cttv.call(url, opts)
             .then (cttv_gwas)
             .then (ensembl_call_snps)
             .then (ensembl_parse_gwas_snps)
@@ -251,6 +251,7 @@ var pipelines = function () {
             target: [genes],
             size : 1000,
             datasource : datasources,
+            facets: false,
             fields : [
                 "target.gene_info",
                 "disease.efo_info",
@@ -262,7 +263,7 @@ var pipelines = function () {
         };
         if (efo !== undefined) {
             opts.disease = [efo];
-            opts.expandefo = false;
+            opts.direct = true;
         }
         return opts;
     }
