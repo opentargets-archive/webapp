@@ -162,7 +162,8 @@ angular.module('cttvDirectives')
                     $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
                     $log.log(resp);
 
-                    scope.n.diseases = resp.data.length;
+                    // scope.n.diseases = resp.data.length;
+                    scope.n.diseases = resp.total;
                     var newData = [];
 
                     // Iterate

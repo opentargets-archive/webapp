@@ -67,7 +67,7 @@ angular.module('cttvDirectives')
                         var opts = {
                             target: attrs.target,
                             outputstructure: "false",
-                            direct: false,
+                            direct: true,
                             facets: false,
                             size: 1000
                         };
@@ -119,7 +119,7 @@ angular.module('cttvDirectives')
                     var opts = {
                         target: attrs.target,
                         outputstructure: "flat",
-                        direct: false,
+                        direct: true,
                         facets: false,
                         size: 1000
                     };
