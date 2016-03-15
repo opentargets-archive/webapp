@@ -86,7 +86,7 @@ angular.module('cttvDirectives')
             var opts = {
                 target: attrs.target,
                 outputstructure: "tree",
-                direct: false,
+                direct: true,
                 facets: true,
                 size: 1000
             };
@@ -251,7 +251,7 @@ angular.module('cttvDirectives')
             var opts = {
                 target: attrs.target,
                 outputstructure: "flat",
-                direct: false,
+                direct: true,
                 facets: true,
                 size: 1000
             };
@@ -267,7 +267,7 @@ angular.module('cttvDirectives')
 
                     var data = cttvAPIservice.flat2tree(resp.body);
                     console.log(" --------------------------- TREE: ");
-                    console.log(tree);
+                    console.log(data);
 
                     // var data = resp.body.data;
                     scope.$parent.updateFacets(resp.body.facets);
