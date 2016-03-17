@@ -14,9 +14,12 @@ angular.module('cttvDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-.directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', function ($log, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts) {
+.directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', 'cttvAPIservice', function ($log, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts, cttvAPIservice) {
 
     'use strict';
+
+    var draw = 1;
+    var filters = {};
 
     var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
@@ -66,9 +69,77 @@ angular.module('cttvDirectives')
     /*
     Setup the table cols and return the DT object
     */
-    var setupTable = function(table, filename){
+    var setupTable = function(table, disease, filename){
         $log.log("setupTable()");
         var t = $(table).DataTable( cttvUtils.setTableToolsParams({
+            "processing": true,
+            "serverSide": true,
+            "ajax": function (data, cbak, params) {
+                // Order options
+                // mappings:
+                // 0 => gene name alphabetically -- not supported in the api
+                // 1 => gene id alphabetically -- not supported in the api and the column is hidden
+                // 2 => overall
+                // 3 => genetic_association
+                // 4 => somatic_mutation
+                // 5 => known_drug
+                // 6 => affected_pathway
+                // 7 => rna_expression
+                // 8 => text_mining
+                // 9 => animal_model
+                // 10 => overall -- hidden column
+                // 11 => gene description -- not supported in the api
+                var mappings = {
+                    2: "overall",
+                    3: "datatypes." + cttvConsts.datatypes.GENETIC_ASSOCIATION,
+                    4: "datatypes." + cttvConsts.datatypes.SOMATIC_MUTATION,
+                    5: "datatypes." + cttvConsts.datatypes.KNOWN_DRUG,
+                    6: "datatypes." + cttvConsts.datatypes.AFFECTED_PATHWAY,
+                    7: "datatypes." + cttvConsts.datatypes.RNA_EXPRESSION,
+                    8: "datatypes." + cttvConsts.datatypes.LITERATURE,
+                    9: "datatypes." + cttvConsts.datatypes.ANIMAL_MODEL,
+                    10: "overall"
+                };
+                var order = [];
+                for (var i=0; i<data.order.length; i++) {
+                    var prefix = data.order[i].dir === "asc" ? "~" : "";
+                    order.push(prefix + mappings[data.order[i].column]);
+                }
+
+                var opts = {
+                    disease: disease,
+                    outputstructure: "flat",
+                    facets: false,
+                    direct: false,
+                    size: data.length,
+                    from: data.start,
+                    sort: order,
+                    search: data.search.value,
+                    draw: draw
+                };
+
+                // If there is a pathway filter...
+                if (filters.pathway_type) {
+                    opts.pathway = filters.pathway_type;
+                }
+                // If there is a datatype filter...
+                if (filters.datatypes) {
+                    opts.datatype = filters.datatypes;
+                }
+
+                cttvAPIservice.getAssociations(opts)
+                    .then (function (resp) {
+                        var dtData = parseServerResponse(resp.body.data);
+                        var o = {
+                            recordsTotal: resp.body.total,
+                            recordsFiltered: resp.body.total,
+                            data: dtData,
+                            draw: draw
+                        };
+                        draw++;
+                        cbak(o);
+                    });
+            },
             "columns": (
                 function(){
                     var a=[];
@@ -82,9 +153,15 @@ angular.module('cttvDirectives')
                         "targets" : [1,10],
                         "visible" : false
                     },
+                    {
+                        "targets" : [0,1,11],
+                        "orderable": false
+                    },
                     { "orderSequence": [ "desc", "asc"], "targets": "_all" }
                 ],
-                "order" : [[2, "desc"], [10, "desc"]],
+                // "order" : [[2, "desc"], [10, "desc"]],
+                "order": [2, "desc"],
+                "orderMulti": false,
                 "autoWidth": false,
                 "ordering": true,
                 "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
@@ -106,10 +183,7 @@ angular.module('cttvDirectives')
         return t;
     };
 
-    var updateTable = function (table, data, target, filters) {
-
-        var datatypes = filters.datatypes || [];
-
+    function parseServerResponse (data){
         var newData = new Array(data.length);
 
         for (var i=0; i<data.length; i++) {
@@ -123,7 +197,7 @@ angular.module('cttvDirectives')
             dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
             var row = [];
             var geneLoc = "";
-            var geneDiseaseLoc = "/evidence/" + data[i].target.id + "/" + data[i].disease.id + (filters.score_str ? "?score_str=" + filters.score_str[0] : "");
+            var geneDiseaseLoc = "/evidence/" + data[i].target.id + "/" + data[i].disease.id;
             row.push("<a href='" + geneDiseaseLoc + "' title='"+data[i].target.symbol+"'>" + data[i].target.symbol + "</a>");
             // Ensembl ID
             row.push(data[i].target.id);
@@ -161,34 +235,10 @@ angular.module('cttvDirectives')
             //        row.push("<a href=" + geneDiseaseLoc + '><i class="fa fa-circle-o"></i> ' + data[i].target.name + "</a>");
             //    }
 
-
             newData[i] = row;
-
         }
-
-
-        // now set the table content:
-
-        // first, clear any existing content
-        table.clear();
-
-        // now here would be a good place to hide/show any columns based on datatypes ??
-        /*for(var i=3; i<table.columns()[0].length-2; i++){
-            // only look at datatypes cols, so the first few and last few (including the total score are left out...)
-            table.column(i).visible( _.isEmpty(datatypes) );
-        }
-
-        if( !_.isEmpty(datatypes) ){
-            datatypes.forEach(function(value){
-                table.column(value+':name').visible(true);
-            });
-        }*/
-
-        // render with new data
-        table.rows.add(newData).draw();
-
-    }; // end updateTable
-
+        return newData;
+    }
 
 
     return {
@@ -197,21 +247,21 @@ angular.module('cttvDirectives')
 
         scope: {
             filename : '=',
-            data : '='
+            disease: '=',
+            filters : '=',
         },
 
-        template: '<div ng-show="data.length>0">'
+        template: '<div>'
         +'  <cttv-matrix-table></cttv-matrix-table>'
         +'  <cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
         +'  <cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
-        +'</div>'
-        +'<div ng-show="data.length==0">'+cttvDictionary.NO_DATA+'</div>',
+        +'</div>',
 
         link: function (scope, elem, attrs) {
-
             // table itself
             var table = elem.children().eq(0).children().eq(0)[0];
-            var dtable = setupTable(table, scope.filename);
+            var dtable;
+            // var dtable = setupTable(table, scope.filename);
 
             // legend stuff
             scope.legendText = "Score";
@@ -225,43 +275,41 @@ angular.module('cttvDirectives')
                 {label:"No data", class:"no-data"}
             ];
 
-
-            // Watch for data changes and refresh the view when that happens
-            scope.$watch("data", function(n,o){
-                //console.log(scope);
-                var filters = cttvFiltersService.parseURL();
-                // console.log(filters);
-                $log.debug("Data:");
-                if( scope.data ){
-                    $log.debug("Update table - "+scope.data.length);
-                    //console.log(scope.data.selected);
-                    updateTable(dtable, scope.data, attrs.target, filters);
+            scope.$watchGroup(["filters", "disease"], function (attrs) {
+                filters = attrs[0];
+                var disease = attrs[1];
+                // if the table exists, we just force an upload (will take the filters into account)
+                if (dtable) {
+                    dtable.ajax.reload();
+                } else {
+                    // create a new table
+                    dtable = setupTable(table, disease, scope.filename);
                 }
             });
 
             // Watch for filename changes
             // when available, we update the option for the CSV button, via a little hack:
             // we update the button action, wrapping the original action in a call where the 4th argument is updated with the correct title
-            scope.$watch( 'filename', function(val){
-                if(val){
-                    // replace spaces with underscores
-                    val = val.split(" ").join("_");
-
-                    // update the export function to
-                    var act = dtable.button(".buttons-csv").action();   // the original export function
-
-                    dtable.button(".buttons-csv").action(
-                        function(){
-                            //var opts = arguments[3];
-                            //opts.title = val;
-                            //act(arguments[0], arguments[1], arguments[2], opts);
-                            arguments[3].title = val;
-                            act.apply(this, arguments);
-                        }
-                    );
-
-                }
-            });
+            // scope.$watch( 'filename', function(val){
+                // if(val){
+                //     // replace spaces with underscores
+                //     val = val.split(" ").join("_");
+                //
+                //     // update the export function to
+                //     var act = dtable.button(".buttons-csv").action();   // the original export function
+                //
+                //     dtable.button(".buttons-csv").action(
+                //         function(){
+                //             //var opts = arguments[3];
+                //             //opts.title = val;
+                //             //act(arguments[0], arguments[1], arguments[2], opts);
+                //             arguments[3].title = val;
+                //             act.apply(this, arguments);
+                //         }
+                //     );
+                //
+                // }
+            // });
 
         } // end link
     }; // end return
