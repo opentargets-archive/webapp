@@ -56,8 +56,8 @@
             $scope.filters.target.loading = true;
             cttvAPIservice.getSearch({
                     q: $scope.search.query.q,
-                    size : 1,
-                    filter : 'gene'
+                    size : 0,
+                    filter : 'target'
                 }).
                 then(
                     function(resp) {
@@ -72,8 +72,8 @@
             $scope.filters.disease.loading = true;
             cttvAPIservice.getSearch({
                     q: $scope.search.query.q,
-                    size : 1,
-                    filter : 'efo'
+                    size : 0,
+                    filter : 'disease'
                 }).
                 then(
                     function(resp) {

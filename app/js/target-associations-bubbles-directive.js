@@ -97,10 +97,7 @@ angular.module('cttvDirectives')
                 if (ga) {
                     cttvAPIservice.getAssociations (opts)
                         .then (function (resp) {
-                            $log.log("***");
-                            $log.log(fct.datatypes);
-                            $log.log(resp);
-                            scope.$parent.updateFacets(resp.body.facets);
+                            // scope.$parent.updateFacets(resp.body.facets);
                             // var data = resp.body.data;
                             var data = cttvAPIservice.flat2tree(resp.body);
                             if (_.isEmpty(data)) {
@@ -121,8 +118,6 @@ angular.module('cttvDirectives')
             }
             datatypesChangesCounter++;
         });
-
-
 
 
 
@@ -215,9 +210,9 @@ angular.module('cttvDirectives')
             // TODO: This may prevent from delivering directives as products!
             if (data) {
                 ga.data(data);
-                scope.$parent.setTherapeuticAreas(ga.data().children || []);
+                // scope.$parent.setTherapeuticAreas(ga.data().children || []);
             } else {
-                scope.$parent.setTherapeuticAreas([]);
+                // scope.$parent.setTherapeuticAreas([]);
             }
         }
 
@@ -252,7 +247,7 @@ angular.module('cttvDirectives')
                 target: attrs.target,
                 outputstructure: "flat",
                 direct: true,
-                facets: true,
+                facets: false,
                 size: 1000
             };
             opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
@@ -270,7 +265,7 @@ angular.module('cttvDirectives')
                     console.log(data);
 
                     // var data = resp.body.data;
-                    scope.$parent.updateFacets(resp.body.facets);
+                    // scope.$parent.updateFacets(resp.body.facets);
                     if (_.isEmpty(data)) {
                         updateView ();
                         return;

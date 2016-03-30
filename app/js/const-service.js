@@ -60,9 +60,10 @@ angular.module('cttvServices').
                 ANIMAL_MODEL: "Mouse",
                 LITERATURE: "Text Mining"
             },
-            DATATYPES: 'datatypes',
-            PATHWAY_TYPES: 'pathway_type',
+            DATATYPES: 'datatype',
+            PATHWAY: 'pathway',
             DATASOURCES: 'datasources',
+            THERAPEUTIC_AREAS: 'therapeutic_area',
             UNIQUE_TARGET_COUNT: 'unique_target_count',
             UNIQUE_DISEASE_COUNT: 'unique_disease_count',
             DATA_DISTRIBUTION: 'data_distribution',
