@@ -97,7 +97,8 @@ angular.module('cttvServices', []).
                         .domain([0,1])
                         //.range(["#CBDCEA", "#005299"]), // blue orig
                         //.range(["#AEDEF7", "#0091EB"]),
-                        .range(["#97D5F5", "#0081D2"]),
+                        //.range(["#97D5F5", "#0081D2"]),
+                        .range(["#B6DDFC", "#0052A3"]), // extra brand blue
                         //.range(["#FFD0CB", "#FF6350"]), // brand red
 
             BLUE_1_3 : d3.scale.linear()
