@@ -536,7 +536,11 @@ angular.module('cttvDirectives', [])
             link: function (scope, elem, attrs) {
                 //scope.dataDistribution =
                 scope.filters = cttvFiltersService.getFilters();
+                console.log("scope.filters");
+                console.log(scope.filters);
                 scope.selectedFilters = cttvFiltersService.getSelectedFilters();
+                console.log("scope.selectedFilters");
+                console.log(scope.selectedFilters);
                 scope.deselectAll = cttvFiltersService.deselectAll;
                 //scope.respStatus = 1; //cttvFiltersService.status(); // TODO: handle response status
                 //scope.updateFilter = function(id){
@@ -554,7 +558,7 @@ angular.module('cttvDirectives', [])
      * The default "select all / clear all" controls for facets
      * @param facet the facet (i.e. instance of FilterCollection from the FilterService) we are rendering, e.g. datatypes, pathways, score , etc...
      */
-    .directive('cttvDefaultFacetContols', ['$log' , function ($log) {
+    .directive('cttvDefaultFacetControls', ['$log' , function ($log) {
         'use strict';
 
         return {
@@ -574,7 +578,28 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    /**
+    * The therapeutic areas facet
+    */
+    .directive('cttvTherapeuticAreasFacet', ['$log', function ($log) {
+        'use strict';
 
+        return {
+            restrict: 'EA',
+            scope: {
+                facet: '=',
+                partial: '@'
+            },
+            template: '<div cttv-default-facet-controls facet="facet"></div>'
+                + '<div>'
+                + '   <cttv-checkbox-facet bucket="ta" partial={{partial}} ng-repeat="ta in facet.filters">'
+                + '{{ta}}   </cttv-checkbox-facet>'
+                + '</div>',
+
+            link: function (scope, elem, attrs) {
+            },
+        };
+    }])
 
     /**
      * The Datatypes facet
@@ -593,7 +618,7 @@ angular.module('cttvDirectives', [])
 
             // template: '<div cttv-default-facet-contols facet="facet"></div>'
             //          +'<div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in facet.filters"></div>',
-            template: '<div cttv-default-facet-contols facet="facet"></div>'
+            template: '<div cttv-default-facet-controls facet="facet"></div>'
                      +'<div ng-init="isCollapsed=true&&(!datatype.collection.isLastClicked())" ng-repeat="datatype in facet.filters">'
                      +'    <cttv-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
@@ -624,7 +649,7 @@ angular.module('cttvDirectives', [])
             },
 
 
-            template: '<div cttv-default-facet-contols facet="facet"></div>'
+            template: '<div cttv-default-facet-controls facet="facet"></div>'
                      +'<div ng-init="isCollapsed=true&&(!pathway.collection.isLastClicked())" ng-repeat="pathway in facet.filters">' // TODO: try "isCollapsed=true&&(!facet.isLastClicked())"
                      +'    <cttv-parent-checkbox-facet bucket="pathway" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
@@ -1201,8 +1226,6 @@ angular.module('cttvDirectives', [])
             },
         };
     }])
-
-
 
     /**
      * A directive for plain Checkbox facets.

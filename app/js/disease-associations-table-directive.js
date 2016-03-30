@@ -110,7 +110,7 @@ angular.module('cttvDirectives')
                     disease: disease,
                     outputstructure: "flat",
                     facets: false,
-                    direct: false,
+                    // direct: false,
                     size: data.length,
                     from: data.start,
                     sort: order,
@@ -118,14 +118,16 @@ angular.module('cttvDirectives')
                     draw: draw
                 };
 
-                // If there is a pathway filter...
-                if (filters.pathway_type) {
-                    opts.pathway = filters.pathway_type;
-                }
-                // If there is a datatype filter...
-                if (filters.datatypes) {
-                    opts.datatype = filters.datatypes;
-                }
+                opts = cttvAPIservice.addFacetsOptions(filters, opts);
+
+                // // If there is a pathway filter...
+                // if (filters.pathway_type) {
+                //     opts.pathway = filters.pathway_type;
+                // }
+                // // If there is a datatype filter...
+                // if (filters.datatypes) {
+                //     opts.datatype = filters.datatypes;
+                // }
 
                 cttvAPIservice.getAssociations(opts)
                     .then (function (resp) {

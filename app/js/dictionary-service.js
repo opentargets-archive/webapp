@@ -66,7 +66,7 @@ angular.module('cttvServices').
 
             // O
             // P
-            PATHWAY_TYPES :                  "Pathway types",
+            PATHWAY :                        "Pathway types",
             PHENODIGM :                      "Phenodigm",
 
             // Q
@@ -129,5 +129,3 @@ angular.module('cttvServices').
 
         return dictionary;
     }]);
-
-

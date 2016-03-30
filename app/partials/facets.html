@@ -36,12 +36,13 @@
                 Here we put all the templates we've got, with an ng-if statement so only the relevant one is added in
             -->
 
-            <div cttv-datatypes-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='datatypes'"></div>
+            <div cttv-datatypes-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='datatype'"></div>
 
-            <div cttv-pathways-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='pathway_type'"></div>
+            <div cttv-pathways-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='pathway'"></div>
 
             <div cttv-score-facet facet='facet' ng-if="facet.key=='data_distribution'"></div>
 
+            <div cttv-therapeutic-areas-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='therapeutic_area'"></div>
 
         </accordion-group>
     </accordion>

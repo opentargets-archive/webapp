@@ -34,12 +34,13 @@ angular.module('cttvServices')
             API_EXPRESSION_URL: 'expression',
             API_TARGET_URL : 'target',
             facets: {
-                DATATYPES: 'datatype', // 'filterbydatatype',
-                PATHWAY_TYPE: 'pathway', //filterbypathway',
+                DATATYPE: 'datatype', // 'filterbydatatype',
+                PATHWAY: 'pathway', //filterbypathway',
                 DATASOURCES: 'datasource', //filterbydatasource',
                 SCORE_MIN : 'scorevalue_min', //filterbyscorevalue_min',
                 SCORE_MAX : 'scorevalue_max', //filterbyscorevalue_max',
                 SCORE_STR : 'stringency',
+                THERAPEUTIC_AREA: 'therapeutic_area', //
             },
         };
 
@@ -163,10 +164,6 @@ angular.module('cttvServices')
 
             }
         };
-
-
-
-
 
 
         var optionsToString = function(obj){
@@ -404,6 +401,9 @@ angular.module('cttvServices')
          * If no object is supplied to the function, a new object is created and returned.
          */
         cttvAPI.addFacetsOptions = function(facets, obj){
+            console.log("FACETS PASSED...");
+            console.log(facets);
+
             obj = obj || {};
             for(var i in facets){
                 if( facets.hasOwnProperty(i)){
