@@ -108,7 +108,7 @@
                                     <!-- CTTV logo -->
                                     <!-- <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>-->
                                     <div class="ot_logo">
-                                        <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_146x34_w.png"/></a>
+                                        <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_146x34_w.png" width="130px" height="30px"/></a>
                                     </div>
                                 </div>
 
@@ -124,7 +124,7 @@
 
 
                                                 <!-- Search box + search button -->
-                                                <div class="input-group">
+                                                <div class="input-group input-group-sm">
 
                                                     <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
@@ -137,7 +137,7 @@
                                                 </div>
 
                                                 <!-- Search in progress spinner -->
-                                                <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
+                                                <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner search-form-spinner-sm" ng-show="search.progress"></span>
 
                                                 <!-- Suggestions box -->
                                                 <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
