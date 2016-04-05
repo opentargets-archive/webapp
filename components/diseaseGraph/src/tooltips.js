@@ -53,7 +53,7 @@ var tooltips = function () {
                         var thisAssociation = data[i];
 
                         obj.rows.push({
-                            "label": "<a href=/target/" + thisAssociation.target.id + "/associations>" + thisAssociation.target.symbol + "</a>",
+                            "label": "<a href=/target/" + thisAssociation.target.id + "/associations>" + thisAssociation.target.gene_info.symbol + "</a>",
                             "value": "<a href=/evidence/" + thisAssociation.target.id + "/" + thisAssociation.disease.id + ">" + "See Evidence"
                         });
                     }
