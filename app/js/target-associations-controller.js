@@ -65,7 +65,6 @@ angular.module('cttvControllers')
 
         cttvAPIservice.getAssociations(opts)
             .then (function (resp) {
-
                 // set the label
                 $scope.search.label = resp.body.data[0].target.symbol;
 
