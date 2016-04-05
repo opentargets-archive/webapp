@@ -10,7 +10,7 @@ angular.module('cttvDirectives')
         require: '?^resize',
 
 	    scope: {
-			"onFocus": '&onFocus',
+			// "onFocus": '&onFocus',
 			loadprogress : '=',
             facets : '='
         },
@@ -209,7 +209,7 @@ angular.module('cttvDirectives')
         function updateView (data) {
             // TODO: This may prevent from delivering directives as products!
             if (data) {
-                ga.data(data);
+                ga.update(data);
                 // scope.$parent.setTherapeuticAreas(ga.data().children || []);
             } else {
                 // scope.$parent.setTherapeuticAreas([]);
@@ -242,63 +242,78 @@ angular.module('cttvDirectives')
                 opts.filterbydatatype = _.keys(dts);
 		    }
             */
+            console.log("TARGET IS " + attrs.target);
+            // var opts = {
+            //     target: attrs.target,
+            //     outputstructure: "flat",
+            //     direct: true,
+            //     facets: false,
+            //     size: 1000
+            // };
+            // opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
 
-            var opts = {
-                target: attrs.target,
-                outputstructure: "flat",
-                direct: true,
-                facets: false,
-                size: 1000
-            };
-            opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
-
-		    cttvAPIservice.getAssociations (opts)
+		    // cttvAPIservice.getAssociations (opts)
 		    // api.call (url)
-		    	.then (function (resp) {
+		    	// .then (function (resp) {
 
-                    $log.log(" -- set view stuff --");
-                    $log.warn ("RESP FOR BUBBLES");
-                    $log.warn(resp);
+                    // $log.log(" -- set view stuff --");
+                    // $log.warn ("RESP FOR BUBBLES");
+                    // $log.warn(resp);
 
-                    var data = cttvAPIservice.flat2tree(resp.body);
-                    console.log(" --------------------------- TREE: ");
-                    console.log(data);
+                    // var data = cttvAPIservice.flat2tree(resp.body);
+                    // console.log(" --------------------------- TREE: ");
+                    // console.log(data);
 
                     // var data = resp.body.data;
                     // scope.$parent.updateFacets(resp.body.facets);
-                    if (_.isEmpty(data)) {
-                        updateView ();
-                        return;
-                    }
+                    // if (_.isEmpty(data)) {
+                    //     updateView ();
+                    //     return;
+                    // }
 
     			    // Bubbles View
-                    var bView = bubblesView()
-                        .useFullPath(cttvUtils.browser.name !== "IE")
-                        .maxVal(1)
-                        .colorPalette(colorScale)
-                        .breadcrumsClick(function (d) {
-                            var focusEvent = new CustomEvent("bubblesViewFocus", {
-                                "detail" : d
-                            });
-                            this.dispatchEvent(focusEvent);
-                        });
+                    // var bView = bubblesView()
+                    //     .useFullPath(cttvUtils.browser.name !== "IE");
+                        // .maxVal(1);
+                        // .colorPalette(colorScale)
+                        // .breadcrumsClick(function (d) {
+                        //     var focusEvent = new CustomEvent("bubblesViewFocus", {
+                        //         "detail" : d
+                        //     });
+                        //     this.dispatchEvent(focusEvent);
+                        // });
 
                     var fView = flowerView()
                         .fontsize (10)
                         .diagonal (180);
 
                     // setup view
-                    ga = geneAssociations()
-                        .target (attrs.target)
-                        .diameter (diameter)
-                        //.datatypes(dts)
-                        .filters(scope.facets)
-                        .names(cttvConsts);
+                    // ga = geneAssociations()
+                    //     .target (attrs.target)
+                    //     .diameter (diameter)
+                    //     //.datatypes(dts)
+                    //     .filters(scope.facets)
+                    //     .names(cttvConsts);
+                    ga = targetAssociations()
+                        .target(attrs.target)
+                        .diameter(diameter)
+                        .filters(scope.facets);
 
-                    updateView (data);
+                    var opts = {
+                        target: attrs.target,
+                        outputstructure: "flat",
+                        size: 1000,
+                        direct: true,
+                        facets: false
+                    };
+                    opts = cttvAPIservice.addFacetsOptions(attrs.facet, opts);
+                    ga.data(cttvAPIservice.getAssociations(opts));
+
+                    // updateView (data);
 
                     //scope.$parent.$apply();
-                    ga(bView, fView, bubblesContainer);
+                    // ga(bView, fView, bubblesContainer);
+                    ga(bubblesContainer);
 
                     // Setting up legend
                     scope.legendText = "Score";
@@ -306,19 +321,19 @@ angular.module('cttvDirectives')
                     for(var i=0; i<=100; i+=25){
                         var j=i/100;
                         //scope.labs.push(j);
-                        scope.colors.push( {color:colorScale(j), label:j} );
+                        scope.colors.push({color:colorScale(j), label:j});
                     }
                     scope.legendData = [
                         //{label:"Therapeutic Area", class:"no-data"}
                     ];
 
-                },
-                cttvAPIservice.defaultErrorHandler
-            );
+                // },
+                // cttvAPIservice.defaultErrorHandler
+            // );
 
 		}
 
-		scope.$watch(function () { return attrs.target; }, function (val) {
+		scope.$watch("target", function (val) {
 		    setView();
 		});
 	    }
