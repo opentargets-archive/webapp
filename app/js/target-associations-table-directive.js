@@ -55,31 +55,31 @@ angular.module('cttvDirectives')
 
 
     // TODO: remove this once the API returns full row data:
-    var reverseDict = {
-        "Genetic associations" : "genetic_association",
-        "Somatic mutations" : "somatic_mutation",
-        "Known drugs" : "known_drug",
-        "RNA expression" : "rna_expression",
-        "Affected pathways" : "affected_pathway",
-        "Text mining" : "literature",
-        "Animal models" : "animal_model"
-    };
+    // var reverseDict = {
+    //     "Genetic associations" : "genetic_association",
+    //     "Somatic mutations" : "somatic_mutation",
+    //     "Known drugs" : "known_drug",
+    //     "RNA expression" : "rna_expression",
+    //     "Affected pathways" : "affected_pathway",
+    //     "Text mining" : "literature",
+    //     "Animal models" : "animal_model"
+    // };
 
     // TODO: remove this once the API returns full row data:
-    var hasDatatype = function (myDatatype, datatypes) {
-        var thisDatatype = reverseDict[myDatatype];
-        for (var i=0; i<datatypes.length; i++) {
-            // var datatype = upperCaseFirst(clearUnderscores(datatypes[i]));
-            // if (datatype.trim() === myDatatype.trim()) {
-            //     return true;
-            // }
-
-            if (thisDatatype === datatypes[i]) {
-                return true;
-            }
-        }
-        return false;
-    };
+    // var hasDatatype = function (myDatatype, datatypes) {
+    //     var thisDatatype = reverseDict[myDatatype];
+    //     for (var i=0; i<datatypes.length; i++) {
+    //         // var datatype = upperCaseFirst(clearUnderscores(datatypes[i]));
+    //         // if (datatype.trim() === myDatatype.trim()) {
+    //         //     return true;
+    //         // }
+    //
+    //         if (thisDatatype === datatypes[i]) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // };
 
     /*
     Setup the table cols and return the DT object
@@ -204,33 +204,35 @@ angular.module('cttvDirectives')
 
         for (var i=0; i<d.length; i++) {
             var data = d[i];
-            if (data.efo_code === "cttv_disease") {
-                continue;
-            }
-            var datatypes = {};
-            datatypes.genetic_association = _.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
-            datatypes.somatic_mutation = _.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
-            datatypes.known_drug = _.result(_.find(data.datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
-            datatypes.affected_pathway = _.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
-            datatypes.rna_expression = _.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
-            datatypes.literature = _.result(_.find(data.datatypes, function (d) { return d.datatype === "literature"; }), "association_score")||0;
-            datatypes.animal_model = _.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
+            // No cttv root anymore in the data retrieved by the API
+            // if (data.efo_code === "cttv_disease") {
+            //     continue;
+            // }
+            // var datatypes = {};
+            // datatypes.genetic_association = _.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
+            // datatypes.somatic_mutation = _.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
+            // datatypes.known_drug = _.result(_.find(data.datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
+            // datatypes.affected_pathway = _.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
+            // datatypes.rna_expression = _.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
+            // datatypes.literature = _.result(_.find(data.datatypes, function (d) { return d.datatype === "literature"; }), "association_score")||0;
+            // datatypes.animal_model = _.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
+            var datatypes = data.association_score.datatypes;
             var row = [];
 
             // Disease name
             var geneDiseaseLoc = "/evidence/" + data.target.id + "/" + data.disease.id;
 
-            row.push("<a href='" + geneDiseaseLoc + "' title='"+data.disease.name+"'>" + data.disease.name + "</a>");
+            row.push("<a href='" + geneDiseaseLoc + "' title='"+data.disease.efo_info.label+"'>" + data.disease.efo_info.label + "</a>");
 
             // EFO (hidden)
             row.push(data.disease.id);
 
             // TherapeuticArea EFO (hidden)
-            var taStr = _.reduce(data.disease.therapeutic_area.codes, iterateeEFO, "");
+            var taStr = _.reduce(data.disease.efo_info.therapeutic_area.codes, iterateeEFO, "");
             row.push(taStr); // Neoplasm
 
             // Association score
-            row.push( getColorStyleString( data.association_score, geneDiseaseLoc ) );
+            row.push( getColorStyleString( data.association_score.overall, geneDiseaseLoc ) );
 
             // Genetic association
             row.push( getColorStyleString( datatypes.genetic_association, geneDiseaseLoc + (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=genetic_associations") );
@@ -247,7 +249,7 @@ angular.module('cttvDirectives')
             // Animal model
             row.push( getColorStyleString( datatypes.animal_model, geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models") );
             // Therapeutic area
-            var area = _.reduce(data.disease.therapeutic_area.labels, iterateeLabel, "");
+            var area = _.reduce(data.disease.efo_info.therapeutic_area.labels, iterateeLabel, "");
             row.push("<span title='"+area+"'>"+area+"</span>");
 
             newData.push(row);

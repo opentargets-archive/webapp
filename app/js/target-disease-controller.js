@@ -159,11 +159,11 @@
 
 
 
-        var updateTitle = function(t, d){
-            //$scope.search.info.title = (($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name)+"-"+$scope.search.info.efo.label).split(" ").join("_");
-            $scope.search.info.title = (t+"-"+d).split(" ").join("_");
-            $log.log( "updateTitle() : " + $scope.search.info.title );
-        };
+        // var updateTitle = function(t, d){
+        //     //$scope.search.info.title = (($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name)+"-"+$scope.search.info.efo.label).split(" ").join("_");
+        //     $scope.search.info.title = (t+"-"+d).split(" ").join("_");
+        //     $log.log( "updateTitle() : " + $scope.search.info.title );
+        // };
 
 
 
@@ -173,20 +173,20 @@
 
 
 
-        function lookDatasource (arr, dsName) {
-            for (var i=0; i<arr.length; i++) {
-               if (arr[i].datatype === dsName) {
-                   return {
-                       "count": arr[i].evidence_count,
-                       "score": arr[i].association_score
-                   };
-               }
-            }
-            return {
-               "count": 0,
-               "score": 0
-            };
-        }
+        // function lookDatasource (arr, dsName) {
+        //     for (var i=0; i<arr.length; i++) {
+        //        if (arr[i].datatype === dsName) {
+        //            return {
+        //                "count": arr[i].evidence_count,
+        //                "score": arr[i].association_score
+        //            };
+        //        }
+        //     }
+        //     return {
+        //        "count": 0,
+        //        "score": 0
+        //     };
+        // }
 
 
 
@@ -196,10 +196,13 @@
         function processFlowerData(data){
             var fd = [];
 
+            console.log(cttvConsts);
             for (var i=0; i<cttvConsts.datatypesOrder.length; i++) {
+                var dkey = cttvConsts.datatypes[cttvConsts.datatypesOrder[i]];
                 var key = cttvConsts.datatypesOrder[i];
                 fd.push({
-                    "value": lookDatasource(data, cttvConsts.datatypes[key]).score,
+                    // "value": lookDatasource(data, cttvConsts.datatypes[key]).score,
+                    "value": data[dkey],
                     "label": cttvConsts.datatypesLabels[key],
                     "active": true,
                 });
@@ -224,11 +227,12 @@
                 then(
                     function(resp) {
                         $log.log("getFlowerData response");
-                        $scope.search.flower_data = processFlowerData(resp.body.data[0].datatypes);
-                        for(var i=0; i<resp.body.data[0].datatypes.length; i++){
-                            $scope.search.association_scores[resp.body.data[0].datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score;
-                        }
-                        updateTitle( resp.body.data[0].target.symbol, resp.body.data[0].disease.name );
+                        $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
+
+                        // for(var i=0; i<resp.body.data[0].association_score.datatypes.length; i++){
+                        //     $scope.search.association_scores[resp.body.data[0].association_score.datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score;
+                        // }
+                        // updateTitle( resp.body.data[0].target.symbol, resp.body.data[0].disease.name );
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
