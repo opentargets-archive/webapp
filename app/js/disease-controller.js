@@ -13,10 +13,10 @@ angular.module('cttvControllers')
         })
         .then (function (resp) {
             var data = resp.body;
-
+            console.log(resp);
             var paths = [];
             for (var i=0; i<data.path.length; i++) {
-                data.path[i].shift();
+                // data.path[i].shift();
                 var path=[];
                 for(var j=0; j<data.path[i].length; j++){
                     path.push({

@@ -189,22 +189,24 @@ angular.module('cttvDirectives')
         var newData = new Array(data.length);
 
         for (var i=0; i<data.length; i++) {
-            var dts = {};
-            dts.genetic_association = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
-            dts.somatic_mutation = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
-            dts.known_drug = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
-            dts.affected_pathway = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
-            dts.rna_expression = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
-            dts.literature = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "literature"; }), "association_score")||0;
-            dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
+            // var dts = {};
+            // dts.genetic_association = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
+            // dts.somatic_mutation = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
+            // dts.known_drug = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
+            // dts.affected_pathway = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
+            // dts.rna_expression = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
+            // dts.literature = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "literature"; }), "association_score")||0;
+            // dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
+
+            var dts = data[i].association_score.datatypes;
             var row = [];
             var geneLoc = "";
             var geneDiseaseLoc = "/evidence/" + data[i].target.id + "/" + data[i].disease.id;
-            row.push("<a href='" + geneDiseaseLoc + "' title='"+data[i].target.symbol+"'>" + data[i].target.symbol + "</a>");
+            row.push("<a href='" + geneDiseaseLoc + "' title='"+data[i].target.symbol+"'>" + data[i].target.gene_info.symbol + "</a>");
             // Ensembl ID
             row.push(data[i].target.id);
             // The association score
-            row.push( getColorStyleString(data[i].association_score, geneDiseaseLoc ) );
+            row.push( getColorStyleString(data[i].association_score.overall, geneDiseaseLoc ) );
             // Genetic association
             row.push( getColorStyleString( dts.genetic_association, geneDiseaseLoc + (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=genetic_associations") );
             // Somatic mutation
@@ -229,7 +231,7 @@ angular.module('cttvDirectives')
                       dts.animal_model) ;
 
             // Push gene name again instead
-            row.push("<a href='" + geneDiseaseLoc + "' title='"+data[i].target.name+"'>" + data[i].target.name + "</a>");
+            row.push("<a href='" + geneDiseaseLoc + "' title='"+data[i].target.gene_info.name+"'>" + data[i].target.gene_info.name + "</a>");
             // just for for internal use to see direct and indirect associations
             //    if (data[i].is_direct === true) {
             //        row.push("<a href=" + geneDiseaseLoc + '> <i class="fa fa-circle"></i> ' + data[i].target.name + "</a>");

@@ -36,18 +36,18 @@ var geneAssociationsTree = function () {
     var ta_display = tnt_tree.node_display.square()
         .size(4)
         .fill (function (node) {
-            return scale(node.property("association_score"));
+            return scale(node.property("__association_score"));
         })
         .stroke (function (node) {
-            return d3.rgb(scale(node.property("association_score"))).darker(2);
+            return d3.rgb(scale(node.property("__association_score"))).darker(2);
         });
     var node_display = tnt_tree.node_display.circle()
         .size(5)
         .fill (function (node) {
-            return scale(node.property("association_score"));
+            return scale(node.property("__association_score"));
         })
         .stroke (function (node) {
-            return d3.rgb(scale(node.property("association_score"))).darker(2);
+            return d3.rgb(scale(node.property("__association_score"))).darker(2);
         });
 
 	treeVis
@@ -61,7 +61,7 @@ var geneAssociationsTree = function () {
         })
         //.branch_color("#777")
         .branch_color (function (source, dest) {
-            return d3.rgb(scale(dest.property("association_score"))).darker(1);
+            return d3.rgb(scale(dest.property("__association_score"))).darker(1);
         })
 	    .data(config.data)
         .node_display (tnt_tree.node_display()
@@ -92,7 +92,7 @@ var geneAssociationsTree = function () {
            .text (function (node) {
                if (node.is_leaf()) {
                    var diseaseName = node.property(function (n) {
-                       return n.disease.name;
+                       return n.disease.efo_info.label;
                    });
                    if (diseaseName && diseaseName.length > 30) {
                        diseaseName = diseaseName.substring(0,30) + "...";
@@ -104,7 +104,7 @@ var geneAssociationsTree = function () {
                }
                // Internal
                var label = node.property( function (n) {
-                   return n.disease ? n.disease.name : "";
+                   return n.disease ? n.disease.efo_info.label : "";
                });
                if (!label.length) {
                    return "";
@@ -115,7 +115,7 @@ var geneAssociationsTree = function () {
                node.apply (function (n) {
                    var vsX = n.property('y');
                    var vsLabel = n.property (function (k) {
-                       return k.disease ? k.disease.name : "";
+                       return k.disease ? k.disease.efo_info.label : "";
                    });
                    if (vsLabel !== label) {
                        var dX = vsX - myX;
@@ -132,7 +132,7 @@ var geneAssociationsTree = function () {
                return label;
            })
            .color(function (node) {
-               return d3.rgb(scale(node.property("association_score"))).darker(2);
+               return d3.rgb(scale(node.property("__association_score"))).darker(2);
            })
            .fontsize(12)
            .fontweight(function (node) {
