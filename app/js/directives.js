@@ -537,11 +537,7 @@ angular.module('cttvDirectives', [])
             link: function (scope, elem, attrs) {
                 //scope.dataDistribution =
                 scope.filters = cttvFiltersService.getFilters();
-                console.log("scope.filters");
-                console.log(scope.filters);
                 scope.selectedFilters = cttvFiltersService.getSelectedFilters();
-                console.log("scope.selectedFilters");
-                console.log(scope.selectedFilters);
                 scope.deselectAll = cttvFiltersService.deselectAll;
                 //scope.respStatus = 1; //cttvFiltersService.status(); // TODO: handle response status
                 //scope.updateFilter = function(id){
@@ -1441,20 +1437,23 @@ angular.module('cttvDirectives', [])
     }])
 
 
-    .directive('mastheadNavigationMenu', [function () {
+    .directive('mastheadNavigationMenu', ['cttvConfig', function ($cttvConfig) {
         'use strict';
 
         return {
             restrict: 'EA',
             scope: {
-                href: '@'
+                href: '@',
             },
             template :    '<ul class="masthead-navigation">'
                         + '    <li><a href="/about">About</a></li>'
                         + '    <li><a href="/faq">FAQs</a></li>'
                         + '    <li><a href="/api-docs" target="_self">API</a></li>' // must force target to link outside of Angular routing
+                        + '    <li><a href="{{dumps_link}}" target="_self">Download</a></li>'
                         + '    <li><a href="/docs">Docs</a></li>'
                         + '</ul>',
-            link: function(scope, element, attrs) {}
+            link: function(scope, element, attrs) {
+                scope.dumps_link = $cttvConfig.dumps_link;
+            }
         };
     }])

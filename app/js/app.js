@@ -78,6 +78,9 @@ angular.module('cttvApp', [
             when('/docs', {
                 templateUrl: 'partials/docs.html'
             }).
+            when('/dumps', {
+                templateUrl: 'docs/dumps.html'
+            }).
 
             otherwise({
                 redirectTo: '/'
