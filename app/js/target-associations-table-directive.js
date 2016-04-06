@@ -12,6 +12,7 @@ angular.module('cttvDirectives')
 
     'use strict';
 
+    var whoiam = "table";
     var draw = 1;
     var filters = {};
 
@@ -266,9 +267,8 @@ angular.module('cttvDirectives')
             target : '=',
             loadprogress : '=',
             filename : '=',
-            datatypes : '@',
             facets : '=',
-            n : '=ndiseases'
+            active: '@'
         },
 
 
@@ -343,12 +343,13 @@ angular.module('cttvDirectives')
             {label:"No data", class:"no-data"}
         ];
 
-        scope.$watchGroup(["facets", "target"], function(attrs) {
+        scope.$watchGroup(["facets", "target", "active"], function(attrs) {
             filters = attrs[0];
             var target = attrs[1];
-            console.log("      => target: " + target);
-            console.log("      => filters: ");
-            console.log(filters);
+            var act = attrs[2];
+            if (scope.active !== whoiam) {
+                return;
+            }
 
             if (dtable) {
                 dtable.ajax.reload();
@@ -418,21 +419,21 @@ angular.module('cttvDirectives')
             // );
         // });
 
-        scope.$watch (function () { return attrs.focus; }, function (val) {
-            if (val === "None") {
-                return;
-            }
-
-            if (dtable) {
-                if ((val === "cttv_disease") || (val === "cttv_source")) {
-                    val = "";
-                }
-                dtable
-                    .column(2)
-                    .search(val)
-                    .draw();
-            }
-        });
+        // scope.$watch (function () { return attrs.focus; }, function (val) {
+        //     if (val === "None") {
+        //         return;
+        //     }
+        //
+        //     if (dtable) {
+        //         if ((val === "cttv_disease") || (val === "cttv_source")) {
+        //             val = "";
+        //         }
+        //         dtable
+        //             .column(2)
+        //             .search(val)
+        //             .draw();
+        //     }
+        // });
 
         // Watch for filename changes
         // when available, we update the option for the CSV button, via a little hack:

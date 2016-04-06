@@ -129,18 +129,18 @@
                 <div class="col-md-9">
                     <tabset>
 
-                        <tab heading="Bubbles">
+                        <tab heading="Bubbles" ng-click='setActive("bubbles")'>
                             <resize>
-                                <cttv-target-associations-bubbles target="{{search.query}}" facets="filters"></cttv-target-associations-bubbles>
+                                <cttv-target-associations-bubbles target="{{search.query}}" facets="filters" active="{{active}}"></cttv-target-associations-bubbles>
                             </resize>
                         </tab>
 
-                        <tab heading="Table">
-                            <cttv-target-associations-table target="search.query" ndiseases="n" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}" filename="search.filename" loadprogress="loading" facets="filters"></cttv-target-associations-table>
+                        <tab heading="Table" ng-click='setActive("table")'>
+                            <cttv-target-associations-table target="search.query" filename="search.filename" loadprogress="loading" facets="filters" active="{{active}}"></cttv-target-associations-table>
                         </tab>
 
-                        <tab heading="Tree">
-                            <cttv-target-associations-tree target="{{search.query}}" focus="{{focusEFO}}" datatypes="{{currentDataTypes}}" facets="filters"></cttv-target-associations-tree>
+                        <tab heading="Tree" ng-click='setActive("tree")'>
+                            <cttv-target-associations-tree target="{{search.query}}" facets="filters" active = "{{active}}"></cttv-target-associations-tree>
                         </tab>
 
                     </tabset>

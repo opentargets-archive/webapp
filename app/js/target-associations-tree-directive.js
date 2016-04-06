@@ -7,72 +7,38 @@ angular.module('cttvDirectives')
     .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', 'cttvConsts', function ($log, cttvAPIservice, cttvConsts) {
         'use strict';
 
+        var whoiam = 'tree';
+
         var gat;
         return {
             restrict: 'E',
             scope: {
-                facets : '='
+                facets : '=',
+                target : '@',
+                active : '@'
             },
             link: function (scope, elem, attrs) {
 
-                var datatypesChangesCounter = 0;
-
-                /*scope.$watch(function () { return attrs.datatypes; }, function (dts) {
-                    dts = JSON.parse(dts);
-                    $log.log("$$$ "); $log.log(dts);
-                    if (datatypesChangesCounter>0) {
-                        if (!gat) {
-                            setTreeView();
-                            return;
-                        }
-                        var opts = {
-                            target: attrs.target,
-                            datastructure: "tree",
-                        };
-                        if (!_.isEmpty(dts)) {
-                            opts.filterbydatatype = _.keys(dts);
-                        }
-                        cttvAPIservice.getAssociations (opts)
-                            .then (function (resp) {
-                                var data = resp.body.data;
-                                if (data) {
-                                    gat
-                                        .data(data)
-                                        .datatypes(dts)
-                                        .update();
-                                    }
-                                },
-                                cttvAPIservice.defaultErrorHandler
-                            );
+                scope.$watchGroup(['target', 'facets', 'active'], function (vals) {
+                    var target = vals[0];
+                    var facets = vals[1];
+                    var act = vals[2];
+                    if (scope.active !== whoiam) {
+                        return;
                     }
-                    datatypesChangesCounter++;
-                });*/
 
+                    var opts = {
+                        target: scope.target,
+                        outputstructure: "false",
+                        direct: true,
+                        facets: false,
+                        size: 1000
+                    };
+                    opts = cttvAPIservice.addFacetsOptions(facets, opts);
 
-                scope.$watch( 'facets', function (fct) {
-                    //var dts = JSON.parse(attrs.datatypes);
-                    if (datatypesChangesCounter>0) {
-                        if (!gat) {
-                            setTreeView();
-                            return;
-                        }
-                        // var opts = {
-                        //     target: attrs.target,
-                        //     datastructure: "tree",
-                        // };
-                        // if (!_.isEmpty(dts)) {
-                        //     opts.filterbydatatype = _.keys(dts);
-                        // }
-
-                        var opts = {
-                            target: attrs.target,
-                            outputstructure: "false",
-                            direct: true,
-                            facets: false,
-                            size: 1000
-                        };
-                        opts = cttvAPIservice.addFacetsOptions(fct, opts);
-
+                    if (!gat) {
+                        setTreeView();
+                    } else {
                         cttvAPIservice.getAssociations (opts)
                             .then (function (resp) {
                                 // var data = resp.body.data;
@@ -81,15 +47,57 @@ angular.module('cttvDirectives')
                                     gat
                                         .data(data)
                                         //.datatypes(dts)
-                                        .filters(fct)
+                                        .filters(facets)
                                         .update();
                                     }
                                 },
                                 cttvAPIservice.defaultErrorHandler
                             );
                     }
-                    datatypesChangesCounter++;
+
                 });
+
+                // scope.$watch( 'facets', function (fct) {
+                //     //var dts = JSON.parse(attrs.datatypes);
+                //     if (datatypesChangesCounter>0) {
+                //         if (!gat) {
+                //             setTreeView();
+                //             return;
+                //         }
+                //         // var opts = {
+                //         //     target: attrs.target,
+                //         //     datastructure: "tree",
+                //         // };
+                //         // if (!_.isEmpty(dts)) {
+                //         //     opts.filterbydatatype = _.keys(dts);
+                //         // }
+                //
+                //         var opts = {
+                //             target: attrs.target,
+                //             outputstructure: "false",
+                //             direct: true,
+                //             facets: false,
+                //             size: 1000
+                //         };
+                //         opts = cttvAPIservice.addFacetsOptions(fct, opts);
+                //
+                //         cttvAPIservice.getAssociations (opts)
+                //             .then (function (resp) {
+                //                 // var data = resp.body.data;
+                //                 var data = cttvAPIservice.flat2tree(resp.body);
+                //                 if (data) {
+                //                     gat
+                //                         .data(data)
+                //                         //.datatypes(dts)
+                //                         .filters(fct)
+                //                         .update();
+                //                     }
+                //                 },
+                //                 cttvAPIservice.defaultErrorHandler
+                //             );
+                //     }
+                //     datatypesChangesCounter++;
+                // });
 
                 var setTreeView = function () {
                     ////// Tree view
@@ -117,7 +125,7 @@ angular.module('cttvDirectives')
                     // }
 
                     var opts = {
-                        target: attrs.target,
+                        target: scope.target,
                         outputstructure: "flat",
                         direct: true,
                         facets: false,
@@ -125,8 +133,6 @@ angular.module('cttvDirectives')
                     };
                     opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
 
-                    $log.log("treeview opts: ");
-                    $log.log(opts);
                     cttvAPIservice.getAssociations (opts)
                         .then (
                             function (resp) {
@@ -142,15 +148,13 @@ angular.module('cttvDirectives')
                                 .fontsize(9)
                                 .diagonal(100);
 
-                                console.log(scope);
-
                                 gat = geneAssociationsTree()
                                     .data(data)
                                     //.datatypes(dts)
                                     .names(cttvConsts)
                                     .diameter(900)
                                     .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
-                                    .target(attrs.target)
+                                    .target(scope.target)
                                     .filters (scope.facets);
                                 gat(fView, elem[0]);
                             },
@@ -158,19 +162,19 @@ angular.module('cttvDirectives')
                         );
                 };
 
-                scope.$watch(function () { return attrs.target; }, function (val) {
-                    setTreeView();
-                });
+                // scope.$watch(function () { return attrs.target; }, function (val) {
+                //     setTreeView();
+                // });
 
-                scope.$watch(function () { return attrs.focus; }, function (val) {
-                    if (val === "None") {
-                        return;
-                    }
-
-                    if (gat) {
-                        gat.selectTherapeuticArea(val);
-                    }
-                });
+                // scope.$watch(function () { return attrs.focus; }, function (val) {
+                //     if (val === "None") {
+                //         return;
+                //     }
+                //
+                //     if (gat) {
+                //         gat.selectTherapeuticArea(val);
+                //     }
+                // });
             }
         };
     }]);
