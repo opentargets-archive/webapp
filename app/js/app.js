@@ -12,7 +12,8 @@ angular.module('cttvApp', [
     'viewhead',
     'cttvServices',
     'hm.readmore',
-    'ngSanitize'
+    'ngSanitize',
+    'swaggerUi'
 ])
 
 .config(['$routeProvider', '$locationProvider',
@@ -73,10 +74,13 @@ angular.module('cttvApp', [
                 templateUrl: 'docs/personal-data-collected-examples.html'
             }).
             when('/variants', {
-                templateUrl: 'docs/variants'
+                templateUrl: 'docs/variants.html'
             }).
-            when('/docs', {
+            when('/documentation/components', {
                 templateUrl: 'partials/docs.html'
+            }).
+            when('/documentation/api', {
+                templateUrl: 'partials/api-docs.html'
             }).
 
             otherwise({
