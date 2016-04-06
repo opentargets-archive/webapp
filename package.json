@@ -54,13 +54,13 @@
     "cttv.bubblesView": "file:components/bubblesView",
     "cttv.diseaseGraph": "file:components/diseaseGraph",
     "cttv.flowerView": "file:components/flowerView",
+    "cttv.genome": "0.0.5",
     "cttv.spinner": "file:components/spinner",
     "cttv.targetAssociations": "file:components/targetAssociations",
     "cttv.targetAssociationsTree": "file:components/targetAssociationsTree",
     "cttv.targetGeneTree": "file:components/targetGeneTree",
-    "cttv.targetGenomeBrowser": "file:components/targetGenomeBrowser",
-    "tnt.ensembl": "0.0.12",
-    "tnt.genome": "0.0.39",
+    "tnt.genome": "0.1.4",
+    "tnt.rest": "^0.1.0",
     "tnt.tooltip": "0.0.11",
     "tnt.utils": "0.0.1"
   }

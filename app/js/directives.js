@@ -30,11 +30,12 @@ angular.module('cttvDirectives', [])
                         .width(w);
 
                     //gB.rest().proxyUrl("/ensembl");
-                    //gB.rest().proxyUrl("/api/latest/ensembl");
-                    gB.rest().proxyUrl("/proxy/rest.ensembl.org");
+                    //gB.rest().proxyUrl("/api/latest/ensembl")
+                    gB.rest().prefix("/proxy/rest.ensembl.org").protocol("").domain("");
                     var theme = targetGenomeBrowser()
-                        .efo(efo);
-                    theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
+                        .efo(efo)
+                        .cttvRestApi(cttvAPIservice.getSelf());
+                    theme(gB, document.getElementById("cttvTargetGenomeBrowser"));
                 });
             }
         };
