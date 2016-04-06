@@ -45,7 +45,6 @@ angular.module('cttvControllers')
     $scope.$on('$routeUpdate', function(){
         $log.log("onRouteUpdate");
         //$scope.filterDataTypes (cttvFiltersService.parseURL());
-        console.warn("WE HAVE TO UPDATE FACETS HERE");
         getFacets(cttvFiltersService.parseURL());
     });
 
@@ -128,7 +127,7 @@ angular.module('cttvControllers')
 
         // we parse for datatypes regardless of whether there are any,
         // since the function there takes care of that case
-        parseDataTypes( filters );
+        // parseDataTypes( filters );
 
         $scope.score = {};
     };
@@ -161,20 +160,18 @@ angular.module('cttvControllers')
     /*
      * Private function; creates hash object for selected datatypes (or all) with corresponding labels for flower graph
      */
-    var parseDataTypes = function (filters) {
-        var currDatatypes = {};
-
-        var filterDatatypes = filters[cttvConsts.DATATYPES] || cttvConsts.datatypesOrder.map(function(d){
-            return cttvConsts.datatypes[d];
-        });
-        filterDatatypes.forEach(function(dt){
-            currDatatypes[dt] = cttvConsts.datatypesLabels[dt.toUpperCase()];   // TODO: these labels should be in some sort of "aggregates", but at hte moment living in the consts service
-        });
-
-        $scope.currentDataTypes = currDatatypes;
-    };
-
-
+    // var parseDataTypes = function (filters) {
+    //     var currDatatypes = {};
+    //
+    //     var filterDatatypes = filters[cttvConsts.DATATYPES] || cttvConsts.datatypesOrder.map(function(d){
+    //         return cttvConsts.datatypes[d];
+    //     });
+    //     filterDatatypes.forEach(function(dt){
+    //         currDatatypes[dt] = cttvConsts.datatypesLabels[dt.toUpperCase()];   // TODO: these labels should be in some sort of "aggregates", but at hte moment living in the consts service
+    //     });
+    //
+    //     $scope.currentDataTypes = currDatatypes;
+    // };
 
 
     //$scope.filterDataTypes(filters);
@@ -183,6 +180,13 @@ angular.module('cttvControllers')
     $scope.updateFacets = function (facets) {
         $log.log("**** updateFacets() ****");
         cttvFiltersService.updateFacets(facets, "unique_disease_count");
+    };
+
+    // active tab
+    $scope.active = "bubbles";
+    $scope.setActive = function (who) {
+        console.log(" set active has been changed to " + who + " because of a click somewhere ---------------------");
+        $scope.active = who;
     };
 
     /*

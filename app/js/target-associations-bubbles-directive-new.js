@@ -4,6 +4,7 @@ angular.module('cttvDirectives')
     .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvConsts', function ($log, cttvAPIservice, cttvUtils, cttvConsts) {
         'use strict';
 
+        var whoiam = "bubbles";
         var bottomMargin = 310;
         var bView;
 
@@ -12,7 +13,8 @@ angular.module('cttvDirectives')
             require: '?^resize',
             scope: {
                 facets : '=',
-                target : '@'
+                target : '@',
+                active : '@'
             },
 
             template: '<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
@@ -34,10 +36,13 @@ angular.module('cttvDirectives')
                 }, true);
 
                 // Change of target or facets
-                scope.$watchGroup(["target", "facets"], function (vals) {
+                scope.$watchGroup(["target", "facets", "active"], function (vals) {
+                    var act = vals[2];
                     var target = vals[0];
                     var facets = vals[1];
-                    console.log("        UPDATE!");
+                    if (scope.active !== whoiam) {
+                        return;
+                    }
                     var opts = {
                         target: target,
                         outputstructure: "flat",
@@ -51,7 +56,6 @@ angular.module('cttvDirectives')
                     } else {
                         setView(cttvAPIservice.getAssociations(opts));
                     }
-
                 });
                 // scope.$watch("target", function (val) {
                 //     console.log("    TARGET UPDATED!!");
