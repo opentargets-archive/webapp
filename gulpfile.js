@@ -238,5 +238,3 @@ gulp.task('build-webapp', ['build-webapp-styles'], function () {
 
 
 gulp.task('build-all', ['init', 'build-docs', 'build-3rdparty', 'build-components-min', 'build-webapp']);
-
-
