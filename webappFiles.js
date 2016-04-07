@@ -14,11 +14,16 @@ var webappFiles = {
             'bower_components/angular-animate/angular-animate.min.js',
             'bower_components/angular-read-more/dist/readmore.min.js',
             'bower_components/lodash/lodash.min.js',
-            'bower_components/angular-sanitize/angular-sanitize.min.js'
+            'bower_components/angular-sanitize/angular-sanitize.min.js',
+            'app/vendor/angular-swagger-ui/swagger-ui.min.js',
+            'app/vendor/angular-swagger-ui/swagger-yaml-parser.min.js',
+            'node_modules/js-yaml/dist/js-yaml.min.js',
+            'node_modules/marked/marked.min.js',
         ],
 
         'css': [
             'bower_components/bootstrap/dist/css/bootstrap.css',
+            'app/vendor/angular-swagger-ui/swagger-ui.min.css'
             // 'app/vendor/datatables/buttons.dataTables.min.css'
         ],
         'cssCopyDir': [

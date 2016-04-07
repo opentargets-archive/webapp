@@ -1448,9 +1448,10 @@ angular.module('cttvDirectives', [])
             template :    '<ul class="masthead-navigation">'
                         + '    <li><a href="/about">About</a></li>'
                         + '    <li><a href="/faq">FAQs</a></li>'
+                        + '    <li><a href="/documentation/api">API</a></li>' // must force target to link outside of Angular routing
                         + '    <li><a href="/api-docs" target="_self">API</a></li>' // must force target to link outside of Angular routing
                         + '    <li><a href="{{dumps_link}}" target="_self">Download</a></li>'
-                        + '    <li><a href="/docs">Docs</a></li>'
+                        + '    <li><a href="/documentation/components">Docs</a></li>'
                         + '</ul>',
             link: function(scope, element, attrs) {
                 scope.dumps_link = $cttvConfig.dumps_link;
