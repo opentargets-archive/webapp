@@ -10,7 +10,8 @@ var geneAssociationsTree = function () {
         diameter : 1000,
         cttvApi : undefined,
         legendText : "<text>Score range</text>",
-        therapeuticArea: undefined, // This is the zoomed therapeuticArea
+        // therapeuticArea: undefined, // This is the zoomed therapeuticArea
+        therapeuticAreas: []
     };
 
     var treeVis = tnt_tree();
@@ -30,257 +31,258 @@ var geneAssociationsTree = function () {
     }
 
     function render (flowerView, div) {
-	var data = config.data;
+        filterOutTAs(config.data);
+    	var data = config.data;
 
-    // node shapes (squares for Therapeutic areas // circles for the rest)
-    var ta_display = tnt_tree.node_display.square()
-        .size(4)
-        .fill (function (node) {
-            return scale(node.property("__association_score"));
-        })
-        .stroke (function (node) {
-            return d3.rgb(scale(node.property("__association_score"))).darker(2);
-        });
-    var node_display = tnt_tree.node_display.circle()
-        .size(5)
-        .fill (function (node) {
-            return scale(node.property("__association_score"));
-        })
-        .stroke (function (node) {
-            return d3.rgb(scale(node.property("__association_score"))).darker(2);
-        });
-
-	treeVis
-        .id(function (d) {
-            var id = d.name;
-            while (d.parent) {
-                id += "_" + d.parent.name;
-                d = d.parent;
-            }
-            return id;
-        })
-        //.branch_color("#777")
-        .branch_color (function (source, dest) {
-            return d3.rgb(scale(dest.property("__association_score"))).darker(1);
-        })
-	    .data(config.data)
-        .node_display (tnt_tree.node_display()
-            .size(8)
-            .display (function (n) {
-                if (n.property('__depth') === 1) {
-                    ta_display.display().call(this, n);
-                } else {
-                    node_display.display().call(this, n);
-                }
+        // node shapes (squares for Therapeutic areas // circles for the rest)
+        var ta_display = tnt_tree.node_display.square()
+            .size(4)
+            .fill (function (node) {
+                return scale(node.property("__association_score"));
             })
-        )
-        .on("click", tooltips.click)
-        .on("mouseover", tooltips.mouseover)
-        .on("mouseout", tooltips.mouseout)
-	    .label(tnt_tree.label.text()
-		   .height(15)
-               .transform(function (node) {
-                   var d = node.data();
-                   var offset = node.children() && node.children().length % 2 ? 10 : 0;
-                   var t = {
-                       translate : [0, (5 - offset)],
-                       rotate : 0
-                   };
-                   return t;
-               }
-           )
-           .text (function (node) {
-               if (node.is_leaf()) {
-                   var diseaseName = node.property(function (n) {
-                       return n.disease.efo_info.label;
-                   });
-                   if (diseaseName && diseaseName.length > 30) {
-                       diseaseName = diseaseName.substring(0,30) + "...";
-                   }
-                   if (node.is_collapsed()) {
-                       diseaseName += (" (+" + node.n_hidden() + " diseases)");
-                   }
-                   return diseaseName;
-               }
-               // Internal
-               var label = node.property( function (n) {
-                   return n.disease ? n.disease.efo_info.label : "";
-               });
-               if (!label.length) {
-                   return "";
-               }
+            .stroke (function (node) {
+                return d3.rgb(scale(node.property("__association_score"))).darker(2);
+            });
+        var node_display = tnt_tree.node_display.circle()
+            .size(5)
+            .fill (function (node) {
+                return scale(node.property("__association_score"));
+            })
+            .stroke (function (node) {
+                return d3.rgb(scale(node.property("__association_score"))).darker(2);
+            });
 
-               var myX = node.property('y');
-               var minNodeDistance = Infinity;
-               node.apply (function (n) {
-                   var vsX = n.property('y');
-                   var vsLabel = n.property (function (k) {
-                       return k.disease ? k.disease.efo_info.label : "";
-                   });
-                   if (vsLabel !== label) {
-                       var dX = vsX - myX;
-                       if (dX < minNodeDistance) {
-                           minNodeDistance = dX;
+    	treeVis
+            .id(function (d) {
+                var id = d.name;
+                while (d.parent) {
+                    id += "_" + d.parent.name;
+                    d = d.parent;
+                }
+                return id;
+            })
+            //.branch_color("#777")
+            .branch_color (function (source, dest) {
+                return d3.rgb(scale(dest.property("__association_score"))).darker(1);
+            })
+    	    .data(config.data)
+            .node_display (tnt_tree.node_display()
+                .size(8)
+                .display (function (n) {
+                    if (n.property('__depth') === 1) {
+                        ta_display.display().call(this, n);
+                    } else {
+                        node_display.display().call(this, n);
+                    }
+                })
+            )
+            .on("click", tooltips.click)
+            .on("mouseover", tooltips.mouseover)
+            .on("mouseout", tooltips.mouseout)
+    	    .label(tnt_tree.label.text()
+    		   .height(15)
+                   .transform(function (node) {
+                       var d = node.data();
+                       var offset = node.children() && node.children().length % 2 ? 10 : 0;
+                       var t = {
+                           translate : [0, (5 - offset)],
+                           rotate : 0
+                       };
+                       return t;
+                   }
+               )
+               .text (function (node) {
+                   if (node.is_leaf()) {
+                       var diseaseName = node.property(function (n) {
+                           return n.disease.efo_info.label;
+                       });
+                       if (diseaseName && diseaseName.length > 30) {
+                           diseaseName = diseaseName.substring(0,30) + "...";
                        }
+                       if (node.is_collapsed()) {
+                           diseaseName += (" (+" + node.n_hidden() + " diseases)");
+                       }
+                       return diseaseName;
                    }
-               });
+                   // Internal
+                   var label = node.property( function (n) {
+                       return n.disease ? n.disease.efo_info.label : "";
+                   });
+                   if (!label.length) {
+                       return "";
+                   }
 
-               var maxLabelSize = minNodeDistance / 7;
-               if (label.length > maxLabelSize) {
-                   label = label.substring(0, ~~(minNodeDistance / 6) - 3) + "..." ;
-               }
-               return label;
-           })
-           .color(function (node) {
-               return d3.rgb(scale(node.property("__association_score"))).darker(2);
-           })
-           .fontsize(12)
-           .fontweight(function (node) {
-               if (node.parent() && node.parent().node_name() === "cttv_disease") {
-                   return "bold";
-               }
-               return "normal";
-           })
-        )
-	    .layout(tnt_tree.layout.vertical()
-            .width(config.diameter)
-            .scale(true)
-        );
+                   var myX = node.property('y');
+                   var minNodeDistance = Infinity;
+                   node.apply (function (n) {
+                       var vsX = n.property('y');
+                       var vsLabel = n.property (function (k) {
+                           return k.disease ? k.disease.efo_info.label : "";
+                       });
+                       if (vsLabel !== label) {
+                           var dX = vsX - myX;
+                           if (dX < minNodeDistance) {
+                               minNodeDistance = dX;
+                           }
+                       }
+                   });
 
-    setBranchLengths (treeVis);
+                   var maxLabelSize = minNodeDistance / 7;
+                   if (label.length > maxLabelSize) {
+                       label = label.substring(0, ~~(minNodeDistance / 6) - 3) + "..." ;
+                   }
+                   return label;
+               })
+               .color(function (node) {
+                   return d3.rgb(scale(node.property("__association_score"))).darker(2);
+               })
+               .fontsize(12)
+               .fontweight(function (node) {
+                   if (node.parent() && node.parent().node_name() === "cttv_disease") {
+                       return "bold";
+                   }
+                   return "normal";
+               })
+            )
+    	    .layout(tnt_tree.layout.vertical()
+                .width(config.diameter)
+                .scale(true)
+            );
 
-
-    // collapse all the therapeutic area nodes
-	// if (tas !== undefined) {
-	//     for (var i=0; i<tas.length; i++) {
-	// 	tas[i].toggle();
-	//     }
-	//     sortNodes();
-	// }
-
-	treeVis(div.node());
-
-
-    // Apply a legend on the node shapes
-    var shapeLegendDiv = div
-        .append("div")
-        .style({
-            "width" : "50%",
-            "display" : "inline-block"
-        });
-
-    var s = shapeLegendDiv.selectAll("span")
-        .data ([
-            {
-                "type" : "square",
-                "label" : "Therapeutic Area"
-            },
-            {
-                "type" : "circle",
-                "label" : "Disease"
-            }
-        ])
-        .enter()
-        .append("div")
-        .style({
-            "font-size": "12px"
-        });
-
-    s
-        .append("span")
-        .style({
-            "display": "block",
-            "width"  : "15px",
-            "height" : "15px",
-            "border" : "1px solid #777",
-            "float"  : "left",
-        })
-        .style("border-radius", function (d) {
-            if (d.type === "circle") {
-                return "50%";
-            }
-            return "";
-        })
-        .append("span")
-        .style({
-            "display" : "block",
-            "width"   : "100%",
-            "height"  : "100%",
-            //"float"   : "left",
-        });
-    s
-        .append("span")
-        .style({
-            "padding-right" : "5px",
-            "padding-top"   : "2px",
-            //"float"         : "left",
-            "padding-left"  : "5px"
-        })
-        .text(function (d) {
-            return d.label;
-        });
+        setBranchLengths (treeVis);
 
 
-	// Apply a legend on the node's color
-    var legendBar = div
-        .append("div")
-        .style({
-            "float": "left",
-            "width" : "50%"
-        });
+        // collapse all the therapeutic area nodes
+    	// if (tas !== undefined) {
+    	//     for (var i=0; i<tas.length; i++) {
+    	// 	tas[i].toggle();
+    	//     }
+    	//     sortNodes();
+    	// }
 
-	//var legendColors = ["#ffffff", "#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
-    var legendColors = ["#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
+    	treeVis(div.node());
 
-    legendBar
-        .append("span")
-        .style({
-            "display" : "block",
-            "float"   : "left",
-            "padding-left" : "2px"
-        })
-        .text("0");
 
-    legendBar.selectAll(".legendBox")
-        .data(legendColors)
-        .enter()
-        .append("span")
-        .attr("class", "legendBox")
-        .style({
-            "display" : "block",
-            "width" : "20px",
-            "height" : "20px",
-            "border" : "1px solid #FFF",
-            "float" : "left",
-        })
-        .style("background", function (d) {
-            return d;
-        });
+        // Apply a legend on the node shapes
+        var shapeLegendDiv = div
+            .append("div")
+            .style({
+                "width" : "50%",
+                "display" : "inline-block"
+            });
 
-    legendBar
-        .append("span")
-        .style({
-            "display" : "block",
-            "float" : "left",
-            "padding-left" : "5px",
-        })
-        .text("1");
-    legendBar
-        .append("span")
-        .style({
-            "display" : "block",
-            "float" : "left",
-            "padding-left" : "10px",
-        })
-        .html (config.legendText);
+        var s = shapeLegendDiv.selectAll("span")
+            .data ([
+                {
+                    "type" : "square",
+                    "label" : "Therapeutic Area"
+                },
+                {
+                    "type" : "circle",
+                    "label" : "Disease"
+                }
+            ])
+            .enter()
+            .append("div")
+            .style({
+                "font-size": "12px"
+            });
 
-	// Add titles
-	// setTitles();
-	// d3.selectAll(".tnt_tree_node")
-	//     .append("title")
-	//     .text(function (d) {
-	// 	return d.label;
-	//     });
+        s
+            .append("span")
+            .style({
+                "display": "block",
+                "width"  : "15px",
+                "height" : "15px",
+                "border" : "1px solid #777",
+                "float"  : "left",
+            })
+            .style("border-radius", function (d) {
+                if (d.type === "circle") {
+                    return "50%";
+                }
+                return "";
+            })
+            .append("span")
+            .style({
+                "display" : "block",
+                "width"   : "100%",
+                "height"  : "100%",
+                //"float"   : "left",
+            });
+        s
+            .append("span")
+            .style({
+                "padding-right" : "5px",
+                "padding-top"   : "2px",
+                //"float"         : "left",
+                "padding-left"  : "5px"
+            })
+            .text(function (d) {
+                return d.label;
+            });
+
+
+    	// Apply a legend on the node's color
+        var legendBar = div
+            .append("div")
+            .style({
+                "float": "left",
+                "width" : "50%"
+            });
+
+    	//var legendColors = ["#ffffff", "#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
+        var legendColors = ["#eff3ff", "#bdd7e7", "#6baed6", "#3182bd", "#08519c"];
+
+        legendBar
+            .append("span")
+            .style({
+                "display" : "block",
+                "float"   : "left",
+                "padding-left" : "2px"
+            })
+            .text("0");
+
+        legendBar.selectAll(".legendBox")
+            .data(legendColors)
+            .enter()
+            .append("span")
+            .attr("class", "legendBox")
+            .style({
+                "display" : "block",
+                "width" : "20px",
+                "height" : "20px",
+                "border" : "1px solid #FFF",
+                "float" : "left",
+            })
+            .style("background", function (d) {
+                return d;
+            });
+
+        legendBar
+            .append("span")
+            .style({
+                "display" : "block",
+                "float" : "left",
+                "padding-left" : "5px",
+            })
+            .text("1");
+        legendBar
+            .append("span")
+            .style({
+                "display" : "block",
+                "float" : "left",
+                "padding-left" : "10px",
+            })
+            .html (config.legendText);
+
+    	// Add titles
+    	// setTitles();
+    	// d3.selectAll(".tnt_tree_node")
+    	//     .append("title")
+    	//     .text(function (d) {
+    	// 	return d.label;
+    	//     });
 
     }
 
@@ -291,29 +293,55 @@ var geneAssociationsTree = function () {
             .flowerView (flowerView)
             .target (config.target);
 
-	var vis = d3.select(div)
-        .append("div")
-	    .style("position", "relative");
+        var vis = d3.select(div)
+            .append("div")
+    	    .style("position", "relative");
 
-	if ((config.data === undefined) && (config.target !== undefined) && (config.cttvApi !== undefined)) {
-	    var api = config.cttvApi;
-	    var url = api.url.associations({
-		target : config.target,
-		outputstructure : "tree",
-		// TODO: Add datatypes here!
-	    });
-	    api.call(url)
-		.then (function (resp) {
-		    config.data = resp.body.data;
-		    render(flowerView, vis);
-		});
-	} else {
-	    render(flowerView, vis);
-	}
+    	if ((config.data === undefined) && (config.target !== undefined) && (config.cttvApi !== undefined)) {
+    	    var api = config.cttvApi;
+    	    var url = api.url.associations({
+    		target : config.target,
+    		outputstructure : "tree",
+    		// TODO: Add datatypes here!
+    	    });
+    	    api.call(url)
+        		.then (function (resp) {
+        		    config.data = resp.body.data;
+        		    render(flowerView, vis);
+        		});
+    	} else {
+    	    render(flowerView, vis);
+    	}
     };
 
+    // If we are interested only in some TAs, filter out the others
+    function filterOutTAs (data) {
+        var onlyThisTAs;
+        if (config.therapeuticAreas && config.therapeuticAreas.length) {
+            onlyThisTAs = {};
+            for (var e=0; e<config.therapeuticAreas.length; e++) {
+                onlyThisTAs[config.therapeuticAreas[e].toUpperCase()] = true;
+            }
+        } else {
+            return;
+        }
+
+        var newTAs = [];
+
+        for (var i=0; i<data.children.length; i++) {
+            var tA = data.children[i];
+            // If the Therapeutic Area is not in the list of therapeutic areas we want to display, remove it from the data
+            if (onlyThisTAs && (!onlyThisTAs[tA.__id.toUpperCase()])) {
+            } else {
+                newTAs.push(tA);
+            }
+        }
+
+        data.children = newTAs;
+    }
 
     theme.update = function () {
+        filterOutTAs(config.data);
         treeVis.data(config.data);
         // collapse all the therapeutic area nodes
         // var root = treeVis.root();
@@ -325,7 +353,7 @@ var geneAssociationsTree = function () {
         // }
         setBranchLengths(treeVis);
         sortNodes();
-        zoomTo(config.therapeuticArea);
+        // zoomTo(config.therapeuticArea);
         treeVis.update();
         // setTitles();
     };
@@ -365,6 +393,15 @@ var geneAssociationsTree = function () {
         return this;
     };
 
+    theme.therapeuticAreas = function (tas) {
+        if (!arguments.length) {
+            return config.therapeuticAreas;
+        }
+        config.therapeuticAreas = tas;
+        return this;
+    };
+
+
     // datatypes
     // theme.datatypes = function (dts) {
     //     if (!arguments.length) {
@@ -375,13 +412,13 @@ var geneAssociationsTree = function () {
     //     return this;
     // };
 
-    theme.names = function (lbs) {
-        if (!arguments.length) {
-            return tooltips.names();
-        }
-        tooltips.names(lbs);
-        return this;
-    };
+    // theme.names = function (lbs) {
+    //     if (!arguments.length) {
+    //         return tooltips.names();
+    //     }
+    //     tooltips.names(lbs);
+    //     return this;
+    // };
 
     // Legend text
     theme.legendText = function (t) {
@@ -392,34 +429,34 @@ var geneAssociationsTree = function () {
         return this;
     };
 
-    function zoomTo (efo) {
-        var root = treeVis.root();
-        var node = root.find_node (function (n) {
-            return n.property("name") === efo;
-        });
-        if (node) {
-            treeVis.data(node.data());
-            treeVis.update();
-        }
-    }
+    // function zoomTo (efo) {
+    //     var root = treeVis.root();
+    //     var node = root.find_node (function (n) {
+    //         return n.property("name") === efo;
+    //     });
+    //     if (node) {
+    //         treeVis.data(node.data());
+    //         treeVis.update();
+    //     }
+    // }
 
-    theme.selectTherapeuticArea = function (efo) {
-        if (!arguments.length) {
-            return config.efo;
-        }
-        config.therapeuticArea = efo;
-        theme.update();
-        return this;
-    };
+    // theme.selectTherapeuticArea = function (efo) {
+    //     if (!arguments.length) {
+    //         return config.efo;
+    //     }
+    //     config.therapeuticArea = efo;
+    //     theme.update();
+    //     return this;
+    // };
 
-    theme.filters = function (f) {
-        if (!arguments.length) {
-            return tooltips.filters();
-        }
-        tooltips.filters(f);
-        return this;
-    };
-
+    // theme.filters = function (f) {
+    //     if (!arguments.length) {
+    //         return tooltips.filters();
+    //     }
+    //     tooltips.filters(f);
+    //     return this;
+    // };
+    //
     function setBranchLengths (treeVis) {
         // Branch lengths:
         // First pass: Get the max depth:
