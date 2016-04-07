@@ -65,10 +65,10 @@ angular.module('cttvControllers')
         cttvAPIservice.getAssociations(opts)
             .then (function (resp) {
                 // set the label
-                $scope.search.label = resp.body.data[0].target.symbol;
+                $scope.search.label = resp.body.data[0].target.gene_info.symbol;
 
                 // set the filename
-                $scope.search.filename = cttvDictionary.EXP_TARGET_ASSOC_LABEL + resp.body.data[0].target.symbol;
+                $scope.search.filename = cttvDictionary.EXP_TARGET_ASSOC_LABEL + resp.body.data[0].target.gene_info.symbol;
 
                 // Set the total number of diseases
                 $scope.n = {};
