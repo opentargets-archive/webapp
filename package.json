@@ -6,7 +6,7 @@
   "license": "",
   "devDependencies": {
     "angular-mocks": "1.3.9",
-    "bower": "^1.7.6",
+    "bower": "1.7.6",
     "chai": "1.10.0",
     "connect": "3.3.5",
     "del": "1.2.0",
@@ -50,20 +50,19 @@
     "test-single-run": "karma start tests/unit/karma.conf.js  --single-run"
   },
   "dependencies": {
-    "cttv.api": "0.0.2",
-    "cttv.bubblesView": "file:components/bubblesView",
+    "cttv.api": "0.0.3",
     "cttv.diseaseGraph": "file:components/diseaseGraph",
-    "cttv.flowerView": "file:components/flowerView",
-    "cttv.genome": "0.0.5",
+    "cttv.flowerView": "0.0.0",
+    "cttv.genome": "0.0.6",
     "cttv.spinner": "file:components/spinner",
     "cttv.targetAssociationsBubbles": "0.0.0",
     "cttv.targetAssociationsTree": "file:components/targetAssociationsTree",
     "cttv.targetGeneTree": "file:components/targetGeneTree",
-    "tnt.genome": "0.1.4",
-    "tnt.rest": "^0.1.0",
-    "js-yaml": "^3.5.5",
-    "marked": "^0.3.5",
-    "tnt.tooltip": "0.0.11",
-    "tnt.utils": "0.0.1"
+    "tnt.genome": "0.1.5",
+    "tnt.rest": "0.1.1",
+    "js-yaml": "3.5.5",
+    "marked": "0.3.5",
+    "tnt.tooltip": "0.1.0",
+    "tnt.utils": "0.1.1"
   }
 }
