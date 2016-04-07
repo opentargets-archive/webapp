@@ -6,4 +6,3 @@ node_modules
 .DS_Store
 build
 app/docs/*.html
-app/js/config-service.js
