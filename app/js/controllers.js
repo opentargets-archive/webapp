@@ -115,8 +115,6 @@
             cttvAPIservice.getSearch( queryobject )
                 .then(
                     function(resp) {
-                        console.log("SEARCH RESULTS:");
-                        console.log(resp);
                         $scope.search.results = resp.body;
                     },
                     cttvAPIservice.defaultErrorHandler
