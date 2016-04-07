@@ -29,7 +29,6 @@ angular.module('cttvDirectives')
 
                 // Change of dims
                 scope.$watch(function () {if (resizeCtrl) {return resizeCtrl.dims();}}, function (val) {
-                    console.log("     DIMS UPDATED!");
                     if (bView) {
                         bView.diameter(val.height - bottomMargin);
                     }
@@ -37,9 +36,10 @@ angular.module('cttvDirectives')
 
                 // Change of target or facets
                 scope.$watchGroup(["target", "facets", "active"], function (vals) {
-                    var act = vals[2];
                     var target = vals[0];
                     var facets = vals[1];
+                    var act = vals[2];
+
                     if (scope.active !== whoiam) {
                         return;
                     }
@@ -51,10 +51,15 @@ angular.module('cttvDirectives')
                         facets: false
                     };
                     opts = cttvAPIservice.addFacetsOptions(facets, opts);
+
                     if (bView) {
+                        bView.therapeuticAreas(opts.therapeutic_area);
                         bView.update(cttvAPIservice.getAssociations(opts));
                     } else {
-                        setView(cttvAPIservice.getAssociations(opts));
+                        setView();
+                        bView.data(cttvAPIservice.getAssociations(opts));
+                        bView.therapeuticAreas(opts.therapeutic_area);
+                        bView(bubblesContainer);
                     }
                 });
                 // scope.$watch("target", function (val) {
@@ -91,29 +96,18 @@ angular.module('cttvDirectives')
 
                     var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
-                    var opts = {
-                        target: attrs.target,
-                        outputstructure: "flat",
-                        size: 1000,
-                        direct: true,
-                        facets: false
-                    };
-                    opts = cttvAPIservice.addFacetsOptions(attrs.facet, opts);
-
                     bView = targetAssociations()
                         // .target("ENSG00000157764")
-                        .target(attrs.target)
+                        .target(scope.target)
                         .diameter(diameter)
                         .linkPrefix("")
                         .showAll(true)
-                        // .colors(cttvUtils.colorScales.BLUE_0_1.range());
-                        .colors(['#e7e1ef', '#dd1c77'])
-                        .useFullPath(cttvUtils.browser.name !== "IE");
+                        .colors(cttvUtils.colorScales.BLUE_0_1.range())
+                        // .colors(['#e7e1ef', '#dd1c77'])
+                        .useFullPath(cttvUtils.browser.name !== "IE")
+                        .tooltipsOnTA(true)
+                        .showMenu(false);
 
-                    // bView.data(cttvAPIservice.getAssociations(opts));
-                    bView.data(data);
-
-                    bView(bubblesContainer);
 
                     // Setting up legend
                     scope.legendText = "Score";
