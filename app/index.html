@@ -41,7 +41,6 @@
         <!-- <link rel="stylesheet" href="css/app.css?v=16112015"> -->
         <!-- <link rel="stylesheet" href="node_modules/tnt.genome/build/index.css"> -->
 
-
         <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
         <script type="text/javascript" src="js/ie_console_noop.js?v=08122015"></script>
 
@@ -83,6 +82,8 @@
     </head>
 
     <body>
+
+
         <div class="cttv-page-wrapper" id="cttv-page-app">
 
             <!-- main page content -->
@@ -108,7 +109,7 @@
                                     <!-- CTTV logo -->
                                     <!-- <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>-->
                                     <div class="ot_logo">
-                                        <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_146x34_w.png"/></a>
+                                        <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_146x34_w.png" width="130px" height="30px"/></a>
                                     </div>
                                 </div>
 
@@ -124,7 +125,7 @@
 
 
                                                 <!-- Search box + search button -->
-                                                <div class="input-group">
+                                                <div class="input-group input-group-sm">
 
                                                     <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
@@ -137,7 +138,7 @@
                                                 </div>
 
                                                 <!-- Search in progress spinner -->
-                                                <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
+                                                <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner search-form-spinner-sm" ng-show="search.progress"></span>
 
                                                 <!-- Suggestions box -->
                                                 <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
@@ -191,6 +192,8 @@
 
                     <!-- Content -->
 
+
+
                     <div ng-view autoscroll="true"></div>
 
                     <!-- End Content -->
@@ -212,8 +215,8 @@
                             <p>Version 1.0 - 2015-12-08</p>
                             <p><a href="/release-notes">Release notes</a></p>
                             <p><a href="/about">About</a></p>
-                            <p><a href="/api-docs" target="_self">API</a></p>
-                            <p><a href="/docs">Docs</a></p>
+                            <p><a href="/documentation/api">API</a></p>
+                            <p><a href="/documentation/components">Docs</a></p>
                             <p><a href="/terms_of_use">Terms of use</a></p>
                         </div>
 
@@ -257,6 +260,8 @@
             <!-- Angular && web app -->
             <script src="build/cttvWebapp-3rdParty.js?v=08122015" type="text/javascript"></script>
             <script src="build/cttvWebapp.min.js?v=08122015" type="text/javascript"></script> <!-- extra directive -->
+
+
             <!-- <script type="text/javascript" src="bower_components/angular/angular.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="bower_components/angular-route/angular-route.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js?v=16112015"></script> -->

@@ -73,6 +73,14 @@ body{
 .masthead {
     width:100%;
     background-color: $masthead-background;
+    background: -webkit-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: -moz-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: -o-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+
+
+
+
     //padding: 8px 0;
     height: auto;
     border-bottom: 1px solid $masthead-border;
@@ -109,7 +117,7 @@ body{
     margin-top: 0px;
     margin-bottom: 0px;
     padding: 0px; //override browser default for ul elements
-    height: 50px;
+    height: 46px;
 
     li {
         display: inline-block;
@@ -120,7 +128,7 @@ body{
         a, a:focus {
             //color: #fff;
             padding: 0px 10px;
-            height: 50px;
+            height: 46px;
             display: table-cell;
             vertical-align: middle;
         }
@@ -219,7 +227,7 @@ body{
 .cttv-content-header {
     margin-bottom: 30px;
     border-bottom: 1px solid $clr-ui-border;
-    box-shadow: 0 1px 5px 0 $clr-ui-shadow;
+    box-shadow: 0 0 5px 0 $clr-ui-shadow;
     background: $clr-ui-background;
 
     h4 {

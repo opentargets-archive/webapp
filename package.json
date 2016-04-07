@@ -56,11 +56,12 @@
     "cttv.flowerView": "file:components/flowerView",
     "cttv.genome": "0.0.5",
     "cttv.spinner": "file:components/spinner",
-    "cttv.targetAssociations": "file:components/targetAssociations",
     "cttv.targetAssociationsTree": "file:components/targetAssociationsTree",
     "cttv.targetGeneTree": "file:components/targetGeneTree",
     "tnt.genome": "0.1.4",
     "tnt.rest": "^0.1.0",
+    "js-yaml": "^3.5.5",
+    "marked": "^0.3.5",
     "tnt.tooltip": "0.0.11",
     "tnt.utils": "0.0.1"
   }
