@@ -1437,23 +1437,23 @@ angular.module('cttvDirectives', [])
     }])
 
 
-    .directive('mastheadNavigationMenu', ['cttvConfig', function ($cttvConfig) {
+    .directive('mastheadNavigationMenu', ['cttvConfig', function (cttvConfig) {
         'use strict';
 
         return {
             restrict: 'EA',
             scope: {
-                href: '@',
+                // href: '@',
             },
             template :    '<ul class="masthead-navigation">'
                         + '    <li><a href="/about">About</a></li>'
                         + '    <li><a href="/faq">FAQs</a></li>'
                         + '    <li><a href="/documentation/api">API</a></li>' // must force target to link outside of Angular routing
-                        + '    <li><a href="{{dumps_link}}" target="_self">Download</a></li>'
+                        + '    <li><a href="{{dumps_link}}" target="_self">Downloads</a></li>'
                         + '    <li><a href="/documentation/components">Docs</a></li>'
                         + '</ul>',
             link: function(scope, element, attrs) {
-                scope.dumps_link = $cttvConfig.dumps_link;
+                scope.dumps_link = cttvConfig.dumps_link;
             }
         };
     }])
