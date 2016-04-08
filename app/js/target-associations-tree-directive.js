@@ -37,7 +37,7 @@ angular.module('cttvDirectives')
                     opts = cttvAPIservice.addFacetsOptions(facets, opts);
 
                     if (!gat) {
-                        setTreeView();
+                        setTreeView(opts.therapeutic_area);
                     } else {
                         cttvAPIservice.getAssociations (opts)
                             .then (function (resp) {
@@ -46,8 +46,8 @@ angular.module('cttvDirectives')
                                 if (data) {
                                     gat
                                         .data(data)
+                                        .therapeuticAreas(opts.therapeutic_area)
                                         //.datatypes(dts)
-                                        .filters(facets)
                                         .update();
                                     }
                                 },
@@ -57,49 +57,7 @@ angular.module('cttvDirectives')
 
                 });
 
-                // scope.$watch( 'facets', function (fct) {
-                //     //var dts = JSON.parse(attrs.datatypes);
-                //     if (datatypesChangesCounter>0) {
-                //         if (!gat) {
-                //             setTreeView();
-                //             return;
-                //         }
-                //         // var opts = {
-                //         //     target: attrs.target,
-                //         //     datastructure: "tree",
-                //         // };
-                //         // if (!_.isEmpty(dts)) {
-                //         //     opts.filterbydatatype = _.keys(dts);
-                //         // }
-                //
-                //         var opts = {
-                //             target: attrs.target,
-                //             outputstructure: "false",
-                //             direct: true,
-                //             facets: false,
-                //             size: 1000
-                //         };
-                //         opts = cttvAPIservice.addFacetsOptions(fct, opts);
-                //
-                //         cttvAPIservice.getAssociations (opts)
-                //             .then (function (resp) {
-                //                 // var data = resp.body.data;
-                //                 var data = cttvAPIservice.flat2tree(resp.body);
-                //                 if (data) {
-                //                     gat
-                //                         .data(data)
-                //                         //.datatypes(dts)
-                //                         .filters(fct)
-                //                         .update();
-                //                     }
-                //                 },
-                //                 cttvAPIservice.defaultErrorHandler
-                //             );
-                //     }
-                //     datatypesChangesCounter++;
-                // });
-
-                var setTreeView = function () {
+                var setTreeView = function (tas) {
                     ////// Tree view
                     // viewport Size
                     var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -151,11 +109,11 @@ angular.module('cttvDirectives')
                                 gat = geneAssociationsTree()
                                     .data(data)
                                     //.datatypes(dts)
-                                    .names(cttvConsts)
+                                    // .names(cttvConsts)
                                     .diameter(900)
                                     .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
                                     .target(scope.target)
-                                    .filters (scope.facets);
+                                    .therapeuticAreas(tas);
                                 gat(fView, elem[0]);
                             },
                             cttvAPIservice.defaultErrorHandler
