@@ -684,7 +684,21 @@
                     row.push( cttvDictionary[item.target.activity.toUpperCase()] || clearUnderscores(item.target.activity) ); // "up_or_down"->"unclassified" via dictionary
 
                     // mutations
-                    row.push(item.evidence.known_mutations || cttvDictionary.NA);
+                    var mut = "";
+                    if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
+                        if(item.evidence.known_mutations.length==1){
+                            mut = item.evidence.known_mutations[0].preferred_name;
+                        } else {
+                            mut += "<ul>";
+                            item.evidence.known_mutations.forEach(function(i){
+                                mut += "<li>"+i.preferred_name+"</li>"
+                            });
+                            mut += "</ul>";
+                        }
+                    } else {
+                        mut = cttvDictionary.NA;
+                    }
+                    row.push(mut);
 
                     // evidence codes
                     row.push("Curated in " + item.evidence.provenance_type.database.id );
@@ -915,7 +929,8 @@
                     "evidence.urls",
                     "evidence.known_mutations",
                     "evidence.provenance_type",
-                    "access_level"
+                    "access_level",
+                    "unique_association_fields.mutation_type"
                 ]
             };
             _.extend(opts, searchObj);
@@ -955,13 +970,34 @@
                     // col 1: disease
                     row.push(item.disease.efo_info.label);
 
-                    // col 2: know mutations
-                    row.push(item.evidence.known_mutations || cttvDictionary.NA);
+                    // col 2: mutation type
+                    /*var mut = "";
+                    if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
+                        if(item.evidence.known_mutations.length==1){
+                            mut = item.evidence.known_mutations[0].preferred_name;
+                        } else {
+                            mut += "<ul>";
+                            item.evidence.known_mutations.forEach(function(i){
+                                mut += "<li>"+i.preferred_name+"</li>"
+                            });
+                            mut += "</ul>";
+                        }
+                    } else {
+                        mut = cttvDictionary.NA;
+                    }*/
+                    var mut = item.unique_association_fields.mutation_type || cttvDictionary.NA;
+                    row.push( clearUnderscores( mut ) );
 
-                    // col 3: evidence source
+                    // col 3: samples
+                    row.push( cttvDictionary.NA );
+
+                    // col 4: inheritance pattern
+                    row.push( cttvDictionary.NA );
+
+                    // col 5: evidence source
                     row.push("<a href='"+item.evidence.urls[0].url+"' target='_blank' class='cttv-external-link'>"+item.evidence.urls[0].nice_name+"</a>");
 
-                    // cols 4: publications
+                    // cols 6: publications
                     var refs = [];
                     if( checkPath(item, "evidence.provenance_type.literature.references") ){
                         refs = item.evidence.provenance_type.literature.references;
@@ -969,7 +1005,7 @@
                     var pmidsList = cttvUtils.getPmidsList( refs );
                     row.push( cttvUtils.getPublicationsString( pmidsList ) );
 
-                    // col 5: pub ids (hidden)
+                    // col 7: pub ids (hidden)
                     row.push(pmidsList.join(", "));
 
 
@@ -1001,13 +1037,17 @@
                         "width" : "3%"
                     },
                     {
-                        "targets" : [5],    // the access-level (public/private icon)
+                        "targets" : [7],    // the access-level (public/private icon)
                         "visible" : false
                     },
                     // now set the widths
                     {
-                        "targets" : [1,2,3],
-                        "width" : "26%"
+                        "targets" : [1,2,4,5],
+                        "width" : "18%"
+                    },
+                    {
+                        "targets" : [3],
+                        "width" : "9%"
                     },
                     /*{
                         "targets" : [4],
