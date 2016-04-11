@@ -32,15 +32,17 @@
  * Bootstrap
  */
 
-.btn-primary, .badge-primary, .label-primary{
-    background-color: $btn-primary-bg;
+.badge-primary, .label-primary{
+    background-color: $clr-primary; //$btn-primary-bg;
 }
 
+
 .btn-primary{
+    background-color: $btn-primary-bg;
     border-color: $btn-primary-border;
     &:hover{
         background-color: $btn-primary-bg-hover;
-        border-color: $btn-primary-border-hover;
+        //border-color: $btn-primary-border-hover;
     }
 }
 
@@ -51,4 +53,9 @@
 .pagination .active a , .pagination .active a:focus{
     background-color: $btn-primary-bg;
     border-color: $btn-primary-border;
+
+    &:hover{
+        background-color: $btn-primary-bg-hover;
+        //border-color: $btn-primary-border-hover;
+    }
 }
