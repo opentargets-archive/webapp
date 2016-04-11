@@ -168,6 +168,9 @@ body{
 
     a{
         color: inherit;
+        &:hover {
+            color: $footer-text-dim;
+        }
     }
 
     h6{
