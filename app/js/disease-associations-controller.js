@@ -72,7 +72,7 @@ angular.module('cttvControllers')
             outputstructure: "flat",
             facets: true,
             // direct: false,
-            size:0
+            size:1
         };
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
@@ -98,6 +98,12 @@ angular.module('cttvControllers')
                 // $scope.data.selected = {datatypes: cttvFiltersService.getSelectedFiltersRaw("datatypes")};
                 $scope.filters = filters;
 
+                // The label of the diseaes in the header
+                $scope.search.label = resp.body.data[0].disease.efo_info.label;
+
+                // The filename to download
+                $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(" ").join("_");
+
                 // set the total?
                 $scope.search.total = resp.body.total; //resp.body.total;
             },
@@ -121,24 +127,7 @@ angular.module('cttvControllers')
     //  Flow
     // ---------------------------
 
-
-    // First off, get disease specific info to populate the top of the page
-    // This is independent of other data, so we just fire that here
-    cttvAPIservice.getDisease( {
-            code:$scope.search.query
-        } ).
-        then(
-            function(resp) {
-                $scope.search.label = resp.body.label;
-                $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.label.split(" ").join("_");
-            },
-            cttvAPIservice.defaultErrorHandler
-        );
-
-
-
     //
-    // Then onto the data
     // No longer need to get unfiltered data first and all that
     // We just get the data and display it, but:
     //  1. Must set the default datatypes for this page
@@ -163,6 +152,29 @@ angular.module('cttvControllers')
         getFacets( cttvFiltersService.parseURL() );
     }*/
 
+
+    // Download the whole table
+    // $scope.downloadTable = function () {
+    //     console.log("Download the whole table!");
+    //     console.log($scope.filters);
+    //     var opts = {
+    //         disease: $scope.search.query,
+    //         outputstructure: "flat",
+    //         facets: false,
+    //         format: "csv",
+    //         size:1000
+    //     };
+    //     opts = cttvAPIservice.addFacetsOptions($scope.filters, opts);
+    //     cttvAPIservice.getAssociations(opts)
+    //         .then(function(resp){
+    //                 $log.log("Export data");
+    //
+    //                 $log.log(resp.body);
+    //             },
+    //             cttvAPIservice.defaultErrorHandler
+    //         );
+    //
+    // };
 
 
 }]);
