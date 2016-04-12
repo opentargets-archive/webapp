@@ -1446,14 +1446,38 @@ angular.module('cttvDirectives', [])
                 // href: '@',
             },
             template :    '<ul class="masthead-navigation">'
-                        + '    <li><a href="/about">About</a></li>'
-                        + '    <li><a href="/faq">FAQs</a></li>'
-                        + '    <li><a href="/documentation/api">API</a></li>' // must force target to link outside of Angular routing
-                        + '    <li><a href="{{dumps_link}}" target="_self">Downloads</a></li>'
-                        + '    <li><a href="/documentation/components">Docs</a></li>'
+                        +     '<li><a href="/about">About</a></li>'
+
+                        +     '<li dropdown on-toggle="toggled(open)"><a href dropdown-toggle>Help <span class="fa fa-angle-down"></span></a>'
+                        +         '<ul class="dropdown-menu" dropdown-menu>'
+                        +              '<li><a href="/faq">FAQs</a></li>'
+                        +              '<li><a href="mailto:support@targetvalidation.org?Subject=OpenTargets%20Core%20Platform%20-%20help%20request">support<span class="fa fa-at"></span>targetvalidation.org</a></li>'
+                        // +              '<li><a href="/documentation/components">Docs</a></li>' // not ready yet
+                        +         '</ul>'
+                        +     '</li>'
+
+                        +     '<li><a href="/documentation/api">API</a></li>' // must force target to link outside of Angular routing
+                        +     '<li><a href="{{dumps_link}}" target="_self">Downloads</a></li>'
+                        //+     '<li><a href="/documentation/components">Docs</a></li>'
                         + '</ul>',
             link: function(scope, element, attrs) {
                 scope.dumps_link = cttvConfig.dumps_link;
+
+                //scope.status = {
+                    //isopen: false
+                //};
+
+                scope.toggled = function(open) {
+                    //$log.log('Dropdown is now: ', open);
+                };
+
+                /* this must be defined here I suppose; some bootstrap thingy that's called automatically */
+                scope.toggleDropdown = function($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    //scope.status.isopen = !scope.status.isopen;
+                };
+
             }
         };
     }])
