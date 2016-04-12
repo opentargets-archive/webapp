@@ -182,14 +182,22 @@ angular.module('cttvServices', []).
             return (Math.round(n/t)*t);
         };
 
-
+        cttvUtilsService.floatPrettyPrint = function (x) {
+            var value = x;
+            if (x < 0.0001) {
+                value = value.toExponential(2);
+            } else {
+                value = value.toFixed(2);
+            }
+            return value;
+        };
 
         cttvUtilsService.getPmidsList = function(refs){
             refs = refs || [];  // to avoid undefined errors
             return refs.map(function (ref) {
                 return ref.lit_id.split('/').pop();
             });
-        }
+        };
 
 
 
@@ -208,10 +216,10 @@ angular.module('cttvServices', []).
                         }).join (" OR ");
                         pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">'+pub+'</a>';
                     }
-                pub += "</span>"
+                pub += "</span>";
             }
             return pub;
-        }
+        };
 
 
 
