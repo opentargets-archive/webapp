@@ -23,12 +23,11 @@ angular.module('cttvDirectives')
     * with color information for each cell
     */
     var getColorStyleString = function(value, href){
-        value = value.toExponential(2);
         var str="";
         if( value<=0 ){
             str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, we don't put anything, so the sorting works better
         } else {
-            str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
+            str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+cttvUtils.floatPrettyPrint(value)+"'>"+cttvUtils.floatPrettyPrint(value)+"</span>";
             if( href ){
                 str = "<a href=" + href + ">" + str + "</a>";
             }
@@ -54,34 +53,6 @@ angular.module('cttvDirectives')
         {name:"", title: cttvDictionary.THERAPEUTIC_AREA}
     ];
 
-
-    // TODO: remove this once the API returns full row data:
-    // var reverseDict = {
-    //     "Genetic associations" : "genetic_association",
-    //     "Somatic mutations" : "somatic_mutation",
-    //     "Known drugs" : "known_drug",
-    //     "RNA expression" : "rna_expression",
-    //     "Affected pathways" : "affected_pathway",
-    //     "Text mining" : "literature",
-    //     "Animal models" : "animal_model"
-    // };
-
-    // TODO: remove this once the API returns full row data:
-    // var hasDatatype = function (myDatatype, datatypes) {
-    //     var thisDatatype = reverseDict[myDatatype];
-    //     for (var i=0; i<datatypes.length; i++) {
-    //         // var datatype = upperCaseFirst(clearUnderscores(datatypes[i]));
-    //         // if (datatype.trim() === myDatatype.trim()) {
-    //         //     return true;
-    //         // }
-    //
-    //         if (thisDatatype === datatypes[i]) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // };
-
     /*
     Setup the table cols and return the DT object
     */
@@ -106,15 +77,16 @@ angular.module('cttvDirectives')
                 // 10 => overall -- hidden column
                 // 11 => gene description -- not supported in the api
                 var mappings = {
-                    3: "overall",
-                    4: "datatypes." + cttvConsts.datatypes.GENETIC_ASSOCIATION,
-                    5: "datatypes." + cttvConsts.datatypes.SOMATIC_MUTATION,
-                    6: "datatypes." + cttvConsts.datatypes.KNOWN_DRUG,
-                    7: "datatypes." + cttvConsts.datatypes.AFFECTED_PATHWAY,
-                    8: "datatypes." + cttvConsts.datatypes.RNA_EXPRESSION,
-                    9: "datatypes." + cttvConsts.datatypes.LITERATURE,
-                    10: "datatypes." + cttvConsts.datatypes.ANIMAL_MODEL,
-                    11: "overall"
+                    0: "disease.efo_info.label",
+                    3: "association_score.overall",
+                    4: "association_score.datatypes." + cttvConsts.datatypes.GENETIC_ASSOCIATION,
+                    5: "association_score.datatypes." + cttvConsts.datatypes.SOMATIC_MUTATION,
+                    6: "association_score.datatypes." + cttvConsts.datatypes.KNOWN_DRUG,
+                    7: "association_score.datatypes." + cttvConsts.datatypes.AFFECTED_PATHWAY,
+                    8: "association_score.datatypes." + cttvConsts.datatypes.RNA_EXPRESSION,
+                    9: "association_score.datatypes." + cttvConsts.datatypes.LITERATURE,
+                    10: "association_score.datatypes." + cttvConsts.datatypes.ANIMAL_MODEL,
+                    11: "association_score.overall"
                 };
                 var order = [];
                 for (var i=0; i<data.order.length; i++) {
@@ -135,9 +107,6 @@ angular.module('cttvDirectives')
                 };
 
                 opts = cttvAPIservice.addFacetsOptions(filters, opts);
-
-                // If there is TA zoom...
-                // TODO: Include TA zoom
 
                 cttvAPIservice.getAssociations(opts)
                     .then (function (resp) {
@@ -168,7 +137,8 @@ angular.module('cttvDirectives')
                     "targets": [3,4,5,6,7,8,9],
                     "asSorting": [ "desc", "asc"],
                 },
-                { "orderSequence": [ "desc", "asc"], "targets": "_all" }
+                { "orderSequence": [ "desc", "asc"], "targets": [3,4,5,6,7,8,9,10,11] },
+                { "orderSequence": ["asc", "desc"], "targets": [0]}
             ],
             "order" : [[3, "desc"]],
             "orderMulti": false,

@@ -122,7 +122,8 @@ angular.module('cttvServices')
             countRequest( params.trackCall===false ? undefined : true );
             //countRequest( true );
 
-            var resp = api.call(url)
+            // Params for api.call are: url, data (for POST) and return format
+            var resp = api.call(url, undefined, (params.format || "json"))
                 .then (done)
                 .catch(cttvAPI.defaultErrorHandler);
 
