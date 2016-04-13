@@ -112,7 +112,12 @@
         $scope.datatypes = datatypes;
 
 
-
+        var arrayToList = function(arr, oneToString){
+            if(oneToString && arr.length==1){
+                return arr[0];
+            }
+            return "<ul><li>" + arr.join("</li><li>") + "</li></ul>";
+        }
 
 
         // =================================================
@@ -684,19 +689,9 @@
                     row.push( cttvDictionary[item.target.activity.toUpperCase()] || clearUnderscores(item.target.activity) ); // "up_or_down"->"unclassified" via dictionary
 
                     // mutations
-                    var mut = "";
+                    var mut = cttvDictionary.NA
                     if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
-                        if(item.evidence.known_mutations.length==1){
-                            mut = item.evidence.known_mutations[0].preferred_name;
-                        } else {
-                            mut += "<ul>";
-                            item.evidence.known_mutations.forEach(function(i){
-                                mut += "<li>"+i.preferred_name+"</li>"
-                            });
-                            mut += "</ul>";
-                        }
-                    } else {
-                        mut = cttvDictionary.NA;
+                        mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
                     }
                     row.push(mut);
 
@@ -971,57 +966,37 @@
                     // col 1: disease
                     row.push(item.disease.efo_info.label);
 
-                    // col 2: mutation type
-                    var mut = "";
+
+                    var mut = cttvDictionary.NA;
+                    var samp = cttvDictionary.NA;
+                    var patt = cttvDictionary.NA;
+
                     if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
-                        if(item.evidence.known_mutations.length==1){
-                            mut = item.evidence.known_mutations[0].preferred_name;
-                        } else {
-                            mut += "<ul>";
-                            item.evidence.known_mutations.forEach(function(i){
-                                mut += "<li>"+i.preferred_name+"</li>"
-                            });
-                            mut += "</ul>";
-                        }
-                    } else {
-                        mut = cttvDictionary.NA;
+
+                        // col 2: mutation type
+                        mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
+
+
+                        // col 3: samples
+                        samp = arrayToList(
+                                            item.evidence.known_mutations.map(
+                                                function(i){
+                                                    if( i.number_samples_with_mutation_type ){
+                                                        return i.number_samples_with_mutation_type+"/"+i.number_mutated_samples;
+                                                    } else {
+                                                        return cttvDictionary.NA;
+                                                    }
+                                                }
+                                            ),
+                                            true );
+
+                        // col 4: inheritance pattern
+                        patt = arrayToList( item.evidence.known_mutations.map(function(i){return i.inheritance_pattern || cttvDictionary.NA;}) , true );
                     }
+
+
                     row.push( clearUnderscores( mut ) );
-
-
-                    // col 3: samples
-                    var samp = "";
-                    if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
-                        if(item.evidence.known_mutations.length==1){
-                            samp = item.evidence.known_mutations[0].number_samples_with_mutation_type+"/"+item.evidence.known_mutations[0].number_mutated_samples;
-                        } else {
-                            samp += "<ul>";
-                            item.evidence.known_mutations.forEach(function(i){
-                                samp += "<li>"+ i.number_samples_with_mutation_type+"/"+i.number_mutated_samples +"</li>"
-                            });
-                            samp += "</ul>";
-                        }
-                    } else {
-                        samp = cttvDictionary.NA;
-                    }
                     row.push( samp );
-
-
-                    // col 4: inheritance pattern
-                    var patt = "";
-                    if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
-                        if(item.evidence.known_mutations.length==1){
-                            patt = item.evidence.known_mutations[0].inheritance_pattern;
-                        } else {
-                            patt += "<ul>";
-                            item.evidence.known_mutations.forEach(function(i){
-                                patt += "<li>"+ i.inheritance_pattern +"</li>"
-                            });
-                            patt += "</ul>";
-                        }
-                    } else {
-                        patt = cttvDictionary.NA;
-                    }
                     row.push( patt );
 
 
