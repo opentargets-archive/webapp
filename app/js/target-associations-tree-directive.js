@@ -4,20 +4,37 @@ angular.module('cttvDirectives')
     /*
     *
     */
-    .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', 'cttvConsts', function ($log, cttvAPIservice, cttvConsts) {
+    .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', 'cttvConsts', 'cttvUtils', function ($log, cttvAPIservice, cttvConsts, cttvUtils) {
         'use strict';
 
         var whoiam = 'tree';
+        var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
         var gat;
+
         return {
+
             restrict: 'E',
+
             scope: {
                 facets : '=',
                 target : '@',
                 active : '@'
             },
+
+            template: '<div></div>'
+            +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
+
+
             link: function (scope, elem, attrs) {
+
+                // legend stuff
+                scope.legendText = "Score";
+                scope.colors = [];
+                for(var i=0; i<=100; i+=25){
+                    var j=i/100;
+                    scope.colors.push( {color:colorScale(j), label:j} );
+                }
 
                 scope.$watchGroup(['target', 'facets', 'active'], function (vals) {
                     var target = vals[0];
@@ -113,8 +130,9 @@ angular.module('cttvDirectives')
                                     .diameter(900)
                                     .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
                                     .target(scope.target)
-                                    .therapeuticAreas(tas);
-                                gat(fView, elem[0]);
+                                    .therapeuticAreas(tas)
+                                    .hasLegendScale(false)
+                                gat(fView, elem.children().eq(0)[0]); //elem[0]);
                             },
                             cttvAPIservice.defaultErrorHandler
                         );

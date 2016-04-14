@@ -47,8 +47,8 @@ $clr-text-dim: scale-color( $clr-text, $lightness: 38% ); // lighter (AAA)
 $clr-text-inv: inv-color($footer-background);
 $clr-text-inv-dim: scale-color( $clr-text-inv, $lightness: -13%);
 
-$clr-link: $secondary-color;
-$clr-link-hover: adjust-color( $secondary-color, $lightness: -5% );
+$clr-link: $extra-brand-color;
+$clr-link-hover: adjust-color( $extra-brand-color, $lightness: 5% );
 
 
 
@@ -70,10 +70,10 @@ $clr-artboard-backgroud: #FFF;
 $clr-private-data: #f36633; // GSK orange
 
 /* some bootstrap elements */
-$btn-primary-bg: $secondary-color;
+$btn-primary-bg: $extra-brand-color; //$secondary-color;
 $btn-primary-border: adjust-color( $btn-primary-bg, $lightness: -5% );
-$btn-primary-bg-hover: adjust-color( $btn-primary-bg, $lightness: -5% );
-$btn-primary-border-hover: adjust-color( $btn-primary-bg, $lightness: -10% );
+$btn-primary-bg-hover: adjust-color( $btn-primary-bg, $lightness: 5% );
+$btn-primary-border-hover: adjust-color( $btn-primary-bg, $lightness: 10% );
 
 
 /*

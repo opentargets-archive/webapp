@@ -40,7 +40,7 @@
     }
 
     .item:hover{
-        background: #EEE;
+        background: $clr-ui-background-secondary; //#EEE;
         cursor: pointer;
     }
 
