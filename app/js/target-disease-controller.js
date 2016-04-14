@@ -112,7 +112,12 @@
         $scope.datatypes = datatypes;
 
 
-
+        var arrayToList = function(arr, oneToString){
+            if(oneToString && arr.length==1){
+                return arr[0];
+            }
+            return "<ul><li>" + arr.join("</li><li>") + "</li></ul>";
+        }
 
 
         // =================================================
@@ -683,19 +688,9 @@
                     row.push( cttvDictionary[item.target.activity.toUpperCase()] || clearUnderscores(item.target.activity) ); // "up_or_down"->"unclassified" via dictionary
 
                     // mutations
-                    var mut = "";
+                    var mut = cttvDictionary.NA
                     if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
-                        if(item.evidence.known_mutations.length==1){
-                            mut = item.evidence.known_mutations[0].preferred_name;
-                        } else {
-                            mut += "<ul>";
-                            item.evidence.known_mutations.forEach(function(i){
-                                mut += "<li>"+i.preferred_name+"</li>"
-                            });
-                            mut += "</ul>";
-                        }
-                    } else {
-                        mut = cttvDictionary.NA;
+                        mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
                     }
                     row.push(mut);
 
@@ -928,6 +923,7 @@
                     "evidence.urls",
                     "evidence.known_mutations",
                     "evidence.provenance_type",
+                    "evidence.known_mutations",
                     "access_level",
                     "unique_association_fields.mutation_type"
                 ]
@@ -969,29 +965,39 @@
                     // col 1: disease
                     row.push(item.disease.efo_info.label);
 
-                    // col 2: mutation type
-                    /*var mut = "";
+
+                    var mut = cttvDictionary.NA;
+                    var samp = cttvDictionary.NA;
+                    var patt = cttvDictionary.NA;
+
                     if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
-                        if(item.evidence.known_mutations.length==1){
-                            mut = item.evidence.known_mutations[0].preferred_name;
-                        } else {
-                            mut += "<ul>";
-                            item.evidence.known_mutations.forEach(function(i){
-                                mut += "<li>"+i.preferred_name+"</li>"
-                            });
-                            mut += "</ul>";
-                        }
-                    } else {
-                        mut = cttvDictionary.NA;
-                    }*/
-                    var mut = item.unique_association_fields.mutation_type || cttvDictionary.NA;
+
+                        // col 2: mutation type
+                        mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
+
+
+                        // col 3: samples
+                        samp = arrayToList(
+                                            item.evidence.known_mutations.map(
+                                                function(i){
+                                                    if( i.number_samples_with_mutation_type ){
+                                                        return i.number_samples_with_mutation_type+"/"+i.number_mutated_samples;
+                                                    } else {
+                                                        return cttvDictionary.NA;
+                                                    }
+                                                }
+                                            ),
+                                            true );
+
+                        // col 4: inheritance pattern
+                        patt = arrayToList( item.evidence.known_mutations.map(function(i){return i.inheritance_pattern || cttvDictionary.NA;}) , true );
+                    }
+
+
                     row.push( clearUnderscores( mut ) );
+                    row.push( samp );
+                    row.push( patt );
 
-                    // col 3: samples
-                    row.push( cttvDictionary.NA );
-
-                    // col 4: inheritance pattern
-                    row.push( cttvDictionary.NA );
 
                     // col 5: evidence source
                     row.push("<a href='"+item.evidence.urls[0].url+"' target='_blank' class='cttv-external-link'>"+item.evidence.urls[0].nice_name+"</a>");

@@ -11,7 +11,9 @@ var geneAssociationsTree = function () {
         cttvApi : undefined,
         legendText : "<text>Score range</text>",
         // therapeuticArea: undefined, // This is the zoomed therapeuticArea
-        therapeuticAreas: []
+        therapeuticAreas: [],
+        hasLegendScale : true,
+        hasLegendShape : true,
     };
 
     var treeVis = tnt_tree();
@@ -22,7 +24,8 @@ var geneAssociationsTree = function () {
     // 	.range(["#b2182b", "#ef8a62", "#fddbc7", "#f7f7f7", "#d1e5f0", "#67a9cf", "#2166ac"]);
     var scale = d3.scale.linear()
         .domain([0,1])
-        .range(["#ffffff", "#08519c"]);
+        //.range(["#ffffff", "#08519c"]);
+        .range(["#B6DDFC", "#0052A3"]);
 
     function sortNodes () {
         treeVis.root().sort (function (node1, node2) {
@@ -171,59 +174,64 @@ var geneAssociationsTree = function () {
                 "display" : "inline-block"
             });
 
-        var s = shapeLegendDiv.selectAll("span")
-            .data ([
-                {
-                    "type" : "square",
-                    "label" : "Therapeutic Area"
-                },
-                {
-                    "type" : "circle",
-                    "label" : "Disease"
-                }
-            ])
-            .enter()
-            .append("div")
-            .style({
-                "font-size": "12px"
-            });
+        if(config.hasLegendShape){
 
-        s
-            .append("span")
-            .style({
-                "display": "block",
-                "width"  : "15px",
-                "height" : "15px",
-                "border" : "1px solid #777",
-                "float"  : "left",
-            })
-            .style("border-radius", function (d) {
-                if (d.type === "circle") {
-                    return "50%";
-                }
-                return "";
-            })
-            .append("span")
-            .style({
-                "display" : "block",
-                "width"   : "100%",
-                "height"  : "100%",
-                //"float"   : "left",
-            });
-        s
-            .append("span")
-            .style({
-                "padding-right" : "5px",
-                "padding-top"   : "2px",
-                //"float"         : "left",
-                "padding-left"  : "5px"
-            })
-            .text(function (d) {
-                return d.label;
-            });
+            var s = shapeLegendDiv.selectAll("span")
+                .data ([
+                    {
+                        "type" : "square",
+                        "label" : "Therapeutic Area"
+                    },
+                    {
+                        "type" : "circle",
+                        "label" : "Disease"
+                    }
+                ])
+                .enter()
+                .append("div")
+                .style({
+                    "font-size": "12px"
+                });
 
+            s
+                .append("span")
+                .style({
+                    "display": "block",
+                    "width"  : "15px",
+                    "height" : "15px",
+                    "border" : "1px solid #777",
+                    "float"  : "left",
+                })
+                .style("border-radius", function (d) {
+                    if (d.type === "circle") {
+                        return "50%";
+                    }
+                    return "";
+                })
+                .append("span")
+                .style({
+                    "display" : "block",
+                    "width"   : "100%",
+                    "height"  : "100%",
+                    //"float"   : "left",
+                });
+            s
+                .append("span")
+                .style({
+                    "padding-right" : "5px",
+                    "padding-top"   : "2px",
+                    //"float"         : "left",
+                    "padding-left"  : "5px"
+                })
+                .text(function (d) {
+                    return d.label;
+                });
+        }
 
     	// Apply a legend on the node's color
+        if( config.hasLegendScale ){
+
+
         var legendBar = div
             .append("div")
             .style({
@@ -276,6 +284,7 @@ var geneAssociationsTree = function () {
             })
             .html (config.legendText);
 
+        }
     	// Add titles
     	// setTitles();
     	// d3.selectAll(".tnt_tree_node")
@@ -428,6 +437,16 @@ var geneAssociationsTree = function () {
         config.legendText = t;
         return this;
     };
+
+    theme.hasLegendScale = function(b){
+        config.hasLegendScale = b;
+        return this;
+    }
+
+    theme.hasLegendShape = function(b){
+        config.hasLegendShape = b;
+        return this;
+    }
 
     // function zoomTo (efo) {
     //     var root = treeVis.root();
