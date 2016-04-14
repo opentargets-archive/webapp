@@ -207,14 +207,12 @@ angular.module('cttvDirectives')
                         return rec.id;
                     });
 
-
                     var showLim = 50;
                     scope.show = {};
                     scope.show.limit = showLim;
                     scope.show.ellipsis = "[Show more]";
-                    scope.drugs = _.uniq(all_drugs_sorted, true, function (rec) {
-                        return rec.id;
-                    });
+                    scope.drugs = _.uniqBy(all_drugs_sorted, 'id');
+                    console.log(scope.drugs);
                     scope.show.moreOrLess = scope.drugs.length > showLim;
 
                     scope.showMoreOrLess = function () {

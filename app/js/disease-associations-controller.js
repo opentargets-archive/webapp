@@ -152,29 +152,4 @@ angular.module('cttvControllers')
         getFacets( cttvFiltersService.parseURL() );
     }*/
 
-
-    // Download the whole table
-    // $scope.downloadTable = function () {
-    //     console.log("Download the whole table!");
-    //     console.log($scope.filters);
-    //     var opts = {
-    //         disease: $scope.search.query,
-    //         outputstructure: "flat",
-    //         facets: false,
-    //         format: "csv",
-    //         size:1000
-    //     };
-    //     opts = cttvAPIservice.addFacetsOptions($scope.filters, opts);
-    //     cttvAPIservice.getAssociations(opts)
-    //         .then(function(resp){
-    //                 $log.log("Export data");
-    //
-    //                 $log.log(resp.body);
-    //             },
-    //             cttvAPIservice.defaultErrorHandler
-    //         );
-    //
-    // };
-
-
 }]);

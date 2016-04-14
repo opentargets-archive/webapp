@@ -170,6 +170,11 @@
                     <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
                 </alert>
 
+                <!-- API ERROR 500 -->
+                <alert type="danger" ng-show="showApiError500" ng-cloak>A problem retrieving data has occurred. Please try to reload the page. If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a>
+                    <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+                </alert>
+
                 <!--<div class="container">-->
                 <div>
 
@@ -231,7 +236,7 @@
                         <div class="col-sm-15 col-sm-3">
                             <h6>Support</h6>
                             <p><a href="/faq"><i class="fa fa-question-circle"></i> FAQs</a></p>
-                            <p><a href="mailto:support@targetvalidation.org?Subject=CTTV%20Core%20Platform%20-%20help%20request"><span class="fa fa-envelope"></span> support<span class="fa fa-at"></span>targetvalidation.org</a></p>
+                            <p><a href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request"><span class="fa fa-envelope"></span> support<span class="fa fa-at"></span>targetvalidation.org</a></p>
                         </div>
 
                         <div class="col-sm-15 col-sm-3">

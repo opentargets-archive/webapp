@@ -125,14 +125,15 @@ angular.module('cttvServices')
             // Params for api.call are: url, data (for POST) and return format
             var resp = api.call(url, undefined, (params.format || "json"))
                 .then (done)
-                .catch(cttvAPI.defaultErrorHandler);
+                .catch(function (err) {
+                    cttvAPI.defaultErrorHandler (err, params.trackCall);
+                });
 
             return promise;
             //return resp.then(handleSuccess, handleError);
 
 
             function done(response) {
-            //function done(error, response){
                 // console.log("RESPONSE");
                 // console.log(response);
                 resolvePromise(response);
@@ -160,12 +161,26 @@ angular.module('cttvServices')
                 //   data : response.body,
                 //   status: response.status
                 // });
-
-
-
             }
         };
 
+        /**
+         * Default error handler function.
+         * It simply logs the error to the console. Can be used in then(succ, err) calls.
+         */
+        cttvAPI.defaultErrorHandler = function(error, trackCall){
+            $log.warn("CTTV API ERROR");
+            countRequest(trackCall===false ? undefined : false);
+            if (error.status === 403) {
+                //$rootScope.$emit('cttvApiError', error);
+                $rootScope.showApiErrorMsg = true;
+            }
+            if (error.status >= 500) {
+                // alert("Error retrieving data from the API. Please try to reload the page");
+                $rootScope.showApiError500 = true;
+            }
+            if (!$rootScope.$$phase) $rootScope.$apply();
+        };
 
         var optionsToString = function(obj){
             var s="";
@@ -381,30 +396,12 @@ angular.module('cttvServices')
             });
         };
 
-
-
-        /**
-         * Default error handler function.
-         * It simply logs the error to the console. Can be used in then(succ, err) calls.
-         */
-        cttvAPI.defaultErrorHandler = function(error){
-            $log.warn("CTTV API ERROR");
-            if (error.status === 403) {
-                //$rootScope.$emit('cttvApiError', error);
-                $rootScope.showApiErrorMsg = true;
-            }
-        };
-
-
         /**
          * Decorates a given object with the API options for the given facets and returns the original object.
          * This can then be used to configure an API call.
          * If no object is supplied to the function, a new object is created and returned.
          */
         cttvAPI.addFacetsOptions = function(facets, obj){
-            console.log("FACETS PASSED...");
-            console.log(facets);
-
             obj = obj || {};
             for(var i in facets){
                 if( facets.hasOwnProperty(i)){
