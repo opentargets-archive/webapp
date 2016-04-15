@@ -105,6 +105,11 @@ a {
 
 .cttv-docs-section {
     margin-bottom: 60px;
+
+    a {
+        color: #333;
+        border-bottom: 1px dotted $secondary-color;
+    }
 }
 
 
