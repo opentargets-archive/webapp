@@ -185,7 +185,6 @@ angular.module('cttvControllers')
     // active tab
     $scope.active = "bubbles";
     $scope.setActive = function (who) {
-        console.log(" set active has been changed to " + who + " because of a click somewhere ---------------------");
         $scope.active = who;
     };
 

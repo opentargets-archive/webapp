@@ -9,6 +9,7 @@
                 $rootScope.showApiErrorMsg = true;
             }
         });
+        $rootScope.showApiError500 = false;
         $rootScope.reloadPage = function () {
             $window.location.reload();
         };

@@ -7,7 +7,7 @@ angular.module('cttvDirectives')
 */
 // .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', 'cttvConsts', '$location', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile, cttvConsts, $location) {
 
-.directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location) {
+.directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', '$q', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location, $q) {
 
 
     'use strict';
@@ -58,7 +58,9 @@ angular.module('cttvDirectives')
     */
     var setupTable = function(table, target, filename){
         $log.log("setupTable()");
-        return $(table).DataTable( cttvUtils.setTableToolsParams({
+        // return $(table).DataTable( cttvUtils.setTableToolsParams({
+        return $(table).DataTable ({
+            "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
             "processing": false,
             "serverSide": true,
             "ajax": function (data, cbak, params) {
@@ -137,7 +139,7 @@ angular.module('cttvDirectives')
                     "targets": [3,4,5,6,7,8,9],
                     "asSorting": [ "desc", "asc"],
                 },
-                { "orderSequence": [ "desc", "asc"], "targets": [3,4,5,6,7,8,9,10,11] },
+                { "orderSequence": ["desc", "asc"], "targets": [3,4,5,6,7,8,9,10,11] },
                 { "orderSequence": ["asc", "desc"], "targets": [0]}
             ],
             "order" : [[3, "desc"]],
@@ -147,7 +149,7 @@ angular.module('cttvDirectives')
             "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             "pageLength": 50
         },
-        filename ));
+        filename );
     };
 
     function parseServerResponse (d) {
@@ -242,195 +244,124 @@ angular.module('cttvDirectives')
         },
 
 
-        template: '<cttv-matrix-table></cttv-matrix-table>'
+        template: '<div>'
+        + ' <div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
+        + '<cttv-matrix-table></cttv-matrix-table>'
         +'<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
-        +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
+        +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
+        + '</div>',
 
 
         link: function (scope, elem, attrs) {
 
+            // -----------------------
+            // Initialize table etc
+            // -----------------------
 
-            /*
-            * Fetch new data and update the table content
-            * without destroying and recreating the table
-            */
-        //     var updateTable = function (table, facets) {
-        //
-        //         $log.log("*** update heatmap ***");
-        //
-        //         scope.loadprogress = true;
-        //
-        //         var opts = {
-        //             target: attrs.target,
-        //             outputstructure: "flat",
-        //             facets: false
-        //         };
-        //         opts = cttvAPIservice.addFacetsOptions(facets, opts);
-        //
-        //
-        //         return cttvAPIservice.getAssociations (opts)
-        //         .then(function (resp) {
-        //
-        //             //resp = JSON.parse(resp.text);
-        //             scope.loadprogress = false;
-        //             resp = resp.body;
-        //             $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
-        //             $log.log(resp);
-        //
-        //             // scope.n.diseases = resp.data.length;
-        //             // clear any existing data from the table
-        //             // and add the new data
-        //             table.clear().rows.add(newData).draw();
-        //
-        //         },
-        //         // Error in the Api?
-        //         cttvAPIservice.defaultErrorHandler
-        //     );
-        //
-        // };    // end updateTable
+            // table itself
+            // var table = elem.children().eq(0)[0];
+            var table = elem.children().eq(0).children().eq(1)[0];
+            var dtable;
+            // var dtable = setupTable(table, scope.filename);
 
-
-
-        // -----------------------
-        // Initialize table etc
-        // -----------------------
-
-        // table itself
-        var table = elem.children().eq(0)[0];
-        var dtable;
-        // var dtable = setupTable(table, scope.filename);
-
-        // legend stuff
-        //scope.labs = ["a","z"];
-        scope.legendText = "Score";
-        scope.colors = [];
-        for(var i=0; i<=100; i+=25){
-            var j=i/100;
-            //scope.labs.push(j);
-            scope.colors.push( {color:colorScale(j), label:j} );
-        }
-        scope.legendData = [
-            {label:"No data", class:"no-data"}
-        ];
-
-        scope.$watchGroup(["facets", "target", "active"], function(attrs) {
-            filters = attrs[0];
-            var target = attrs[1];
-            var act = attrs[2];
-            if (scope.active !== whoiam) {
-                return;
+            // legend stuff
+            //scope.labs = ["a","z"];
+            scope.legendText = "Score";
+            scope.colors = [];
+            for(var i=0; i<=100; i+=25){
+                var j=i/100;
+                //scope.labs.push(j);
+                scope.colors.push( {color:colorScale(j), label:j} );
             }
+            scope.legendData = [
+                {label:"No data", class:"no-data"}
+            ];
 
-            if (dtable) {
-                dtable.ajax.reload();
-            } else {
-                dtable = setupTable(table, target, scope.filename);
-            }
-        });
+            // Download the whole table
+            scope.downloadTable = function () {
 
-        // TODO: This is firing a second time the table creation. Make sure only one table is created at a time
-        /*
-        * Watch for changes in the datatypes.
-        * This is fired also at initization:
-        * no need to watch for changes to target,
-        * so we only have one call (might need to check in the future though).
-        * We're also no longer removing/destroying the table
-        * which is only created at initialization, again removing the need
-        * to watch out for double created tables...
-        */
-        /*scope.$watch( function () { return attrs.datatypes; }, function (dts) {
+                var size = 10000;
+                // First make a call to know how many rows there are:
+                var optsPreFlight = {
+                    target: scope.target,
+                    outputstructure: "flat",
+                    facets: false,
+                    size: 1
+                };
+                optsPreFlight = cttvAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
+                cttvAPIservice.getAssociations(optsPreFlight)
+                    .then (function (resp) {
+                        var total = resp.body.total;
 
-            dts = JSON.parse(dts);
+                        function getNextChunk (size, from) {
+                            var opts = {
+                                target: scope.target,
+                                outputstructure: "flat",
+                                facets: false,
+                                format: "csv",
+                                size: size,
+                                fields: ["disease.efo_info.label", "association_score.overall", "association_score.datatypes.genetic_association", "association_score.datatypes.somatic_mutation", "association_score.datatypes.known_drug", "association_score.datatypes.affected_pathway", "association_score.datatypes.rna_expression", "association_score.datatypes.literature", "association_score.datatypes.animal_model", "disease.efo_info.therapeutic_area.labels"],
+                                from: from
+                            };
+                            opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
 
-            updateTable(dtable, dts)
-            .then(
-                function () {
-                    dtable.columns().eq(0).each (function (i) {
-
-                        // first headers are "Disease", "EFO", "TA EFO", "Association score" and last one is "Therapeutic area"
-                        if (i>3 && i<11) {
-                            var column = dtable.column(i);
-                            if (hasDatatype(column.header().textContent, _.keys(dts))) {
-                                column.visible(true);
-                            } else {
-                                column.visible(false);
-                            }
+                            return cttvAPIservice.getAssociations(opts)
+                                .then (function (resp) {
+                                    var moreText = resp.body;
+                                    if (from>0) {
+                                        // Not in the first page, so remove the header row
+                                        moreText = moreText.split("\n").slice(1).join("\n");
+                                    }
+                                    totalText += moreText;
+                                    return totalText;
+                                });
                         }
 
-                    });
-                },
-                cttvAPIservice.defaultErrorHandler
-            );
+                        var promise = $q(function (resolve, reject) {
+                            resolve ("");
+                        });
+                        var totalText = "";
+                        var promises = [];
+                        for (var i=0; i<total; i+=size) {
+                            promises.push ({
+                                    from: i,
+                                    total: size
+                                });
+                            // promises.push(getNextChunk(size, i));
+                        }
+                        promises.forEach(function (p) {
+                            promise = promise.then (function () {
+                                return getNextChunk(p.total, p.from);
+                            });
+                        });
+                        promise.then (function (res) {
+                            var hiddenElement = document.createElement('a');
+                            hiddenElement.href = 'data:attachment/csv,' + encodeURI(totalText);
+                            hiddenElement.target = '_blank';
+                            hiddenElement.download = scope.filename + ".csv";
+                            hiddenElement.click();
+                        });
 
-            // Hide the columns that are filtered out
-        });*/
+                    }, cttvAPIservice.defaultErrorHandler);
+            };
 
-        // scope.$watch( 'facets', function (fct) {
-            // updateTable(dtable, fct)
-            // // TODO: remove this (column hiding code) once the API returns full row data:
-            // .then(
-            //     function () {
-            //
-            //         /*var dts = JSON.parse(attrs.datatypes);
-            //         dtable.columns().eq(0).each (function (i) {
-            //             //first headers are "Disease", "EFO", "TA EFO", "Association score" and last one is "Therapeutic area"
-            //             if (i>3 && i<11) {
-            //                 var column = dtable.column(i);
-            //                 if (hasDatatype(column.header().textContent, _.keys(dts))) {
-            //                     column.visible(true);
-            //                 } else {
-            //                     column.visible(false);
-            //                 }
-            //             }
-            //
-            //         });*/
-            //     },
-            //     cttvAPIservice.defaultErrorHandler
-            // );
-        // });
+            scope.$watchGroup(["facets", "target", "active"], function(attrs) {
+                filters = attrs[0];
+                var target = attrs[1];
+                var act = attrs[2];
+                if (scope.active !== whoiam) {
+                    return;
+                }
 
-        // scope.$watch (function () { return attrs.focus; }, function (val) {
-        //     if (val === "None") {
-        //         return;
-        //     }
-        //
-        //     if (dtable) {
-        //         if ((val === "cttv_disease") || (val === "cttv_source")) {
-        //             val = "";
-        //         }
-        //         dtable
-        //             .column(2)
-        //             .search(val)
-        //             .draw();
-        //     }
-        // });
+                if (dtable) {
+                    dtable.ajax.reload();
+                } else {
+                    dtable = setupTable(table, target, scope.filename);
+                }
+            });
 
-        // Watch for filename changes
-        // when available, we update the option for the CSV button, via a little hack:
-        // we update the button action, wrapping the original action in a call where the 4th argument is updated with the correct title
-        // scope.$watch( 'filename', function(val){
-        //     if(val){
-        //         // replace spaces with underscores
-        //         val = val.split(" ").join("_");
-        //
-        //         // update the export function to
-        //         var act = dtable.button(".buttons-csv").action();   // the original export function
-        //
-        //         dtable.button(".buttons-csv").action(
-        //             function(){
-        //                 //var opts = arguments[3];
-        //                 //opts.title = val;
-        //                 //act(arguments[0], arguments[1], arguments[2], opts);
-        //                 arguments[3].title = val;
-        //                 act.apply(this, arguments);
-        //             }
-        //         );
-        //
-        //     }
-        // });
+        } // end link
 
-    } // end link
-
-}; // end return
+    }; // end return
 
 }]);    // end directive cttvTargetAssociationsTable

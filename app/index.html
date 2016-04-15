@@ -81,10 +81,10 @@
 
     </head>
 
-    <body>
+    <body id="cttv-page-app">
 
 
-        <div class="cttv-page-wrapper" id="cttv-page-app">
+        <div class="cttv-page-wrapper">
 
             <!-- main page content -->
             <div class="cttv-main-container">
@@ -167,6 +167,11 @@
 
                 <!-- Authentication error -->
                 <alert type="danger" ng-show="showApiErrorMsg" ng-cloak>Your session has expired, reload the page to authenticate again
+                    <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+                </alert>
+
+                <!-- API ERROR 500 -->
+                <alert type="danger" ng-show="showApiError500" close="showApiError500=false" ng-cloak>A problem retrieving data has occurred. Please try to reload the page. If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a>
                     <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
                 </alert>
 
