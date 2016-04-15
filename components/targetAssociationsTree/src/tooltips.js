@@ -111,8 +111,8 @@ var tooltips = function () {
         // }
 
         var leafTooltip = tnt_tooltip.list()
-        .id(1)
-        .width(tooltip_width);
+            .id(1)
+            .width(tooltip_width);
         // Hijack tooltip's fill callback
         var origFill = leafTooltip.fill();
 
@@ -140,7 +140,7 @@ var tooltips = function () {
             flowerView
                 .diagonal(150)
                 .values(flowerData);
-            flowerView(this.select("div .tnt_flowerView").node());
+            flowerView(d3.select(this).select("div .tnt_flowerView").node());
         });
 
         leafTooltip.call(this, obj);

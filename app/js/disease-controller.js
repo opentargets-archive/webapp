@@ -13,7 +13,6 @@ angular.module('cttvControllers')
         })
         .then (function (resp) {
             var data = resp.body;
-            console.log(resp);
             var paths = [];
             for (var i=0; i<data.path.length; i++) {
                 // data.path[i].shift();

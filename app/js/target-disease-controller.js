@@ -201,7 +201,6 @@
         function processFlowerData(data){
             var fd = [];
 
-            console.log(cttvConsts);
             for (var i=0; i<cttvConsts.datatypesOrder.length; i++) {
                 var dkey = cttvConsts.datatypes[cttvConsts.datatypesOrder[i]];
                 var key = cttvConsts.datatypesOrder[i];
@@ -1358,7 +1357,6 @@
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
-                        console.log(resp);
 
                         if( resp.body.data ){
                             $scope.search.literature.total = resp.body.total;

@@ -250,7 +250,7 @@ angular.module('cttvDirectives')
         },
 
         template: '<div>'
-        + ' <div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as .csv"></span></a></div></div>'
+        + ' <div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CVS"></span></a></div></div>'
         +'  <cttv-matrix-table></cttv-matrix-table>'
         +'  <cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
         +'  <cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
@@ -260,18 +260,6 @@ angular.module('cttvDirectives')
             // table itself
             var table = elem.children().eq(0).children().eq(1)[0];
             var dtable;
-
-            // Populate the download button
-            // var downloadDiv = document.getElementById("cttvTableDownloadIcon");
-            // console.log(elem);
-            // console.log(downloadDiv);
-            // var iconLink = document.createElement("a");
-            // iconLink.className = "btn btn-default buttons-csv buttons-html5";
-            // var innerSpan = document.createElement("span");
-            // innerSpan.className = "fa fa-download";
-            // innerSpan.title = "Download as CSV";
-            // iconLink.appendChild(innerSpan);
-            // downloadDiv.appendChild(iconLink);
 
             // legend stuff
             scope.legendText = "Score";
@@ -285,8 +273,9 @@ angular.module('cttvDirectives')
                 {label:"No data", class:"no-data"}
             ];
 
-            // Download the whole table (for now the first 1000 rows)
+            // Download the whole table
             scope.downloadTable = function () {
+                var size = 10000;
                 // First make a call to know how many rows there are:
                 var optsPreFlight = {
                     disease: scope.disease,
@@ -298,64 +287,58 @@ angular.module('cttvDirectives')
                 cttvAPIservice.getAssociations(optsPreFlight)
                     .then (function (resp) {
                         var total = resp.body.total;
-                        var promises = [];
-                        for (var i=0; i<total; i+=1000) {
+
+                        function getNextChunk (size, from) {
                             var opts = {
                                 disease: scope.disease,
                                 outputstructure: "flat",
                                 facets: false,
                                 format: "csv",
-                                size: 1000,
-                                from: i+1
+                                size: size,
+                                fields: ["target.gene_info.symbol", "association_score.overall", "association_score.datatypes.genetic_association", "association_score.datatypes.somatic_mutation", "association_score.datatypes.known_drug", "association_score.datatypes.affected_pathway", "association_score.datatypes.rna_expression", "association_score.datatypes.literature", "association_score.datatypes.animal_model", "target.gene_info.name"],
+                                from: from
                             };
                             opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
-                            promises.push(cttvAPIservice.getAssociations(opts));
 
-                            $q.all(promises)
-                            .then (function (resps) {
-                                // Don't know why .all doesn't wait for all the promises to be back
-                                if (resps.length === promises.length) {
-                                    var total = "";
-                                    for (var i=0; i<resps.length; i++) {
-                                        var resp = resps[i];
-                                        var moreText = resp.body;
-                                        if (i>0) { // We are not in the first "page"
-                                            // Remove the first line of text
-                                            moreText = moreText.split("\n").slice(1).join("\n");
-                                        }
-                                        total += moreText;
+                            return cttvAPIservice.getAssociations(opts)
+                                .then (function (resp) {
+                                    console.log(from);
+                                    var moreText = resp.body;
+                                    if (from>0) {
+                                        // Not in the first page, so remove the header row
+                                        moreText = moreText.split("\n").slice(1).join("\n");
                                     }
-                                    var hiddenElement = document.createElement('a');
-                                    hiddenElement.href = 'data:attachment/csv,' + encodeURI(total);
-                                    hiddenElement.target = '_blank';
-                                    hiddenElement.download = scope.filename + ".csv";
-                                    hiddenElement.click();
-                                }
-                            }, cttvAPIservice.defaultErrorHandler);
+                                    totalText += moreText;
+                                    return totalText;
+                                });
                         }
-                    });
 
-                // var opts = {
-                //     disease: scope.disease,
-                //     outputstructure: "flat",
-                //     facets: false,
-                //     format: "csv",
-                //     size:1000
-                // };
-                // opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
-                // cttvAPIservice.getAssociations(opts)
-                //     .then(function(resp){
-                //             $log.log("Export data");
-                //             console.log(scope.filename + ".csv");
-                //             var hiddenElement = document.createElement('a');
-                //             hiddenElement.href = 'data:attachment/csv,' + encodeURI(resp.body);
-                //             hiddenElement.target = '_blank';
-                //             hiddenElement.download = scope.filename + ".csv";
-                //             hiddenElement.click();
-                //         },
-                //         cttvAPIservice.defaultErrorHandler
-                //     );
+                        var promise = $q(function (resolve, reject) {
+                            resolve ("");
+                        });
+                        var totalText = "";
+                        var promises = [];
+                        for (var i=0; i<total; i+=size) {
+                            promises.push ({
+                                    from: i,
+                                    total: size
+                                });
+                            // promises.push(getNextChunk(size, i));
+                        }
+                        promises.forEach(function (p) {
+                            promise = promise.then (function () {
+                                return getNextChunk(p.total, p.from);
+                            });
+                        });
+                        promise.then (function (res) {
+                            var hiddenElement = document.createElement('a');
+                            hiddenElement.href = 'data:attachment/csv,' + encodeURI(totalText);
+                            hiddenElement.target = '_blank';
+                            hiddenElement.download = scope.filename + ".csv";
+                            hiddenElement.click();
+                        });
 
+                    }, cttvAPIservice.defaultErrorHandler);
             };
 
             scope.$watchGroup(["filters", "disease"], function (attrs) {
