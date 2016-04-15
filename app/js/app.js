@@ -53,13 +53,15 @@ angular.module('cttvApp', [
 
             // Docs
             when('/faq', {
-                templateUrl: 'docs/faq.html'
+                //templateUrl: 'docs/faq.html'
+                templateUrl: 'partials/faq.html'
             }).
             when('/data_sources', {
                 templateUrl: 'docs/data_sources.html'
             }).
             when('/terms_of_use', {
-                templateUrl: 'docs/terms_of_use.html',
+                //templateUrl: 'docs/terms_of_use.html',
+                templateUrl: 'partials/terms_of_use.html',
             }).
             when('/release-notes', {
                 templateUrl: 'partials/release-notes.html'
@@ -68,7 +70,8 @@ angular.module('cttvApp', [
                 templateUrl: 'docs/scoring.html'
             }).
             when('/about', {
-                templateUrl: 'docs/about.html'
+                //templateUrl: 'docs/about.html'
+                templateUrl: 'partials/about.html'
             }).
             when('/personal-data-collected-examples', {
                 templateUrl: 'docs/personal-data-collected-examples.html'
