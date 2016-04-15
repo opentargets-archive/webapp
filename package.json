@@ -55,7 +55,7 @@
     "cttv.flowerView": "0.0.0",
     "cttv.genome": "0.0.9",
     "cttv.spinner": "file:components/spinner",
-    "cttv.targetAssociationsBubbles": "0.0.3",
+    "cttv.targetAssociationsBubbles": "0.0.4",
     "cttv.targetAssociationsTree": "file:components/targetAssociationsTree",
     "cttv.targetGeneTree": "file:components/targetGeneTree",
     "tnt.genome": "0.1.5",
