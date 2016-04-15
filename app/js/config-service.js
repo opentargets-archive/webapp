@@ -34,7 +34,7 @@ angular.module('cttvServices').
                 animal_model : [dbs.PHENODIGM],
                 literature : [dbs.EPMC]
             },
-            dumps_link: "/dumps/"
+            dumps_link: "/downloads/data"
         };
 
 

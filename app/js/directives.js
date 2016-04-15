@@ -1457,7 +1457,7 @@ angular.module('cttvDirectives', [])
                         +     '</li>'
 
                         +     '<li><a href="/documentation/api">API</a></li>' // must force target to link outside of Angular routing
-                        +     '<li><a href="{{dumps_link}}" target="_self">Downloads</a></li>'
+                        +     '<li><a href="{{dumps_link}}">Downloads</a></li>'
                         //+     '<li><a href="/documentation/components">Docs</a></li>'
                         + '</ul>',
             link: function(scope, element, attrs) {

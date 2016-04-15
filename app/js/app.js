@@ -83,7 +83,7 @@ angular.module('cttvApp', [
             when('/documentation/components', {
                 templateUrl: 'partials/docs.html'
             }).
-            when('/dumps', {
+            when('/downloads/data', {
                 templateUrl: 'partials/dumps.html'
             }).
             when('/documentation/api', {
