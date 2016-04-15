@@ -11,6 +11,7 @@ angular.module('cttvDirectives')
         var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
         var gat;
+        var currTarget;
 
         return {
 
@@ -43,6 +44,12 @@ angular.module('cttvDirectives')
                     if (scope.active !== whoiam) {
                         return;
                     }
+
+                    // Remove the current tree if the target has changed
+                    if (target !== currTarget) {
+                        gat = undefined;
+                    }
+                    currTarget = target;
 
                     var opts = {
                         target: scope.target,
@@ -122,17 +129,18 @@ angular.module('cttvDirectives')
                                 var fView = flowerView()
                                 .fontsize(9)
                                 .diagonal(100);
-
                                 gat = geneAssociationsTree()
                                     .data(data)
                                     //.datatypes(dts)
-                                    // .names(cttvConsts)
+                                    .names(cttvConsts)
+                                    .filters(scope.facets)
                                     .diameter(900)
                                     .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
                                     .target(scope.target)
                                     .therapeuticAreas(tas)
-                                    .hasLegendScale(false)
-                                gat(fView, elem.children().eq(0)[0]); //elem[0]);
+                                    .hasLegendScale(false);
+
+                                gat(fView, elem.children().eq(0)[0]);
                             },
                             cttvAPIservice.defaultErrorHandler
                         );

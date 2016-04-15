@@ -421,13 +421,13 @@ var geneAssociationsTree = function () {
     //     return this;
     // };
 
-    // theme.names = function (lbs) {
-    //     if (!arguments.length) {
-    //         return tooltips.names();
-    //     }
-    //     tooltips.names(lbs);
-    //     return this;
-    // };
+    theme.names = function (lbs) {
+        if (!arguments.length) {
+            return tooltips.names();
+        }
+        tooltips.names(lbs);
+        return this;
+    };
 
     // Legend text
     theme.legendText = function (t) {
@@ -439,14 +439,20 @@ var geneAssociationsTree = function () {
     };
 
     theme.hasLegendScale = function(b){
+        if (!arguments.length) {
+            return config.hasLegendScale;
+        }
         config.hasLegendScale = b;
         return this;
-    }
+    };
 
     theme.hasLegendShape = function(b){
+        if (!arguments.length) {
+            return config.hasLegendScale;
+        }
         config.hasLegendShape = b;
         return this;
-    }
+    };
 
     // function zoomTo (efo) {
     //     var root = treeVis.root();
@@ -468,14 +474,14 @@ var geneAssociationsTree = function () {
     //     return this;
     // };
 
-    // theme.filters = function (f) {
-    //     if (!arguments.length) {
-    //         return tooltips.filters();
-    //     }
-    //     tooltips.filters(f);
-    //     return this;
-    // };
-    //
+    theme.filters = function (f) {
+        if (!arguments.length) {
+            return tooltips.filters();
+        }
+        tooltips.filters(f);
+        return this;
+    };
+
     function setBranchLengths (treeVis) {
         // Branch lengths:
         // First pass: Get the max depth:
