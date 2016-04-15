@@ -67,7 +67,8 @@ angular.module('cttvApp', [
                 templateUrl: 'partials/release-notes.html'
             }).
             when('/scoring', {
-                templateUrl: 'docs/scoring.html'
+                //templateUrl: 'docs/scoring.html'
+                templateUrl: 'partials/scoring.html'
             }).
             when('/about', {
                 //templateUrl: 'docs/about.html'
