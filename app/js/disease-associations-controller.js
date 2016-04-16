@@ -63,13 +63,16 @@ angular.module('cttvControllers')
      *      datatypes: "known_drug",
      *      pathway_type: [ "REACT_111102", "REACT_116125", "REACT_6900" ]
      * }
-     * getData(filters);
+     * getFacets(filters);
      */
-    var getData = function(filters){
-        $log.log("getData()");
+    var getFacets = function(filters){
+        $log.log("getFacets()");
         var opts = {
             disease: $scope.search.query,
-            datastructure: "flat",
+            outputstructure: "flat",
+            facets: true,
+            // direct: false,
+            size:1
         };
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
@@ -85,17 +88,24 @@ angular.module('cttvControllers')
 
                 // 1: set the facets
                 // we must do this first, so we know which datatypes etc we actually have
-                $log.log(resp.body.status[0]);
+                // $log.log(resp.body.status[0]);
                 $log.log(resp.body);
                 cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
                 // cttvFiltersService.status(resp.body.status);
 
                 // set the data
-                $scope.data = resp.body.data;
-                $scope.data.selected = {datatypes: cttvFiltersService.getSelectedFiltersRaw("datatypes")};
+                // $scope.data = resp.body.data;
+                // $scope.data.selected = {datatypes: cttvFiltersService.getSelectedFiltersRaw("datatypes")};
+                $scope.filters = filters;
+
+                // The label of the diseaes in the header
+                $scope.search.label = resp.body.data[0].disease.efo_info.label;
+
+                // The filename to download
+                $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(" ").join("_");
 
                 // set the total?
-                $scope.search.total = resp.body.data.length; //resp.body.total;
+                $scope.search.total = resp.body.total; //resp.body.total;
             },
             cttvAPIservice.defaultErrorHandler
         );
@@ -109,34 +119,15 @@ angular.module('cttvControllers')
     // when the search change, get new data
     $scope.$on('$routeUpdate', function(){
         $log.log("onRouteUpdate");
-        getData( cttvFiltersService.parseURL() );
+        getFacets( cttvFiltersService.parseURL() );
     });
-
 
 
     // ---------------------------
     //  Flow
     // ---------------------------
 
-
-
-    // First off, get disease specific info to populate the top of the page
-    // This is independent of other data, so we just fire that here
-    cttvAPIservice.getDisease( {
-            code:$scope.search.query
-        } ).
-        then(
-            function(resp) {
-                $scope.search.label = resp.body.label;
-                $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.label.split(" ").join("_");
-            },
-            cttvAPIservice.defaultErrorHandler
-        );
-
-
-
     //
-    // Then onto the data
     // No longer need to get unfiltered data first and all that
     // We just get the data and display it, but:
     //  1. Must set the default datatypes for this page
@@ -144,7 +135,7 @@ angular.module('cttvControllers')
     //  3. Listen for page changes
 
     // Option 1: get the data without caring about filtered out mouse data
-    getData( cttvFiltersService.parseURL() );
+    getFacets( cttvFiltersService.parseURL() );
 
     // - OR -
 
@@ -158,9 +149,7 @@ angular.module('cttvControllers')
         // THERE IS A SEARCH
 
         // make the call for data with the selected filters
-        getData( cttvFiltersService.parseURL() );
+        getFacets( cttvFiltersService.parseURL() );
     }*/
-
-
 
 }]);

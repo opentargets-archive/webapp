@@ -2,8 +2,9 @@
 <html ng-app="cttvApp">
     <head>
 
-        <title ng-bind-template="{{viewTitle ? viewTitle+' - ' : ''}}CTTV Platform"></title>
-        <link rel="shortcut icon" href="imgs/favicons/CTTV_favicon_trans.png" type="image/png" />
+        <title ng-bind-template="{{viewTitle ? viewTitle+' - ' : ''}}Target Validation Platform"></title>
+
+        <link rel="shortcut icon" href="imgs/favicons/OT_favicon.png" type="image/png" />
         <meta http-equiv="content-type" content="text/html; charset=UTF8">
         <meta name="google-site-verification" content="L6ztwjop7Soke4dHLg6YAEwUK6IrTKtQEp8cIUamlKg" />
 
@@ -22,13 +23,12 @@
         })();
         </script><![endif]-->
 
-        <title ng-bind-template="CTTV Core{{viewTitle ? ' - '+viewTitle : ''}}"></title>
 
         <link rel="stylesheet" href="build/cttvWebapp-3rdParty.css?v=08122015" />
         <!-- Don't bundle font-awexome.min.css or the woff files would be broken -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <!-- <link href="build/fontawesome/css/font-awesome.min.css?v=16112015" rel="stylesheet" /> -->
-        <link href="build/bootstrap/dist/css/bootstrap.min.css?v=08122015" rel="stylesheet" />
+        <!-- <link href="build/fontawesome/css/font-awesome.min.css?v=16112015" rel="stylesheet" />
+        <link href="build/bootstrap/dist/css/bootstrap.min.css?v=08122015" rel="stylesheet" />-->
         <link rel="stylesheet" href="build/cttvWebapp.min.css?v=08122015" />
 
         <!-- Components -->
@@ -40,7 +40,6 @@
         <!-- <link href="node_modules/cttv.flowerView/build/flowerView.css" rel="stylesheet"/> -->
         <!-- <link rel="stylesheet" href="css/app.css?v=16112015"> -->
         <!-- <link rel="stylesheet" href="node_modules/tnt.genome/build/index.css"> -->
-
 
         <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
         <script type="text/javascript" src="js/ie_console_noop.js?v=08122015"></script>
@@ -77,71 +76,92 @@
 
         <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'> -->
 
+        <!-- App CSS at the end, to override anything required
+        <link rel="stylesheet" href="build/cttvWebapp.min.css?v=08122015" />-->
+
     </head>
 
-    <body>
+    <body id="cttv-page-app">
+
+
         <div class="cttv-page-wrapper">
 
             <!-- main page content -->
             <div class="cttv-main-container">
 
-                <!-- Masthead (search) -->
-                <div class="masthead ng-cloak" ng-show="location.path()!=='/'" ng-controller="MastheadCtrl">
-                    <div class="container">
-                        <div class="row">
 
-                            <div class="col-xs-5">
-                                <!-- CTTV logo -->
-                                <!-- <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>-->
-                                <a href="/" style="display:block; height:34px;"><img style="top:2px; position:relative;" src="imgs/logo/cttv_logo_text_color_205x35.png"/><span class="cttv-logotype"></span></a>
-                            </div>
+                <div ng-controller="MastheadCtrl">
 
-                            <div class="col-xs-2">
-                            </div>
-
-                            <div class="col-xs-5" ng-controller="SearchBoxCtrl">
-                                <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
-                                    <fieldset>
-                                        <div class="has-feedback search-form">
-
-
-
-                                            <!-- Search box + search button -->
-                                            <div class="input-group">
-
-                                                <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
-
-                                                <div class="input-group-btn">
-                                                    <button type="submit" class="btn btn-primary">
-                                                        <span class="fa fa-search fa-lg"></span>
-                                                    </button>
-                                                </div>
-
-                                            </div>
-
-                                            <!-- Search in progress spinner -->
-                                            <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
-
-                                            <!-- Suggestions box -->
-                                            <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
-
-
-                                            <!--<span class="small">
-                                                <i>
-                                                    Examples: <a href="/search?q=braf">BRAF</a>,
-                                                    <a href="/search?q=asthma">asthma</a>,
-                                                    <a href="/search?q=pten">PTEN</a>
-                                                </i>
-                                            </span>-->
-
-
-                                        </div>
-                                    </fieldset>
-                                </form>
-                            </div>
-
+                    <!-- Masthead (homepage) -->
+                    <div ng-if="location.path()=='/'" class="ng-cloak masthead-navigation-container">
+                        <div class="container">
+                            <masthead-navigation-menu></masthead-navigation-menu>
                         </div>
                     </div>
+
+                    <!-- Masthead (other pages) -->
+                    <div ng-if="location.path()!=='/'" class="masthead ng-cloak">
+                        <div class="container">
+
+                            <div class="row" >
+
+                                <div class="col-xs-2">
+                                    <!-- CTTV logo -->
+                                    <!-- <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>-->
+                                    <div class="ot_logo">
+                                        <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_130x30_w.svg" width="130px" height="30px"/></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-6 masthead-navigation-container">
+                                    <masthead-navigation-menu></masthead-navigation-menu>
+                                </div>
+
+                                <div class="col-xs-4" ng-controller="SearchBoxCtrl">
+                                    <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
+                                        <fieldset>
+                                            <div class="has-feedback search-form">
+
+
+
+                                                <!-- Search box + search button -->
+                                                <div class="input-group input-group-sm">
+
+                                                    <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+
+                                                    <div class="input-group-btn">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <span class="fa fa-search fa-lg"></span>
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- Search in progress spinner -->
+                                                <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner search-form-spinner-sm" ng-show="search.progress"></span>
+
+                                                <!-- Suggestions box -->
+                                                <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
+
+
+                                                <!--<span class="small">
+                                                    <i>
+                                                        Examples: <a href="/search?q=braf">BRAF</a>,
+                                                        <a href="/search?q=asthma">asthma</a>,
+                                                        <a href="/search?q=pten">PTEN</a>
+                                                    </i>
+                                                </span>-->
+
+
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- End Masthead -->
 
@@ -150,7 +170,14 @@
                     <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
                 </alert>
 
-                <div class="container">
+                <!-- API ERROR 500 -->
+                <alert type="danger" ng-show="showApiError500" close="showApiError500=false" ng-cloak>A problem retrieving data has occurred. Please try to reload the page. If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a>
+                    <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+                </alert>
+
+                <!--<div class="container">-->
+                <div>
+
                     <!-- Remove beta ribbon -->
                     <!-- <div id="cttv-beta-ribbon" class="cttv-beta-ribbon"></div> -->
 
@@ -161,6 +188,7 @@
                     </div>
                     <![endif]-->
                     <!-- javascript disabled ?-->
+
                     <noscript>
                         <div class="alert alert-danger">
                             Javascript is currently disabled or is not supported by this browser. This page relies on JavaScript to present the data in all its glory. Please enable JavaScript for full functionality.
@@ -168,6 +196,8 @@
                     </noscript>
 
                     <!-- Content -->
+
+
 
                     <div ng-view autoscroll="true"></div>
 
@@ -186,10 +216,12 @@
 
 
                         <div class="col-sm-15 col-sm-3">
-                            <h6>CTTV Platform</h6>
-                            <p>Version 1.0 - 2015-12-08</p>
+                            <h6>Platform</h6>
+                            <p>Version 1.1 - 2016-04-18</p>
                             <p><a href="/release-notes">Release notes</a></p>
                             <p><a href="/about">About</a></p>
+                            <p><a href="/documentation/api">API</a></p>
+                            <!-- <p><a href="/documentation/components">Docs</a></p> -->
                             <p><a href="/terms_of_use">Terms of use</a></p>
                         </div>
 
@@ -198,23 +230,24 @@
                             <p><a href="http://www.ebi.ac.uk">EMBL-EBI</a></p>
                             <p><a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a></p>
                             <p><a href="http://www.gsk.com">GSK</a></p>
+                            <p><a href="https://www.biogen.com/">Biogen</a></p>
                         </div>
 
                         <div class="col-sm-15 col-sm-3">
-                            <h6>Support</h6>
+                            <h6>Help</h6>
                             <p><a href="/faq"><i class="fa fa-question-circle"></i> FAQs</a></p>
-                            <p><span class="fa fa-envelope"></span> <a href="mailto:support@targetvalidation.org?Subject=CTTV%20Core%20Platform%20-%20help%20request">support<span class="fa fa-at"></span>targetvalidation.org</a></p>
+                            <p><a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x25;&#x32;&#x30;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x25;&#x32;&#x30;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x25;&#x32;&#x30;&#x2D;&#x25;&#x32;&#x30;&#x68;&#x65;&#x6C;&#x70;&#x25;&#x32;&#x30;&#x72;&#x65;&#x71;&#x75;&#x65;&#x73;&#x74;"><span class="fa fa-envelope"></span> support<span class="fa fa-at"></span>targetvalidation.org</a></p>
                         </div>
 
                         <div class="col-sm-15 col-sm-3">
                             <h6>Contact</h6>
                             <p><!-- <span class="fa fa-phone"></span> +44 (0)1223 494 665<br /> --></p>
-                            <p><span class="fa fa-envelope"></span> <a href="mailto:contact@targetvalidation.org">contact<span class="fa fa-at"></span>targetvalidation.org</a></p>
-                            <p><span class="fa fa-twitter"></span> <a href="http://twitter.com/targetvalidate"><span class="fa fa-at"></span>targetvalidate</a></p>
+                            <p><a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x63;&#x6F;&#x6E;&#x74;&#x61;&#x63;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;"><span class="fa fa-envelope"></span> contact<span class="fa fa-at"></span>targetvalidation.org</a></p>
+                            <p><a href="http://twitter.com/targetvalidate"><span class="fa fa-twitter"></span> <span class="fa fa-at"></span>targetvalidate</a></p>
                         </div>
 
                         <div class="col-sm-15 col-sm-3">
-                            <h6><a href="http://about.targetvalidation.org">Centre for Therapeutic Target Validation</a></h6>
+                            <h6><a href="http://about.targetvalidation.org">Open Targets</a></h6>
                             <p><a href="http://about.targetvalidation.org/about">Overview</a></p>
                             <p><a href="http://about.targetvalidation.org/projects">Projects</a></p>
                             <p><a href="http://about.targetvalidation.org/news">News</a></p>
@@ -232,6 +265,7 @@
             <!-- Angular && web app -->
             <script src="build/cttvWebapp-3rdParty.js?v=08122015" type="text/javascript"></script>
             <script src="build/cttvWebapp.min.js?v=08122015" type="text/javascript"></script> <!-- extra directive -->
+
             <!-- <script type="text/javascript" src="bower_components/angular/angular.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="bower_components/angular-route/angular-route.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js?v=16112015"></script> -->
@@ -280,7 +314,7 @@
             <!-- PMC Citation -->
             <!-- <link type="text/css" rel="stylesheet" href="node_modules/biojs-vis-pmccitation/css/style.css"/> -->
             <!-- <script type="text/javascript" src="node_modules/biojs-vis-pmccitation/build/biojsvispmccitation.js"></script> -->
-            <link type="text/css" rel="stylesheet" href="vendor/biojsvispmccitation/style.css?v=08122015"/>
+            <!-- <link type="text/css" rel="stylesheet" href="vendor/biojsvispmccitation/style.css?v=08122015"/> -->
             <!-- <script type="text/javascript" src="vendor/biojsvispmccitation/biojsvispmccitation.js"></script> -->
 
             <!-- Protein viewer -->

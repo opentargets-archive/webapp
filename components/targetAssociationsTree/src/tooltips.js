@@ -31,7 +31,7 @@ var tooltips = function () {
 
         var obj = {};
         obj.header = "";
-        obj.body = node.property(function (n) { return n.disease.name }) + " (" + node.property("association_score").toFixed(2) + ")";
+        obj.body = node.property(function (n) { return n.disease.efo_info.label; }) + " (" + node.property("__association_score").toFixed(2) + ")";
         show_deferred.call(this, obj, ev);
     };
 
@@ -43,8 +43,8 @@ var tooltips = function () {
     t.click = function (node) {
         //console.log(filters);
         var obj = {};
-        var score = node.property("association_score");
-        obj.header = node.property(function (n) { return n.disease.name });+ " (Association score: " + score.toFixed(2) + ")";
+        var score = node.property("__association_score");
+        obj.header = node.property(function (n) { return n.disease.efo_info.label; });+ " (Association score: " + score.toFixed(2) + ")";
         var loc = "/evidence/" + target + "/" +node.property(function (n) { return n.disease.id }) + (filters.score_str ? "?score_str=" + filters.score_str[0] : "");
         //var loc = "/evidence/" + target + "/" + node.property("efo_code") + '?score_str=' + filters.score_str[0];
         //obj.body="<div></div><a href=" + loc + ">View evidence details</a><br/><a href=''>Zoom on node</a>";
@@ -111,24 +111,27 @@ var tooltips = function () {
         // }
 
         var leafTooltip = tnt_tooltip.list()
-        .id(1)
-        .width(tooltip_width);
+            .id(1)
+            .width(tooltip_width);
         // Hijack tooltip's fill callback
         var origFill = leafTooltip.fill();
 
         // Pass a new fill callback that calls the original one and decorates with flowers
         leafTooltip.fill (function (data) {
             origFill.call(this, data);
-            var nodeDatatypes = node.property("datatypes");
+            var nodeDatatypes = node.property(function (d) {
+                return d.association_score.datatypes;
+            });
 
             var flowerData = [];
             for (var i=0; i<names.datatypesOrder.length; i++) {
                 var dkey = names.datatypes[names.datatypesOrder[i]];
                 var key = names.datatypesOrder[i];
+                var datasource = nodeDatatypes[dkey];
 
-                var datasource = lookDatasource(nodeDatatypes, dkey);
+                // var datasource = lookDatasource(nodeDatatypes, dkey);
                 flowerData.push({
-                    "value": datasource.score,
+                    "value": datasource,
                     "label": names.datatypesLabels[key],
                     "active": true,//hasActiveDatatype(names.datatypes[key])
                 });
@@ -137,26 +140,26 @@ var tooltips = function () {
             flowerView
                 .diagonal(150)
                 .values(flowerData);
-            flowerView(this.select("div .tnt_flowerView").node());
+            flowerView(d3.select(this).select("div .tnt_flowerView").node());
         });
 
         leafTooltip.call(this, obj);
 
-        function lookDatasource (arr, dsName) {
-            for (var i=0; i<arr.length; i++) {
-                var ds = arr[i];
-                if (ds.datatype === dsName) {
-                    return {
-                        "count": ds.evidence_count,
-                        "score": ds.association_score
-                    };
-                }
-            }
-            return {
-                "count": 0,
-                "score": 0
-            };
-        }
+        // function lookDatasource (arr, dsName) {
+        //     for (var i=0; i<arr.length; i++) {
+        //         var ds = arr[i];
+        //         if (ds.datatype === dsName) {
+        //             return {
+        //                 "count": ds.evidence_count,
+        //                 "score": ds.association_score
+        //             };
+        //         }
+        //     }
+        //     return {
+        //         "count": 0,
+        //         "score": 0
+        //     };
+        // }
 
         function hasActiveDatatype (checkDatatype) {
             for (var datatype in filters.datatypes) {

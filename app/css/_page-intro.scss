@@ -7,18 +7,75 @@
 
 
 
-.intro-logo{
-    padding-bottom:40px;
+/*
+ * A generic section on the intro page
+ */
+
+.intro-section {
+    padding: 80px 0px;
+}
+
+
+/*
+ * The search section at the top of the page
+ */
+
+.intro-section-search {
+    padding: 140px 0px;
+}
+
+.intro-logo {
+    padding-bottom:60px;
     display: block;
     margin: 0 auto;
 }
 
+
+/*
+ * The stats section
+ */
+
+.intro-section-stats {
+    //background: $clr-ui-background-secondary;
+    padding-top: 0px;
+
+    > .container {
+        max-width: 800px;
+    }
+}
+
+.intro-stats-heading {
+    color:#666;
+    font-weight: 200 !important;
+    text-align: center;
+}
+
+
+
+/*
+ * The statement section
+ */
+
 .intro-content{
     margin-top: 100px;
 }
-
 .intro-divider{
     height:100px;
+}
+
+.intro-section-statement{
+    //max-width:800px;
+    //text-align:center;
+    //margin: auto 0px;
+    background: $clr-ui-background-secondary;
+    background-image: url('/imgs/graphics/ot_advancing_3.png');
+    background-attachment: fixed;
+    background-position: center left;
+    background-repeat: no-repeat;
+    text-align: center;
+    > .container {
+        max-width: 800px
+    }
 }
 
 .intro-statement{
@@ -28,10 +85,12 @@
 
 .intro-statement-heading{
     color:#666;
+    font-weight: 200 !important;
 }
 
 .intro-statement-p{
-    color:#2B8BAC;
+    //color:#2B8BAC;
 }
+
 
 

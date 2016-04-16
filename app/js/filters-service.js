@@ -194,16 +194,16 @@ angular.module('cttvServices').
                     conf.selected = isSelected(collection, obj.key); // && conf.count>0;    // do we want to show disabled items (with count==0) as selected or not?
                     conf.facet = collection;
                     conf.collection = null; //new FilterCollection("","");
-                    if(dtb.datasources){
-                        conf.collection = parseCollection( parseFacetData(cttvConsts.DATASOURCES, dtb.datasources, countsToUse) );
+                    if(dtb.datasource){
+                        conf.collection = parseCollection( parseFacetData(cttvConsts.DATASOURCES, dtb.datasource, countsToUse) );
                     }
                     return conf;
                 });/*.filter( function(obj){
                     // Use a filter function to keep only those returned by the API??
                     return obj.count>0;
                 });*/
-            } else if (collection === cttvConsts.PATHWAY_TYPES){
-                config.label = cttvDictionary.PATHWAY_TYPES;
+            } else if (collection === cttvConsts.PATHWAY){
+                config.label = cttvDictionary.PATHWAY;
                 // pathways
                 config.filters = data.buckets.map(function(obj){
                     var conf = {};
@@ -214,7 +214,7 @@ angular.module('cttvServices').
                     conf.facet = collection;
                     conf.collection = null;
                     if(obj.pathway){
-                        conf.collection = parseCollection( parseFacetData(cttvConsts.PATHWAY_TYPES, obj.pathway, countsToUse) );
+                        conf.collection = parseCollection( parseFacetData(cttvConsts.PATHWAY, obj.pathway, countsToUse) );
                     }
                     return conf;
                 });
@@ -231,7 +231,18 @@ angular.module('cttvServices').
                     conf.collection = null;
                     return conf;
                 });
-
+            } else if (collection === cttvConsts.THERAPEUTIC_AREAS) {
+                // therapeutic area facet
+                config.filters = data.buckets.map(function (obj) {
+                    var conf = {};
+                    conf.key = obj.key;
+                    conf.label = obj.label;
+                    conf.count = obj[countsToUse].value;
+                    conf.facet = collection;
+                    conf.collection = null;
+                    conf.selected = isSelected(collection, obj.key);
+                    return conf;
+                });
             } else if (collection === cttvConsts.DATA_DISTRIBUTION){
                 // score (data_distribution)
                 config.label= cttvDictionary.SCORE;
@@ -517,8 +528,9 @@ angular.module('cttvServices').
          */
         cttvFiltersService.facetTypes = {
             DATATYPES: cttvConsts.DATATYPES,        // 'datatypes'
-            PATHWAYS: cttvConsts.PATHWAY_TYPES,     // 'pathway_type'
-            SCORE: cttvConsts.DATA_DISTRIBUTION    // 'data_distribution'
+            PATHWAYS: cttvConsts.PATHWAY,     // 'pathway_type'
+            SCORE: cttvConsts.DATA_DISTRIBUTION,    // 'data_distribution'
+            THERAPEUTIC_AREAS: cttvConsts.THERAPEUTIC_AREAS // disease
         };
 
 
@@ -584,8 +596,6 @@ angular.module('cttvServices').
             return raw;
         };
 
-
-
         /**
          * Removes ALL selections
          */
@@ -630,7 +640,7 @@ angular.module('cttvServices').
          * @param status [Array] this contains ["ok"] if all facets were computed correctly by the API. In case of errors, it contains the list of facets reporting incorrect values, e.g. ["partial-facet-datatypes"]
          */
         cttvFiltersService.updateFacets = function(facets, countsToUse, status){
-            $log.log("cttvFiltersService.updateFacets()");
+            console.warn("updateFacets");
 
             // if there are no facets, return
             if(!facets){

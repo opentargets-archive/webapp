@@ -17,10 +17,13 @@ var tooltips = function () {
             .id(1);
         var url = cttvApi.url.associations({
             "disease" : efo.efo,
+            "size": 10,
+            "facets": false
             //"expandefo": true
         });
         cttvApi.call(url)
             .then(function (resp) {
+                var size = resp.body.total;
                 var data = resp.body.data;
                 var obj = {};
                 obj.header = efo.label;
@@ -41,19 +44,19 @@ var tooltips = function () {
                 // });
 
                 if (data.length) {
-                    var is_truncated = data.length > 10;
+                    // var is_truncated = data.length > 10;
                     obj.rows.push({
-                        "label" : "<a href=/disease/" + efo.efo + "/associations>" + data.length + " genes associated" + "</a>" + (data.length>10 ? " (Showing the first 10)" : ""),
+                        "label" : "<a href=/disease/" + efo.efo + "/associations>" + size + " genes associated" + "</a>" + (size>10 ? " (Showing the first 10)" : ""),
                         "value" : ""
                     });
                     data.sort(function (a, b) {
-                        return b.association_score - a.association_score;
+                        return b.__association_score - a.__association_score;
                     });
-                    for (var i=0; i<d3.min([data.length, 10]); i++) {
+                    for (var i=0; i<d3.min([size, 10]); i++) {
                         var thisAssociation = data[i];
 
                         obj.rows.push({
-                            "label": "<a href=/target/" + thisAssociation.target.id + "/associations>" + thisAssociation.target.symbol + "</a>",
+                            "label": "<a href=/target/" + thisAssociation.target.id + "/associations>" + thisAssociation.target.gene_info.symbol + "</a>",
                             "value": "<a href=/evidence/" + thisAssociation.target.id + "/" + thisAssociation.disease.id + ">" + "See Evidence"
                         });
                     }

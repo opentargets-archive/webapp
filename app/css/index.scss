@@ -13,6 +13,12 @@
 
 
 /*
+ * Typography
+ */
+@import "typography";
+
+
+/*
  * Extra layout options
  */
 @import "layouts";
@@ -36,10 +42,7 @@
 @import "autocomplete";
 
 
-/*
- * Typography
- */
-@import "typography";
+
 
 
 /*
@@ -73,4 +76,5 @@
  * e.g. tooltips, spinners, etc
  */
 @import "ui-elements";
+
 

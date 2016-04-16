@@ -1,68 +1,61 @@
-<div>
+<div class="partial-page">
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
-    <view-title>{{disease.label+' profile'}}</view-title>
 
     <div class="cttv-content-header">
-        <h3>{{disease.label}}</h3>
+        <div class="container">
+            <h3>{{disease.label}}</h3>
 
-        <p ng-show="disease.label"><a href="/disease/{{disease.efo}}/associations"><span><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span> View associated targets</span></a>
-        </p>
+            <p ng-show="disease.label"><a href="/disease/{{disease.efo}}/associations"><span><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span> View associated targets</span></a>
+            </p>
 
-        <p>
-            <hm-read-more  hm-text="{{disease.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
-        </p>
 
-        <p>
-            Synonyms: <span class="cttv-profile-synonym-list" ng-repeat="syn in disease.synonyms">{{syn}}</span>
-        </p>
+        </div>
     </div>
 
 
+    <div class="container">
+        <div class"row" style="padding-bottom:20px; margin-bottom:20px">
+            <p>
+                <hm-read-more  hm-text="{{disease.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
+            </p>
 
+            <p>
+                Synonyms: <span class="cttv-profile-synonym-list" ng-repeat="syn in disease.synonyms">{{syn}}</span>
+            </p>
 
-    <accordion close-others="false">
+            <accordion close-others="false">
+                
+                <accordion-group attr-section-name="Drugs" heading="Drugs" is-open="false">
+                    <div>
+                        <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a>
+                            <known-drug-table disease="{{disease.efo}}"></known-drug-table>
+                        </p>
+                    </div>
+                </accordion-group>
 
-        <!-- <accordion-group attr-section-name="Description" heading="Description" is-open="true">
-            {{disease.description}}
-        </accordion-group>
-
-        <accordion-group attr-section-name="Synonyms" heading="Synonyms" is-open="false">
-            <ul>
-                <li ng-repeat="syn in disease.synonyms">
-                    {{syn}}
-                </li>
-            </ul>
-        </accordion-group> -->
-
-        <accordion-group attr-section-name="Drugs" heading="Drugs" is-open="false">
-            <div>
-                <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a>
-                    <known-drug-table disease="{{disease.efo}}"></known-drug-table>
-                </p>
-            </div>
-        </accordion-group>
-
-        <accordion-group attr-section-name="Classification" heading="Disease Classification" is-open="true">
-            <tabset>
-                <tab heading="Graph">
-                    <p class="cttv-section-intro">Graph showing the diseases related with {{disease.label}}. Click on any disease to get more information about it and its associated targets</p>
-                    <cttv-efo-graph efo="{{disease}}" width=1140></cttv-efo-graph>
-                </tab>
-                <tab heading="Text">
-                    <h4>Paths</h4>
-                    <ul ng-repeat="path in disease.paths">
-                        <b>Path {{$index+1}}</b>
-                        <li ng-repeat="node in path" style="margin-left:{{$index*10}}px">
-                             {{node.label}} <small>(<a href="/disease/{{node.efo}}/associations">See target associations</a>), (<a href="/disease/{{node.efo}}">Go to disease page</a>)</small>
-                        </li>
-                    </ul>
-                    <h4 ng-if="disease.children.length > 0">Children</h4>
-                    <ul>
-                        <li ng-repeat="child in disease.children">{{child.label}} <small>(<a href="/disease/{{child.code}}/associations">See target associations</a>), (<a href="/disease/{{child.code}}">Go to diseases page</a>)</small>
-                        </li>
-                    </ul>
-                </tab>
-            </tabset>
-        </accordion-group>
-    </accordion>
+                <accordion-group attr-section-name="Classification" heading="Disease Classification" is-open="true">
+                    <tabset>
+                        <tab heading="Graph">
+                            <p class="cttv-section-intro">Graph showing the diseases related with {{disease.label}}. Click on any disease to get more information about it and its associated targets</p>
+                            <cttv-efo-graph efo="{{disease}}" width=1140></cttv-efo-graph>
+                        </tab>
+                        <tab heading="Text">
+                            <h4>Paths</h4>
+                            <ul ng-repeat="path in disease.paths">
+                                <b>Path {{$index+1}}</b>
+                                <li ng-repeat="node in path" style="margin-left:{{$index*10}}px">
+                                     {{node.label}} <small>(<a href="/disease/{{node.efo}}/associations">See target associations</a>), (<a href="/disease/{{node.efo}}">Go to disease page</a>)</small>
+                                </li>
+                            </ul>
+                            <h4 ng-if="disease.children.length > 0">Children</h4>
+                            <ul>
+                                <li ng-repeat="child in disease.children">{{child.label}} <small>(<a href="/disease/{{child.code}}/associations">See target associations</a>), (<a href="/disease/{{child.code}}">Go to diseases page</a>)</small>
+                                </li>
+                            </ul>
+                        </tab>
+                    </tabset>
+                </accordion-group>
+            </accordion>
+        </div>
+    </div>
 </div>

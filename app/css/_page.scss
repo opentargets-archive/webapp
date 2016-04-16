@@ -56,7 +56,7 @@ body{
     width:100%;
     background: $primary-background-color;
     padding-bottom:70px;
-    padding-bottom:260px;
+    padding-bottom:220px;
 }
 
 .cttv-page-wrapper {
@@ -72,14 +72,33 @@ body{
 
 .masthead {
     width:100%;
-    background-color: $clr-ui-background-secondary; //$masthead-background;
-    padding:10px 0;
+    background-color: $masthead-background;
+    background: -webkit-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: -moz-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: -o-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+
+
+
+
+    //padding: 8px 0;
     height: auto;
     border-bottom: 1px solid $masthead-border;
+    position: relative;
+    box-shadow: 0 1px 5px 0 $clr-ui-shadow;
+    z-index: 10; // this will need some sort of variable presumably?
 
     .container{
         height: auto;
     }
+
+    .global-search {
+        margin: 8px 0px;
+    }
+}
+
+.ot_logo {
+    margin: 8px 0px;
 }
 
 .cttv-logotype {
@@ -88,6 +107,76 @@ body{
     color: #888;
     line-height: 24px;
 }
+
+.masthead-navigation-container {
+    text-align: right;
+}
+
+/* define style for homepage masthead navigation */
+.masthead-navigation {
+    list-style: none;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 0px; //override browser default for ul elements
+    height: 46px;
+
+    >li {
+        display: inline-block;
+        &.open {
+            background: $clr-ui-background-secondary;
+        }
+
+        >a, >a:focus {
+            //color: #fff;
+            padding: 0px 10px;
+            height: 46px;
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }
+
+    /* style the dropdown, based on bootstrap ui components */
+    .dropdown-menu {
+        font-size: 12px;
+        border-radius: 0px;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-top-right-radius: 4px;
+        margin: 0px;
+
+        li a {
+            color: $clr-link;
+            padding: 3px 8px;
+            &:hover {
+                //color: #FFF;
+                background: $clr-ui-background-secondary; //$btn-primary-bg-hover;
+            }
+        }
+
+
+    }
+
+
+}
+
+/* specific settings for the other pages masthead navigation */
+.masthead .masthead-navigation {
+
+    .dropdown-menu {
+        border-top-right-radius: 0px;
+    }
+
+    >li {
+        &.open, &:hover {
+            background: $btn-primary-bg-hover;
+        }
+
+        >a, >a:focus {
+            color: #fff;
+        }
+    }
+}
+
 
 
 
@@ -112,6 +201,9 @@ body{
 
     a{
         color: inherit;
+        &:hover {
+            color: $footer-text-dim;
+        }
     }
 
     h6{
@@ -141,6 +233,7 @@ body{
 /* define the container for an angular partial*/
 .partial-page{
     position:relative;
+    padding-bottom: 40px;
 }
 
 
@@ -168,7 +261,10 @@ body{
 }
 
 .cttv-content-header {
-    padding-bottom: 30px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid $clr-ui-border;
+    box-shadow: 0 0 5px 0 $clr-ui-shadow;
+    background: $clr-ui-background;
 
     h4 {
         font-weight: 300;
@@ -178,6 +274,7 @@ body{
         @extend h4;
         margin-bottom: 0px;
     }
+
 }
 
 

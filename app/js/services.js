@@ -95,7 +95,16 @@ angular.module('cttvServices', []).
         cttvUtilsService.colorScales = {
             BLUE_0_1 : d3.scale.linear()
                         .domain([0,1])
-                        .range(["#CBDCEA", "#005299"]), // blue orig
+                        //.range(["#CBDCEA", "#005299"]), // blue orig
+                        //.range(["#AEDEF7", "#0091EB"]),
+                        //.range(["#97D5F5", "#0081D2"]),
+                        .range(["#B6DDFC", "#0052A3"]), // extra brand blue
+                        //.range(["#FFD0CB", "#FF6350"]), // brand red
+
+            BLUE_1_3 : d3.scale.linear()
+                        .domain([1,3])
+                        .range(["#B6DDFC", "#0052A3"])
+
         };
 
         cttvUtilsService.search = {
@@ -173,14 +182,22 @@ angular.module('cttvServices', []).
             return (Math.round(n/t)*t);
         };
 
-
+        cttvUtilsService.floatPrettyPrint = function (x) {
+            var value = x;
+            if (x < 0.0001) {
+                value = value.toExponential(2);
+            } else {
+                value = value.toFixed(2);
+            }
+            return value;
+        };
 
         cttvUtilsService.getPmidsList = function(refs){
             refs = refs || [];  // to avoid undefined errors
             return refs.map(function (ref) {
                 return ref.lit_id.split('/').pop();
             });
-        }
+        };
 
 
 
@@ -199,10 +216,10 @@ angular.module('cttvServices', []).
                         }).join (" OR ");
                         pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">'+pub+'</a>';
                     }
-                pub += "</span>"
+                pub += "</span>";
             }
             return pub;
-        }
+        };
 
 
 
