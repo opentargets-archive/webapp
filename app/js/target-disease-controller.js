@@ -112,7 +112,12 @@
         $scope.datatypes = datatypes;
 
 
-
+        var arrayToList = function(arr, oneToString){
+            if(oneToString && arr.length==1){
+                return arr[0];
+            }
+            return "<ul><li>" + arr.join("</li><li>") + "</li></ul>";
+        }
 
 
         // =================================================
@@ -159,11 +164,11 @@
 
 
 
-        var updateTitle = function(t, d){
-            //$scope.search.info.title = (($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name)+"-"+$scope.search.info.efo.label).split(" ").join("_");
-            $scope.search.info.title = (t+"-"+d).split(" ").join("_");
-            $log.log( "updateTitle() : " + $scope.search.info.title );
-        };
+        // var updateTitle = function(t, d){
+        //     //$scope.search.info.title = (($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name)+"-"+$scope.search.info.efo.label).split(" ").join("_");
+        //     $scope.search.info.title = (t+"-"+d).split(" ").join("_");
+        //     $log.log( "updateTitle() : " + $scope.search.info.title );
+        // };
 
 
 
@@ -173,20 +178,20 @@
 
 
 
-        function lookDatasource (arr, dsName) {
-            for (var i=0; i<arr.length; i++) {
-               if (arr[i].datatype === dsName) {
-                   return {
-                       "count": arr[i].evidence_count,
-                       "score": arr[i].association_score
-                   };
-               }
-            }
-            return {
-               "count": 0,
-               "score": 0
-            };
-        }
+        // function lookDatasource (arr, dsName) {
+        //     for (var i=0; i<arr.length; i++) {
+        //        if (arr[i].datatype === dsName) {
+        //            return {
+        //                "count": arr[i].evidence_count,
+        //                "score": arr[i].association_score
+        //            };
+        //        }
+        //     }
+        //     return {
+        //        "count": 0,
+        //        "score": 0
+        //     };
+        // }
 
 
 
@@ -197,9 +202,11 @@
             var fd = [];
 
             for (var i=0; i<cttvConsts.datatypesOrder.length; i++) {
+                var dkey = cttvConsts.datatypes[cttvConsts.datatypesOrder[i]];
                 var key = cttvConsts.datatypesOrder[i];
                 fd.push({
-                    "value": lookDatasource(data, cttvConsts.datatypes[key]).score,
+                    // "value": lookDatasource(data, cttvConsts.datatypes[key]).score,
+                    "value": data[dkey],
                     "label": cttvConsts.datatypesLabels[key],
                     "active": true,
                 });
@@ -224,11 +231,12 @@
                 then(
                     function(resp) {
                         $log.log("getFlowerData response");
-                        $scope.search.flower_data = processFlowerData(resp.body.data[0].datatypes);
-                        for(var i=0; i<resp.body.data[0].datatypes.length; i++){
-                            $scope.search.association_scores[resp.body.data[0].datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score;
-                        }
-                        updateTitle( resp.body.data[0].target.symbol, resp.body.data[0].disease.name );
+                        $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
+
+                        // for(var i=0; i<resp.body.data[0].association_score.datatypes.length; i++){
+                        //     $scope.search.association_scores[resp.body.data[0].association_score.datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score;
+                        // }
+                        // updateTitle( resp.body.data[0].target.symbol, resp.body.data[0].disease.name );
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
@@ -435,7 +443,7 @@
             var opts = {
                 target:$scope.search.target,
                 disease:$scope.search.disease,
-                size: 1100,
+                size: 1000,
                 datasource: cttvConfig.evidence_sources.genetic_association.rare,
                 fields: [
                     "disease.efo_info",
@@ -680,7 +688,11 @@
                     row.push( cttvDictionary[item.target.activity.toUpperCase()] || clearUnderscores(item.target.activity) ); // "up_or_down"->"unclassified" via dictionary
 
                     // mutations
-                    row.push(item.evidence.known_mutations || cttvDictionary.NA);
+                    var mut = cttvDictionary.NA
+                    if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
+                        mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
+                    }
+                    row.push(mut);
 
                     // evidence codes
                     row.push("Curated in " + item.evidence.provenance_type.database.id );
@@ -911,7 +923,9 @@
                     "evidence.urls",
                     "evidence.known_mutations",
                     "evidence.provenance_type",
-                    "access_level"
+                    "evidence.known_mutations",
+                    "access_level",
+                    "unique_association_fields.mutation_type"
                 ]
             };
             _.extend(opts, searchObj);
@@ -951,13 +965,44 @@
                     // col 1: disease
                     row.push(item.disease.efo_info.label);
 
-                    // col 2: know mutations
-                    row.push(item.evidence.known_mutations || cttvDictionary.NA);
 
-                    // col 3: evidence source
+                    var mut = cttvDictionary.NA;
+                    var samp = cttvDictionary.NA;
+                    var patt = cttvDictionary.NA;
+
+                    if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
+
+                        // col 2: mutation type
+                        mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
+
+
+                        // col 3: samples
+                        samp = arrayToList(
+                                            item.evidence.known_mutations.map(
+                                                function(i){
+                                                    if( i.number_samples_with_mutation_type ){
+                                                        return i.number_samples_with_mutation_type+"/"+i.number_mutated_samples;
+                                                    } else {
+                                                        return cttvDictionary.NA;
+                                                    }
+                                                }
+                                            ),
+                                            true );
+
+                        // col 4: inheritance pattern
+                        patt = arrayToList( item.evidence.known_mutations.map(function(i){return i.inheritance_pattern || cttvDictionary.NA;}) , true );
+                    }
+
+
+                    row.push( clearUnderscores( mut ) );
+                    row.push( samp );
+                    row.push( patt );
+
+
+                    // col 5: evidence source
                     row.push("<a href='"+item.evidence.urls[0].url+"' target='_blank' class='cttv-external-link'>"+item.evidence.urls[0].nice_name+"</a>");
 
-                    // cols 4: publications
+                    // cols 6: publications
                     var refs = [];
                     if( checkPath(item, "evidence.provenance_type.literature.references") ){
                         refs = item.evidence.provenance_type.literature.references;
@@ -965,7 +1010,7 @@
                     var pmidsList = cttvUtils.getPmidsList( refs );
                     row.push( cttvUtils.getPublicationsString( pmidsList ) );
 
-                    // col 5: pub ids (hidden)
+                    // col 7: pub ids (hidden)
                     row.push(pmidsList.join(", "));
 
 
@@ -997,13 +1042,17 @@
                         "width" : "3%"
                     },
                     {
-                        "targets" : [5],    // the access-level (public/private icon)
+                        "targets" : [7],    // the access-level (public/private icon)
                         "visible" : false
                     },
                     // now set the widths
                     {
-                        "targets" : [1,2,3],
-                        "width" : "26%"
+                        "targets" : [1,2,4,5],
+                        "width" : "18%"
+                    },
+                    {
+                        "targets" : [3],
+                        "width" : "9%"
                     },
                     /*{
                         "targets" : [4],
@@ -1308,7 +1357,6 @@
             return cttvAPIservice.getFilterBy( opts ).
                 then(
                     function(resp) {
-                        console.log(resp);
 
                         if( resp.body.data ){
                             $scope.search.literature.total = resp.body.total;

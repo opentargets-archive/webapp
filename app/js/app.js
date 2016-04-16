@@ -11,7 +11,9 @@ angular.module('cttvApp', [
     'angulartics.piwik',
     'viewhead',
     'cttvServices',
-    'hm.readmore'
+    'hm.readmore',
+    'ngSanitize',
+    'swaggerUi'
 ])
 
 .config(['$routeProvider', '$locationProvider',
@@ -51,30 +53,42 @@ angular.module('cttvApp', [
 
             // Docs
             when('/faq', {
-                templateUrl: 'docs/faq.html'
+                //templateUrl: 'docs/faq.html'
+                templateUrl: 'partials/faq.html'
             }).
             when('/data_sources', {
                 templateUrl: 'docs/data_sources.html'
             }).
             when('/terms_of_use', {
-                templateUrl: 'docs/terms_of_use.html',
+                //templateUrl: 'docs/terms_of_use.html',
+                templateUrl: 'partials/terms_of_use.html',
             }).
             when('/release-notes', {
                 templateUrl: 'partials/release-notes.html'
             }).
             when('/scoring', {
-                templateUrl: 'docs/scoring.html'
+                //templateUrl: 'docs/scoring.html'
+                templateUrl: 'partials/scoring.html'
             }).
             when('/about', {
-                templateUrl: 'docs/about.html'
+                //templateUrl: 'docs/about.html'
+                templateUrl: 'partials/about.html'
             }).
             when('/personal-data-collected-examples', {
                 templateUrl: 'docs/personal-data-collected-examples.html'
             }).
             when('/variants', {
-                templateUrl: 'docs/variants'
+                templateUrl: 'docs/variants.html'
             }).
-
+            when('/documentation/components', {
+                templateUrl: 'partials/docs.html'
+            }).
+            when('/downloads/data', {
+                templateUrl: 'partials/dumps.html'
+            }).
+            when('/documentation/api', {
+                templateUrl: 'partials/api-docs.html'
+            }).
             otherwise({
                 redirectTo: '/'
             });

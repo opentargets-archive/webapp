@@ -7,10 +7,35 @@ angular.module('cttvDirectives')
 */
 // .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', 'cttvConsts', '$location', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile, cttvConsts, $location) {
 
-.directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location) {
+.directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', '$q', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location, $q) {
 
 
     'use strict';
+
+    var whoiam = "table";
+    var draw = 1;
+    var filters = {};
+
+    var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+
+    /*
+    * Generates and returns the string representation of the span element
+    * with color information for each cell
+    */
+    var getColorStyleString = function(value, href){
+        var str="";
+        if( value<=0 ){
+            str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, we don't put anything, so the sorting works better
+        } else {
+            str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+cttvUtils.floatPrettyPrint(value)+"'>"+cttvUtils.floatPrettyPrint(value)+"</span>";
+            if( href ){
+                str = "<a href=" + href + ">" + str + "</a>";
+            }
+        }
+
+        return str;
+    };
+
 
     var cols = [
         {name: "", title: cttvDictionary.DISEASE},
@@ -28,42 +53,76 @@ angular.module('cttvDirectives')
         {name:"", title: cttvDictionary.THERAPEUTIC_AREA}
     ];
 
-
-    // TODO: remove this once the API returns full row data:
-    var reverseDict = {
-        "Genetic associations" : "genetic_association",
-        "Somatic mutations" : "somatic_mutation",
-        "Known drugs" : "known_drug",
-        "RNA expression" : "rna_expression",
-        "Affected pathways" : "affected_pathway",
-        "Text mining" : "literature",
-        "Animal models" : "animal_model"
-    };
-
-    // TODO: remove this once the API returns full row data:
-    var hasDatatype = function (myDatatype, datatypes) {
-        var thisDatatype = reverseDict[myDatatype];
-        for (var i=0; i<datatypes.length; i++) {
-            // var datatype = upperCaseFirst(clearUnderscores(datatypes[i]));
-            // if (datatype.trim() === myDatatype.trim()) {
-            //     return true;
-            // }
-
-            if (thisDatatype === datatypes[i]) {
-                return true;
-            }
-        }
-        return false;
-    };
-
-
-
     /*
     Setup the table cols and return the DT object
     */
-    var setupTable = function(table, filename){
-        return $(table).DataTable( cttvUtils.setTableToolsParams({
-            //"data": newData,
+    var setupTable = function(table, target, filename){
+        $log.log("setupTable()");
+        // return $(table).DataTable( cttvUtils.setTableToolsParams({
+        return $(table).DataTable ({
+            "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
+            "processing": false,
+            "serverSide": true,
+            "ajax": function (data, cbak, params) {
+                // Order options
+                // mappings:
+                // 0 => gene name alphabetically -- not supported in the api
+                // 1 => gene id alphabetically -- not supported in the api and the column is hidden
+                // 2 => overall
+                // 3 => genetic_association
+                // 4 => somatic_mutation
+                // 5 => known_drug
+                // 6 => affected_pathway
+                // 7 => rna_expression
+                // 8 => text_mining
+                // 9 => animal_model
+                // 10 => overall -- hidden column
+                // 11 => gene description -- not supported in the api
+                var mappings = {
+                    0: "disease.efo_info.label",
+                    3: "association_score.overall",
+                    4: "association_score.datatypes." + cttvConsts.datatypes.GENETIC_ASSOCIATION,
+                    5: "association_score.datatypes." + cttvConsts.datatypes.SOMATIC_MUTATION,
+                    6: "association_score.datatypes." + cttvConsts.datatypes.KNOWN_DRUG,
+                    7: "association_score.datatypes." + cttvConsts.datatypes.AFFECTED_PATHWAY,
+                    8: "association_score.datatypes." + cttvConsts.datatypes.RNA_EXPRESSION,
+                    9: "association_score.datatypes." + cttvConsts.datatypes.LITERATURE,
+                    10: "association_score.datatypes." + cttvConsts.datatypes.ANIMAL_MODEL,
+                    11: "association_score.overall"
+                };
+                var order = [];
+                for (var i=0; i<data.order.length; i++) {
+                    var prefix = data.order[i].dir === "asc" ? "~" : "";
+                    order.push(prefix + mappings[data.order[i].column]);
+                }
+
+                var opts = {
+                    target: target,
+                    outputstructure: "flat",
+                    facets: false,
+                    direct: true,
+                    size: data.length,
+                    from: data.start,
+                    sort: order,
+                    search: data.search.value,
+                    draw: draw
+                };
+
+                opts = cttvAPIservice.addFacetsOptions(filters, opts);
+
+                cttvAPIservice.getAssociations(opts)
+                    .then (function (resp) {
+                        var dtData = parseServerResponse(resp.body.data);
+                        var o = {
+                            recordsTotal: resp.body.total,
+                            recordsFiltered: resp.body.total,
+                            data: dtData,
+                            draw: draw
+                        };
+                        draw++;
+                        cbak(o);
+                    });
+            },
             "columns": (function(){
                 var a=[];
                 for(var i=0; i<cols.length; i++){
@@ -80,302 +139,229 @@ angular.module('cttvDirectives')
                     "targets": [3,4,5,6,7,8,9],
                     "asSorting": [ "desc", "asc"],
                 },
-                { "orderSequence": [ "desc", "asc"], "targets": "_all" }
+                { "orderSequence": ["desc", "asc"], "targets": [3,4,5,6,7,8,9,10,11] },
+                { "orderSequence": ["asc", "desc"], "targets": [0]}
             ],
             "order" : [[3, "desc"]],
+            "orderMulti": false,
             "autoWidth": false,
             "ordering": true,
             "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
             "pageLength": 50
         },
-        filename ));
+        filename );
     };
 
+    function parseServerResponse (d) {
+        // scope.n.diseases = resp.total;
+        var newData = [];
 
+        // Iterate
+        var iterateeEFO = function (str, ta) {
+            if (str === "") {
+                str = ta;
+            } else {
+                str += "," + ta;
+            }
+            return str;
+
+        };
+        var iterateeLabel = function (str, ta) {
+            if (str === "") {
+                str = ta;
+            } else {
+                str += ", " + ta;
+            }
+            return str;
+        };
+
+        for (var i=0; i<d.length; i++) {
+            var data = d[i];
+            // No cttv root anymore in the data retrieved by the API
+            // if (data.efo_code === "cttv_disease") {
+            //     continue;
+            // }
+            // var datatypes = {};
+            // datatypes.genetic_association = _.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
+            // datatypes.somatic_mutation = _.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
+            // datatypes.known_drug = _.result(_.find(data.datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
+            // datatypes.affected_pathway = _.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
+            // datatypes.rna_expression = _.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
+            // datatypes.literature = _.result(_.find(data.datatypes, function (d) { return d.datatype === "literature"; }), "association_score")||0;
+            // datatypes.animal_model = _.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
+            var datatypes = data.association_score.datatypes;
+            var row = [];
+
+            // Disease name
+            var geneDiseaseLoc = "/evidence/" + data.target.id + "/" + data.disease.id;
+
+            row.push("<a href='" + geneDiseaseLoc + "' title='"+data.disease.efo_info.label+"'>" + data.disease.efo_info.label + "</a>");
+
+            // EFO (hidden)
+            row.push(data.disease.id);
+
+            // TherapeuticArea EFO (hidden)
+            var taStr = _.reduce(data.disease.efo_info.therapeutic_area.codes, iterateeEFO, "");
+            row.push(taStr); // Neoplasm
+
+            // Association score
+            row.push( getColorStyleString( data.association_score.overall, geneDiseaseLoc ) );
+
+            // Genetic association
+            row.push( getColorStyleString( datatypes.genetic_association, geneDiseaseLoc + (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=genetic_associations") );
+            // Somatic mutation
+            row.push( getColorStyleString( datatypes.somatic_mutation, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=somatic_mutations") );
+            // Known drug
+            row.push( getColorStyleString( datatypes.known_drug, geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=known_drugs") );
+            // Affected pathway
+            row.push( getColorStyleString( datatypes.affected_pathway, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=affected_pathways") );
+            // Expression atlas
+            row.push( getColorStyleString( datatypes.rna_expression, geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=rna_expression") );
+            // Literature
+            row.push( getColorStyleString( datatypes.literature, geneDiseaseLoc +            (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature"));
+            // Animal model
+            row.push( getColorStyleString( datatypes.animal_model, geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models") );
+            // Therapeutic area
+            var area = _.reduce(data.disease.efo_info.therapeutic_area.labels, iterateeLabel, "");
+            row.push("<span title='"+area+"'>"+area+"</span>");
+
+            newData.push(row);
+        }
+
+        return newData;
+    }
 
     return {
 
         restrict: 'E',
 
         scope: {
+            target : '=',
             loadprogress : '=',
             filename : '=',
-            datatypes : '@',
             facets : '=',
-            n : '=ndiseases'
+            active: '@'
         },
 
 
-        template: '<cttv-matrix-table></cttv-matrix-table>'
+        template: '<div>'
+        + ' <div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
+        + '<cttv-matrix-table></cttv-matrix-table>'
         +'<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
-        +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
+        +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
+        + '</div>',
 
 
         link: function (scope, elem, attrs) {
 
-            var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+            // -----------------------
+            // Initialize table etc
+            // -----------------------
 
-            /*
-            * Generates and returns the string representation of the span element
-            * with color information for each cell
-            */
-            var getColorStyleString = function(value, href){
-                value = value.toExponential(2);
-                var str="";
-                if( value<=0 ){
-                    str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, we don't put anything, so the sorting works better
-                } else {
-                    str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+value+"'>"+value+"</span>";
-                    if( href ){
-                        str = "<a href=" + href + ">" + str + "</a>";
-                    }
-                }
+            // table itself
+            // var table = elem.children().eq(0)[0];
+            var table = elem.children().eq(0).children().eq(1)[0];
+            var dtable;
+            // var dtable = setupTable(table, scope.filename);
 
-                return str;
+            // legend stuff
+            //scope.labs = ["a","z"];
+            scope.legendText = "Score";
+            scope.colors = [];
+            for(var i=0; i<=100; i+=25){
+                var j=i/100;
+                //scope.labs.push(j);
+                scope.colors.push( {color:colorScale(j), label:j} );
+            }
+            scope.legendData = [
+                {label:"No data", class:"no-data"}
+            ];
+
+            // Download the whole table
+            scope.downloadTable = function () {
+
+                var size = 10000;
+                // First make a call to know how many rows there are:
+                var optsPreFlight = {
+                    target: scope.target,
+                    outputstructure: "flat",
+                    facets: false,
+                    size: 1
+                };
+                optsPreFlight = cttvAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
+                cttvAPIservice.getAssociations(optsPreFlight)
+                    .then (function (resp) {
+                        var total = resp.body.total;
+
+                        function getNextChunk (size, from) {
+                            var opts = {
+                                target: scope.target,
+                                outputstructure: "flat",
+                                facets: false,
+                                format: "csv",
+                                size: size,
+                                fields: ["disease.efo_info.label", "association_score.overall", "association_score.datatypes.genetic_association", "association_score.datatypes.somatic_mutation", "association_score.datatypes.known_drug", "association_score.datatypes.affected_pathway", "association_score.datatypes.rna_expression", "association_score.datatypes.literature", "association_score.datatypes.animal_model", "disease.efo_info.therapeutic_area.labels"],
+                                from: from
+                            };
+                            opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
+
+                            return cttvAPIservice.getAssociations(opts)
+                                .then (function (resp) {
+                                    var moreText = resp.body;
+                                    if (from>0) {
+                                        // Not in the first page, so remove the header row
+                                        moreText = moreText.split("\n").slice(1).join("\n");
+                                    }
+                                    totalText += moreText;
+                                    return totalText;
+                                });
+                        }
+
+                        var promise = $q(function (resolve, reject) {
+                            resolve ("");
+                        });
+                        var totalText = "";
+                        var promises = [];
+                        for (var i=0; i<total; i+=size) {
+                            promises.push ({
+                                    from: i,
+                                    total: size
+                                });
+                            // promises.push(getNextChunk(size, i));
+                        }
+                        promises.forEach(function (p) {
+                            promise = promise.then (function () {
+                                return getNextChunk(p.total, p.from);
+                            });
+                        });
+                        promise.then (function (res) {
+                            var hiddenElement = document.createElement('a');
+                            hiddenElement.href = 'data:attachment/csv,' + encodeURI(totalText);
+                            hiddenElement.target = '_blank';
+                            hiddenElement.download = scope.filename + ".csv";
+                            hiddenElement.click();
+                        });
+
+                    }, cttvAPIservice.defaultErrorHandler);
             };
 
-
-            /*
-            * Fetch new data and update the table content
-            * without destroying and recreating the table
-            */
-            var updateTable = function (table, facets) {
-
-                $log.log("*** update heatmap ***");
-
-                scope.loadprogress = true;
-
-
-                var opts = {
-                    target: attrs.target,
-                    datastructure: "flat",
-                    facets: false
-                };
-                opts = cttvAPIservice.addFacetsOptions(facets, opts);
-
-
-                return cttvAPIservice.getAssociations (opts)
-                .then(function (resp) {
-
-                    //resp = JSON.parse(resp.text);
-                    scope.loadprogress = false;
-                    resp = resp.body;
-                    $log.log("RESP FOR TABLES (IN DIRECTIVE): ");
-                    $log.log(resp);
-
-                    scope.n.diseases = resp.data.length;
-                    var newData = [];
-
-                    // Iterate
-                    var iterateeEFO = function (str, ta) {
-                        if (str === "") {
-                            str = ta;
-                        } else {
-                            str += "," + ta;
-                        }
-                        return str;
-
-                    };
-                    var iterateeLabel = function (str, ta) {
-                        if (str === "") {
-                            str = ta;
-                        } else {
-                            str += ", " + ta;
-                        }
-                        return str;
-                    };
-
-
-                    for (var i=0; i<resp.data.length; i++) {
-                        var data = resp.data[i];
-                        if (data.efo_code === "cttv_disease") {
-                            continue;
-                        }
-                        var datatypes = {};
-                        datatypes.genetic_association = _.result(_.find(data.datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
-                        datatypes.somatic_mutation = _.result(_.find(data.datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
-                        datatypes.known_drug = _.result(_.find(data.datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
-                        datatypes.affected_pathway = _.result(_.find(data.datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
-                        datatypes.rna_expression = _.result(_.find(data.datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
-                        datatypes.literature = _.result(_.find(data.datatypes, function (d) { return d.datatype === "literature"; }), "association_score")||0;
-                        datatypes.animal_model = _.result(_.find(data.datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
-                        var row = [];
-
-                        // Disease name
-                        var geneDiseaseLoc = "/evidence/" + attrs.target + "/" + data.disease.id + (facets.score_str ? "?score_str=" + facets.score_str[0] : "");
-
-                        row.push("<a href='" + geneDiseaseLoc + "' title='"+data.disease.name+"'>" + data.disease.name + "</a>");
-
-                        // EFO (hidden)
-                        row.push(data.disease.id);
-
-                        // TherapeuticArea EFO (hidden)
-                        var taStr = _.reduce(data.disease.therapeutic_area.codes, iterateeEFO, "");
-                        row.push(taStr); // Neoplasm
-
-                        // Association score
-                        row.push( getColorStyleString( data.association_score, geneDiseaseLoc ) );
-
-                        // Genetic association
-                        row.push( getColorStyleString( datatypes.genetic_association, geneDiseaseLoc + (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=genetic_associations") );
-                        // Somatic mutation
-                        row.push( getColorStyleString( datatypes.somatic_mutation, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=somatic_mutations") );
-                        // Known drug
-                        row.push( getColorStyleString( datatypes.known_drug, geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=known_drugs") );
-                        // Affected pathway
-                        row.push( getColorStyleString( datatypes.affected_pathway, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=affected_pathways") );
-                        // Expression atlas
-                        row.push( getColorStyleString( datatypes.rna_expression, geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=rna_expression") );
-                        // Literature
-                        row.push( getColorStyleString( datatypes.literature, geneDiseaseLoc +            (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature"));
-                        // Animal model
-                        row.push( getColorStyleString( datatypes.animal_model, geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models") );
-                        // Therapeutic area
-                        var area = _.reduce(data.disease.therapeutic_area.labels, iterateeLabel, "");
-                        row.push("<span title='"+area+"'>"+area+"</span>");
-
-                        newData.push(row);
-                    }
-
-                    // clear any existing data from the table
-                    // and add the new data
-                    table.clear().rows.add(newData).draw();
-
-                },
-                // Error in the Api?
-                cttvAPIservice.defaultErrorHandler
-            );
-
-        };    // end updateTable
-
-
-
-        // -----------------------
-        // Initialize table etc
-        // -----------------------
-
-        // table itself
-        var table = elem.children().eq(0)[0];
-        var dtable = setupTable(table, scope.filename);
-
-        // legend stuff
-        //scope.labs = ["a","z"];
-        scope.legendText = "Score";
-        scope.colors = [];
-        for(var i=0; i<=100; i+=25){
-            var j=i/100;
-            //scope.labs.push(j);
-            scope.colors.push( {color:colorScale(j), label:j} );
-        }
-        scope.legendData = [
-            {label:"No data", class:"no-data"}
-        ];
-
-
-
-        // TODO: This is firing a second time the table creation. Make sure only one table is created at a time
-        /*
-        * Watch for changes in the datatypes.
-        * This is fired also at initization:
-        * no need to watch for changes to target,
-        * so we only have one call (might need to check in the future though).
-        * We're also no longer removing/destroying the table
-        * which is only created at initialization, again removing the need
-        * to watch out for double created tables...
-        */
-        /*scope.$watch( function () { return attrs.datatypes; }, function (dts) {
-
-            dts = JSON.parse(dts);
-
-            updateTable(dtable, dts)
-            .then(
-                function () {
-                    dtable.columns().eq(0).each (function (i) {
-
-                        // first headers are "Disease", "EFO", "TA EFO", "Association score" and last one is "Therapeutic area"
-                        if (i>3 && i<11) {
-                            var column = dtable.column(i);
-                            if (hasDatatype(column.header().textContent, _.keys(dts))) {
-                                column.visible(true);
-                            } else {
-                                column.visible(false);
-                            }
-                        }
-
-                    });
-                },
-                cttvAPIservice.defaultErrorHandler
-            );
-
-            // Hide the columns that are filtered out
-        });*/
-
-        scope.$watch( 'facets', function (fct) {
-            updateTable(dtable, fct)
-            // TODO: remove this (column hiding code) once the API returns full row data:
-            .then(
-                function () {
-
-                    /*var dts = JSON.parse(attrs.datatypes);
-                    dtable.columns().eq(0).each (function (i) {
-                        //first headers are "Disease", "EFO", "TA EFO", "Association score" and last one is "Therapeutic area"
-                        if (i>3 && i<11) {
-                            var column = dtable.column(i);
-                            if (hasDatatype(column.header().textContent, _.keys(dts))) {
-                                column.visible(true);
-                            } else {
-                                column.visible(false);
-                            }
-                        }
-
-                    });*/
-                },
-                cttvAPIservice.defaultErrorHandler
-            );
-        });
-
-        scope.$watch (function () { return attrs.focus; }, function (val) {
-            if (val === "None") {
-                return;
-            }
-
-            if (dtable) {
-                if ((val === "cttv_disease") || (val === "cttv_source")) {
-                    val = "";
+            scope.$watchGroup(["facets", "target", "active"], function(attrs) {
+                filters = attrs[0];
+                var target = attrs[1];
+                var act = attrs[2];
+                if (scope.active !== whoiam) {
+                    return;
                 }
-                dtable
-                    .column(2)
-                    .search(val)
-                    .draw();
-            }
-        });
 
-        // Watch for filename changes
-        // when available, we update the option for the CSV button, via a little hack:
-        // we update the button action, wrapping the original action in a call where the 4th argument is updated with the correct title
-        scope.$watch( 'filename', function(val){
-            if(val){
-                // replace spaces with underscores
-                val = val.split(" ").join("_");
+                if (dtable) {
+                    dtable.ajax.reload();
+                } else {
+                    dtable = setupTable(table, target, scope.filename);
+                }
+            });
 
-                // update the export function to
-                var act = dtable.button(".buttons-csv").action();   // the original export function
+        } // end link
 
-                dtable.button(".buttons-csv").action(
-                    function(){
-                        //var opts = arguments[3];
-                        //opts.title = val;
-                        //act(arguments[0], arguments[1], arguments[2], opts);
-                        arguments[3].title = val;
-                        act.apply(this, arguments);
-                    }
-                );
-
-            }
-        });
-
-    } // end link
-
-}; // end return
+    }; // end return
 
 }]);    // end directive cttvTargetAssociationsTable

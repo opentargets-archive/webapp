@@ -4,90 +4,84 @@ angular.module('cttvDirectives')
     /*
     *
     */
-    .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', 'cttvConsts', function ($log, cttvAPIservice, cttvConsts) {
+    .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', 'cttvConsts', 'cttvUtils', function ($log, cttvAPIservice, cttvConsts, cttvUtils) {
         'use strict';
 
+        var whoiam = 'tree';
+        var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+
         var gat;
+        var currTarget;
+
         return {
+
             restrict: 'E',
+
             scope: {
-                facets : '='
+                facets : '=',
+                target : '@',
+                active : '@'
             },
+
+            template: '<div></div>'
+            +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
+
+
             link: function (scope, elem, attrs) {
 
-                var datatypesChangesCounter = 0;
+                // legend stuff
+                scope.legendText = "Score";
+                scope.colors = [];
+                for(var i=0; i<=100; i+=25){
+                    var j=i/100;
+                    scope.colors.push( {color:colorScale(j), label:j} );
+                }
 
-                /*scope.$watch(function () { return attrs.datatypes; }, function (dts) {
-                    dts = JSON.parse(dts);
-                    $log.log("$$$ "); $log.log(dts);
-                    if (datatypesChangesCounter>0) {
-                        if (!gat) {
-                            setTreeView();
-                            return;
-                        }
-                        var opts = {
-                            target: attrs.target,
-                            datastructure: "tree",
-                        };
-                        if (!_.isEmpty(dts)) {
-                            opts.filterbydatatype = _.keys(dts);
-                        }
-                        cttvAPIservice.getAssociations (opts)
-                            .then (function (resp) {
-                                var data = resp.body.data;
-                                if (data) {
-                                    gat
-                                        .data(data)
-                                        .datatypes(dts)
-                                        .update();
-                                    }
-                                },
-                                cttvAPIservice.defaultErrorHandler
-                            );
+                scope.$watchGroup(['target', 'facets', 'active'], function (vals) {
+                    var target = vals[0];
+                    var facets = vals[1];
+                    var act = vals[2];
+                    if (scope.active !== whoiam) {
+                        return;
                     }
-                    datatypesChangesCounter++;
-                });*/
 
+                    // Remove the current tree if the target has changed
+                    if (target !== currTarget) {
+                        gat = undefined;
+                    }
+                    currTarget = target;
 
-                scope.$watch( 'facets', function (fct) {
-                    //var dts = JSON.parse(attrs.datatypes);
-                    if (datatypesChangesCounter>0) {
-                        if (!gat) {
-                            setTreeView();
-                            return;
-                        }
-                        // var opts = {
-                        //     target: attrs.target,
-                        //     datastructure: "tree",
-                        // };
-                        // if (!_.isEmpty(dts)) {
-                        //     opts.filterbydatatype = _.keys(dts);
-                        // }
+                    var opts = {
+                        target: scope.target,
+                        outputstructure: "false",
+                        direct: true,
+                        facets: false,
+                        size: 1000
+                    };
+                    opts = cttvAPIservice.addFacetsOptions(facets, opts);
 
-                        var opts = {
-                            target: attrs.target,
-                            datastructure: "tree"
-                        };
-                        opts = cttvAPIservice.addFacetsOptions(fct, opts);
-
+                    if (!gat) {
+                        setTreeView(opts.therapeutic_area);
+                    } else {
                         cttvAPIservice.getAssociations (opts)
                             .then (function (resp) {
-                                var data = resp.body.data;
+                                // var data = resp.body.data;
+                                var data = cttvAPIservice.flat2tree(resp.body);
                                 if (data) {
                                     gat
                                         .data(data)
+                                        .therapeuticAreas(opts.therapeutic_area)
                                         //.datatypes(dts)
-                                        .filters(fct)
                                         .update();
                                     }
                                 },
                                 cttvAPIservice.defaultErrorHandler
                             );
                     }
-                    datatypesChangesCounter++;
+
                 });
 
-                var setTreeView = function () {
+                var setTreeView = function (tas) {
                     ////// Tree view
                     // viewport Size
                     var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -113,56 +107,58 @@ angular.module('cttvDirectives')
                     // }
 
                     var opts = {
-                        target: attrs.target,
-                        datastructure: "tree",
+                        target: scope.target,
+                        outputstructure: "flat",
+                        direct: true,
+                        facets: false,
+                        size: 1000
                     };
                     opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
 
-                    $log.log("treeview opts: ");
-                    $log.log(opts);
                     cttvAPIservice.getAssociations (opts)
                         .then (
                             function (resp) {
                                 console.warn ("RESP FOR TREE");
                                 console.warn(resp);
 
-                                var data = resp.body.data;
+                                var data = cttvAPIservice.flat2tree(resp.body);
+                                // var data = resp.body.data;
                                 if (_.isEmpty(data)) {
                                     return;
                                 }
                                 var fView = flowerView()
                                 .fontsize(9)
                                 .diagonal(100);
-
-                                console.log(scope);
-
                                 gat = geneAssociationsTree()
                                     .data(data)
                                     //.datatypes(dts)
                                     .names(cttvConsts)
+                                    .filters(scope.facets)
                                     .diameter(900)
                                     .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
-                                    .target(attrs.target)
-                                    .filters (scope.facets);
-                                gat(fView, elem[0]);
+                                    .target(scope.target)
+                                    .therapeuticAreas(tas)
+                                    .hasLegendScale(false);
+
+                                gat(fView, elem.children().eq(0)[0]);
                             },
                             cttvAPIservice.defaultErrorHandler
                         );
                 };
 
-                scope.$watch(function () { return attrs.target; }, function (val) {
-                    setTreeView();
-                });
+                // scope.$watch(function () { return attrs.target; }, function (val) {
+                //     setTreeView();
+                // });
 
-                scope.$watch(function () { return attrs.focus; }, function (val) {
-                    if (val === "None") {
-                        return;
-                    }
-
-                    if (gat) {
-                        gat.selectTherapeuticArea(val);
-                    }
-                });
+                // scope.$watch(function () { return attrs.focus; }, function (val) {
+                //     if (val === "None") {
+                //         return;
+                //     }
+                //
+                //     if (gat) {
+                //         gat.selectTherapeuticArea(val);
+                //     }
+                // });
             }
         };
     }]);

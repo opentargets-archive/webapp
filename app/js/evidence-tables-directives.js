@@ -3,7 +3,7 @@
 angular.module('cttvDirectives')
 
 /* Directive to display the known drug evidence table */
-.directive('knownDrugTable', ['$log', 'cttvAPIservice', 'cttvConsts', 'cttvUtils', 'cttvConfig', '$location', function ($log, cttvAPIservice, cttvConsts, cttvUtils, cttvConfig, $location) {
+.directive('knownDrugTable', ['$log', 'cttvAPIservice', 'cttvConsts', 'cttvUtils', 'cttvConfig', '$location', 'cttvDictionary', function ($log, cttvAPIservice, cttvConsts, cttvUtils, cttvConfig, $location, cttvDictionary) {
 
     'use strict';
     var dbs = cttvConsts.dbs;
@@ -119,32 +119,38 @@ angular.module('cttvDirectives')
                                 url: item.evidence.target2drug.urls[0].url
                             });
 
-                            // data origin: public / private
+                            // 0: data origin: public / private
                             row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
-                            // 0: disease
-                            //row.push(item.disease.efo_info.efo_id);
+                            // 1: disease
                             row.push( "<a href='/disease/"+ item.disease.efo_info.efo_id.split('/').pop() +"'>"+item.disease.efo_info.label+"</a>");
 
-                            // 1: drug
+                            // 2: drug
                             row.push( "<a class='cttv-external-link' href='"+item.evidence.target2drug.urls[0].url+"' target='_blank'>" +
                             item.drug.molecule_name +
                             "</a>");
 
-                            // 2: phase
+                            // 3: phase
                             //row.push(item.drug.max_phase_for_all_diseases.label);
                             row.push(item.evidence.drug2clinic.max_phase_for_disease.label);
 
-                            // 2: hidden
+                            // 4: phase numeric (hidden)
                             row.push(item.drug.max_phase_for_all_diseases.numeric_index);
 
-                            // 3: type
+                            // 5: status
+                            var sts = cttvDictionary.NA;
+                            if ( cttvUtils.checkPath(item, "evidence.drug2clinic.status") ) {
+                                sts = item.evidence.drug2clinic.status;
+                            }
+                            row.push(sts);
+
+                            // 6: type
                             row.push(item.drug.molecule_type);
 
-                            // 4: Mechanism of action
+                            // 7: Mechanism of action
                             var action = item.evidence.target2drug.mechanism_of_action;
 
-                            // publications:
+                            // publications
                             var refs = [];
                             if( checkPath(item, "evidence.target2drug.provenance_type.literature.references") ){
                                 refs = item.evidence.target2drug.provenance_type.literature.references;
@@ -165,7 +171,7 @@ angular.module('cttvDirectives')
                             //row.push(pmidsList.join(", "));
 
 
-                            // 5: Activity
+                            // 8: Activity
                             var activity = item.target.activity;
                             switch (activity) {
                                 case 'drug_positive_modulator' :
@@ -182,13 +188,13 @@ angular.module('cttvDirectives')
                             //             + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
                             //             + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
-                            // 7: target class
+                            // 9: target class
                             row.push(item.target.target_class[0]);
 
 
                             // 8: target context / protein complex members
 
-                            // 9: evidence source
+                            // 10: evidence source
                             row.push( "Curated from <br /><a class='cttv-external-link' href='" +
                             item.evidence.drug2clinic.urls[0].url +
                             "' target='_blank'>" + item.evidence.drug2clinic.urls[0].nice_name + "</a>");
@@ -207,14 +213,11 @@ angular.module('cttvDirectives')
                         return rec.id;
                     });
 
-
                     var showLim = 50;
                     scope.show = {};
                     scope.show.limit = showLim;
                     scope.show.ellipsis = "[Show more]";
-                    scope.drugs = _.uniq(all_drugs_sorted, true, function (rec) {
-                        return rec.id;
-                    });
+                    scope.drugs = _.uniqBy(all_drugs_sorted, 'id');
                     scope.show.moreOrLess = scope.drugs.length > showLim;
 
                     scope.showMoreOrLess = function () {
@@ -254,11 +257,11 @@ angular.module('cttvDirectives')
                             },
                             {
                                 "targets": [3],
-                                "width": "6%"
+                                "width": "5.6%"
                             },
                             {
-                                "targets": [2,5,6,7,8,9],
-                                "width": "13%"
+                                "targets": [2,5,6,7,8,9,10],
+                                "width": "11.2%"
                             }
                         ],
                         // "aoColumnDefs" : [

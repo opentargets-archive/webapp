@@ -30,11 +30,12 @@ angular.module('cttvDirectives', [])
                         .width(w);
 
                     //gB.rest().proxyUrl("/ensembl");
-                    //gB.rest().proxyUrl("/api/latest/ensembl");
-                    gB.rest().proxyUrl("/proxy/rest.ensembl.org");
+                    //gB.rest().proxyUrl("/api/latest/ensembl")
+                    gB.rest().prefix("/proxy/rest.ensembl.org").protocol("").domain("");
                     var theme = targetGenomeBrowser()
-                        .efo(efo);
-                    theme(gB, cttvAPIservice.getSelf(), document.getElementById("cttvTargetGenomeBrowser"));
+                        .efo(efo)
+                        .cttvRestApi(cttvAPIservice.getSelf());
+                    theme(gB, document.getElementById("cttvTargetGenomeBrowser"));
                 });
             }
         };
@@ -380,9 +381,7 @@ angular.module('cttvDirectives', [])
     .directive('cttvHpaTissueExpression', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
         'use strict';
 
-        var colorScale = d3.scale.linear()
-            .domain([1,3])
-            .range(["#CBDCEA", "#005299"]); // blue orig
+        var colorScale = cttvUtils.colorScales.BLUE_1_3; //blue orig
 
         var labelScale = d3.scale.ordinal()
             .domain([1,2,3])
@@ -556,7 +555,7 @@ angular.module('cttvDirectives', [])
      * The default "select all / clear all" controls for facets
      * @param facet the facet (i.e. instance of FilterCollection from the FilterService) we are rendering, e.g. datatypes, pathways, score , etc...
      */
-    .directive('cttvDefaultFacetContols', ['$log' , function ($log) {
+    .directive('cttvDefaultFacetControls', ['$log' , function ($log) {
         'use strict';
 
         return {
@@ -576,7 +575,28 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    /**
+    * The therapeutic areas facet
+    */
+    .directive('cttvTherapeuticAreasFacet', ['$log', function ($log) {
+        'use strict';
 
+        return {
+            restrict: 'EA',
+            scope: {
+                facet: '=',
+                partial: '@'
+            },
+            template: '<div cttv-default-facet-controls facet="facet"></div>'
+                + '<div>'
+                + '   <cttv-checkbox-facet bucket="ta" partial={{partial}} ng-repeat="ta in facet.filters">'
+                + '{{ta}}   </cttv-checkbox-facet>'
+                + '</div>',
+
+            link: function (scope, elem, attrs) {
+            },
+        };
+    }])
 
     /**
      * The Datatypes facet
@@ -595,7 +615,7 @@ angular.module('cttvDirectives', [])
 
             // template: '<div cttv-default-facet-contols facet="facet"></div>'
             //          +'<div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in facet.filters"></div>',
-            template: '<div cttv-default-facet-contols facet="facet"></div>'
+            template: '<div cttv-default-facet-controls facet="facet"></div>'
                      +'<div ng-init="isCollapsed=true&&(!datatype.collection.isLastClicked())" ng-repeat="datatype in facet.filters">'
                      +'    <cttv-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
@@ -626,7 +646,7 @@ angular.module('cttvDirectives', [])
             },
 
 
-            template: '<div cttv-default-facet-contols facet="facet"></div>'
+            template: '<div cttv-default-facet-controls facet="facet"></div>'
                      +'<div ng-init="isCollapsed=true&&(!pathway.collection.isLastClicked())" ng-repeat="pathway in facet.filters">' // TODO: try "isCollapsed=true&&(!facet.isLastClicked())"
                      +'    <cttv-parent-checkbox-facet bucket="pathway" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
@@ -1204,8 +1224,6 @@ angular.module('cttvDirectives', [])
         };
     }])
 
-
-
     /**
      * A directive for plain Checkbox facets.
      * @param bucket the instance of Filter object from the FilterService; this is likely in an ng-repeat thing like ng-repeat="bucket in filters"
@@ -1415,5 +1433,51 @@ angular.module('cttvDirectives', [])
             },
             template : '<a href="{{href}}"><span class="fa fa-question-circle"></span></a>',
             link: function(scope, element, attrs) {}
+        };
+    }])
+
+
+    .directive('mastheadNavigationMenu', ['cttvConfig', function (cttvConfig) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {
+                // href: '@',
+            },
+            template :    '<ul class="masthead-navigation">'
+                        +     '<li><a href="/about">About</a></li>'
+
+                        +     '<li dropdown on-toggle="toggled(open)"><a href dropdown-toggle>Help <span class="fa fa-angle-down"></span></a>'
+                        +         '<ul class="dropdown-menu" dropdown-menu>'
+                        +              '<li><a href="/faq">FAQs</a></li>'
+                        +              '<li><a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x25;&#x32;&#x30;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x25;&#x32;&#x30;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x25;&#x32;&#x30;&#x2D;&#x25;&#x32;&#x30;&#x68;&#x65;&#x6C;&#x70;&#x25;&#x32;&#x30;&#x72;&#x65;&#x71;&#x75;&#x65;&#x73;&#x74;">support<span class="fa fa-at"></span>targetvalidation.org</a></li>'
+                        // +              '<li><a href="/documentation/components">Docs</a></li>' // not ready yet
+                        +         '</ul>'
+                        +     '</li>'
+
+                        +     '<li><a href="/documentation/api">API</a></li>' // must force target to link outside of Angular routing
+                        +     '<li><a href="{{dumps_link}}">Downloads</a></li>'
+                        //+     '<li><a href="/documentation/components">Docs</a></li>'
+                        + '</ul>',
+            link: function(scope, element, attrs) {
+                scope.dumps_link = cttvConfig.dumps_link;
+
+                //scope.status = {
+                    //isopen: false
+                //};
+
+                scope.toggled = function(open) {
+                    //$log.log('Dropdown is now: ', open);
+                };
+
+                /* this must be defined here I suppose; some bootstrap thingy that's called automatically */
+                scope.toggleDropdown = function($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    //scope.status.isopen = !scope.status.isopen;
+                };
+
+            }
         };
     }])

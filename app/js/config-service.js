@@ -33,7 +33,8 @@ angular.module('cttvServices').
                 pathway : [dbs.REACTOME],
                 animal_model : [dbs.PHENODIGM],
                 literature : [dbs.EPMC]
-            }
+            },
+            dumps_link: "/downloads/data"
         };
 
 

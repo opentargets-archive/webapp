@@ -9,6 +9,10 @@
     right:40px;
     line-height: inherit;   /* to override bootstrap form feedback */
     padding: 8px 0px;
+
+}
+.search-form-spinner-sm {
+    padding: 4px 0px;
 }
 
 .search-suggestions-box{
@@ -36,7 +40,7 @@
     }
 
     .item:hover{
-        background: #EEE;
+        background: $clr-ui-background-secondary; //#EEE;
         cursor: pointer;
     }
 

@@ -9,22 +9,11 @@
                 $rootScope.showApiErrorMsg = true;
             }
         });
+        $rootScope.showApiError500 = false;
         $rootScope.reloadPage = function () {
             $window.location.reload();
         };
     }])
-
-    /**
-     * High level controller for the app
-     */
-    // .controller('CttvAppCtrl', ['$scope', '$window', '$rootScope',  function ($scope, $window, $rootScope) {
-    //     'use strict';
-    //     // $scope.appmsg = "Lalala";
-    //     $scope.showMsg = false;
-    //     $scope.reload = function () {
-    //         $window.location.reload();
-    //     };
-    // }])
 
     /**
      * SearchAppCtrl
@@ -37,17 +26,18 @@
 
         $scope.search = cttvAppToAPIService.createSearchInitObject();
         $scope.filters = {
-            gene : {
+            target : {
                 total : 0,
                 selected: false,
                 loading: false
             },
-            efo : {
+            disease : {
                 total : 0,
                 selected : false,
                 loading: false
             }
         };
+
 
         /**
         Something like:
@@ -64,40 +54,39 @@
 
         var getFiltersData = function(){
 
-            $scope.filters.gene.loading = true;
+            $scope.filters.target.loading = true;
             cttvAPIservice.getSearch({
                     q: $scope.search.query.q,
-                    size : 1,
-                    filter : 'gene'
+                    size : 0,
+                    filter : 'target'
                 }).
                 then(
                     function(resp) {
-                        $scope.filters.gene.total = resp.body.total;
+                        $scope.filters.target.total = resp.body.total;
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
                 finally(function(){
-                    $scope.filters.gene.loading = false;
+                    $scope.filters.target.loading = false;
                 });
 
-            $scope.filters.efo.loading = true;
+            $scope.filters.disease.loading = true;
             cttvAPIservice.getSearch({
                     q: $scope.search.query.q,
-                    size : 1,
-                    filter : 'efo'
+                    size : 0,
+                    filter : 'disease'
                 }).
                 then(
                     function(resp) {
-                        $scope.filters.efo.total = resp.body.total;
+                        $scope.filters.disease.total = resp.body.total;
                     },
                     cttvAPIservice.defaultErrorHandler
                 ).
                 finally(function(){
-                    $scope.filters.efo.loading = false;
+                    $scope.filters.disease.loading = false;
                 });
 
         };
-
 
 
         $scope.getResults = function(){
@@ -120,8 +109,8 @@
             var queryobject = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
             // if one and only one of the filters is selected, apply the corresponding filter
             // cool way of mimicking a XOR operator ;)
-            if( $scope.filters.gene.selected != $scope.filters.efo.selected ){
-                queryobject.filter = $scope.filters.gene.selected ? 'gene' : 'efo';
+            if( $scope.filters.target.selected != $scope.filters.disease.selected ){
+                queryobject.filter = $scope.filters.target.selected ? 'target' : 'disease';
             }
 
             cttvAPIservice.getSearch( queryobject )
@@ -163,7 +152,6 @@
         'use strict';
         $log.log('MastheadCtrl()');
         $scope.location = $location;
-
     }]).
 
     controller('D3TestCtrl', ['$scope', '$log', function ($scope, $log) {

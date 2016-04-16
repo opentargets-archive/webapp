@@ -60,9 +60,10 @@ angular.module('cttvServices').
                 ANIMAL_MODEL: "Mouse",
                 LITERATURE: "Text Mining"
             },
-            DATATYPES: 'datatypes',
-            PATHWAY_TYPES: 'pathway_type',
+            DATATYPES: 'datatype',
+            PATHWAY: 'pathway',
             DATASOURCES: 'datasources',
+            THERAPEUTIC_AREAS: 'therapeutic_area',
             UNIQUE_TARGET_COUNT: 'unique_target_count',
             UNIQUE_DISEASE_COUNT: 'unique_disease_count',
             DATA_DISTRIBUTION: 'data_distribution',
@@ -77,16 +78,18 @@ angular.module('cttvServices').
             OK : 'ok',
             ACCESS_LEVEL_PUBLIC: 'public',
             ACCESS_LEVEL_PRIVATE: 'private',
-            CTTV_ROOT_URI: 'http://www.targetvalidation.org/cttv_root'
+            CTTV_ROOT_URI: 'http://www.targetvalidation.org/cttv_root',
+            CTTV_ROOT_NAME: "CTTV Root",
+            CTTV_ROOT_CODE: "cttv_root"
         };
 
         consts.invert = function(val){
             var a = invLookup(consts, val);
             return a;
-        }
+        };
 
         function invLookup(o ,v){
-            var k = undefined;
+            var k;
             for(var i in o){
                 if(o.hasOwnProperty(i)){
                     //$log.log(v+") "+i+" = "+o[i]);
