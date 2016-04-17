@@ -16,12 +16,12 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary) {
+.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils) {
 
     'use strict';
 
     $log.log('diseaseAssociationsCtrl()');
-
+    cttvUtils.clearErrors();
 
 
     // ---------------------------

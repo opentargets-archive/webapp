@@ -8,7 +8,7 @@ angular.module('cttvServices', []).
     /**
      * Some utility services.
      */
-    factory('cttvUtils', ['$log', '$window', function($log, $window) {
+    factory('cttvUtils', ['$log', '$window', '$rootScope', function($log, $window, $rootScope) {
         'use strict';
 
         var cttvUtilsService = {};
@@ -221,6 +221,9 @@ angular.module('cttvServices', []).
             return pub;
         };
 
+        cttvUtilsService.clearErrors = function () {
+            $rootScope.showApiError500 = false;
+        };
 
 
         // Defers a call x ms
