@@ -19,10 +19,10 @@
      * SearchAppCtrl
      * Controller for the search/results page
      */
-    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice) {
+    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', 'cttvUtils', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice, cttvUtils) {
         'use strict';
         $log.log('SearchCtrl()');
-
+        cttvUtils.clearErrors();
 
         $scope.search = cttvAppToAPIService.createSearchInitObject();
         $scope.filters = {

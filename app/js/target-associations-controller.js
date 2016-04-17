@@ -11,6 +11,7 @@ angular.module('cttvControllers')
         'use strict';
 
 	$log.log('targetAssociationsCtrl()');
+    cttvUtils.clearErrors();
 
 	var q = $location.path().split('/')[2];
 	$scope.search = {
