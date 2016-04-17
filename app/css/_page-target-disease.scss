@@ -28,8 +28,9 @@
 .gene-disease-header .overview .association{
     display: table-cell;
     width:10%;
-    vertical-align:middle;
+    vertical-align:top;
     padding: 2px;
+    padding-top:20px;
 }
 
 .gene-disease-header .overview .association div{
@@ -46,5 +47,3 @@
 .gene-disease-content .no-last-el{
     border-right-width: 1px !important;
 }
-
-
