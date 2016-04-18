@@ -37,7 +37,8 @@ angular.module('cttvControllers')
                 "description" : data.definition || resp.label,
                 "synonyms" : _.uniq(data.efo_synonyms),
                 "paths" : paths,
-                "children" : data.children
+                "children" : data.children,
+                "title" : data.label.split(" ").join("_")
             };
 
             // Update bindings

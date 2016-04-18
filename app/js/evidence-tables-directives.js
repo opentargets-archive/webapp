@@ -15,7 +15,8 @@ angular.module('cttvDirectives')
         templateUrl: 'partials/known-drug-table.html',
         scope: {
             loadFlag : '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
-            data : '=?'         // optional data link to pass the data out of the directive
+            data : '=?',        // optional data link to pass the data out of the directive
+            title : '=?'        // optional title for filename export
         },
         controller: ['$scope', function ($scope) {
             function init() {
@@ -269,7 +270,7 @@ angular.module('cttvDirectives')
                         // ]
                         //"ordering": false
                         //}, $scope.search.info.title+"-known_drugs") );
-                    }, "-known_drugs"));
+                    }, (scope.title ? scope.title+"-" : "")+"known_drugs"));
                 }
 
             });

@@ -25,7 +25,8 @@ angular.module('cttvControllers')
                 symbol : resp.approved_symbol || resp.ensembl_external_name, //resp.approved_symbol || resp.approved_name || resp.ensembl_external_name,
                 id : resp.approved_id || resp.ensembl_gene_id,
                 description : resp.uniprot_function[0],
-                name : resp.approved_name || resp.ensembl_description
+                name : resp.approved_name || resp.ensembl_description,
+                title : (resp.approved_symbol || resp.ensembl_external_name).split(" ").join("_")
             };
 
             // Synonyms
