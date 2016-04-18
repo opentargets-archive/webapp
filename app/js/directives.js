@@ -1446,7 +1446,7 @@ angular.module('cttvDirectives', [])
                 // href: '@',
             },
             template :    '<ul class="masthead-navigation">'
-                        +     '<li dropdown on-toggle="toggled(open)"><a href dropdown-toggle>About<span class="fa fa-angle-down"></span></a>'
+                        +     '<li dropdown on-toggle="toggled(open)"><a href dropdown-toggle>About <span class="fa fa-angle-down"></span></a>'
                         +         '<ul class="dropdown-menu" dropdown-menu>'
                         +              '<li><a href="//www.opentargets.org/">Open Targets</a></li>'
                         +              '<li><a href="/about">Target Validation Platform</a></li>'
