@@ -1446,7 +1446,12 @@ angular.module('cttvDirectives', [])
                 // href: '@',
             },
             template :    '<ul class="masthead-navigation">'
-                        +     '<li><a href="/about">About</a></li>'
+                        +     '<li dropdown on-toggle="toggled(open)"><a href dropdown-toggle>About<span class="fa fa-angle-down"></span></a>'
+                        +         '<ul class="dropdown-menu" dropdown-menu>'
+                        +              '<li><a href="//www.opentargets.org/">Open Targets</a></li>'
+                        +              '<li><a href="/about">Target Validation Platform</a></li>'
+                        +         '</ul>'
+                        +     '</li>'
 
                         +     '<li dropdown on-toggle="toggled(open)"><a href dropdown-toggle>Help <span class="fa fa-angle-down"></span></a>'
                         +         '<ul class="dropdown-menu" dropdown-menu>'
@@ -1458,6 +1463,7 @@ angular.module('cttvDirectives', [])
 
                         +     '<li><a href="/documentation/api">API</a></li>' // must force target to link outside of Angular routing
                         +     '<li><a href="{{dumps_link}}">Downloads</a></li>'
+                        +     '<li><a href="//blog.opentargets.org/tag/tech">Blog</a></li>'
                         //+     '<li><a href="/documentation/components">Docs</a></li>'
                         + '</ul>',
             link: function(scope, element, attrs) {
