@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
         'use strict';
 
         var whoiam = "bubbles";
-        var bottomMargin = 310;
+        var bottomMargin = 220;
         var bView;
 
         return {
