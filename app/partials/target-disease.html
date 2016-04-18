@@ -232,7 +232,7 @@
                         <div ng-show="search.drugs.data.length>0">
                             <p>Source: <span ng-repeat="source in search.drugs.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
-                            <known-drug-table disease="{{disease}}" target="{{target}}" load-flag="search.drugs.is_loading" data="search.drugs.data"></known-drug-table>
+                            <known-drug-table disease="{{disease}}" target="{{target}}" load-flag="search.drugs.is_loading" data="search.drugs.data" title="search.info.title"></known-drug-table>
                         </div>
 
                         <div ng-show="search.drugs.data.length==0">

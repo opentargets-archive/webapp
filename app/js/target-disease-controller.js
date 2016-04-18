@@ -165,11 +165,11 @@
 
 
 
-        // var updateTitle = function(t, d){
-        //     //$scope.search.info.title = (($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name)+"-"+$scope.search.info.efo.label).split(" ").join("_");
-        //     $scope.search.info.title = (t+"-"+d).split(" ").join("_");
-        //     $log.log( "updateTitle() : " + $scope.search.info.title );
-        // };
+        var updateTitle = function(t, d){
+            //$scope.search.info.title = (($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name)+"-"+$scope.search.info.efo.label).split(" ").join("_");
+            $scope.search.info.title = (t+"-"+d).split(" ").join("_");
+            $log.log( "updateTitle() : " + $scope.search.info.title );
+        };
 
 
 
@@ -237,7 +237,7 @@
                         // for(var i=0; i<resp.body.data[0].association_score.datatypes.length; i++){
                         //     $scope.search.association_scores[resp.body.data[0].association_score.datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score;
                         // }
-                        // updateTitle( resp.body.data[0].target.symbol, resp.body.data[0].disease.name );
+                        updateTitle( resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label );
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
