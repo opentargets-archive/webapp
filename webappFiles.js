@@ -19,6 +19,7 @@ var webappFiles = {
             'app/vendor/angular-swagger-ui/swagger-yaml-parser.min.js',
             'node_modules/js-yaml/dist/js-yaml.min.js',
             'node_modules/marked/marked.min.js',
+	    'bower_components/FileSaver/FileSaver.min.js'
         ],
 
         'css': [
