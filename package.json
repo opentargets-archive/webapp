@@ -56,12 +56,12 @@
     "cttv.genome": "0.0.9",
     "cttv.spinner": "file:components/spinner",
     "cttv.targetAssociationsBubbles": "0.0.7",
-    "cttv.targetAssociationsTree": "file:components/targetAssociationsTree",
+    "cttv.targetAssociationsTree": "0.0.0",
     "cttv.targetGeneTree": "file:components/targetGeneTree",
-    "tnt.genome": "0.1.5",
-    "tnt.rest": "0.1.1",
     "js-yaml": "3.5.5",
     "marked": "0.3.5",
+    "tnt.genome": "0.1.5",
+    "tnt.rest": "0.1.1",
     "tnt.tooltip": "0.1.0",
     "tnt.utils": "0.1.1"
   }
