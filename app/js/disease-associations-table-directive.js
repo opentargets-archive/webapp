@@ -250,8 +250,7 @@ angular.module('cttvDirectives')
         },
 
         template: '<div>'
-        // + '<div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
-        + '<div class="clearfix"><div class="pull-right"></div></div>'
+        + '<div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
         +'  <cttv-matrix-table></cttv-matrix-table>'
         +'  <cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
         +'  <cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
@@ -289,6 +288,12 @@ angular.module('cttvDirectives')
                     .then (function (resp) {
                         var total = resp.body.total;
 
+                        function columnsNumberOk (csv, n) {
+                            var firstRow = csv.split("\n")[0];
+                            var cols = firstRow.split(",");
+                            return cols.length === n;
+                        }
+
                         function getNextChunk (size, from) {
                             var opts = {
                                 disease: scope.disease,
@@ -303,14 +308,15 @@ angular.module('cttvDirectives')
 
                             return cttvAPIservice.getAssociations(opts)
                                 .then (function (resp) {
-                                    console.log(from);
                                     var moreText = resp.body;
-                                    if (from>0) {
-                                        // Not in the first page, so remove the header row
-                                        moreText = moreText.split("\n").slice(1).join("\n");
+                                    if (columnsNumberOk(moreText, opts.fields.length)) {
+                                        if (from>0) {
+                                            // Not in the first page, so remove the header row
+                                            moreText = moreText.split("\n").slice(1).join("\n");
+                                        }
+                                        totalText += moreText;
+                                        return totalText;
                                     }
-                                    totalText += moreText;
-                                    return totalText;
                                 });
                         }
 
@@ -332,11 +338,14 @@ angular.module('cttvDirectives')
                             });
                         });
                         promise.then (function (res) {
-                            var hiddenElement = document.createElement('a');
-                            hiddenElement.href = 'data:attachment/csv,' + encodeURI(totalText);
-                            hiddenElement.target = '_blank';
-                            hiddenElement.download = scope.filename + ".csv";
-                            hiddenElement.click();
+                            var b = new Blob([totalText], {type: "text/csv;charset=utf-8"});
+                            saveAs(b, scope.filename + ".csv");
+
+                            // var hiddenElement = document.createElement('a');
+                            // hiddenElement.href = 'data:attachment/csv,' + encodeURI(totalText);
+                            // hiddenElement.target = '_blank';
+                            // hiddenElement.download = scope.filename + ".csv";
+                            // hiddenElement.click();
                         });
 
                     }, cttvAPIservice.defaultErrorHandler);
