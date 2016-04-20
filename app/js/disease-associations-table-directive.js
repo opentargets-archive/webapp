@@ -288,6 +288,12 @@ angular.module('cttvDirectives')
                     .then (function (resp) {
                         var total = resp.body.total;
 
+                        function columnsNumberOk (csv, n) {
+                            var firstRow = csv.split("\n")[0];
+                            var cols = firstRow.split(",");
+                            return cols.length === n;
+                        }
+
                         function getNextChunk (size, from) {
                             var opts = {
                                 disease: scope.disease,
@@ -302,14 +308,15 @@ angular.module('cttvDirectives')
 
                             return cttvAPIservice.getAssociations(opts)
                                 .then (function (resp) {
-                                    console.log(from);
                                     var moreText = resp.body;
-                                    if (from>0) {
-                                        // Not in the first page, so remove the header row
-                                        moreText = moreText.split("\n").slice(1).join("\n");
+                                    if (columnsNumberOk(moreText, opts.fields.length)) {
+                                        if (from>0) {
+                                            // Not in the first page, so remove the header row
+                                            moreText = moreText.split("\n").slice(1).join("\n");
+                                        }
+                                        totalText += moreText;
+                                        return totalText;                                        
                                     }
-                                    totalText += moreText;
-                                    return totalText;
                                 });
                         }
 
