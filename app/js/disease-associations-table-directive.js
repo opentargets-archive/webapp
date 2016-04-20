@@ -315,7 +315,7 @@ angular.module('cttvDirectives')
                                             moreText = moreText.split("\n").slice(1).join("\n");
                                         }
                                         totalText += moreText;
-                                        return totalText;                                        
+                                        return totalText;
                                     }
                                 });
                         }
@@ -338,11 +338,14 @@ angular.module('cttvDirectives')
                             });
                         });
                         promise.then (function (res) {
-                            var hiddenElement = document.createElement('a');
-                            hiddenElement.href = 'data:attachment/csv,' + encodeURI(totalText);
-                            hiddenElement.target = '_blank';
-                            hiddenElement.download = scope.filename + ".csv";
-                            hiddenElement.click();
+                            var b = new Blob([totalText], {type: "text/csv;charset=utf-8"});
+                            saveAs(b, scope.filename + ".csv");
+
+                            // var hiddenElement = document.createElement('a');
+                            // hiddenElement.href = 'data:attachment/csv,' + encodeURI(totalText);
+                            // hiddenElement.target = '_blank';
+                            // hiddenElement.download = scope.filename + ".csv";
+                            // hiddenElement.click();
                         });
 
                     }, cttvAPIservice.defaultErrorHandler);
