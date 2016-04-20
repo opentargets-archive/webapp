@@ -53,7 +53,7 @@
     "cttv.api": "0.0.5",
     "cttv.diseaseGraph": "file:components/diseaseGraph",
     "cttv.flowerView": "0.0.0",
-    "cttv.genome": "0.0.9",
+    "cttv.genome": "0.0.10",
     "cttv.spinner": "file:components/spinner",
     "cttv.targetAssociationsBubbles": "0.0.7",
     "cttv.targetAssociationsTree": "0.0.1",
