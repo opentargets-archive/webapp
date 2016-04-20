@@ -19,6 +19,7 @@
 .gene-disease-header .overview .item{
     display: table-cell;
     width:45%;
+    vertical-align:top;
 }
 
 .gene-disease-header .overview .item a p{
@@ -30,7 +31,7 @@
     width:10%;
     vertical-align:top;
     padding: 2px;
-    padding-top:20px;
+    padding-top:43px;
 }
 
 .gene-disease-header .overview .association div{
