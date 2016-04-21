@@ -306,6 +306,7 @@ angular.module('cttvDirectives')
                                 facets: false,
                                 format: "csv",
                                 size: size,
+                                direct: true,
                                 fields: ["disease.efo_info.label", "association_score.overall", "association_score.datatypes.genetic_association", "association_score.datatypes.somatic_mutation", "association_score.datatypes.known_drug", "association_score.datatypes.affected_pathway", "association_score.datatypes.rna_expression", "association_score.datatypes.literature", "association_score.datatypes.animal_model", "disease.efo_info.therapeutic_area.labels"],
                                 from: from
                             };
