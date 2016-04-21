@@ -160,7 +160,7 @@ angular.module('cttvDirectives')
                 "orderMulti": false,
                 "autoWidth": false,
                 "ordering": true,
-                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "lengthMenu": [[10, 50, 200, 500], [10, 50, 200, 500]],
                 "pageLength": 50,
                 "language": {
                     // "lengthMenu": "Display _MENU_ records per page",
