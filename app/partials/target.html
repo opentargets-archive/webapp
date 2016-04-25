@@ -146,12 +146,14 @@
 
                 <!-- Drugs -->
                 <accordion-group heading="Drugs" attr-section-name="Drugs" is-open="false">
-                    <div>
-                        <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a>
-                            <known-drug-table target="{{targetId}}" title="target.title"></known-drug-table>
-                        </p>
+                    <div ng-show="!drugs.has_errors">
+                        <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a></p>
+                        <known-drug-table target="{{targetId}}" title="target.title" error-flag="drugs.has_errors"></known-drug-table>
                     </div>
 
+                    <alert type="danger" ng-show="drugs.has_errors" ng-cloak>
+                        <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Try again later.
+                    </alert>
                 </accordion-group>
 
                 <!-- <accordion-group heading="Drugs" is-open="false">
