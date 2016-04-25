@@ -56,7 +56,7 @@
     "cttv.genome": "0.0.10",
     "cttv.spinner": "file:components/spinner",
     "cttv.targetAssociationsBubbles": "0.0.7",
-    "cttv.targetAssociationsTree": "0.0.1",
+    "cttv.targetAssociationsTree": "0.0.2",
     "cttv.targetGeneTree": "file:components/targetGeneTree",
     "js-yaml": "3.5.5",
     "marked": "0.3.5",
