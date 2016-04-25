@@ -9,6 +9,10 @@ angular.module('cttvControllers')
         $log.log("DiseaseCtrl()");
         cttvUtils.clearErrors();
 
+        $scope.drugs = {
+            has_errors: false,
+        }
+
         var efo_code = $location.url().split("/")[2];
         cttvAPIservice.getDisease({
             code: efo_code
@@ -40,6 +44,7 @@ angular.module('cttvControllers')
                 "children" : data.children,
                 "title" : data.label.split(" ").join("_")
             };
+
 
             // Update bindings
             //$scope.$apply();

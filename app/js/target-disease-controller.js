@@ -49,7 +49,8 @@
                     is_loading: false,
                     heading : cttvDictionary.COMMON_DISEASES,
                     source : cttvConfig.evidence_sources.genetic_association.common,
-                    source_label : cttvConfig.evidence_sources.genetic_association.common.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
+                    source_label : cttvConfig.evidence_sources.genetic_association.common.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    has_errors: false,
                 },
                 rare_diseases : {
                     data : [],
@@ -57,7 +58,8 @@
                     is_loading: false,
                     heading : cttvDictionary.RARE_DISEASES,
                     source : cttvConfig.evidence_sources.genetic_association.rare,
-                    source_label : cttvConfig.evidence_sources.genetic_association.rare.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
+                    source_label : cttvConfig.evidence_sources.genetic_association.rare.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    has_errors: false,
                 }
             },
             rna_expression : {
@@ -66,7 +68,8 @@
                 is_loading: false,
                 heading : cttvDictionary.RNA_EXPRESSION,
                 source : cttvConfig.evidence_sources.rna_expression,
-                source_label : cttvConfig.evidence_sources.rna_expression.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
+                source_label : cttvConfig.evidence_sources.rna_expression.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                has_errors: false,
             },
             pathways : {
                 data : [],
@@ -74,7 +77,8 @@
                 is_loading: false,
                 heading : cttvDictionary.AFFECTED_PATHWAY,
                 source : cttvConfig.evidence_sources.pathway,
-                source_label : cttvConfig.evidence_sources.pathway.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
+                source_label : cttvConfig.evidence_sources.pathway.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                has_errors: false,
             },
             drugs : {
                 data : [],
@@ -82,7 +86,8 @@
                 is_loading: false,
                 heading : cttvDictionary.KNOWN_DRUG,
                 source : cttvConfig.evidence_sources.known_drug,
-                source_label : cttvConfig.evidence_sources.known_drug.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
+                source_label : cttvConfig.evidence_sources.known_drug.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                has_errors: false,
             },
             somatic_mutations : {
                 data : [],
@@ -90,7 +95,8 @@
                 is_loading: false,
                 heading : cttvDictionary.SOMATIC_MUTATION,
                 source : cttvConfig.evidence_sources.somatic_mutation,
-                source_label : cttvConfig.evidence_sources.somatic_mutation.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
+                source_label : cttvConfig.evidence_sources.somatic_mutation.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                has_errors: false,
             },
             literature : {
                 data : [],
@@ -98,7 +104,8 @@
                 is_loading: false,
                 heading : cttvDictionary.LITERATURE,
                 source : cttvConfig.evidence_sources.literature,
-                source_label : cttvConfig.evidence_sources.literature.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
+                source_label : cttvConfig.evidence_sources.literature.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                has_errors: false,
             },
             mouse : {
                 data : [],
@@ -106,7 +113,8 @@
                 is_loading: false,
                 heading : cttvDictionary.ANIMAL_MODEL,
                 source : cttvConfig.evidence_sources.animal_model,
-                source_label : cttvConfig.evidence_sources.animal_model.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; })
+                source_label : cttvConfig.evidence_sources.animal_model.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                has_errors: false,
             },
         };
 
@@ -390,7 +398,9 @@
 
 
                     newdata.push(row);
+
                 }catch(e){
+                    $scope.search.genetic_associations.common_diseases.has_errors = true;
                     $log.error("Error parsing common disease data:");
                     $log.error(e);
                 }
@@ -562,6 +572,7 @@
 
 
                 }catch(e){
+                    $scope.search.genetic_associations.rare_diseases.has_errors = true;
                     $log.warn("Error parsing rare disease data:");
                     $log.warn(e);
                 }
@@ -714,6 +725,7 @@
                     newdata.push(row); // use push() so we don't end up with empty rows
 
                 }catch(e){
+                    $scope.search.pathways.has_errors = true;
                     $log.error("Error parsing pathways data:");
                     $log.error(e);
                 }
@@ -855,6 +867,7 @@
                     newdata.push(row); // push, so we don't end up with empty rows
 
                 }catch(e){
+                    $scope.search.rna_expression.has_errors = true;
                     $log.log("Error parsing RNA-expression data:");
                     $log.log(e);
                 }
@@ -1018,6 +1031,7 @@
 
                     newdata.push(row); // push, so we don't end up with empty rows
                 }catch(e){
+                    $scope.search.somatic_mutations.has_errors = true;
                     $log.log("Error parsing somatic mutation data:");
                     $log.log(e);
                 }
@@ -1160,6 +1174,7 @@
 
                     newdata.push(row); // push, so we don't end up with empty rows
                 }catch(e){
+                    $scope.search.mouse.has_errors = true;
                     $log.error("Error parsing mouse data:");
                     $log.error(e);
                 }
@@ -1660,6 +1675,7 @@
 
 
                 }catch(e){
+                    $scope.search.literature.has_errors = true;
                     $log.error("Error parsing literature data:");
                     $log.error(e);
                 }

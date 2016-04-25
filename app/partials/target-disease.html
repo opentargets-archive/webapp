@@ -89,7 +89,7 @@
                                     <!-- <p><span class="small">Association score: {{search.association_scores[datatypes.GENETIC_ASSOCIATION] || 0}}</span></p> -->
 
                                     <!-- Common disease table -->
-                                    <div ng-show="search.genetic_associations.common_diseases.data.length>0">
+                                    <div ng-show="search.genetic_associations.common_diseases.data.length>0 && !search.genetic_associations.common_diseases.has_errors">
                                         <h4>{{search.genetic_associations.common_diseases.heading}}</h4>
                                         <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">GWAS Catalog curated database</a></p> -->
 
@@ -123,13 +123,17 @@
                                         </div>
                                     </div>
 
+                                    <alert type="danger" ng-show="search.genetic_associations.common_diseases.has_errors" ng-cloak style="margin-top:15px">
+                                        <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving {{search.genetic_associations.common_diseases.heading}} data. Try again later.
+                                    </alert>
+
 
                                     <!-- common / rare disease table divider -->
                                     <div ng-show="search.genetic_associations.common_diseases.data.length>0 && search.genetic_associations.rare_diseases.data.length>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
 
 
                                     <!-- Related rare disease table -->
-                                    <div ng-show="search.genetic_associations.rare_diseases.data.length>0">
+                                    <div ng-show="search.genetic_associations.rare_diseases.data.length>0 && !search.genetic_associations.rare_diseases.has_errors">
                                         <h4>{{search.genetic_associations.rare_diseases.heading}}</h4>
                                         <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">UniProt</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated databases</p> -->
 
@@ -158,11 +162,19 @@
                                             </table>
                                         </div>
                                     </div>
+
+                                    <alert type="danger" ng-show="search.genetic_associations.rare_diseases.has_errors" ng-cloak style="margin-top:15px">
+                                        <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving {{search.genetic_associations.rare_diseases.heading}} data. Try again later.
+                                    </alert>
+
                                 </div>
-                                <div ng-show="search.genetic_associations.common_diseases.data.length==0 && search.genetic_associations.rare_diseases.data.length==0">
+
+                                <div ng-show="search.genetic_associations.common_diseases.data.length==0 && search.genetic_associations.rare_diseases.data.length==0 && !search.genetic_associations.common_diseases.has_errors && !search.genetic_associations.rare_diseases.has_errors">
                                     <p>No data available</p>
                                 </div>
+
                             </tab>
+
                             <tab heading="Browser">
                                 <div style="overflow:hidden">
                                     <cttv-target-genome-browser width=1140 efo={{search.disease}} target="{{search.info.gene.ensembl_gene_id}}"></cttv-target-genome-browser>
@@ -185,7 +197,7 @@
                                 <span cttv-progress-spinner class="pull-right" ng-show="search.somatic_mutations.is_loading"></span>
                             </span>
                         </accordion-heading>
-                        <div ng-show="search.somatic_mutations.data.length>0">
+                        <div ng-show="search.somatic_mutations.data.length>0 && !search.somatic_mutations.has_errors">
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Cancer Gene Census</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated database</p> -->
 
                             <p>Source: <span ng-repeat="source in search.somatic_mutations.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
@@ -210,9 +222,13 @@
                                 </table>
                             </div>
                         </div>
-                        <div ng-show="search.somatic_mutations.data.length==0">
+                        <div ng-show="search.somatic_mutations.data.length==0 && !search.somatic_mutations.has_errors">
                             <p>No data available</p>
                         </div>
+
+                        <alert type="danger" ng-show="search.somatic_mutations.has_errors" ng-cloak>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Try again later.
+                        </alert>
                     </accordion-group>
 
 
@@ -229,15 +245,19 @@
                         </accordion-heading>
 
                         <!-- <div ng-show="search.drugs==true"> -->
-                        <div ng-show="search.drugs.data.length>0">
+                        <div ng-show="search.drugs.data.length>0 && !search.drugs.has_errors">
                             <p>Source: <span ng-repeat="source in search.drugs.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
-                            <known-drug-table disease="{{disease}}" target="{{target}}" load-flag="search.drugs.is_loading" data="search.drugs.data" title="search.info.title"></known-drug-table>
+                            <known-drug-table disease="{{disease}}" target="{{target}}" load-flag="search.drugs.is_loading" data="search.drugs.data" title="search.info.title" error-flag="search.drugs.has_errors"></known-drug-table>
                         </div>
 
-                        <div ng-show="search.drugs.data.length==0">
+                        <div ng-show="search.drugs.data.length==0 && !search.drugs.has_errors">
                             <p>No data available</p>
                         </div>
+
+                        <alert type="danger" ng-show="search.drugs.has_errors" ng-cloak>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Try again later.
+                        </alert>
 
                     </accordion-group>
 
@@ -254,10 +274,10 @@
                                 <span cttv-progress-spinner class="pull-right" ng-show="search.pathways.is_loading"></span>
                             </span>
                         </accordion-heading>
-                        <div ng-show="search.pathways.data.length>0">
+                        <div ng-show="search.pathways.data.length>0 && !search.pathways.has_errors">
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Reactome</a> curated database</p> -->
                             <p>Source: <span ng-repeat="source in search.pathways.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
-                            <!-- <h4>Header info for table</h4> -->
+
                             <div class="table-panel">
                                 <table class='table cttv-evidence-table' id="pathways-table">
                                     <thead>
@@ -281,9 +301,14 @@
                                 </table>
                             </div>
                         </div>
-                        <div ng-show="search.pathways.data.length==0">
+
+                        <div ng-show="search.pathways.data.length==0 && !search.pathways.has_errors">
                             <p>No data available</p>
                         </div>
+
+                        <alert type="danger" ng-show="search.pathways.has_errors" ng-cloak>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Try again later.
+                        </alert>
                     </accordion-group>
 
 
@@ -299,11 +324,10 @@
                                 <span cttv-progress-spinner class="pull-right" ng-show="search.rna_expression.is_loading"></span>
                             </span>
                         </accordion-heading>
-                        <div ng-show="search.rna_expression.data.length>0">
+                        <div ng-show="search.rna_expression.data.length>0 && !search.rna_expression.has_errors">
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Expression Atlas</a> curated database</p> -->
                             <p>Source: <span ng-repeat="source in search.rna_expression.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
-                            <!-- <h4>Header info for table</h4> -->
                             <div class="table-panel">
                                 <table class='table cttv-evidence-table' id="rna-expression-table">
                                     <thead>
@@ -331,9 +355,14 @@
                                 </table>
                             </div>
                         </div>
-                        <div ng-show="search.rna_expression.data.length==0">
+
+                        <div ng-show="search.rna_expression.data.length==0 && !search.rna_expression.has_errors">
                             <p>No data available</p>
                         </div>
+
+                        <alert type="danger" ng-show="search.rna_expression.has_errors" ng-cloak>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Try again later.
+                        </alert>
                     </accordion-group>
 
 
@@ -349,7 +378,7 @@
                             </span>
                         </accordion-heading>
 
-                        <div ng-show="search.literature.data.length>0">
+                        <div ng-show="search.literature.data.length>0 && !search.literature.has_errors">
 
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">DisGeNET</a> and <a href="/faq#data-provenance" target="_blank">Europe PMC</a></p> -->
                             <!-- <p>Source: <span ng-repeat="source in search.literature.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span></p> -->
@@ -389,9 +418,15 @@
                                 </table>
                             </div>
                         </div>
-                        <div ng-show="search.literature.data.length==0">
+
+                        <div ng-show="search.literature.data.length==0 && !search.literature.has_errors">
                             <p>No data available</p>
                         </div>
+
+                        <alert type="danger" ng-show="search.literature.has_errors" ng-cloak>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Try again later.
+                        </alert>
+
                     </accordion-group>
 
 
@@ -407,9 +442,11 @@
                                 <span cttv-progress-spinner class="pull-right" ng-show="search.mouse.is_loading"></span>
                             </span>
                         </accordion-heading>
-                        <div ng-show="search.mouse.data.length>0">
+
+                        <div ng-show="search.mouse.data.length>0 && !search.mouse.has_errors">
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Phenodigm</a></p> -->
                             <p>Source: <span ng-repeat="source in search.mouse.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a></a><span></p>
+
                             <div class="table-panel">
                                 <table class='table cttv-evidence-table' id="mouse-table">
                                     <thead>
@@ -434,9 +471,14 @@
                                 </table>
                             </div>
                         </div>
-                        <div ng-show="search.mouse.data.length==0">
+
+                        <div ng-show="search.mouse.data.length==0 && !search.mouse.has_errors">
                             <p>No data available</p>
                         </div>
+
+                        <alert type="danger" ng-show="search.mouse.has_errors" ng-cloak>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Try again later.
+                        </alert>
                     </accordion-group>
 
 

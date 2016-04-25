@@ -13,6 +13,10 @@ angular.module('cttvControllers')
 
     $scope.targetId = $location.url().split("/")[2];
 
+    $scope.drugs = {
+        has_errors: false,
+    }
+
     cttvAPIservice.getTarget({
         target_id: $scope.targetId
     })
