@@ -16,7 +16,8 @@ angular.module('cttvDirectives')
         scope: {
             loadFlag : '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
             data : '=?',        // optional data link to pass the data out of the directive
-            title : '=?'        // optional title for filename export
+            title : '=?',       // optional title for filename export
+            errorFlag : '=?'    // optional error-flag: pass a var to hold parsing-related errors
         },
         controller: ['$scope', function ($scope) {
             function init() {
@@ -30,6 +31,8 @@ angular.module('cttvDirectives')
             // this probably shouldn't live here, so we'll see later on...
             var accessLevelPrivate = "<span class='cttv-access-private' title='private data'></span>";
             var accessLevelPublic = "<span class='cttv-access-public' title='public data'></span>";
+
+            scope.errorFlag = false;
 
             scope.$watchGroup([function () {return attrs.target;}, function () {return attrs.disease;}], function () {
                 //if (!attrs.target && !attrs.disease) {
@@ -205,6 +208,7 @@ angular.module('cttvDirectives')
 
                             newdata.push(row); // use push() so we don't end up with empty rows
                         }catch(e){
+                            scope.errorFlag = true;
                             $log.log("Error parsing drugs data:");
                             $log.log(e);
                         }
