@@ -1,0 +1,121 @@
+<div class="partial-page">
+
+    <view-title>Data sources</view-title>
+
+    <div class="cttv-content-header">
+        <div class="container">
+            <h3>Target Validation Platform Data Sources</h3>
+            <p></p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 pull-right">
+                <ul class="plain arrow-icon">
+                    <li><a href="#genetic">Genetic associations</a>
+                        <ul class="plain arrow-icon">
+                            <li><a href="#gwas">GWAS Catalog</a></li>
+                            <li><a href="#uniprot">UniProt</a></li>
+                            <li><a href="#eva">European Variation Archive (EVA)</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#somatic">Somatic mutations</a>
+                        <ul class="plain arrow-icon">
+                            <li><a href="#census">The Cancer Gene Census</a></li>
+                            <li><a href="#eva_somatic">European Variation Archive (EVA)</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#drugs">Drugs</a>
+                        <ul class="plain arrow-icon">
+                            <li><a href="#chembl">ChEMBL</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#rna-expression">RNA expression</a>
+                        <ul class="plain arrow-icon">
+                            <li><a href="#atlas">Expression Atlas</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="#text_mining">Text mining</a></li>
+
+                    <li><a href="#reactome">Affected pathways</a></li>
+
+                    <li><a href="#mouse">Animal models</a></li>
+
+
+
+                </ul>
+            </div>
+
+            <div class="col-sm-8">
+
+                <div class="cttv-docs-section">
+                    <p>The Target Validation Platform collects and integrates data from various data sources that we believe are important to target identification and prioritisation. Within the platform we distinguish between individual <strong>data sources</strong> which correspond to the database that supplies the data, and <strong>data types</strong> which are groupings of data from different data sources. Data from an individual data source can contribute to different data types, if there is a logical split in the data. For instance <a href="http://www.ebi.ac.uk/eva/?Home">EVA</a> contains both germline and somatic mutations, and hence contributes to both the <a href="#genetic">Genetic associations</a> and <a href="#somatic">Somatic mutation</a> data types.</p>
+                </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="genetic"></a>Genetic associations</h4>
+                    <p>Genetic associations are classified as associaions to either common or rare diseases. We use data from the GWAS catalog from Genome Wide Association Studies (GWAS) for common disese and mutations in clinical samples from European Variation Archive (EVA) or UniProt annotation for rare genetic diseases (Mendelian diseases).</p>
+
+                    <h5><a name="gwas"></a>GWAS Catalog</h5>
+                    <p>The <a href="https://www.ebi.ac.uk/gwas/">GWAS catalog</a> provides evidence on the association of targets (genes) and diseases from Genome Wide Association Studies (GWAS). GWAS Catalog provides a list of the most associated variants (SNPs) by genomic region with the disease from each study. The GWAS Catalog data includes associations with p-values ≤ 10-5. Although the standard in the field for significance of an association in GWAS is for the p-value to be ≤ 5 x10-8, we provide sub-threshold values to broaden the coverage of diseases. The association is assigned the most likely gene by assessing the probable link between SNP and gene using an Open Targets custom annotation pipeline. SNPs are assigned to a gene by first considering any deleterious consequence within the gene&#39;s coding region, then whether it is located within the gene&#39;s introns or regulatory regions and finally identifying the gene promoter to which it is nearest if there is no other data available.</p>
+
+                    <h5><a name="uniprot"></a>UniProt</h5>
+                    <p>The EMBL-EBI <a href="http://www.uniprot.org">UniProt</a> database is a comprehensive, high-quality and freely accessible resource of protein sequence and functional information manually curated from the literature and public databases including Online Mendelian Inheritance in Man (OMIM). The UniProt database supplies curated information on rare genetic diseases (Mendelian diseases). In this data, evidence that a target is associated with a disease comes primarily from deleterious mutation within the protein coding region of the gene in diseased individuals and segregation within families. In cases where UniProt curators have curated an association between a target and disease but do not supply a specific mutation we refer to this data source as <a name="unilit"></a>UniProt Literature.</p>
+
+                    <h5><a name="eva"></a>European Variation Archive (EVA)</h5>
+                    <p>The EMBL-EBI <a href="http://www.ebi.ac.uk/eva/?Home">European Variation Archive</a> (EVA) is an open-access database of all types of genetic variation data from human. For target - disease evidence in rare genetic disease we take clinically relevant data from EVA where the variation/mutation is considered pathogenic or likely pathogenics. These data originate primarily from the <a href="http://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a> archive, which includes OMIM.</p>
+                </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="somatic"></a>Somatic mutations</h4>
+                    <p>Mutations that may have clinical or treatment implications in cancer and other diseases are extracted from the following resources:</p>
+
+                    <h5><a name="census"></a>The Cancer Gene Census</h5>
+                    <p>The Wellcome Trust Sanger Institute <a href="http://cancer.sanger.ac.uk/cosmic">COSMIC</a> database provides evidence from somatic mutations on likely cancer drivers as manually curated in the <a href="http://cancer.sanger.ac.uk/census">Cancer Gene Census</a>. The COSMIC Cancer Gene Census is a catalogue of genes for which mutations have been causally implicated in cancer.</p>
+
+                    <h5><a name="eva_somatic"></a>European Variation Archive (EVA)</h5>
+                    <p>The EMBL-EBI <a href="http://www.ebi.ac.uk/eva/?Home">European Variation Archive</a> (EVA) also contains data on somatic mutations in cancer and other diseases.</p>
+                </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="drugs"></a>Drugs</h4>
+
+                    <h5><a name="chembl"></a>ChEMBL</h5>
+                    <p>The EMBL-EBI <a href="https://www.ebi.ac.uk/chembl/">ChEMBL</a> database provides evidence from known drugs where the drug can be connected to a disease and a known target. ChEMBL is an open access database that contains compound bioactivity data against drug targets. Currently, data on FDA-approved, marketed drugs (i.e. those which are approved for clinical trials in the USA) are being displayed. Clinical indication data from other countries is being reviewed and processed.</p>
+                </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="rna-expression"></a>RNA expression</h4>
+
+                    <h5><a name="atlas"></a>Expression Atlas</h5>
+                    <p>The EMBL-EBI Expression Atlas database provides information on gene expression patterns under different biological conditions. For Open Targets, the Expression Atlas database supplies evidence from gene expression changes in studies that compare disease samples with normal samples, or in some cases with other disease samples. In addition the Expression Atlas provides baseline expression information for each target, which can be found on the <a href="/about#target_profile">Target Profile</a> page.</p>
+                </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="text_mining"></a>Text mining</h4>
+                    <p>Evidence of disease associated genes can be extracted automatically by mining the up-to-date and worldwide biomedical literature corpus. <a href="https://europepmc.org/">Europe PubMed Central</a> (Europe PMC) is a unique, free, information resource for biomedical and health researchers that provides access to 30.4 million+ abstracts and 3.3 million+ full text research articles from PubMed and PubMed Central. For Open Targets, Europe PMC supplies evidence of links between genes and diseases by mining the titles, abstracts and full text research articles using an entity-to-entity recognition approach.</p>
+                </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="reactome"></a>Affected pathways</h4>
+                    <p>The <a href="http://www.reactome.org">Reactome</a> database manually curates and identifies reaction pathways that are affected by pathogenic mutations.</p>
+                </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="mouse"></a>Animal models</h4>
+                    <p>The Wellcome Trust Sanger Institute <a href="http://www.sanger.ac.uk/resources/databases/phenodigm/">PhenoDigm</a> database provides evidence on associations of targets and disease via gene knockout mouse models. The orthologous human gene to the one knocked out in the mouse is identified. The phenotypic effects in the mutant mouse are then mapped to phenotypes associated with human diseases and probable matches are identified and scored.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
