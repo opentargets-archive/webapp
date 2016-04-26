@@ -56,7 +56,8 @@ angular.module('cttvApp', [
                 templateUrl: 'partials/faq.html'
             }).
             when('/data_sources', {
-                templateUrl: 'docs/data_sources.html'
+                //templateUrl: 'docs/data_sources.html'
+                templateUrl: 'partials/data_sources.html'
             }).
             when('/terms_of_use', {
                 //templateUrl: 'docs/terms_of_use.html',
