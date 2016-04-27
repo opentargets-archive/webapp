@@ -314,14 +314,14 @@
                 disease:$scope.search.disease,
                 size: 1000,
                 datasource: cttvConfig.evidence_sources.genetic_association.common,
-                fields:[
-                    "disease",
-                    "evidence",
-                    "variant",
-                    "target",
-                    "sourceID",
-                    "access_level"
-                ]
+                // fields:[
+                //     "disease",
+                //     "evidence",
+                //     "variant",
+                //     "target",
+                //     "sourceID",
+                //     "access_level"
+                // ]
             };
             _.extend(opts, searchObj);
             return cttvAPIservice.getFilterBy( opts ).
@@ -456,13 +456,13 @@
                 disease:$scope.search.disease,
                 size: 1000,
                 datasource: cttvConfig.evidence_sources.genetic_association.rare,
-                fields: [
-                    "disease.efo_info",
-                    "evidence",
-                    "variant",
-                    "type",
-                    "access_level"
-                ]
+                // fields: [
+                //     "disease.efo_info",
+                //     "evidence",
+                //     "variant",
+                //     "type",
+                //     "access_level"
+                // ]
             };
 
             _.extend(opts, searchObj);
@@ -649,12 +649,12 @@
                 disease:$scope.search.disease,
                 size: 1000,
                 datasource: $scope.search.pathways.source, //cttvConfig.evidence_sources.pathway,
-                fields: [
-                    "target",
-                    "disease",
-                    "evidence",
-                    "access_level"
-                ]
+                // fields: [
+                //     "target",
+                //     "disease",
+                //     "evidence",
+                //     "access_level"
+                // ]
             };
             _.extend(opts, searchObj);
             return cttvAPIservice.getFilterBy( opts ).
@@ -779,12 +779,12 @@
                 disease:$scope.search.disease,
                 size: 1000,
                 datasource: $scope.search.rna_expression.source, //cttvConfig.evidence_sources.rna_expression,
-                fields: [
-                    "disease",
-                    "evidence",
-                    "target",
-                    "access_level"
-                ]
+                // fields: [
+                //     "disease",
+                //     "evidence",
+                //     "target",
+                //     "access_level"
+                // ]
             };
             _.extend(opts, searchObj);
             return cttvAPIservice.getFilterBy( opts ).
@@ -931,16 +931,16 @@
                 disease:$scope.search.disease,
                 size: 1000,
                 datasource: $scope.search.somatic_mutations.source, //cttvConfig.evidence_sources.somatic_mutation ,
-                fields: [
-                    "disease.efo_info", // disease
-                    "evidence.evidence_codes_info",  // evidence source
-                    "evidence.urls",
-                    "evidence.known_mutations",
-                    "evidence.provenance_type",
-                    "evidence.known_mutations",
-                    "access_level",
-                    "unique_association_fields.mutation_type"
-                ]
+                // fields: [
+                //     "disease.efo_info", // disease
+                //     "evidence.evidence_codes_info",  // evidence source
+                //     "evidence.urls",
+                //     "evidence.known_mutations",
+                //     "evidence.provenance_type",
+                //     "evidence.known_mutations",
+                //     "access_level",
+                //     "unique_association_fields.mutation_type"
+                // ]
             };
             _.extend(opts, searchObj);
             $scope.search.somatic_mutations.is_loading = true;
@@ -1107,12 +1107,12 @@
                 disease:$scope.search.disease,
                 size: 1000,
                 datasource: $scope.search.mouse.source, //cttvConfig.evidence_sources.animal_model,
-                fields: [
-                    "disease",
-                    "evidence",
-                    "scores",
-                    "access_level"
-                ]
+                // fields: [
+                //     "disease",
+                //     "evidence",
+                //     "scores",
+                //     "access_level"
+                // ]
             };
             _.extend(opts, searchObj);
             return cttvAPIservice.getFilterBy( opts ).
