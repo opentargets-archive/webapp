@@ -56,7 +56,8 @@ angular.module('cttvApp', [
                 templateUrl: 'partials/faq.html'
             }).
             when('/data_sources', {
-                templateUrl: 'docs/data_sources.html'
+                //templateUrl: 'docs/data_sources.html'
+                templateUrl: 'partials/data_sources.html'
             }).
             when('/terms_of_use', {
                 //templateUrl: 'docs/terms_of_use.html',
@@ -74,10 +75,12 @@ angular.module('cttvApp', [
                 templateUrl: 'partials/about.html'
             }).
             when('/personal-data-collected-examples', {
-                templateUrl: 'docs/personal-data-collected-examples.html'
+                //templateUrl: 'docs/personal-data-collected-examples.html'
+                templateUrl: 'partials/personal-data-collected-examples.html'
             }).
             when('/variants', {
-                templateUrl: 'docs/variants.html'
+                //templateUrl: 'docs/variants.html'
+                templateUrl: 'partials/variants.html'
             }).
             when('/documentation/components', {
                 templateUrl: 'partials/docs.html'
