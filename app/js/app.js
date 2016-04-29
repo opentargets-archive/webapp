@@ -12,7 +12,9 @@ angular.module('cttvApp', [
     'cttvServices',
     'hm.readmore',
     'ngSanitize',
-    'swaggerUi'
+    'swaggerUi',
+    'pdb.component.library',
+    'plugins'
 ])
 
 .config(['$routeProvider', '$locationProvider',

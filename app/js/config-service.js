@@ -16,7 +16,6 @@ angular.module('cttvServices').
         var dbs = cttvConsts.dbs;
 
         var config = {
-
             // flag to hide/show first column (with public/private styling) in evidence tables
             show_access_level : false,
 
@@ -34,7 +33,17 @@ angular.module('cttvServices').
                 animal_model : [dbs.PHENODIGM],
                 literature : [dbs.EPMC]
             },
-            dumps_link: "/downloads/data"
+            dumps_link: "/downloads/data",
+
+            extraTargetSections: [
+                {
+                    name: "pdb2",
+                    element: "pdb-target",
+                    heading: "Protein Structure (PDB)",
+                    visible: false,
+                    dependencies: []
+                }
+            ]
         };
 
 

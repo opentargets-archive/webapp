@@ -19,7 +19,7 @@ var webappFiles = {
             'app/vendor/angular-swagger-ui/swagger-yaml-parser.min.js',
             'node_modules/js-yaml/dist/js-yaml.min.js',
             'node_modules/marked/marked.min.js',
-	    'bower_components/FileSaver/FileSaver.min.js'
+            'bower_components/FileSaver/FileSaver.min.js'
         ],
 
         'css': [
@@ -57,6 +57,8 @@ var webappFiles = {
             'app/js/target-associations-bubbles-directive-new.js',
             'app/js/evidence-tables-directives.js',
             'app/js/disease-graph-directive.js',
+            'app/js/plugin-directive.js',
+            'app/plugins/pdb-directive.js',
         ],
 
         css: [
