@@ -115,7 +115,6 @@
                     </div>
                 </accordion-group>
 
-
                 <!-- Protein Structure -->
                 <accordion-group heading="Protein Structure" attr-section-name="ProteinStructure" is-open="false">
                     <p class="cttv-section-intro">There {{pdb.nstructures == 1 ? "is" : "are"}} <strong>{{pdb.nstructures}}</strong> {{pdb.nstructures == 1 ? "structure" : "structures"}} available for {{target.symbol}} in <a target="_blank"  href="https://www.ebi.ac.uk/pdbe">PDBe</a>. <span ng-if="pdb.nstructures>1">Below we show the most representative one. A summary of the other structures can be found in the <a target="_blank" href="http://www.uniprot.org/uniprot/{{uniprot.accessions[0]}}#structure">UniProt entry for {{uniprot.accessions[0]}}</a></span></p>
@@ -123,6 +122,10 @@
                     <p>{{pdb.alt}}</p>
                     <img ng-src="{{pdb.thumbnailUrl}}" />
                     <p ng-bind-html="pdb.description"></p>
+
+                    <!-- <div style="position:relative;width:500px;height:500px;">
+                        <pdb-lite-mol pdb-id='1cbs' load-ed-maps="true"></pdb-lite-mol>
+                    </div> -->
                 </accordion-group>
 
                 <!-- Pathways -->
@@ -168,10 +171,10 @@
                 </accordion-group> -->
 
                 <!-- Gene tree -->
-                <accordion-group heading="Target Family" attr-section-name="GeneTree" is-open="false">
+                <!-- <accordion-group heading="Target Family" attr-section-name="GeneTree" is-open="false">
                     <p class=cttv-section-intro>Phylogenetic tree showing the history of the human gene {{target.symbol}} based on protein sequences. The tree shows human paralogs and orthologs in selected species. Click on any node to get more information about the homology relationship. Check / Uncheck species to prune the tree accordingly</p>
                     <cttv-target-gene-tree target="{{targetGeneId}}"></cttv-gene-tree>
-                </accordion-group>
+                </accordion-group> -->
 
                 <!-- Bibliography -->
                 <accordion-group heading="Bibliography" attr-section-name="Bibliography" is-open="false">
@@ -193,6 +196,13 @@
                             <span class="label label-success">{{citation.citedByCount}} citation<span ng-if="citation.citedByCount != 1">s</span></span>
                         </div>
                     </div>
+                </accordion-group>
+
+                <accordion-group ng-repeat="section in sections" is-open="section.visible" attr-section-name="{{section.name}}">
+                    <accordion-heading>
+                        <span ng-click="toggle(section.name)">{{section.heading}}</span>
+                    </accordion-heading>
+                    <plugin-loader target="{{pdb.id}}" plugin="{{section.element}}" visible="{{section.visible}}"></plugin-loader>
                 </accordion-group>
 
             </accordion>

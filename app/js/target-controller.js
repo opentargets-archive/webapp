@@ -6,7 +6,7 @@ angular.module('cttvControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-.controller ("TargetCtrl", ["$scope", "$location", "$log", "cttvAPIservice", "$http", "$sce", "$q", 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, $http, $sce, $q, cttvUtils) {
+.controller ("TargetCtrl", ["$scope", "$location", "$log", "cttvAPIservice", "$http", "$sce", "$q", 'cttvUtils', 'cttvConfig', function ($scope, $location, $log, cttvAPIservice, $http, $sce, $q, cttvUtils, cttvConfig) {
     "use strict";
     $log.log('TargetCtrl()');
     cttvUtils.clearErrors();
@@ -15,7 +15,7 @@ angular.module('cttvControllers')
 
     $scope.drugs = {
         has_errors: false,
-    }
+    };
 
     cttvAPIservice.getTarget({
         target_id: $scope.targetId
@@ -291,6 +291,16 @@ angular.module('cttvControllers')
             // var bibliographyStr = cleanBibliography.join (",");
             // $scope.pmids = bibliographyStr;
             // $scope.pmidsLinks = (_.map(cleanBibliography,function (p) {return "EXT_ID:" + p;})).join(" OR ");
+
+            $scope.sections = cttvConfig.extraTargetSections;
+            $scope.toggle = function (plugin) {
+                for (var i=0; i<$scope.sections.length; i++) {
+                    var section = $scope.sections[i];
+                    if (section.name === plugin) {
+                        section.visible = !section.visible;
+                    }
+                }
+            };
 
         },
         // error handler
