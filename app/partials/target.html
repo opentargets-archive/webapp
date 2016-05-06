@@ -202,7 +202,7 @@
                     <accordion-heading>
                         <span ng-click="toggle(section.name)">{{section.heading}}</span>
                     </accordion-heading>
-                    <plugin-loader target="{{pdb.id}}" plugin="{{section.element}}" visible="{{section.visible}}"></plugin-loader>
+                    <plugin-loader target="target" plugin="section.element" visible="{{section.visible}}" dependencies="section.dependencies"></plugin-loader>
                 </accordion-group>
 
             </accordion>
