@@ -41,7 +41,7 @@ angular.module('cttvServices').
                     element: "pdb-target",
                     heading: "Protein Structure (PDB)",
                     visible: false,
-                    dependencies: []
+                    dependencies: ['plugins/asyncTest.js'],
                 }
             ]
         };

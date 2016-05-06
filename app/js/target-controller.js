@@ -24,14 +24,21 @@ angular.module('cttvControllers')
         // success
         function (resp) {
             resp = JSON.parse(resp.text);
-            $scope.target = {
-                label : resp.approved_name || resp.ensembl_external_name,
-                symbol : resp.approved_symbol || resp.ensembl_external_name, //resp.approved_symbol || resp.approved_name || resp.ensembl_external_name,
-                id : resp.approved_id || resp.ensembl_gene_id,
-                description : resp.uniprot_function[0],
-                name : resp.approved_name || resp.ensembl_description,
-                title : (resp.approved_symbol || resp.ensembl_external_name).split(" ").join("_")
-            };
+            $scope.target = resp;
+            $scope.target.label = resp.approved_name || resp.ensembl_external_name;
+            $scope.target.symbol = resp.approved_symbol || resp.ensembl_external_name;
+            $scope.target.id = resp.approved_id || resp.ensembl_gene_id;
+            $scope.target.name = resp.approved_name || resp.ensembl_description;
+            $scope.target.title = (resp.approved_symbol || resp.ensembl_external_name).split(" ").join("_");
+            $scope.target.description = resp.uniprot_function[0];
+            // $scope.target = {
+            //     label : resp.approved_name || resp.ensembl_external_name,
+            //     symbol : resp.approved_symbol || resp.ensembl_external_name, //resp.approved_symbol || resp.approved_name || resp.ensembl_external_name,
+            //     id : resp.approved_id || resp.ensembl_gene_id,
+            //     description : resp.uniprot_function[0],
+            //     name : resp.approved_name || resp.ensembl_description,
+            //     title : (resp.approved_symbol || resp.ensembl_external_name).split(" ").join("_")
+            // };
 
             // Synonyms
             var syns = {};
@@ -292,6 +299,7 @@ angular.module('cttvControllers')
             // $scope.pmids = bibliographyStr;
             // $scope.pmidsLinks = (_.map(cleanBibliography,function (p) {return "EXT_ID:" + p;})).join(" OR ");
 
+            // Extra sections -- plugins
             $scope.sections = cttvConfig.extraTargetSections;
             $scope.toggle = function (plugin) {
                 for (var i=0; i<$scope.sections.length; i++) {
