@@ -1,6 +1,6 @@
 
 
-angular.module('cttvApp', [
+var app = angular.module('cttvApp', [
     'ngRoute',
     'ui.bootstrap',
     'cttvControllers',
@@ -13,9 +13,11 @@ angular.module('cttvApp', [
     'hm.readmore',
     'ngSanitize',
     'swaggerUi'
-])
+]);
 
-.config(['$routeProvider', '$locationProvider',
+
+
+app.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
         'use strict';
 
@@ -103,3 +105,25 @@ angular.module('cttvApp', [
         $locationProvider.html5Mode(true).hashPrefix('!');
 
 }]);
+
+
+
+/*
+ * Manual Angular bootstrapping:
+ * load the config file first, then bootstrap the app
+ */
+angular.element(document).ready(
+  function() {
+    var initInjector = angular.injector(['ng']);
+    var $http = initInjector.get('$http');
+    $http.get('build/config.json').then(
+      function(response) {
+        app.constant('initConfig', response.data);
+        angular.bootstrap(document, ['cttvApp']);
+      }
+    );
+  }
+);
+
+
+

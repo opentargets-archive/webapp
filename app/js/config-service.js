@@ -9,7 +9,7 @@ angular.module('cttvServices').
      * The Config service.
      * This stores global config variables for the font end
      */
-    factory('cttvConfig', ['cttvConsts', function(cttvConsts) {
+    factory('cttvConfig', ['cttvConsts', 'initConfig', function(cttvConsts, initConfig) {
         'use strict';
 
         // local handle to the dbs list in the consts service
@@ -18,7 +18,7 @@ angular.module('cttvServices').
         var config = {
 
             // flag to hide/show first column (with public/private styling) in evidence tables
-            show_access_level : false,
+            //show_access_level : false,
 
             // evidence sources used in the evidence page tables:
             // if multiple sources are needed (e.g. for somatic mutation table), specify these in an array
@@ -34,9 +34,13 @@ angular.module('cttvServices').
                 animal_model : [dbs.PHENODIGM],
                 literature : [dbs.EPMC]
             },
-            dumps_link: "/downloads/data"
+            //dumps_link: "/downloads/data"
         };
 
+        // config.config = initConfig;
+
+
+        config = _.merge(config, initConfig)
 
         return config;
     }]);

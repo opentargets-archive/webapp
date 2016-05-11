@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="cttvApp">
+<html> <!-- ng-app="cttvApp"> -->
     <head>
 
         <title ng-bind-template="{{viewTitle ? viewTitle+' - ' : ''}}Target Validation Platform"></title>
@@ -197,7 +197,9 @@
 
                     <!-- Content -->
 
-
+                    <!-- <div ng-controller="InitCtrl" ng-cloak>
+                        Hello, I'm {{name}} and I'm {{age}} years young.
+                    </div> -->
 
                     <div ng-view autoscroll="true"></div>
 
