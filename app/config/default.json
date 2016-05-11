@@ -1,0 +1,64 @@
+/*
+ * Configuration file for the webapp standard/default items.
+ * This is merged with custom.json (if present) in build/config.json
+ */
+
+{
+
+    /*
+     * Mastehead navigation menu at the top of the page
+     */
+    "mastheadNavigationMenu" : [
+        {
+            "label" : "About",
+            "href" : "/about",
+            "menu" : [
+                {
+                    "label" : "Open Targets",
+                    "href" : "//www.opentargets.org/"
+                },
+                {
+                    "label" : "Target Validation Platform",
+                    "href" : "/about"
+                }
+            ]
+        },
+
+        {
+            "label" : "Help",
+            "href" : "",
+            "menu" : [
+                {
+                    "label" : "FAQs",
+                    "href" : "/faq"
+                },
+                {
+                    "label" : "support@targetvalidation.org",
+                    "href" : "mailto:support@targetvalidation.org?Subject=Target%20Validation%20Platform%20-%20help%20request"
+                }
+            ]
+        },
+
+        {
+            "label" : "API",
+            "href" : "/documentation/api"
+        },
+
+        {
+            "label" : "Downloads",
+            "href" : "/downloads/data"
+        },
+
+        {
+            "label" : "Blog",
+            "href" : "//blog.opentargets.org/"
+        }
+
+    ],
+
+    "show_access_level" : true,
+
+    "dumps_link": "/downloads/data"
+
+
+}

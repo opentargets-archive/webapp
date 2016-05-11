@@ -83,6 +83,7 @@ angular.module('cttvServices').
             CTTV_ROOT_CODE: "cttv_root"
         };
 
+
         consts.invert = function(val){
             var a = invLookup(consts, val);
             return a;
