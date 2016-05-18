@@ -2,6 +2,7 @@
 
 var app = angular.module('cttvApp', [
     'ngRoute',
+    'ui.router',
     'ui.bootstrap',
     'cttvControllers',
     'cttvDirectives',
@@ -17,92 +18,116 @@ var app = angular.module('cttvApp', [
 
 
 
-app.config(['$routeProvider', '$locationProvider',
-    function($routeProvider, $locationProvider) {
-        'use strict';
+/*
+ * App configuration uses the new UI-Router module
+ */
+app.config([ '$stateProvider', '$urlRouterProvider', '$locationProvider',
+    function($stateProvider, $urlRouterProvider, $locationProvider) {
 
-        $routeProvider.
-            when('/', {
-                templateUrl: 'partials/intro.html'
-            }).
-            when('/search', {
+        // For any unmatched url, redirect to /state1
+        $urlRouterProvider.otherwise("/");
+
+        // Now set up the states:
+        // syntax is similar to old angular router
+        $stateProvider
+
+            .state('intro', {
+                url: "/",
+                templateUrl: "partials/intro.html"
+            })
+
+            .state('search', {
+                url:'/search',
                 templateUrl: 'partials/search.html',
-                controller: 'SearchAppCtrl'
-            }).
-    	    when('/target/:id/associations', {
+                controller: 'SearchAppCtrl',
+            })
+
+            .state('target-associations', {
+                url: '/target/:id/associations',
                 templateUrl: 'partials/target-associations.html',
                 controller: 'targetAssociationsCtrl',
                 reloadOnSearch: false
-    	    }).
-    	    when('/disease/:id/associations', {
+            })
+            .state('disease-associations', {
+                url: '/disease/:id/associations',
                 templateUrl: 'partials/disease-associations.html',
                 controller: 'diseaseAssociationsCtrl',
                 reloadOnSearch: false
-    	    }).
-    	    when('/evidence/:id/:id', {
+            })
+            .state('evidence', {
+                url: '/evidence/:tid/:did',
                 templateUrl: 'partials/target-disease.html',
                 controller: 'TargetDiseaseCtrl'
-    	    }).
-    	    when('/target/:id', {
-        		templateUrl: 'partials/target.html',
-        		controller: 'TargetCtrl'
-    	    }).
-    	    when('/disease/:id', {
-        		templateUrl: 'partials/disease.html',
-        		controller: 'DiseaseCtrl'
-    	    }).
+            })
+            .state('target', {
+                url: '/target/:id',
+                templateUrl: 'partials/target.html',
+                controller: 'TargetCtrl'
+            })
+            .state('disease', {
+                url: '/disease/:id',
+                templateUrl: 'partials/disease.html',
+                controller: 'DiseaseCtrl'
+            })
 
             // Docs
-            when('/faq', {
+            .state('faq', {
                 //templateUrl: 'docs/faq.html'
+                url: '/faq',
                 templateUrl: 'partials/faq.html'
-            }).
-            when('/data_sources', {
+            })
+            .state('data-sources', {
                 //templateUrl: 'docs/data_sources.html'
+                url: '/data_sources',
                 templateUrl: 'partials/data_sources.html'
-            }).
-            when('/terms_of_use', {
+            })
+            .state('terms', {
                 //templateUrl: 'docs/terms_of_use.html',
+                url: '/terms_of_use',
                 templateUrl: 'partials/terms_of_use.html',
-            }).
-            when('/release-notes', {
+            })
+            .state('release-notes', {
+                url: '/release-notes',
                 templateUrl: 'partials/release-notes.html'
-            }).
-            when('/scoring', {
+            })
+            .state('scoring', {
                 //templateUrl: 'docs/scoring.html'
+                url: '/scoring',
                 templateUrl: 'partials/scoring.html'
-            }).
-            when('/about', {
+            })
+            .state('about', {
                 //templateUrl: 'docs/about.html'
+                url: '/about',
                 templateUrl: 'partials/about.html'
-            }).
-            when('/personal-data-collected-examples', {
+            })
+            .state('personal-data', {
                 //templateUrl: 'docs/personal-data-collected-examples.html'
+                url: '/personal-data-collected-examples',
                 templateUrl: 'partials/personal-data-collected-examples.html'
-            }).
-            when('/variants', {
+            })
+            .state('variants', {
                 //templateUrl: 'docs/variants.html'
+                url: '/variants',
                 templateUrl: 'partials/variants.html'
-            }).
-            when('/documentation/components', {
+            })
+            .state('docs-components', {
+                url: '/documentation/components',
                 templateUrl: 'partials/docs.html'
-            }).
-            when('/downloads/data', {
+            })
+            .state('downloads-data', {
+                url: '/downloads/data',
                 templateUrl: 'partials/dumps.html'
-            }).
-            when('/documentation/api', {
+            })
+            .state('docs-api', {
+                url: '/documentation/api',
                 templateUrl: 'partials/api-docs.html'
-            }).
-            otherwise({
-                redirectTo: '/'
-            });
-
-            // function supports_history_api() {
-            //     return !!(window.history && history.pushState);
-            // }
+            })
 
 
+        // Still needs default angular locationProvider service
+        // to have html5 URL-style (i.e. sans #)
         $locationProvider.html5Mode(true).hashPrefix('!');
+
 
 }]);
 

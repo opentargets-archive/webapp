@@ -83,7 +83,6 @@
 
     <body id="cttv-page-app">
 
-
         <div class="cttv-page-wrapper">
 
             <!-- main page content -->
@@ -197,11 +196,8 @@
 
                     <!-- Content -->
 
-                    <!-- <div ng-controller="InitCtrl" ng-cloak>
-                        Hello, I'm {{name}} and I'm {{age}} years young.
-                    </div> -->
-
-                    <div ng-view autoscroll="true"></div>
+                    <!-- <div ng-view autoscroll="true"></div> -->
+                    <div ui-view autoscroll="true"></div>
 
                     <!-- End Content -->
 
@@ -268,6 +264,7 @@
             <!-- Angular && web app -->
             <script src="build/cttvWebapp-3rdParty.js?v=18042016" type="text/javascript"></script>
             <script src="build/cttvWebapp.min.js?v=18042016" type="text/javascript"></script> <!-- extra directive -->
+
 
             <!-- <script type="text/javascript" src="bower_components/angular/angular.min.js?v=16112015"></script> -->
             <!-- <script type="text/javascript" src="bower_components/angular-route/angular-route.min.js?v=16112015"></script> -->

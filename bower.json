@@ -35,7 +35,8 @@
     "jquery": "2.2.0",
     "d3": "~3.5.8",
     "angular-sanitize": "1.5.1",
-    "FileSaver": "*"
+    "FileSaver": "*",
+    "angular-ui-router": "~0.2.18"
   },
   "resolutions": {
     "angular": "1.5.1"
