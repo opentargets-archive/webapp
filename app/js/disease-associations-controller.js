@@ -113,12 +113,17 @@ angular.module('cttvControllers')
 
     };
 
+//      $rootScope.$on('$stateChangeStart',
+//  function(event, toState, toParams, fromState, fromParams){
+//      event.preventDefault();
+//  })
 
 
     // Set up a listener for the URL changes and
     // when the search change, get new data
-    $scope.$on('$routeUpdate', function(){
-        $log.log("onRouteUpdate");
+    // $scope.$on('$routeUpdate', function(){
+    $scope.$on('$locationChangeSuccess', function(){
+        $log.log("** onRouteUpdate **");
         getFacets( cttvFiltersService.parseURL() );
     });
 
