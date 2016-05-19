@@ -1,29 +1,30 @@
 angular.module('plugins')
-    .directive('pdbTarget', ['$log', '$compile', function ($log, $compile) {
+    .directive('pdbTarget', ['$log', '$http', function ($log, $http) {
         'use strict';
 
         return {
             restrict: 'E',
-            template: "<p>The target that has been passed is {{targetId}}",
+            templateUrl: "plugins/pdb.html",
             scope: {
                 target: '='
             },
             link: function (scope, element, attrs) {
-                // var template = '<pdb-prints pdb-ids="[\'1cbs\']" settings=\'{"orientation": "horizontal", "size": 64 }\'></pdb-prints>';
-                // var template = '<pdb-topology-viewer entry-id="1aqd" entity-id="1"></pdb-topology-viewer>';
+                // TODO: This just takes a random PDB ID from the pdb section
+                // A more rationale way should be implemented
 
-                scope.targetId = scope.target.symbol;
-                var pdbId = Object.keys(scope.target.pdb)[0];
-                console.log(pdbId);
+                var uniprotId = scope.target.uniprot_id;
 
-                var template = '<pdb-prints pdb-ids="[\'' + pdbId + '\']" settings=\'{"orientation": "horizontal", "size": 64 }\'></pdb-prints>';
+                $http.get("/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/" + uniprotId)
+                    .then (function (resp) {
+                        console.log(resp);
+                        var bestStructure = resp.data[uniprotId][0];
+                        console.log("BEST PROTEIN STRCTURE IS " + bestStructure.pdb_id);
+                        scope.pdbId = bestStructure.pdb_id;
+                    });
 
-                template = template + '<pdb-seq-viewer style="margin:30px" entry-id="' + pdbId + '" entity-id="1" viewer-type="pdbViewer" settings=\'{"width": 700, "height": 350}\'></pdb-seq-viewer>';
 
-                template = template + '<div style="margin: 30px;position:relative;width:500px;height:500px;"><pdb-lite-mol pdb-id="' + pdbId + '" load-ed-maps="true"></pdb-lite-mol></div>';
-
-                var compiled = $compile(template)(scope);
-                element.append(compiled);
+                // var pdb = scope.target.pdb;
+                // scope.pdbId = _.sortBy(_.keys(pdb))[0].toLowerCase();
             }
         };
     }]);

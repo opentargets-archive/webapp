@@ -35,14 +35,117 @@ angular.module('cttvServices').
             },
             dumps_link: "/downloads/data",
 
-            extraTargetSections: [
+            targetSections: [
                 {
-                    name: "pdb2",
+                    name: "featuresViewer",
+                    element: "target-features",
+                    heading: "Protein Information (from Uniprot)",
+                    // visible: false,
+                    dependencies: {
+                        'https://ebi-uniprot.github.io/CDN/feature-viewer/2.0.0/featuresviewer.min.js': {
+                            'format': 'global'
+                        },
+                        'https://ebi-uniprot.github.io/CDN/feature-viewer/css/main.css!': {
+                            'loader': 'css'
+                        },
+                        'https://ebi-uniprot.github.io/CDN/feature-viewer/css/fontello.css': {
+                            'loader': 'css'
+                        }
+                    }
+                },
+
+                {
+                    name: "Variants",
+                    element: 'genome-browser',
+                    heading: "Variants, isoforms and genomic context",
+                    // visible: false,
+                },
+
+                {
+                    name: "ProteinExpression",
+                    element: "protein-baseline-expression",
+                    heading: "Protein baseline expression",
+                    // visible: false
+                },
+
+                {
+                    name: "RnaExpression",
+                    element: "rna-baseline-expression",
+                    heading: "RNA baseline expression",
+                    // visible: false,
+                    dependencies: {
+                        "vendor/expressionAtlasBundle/vendor.bundle.js": {
+                            "format": "global"
+                        },
+                        "vendor/expressionAtlasBundle/expression-atlas-heatmap.bundle.js": {
+                            "format": "global"
+                        }
+                    }
+                },
+
+                {
+                    name: "GeneOntology",
+                    element: "gene-ontology",
+                    heading: "Gene Ontology",
+                    // visible: false,
+                },
+
+                {
+                    name: "ProteinStructure",
                     element: "pdb-target",
                     heading: "Protein Structure (PDB)",
-                    visible: false,
-                    dependencies: ['plugins/asyncTest.js'],
-                }
+                    // visible: false,
+                },
+
+                {
+                    name: "Pathways",
+                    element: "target-pathways",
+                    heading: "Pathways",
+                    // visible: false,
+                    // dependencies: {
+                    //     '/proxy/www.reactome.org/DiagramJs/diagram/diagram.nocache.js': {
+                    //         "format": "global",
+                    //         "scriptLoad": true
+                    //     }
+                    // }
+                },
+
+                {
+                    name: "Drugs",
+                    element: "drugs-display",
+                    heading: "Drugs",
+                    // visible: false
+                },
+
+                {
+                    name: "targetFamily",
+                    element: 'target-family',
+                    heading: 'Target Family',
+                    // visible: false
+                },
+                {
+                    name: "Bibliography",
+                    element: 'bibliography-target',
+                    heading: 'Bibliography',
+                    // visible: false
+                },
+                // {
+                //     // The name of the plugin (must be unique)
+                //     name: "test",
+                //     // The custom element exposed by the plugin directive
+                //     element: "test-plugin",
+                //     // The text to appear as the heading of the plugin
+                //     heading: "Test plugin",
+                //     // If it is visible by default
+                //     visible: false,
+                //     // The dependencies of the plugin
+                //     // dependencies: ['/plugins/asyncTest.js']
+                //     dependencies: {
+                //         '/plugins/asyncTest.js': {
+                //             "format": "global"
+                //         }
+                //     }
+                // }
             ]
         };
 

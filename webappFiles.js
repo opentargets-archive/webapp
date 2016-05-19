@@ -19,7 +19,8 @@ var webappFiles = {
             'app/vendor/angular-swagger-ui/swagger-yaml-parser.min.js',
             'node_modules/js-yaml/dist/js-yaml.min.js',
             'node_modules/marked/marked.min.js',
-            'bower_components/FileSaver/FileSaver.min.js'
+            'bower_components/FileSaver/FileSaver.min.js',
+            'node_modules/systemjs/dist/system.js'
         ],
 
         'css': [
@@ -59,7 +60,12 @@ var webappFiles = {
             'app/js/disease-graph-directive.js',
             'app/js/lazyload.js',
             'app/js/plugin-directive.js',
-            'app/plugins/pdb-directive.js',
+            // Plugins -- should go in another config file
+            // 'app/plugins/pdb-directive.js',
+            // 'app/plugins/proteinFeatures-directive.js',
+            // 'app/plugins/protein-baseline-expression-directive.js',
+            // 'app/plugins/test-directive.js',
+            'app/plugins/*.js'
         ],
 
         css: [
