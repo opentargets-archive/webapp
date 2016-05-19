@@ -25,7 +25,8 @@ app.config([ '$stateProvider', '$urlRouterProvider', '$locationProvider',
     function($stateProvider, $urlRouterProvider, $locationProvider) {
 
         // For any unmatched url, redirect to /state1
-        $urlRouterProvider.otherwise("/");
+        $urlRouterProvider
+            .otherwise("/");
 
         // Now set up the states:
         // syntax is similar to old angular router
