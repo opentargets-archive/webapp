@@ -1,6 +1,7 @@
 bower_components
 **/*~
 node_modules
+jspm_packages
 .sass-cache
 *.css.map
 .DS_Store

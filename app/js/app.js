@@ -1,4 +1,4 @@
-
+var providers = {};
 
 angular.module('cttvApp', [
     'ngRoute',
@@ -17,9 +17,11 @@ angular.module('cttvApp', [
     'plugins'
 ])
 
-.config(['$routeProvider', '$locationProvider',
-    function($routeProvider, $locationProvider) {
+.config(['$routeProvider', '$locationProvider', '$compileProvider',
+    function($routeProvider, $locationProvider, $compileProvider) {
         'use strict';
+
+        providers.compileProvider    = $compileProvider;
 
         $routeProvider.
             when('/', {
