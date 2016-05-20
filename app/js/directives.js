@@ -1423,12 +1423,15 @@ angular.module('cttvDirectives', [])
             scope: {
                 // href: '@',
             },
-            template :    '<ul class="masthead-navigation">'
-                        +     '<li dropdown on-toggle="toggled(open)"><a href dropdown-toggle>About <span class="fa fa-angle-down"></span></a>'
-                        +         '<ul class="dropdown-menu" dropdown-menu>'
-                        +              '<li><a href="//www.opentargets.org/">Open Targets</a></li>'
-                        +              '<li><a href="/about">Target Validation Platform</a></li>'
-                        +         '</ul>'
+            /*template :    '<ul class="masthead-navigation">'
+                        +     '<li>'
+                        +         '<span dropdown on-toggle="toggled(open)">'
+                        +             '<a href dropdown-toggle>About <span class="fa fa-angle-down"></span></a>'
+                        +             '<ul class="dropdown-menu" dropdown-menu>'
+                        +                  '<li><a href="//www.opentargets.org/">Open Targets</a></li>'
+                        +                  '<li><a href="/about">Target Validation Platform</a></li>'
+                        +             '</ul>'
+                        +          '</span>'
                         +     '</li>'
 
                         +     '<li dropdown on-toggle="toggled(open)"><a href dropdown-toggle>Help <span class="fa fa-angle-down"></span></a>'
@@ -1443,13 +1446,27 @@ angular.module('cttvDirectives', [])
                         +     '<li><a href="{{dumps_link}}">Downloads</a></li>'
                         +     '<li><a href="//blog.opentargets.org/">Blog</a></li>'
                         //+     '<li><a href="/documentation/components">Docs</a></li>'
-                        + '</ul>',
+                        + '</ul>',*/
+
+            template : '<ul class="masthead-navigation">'
+                        +    '<li ng-repeat="item in nav" ng-if="item.label">'
+
+                        +        '<div ng-if="item.menu==undefined">'
+                        +             '<a href="{{item.href}}">{{item.label}}</a>'
+                        +        '</div>'
+
+                        +        '<div dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
+                        +             '<a href dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
+                        +             '<ul class="dropdown-menu" dropdown-menu>'
+                        +                  '<li ng-repeat="subitem in item.menu"><a href="{{subitem.href}}">{{subitem.label}}</a></li>'
+                        +             '</ul>'
+                        +        '</div>'
+
+                        +    '</li>'
+                        +'</ul>',
             link: function(scope, element, attrs) {
                 scope.dumps_link = cttvConfig.dumps_link;
-
-                //scope.status = {
-                    //isopen: false
-                //};
+                scope.nav = cttvConfig.mastheadNavigationMenu;
 
                 scope.toggled = function(open) {
                     //$log.log('Dropdown is now: ', open);
