@@ -122,16 +122,18 @@ body{
 
     >li {
         display: inline-block;
-        &.open {
-            background: $clr-ui-background-secondary;
-        }
 
-        >a, >a:focus {
-            //color: #fff;
-            padding: 0px 10px;
-            height: 46px;
-            display: table-cell;
-            vertical-align: middle;
+        >div {
+            &.open{
+                background: $clr-ui-background-secondary;
+            }
+
+            >a, >a:focus {
+                padding: 0px 10px;
+                height: 46px;
+                display: table-cell;
+                vertical-align: middle;
+            }
         }
     }
 
@@ -166,7 +168,7 @@ body{
         border-top-right-radius: 0px;
     }
 
-    >li {
+    >li div {
         &.open, &:hover {
             background: $btn-primary-bg-hover;
         }

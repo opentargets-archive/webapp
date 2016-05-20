@@ -1,0 +1,133 @@
+{
+    "mastheadNavigationMenu" : [
+        {
+            "label" : "About",
+            "href" : "/about",
+            "menu" : [
+                {
+                    "label" : "Open Targets",
+                    "href" : "//www.opentargets.org/"
+                },
+                {
+                    "label" : "Target Validation Platform",
+                    "href" : "/about"
+                }
+            ]
+        },
+
+        {
+            "label" : "Help",
+            "href" : "",
+            "menu" : [
+                {
+                    "label" : "FAQs",
+                    "href" : "/faq"
+                },
+                {
+                    "label" : "support@targetvalidation.org",
+                    "href" : "mailto:support@targetvalidation.org?Subject=Target%20Validation%20Platform%20-%20help%20request"
+                }
+            ]
+        },
+
+        {
+            "label" : "API",
+            "href" : "/documentation/api"
+        },
+
+        {
+            "label" : "Downloads",
+            "href" : "/downloads/data"
+        },
+
+        {
+            "label" : "Blog",
+            "href" : "//blog.opentargets.org/"
+        }
+
+    ],
+
+    "show_access_level" : true,
+
+    "dumps_link": "/downloads/data",
+
+    "targetSections": [
+        {
+            "name": "featuresViewer",
+            "element": "target-features",
+            "heading": "Protein Information (from Uniprot)",
+            "dependencies": {
+                "https://ebi-uniprot.github.io/CDN/feature-viewer/2.0.0/featuresviewer.min.js": {
+                    "format": "global"
+                },
+                "https://ebi-uniprot.github.io/CDN/feature-viewer/css/main.css!": {
+                    "loader": "css"
+                },
+                "https://ebi-uniprot.github.io/CDN/feature-viewer/css/fontello.css": {
+                    "loader": "css"
+                }
+            }
+        },
+
+        {
+            "name": "Variants",
+            "element": "genome-browser",
+            "heading": "Variants, isoforms and genomic context"
+        },
+
+        {
+            "name": "ProteinExpression",
+            "element": "protein-baseline-expression",
+            "heading": "Protein baseline expression"
+        },
+
+        {
+            "name": "RnaExpression",
+            "element": "rna-baseline-expression",
+            "heading": "RNA baseline expression",
+            "dependencies": {
+                "vendor/expressionAtlasBundle/vendor.bundle.js": {
+                    "format": "global"
+                },
+                "vendor/expressionAtlasBundle/expression-atlas-heatmap.bundle.js": {
+                    "format": "global"
+                }
+            }
+        },
+
+        {
+            "name": "GeneOntology",
+            "element": "gene-ontology",
+            "heading": "Gene Ontology"
+        },
+
+        {
+            "name": "ProteinStructure",
+            "element": "pdb-target",
+            "heading": "Protein Structure (PDB)",
+            "modules": ["pdb.component.library"]
+        },
+        {
+            "name": "Pathways",
+            "element": "target-pathways",
+            "heading": "Pathways"
+        },
+
+        {
+            "name": "Drugs",
+            "element": "drugs-display",
+            "heading": "Drugs"
+        },
+
+        {
+            "name": "targetFamily",
+            "element": "target-family",
+            "heading": "Target Family"
+        },
+        {
+            "name": "Bibliography",
+            "element": "bibliography-target",
+            "heading": "Bibliography"
+        }
+    ]
+}

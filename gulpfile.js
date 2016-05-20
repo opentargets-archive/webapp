@@ -1,4 +1,4 @@
-
+var fs = require('fs');
 var gulp   = require('gulp');
 var ignore = require('gulp-ignore');
 var jshint = require('gulp-jshint');
@@ -20,12 +20,22 @@ var del = require("del");
 var rename = require('gulp-rename');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
+var jsonminify = require('gulp-jsonminify');
+var extend = require('gulp-extend');
+
+
+
 var buildDir = "app/build";
 var componentsConfig = "components.js";
 var packageConfig = require("./package.json");
 
 var componentsName = 'components-' + packageConfig.name;
 var webappName = packageConfig.name;
+
+// app config / initialization
+var webappConfigDir = "app/config";
+var webappConfigSources = [webappConfigDir+'/default.json', webappConfigDir+'/custom.json'];
+var webappConfigFile = "config.json";
 
 // path tools
 var path = require('path');
@@ -224,7 +234,45 @@ gulp.task('build-webapp-styles', function () {
 
 
 
-gulp.task('build-webapp', ['build-webapp-styles'], function () {
+/**
+ * Check if custom config json exists and if not creates file with standard content
+ */
+gulp.task('init-config', function(){
+
+    var c = fs.stat(webappConfigSources[1], function(err, stat){
+        if(!stat){
+            var content = "/*\n"
+                        + "Custom config options\n"
+                        + "*/\n"
+                        + "{\n"
+                        + "    /*\n"
+                        + "    Insert here options to override those defined in default.json\n"
+                        + "    */\n"
+                        + "}";
+            fs.writeFileSync(webappConfigSources[1], content);
+        }
+    })
+
+});
+
+
+
+/**
+ * Merges default and custom config json files.
+ * Custom overrides default values
+ */
+gulp.task('build-config', ['init-config'], function(){
+
+    return gulp.src( webappConfigSources )
+        .pipe(jsonminify())                     // remove comments
+        .pipe(extend(webappConfigFile, false))  // merge files; no deep-checking, just first level, so careful to overwrite objects
+        .pipe(gulp.dest(buildDir));
+
+});
+
+
+
+gulp.task('build-webapp', ['build-webapp-styles', 'build-config'], function () {
     return gulp.src(webappFiles.cttv.js)
         .pipe(sourcemaps.init({
             debug: true
