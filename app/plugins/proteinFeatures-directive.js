@@ -18,7 +18,6 @@ angular.module('plugins')
                 };
 
                 $timeout(function () {
-                    console.log(document.getElementById("upfv"));
                     var FeatureViewer = require("biojs-vis-proteinfeaturesviewer");
                     var fvInstance = new FeatureViewer({
                         anproxy: "/proxy/",

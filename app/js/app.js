@@ -129,8 +129,6 @@ var deps = [
              function(response) {
                  deps = _.concat(deps, getComponents(response.data));
                  configSystemjs(response.data, $q).then(function () {
-                     console.log("DEPS TO INCLUDE IN ANGULAR...");
-                     console.log(deps);
                      var app = initApp(deps);
                      app.constant('initConfig', response.data);
                      angular.bootstrap(document, ['cttvApp']);

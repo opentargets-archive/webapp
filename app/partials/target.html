@@ -194,7 +194,7 @@
                     </div>
                 </accordion-group> -->
 
-                <accordion-group ng-repeat="section in sections" is-open="false" attr-section-name="{{section.name}}">
+                <accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}">
                     <accordion-heading>
                         <span ng-click='section.visible = !section.visible'>{{section.heading}}</span>
                     </accordion-heading>

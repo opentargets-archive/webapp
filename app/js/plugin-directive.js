@@ -13,6 +13,7 @@ angular.module('plugins', [])
         link: function(scope, element, attrs) {
 
             scope.$watch('visible', function (val) {
+                console.log("VISIBLE... " + val);
 
                 // Find the first ancestor element to get the width from
                 var sectionWidth = 0;
@@ -46,7 +47,7 @@ angular.module('plugins', [])
                         .then (function () {
                             console.log("All deps have now been loaded...");
                             $timeout (function () {
-                                var template = '<' + scope.plugin + (scope.target ? (" target=target") : " ") + (scope.disease ? ("disease=" + scope.disease) : "") + " width=" + sectionWidth + "></" + scope.plugin + ">";
+                                var template = '<' + scope.plugin + (scope.target ? (" target=target") : " ") + (scope.disease ? ("disease=disease") : "") + " width=" + sectionWidth + "></" + scope.plugin + ">";
                                 var compiled = $compile(template)(scope);
                                 element.append(compiled);
                             }, 0);
