@@ -51,6 +51,20 @@
 
     "dumps_link": "/downloads/data",
 
+    "diseaseSections": [
+        {
+            "name": "Drugs",
+            "element": "drugs-display",
+            "heading": "Drugs"
+        },
+        {
+            "name": "Classification",
+            "element": "disease-classification",
+            "heading": "Classification",
+            "visible": "true"
+        }
+    ],
+
     "targetSections": [
         {
             "name": "featuresViewer",

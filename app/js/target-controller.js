@@ -14,10 +14,6 @@ angular.module('cttvControllers')
 
     $scope.targetId = $location.url().split("/")[2];
 
-    $scope.drugs = {
-        has_errors: false,
-    };
-
     cttvAPIservice.getTarget({
         target_id: $scope.targetId
     })
@@ -65,6 +61,7 @@ angular.module('cttvControllers')
             $scope.synonyms = _.keys(syns);
 
             // Uniprot
+            // TODO: Probably not being used... make sure & clean up
             $scope.uniprot = {
                 id : resp.uniprot_id,
                 subunits : resp.uniprot_subunit,
@@ -277,9 +274,9 @@ angular.module('cttvControllers')
 
             // Extra sections -- plugins
             $scope.sections = cttvConfig.targetSections;
-            // Restore the visibility values
+            // Set default visibility values
             for (var t=0; t<$scope.sections.length; t++) {
-                $scope.sections[t].visible = false;
+                $scope.sections[t].defaultVisibility = $scope.sections[t].visible;
             }
 
         },

@@ -4,14 +4,10 @@ angular.module('cttvControllers')
 * Controller for the disease page
 * It loads general information about a given disease
 */
-    .controller ('DiseaseCtrl', ["$scope", "$location", "$log", "cttvAPIservice", 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, cttvUtils) {
+    .controller ('DiseaseCtrl', ["$scope", "$location", "$log", "cttvAPIservice", 'cttvUtils', 'cttvConfig', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvConfig) {
         "use strict";
         $log.log("DiseaseCtrl()");
         cttvUtils.clearErrors();
-
-        $scope.drugs = {
-            has_errors: false,
-        }
 
         var efo_code = $location.url().split("/")[2];
         cttvAPIservice.getDisease({
@@ -45,8 +41,10 @@ angular.module('cttvControllers')
                 "title" : data.label.split(" ").join("_")
             };
 
-
-            // Update bindings
-            //$scope.$apply();
+            // Extra sections -- plugins
+            $scope.sections = cttvConfig.diseaseSections;
+            for (var t=0; t<$scope.sections.length; t++) {
+                $scope.sections[t].defaultVisibility = $scope.sections[t].visible;
+            }
         });
     }]);
