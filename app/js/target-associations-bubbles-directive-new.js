@@ -1,7 +1,7 @@
 /* Bubbles directive for associations */
 angular.module('cttvDirectives')
 
-    .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvConsts', function ($log, cttvAPIservice, cttvUtils, cttvConsts) {
+    .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvConsts', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvConsts, $analytics) {
         'use strict';
 
         var whoiam = "bubbles";
@@ -86,6 +86,9 @@ angular.module('cttvDirectives')
                 // });
 
                 function setView (data) { // data is a promise
+                    // Fire a target associations tree event for piwik to track
+                    $analytics.eventTrack('targetAssociationsBubbles', {"category": "association", "label": "bubbles"});
+
                     var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
                     var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
