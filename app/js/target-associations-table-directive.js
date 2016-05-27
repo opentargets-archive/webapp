@@ -7,10 +7,11 @@ angular.module('cttvDirectives')
 */
 // .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', 'cttvConsts', '$location', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile, cttvConsts, $location) {
 
-.directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', '$q', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location, $q) {
-
-
+.directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', '$q', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location, $q, $analytics) {
     'use strict';
+
+    // Fire a target associations tree event for piwik to track
+    $analytics.eventTrack('targetAssociationsTable', {"category": "association", "label": "table"});
 
     var whoiam = "table";
     var draw = 1;
