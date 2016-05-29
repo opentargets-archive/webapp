@@ -6,7 +6,7 @@ angular.module('cttvControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-.controller ("TargetCtrl", ["$scope", "$location", "$log", "cttvAPIservice", "$http", "$sce", "$q", 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, $http, $sce, $q, cttvUtils) {
+.controller ("TargetCtrl", ["$scope", "$location", "$log", "cttvAPIservice", "$http", "$sce", "$q", 'cttvUtils', '$analytics', function ($scope, $location, $log, cttvAPIservice, $http, $sce, $q, cttvUtils, $analytics) {
     "use strict";
     $log.log('TargetCtrl()');
     cttvUtils.clearErrors();
@@ -15,7 +15,12 @@ angular.module('cttvControllers')
 
     $scope.drugs = {
         has_errors: false,
-    }
+    };
+
+    $scope.sectionOpen=function(who) {
+        // Fire a target associations tree event for piwik to track
+        $analytics.eventTrack('profile', {"category": "target", "label": who});
+    };
 
     cttvAPIservice.getTarget({
         target_id: $scope.targetId
@@ -247,8 +252,6 @@ angular.module('cttvControllers')
                     name: pathway.name
                 };
             };
-
-
 
 
             // Drugs
