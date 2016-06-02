@@ -41,6 +41,7 @@ app.config([ '$stateProvider', '$urlRouterProvider', '$locationProvider',
                 url:'/search',
                 templateUrl: 'partials/search.html',
                 controller: 'SearchAppCtrl',
+                reloadOnSearch: false
             })
 
             .state('target-associations', {

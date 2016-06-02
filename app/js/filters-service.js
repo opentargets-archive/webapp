@@ -9,7 +9,7 @@ angular.module('cttvServices').
     /**
      *
      */
-    factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', 'cttvUtils', function($log, $location, cttvDictionary, cttvConsts, cttvAPIservice, cttvUtils) {
+    factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', function($log, $location, cttvDictionary, cttvConsts, cttvAPIservice, cttvUtils, cttvLocationState) {
 
         "use strict";
 
@@ -97,7 +97,6 @@ angular.module('cttvServices').
          */
         var getCollectionForSelected = function(key, label){
             var c = selected.filter(function(obj){return obj.key == key;})[0];
-            //$log.log("getCollectionForSelected( "+key+", "+label+" ) :: "+c);
             if(c==undefined){
                 c = new FilterCollection({key: key, label: label});
                 selected.push(c);
@@ -146,7 +145,9 @@ angular.module('cttvServices').
          * Returns true if a filter with the given key is selected
          */
         var isSelected=function(collection, key){
-            return ($location.search()[collection] && ( $location.search()[collection]===key || $location.search()[collection].indexOf(key)>=0 )) || false;
+            // return ($location.search()[collection] && ( $location.search()[collection]===key || $location.search()[collection].indexOf(key)>=0 )) || false;
+            var fcts = cttvLocationState.getState()["fcts"];
+            return (fcts && fcts[collection] && ( fcts[collection]===key || fcts[collection].indexOf(key)>=0 ))|| false;
         };
 
 
@@ -170,7 +171,7 @@ angular.module('cttvServices').
          * Takes API data for a facet (i.e. a collection of filters) and returns the config object to create that collection
          */
         var parseFacetData = function(collection, data, countsToUse){
-            //$log.log("parseFacetData");
+            $log.log("parseFacetData");
             var config={
                 key: collection,    // this is the type, really...
                 label: cttvDictionary[collection.toUpperCase()] || collection,  // set default label based on what the API has returned for this
@@ -197,6 +198,7 @@ angular.module('cttvServices').
                     if(dtb.datasource){
                         conf.collection = parseCollection( parseFacetData(cttvConsts.DATASOURCES, dtb.datasource, countsToUse) );
                     }
+
                     return conf;
                 });/*.filter( function(obj){
                     // Use a filter function to keep only those returned by the API??
@@ -291,9 +293,6 @@ angular.module('cttvServices').
                     //min : 0,
                     //max : 1
                 }
-                // $log.log("*** *** ***");
-                // $log.log(config.filters)
-                // $log.log(config.data);
             }
 
             return config;
@@ -335,7 +334,8 @@ angular.module('cttvServices').
                     raw[obj.facet].push( obj.key )
                 })
             })
-            $location.search(raw);
+            // $location.search(raw);
+            cttvLocationState.setStateFor("fcts",raw);
         }
 
 
@@ -344,7 +344,6 @@ angular.module('cttvServices').
          * Calls in sequence updateSelected() and updateLocationSearch()
          */
         var update = function(){
-            $log.log("update");
             updateSelected();
             updateLocationSearch();
         }
@@ -355,7 +354,6 @@ angular.module('cttvServices').
          * Builds a collection from the specified config object and addes it to the filters[] array
          */
         var addCollection = function(obj){
-            $log.log("addCollection");
             filters.push( parseCollection(obj) );
         };
 
@@ -366,7 +364,6 @@ angular.module('cttvServices').
          * f is essentially a config object
          */
         var getFilter = function(f){
-            //$log.log("getFilter()");
             if(!filtersData[f.facet]){
                 filtersData[f.facet] = {}
             }
@@ -504,7 +501,6 @@ angular.module('cttvServices').
 
             FilterCollection.prototype.isLastClicked = function(){
                 return this.filters.some(function(f){
-                    //$log.log("  "+f.toString() + " === "+ lastClicked);
                     return f.toString() == lastClicked;
                 });
             }
@@ -586,6 +582,7 @@ angular.module('cttvServices').
             if(facet){
                 return getSelectedFilters(facet);
             }
+            /*
             var raw = {};
             for(var i in $location.search()){
                 raw[i] = $location.search()[i];
@@ -594,6 +591,8 @@ angular.module('cttvServices').
                 }
             }
             return raw;
+            */
+            return cttvLocationState.getState() || {};
         };
 
         /**
@@ -615,7 +614,12 @@ angular.module('cttvServices').
          * and returns an API-friendly config object with the filter options
          */
         cttvFiltersService.parseURL = function(){
+
+            $log.log(">> >>>>>>>>>>>>>>>> >> >>>>>>>>>>>>>>>>>>> >>");
             // datatypes=genetic_association&datatypes=known_drug&datatypes=rna_expression
+
+            // TODO:
+            // this should be deprecated now, right?
             var raw = {};
             var search = $location.search();
 
@@ -627,7 +631,6 @@ angular.module('cttvServices').
                     }
                 }
             }
-            //$log.log(raw);
             return raw;
         };
 
@@ -640,7 +643,6 @@ angular.module('cttvServices').
          * @param status [Array] this contains ["ok"] if all facets were computed correctly by the API. In case of errors, it contains the list of facets reporting incorrect values, e.g. ["partial-facet-datatypes"]
          */
         cttvFiltersService.updateFacets = function(facets, countsToUse, status){
-            console.warn("updateFacets");
 
             // if there are no facets, return
             if(!facets){
@@ -673,7 +675,6 @@ angular.module('cttvServices').
 
             orderedFacets.forEach(function(collection){
                 if (facets.hasOwnProperty(collection)) {
-                    $log.log("TRY TO ADD "+collection);
                     try{
                         addCollection( parseFacetData(collection, facets[collection], countsToUse) );
                     } catch(e){
@@ -684,9 +685,6 @@ angular.module('cttvServices').
 
             // update the filters state?
             updateSelected();
-            // $log.log("--------------");
-            // $log.log(filtersData);
-            // $log.log("--------------");
         };
 
 
