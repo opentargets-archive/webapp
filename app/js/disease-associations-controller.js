@@ -16,7 +16,7 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils) {
+.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState) {
 
     'use strict';
 
@@ -76,10 +76,6 @@ angular.module('cttvControllers')
         };
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
-        // TEST:
-        //cttvFiltersService.updateFacets(JSON.parse('{"data_distribution": {"buckets": {"0.0": {"value": 803},"0.2": {"value": 8},"0.4": {"value": 5},"0.8": {"value": 234},"0.6": {"value": 2}}}}'));
-
-
 
         cttvAPIservice.getAssociations(opts).
         then(
@@ -119,18 +115,35 @@ angular.module('cttvControllers')
 //  })
 
 
-    // Set up a listener for the URL changes and
-    // when the search change, get new data
+    // Set up a listener for the URL changes and when the search change, get new data
     // $scope.$on('$routeUpdate', function(){
-    $scope.$on('$locationChangeSuccess', function(){
+    /*$scope.$on('$locationChangeSuccess', function(){
         $log.log("** onRouteUpdate **");
         getFacets( cttvFiltersService.parseURL() );
+    });*/
+
+
+
+    // Set up a listener for the URL changes and when the search change, get new data
+    $scope.$on(cttvLocationState.STATECHANGED, function (e, args) {
+        // $log.log(e);
+        // $log.log(args);
+        getFacets( args.fcts ); // if there are no facets, no worries, the API service will handle undefined
     });
+
 
 
     // ---------------------------
     //  Flow
     // ---------------------------
+
+    // When page first load, the above cttvLocationState.STATECHANGED is fired, but we are not ready to catch it yet
+    // so we have to fire the handler manually
+    getFacets( cttvLocationState.parseLocationSearch()["fcts"] || {} );
+
+
+
+
 
     //
     // No longer need to get unfiltered data first and all that
@@ -140,7 +153,8 @@ angular.module('cttvControllers')
     //  3. Listen for page changes
 
     // Option 1: get the data without caring about filtered out mouse data
-    getFacets( cttvFiltersService.parseURL() );
+    //getFacets( cttvFiltersService.parseURL() );
+
 
     // - OR -
 

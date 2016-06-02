@@ -186,7 +186,7 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             if($location.url() != APP_SEARCH_URL){
                 $location.url(APP_SEARCH_URL);
             }
-            $location.search( 'q=' + $scope.search.query.text);
+            $location.search( 'src=q:' + $scope.search.query.text);
 
 
             // reset the query field:

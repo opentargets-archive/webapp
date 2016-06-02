@@ -7,7 +7,7 @@ angular.module('cttvControllers')
  * Controller for the target associations page
  * It loads a list of associations for the given search
  */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', '$timeout', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary, $timeout) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', '$timeout', 'cttvLocationState', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary, $timeout, cttvLocationState) {
         'use strict';
 
 	$log.log('targetAssociationsCtrl()');
@@ -35,7 +35,10 @@ angular.module('cttvControllers')
         cttvFiltersService.facetTypes.THERAPEUTIC_AREAS
     ]);
 
-    var filters = cttvFiltersService.parseURL();
+    // var filters = cttvFiltersService.parseURL();
+
+    var filters = cttvLocationState.parseLocationSearch()["fcts"] || {} ;
+
     // var opts = cttvAPIservice.addFacetsOptions(filters, {});
     // cttvAPIservice.addFacetsOptions(filters, {});
 
@@ -44,11 +47,17 @@ angular.module('cttvControllers')
     // Set up a listener for the URL changes and
     // when the search change, get new data
     // $scope.$on('$routeUpdate', function(){
-    $scope.$on('$locationChangeSuccess', function(){
+    /*$scope.$on('$locationChangeSuccess', function(){
         $log.log("onRouteUpdate");
         //$scope.filterDataTypes (cttvFiltersService.parseURL());
         getFacets(cttvFiltersService.parseURL());
+    });*/
+
+    // Set up a listener for the URL changes and when the search change, get new data
+    $scope.$on(cttvLocationState.STATECHANGED, function (e, args) {
+        getFacets( args.fcts );
     });
+
 
     function getFacets (filters) {
         $log.log("getFacets()");
@@ -108,7 +117,10 @@ angular.module('cttvControllers')
     //     );
 
 
-    getFacets(cttvFiltersService.parseURL());
+    // getFacets(cttvFiltersService.parseURL());
+
+    // on page load:
+    getFacets( cttvLocationState.parseLocationSearch()["fcts"] );
 
 	$scope.loading = false;
 
