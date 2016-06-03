@@ -1632,8 +1632,8 @@
                     row.push( "<i class='fa fa-spinner fa-spin'></i>" );
 
                     // matched sentences
-                    //row.push( '<button type="button" class="btn btn-default" ng-click="window.alert(\'hello\')">'+item.evidence.literature_ref.mined_sentences.length+'</button>' );
-                    row.push( '<a onclick="angular.element(this).scope().open('+newdata.length+')"><span class=badge>' + item.evidence.literature_ref.mined_sentences.length + '</span> ' + (newdata.length==1 ? ('sentence') : ('sentences')) + '</a>' );
+                    //row.push( '<a onclick="angular.element(this).scope().open('+newdata.length+')"><span class=badge>' + item.evidence.literature_ref.mined_sentences.length + '</span> ' + (newdata.length==1 ? ('sentence') : ('sentences')) + '</a>' );
+                    row.push( '<a class="literature-matched-sentences" onclick="angular.element(this).scope().open('+newdata.length+')"><span class=badge>' + item.evidence.literature_ref.mined_sentences.length + '</span></a>' );
 
                     // year
                     row.push("<i class='fa fa-spinner fa-spin'></i>");

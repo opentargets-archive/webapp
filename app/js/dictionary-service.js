@@ -25,7 +25,7 @@ angular.module('cttvServices').
             CANCER_GENE_CENSUS :             "Cancer Gene Census",
             CHEMBL :                         "CHEMBL",
             COMMON_DISEASES :                "Common diseases",
-            CTTV_PIPELINE :                  "CTTV pipeline",
+            CTTV_PIPELINE :                  "Open Targets pipeline",
 
             // D
             DATA_DISTRIBUTION :              "Data distribution",
