@@ -7,9 +7,7 @@ angular.module('cttvDirectives')
 */
 // .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', 'cttvConsts', '$location', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile, cttvConsts, $location) {
 
-.directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', '$q', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location, $q) {
-
-
+.directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', '$q', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location, $q, $analytics) {
     'use strict';
 
     var whoiam = "table";
@@ -367,6 +365,8 @@ angular.module('cttvDirectives')
                 if (dtable) {
                     dtable.ajax.reload();
                 } else {
+                    // Fire a target associations tree event for piwik to track
+                    $analytics.eventTrack('targetAssociationsTable', {"category": "association", "label": "table"});
                     dtable = setupTable(table, target, scope.filename);
                 }
             });

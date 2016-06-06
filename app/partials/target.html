@@ -38,7 +38,7 @@
 
 
                 <!-- Uniprot information -->
-                <accordion-group heading="Protein Information (from UniProt)" attr-section-name="Uniprot" is-open="false">
+                <accordion-group heading="Protein Information (from UniProt)" attr-section-name="Uniprot" is-open="false" ng-click='sectionOpen("uniprot")'>
                     <tabset>
                         <tab heading="Text">
                             <p>ID: {{uniprot.id}}</p>
@@ -70,7 +70,7 @@
                 </accordion-group>
 
                 <!-- Variants, isoforms and genomic context -->
-                <accordion-group attr-section-name="Variants" is-open="false">
+                <accordion-group attr-section-name="Variants" is-open="false" ng-click='sectionOpen("genomeBrowser")'>
                     <accordion-heading>
                         <span ng-click="toggleGenomeLocation()">Variants, isoforms and genomic context</span>
                     </accordion-heading>
@@ -83,7 +83,7 @@
                 </accordion-group>
 
                 <!-- Protein baseline expression -->
-                <accordion-group attr-section-name="ProteinExpression" is-open="false">
+                <accordion-group attr-section-name="ProteinExpression" is-open="false" ng-click='sectionOpen("proteinExpression")'>
                     <accordion-heading>
                         <span>Protein Baseline Expression</span>
                     </accordion-heading>
@@ -97,7 +97,7 @@
                 </accordion-group>
 
                 <!-- RNA baseline expression -->
-                <accordion-group attr-section-name="RnaExpression" is-open="false">
+                <accordion-group attr-section-name="RnaExpression" is-open="false" ng-click='sectionOpen("rnaExpression")'>
                     <accordion-heading>
                         <span ng-click="toggleBaselineExpression()">RNA Baseline Expression</span>
                     </accordion-heading>
@@ -105,7 +105,7 @@
                 </accordion-group>
 
                 <!-- Gene Ontology -->
-                <accordion-group heading="Gene Ontology" attr-section-name="GeneOntology" is-open="false">
+                <accordion-group heading="Gene Ontology" attr-section-name="GeneOntology" is-open="false" ng-click='sectionOpen("geneOntology")'>
                     <p class="cttv-section-intro"><span ng-show="!goterms.length">There are no </span>Gene Ontology terms associated with {{target.symbol}}</p>
                     <div ng-repeat="go in goterms">
                         <h4>{{go.Ontology}}</h4>
@@ -117,7 +117,7 @@
 
 
                 <!-- Protein Structure -->
-                <accordion-group heading="Protein Structure" attr-section-name="ProteinStructure" is-open="false">
+                <accordion-group heading="Protein Structure" attr-section-name="ProteinStructure" is-open="false" ng-click='sectionOpen("proteinStructure")'>
                     <p class="cttv-section-intro">There {{pdb.nstructures == 1 ? "is" : "are"}} <strong>{{pdb.nstructures}}</strong> {{pdb.nstructures == 1 ? "structure" : "structures"}} available for {{target.symbol}} in <a target="_blank"  href="https://www.ebi.ac.uk/pdbe">PDBe</a>. <span ng-if="pdb.nstructures>1">Below we show the most representative one. A summary of the other structures can be found in the <a target="_blank" href="http://www.uniprot.org/uniprot/{{uniprot.accessions[0]}}#structure">UniProt entry for {{uniprot.accessions[0]}}</a></span></p>
                     <h4 ng-if="pdb.nstructures>0">{{pdb.id}} <span><a target="_blank" href="https://www.ebi.ac.uk/pdbe/entry/pdb/{{pdb.id}}"><i class="fa fa-external-link"></i></a></span></h4>
                     <p>{{pdb.alt}}</p>
@@ -126,7 +126,7 @@
                 </accordion-group>
 
                 <!-- Pathways -->
-                <accordion-group heading="Pathways" attr-section-name="Pathways" is-open="false">
+                <accordion-group heading="Pathways" attr-section-name="Pathways" is-open="false" ng-click='sectionOpen("pathways")'>
                     <p ng-if="!pathways.length">
                         No pathways found
                     </p>
@@ -145,7 +145,7 @@
                 </accordion-group>
 
                 <!-- Drugs -->
-                <accordion-group heading="Drugs" attr-section-name="Drugs" is-open="false">
+                <accordion-group heading="Drugs" attr-section-name="Drugs" is-open="false" ng-click='sectionOpen("drugs")'>
                     <div ng-show="!drugs.has_errors">
                         <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a></p>
                         <known-drug-table target="{{targetId}}" title="target.title" error-flag="drugs.has_errors"></known-drug-table>
@@ -168,13 +168,13 @@
                 </accordion-group> -->
 
                 <!-- Gene tree -->
-                <accordion-group heading="Target Family" attr-section-name="GeneTree" is-open="false">
+                <accordion-group heading="Target Family" attr-section-name="GeneTree" is-open="false" ng-click='sectionOpen("targetFamily")'>
                     <p class=cttv-section-intro>Phylogenetic tree showing the history of the human gene {{target.symbol}} based on protein sequences. The tree shows human paralogs and orthologs in selected species. Click on any node to get more information about the homology relationship. Check / Uncheck species to prune the tree accordingly</p>
                     <cttv-target-gene-tree target="{{targetGeneId}}"></cttv-gene-tree>
                 </accordion-group>
 
                 <!-- Bibliography -->
-                <accordion-group heading="Bibliography" attr-section-name="Bibliography" is-open="false">
+                <accordion-group heading="Bibliography" attr-section-name="Bibliography" is-open="false" ng-click='sectionOpen("bibliography")'>
                     <p class="cttv-section-intro">There are {{citations.count || 0}} citations for {{target.symbol}} in UniProt. <span ng-if="citations.count>25">Only the first 25 are shown below.</span> <span ng-if="citations.count">To see all the citations in the EuropePMC portal, follow this <a target=_blank href="{{citations.europepmcLink}}">link</a></span></p>
                     <div class="epmc_citation_container" ng-repeat="citation in citations.all track by $index">
                         <div class="epmc_citation_title">
