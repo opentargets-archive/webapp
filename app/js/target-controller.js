@@ -18,6 +18,7 @@ angular.module('cttvControllers')
     }
 
 
+
     /*
     cttvAPIservice.getTargetRelation({
         id: $scope.targetId
@@ -34,6 +35,7 @@ angular.module('cttvControllers')
         cttvAPIservice.defaultErrorHandler
     );
     */
+
 
 
     cttvAPIservice.getTarget({
