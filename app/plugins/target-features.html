@@ -1,0 +1,28 @@
+<tabset>
+    <tab heading="Text">
+        <p>ID: {{uniprot.id}}</p>
+        <p>Accessions:</p>
+        <ul>
+            <li ng-repeat="accession in uniprot.accessions"><a target="_blank" href="http://www.uniprot.org/uniprot/{{accession}}">{{accession}}</a></li>
+        </ul>
+        <p>Subunit:</p>
+        <ul>
+            <li ng-repeat="subunit in uniprot.subunits">
+                {{subunit}}
+            </li>
+        </ul>
+        <p>Subcellular location:</p>
+        <ul>
+            <li ng-repeat="location in uniprot.locations">
+                {{location}}
+            </li>
+        </ul>
+        <p>UniProt Keywords:</p>
+        <ul>
+            <li ng-repeat="keyword in uniprot.keywords">{{keyword}}</li>
+        </ul>
+    </tab>
+    <tab heading="Graphical">
+        <div id="upfv"></div>
+    </tab>
+</tabset>
