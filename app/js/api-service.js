@@ -429,6 +429,20 @@ angular.module('cttvServices')
 
 
 
+        /**
+         * Get relations for specified gene or targer
+         */
+        cttvAPI.getDiseaseRelation = function(queryObject){
+            $log.log("cttvAPI.getTargetRelation");
+
+            return callAPI({
+                operation : cttvAPI.API_DISEASE_RELATION_URL,
+                params : queryObject
+            });
+        }
+
+
+
         return cttvAPI;
     }])
 

@@ -17,6 +17,25 @@ angular.module('cttvControllers')
         has_errors: false,
     }
 
+
+    /*
+    cttvAPIservice.getTargetRelation({
+        id: $scope.targetId
+    })
+    .then(
+        // success
+        function (resp) {
+            $log.log("getTargetRelation");
+            $log.log(resp);
+            $scope.relations = resp.body.data;
+        },
+
+        // error handler
+        cttvAPIservice.defaultErrorHandler
+    );
+    */
+
+
     cttvAPIservice.getTarget({
         target_id: $scope.targetId
     })
