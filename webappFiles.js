@@ -43,6 +43,7 @@ var webappFiles = {
             'app/js/dictionary-service.js',
             'app/js/const-service.js',
             'app/js/config-service.js',
+            'app/js/location-state-service.js',
             'app/js/filters-service.js',
             'app/js/filters.js',
             'app/js/search-box-controller.js',
