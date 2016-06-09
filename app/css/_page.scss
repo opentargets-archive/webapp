@@ -281,6 +281,41 @@ body{
 
 
 
+/*
+ * Feedback button
+ */
+
+.cttv-feedback-button {
+    position: fixed;
+    top: 50%;
+    margin-top: -50px;
+    z-index: 10000;
+    right: 0;
+    @include transform-origin( bottom right );
+    @include transform( rotate(-90deg) );
+
+    a {
+        color: #FFF;
+
+        div {
+            padding: 7px 12px 5px 12px;
+            background: $extra-brand-color;
+            @include border-top-left-radius( 5px );
+            @include border-top-right-radius( 5px );
+            box-shadow: 0px 0px 6px 1px rgba(0,0,0,.2);
+            font-size: 14px;
+            font-weight: 400;
+
+            .fa{
+                @include transform( rotate( 90deg ) ); // icon should be straight
+            }
+
+            span {
+                padding-left: 5px;
+            }
+        }
+    }
+}
 
 
 
