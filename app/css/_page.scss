@@ -306,13 +306,6 @@ body{
             font-size: 14px;
             font-weight: 400;
 
-            .fa{
-                @include transform( rotate( 90deg ) ); // icon should be straight
-            }
-
-            span {
-                padding-left: 5px;
-            }
         }
     }
 }
