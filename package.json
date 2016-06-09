@@ -32,6 +32,7 @@
     "gulp-uglify": "1.2.0",
     "gulp-watch": "3.0.0",
     "http-server": "0.6.1",
+    "jspm": "^0.16.34",
     "karma": "0.12.31",
     "karma-chai": "0.1.0",
     "karma-cli": "0.0.4",
@@ -46,7 +47,7 @@
     "shelljs": "0.2.6"
   },
   "scripts": {
-    "postinstall": "bower install --allow-root && gulp build-all",
+    "postinstall": "bower install --allow-root && ./node_modules/.bin/jspm install && gulp build-all",
     "start": "cd server && node server.js",
     "test": "gulp test",
     "test-single-run": "karma start tests/unit/karma.conf.js  --single-run"
@@ -62,9 +63,25 @@
     "cttv.targetGeneTree": "file:components/targetGeneTree",
     "js-yaml": "3.5.5",
     "marked": "0.3.5",
+    "systemjs": "^0.19.27",
     "tnt.genome": "0.1.5",
     "tnt.rest": "0.1.1",
     "tnt.tooltip": "0.1.0",
     "tnt.utils": "0.1.1"
+  },
+  "jspm": {
+    "directories": {
+      "packages": "app/jspm_packages"
+    },
+    "configFile": "jspm-config.js",
+    "dependencies": {
+      "css": "github:systemjs/plugin-css@^0.1.21",
+      "three": "github:mrdoob/three.js@master"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
   }
 }
