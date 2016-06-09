@@ -4,7 +4,7 @@ angular.module('cttvDirectives')
     /*
     *
     */
-    .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', 'cttvConsts', 'cttvUtils', function ($log, cttvAPIservice, cttvConsts, cttvUtils) {
+    .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', 'cttvConsts', 'cttvUtils', '$analytics', function ($log, cttvAPIservice, cttvConsts, cttvUtils, $analytics) {
         'use strict';
 
         var whoiam = 'tree';
@@ -82,6 +82,9 @@ angular.module('cttvDirectives')
                 });
 
                 var setTreeView = function (tas) {
+                    // Fire a target associations tree event for piwik to track
+                    $analytics.eventTrack('targetAssociationsTree', {"category": "association", "label": "tree"});
+
                     ////// Tree view
                     // viewport Size
                     var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
