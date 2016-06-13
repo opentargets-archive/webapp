@@ -6,35 +6,13 @@ angular.module('cttvControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-.controller ("TargetCtrl", ["$scope", "$location", "$log", "cttvAPIservice", "$http", "$sce", "$q", 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, $http, $sce, $q, cttvUtils) {
+.controller ("TargetCtrl", ["$scope", "$location", "$log", "cttvAPIservice", "$http", "$sce", "$q", 'cttvUtils', 'cttvConfig', function ($scope, $location, $log, cttvAPIservice, $http, $sce, $q, cttvUtils, cttvConfig) {
     "use strict";
+
     $log.log('TargetCtrl()');
     cttvUtils.clearErrors();
 
     $scope.targetId = $location.url().split("/")[2];
-
-    $scope.drugs = {
-        has_errors: false,
-    }
-
-
-
-    cttvAPIservice.getTargetRelation({
-        id: $scope.targetId
-    })
-    .then(
-        // success
-        function (resp) {
-            $log.log("getTargetRelation");
-            $log.log(resp);
-            $scope.relations = resp.body.data;
-        },
-
-        // error handler
-        cttvAPIservice.defaultErrorHandler
-    );
-
-
 
     cttvAPIservice.getTarget({
         target_id: $scope.targetId
@@ -43,14 +21,21 @@ angular.module('cttvControllers')
         // success
         function (resp) {
             resp = JSON.parse(resp.text);
-            $scope.target = {
-                label : resp.approved_name || resp.ensembl_external_name,
-                symbol : resp.approved_symbol || resp.ensembl_external_name, //resp.approved_symbol || resp.approved_name || resp.ensembl_external_name,
-                id : resp.approved_id || resp.ensembl_gene_id,
-                description : resp.uniprot_function[0],
-                name : resp.approved_name || resp.ensembl_description,
-                title : (resp.approved_symbol || resp.ensembl_external_name).split(" ").join("_")
-            };
+            $scope.target = resp;
+            $scope.target.label = resp.approved_name || resp.ensembl_external_name;
+            $scope.target.symbol = resp.approved_symbol || resp.ensembl_external_name;
+            $scope.target.id = resp.approved_id || resp.ensembl_gene_id;
+            $scope.target.name = resp.approved_name || resp.ensembl_description;
+            $scope.target.title = (resp.approved_symbol || resp.ensembl_external_name).split(" ").join("_");
+            $scope.target.description = resp.uniprot_function[0];
+            // $scope.target = {
+            //     label : resp.approved_name || resp.ensembl_external_name,
+            //     symbol : resp.approved_symbol || resp.ensembl_external_name, //resp.approved_symbol || resp.approved_name || resp.ensembl_external_name,
+            //     id : resp.approved_id || resp.ensembl_gene_id,
+            //     description : resp.uniprot_function[0],
+            //     name : resp.approved_name || resp.ensembl_description,
+            //     title : (resp.approved_symbol || resp.ensembl_external_name).split(" ").join("_")
+            // };
 
             // Synonyms
             var syns = {};
@@ -76,6 +61,7 @@ angular.module('cttvControllers')
             $scope.synonyms = _.keys(syns);
 
             // Uniprot
+            // TODO: Probably not being used... make sure & clean up
             $scope.uniprot = {
                 id : resp.uniprot_id,
                 subunits : resp.uniprot_subunit,
@@ -84,24 +70,24 @@ angular.module('cttvControllers')
                 keywords : resp.uniprot_keywords
             };
 
-            var FeatureViewer = require("biojs-vis-proteinfeaturesviewer");
-            var fvInstance = new FeatureViewer({
-                proxy: "/proxy/",
-                el: "#uniprotProteinFeatureViewer",
-                uniprotacc: resp.uniprot_accessions[0],
-                exclusions: ['seqInfo']
-            });
+            // var FeatureViewer = require("biojs-vis-proteinfeaturesviewer");
+            // var fvInstance = new FeatureViewer({
+            //     proxy: "/proxy/",
+            //     el: "#uniprotProteinFeatureViewer",
+            //     uniprotacc: resp.uniprot_accessions[0],
+            //     exclusions: ['seqInfo']
+            // });
 
             // Ensembl
-            var isHuman = resp.ensembl_gene_id.substring(0,4) === "ENSG";
-            $scope.ensembl = {
-                id : resp.ensembl_gene_id,
-                description : resp.ensembl_description,
-                isHuman : isHuman,
-                chr : resp.chromosome,
-                start : resp.gene_start,
-                end : resp.gene_end
-            };
+            // var isHuman = resp.ensembl_gene_id.substring(0,4) === "ENSG";
+            // $scope.ensembl = {
+            //     id : resp.ensembl_gene_id,
+            //     description : resp.ensembl_description,
+            //     isHuman : isHuman,
+            //     chr : resp.chromosome,
+            //     start : resp.gene_start,
+            //     end : resp.gene_end
+            // };
 
             // GO terms
             // var goterms = _.filter(resp.dbxrefs, function (t) {return t.match(/^GO:/)});
@@ -109,60 +95,60 @@ angular.module('cttvControllers')
             // var uniqGoterms = _.uniq(cleanGoterms);
             // $scope.goterms = uniqGoterms;
             // var gos = _.pluck(resp.go, 'term');
-            var gosByOntology = {
-                'F' : [],
-                'C' : [],
-                'P' : []
-            };
-
-            var gos = _.keys(resp.go);
-            for (var ii=0; ii<gos.length; ii++) {
-                var goid = gos[ii];
-                var ontology = resp.go[goid].term.substring(0,1);
-                gosByOntology[ontology].push ({label: resp.go[goid].term.substring(2),
-                    goid: goid
-                });
-            }
-
-            var goArr = [];
-            if (gosByOntology.F.length) {
-                goArr.push (
-                    {
-                        "Ontology" : "Molecular Function",
-                        "terms" : gosByOntology.F
-                    }
-                );
-            }
-
-            if (gosByOntology.P.length) {
-                goArr.push (
-                    {
-                        "Ontology" : "Biological Process",
-                        "terms" : gosByOntology.P
-                    }
-                );
-            }
-
-            if (gosByOntology.C.length) {
-                goArr.push (
-                    {
-                        "Ontology" : "Cellular Component",
-                        "terms" : gosByOntology.C
-                    }
-                );
-            }
-            $scope.goterms = goArr;
+            // var gosByOntology = {
+            //     'F' : [],
+            //     'C' : [],
+            //     'P' : []
+            // };
+            //
+            // var gos = _.keys(resp.go);
+            // for (var ii=0; ii<gos.length; ii++) {
+            //     var goid = gos[ii];
+            //     var ontology = resp.go[goid].term.substring(0,1);
+            //     gosByOntology[ontology].push ({label: resp.go[goid].term.substring(2),
+            //         goid: goid
+            //     });
+            // }
+            //
+            // var goArr = [];
+            // if (gosByOntology.F.length) {
+            //     goArr.push (
+            //         {
+            //             "Ontology" : "Molecular Function",
+            //             "terms" : gosByOntology.F
+            //         }
+            //     );
+            // }
+            //
+            // if (gosByOntology.P.length) {
+            //     goArr.push (
+            //         {
+            //             "Ontology" : "Biological Process",
+            //             "terms" : gosByOntology.P
+            //         }
+            //     );
+            // }
+            //
+            // if (gosByOntology.C.length) {
+            //     goArr.push (
+            //         {
+            //             "Ontology" : "Cellular Component",
+            //             "terms" : gosByOntology.C
+            //         }
+            //     );
+            // }
+            // $scope.goterms = goArr;
 
             // Expression Atlas
-            $scope.toggleBaselineExpression = function () {
-                $scope.eaTarget = resp.ensembl_gene_id;
-            };
+            // $scope.toggleBaselineExpression = function () {
+            //     $scope.eaTarget = resp.ensembl_gene_id;
+            // };
 
             // Genome Browser
-            $scope.toggleGenomeLocation = function () {
-                $scope.chr = resp.chromosome;
-                $scope.genomeBrowserGene = resp.ensembl_gene_id;
-            };
+            // $scope.toggleGenomeLocation = function () {
+            //     $scope.chr = resp.chromosome;
+            //     $scope.genomeBrowserGene = resp.ensembl_gene_id;
+            // };
 
             // Transcript Viewer
             // $scope.toggleTranscriptView = function () {
@@ -171,103 +157,76 @@ angular.module('cttvControllers')
             // };
 
             // Protein structure (PDB)
-            var pdb = resp.pdb;
-            $scope.pdb = {};
-            if (_.isEmpty(pdb)) {
-                $scope.pdb.nstructures = 0;
-                //return;
-            } else {
-                var firstStructure = _.sortBy(_.keys(pdb))[0].toLowerCase();
-                $scope.pdb.id = firstStructure;
-                $scope.pdb.nstructures = _.keys(pdb).length;
-
-                // cttvAPIservice.getProxy({
-                //     "url" : "http://www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json",
-                // })
-                // .then (function (resp) {
-                // var data = resp.body;
-                // var entryImgs = data[firstStructure].entry.all.image;
-                // for (var i=0; i<entryImgs.length; i++) {
-                //     if (entryImgs[i].filename === (firstStructure + "_deposited_chain_front")) {
-                //         $scope.pdb.thumbnailUrl = "//www.ebi.ac.uk/pdbe/static/entry/" + entryImgs[i].filename + data.image_suffix[2]; // 400x400 image
-                //         $scope.pdb.alt = entryImgs[i].alt;
-                //         $scope.pdb.description = $sce.trustAsHtml(entryImgs[i].description);
-                //         return;
-                //     }
-                // }
-                // });
-
-                $http.get("/proxy/www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json")
-                    .success (function (data) {
-                        var entryImgs = data[firstStructure].entry.all.image;
-                        for (var i=0; i<entryImgs.length; i++) {
-                            if (entryImgs[i].filename === (firstStructure + "_deposited_chain_front")) {
-                                $scope.pdb.thumbnailUrl = "//www.ebi.ac.uk/pdbe/static/entry/" + entryImgs[i].filename + data.image_suffix[2]; // 400x400 image
-                                $scope.pdb.alt = entryImgs[i].alt;
-                                //$scope.pdb.description = $sce.trustAsHtml(entryImgs[i].description);
-                                return;
-                            }
-                        }
-                    })
-                    .error (function (data) {
-                        console.log("ERROR FROM PDB:");
-                        console.log(data);
-                    });
-            }
+            // var pdb = resp.pdb;
+            // $scope.pdb = {};
+            // if (_.isEmpty(pdb)) {
+            //     $scope.pdb.nstructures = 0;
+            //     //return;
+            // } else {
+            //     var firstStructure = _.sortBy(_.keys(pdb))[0].toLowerCase();
+            //     $scope.pdb.id = firstStructure;
+            //     $scope.pdb.nstructures = _.keys(pdb).length;
+            //
+            //     $http.get("/proxy/www.ebi.ac.uk/pdbe/static/entry/" + firstStructure + "_json")
+            //         .success (function (data) {
+            //             var entryImgs = data[firstStructure].entry.all.image;
+            //             for (var i=0; i<entryImgs.length; i++) {
+            //                 if (entryImgs[i].filename === (firstStructure + "_deposited_chain_front")) {
+            //                     $scope.pdb.thumbnailUrl = "//www.ebi.ac.uk/pdbe/static/entry/" + entryImgs[i].filename + data.image_suffix[2]; // 400x400 image
+            //                     $scope.pdb.alt = entryImgs[i].alt;
+            //                     //$scope.pdb.description = $sce.trustAsHtml(entryImgs[i].description);
+            //                     return;
+            //                 }
+            //             }
+            //         })
+            //         .error (function (data) {
+            //             console.log("ERROR FROM PDB:");
+            //             console.log(data);
+            //         });
+            // }
 
 
             // Orthologues
-            // var ensemblApi = tnt.ensembl();
-            // var orthUrl = ensemblApi.url.homologues({
-            //     id: resp.ensembl_gene_id
-            // });
-            // ensemblApi.call(orthUrl)
-            //     .then (function (orthResp) {
-            //         var data = orthResp.body;
-            //     });
-            $scope.targetGeneId = resp.ensembl_gene_id;
+            // $scope.targetGeneId = resp.ensembl_gene_id;
 
             // Pathways
-            // Genome Browser
-            $scope.togglePathwayViewer = function () {
-                var pathways = resp.reactome;
-                var reactomePathways = [];
-
-                // Get the new identifiers
-                var promises = [];
-                var pathwayArr = [];
-                for (var pathway in pathways) {
-                    var p = $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/" + pathway + "/stableIdentifier");
-                    promises.push(p);
-                    pathwayArr.push(pathways[pathway]["pathway name"]);
-                }
-                $q
-                    .all(promises)
-                    .then(function (vals) {
-                        for (var i=0; i<vals.length; i++) {
-                            var val = vals[i].data;
-                            var idRaw = val.split("\t")[1];
-                            var id = idRaw.split('.')[0];
-                            reactomePathways.push({
-                                "id": id,
-                                "name" : pathwayArr[i]
-                            });
-                        }
-                        $scope.pathways = reactomePathways;
-                        if ($scope.pathways[0]) {
-                            $scope.setPathwayViewer($scope.pathways[0]);
-                        }
-                    });
-
-            };
-            $scope.setPathwayViewer = function (pathway) {
-                $scope.pathway = {
-                    id: pathway.id,
-                    name: pathway.name
-                };
-            };
-
-
+            // $scope.togglePathwayViewer = function () {
+            //     var pathways = resp.reactome;
+            //     var reactomePathways = [];
+            //
+            //     // Get the new identifiers
+            //     var promises = [];
+            //     var pathwayArr = [];
+            //     for (var pathway in pathways) {
+            //         var p = $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/" + pathway + "/stableIdentifier");
+            //         promises.push(p);
+            //         pathwayArr.push(pathways[pathway]["pathway name"]);
+            //     }
+            //     $q
+            //         .all(promises)
+            //         .then(function (vals) {
+            //             for (var i=0; i<vals.length; i++) {
+            //                 var val = vals[i].data;
+            //                 var idRaw = val.split("\t")[1];
+            //                 var id = idRaw.split('.')[0];
+            //                 reactomePathways.push({
+            //                     "id": id,
+            //                     "name" : pathwayArr[i]
+            //                 });
+            //             }
+            //             $scope.pathways = reactomePathways;
+            //             if ($scope.pathways[0]) {
+            //                 $scope.setPathwayViewer($scope.pathways[0]);
+            //             }
+            //         });
+            //
+            // };
+            // $scope.setPathwayViewer = function (pathway) {
+            //     $scope.pathway = {
+            //         id: pathway.id,
+            //         name: pathway.name
+            //     };
+            // };
 
 
             // Drugs
@@ -276,33 +235,33 @@ angular.module('cttvControllers')
 
 
             // Bibliography
-            var bibliography = _.filter(resp.dbxrefs, function (t) {
-                return t.match(/^PubMed/);
-            });
-            var cleanBibliography = _.map (bibliography, function (t) {
-                return t.substring(7, t.lenght);
-            });
-            //var bibliographyStr = cleanBibliography.join (",");
-            var pmidsLinks = (_.map(cleanBibliography, function (p) {
-                return "EXT_ID:" + p;
-            })).join (" OR ");
-            $scope.citations = {};
-
-            $http.get("/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search?query=" + pmidsLinks + "&format=json")
-                .then (function (resp) {
-                    $scope.citations.count = resp.data.hitCount;
-                    $scope.citations.europepmcLink = "//europepmc.org/search?query=" + pmidsLinks;
-                    var citations = resp.data.resultList.result;
-                    for (var i=0; i<citations.length; i++) {
-                        var authorStr = citations[i].authorString;
-                        if (authorStr[authorStr.length-1] === ".") {
-                            authorStr = authorStr.slice(0,-1);
-                        }
-                        var authors = authorStr.split(', ');
-                        citations[i].authors = authors;
-                    }
-                    $scope.citations.all = resp.data.resultList.result;
-                });
+            // var bibliography = _.filter(resp.dbxrefs, function (t) {
+            //     return t.match(/^PubMed/);
+            // });
+            // var cleanBibliography = _.map (bibliography, function (t) {
+            //     return t.substring(7, t.lenght);
+            // });
+            // //var bibliographyStr = cleanBibliography.join (",");
+            // var pmidsLinks = (_.map(cleanBibliography, function (p) {
+            //     return "EXT_ID:" + p;
+            // })).join (" OR ");
+            // $scope.citations = {};
+            //
+            // $http.get("/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search?query=" + pmidsLinks + "&format=json")
+            //     .then (function (resp) {
+            //         $scope.citations.count = resp.data.hitCount;
+            //         $scope.citations.europepmcLink = "//europepmc.org/search?query=" + pmidsLinks;
+            //         var citations = resp.data.resultList.result;
+            //         for (var i=0; i<citations.length; i++) {
+            //             var authorStr = citations[i].authorString;
+            //             if (authorStr[authorStr.length-1] === ".") {
+            //                 authorStr = authorStr.slice(0,-1);
+            //             }
+            //             var authors = authorStr.split(', ');
+            //             citations[i].authors = authors;
+            //         }
+            //         $scope.citations.all = resp.data.resultList.result;
+            //     });
 
             // Bibliography
             // var bibliography = _.filter(resp.dbxrefs, function (t) {return t.match(/^PubMed/);});
@@ -310,6 +269,14 @@ angular.module('cttvControllers')
             // var bibliographyStr = cleanBibliography.join (",");
             // $scope.pmids = bibliographyStr;
             // $scope.pmidsLinks = (_.map(cleanBibliography,function (p) {return "EXT_ID:" + p;})).join(" OR ");
+
+            // Extra sections -- plugins
+            $scope.sections = cttvConfig.targetSections;
+            // Set default visibility values
+            for (var t=0; t<$scope.sections.length; t++) {
+                console.log($scope.sections[t].visible);
+                $scope.sections[t].defaultVisibility = $scope.sections[t].visible;
+            }
 
         },
         // error handler

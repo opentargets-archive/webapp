@@ -1,13 +1,4 @@
-/*
- * Configuration file for the webapp standard/default items.
- * This is merged with custom.json (if present) in build/config.json
- */
-
 {
-
-    /*
-     * Mastehead navigation menu at the top of the page
-     */
     "mastheadNavigationMenu" : [
         {
             "label" : "About",
@@ -58,7 +49,124 @@
 
     "show_access_level" : true,
 
-    "dumps_link": "/downloads/data"
+    "dumps_link": "/downloads/data",
 
+    "diseaseSections": [
+        {
+            "name": "relatedDiseases",
+            "element": "related-diseases",
+            "heading": "Related diseases",
+            "track": false
+        },
+        {
+            "name": "drugs",
+            "element": "drugs-display",
+            "heading": "Drugs",
+            "track": true
+        },
+        {
+            "name": "classification",
+            "element": "disease-classification",
+            "heading": "Classification",
+            "visible": "true",
+            "track": true
+        }
+    ],
 
+    "targetSections": [
+        {
+            "name": "relatedTargets",
+            "element": "related-targets",
+            "heading": "Related targets",
+            "track": false
+        },
+
+        {
+            "name": "uniprot",
+            "element": "target-features",
+            "heading": "Protein Information (from Uniprot)",
+            "dependencies": {
+                "https://ebi-uniprot.github.io/CDN/feature-viewer/2.0.0/featuresviewer.min.js": {
+                    "format": "global"
+                },
+                "https://ebi-uniprot.github.io/CDN/feature-viewer/css/main.css!": {
+                    "loader": "css"
+                },
+                "https://ebi-uniprot.github.io/CDN/feature-viewer/css/fontello.css": {
+                    "loader": "css"
+                }
+            },
+            "track": true
+        },
+
+        {
+            "name": "genomeBrowser",
+            "element": "genome-browser",
+            "heading": "Variants, isoforms and genomic context",
+            "track": true
+        },
+
+        {
+            "name": "proteinExpression",
+            "element": "protein-baseline-expression",
+            "heading": "Protein baseline expression",
+            "track": true
+        },
+
+        {
+            "name": "rnaExpression",
+            "element": "rna-baseline-expression",
+            "heading": "RNA baseline expression",
+            "dependencies": {
+                "vendor/expressionAtlasBundle/vendor.bundle.js": {
+                    "format": "global"
+                },
+                "vendor/expressionAtlasBundle/expression-atlas-heatmap.bundle.js": {
+                    "format": "global"
+                }
+            },
+            "track": true
+        },
+
+        {
+            "name": "geneOntology",
+            "element": "gene-ontology",
+            "heading": "Gene Ontology",
+            "track": true
+        },
+
+        {
+            "name": "proteinStructure",
+            "element": "pdb-target",
+            "heading": "Protein Structure (PDB)",
+            "modules": ["pdb.component.library"],
+            "track": true
+        },
+        {
+            "name": "pathways",
+            "element": "target-pathways",
+            "heading": "Pathways",
+            "track": true
+        },
+
+        {
+            "name": "drugs",
+            "element": "drugs-display",
+            "heading": "Drugs",
+            "track": true
+        },
+
+        {
+            "name": "targetFamily",
+            "element": "target-family",
+            "heading": "Target Family",
+            "track": true
+        },
+        {
+            "name": "bibliography",
+            "element": "bibliography-target",
+            "heading": "Bibliography",
+            "track": true
+        }
+    ]
 }
