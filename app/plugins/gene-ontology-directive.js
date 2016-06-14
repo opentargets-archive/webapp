@@ -16,10 +16,12 @@ angular.module('plugins')
                 };
 
                 var gos = _.keys(scope.target.go);
-                for (var i=0; i<gos.length; i++) {
-                    var goid = gos[i];
-                    var ontology = scope.target.go[goid].term.substring(0,1);
-                    gosByOntology[ontology].push ({label: scope.target.go[goid].term.substring(2),
+                for (var i=0; i<scope.target.go.length; i++) {
+                    var go = scope.target.go[i];
+                    var goid = go.id;
+                    var ontology = go.value.term.substring(0,1);
+                    //var ontology = scope.target.go[goid].term.substring(0,1);
+                    gosByOntology[ontology].push ({label: go.value.term.substring(2),
                         goid: goid
                     });
                 }
