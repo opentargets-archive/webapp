@@ -38,6 +38,13 @@ angular.module('plugins', [])
                         $analytics.eventTrack('profile', {"category": attrs.page, "label": scope.label});
                     }
 
+                    // spinner
+                    // TODO: substitute by spinner directive
+                    var spinner = document.createElement("i");
+                    spinner.id = "section-spinner-" + scope.label;
+                    spinner.setAttribute("class", "fa fa-spinner fa-spin fa-2x");
+                    element[0].appendChild(spinner);
+
                     // Lazy load the dependencies
                     var deps = scope.dependencies;
                     var loadedDeps = [];
@@ -51,6 +58,9 @@ angular.module('plugins', [])
                     $q.all(loadedDeps)
                         .then (function () {
                             console.log("All deps have now been loaded...");
+                            // remove the spinner
+                            var spinner = document.getElementById("section-spinner-" + scope.label);
+                            spinner.parentNode.removeChild(spinner);
                             $timeout (function () {
                                 var template = '<' + scope.plugin + (scope.target ? (" target=target") : " ") + (scope.disease ? ("disease=disease") : "") + " width=" + sectionWidth + "></" + scope.plugin + ">";
                                 var compiled = $compile(template)(scope);

@@ -274,6 +274,7 @@ angular.module('cttvControllers')
             $scope.sections = cttvConfig.targetSections;
             // Set default visibility values
             for (var t=0; t<$scope.sections.length; t++) {
+                console.log($scope.sections[t].visible);
                 $scope.sections[t].defaultVisibility = $scope.sections[t].visible;
             }
 

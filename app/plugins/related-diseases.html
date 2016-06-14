@@ -1,0 +1,4 @@
+<p>Related Diseases</p>
+<ul>
+    <li ng-repeat="rel in relations"><a href="/disease/{{rel.object}}">{{rel.object}}</a> ({{rel.type}} : {{rel.value}})</li>
+</ul>

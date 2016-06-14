@@ -53,6 +53,12 @@
 
     "diseaseSections": [
         {
+            "name": "relatedDiseases",
+            "element": "related-diseases",
+            "heading": "Related diseases",
+            "track": false
+        },
+        {
             "name": "drugs",
             "element": "drugs-display",
             "heading": "Drugs",
@@ -68,6 +74,13 @@
     ],
 
     "targetSections": [
+        {
+            "name": "relatedTargets",
+            "element": "related-targets",
+            "heading": "Related targets",
+            "track": false
+        },
+
         {
             "name": "uniprot",
             "element": "target-features",
