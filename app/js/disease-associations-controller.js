@@ -85,27 +85,28 @@ angular.module('cttvControllers')
         then(
             function(resp){
                 $log.log("Got new data...");
+                // Check if we have data
+                $scope.search.total = resp.body.total;
+                if (resp.body.total) {
+                    // 1: set the facets
+                    // we must do this first, so we know which datatypes etc we actually have
+                    // $log.log(resp.body.status[0]);
+                    $log.log(resp.body);
+                    cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
+                    // cttvFiltersService.status(resp.body.status);
 
-                // 1: set the facets
-                // we must do this first, so we know which datatypes etc we actually have
-                // $log.log(resp.body.status[0]);
-                $log.log(resp.body);
-                cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
-                // cttvFiltersService.status(resp.body.status);
+                    // set the data
+                    // $scope.data = resp.body.data;
+                    // $scope.data.selected = {datatypes: cttvFiltersService.getSelectedFiltersRaw("datatypes")};
+                    $scope.filters = filters;
 
-                // set the data
-                // $scope.data = resp.body.data;
-                // $scope.data.selected = {datatypes: cttvFiltersService.getSelectedFiltersRaw("datatypes")};
-                $scope.filters = filters;
+                    // The label of the diseaes in the header
+                    $scope.search.label = resp.body.data[0].disease.efo_info.label;
 
-                // The label of the diseaes in the header
-                $scope.search.label = resp.body.data[0].disease.efo_info.label;
+                    // The filename to download
+                    $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(" ").join("_");
 
-                // The filename to download
-                $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(" ").join("_");
-
-                // set the total?
-                $scope.search.total = resp.body.total; //resp.body.total;
+                }
             },
             cttvAPIservice.defaultErrorHandler
         );
