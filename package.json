@@ -53,11 +53,11 @@
     "test-single-run": "karma start tests/unit/karma.conf.js  --single-run"
   },
   "dependencies": {
-    "cttv.api": "0.0.5",
+    "cttv.api": "0.0.6",
     "cttv.diseaseGraph": "file:components/diseaseGraph",
     "cttv.flowerView": "0.0.0",
     "cttv.genome": "0.0.10",
-    "cttv.spinner": "file:components/spinner",
+    "cttv.spinner": "0.0.0",
     "cttv.targetAssociationsBubbles": "0.0.7",
     "cttv.targetAssociationsTree": "0.0.2",
     "cttv.targetGeneTree": "file:components/targetGeneTree",
@@ -67,7 +67,8 @@
     "tnt.genome": "0.1.5",
     "tnt.rest": "0.1.1",
     "tnt.tooltip": "0.1.0",
-    "tnt.utils": "0.1.1"
+    "tnt.utils": "0.1.1",
+    "viz_diseases": "0.0.1"
   },
   "jspm": {
     "directories": {
