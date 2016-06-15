@@ -127,7 +127,7 @@ angular.module('cttvControllers')
 
 
     /*
-     * This doesn't really need to be exposed thorugh $scope I think...
+     * Update function passes the current view (state) to the URL
      */
     function update(){
         cttvLocationState.setStateFor(stateId, $scope.view);
