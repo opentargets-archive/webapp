@@ -19,7 +19,8 @@ angular.module('cttvServices').
             old_state = state;
             state = new_state;
             $log.log("[event] cttvLocationState." + cttvLocationStateService.STATECHANGED);
-            $rootScope.$broadcast(cttvLocationStateService.STATECHANGED, state);
+            $log.log(state);
+            $rootScope.$broadcast(cttvLocationStateService.STATECHANGED, state, old_state);
         }
 
 
@@ -64,6 +65,8 @@ angular.module('cttvServices').
          * parseLocationSearch(search) // returns {ftcs:{datatype:["drugs","literature","animals"], pathways:"sdfs"}}
          */
         cttvLocationStateService.parseLocationSearch = function(search){
+            $log.log("parseLocationSearch");
+            $log.log(search);
             search = search || $location.search();
             var raw = {};
 
@@ -94,6 +97,15 @@ angular.module('cttvServices').
 
 
         /**
+         * get the state object
+         */
+        cttvLocationStateService.getOldState = function(){
+            return old_state;
+        }
+
+
+
+        /**
          * Set the state object to the given one (full override)
          */
         cttvLocationStateService.setState = function(so){
@@ -107,14 +119,18 @@ angular.module('cttvServices').
          * Update the state object only for the specific sub-object
          */
         cttvLocationStateService.setStateFor = function(k, so, track){
+            $log.log("setStateFor "+k);
+            $log.log(state);
             if(track==undefined){track=true;}
             state[k] = so;
             if( !state[k] || Object.keys(state[k]).length==0 ){
                 delete state[k];
             }
+            $log.log(state);
             if(track){
                 cttvLocationStateService.updateStateURL();
             }
+
         }
 
 
@@ -134,6 +150,17 @@ angular.module('cttvServices').
                 }
             }
             $location.search(stt);
+        }
+
+
+
+        /**
+         * This does absolutely nothing.
+         * But call it at the beginning of your controller to sort of wake up / instantiate the service,
+         * ensuring it's ready and available in your controller
+         */
+        cttvLocationStateService.init = function(){
+            // do nothing!
         }
 
 

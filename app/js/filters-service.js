@@ -171,7 +171,7 @@ angular.module('cttvServices').
          * Takes API data for a facet (i.e. a collection of filters) and returns the config object to create that collection
          */
         var parseFacetData = function(collection, data, countsToUse){
-            $log.log("parseFacetData");
+            $log.log("parseFacetData "+collection);
             var config={
                 key: collection,    // this is the type, really...
                 label: cttvDictionary[collection.toUpperCase()] || collection,  // set default label based on what the API has returned for this
@@ -633,6 +633,10 @@ angular.module('cttvServices').
             }
             return raw;
         };
+
+
+
+        cttvFiltersService.stateId = "fcts";
 
 
 
