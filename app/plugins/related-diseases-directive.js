@@ -22,8 +22,6 @@ angular.module('plugins')
                     .size(800)
                     .cttvApi(cttvAPIservice.getSelf());
 
-                console.log("calling viz with div...");
-                console.log(newDiv);
                 v(newDiv);
             }
         };
