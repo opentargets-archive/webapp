@@ -17,28 +17,14 @@ angular.module('plugins')
                 newDiv.style.margin="0 auto";
                 element[0].appendChild(newDiv);
 
-                cttvAPIservice.getDiseaseRelation({
-                    id: scope.disease.efo,
-                })
-                .then(
-                    // success
-                    function (resp) {
-                        $log.log("getDiseaseRelation");
-                        $log.log(resp);
-                        scope.relations = resp.body.data;
+                var v = vis()
+                    .disease(scope.disease.efo)
+                    .size(800)
+                    .cttvApi(cttvAPIservice.getSelf());
 
-                        var v = vis()
-                            .disease(scope.disease.efo)
-                            .size(800);
-
-                        v(document.getElementById("relatedDiseases"));
-
-                    },
-
-                    // error handler
-                    cttvAPIservice.defaultErrorHandler
-                );
-
+                console.log("calling viz with div...");
+                console.log(newDiv);
+                v(newDiv);
             }
         };
     }]);
