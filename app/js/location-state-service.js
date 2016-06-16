@@ -16,10 +16,9 @@ angular.module('cttvServices').
 
 
         var updateState = function(new_state){
+            $log.log("[event] cttvLocationState." + cttvLocationStateService.STATECHANGED);
             old_state = state;
             state = new_state;
-            $log.log("[event] cttvLocationState." + cttvLocationStateService.STATECHANGED);
-            $log.log(state);
             $rootScope.$broadcast(cttvLocationStateService.STATECHANGED, state, old_state);
         }
 
@@ -53,6 +52,13 @@ angular.module('cttvServices').
             // uses jQuery.param() method
             // $httpParamSerializerJQLike should work the same... but it doesn't and returns parentheses around arrays etc
             // so we stick with jQuery for now
+            if( typeof obj === "string" ) {
+                // this is to handle simple cases where obj is a simple string,
+                // say like in the case of &version=latest
+                // it returns "latest";
+                // otherwise jQuery would convert it to something like "0=l&1=a&2=t&3=e&4=s&5=t" which turns the URL into an ugly mess
+                return obj;
+            }
             return $.param(obj,true).replace(/=/g,":").replace(/&/g,",");
         }
 
@@ -65,8 +71,7 @@ angular.module('cttvServices').
          * parseLocationSearch(search) // returns {ftcs:{datatype:["drugs","literature","animals"], pathways:"sdfs"}}
          */
         cttvLocationStateService.parseLocationSearch = function(search){
-            $log.log("parseLocationSearch");
-            $log.log(search);
+
             search = search || $location.search();
             var raw = {};
 
@@ -74,9 +79,16 @@ angular.module('cttvServices').
                 if(search.hasOwnProperty(i)){
                     raw[ i ] = search[i];
 
-                    if(typeof raw[ i ] === "string" && raw[ i ].match(/.:./)){
+                    if( typeof raw[ i ] === "string" ) {
 
-                        raw[i] = parseSearchItem(search[i]);;
+                        // if this is a string the new state format (e.g. "view=t:bubble,p:1", then we parse it)
+                        if( raw[ i ].match(/.:./) ){
+                            raw[i] = parseSearchItem(search[i]);
+                        }
+                        // but if it's only just a plain string we keep it as it is, ideally
+                        else {
+
+                        }
 
                     }
                 }
@@ -120,13 +132,12 @@ angular.module('cttvServices').
          */
         cttvLocationStateService.setStateFor = function(k, so, track){
             $log.log("setStateFor "+k);
-            $log.log(state);
             if(track==undefined){track=true;}
             state[k] = so;
             if( !state[k] || Object.keys(state[k]).length==0 ){
                 delete state[k];
             }
-            $log.log(state);
+
             if(track){
                 cttvLocationStateService.updateStateURL();
             }
@@ -143,12 +154,14 @@ angular.module('cttvServices').
          * Updates the URL search with the current state object
          */
         cttvLocationStateService.updateStateURL = function(){
+
             var stt = {}
             for(var i in state){
                 if(state.hasOwnProperty(i)){
                     stt[i] = cttvLocationStateService.param(state[i]);
                 }
             }
+
             $location.search(stt);
         }
 
