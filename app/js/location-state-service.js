@@ -6,7 +6,7 @@ angular.module('cttvServices').
 
 
 
-    factory('cttvLocationState', ['$log', '$location', '$rootScope', function($log, $location, $rootScope) {
+    factory('cttvLocationState', ['$log', '$location', '$rootScope', 'cttvConsts', function($log, $location, $rootScope, cttvConsts) {
 
 
         var cttvLocationStateService = {};
@@ -16,9 +16,13 @@ angular.module('cttvServices').
 
 
         var updateState = function(new_state){
-            $log.log("[event] cttvLocationState." + cttvLocationStateService.STATECHANGED);
+
+            // update the state and
             old_state = state;
             state = new_state;
+
+            // broadcast state update event
+            $log.log("[event] cttvLocationState." + cttvLocationStateService.STATECHANGED);
             $rootScope.$broadcast(cttvLocationStateService.STATECHANGED, state, old_state);
         }
 
@@ -71,28 +75,41 @@ angular.module('cttvServices').
          * parseLocationSearch(search) // returns {ftcs:{datatype:["drugs","literature","animals"], pathways:"sdfs"}}
          */
         cttvLocationStateService.parseLocationSearch = function(search){
-
+            $log.log("parseLocationSearch");
             search = search || $location.search();
             var raw = {};
+            var fc = [
+                cttvConsts.DATATYPES,
+                cttvConsts.PATHWAY,
+                cttvConsts.DATASOURCES,
+                cttvConsts.THERAPEUTIC_AREAS,
+                cttvConsts.DATA_DISTRIBUTION
+            ];
 
             for(var i in search){
                 if(search.hasOwnProperty(i)){
+
                     raw[ i ] = search[i];
 
-                    if( typeof raw[ i ] === "string" ) {
+                    if( typeof raw[ i ] === "string" && raw[ i ].match(/.:./)) {
+                        // this is a string the new state format (e.g. "view=t:bubble,p:1") so then we parse it
+                        raw[i] = parseSearchItem(search[i]);
+                    }
 
-                        // if this is a string the new state format (e.g. "view=t:bubble,p:1", then we parse it)
-                        if( raw[ i ].match(/.:./) ){
-                            raw[i] = parseSearchItem(search[i]);
+                    // if any, try and convert old style facets URLs
+                    // but only if there are no new style facets
+                    // TODO:
+                    // we will remove this in the future once old style facets URL have been flused out
+                    if( fc.includes(i) && !search["fcts"]){
+                        if( !raw["fcts"] ){
+                            raw["fcts"] = {};
                         }
-                        // but if it's only just a plain string we keep it as it is, ideally
-                        else {
-
-                        }
-
+                        raw.fcts[i] = ( typeof search[ i ] === "string" ) ? [search[i]] : search[i];
+                        delete raw[i];
                     }
                 }
             }
+
 
             return raw;
         }
