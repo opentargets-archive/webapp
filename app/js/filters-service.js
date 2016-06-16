@@ -146,7 +146,7 @@ angular.module('cttvServices').
          */
         var isSelected=function(collection, key){
             // return ($location.search()[collection] && ( $location.search()[collection]===key || $location.search()[collection].indexOf(key)>=0 )) || false;
-            var fcts = cttvLocationState.getState()["fcts"];
+            var fcts = cttvLocationState.getState()[ cttvFiltersService.stateId ];
             return (fcts && fcts[collection] && ( fcts[collection]===key || fcts[collection].indexOf(key)>=0 ))|| false;
         };
 
@@ -335,7 +335,7 @@ angular.module('cttvServices').
                 })
             })
             // $location.search(raw);
-            cttvLocationState.setStateFor("fcts",raw);
+            cttvLocationState.setStateFor( cttvFiltersService.stateId , raw );
         }
 
 
@@ -576,24 +576,21 @@ angular.module('cttvServices').
          *    datatype: ["known_drug", "rna_expression"]
          * }
          */
-        cttvFiltersService.getSelectedFiltersRaw = function(facet){
-            // TODO: ok so this first part was also kinda hacked together quickly
-            // and ideally we can clean up a few more functions here...
-            if(facet){
-                return getSelectedFilters(facet);
-            }
-            /*
-            var raw = {};
-            for(var i in $location.search()){
-                raw[i] = $location.search()[i];
-                if(typeof raw[i] === "string"){
-                    raw[i] = [raw[i]];
-                }
-            }
-            return raw;
-            */
-            return cttvLocationState.getState() || {};
-        };
+
+        // TODO:
+        // this also seems to be redundant ???
+        // cttvFiltersService.getSelectedFiltersRaw = function(facet){
+        //     // TODO: ok so this first part was also kinda hacked together quickly
+        //     // and ideally we can clean up a few more functions here...
+        //     $log.log("*** getSelectedFiltersRaw");
+        //     if(facet){
+        //         return getSelectedFilters(facet);
+        //     }
+//
+        //     return cttvLocationState.getState() || {};
+        // };
+
+
 
         /**
          * Removes ALL selections
@@ -613,26 +610,26 @@ angular.module('cttvServices').
          * Parses the search of the URL
          * and returns an API-friendly config object with the filter options
          */
-        cttvFiltersService.parseURL = function(){
-
-            $log.log(">> >>>>>>>>>>>>>>>> >> >>>>>>>>>>>>>>>>>>> >>");
-            // datatypes=genetic_association&datatypes=known_drug&datatypes=rna_expression
-
-            // TODO:
-            // this should be deprecated now, right?
-            var raw = {};
-            var search = $location.search();
-
-            for(var i in search){
-                if(search.hasOwnProperty(i)){
-                    raw[ i ] = search[i];
-                    if(typeof raw[ i ] === "string"){
-                        raw[i] = [raw[i]];
-                    }
-                }
-            }
-            return raw;
-        };
+        // TODO:
+        // this should be deprecated now, right?
+        //cttvFiltersService.parseURL = function(){
+//
+        //    $log.log(">> >>>>>>>>>>>>>>>> >> >>>>>>>>>>>>>>>>>>> >>");
+        //    // datatypes=genetic_association&datatypes=known_drug&datatypes=rna_expression
+//
+        //    var raw = {};
+        //    var search = $location.search();
+//
+        //    for(var i in search){
+        //        if(search.hasOwnProperty(i)){
+        //            raw[ i ] = search[i];
+        //            if(typeof raw[ i ] === "string"){
+        //                raw[i] = [raw[i]];
+        //            }
+        //        }
+        //    }
+        //    return raw;
+        //};
 
 
 
