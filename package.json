@@ -68,7 +68,7 @@
     "tnt.rest": "0.1.1",
     "tnt.tooltip": "0.1.0",
     "tnt.utils": "0.1.1",
-    "viz_diseases": "0.0.4"
+    "viz_diseases": "0.0.5"
   },
   "jspm": {
     "directories": {
