@@ -53,7 +53,7 @@
     "test-single-run": "karma start tests/unit/karma.conf.js  --single-run"
   },
   "dependencies": {
-    "cttv.api": "0.0.6",
+    "cttv.api": "0.0.7",
     "cttv.diseaseGraph": "file:components/diseaseGraph",
     "cttv.flowerView": "0.0.0",
     "cttv.genome": "0.0.10",
