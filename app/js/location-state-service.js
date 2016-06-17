@@ -78,6 +78,7 @@ angular.module('cttvServices').
             $log.log("parseLocationSearch");
             search = search || $location.search();
             var raw = {};
+            // array containing the type of old facets -- TODO: can remove in future when we get rid of backward compatibilty (see comment below)
             var fc = [
                 cttvConsts.DATATYPES,
                 cttvConsts.PATHWAY,
@@ -96,16 +97,17 @@ angular.module('cttvServices').
                         raw[i] = parseSearchItem(search[i]);
                     }
 
-                    // if any, try and convert old style facets URLs
-                    // but only if there are no new style facets
                     // TODO:
-                    // we will remove this in the future once old style facets URL have been flused out
-                    if( fc.includes(i) && !search["fcts"]){
-                        if( !raw["fcts"] ){
-                            raw["fcts"] = {};
+                    // we will * REMOVE THIS * whole "if" block in the future, once old style facets URL have been "flused" out!
+                    //
+                    // If any, try and convert old style facets URLs, but only if there are no new style facets
+                    if( fc.includes(i) ){
+                        // so if this is an old style facet, check if there are any new style ones, and if not, let's try parse the old facet into new syntax
+                        if( !search["fcts"] ){
+                            raw["fcts"] = raw["fcts"] || {};    // create a "fcts" objects if needed
+                            raw.fcts[i] = ( typeof search[ i ] === "string" ) ? [search[i]] : search[i];    // add facets to "fcts"
                         }
-                        raw.fcts[i] = ( typeof search[ i ] === "string" ) ? [search[i]] : search[i];
-                        delete raw[i];
+                        delete raw[i];  // in any case, now delete the old style facet
                     }
                 }
             }
