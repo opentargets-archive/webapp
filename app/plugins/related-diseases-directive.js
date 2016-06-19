@@ -94,7 +94,7 @@ angular.module('plugins')
                     { "orderSequence": ["desc", "asc"], "targets": [2,3,4,5,6,7,8,9,10] },
                     { "orderSequence": ["asc", "desc"], "targets": [0]}
                 ],
-                // "order": [2, "desc"],
+                "order": [],
                 "orderMulti": true,
                 "autoWidth": false,
                 "ordering": true,
