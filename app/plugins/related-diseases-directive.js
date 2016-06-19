@@ -3,7 +3,8 @@ angular.module('plugins')
         "use strict";
 
         // Details table --
-        var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+        // var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+        var colorScale = cttvUtils.colorScales.BLUE_RED; // blue <-> red
 
         var currTable;
         var spDiv;
@@ -12,16 +13,39 @@ angular.module('plugins')
         * Generates and returns the string representation of the span element
         * with color information for each cell
         */
-        var getColorStyleString = function(value, href){
-            var str="";
-            if( value<=0 ){
-                str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, we don't put anything, so the sorting works better
-            } else {
-                str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+cttvUtils.floatPrettyPrint(value)+"'>"+cttvUtils.floatPrettyPrint(value)+"</span>";
-                if( href ){
-                    str = "<a href=" + href + ">" + str + "</a>";
-                }
-            }
+        // var getColorStyleString = function(value, href){
+        //     var str="";
+        //     if( value<=0 ){
+        //         str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, we don't put anything, so the sorting works better
+        //     } else {
+        //         str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+cttvUtils.floatPrettyPrint(value)+"'>"+cttvUtils.floatPrettyPrint(value)+"</span>";
+        //         if( href ){
+        //             str = "<a href=" + href + ">" + str + "</a>";
+        //         }
+        //     }
+        //     return str;
+        // };
+
+        // var getColorStyleString = function (value1, value2, href) {
+        //     var str = "";
+        //     var delta = value1-value2;
+        //     var opacity = (value1 + value2) / 2;
+        //     str = "<span style='color:" + colorScale(delta) + "; background:" + colorScale(delta) + "; opacity:" + opacity + "' title= Score: "+cttvUtils.floatPrettyPrint(delta)+"'>"+cttvUtils.floatPrettyPrint(delta)+"</span>";
+        //
+        //     if (href){
+        //         str = "<a href=" + href + ">" + str + "</a>";
+        //     }
+        //
+        //     return str;
+        // };
+
+        var getColorStyleString = function (value1, value2, hrefObj, hrefSbj) {
+            var str = "";
+            var width = 28;
+            var barScale1 = d3.scale.linear()
+                .domain([0, 1])
+                .range([0, width]); // Each cell is 48px
+            str = "<div style='background:#EEEEEE; color:#EEEEEE'><a href=" + hrefObj + "><div style='display:inline-block; height:15px; width:" + barScale1(value1) + "px; background:#582A72; margin-left:" + (width-barScale1(value1)) + "px;'></div></a><a href=" + hrefSbj + "><div style='display:inline-block; height:15px; width:" + barScale1(value2) + "px; background:#AAAA39;'></div></a>" + cttvUtils.floatPrettyPrint(value1) + "</div>";
 
             return str;
         };
@@ -31,17 +55,6 @@ angular.module('plugins')
             {name:"", title:cttvDictionary.ENSEMBL_ID},
 
             // Datatypes for the OBJECT
-            {name:"", title:cttvDictionary.ASSOCIATION_SCORE},
-            {name:cttvConsts.datatypes.GENETIC_ASSOCIATION, title:cttvDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
-            {name:cttvConsts.datatypes.SOMATIC_MUTATION, title:cttvDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
-            {name:cttvConsts.datatypes.KNOWN_DRUG, title:cttvDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
-            {name:cttvConsts.datatypes.AFFECTED_PATHWAY, title:cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
-            {name:cttvConsts.datatypes.RNA_EXPRESSION, title:cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
-            {name:cttvConsts.datatypes.LITERATURE, title:cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
-            {name:cttvConsts.datatypes.ANIMAL_MODEL, title:cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
-            {name:"", title:"total score"},
-
-            // Datatypes for the SUBJECT
             {name:"", title:cttvDictionary.ASSOCIATION_SCORE},
             {name:cttvConsts.datatypes.GENETIC_ASSOCIATION, title:cttvDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
             {name:cttvConsts.datatypes.SOMATIC_MUTATION, title:cttvDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
@@ -71,17 +84,17 @@ angular.module('plugins')
                 })(),
                 "columnDefs" : [
                     {
-                        "targets" : [1,10,19],
+                        "targets" : [1,10],
                         "visible" : false
                     },
                     {
-                        "targets" : [1,20],
+                        "targets" : [1,11],
                         "orderable": false
                     },
-                    { "orderSequence": ["desc", "asc"], "targets": [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19] },
+                    { "orderSequence": ["desc", "asc"], "targets": [2,3,4,5,6,7,8,9,10] },
                     { "orderSequence": ["asc", "desc"], "targets": [0]}
                 ],
-                "order": [2, "desc"],
+                // "order": [2, "desc"],
                 "orderMulti": true,
                 "autoWidth": false,
                 "ordering": true,
@@ -90,7 +103,7 @@ angular.module('plugins')
                 "language": {
                     // "lengthMenu": "Display _MENU_ records per page",
                     // "zeroRecords": "Nothing found - sorry",
-                    "info": "Showing _START_ to _END_ of _TOTAL_ targets",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ shared targets",
                     // "infoEmpty": "No records available",
                     // "infoFiltered": "(filtered from _MAX_ total records)"
                 }
@@ -121,9 +134,9 @@ angular.module('plugins')
             for (var i=0; i<data.length; i++) {
                 var d = data[i];
                 if (!resp[d.disease.id]) {
-                    resp[d.disease.id] = [];
+                    resp[d.disease.id] = {};
                 }
-                resp[d.disease.id].push(d);
+                resp[d.disease.id][d.target.id] = d;
             }
             return resp;
         }
@@ -132,7 +145,7 @@ angular.module('plugins')
 
             var paramsObj = {};
             paramsObj.disease = [object, subject];
-            paramsObj.target = targets;
+            paramsObj.target = targets.slice(0, 100);
             paramsObj.size = 200;
             paramsObj.direct = true;
             paramsObj.facets = false;
@@ -141,58 +154,64 @@ angular.module('plugins')
             var url = cttvApi.url.associations();
 
             cttvApi.call(url, paramsObj)
-                .then (function (resp) {
-                    var bestTargets = getBestSharedTargets(resp.body.data, 100);
-                    var url = cttvApi.url.associations();
-                    var opts = {
-                        disease: [object, subject],
-                        target: bestTargets,
-                        size: 200,
-                        direct: true,
-                        facets: false,
-                    };
-                    return cttvApi.call(url, opts);
-                })
+                // .then (function (resp) {
+                //     var bestTargets = getBestSharedTargets(resp.body.data, 100);
+                //     var url = cttvApi.url.associations();
+                //     var opts = {
+                //         disease: [object, subject],
+                //         target: bestTargets,
+                //         size: 200,
+                //         direct: true,
+                //         facets: false,
+                //     };
+                //     return cttvApi.call(url, opts);
+                // })
                 .then (function (resp) {
                     var splitData = splitDataIntoDiseases(resp.body.data);
-                    var dtData = parseData(splitData, object, subject);
+                    var dtData = parseData(splitData, object, subject, targets.slice(0, 100));
                     spDiv.parentNode.removeChild(spDiv);
                     setupTable(table, dtData, filename);
                 });
         }
 
-        function parseData (data, object, subject) {
+        function parseData (data, object, subject, targets) {
             var newData = new Array(data.length);
-            for (var i=0; i<data[object].length; i++) {
-                var objDts = data[object][i].association_score.datatypes;
-                var sbjDts = data[subject][i].association_score.datatypes;
+            for (var i=0; i<targets.length; i++) {
+            //for (var i=0; i<data[object].length; i++) {
+                var target = targets[i];
+                var objAssoc = data[object][target];
+                var sbjAssoc = data[subject][target];
+                console.log(objAssoc);
+                console.log(sbjAssoc);
+                var objDts = objAssoc.association_score.datatypes;
+                var sbjDts = sbjAssoc.association_score.datatypes;
                 var row = [];
-                var geneLoc = "/target/" + data[object][i].target.id;
-                var geneObjDiseaseLoc = "/evidence/" + data[object][i].target.id + "/" + data[object][i].disease.id;
-                var geneSbjDiseaseLoc = "/evidence/" + data[subject][i].target.id + "/" + data[subject][i].disease.id;
+                var geneLoc = "/target/" + objAssoc.target.id + "/associations";
+                var geneObjDiseaseLoc = "/evidence/" + objAssoc.target.id + "/" + objAssoc.disease.id;
+                var geneSbjDiseaseLoc = "/evidence/" + sbjAssoc.target.id + "/" + sbjAssoc.disease.id;
 
                 // Name
-                row.push("<a href=" + geneLoc + " title=" + data[object][i].target.gene_info.symbol + ">" + data[object][i].target.gene_info.symbol + "</a>");
+                row.push("<a href=" + geneLoc + " title=" + objAssoc.target.gene_info.symbol + ">" + objAssoc.target.gene_info.symbol + "</a>");
                 // Ensembl ID
-                row.push(data[object][i].target.id);
+                row.push(objAssoc.target.id);
 
                 // OBJECT...
                 // Association score
-                row.push(getColorStyleString(data[object][i].association_score.overall, geneObjDiseaseLoc));
+                row.push(getColorStyleString(objAssoc.association_score.overall, sbjAssoc.association_score.overall, geneObjDiseaseLoc, geneSbjDiseaseLoc));
                 // Genetic association
-                row.push( getColorStyleString( objDts.genetic_association, geneObjDiseaseLoc + (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=genetic_associations") );
+                row.push( getColorStyleString( objDts.genetic_association, sbjDts.genetic_association, geneObjDiseaseLoc + (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=genetic_associations", geneSbjDiseaseLoc + (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=genetic_associations") );
                 // Somatic mutation
-                row.push( getColorStyleString( objDts.somatic_mutation, geneObjDiseaseLoc +    (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=somatic_mutations") );
+                row.push( getColorStyleString( objDts.somatic_mutation, sbjDts.somatic_mutation, geneObjDiseaseLoc +    (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=somatic_mutations", geneSbjDiseaseLoc +    (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=somatic_mutations") );
                 // Known drug
-                row.push( getColorStyleString( objDts.known_drug, geneObjDiseaseLoc + (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=known_drugs") );
+                row.push( getColorStyleString( objDts.known_drug, sbjDts.known_drug, geneObjDiseaseLoc + (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=known_drugs", geneSbjDiseaseLoc + (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=known_drugs") );
                 // Affected pathway
-                row.push( getColorStyleString( objDts.affected_pathway, geneObjDiseaseLoc +    (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=affected_pathways") );
+                row.push( getColorStyleString( objDts.affected_pathway, sbjDts.affected_pathway, geneObjDiseaseLoc +    (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=affected_pathways", geneSbjDiseaseLoc +    (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=affected_pathways") );
                 // Expression atlas
-                row.push( getColorStyleString( objDts.rna_expression, geneObjDiseaseLoc +      (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=rna_expression") );
+                row.push( getColorStyleString( objDts.rna_expression, sbjDts.rna_expression, geneObjDiseaseLoc +      (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=rna_expression", geneSbjDiseaseLoc +      (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=rna_expression") );
                 // Literature
-                row.push( getColorStyleString( objDts.literature, geneObjDiseaseLoc +(geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature"));
+                row.push( getColorStyleString( objDts.literature, sbjDts.literature, geneObjDiseaseLoc +(geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature", geneSbjDiseaseLoc +(geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature"));
                 // Animal model
-                row.push( getColorStyleString( objDts.animal_model, geneObjDiseaseLoc +        (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models") );
+                row.push( getColorStyleString( objDts.animal_model, sbjDts.animal_model, geneObjDiseaseLoc +        (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models", geneSbjDiseaseLoc +        (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models") );
 
                 // Total score
                 row.push( objDts.genetic_association+
@@ -202,34 +221,7 @@ angular.module('plugins')
                     objDts.affected_pathway+
                     objDts.animal_model);
 
-                // SUBJECT
-                // Association score
-                row.push(getColorStyleString(data[subject][i].association_score.overall, geneSbjDiseaseLoc));
-                // Genetic association
-                row.push( getColorStyleString( sbjDts.genetic_association, geneSbjDiseaseLoc + (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=genetic_associations") );
-                // Somatic mutation
-                row.push( getColorStyleString( sbjDts.somatic_mutation, geneSbjDiseaseLoc +    (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=somatic_mutations") );
-                // Known drug
-                row.push( getColorStyleString( sbjDts.known_drug, geneSbjDiseaseLoc + (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=known_drugs") );
-                // Affected pathway
-                row.push( getColorStyleString( sbjDts.affected_pathway, geneSbjDiseaseLoc +    (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=affected_pathways") );
-                // Expression atlas
-                row.push( getColorStyleString( sbjDts.rna_expression, geneSbjDiseaseLoc +      (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=rna_expression") );
-                // Literature
-                row.push( getColorStyleString( sbjDts.literature, geneSbjDiseaseLoc +(geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature"));
-                // Animal model
-                row.push( getColorStyleString( sbjDts.animal_model, geneSbjDiseaseLoc +        (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models") );
-
-                // Total score
-                row.push( sbjDts.genetic_association+
-                    sbjDts.somatic_mutation+
-                    sbjDts.known_drug+
-                    sbjDts.rna_expression+
-                    sbjDts.affected_pathway+
-                    sbjDts.animal_model);
-
-
-                row.push("<a href='" + geneLoc + "' title='"+data[object][i].target.gene_info.name+"'>" + data[object][i].target.gene_info.name + "</a>");
+                row.push("<a href='" + geneLoc + "' title='"+objAssoc.target.gene_info.name+"'>" + objAssoc.target.gene_info.name + "</a>");
 
                 newData[i] = row;
             }
@@ -245,12 +237,22 @@ angular.module('plugins')
                 width: '='
             },
             link: function (scope, element, attrs) {
+                scope.changedScore = function (newScore) {
+                    console.log(newScore);
+                };
+
                 // Populate overview
                 $timeout (function () {
                     var v = vis()
                         .disease(scope.disease.efo)
                         .size(800)
                         .cttvApi(cttvAPIservice.getSelf());
+
+                    // v.on("load", function (d) {
+                    //     console.log("LOADED------------------------------------");
+                    //     console.log(Object.keys(d[0].scores));
+                    //     scope.scores = Object.keys(d[0].scores);
+                    // });
 
                     // Populate details on node click:
                     v.on("click", function (d) {
@@ -267,11 +269,25 @@ angular.module('plugins')
                         container.innerHTML = "";
                         var h4 = document.createElement("h4");
                         h4.innerText = "Details";
-                        var p = document.createElement("p");
-                        p.style["font-weight"] = "bold";
-                        p.innerText = d.object.label + " vs " + d.subject.label;
+
+                        // Disease names with color
+                        var divHeader = document.createElement("div");
+                        var pD1 = document.createElement("span");
+                        pD1.style["font-weight"] = "bold";
+                        pD1.style.color = "#582A72";
+                        pD1.innerText = d.object.label;
+
+                        var pVs = document.createElement("text");
+                        pVs.innerText = " vs ";
+
+                        var pD2 = document.createElement("span");
+                        pD2.style["font-weight"] = "bold";
+                        pD2.style.color = "#AAAA39";
+                        pD2.innerText = d.subject.label;
                         container.appendChild(h4);
-                        container.appendChild(p);
+                        container.appendChild(pD1);
+                        container.appendChild(pVs);
+                        container.appendChild(pD2);
 
                         // Destroy prev table if exists
                         if (currTable) {
