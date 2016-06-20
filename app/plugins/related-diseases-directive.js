@@ -246,6 +246,7 @@ angular.module('plugins')
                     var v = vis()
                         .disease(scope.disease.efo)
                         .size(800)
+                        .score("jackard_weighted")
                         .cttvApi(cttvAPIservice.getSelf());
 
                     // v.on("load", function (d) {
