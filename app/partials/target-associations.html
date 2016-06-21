@@ -48,18 +48,23 @@
                     </ul>
 
                     <!-- Tab panes -->
-                    <div ng-show="view.t[0]=='bubbles'">
-                        <resize>
-                            <cttv-target-associations-bubbles target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-bubbles>
-                        </resize>
-                    </div>
+                    <div class="tab-content">
+                        <!-- <div ng-show="view.t[0]=='bubbles'"> -->
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='bubbles'}">
+                            <resize>
+                                <cttv-target-associations-bubbles target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-bubbles>
+                            </resize>
+                        </div>
 
-                    <div ng-show="view.t[0]=='table'">
-                        <cttv-target-associations-table target="search.query" filename="search.filename" loadprogress="loading" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-table>
-                    </div>
+                        <!-- <div ng-show="view.t[0]=='table'"> -->
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='table'}">
+                            <cttv-target-associations-table target="search.query" filename="search.filename" loadprogress="loading" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-table>
+                        </div>
 
-                    <div ng-show="view.t[0]=='tree'">
-                        <cttv-target-associations-tree target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-tree>
+                        <!-- <div ng-show="view.t[0]=='tree'"> -->
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='tree'}">
+                            <cttv-target-associations-tree target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-tree>
+                        </div>
                     </div>
 
 

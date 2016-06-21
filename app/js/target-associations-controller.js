@@ -82,9 +82,19 @@ angular.module('cttvControllers')
      */
     var render = function(new_state, old_state){
         $log.log("render()");
+
         // here we want to update facets, tabs, etc
-        getFacets( new_state[facetsId] );
-        setView( new_state[stateId] );
+
+        // facets changed?
+        if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) ){
+            getFacets( new_state[facetsId] );
+        }
+
+        // view changed?
+        if( ! _.isEqual( new_state[stateId], old_state[stateId] ) ){
+            setView( new_state[stateId] );
+        }
+
     }
 
 
