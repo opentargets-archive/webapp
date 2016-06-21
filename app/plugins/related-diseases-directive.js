@@ -245,6 +245,7 @@ angular.module('plugins')
                 $timeout (function () {
                     var v = vis()
                         .disease(scope.disease.efo)
+                        .skip(1)
                         .size(800)
                         .score("jackard_weighted")
                         .cttvApi(cttvAPIservice.getSelf());
