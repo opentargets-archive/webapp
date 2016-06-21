@@ -8,22 +8,30 @@ angular.module('cttvServices').
 
     factory('cttvLocationState', ['$log', '$location', '$rootScope', 'cttvConsts', function($log, $location, $rootScope, cttvConsts) {
 
+        "use strict";
 
         var cttvLocationStateService = {};
-        var state = {};     // this should be the parsed $location.search() object
-        var old_state = {};  // TODO: not sure we'll actually need this
+        var state = {};     // state is the parsed $location.search() object
+        var old_state = {}; // old_state is updated with value of state just before updating state, so it holds the previous state
+        var tmp_state = {}; // tmp_state temporarily holds the state when a component calls updateStateFor: it is used to update the URL which is then parsed back into state
 
 
 
+        /*
+         * Updates state and old_state and broadcast a message to the app
+         */
         var updateState = function(new_state){
 
             // update the state and
             old_state = state;
-            state = new_state;
+            state = _.cloneDeep( new_state );
+            tmp_state = _.cloneDeep( new_state );
 
             // broadcast state update event
             $log.log("[event] cttvLocationState." + cttvLocationStateService.STATECHANGED);
-            $rootScope.$broadcast(cttvLocationStateService.STATECHANGED, state, old_state);
+
+            $rootScope.$broadcast(cttvLocationStateService.STATECHANGED, _.cloneDeep(state), _.cloneDeep(old_state));
+
         }
 
 
@@ -75,7 +83,7 @@ angular.module('cttvServices').
          * parseLocationSearch(search) // returns {ftcs:{datatype:["drugs","literature","animals"], pathways:"sdfs"}}
          */
         cttvLocationStateService.parseLocationSearch = function(search){
-            $log.log("parseLocationSearch");
+            //$log.log("parseLocationSearch");
             search = search || $location.search();
             var raw = {};
             // array containing the type of old facets -- TODO: can remove in future when we get rid of backward compatibilty (see comment below)
@@ -122,7 +130,8 @@ angular.module('cttvServices').
          * get the state object
          */
         cttvLocationStateService.getState = function(){
-            return state;
+            //$log.log("!!!! getState()");
+            return _.cloneDeep( state );
         }
 
 
@@ -131,16 +140,18 @@ angular.module('cttvServices').
          * get the state object
          */
         cttvLocationStateService.getOldState = function(){
-            return old_state;
+            //$log.log("!!!! getOldState()");
+            return _.cloneDeep( old_state );
         }
 
 
 
         /**
-         * Set the state object to the given one (full override)
+         * Set the temp state object to the given one (full override)
          */
         cttvLocationStateService.setState = function(so){
-            state = so;
+            //$log.log("!!!! setState()");
+            tmp_state = so;
             cttvLocationStateService.updateStateURL();
         }
 
@@ -151,10 +162,12 @@ angular.module('cttvServices').
          */
         cttvLocationStateService.setStateFor = function(k, so, track){
             $log.log("setStateFor "+k);
-            if(track==undefined){track=true;}
-            state[k] = so;
-            if( !state[k] || Object.keys(state[k]).length==0 ){
-                delete state[k];
+
+            if(track==undefined){track=true;}   // track = (track || track==undefined)
+            tmp_state[k] = so;
+
+            if( !tmp_state[k] || Object.keys(tmp_state[k]).length==0 ){
+                delete tmp_state[k];
             }
 
             if(track){
@@ -165,7 +178,8 @@ angular.module('cttvServices').
 
 
         cttvLocationStateService.resetStateFor = function(k){
-            cttvLocationStateService.setStateFor(k, {}, false)
+            $log.log("resetStateFor()");
+            cttvLocationStateService.setStateFor(k, {}, false);
         }
 
 
@@ -173,11 +187,12 @@ angular.module('cttvServices').
          * Updates the URL search with the current state object
          */
         cttvLocationStateService.updateStateURL = function(){
+            //$log.log("!!!! updateStateURL");
 
             var stt = {}
-            for(var i in state){
-                if(state.hasOwnProperty(i)){
-                    stt[i] = cttvLocationStateService.param(state[i]);
+            for(var i in tmp_state){
+                if(tmp_state.hasOwnProperty(i)){
+                    stt[i] = cttvLocationStateService.param(tmp_state[i]);
                 }
             }
 
