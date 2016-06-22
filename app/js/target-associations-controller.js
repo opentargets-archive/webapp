@@ -35,7 +35,7 @@ angular.module('cttvControllers')
 
     // the scope view is essentially the state
     $scope.view = {
-        t : ["bubbles"],    // initialize default view values
+        t : ["bubbles"],    // t = the selected tab
         //tp: [1]
     }
 
@@ -68,11 +68,17 @@ angular.module('cttvControllers')
      * filters are autonomous and do their own business
      */
     var setView = function(obj){
-        $log.log("setView");
-        if(obj){
-            obj.t = obj.t || "bubbles";
-            $scope.view.t = obj.t;
-        }
+
+        // should work also for obj==undefined at page load
+        // or if navigating back through browser history
+
+        // define defaults as needed
+        obj = obj || {};
+        obj.t = obj.t || ["bubbles"];
+
+        // update the scope; only the tab is needed at the moment
+        $scope.view.t = obj.t;
+
     }
 
 
@@ -81,17 +87,19 @@ angular.module('cttvControllers')
      * Takes object from locationStateService, initialize the page/component state and fire a query which then updates the screen
      */
     var render = function(new_state, old_state){
-        $log.log("render()");
 
-        // here we want to update facets, tabs, etc
+        // here we want to update facets, tabs, etc:
+        // 1. first we check if the state of a particular element has changed;
+        // 2. if it hasn't changed, and it's undefined (new=undefined, old=undefined),
+        // then it's a page load with no state specified, so we update that element anyway with default values
 
         // facets changed?
-        if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) ){
+        if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) || !new_state[facetsId] ){
             getFacets( new_state[facetsId] );
         }
 
         // view changed?
-        if( ! _.isEqual( new_state[stateId], old_state[stateId] ) ){
+        if( ! _.isEqual( new_state[stateId], old_state[stateId] ) || !new_state[stateId] ){
             setView( new_state[stateId] );
         }
 
@@ -103,7 +111,6 @@ angular.module('cttvControllers')
      * Get facets data as well general page info data (e.g. count, labels etc)
      */
     function getFacets (filters) {
-        $log.log("getFacets()");
 
         // Set the filters
         $scope.filters = filters;
