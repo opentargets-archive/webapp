@@ -28,9 +28,6 @@ angular.module('cttvDirectives')
 
 
             link: function (scope, elem, attrs) {
-                $log.log("");
-                $log.log("");
-                $log.log("*** cttvTargetAssociationsTree: link()");
 
                 // legend stuff
                 scope.legendText = "Score";
@@ -40,24 +37,14 @@ angular.module('cttvDirectives')
                     scope.colors.push( {color:colorScale(j), label:j} );
                 }
 
-                $log.log("*** setting up watchGroup...");
 
                 scope.$watchGroup(['target', 'facets', 'active'], function (vals, old_vals) {
-                    // $log.log("");
-                    // $log.log("");
-                    // $log.log("*** cttvTargetAssociationsTree: watchGroup()");
-                    // $log.log( scope.active !== whoiam );
-                    // $log.log(vals);
-                    // $log.log(old_vals);
-                    // $log.log("Check facets js: "+ Object.is(vals[1],old_vals[1]));
-                    // $log.log("Check facets _: "+ _.isEqual(vals[1],old_vals[1])  );
 
                     var target = vals[0];
                     var facets = vals[1];
                     var act = vals[2];
 
                     if ( scope.active !== whoiam ) {
-                    //if ( scope.active !== whoiam || ( !Object.is(vals[1],old_vals[1]) && _.isEqual(vals[1],old_vals[1]) ) ) { // TODO: this is a temporary fix
                         return;
                     }
 
@@ -99,8 +86,6 @@ angular.module('cttvDirectives')
 
                 var setTreeView = function (tas) {
 
-                    $log.log("*** cttvTargetAssociationsTree: setTreeView()");
-
                     ////// Tree view
                     // viewport Size
                     var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -137,10 +122,6 @@ angular.module('cttvDirectives')
                     cttvAPIservice.getAssociations (opts)
                         .then (
                             function (resp) {
-                                // console.warn ("RESP FOR TREE");
-                                // console.warn(resp);
-
-                                $log.log("*** cttvTargetAssociationsTree: setTreeView().response");
 
                                 var data = cttvAPIservice.flat2tree(resp.body);
                                 // var data = resp.body.data;
