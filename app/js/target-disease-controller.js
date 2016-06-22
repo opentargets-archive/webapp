@@ -1283,7 +1283,8 @@
                     auth = authArr[0];
 
                     // var match;
-                    var abstract = pub.abstractText;
+                    //var abstract = pub.abstractText;
+                    var abstract = $('#literature-table').DataTable().row(rowIdx).data()[6];
 
                     var title = pub.title;
 
@@ -1291,6 +1292,7 @@
                     //     var matchedText = match[1];
                     //     abstract = abstract.replace(matchedText, "<b>" + matchedText + "</b>");
                     // }
+                    /*
                     var abstractSentences;
                     if ($scope.search.literature.abstractSentences[data[2]][data[7]]) {
                         abstractSentences = $scope.search.literature.abstractSentences[data[2]][data[7]][data[8]];
@@ -1318,6 +1320,7 @@
                             }
                         });
                     }
+                    */
 
                     data[3] += "<a target=_blank href='http://europepmc.org/abstract/MED/"+pub.pmid+"'>"+title+"</a>"
                     + "<br />"
