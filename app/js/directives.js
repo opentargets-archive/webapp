@@ -154,8 +154,8 @@ angular.module('cttvDirectives', [])
 
                     // });
 
-                    var atlasHeatmapBuilder = window.exposed;
-                    atlasHeatmapBuilder({
+                    // var atlasHeatmapBuilder = window.exposed;
+                    expressionAtlasHeatmap.render({
                         proxyPrefix: "/proxy",
                         //gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa/',
                         params: 'geneQuery=' + target + "&species=homo%20sapiens",
