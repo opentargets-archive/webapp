@@ -8,7 +8,13 @@
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$modal', '$compile', '$http', '$q', '$timeout', '$analytics', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $modal, $compile, $http, $q, $timeout, $analytics) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log',
+            'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig',
+            'clearUnderscoresFilter', 'upperCaseFirstFilter',
+            '$modal', '$compile', '$http', '$q', '$timeout', '$analytics',
+            function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig,
+                      clearUnderscores, upperCaseFirst,
+                      $modal, $compile, $http, $q, $timeout, $analytics) {
         'use strict';
         $log.log('TargetDiseaseCtrl()');
         cttvUtils.clearErrors();
@@ -1256,20 +1262,28 @@
         */
 
         function parseResponse (recs, dt) {
+            //$log.log("parseResponse():recs", recs);
+            //$log.log("parseResponse():dt", dt);
             dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 var data = this.data();
+                $log.log("parseResponse():data", data);
+                $log.log("parseResponse():rowIdx=", rowIdx);
+                $log.log("parseResponse():tableLoop=", tableLoop);
+                $log.log("parseResponse():rowLoop=", rowLoop);
+
                 // ... do something with data(), or this.node(), etc
                 //data[1]; // the literature ID
                 var pmdata = recs.filter(function(item){
                     return item.pmid == data[2];
                 });
-
+                //$log.log("parseResponse():pmdata",pmdata);
                 if(pmdata.length>0){
                     //var re = /Abstract: (.*?)\.\s*<\/li>/g;
                     data[3]="";
 
                     // pmdata.forEach(function(pub){
                     var pub = pmdata[0];
+                    $log.log("parseResponse():pub=",pub);
                     // format author names
                     var auth = pub.authorString;
                     // auth = auth.substr(0,auth.length-1);
@@ -1285,9 +1299,11 @@
                     // var match;
                     //var abstract = pub.abstractText;
                     var abstract = $('#literature-table').DataTable().row(rowIdx).data()[6];
-
+                    //$log.log("parseResponse():!!!!!DataTable.row.data", $('#literature-table').DataTable().row(rowIdx).data());
                     var title = pub.title;
-
+                    //$log.log("parseResponse():pub.title=",pub.title);
+                    //$log.log("parseResponse():pub.abstractText=",pub.abstractText);
+                    //$log.log("parseResponse():matches=", abstract);
                     // while ((match = re.exec(data[8])) !== null) {
                     //     var matchedText = match[1];
                     //     abstract = abstract.replace(matchedText, "<b>" + matchedText + "</b>");
@@ -1379,6 +1395,7 @@
 
                         if( resp.body.data ){
                             $scope.search.literature.total = resp.body.total;
+                            //$log.log("target-disease-controller: resp.body.total = " , resp.body.total);
                             var unicode_re = /u([\dABCDEF]{4})/gi;
                             var match;
 
@@ -1558,6 +1575,7 @@
 
             //var callChunks = [];
             for (var i=0; i<chunks; i++) {
+                //$log.log("chunks=", chunks);
                 var done = 0;
                 //var thisRecords = $scope.search.literature.data.slice(i*chunkSize, (i+1)*chunkSize);
                 var thisRecords = uniqPMIDs.slice(i*chunkSize, (i+1)*chunkSize);
@@ -1613,6 +1631,7 @@
 
 
         var formatLiteratureDataToArray = function(data){
+        	//console.log("formatLiteratureDataToArray : data:",data);
             var newdata = [];
             var cat_list = ["title", "abstract", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
 
@@ -1781,6 +1800,8 @@
 
 
         $scope.sectionOpen=function(who) {
+           $log.info("tdc:sectionOpen", who);
+            console.log("tdc:sectionOpen", who);
             // Fire a target associations tree event for piwik to track
             $analytics.eventTrack('evidence', {"category": "evidence", "label": who});
         };
