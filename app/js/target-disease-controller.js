@@ -1303,7 +1303,7 @@
                     var abstract = $('#literature-table').DataTable().row(rowIdx).data()[6];
                     //$log.log("parseResponse():!!!!!DataTable.row.data", $('#literature-table').DataTable().row(rowIdx).data());
                     var title = pub.title;
-                    $log.log("parseResponse():pub.title=",pub.title);
+                    //$log.log("parseResponse():pub.title=",pub.title);
                     //$log.log("parseResponse():pub.abstractText=",pub.abstractText);
                     //$log.log("parseResponse():matches=", abstract);
                     // while ((match = re.exec(data[8])) !== null) {
@@ -1634,7 +1634,7 @@
 
 
         var formatLiteratureDataToArray = function(data){
-        	console.log("formatLiteratureDataToArray : data:",data);
+        	//console.log("formatLiteratureDataToArray : data:",data);
             var newdata = [];
             var cat_list = ["title", "abstract", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
 
