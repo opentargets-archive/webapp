@@ -26,7 +26,8 @@ RUN cd /opt/share/webapp && \
     echo 'unsafe-perm = true' > .npmrc && \
     npm install && \
     cp -r ./app /var/www && \
-    rm -rf /opt/share/webapp 
+    rm -rf /opt/share/webapp && \
+    rm -rf .npm
 
 COPY ./nginx_conf/server.* /usr/share/nginx_crt/
 COPY ./nginx_conf/nginx.conf /etc/nginx/nginx.conf
