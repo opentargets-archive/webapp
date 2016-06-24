@@ -27,7 +27,7 @@ RUN cd /opt/share/webapp && \
     npm install && \
     cp -r ./app /var/www && \
     rm -rf /opt/share/webapp && \
-    rm -rf .npm
+    rm -rf /var/www/app/jspm_packages
 
 COPY ./nginx_conf/server.* /usr/share/nginx_crt/
 COPY ./nginx_conf/nginx.conf /etc/nginx/nginx.conf
