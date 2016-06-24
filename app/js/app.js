@@ -59,7 +59,8 @@ app.config([ '$stateProvider', '$urlRouterProvider', '$locationProvider',
             .state('evidence', {
                 url: '/evidence/:tid/:did',
                 templateUrl: 'partials/target-disease.html',
-                controller: 'TargetDiseaseCtrl'
+                controller: 'TargetDiseaseCtrl',
+                reloadOnSearch: false
             })
             .state('target', {
                 url: '/target/:id',
