@@ -220,10 +220,9 @@ angular.module('cttvServices').
         // This is the main part of the service:
         // it watches for changes in the URL search, then process the search and fire an event
         // all components that need to update their state based on this will be listening
+        // $rootScope.$on('$locationChangeSuccess', function(){
         $rootScope.$on('$locationChangeSuccess', function(){
-
             updateState( cttvLocationStateService.parseLocationSearch( $location.search() ) );
-
         });
 
 
