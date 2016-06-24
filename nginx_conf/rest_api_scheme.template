@@ -1,0 +1,1 @@
+set $rest_api_scheme $REST_API_SCHEME ;
