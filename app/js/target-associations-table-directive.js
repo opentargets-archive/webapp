@@ -56,11 +56,18 @@ angular.module('cttvDirectives')
     /*
     Setup the table cols and return the DT object
     */
-    var setupTable = function(table, target, filename){
+    var setupTable = function(table, target, filename, download){
         $log.log("setupTable()");
         // return $(table).DataTable( cttvUtils.setTableToolsParams({
         return $(table).DataTable ({
-            "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
+            //"dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
+            "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
+            "buttons": [
+                {
+                    text: "<span class='fa fa-download' title='Download as CSV'></span>",
+                    action: download
+                }
+            ],
             "processing": false,
             "serverSide": true,
             "ajax": function (data, cbak, params) {
@@ -245,8 +252,9 @@ angular.module('cttvDirectives')
 
 
         template: '<div>'
-        + ' <div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
-        + '<cttv-matrix-table></cttv-matrix-table>'
+        //+ ' <div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
+        +'<div></div>'
+        +'<cttv-matrix-table></cttv-matrix-table>'
         +'<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
         +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
         + '</div>',
@@ -367,7 +375,7 @@ angular.module('cttvDirectives')
                 if (dtable) {
                     dtable.ajax.reload();
                 } else {
-                    dtable = setupTable(table, target, scope.filename);
+                    dtable = setupTable(table, target, scope.filename, scope.downloadTable);
                 }
             });
 
