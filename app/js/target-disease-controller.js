@@ -124,6 +124,8 @@
             },
         };
 
+
+
         $scope.datatypes = datatypes;
 
 
@@ -1337,8 +1339,7 @@
                         });
                     }
                     */
-
-                    data[3] += "<a target=_blank href='http://europepmc.org/abstract/MED/"+pub.pmid+"'>"+title+"</a>"
+                    data[3] += "<a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a>"
                     + "<br />"
                     + "<span class=small>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo + "</span>"
                     + "<p class=small>" + (abstract || "no abstract available") + "</p>"
@@ -1370,6 +1371,8 @@
             $scope.citations.all = resp.data.resultList.result;*/
 
         }
+
+
 
         var getLiteratureData = function(){
             $scope.search.literature.is_loading = true;
@@ -1706,6 +1709,10 @@
 
             return newdata;
         };
+                $scope.openEuropePmc = function(pmid){
+                    var URL = "http://europepmc.org/abstract/MED/"+pmid;
+                    window.open(URL);
+                };
 
         $scope.open = function(id){
             //$log.log(id);
