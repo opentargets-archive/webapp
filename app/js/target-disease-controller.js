@@ -16,7 +16,7 @@
                       clearUnderscores, upperCaseFirst,
                       $modal, $compile, $http, $q, $timeout, $analytics) {
         'use strict';
-        $log.log('TargetDiseaseCtrl()');
+
         cttvUtils.clearErrors();
 
         var checkPath = cttvUtils.checkPath;
@@ -148,8 +148,6 @@
          * i.e. to fill the two boxes at the top of the page
          */
         var getInfo = function(){
-            $log.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
-
             // get gene specific info
             cttvAPIservice.getTarget( {
                     target_id:$scope.search.target
@@ -182,9 +180,7 @@
 
 
         var updateTitle = function(t, d){
-            //$scope.search.info.title = (($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name)+"-"+$scope.search.info.efo.label).split(" ").join("_");
             $scope.search.info.title = (t+"-"+d).split(" ").join("_");
-            $log.log( "updateTitle() : " + $scope.search.info.title );
         };
 
 
@@ -235,8 +231,6 @@
 
 
         var getFlowerData = function(){
-            $log.log("getFlowerData()");
-
             var opts = {
                 target:$scope.search.target,
                 disease:$scope.search.disease,
@@ -247,12 +241,7 @@
             return cttvAPIservice.getAssociation(opts).
                 then(
                     function(resp) {
-                        $log.log("getFlowerData response");
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
-
-                        // for(var i=0; i<resp.body.data[0].association_score.datatypes.length; i++){
-                        //     $scope.search.association_scores[resp.body.data[0].association_score.datatypes[i].datatype] = resp.body.data[0].datatypes[i].association_score;
-                        // }
                         updateTitle( resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label );
                     },
                     cttvAPIservice.defaultErrorHandler
@@ -933,7 +922,7 @@
 
 
         var getMutationData = function(){
-            $log.log("getMutationData()");
+            //$log.log("getMutationData()");
             var opts = {
                 target:$scope.search.target,
                 disease:$scope.search.disease,
@@ -1268,10 +1257,7 @@
             //$log.log("parseResponse():dt", dt);
             dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 var data = this.data();
-                $log.log("parseResponse():data", data);
-                $log.log("parseResponse():rowIdx=", rowIdx);
-                $log.log("parseResponse():tableLoop=", tableLoop);
-                $log.log("parseResponse():rowLoop=", rowLoop);
+                //$log.log("parseResponse():data", data);
 
                 // ... do something with data(), or this.node(), etc
                 //data[1]; // the literature ID
@@ -1283,9 +1269,8 @@
                     //var re = /Abstract: (.*?)\.\s*<\/li>/g;
                     data[3]="";
 
-                    // pmdata.forEach(function(pub){
                     var pub = pmdata[0];
-                    $log.log("parseResponse():pub=",pub);
+
                     // format author names
                     var auth = pub.authorString;
                     // auth = auth.substr(0,auth.length-1);
@@ -1307,42 +1292,31 @@
                         abstractSentences = $scope.search.literature.abstractSentences[data[2]][data[7]][data[8]];
                     }
                     if (abstractSentences && abstract) {
-                        // console.log(data[2]);
-                        // console.log(abstractSentences);
+
                         abstractSentences.map (function (f) {
-                            // console.log("ORIG: " + abstract);
-                            // console.log("    vs " + f.raw);
-                            // console.log("    == " + f.formatted);
                             var pos = abstract.indexOf(f.raw);
                             // console.log("    POS: " + pos);
-                            //abstract = abstract.replace(f.raw, "<b>" + f.formatted + '</b>');
                             abstract = abstract.replace(f.raw, f.formatted);
+                            //console.log("f.raw=", f.raw);
+                            //console.log("f.formatted=", f.formatted);
 
                             // If not in the abstract, try the title
                             if (pos === -1) {
-                                // console.log("LOOKING IN TITLE:");
-                                // console.log("'" + title + "'");
-                                // console.log( "  ====> '" + f.raw + "'");
                                 pos = title.indexOf(f.raw);
-                                // console.log(" =====> " + pos);
                                 title = title.replace(f.raw, f.formatted);
                             }
                         });
+                        //console.log("resuilting abstract=", abstract);
                     }
+
                     var titleAndSource = "<a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a>"
                         + "<br />"
                         + "<span class=small>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo + "</span>"
-                    data[9]=titleAndSource + "<br><br>" +abstract;
+                    data[9]=titleAndSource + "<br><br>" + abstract;
                     data[3] += titleAndSource + "<p class=small>" + (matchedSentences || "no matches available") + "</p>"
-
                     data[5] = pub.journalInfo.yearOfPublication;
-                    $log.log("parseResponse:data", data);
-                    // });
 
-                }else{
-                    //data[3] = cttvDictionary.NA;
                 }
-
                 this.data(data);
 
             } );
@@ -1476,8 +1450,6 @@
                                         return bps;
                                     }, []);
 
-                                    // console.log(sentence.breakpoints);
-                                    // console.log(sentence);
                                     var text = sentence.text;
                                     // console.log("ORIG: " + text);
                                     sentence.breakpoints.map (function (bp) {
@@ -1497,16 +1469,28 @@
                                         if (!abstractSentences[pubmedId][formatSource(paper.sourceID)][efo]) {
                                             abstractSentences[pubmedId][formatSource(paper.sourceID)][efo] = [];
                                         }
-                                        abstractSentences[pubmedId][formatSource(paper.sourceID)][efo].push ({
-                                            'raw': sentence.text.trim(),
-                                            'formatted': text
-                                        });
+
+                                        var highlightedSentence = '<span class="highlight-info text-content-highlight">' + text + '</span>';
+                                        if (sentence.section === "abstract") {
+
+                                            abstractSentences[pubmedId][formatSource(paper.sourceID)][efo].push({
+                                                'raw': sentence.text.trim(),
+                                                'formatted':highlightedSentence
+                                            });
+                                        }
+                                        else {//title
+                                            abstractSentences[pubmedId][formatSource(paper.sourceID)][efo].push({
+                                                'raw': sentence.text.trim(),
+                                                'formatted':text
+                                            });
+                                        }
                                     }
-
-                                    sentence.formattedText = text;
-                                    //sentence.formattedText = sentence.formattedText + ' <span class="label label-primary">kk</span>';
-                                    // console.log(sentence.formattedText);
-
+                                    if (sentence.section === "abstract"){
+                                        sentence.formattedText = '<span class="highlight-info text-content-highlight">' + text + '</span>';
+                                    }
+                                    else{
+                                        sentence.formattedText = text;
+                                    }
                                 });
                             });
 
@@ -1626,7 +1610,7 @@
 
 
         var formatLiteratureDataToArray = function(data){
-        	$log.log("formatLiteratureDataToArray : data:",data);
+        	//$log.log("formatLiteratureDataToArray : data:",data);
             var newdata = [];
             var cat_list = ["title", "abstract", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
 
@@ -1709,7 +1693,7 @@
         $scope.open = function(id){
             //$log.log(id);
             //var row = $('#literature-table').DataTable().row(id.data()[5];
-            $log.log("rowData",$('#literature-table').DataTable().row(id).data());
+            //$log.log("rowData",$('#literature-table').DataTable().row(id).data());
             var modalInstance = $modal.open({
               animation: true,
               //templateUrl: 'myModalContent.html',
@@ -1800,7 +1784,6 @@
 
         $scope.sectionOpen=function(who) {
            $log.info("tdc:sectionOpen", who);
-            console.log("tdc:sectionOpen", who);
             // Fire a target associations tree event for piwik to track
             $analytics.eventTrack('evidence', {"category": "evidence", "label": who});
         };
