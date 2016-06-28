@@ -7,6 +7,132 @@ angular.module('cttvDirectives')
         var whoiam = "bubbles";
         var bottomMargin = 220;
         var bView;
+        var offset = 300;
+
+        function decorateSVG (from_svg) {
+            var clone = from_svg.cloneNode(true);
+            // Remove the defs and the therapeutic area labels
+            d3.select(clone)
+                .select("defs")
+                .remove();
+            d3.select(clone)
+                .selectAll(".topLabel")
+                .remove();
+
+            // Move the bubbles view to the right to leave space for the new TA labels
+            // var currWidth = d3.select(clone).attr("width");
+            // d3.select(clone).attr("width", ~~currWidth + offset);
+            // d3.select(clone).select("g").attr("transform", "translate(" + offset + ",0)");
+
+            // Get all therapeutic area labels on a side
+            var g = d3.select(clone).select("g");
+            var root = d3.select(".bubblesViewRoot")
+                .datum();
+
+            function okOverlaps(p, angle, others) {
+                for (var o in others) {
+                    // Overlap
+                    if ((Math.abs(others[o].y - p.y)<10) && (Math.abs(angle - others[o].angle)<0.2)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function getPos (init, angle) {
+                var p = {};
+                p.x = init.x + (init.r * Math.cos(angle));
+                p.y = init.y + (init.r * Math.sin(angle));
+                return p;
+            }
+            var labelPositions = {};
+            var taBubbles = d3.selectAll(".bubblesViewInternal")
+                .each(function (d, i) {
+                    // i=0 is the root circle
+                    if (!i) {
+                        return;
+                    }
+                    // Calculate angle
+                    var angleRadians = Math.atan2(d.y - root.y, d.x - root.x);
+
+                    //angleRadians = angleRadians < 0 ? angleRadians + 360 : angleRadians;
+                    // Find the projection of the line in the root bubble
+                    var ok = false;
+                    var p1 = getPos(d, angleRadians);
+                    var p2;
+                    var ntries = 0;
+                    while (!ok && ntries<50) {
+                        ntries++;
+                        p2 = getPos(root, angleRadians);
+                        ok = okOverlaps(p2, angleRadians, labelPositions);
+                        // ok = true;
+                        if (!ok) {
+                            if ((angleRadians > 0) && (angleRadians < 90)) {
+                                angleRadians = angleRadians - 0.02;
+                            } else if ((angleRadians > 90) && (angleRadians < 180)) {
+                                angleRadians = angleRadians + 0.02;
+                            } else if ((angleRadians < 0) && (angleRadians > -90)) {
+                                angleRadians = angleRadians + 0.02;
+                            } else {
+                                angleRadians = angleRadians - 0.02;
+                            }
+                            //angleRadians = angleRadians + 0.02;
+                        }
+                    }
+                    labelPositions[d.__id] = {
+                        x: p2.x,
+                        y: p2.y,
+                        angle : angleRadians
+                    };
+                    //var p = getPos(d, angleRadians);
+                    // var x1 = d.x + (d.r * Math.cos(angleRadians));
+                    // var y1 = d.y + (d.r * Math.sin(angleRadians));
+                    // var x2 = root.x + (root.r * Math.cos(angleRadians));
+                    // var y2 = root.y + (root.r * Math.sin(angleRadians));
+
+                    g
+                        .append("line")
+                        .attr("class", "TA-label")
+                        .attr("x1", p1.x)
+                        .attr("y1", p1.y)
+                        .attr("x2", p2.x)
+                        .attr("y2", p2.y)
+                        .attr("stroke", "gray");
+                    g
+                        .append("g")
+                        .attr("transform", "translate(" + p2.x + "," + p2.y + ")")
+                        .append("text")
+                        .style("font-size", "12px")
+                        .style("text-anchor", function () {
+                            var angle = (angleRadians * 180 / Math.PI);
+                            if ((angle < -90) || (angle>90)) {
+                                return "end";
+                            }
+                            return "start";
+                        })
+                        .text(function() {
+                            return d.name;
+                        });
+                });
+
+            // Resize the whole div
+            var longestLabel = "";
+            taBubbles
+                .each(function (d) {
+                    if (d.name.length > longestLabel.length) {
+                        longestLabel = d.name;
+                    }
+                });
+            var l = longestLabel.length * 6;
+            var currWidth = ~~d3.select(clone).attr("width");
+            var currHeight = ~~d3.select(clone).attr("height");
+            d3.select(clone)
+                .attr("width", currWidth + l*2)
+                .attr("height", currHeight + 50);
+            g.attr("transform", "translate(" + l + "," + "25)");
+
+            return clone;
+        }
 
         return {
             restrict: 'E',
@@ -17,12 +143,15 @@ angular.module('cttvDirectives')
                 active : '@'
             },
 
-            template: '<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
+            template: '<png filename="{{target}}-AssociationsBubblesView.png"></png><div></div>'
             +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
 
 
             link: function (scope, elem, attrs, resizeCtrl) {
-                var bubblesContainer = elem.children().eq(0).children().eq(0)[0];
+                //var bubblesContainer = elem.children().eq(1).children().eq(0)[0];
+                var bubblesContainer = elem.children().eq(1)[0];
+                bubblesContainer.id = "cttvBubblesView";
+                scope.element = "cttvBubblesView";
 
                 var bView;
                 var nav;
@@ -62,28 +191,6 @@ angular.module('cttvDirectives')
                         bView(bubblesContainer);
                     }
                 });
-                // scope.$watch("target", function (val) {
-                //     console.log("    TARGET UPDATED!!");
-        		//     setView();
-        		// });
-
-                // scope.$watch("facets", function (fct) {
-                //     console.log("    FACETS UPDATED!");
-                //     console.log(fct);
-                //     var opts = {
-                //         target: attrs.target,
-                //         outputstructure: "flat",
-                //         size: 1000,
-                //         direct: true,
-                //         facets: false
-                //     };
-                //     opts = cttvAPIservice.addFacetsOptions(fct, opts);
-                //     if (bView) {
-                //         bView.update(cttvAPIservice.getAssociations(opts));
-                //     } else {
-                //         setView();
-                //     }
-                // });
 
                 function setView (data) { // data is a promise
                     // Fire a target associations tree event for piwik to track
@@ -125,6 +232,12 @@ angular.module('cttvDirectives')
                     ];
 
                 }
+
+                scope.toExport = function () {
+                    var svg = decorateSVG(elem.children().eq(1)[0].querySelector("svg"));
+                    //var svg = elem.children().eq(1)[0].querySelector("svg");
+                    return svg;
+                };
             }
         };
     }]);
