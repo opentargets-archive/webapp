@@ -1299,18 +1299,9 @@
                     auth = authArr[0];
 
                     // var match;
-                    //var abstract = pub.abstractText;
-                    var abstract = $('#literature-table').DataTable().row(rowIdx).data()[6];
-                    //$log.log("parseResponse():!!!!!DataTable.row.data", $('#literature-table').DataTable().row(rowIdx).data());
+                    var abstract = pub.abstractText;
+                    var matchedSentences = $('#literature-table').DataTable().row(rowIdx).data()[6];
                     var title = pub.title;
-                    //$log.log("parseResponse():pub.title=",pub.title);
-                    //$log.log("parseResponse():pub.abstractText=",pub.abstractText);
-                    //$log.log("parseResponse():matches=", abstract);
-                    // while ((match = re.exec(data[8])) !== null) {
-                    //     var matchedText = match[1];
-                    //     abstract = abstract.replace(matchedText, "<b>" + matchedText + "</b>");
-                    // }
-                    /*
                     var abstractSentences;
                     if ($scope.search.literature.abstractSentences[data[2]][data[7]]) {
                         abstractSentences = $scope.search.literature.abstractSentences[data[2]][data[7]][data[8]];
@@ -1338,13 +1329,14 @@
                             }
                         });
                     }
-                    */
-                    data[3] += "<a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a>"
-                    + "<br />"
-                    + "<span class=small>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo + "</span>"
-                    + "<p class=small>" + (abstract || "no abstract available") + "</p>"
+                    var titleAndSource = "<a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a>"
+                        + "<br />"
+                        + "<span class=small>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo + "</span>"
+                    data[9]=titleAndSource + "<br><br>" +abstract;
+                    data[3] += titleAndSource + "<p class=small>" + (matchedSentences || "no matches available") + "</p>"
 
                     data[5] = pub.journalInfo.yearOfPublication;
+                    $log.log("parseResponse:data", data);
                     // });
 
                 }else{
@@ -1634,7 +1626,7 @@
 
 
         var formatLiteratureDataToArray = function(data){
-        	//console.log("formatLiteratureDataToArray : data:",data);
+        	$log.log("formatLiteratureDataToArray : data:",data);
             var newdata = [];
             var cat_list = ["title", "abstract", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
 
@@ -1717,7 +1709,7 @@
         $scope.open = function(id){
             //$log.log(id);
             //var row = $('#literature-table').DataTable().row(id.data()[5];
-            //$log.log(row.data()[5]);
+            $log.log("rowData",$('#literature-table').DataTable().row(id).data());
             var modalInstance = $modal.open({
               animation: true,
               //templateUrl: 'myModalContent.html',
@@ -1727,8 +1719,8 @@
                        +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
                        +'</div>'
                        +'<div class="cttv-literature-modal">'
-                       +'<h5>Matched sentences</h5>'
-                       +'<div>'+$('#literature-table').DataTable().row(id).data()[6]+'</div>'
+                       +'<h5>Abstract</h5>'
+                       +'<div>'+$('#literature-table').DataTable().row(id).data()[9]+'</div>'
                        +'</div>',
               //controller: 'ModalInstanceCtrl',
               size: 'lg',
