@@ -295,7 +295,11 @@ gulp.task('webserver', ['build-all'], function() {
 	  proxies: [{source: '/api', target: 'http://local.targetvalidation.org:8899/api'}, 
                     {source: '/proxy', target: 'http://local.targetvalidation.org:8899/proxy'}],
 	  open: true
-   }));
+   }))
+   .pipe(gulp.watch(gulp.watch([
+        './app/js/**/*',
+        './app/css/**/*'
+    ], ['build-webapp'])));
 });
 
 
