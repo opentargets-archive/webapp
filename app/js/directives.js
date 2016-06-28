@@ -1285,6 +1285,43 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    .directive('png', ['$timeout', '$modal', function ($timeout, $modal) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            transclude: true,
+            scope: {
+                filename:'@'
+            },
+            replace: false,
+            template: '<div ng-show="exportable" class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="exportPNG()"><span class="fa fa-picture-o" title="Download as PNG"></span></a></div></div>',
+            link: function (scope, element, attrs) {
+                $timeout(function () {
+                    scope.exportable = ((scope.$parent.toExport !== undefined) && (typeof scope.$parent.toExport === "function"));
+                }, 0)
+                scope.exportPNG = function () {
+                    var svg = scope.$parent.toExport();
+                    // TODO: Set max_size to 2,100,000
+                    var pngExporter = tnt.utils.png()
+                        .filename(scope.filename || "image.png")
+                        .stylesheets(["http://test.targetvalidation.org:8899/build/components-cttvWebapp.min.css?v=18042016"])
+                        // .stylesheets([])
+                        .limit({
+                            limit: 2100000,
+                            onError: function () {
+                                $modal.open({
+                                    animation: true,
+                                    template: "<div class='modal-header'>Image too large</div><div class=modal-body>The image you are trying to export is too large. Reduce the number of elements and try again.</div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                                    size:"sm",
+                                });
+                            }
+                        });
+                    pngExporter(d3.select(svg));
+                };
+            }
+        };
+    }])
 
     .directive('cttvHelpIcon', [function () {
         'use strict';
