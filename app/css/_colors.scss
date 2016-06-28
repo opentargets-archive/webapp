@@ -106,3 +106,5 @@ $clr-primary: $secondary-color; //ok, this is confusing //#337ab7;
 $clr-primary-hover: adjust-color( $clr-primary, $lightness: -5% );
 $clr-primary-highlight: #b7d3e7;    /* 25% of standard full color */
 
+$clr-info-highlight: #f5f6ce;    /* 25% of standard full color */
+
