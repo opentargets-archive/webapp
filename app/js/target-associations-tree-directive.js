@@ -11,7 +11,7 @@ angular.module('cttvDirectives')
         var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
         var gat;
-        var currTarget;
+        //var currTarget;
 
         return {
 
@@ -28,7 +28,9 @@ angular.module('cttvDirectives')
 
 
             link: function (scope, elem, attrs) {
+                $log.log("tree.link()");
 
+                var currTarget;
                 // legend stuff
                 scope.legendText = "Score";
                 scope.colors = [];
@@ -39,14 +41,18 @@ angular.module('cttvDirectives')
 
 
                 scope.$watchGroup(['target', 'facets', 'active'], function (vals, old_vals) {
-
+                    $log.log("tree.watchGroup()");
                     var target = vals[0];
                     var facets = vals[1];
                     var act = vals[2];
 
+                    $log.log(scope.active +" !== " +whoiam);
+
                     if ( scope.active !== whoiam ) {
                         return;
                     }
+
+                    $log.log(target +"!=="+ currTarget);
 
                     // Remove the current tree if the target has changed
                     if (target !== currTarget) {
@@ -62,7 +68,7 @@ angular.module('cttvDirectives')
                         size: 1000
                     };
                     opts = cttvAPIservice.addFacetsOptions(facets, opts);
-
+                    $log.log(gat);
                     if (!gat) {
                         setTreeView(opts.therapeutic_area);
                     } else {
