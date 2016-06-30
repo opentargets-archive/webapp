@@ -4,7 +4,7 @@ This is the web app for the CTTV project, based on the CoreDB API.
 The app is based on Angular, while D3 is used for visualization and graphs.
 
 
-## Getting started 
+## Getting started
 Clone the repository and install the dependencies.
 
 
@@ -14,6 +14,11 @@ You'll obvoiously need git to clone the repository.
 Installation and tests need some node.js tools:
 you must have `node.js` and its package manager `npm` installed.  You can get them from [http://nodejs.org/](http://nodejs.org/)
 
+Installing bower and gulp globally also helps
+```
+npm install -g bower
+npm install -g gulp
+```
 
 ### Install
 Tools are installed via NPM. To run the installer run
@@ -37,7 +42,7 @@ To test your app, you can just run the included simple `http-server` by running:
 ```
 npm start
 ```
-Then go to 
+Then go to
 ```
 http://localhost:8000/app/
 ```
@@ -46,5 +51,3 @@ All the code you need for deployment is contained in
 ```
 /app
 ```
-
-
