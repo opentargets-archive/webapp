@@ -14,9 +14,10 @@ You'll obvoiously need git to clone the repository.
 Installation and tests need some node.js tools:
 you must have `node.js` and its package manager `npm` installed.  You can get them from [http://nodejs.org/](http://nodejs.org/)
 
-Installing bower globally also helps
+Installing bower and gulp globally also helps
 ```
 npm install -g bower
+npm install -g gulp
 ```
 
 ### Install
