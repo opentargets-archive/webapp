@@ -7,6 +7,7 @@ var watch = require('gulp-watch');
 var karma = require("karma").server;
 var uglify = require('gulp-uglify');
 var closureCompiler = require('gulp-closure-compiler');
+var server = require('gulp-server-livereload');
 
 var browserify = require('gulp-browserify');
 var sass = require('gulp-sass');
@@ -283,6 +284,23 @@ gulp.task('build-webapp', ['build-webapp-styles', 'build-config'], function () {
         .pipe(gulp.dest(buildDir));
 });
 
+gulp.task('webserver', ['build-all'], function() {
+   gulp.src('app')
+	.pipe(server({
+	  livereload: true,
+	  fallback: 'index.html',
+	  host: 'localhost',
+	  port: '8000',
+	  defaultFile: 'index.html',
+	  proxies: [{source: '/api', target: 'http://local.targetvalidation.org:8899/api'}, 
+                    {source: '/proxy', target: 'http://local.targetvalidation.org:8899/proxy'}],
+	  open: true
+   }))
+   .pipe(gulp.watch(gulp.watch([
+        './app/js/**/*',
+        './app/css/**/*'
+    ], ['build-webapp'])));
+});
 
 
 gulp.task('build-all', ['init', 'build-docs', 'build-3rdparty', 'build-components-min', 'build-webapp']);
