@@ -11,17 +11,12 @@ angular.module('plugins')
             link: function (scope, element, attrs) {
 
                 $timeout(function () {
-                    console.log("Starting expression atlas...");
-                    console.log(window.exposed);
-                    var atlasHeatmapBuilder = window.exposed;
-                    console.log("STARTING THE EXPRESSION WIDGET...");
-                    atlasHeatmapBuilder({
-                        proxyPrefix: "/proxy",
-                        //gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa/',
+                    expressionAtlasHeatmapHighcharts.render({
                         params: 'geneQuery=' + scope.target.symbol + "&species=homo%20sapiens",
                         isMultiExperiment: true,
                         target: "gxaWidget",
-                        disableGoogleAnalytics: true
+                        disableGoogleAnalytics: true,
+                        proxyPrefix: "/proxy",
                     });
                 }, 0);
             }
