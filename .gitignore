@@ -9,3 +9,4 @@ jspm_packages
 build
 app/docs/*.html
 .idea
+npm-debug.log
