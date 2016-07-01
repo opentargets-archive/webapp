@@ -193,7 +193,11 @@ angular.module('cttvDirectives')
                             //             + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
                             // 9: target class
-                            row.push(item.target.target_class[0]);
+                            var trgc = cttvDictionary.NA;
+                            if ( cttvUtils.checkPath(item, "target.target_class") ) {
+                                trgc = item.target.target_class[0] || cttvDictionary.NA;
+                            }
+                            row.push(trgc);
 
 
                             // 8: target context / protein complex members
