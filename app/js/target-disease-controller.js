@@ -1312,8 +1312,8 @@
                     var titleAndSource = "<a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a>"
                         + "<br />"
                         + "<span class=small>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo + "</span>"
-                    data[9]=titleAndSource + "<br><br>" + abstract;
-                    data[3] += titleAndSource + "<p class=small>" + (matchedSentences || "no matches available") + "</p>"
+                    data[9]=titleAndSource + "<br/><br/>" + abstract;
+                    data[3] += titleAndSource + "<br/><br/>" + abstract + "<p class=small>" + (matchedSentences || "no matches available") + "</p>"
                     data[5] = pub.journalInfo.yearOfPublication;
 
                 }
@@ -1617,6 +1617,9 @@
             data.forEach(function(item){
                 // create rows:
                 var row = [];
+                
+                // count number of sentences in a section
+                var sectionCount = {};
 
                 try{
 
@@ -1658,12 +1661,30 @@
 
                         return +(ai > bi) || +(ai === bi) - 1;
                     });
+                    
+                    sectionCount = countSentences(item.evidence.literature_ref.mined_sentences);
+                    
+                    var previousSection = null;
 
                     row.push(
-                        "<ul>"+
                         item.evidence.literature_ref.mined_sentences.map(function(sent){
-                            return "<li><span class='bold'>"+upperCaseFirst( clearUnderscores(sent.section) )+"</span>: "+sent.formattedText+"</li>";
-                        }).join("") + "</ul>"
+                        	
+                        	var section = upperCaseFirst( clearUnderscores(sent.section));
+                        	var sentenceString = "";
+                        	
+                        	if(section != 'Title' && section != 'Abstract') {
+
+								if(previousSection != sent.section) {
+									sentenceString = "<br/><span ng-click='" + sent.section + " = !" + sent.section + "'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>"+ section +"</span>:&nbsp;" + sectionCount[sent.section] + "</span><br/><div collapse= '" + sent.section + "ng-if='" + sent.section + "'>";
+									previousSection = sent.section;
+
+								}
+
+                        		sentenceString = sentenceString + "<li>"+sent.formattedText+"</li>";
+                        	}
+                        	
+                        	return sentenceString;
+                        }).join("") + "</div>"
                     );
 
                     // source
@@ -1685,12 +1706,29 @@
 
             return newdata;
         };
-                $scope.openEuropePmc = function(pmid){
-                    var URL = "http://europepmc.org/abstract/MED/"+pmid;
-                    window.open(URL);
-                };
+        
+        // count the number of sentences in each section
+        var countSentences = function(sentences) {
+        	var count = {};
+        	sentences.map(function(sentence) {
 
-        $scope.open = function(id){
+        		if(count[sentence.section] === undefined) {
+        			count[sentence.section] = 1;
+        		}
+        		else {
+        			count[sentence.section]++;
+        		}
+        	});
+
+        	return count;
+        };
+
+		$scope.openEuropePmc = function(pmid){
+			var URL = "http://europepmc.org/abstract/MED/"+pmid;
+			window.open(URL);
+		};
+
+		$scope.open = function(id){
             //$log.log(id);
             //var row = $('#literature-table').DataTable().row(id.data()[5];
             //$log.log("rowData",$('#literature-table').DataTable().row(id).data());
