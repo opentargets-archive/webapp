@@ -14,7 +14,7 @@ angular.module('cttvDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-.directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', 'cttvAPIservice', '$q', function ($log, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts, cttvAPIservice, $q) {
+.directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', 'cttvAPIservice', '$q', 'cttvLocationState', function ($log, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts, cttvAPIservice, $q, cttvLocationState) {
 
     'use strict';
 
@@ -22,6 +22,8 @@ angular.module('cttvDirectives')
     var filters = {};
 
     var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+
+    var state = {};
 
     /*
     * Generates and returns the string representation of the span element
@@ -68,9 +70,11 @@ angular.module('cttvDirectives')
     /*
     Setup the table cols and return the DT object
     */
-    var setupTable = function(table, disease, filename, download){
+    var setupTable = function(table, disease, filename, download, stt){
         $log.log("setupTable()");
-        // var t = $(table).DataTable( cttvUtils.setTableToolsParams({
+
+        stt = stt || {};
+
         var t = $(table).DataTable({
             //"dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
             "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
@@ -83,6 +87,7 @@ angular.module('cttvDirectives')
             "processing": false,
             "serverSide": true,
             "ajax": function (data, cbak, params) {
+
                 // Order options
                 // mappings:
                 // 0 => gene name alphabetically -- not supported in the api
@@ -114,6 +119,9 @@ angular.module('cttvDirectives')
                     var prefix = data.order[i].dir === "asc" ? "~" : "";
                     order.push(prefix + mappings[data.order[i].column]);
                 }
+
+                // TODO: put this back if we put the state back
+                //data.start = stt.p*data.length || data.start;   // NaN || data.start in case it's not defined
 
                 var opts = {
                     disease: disease,
@@ -163,7 +171,7 @@ angular.module('cttvDirectives')
                     { "orderSequence": ["asc", "desc"], "targets": [0]}
                 ],
                 // "order" : [[2, "desc"], [10, "desc"]],
-                "order": [2, "desc"],
+                "order": [2, "desc"],   // stt.o || [2, "desc"],
                 "orderMulti": false,
                 "autoWidth": false,
                 "ordering": true,
@@ -246,6 +254,29 @@ angular.module('cttvDirectives')
     }
 
 
+
+    /*
+     * TODO: currently not being called - will check when we put this back
+     * Update function passes the current view (state) to the URL
+     */
+    function update(id, st){
+        $log.log("update");
+        $log.log(st);
+        cttvLocationState.setStateFor(id, st);
+    }
+
+
+
+    /*
+     * Renders page elements based on state from locationStateService
+     */
+    function render(new_state, old_state){
+        // TODO: might not need this?
+        // state = ...
+    }
+
+
+
     return {
 
         restrict: 'E',
@@ -254,19 +285,24 @@ angular.module('cttvDirectives')
             filename : '=',
             disease: '=',
             filters : '=',
+            stateId : '@?'
         },
 
         template: '<div>'
         // + '<div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
-        +'  <div></div>'
         +'  <cttv-matrix-table></cttv-matrix-table>'
         +'  <cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
         +'  <cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
         +'</div>',
 
         link: function (scope, elem, attrs) {
+
+            // TODO: initialize the state if we enable this feature
+            // cttvLocationState.init();
+            // state = cttvLocationState.getState()[scope.stateId] || {};
+
             // table itself
-            var table = elem.children().eq(0).children().eq(1)[0];
+            var table = elem.children().eq(0).children().eq(0)[0];
             var dtable;
 
             // legend stuff
@@ -280,6 +316,8 @@ angular.module('cttvDirectives')
             scope.legendData = [
                 {label:"No data", class:"no-data"}
             ];
+
+            scope.stateId = scope.stateId || "dhm"; // Disease Heat Map ??
 
             // Download the whole table
             scope.downloadTable = function () {
@@ -358,15 +396,49 @@ angular.module('cttvDirectives')
                     }, cttvAPIservice.defaultErrorHandler);
             };
 
+
+
+            // TODO: check this
+            // Do we want the directive to listen for changes in the URL?
+            // Probably so, but not with this implementation of DataTables...
+            // So for now we leave it OUT
+            // scope.$on(cttvLocationState.STATECHANGED, function (evt, new_state, old_state) {
+            //     render( new_state, old_state ); // if there are no facets, no worries, the API service will handle undefined
+            // });
+
+
+
             scope.$watchGroup(["filters", "disease"], function (attrs) {
                 filters = attrs[0];
                 var disease = attrs[1];
+                // actually, is disease going to change?
+                // I mean, if it changes, the page changes, right?
                 // if the table exists, we just force an upload (will take the filters into account)
                 if (dtable) {
                     dtable.ajax.reload();
                 } else {
+                    //state = cttvLocationState.getState()[scope.stateId];
                     // create a new table
-                    dtable = setupTable(table, disease, scope.filename, scope.downloadTable);
+                    //dtable = setupTable(table, disease, scope.filename, scope.downloadTable);
+                    dtable = setupTable(table, scope.disease, scope.filename, scope.downloadTable, state);
+
+                    // listener for page changes
+                    dtable.on( 'page.dt', function () {
+                        // TODO: comment back in when (if) ready
+                        // state.p = +dtable.page.info().page;
+                        // update(scope.stateId, state);
+                    } );
+
+                    // listener for order change
+                    dtable.on( 'order.dt', function () {
+                        // TODO: comment back in when (if) ready
+                        // var order = dtable.order();
+                        // if( !Array.isArray(order[0])){
+                        //     order = [order];
+                        // }
+                        // state.o = order[0];
+                        // update(scope.stateId, state);
+                    } );
                 }
             });
 
