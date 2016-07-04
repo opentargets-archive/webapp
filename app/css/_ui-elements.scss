@@ -2,10 +2,18 @@
 #cttv-page-app {
 
     /*
+    * one line modals
+    */
+    .modal-body-center {
+        text-align: center;
+    }
+    .png-scale-factor-selection {
+        padding: 10px;
+    }
+
+    /*
      * Spinners
      */
-
-
 
     .page-progress-spinner{
         width:100%;

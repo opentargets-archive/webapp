@@ -8,6 +8,7 @@ angular.module('cttvFilters', [])
             return input.split(splitChar)[splitIndex];
         };
     })
+
     .filter('clearUnderscores', function () {
         'use strict';
 
