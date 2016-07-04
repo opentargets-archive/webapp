@@ -47,7 +47,7 @@
 
     ],
 
-    "show_access_level" : true,
+    "show_access_level" : false,
 
     "dumps_link": "/downloads/data",
 
