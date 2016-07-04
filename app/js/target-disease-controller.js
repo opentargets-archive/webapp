@@ -850,7 +850,8 @@
                     row.push( item.evidence.log2_fold_change.percentile_rank );
 
                     // experiment overview
-                    row.push( "<a class='cttv-external-link' href='"+item.evidence.urls[2].url+"' target='_blank'>" + (item.evidence.experiment_overview || "Experiment overview and raw data") + "</a>" );
+                    var expOverview = (item.evidence.urls[2] || item.evidence.urls[0]).url || cttvDictionary.NA;
+                    row.push( "<a class='cttv-external-link' href='"+expOverview+"' target='_blank'>" + (item.evidence.experiment_overview || "Experiment overview and raw data") + "</a>" );
 
                     // publications
                     var refs = [];
