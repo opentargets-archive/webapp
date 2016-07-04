@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('targetFamily', ['$log', 'cttvUtils', function ($log, cttvUtils) {
+    .directive('geneTree', ['$log', 'cttvUtils', function ($log, cttvUtils) {
         'use strict';
 
         var rx = /species\/(.*)\.png/;
@@ -15,7 +15,6 @@ angular.module('plugins')
                     var spRaw = g.select("image")
                         .attr("href");
                     var sp = (rx.exec(spRaw))[1];
-                    console.log(sp);
                     var gene = g.select("text")
                         .text();
                     g
@@ -26,7 +25,6 @@ angular.module('plugins')
 
             // Remove the images --
             leaves.selectAll("image").remove();
-            console.log(clone);
             return clone;
         }
 
@@ -35,7 +33,7 @@ angular.module('plugins')
             template: '<p class=cttv-section-intro>Phylogenetic tree showing the history of the human gene '
             + '{{target.symbol}} based on protein sequences. The tree shows human paralogs and orthologs in'
             + 'selected species. Click on any node to get more information about the homology relationship.'
-            + 'Check / Uncheck species to prune the tree accordingly</p><png filename="{{target.approved_symbol}}-geneTree.png"></png>',
+            + 'Check / Uncheck species to prune the tree accordingly</p><p ng-if=notFound==1>No gene tree has been found for {{target.symbol}}</p><png filename="{{target.approved_symbol}}-geneTree.png"></png>',
 
             scope: {
                 target: '=',
@@ -49,14 +47,11 @@ angular.module('plugins')
                 var gt = targetGeneTree()
                     .id(scope.target.id)
                     .width(width)
-                    .proxy("/proxy/rest.ensembl.org");
-                    // .on("load", function () {
-                    //     console.log("TREE LOADED!!!");
-                    //     scope.toExport = decorateExport(newDiv.querySelector("svg"));
-                    // });
+                    .proxy("/proxy/rest.ensembl.org")
+                    .on("notFound", function() {
+                        scope.notFound = 1;
+                    });
                 gt(newDiv);
-
-                console.log(cttvUtils.browser);
 
                 scope.toExport = function () {
                     var svg = newDiv.querySelector("svg");

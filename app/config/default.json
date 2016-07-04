@@ -47,7 +47,7 @@
 
     ],
 
-    "show_access_level" : true,
+    "show_access_level" : false,
 
     "dumps_link": "/downloads/data",
 
@@ -161,9 +161,9 @@
         },
 
         {
-            "name": "targetFamily",
-            "element": "target-family",
-            "heading": "Target Family",
+            "name": "geneTree",
+            "element": "gene-tree",
+            "heading": "Gene tree",
             "track": true
         },
         {
