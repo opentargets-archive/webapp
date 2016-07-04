@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('targetFamily', ['$log', 'cttvUtils', function ($log, cttvUtils) {
+    .directive('geneTree', ['$log', 'cttvUtils', function ($log, cttvUtils) {
         'use strict';
 
         var rx = /species\/(.*)\.png/;
@@ -15,7 +15,6 @@ angular.module('plugins')
                     var spRaw = g.select("image")
                         .attr("href");
                     var sp = (rx.exec(spRaw))[1];
-                    console.log(sp);
                     var gene = g.select("text")
                         .text();
                     g
@@ -26,7 +25,6 @@ angular.module('plugins')
 
             // Remove the images --
             leaves.selectAll("image").remove();
-            console.log(clone);
             return clone;
         }
 
@@ -50,13 +48,7 @@ angular.module('plugins')
                     .id(scope.target.id)
                     .width(width)
                     .proxy("/proxy/rest.ensembl.org");
-                    // .on("load", function () {
-                    //     console.log("TREE LOADED!!!");
-                    //     scope.toExport = decorateExport(newDiv.querySelector("svg"));
-                    // });
                 gt(newDiv);
-
-                console.log(cttvUtils.browser);
 
                 scope.toExport = function () {
                     var svg = newDiv.querySelector("svg");
