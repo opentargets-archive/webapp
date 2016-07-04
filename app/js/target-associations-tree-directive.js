@@ -23,7 +23,7 @@ angular.module('cttvDirectives')
                 active : '@'
             },
 
-            template: '<div></div>'
+            template: '<png filename="{{target}}-AssociationsTreeView.png"></png><div id=cttvTreeView></div>'
             +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
 
 
@@ -121,9 +121,6 @@ angular.module('cttvDirectives')
                     cttvAPIservice.getAssociations (opts)
                         .then (
                             function (resp) {
-                                console.warn ("RESP FOR TREE");
-                                console.warn(resp);
-
                                 var data = cttvAPIservice.flat2tree(resp.body);
                                 // var data = resp.body.data;
                                 if (_.isEmpty(data)) {
@@ -143,25 +140,17 @@ angular.module('cttvDirectives')
                                     .therapeuticAreas(tas)
                                     .hasLegendScale(false);
 
-                                gat(fView, elem.children().eq(0)[0]);
+                                gat(fView, elem.children().eq(1)[0]);
+
                             },
                             cttvAPIservice.defaultErrorHandler
                         );
                 };
 
-                // scope.$watch(function () { return attrs.target; }, function (val) {
-                //     setTreeView();
-                // });
-
-                // scope.$watch(function () { return attrs.focus; }, function (val) {
-                //     if (val === "None") {
-                //         return;
-                //     }
-                //
-                //     if (gat) {
-                //         gat.selectTherapeuticArea(val);
-                //     }
-                // });
+                scope.toExport = function () {
+                    var svg = elem.children().eq(1)[0].querySelector("svg");
+                    return svg;
+                };
             }
         };
     }]);

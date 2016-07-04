@@ -48,8 +48,6 @@ angular.module('plugins', [])
                     // Lazy load the dependencies
                     var deps = scope.dependencies;
                     var loadedDeps = [];
-                    // TODO: This is loading all the deps async. No resources dependencies are considered at this time
-
                     for (var dep in deps) {
                         loadedDeps.push(lazy.import(dep));
                     }
