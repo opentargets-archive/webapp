@@ -5,52 +5,118 @@ angular.module('cttvControllers')
 /**
  * AssociationsCtrl
  * Controller for the target associations page
- * It loads a list of associations for the given search
  */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', '$timeout', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary, $timeout) {
-        'use strict';
+.controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', '$timeout', 'cttvLocationState', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary, $timeout, cttvLocationState) {
+    'use strict';
 
 	$log.log('targetAssociationsCtrl()');
-    cttvUtils.clearErrors();
 
-	var q = $location.path().split('/')[2];
+
+
+    cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
+
+
+
+    // Initial setup
+
+
+    // scope vars
 	$scope.search = {
-	    query : q
+	    query : ""
 	};
 
     $scope.labels = {
         therapeutic_areas : cttvDictionary.THERAPEUTIC_AREAS
     };
 
+    $scope.n = {
+        diseases : "...", // this should be a number, but initialize to "..." for better user feedback
+    };
+
+    // the scope view is essentially the state
+    $scope.view = {
+        t : ["bubbles"],    // t = the selected tab
+        //tp: [1]
+    }
+
+    $scope.loading = false;
 
 
-    // reset the filters when loading a new page
-    // so we don't see the filters from the previous page...
+
+    // filters
+
+    // reset the filters when loading a new page so we don't see the filters from the previous page...
     cttvFiltersService.reset();
 
-    // Set filters
+    // select facets to show
     cttvFiltersService.pageFacetsStack([
         //cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
         cttvFiltersService.facetTypes.DATATYPES,
         cttvFiltersService.facetTypes.THERAPEUTIC_AREAS
     ]);
 
-    var filters = cttvFiltersService.parseURL();
 
-    // Set up a listener for the URL changes and
-    // when the search change, get new data
-    $scope.$on('$routeUpdate', function(){
-        $log.log("onRouteUpdate");
-        getFacets(cttvFiltersService.parseURL());
-    });
 
+    // state we want to export to/from the URL
+    var stateId = "view";
+    var facetsId = cttvFiltersService.stateId;
+
+
+
+    /*
+     * The view is essentially the state for the page;
+     * filters are autonomous and do their own business
+     */
+    var setView = function(obj){
+
+        // should work also for obj==undefined at page load
+        // or if navigating back through browser history
+
+        // define defaults as needed
+        obj = obj || {};
+        obj.t = obj.t || ["bubbles"];
+
+        // update the scope; only the tab is needed at the moment
+        $scope.view.t = obj.t;
+
+    }
+
+
+
+    /*
+     * Takes object from locationStateService, initialize the page/component state and fire a query which then updates the screen
+     */
+    var render = function(new_state, old_state){
+
+        // here we want to update facets, tabs, etc:
+        // 1. first we check if the state of a particular element has changed;
+        // 2. if it hasn't changed, and it's undefined (new=undefined, old=undefined),
+        // then it's a page load with no state specified, so we update that element anyway with default values
+
+        // facets changed?
+        if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) || !new_state[facetsId] ){
+            getFacets( new_state[facetsId] );
+        }
+
+        // view changed?
+        if( ! _.isEqual( new_state[stateId], old_state[stateId] ) || !new_state[stateId] ){
+            setView( new_state[stateId] );
+        }
+
+    }
+
+
+
+    /*
+     * Get facets data as well general page info data (e.g. count, labels etc)
+     */
     function getFacets (filters) {
-        $log.log("getFacets()");
+
         // Set the filters
         $scope.filters = filters;
 
         var opts = {
-            target: q,
+            target: $scope.search.query,
             outputstructure: "flat",
             facets: true,
             direct: true,
@@ -67,47 +133,66 @@ angular.module('cttvControllers')
                     // set the filename
                     $scope.search.filename = cttvDictionary.EXP_TARGET_ASSOC_LABEL + resp.body.data[0].target.gene_info.symbol;
 
-                    // Update the facets
-                    $scope.updateFacets(resp.body.facets);
+                    // Set the total number of diseases
+                    $scope.n.diseases = resp.body.total;
 
+                    // Update the facets
+                    cttvFiltersService.updateFacets(resp.body.facets, cttvConsts.UNIQUE_DISEASE_COUNT );
+                    //$scope.updateFacets(resp.body.facets);
                 }
             },
             cttvAPIservice.defaultErrorHandler);
     }
 
-    getFacets(cttvFiltersService.parseURL());
-
-	$scope.loading = false;
 
 
-	$scope.toggleDataTypes = function () {
-	    $scope.toggleNavigation();
-	};
+    /*
+     * Update function passes the current view (state) to the URL
+     */
+    function update(){
+        cttvLocationState.setStateFor(stateId, $scope.view);
+    }
+
 
 
     /**
-     * Parse the filters.
-     * That means it takes the list of filters as specified in the URL
+     * Called from the tables in the HTML, this sets the active tab id.
+     * Valid tabs are: "bubbles", "table", "tree"
      */
-    $scope.filter = function(filters){
-        $log.log("filter()");
-
-        $scope.filters = filters;
-        $scope.score = {};
-    };
+    $scope.setActiveTab = function (tab) {
+        $scope.view.t[0] = tab;
+        update();
+    }
 
 
-    $scope.filter(filters);
 
-    $scope.updateFacets = function (facets) {
-        $log.log("**** updateFacets() ****");
-        cttvFiltersService.updateFacets(facets, "unique_disease_count");
-    };
+    //
+    // on STATECHANGED
+    // Set up a listener for the URL changes and when the search change, get new data
+    //
 
-    // active tab
-    $scope.active = "bubbles";
-    $scope.setActive = function (who) {
-        $scope.active = who;
-    };
+
+
+    $scope.$on(cttvLocationState.STATECHANGED, function (evt, new_state, old_state) {
+        render( new_state, old_state ); // args is the same as getState()
+    });
+
+
+
+    //
+    // on PAGE LOAD
+    //
+
+
+
+    cttvUtils.clearErrors();
+    $scope.search.query = $location.path().split('/')[2];
+    $scope.filters = cttvLocationState.getState()[facetsId] || {} ;
+
+    render( cttvLocationState.getState(), cttvLocationState.getOldState() );
+
+
 
 }]);
+
+

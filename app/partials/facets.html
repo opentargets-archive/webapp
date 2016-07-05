@@ -26,10 +26,11 @@
     <!-- Facets and filters -->
     <h4>Filter by</h4>
     <accordion close-others=false>
-        <accordion-group ng-init="status = {isOpen: true}" is-open="status.isOpen" ng-repeat="facet in filters" ng-if="facet.filters.length>0">
+        <accordion-group ng-init="status = {isOpen: true}" is-open="status.isOpen" ng-repeat="facet in filters track by facet.key" ng-if="facet.filters.length>0">
             <accordion-heading class="cttv-facets-headers">
                 {{facet.label | clearUnderscores | upperCaseFirst}}<i style="font-size:16px" class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !status.isOpen, 'fa-caret-down': status.isOpen}"></i>
             </accordion-heading>
+
 
             <!--
                 The content panel of the facet:
