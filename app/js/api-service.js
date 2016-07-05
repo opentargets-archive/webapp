@@ -33,6 +33,8 @@ angular.module('cttvServices')
             API_DISEASE_URL: 'disease',
             API_EXPRESSION_URL: 'expression',
             API_TARGET_URL : 'target',
+            API_TARGET_RELATION_URL : 'targetRelation',
+            API_DISEASE_RELATION_URL : 'diseaseRelation',
             facets: {
                 DATATYPE: 'datatype', // 'filterbydatatype',
                 PATHWAY: 'pathway', //filterbypathway',
@@ -410,6 +412,34 @@ angular.module('cttvServices')
             }
             return obj;
         };
+
+
+
+        /**
+         * Get relations for specified gene or targer
+         */
+        cttvAPI.getTargetRelation = function(queryObject){
+            $log.log("cttvAPI.getTargetRelation");
+
+            return callAPI({
+                operation : cttvAPI.API_TARGET_RELATION_URL,
+                params : queryObject
+            });
+        }
+
+
+
+        /**
+         * Get relations for specified gene or targer
+         */
+        cttvAPI.getDiseaseRelation = function(queryObject){
+            $log.log("cttvAPI.getTargetRelation");
+
+            return callAPI({
+                operation : cttvAPI.API_DISEASE_RELATION_URL,
+                params : queryObject
+            });
+        }
 
 
 

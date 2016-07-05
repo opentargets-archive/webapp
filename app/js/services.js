@@ -103,7 +103,11 @@ angular.module('cttvServices', []).
 
             BLUE_1_3 : d3.scale.linear()
                         .domain([1,3])
-                        .range(["#B6DDFC", "#0052A3"])
+                        .range(["#B6DDFC", "#0052A3"]),
+
+            BLUE_RED : d3.scale.linear()
+                        .domain([-1,1])
+                        .range(['#582A72', '#AAAA39'])
 
         };
 

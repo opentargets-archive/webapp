@@ -1,8 +1,12 @@
+app/config/custom.json
 bower_components
 **/*~
 node_modules
+jspm_packages
 .sass-cache
 *.css.map
 .DS_Store
 build
 app/docs/*.html
+.idea
+npm-debug.log

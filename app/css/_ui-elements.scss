@@ -2,10 +2,18 @@
 #cttv-page-app {
 
     /*
+    * one line modals
+    */
+    .modal-body-center {
+        text-align: center;
+    }
+    .png-scale-factor-selection {
+        padding: 10px;
+    }
+
+    /*
      * Spinners
      */
-
-
 
     .page-progress-spinner{
         width:100%;
@@ -391,7 +399,6 @@
     .epmc_citation_container{
         padding-top:3px;
         margin-bottom:25px;
-        float:left;
     }
 
     .epmc_citation_title{
@@ -431,9 +438,9 @@
 
 
 
-    /////////////////////
-
-
+    /*
+     * For future homepage rebranding
+     */
 
     .numberCircle {
         -webkit-border-radius: 50%;
@@ -475,5 +482,3 @@
 
 
 }
-
-

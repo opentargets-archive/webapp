@@ -126,17 +126,20 @@ angular.module('cttvControllers')
 
         cttvAPIservice.getAssociations(opts)
             .then (function (resp) {
-                // set the label
-                $scope.search.label = resp.body.data[0].target.gene_info.symbol;
+                $scope.search.total = resp.body.total;
+                if (resp.body.total) {
+                    $scope.search.label = resp.body.data[0].target.gene_info.symbol;
 
-                // set the filename
-                $scope.search.filename = cttvDictionary.EXP_TARGET_ASSOC_LABEL + resp.body.data[0].target.gene_info.symbol;
+                    // set the filename
+                    $scope.search.filename = cttvDictionary.EXP_TARGET_ASSOC_LABEL + resp.body.data[0].target.gene_info.symbol;
 
-                // Set the total number of diseases
-                $scope.n.diseases = resp.body.total;
+                    // Set the total number of diseases
+                    $scope.n.diseases = resp.body.total;
 
-                // update facets
-                cttvFiltersService.updateFacets(resp.body.facets, cttvConsts.UNIQUE_DISEASE_COUNT );
+                    // Update the facets
+                    cttvFiltersService.updateFacets(resp.body.facets, cttvConsts.UNIQUE_DISEASE_COUNT );
+                    //$scope.updateFacets(resp.body.facets);
+                }
             },
             cttvAPIservice.defaultErrorHandler);
     }
@@ -160,9 +163,6 @@ angular.module('cttvControllers')
         $scope.view.t[0] = tab;
         update();
     }
-
-
-
 
 
 
@@ -194,3 +194,5 @@ angular.module('cttvControllers')
 
 
 }]);
+
+

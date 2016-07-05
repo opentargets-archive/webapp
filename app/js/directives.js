@@ -41,143 +41,6 @@ angular.module('cttvDirectives', [])
         };
     }])
 
-    .directive('cttvTargetGeneTree', [function () {
-        'use strict';
-
-        return {
-            restrict: 'E',
-            link: function (scope, elem, attrs) {
-                var w = 1140; // !!
-                scope.$watch (function () { return attrs.target; }, function (target) {
-                    if (target === "") {
-                        return;
-                    }
-                    var newDiv = document.createElement("div");
-                    newDiv.id = "cttvTargetGeneTree";
-                    elem[0].appendChild(newDiv);
-
-                    var gt = targetGeneTree()
-                        .id(target)
-                        .width(1100)
-                        .proxy("/proxy/rest.ensembl.org");
-                    gt(newDiv);
-                });
-            }
-        };
-    }])
-
-    .directive('reactomePathwayViewer', [function () {
-        'use strict';
-
-        return {
-            restrict: 'E',
-            link: function (scope, elem, attrs) {
-
-                var w = 900;
-                var h = 500;
-                var currentPathwayId;
-                var count = 0;
-                // We need to wait until reactome seed is loaded
-                var centinel = setInterval (function () {
-                    count++;
-                    if (count > 10) {
-                        clearInterval(centinel);
-                    }
-                    if (Reactome) {
-                        clearInterval(centinel);
-                        console.log(Reactome);
-
-                        var newDiv = document.createElement("div");
-                        newDiv.id = "pathwayDiagramContainer";
-                        newDiv.className += " pwp-DiagramCanvas";
-                        elem[0].appendChild(newDiv);
-
-                        var pathwayDiagram;
-
-                        scope.$watch (function () { return attrs.pathway; }, function () {
-                            var pathway = attrs.pathway;
-                            //var subpathway = attrs.subpathway;
-                            var target = attrs.target;
-                            if (pathway === "") {
-                                return;
-                            }
-                            if (!pathwayDiagram) {
-                                pathwayDiagram = Reactome.Diagram.create ({
-                                    "proxyPrefix" : "/proxy/www.reactome.org",
-                                    "placeHolder": "pathwayDiagramContainer",
-                                    "width": 1100,
-                                    "height": 700,
-                                });
-                                pathwayDiagram.onDiagramLoaded(function (pathwayId) {
-                                    pathwayDiagram.flagItems(target);
-                                });
-                            }
-                            if (pathway !== currentPathwayId) {
-                                currentPathwayId = pathway;
-                                pathwayDiagram.loadDiagram(pathway);
-                            }
-                        });
-                    }
-                },500);
-            }
-        };
-    }])
-
-    /*
-    *
-    */
-    .directive('ebiExpressionAtlasBaselineSummary', ['cttvAPIservice', function (cttvAPIservice) {
-        'use strict';
-
-        return {
-            restrict: 'E',
-            link: function (scope, elem, attrs) {
-                scope.$watch(function () { return attrs.target; }, function (target) {
-                    if (target === "") {
-                        return;
-                    }
-                    var newDiv = document.createElement("div");
-                    newDiv.id = "cttvExpressionAtlas";
-                    newDiv.className = "accordionCell";
-                    elem[0].appendChild(newDiv);
-
-                    // cttvAPIservice.getToken().then(function (resp) {
-                    //     console.warn(resp.body);
-                    //     var token = resp.body.token;
-                    // var instance = new Biojs.AtlasHeatmap ({
-                    //     gxaBaseUrl: '/api/latest/proxy/generic/',
-                    //     //gxaBaseUrl : '/gxa',
-                    //     params:'geneQuery=' + target + "&species=homo%20sapiens",
-                    //     isMultiExperiment: true,
-                    //     target : "cttvExpressionAtlas"
-                    // });
-
-                    // });
-
-                    var atlasHeatmapBuilder = window.exposed;
-                    atlasHeatmapBuilder({
-                        proxyPrefix: "/proxy",
-                        //gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa/',
-                        params: 'geneQuery=' + target + "&species=homo%20sapiens",
-                        isMultiExperiment: true,
-                        target: "cttvExpressionAtlas",
-                        disableGoogleAnalytics: true
-                    });
-
-
-                    // var instance = AtlasHeatmapModule.build ({
-                    //     gxaBaseUrl: '/proxy/www.ebi.ac.uk/gxa',
-                    //     //gxaBaseUrl : '/gxa',
-                    //     params:'geneQuery=' + target + "&species=homo%20sapiens",
-                    //     isMultiExperiment: true,
-                    //     target : "cttvExpressionAtlas"
-                    // });
-                });
-            },
-        };
-    }])
-
-
     /*
     *
     */
@@ -1422,6 +1285,57 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    .directive('png', ['$timeout', '$modal', function ($timeout, $modal) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            transclude: true,
+            scope: {
+                filename:'@'
+            },
+            replace: false,
+            template: '<div ng-show="exportable" class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="exportPNG()"><span class="fa fa-picture-o" title="Download as PNG"></span></a></div></div>',
+            link: function (scope, element, attrs) {
+                $timeout(function () {
+                    scope.exportable = ((scope.$parent.toExport !== undefined) && (typeof scope.$parent.toExport === "function"));
+                }, 0);
+                scope.currScale = 1;
+                scope.exportPNG = function () {
+                    var svg = scope.$parent.toExport();
+                    // Show a modal with the scale of the png
+                    var modal = $modal.open({
+                        animation: true,
+                        template: "<div class=modal-header>PNG scale factor</div><div class='modal-body modal-body-center'><span class=png-scale-factor-selection><input type=radio name=pngScale value=1 checked ng-model='$parent.currScale'> 1x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=2 ng-model='$parent.currScale'> 2x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=3 ng-model='$parent.currScale'> 3x</span></div><div class=modal-footer><button class='btn btn-primary' type=button ng-click='export(this)' onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                        size: "sm",
+                        scope: scope
+                    });
+                    scope.export = function (elem) {
+                        // elem.scope().$dismiss();
+
+                        // TODO: Set max_size to 2100000
+                        var pngExporter = tnt.utils.png()
+                            .filename(scope.filename || "image.png")
+                            .scale_factor(scope.currScale)
+                            .stylesheets(['components-cttvWebapp.min.css'])
+                            // .stylesheets(["http://test.targetvalidation.org:8899/build/components-cttvWebapp.min.css?v=18042016"])
+                            // .stylesheets([])
+                            .limit({
+                                limit: 2100000,
+                                onError: function () {
+                                    $modal.open({
+                                        animation: true,
+                                        template: "<div class='modal-header'>Image too large</div><div class=modal-body>The image you are trying to export is too large. Reduce the number of elements and try again.</div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                                        size:"sm",
+                                    });
+                                }
+                            });
+                        pngExporter(d3.select(svg));
+                    };
+                };
+            }
+        };
+    }])
 
     .directive('cttvHelpIcon', [function () {
         'use strict';
