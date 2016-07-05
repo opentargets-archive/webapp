@@ -14,14 +14,6 @@
         <script src="bower_components/aight/aight.min.js"></script>
         <![endif]-->
 
-        <!-- systemjs polyfill for IE11 -->
-        <script>
-            if(window.ScriptEngineMajorVersion && window.ScriptEngineMajorVersion() == 11) {
-                document.write('<alert>Hi!</alert>');
-                document.write('<script src=jspm_packages/system-polyfills.js></script>');
-            }
-        </script>
-
         <base href="/">
         <!--[if IE]><script type="text/javascript">
         // Fix for IE ignoring relative base tags.
@@ -248,6 +240,8 @@
             </div>
             <!-- End Footer-->
 
+            <!-- require.js -->
+            <script src="jspm_packages/system.js"></script>
 
             <!-- Angular && web app -->
             <script src="build/cttvWebapp-3rdParty.js?v=18042016" type="text/javascript"></script>
