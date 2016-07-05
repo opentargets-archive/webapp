@@ -15,10 +15,12 @@
         <![endif]-->
 
         <!-- systemjs polyfill for IE11 -->
-        <!--[if IE]>
-        <script>alert("IE!")</script>
-        <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
-        <![endif]-->
+        <script>
+            if(window.ScriptEngineMajorVersion && window.ScriptEngineMajorVersion() == 11) {
+                document.write('<alert>Hi!</alert>');
+                document.write('<script src=jspm_packages/system-polyfills.js></script>');
+            }
+        </script>
 
         <base href="/">
         <!--[if IE]><script type="text/javascript">
