@@ -146,7 +146,7 @@
 
                 <!-- Drugs -->
                 <accordion-group heading="Drugs" attr-section-name="Drugs" is-open="false" ng-click='sectionOpen("drugs")'>
-                    <div ng-show="!drugs.has_errors">
+                    <div ng-show="!drugs.has_errors" class="scroll-table-panel">
                         <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a></p>
                         <known-drug-table target="{{targetId}}" title="target.title" error-flag="drugs.has_errors"></known-drug-table>
                     </div>

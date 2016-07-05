@@ -26,7 +26,7 @@
             <accordion close-others="false">
 
                 <accordion-group attr-section-name="Drugs" heading="Drugs" is-open="false">
-                    <div ng-show="!drugs.has_errors">
+                    <div ng-show="!drugs.has_errors" class="scroll-table-panel">
                         <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a></p>
                         <known-drug-table disease="{{disease.efo}}" title="disease.title" error-flag="drugs.has_errors"></known-drug-table>
                     </div>
