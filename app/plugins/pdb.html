@@ -1,12 +1,14 @@
+<!-- Not used for now since the plugins don't work with data binding -->
+
 <tabset>
     <tab heading="3D ({{pdbId}})">
         <div style="margin: 30px;position:relative;width:500px;height:500px;">
-            <pdb-lite-mol pdb-id="{{pdbId}}" entity-id="1"></pdb-lite-mol>
+            <pdb-lite-mol pdb-id="pdbId" hide-controls="true"></pdb-lite-mol>
         </div>
     </tab>
     <tab heading="2D">
         <div style="margin: 30px;position:relative;width:500px;height:500px;">
-            <pdb-topology-viewer entry-id=1aqd" entity-id="1"></pdb-topology-viewer>
+            <pdb-topology-viewer entry-id="pdbId" entity-id="1"></pdb-topology-viewer>
         </div>
     </tab>
 </tabset>
