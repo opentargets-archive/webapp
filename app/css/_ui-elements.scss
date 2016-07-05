@@ -12,6 +12,27 @@
     }
 
     /*
+     * The menu bar of the lite mol widget needs to be shown on top of the masthead
+     */
+     pdb-lite-mol .lm-plugin {
+         z-index: 10000;
+     }
+
+    /*
+     * The PDB widget CSS styling
+     */
+     .pdb-widget-container {
+         display : block;
+         margin-left : auto;
+         margin-right : auto;
+         position : relative;
+         width : 700px;
+         height : 700px;
+         margin-top : 30px;
+     }
+
+
+    /*
      * Spinners
      */
 
