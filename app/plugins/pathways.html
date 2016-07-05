@@ -1,0 +1,11 @@
+<p ng-if="!pathways.length">
+    No pathways found
+</p>
+<ul>
+    <li ng-repeat="pathway in pathways">
+        {{pathway.name}} <i title="Display pathway below" ng-click="setPathwayViewer(pathway)" class="fa fa-sitemap changeView"></i> <a title="View pathway in Reactome website" target="_blank" href="http://www.reactome.org/content/detail/{{pathway.id}}"><i class="fa fa-external-link"></i></a>
+    </li>
+</ul>
+<div class=accordionCell>
+    <p ng-show="pathway.id">Diagram for <b>{{pathway.name}}</b> pathway</p>
+</div>

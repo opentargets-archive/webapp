@@ -8,7 +8,7 @@
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$modal', '$compile', '$http', '$q', '$timeout', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $modal, $compile, $http, $q, $timeout, cttvLocationState, $anchorScroll, $rootScope) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$modal', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $modal, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
         'use strict';
         $log.log('TargetDiseaseCtrl()');
 
@@ -862,7 +862,9 @@
                     row.push( item.evidence.log2_fold_change.percentile_rank );
 
                     // experiment overview
-                    row.push( "<a class='cttv-external-link' href='"+item.evidence.urls[2].url+"' target='_blank'>" + (item.evidence.experiment_overview || "Experiment overview and raw data") + "</a>" );
+                    var expOverview = (item.evidence.urls[2] || item.evidence.urls[0]).url || cttvDictionary.NA;
+                    row.push( "<a class='cttv-external-link' href='"+expOverview+"' target='_blank'>" + (item.evidence.experiment_overview || "Experiment overview and raw data") + "</a>" );
+
 
                     // publications
                     var refs = [];
@@ -1644,8 +1646,8 @@
                     row.push( "<i class='fa fa-spinner fa-spin'></i>" );
 
                     // matched sentences
-                    //row.push( '<button type="button" class="btn btn-default" ng-click="window.alert(\'hello\')">'+item.evidence.literature_ref.mined_sentences.length+'</button>' );
-                    row.push( '<a onclick="angular.element(this).scope().open('+newdata.length+')"><span class=badge>' + item.evidence.literature_ref.mined_sentences.length + '</span> ' + (newdata.length==1 ? ('sentence') : ('sentences')) + '</a>' );
+                    //row.push( '<a onclick="angular.element(this).scope().open('+newdata.length+')"><span class=badge>' + item.evidence.literature_ref.mined_sentences.length + '</span> ' + (newdata.length==1 ? ('sentence') : ('sentences')) + '</a>' );
+                    row.push( '<a class="literature-matched-sentences" onclick="angular.element(this).scope().open('+newdata.length+')"><span class=badge>' + item.evidence.literature_ref.mined_sentences.length + '</span></a>' );
 
                     // year
                     row.push("<i class='fa fa-spinner fa-spin'></i>");
@@ -1783,17 +1785,16 @@
 
 
 
-
-
-
-
         // =================================================
         //  S C O P E   M E T H O D S
         // =================================================
 
 
 
-        $scope.bla=function(){};
+        $scope.sectionOpen=function(who) {
+            // Fire a target associations tree event for piwik to track
+            $analytics.eventTrack('evidence', {"category": "evidence", "label": who});
+        };
 
 
 

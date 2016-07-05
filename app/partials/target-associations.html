@@ -3,34 +3,25 @@
 <div class="partial-page">
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
-    <!-- <div ng-show="n.diseases==0">
-        <h3>
-            No diseases found for {{search.label}}
-        </h3>
-        Try searching a different target or disease above
+    <div ng-show="search.total==0">
+        <div class="container">
+            <h3 view-title>No diseases found for {{search.query}}</h3>
+            Try searching a different target or disease above
+        </div>
     </div>
 
-    <div ng-show="n.diseases>0"> -->
-
+    <div ng-show="search.total>0">
 
         <div class="cttv-content-header">
             <div class="container">
-                <h3 view-title>{{n.diseases}} {{n.diseases===1 ? "disease" : "diseases"}} associated with {{search.label}}</h3>
+                <h3 view-title>{{search.total}} {{search.total===1 ? "disease" : "diseases"}} associated with {{search.label}}</h3>
                 <p><!-- Found {{n.diseases}} {{n.diseases===1 ? "disease" : "diseases"}} <span class="cttv-interpage-link">--><a href="/target/{{search.query}}"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span> View {{search.label}} profile</a><!-- </span> -->
                 </p>
             </div>
         </div>
 
         <div class="container">
-
-            <div ng-show="n.diseases==0">
-                <h4>
-                    No diseases found for {{search.label}}
-                </h4>
-                <p>Try searching a different target or disease above</p>
-            </div>
-
-            <div class="row" ng-show="n.diseases>0">
+            <div class="row" ng-show="search.total>0">
 
                 <div class="col-md-3 cttv-facet">
                     <cttv-facets></cttv-facets>
@@ -72,5 +63,6 @@
             </div>
         </div>
 
+    </div>
 </div>
 <!-- end search results-->

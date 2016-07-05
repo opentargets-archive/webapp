@@ -65,7 +65,8 @@
 
 
         <!-- Tabular data -->
-        <div class="row gene-disease-content">
+        <!-- <div class="row gene-disease-content"> -->
+        <div class="row gene-disease-content scroll-table-panel">
 
             <div class="col-sm-12">
 
@@ -75,7 +76,7 @@
                 <accordion close-others="false">
 
                     <!-- Genetic Associations table -->
-                    <accordion-group is-open="search.tables.genetic_associations.is_open">
+                    <accordion-group is-open="search.tables.genetic_associations.is_open" ng-click='sectionOpen("genetics")'>
                         <accordion-heading>
                             <a id="genetic_associations"></a>
                             <span class="text-nolight">
@@ -190,7 +191,7 @@
 
 
                     <!-- Somatic Mutations table -->
-                    <accordion-group is-open="search.tables.somatic_mutations.is_open">
+                    <accordion-group is-open="search.tables.somatic_mutations.is_open" ng-click='sectionOpen("somatic")'>
                         <accordion-heading>
                             <a id="somatic_mutations"></a>
                             <span class="text-nolight">
@@ -239,7 +240,7 @@
 
                     <!-- Known drugs (as a directive) -->
 
-                    <accordion-group is-open="search.tables.known_drugs.is_open">
+                    <accordion-group is-open="search.tables.known_drugs.is_open" ng-click='sectionOpen("drugs")'>
                         <accordion-heading>
                             <a id="known_drugs"></a>
                             <span class="text-nolight">
@@ -270,7 +271,7 @@
 
 
                     <!-- Affected pathways -->
-                    <accordion-group is-open="search.tables.affected_pathways.is_open">
+                    <accordion-group is-open="search.tables.affected_pathways.is_open" ng-click='sectionOpen("pathways")'>
                         <accordion-heading>
                             <a id="affected_pathways"></a>
                             <span class="text-nolight">
@@ -321,7 +322,7 @@
 
 
                     <!-- RNA Expression table -->
-                    <accordion-group is-open="search.tables.rna_expression.is_open">
+                    <accordion-group is-open="search.tables.rna_expression.is_open" ng-click='sectionOpen("rna")'>
                         <accordion-heading>
                             <a id="rna_expression"></a>
                             <span class="text-nolight">
@@ -376,7 +377,7 @@
 
 
                     <!-- Text mining -->
-                    <accordion-group is-open="search.tables.literature.is_open">
+                    <accordion-group is-open="search.tables.literature.is_open" ng-click='sectionOpen("literature")'>
                         <accordion-heading>
                             <a id="literature"></a>
                             <span class="text-nolight">
@@ -441,7 +442,7 @@
 
 
                     <!-- Mouse models -->
-                    <accordion-group is-open="search.tables.animal_models.is_open">
+                    <accordion-group is-open="search.tables.animal_models.is_open" ng-click='sectionOpen("mouse")'>
                         <accordion-heading>
                             <a id="animal_models"></a>
                             <span class="text-nolight">
