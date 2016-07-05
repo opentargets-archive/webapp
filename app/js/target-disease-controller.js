@@ -8,7 +8,13 @@
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$modal', '$compile', '$http', '$q', '$timeout', '$analytics', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $modal, $compile, $http, $q, $timeout, $analytics) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log',
+            'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig',
+            'clearUnderscoresFilter', 'upperCaseFirstFilter',
+            '$modal', '$compile', '$http', '$q', '$timeout', '$analytics',
+            function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig,
+                      clearUnderscores, upperCaseFirst,
+                      $modal, $compile, $http, $q, $timeout, $analytics) {
         'use strict';
 
         cttvUtils.clearErrors();
@@ -1247,6 +1253,8 @@
         */
 
         function parseResponse (recs, dt) {
+            //$log.log("parseResponse():recs", recs);
+            //$log.log("parseResponse():dt", dt);
             dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 var data = this.data();
                 //$log.log("parseResponse():data", data);
@@ -1256,7 +1264,7 @@
                 var pmdata = recs.filter(function(item){
                     return item.pmid == data[2];
                 });
-
+                //$log.log("parseResponse():pmdata",pmdata);
                 if(pmdata.length>0){
                     //var re = /Abstract: (.*?)\.\s*<\/li>/g;
                     data[3]="";
@@ -1305,7 +1313,7 @@
                         + "<br />"
                         + "<span class=small>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo + "</span>"
                     data[9]=titleAndSource + "<br/><br/>" + abstract;
-                    data[3] += titleAndSource + "<br/><br/>" + abstract + "<p class=small>" + (matchedSentences || "no matches available") + "</p>"
+                    data[3] += titleAndSource + "<br/><br/>" + "<p class=small>" + (matchedSentences || "no matches available") + "</p>"
                     data[5] = pub.journalInfo.yearOfPublication;
 
                 }
@@ -1356,6 +1364,7 @@
 
                         if( resp.body.data ){
                             $scope.search.literature.total = resp.body.total;
+                            //$log.log("target-disease-controller: resp.body.total = " , resp.body.total);
                             var unicode_re = /u([\dABCDEF]{4})/gi;
                             var match;
 
@@ -1545,6 +1554,7 @@
 
             //var callChunks = [];
             for (var i=0; i<chunks; i++) {
+                //$log.log("chunks=", chunks);
                 var done = 0;
                 //var thisRecords = $scope.search.literature.data.slice(i*chunkSize, (i+1)*chunkSize);
                 var thisRecords = uniqPMIDs.slice(i*chunkSize, (i+1)*chunkSize);
@@ -1607,7 +1617,7 @@
             data.forEach(function(item){
                 // create rows:
                 var row = [];
-
+                
                 // count number of sentences in a section
                 var sectionCount = {};
 
@@ -1651,28 +1661,28 @@
 
                         return +(ai > bi) || +(ai === bi) - 1;
                     });
-
+                    
                     sectionCount = countSentences(item.evidence.literature_ref.mined_sentences);
-
+                    
                     var previousSection = null;
 
                     row.push(
                         item.evidence.literature_ref.mined_sentences.map(function(sent){
-
+                        	
                         	var section = upperCaseFirst( clearUnderscores(sent.section));
                         	var sentenceString = "";
-
-                        	if(section != 'Title' && section != 'Abstract') {
+                        	
+                        	if(section != 'Title') {
 
 								if(previousSection != sent.section) {
-									sentenceString = "<br/><span ng-click='" + sent.section + " = !" + sent.section + "'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>"+ section +"</span>:&nbsp;" + sectionCount[sent.section] + "</span><br/><div collapse= '" + sent.section + "ng-if='" + sent.section + "'>";
+									sentenceString = "<br/><span ng-click='" + sent.section + " = !" + sent.section + "'><span class='bold'>"+ section +"</span>:&nbsp;" + sectionCount[sent.section] + " matched sentences</span><br/><div collapse= '" + sent.section + "ng-if='" + sent.section + "'>";
 									previousSection = sent.section;
 
 								}
 
                         		sentenceString = sentenceString + "<li>"+sent.formattedText+"</li>";
                         	}
-
+                        	
                         	return sentenceString;
                         }).join("") + "</div>"
                     );
@@ -1696,7 +1706,7 @@
 
             return newdata;
         };
-
+        
         // count the number of sentences in each section
         var countSentences = function(sentences) {
         	var count = {};
