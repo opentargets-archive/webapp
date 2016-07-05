@@ -119,25 +119,25 @@ var deps = [
  * Manual Angular bootstrapping:
  * load the config file first, then bootstrap the app
  */
- angular.element(document).ready(
-     function() {
-         var initInjector = angular.injector(['ng']);
-         var $http = initInjector.get('$http');
-         var $q = initInjector.get('$q');
-         // First get the config file
-         $http.get('build/config.json').then(
-             function(response) {
-                 deps = _.concat(deps, getComponents(response.data));
-                 configSystemjs(response.data, $q).then(function () {
-                     var app = initApp(deps);
-                     app.constant('initConfig', response.data);
-                     angular.bootstrap(document, ['cttvApp']);
 
-                 });
-             }
-         );
-     }
- );
+angular.element(document).ready(
+    function() {
+        var initInjector = angular.injector(['ng']);
+        var $http = initInjector.get('$http');
+        var $q = initInjector.get('$q');
+        // First get the config file
+        $http.get('build/config.json').then(
+            function(response) {
+                deps = _.concat(deps, getComponents(response.data));
+                configSystemjs(response.data, $q).then(function () {
+                    var app = initApp(deps);
+                    app.constant('initConfig', response.data);
+                    angular.bootstrap(document, ['cttvApp']);
+                });
+            }
+        );
+    }
+);
 
 function getComponents (config) {
     var modules = [];
@@ -188,3 +188,4 @@ function configSystemjs (config, $q) {
     }
     return $q.all(deps);
 }
+

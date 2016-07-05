@@ -479,7 +479,7 @@ angular.module('cttvDirectives', [])
             // template: '<div cttv-default-facet-contols facet="facet"></div>'
             //          +'<div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in facet.filters"></div>',
             template: '<div cttv-default-facet-controls facet="facet"></div>'
-                     +'<div ng-init="isCollapsed=true&&(!datatype.collection.isLastClicked())" ng-repeat="datatype in facet.filters">'
+                     +'<div ng-init="isCollapsed=true&&(!datatype.collection.isLastClicked())" ng-repeat="datatype in facet.filters track by datatype.key" >'
                      +'    <cttv-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
                      +'    <div collapse="isCollapsed" style="padding-left:20px">'
                      //+'        <div></div>'
