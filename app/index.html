@@ -14,6 +14,14 @@
         <script src="bower_components/aight/aight.min.js"></script>
         <![endif]-->
 
+        <!-- systemjs polyfill for IE11 -->
+        <script>
+            if(window.ScriptEngineMajorVersion && window.ScriptEngineMajorVersion() == 11) {
+                document.write('<alert>Hi!</alert>');
+                document.write('<script src=jspm_packages/system-polyfills.js></script>');
+            }
+        </script>
+
         <base href="/">
         <!--[if IE]><script type="text/javascript">
         // Fix for IE ignoring relative base tags.
