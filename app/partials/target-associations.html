@@ -28,23 +28,36 @@
                 </div>
 
                 <div class="col-md-9">
-                    <tabset>
 
-                        <tab heading="Bubbles" ng-click='setActive("bubbles")'>
+                    <!-- TABS views -->
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" ng-class="(view.t[0]=='bubbles') ? 'active' : ''" ><a href="#" ng-click='setActiveTab("bubbles")'>Bubbles</a></li>
+                        <li role="presentation" ng-class="(view.t[0]=='table') ? 'active' : ''"><a href="#" ng-click='setActiveTab("table")'>Table</a></li>
+                        <li role="presentation" ng-class="(view.t[0]=='tree') ? 'active' : ''"><a href="#" ng-click='setActiveTab("tree")'>Tree</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <!-- <div ng-show="view.t[0]=='bubbles'"> -->
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='bubbles'}">
                             <resize>
-                                <cttv-target-associations-bubbles target="{{search.query}}" facets="filters" active="{{active}}"></cttv-target-associations-bubbles>
+                                <cttv-target-associations-bubbles target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-bubbles>
                             </resize>
-                        </tab>
+                        </div>
 
-                        <tab heading="Table" ng-click='setActive("table")'>
-                            <cttv-target-associations-table target="search.query" filename="search.filename" loadprogress="loading" facets="filters" active="{{active}}"></cttv-target-associations-table>
-                        </tab>
+                        <!-- <div ng-show="view.t[0]=='table'"> -->
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='table'}">
+                            <cttv-target-associations-table target="search.query" filename="search.filename" loadprogress="loading" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-table>
+                        </div>
 
-                        <tab heading="Tree" ng-click='setActive("tree")'>
-                            <cttv-target-associations-tree target="{{search.query}}" facets="filters" active = "{{active}}"></cttv-target-associations-tree>
-                        </tab>
+                        <!-- <div ng-show="view.t[0]=='tree'"> -->
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='tree'}">
+                            <cttv-target-associations-tree target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-tree>
+                        </div>
+                    </div>
 
-                    </tabset>
 
                 </div>
             </div>

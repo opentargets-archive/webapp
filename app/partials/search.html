@@ -21,15 +21,17 @@
 
             <!-- Filters/Facets -->
 
-            <div class="col-sm-2">
-                <h4>Refine by:</h4>
-                <div class="checkbox">
-                    <label ng-class="(filters.target.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.target.selected" ng-change="getResults()" ng-disabled="filters.target.total==0">Target <span class='badge badge-primary'>{{filters.target.total}}</span></label>
-                    <span cttv-progress-spinner class="text-lowlight" ng-show="filters.target.loading"></span>
-                </div>
-                <div class="checkbox">
-                    <label ng-class="(filters.disease.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.disease.selected" ng-change="getResults()" ng-disabled="filters.disease.total==0">Disease <span class='badge badge-warning'>{{filters.disease.total}}</span></label>
-                    <span cttv-progress-spinner class="text-lowlight" ng-show="filters.disease.loading"></span>
+            <div class="col-sm-2" ng-if="search.results.total>0">
+                <div >
+                    <h4>Refine by:</h4>
+                    <div class="checkbox">
+                        <label ng-class="(filters.target.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.target.selected" ng-change="update()" ng-disabled="filters.target.total==0">Target <span class='badge badge-primary'>{{filters.target.total}}</span></label>
+                        <span cttv-progress-spinner class="text-lowlight" ng-show="filters.target.loading"></span>
+                    </div>
+                    <div class="checkbox">
+                        <label ng-class="(filters.disease.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.disease.selected" ng-change="update()" ng-disabled="filters.disease.total==0">Disease <span class='badge badge-warning'>{{filters.disease.total}}</span></label>
+                        <span cttv-progress-spinner class="text-lowlight" ng-show="filters.disease.loading"></span>
+                    </div>
                 </div>
             </div>
 
@@ -57,10 +59,30 @@
                     </span>
                 </div>
 
+                <div ng-if="search.query.q.length==0">
+                    <p>No search has been specified.</p>
+                    <p>Suggestions:</p>
+                    <ul>
+                        <li>Start typing few letters in the search and look at the suggested options</li>
+                        <li>Type words (or part of) and click the <i class="fa fa-search"></i> button for a full search</li>
+                    </ul>
+                </div>
+
+                <div ng-if="search.results.total==0">
+                    <p>Your search - {{search.query.q}} - did not match any data.</p>
+
+                    <p>Suggestions:</p>
+                    <ul>
+                        <li>Check the spelling is correct.</li>
+                        <li>Try different words.</li>
+                        <!-- <li>Try more general keywords.</li> -->
+                        <li>Try fewer words.</li>
+                    </ul>
+                </div>
 
                 <div>
                     <!-- Furthermore this should only be shown when results are displayed -->
-                    <pagination boundary-links="true" total-items="search.results.total" ng-model="search.query.page" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="getResults();" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" num-pages="numPages" style="{{numPages<=1 ? 'display:none' : ''}}"></pagination>
+                    <pagination ng-if="search.results.total>search.query.size" boundary-links="true" total-items="search.results.total" ng-model="state.p[0]" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="update()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
                 </div>
 
 
