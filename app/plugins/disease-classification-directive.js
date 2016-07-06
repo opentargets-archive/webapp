@@ -23,11 +23,12 @@ angular.module('plugins')
                     efoGraph(container);
 
                     // The PNG export routine
-                    scope.toExport = function () {
-                        var svg = document.getElementById("cttv-efo-graph").querySelector("svg");
-                        return svg;
-                    };
-
+                    if (cttvUtils.browser.name !== "IE") {
+                        scope.toExport = function () {
+                            var svg = document.getElementById("cttv-efo-graph").querySelector("svg");
+                            return svg;
+                        };
+                    }
                 },0);
 
             }

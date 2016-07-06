@@ -1,319 +1,223 @@
-
-/* Directives */
+/* Bubbles directive for associations */
 angular.module('cttvDirectives')
 
-    .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', 'cttvUtils', "cttvConsts", function ($log, cttvAPIservice, cttvUtils, cttvConsts) {
+    .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvConsts', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvConsts, $analytics) {
         'use strict';
-	return {
-	    restrict: 'E',
 
-        require: '?^resize',
+        var whoiam = "bubbles";
+        var bottomMargin = 220;
+        var bView;
+        var offset = 300;
 
-	    scope: {
-			// "onFocus": '&onFocus',
-			loadprogress : '=',
-            facets : '='
-        },
+        function decorateSVG (from_svg) {
+            var clone = from_svg.cloneNode(true);
+            // Remove the defs and the therapeutic area labels
+            d3.select(clone)
+                .select("defs")
+                .remove();
+            d3.select(clone)
+                .selectAll(".topLabel")
+                .remove();
 
-        template: '<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
-        +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
+            // Move the bubbles view to the right to leave space for the new TA labels
+            // var currWidth = d3.select(clone).attr("width");
+            // d3.select(clone).attr("width", ~~currWidth + offset);
+            // d3.select(clone).select("g").attr("transform", "translate(" + offset + ",0)");
 
+            // Get all therapeutic area labels on a side
+            var g = d3.select(clone).select("g");
+            var root = d3.select(".bubblesViewRoot")
+                .datum();
 
-	    link: function (scope, elem, attrs, resizeCtrl) {
-            var bubblesContainer = elem.children().eq(0).children().eq(0)[0];
-
-		// event receiver on focus
-		addEventListener('bubblesViewFocus', function (e) {
-		    // TODO: This is effectively clicking in the nav bar
-		    // This prevents delivering the directive as stand-alone
-		    $("#cttv_targetAssociations_navBar_" + attrs.focus).click();
-		}, true);
-
-		var ga;
-		var nav;
-
-		var datatypesChangesCounter = 0;
-
-
-        // scope.$watch('score', function(old, current){
-        //     $log.log("score changed ");
-        //     $log.log(current);
-        // });
-
-
-
-		// Data types changes
-        /*
-		scope.$watch(function () { return attrs.datatypes; }, function (dts) {
-
-            dts = JSON.parse(attrs.datatypes);
-            var opts = {
-                target: attrs.target,
-                datastructure: "tree",
-            };
-            if (!_.isEmpty (dts)) {
-                opts.filterbydatatype = _.keys(dts);
+            function okOverlaps(p, angle, others) {
+                for (var o in others) {
+                    // Overlap
+                    if ((Math.abs(others[o].y - p.y)<10) && (Math.abs(angle - others[o].angle)<0.2)) {
+                        return false;
+                    }
+                }
+                return true;
             }
 
-            if (datatypesChangesCounter>0) {
-                if (ga) {
-                    cttvAPIservice.getAssociations (opts)
-                        .then (function (resp) {
-                            scope.$parent.updateFacets(resp.body.facets);
-                            var data = resp.body.data;
-                            if (_.isEmpty(data)) {
-                                data.association_score = 0.01;
+            function getPos (init, angle) {
+                var p = {};
+                p.x = init.x + (init.r * Math.cos(angle));
+                p.y = init.y + (init.r * Math.sin(angle));
+                return p;
+            }
+            var labelPositions = {};
+            var taBubbles = d3.selectAll(".bubblesViewInternal")
+                .each(function (d, i) {
+                    // i=0 is the root circle
+                    if (!i) {
+                        return;
+                    }
+                    // Calculate angle
+                    var angleRadians = Math.atan2(d.y - root.y, d.x - root.x);
+
+                    //angleRadians = angleRadians < 0 ? angleRadians + 360 : angleRadians;
+                    // Find the projection of the line in the root bubble
+                    var ok = false;
+                    var p1 = getPos(d, angleRadians);
+                    var p2;
+                    var ntries = 0;
+                    while (!ok && ntries<50) {
+                        ntries++;
+                        p2 = getPos(root, angleRadians);
+                        ok = okOverlaps(p2, angleRadians, labelPositions);
+                        // ok = true;
+                        if (!ok) {
+                            if ((angleRadians > 0) && (angleRadians < 90)) {
+                                angleRadians = angleRadians - 0.02;
+                            } else if ((angleRadians > 90) && (angleRadians < 180)) {
+                                angleRadians = angleRadians + 0.02;
+                            } else if ((angleRadians < 0) && (angleRadians > -90)) {
+                                angleRadians = angleRadians + 0.02;
+                            } else {
+                                angleRadians = angleRadians - 0.02;
                             }
-                            ga.datatypes(dts);
-                            updateView(data);
-                            ga.update(data);
-                        },
-                        cttvAPIservice.defaultErrorHandler
-                    );
-                } else {
-                    setView();
-                }
-            }
-            datatypesChangesCounter++;
-		});
-        */
+                            //angleRadians = angleRadians + 0.02;
+                        }
+                    }
+                    labelPositions[d.__id] = {
+                        x: p2.x,
+                        y: p2.y,
+                        angle : angleRadians
+                    };
+                    //var p = getPos(d, angleRadians);
+                    // var x1 = d.x + (d.r * Math.cos(angleRadians));
+                    // var y1 = d.y + (d.r * Math.sin(angleRadians));
+                    // var x2 = root.x + (root.r * Math.cos(angleRadians));
+                    // var y2 = root.y + (root.r * Math.sin(angleRadians));
 
-
-
-        // try only watching for facet changes
-        scope.$watch('facets', function (fct) {
-
-            var opts = {
-                target: attrs.target,
-                outputstructure: "tree",
-                direct: true,
-                facets: true,
-                size: 1000
-            };
-            opts = cttvAPIservice.addFacetsOptions(fct, opts);
-
-
-            if (datatypesChangesCounter>0) {
-                if (ga) {
-                    cttvAPIservice.getAssociations (opts)
-                        .then (function (resp) {
-                            // scope.$parent.updateFacets(resp.body.facets);
-                            // var data = resp.body.data;
-                            var data = cttvAPIservice.flat2tree(resp.body);
-                            if (_.isEmpty(data)) {
-                                data.association_score = 0.01;
+                    g
+                        .append("line")
+                        .attr("class", "TA-label")
+                        .attr("x1", p1.x)
+                        .attr("y1", p1.y)
+                        .attr("x2", p2.x)
+                        .attr("y2", p2.y)
+                        .attr("stroke", "gray");
+                    g
+                        .append("g")
+                        .attr("transform", "translate(" + p2.x + "," + p2.y + ")")
+                        .append("text")
+                        .style("font-size", "12px")
+                        .style("text-anchor", function () {
+                            var angle = (angleRadians * 180 / Math.PI);
+                            if ((angle < -90) || (angle>90)) {
+                                return "end";
                             }
-                            //ga.datatypes(fct.datatypes);
-                            //ga.datatypes( JSON.parse(attrs.datatypes) );
-                            ga.filters (scope.facets);
+                            return "start";
+                        })
+                        .text(function() {
+                            return d.name;
+                        });
+                });
 
-                            updateView(data);
-                            ga.update(data);
-                        },
-                        cttvAPIservice.defaultErrorHandler
-                    );
-                } else {
-                    setView();
-                }
-            }
-            datatypesChangesCounter++;
-        });
+            // Resize the whole div
+            var longestLabel = "";
+            taBubbles
+                .each(function (d) {
+                    if (d.name.length > longestLabel.length) {
+                        longestLabel = d.name;
+                    }
+                });
+            var l = longestLabel.length * 6;
+            var currWidth = ~~d3.select(clone).attr("width");
+            var currHeight = ~~d3.select(clone).attr("height");
+            d3.select(clone)
+                .attr("width", currWidth + l*2)
+                .attr("height", currHeight + 50);
+            g.attr("transform", "translate(" + l + "," + "25)");
 
-
-
-		// Highlight changes
-		scope.$watch(function () { return attrs.diseaseIsSelected; }, function () {
-
-		    if (ga && attrs.highlight) {
-                var efo = JSON.parse(attrs.highlight);
-
-    			// Also put a flower in the nav bar -- TODO: Again, this is interacting with the navigation, which
-    			// makes it more difficult to reuse!
-    			var datatypes = {};
-                for (var j=0; j<cttvConsts.datatypesOrder.length; j++) {
-                    var dkey = cttvConsts.datatypesOrder[j];
-                    datatypes[dkey] = _.result(_.find(efo.datatypes, function (d) {
-                        return d.datatype === cttvConsts.datatypes[dkey];
-                    }), "association_score")||0;
-                }
-    			// datatypes.GENETIC_ASSOCIATION = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
-    			// datatypes.SOMATIC_MUTATION = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
-    			// datatypes.KNOWN_DRUG = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
-    			// datatypes.RNA_EXPRESSION = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
-    			// datatypes.AFFECTED_PATHWAY = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
-    			// datatypes.ANIMAL_MODEL = _.result(_.find(efo.datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
-                // datatypes.LITERATURE = _.result(_.find(efo.datatypes, function (d) { return d.literature === "literature"; }), "association_score")||0;
-                // var hasActiveDatatype = function (checkDatatype) {
-                //     var datatypes = JSON.parse(attrs.datatypes);
-                //     for (var datatype in datatypes) {
-                //         if (datatype === checkDatatype) {
-                //             return true;
-                //         }
-                //     }
-                //     return false;
-                // };
-
-                var flowerData = [];
-                for (var i=0; i<cttvConsts.datatypesOrder.length; i++) {
-                    var key = cttvConsts.datatypesOrder[i];
-                    flowerData.push({
-                        "value": datatypes[key],
-                        "label": cttvConsts.datatypesLabels[key],
-                        "active": true, //hasActiveDatatype(cttvConsts.datatypes[key])
-                    });
-                }
-    			// var flowerData = [
-    			//     {"value":datatypes.genetic_association, "label": "Genetics", "active": hasActiveDatatype("genetic_association")},
-    			//     {"value":datatypes.somatic_mutation,  "label":"Somatic", "active": hasActiveDatatype("somatic_mutation")},
-    			//     {"value":datatypes.known_drug,  "label":"Drugs", "active": hasActiveDatatype("known_drug")},
-    			//     {"value":datatypes.rna_expression,  "label":"RNA", "active": hasActiveDatatype("rna_expression")},
-    			//     {"value":datatypes.affected_pathway,  "label":"Pathways", "active": hasActiveDatatype("affected_pathway")},
-    			//     {"value":datatypes.animal_model,  "label":"Models", "active": hasActiveDatatype("animal_model")},
-                //     {"value":datatypes.literature, "label":"Literature", "active": hasActiveDatatype("literature")}
-    			// ];
-                $log.log("FLOWER DATA:");
-                $log.log(flowerData);
-    			var navFlower = flowerView()
-    			    .fontsize(9)
-    			    .diagonal(130)
-    			    .values(flowerData);
-
-    			// The parent_efo is needed to dis-ambiguate between same EFOs in different therapeuticAreas
-    			navFlower(document.getElementById("cttv_targetAssociations_flower_" + efo.efo + "_" + efo.parent_efo));
-
-    			// This is the link to the evidence page from the flower
-                // var link = "/evidence/" + attrs.target + "/" + efo.efo + '?score_str=' + scope.facets.score_str[0];
-    			// scope.$parent.targetDiseaseLink = link;
-
-    		}
-		});
-
-		// Focus changes
-		scope.$watch(function () { return attrs.focus; }, function (val) {
-            if (val === "None") {
-                return;
-            }
-
-            if (ga) {
-                ga.selectTherapeuticArea(val);
-            }
-		});
-
-        // Dim changes
-        scope.$watch(function () {if (resizeCtrl) { return resizeCtrl.dims();}}, function (val) {
-            if (ga) {
-                ga.diameter(val.height - 310);
-            }
-        }, true);
-
-        function updateView (data) {
-            // TODO: This may prevent from delivering directives as products!
-            if (data) {
-                ga.update(data);
-                // scope.$parent.setTherapeuticAreas(ga.data().children || []);
-            } else {
-                // scope.$parent.setTherapeuticAreas([]);
-            }
+            return clone;
         }
 
-		function setView () {
-		    ////// Bubbles View
-		    // viewport Size
+        return {
+            restrict: 'E',
+            require: '?^resize',
+            scope: {
+                facets : '=',
+                target : '@',
+                active : '@'
+            },
 
-		    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-		    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            template: '<png filename="{{target}}-AssociationsBubblesView.png"></png><div></div>'
+            +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
 
-		    // Element Coord
-		    var elemOffsetTop = elem[0].parentNode.offsetTop;
 
-		    // BottomMargin
-		    var bottomMargin = 310;
+            link: function (scope, elem, attrs, resizeCtrl) {
+                //var bubblesContainer = elem.children().eq(1).children().eq(0)[0];
+                var bubblesContainer = elem.children().eq(1)[0];
+                bubblesContainer.id = "cttvBubblesView";
+                scope.element = "cttvBubblesView";
 
-		    var diameter = viewportH - elemOffsetTop - bottomMargin;
+                var bView;
+                var nav;
 
-            var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+                // Change of dims
+                scope.$watch(function () {if (resizeCtrl) {return resizeCtrl.dims();}}, function (val) {
+                    if (bView) {
+                        bView.diameter(val.height - bottomMargin);
+                    }
+                }, true);
 
-		    //var dts = JSON.parse(attrs.datatypes);
-		    /*var opts = {
-                target: attrs.target,
-                datastructure: "tree",
-		    };
-		    if (!_.isEmpty(dts)) {
-                opts.filterbydatatype = _.keys(dts);
-		    }
-            */
-            console.log("TARGET IS " + attrs.target);
-            // var opts = {
-            //     target: attrs.target,
-            //     outputstructure: "flat",
-            //     direct: true,
-            //     facets: false,
-            //     size: 1000
-            // };
-            // opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
+                // Change of target or facets
+                scope.$watchGroup(["target", "facets", "active"], function (vals) {
+                    var target = vals[0];
+                    var facets = vals[1];
+                    var act = vals[2];
 
-		    // cttvAPIservice.getAssociations (opts)
-		    // api.call (url)
-		    	// .then (function (resp) {
-
-                    // $log.log(" -- set view stuff --");
-                    // $log.warn ("RESP FOR BUBBLES");
-                    // $log.warn(resp);
-
-                    // var data = cttvAPIservice.flat2tree(resp.body);
-                    // console.log(" --------------------------- TREE: ");
-                    // console.log(data);
-
-                    // var data = resp.body.data;
-                    // scope.$parent.updateFacets(resp.body.facets);
-                    // if (_.isEmpty(data)) {
-                    //     updateView ();
-                    //     return;
-                    // }
-
-    			    // Bubbles View
-                    // var bView = bubblesView()
-                    //     .useFullPath(cttvUtils.browser.name !== "IE");
-                        // .maxVal(1);
-                        // .colorPalette(colorScale)
-                        // .breadcrumsClick(function (d) {
-                        //     var focusEvent = new CustomEvent("bubblesViewFocus", {
-                        //         "detail" : d
-                        //     });
-                        //     this.dispatchEvent(focusEvent);
-                        // });
-
-                    var fView = flowerView()
-                        .fontsize (10)
-                        .diagonal (180);
-
-                    // setup view
-                    // ga = geneAssociations()
-                    //     .target (attrs.target)
-                    //     .diameter (diameter)
-                    //     //.datatypes(dts)
-                    //     .filters(scope.facets)
-                    //     .names(cttvConsts);
-                    ga = targetAssociations()
-                        .target(attrs.target)
-                        .diameter(diameter)
-                        .filters(scope.facets);
-
+                    if (scope.active !== whoiam) {
+                        return;
+                    }
                     var opts = {
-                        target: attrs.target,
+                        target: target,
                         outputstructure: "flat",
                         size: 1000,
                         direct: true,
                         facets: false
                     };
-                    opts = cttvAPIservice.addFacetsOptions(attrs.facet, opts);
-                    ga.data(cttvAPIservice.getAssociations(opts));
+                    opts = cttvAPIservice.addFacetsOptions(facets, opts);
 
-                    // updateView (data);
+                    if (bView) {
+                        bView.therapeuticAreas(opts.therapeutic_area);
+                        bView.update(cttvAPIservice.getAssociations(opts));
+                    } else {
+                        setView();
+                        bView.data(cttvAPIservice.getAssociations(opts));
+                        bView.therapeuticAreas(opts.therapeutic_area);
+                        bView(bubblesContainer);
+                    }
+                });
 
-                    //scope.$parent.$apply();
-                    // ga(bView, fView, bubblesContainer);
-                    ga(bubblesContainer);
+                function setView (data) { // data is a promise
+                    // Fire a target associations tree event for piwik to track
+                    $analytics.eventTrack('targetAssociationsBubbles', {"category": "association", "label": "bubbles"});
+
+                    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+                    // Element Coord
+        		    var elemOffsetTop = elem[0].parentNode.offsetTop;
+
+                    var diameter = viewportH - elemOffsetTop - bottomMargin;
+
+                    var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+
+                    bView = targetAssociations()
+                        // .target("ENSG00000157764")
+                        .target(scope.target)
+                        .diameter(diameter)
+                        .linkPrefix("")
+                        .showAll(true)
+                        .colors(cttvUtils.colorScales.BLUE_0_1.range())
+                        // .colors(['#e7e1ef', '#dd1c77'])
+                        .useFullPath(cttvUtils.browser.name !== "IE")
+                        .tooltipsOnTA(true)
+                        .showMenu(false);
+
 
                     // Setting up legend
                     scope.legendText = "Score";
@@ -321,21 +225,21 @@ angular.module('cttvDirectives')
                     for(var i=0; i<=100; i+=25){
                         var j=i/100;
                         //scope.labs.push(j);
-                        scope.colors.push({color:colorScale(j), label:j});
+                        scope.colors.push( {color:colorScale(j), label:j} );
                     }
                     scope.legendData = [
                         //{label:"Therapeutic Area", class:"no-data"}
                     ];
 
-                // },
-                // cttvAPIservice.defaultErrorHandler
-            // );
+                }
 
-		}
-
-		scope.$watch("target", function (val) {
-		    setView();
-		});
-	    }
-	};
+                if (cttvUtils.browser.name !== "IE") {
+                    scope.toExport = function () {
+                        var svg = decorateSVG(elem.children().eq(1)[0].querySelector("svg"));
+                        //var svg = elem.children().eq(1)[0].querySelector("svg");
+                        return svg;
+                    };
+                }
+            }
+        };
     }]);

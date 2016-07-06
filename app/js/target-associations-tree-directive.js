@@ -156,10 +156,13 @@ angular.module('cttvDirectives')
                         );
                 };
 
-                scope.toExport = function () {
-                    var svg = elem.children().eq(1)[0].querySelector("svg");
-                    return svg;
-                };
+                if (cttvUtils.browser.name !== "IE") {
+
+                    scope.toExport = function () {
+                        var svg = elem.children().eq(1)[0].querySelector("svg");
+                        return svg;
+                    };
+                }
             }
         };
     }]);
