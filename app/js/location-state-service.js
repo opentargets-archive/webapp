@@ -109,10 +109,10 @@ angular.module('cttvServices').
                     // we will * REMOVE THIS * whole "if" block in the future, once old style facets URL have been "flused" out!
                     //
                     // If any, try and convert old style facets URLs, but only if there are no new style facets
-                    if( fc.includes(i) ){
+                    if (_.indexOf(fc, i) > -1) {
                         // so if this is an old style facet, check if there are any new style ones, and if not, let's try parse the old facet into new syntax
-                        if( !search["fcts"] ){
-                            raw["fcts"] = raw["fcts"] || {};    // create a "fcts" objects if needed
+                        if(!search.fcts){
+                            raw.fcts = raw.fcts || {};    // create a "fcts" objects if needed
                             raw.fcts[i] = ( typeof search[ i ] === "string" ) ? [search[i]] : search[i];    // add facets to "fcts"
                         }
                         delete raw[i];  // in any case, now delete the old style facet
@@ -122,7 +122,7 @@ angular.module('cttvServices').
 
 
             return raw;
-        }
+        };
 
 
 
@@ -231,8 +231,3 @@ angular.module('cttvServices').
 
 
     }]);
-
-
-
-
-
