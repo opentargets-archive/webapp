@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('genomeBrowser', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+    .directive('genomeBrowser', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
         'use strict';
 
         // Decorate the svg for exporting
@@ -111,11 +111,12 @@ angular.module('plugins')
                     .cttvRestApi(cttvAPIservice.getSelf());
                 theme(gB, newDiv);
 
-                scope.toExport = function () {
-                    var svg = decorateSVG(newDiv.querySelector("svg"), theme, scope.target.approved_symbol);
-                    return svg;
-                };
-
+                if (cttvUtils.browser.name !== "IE") {
+                    scope.toExport = function () {
+                        var svg = decorateSVG(newDiv.querySelector("svg"), theme, scope.target.approved_symbol);
+                        return svg;
+                    };
+                }
             }
         };
     }]);

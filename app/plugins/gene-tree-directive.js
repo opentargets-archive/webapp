@@ -2,32 +2,6 @@ angular.module('plugins')
     .directive('geneTree', ['$log', 'cttvUtils', function ($log, cttvUtils) {
         'use strict';
 
-        var rx = /species\/(.*)\.png/;
-
-        function removeImgs(from_svg, geneTree) {
-            var clone = from_svg.cloneNode(true);
-
-            // Get all the leaves --
-            var leaves = d3.select(clone).selectAll(".leaf");
-            leaves
-                .each(function (d, i) {
-                    var g = d3.select(this); // the g for the node
-                    var spRaw = g.select("image")
-                        .attr("href");
-                    var sp = (rx.exec(spRaw))[1];
-                    var gene = g.select("text")
-                        .text();
-                    g
-                        .select("text")
-                        .attr("transform", "translate(10,5)")
-                        .text(gene + " (" + geneTree.scientific2common(sp) + ")");
-                });
-
-            // Remove the images --
-            leaves.selectAll("image").remove();
-            return clone;
-        }
-
         return {
             restrict: 'E',
             template: '<p class=cttv-section-intro>Phylogenetic tree showing the history of the human gene '
@@ -53,13 +27,13 @@ angular.module('plugins')
                     });
                 gt(newDiv);
 
-                scope.toExport = function () {
-                    var svg = newDiv.querySelector("svg");
-                    if (cttvUtils.browser.name === "Safari") {
-                        svg = removeImgs(svg, gt);
-                    }
-                    return svg;
-                };
+
+                if (cttvUtils.browser.name !== "IE") {
+                    scope.toExport = function () {
+                        var svg = newDiv.querySelector("svg");
+                        return svg;
+                    };
+                }
 
             }
         };

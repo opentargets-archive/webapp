@@ -56,7 +56,7 @@ var webappFiles = {
             'app/js/disease-associations-table-directive.js',
             'app/js/target-associations-table-directive.js',
             'app/js/target-associations-tree-directive.js',
-            'app/js/target-associations-bubbles-directive-new.js',
+            'app/js/target-associations-bubbles-directive.js',
             'app/js/evidence-tables-directives.js',
             'app/js/disease-graph-directive.js',
             'app/js/lazyload.js',
