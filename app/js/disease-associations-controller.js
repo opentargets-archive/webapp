@@ -16,12 +16,14 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils) {
+.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState) {
 
     'use strict';
 
     $log.log('diseaseAssociationsCtrl()');
-    cttvUtils.clearErrors();
+
+    cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
+
 
 
     // ---------------------------
@@ -44,13 +46,37 @@ angular.module('cttvControllers')
     // so we don't see the filters from the previous page...
     cttvFiltersService.reset();
 
-    // Set page filters:
-    // this defines the order in which the facets are going to be displayed
+    // Set page filters: this defines the order in which the facets are going to be displayed
     cttvFiltersService.pageFacetsStack([
         //cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
         cttvFiltersService.facetTypes.DATATYPES,    // adds a datatypes facet to the page
         cttvFiltersService.facetTypes.PATHWAYS      // adds a pathways facet to the page
     ]);
+
+
+
+    // state we want to export to/from the URL
+    // var stateId = "view";
+    var facetsId = cttvFiltersService.stateId;
+
+
+
+    /*
+     * Renders page elements based on state from locationStateService
+     */
+    var render = function(new_state, old_state){
+
+        // here we want to update facets, tabs, etc:
+        // 1. first we check if the state of a particular element has changed;
+        // 2. if it hasn't changed, and it's undefined (i.e. new=undefined, old=undefined),
+        // then it's a page load with no state specified, so we update that element anyway with default values
+
+        // facets changed?
+        if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) || !new_state[facetsId] ){
+            getFacets( new_state[facetsId] );
+        }
+
+    }
 
 
 
@@ -66,7 +92,10 @@ angular.module('cttvControllers')
      * getFacets(filters);
      */
     var getFacets = function(filters){
-        $log.log("getFacets()");
+
+        // set the filters
+        $scope.filters = filters;
+
         var opts = {
             disease: $scope.search.query,
             outputstructure: "flat",
@@ -76,37 +105,25 @@ angular.module('cttvControllers')
         };
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
-        // TEST:
-        //cttvFiltersService.updateFacets(JSON.parse('{"data_distribution": {"buckets": {"0.0": {"value": 803},"0.2": {"value": 8},"0.4": {"value": 5},"0.8": {"value": 234},"0.6": {"value": 2}}}}'));
-
-
 
         cttvAPIservice.getAssociations(opts).
         then(
             function(resp){
-                $log.log("Got new data...");
-                // Check if we have data
-                $scope.search.total = resp.body.total;
-                if (resp.body.total) {
-                    // 1: set the facets
-                    // we must do this first, so we know which datatypes etc we actually have
-                    // $log.log(resp.body.status[0]);
-                    $log.log(resp.body);
-                    cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
-                    // cttvFiltersService.status(resp.body.status);
 
-                    // set the data
-                    // $scope.data = resp.body.data;
-                    // $scope.data.selected = {datatypes: cttvFiltersService.getSelectedFiltersRaw("datatypes")};
-                    $scope.filters = filters;
+                // 1: set the facets
+                // we must do this first, so we know which datatypes etc we actually have
+                cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
 
-                    // The label of the diseaes in the header
-                    $scope.search.label = resp.body.data[0].disease.efo_info.label;
 
-                    // The filename to download
-                    $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(" ").join("_");
 
-                }
+                // The label of the diseaes in the header
+                $scope.search.label = resp.body.data[0].disease.efo_info.label;
+
+                // The filename to download
+                $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(" ").join("_");
+
+                // set the total?
+                $scope.search.total = resp.body.total; //resp.body.total;
             },
             cttvAPIservice.defaultErrorHandler
         );
@@ -116,41 +133,29 @@ angular.module('cttvControllers')
 
 
 
-    // Set up a listener for the URL changes and
-    // when the search change, get new data
-    $scope.$on('$routeUpdate', function(){
-        $log.log("onRouteUpdate");
-        getFacets( cttvFiltersService.parseURL() );
+    //
+    // on STATECHANGED
+    // Set up a listener for the URL changes and when the search change, get new data
+    //
+
+
+
+    $scope.$on(cttvLocationState.STATECHANGED, function (evt, new_state, old_state) {
+        render( new_state, old_state ); // if there are no facets, no worries, the API service will handle undefined
     });
 
 
-    // ---------------------------
-    //  Flow
-    // ---------------------------
 
     //
-    // No longer need to get unfiltered data first and all that
-    // We just get the data and display it, but:
-    //  1. Must set the default datatypes for this page
-    //  2. Get the data and facets
-    //  3. Listen for page changes
+    // on PAGE LOAD
+    //
 
-    // Option 1: get the data without caring about filtered out mouse data
-    getFacets( cttvFiltersService.parseURL() );
 
-    // - OR -
 
-    // Option 2: set the default filterd-out mouse data on page load, in which case we get the data on URL change
-    /*if(_.keys(cttvFiltersService.parseURL()).length==0){
-        // NO SEARCH
+    cttvUtils.clearErrors();
+    $scope.filters = cttvLocationState.getState()[facetsId] || {} ;
+    render( cttvLocationState.getState(), cttvLocationState.getOldState() );
 
-        // no search == no filters specified, so we set default filters: this will trigger a page reload
-        cttvFiltersService.setSelectedFilters({datatypes: cttvFiltersService.getDefaultSelectedDatatypes()});
-    } else {
-        // THERE IS A SEARCH
 
-        // make the call for data with the selected filters
-        getFacets( cttvFiltersService.parseURL() );
-    }*/
 
 }]);

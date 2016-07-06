@@ -230,6 +230,16 @@ angular.module('cttvServices', []).
         };
 
 
+        /* TODO */
+        cttvUtilsService.objToString = function(obj){
+            var s = "";
+            for(var i in obj){
+
+            }
+            return s;
+        }
+
+
         // Defers a call x ms
         // If a new call is made before the time expires, discard the initial one and start deferring again
         // cttvUtilsService.defer = function (cbak, ms) {
@@ -248,4 +258,6 @@ angular.module('cttvServices', []).
         // };
 
         return cttvUtilsService;
-    }]);
+    }])
+
+
