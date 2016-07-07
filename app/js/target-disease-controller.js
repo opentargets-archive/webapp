@@ -1668,6 +1668,8 @@
                     sectionCount = countSentences(item.evidence.literature_ref.mined_sentences);
                     sectionSentences = prepareSectionSentences(item.evidence.literature_ref.mined_sentences);
                     var previousSection = null;
+                    var parts = item.evidence.literature_ref.lit_id.split('/');
+                    var id = parts.pop();	
                     
                     // 6
                     row.push(
@@ -1675,47 +1677,19 @@
                         	
                         	var section = upperCaseFirst( clearUnderscores(sent.section));
                         	var sentenceString = "";
-                        	
                         	if(section != 'Title') {
 
 								if(previousSection != sent.section) { 
 									if(previousSection != null){ //this is not the first section with matched sentences
-										sentenceString = sentenceString +'</ul></div>';
+										sentenceString = sentenceString +'</div>';
 									}
-									sentenceString += "<br/><span class='bold'>"+ section +"</span>:&nbsp;"; //+sectionCount[sent.section];
-									if(sent.section == 'abstract'){
-										sentenceString +="<a  onclick='angular.element(this).scope().openMatchedSentencesAbstract("+newdata.length+")'><span class=badge>" + sectionCount[sent.section] + "</span></a>"; 
-									}else if(sent.section == 'appendix'){
-										sentenceString +="<a onclick='angular.element(this).scope().openMatchedSentencesAppendix("+newdata.length+")'><span class=badge>" + sectionCount[sent.section] + "</span></a>"; 
-									}
-									else if(sent.section == 'conclusion_and_future_work'){
-										sentenceString +="<a  onclick='angular.element(this).scope().openMatchedSentencesConclusion("+newdata.length+")'><span class=badge>" + sectionCount[sent.section] + "</span></a>"; 
-									}
-									else if(sent.section == 'discussion'){
-										sentenceString +="<a  onclick='angular.element(this).scope().openMatchedSentencesDiscussion("+newdata.length+")'><span class=badge>" + sectionCount[sent.section] + "</span></a>"; 									
-									}
-									else if(sent.section == 'introduction_and_background'){
-										sentenceString +="<a  onclick='angular.element(this).scope().openMatchedSentencesIntro("+newdata.length+")'><span class=badge>" + sectionCount[sent.section] + "</span></a>"; 
-									}
-									else if(sent.section == 'other'){
-										sentenceString +="<a  onclick='angular.element(this).scope().openMatchedSentencesOther("+newdata.length+")'><span class=badge>" + sectionCount[sent.section] + "</span></a>"; 
-									}
-									else if(sent.section == 'results'){
-										sentenceString +="<a  onclick='angular.element(this).scope().openMatchedSentencesResults("+newdata.length+")'><span class=badge>" + sectionCount[sent.section] + "</span></a>"; 
-									}
-									else if(sent.section == 'title'){
-										sentenceString +="<a  onclick='angular.element(this).scope().openMatchedSentencesTitle("+newdata.length+")'><span class=badge>" + sectionCount[sent.section] + "</span></a>"; 
-									}
-									else{
-										sentenceString +="<a  onclick='angular.element(this).scope().openMatchedSentences("+newdata.length+")'><span class=badge>" + sectionCount[sent.section] + "</span></a>"; 
-									}
-									
-									sentenceString += " matched sentences<div collapse= '" + true + "' ng-if='" + sent.section + "'>";
+									sentenceString +="<p class='small'><span onclick='angular.element(this).scope().displaySentences(\""+ id + sent.section +"\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>" + section + ": </span>" + sectionCount[sent.section]; 
+									sentenceString += " matched sentences</span></p>";
 									previousSection = sent.section;
 
 								}
 
-                        		sentenceString = sentenceString; //+ "<li>"+sent.formattedText+"</li>";
+								sentenceString += "<div id='" + id + sent.section + "' style='display:none'><ul style='margin-left: 10px;'>" + sectionSentences[sent.section] + "</ul></div>";
                         	}
                         	
                         	return sentenceString;
@@ -1770,6 +1744,7 @@
 
         		if(sectionSentenceMap[sentence.section] === undefined) {
         			sectionSentenceMap[sentence.section] = "";
+        			sectionSentenceMap[sentence.section] +=  "<li>"+sentence.formattedText+"</li>";
         		}
         		else {
         			sectionSentenceMap[sentence.section] +=  "<li>"+sentence.formattedText+"</li>";
@@ -1811,235 +1786,11 @@
 
         };
         
-        $scope.openMatchedSentences = function(id,section){
-        	//var matchedSentences = sectionSentences[whichSection];
-            //$log.log(id);
-        	
-            var row10 = $('#literature-table').DataTable().row(id).data()[10];
-            console.log("OPENMATCH:",row10);
-            console.log("OPENMATCH:section", section);
-            var modalInstance = $modal.open({
-              animation: true,             
-              template: '<div onclick="angular.element(this).scope().$dismiss()">'
-                       +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
-                       +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
-                       +'</div>'
-                       +'<div class="cttv-literature-modal">'                     
-                       +'<div><ul>'+$('#literature-table').DataTable().row(id).data()[10]+'</div>'
-                       +'</ul></div>',
-              size: 'lg',
-              resolve: {
-                items: function () {
-                    return $scope.search.info;
-                }
-              }
-            });
-
+        $scope.displaySentences = function(id) {
+  	      
+      		//make the collapse content to be shown or hide
+      		$('#'+id).toggle("fast");
         };
-        $scope.openMatchedSentencesAbstract = function(id){
-        	//var matchedSentences = sectionSentences[whichSection];
-            //$log.log(id);
-        	
-            var row10 = $('#literature-table').DataTable().row(id).data()[10];
-            console.log("OPENMATCH:",row10);
-            console.log("OPENMATCH:section", section);
-            var modalInstance = $modal.open({
-              animation: true,             
-              template: '<div onclick="angular.element(this).scope().$dismiss()">'
-                       +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
-                       +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
-                       +'</div>'
-                       +'<div class="cttv-literature-modal">'                     
-                       +'<div><ul>'+$('#literature-table').DataTable().row(id).data()[10].abstract+'</div>'
-                       +'</ul></div>',
-              size: 'lg',
-              resolve: {
-                items: function () {
-                    return $scope.search.info;
-                }
-              }
-            });
-
-        };
-        $scope.openMatchedSentencesAppendix = function(id){
-        	//var matchedSentences = sectionSentences[whichSection];
-            //$log.log(id);
-        	
-            var row10 = $('#literature-table').DataTable().row(id).data()[10];
-            console.log("OPENMATCH:",row10);
-            console.log("OPENMATCH:section", section);
-            var modalInstance = $modal.open({
-              animation: true,             
-              template: '<div onclick="angular.element(this).scope().$dismiss()">'
-                       +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
-                       +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
-                       +'</div>'
-                       +'<div class="cttv-literature-modal">'                     
-                       +'<div><ul>'+$('#literature-table').DataTable().row(id).data()[10].appendix+'</div>'
-                       +'</ul></div>',
-              size: 'lg',
-              resolve: {
-                items: function () {
-                    return $scope.search.info;
-                }
-              }
-            });
-
-        };
-        $scope.openMatchedSentencesConclusion = function(id){
-        	//var matchedSentences = sectionSentences[whichSection];
-            //$log.log(id);
-        	
-            var row10 = $('#literature-table').DataTable().row(id).data()[10];
-            console.log("OPENMATCH:",row10);
-            console.log("OPENMATCH:section", section);
-            var modalInstance = $modal.open({
-              animation: true,             
-              template: '<div onclick="angular.element(this).scope().$dismiss()">'
-                       +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
-                       +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
-                       +'</div>'
-                       +'<div class="cttv-literature-modal">'                     
-                       +'<div><ul>'+$('#literature-table').DataTable().row(id).data()[10].conclusion_and_future_work+'</div>'
-                       +'</ul></div>',
-              size: 'lg',
-              resolve: {
-                items: function () {
-                    return $scope.search.info;
-                }
-              }
-            });
-
-        };
-        $scope.openMatchedSentencesDiscussion = function(id){
-        	//var matchedSentences = sectionSentences[whichSection];
-            //$log.log(id);
-        	
-            var row10 = $('#literature-table').DataTable().row(id).data()[10];
-            console.log("OPENMATCH:",row10);
-            console.log("OPENMATCH:section", section);
-            var modalInstance = $modal.open({
-              animation: true,             
-              template: '<div onclick="angular.element(this).scope().$dismiss()">'
-                       +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
-                       +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
-                       +'</div>'
-                       +'<div class="cttv-literature-modal">'                     
-                       +'<div><ul>'+$('#literature-table').DataTable().row(id).data()[10].discussion+'</div>'
-                       +'</ul></div>',
-              size: 'lg',
-              resolve: {
-                items: function () {
-                    return $scope.search.info;
-                }
-              }
-            });
-
-        };
-        $scope.openMatchedSentencesIntro = function(id){
-        	//var matchedSentences = sectionSentences[whichSection];
-            //$log.log(id);
-        	
-            var row10 = $('#literature-table').DataTable().row(id).data()[10];
-            console.log("OPENMATCH:",row10);
-            console.log("OPENMATCH:section", section);
-            var modalInstance = $modal.open({
-              animation: true,             
-              template: '<div onclick="angular.element(this).scope().$dismiss()">'
-                       +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
-                       +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
-                       +'</div>'
-                       +'<div class="cttv-literature-modal">'                     
-                       +'<div><ul>'+$('#literature-table').DataTable().row(id).data()[10].introduction_and_background+'</div>'
-                       +'</ul></div>',
-              size: 'lg',
-              resolve: {
-                items: function () {
-                    return $scope.search.info;
-                }
-              }
-            });
-
-        };
-        
-        $scope.openMatchedSentencesOther = function(id){
-        	//var matchedSentences = sectionSentences[whichSection];
-            //$log.log(id);
-        	
-            var row10 = $('#literature-table').DataTable().row(id).data()[10];
-            console.log("OPENMATCH:",row10);
-            console.log("OPENMATCH:section", section);
-            var modalInstance = $modal.open({
-              animation: true,             
-              template: '<div onclick="angular.element(this).scope().$dismiss()">'
-                       +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
-                       +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
-                       +'</div>'
-                       +'<div class="cttv-literature-modal">'                     
-                       +'<div><ul>'+$('#literature-table').DataTable().row(id).data()[10].other+'</div>'
-                       +'</ul></div>',
-              size: 'lg',
-              resolve: {
-                items: function () {
-                    return $scope.search.info;
-                }
-              }
-            });
-
-        };
-        
-        $scope.openMatchedSentencesResults = function(id){
-        	//var matchedSentences = sectionSentences[whichSection];
-            //$log.log(id);
-        	
-            var row10 = $('#literature-table').DataTable().row(id).data()[10];
-            console.log("OPENMATCH:",row10);
-            
-            var modalInstance = $modal.open({
-              animation: true,             
-              template: '<div onclick="angular.element(this).scope().$dismiss()">'
-                       +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
-                       +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
-                       +'</div>'
-                       +'<div class="cttv-literature-modal">'                     
-                       +'<div><ul>'+$('#literature-table').DataTable().row(id).data()[10].results+'</div>'
-                       +'</ul></div>',
-              size: 'lg',
-              resolve: {
-                items: function () {
-                    return $scope.search.info;
-                }
-              }
-            });
-
-        };
-        $scope.openMatchedSentencesTitle = function(id){
-        	//var matchedSentences = sectionSentences[whichSection];
-            //$log.log(id);
-        	
-            var row10 = $('#literature-table').DataTable().row(id).data()[10];
-            console.log("OPENMATCH:",row10);
-            
-            var modalInstance = $modal.open({
-              animation: true,             
-              template: '<div onclick="angular.element(this).scope().$dismiss()">'
-                       +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
-                       +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
-                       +'</div>'
-                       +'<div class="cttv-literature-modal">'                     
-                       +'<div><ul>'+$('#literature-table').DataTable().row(id).data()[10].title+'</div>'
-                       +'</ul></div>',
-              size: 'lg',
-              resolve: {
-                items: function () {
-                    return $scope.search.info;
-                }
-              }
-            });
-
-        };
-        
-        
 
         var initTableLiterature = function(){
 
