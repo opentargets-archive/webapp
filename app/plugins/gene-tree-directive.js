@@ -27,7 +27,6 @@ angular.module('plugins')
                     });
                 gt(newDiv);
 
-
                 if (cttvUtils.browser.name !== "IE") {
                     scope.toExport = function () {
                         var svg = newDiv.querySelector("svg");

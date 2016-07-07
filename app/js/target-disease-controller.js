@@ -133,55 +133,50 @@
                 return arr[0];
             }
             return "<ul><li>" + arr.join("</li><li>") + "</li></ul>";
-        }
-
-
-
-
-
+        };
 
 
         // =================================================
         //  I N F O
         // =================================================
 
-
-
         /**
          * Get the information for target and disease,
          * i.e. to fill the two boxes at the top of the page
          */
-        var getInfo = function(){
-            $log.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
+         var targetPromise;
+         var getInfo = function(){
+             $log.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
 
-            // get gene specific info
-            cttvAPIservice.getTarget( {
-                    target_id:$scope.search.target
-                } ).
-                then(
-                    function(resp) {
-                        $scope.search.info.gene = resp.body;
-                        //updateTitle();
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                );
+             // get gene specific info
+             targetPromise = cttvAPIservice.getTarget({
+                 target_id:$scope.search.target
+             })
+                .then(function(resp) {
+                    $scope.search.info.gene = resp.body;
+                    //updateTitle();
+                    return resp;
+                },cttvAPIservice.defaultErrorHandler)
+                .then (function (target) {
+                    return $http.get("/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/" + target.body.uniprot_id);
+                },cttvAPIservice.defaultErrorHandler);
 
 
-            // get disease specific info with the efo() method
-            cttvAPIservice.getDisease( {
-                    code:$scope.search.disease
-                } ).
-                then(
-                    function(resp) {
-                        $scope.search.info.efo = resp.body;
-                        // TODO: This is not returned by the api yet. Maybe we need to remove it later
-                        $scope.search.info.efo.efo_code = $scope.search.disease;
-                        //updateTitle();
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                );
+             // get disease specific info with the efo() method
+             cttvAPIservice.getDisease( {
+                 code:$scope.search.disease
+             } ).
+             then(
+                 function(resp) {
+                     $scope.search.info.efo = resp.body;
+                     // TODO: This is not returned by the api yet. Maybe we need to remove it later
+                     $scope.search.info.efo.efo_code = $scope.search.disease;
+                     //updateTitle();
+                 },
+                 cttvAPIservice.defaultErrorHandler
+             );
 
-        };
+         };
 
 
 
@@ -196,25 +191,6 @@
         // =================================================
         //  F L O W E R
         // =================================================
-
-
-
-        // function lookDatasource (arr, dsName) {
-        //     for (var i=0; i<arr.length; i++) {
-        //        if (arr[i].datatype === dsName) {
-        //            return {
-        //                "count": arr[i].evidence_count,
-        //                "score": arr[i].association_score
-        //            };
-        //        }
-        //     }
-        //     return {
-        //        "count": 0,
-        //        "score": 0
-        //     };
-        // }
-
-
 
         /*
          * takes a datasources array and returns an array of objects {value: number, label:string}
@@ -304,8 +280,6 @@
             return label;
         };
 
-
-
         // var getSoLabel = function(arr_info, arr_code){
         //     var label = "nearest_gene_five_prime_end";
         //     // first look for the SO id in the array
@@ -317,6 +291,41 @@
         //     }
         //     return label;
         // }
+
+        var getSnpPositions = function () {
+            targetPromise = targetPromise
+                .then (function (bestStructure) {
+                    console.log(bestStructure);
+                    console.log($scope.search.info.gene.uniprot_id);
+                    $scope.search.info.bestStructure = bestStructure.data[$scope.search.info.gene.uniprot_id][0];
+                    console.log(" =====> this is the target information...");
+                    console.log($scope.search.info.gene);
+                    var url = "/proxy/www.ebi.ac.uk/proteins/api/variation/" + $scope.search.info.gene.uniprot_id;
+                    return $http.get(url)
+                        .then (function (varsResp) {
+                            var snps = varsResp.data.features;
+                            var snpsLoc = {};
+                            for (var i=0; i<snps.length; i++) {
+                                var snpId;
+                                var variant = snps[i];
+                                if (variant.xrefs) {
+                                    for (var j=0; j<variant.xrefs.length; j++) {
+                                        if (variant.xrefs[j].id.indexOf("rs")===0) {
+                                            snpId = variant.xrefs[j].id;
+                                            break;
+                                        }
+                                    }
+                                    snpsLoc[snpId] = {
+                                        start: variant.begin,
+                                        end  : variant.end
+                                    };
+                                }
+                            }
+                            console.log(snpsLoc);
+                            return snpsLoc;
+                        });
+                });
+        };
 
 
         var getCommonDiseaseData = function(){
@@ -479,11 +488,25 @@
 
             _.extend(opts, searchObj);
 
-            return cttvAPIservice.getFilterBy( opts ).
-                then(
+            return targetPromise.then(function (snpsLoc) {
+                console.log("I HAVE THE RARE DISEASE DATA AND THIS IS THE INFORMATION FOR THE LOCATION OF THE SNPS from Uniprot...");
+                console.log(snpsLoc);
+                cttvAPIservice.getFilterBy( opts )
+                .then(
                     function(resp) {
                         if( resp.body.data ){
-                            $scope.search.tables.genetic_associations.rare_diseases.data = resp.body.data;
+                            var data = resp.body.data;
+                            for (var i=0; i<data.length; i++) {
+                                var item = data[i];
+                                if( checkPath(item, "variant.id") && item.variant.id[0]){
+                                    var rsId = item.variant.id[0].split('/').pop();
+                                    if (snpsLoc[rsId]) {
+                                        console.log("variant location found!");
+                                        data[i].variant.pos = snpsLoc[rsId];
+                                    }
+                                }
+                            }
+                            $scope.search.tables.genetic_associations.rare_diseases.data = data;
                             initRareDiseasesTable();
                         } else {
                             $log.warn("Empty response : rare disease");
@@ -497,6 +520,7 @@
                     // update for parent
                     updateGeneticAssociationsSetting();
                 });
+            });
         };
 
 
@@ -578,6 +602,13 @@
                     // Publication ids (hidden)
                     row.push(pmidsList.join(", "));
 
+                    // 3D structure?
+                    if (item.variant && item.variant.pos) {
+                        var msg3d = "<div><p><a class=cttv-change-view onclick='angular.element(this).scope().showVariantInStructure(" + item.variant.pos.start + ")'>View in 3D</p></a></div>";
+                        row.push($compile(msg3d)($scope)[0].innerHTML);
+                    } else {
+                        row.push("N/A");
+                    }
 
                     // add the row to data
                     newdata.push(row);
@@ -593,6 +624,18 @@
             return newdata;
         };
 
+        // $scope.pdbId = "4uv7";
+        $scope.showVariantInStructure = function (pos) {
+            $scope.$apply(function() {
+                var modal = $modal.open({
+                    animation: true,
+                    template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div class=pdb-widget-container><pdb-lite-mol pdb-id='search.info.bestStructure.pdb_id' hide-controls=true></pdb-lite-mol></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                    size: "m",
+                    scope:$scope,
+                    windowClass: 'variantStructureModalWindow'
+                });
+            });
+        };
 
         var initRareDiseasesTable = function(){
             $('#rare-diseases-table').DataTable( cttvUtils.setTableToolsParams({
@@ -1815,6 +1858,7 @@
 
         // and fire the info search
         getInfo();
+        getSnpPositions();
 
 
         // get the data for the flower graph
@@ -1834,7 +1878,7 @@
 
 
         var render = function(new_state, old_state){
-            var view = new_state["view"] || {};
+            var view = new_state.view || {};
             var sec = view.sec;
             if(sec && sec[0] && $scope.search.tables[ sec[0] ]){
                 $scope.search.tables[ sec[0] ].is_open = true;
@@ -1845,7 +1889,7 @@
                 // TODO: will have to think of a more elegant way of managing this, for example load all data in sequence
                 $anchorScroll( "tables" );
             }
-        }
+        };
 
 
         $scope.$on(cttvLocationState.STATECHANGED, function (e, new_state, old_state) {
@@ -1861,36 +1905,5 @@
 
 
         render(cttvLocationState.getState(), cttvLocationState.getOldState());
-
-
-            /*getFlowerData()
-                .then(function(){
-                    $log.info($scope.search.association_scores);
-
-                    // then try get some data for the tables where we know we have data...
-
-                    if($scope.search.association_scores[datatypes.GENETIC_ASSOCIATION]){
-                        getCommonDiseaseData();
-                        getRareDiseaseData();
-                    }
-                    if($scope.search.association_scores[datatypes.SOMATIC_MUTATION]){
-                        getMutationData();
-                    }
-                    if($scope.search.association_scores[datatypes.KNOWN_DRUG]){
-                        getDrugData();
-                    }
-                    if($scope.search.association_scores[datatypes.RNA_EXPRESSION]){
-                        getRnaExpressionData();
-                    }
-                    if($scope.search.association_scores[datatypes.AFFECTED_PATHWAY]){
-                        getPathwaysData();
-                    }
-                    if($scope.search.association_scores[datatypes.LITERATURE]){
-                        getLiteratureData();
-                    }
-                    if($scope.search.association_scores[datatypes.ANIMAL_MODEL]){
-                        getMouseData();
-                    }
-                });*/
 
     }]);
