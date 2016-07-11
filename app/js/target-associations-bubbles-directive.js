@@ -143,7 +143,7 @@ angular.module('cttvDirectives')
                 active : '@'
             },
 
-            template: '<png filename="{{target}}-AssociationsBubblesView.png"></png><div></div>'
+            template: '<png filename="{{target}}-AssociationsBubblesView.png" track="associationsBubbles"></png><div></div>'
             +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
 
 
