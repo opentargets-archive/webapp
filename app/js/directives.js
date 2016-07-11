@@ -1285,14 +1285,15 @@ angular.module('cttvDirectives', [])
         };
     }])
 
-    .directive('png', ['$timeout', '$modal', function ($timeout, $modal) {
+    .directive('png', ['$timeout', '$modal', '$analytics', function ($timeout, $modal, $analytics) {
         'use strict';
 
         return {
             restrict: 'EA',
             transclude: true,
             scope: {
-                filename:'@'
+                filename:'@',
+                track: '@'
             },
             replace: false,
             template: '<div ng-show="exportable" class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="exportPNG()"><span class="fa fa-picture-o" title="Download as PNG"></span></a></div></div>',
@@ -1311,15 +1312,16 @@ angular.module('cttvDirectives', [])
                         scope: scope
                     });
                     scope.export = function (elem) {
-                        // elem.scope().$dismiss();
+                        // track in piwik
+                        if (scope.track) {
+                            $analytics.eventTrack('export', {"category":scope.track, "label": scope.currScale})
+                        }
 
                         // TODO: Set max_size to 2100000
                         var pngExporter = tnt.utils.png()
                             .filename(scope.filename || "image.png")
                             .scale_factor(scope.currScale)
                             .stylesheets(['components-cttvWebapp.min.css'])
-                            // .stylesheets(["http://test.targetvalidation.org:8899/build/components-cttvWebapp.min.css?v=18042016"])
-                            // .stylesheets([])
                             .limit({
                                 limit: 2100000,
                                 onError: function () {
