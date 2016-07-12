@@ -292,14 +292,52 @@
         //     return label;
         // }
 
+        var parseBestStructure = function (structures) {
+            var best = {
+                pdb_id : structures[0].pdb_id,
+                mappings: [structures[0]]
+            };
+            // Look for the other structures with the same id:
+            for (var i=1; i<structures.length; i++) {
+                var struct = structures[i];
+                if (struct.pdb_id === best.pdb_id) {
+                    best.mappings.push(struct);
+                }
+            }
+            return best;
+        };
+
+        var variantIsInStructure = function (variant, structure) {
+            for (var i=0; i<structure.mappings.length; i++) {
+                var mapping = structure.mappings[i];
+                if ((~~variant.begin > mapping.unp_start) && (~~variant.end < mapping.unp_end)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        var convertUniprotCoords = function (variant, structure) {
+            for (var i=0; i<structure.mappings.length; i++) {
+                var mapping = structure.mappings[i];
+                if ((~~variant.begin > mapping.unp_start) && (~~variant.end < mapping.unp_end)) {
+                    var pdbStart = ~~variant.begin - mapping.unp_start + mapping.start;
+                    var pdbEnd = ~~variant.end - mapping.unp_start + mapping.start;
+                    return {
+                        start: pdbStart,
+                        end: pdbEnd,
+                        coverage: mapping.coverage,
+                        chain_id: mapping.chain_id
+                    };
+                }
+            }
+            return {};
+        };
+
         var getSnpPositions = function () {
             targetPromise = targetPromise
-                .then (function (bestStructure) {
-                    console.log(bestStructure);
-                    console.log($scope.search.info.gene.uniprot_id);
-                    $scope.search.info.bestStructure = bestStructure.data[$scope.search.info.gene.uniprot_id][0];
-                    console.log(" =====> this is the target information...");
-                    console.log($scope.search.info.gene);
+                .then (function (bestStructures) {
+                    $scope.search.info.bestStructure = parseBestStructure(bestStructures.data[$scope.search.info.gene.uniprot_id]);
                     var url = "/proxy/www.ebi.ac.uk/proteins/api/variation/" + $scope.search.info.gene.uniprot_id;
                     return $http.get(url)
                         .then (function (varsResp) {
@@ -315,13 +353,17 @@
                                             break;
                                         }
                                     }
-                                    snpsLoc[snpId] = {
-                                        start: variant.begin,
-                                        end  : variant.end
-                                    };
+                                    var pdbCoords = convertUniprotCoords(variant, $scope.search.info.bestStructure);
+                                    if (snpId && pdbCoords.start && pdbCoords.end) {
+                                        // var strCoords = convertUniprotCoords(variant, $scope.search.info.bestStructure);
+                                        snpsLoc[snpId] = pdbCoords;
+                                        // snpsLoc[snpId] = {
+                                        //     start: variant.begin,
+                                        //     end  : variant.end
+                                        // };
+                                    }
                                 }
                             }
-                            console.log(snpsLoc);
                             return snpsLoc;
                         });
                 });
@@ -489,8 +531,6 @@
             _.extend(opts, searchObj);
 
             return targetPromise.then(function (snpsLoc) {
-                console.log("I HAVE THE RARE DISEASE DATA AND THIS IS THE INFORMATION FOR THE LOCATION OF THE SNPS from Uniprot...");
-                console.log(snpsLoc);
                 cttvAPIservice.getFilterBy( opts )
                 .then(
                     function(resp) {
@@ -498,10 +538,9 @@
                             var data = resp.body.data;
                             for (var i=0; i<data.length; i++) {
                                 var item = data[i];
-                                if( checkPath(item, "variant.id") && item.variant.id[0]){
+                                if (checkPath(item, "variant.id") && item.variant.id[0]){
                                     var rsId = item.variant.id[0].split('/').pop();
                                     if (snpsLoc[rsId]) {
-                                        console.log("variant location found!");
                                         data[i].variant.pos = snpsLoc[rsId];
                                     }
                                 }
@@ -604,7 +643,7 @@
 
                     // 3D structure?
                     if (item.variant && item.variant.pos) {
-                        var msg3d = "<div><p><a class=cttv-change-view onclick='angular.element(this).scope().showVariantInStructure(" + item.variant.pos.start + ")'>View in 3D</p></a></div>";
+                        var msg3d = "<div><p><a class=cttv-change-view onclick='angular.element(this).scope().showVariantInStructure(" + item.variant.pos.start + ", " + item.variant.pos.end + ", \"" + item.variant.pos.chain_id + "\")'>View in 3D</p></a></div>";
                         row.push($compile(msg3d)($scope)[0].innerHTML);
                     } else {
                         row.push("N/A");
@@ -624,17 +663,51 @@
             return newdata;
         };
 
+        // Lite-mol display of the structure
+        //Method to bind component scope
+        var liteMolScope;
+        var bindPdbComponentScope = function(element){
+            return angular.element(element).isolateScope();
+        };
+
+        var selectStructure = function(liteMolScope, queryParams, color){
+            //Create query object from event data
+            var selectQuery = {
+                entity_id: queryParams.entity_id,
+                struct_asym_id: queryParams.struct_asym_id,
+                start_residue_number: queryParams.start_residue_number,
+                end_residue_number: queryParams.end_residue_number
+            };
+
+            //Call highlightAnnotation
+            var showSideChainForSelection = true;
+            liteMolScope.LiteMolComponent.SelectExtractFocus(selectQuery, color, showSideChainForSelection);
+        };
+
         // $scope.pdbId = "4uv7";
-        $scope.showVariantInStructure = function (pos) {
+        $scope.showVariantInStructure = function (start, end, chain_id) {
             $scope.$apply(function() {
                 var modal = $modal.open({
                     animation: true,
-                    template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div class=pdb-widget-container><pdb-lite-mol pdb-id='search.info.bestStructure.pdb_id' hide-controls=true></pdb-lite-mol></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                    template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div class=pdb-widget-container><pdb-lite-mol id='litemol_1' pdb-id='search.info.bestStructure.pdb_id' hide-controls=true></pdb-lite-mol></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
                     size: "m",
                     scope:$scope,
                     windowClass: 'variantStructureModalWindow'
                 });
             });
+            //bind to litemol scope
+            liteMolScope = bindPdbComponentScope(document.getElementById('litemol_1'));
+
+            //Set background
+            liteMolScope.LiteMolComponent.setBackground();
+
+            // Make selection and apply color
+            var queryParams = {entity_id: '1', struct_asym_id: chain_id, start_residue_number: start, end_residue_number: end};
+            var color = {r: 27, g:204, b:52};
+
+            setTimeout(function(){ //added settimeout to complete the struture loading before applying selection
+                selectStructure(liteMolScope, queryParams, color);
+            }, 400);
         };
 
         var initRareDiseasesTable = function(){
