@@ -48,7 +48,7 @@
     "shelljs": "0.2.6"
   },
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower install --allow-root && ./node_modules/.bin/jspm install && ./node-modules/.bin/gulp build-all",
+    "postinstall": "./node_modules/.bin/bower install --allow-root && ./node_modules/.bin/jspm install && ./node_modules/.bin/gulp build-all",
     "start": "cd server && node server.js",
     "test": "./node_modules/.bin/gulp test",
     "test-single-run": "karma start tests/unit/karma.conf.js  --single-run"
