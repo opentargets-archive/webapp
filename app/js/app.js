@@ -4,8 +4,6 @@ function initApp (deps) {
 
     var app = angular.module('cttvApp', deps);
 
-
-
     app.config(['$routeProvider', '$locationProvider',
         function($routeProvider, $locationProvider) {
             'use strict';
@@ -188,4 +186,3 @@ function configSystemjs (config, $q) {
     }
     return $q.all(deps);
 }
-
