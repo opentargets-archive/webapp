@@ -305,12 +305,9 @@ body{
         div {
             padding: 7px 12px 5px 12px;
             background: $extra-brand-color;
-            // @include border-top-left-radius( 5px );
-
 
             font-size: 14px;
             font-weight: 400;
-
         }
     }
 }
@@ -359,6 +356,12 @@ body{
 
 
 
+.footer-social-bar {
+    span {
+        padding-right: 5px;
+        font-size: 15px;
+    }
+}
 
 .fixed {
     position: fixed;
