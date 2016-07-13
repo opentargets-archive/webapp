@@ -282,17 +282,22 @@ body{
 
 
 /*
- * Feedback button
+ * Feedback side panel
  */
 
 .cttv-feedback-button {
+
     position: fixed;
     top: 50%;
-    margin-top: -50px;
+    margin-top: -30px;
+    left: 100%;
     z-index: 10000;
-    right: 0;
-    @include transform-origin( bottom right );
+    min-height: 30px;
+    @include transform-origin( left 30px );
     @include transform( rotate(-90deg) );
+    @include border-top-right-radius( 5px );
+    overflow: hidden;
+    box-shadow: 0px 0px 6px 1px rgba(0,0,0,.2);
 
     a {
         color: #FFF;
@@ -300,17 +305,63 @@ body{
         div {
             padding: 7px 12px 5px 12px;
             background: $extra-brand-color;
-            @include border-top-left-radius( 5px );
-            @include border-top-right-radius( 5px );
-            box-shadow: 0px 0px 6px 1px rgba(0,0,0,.2);
+
             font-size: 14px;
             font-weight: 400;
-
         }
     }
 }
 
+.cttv-social-panel {
+    position: fixed;
+    top: 50%;
+    //margin-top: 2px;
+    border-top: 1px solid #fff;
+    z-index: 10000;
+    right: 0;
+    border-bottom-left-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 6px 1px rgba(0,0,0,.2);
 
+    div {
+        width: 30px;
+        height: 30px;
+        color: #FFF;
+        font-size: 14px;
+        text-align: center;
+        font-family: 'FontAwesome';
+        padding-top: 6px;
+    }
+}
+    .cttv-social-panel-linkedin{
+        background: #0077B5;
+        &:after {
+            content: "\f0e1";
+        };
+    }
+
+    .cttv-social-panel-twitter{
+        background: #00ACED;
+        &:after {
+            content: "\f099";
+        };
+    }
+
+    .cttv-social-panel-facebook{
+        background: #4867AA;
+        &:after {
+            content: "\f09a";
+        };
+    }
+
+
+
+.footer-social-bar {
+    span {
+        padding-right: 5px;
+        font-size: 15px;
+    }
+}
 
 .fixed {
     position: fixed;

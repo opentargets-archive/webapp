@@ -1,6 +1,8 @@
 angular.module('plugins', [])
 .directive ('pluginLoader', ['$compile', '$timeout', 'lazy', '$q', '$analytics', function ($compile, $timeout, lazy, $q, $analytics) {
 
+    var alreadyLoaded = {};
+
     return {
         restrict: 'E',
         scope: {
@@ -34,6 +36,12 @@ angular.module('plugins', [])
                 }
 
                 if (val === "true") {
+                    if (alreadyLoaded[scope.plugin]) {
+                        return;
+                    } else {
+                        alreadyLoaded[scope.plugin] = true;    
+                    }
+
                     if (scope.track) {
                         $analytics.eventTrack('profile', {"category": attrs.page, "label": scope.label});
                     }
@@ -69,9 +77,9 @@ angular.module('plugins', [])
                             }, 0);
                         });
                 } else {
-                    while (element[0].firstChild) {
-                        element[0].removeChild(element[0].firstChild);
-                    }
+                    // while (element[0].firstChild) {
+                    //     element[0].removeChild(element[0].firstChild);
+                    // }
                 }
             });
         }

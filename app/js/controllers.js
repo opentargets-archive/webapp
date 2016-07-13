@@ -1,21 +1,28 @@
   /* Controllers */
 
     angular.module('cttvControllers', [])
-    .run (['$rootScope', '$window', function ($rootScope, $window) {
+    .run (['$rootScope', '$window', '$modalStack', function ($rootScope, $window, $modalStack) {
         'use strict';
-        $rootScope.showApiErrorMsg = false;
+
+        // Close all the modal windows when the route changes
+        $rootScope.$on('$routeChangeSuccess', function (newVal, oldVal) {
+            if (oldVal !== newVal) {
+                $modalStack.dismissAll();
+            }
+
+            $rootScope.showApiErrorMsg = false;
+            $rootScope.showApiError500 = false;
+        });
+
         $rootScope.$on("cttvApiError", function (event, data) {
             if (data.status === 403) {
                 $rootScope.showApiErrorMsg = true;
             }
         });
-        $rootScope.showApiError500 = false;
         $rootScope.reloadPage = function () {
             $window.location.reload();
         };
     }])
-
-
 
     .controller('MastheadCtrl', ['$scope', '$location', '$log', 'cttvLocationState', function ($scope, $location, $log, cttvLocationState) {
         'use strict';
@@ -23,5 +30,3 @@
         $scope.location = $location;
 
     }]);
-
-
