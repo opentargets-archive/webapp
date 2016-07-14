@@ -327,7 +327,9 @@
                         start: pdbStart,
                         end: pdbEnd,
                         coverage: mapping.coverage,
-                        chain_id: mapping.chain_id
+                        // chain_id: mapping.chain_id,
+                        alternativeAA: variant.alternativeSequence,
+                        description: variant.description
                     };
                 }
             }
@@ -643,7 +645,7 @@
 
                     // 3D structure?
                     if (item.variant && item.variant.pos) {
-                        var msg3d = "<div><p><a class=cttv-change-view onclick='angular.element(this).scope().showVariantInStructure(" + item.variant.pos.start + ", " + item.variant.pos.end + ", \"" + item.variant.pos.chain_id + "\")'>View in 3D</p></a></div>";
+                        var msg3d = "<div><p><a class=cttv-change-view onclick='angular.element(this).scope().showVariantInStructure(" + item.variant.pos.start + ", " + item.variant.pos.end + ", \"" + item.variant.pos.chain_id + "\"" + ", \"" + item.variant.pos.alternativeAA + "\")'>View in 3D</p></a></div>";
                         row.push($compile(msg3d)($scope)[0].innerHTML);
                     } else {
                         row.push("N/A");
@@ -684,30 +686,70 @@
             liteMolScope.LiteMolComponent.SelectExtractFocus(selectQuery, color, showSideChainForSelection);
         };
 
+
+        function filterMappings (mappings, pdb_pos) {
+            for (var i=0; i<mappings.length; i++) {
+                var mapping = mappings[i];
+                if (mapping.start.residue_number < pdb_pos && mapping.end.residue_number > pdb_pos) {
+                    return mapping;
+                }
+            }
+            return {};
+        }
+
         // $scope.pdbId = "4uv7";
-        $scope.showVariantInStructure = function (start, end, chain_id) {
-            $scope.$apply(function() {
-                var modal = $modal.open({
-                    animation: true,
-                    template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div class=pdb-widget-container><pdb-lite-mol id='litemol_1' pdb-id='search.info.bestStructure.pdb_id' hide-controls=true></pdb-lite-mol></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
-                    size: "m",
-                    scope:$scope,
-                    windowClass: 'variantStructureModalWindow'
+        $scope.showVariantInStructure = function (start, end, chain_id, alt) {
+            // Get the struct_asym_id and the entity_id for the pdb widget
+            var url = "/proxy/www.ebi.ac.uk/pdbe/api/mappings/uniprot/" + $scope.search.info.bestStructure.pdb_id;
+            $http.get(url)
+                .then (function (mappings) {
+                    var mapping = filterMappings(mappings.data[$scope.search.info.bestStructure.pdb_id].UniProt[$scope.search.info.gene.uniprot_id].mappings, start);
+
+                    var clientHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+                    var modal = $modal.open({
+                        animation: true,
+                        template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div style='height:" + (clientHeight*0.5) + "px'><div class=pdb-widget-container style='height:" + (clientHeight*0.4) + "px;'><pdb-lite-mol id='litemol_1' pdb-id='search.info.bestStructure.pdb_id' hide-controls=true></pdb-lite-mol></div><div id=litemol_legend style='margin:20px; '><br/></div></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                        size: "m",
+                        scope:$scope,
+                        windowClass: 'variantStructureModalWindow'
+                    });
+
+                    $timeout(function(){ //added settimeout to complete the struture loading before applying selection
+                        //bind to litemol scope
+                        liteMolScope = bindPdbComponentScope(document.getElementById('litemol_1'));
+
+                        // Populate the litemol legend
+                        var legendContainer = document.getElementById("litemol_legend");
+                        var seqStr = d3.select(legendContainer)
+                            .append("p")
+                            .append("span");
+                        seqStr
+                            .append("div")
+                            .style({
+                                display: "inline-block",
+                                margin: "0px 5px 0px 15px",
+                                width: "30px",
+                                height: "10px",
+                                border: "1px solid rgb(0,0,0)",
+                                background: "rgb(27, 204, 52)"
+                            });
+                        seqStr
+                            .append("text")
+                            .text("SNP position");
+
+                        d3.select(legendContainer)
+                            .append("p")
+                            .text("Alternative Aminoacid: " + alt);
+
+                        //Set background
+                        liteMolScope.LiteMolComponent.setBackground();
+
+                        // Make selection and apply color
+                        var queryParams = {entity_id: mapping.entity_id, struct_asym_id: mapping.struct_asym_id, start_residue_number: start, end_residue_number: end};
+                        var color = {r: 27, g:204, b:52};
+                        selectStructure(liteMolScope, queryParams, color);
+                    }, 1000);
                 });
-            });
-            //bind to litemol scope
-            liteMolScope = bindPdbComponentScope(document.getElementById('litemol_1'));
-
-            //Set background
-            liteMolScope.LiteMolComponent.setBackground();
-
-            // Make selection and apply color
-            var queryParams = {entity_id: '1', struct_asym_id: chain_id, start_residue_number: start, end_residue_number: end};
-            var color = {r: 27, g:204, b:52};
-
-            setTimeout(function(){ //added settimeout to complete the struture loading before applying selection
-                selectStructure(liteMolScope, queryParams, color);
-            }, 400);
         };
 
         var initRareDiseasesTable = function(){
