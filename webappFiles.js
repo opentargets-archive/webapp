@@ -29,6 +29,9 @@ var webappFiles = {
         ],
         'cssCopyDir': [
             'bower_components/components-font-awesome/**/*'
+        ],
+        'copy': [
+            'bower_components/bio-pv/bio-pv.min.js'
         ]
     },
 

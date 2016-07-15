@@ -210,15 +210,16 @@ gulp.task('build-3rdparty-styles', ['copy-bootstrap', 'copy-fontawesome'], funct
         .pipe(gulp.dest(buildDir));
 });
 
+gulp.task('copy-files', function () {
+    return gulp.src(webappFiles.thirdParty.copy)
+        .pipe(gulp.dest(buildDir));
+});
 
-
-gulp.task('build-3rdparty', ['build-3rdparty-styles'], function () {
+gulp.task('build-3rdparty', ['copy-files', 'build-3rdparty-styles'], function () {
     return gulp.src(webappFiles.thirdParty.js)
         .pipe(concat(webapp3rdparty))
         .pipe(gulp.dest(buildDir));
 });
-
-
 
 gulp.task('build-webapp-styles', function () {
     return gulp.src(webappFiles.cttv.css)
@@ -292,7 +293,7 @@ gulp.task('webserver', ['build-all'], function() {
 	  host: 'localhost',
 	  port: '8000',
 	  defaultFile: 'index.html',
-	  proxies: [{source: '/api', target: 'http://local.targetvalidation.org:8899/api'}, 
+	  proxies: [{source: '/api', target: 'http://local.targetvalidation.org:8899/api'},
                     {source: '/proxy/www.ebi.ac.uk/', target: 'https://www.ebi.ac.uk/'},
                     {source: '/proxy/www.reactome.org/', target: 'http://www.reactome.org/'},
                     {source: '/proxy/wwwdev.ebi.ac.uk/', target: 'http://wwwdev.ebi.ac.uk/'},

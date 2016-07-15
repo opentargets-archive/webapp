@@ -394,11 +394,24 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
-                then(
+            return targetPromise.then (function (snpsLoc) {
+                cttvAPIservice.getFilterBy( opts )
+                .then(
                     function(resp) {
                         if( resp.body.data ){
-                            $scope.search.tables.genetic_associations.common_diseases.data = resp.body.data;
+                            var data = resp.body.data;
+                            for (var i=0; i<data.length; i++) {
+                                var item = data[i];
+                                console.log(item);
+                                if (checkPath(item, "variant.id") && item.variant.id[0]) {
+                                    var rsId = item.variant.id[0].split('/').pop();
+                                    if (snpsLoc[rsId]) {
+                                        console.log("uniprot info found for variant " + rsId);
+                                        data[i].variant.pos = snpsLoc[rsId];
+                                    }
+                                }
+                            }
+                            $scope.search.tables.genetic_associations.common_diseases.data = data;
                             initCommonDiseasesTable();
                         } else {
                             $log.warn("Empty response : common disease");
@@ -413,8 +426,8 @@
                     // update for parent
                     updateGeneticAssociationsSetting();
                 });
+            }, cttvAPIservice.defaultErrorHandler);
         };
-
 
 
         /*
@@ -534,9 +547,7 @@
                     "access_level"
                 ]
             };
-
             _.extend(opts, searchObj);
-
             return targetPromise.then(function (snpsLoc) {
                 cttvAPIservice.getFilterBy( opts )
                 .then(
