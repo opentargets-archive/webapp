@@ -345,8 +345,10 @@
                         .then (function (varsResp) {
                             var snps = varsResp.data.features;
                             var snpsLoc = {};
+                            var snpId;
                             for (var i=0; i<snps.length; i++) {
-                                var snpId;
+                                snpId = undefined;
+
                                 var variant = snps[i];
                                 if (variant.xrefs) {
                                     for (var j=0; j<variant.xrefs.length; j++) {
@@ -355,15 +357,18 @@
                                             break;
                                         }
                                     }
-                                    var pdbCoords = convertUniprotCoords(variant, $scope.search.info.bestStructure);
-                                    if (snpId && pdbCoords.start && pdbCoords.end) {
-                                        // var strCoords = convertUniprotCoords(variant, $scope.search.info.bestStructure);
+                                    if (snpId) {
+                                        var pdbCoords = convertUniprotCoords(variant, $scope.search.info.bestStructure);
                                         snpsLoc[snpId] = pdbCoords;
+                                    }
+//                                    if (snpId && pdbCoords.start && pdbCoords.end) {
+                                        // var strCoords = convertUniprotCoords(variant, $scope.search.info.bestStructure);
+//                                        snpsLoc[snpId] = pdbCoords;
                                         // snpsLoc[snpId] = {
                                         //     start: variant.begin,
                                         //     end  : variant.end
                                         // };
-                                    }
+//                                    }
                                 }
                             }
                             return snpsLoc;
