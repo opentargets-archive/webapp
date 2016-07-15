@@ -18,14 +18,14 @@ angular.module('plugins')
                         var bestStructure = resp.data[uniprotId][0];
                         scope.pdbId = bestStructure.pdb_id;
 
-                        var template = '<p>Showing the PDB structure for <a class=pdb-links pdb-id=' + bestStructure.pdb_id + ' target=_blank href="javascript:void(0);">' + bestStructure.pdb_id + '</a></p><tabset><tab heading=3D><div class="pdb-widget-container"><pdb-lite-mol pdb-id="pdbId" hide-controls=true></pdb-lite-mol></div></tab><tab heading=2D><div class="pdb-widget-container"><pdb-topology-viewer entry-id=' + bestStructure.pdb_id + ' entity-id=1></pdb-topology-viewer></div></tab><tab heading=PV><div id=pvTarget></div></tab><tabset>';
+                        var template = '<p>Showing the PDB structure for <a class=pdb-links pdb-id=' + bestStructure.pdb_id + ' target=_blank href="javascript:void(0);">' + bestStructure.pdb_id + '</a></p><tabset><tab heading=3D><div class="pdb-widget-container"><pdb-lite-mol pdb-id="pdbId" hide-controls=true></pdb-lite-mol></div></tab><tab heading=2D><div class="pdb-widget-container"><pdb-topology-viewer entry-id=' + bestStructure.pdb_id + ' entity-id=1></pdb-topology-viewer></div></tab><tab heading=PV><div class="pdb-widget-container" id=pvTarget></div><div id=picked-atom-name style="text-align:center;"">&nbsp;</div></tab><tabset>';
                         var compiled = $compile(template)(scope);
                         element.append(compiled);
 
 
                         // PV viewer
                         $timeout(function () {
-                            var pvContainer = document.getElementById("pvTarget");
+                            var parent = document.getElementById("pvTarget");
                             // override the default options with something less restrictive.
                             var options = {
                               width: 600,
@@ -34,9 +34,51 @@ angular.module('plugins')
                               quality : 'medium'
                             };
                             // insert the viewer under the Dom element with id 'gl'.
-                            var viewer = pv.Viewer(pvContainer, options);
+
+                            function setColorForAtom(go, atom, color) {
+                                var view = go.structure().createEmptyView();
+                                view.addAtom(atom);
+                                go.colorBy(pv.color.uniform(color), view);
+                            }
+
+                            var viewer = pv.Viewer(parent, options);
                             $http.get('//pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
                                 .then (function (data) {
+                                    // variable to store the previously picked atom. Required for resetting the color
+                                    // whenever the mouse moves.
+                                    var prevPicked = null;
+                                    // add mouse move event listener to the div element containing the viewer. Whenever
+                                    // the mouse moves, use viewer.pick() to get the current atom under the cursor.
+                                    parent.addEventListener('mousemove', function(event) {
+                                        var rect = viewer.boundingClientRect();
+                                        var picked = viewer.pick({ x : event.clientX - rect.left,
+                                                                   y : event.clientY - rect.top });
+                                        if (prevPicked !== null && picked !== null &&
+                                            picked.target() === prevPicked.atom) {
+                                          return;
+                                        }
+                                        if (prevPicked !== null) {
+                                          // reset color of previously picked atom.
+                                          setColorForAtom(prevPicked.node, prevPicked.atom, prevPicked.color);
+                                        }
+                                        if (picked !== null) {
+                                          var atom = picked.target();
+                                          document.getElementById('picked-atom-name').innerHTML = atom.qualifiedName();
+                                          // get RGBA color and store in the color array, so we know what it was
+                                          // before changing it to the highlight color.
+                                          var color = [0,0,0,0];
+                                          picked.node().getColorForAtom(atom, color);
+                                          prevPicked = { atom : atom, color : color, node : picked.node() };
+
+                                          setColorForAtom(picked.node(), atom, 'red');
+                                        } else {
+                                          document.getElementById('picked-atom-name').innerHTML = '&nbsp;';
+                                          prevPicked = null;
+                                        }
+                                        viewer.requestRedraw();
+                                    });
+
+
                                     var structure = pv.io.pdb(data.data);
                                     viewer.cartoon('protein', structure);
                                     viewer.autoZoom();
