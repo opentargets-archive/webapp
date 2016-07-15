@@ -284,7 +284,6 @@ body{
 /*
  * Feedback side panel
  */
-
 .cttv-feedback-button {
 
     position: fixed;
@@ -312,18 +311,36 @@ body{
     }
 }
 
+
+/*
+ * Add the full round corners to the feedback panel when shown on its own
+ */
+.cttv-feedback-button-round {
+    @include border-top-left-radius( 5px );
+}
+
+
+
+/*
+ * Container for the social media icons / follow us thingy
+ */
 .cttv-social-panel {
     position: fixed;
     top: 50%;
-    //margin-top: 2px;
     border-top: 1px solid #fff;
-    z-index: 10000;
+    z-index: 10001;
     right: 0;
-    border-bottom-left-radius: 5px;
+    @include border-bottom-left-radius( 5px );
     overflow: hidden;
     box-shadow: 0 0 6px 1px rgba(0,0,0,.2);
 
-    div {
+    width: 30px;
+    min-height: 90px;
+
+    cursor: pointer;
+
+
+    .cttv-social-panel-item {
         width: 30px;
         height: 30px;
         color: #FFF;
@@ -332,27 +349,46 @@ body{
         font-family: 'FontAwesome';
         padding-top: 6px;
     }
+
+    .cttv-social-panel-follow {
+        background: $extra-brand-color;
+        color: #FFF;
+        min-width:90px;
+        min-height: 30px;
+        position: absolute;
+        top: -30px;
+        right: 0px;
+        @include transform-origin( bottom right );
+        @include transform( rotate(-90deg) );
+        text-align: center;
+        padding: 7px 0px 5px 0px;
+    }
 }
-    .cttv-social-panel-linkedin{
-        background: #0077B5;
-        &:after {
-            content: "\f0e1";
-        };
-    }
 
-    .cttv-social-panel-twitter{
-        background: #00ACED;
-        &:after {
-            content: "\f099";
-        };
-    }
 
-    .cttv-social-panel-facebook{
-        background: #4867AA;
-        &:after {
-            content: "\f09a";
-        };
-    }
+/*
+ * The linkedin icon block
+ */
+.cttv-social-panel-linkedin{
+    background: #0077B5;
+    &:after {
+        content: "\f0e1";
+    };
+}
+
+.cttv-social-panel-twitter{
+    background: #00ACED;
+    &:after {
+        content: "\f099";
+    };
+}
+
+.cttv-social-panel-facebook{
+    background: #4867AA;
+    &:after {
+        content: "\f09a";
+    };
+}
 
 
 
