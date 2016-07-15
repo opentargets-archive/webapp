@@ -35,7 +35,7 @@ angular.module('plugins')
                             };
                             // insert the viewer under the Dom element with id 'gl'.
                             var viewer = pv.Viewer(pvContainer, options);
-                            $http.get('http://pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
+                            $http.get('//pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
                                 .then (function (data) {
                                     var structure = pv.io.pdb(data.data);
                                     viewer.cartoon('protein', structure);
