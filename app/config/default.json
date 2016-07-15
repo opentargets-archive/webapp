@@ -52,12 +52,12 @@
     "dumps_link": "/downloads/data",
 
     "diseaseSections": [
-        {
+        /*{
             "name": "relatedDiseases",
             "element": "related-diseases",
             "heading": "Related diseases",
             "track": false
-        },
+        },*/
         {
             "name": "drugs",
             "element": "drugs-display",
@@ -74,12 +74,12 @@
     ],
 
     "targetSections": [
-        {
+        /*{
             "name": "relatedTargets",
             "element": "related-targets",
             "heading": "Related targets",
             "track": false
-        },
+        },*/
 
         {
             "name": "uniprot",
@@ -142,7 +142,7 @@
         {
             "name": "proteinStructure",
             "element": "pdb-target",
-            "heading": "Protein Structure (PDB)",
+            "heading": "Protein Structure",
             "modules": ["pdb.component.library"],
             "dependencies": {
                 "build/bio-pv.min.js": {
