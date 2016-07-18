@@ -1286,6 +1286,7 @@
                     // var match;
                     var abstract = pub.abstractText;
                     var matchedSentences = $('#literature-table').DataTable().row(rowIdx).data()[6];
+                   
                     var title = pub.title;
                     var abstractSentences;
                     if ($scope.search.literature.abstractSentences[data[2]][data[7]]) {
@@ -1296,7 +1297,7 @@
                         abstractSentences.map (function (f) {
                             var pos = abstract.indexOf(f.raw);
                             // console.log("    POS: " + pos);
-                            abstract = abstract.replace(f.raw, f.formatted);
+                            abstract = abstract.replace(f.raw, f.formattedHighlighted);
                             //console.log("f.raw=", f.raw);
                             //console.log("f.formatted=", f.formatted);
 
@@ -1312,10 +1313,10 @@
                     var titleAndSource = "<a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a>"
                         + "<br />"
                         + "<span class=small>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo + "</span>"
-                    data[9]=titleAndSource + "<br/><br/>" + abstract;
+                    data[9]=titleAndSource + "<br/>" + abstract;
                     data[3] += titleAndSource + "<br/><br/>" + "<p class=small>" + (matchedSentences || "no matches available") + "</p>"
                     data[5] = pub.journalInfo.yearOfPublication;
-
+                    
                 }
                 this.data(data);
 
@@ -1475,7 +1476,8 @@
 
                                             abstractSentences[pubmedId][formatSource(paper.sourceID)][efo].push({
                                                 'raw': sentence.text.trim(),
-                                                'formatted':highlightedSentence
+                                                'formatted':text,
+                                                'formattedHighlighted':highlightedSentence
                                             });
                                         }
                                         else {//title
@@ -1486,11 +1488,11 @@
                                         }
                                     }
                                     if (sentence.section === "abstract"){
-                                        sentence.formattedText = '<span class="highlight-info text-content-highlight">' + text + '</span>';
+                                        sentence.formattedHighlightedText = '<span class="highlight-info text-content-highlight">' + text + '</span>';
                                     }
-                                    else{
-                                        sentence.formattedText = text;
-                                    }
+                                    
+                                    sentence.formattedText = text;
+                                    
                                 });
                             });
 
@@ -1620,26 +1622,27 @@
                 
                 // count number of sentences in a section
                 var sectionCount = {};
-
+                // Map that groups all sentences by section
+                var sectionSentences = {};
                 try{
 
-                    // data origin: public / private
+                    // 0 data origin: public / private
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
-                    // disease
+                    // 1 disease
                     row.push(item.disease.efo_info.label);
 
-                    // publication ID (hidden)
+                    // 2 publication ID (hidden)
                     row.push( item.evidence.literature_ref.lit_id.split("/").pop() );
 
-                    // publications
+                    // 3 publications
                     row.push( "<i class='fa fa-spinner fa-spin'></i>" );
 
-                    // matched sentences
+                    // 4 matched sentences
                     //row.push( '<a onclick="angular.element(this).scope().open('+newdata.length+')"><span class=badge>' + item.evidence.literature_ref.mined_sentences.length + '</span> ' + (newdata.length==1 ? ('sentence') : ('sentences')) + '</a>' );
                     row.push( '<a class="literature-matched-sentences" onclick="angular.element(this).scope().open('+newdata.length+')"><span class=badge>' + item.evidence.literature_ref.mined_sentences.length + '</span></a>' );
 
-                    // year
+                    // 5 year
                     row.push("<i class='fa fa-spinner fa-spin'></i>");
 
                     // details (hidden)
@@ -1663,35 +1666,46 @@
                     });
                     
                     sectionCount = countSentences(item.evidence.literature_ref.mined_sentences);
-                    
+                    sectionSentences = prepareSectionSentences(item.evidence.literature_ref.mined_sentences);
                     var previousSection = null;
-
+                    var parts = item.evidence.literature_ref.lit_id.split('/');
+                    var id = parts.pop();	
+                    
+                    // 6
                     row.push(
                         item.evidence.literature_ref.mined_sentences.map(function(sent){
                         	
                         	var section = upperCaseFirst( clearUnderscores(sent.section));
                         	var sentenceString = "";
-                        	
                         	if(section != 'Title') {
 
-								if(previousSection != sent.section) {
-									sentenceString = "<br/><span ng-click='" + sent.section + " = !" + sent.section + "'><span class='bold'>"+ section +"</span>:&nbsp;" + sectionCount[sent.section] + " matched sentences</span><br/><div collapse= '" + sent.section + "ng-if='" + sent.section + "'>";
+								if(previousSection != sent.section) { 
+									if(previousSection != null){ //this is not the first section with matched sentences
+										sentenceString = sentenceString +'</div>';
+									}
+									sentenceString +="<p class='small'><span onclick='angular.element(this).scope().displaySentences(\""+ id + sent.section +"\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>" + section + ": </span>" + sectionCount[sent.section]; 
+									sentenceString += " matched sentences</span></p>";
 									previousSection = sent.section;
 
 								}
 
-                        		sentenceString = sentenceString + "<li>"+sent.formattedText+"</li>";
+								sentenceString += "<div id='" + id + sent.section + "' style='display:none'><ul style='margin-left: 10px;'>" + sectionSentences[sent.section] + "</ul></div>";
                         	}
                         	
                         	return sentenceString;
                         }).join("") + "</div>"
                     );
 
-                    // source
+                    // 7 source like SuropePMC
                     row.push(checkPath(item, "sourceID") ? formatSource(item.sourceID) : "");
 
-                    // EFO (hidden)
+                    // 8 EFO (hidden)
                     row.push (item.disease.id);
+                    
+                    // 9 this is hidden, map of categories and their matching sentences
+                    row.push(sectionSentences);
+                    // 9 this is hidden, map of categories and their matching sentences
+                    row.push(sectionSentences);
 
                     newdata.push(row); // push, so we don't end up with empty rows
 
@@ -1721,6 +1735,23 @@
         	});
 
         	return count;
+        };
+        
+        // group sentences in each section into one sentence
+        var prepareSectionSentences = function(sentences) {
+        	var sectionSentenceMap = {};
+        	sentences.map(function(sentence) {
+
+        		if(sectionSentenceMap[sentence.section] === undefined) {
+        			sectionSentenceMap[sentence.section] = "";
+        			sectionSentenceMap[sentence.section] +=  "<li>"+sentence.formattedText+"</li>";
+        		}
+        		else {
+        			sectionSentenceMap[sentence.section] +=  "<li>"+sentence.formattedText+"</li>";
+        		}
+        	});
+
+        	return sectionSentenceMap;
         };
 
 		$scope.openEuropePmc = function(pmid){
@@ -1754,8 +1785,12 @@
             });
 
         };
-
-
+        
+        $scope.displaySentences = function(id) {
+  	      
+      		//make the collapse content to be shown or hide
+      		$('#'+id).toggle("fast");
+        };
 
         var initTableLiterature = function(){
 
