@@ -1284,7 +1284,11 @@
                     auth = authArr[0];
 
                     // var match;
-                    var abstract = pub.abstractText;
+                    //console.log("data=",data);
+                    var abstractSection = "Abstract";
+                    var abstract = "<div id='"+data[2]+ abstractSection +"'>"+  pub.abstractText+"</div>";
+                    
+                    var abstractString ="<p class='small'><span onclick='angular.element(this).scope().displaySentences(\""+data[2]+ abstractSection +"\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>Abstract</span></p>"; 					
                     var matchedSentences = $('#literature-table').DataTable().row(rowIdx).data()[6];
                    
                     var title = pub.title;
@@ -1297,7 +1301,8 @@
                         abstractSentences.map (function (f) {
                             var pos = abstract.indexOf(f.raw);
                             // console.log("    POS: " + pos);
-                            abstract = abstract.replace(f.raw, f.formattedHighlighted);
+                            //abstract = abstract.replace(f.raw, f.formattedHighlighted);
+                            abstract = abstract.replace(f.raw, f.formatted);
                             //console.log("f.raw=", f.raw);
                             //console.log("f.formatted=", f.formatted);
 
@@ -1310,12 +1315,14 @@
                         //console.log("resuilting abstract=", abstract);
                     }
 
-                    var titleAndSource = "<a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a>"
+                    var titleAndSource = "<span class=large><a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a></span>"
                         + "<br />"
                         + "<span class=small>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo + "</span>"
-                    data[9]=titleAndSource + "<br/>" + abstract;
-                    data[3] += titleAndSource + "<br/><br/>" + "<p class=small>" + (matchedSentences || "no matches available") + "</p>"
-                    data[5] = pub.journalInfo.yearOfPublication;
+                    //data[9] is used for popups, to show abstract
+                    data[9]=titleAndSource + "<br/>" + abstractString + abstract;
+                    //this is column 3
+                    data[3] += titleAndSource + "<br/><br/>" +abstractString +abstract+ " <p class=small>" + (matchedSentences || "no matches available") + "</p>"
+                    data[4] = pub.journalInfo.yearOfPublication; //this is column 4
                     
                 }
                 this.data(data);
@@ -1496,7 +1503,7 @@
                                 });
                             });
 
-                            //$scope.search.literature.data = resp.body.data;
+                            
                             $scope.search.literature.data = sortedByDate;
                             $scope.search.literature.abstractSentences = abstractSentences;
                             var dt = initTableLiterature();
@@ -1529,18 +1536,6 @@
         var getLiteratureAbstractsData = function(dt){
             $scope.loading = true;
             $scope.loaded = 0;
-            //$scope.search.literature.data
-
-
-            // var pmidsLinks = (_.map(cleanBibliography, function (p) {
-            //     return "EXT_ID:" + p;
-            // })).join (" OR ");
-            // $scope.citations = {};
-
-
-            // if ($scope.search.literature.data.length > 20) {
-            //     $scope.search.literature.data = $scope.search.literature.data.slice(0, 20);
-            // }
 
             // The expans_efo option may be retrieving the same article multiple times
             // Filter unique entries:
@@ -1551,21 +1546,21 @@
             var uniqPMIDs = Object.keys(uniq);
             // Chunk!
             var chunkSize = 10;
-            //var chunks = Math.ceil($scope.search.literature.data.length / chunkSize);
+            
             var chunks = Math.ceil(uniqPMIDs.length / chunkSize);
 
             //var callChunks = [];
             for (var i=0; i<chunks; i++) {
                 //$log.log("chunks=", chunks);
                 var done = 0;
-                //var thisRecords = $scope.search.literature.data.slice(i*chunkSize, (i+1)*chunkSize);
+               
                 var thisRecords = uniqPMIDs.slice(i*chunkSize, (i+1)*chunkSize);
                 var thisPMIDs = thisRecords.map(function (id) {
-                    //var id = p.evidence.literature_ref.lit_id.split("/").pop();
+                    
                     return "EXT_ID:" + id;
                 }).join(" OR ");
                 var url = "/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search?pagesize=" + thisRecords.length + "&query=" + thisPMIDs + "&format=json&resulttype=core";
-                //callChunks.push($http.get(url));
+                
                 $http.get(url)
                     .then (function (res) {
                         done++;
@@ -1579,34 +1574,6 @@
                         }
                     });
             }
-
-            // $q.all(callChunks)
-            //     .then (function (results) {
-            //         var allRes = [];
-            //         // TODO: This is inefficient since parseResponse scans the whole table. It would be better to combine all the results at this stage and call parseResponse once
-            //         for (var i=0; i<results.length; i++) {
-            //             allRes = allRes.concat(results[i].data.resultList.result);
-            //         }
-            //         parseResponse(allRes, dt);
-            //     },
-            //     cttvAPIservice.defaultErrorHandler
-            // );
-
-
-            // var pmids = $scope.search.literature.data.map(function(p){
-            //     return "EXT_ID:" + p.evidence.literature_ref.lit_id.split("/").pop();
-            // }).join (" OR ");
-
-            // $log.log("PMIDS:");
-            // $log.log(pmids);
-
-            // $http.get("/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search/pagesize="+$scope.search.literature.data.length+"&query=" + pmids + "&format=json&resulttype=core")
-            //     .then (
-            //         function (resp) {
-            //             parseResponse(resp, dt);
-            //         },
-            //         cttvAPIservice.defaultErrorHandler
-            //     );
         };
 
 
@@ -1614,7 +1581,8 @@
         var formatLiteratureDataToArray = function(data){
         	//$log.log("formatLiteratureDataToArray : data:",data);
             var newdata = [];
-            var cat_list = ["title", "abstract", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
+            var cat_list = ["title", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
+            //var cat_list = ["title", "abstract", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
 
             data.forEach(function(item){
                 // create rows:
@@ -1633,9 +1601,11 @@
                     row.push(item.disease.efo_info.label);
 
                     // 2 publication ID (hidden)
-                    row.push( item.evidence.literature_ref.lit_id.split("/").pop() );
+                    var parts = item.evidence.literature_ref.lit_id.split('/');
+                    var id = parts.pop();	
+                    row.push( id );
 
-                    // 3 publications
+                    // 3 publication
                     row.push( "<i class='fa fa-spinner fa-spin'></i>" );
 
                     // 4 matched sentences
@@ -1645,8 +1615,8 @@
                     // 5 year
                     row.push("<i class='fa fa-spinner fa-spin'></i>");
 
-                    // details (hidden)
-                    // first sort the data to preferred order
+                    //  details (hidden)
+                    // first sort the matched sentences to preferred order
                     item.evidence.literature_ref.mined_sentences.sort(function(a,b){
                         var a = a.section.toLowerCase();
                         var b = b.section.toLowerCase();
@@ -1668,16 +1638,14 @@
                     sectionCount = countSentences(item.evidence.literature_ref.mined_sentences);
                     sectionSentences = prepareSectionSentences(item.evidence.literature_ref.mined_sentences);
                     var previousSection = null;
-                    var parts = item.evidence.literature_ref.lit_id.split('/');
-                    var id = parts.pop();	
                     
-                    // 6
+                    // 6 sentences grouped by section
                     row.push(
                         item.evidence.literature_ref.mined_sentences.map(function(sent){
                         	
                         	var section = upperCaseFirst( clearUnderscores(sent.section));
                         	var sentenceString = "";
-                        	if(section != 'Title') {
+                        	if(section != 'Title' && section != 'Abstract') {
 
 								if(previousSection != sent.section) { 
 									if(previousSection != null){ //this is not the first section with matched sentences
@@ -1696,7 +1664,7 @@
                         }).join("") + "</div>"
                     );
 
-                    // 7 source like SuropePMC
+                    // 7 source like EuropePMC
                     row.push(checkPath(item, "sourceID") ? formatSource(item.sourceID) : "");
 
                     // 8 EFO (hidden)
@@ -1704,9 +1672,8 @@
                     
                     // 9 this is hidden, map of categories and their matching sentences
                     row.push(sectionSentences);
-                    // 9 this is hidden, map of categories and their matching sentences
-                    row.push(sectionSentences);
-
+                    
+                   
                     newdata.push(row); // push, so we don't end up with empty rows
 
 
@@ -1741,13 +1708,14 @@
         var prepareSectionSentences = function(sentences) {
         	var sectionSentenceMap = {};
         	sentences.map(function(sentence) {
-
-        		if(sectionSentenceMap[sentence.section] === undefined) {
-        			sectionSentenceMap[sentence.section] = "";
-        			sectionSentenceMap[sentence.section] +=  "<li>"+sentence.formattedText+"</li>";
-        		}
-        		else {
-        			sectionSentenceMap[sentence.section] +=  "<li>"+sentence.formattedText+"</li>";
+        		if(sentence.section != "abstract"){
+	        		if(sectionSentenceMap[sentence.section] === undefined) {
+	        			sectionSentenceMap[sentence.section] = "";
+	        			sectionSentenceMap[sentence.section] +=  "<li>"+sentence.formattedText+"</li>";
+	        		}
+	        		else {
+	        			sectionSentenceMap[sentence.section] +=  "<li>"+sentence.formattedText+"</li>";
+	        		}
         		}
         	});
 
@@ -1791,7 +1759,7 @@
       		//make the collapse content to be shown or hide
       		$('#'+id).toggle("fast");
         };
-
+        
         var initTableLiterature = function(){
 
             return $('#literature-table').DataTable( cttvUtils.setTableToolsParams({
@@ -1799,10 +1767,10 @@
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,
-                "order": [[5, 'desc'], [4, 'desc']],   // order by number of matched sentences
+                "order": [ [4, 'desc']],   // order by number of matched sentences
                 "columnDefs" : [
                     {
-                        "targets" : [2,6,7,8],
+                        "targets" : [2,5,6,7,8],
                         "visible" : false,
                     },
                     {
@@ -1811,20 +1779,46 @@
                         "width" : "3%"
                     },
                     {
-                        "targets" : [1],
+                        "targets" : [1], //disease?
                         "width" : "12%"
-                    },
-                    {
-                        "targets" : [4,7],
-                        "width" : "10%"
-                    },
-                    {
-                        "targets" : [5],
-                        "width" : "10%"
                     }
                 ],
             }, $scope.search.info.title+"-text_mining") );
         };
+
+//        var initTableLiterature = function(){
+//
+//            return $('#literature-table').DataTable( cttvUtils.setTableToolsParams({
+//                "data": formatLiteratureDataToArray($scope.search.literature.data),
+//                "autoWidth": false,
+//                "paging" : true,
+//                "ordering" : true,
+//                "order": [[5, 'desc'], [4, 'desc']],   // order by number of matched sentences
+//                "columnDefs" : [
+//                    {
+//                        "targets" : [2,6,7,8],
+//                        "visible" : false,
+//                    },
+//                    {
+//                        "targets" : [0],    // the access-level (public/private icon)
+//                        "visible" : cttvConfig.show_access_level ,
+//                        "width" : "3%"
+//                    },
+//                    {
+//                        "targets" : [1], //disease?
+//                        "width" : "12%"
+//                    },
+//                    {
+//                        "targets" : [4,7],
+//                        "width" : "10%"
+//                    },
+//                    {
+//                        "targets" : [5],
+//                        "width" : "10%"
+//                    }
+//                ],
+//            }, $scope.search.info.title+"-text_mining") );
+//        };
 
 
 
