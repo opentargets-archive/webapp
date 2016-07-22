@@ -360,7 +360,7 @@
                     // data origin: public / private
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
-                    // disease
+                    // disease name
                     row.push( item.disease.efo_info.label );
 
                     // Variant
@@ -1248,7 +1248,7 @@
         Literature data for the "Text mining" table. Table fields are:
           - Disease: disease name (string)
           - Publication: publication description (string, long text)
-          - Matched sentences: the number of them (number)
+          
           - Year: number
         */
 
@@ -1256,21 +1256,17 @@
             //$log.log("parseResponse():recs", recs);
             //$log.log("parseResponse():dt", dt);
             dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
-                var data = this.data();
+                var data = this.data(); //data is previously preformatted table data that we need to add abstract info that came from pm
                 //$log.log("parseResponse():data", data);
-
-                // ... do something with data(), or this.node(), etc
-                //data[1]; // the literature ID
+               
                 var pmdata = recs.filter(function(item){
                     return item.pmid == data[2];
                 });
                 //$log.log("parseResponse():pmdata",pmdata);
                 if(pmdata.length>0){
-                    //var re = /Abstract: (.*?)\.\s*<\/li>/g;
+                    
                     data[3]="";
-
                     var pub = pmdata[0];
-
                     // format author names
                     var auth = pub.authorString;
                     // auth = auth.substr(0,auth.length-1);
@@ -1283,18 +1279,18 @@
                     }
                     auth = authArr[0];
 
-                    // var match;
-                    //console.log("data=",data);
+                    
+                    //console.log("dataBefore=",data);
                     var abstractSection = "Abstract";
                     var abstract = "<div id='"+data[2]+ abstractSection +"'>"+  pub.abstractText+"</div>";
                     
                     var abstractString ="<p class='small'><span onclick='angular.element(this).scope().displaySentences(\""+data[2]+ abstractSection +"\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>Abstract</span></p>"; 					
-                    var matchedSentences = $('#literature-table').DataTable().row(rowIdx).data()[6];
+                    var matchedSentences = $('#literature-table').DataTable().row(rowIdx).data()[5]; //this is details
                    
                     var title = pub.title;
                     var abstractSentences;
-                    if ($scope.search.literature.abstractSentences[data[2]][data[7]]) {
-                        abstractSentences = $scope.search.literature.abstractSentences[data[2]][data[7]][data[8]];
+                    if ($scope.search.literature.abstractSentences[data[2]][data[6]]) {
+                        abstractSentences = $scope.search.literature.abstractSentences[data[2]][data[6]][data[7]];
                     }
                     if (abstractSentences && abstract) {
 
@@ -1314,15 +1310,25 @@
                         });
                         //console.log("resuilting abstract=", abstract);
                     }
-
+                    var journalInfo = (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo;
                     var titleAndSource = "<span class=large><a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a></span>"
                         + "<br />"
-                        + "<span class=small>"+auth +" "+ (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo + "</span>"
-                    //data[9] is used for popups, to show abstract
-                    data[9]=titleAndSource + "<br/>" + abstractString + abstract;
-                    //this is column 3
+                        + "<span class=small>"+auth +" "+journalInfo+ "</span>"
+                    
                     data[3] += titleAndSource + "<br/><br/>" +abstractString +abstract+ " <p class=small>" + (matchedSentences || "no matches available") + "</p>"
                     data[4] = pub.journalInfo.yearOfPublication; //this is column 4
+                        
+                    data[8]=title;
+                    data[9]=pub.authorString;
+                    data[10]=journalInfo;
+                    var URL = "http://europepmc.org/abstract/MED/"+pub.pmid;
+                    
+                    if(pub.abstractText){
+                    	data[11]= pub.abstractText;
+                    }
+                    
+                    data[13]=URL;
+                    //console.log("dataAfter", data);
                     
                 }
                 this.data(data);
@@ -1330,20 +1336,6 @@
             } );
 
             dt.draw();
-
-            /*$scope.citations.count = resp.data.hitCount;
-            $scope.citations.europepmcLink = "//europepmc.org/search?query=" + pmids;
-            var citations = resp.data.resultList.result;
-            for (var i=0; i<citations.length; i++) {
-                var authorStr = citations[i].authorString;
-                if (authorStr[authorStr.length-1] === ".") {
-                    authorStr = authorStr.slice(0,-1);
-                }
-                var authors = authorStr.split(', ');
-                citations[i].authors = authors;
-            }
-            $scope.citations.all = resp.data.resultList.result;*/
-
         }
 
 
@@ -1584,7 +1576,9 @@
             var cat_list = ["title", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
             //var cat_list = ["title", "abstract", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
 
+            
             data.forEach(function(item){
+            	//console.log("originalDataItem", item);
                 // create rows:
                 var row = [];
                 
@@ -1592,8 +1586,8 @@
                 var sectionCount = {};
                 // Map that groups all sentences by section
                 var sectionSentences = {};
+                var sectionSentencesSimple = {};
                 try{
-
                     // 0 data origin: public / private
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
@@ -1608,15 +1602,15 @@
                     // 3 publication
                     row.push( "<i class='fa fa-spinner fa-spin'></i>" );
 
-                    // 4 matched sentences
+                    // 4 total # of matched sentences
                     //row.push( '<a onclick="angular.element(this).scope().open('+newdata.length+')"><span class=badge>' + item.evidence.literature_ref.mined_sentences.length + '</span> ' + (newdata.length==1 ? ('sentence') : ('sentences')) + '</a>' );
-                    row.push( '<a class="literature-matched-sentences" onclick="angular.element(this).scope().open('+newdata.length+')"><span class=badge>' + item.evidence.literature_ref.mined_sentences.length + '</span></a>' );
+                    //row.push( '<a class="literature-matched-sentences" onclick="angular.element(this).scope().open('+newdata.length+')"><span class=badge>' + item.evidence.literature_ref.mined_sentences.length + '</span></a>' );
 
-                    // 5 year
+                    // 4 year
                     row.push("<i class='fa fa-spinner fa-spin'></i>");
 
                     //  details (hidden)
-                    // first sort the matched sentences to preferred order
+                    // first sort the matched sentences by category to preferred order
                     item.evidence.literature_ref.mined_sentences.sort(function(a,b){
                         var a = a.section.toLowerCase();
                         var b = b.section.toLowerCase();
@@ -1637,10 +1631,11 @@
                     
                     sectionCount = countSentences(item.evidence.literature_ref.mined_sentences);
                     sectionSentences = prepareSectionSentences(item.evidence.literature_ref.mined_sentences);
+                    sectionSentencesSimple = prepareSectionSentencesSimple(item.evidence.literature_ref.mined_sentences);
                     var previousSection = null;
                     
-                    // 6 sentences grouped by section
-                    row.push(
+                    // 5 sentences grouped by section and sections are sorted already
+                    row.push( 
                         item.evidence.literature_ref.mined_sentences.map(function(sent){
                         	
                         	var section = upperCaseFirst( clearUnderscores(sent.section));
@@ -1664,16 +1659,48 @@
                         }).join("") + "</div>"
                     );
 
-                    // 7 source like EuropePMC
+                    // 6 source like EuropePMC
                     row.push(checkPath(item, "sourceID") ? formatSource(item.sourceID) : "");
 
-                    // 8 EFO (hidden)
+                    // 7 EFO (hidden)
                     row.push (item.disease.id);
                     
-                    // 9 this is hidden, map of categories and their matching sentences
-                    row.push(sectionSentences);
+                    // 8 this is hidden, map of categories and their matching sentences
+                    row.push("<i class='fa fa-spinner fa-spin'></i>");
+                    //9
+                    row.push("<i class='fa fa-spinner fa-spin'></i>");
+                    //10
+                    row.push("<i class='fa fa-spinner fa-spin'></i>");
+                    //11
+                    row.push("<i class='fa fa-spinner fa-spin'></i>");
                     
-                   
+                    //12 less formatted matched sentences grouped 
+                    var previousSection1 = null;
+                    var matchString = item.evidence.literature_ref.mined_sentences.map(function(sent){
+                    	
+                    	var sectionTitle = upperCaseFirst( clearUnderscores(sent.section));
+                    	var sentenceString = "";
+                    	if(sectionTitle != 'Title' && sectionTitle != 'Abstract') {
+
+							if(previousSection1 != sent.section) { //see new section
+								//if(previousSection != null){ //this is not the first section with matched sentences
+								//	sentenceString = sentenceString +'</div>';
+								//}
+								sentenceString +=  sectionTitle.toUpperCase() +": " ;    									
+								previousSection1 = sent.section;
+								sentenceString +=  sectionSentencesSimple[sent.section];
+							}   								
+							
+							
+                    	}
+                    	
+                    	return sentenceString;
+                    }).join("") + "</div>";
+                    
+                    row.push(matchString);
+                    
+                    //13
+                    row.push("<i class='fa fa-spinner fa-spin'></i>");
                     newdata.push(row); // push, so we don't end up with empty rows
 
 
@@ -1708,6 +1735,7 @@
         var prepareSectionSentences = function(sentences) {
         	var sectionSentenceMap = {};
         	sentences.map(function(sentence) {
+        		
         		if(sentence.section != "abstract"){
 	        		if(sectionSentenceMap[sentence.section] === undefined) {
 	        			sectionSentenceMap[sentence.section] = "";
@@ -1715,6 +1743,26 @@
 	        		}
 	        		else {
 	        			sectionSentenceMap[sentence.section] +=  "<li>"+sentence.formattedText+"</li>";
+	        		}
+        		}
+        	});
+
+        	return sectionSentenceMap;
+        };
+        
+        // group sentences in each section into one sentence
+        var prepareSectionSentencesSimple = function(sentences) {
+        	var sectionSentenceMap = {};
+        	sentences.map(function(sentence) {
+        		
+        		if(sentence.section != "abstract"){
+        			//console.log("sentence:",sentence);
+	        		if(sectionSentenceMap[sentence.section] === undefined) {
+	        			sectionSentenceMap[sentence.section] = "";
+	        			sectionSentenceMap[sentence.section] +=  " "+sentence.formattedText+" ";
+	        		}
+	        		else {
+	        			sectionSentenceMap[sentence.section] +=  " "+sentence.formattedText+" ";
 	        		}
         		}
         	});
@@ -1743,7 +1791,7 @@
                        +'<h5>Abstract</h5>'
                        +'<div>'+$('#literature-table').DataTable().row(id).data()[9]+'</div>'
                        +'</div>',
-              //controller: 'ModalInstanceCtrl',
+              
               size: 'lg',
               resolve: {
                 items: function () {
@@ -1762,15 +1810,15 @@
         
         var initTableLiterature = function(){
 
-            return $('#literature-table').DataTable( cttvUtils.setTableToolsParams({
+            return $('#literature-table').DataTable( cttvUtils.setTableToolsParamsExportColumns({
                 "data": formatLiteratureDataToArray($scope.search.literature.data),
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,
-                "order": [ [4, 'desc']],   // order by number of matched sentences
+                "order": [ [4, 'desc']],   // order by year
                 "columnDefs" : [
                     {
-                        "targets" : [2,5,6,7,8],
+                        "targets" : [2,5,6,7,8,9,10,11,12],
                         "visible" : false,
                     },
                     {
@@ -1827,27 +1875,9 @@
         // =================================================
 
 
-
-        // function checkPath(obj, path){
-        //     var prop;
-        //     var props = path.split('.');
-        //
-        //     while( prop = props.shift() ){
-        //         if(!obj.hasOwnProperty(prop)){
-        //             return false;
-        //         }
-        //         obj = obj[prop];
-        //     }
-        //     return true;
-        // }
-
-
-
         // =================================================
         //  S C O P E   M E T H O D S
         // =================================================
-
-
 
         $scope.sectionOpen=function(who) {
            $log.info("tdc:sectionOpen", who);
@@ -1855,12 +1885,9 @@
             $analytics.eventTrack('evidence', {"category": "evidence", "label": who});
         };
 
-
-
         // =================================================
         //  M A I N   F L O W
         // =================================================
-
 
         //if($location.search().t && $location.search().d){
             $log.info("target-disease-controller");
@@ -1869,13 +1896,8 @@
             // parse parameters
             $scope.search.target = path[2];
             $scope.search.disease = path[3];
-
-
-
             // and fire the info search
             getInfo();
-
-
             // get the data for the flower graph
             getFlowerData()
                 .then(function(){
@@ -1889,37 +1911,4 @@
                     getLiteratureData();
                     getMouseData();
                 });
-
-
-
-            /*getFlowerData()
-                .then(function(){
-                    $log.info($scope.search.association_scores);
-
-                    // then try get some data for the tables where we know we have data...
-
-                    if($scope.search.association_scores[datatypes.GENETIC_ASSOCIATION]){
-                        getCommonDiseaseData();
-                        getRareDiseaseData();
-                    }
-                    if($scope.search.association_scores[datatypes.SOMATIC_MUTATION]){
-                        getMutationData();
-                    }
-                    if($scope.search.association_scores[datatypes.KNOWN_DRUG]){
-                        getDrugData();
-                    }
-                    if($scope.search.association_scores[datatypes.RNA_EXPRESSION]){
-                        getRnaExpressionData();
-                    }
-                    if($scope.search.association_scores[datatypes.AFFECTED_PATHWAY]){
-                        getPathwaysData();
-                    }
-                    if($scope.search.association_scores[datatypes.LITERATURE]){
-                        getLiteratureData();
-                    }
-                    if($scope.search.association_scores[datatypes.ANIMAL_MODEL]){
-                        getMouseData();
-                    }
-                });*/
-
     }]);

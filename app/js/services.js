@@ -89,6 +89,24 @@ angular.module('cttvServices', []).
 
             return obj;
         };
+        
+        cttvUtilsService.setTableToolsParamsExportColumns = function(obj, title){
+        	   
+            obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>rt<"pull-left small" l><"pull-right small" p>>';
+            obj.buttons = [
+                {
+                    extend: 'csv', //extend: 'csvHtml5',
+                    text: "<span class='fa fa-download' title='Download as .csv'><span>",
+                    title: title,
+                    exportOptions: {
+                        columns: [1,2,4,6,7,8,9,10,11,12,13]
+                    }
+                }
+            ];
+
+            return obj;
+        };
+
 
 
 
