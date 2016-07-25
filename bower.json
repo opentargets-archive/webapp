@@ -30,7 +30,7 @@
     "bootstrap": "3.3.5",
     "angular-bootstrap": "0.13.4",
     "aight": "2.0",
-    "lodash": "3.10.1",
+    "lodash": "4.14.0",
     "angulartics": "~0.20.2",
     "jquery": "2.2.0",
     "d3": "~3.5.8",
