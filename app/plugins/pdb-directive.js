@@ -33,7 +33,6 @@ angular.module('plugins')
                               antialias: true,
                               quality : 'medium'
                             };
-                            // insert the viewer under the Dom element with id 'gl'.
 
                             function setColorForAtom(go, atom, color) {
                                 var view = go.structure().createEmptyView();
@@ -42,7 +41,7 @@ angular.module('plugins')
                             }
 
                             var viewer = pv.Viewer(parent, options);
-                            $http.get('//pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
+                            $http.get('/proxy/pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
                                 .then (function (data) {
                                     // variable to store the previously picked atom. Required for resetting the color
                                     // whenever the mouse moves.
