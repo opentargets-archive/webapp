@@ -1679,21 +1679,15 @@
                     var matchString = item.evidence.literature_ref.mined_sentences.map(function(sent){
                     	
                     	var sectionTitle = upperCaseFirst( clearUnderscores(sent.section));
-                    	var sentenceString = "";
-                    	if(sectionTitle != 'Title' && sectionTitle != 'Abstract') {
+                    	var sentenceString = "";                 	
 
-							if(previousSection1 != sent.section) { //see new section
-								//if(previousSection != null){ //this is not the first section with matched sentences
-								//	sentenceString = sentenceString +'</div>';
-								//}
-								sentenceString +=  sectionTitle.toUpperCase() +": " ;    									
-								previousSection1 = sent.section;
-								sentenceString +=  sectionSentencesSimple[sent.section];
-							}   								
+						if(previousSection1 != sent.section) { //see new section
 							
-							
-                    	}
-                    	
+							sentenceString +=  sectionTitle.toUpperCase() +": " ;    									
+							previousSection1 = sent.section;
+							sentenceString +=  sectionSentencesSimple[sent.section];
+						}   								
+						
                     	return sentenceString;
                     }).join("") + "</div>";
                     
@@ -1753,18 +1747,14 @@
         // group sentences in each section into one sentence
         var prepareSectionSentencesSimple = function(sentences) {
         	var sectionSentenceMap = {};
-        	sentences.map(function(sentence) {
-        		
-        		if(sentence.section != "abstract"){
-        			//console.log("sentence:",sentence);
-	        		if(sectionSentenceMap[sentence.section] === undefined) {
-	        			sectionSentenceMap[sentence.section] = "";
-	        			sectionSentenceMap[sentence.section] +=  " "+sentence.formattedText+" ";
-	        		}
-	        		else {
-	        			sectionSentenceMap[sentence.section] +=  " "+sentence.formattedText+" ";
-	        		}
+        	sentences.map(function(sentence) {        		       		
+        		if(sectionSentenceMap[sentence.section] === undefined) {
+        			sectionSentenceMap[sentence.section] = "";
+        			sectionSentenceMap[sentence.section] +=  " "+sentence.formattedText+" ";
         		}
+        		else {
+        			sectionSentenceMap[sentence.section] +=  " "+sentence.formattedText+" ";
+        		}       		
         	});
 
         	return sectionSentenceMap;
@@ -1833,41 +1823,6 @@
                 ],
             }, $scope.search.info.title+"-text_mining") );
         };
-
-//        var initTableLiterature = function(){
-//
-//            return $('#literature-table').DataTable( cttvUtils.setTableToolsParams({
-//                "data": formatLiteratureDataToArray($scope.search.literature.data),
-//                "autoWidth": false,
-//                "paging" : true,
-//                "ordering" : true,
-//                "order": [[5, 'desc'], [4, 'desc']],   // order by number of matched sentences
-//                "columnDefs" : [
-//                    {
-//                        "targets" : [2,6,7,8],
-//                        "visible" : false,
-//                    },
-//                    {
-//                        "targets" : [0],    // the access-level (public/private icon)
-//                        "visible" : cttvConfig.show_access_level ,
-//                        "width" : "3%"
-//                    },
-//                    {
-//                        "targets" : [1], //disease?
-//                        "width" : "12%"
-//                    },
-//                    {
-//                        "targets" : [4,7],
-//                        "width" : "10%"
-//                    },
-//                    {
-//                        "targets" : [5],
-//                        "width" : "10%"
-//                    }
-//                ],
-//            }, $scope.search.info.title+"-text_mining") );
-//        };
-
 
 
         // =================================================
