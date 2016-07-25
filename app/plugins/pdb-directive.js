@@ -6,7 +6,8 @@ angular.module('plugins')
             restrict: 'E',
             // templateUrl: "plugins/pdb.html",
             scope: {
-                target: '='
+                target: '=',
+                width: "="
             },
             link: function (scope, element, attrs) {
 
@@ -18,7 +19,7 @@ angular.module('plugins')
                         var bestStructure = resp.data[uniprotId][0];
                         scope.pdbId = bestStructure.pdb_id;
 
-                        var template = '<p>Showing the PDB structure for <a class=pdb-links pdb-id=' + bestStructure.pdb_id + ' target=_blank href="javascript:void(0);">' + bestStructure.pdb_id + '</a></p><tabset><tab heading=3D><div class="pdb-widget-container"><pdb-lite-mol pdb-id="pdbId" hide-controls=true></pdb-lite-mol></div></tab><tab heading=2D><div class="pdb-widget-container"><pdb-topology-viewer entry-id=' + bestStructure.pdb_id + ' entity-id=1></pdb-topology-viewer></div></tab><tab heading=PV><div class="pdb-widget-container" id=pvTarget></div><div id=picked-atom-name style="text-align:center;"">&nbsp;</div></tab><tabset>';
+                        var template = '<p>Showing the PDB structure for <a class=pdb-links pdb-id=' + bestStructure.pdb_id + ' target=_blank href="javascript:void(0);">' + bestStructure.pdb_id + '</a></p><tabset><tab heading=3D><div class="pdb-widget-container"><pdb-lite-mol pdb-id="pdbId" hide-controls=true></pdb-lite-mol></div></tab><tab heading=2D><div class="pdb-widget-container"><pdb-topology-viewer entry-id=' + bestStructure.pdb_id + ' entity-id=1></pdb-topology-viewer></div></tab><tab heading=PV><div id=pvTarget></div><div id=picked-atom-name style="text-align:center;"">&nbsp;</div></tab><tabset>';
                         var compiled = $compile(template)(scope);
                         element.append(compiled);
 
@@ -28,10 +29,10 @@ angular.module('plugins')
                             var parent = document.getElementById("pvTarget");
                             // override the default options with something less restrictive.
                             var options = {
-                              width: 600,
-                              height: 600,
-                              antialias: true,
-                              quality : 'medium'
+                                width: scope.width - 30,
+                                height: 600,
+                                antialias: true,
+                                quality : 'medium'
                             };
 
                             function setColorForAtom(go, atom, color) {
@@ -89,6 +90,10 @@ angular.module('plugins')
                                     });
                                 });
                         },0);
+                    }, function (resp) { // error
+                        var template = "<div>No structure found for {{target.approved_symbol}}</div>";
+                        var compiled = $compile(template)(scope);
+                        element.append(compiled);
                     });
 
 
