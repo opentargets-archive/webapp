@@ -1,8 +1,6 @@
 angular.module('plugins', [])
 .directive ('pluginLoader', ['$compile', '$timeout', 'lazy', '$q', '$analytics', function ($compile, $timeout, lazy, $q, $analytics) {
 
-    var alreadyLoaded = {};
-
     return {
         restrict: 'E',
         scope: {
@@ -16,6 +14,7 @@ angular.module('plugins', [])
             'label': '='
         },
         link: function(scope, element, attrs) {
+            scope.alreadyLoaded = {};
 
             scope.$watch('visible', function (val) {
 
@@ -36,10 +35,12 @@ angular.module('plugins', [])
                 }
 
                 if (val === "true") {
-                    if (alreadyLoaded[scope.plugin]) {
+                    if (scope.alreadyLoaded[scope.plugin]) {
+                        console.log(scope.plugin + " is already there");
                         return;
                     } else {
-                        alreadyLoaded[scope.plugin] = true;    
+                        console.log(scope.plugin + " does not exist yet, creating it");
+                        scope.alreadyLoaded[scope.plugin] = true;
                     }
 
                     if (scope.track) {
