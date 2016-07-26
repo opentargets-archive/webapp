@@ -923,6 +923,7 @@ angular
     					operation.open = openPath && openPath === operation.operationId || openPath === resource.name + '*';
     					resource.operations = resource.operations || [];
     					resource.operations.push(operation);
+                        // resource.open = true;    // use this to trigger list operations by default and override any yaml value
     					if (operation.open) {
     						resource.open = true;
     					}
