@@ -1755,7 +1755,7 @@
                 "order": [ [4, 'desc']],   // order by year
                 "columnDefs" : [
                     {
-                        "targets" : [2,5,6,7,8,11,12,13],
+                        "targets" : [2,5,6,7,8,9,10,11,12,13],
                         "visible" : false,
                     },
                     {
