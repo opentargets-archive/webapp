@@ -1231,16 +1231,24 @@
                     var pub = pmdata[0];
                     // format author names
                     var auth = pub.authorString;
-                    // auth = auth.substr(0,auth.length-1);
+                    
                     var authArr = [];
                     if (auth) {
                         authArr = auth.split(",");
+                        data[9]=pub.authorString;
+                    }
+                    else{
+                    	data[9] = "";
                     }
                     if(auth && auth.length>1){
                         authArr[0] = authArr[0] + " <span class='cttv-author-et-al'>et al.</span>";
                     }
-                    auth = authArr[0];
-                  
+                    if(authArr[0]){
+                    	auth = authArr[0];
+                    }
+                    else{
+                    	auth = "";
+                    }
                     var abstractSection = "Abstract";
                     var abstract = "<div id='"+data[2]+ abstractSection +"'>"+  pub.abstractText+"</div>";
                     
@@ -1271,16 +1279,22 @@
                         });
                         
                     }
-                    var journalInfo = (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo;
+                    var journalVolume = pub.journalInfo.volume ? pub.journalInfo.volume:"";
+                    var journalIssue = pub.journalInfo.issue  ? "(" + pub.journalInfo.issue + ")":"";
+                    var pageInfo     = pub.pageInfo ? ":" + pub.pageInfo:"";
+                    var journalInfo = (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " + journalVolume + journalIssue + pageInfo;
+                    if(!journalInfo){
+                    	journalInfo = "";
+                    }
                     var titleAndSource = "<span class=large><a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a></span>"
                         + "<br />"
-                        + "<span class=small>"+auth +" "+journalInfo+ "</span>"
+                        + "<span class=small>"+auth +" "+journalInfo+ "</span>";
                     
                     data[3] += titleAndSource + "<br/><br/>" +abstractString +abstract+ " <p class=small>" + (matchedSentences || "no matches available") + "</p>"
                     data[4] = pub.journalInfo.yearOfPublication; //this is column 4
                         
                     data[8]=title;
-                    data[9]=pub.authorString;
+                    
                     data[10]=journalInfo;
                     var URL = "http://europepmc.org/abstract/MED/"+pub.pmid;
                     
@@ -1741,7 +1755,7 @@
                 "order": [ [4, 'desc']],   // order by year
                 "columnDefs" : [
                     {
-                        "targets" : [2,5,6,7,8,9,10,11,12,13],
+                        "targets" : [2,5,6,7,8,11,12,13],
                         "visible" : false,
                     },
                     {
