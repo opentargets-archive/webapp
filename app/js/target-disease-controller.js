@@ -8,25 +8,11 @@
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-<<<<<<< HEAD
     .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$modal', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $modal, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
         'use strict';
         $log.log('TargetDiseaseCtrl()');
 
-
-
-        cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
-=======
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log',
-            'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig',
-            'clearUnderscoresFilter', 'upperCaseFirstFilter',
-            '$modal', '$compile', '$http', '$q', '$timeout', '$analytics',
-            function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig,
-                      clearUnderscores, upperCaseFirst,
-                      $modal, $compile, $http, $q, $timeout, $analytics) {
-        'use strict';
-
->>>>>>> biogenDev
+		cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
         cttvUtils.clearErrors();
 
         var checkPath = cttvUtils.checkPath;
@@ -136,13 +122,7 @@
             }
         };
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> biogenDev
         $scope.datatypes = datatypes;
-
 
         var arrayToList = function(arr, oneToString){
             if(oneToString && arr.length==1){
@@ -150,17 +130,10 @@
             }
             return "<ul><li>" + arr.join("</li><li>") + "</li></ul>";
         }
-
-
-
-
-
-
-
+        
         // =================================================
         //  I N F O
         // =================================================
-
 
 
         /**
@@ -208,24 +181,6 @@
         // =================================================
         //  F L O W E R
         // =================================================
-
-
-
-        // function lookDatasource (arr, dsName) {
-        //     for (var i=0; i<arr.length; i++) {
-        //        if (arr[i].datatype === dsName) {
-        //            return {
-        //                "count": arr[i].evidence_count,
-        //                "score": arr[i].association_score
-        //            };
-        //        }
-        //     }
-        //     return {
-        //        "count": 0,
-        //        "score": 0
-        //     };
-        // }
-
 
 
         /*
@@ -310,20 +265,6 @@
         };
 
 
-
-        // var getSoLabel = function(arr_info, arr_code){
-        //     var label = "nearest_gene_five_prime_end";
-        //     // first look for the SO id in the array
-        //     for(var i=0; i<arr_code.length; i++){
-        //         if(arr_code[i].substr(0,2).toUpperCase() === "SO"){
-        //             label = getEcoLabel( arr_info, arr_code[i]);
-        //             break;
-        //         }
-        //     }
-        //     return label;
-        // }
-
-
         var getCommonDiseaseData = function(){
             $scope.search.tables.genetic_associations.common_diseases.is_loading = true;
             var opts = {
@@ -369,7 +310,7 @@
          */
         var formatCommonDiseaseDataToArray = function(data){
             var newdata = [];
-            //for(var i=0; i<data.length; i++){
+            
             data.forEach(function(item){
 
                 // create rows:
@@ -1269,8 +1210,7 @@
         /*
         Literature data for the "Text mining" table. Table fields are:
           - Disease: disease name (string)
-          - Publication: publication description (string, long text)
-          
+          - Publication: publication description (string, long text)          
           - Year: number
         */
 
@@ -1300,9 +1240,7 @@
                         authArr[0] = authArr[0] + " <span class='cttv-author-et-al'>et al.</span>";
                     }
                     auth = authArr[0];
-
-                    
-                    //console.log("dataBefore=",data);
+                  
                     var abstractSection = "Abstract";
                     var abstract = "<div id='"+data[2]+ abstractSection +"'>"+  pub.abstractText+"</div>";
                     
@@ -1311,13 +1249,9 @@
                    
                     var title = pub.title;
                     var abstractSentences;
-<<<<<<< HEAD
-                    if ($scope.search.tables.literature.abstractSentences[data[2]][data[7]]) {
-                        abstractSentences = $scope.search.tables.literature.abstractSentences[data[2]][data[7]][data[8]];
-=======
-                    if ($scope.search.literature.abstractSentences[data[2]][data[6]]) {
-                        abstractSentences = $scope.search.literature.abstractSentences[data[2]][data[6]][data[7]];
->>>>>>> biogenDev
+
+                    if ($scope.search.tables.literature.abstractSentences[data[2]][data[6]]) {
+                        abstractSentences = $scope.search.tables.literature.abstractSentences[data[2]][data[6]][data[7]];
                     }
                     if (abstractSentences && abstract) {
 
@@ -1335,7 +1269,7 @@
                                 title = title.replace(f.raw, f.formatted);
                             }
                         });
-                        //console.log("resuilting abstract=", abstract);
+                        
                     }
                     var journalInfo = (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo;
                     var titleAndSource = "<span class=large><a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a></span>"
@@ -1374,15 +1308,8 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: $scope.search.tables.literature.maxShow,
-                datasource: $scope.search.tables.literature.source, //cttvConfig.evidence_sources.literature,   // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
-                //datasource: [dbs.EPMC, dbs.DISGENET],
-                // fields: [
-                //     "disease",  // take disease.efo_info[0].label and disease.efo_info[0].efo_id
-                //     "evidence",
-                //     "scores",
-                //     "access_level",
-                //     "scoreID"
-                // ]
+                datasource: $scope.search.tables.literature.source //cttvConfig.evidence_sources.literature,   
+                // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
             };
             _.extend(opts, searchObj);
             return cttvAPIservice.getFilterBy( opts ).
@@ -1390,12 +1317,9 @@
                     function(resp) {
 
                         if( resp.body.data ){
-<<<<<<< HEAD
+
                             $scope.search.tables.literature.total = resp.body.total;
-=======
-                            $scope.search.literature.total = resp.body.total;
-                            //$log.log("target-disease-controller: resp.body.total = " , resp.body.total);
->>>>>>> biogenDev
+
                             var unicode_re = /u([\dABCDEF]{4})/gi;
                             var match;
 
@@ -1405,7 +1329,7 @@
 
                             var abstractSentences = {};
                             sortedByDate.map (function (paper) {
-                                //all.push(paper.evidence.literature_ref.lit_id.split("/").pop());
+                                
                                 // WARNING: Unicode characters are encoded in the response, we convert them to symbol
 
                                 paper.evidence.literature_ref.mined_sentences.map (function (sentence) {
@@ -1433,17 +1357,7 @@
                                     abstractSentences[pubmedId] = {};
                                 }
                                 paper.evidence.literature_ref.mined_sentences.map (function (sentence) {
-                                    // Non asciii characters are also breakpoints
-                                    // for (var i=0; i<sentence.text.length; i++) {
-                                    //     if (sentence.text.charCodeAt(i) >= 945) {
-                                    //         sentence.breakpoints.push({
-                                    //             "type": "nonAsciii",
-                                    //             "pos" : i,
-                                    //             "extra": 0,
-                                    //             "span": -1
-                                    //         });
-                                    //     }
-                                    //  }
+                                    
                                      if (sentence.t_start !== sentence.t_end) {
                                          sentence.breakpoints.push({
                                             "type": "t_start",
@@ -1504,7 +1418,7 @@
                                         var highlightedSentence = '<span class="highlight-info text-content-highlight">' + text + '</span>';
                                         if (sentence.section === "abstract") {
 
-                                            abstractSentences[pubmedId][formatSource(paper.sourceID)][efo].push({
+                                           	abstractSentences[pubmedId][formatSource(paper.sourceID)][efo].push({
                                                 'raw': sentence.text.trim(),
                                                 'formatted':text,
                                                 'formattedHighlighted':highlightedSentence
@@ -1526,15 +1440,10 @@
                                 });
                             });
 
-<<<<<<< HEAD
-                            //$scope.search.tables.literature.data = resp.body.data;
+
                             $scope.search.tables.literature.data = sortedByDate;
                             $scope.search.tables.literature.abstractSentences = abstractSentences;
-=======
-                            
-                            $scope.search.literature.data = sortedByDate;
-                            $scope.search.literature.abstractSentences = abstractSentences;
->>>>>>> biogenDev
+
                             var dt = initTableLiterature();
                             getLiteratureAbstractsData(dt);
                         } else {
@@ -1565,22 +1474,7 @@
         var getLiteratureAbstractsData = function(dt){
             $scope.loading = true;
             $scope.loaded = 0;
-<<<<<<< HEAD
-            //$scope.search.tables.literature.data
-
-
-            // var pmidsLinks = (_.map(cleanBibliography, function (p) {
-            //     return "EXT_ID:" + p;
-            // })).join (" OR ");
-            // $scope.citations = {};
-
-
-            // if ($scope.search.tables.literature.data.length > 20) {
-            //     $scope.search.tables.literature.data = $scope.search.tables.literature.data.slice(0, 20);
-            // }
-=======
->>>>>>> biogenDev
-
+            
             // The expans_efo option may be retrieving the same article multiple times
             // Filter unique entries:
             var uniq = {};
@@ -1589,30 +1483,18 @@
             });
             var uniqPMIDs = Object.keys(uniq);
             // Chunk!
-            var chunkSize = 10;
-<<<<<<< HEAD
-            //var chunks = Math.ceil($scope.search.tables.literature.data.length / chunkSize);
-=======
-            
->>>>>>> biogenDev
+            var chunkSize = 10;           
             var chunks = Math.ceil(uniqPMIDs.length / chunkSize);
-
-            //var callChunks = [];
+          
             for (var i=0; i<chunks; i++) {
-                //$log.log("chunks=", chunks);
                 var done = 0;
-<<<<<<< HEAD
                 //var thisRecords = $scope.search.tables.literature.data.slice(i*chunkSize, (i+1)*chunkSize);
-=======
-               
->>>>>>> biogenDev
                 var thisRecords = uniqPMIDs.slice(i*chunkSize, (i+1)*chunkSize);
-                var thisPMIDs = thisRecords.map(function (id) {
-                    
+                var thisPMIDs = thisRecords.map(function (id) {                   
                     return "EXT_ID:" + id;
                 }).join(" OR ");
                 var url = "/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search?pagesize=" + thisRecords.length + "&query=" + thisPMIDs + "&format=json&resulttype=core";
-                
+                //Should not this be a service call?
                 $http.get(url)
                     .then (function (res) {
                         done++;
@@ -1625,51 +1507,16 @@
 
                         }
                     });
-            }
-<<<<<<< HEAD
-
-            // $q.all(callChunks)
-            //     .then (function (results) {
-            //         var allRes = [];
-            //         // TODO: This is inefficient since parseResponse scans the whole table. It would be better to combine all the results at this stage and call parseResponse once
-            //         for (var i=0; i<results.length; i++) {
-            //             allRes = allRes.concat(results[i].data.resultList.result);
-            //         }
-            //         parseResponse(allRes, dt);
-            //     },
-            //     cttvAPIservice.defaultErrorHandler
-            // );
-
-
-            // var pmids = $scope.search.tables.literature.data.map(function(p){
-            //     return "EXT_ID:" + p.evidence.literature_ref.lit_id.split("/").pop();
-            // }).join (" OR ");
-
-            // $log.log("PMIDS:");
-            // $log.log(pmids);
-
-            // $http.get("/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search/pagesize="+$scope.search.tables.literature.data.length+"&query=" + pmids + "&format=json&resulttype=core")
-            //     .then (
-            //         function (resp) {
-            //             parseResponse(resp, dt);
-            //         },
-            //         cttvAPIservice.defaultErrorHandler
-            //     );
-=======
->>>>>>> biogenDev
+            }       
         };
 
-
-
         var formatLiteratureDataToArray = function(data){
-        	//$log.log("formatLiteratureDataToArray : data:",data);
+        	
             var newdata = [];
             var cat_list = ["title", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
-            //var cat_list = ["title", "abstract", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
-
             
             data.forEach(function(item){
-            	//console.log("originalDataItem", item);
+            	
                 // create rows:
                 var row = [];
                 
@@ -1856,14 +1703,9 @@
 			window.open(URL);
 		};
 
-		$scope.open = function(id){
-            //$log.log(id);
-            //var row = $('#literature-table').DataTable().row(id.data()[5];
-            //$log.log("rowData",$('#literature-table').DataTable().row(id).data());
+		$scope.open = function(id){            
             var modalInstance = $modal.open({
               animation: true,
-              //templateUrl: 'myModalContent.html',
-              // template: '<cttv-modal>'+ $('#literature-table').DataTable().row(id).data()[5] +'</cttv-modal>',
               template: '<div onclick="angular.element(this).scope().$dismiss()">'
                        +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
                        +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
@@ -1891,13 +1733,8 @@
         
         var initTableLiterature = function(){
 
-<<<<<<< HEAD
-            return $('#literature-table').DataTable( cttvUtils.setTableToolsParams({
-                "data": formatLiteratureDataToArray($scope.search.tables.literature.data),
-=======
             return $('#literature-table').DataTable( cttvUtils.setTableToolsParamsExportColumns({
-                "data": formatLiteratureDataToArray($scope.search.literature.data),
->>>>>>> biogenDev
+                "data": formatLiteratureDataToArray($scope.search.tables.literature.data),
                 "autoWidth": false,
                 "paging" : true,
                 "ordering" : true,
@@ -1940,8 +1777,6 @@
         //  M A I N   F L O W
         // =================================================
 
-        //if($location.search().t && $location.search().d){
-<<<<<<< HEAD
         $log.info("target-disease-controller");
         var path = $location.path().split("/");
         $log.info(path);
@@ -1949,11 +1784,8 @@
         $scope.search.target = path[2];
         $scope.search.disease = path[3];
 
-
-
         // and fire the info search
         getInfo();
-
 
         // get the data for the flower graph
         getFlowerData()
@@ -1969,14 +1801,12 @@
                 getMouseData();
             });
 
-
-
         var render = function(new_state, old_state){
             var view = new_state["view"] || {};
             var sec = view.sec;
             if(sec && sec[0] && $scope.search.tables[ sec[0] ]){
                 $scope.search.tables[ sec[0] ].is_open = true;
-                // $anchorScroll( sec[0] );
+               
                 // scrolling before we have the data is unlikely to work:
                 // at best it will scroll a little bit, but not much, because there won't be any height to allow scolling
                 // leaving this here for now.
@@ -1985,73 +1815,16 @@
             }
         }
 
-
         $scope.$on(cttvLocationState.STATECHANGED, function (e, new_state, old_state) {
-            // at the moment this shouldn't be trigger other then when rerouting from an old style link
+            // at the moment this shouldn't be trigger other than when rerouting from an old style link
             render( new_state, old_state );
         });
-
 
         // if old link, do a rerouting to new style links
         if( !cttvLocationState.getState()["view"] && cttvLocationState.getState()["sec"] ){
             $location.search( 'view=sec:' + cttvLocationState.getState()["sec"]);
         }
-
-
+        
         render(cttvLocationState.getState(), cttvLocationState.getOldState());
-
-
-            /*getFlowerData()
-                .then(function(){
-                    $log.info($scope.search.association_scores);
-
-                    // then try get some data for the tables where we know we have data...
-
-                    if($scope.search.association_scores[datatypes.GENETIC_ASSOCIATION]){
-                        getCommonDiseaseData();
-                        getRareDiseaseData();
-                    }
-                    if($scope.search.association_scores[datatypes.SOMATIC_MUTATION]){
-                        getMutationData();
-                    }
-                    if($scope.search.association_scores[datatypes.KNOWN_DRUG]){
-                        getDrugData();
-                    }
-                    if($scope.search.association_scores[datatypes.RNA_EXPRESSION]){
-                        getRnaExpressionData();
-                    }
-                    if($scope.search.association_scores[datatypes.AFFECTED_PATHWAY]){
-                        getPathwaysData();
-                    }
-                    if($scope.search.association_scores[datatypes.LITERATURE]){
-                        getLiteratureData();
-                    }
-                    if($scope.search.association_scores[datatypes.ANIMAL_MODEL]){
-                        getMouseData();
-                    }
-                });*/
-
-=======
-            $log.info("target-disease-controller");
-            var path = $location.path().split("/");
-            $log.info(path);
-            // parse parameters
-            $scope.search.target = path[2];
-            $scope.search.disease = path[3];
-            // and fire the info search
-            getInfo();
-            // get the data for the flower graph
-            getFlowerData()
-                .then(function(){
-                    // then get data for all then
-                    getCommonDiseaseData();
-                    getRareDiseaseData();
-                    getMutationData();
-                    getDrugData();
-                    getRnaExpressionData();
-                    getPathwaysData();
-                    getLiteratureData();
-                    getMouseData();
-                });
->>>>>>> biogenDev
+        
     }]);
