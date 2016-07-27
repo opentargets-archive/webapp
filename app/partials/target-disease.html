@@ -57,12 +57,13 @@
                     </div>
 
                 </div>
-
             </div>
-
-
         </div>
+    </div>
 
+
+    <!-- Tabular data -->
+    <div class="container">
 
         <!-- Tabular data -->
         <!-- <div class="row gene-disease-content"> -->
@@ -403,7 +404,8 @@
                                 <p>Source: <span ng-repeat="source in search.tables.literature.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span></span></p>
                             </div>
 
-                            <p class=cttv-section-intro>Shown are the top {{search.tables.literature.data.length}} articles where <span class="highlight-primary text-content-highlight">target</span> and <span class="highlight-warning text-content-highlight">disease</span> are found in the same sentence. </p>
+							<p class=cttv-section-intro>Shown are the top {{search.tables.literature.data.length}} articles where <span class="highlight-primary text-content-highlight">target</span> and <span class="highlight-warning text-content-highlight">disease</span> are found in the same sentence.  </p>
+
 
                             <p ng-show="search.tables.literature.total>search.tables.literature.maxShow">{{search.tables.literature.total}} records found. Showing the most relevant {{search.tables.literature.data.length}}</p>
 
@@ -411,15 +413,20 @@
                                 <table class='table cttv-evidence-table' id="literature-table">
                                     <thead>
                                         <tr>
-                                            <th></th>  <!-- nameless col for access level -->
-                                            <th>Disease</th>
-                                            <th>Publication ID</th> <!-- hidden column -->
-                                            <th>Publication</th>
-                                            <th>Matched sentences</th>
-                                            <th>Year</th>
-                                            <th>Details</th> <!-- hidden column -->
-                                            <th>Source</th> <!-- hidden column -->
-                                            <th>EFO</th> <!-- hidden column -->
+                                            <th></th>  				<!--0 nameless col for access level -->
+                                            <th>Disease</th> 		<!--1   -->
+                                            <th>Publication ID</th> <!--2 hidden column -->
+                                            <th>Publication</th>	<!--3  -->
+                                            <th>Year</th> 			<!--4  -->
+                                            <th>Details</th> 		<!--5 hidden column -->
+                                            <th>Source</th> 		<!--6 hidden column -->
+                                            <th>EFO</th> 			<!--7 hidden column -->
+                                            <th>Title</th>			<!--8 hidden column used for export-->
+                                            <th>Authors</th>		<!--9 hidden column used for export-->
+                                            <th>Journal</th>		<!--10 hidden column used for export-->
+                                            <th>Abstract</th>		<!--11 hidden column used for export-->
+                                            <th>Matches</th>		<!--12 hidden column used for export-->
+                                            <th>URL</th>			<!--13 hidden column used for export-->
                                         </tr>
                                     </thead>
 
@@ -493,10 +500,6 @@
                     </accordion-group>
 
                 </accordion>
-
-
-
-
 
 
 
