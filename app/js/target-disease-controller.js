@@ -129,12 +129,7 @@
                 return arr[0];
             }
             return "<ul><li>" + arr.join("</li><li>") + "</li></ul>";
-<<<<<<< HEAD
         };
-=======
-        }
-
->>>>>>> master
         // =================================================
         //  I N F O
         // =================================================
@@ -2051,8 +2046,4 @@
         }
 
         render(cttvLocationState.getState(), cttvLocationState.getOldState());
-<<<<<<< HEAD
-=======
-
->>>>>>> master
     }]);
