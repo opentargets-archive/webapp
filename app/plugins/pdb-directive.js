@@ -68,10 +68,17 @@ angular.module('plugins')
                                           // get RGBA color and store in the color array, so we know what it was
                                           // before changing it to the highlight color.
                                           var color = [0,0,0,0];
-                                          picked.node().getColorForAtom(atom, color);
+                                          var currColor = picked.node().getColorForAtom(atom, color);
+                                          console.log(currColor);
                                           prevPicked = { atom : atom, color : color, node : picked.node() };
 
-                                          setColorForAtom(picked.node(), atom, 'red');
+                                          if (currColor[0] === 1) {
+                                              console.log("setting atom to blue");
+                                              setColorForAtom(picked.node(), atom, 'blue');
+                                          } else {
+                                              setColorForAtom(picked.node(), atom, 'red');
+                                          }
+                                          
                                         } else {
                                           document.getElementById('picked-atom-name').innerHTML = '&nbsp;';
                                           prevPicked = null;
@@ -81,7 +88,9 @@ angular.module('plugins')
 
 
                                     var structure = pv.io.pdb(data.data);
-                                    viewer.cartoon('protein', structure);
+                                    viewer.cartoon('protein', structure, {
+                                        color: pv.color.byChain()
+                                    });
                                     viewer.autoZoom();
 
                                     // viewer.on('viewerReady', function() {
