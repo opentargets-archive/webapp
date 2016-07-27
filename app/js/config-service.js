@@ -26,7 +26,7 @@ angular.module('cttvServices').
                     common : [dbs.GWAS],
                     rare : [dbs.UNIPROT, dbs.EVA, dbs.UNIPROT_LITERATURE]
                 },
-                somatic_mutation : [dbs.CANCER_GENE_CENSUS, dbs.EVA_SOMATIC],
+                somatic_mutation : [dbs.CANCER_GENE_CENSUS, dbs.EVA_SOMATIC, dbs.INTOGEN],
                 known_drug : [dbs.CHEMBL],
                 rna_expression : [dbs.EXPRESSION_ATLAS],
                 pathway : [dbs.REACTOME],
