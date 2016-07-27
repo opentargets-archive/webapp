@@ -404,7 +404,7 @@
                                 <p>Source: <span ng-repeat="source in search.tables.literature.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span></span></p>
                             </div>
 
-							<p class=cttv-section-intro>Shown are the top {{search.tables.literature.data.length}} articles where <span class="highlight-primary text-content-highlight">target</span> and <span class="highlight-warning text-content-highlight">disease</span> are found in the same sentence.  Perform similar search for <span class="highlight-primary text-content-highlight">{{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}}</span> and <span class="highlight-warning text-content-highlight">{{search.info.efo.label}}</span> in <a href="http://www.ncbi.nlm.nih.gov/pubmed/?term='{{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}}+and+{{search.info.efo.label}}'" target="_blank">PubMed</a> or <a href="https://europepmc.org/search?query='{{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}} and {{search.info.efo.label}}'" target="_blank">Europe PMC</a></p>
+							<p class=cttv-section-intro>Shown are the top {{search.tables.literature.data.length}} articles where <span class="highlight-primary text-content-highlight">target</span> and <span class="highlight-warning text-content-highlight">disease</span> are found in the same sentence.  </p>
 
 
                             <p ng-show="search.tables.literature.total>search.tables.literature.maxShow">{{search.tables.literature.total}} records found. Showing the most relevant {{search.tables.literature.data.length}}</p>
