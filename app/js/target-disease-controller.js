@@ -1471,7 +1471,8 @@
                     }
 
                     var abstractSection = "Abstract";
-                    var abstract = "<div id='"+data[2]+ abstractSection +"'>"+  pub.abstractText+"</div>";
+                    var abstractText = pub.abstractText?pub.abstractText:"No abstract supplied.";
+                    var abstract = "<div id='"+data[2]+ abstractSection +"'>"+  abstractText+"</div>";
 
                     var abstractString ="<p class='small'><span onclick='angular.element(this).scope().displaySentences(\""+data[2]+ abstractSection +"\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>Abstract</span></p>";
                     var matchedSentences = $('#literature-table').DataTable().row(rowIdx).data()[5]; //this is details
