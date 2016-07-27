@@ -56,6 +56,7 @@
 
                     <span class="search-details">
                         <span class="label" ng-class="(result.data.type==='target') ? 'label-primary' : 'label-warning'">{{result.data.type}}</span><!-- &nbsp;|&nbsp;<span class="text-lowlight">Score: {{result.score}}</span> -->
+                        <span title="Search keyword matches an ortholog of this target" class="label label-success" ng-hide="result.humanMatch">Match from ortholog</span>
                     </span>
                 </div>
 

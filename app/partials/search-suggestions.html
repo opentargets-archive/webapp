@@ -7,6 +7,7 @@
       <span class="nbblock">
         <a><span ng-bind-html="search.results.besthit.data.name | typeaheadHighlight:search.query.text"></span></a>
         <span class="label cttv-text-small" ng-class="(search.results.besthit.data.type=='target') ? 'label-primary' : 'label-warning'">{{search.results.besthit.data.type=="target" ? "target" : "disease"}}</span>
+        <span title="Search keyword matches an ortholog of this target" class="label label-success" ng-hide="search.results.besthit.humanMatch">Match from ortholog</span>
       </span>
       <span class="text-small text-lowlight" ng-if="search.results.besthit.data.type=='target'">{{search.results.besthit.data.full_name}}</span>
       <br /><span style="font-size: 0.8em; color:#888888"> {{search.results.besthit.data.type == "target" ? search.results.besthit.data.association_counts.direct : search.results.besthit.data.association_counts.total}} {{search.results.besthit.data.type == "target" ? (search.results.besthit.data.association_counts.direct == 1 ? "disease" : "diseases") : (search.results.besthit.data.association_counts.total == 1 ? "target" : "targets")}} associated</span>
