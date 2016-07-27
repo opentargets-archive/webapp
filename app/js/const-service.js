@@ -32,12 +32,13 @@ angular.module('cttvServices').
                 CHEMBL :              "chembl",
                 DISGENET :            "disgenet",
                 EPMC :                "europepmc",
-                EVA_SOMATIC :         "eva_somatic"
+                EVA_SOMATIC :         "eva_somatic",
+                INTOGEN :             "intogen"
             },
             dbs_info_url : {
                 EXPRESSION_ATLAS :    "/data_sources#atlas",
                 UNIPROT :             "/data_sources#uniprot",
-                UNIPROT_LITERATURE:   "/data_sources#unilit",
+                UNIPROT_LITERATURE:   "/data_sources#uniprot_lit",
                 REACTOME :            "/data_sources#reactome",
                 EVA :                 "/data_sources#eva",
                 PHENODIGM :           "/data_sources#mouse",
@@ -46,7 +47,8 @@ angular.module('cttvServices').
                 CHEMBL :              "/data_sources#chembl",
                 DISGENET :            "/data_sources",  // no longer used
                 EPMC :                "/data_sources#text_mining",
-                EVA_SOMATIC :         "/data_sources#eva"
+                EVA_SOMATIC :         "/data_sources#eva",
+                INTOGEN :             "/data_sources#intogen"
             },
             datatypesOrder: [
                 "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "ANIMAL_MODEL"

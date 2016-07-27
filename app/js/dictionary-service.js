@@ -50,6 +50,7 @@ angular.module('cttvServices').
 
             // H
             // I
+            INTOGEN :                        "IntOGen",
             // J
             // K
             KNOWN_DRUG :                     "Drugs",
