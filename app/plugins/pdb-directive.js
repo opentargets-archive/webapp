@@ -42,7 +42,8 @@ angular.module('plugins')
                             }
 
                             var viewer = pv.Viewer(parent, options);
-                            $http.get('/proxy/pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
+                            $http.get('/proxy/files.rcsb.org/view/' + bestStructure.pdb_id + '.pdb')
+                            // $http.get('/proxy/pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
                                 .then (function (data) {
                                     // variable to store the previously picked atom. Required for resetting the color
                                     // whenever the mouse moves.
