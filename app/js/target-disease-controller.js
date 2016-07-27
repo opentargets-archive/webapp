@@ -130,7 +130,7 @@
             }
             return "<ul><li>" + arr.join("</li><li>") + "</li></ul>";
         }
-        
+
         // =================================================
         //  I N F O
         // =================================================
@@ -310,7 +310,7 @@
          */
         var formatCommonDiseaseDataToArray = function(data){
             var newdata = [];
-            
+
             data.forEach(function(item){
 
                 // create rows:
@@ -899,7 +899,9 @@
                     "evidence.provenance_type",
                     "evidence.known_mutations",
                     "access_level",
-                    "unique_association_fields.mutation_type"
+                    "unique_association_fields.mutation_type",
+                    "target.activity",
+                    "sourceID"
                 ]
             };
             _.extend(opts, searchObj);
@@ -947,7 +949,12 @@
                     if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
 
                         // col 2: mutation type
-                        mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
+                        if(item.sourceID == cttvConsts.dbs.INTOGEN){
+                            mut = item.target.activity;
+                        } else {
+                            mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
+                        }
+
 
 
                         // col 3: samples
@@ -1210,7 +1217,7 @@
         /*
         Literature data for the "Text mining" table. Table fields are:
           - Disease: disease name (string)
-          - Publication: publication description (string, long text)          
+          - Publication: publication description (string, long text)
           - Year: number
         */
 
@@ -1220,13 +1227,13 @@
             dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 var data = this.data(); //data is previously preformatted table data that we need to add abstract info that came from pm
                 //$log.log("parseResponse():data", data);
-               
+
                 var pmdata = recs.filter(function(item){
                     return item.pmid == data[2];
                 });
                 //$log.log("parseResponse():pmdata",pmdata);
                 if(pmdata.length>0){
-                    
+
                     data[3]="";
                     var pub = pmdata[0];
                     // format author names
@@ -1240,13 +1247,13 @@
                         authArr[0] = authArr[0] + " <span class='cttv-author-et-al'>et al.</span>";
                     }
                     auth = authArr[0];
-                  
+
                     var abstractSection = "Abstract";
                     var abstract = "<div id='"+data[2]+ abstractSection +"'>"+  pub.abstractText+"</div>";
-                    
-                    var abstractString ="<p class='small'><span onclick='angular.element(this).scope().displaySentences(\""+data[2]+ abstractSection +"\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>Abstract</span></p>"; 					
+
+                    var abstractString ="<p class='small'><span onclick='angular.element(this).scope().displaySentences(\""+data[2]+ abstractSection +"\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>Abstract</span></p>";
                     var matchedSentences = $('#literature-table').DataTable().row(rowIdx).data()[5]; //this is details
-                   
+
                     var title = pub.title;
                     var abstractSentences;
 
@@ -1269,28 +1276,28 @@
                                 title = title.replace(f.raw, f.formatted);
                             }
                         });
-                        
+
                     }
                     var journalInfo = (pub.journalInfo.journal.medlineAbbreviation || pub.journalInfo.journal.title)+ " " +pub.journalInfo.volume + (pub.journalInfo.issue ? "(" + pub.journalInfo.issue + ")":"") + ":" + pub.pageInfo;
                     var titleAndSource = "<span class=large><a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a></span>"
                         + "<br />"
                         + "<span class=small>"+auth +" "+journalInfo+ "</span>"
-                    
+
                     data[3] += titleAndSource + "<br/><br/>" +abstractString +abstract+ " <p class=small>" + (matchedSentences || "no matches available") + "</p>"
                     data[4] = pub.journalInfo.yearOfPublication; //this is column 4
-                        
+
                     data[8]=title;
                     data[9]=pub.authorString;
                     data[10]=journalInfo;
                     var URL = "http://europepmc.org/abstract/MED/"+pub.pmid;
-                    
+
                     if(pub.abstractText){
                     	data[11]= pub.abstractText;
                     }
-                    
+
                     data[13]=URL;
                     //console.log("dataAfter", data);
-                    
+
                 }
                 this.data(data);
 
@@ -1308,7 +1315,7 @@
                 target:$scope.search.target,
                 disease:$scope.search.disease,
                 size: $scope.search.tables.literature.maxShow,
-                datasource: $scope.search.tables.literature.source //cttvConfig.evidence_sources.literature,   
+                datasource: $scope.search.tables.literature.source //cttvConfig.evidence_sources.literature,
                 // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
             };
             _.extend(opts, searchObj);
@@ -1329,7 +1336,7 @@
 
                             var abstractSentences = {};
                             sortedByDate.map (function (paper) {
-                                
+
                                 // WARNING: Unicode characters are encoded in the response, we convert them to symbol
 
                                 paper.evidence.literature_ref.mined_sentences.map (function (sentence) {
@@ -1357,7 +1364,7 @@
                                     abstractSentences[pubmedId] = {};
                                 }
                                 paper.evidence.literature_ref.mined_sentences.map (function (sentence) {
-                                    
+
                                      if (sentence.t_start !== sentence.t_end) {
                                          sentence.breakpoints.push({
                                             "type": "t_start",
@@ -1434,9 +1441,9 @@
                                     if (sentence.section === "abstract"){
                                         sentence.formattedHighlightedText = '<span class="highlight-info text-content-highlight">' + text + '</span>';
                                     }
-                                    
+
                                     sentence.formattedText = text;
-                                    
+
                                 });
                             });
 
@@ -1474,7 +1481,7 @@
         var getLiteratureAbstractsData = function(dt){
             $scope.loading = true;
             $scope.loaded = 0;
-            
+
             // The expans_efo option may be retrieving the same article multiple times
             // Filter unique entries:
             var uniq = {};
@@ -1483,14 +1490,14 @@
             });
             var uniqPMIDs = Object.keys(uniq);
             // Chunk!
-            var chunkSize = 10;           
+            var chunkSize = 10;
             var chunks = Math.ceil(uniqPMIDs.length / chunkSize);
-          
+
             for (var i=0; i<chunks; i++) {
                 var done = 0;
                 //var thisRecords = $scope.search.tables.literature.data.slice(i*chunkSize, (i+1)*chunkSize);
                 var thisRecords = uniqPMIDs.slice(i*chunkSize, (i+1)*chunkSize);
-                var thisPMIDs = thisRecords.map(function (id) {                   
+                var thisPMIDs = thisRecords.map(function (id) {
                     return "EXT_ID:" + id;
                 }).join(" OR ");
                 var url = "/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search?pagesize=" + thisRecords.length + "&query=" + thisPMIDs + "&format=json&resulttype=core";
@@ -1507,19 +1514,19 @@
 
                         }
                     });
-            }       
+            }
         };
 
         var formatLiteratureDataToArray = function(data){
-        	
+
             var newdata = [];
             var cat_list = ["title", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
-            
+
             data.forEach(function(item){
-            	
+
                 // create rows:
                 var row = [];
-                
+
                 // count number of sentences in a section
                 var sectionCount = {};
                 // Map that groups all sentences by section
@@ -1534,7 +1541,7 @@
 
                     // 2 publication ID (hidden)
                     var parts = item.evidence.literature_ref.lit_id.split('/');
-                    var id = parts.pop();	
+                    var id = parts.pop();
                     row.push( id );
 
                     // 3 publication
@@ -1566,25 +1573,25 @@
 
                         return +(ai > bi) || +(ai === bi) - 1;
                     });
-                    
+
                     sectionCount = countSentences(item.evidence.literature_ref.mined_sentences);
                     sectionSentences = prepareSectionSentences(item.evidence.literature_ref.mined_sentences);
                     sectionSentencesSimple = prepareSectionSentencesSimple(item.evidence.literature_ref.mined_sentences);
                     var previousSection = null;
-                    
+
                     // 5 sentences grouped by section and sections are sorted already
-                    row.push( 
+                    row.push(
                         item.evidence.literature_ref.mined_sentences.map(function(sent){
-                        	
+
                         	var section = upperCaseFirst( clearUnderscores(sent.section));
                         	var sentenceString = "";
                         	if(section != 'Title' && section != 'Abstract') {
 
-								if(previousSection != sent.section) { 
+								if(previousSection != sent.section) {
 									if(previousSection != null){ //this is not the first section with matched sentences
 										sentenceString = sentenceString +'</div>';
 									}
-									sentenceString +="<p class='small'><span onclick='angular.element(this).scope().displaySentences(\""+ id + sent.section +"\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>" + section + ": </span>" + sectionCount[sent.section]; 
+									sentenceString +="<p class='small'><span onclick='angular.element(this).scope().displaySentences(\""+ id + sent.section +"\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>" + section + ": </span>" + sectionCount[sent.section];
 									sentenceString += " matched sentences</span></p>";
 									previousSection = sent.section;
 
@@ -1592,7 +1599,7 @@
 
 								sentenceString += "<div id='" + id + sent.section + "' style='display:none'><ul style='margin-left: 10px;'>" + sectionSentences[sent.section] + "</ul></div>";
                         	}
-                        	
+
                         	return sentenceString;
                         }).join("") + "</div>"
                     );
@@ -1602,7 +1609,7 @@
 
                     // 7 EFO (hidden)
                     row.push (item.disease.id);
-                    
+
                     // 8 this is hidden, map of categories and their matching sentences
                     row.push("<i class='fa fa-spinner fa-spin'></i>");
                     //9
@@ -1611,26 +1618,26 @@
                     row.push("<i class='fa fa-spinner fa-spin'></i>");
                     //11
                     row.push("<i class='fa fa-spinner fa-spin'></i>");
-                    
-                    //12 less formatted matched sentences grouped 
+
+                    //12 less formatted matched sentences grouped
                     var previousSection1 = null;
                     var matchString = item.evidence.literature_ref.mined_sentences.map(function(sent){
-                    	
+
                     	var sectionTitle = upperCaseFirst( clearUnderscores(sent.section));
-                    	var sentenceString = "";                 	
+                    	var sentenceString = "";
 
 						if(previousSection1 != sent.section) { //see new section
-							
-							sentenceString +=  sectionTitle.toUpperCase() +": " ;    									
+
+							sentenceString +=  sectionTitle.toUpperCase() +": " ;
 							previousSection1 = sent.section;
 							sentenceString +=  sectionSentencesSimple[sent.section];
-						}   								
-						
+						}
+
                     	return sentenceString;
                     }).join("") + "</div>";
-                    
+
                     row.push(matchString);
-                    
+
                     //13
                     row.push("<i class='fa fa-spinner fa-spin'></i>");
                     newdata.push(row); // push, so we don't end up with empty rows
@@ -1646,7 +1653,7 @@
 
             return newdata;
         };
-        
+
         // count the number of sentences in each section
         var countSentences = function(sentences) {
         	var count = {};
@@ -1662,12 +1669,12 @@
 
         	return count;
         };
-        
+
         // group sentences in each section into one sentence
         var prepareSectionSentences = function(sentences) {
         	var sectionSentenceMap = {};
         	sentences.map(function(sentence) {
-        		
+
         		if(sentence.section != "abstract"){
 	        		if(sectionSentenceMap[sentence.section] === undefined) {
 	        			sectionSentenceMap[sentence.section] = "";
@@ -1681,18 +1688,18 @@
 
         	return sectionSentenceMap;
         };
-        
+
         // group sentences in each section into one sentence
         var prepareSectionSentencesSimple = function(sentences) {
         	var sectionSentenceMap = {};
-        	sentences.map(function(sentence) {        		       		
+        	sentences.map(function(sentence) {
         		if(sectionSentenceMap[sentence.section] === undefined) {
         			sectionSentenceMap[sentence.section] = "";
         			sectionSentenceMap[sentence.section] +=  " "+sentence.formattedText+" ";
         		}
         		else {
         			sectionSentenceMap[sentence.section] +=  " "+sentence.formattedText+" ";
-        		}       		
+        		}
         	});
 
         	return sectionSentenceMap;
@@ -1703,7 +1710,7 @@
 			window.open(URL);
 		};
 
-		$scope.open = function(id){            
+		$scope.open = function(id){
             var modalInstance = $modal.open({
               animation: true,
               template: '<div onclick="angular.element(this).scope().$dismiss()">'
@@ -1714,7 +1721,7 @@
                        +'<h5>Abstract</h5>'
                        +'<div>'+$('#literature-table').DataTable().row(id).data()[9]+'</div>'
                        +'</div>',
-              
+
               size: 'lg',
               resolve: {
                 items: function () {
@@ -1724,13 +1731,13 @@
             });
 
         };
-        
+
         $scope.displaySentences = function(id) {
-  	      
+
       		//make the collapse content to be shown or hide
       		$('#'+id).toggle("fast");
         };
-        
+
         var initTableLiterature = function(){
 
             return $('#literature-table').DataTable( cttvUtils.setTableToolsParamsExportColumns({
@@ -1806,7 +1813,7 @@
             var sec = view.sec;
             if(sec && sec[0] && $scope.search.tables[ sec[0] ]){
                 $scope.search.tables[ sec[0] ].is_open = true;
-               
+
                 // scrolling before we have the data is unlikely to work:
                 // at best it will scroll a little bit, but not much, because there won't be any height to allow scolling
                 // leaving this here for now.
@@ -1824,7 +1831,7 @@
         if( !cttvLocationState.getState()["view"] && cttvLocationState.getState()["sec"] ){
             $location.search( 'view=sec:' + cttvLocationState.getState()["sec"]);
         }
-        
+
         render(cttvLocationState.getState(), cttvLocationState.getOldState());
-        
+
     }]);
