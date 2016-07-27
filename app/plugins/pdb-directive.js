@@ -19,7 +19,7 @@ angular.module('plugins')
                         var bestStructure = resp.data[uniprotId][0];
                         scope.pdbId = bestStructure.pdb_id;
 
-                        var template = '<p>Showing the PDB structure for <a class=pdb-links pdb-id=' + bestStructure.pdb_id + ' target=_blank href="javascript:void(0);">' + bestStructure.pdb_id + '</a></p><tabset><tab heading=3D><div class="pdb-widget-container"><pdb-lite-mol pdb-id="pdbId" hide-controls=true></pdb-lite-mol></div></tab><tab heading=2D><div class="pdb-widget-container"><pdb-topology-viewer entry-id=' + bestStructure.pdb_id + ' entity-id=1></pdb-topology-viewer></div></tab><tab heading=PV><div id=pvTarget></div><div id=picked-atom-name style="text-align:center;"">&nbsp;</div></tab><tabset>';
+                        var template = '<p>Showing the PDB structure for <a class=pdb-links pdb-id=' + bestStructure.pdb_id + ' target=_blank href="javascript:void(0);">' + bestStructure.pdb_id + '</a></p><tabset><tab heading=3D><div class="pdb-widget-container"><pdb-lite-mol pdb-id="pdbId" hide-controls=true></pdb-lite-mol></div></tab><tab heading=2D><div class="pdb-widget-container"><pdb-topology-viewer entry-id=' + bestStructure.pdb_id + ' entity-id=1></pdb-topology-viewer></div></tab><tab heading=PV><png filename="{{target.approved_symbol}}-structure.png" track="targetStructure"></png><div id=pvTarget></div><div id=picked-atom-name style="text-align:center;"">&nbsp;</div></tab><tabset>';
                         var compiled = $compile(template)(scope);
                         element.append(compiled);
 
@@ -53,10 +53,10 @@ angular.module('plugins')
                                     parent.addEventListener('mousemove', function(event) {
                                         var rect = viewer.boundingClientRect();
                                         var picked = viewer.pick({ x : event.clientX - rect.left,
-                                                                   y : event.clientY - rect.top });
-                                        if (prevPicked !== null && picked !== null &&
-                                            picked.target() === prevPicked.atom) {
-                                          return;
+                                            y : event.clientY - rect.top
+                                        });
+                                        if (prevPicked !== null && picked !== null && picked.target() === prevPicked.atom) {
+                                            return;
                                         }
                                         if (prevPicked !== null) {
                                           // reset color of previously picked atom.
@@ -84,12 +84,20 @@ angular.module('plugins')
                                     viewer.cartoon('protein', structure);
                                     viewer.autoZoom();
 
-                                    viewer.on('viewerReady', function() {
+                                    // viewer.on('viewerReady', function() {
                                         // structure.atomSelect(function (a) {
                                         //     console.log(a);
                                         // });
-                                    });
+                                    // });
                                 });
+                                scope.toExport = function () {
+                                    console.log("element...");
+                                    console.log(element[0]);
+                                    var canvas = element[0].querySelector("div#pvTarget > canvas");
+                                    console.log(canvas);
+                                    return canvas;
+                                };
+
                         },0);
                     }, function (resp) { // error
                         var template = "<div>No structure found for {{target.approved_symbol}}</div>";
