@@ -1,6 +1,3 @@
-'use strict';
-
-
 
 /**
  * Controller for the little search box
@@ -46,7 +43,7 @@ angular.module('cttvControllers')
                 $scope.filters[k].selected= false;
                 $scope.filters[k].loading= false;
             });
-        }
+        };
 
         initScopeFilters();
 
@@ -71,9 +68,9 @@ angular.module('cttvControllers')
             state.f = ( obj.f || [] )[0] ? obj.f : [];
 
             // ensure filters are only allowed terms
-            state.f = state.f.filter(function(filter){return filter=="target" || filter=="disease"});
+            state.f = state.f.filter(function(filter){return filter=="target" || filter=="disease";});
             return state;
-        }
+        };
 
 
 
@@ -83,7 +80,7 @@ angular.module('cttvControllers')
         var setStateFromURL = function(obj){
             initState(obj);
             updateQueryFromState();
-        }
+        };
 
 
 
@@ -104,7 +101,7 @@ angular.module('cttvControllers')
             // get the data
             getResults();
             getFiltersData();   // gets the count for the fake facets; will be replaced when we have real facets
-        }
+        };
 
 
 
@@ -127,7 +124,7 @@ angular.module('cttvControllers')
 
             state.f = f;
             cttvLocationState.setStateFor(stateId, state);
-        }
+        };
 
 
 
@@ -154,7 +151,7 @@ angular.module('cttvControllers')
                         finally(function(){
                             $scope.filters[k].loading = false;
                         });
-                })
+                });
             }
 
         };
@@ -180,7 +177,29 @@ angular.module('cttvControllers')
                 cttvAPIservice.getSearch( queryobject )
                     .then(
                         function(resp) {
+                            var i, h, h2;
+                            var t;
                             $scope.search.results = resp.body;
+                            for (i=0; i<$scope.search.results.data.length; i++) {
+                                var r = $scope.search.results.data[i];
+                                r.humanMatch = false;
+                                for (h in r.highlight) {
+                                    // if (h.startsWith("ortholog") && h.endsWith('name')) {
+                                    //     delete r.highlight[h];
+                                    // }
+                                    if (!h.startsWith("ortholog")) {
+                                        r.humanMatch = true;
+                                        break;
+                                    }
+                                }
+                                if (r.humanMatch) {
+                                    for (h2 in r.highlight) {
+                                        if (h2.startsWith("ortholog")) {
+                                            delete r.highlight[h2];
+                                        }
+                                    }
+                                }
+                            }
                         },
                         cttvAPIservice.defaultErrorHandler
                     )
