@@ -340,6 +340,10 @@
     .highlight-primary {
         background-color: $clr-primary-highlight;  /* 25% of standard primary color */
     }
+    
+    .highlight-info {
+    	background-color: $clr-info-highlight;  /* 25% of standard warning color */
+	}
 
 
     // pill-like horizonal list in target and disease profile pages
