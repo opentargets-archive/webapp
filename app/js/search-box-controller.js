@@ -78,10 +78,21 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
                 return cttvAPIservice.getQuickSearch({q:$scope.search.query.text, size:3, trackCall:false}).
                     then(
                         function(resp){
+                            var i, h, h2;
                             $log.info(resp);
                             $scope.search.results = parseResponseData(resp.body.data);  // store the results
-                        },
-                        cttvAPIservice.defaultErrorHandler
+                            var besthit = $scope.search.results.besthit;
+                            besthit.humanMatch = false;
+                            for (h in besthit.highlight) {
+                                if (h.startsWith("ortholog") && h.endsWith('name')) {
+                                    delete besthit.highlight[h];
+                                }
+                                if (!h.startsWith("ortholog")) {
+                                    besthit.humanMatch = true;
+                                    break;
+                                }
+                            }
+                        }, cttvAPIservice.defaultErrorHandler
                     ).
                     finally(function(){
                         $scope.search.progress = false;

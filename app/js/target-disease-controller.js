@@ -129,7 +129,12 @@
                 return arr[0];
             }
             return "<ul><li>" + arr.join("</li><li>") + "</li></ul>";
+<<<<<<< HEAD
         };
+=======
+        }
+
+>>>>>>> master
         // =================================================
         //  I N F O
         // =================================================
@@ -1111,7 +1116,9 @@
                     "evidence.provenance_type",
                     "evidence.known_mutations",
                     "access_level",
-                    "unique_association_fields.mutation_type"
+                    "unique_association_fields.mutation_type",
+                    "target.activity",
+                    "sourceID"
                 ]
             };
             _.extend(opts, searchObj);
@@ -1159,7 +1166,12 @@
                     if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
 
                         // col 2: mutation type
-                        mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
+                        if(item.sourceID == cttvConsts.dbs.INTOGEN){
+                            mut = item.target.activity;
+                        } else {
+                            mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
+                        }
+
 
 
                         // col 3: samples
@@ -2039,4 +2051,8 @@
         }
 
         render(cttvLocationState.getState(), cttvLocationState.getOldState());
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     }]);
