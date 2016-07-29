@@ -17,12 +17,12 @@
                 <div>
                     <ul class="plain arrow-icon">
                         <li><a href="#getting_started">Getting started with a text search</a></li>
-                        <li><a href="#target_assoc">Finding diseases associated with a target</a></li>
-                        <li><a href="#disease_assoc">Finding targets associated with a disease</a></li>
-                        <li><a href="#evidence">Finding information on the evidence for target-disease associations</a></li>
-                        <li><a href="#target_profile">Finding the profile of a target</a></li>
-                        <li><a href="#disease_profile">Finding the profile of a disease</a></li>
-                        <li><a href="#scoring">Finding the strength of target-disease association</a></li>
+                        <li><a href="#target_assoc">Diseases associated with a target</a></li>
+                        <li><a href="#disease_assoc">Targets associated with a disease</a></li>
+                        <li><a href="#evidence">The evidence for target-disease associations</a></li>
+                        <li><a href="#target_profile">The target profile</a></li>
+                        <li><a href="#disease_profile">The disease profile</a></li>
+                        <li><a href="#scoring">The strength of target-disease association</a></li>
                         <li><a href="#filters">Filtering target-disease associations</a></li>
                         <li><a href="#api">Accessing the Target Validation data with an API</a></li>
                         <li><a href="#citation">How to cite us</a></li>
@@ -47,14 +47,14 @@
 
                     <p>The search box is available on the <a href="https://www.targetvalidation.org/">Open Targets</a> homepage and at the top of every other page.</p>
 
-                    <p>You can search for a disease name, a gene name (or official symbol) or a protein name (or symbol). You can also search for synonyms and abbreviations for both genes (e.g. p53) and diseases (AD for Alzheimers disease), provided these alternative names are listed in the original sources from which we get this data from, e.g. UniProt (for genes) and Experimental Factor Ontology (for diseases and phenotypes).</p>
+                    <p>You can search for a disease name, a gene name (or official symbol) or a protein name (or symbol). You can also search for synonyms and abbreviations for both genes (e.g. p53) and diseases (AD for Alzheimers disease), provided these alternative names are listed in the original sources from which we get this data from, e.g. HGNC (for genes) and Experimental Factor Ontology (for diseases and phenotypes).</p>
                 </div>
 
 
                 <div class="cttv-docs-section">
-                    <h4><a name="target_assoc"></a>Finding diseases associated with a target</h4>
+                    <h4><a name="target_assoc"></a>Diseases associated with a target</h4>
 
-                    <p>When you search for a target, you will get an overview of all potential diseases associated with the target. You can filter the results of associations by Data types (e.g. Genetic associations, Somatic mutations) and Therapeutic area (e.g. Genetic disorder, Skin disease).</p>
+                    <p>When you search for a target, you will get an overview of all potential diseases associated with it. You can filter the results of associations by Data types (e.g. Genetic associations, Somatic mutations) and Therapeutic area (e.g. Genetic disorder, Skin disease).</p>
 
                     <p>The associations are provided in three different views, Bubbles, Table and Tree, which are organised by the tabs:</p>
 
@@ -66,7 +66,7 @@
 
 
                     <h5 id="table-view">Table View</h5>
-                    <p>In this view, we list all diseases associated to a target, ordered by the association score, which is colour coded. The darker the blue, the stronger the association. When there is no evidence to support the association, the cells in this table are coloured in white. Evidence from the leaf (highly specific) terms of the disease ontology is aggregated to broader, parent terms. So, if you search for BRAF, you will see evidence for disease associations for higher terms such as neoplasm, or cancer.</p>
+                    <p>In this view, we list all diseases associated with target, ordered by the association score, which is colour coded. The darker the blue, the stronger the association. When there is no evidence to support the association, the cells in this table are coloured in white. Evidence from highly specific terms of the disease ontology is aggregated to broader, parent terms. So, if you search for BRAF, you will see evidence for disease associations for higher terms such as neoplasm, or cancer.</p>
 
                     <p>You can order the associations by their scores for individual data types (e.g. Genetic associations, Somatic mutations). To order by several data types, shift-click the table headers. Use the search box to restrict the diseases displayed in the Table view. In our BRAF example above, if you type &quot;lung&quot;, you will restrict the table to show diseases with the word &#39;lung&#39; in their names.</p>
 
@@ -78,42 +78,44 @@
 
 
                 <div class="cttv-docs-section">
-                    <h4><a name="disease_assoc"></a>Finding targets associated with a disease</h4>
+                    <h4><a name="disease_assoc"></a>Targets associated with a disease</h4>
 
                     <p>When you search for a disease, you will get to a page that shows an overview of all potential targets associated with the disease. This data is provided as a table, with cells ordered by the association score. The colour of the cells represents the strength of the association, ranging from white (no association) to dark blue (strong association). You can filter the targets by the data types supporting the association (e.g. Genetic associations, Somatic mutations) and by Pathway types containing the target (e.g. Signal Transduction, Metabolism).</p>
 
-                    <p>Use the search box if you want to restrict the targets displayed in the table.</p>
+                    <p>You can also restrict the target displayed in the table.</p>
 
                 </div>
 
 
                 <div class="cttv-docs-section">
 
-                    <h4><a name="evidence"></a>Finding information on the evidence for target-disease associations</h4>
+                    <h4><a name="evidence"></a>The evidence for target-disease associations</h4>
 
-                    <p>We provide details of the evidence used for all the associations identified in our computational analyses from our <a href="/data_sources">Target Validation Platform Data Sources</a>.</p>
+                    <p>We provide details of the evidence (e.g. UniProt) used for all the associations we’ve identified. Check our <a href="/data_sources">Target Validation Platform Data Sources</a> to find out which evidence we’ve used in our computational analyses.</p>
 
-                    <p>The evidence page shows a flower, where each petal represents one data source, e.g. Genetics, Somatic mutations, etc. If the petal representing Somatic mutation data is coloured in dark blue for example, the association based on the Somatic mutations evidence is strong. In this page, we also display the detailed information for each evidence divided in sections.</p>
+                    <p>If you start your search with a disease, you can go to the evidence page by clicking on the cells in the table. If you rather search for a gene, you get to the evidence page by clicking on the bubbles (Bubble view), the cells in the table (Table view) or the nodes in the tree (Tree view).</p>
+
+                    <p>The evidence page shows a flower, where each petal represents one data source, e.g. Genetics, Somatic mutations. If the petal representing Somatic mutation data for example is coloured in dark blue, this means the association based on the Somatic mutations evidence is strong. In this page, we also display the detailed information for each evidence divided in sections or panels.</p>
 
                 </div>
 
 
                 <div class="cttv-docs-section">
 
-                    <h4><a name="target_profile"></a>Finding the profile of a target</h4>
+                    <h4><a name="target_profile"></a>The target profile</h4>
 
-                    <p>When searching for a target, in addition to the list of diseases associated with the target, you will also see at the top of the page the ‘View TARGET profile’ link. Click on this to get information outside the context of a disease for your target of interest. This is the list of information (not disease related) for a target and the original resource the data is from:</p>
+                    <p>When searching for a target, in addition to the list of diseases associated with it, you will also see at the top of the page the ‘View TARGET profile’ link. Click on this to get information outside the context of a disease for your target of interest. This is the list of information (not disease related) for a target and the original resource the data is from:</p>
 
                     <ul>
                         <li>Protein Information, <a href="http://www.uniprot.org/">UniProt</a></li>
-                        <li>Variants, isoforms and genomic context, <a href="http://ensembl.org/">Ensembl</a></li>
+                        <li>Variants, isoforms and genomic context, <a href="http://www.ensembl.org/info/genome/genebuild/genome_annotation.html">Ensembl annotation of genes</a> and <a href="http://www.ensembl.org/info/genome/variation/index.html">Ensembl Variation</a></li>
                         <li>Baseline expression at the protein (or RNA) level, <a href="http://www.proteinatlas.org/">Human Protein Atlas:</a></li>
                         <li>RNA baseline expression, <a href="https://www.ebi.ac.uk/gxa/home">Expression Atlas</a></li>
                         <li>Gene Ontology, <a href="http://geneontology.org/">Gene Ontology Consortium </a></li>
                         <li>Protein Structure, <a href="https://www.ebi.ac.uk/pdbe/">Protein Data Bank Europe</a></li>
                         <li>Pathways, <a href="http://www.reactome.org/">Reactome</a></li>
                         <li>Drugs, <a href="https://www.ebi.ac.uk/chembl/">ChEMBL</a></li>
-                        <li>Gene tree, Ensembl</li>
+                        <li>Gene tree, Ensembl Protein trees and orthologies</li>
                         <li>Bibliography, UniProt</li>
                     </ul>
 
@@ -122,20 +124,20 @@
 
                 <div class="cttv-docs-section">
 
-                    <h4><a name="disease_profile"></a>Finding the profile of a disease</h4>
+                    <h4><a name="disease_profile"></a>The disease profile</h4>
 
-                    <p>When searching for a disease, in addition to the list of targets associated with the disease, you will also see on the top of the page the ‘View DISEASE profile’ link. Click on this to get disease specific information:</p>
+                    <p>When searching for a disease, in addition to the list of targets associated with it, you will also see on the top of the page the ‘View DISEASE profile’ link. Click on this to get disease specific information:</p>
                     <ul>
-                        <li>Synonyms, alternative names for the disease from EFO</li>
-                        <li>Drugs, all FDA-approved and marketed drugs to treat the disease from ChEMBL</li>
-                        <li>Disease classification based on the relationships of the disease to parents and children within the EFO hierarchy.</li>
+                        <li>Synonyms: alternative names for the disease from <a href="http://www.ebi.ac.uk/efo/">Experimental Factor Ontology</a> (EFO)</li>
+                        <li>Drugs: all FDA-approved and marketed drugs to treat the disease from <a href="https://www.ebi.ac.uk/chembl/">ChEMBL</a></li>
+                        <li>Classification: based on the relationships of the disease to parents and children within the EFO hierarchy</li>
                     </ul>
                 </div>
 
 
                 <div class="cttv-docs-section">
 
-                    <h4><a name="scoring"></a>Finding the strength of target-disease association</h4>
+                    <h4><a name="scoring"></a>The strength of target-disease association</h4>
 
                     <p>We allow for the prioritisation of targets by <a href="/scoring">scoring target-disease associations</a> . Our scoring system varies from 0 to 1, the latter represents the strongest association, and it’s calculated based on the confidence levels in the evidence.</p>
 
@@ -146,7 +148,7 @@
 
                     <h4><a name="filters"></a>Filtering target-disease associations</h4>
 
-                    <p>You can filter the associations based on three major domains</p>
+                    <p>You can filter the associations based on three major domains:</p>
 
                     <ul>
                         <li>Data types, e.g. Genetic Associations, Somatic mutations, Drugs.</li>
@@ -162,7 +164,7 @@
 
                     <h4><a name="api"></a>Accessing the Target Validation data with an API</h4>
 
-                    <p>You can access all this data programmatically via our REST API services. We list the methods available, the supported formats and some endpoints in our <a href="/documentation/api">API documentation</a>.</p>
+                    <p>You can access all this data programmatically via our REST API services. We list the methods available, the supported formats and the endpoints in our <a href="/documentation/api">API documentation</a>.</p>
 
                 </div>
 
