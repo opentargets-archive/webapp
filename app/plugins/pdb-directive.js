@@ -4,7 +4,7 @@ angular.module('plugins')
 
         return {
             restrict: 'E',
-            template: '<p>Structure for {{pdbId}}</p><png filename="{{target.approved_symbol}}-structure.png" track="targetStructure"></png>',
+            template: '<div ng-show="pdbId"><p class=cttv-section-intro>Below is shown the best structure found in PDBe for {{target.approved_symbol}}. It corresponds to PDBe entry {{pdbId}} based on coverage and structure quality. To get more information about this structure visit the <a target=_blank href="http://www.ebi.ac.uk/pdbe/entry/pdb/{{pdbId}}">PDBe entry for {{pdbId}}</a></p><p>Structure for {{pdbId}} ({{title | lowercase}})</p><png style="float:right" filename="{{target.approved_symbol}}-structure.png" track="targetStructure"></png><div id=picked-atom-name style="text-align:center;"">&nbsp;</div></div>',
             // templateUrl: "plugins/pdb.html",
             scope: {
                 target: '=',
@@ -14,11 +14,81 @@ angular.module('plugins')
 
                 var uniprotId = scope.target.uniprot_id;
 
-                var w = scope.width - 40;
+                // burger menu
+                var burgerContainer = d3.select(element[0])
+                    .append("div")
+                    .style("position","relative");
+                burgerContainer
+                    .append("div")
+                    .attr("class", "hamburger-frame")
+                    .on("click", function () {
+                        if (div.style("height") === "0px") {
+                            div
+                                .transition()
+                                .duration(1000)
+                                .style("height", "550px");
+                        } else {
+                            div
+                                .transition()
+                                .duration(1000)
+                                .style("height", "0px");
+                        }
+                    });
+
+                var div = burgerContainer
+                    .append("div")
+                    .attr("class", "cttv_targetTree_legend");
+
+                var colorSection = div
+                    .append("div");
+                colorSection
+                    .append("p")
+                    .text("Color by...");
+                colorSection
+                    .append("input")
+                    .style("margin", "10px")
+                    .attr("type", "radio")
+                    .attr("name", "colorBy")
+                    .attr("value", "chain")
+                    .property("checked", true)
+                    .on("change", function () {
+                        scope.viewer.clear();
+                        scope.viewer.cartoon('protein', scope.structure, {
+                            color: pv.color.byChain()
+                        });
+                    });
+                colorSection
+                    .append("label")
+                    .text (" Chain");
+                colorSection.append("br");
+                colorSection
+                    .append("input")
+                    .style("margin", "10px")
+                    .style("margin-top", "0px")
+                    .attr("type", "radio")
+                    .attr("name", "colorBy")
+                    .attr("value", "Structure")
+                    .on("change", function (v) {
+                        scope.viewer.clear();
+                        scope.viewer.cartoon('protein', scope.structure, {
+                            color: pv.color.ssSuccession()
+                        });
+                    });
+                colorSection
+                    .append("label")
+                    .text(" Structure");
+
+                // PV
+                var w = scope.width - 120;
                 var newDiv = document.createElement("div");
                 newDiv.id = "pvTarget";
                 newDiv.className = "accordionCell";
                 element[0].appendChild(newDiv);
+
+
+                var burger = burgerContainer
+                    .append("div")
+                    .attr("class", "hamburger-menu");
 
 
                 $http.get("/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/" + uniprotId)
@@ -31,7 +101,7 @@ angular.module('plugins')
                             var parent = newDiv;
                             // override the default options with something less restrictive.
                             var options = {
-                                width: scope.width - 30,
+                                width: w,
                                 height: 600,
                                 antialias: true,
                                 quality : 'medium'
@@ -43,18 +113,30 @@ angular.module('plugins')
                                 go.colorBy(pv.color.uniform(color), view);
                             }
 
-                            var viewer = pv.Viewer(parent, options);
+                            scope.viewer = pv.Viewer(parent, options);
                             $http.get('/proxy/files.rcsb.org/view/' + bestStructure.pdb_id + '.pdb')
                             // $http.get('/proxy/pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
                                 .then (function (data) {
+                                    // Extract the title:
+                                    // console.log(data);
+                                    var lines = data.data.split("\n");
+                                    for (var i=0; i<lines.length; i++) {
+                                        if (lines[i].startsWith("TITLE")) {
+                                            var titleCols = lines[i].split(/\s+/);
+                                            titleCols.shift();
+                                            scope.title = titleCols.join(" ").trim();
+                                        }
+                                    }
+
+
                                     // variable to store the previously picked atom. Required for resetting the color
                                     // whenever the mouse moves.
                                     var prevPicked = null;
                                     // add mouse move event listener to the div element containing the viewer. Whenever
                                     // the mouse moves, use viewer.pick() to get the current atom under the cursor.
                                     parent.addEventListener('mousemove', function(event) {
-                                        var rect = viewer.boundingClientRect();
-                                        var picked = viewer.pick({ x : event.clientX - rect.left,
+                                        var rect = scope.viewer.boundingClientRect();
+                                        var picked = scope.viewer.pick({ x : event.clientX - rect.left,
                                             y : event.clientY - rect.top
                                         });
                                         if (prevPicked !== null && picked !== null && picked.target() === prevPicked.atom) {
@@ -71,7 +153,6 @@ angular.module('plugins')
                                           // before changing it to the highlight color.
                                           var color = [0,0,0,0];
                                           var currColor = picked.node().getColorForAtom(atom, color);
-                                          console.log(currColor);
                                           prevPicked = { atom : atom, color : color, node : picked.node() };
 
                                           if (currColor[0] === 1) {
@@ -85,15 +166,15 @@ angular.module('plugins')
                                           document.getElementById('picked-atom-name').innerHTML = '&nbsp;';
                                           prevPicked = null;
                                         }
-                                        viewer.requestRedraw();
+                                        scope.viewer.requestRedraw();
                                     });
 
 
-                                    var structure = pv.io.pdb(data.data);
-                                    viewer.cartoon('protein', structure, {
+                                    scope.structure = pv.io.pdb(data.data);
+                                    scope.viewer.cartoon('protein', scope.structure, {
                                         color: pv.color.byChain()
                                     });
-                                    viewer.autoZoom();
+                                    scope.viewer.autoZoom();
 
                                     // viewer.on('viewerReady', function() {
                                         // structure.atomSelect(function (a) {
@@ -115,10 +196,7 @@ angular.module('plugins')
 
                 if (cttvUtils.browser.name !== "IE") {
                     scope.toExport = function () {
-                        console.log("element...");
-                        console.log(element[0]);
                         var canvas = element[0].querySelector("div#pvTarget > canvas");
-                        console.log(canvas);
                         return canvas;
                     };
                 }
