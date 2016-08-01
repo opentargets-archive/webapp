@@ -143,7 +143,11 @@
             "name": "proteinStructure",
             "element": "pdb-target",
             "heading": "Protein Structure",
-            "modules": ["pdb.component.library"],
+            "dependencies": {
+                "build/bio-pv.min.js": {
+                    "format": "global"
+                }
+            },
             "track": true
         },
         {
