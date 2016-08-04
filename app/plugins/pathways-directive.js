@@ -31,7 +31,7 @@ angular.module('plugins')
                         var p = $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/" + pathway + "/stableIdentifier");
                         promises.push(p);
                         // pathwayArr.push(pathways[pathway]["pathway name"]);
-                        pathwayArr.push(pathway);
+                        pathwayArr.push(pathways[i].value["pathway name"]);
                     }
                     $q
                         .all(promises)
