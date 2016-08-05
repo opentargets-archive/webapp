@@ -19,8 +19,8 @@
                 <hm-read-more  hm-text="{{disease.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
             </p>
 
-            <p>
-                Synonyms: <span class="cttv-profile-synonym-list" ng-repeat="syn in disease.synonyms">{{syn}}</span>
+            <p ng-show="disease.synonyms">
+                Synonyms: <span class="cttv-profile-synonym-list" ng-repeat="syn in disease.synonyms" ng-show="syn!=null">{{syn}}</span>
             </p>
 
             <accordion close-others="false">
