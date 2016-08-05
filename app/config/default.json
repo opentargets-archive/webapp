@@ -84,7 +84,7 @@
         {
             "name": "uniprot",
             "element": "target-features",
-            "heading": "Protein Information (from Uniprot)",
+            "heading": "Protein Information (from UniProt)",
             "dependencies": {
                 "https://ebi-uniprot.github.io/CDN/feature-viewer/2.0.0/featuresviewer.min.js": {
                     "format": "global"
