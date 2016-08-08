@@ -77,19 +77,19 @@
                     <p>Genetic associations are available for both common and rare (Mendelian) diseases and come from the following sources:</p>
 
                     <h5><a name="gwas"></a>GWAS Catalog</h5>
-                    <p>The NHGRI-EBI <a href="https://www.ebi.ac.uk/gwas/docs/about">GWAS catalog</a> provides evidence on the association of genes (targets) and common diseases. This data comes from the manual curation of published Genome Wide Association Studies (GWAS). The catalog gives a list of the genetic variants (e.g. SNPs) that are most associated with a disease, by genomic region from each study. We include all associations with p-values ≤ 10-5, so that we broaden the coverage of diseases. We assess the link between variant and gene using the Open Targets custom annotation pipeline to find the association between a disease and its most likely gene. Variants are assigned to a gene by first considering any deleterious consequence within the coding region of that gene, followed by whether the variant is located within introns or regulatory regions. If the variant is intergenic, it will be assigned to the promoter region of the nearest gene. The consequences of these variants are annotated using the <a href="http://www.ensembl.org/info/docs/tools/vep/index.html">Variant Effect Predictor</a></p>
+                    <p>The NHGRI-EBI <a href="https://www.ebi.ac.uk/gwas/docs/about">GWAS catalog</a> provides evidence on the association of genes (targets) and common diseases. This data comes from the manual curation of published Genome Wide Association Studies (GWAS). The catalog gives a list of the genetic variants (e.g. SNPs) that are most associated with a disease, by genomic region. We include all associations with p-values ≤ 10-5, so that we broaden the coverage of diseases. We assess the link between variant and gene using the Open Targets custom annotation pipeline to find the association between a disease and its most likely target. Variants are assigned to a gene by first considering any deleterious consequence within the coding region of that gene, followed by whether the variant is located within introns or regulatory regions. If the variant is intergenic, it will be assigned to the promoter region of the nearest gene. The consequences of these variants are annotated using the <a href="http://www.ensembl.org/info/docs/tools/vep/index.html">Variant Effect Predictor</a>.</p>
 
                     <h5><a name="uniprot"></a>UniProt</h5>
-                    <p>The Universal Protein Resource (<a href="http://www.uniprot.org/">UniProt</a>) provides protein sequence and functional information.  It manually curates associations between genes and rare (Mendelian) diseases from literature and public databases. The curated variants must be in the coding region of a gene, deleterious, observed in patients and segregating within their families. </p>
+                    <p>The Universal Protein Resource (<a href="http://www.uniprot.org/">UniProt</a>) provides protein sequence and functional information. It manually curates associations between genes and rare (Mendelian) diseases from literature and public databases. These curated variants must be in the coding region of a gene, deleterious, observed in patients, and segregating within their families. </p>
 
                     <h5><a name="uniprot_lit"></a>UniProt literature</h5>
                     <p>UniProt may curate target-disease associations but not provide a specific mutation in the coding region of a gene. We classify these variants as UniProt Literature.</p>
 
                     <h5><a name="eva"></a>European Variation Archive (EVA)</h5>
-                    <p>The EMBL-EBI <a href="http://www.ebi.ac.uk/eva/?Home">European Variation Archive</a> (EVA) is a database of publicly available genetic variants, both short scale (e.g. SNPs) and large structural variants (e.g. larger deletions). For rare (Mendelian) diseases, EVA provides clinically relevant data for the variants that are pathogenic or likely pathogenic. This clinical information comes from the <a href="http://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a>, and includes <a href="http://www.ncbi.nlm.nih.gov/omim"></a>OMIM data.</p>
+                    <p>The EMBL-EBI <a href="http://www.ebi.ac.uk/eva/?Home">European Variation Archive</a> (EVA) is a database of publicly available genetic variants, both short scale (e.g. SNPs) and large structural variants (e.g. larger deletions). For rare (Mendelian) diseases, EVA provides clinically relevant data for the variants that are pathogenic or likely pathogenic. This clinical information comes from <a href="http://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a>, and includes <a href="http://www.ncbi.nlm.nih.gov/omim"></a>OMIM data.</p>
 
                     <h5><a name="decipher"></a>DECIPHER</h5>
-                    <p>The Wellcome Trust Sanger Institute <a href="https://decipher.sanger.ac.uk/index">DECIPHER</a> is a database of genomic variants and phenotypes in patients with developmental disorders. They have provided a summary of the overall effects of disease-causing variants available in the <a href="http://www.ebi.ac.uk/gene2phenotype/gene2phenotype-webcode/cgi-bin/handler.cgi">gene2phenotype</a> (G2P) dataset. G2P is produced and curated from published literature by consultant clinical geneticists in the UK. This data is comprised of both short scale (i.e. sequence variants such as SNPs) and large structural variants (e.g. copy number variants), and can allow targeted filtering of genome-wide data for diagnostic purposes.</p>
+                    <p>The Wellcome Trust Sanger Institute <a href="https://decipher.sanger.ac.uk/index">DECIPHER</a> is a database of genomic variants and phenotypes in patients with developmental disorders. They have provided a summary of the overall effects of disease-causing variants available in the <a href="http://www.ebi.ac.uk/gene2phenotype">gene2phenotype</a> (G2P) dataset. G2P is produced and curated from literature by consultant clinical geneticists in the UK. This data is comprised of both short scale (i.e. sequence variants such as SNPs) and large structural variants (e.g. copy number variants), and can allow targeted filtering of genome-wide data for diagnostic purposes.</p>
                 </div>
 
 
@@ -97,14 +97,14 @@
                     <h4><a name="somatic"></a>Somatic mutations</h4>
                     <p>Somatic mutation data refers to mutations that may have clinical or treatment implications in cancer and possibly other diseases. This data type is obtained from the following sources:</p>
 
-                    <h5><a name="census"></a>The Cancer Gene Census</h5>
-                    <p>The <a href="http://cancer.sanger.ac.uk/cosmic">COSMIC</a> COSMIC Cancer Gene Census at the Wellcome Trust Sanger Institute provides a catalogue of genes for which mutations have been causally implicated in cancer. It provides evidence on manually curated mutations likely to be cancer drivers.</p>
+                    <h5><a name="census"></a>Cancer Gene Census</h5>
+                    <p>Cancer Gene Census is a catalogue of genes for which mutations have been causally implicated in cancer. The Catalogue of Somatic Mutations in Cancer (<a href="http://cancer.sanger.ac.uk/cosmic">COSMIC</a>) at the  Wellcome Trust Sanger Institute provides us with the set of genes associated with specific  cancers in the Cancer Gene Census, in addition to other cancers associated with that gene in the COSMIC database.</p>
 
-                    <h5><a name="eva_somatic"></a>EVA</h5>
+                    <h5><a name="eva_somatic"></a>European Variation Archive (EVA)</h5>
                     <p>The EMBL-EBI <a href="http://www.ebi.ac.uk/eva/?Home">European Variation Archive</a> (EVA) provides data on somatic mutations in both cancer and other diseases.</p>
 
                     <h5><a name="intogen"></a>IntOGen</h5>
-                    <p><a href="http://bg.upf.edu/group/tools.php#intogen">IntOGen</a> provides somatic mutations, genes and pathways involved in tumorigenesis. Their current release (2014.12) comprises data from 4,623 exomes from 13 cancer larger consortia, such as International Cancer Genome Consortium (ICGC) and The Cancer Genome Atlas (TCGA). </p>
+                    <p><a href="http://bg.upf.edu/group/tools.php#intogen">IntOGen</a> provides somatic mutations, genes and pathways involved in tumorigenesis. We have imported the latest data from 6,792 samples across 28 cancer types (Rubio-Perez et al). In these new dataset, false mutation calls have been filtered out and additional expression data is available for a larger number of samples in certain tumour types. This IntOgen analysis is updated and has not yet been released on the IntOgen website; so there can be discrepancies between targetvalidation.org and the IntOgen site.</p>
                 </div>
 
 
@@ -113,7 +113,7 @@
                     <p>This data type is currently comprised of only one data source:</p>
 
                     <h5><a name="chembl"></a>ChEMBL</h5>
-                    <p>The EMBL-EBI <a href="https://www.ebi.ac.uk/chembl/">ChEMBL</a> database provides evidence from known drugs that can be linked to a disease and a known target. ChEMBL contains compound bioactivity data against drug targets. We display the data on drugs that have been approved for marketing by the U.S Food and Drug Administration (FDA), in addition to some clinical candidates, yet to be FDA approved.</p>
+                    <p>The EMBL-EBI <a href="https://www.ebi.ac.uk/chembl/">ChEMBL</a> database provides evidence from known drugs that can be linked to a disease and a known target. ChEMBL contains compound bioactivity data against drug targets. We display the data on drugs that have been approved for marketing by the U.S Food and Drug Administration (FDA), in addition to some clinical candidates.</p>
                 </div>
 
 
