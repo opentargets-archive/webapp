@@ -946,32 +946,26 @@
                     var samp = cttvDictionary.NA;
                     var patt = cttvDictionary.NA;
 
-                    if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
+
+                    if(item.evidence.known_mutations){
 
                         // col 2: mutation type
                         if(item.sourceID == cttvConsts.dbs.INTOGEN){
                             mut = item.target.activity;
                         } else {
-                            mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
+                            mut = item.evidence.known_mutations.preferred_name;
                         }
 
 
 
                         // col 3: samples
-                        samp = arrayToList(
-                                            item.evidence.known_mutations.map(
-                                                function(i){
-                                                    if( i.number_samples_with_mutation_type ){
-                                                        return i.number_samples_with_mutation_type+"/"+i.number_mutated_samples;
-                                                    } else {
-                                                        return cttvDictionary.NA;
-                                                    }
-                                                }
-                                            ),
-                                            true );
+                        if( item.evidence.known_mutations.number_samples_with_mutation_type ){
+                            samp = item.evidence.known_mutations.number_samples_with_mutation_type+"/"+item.evidence.known_mutations.number_mutated_samples;
+                        }
+
 
                         // col 4: inheritance pattern
-                        patt = arrayToList( item.evidence.known_mutations.map(function(i){return i.inheritance_pattern || cttvDictionary.NA;}) , true );
+                        patt = item.evidence.known_mutations.inheritance_pattern;
                     }
 
 
@@ -1238,7 +1232,7 @@
                     var pub = pmdata[0];
                     // format author names
                     var auth = pub.authorString;
-                    
+
                     var authArr = [];
                     if (auth) {
                         authArr = auth.split(",");
@@ -1299,12 +1293,12 @@
                     var titleAndSource = "<span class=large><a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a></span>"
                         + "<br />"
                         + "<span class=small>"+auth +" "+journalInfo+ "</span>";
-                    
+
                     data[3] += titleAndSource + "<br/><br/>" +abstractString +abstract+ " <p class=small>" + (matchedSentences || "no matches available") + "</p>"
                     data[4] = pub.journalInfo.yearOfPublication; //this is column 4
 
                     data[8]=title;
-                    
+
                     data[10]=journalInfo;
                     var URL = "http://europepmc.org/abstract/MED/"+pub.pmid;
 
