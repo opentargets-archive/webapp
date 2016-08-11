@@ -493,12 +493,9 @@
 
                     // evidence source
                     if( item.type === 'genetic_association' && checkPath(item, "evidence.variant2disease") ){
-                        $log.log("one "+db);
-
                         row.push( "<a class='cttv-external-link' href='" + item.evidence.variant2disease.urls[0].url + "' target=_blank>" + item.evidence.variant2disease.urls[0].nice_name + "</a>" );
 
                     } else {
-                        $log.log("two "+db);
                         // Do some cleaning up for gene2Phenotype:
                         // TODO: this will probably be removed once we reprocess the data and put the nicely formatted text and URL in the data;
                         // I leave the hard coded strings in on purpose, so hopefully I'll remember to remove this in the future.
@@ -966,21 +963,21 @@
 
                         // col 2: mutation type
                         if(item.sourceID == cttvConsts.dbs.INTOGEN){
-                            mut = item.target.activity;
+                            mut = item.target.activity || mut;
                         } else {
-                            mut = item.evidence.known_mutations.preferred_name;
+                            mut = item.evidence.known_mutations.preferred_name || mut;
                         }
 
 
 
                         // col 3: samples
                         if( item.evidence.known_mutations.number_samples_with_mutation_type ){
-                            samp = item.evidence.known_mutations.number_samples_with_mutation_type+"/"+item.evidence.known_mutations.number_mutated_samples;
+                            samp = item.evidence.known_mutations.number_samples_with_mutation_type+"/"+item.evidence.known_mutations.number_mutated_samples || samp;
                         }
 
 
                         // col 4: inheritance pattern
-                        patt = item.evidence.known_mutations.inheritance_pattern;
+                        patt = item.evidence.known_mutations.inheritance_pattern || patt;
                     }
 
 
