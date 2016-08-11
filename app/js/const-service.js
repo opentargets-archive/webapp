@@ -50,7 +50,7 @@ angular.module('cttvServices').
                 EPMC :                "/data_sources#text_mining",
                 EVA_SOMATIC :         "/data_sources#eva",
                 INTOGEN :             "/data_sources#intogen",
-                GENE_2_PHENOTYPE :    "/data_source#decipher"
+                GENE_2_PHENOTYPE :    "/data_sources#gene2phenotype"
             },
             datatypesOrder: [
                 "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "ANIMAL_MODEL"
