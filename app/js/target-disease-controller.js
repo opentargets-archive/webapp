@@ -493,9 +493,24 @@
 
                     // evidence source
                     if( item.type === 'genetic_association' && checkPath(item, "evidence.variant2disease") ){
+                        $log.log("one "+db);
+
                         row.push( "<a class='cttv-external-link' href='" + item.evidence.variant2disease.urls[0].url + "' target=_blank>" + item.evidence.variant2disease.urls[0].nice_name + "</a>" );
+
                     } else {
-                        row.push( "<a class='cttv-external-link' href='" + item.evidence.urls[0].url + "' target=_blank>" + item.evidence.urls[0].nice_name + "</a>" );
+                        $log.log("two "+db);
+                        // Do some cleaning up for gene2Phenotype:
+                        // TODO: this will probably be removed once we reprocess the data and put the nicely formatted text and URL in the data;
+                        // I leave the hard coded strings in on purpose, so hopefully I'll remember to remove this in the future.
+                        // I'm setting manually:
+                        //  1) URL
+                        //  2) the text of the link
+                        if( db == cttvConsts.dbs.GENE_2_PHENOTYPE ){
+                            row.push( "<a class='cttv-external-link' href='http://www.ebi.ac.uk/gene2phenotype/search?panel=ALL&search_term=" + ($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name) + "' target=_blank>Further details in Gene2Phenotype database</a>" );
+                        } else {
+                            row.push( "<a class='cttv-external-link' href='" + item.evidence.urls[0].url + "' target=_blank>" + item.evidence.urls[0].nice_name + "</a>" );
+                        }
+
                     }
 
 

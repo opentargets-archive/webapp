@@ -33,7 +33,8 @@ angular.module('cttvServices').
                 DISGENET :            "disgenet",
                 EPMC :                "europepmc",
                 EVA_SOMATIC :         "eva_somatic",
-                INTOGEN :             "intogen"
+                INTOGEN :             "intogen",
+                GENE_2_PHENOTYPE :    "gene2phenotype"
             },
             dbs_info_url : {
                 EXPRESSION_ATLAS :    "/data_sources#atlas",
@@ -48,7 +49,8 @@ angular.module('cttvServices').
                 DISGENET :            "/data_sources",  // no longer used
                 EPMC :                "/data_sources#text_mining",
                 EVA_SOMATIC :         "/data_sources#eva",
-                INTOGEN :             "/data_sources#intogen"
+                INTOGEN :             "/data_sources#intogen",
+                GENE_2_PHENOTYPE :    "/data_source#decipher"
             },
             datatypesOrder: [
                 "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "ANIMAL_MODEL"
