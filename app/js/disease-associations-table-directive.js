@@ -32,9 +32,19 @@ angular.module('cttvDirectives')
     var getColorStyleString = function(value, href){
         var str="";
         if( value<=0 ){
-            str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
+            if(value<0){
+                // when there's no data, it should be -1
+                str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
+            } else {
+                str = "<span class='zero-score' title='Score: 0'>0</span>"; // this case should be pretty rare
+                if( href ){
+                    str = "<a href=" + href + ">" + str + "</a>";
+                }
+            }
         } else {
-            str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+cttvUtils.floatPrettyPrint(value)+"'>"+cttvUtils.floatPrettyPrint(value)+"</span>";
+            var col = colorScale(value);
+            var val = cttvUtils.floatPrettyPrint(value);
+            str = "<span style='color: "+col+"; background: "+col+";' title='Score: "+val+"'>"+val+"</span>";
             if( href ){
                 str = "<a href=" + href + ">" + str + "</a>";
             }
@@ -197,6 +207,10 @@ angular.module('cttvDirectives')
     function parseServerResponse (data){
         var newData = new Array(data.length);
 
+        var getScore = function(d, dt){
+            return ( !data[d].association_score.datatypes[dt] && !data[d].evidence_count.datatypes[dt] ) ? -1 : data[d].association_score.datatypes[dt] ;
+        }
+
         for (var i=0; i<data.length; i++) {
             // var dts = {};
             // dts.genetic_association = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
@@ -207,7 +221,8 @@ angular.module('cttvDirectives')
             // dts.literature = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "literature"; }), "association_score")||0;
             // dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
 
-            var dts = data[i].association_score.datatypes;
+            //var dts = data[i].association_score.datatypes;
+            // var ec = data[i].evidence_count.datatypes;
             var row = [];
             var geneLoc = "";
             var geneDiseaseLoc = "/evidence/" + data[i].target.id + "/" + data[i].disease.id;
@@ -217,27 +232,27 @@ angular.module('cttvDirectives')
             // The association score
             row.push( getColorStyleString(data[i].association_score.overall, geneDiseaseLoc ) );
             // Genetic association
-            row.push( getColorStyleString( dts.genetic_association, geneDiseaseLoc + (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:genetic_associations") );
+            row.push( getColorStyleString( getScore(i, "genetic_association") , geneDiseaseLoc + (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:genetic_associations") );
             // Somatic mutation
-            row.push( getColorStyleString( dts.somatic_mutation, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:somatic_mutations") );
+            row.push( getColorStyleString( getScore(i, "somatic_mutation") , geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:somatic_mutations") );
             // Known drug
-            row.push( getColorStyleString( dts.known_drug, geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:known_drugs") );
+            row.push( getColorStyleString( getScore(i, "known_drug") , geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:known_drugs") );
             // Affected pathway
-            row.push( getColorStyleString( dts.affected_pathway, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:affected_pathways") );
+            row.push( getColorStyleString( getScore(i, "affected_pathway") , geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:affected_pathways") );
             // Expression atlas
-            row.push( getColorStyleString( dts.rna_expression, geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:rna_expression") );
+            row.push( getColorStyleString( getScore(i, "rna_expression") , geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:rna_expression") );
             // Literature
-            row.push( getColorStyleString( dts.literature, geneDiseaseLoc +(geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:literature"));
+            row.push( getColorStyleString( getScore(i, "literature") , geneDiseaseLoc +(geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:literature"));
             // Animal model
-            row.push( getColorStyleString( dts.animal_model, geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:animal_models") );
+            row.push( getColorStyleString( getScore(i, "animal_model") , geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:animal_models") );
 
             // Total score
-            row.push( dts.genetic_association+
-                      dts.somatic_mutation+
-                      dts.known_drug+
-                      dts.rna_expression+
-                      dts.affected_pathway+
-                      dts.animal_model) ;
+            row.push( data[i].association_score.datatypes.genetic_association+
+                      data[i].association_score.datatypes.somatic_mutation+
+                      data[i].association_score.datatypes.known_drug+
+                      data[i].association_score.datatypes.rna_expression+
+                      data[i].association_score.datatypes.affected_pathway+
+                      data[i].association_score.datatypes.animal_model) ;
 
             // Push gene name again instead
             row.push("<a href='" + geneDiseaseLoc + "' title='"+data[i].target.gene_info.name+"'>" + data[i].target.gene_info.name + "</a>");

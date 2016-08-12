@@ -298,6 +298,12 @@
         color: #FFF;
     }
 
+    .matrix-table span.zero-score, .matrix-legend span.zero-score{
+        border: 1px solid #EEE;
+        background: #eef5fb;
+        color: #eef5fb;
+    }
+
     .matrix-table span.value-0, .matrix-legend span.value-0 {
         background: #EEE;
         color: #EEE;
