@@ -23,12 +23,20 @@ angular.module('cttvDirectives')
     var getColorStyleString = function(value, href){
         var str="";
         if( value<=0 ){
-            str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, we don't put anything, so the sorting works better
-        } else {
-            str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+cttvUtils.floatPrettyPrint(value)+"'>"+cttvUtils.floatPrettyPrint(value)+"</span>";
-            if( href ){
-                str = "<a href=" + href + ">" + str + "</a>";
+            if(value<0){
+                // when there's no data, it should be -1
+                str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
+            } else {
+                str = "<span class='zero-score' title='Score: 0'>0</span>"; // this case should be pretty rare
             }
+        } else {
+            var col = colorScale(value);
+            var val = cttvUtils.floatPrettyPrint(value);
+            str = "<span style='color: "+col+"; background: "+col+";' title='Score: "+val+"'>"+val+"</span>";
+        }
+
+        if( href && value>=0 ){
+            str = "<a href=" + href + ">" + str + "</a>";
         }
 
         return str;
@@ -171,6 +179,7 @@ angular.module('cttvDirectives')
             return str;
 
         };
+
         var iterateeLabel = function (str, ta) {
             if (str === "") {
                 str = ta;
@@ -179,6 +188,10 @@ angular.module('cttvDirectives')
             }
             return str;
         };
+
+        var getScore = function(i, dt){
+            return ( !d[i].association_score.datatypes[dt] && !d[i].evidence_count.datatypes[dt] ) ? -1 : d[i].association_score.datatypes[dt] ;
+        }
 
         for (var i=0; i<d.length; i++) {
             var data = d[i];
@@ -213,19 +226,19 @@ angular.module('cttvDirectives')
             row.push( getColorStyleString( data.association_score.overall, geneDiseaseLoc ) );
 
             // Genetic association
-            row.push( getColorStyleString( datatypes.genetic_association, geneDiseaseLoc + (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:genetic_associations") );
+            row.push( getColorStyleString( getScore(i, "genetic_association") , geneDiseaseLoc + (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:genetic_associations") );
             // Somatic mutation
-            row.push( getColorStyleString( datatypes.somatic_mutation, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:somatic_mutations") );
+            row.push( getColorStyleString( getScore(i, "somatic_mutation") , geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:somatic_mutations") );
             // Known drug
-            row.push( getColorStyleString( datatypes.known_drug, geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:known_drugs") );
+            row.push( getColorStyleString( getScore(i, "known_drug") , geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:known_drugs") );
             // Affected pathway
-            row.push( getColorStyleString( datatypes.affected_pathway, geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:affected_pathways") );
+            row.push( getColorStyleString( getScore(i, "affected_pathway") , geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:affected_pathways") );
             // Expression atlas
-            row.push( getColorStyleString( datatypes.rna_expression, geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:rna_expression") );
+            row.push( getColorStyleString( getScore(i, "rna_expression") , geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:rna_expression") );
             // Literature
-            row.push( getColorStyleString( datatypes.literature, geneDiseaseLoc +            (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:literature"));
+            row.push( getColorStyleString( getScore(i, "literature") , geneDiseaseLoc +            (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:literature"));
             // Animal model
-            row.push( getColorStyleString( datatypes.animal_model, geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:animal_models") );
+            row.push( getColorStyleString( getScore(i, "animal_model") , geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "view=sec:animal_models") );
             // Therapeutic area
             var area = _.reduce(data.disease.efo_info.therapeutic_area.labels, iterateeLabel, "");
             row.push("<span title='"+area+"'>"+area+"</span>");

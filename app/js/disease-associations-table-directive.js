@@ -37,17 +37,15 @@ angular.module('cttvDirectives')
                 str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
             } else {
                 str = "<span class='zero-score' title='Score: 0'>0</span>"; // this case should be pretty rare
-                if( href ){
-                    str = "<a href=" + href + ">" + str + "</a>";
-                }
             }
         } else {
             var col = colorScale(value);
             var val = cttvUtils.floatPrettyPrint(value);
             str = "<span style='color: "+col+"; background: "+col+";' title='Score: "+val+"'>"+val+"</span>";
-            if( href ){
-                str = "<a href=" + href + ">" + str + "</a>";
-            }
+        }
+
+        if( href && value>=0 ){
+            str = "<a href=" + href + ">" + str + "</a>";
         }
 
         return str;
