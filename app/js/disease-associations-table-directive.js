@@ -41,7 +41,7 @@ angular.module('cttvDirectives')
             }*/
         } else {
             var col = colorScale(value);
-            var val = cttvUtils.floatPrettyPrint(value);
+            var val = (value==0) ? "0" : cttvUtils.floatPrettyPrint(value);
             str = "<span style='color: "+col+"; background: "+col+";' title='Score: "+val+"'>"+val+"</span>";
         }
 
