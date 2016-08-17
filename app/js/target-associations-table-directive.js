@@ -22,13 +22,14 @@ angular.module('cttvDirectives')
     */
     var getColorStyleString = function(value, href){
         var str="";
-        if( value<=0 ){
-            if(value<0){
+        if( value<0 ){
+            str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
+            /*if(value<0){
                 // when there's no data, it should be -1
                 str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
             } else {
-                str = "<span class='zero-score' title='Score: 0'>0</span>"; // this case should be pretty rare
-            }
+                str = "<span class='zero-score' title='Score: 0' style='background:"+colorScale(value)+"'>0</span>"; // this case should be pretty rare
+            }*/
         } else {
             var col = colorScale(value);
             var val = cttvUtils.floatPrettyPrint(value);
