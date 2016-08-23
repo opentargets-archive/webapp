@@ -28,6 +28,7 @@ RUN cd /opt/share/webapp && \
     cp -r ./app /var/www && \
     rm -rf /opt/share/webapp 
 
+COPY ./nginx_conf/server.* /usr/share/nginx_crt/
 COPY ./nginx_conf/nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx_conf/app_server.template /etc/nginx/conf.d/app_server.template
 COPY ./nginx_conf/rest_api_scheme.template /etc/nginx/conf.d/rest_api_scheme.template
