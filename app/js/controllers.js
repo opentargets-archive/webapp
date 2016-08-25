@@ -1,13 +1,13 @@
   /* Controllers */
 
     angular.module('cttvControllers', [])
-    .run (['$rootScope', '$window', '$modalStack', function ($rootScope, $window, $modalStack) {
+    .run (['$rootScope', '$window', '$uibModalStack', function ($rootScope, $window, $uibModalStack) {
         'use strict';
 
         // Close all the modal windows when the route changes
         $rootScope.$on('$routeChangeSuccess', function (newVal, oldVal) {
             if (oldVal !== newVal) {
-                $modalStack.dismissAll();
+                $uibModalStack.dismissAll();
             }
 
             $rootScope.showApiErrorMsg = false;
