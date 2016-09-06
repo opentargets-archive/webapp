@@ -121,10 +121,17 @@ angular.module('cttvServices').
                 if(fs.collection!=null && fs.collection.getSelectedFilters().length>0){
                     if(fs.collection.getSelectedFilters().length < fs.collection.filters.length){
                         fs.selected = false;
-                    } else {
-                        fs.selected = true;
                     }
+                    // NOTE [ luca, 06.sept.2016 ]
+                    // removing this, which essentially sets the parent as selected if all its children are selected;
+                    // while this would not be incorrect, it causes
+                    //  1. the API call to be for the parent as well as all the children and
+                    //  2. if there is only 1 child, then when we deselect it, the parent will remain/switch/become selected
+                    /*else {
+                        fs.selected = true;
+                    }*/
                 }
+
 
                 if ( fs.selected ){
                     // we check there is a collection (if not we cretate it) and then add the filter to it...
