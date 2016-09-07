@@ -32,6 +32,47 @@
     }])
 
 
+    /**
+    * Controller to allow notifications to the user
+    */
+    .controller('NotifyCtrl', ['$scope', '$log', '$http', '$modal', '$cookies', function ($scope, $log, $http, $modal, $cookies) {
+        'use strict';
+        $log.log(" NotifyCtrl ");
+        // Default behaviour on icon click
+        $scope.notify = function(){};
+        $http.get('/notification.json')
+            .then (function(partial) {
+                console.log(partial);
+                if (partial.data.id) { // There is a new notification
+                    var thiscookie = $cookies.get(partial.data.id);
+                    if (thiscookie) {
+                        // We don't show the notifications icon
+                        $scope.showNotify = false;
+                        return;
+                    }
+                    $scope.showNotify = true;
+                    var currMs = Date.now();
+                    $cookies.put(partial.data.id, 1, {
+                        expires: new Date(currMs + 2592000000) // In 30 days
+                    });
+                    console.log("  COOOKIESSS ");
+                    var cs = $cookies.getAll();
+                    console.log(cs);
+                    $scope.notify = function () {
+                        console.log(partial.data.template);
+                        var modal = $modal.open({
+                            animation: true,
+                            template: "<div class=modal-header>" + partial.data.template.header + "</div><div class='modal-body modal-body-center'>" + partial.data.template.body + "</div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss(); angular.element(this).scope().showNotify=false'>OK</button></div>",
+                            size: "m",
+                            scope:$scope
+   });
+
+                    };
+                }
+            }, function (err) {
+                console.log(err);
+            });
+    }])
 
     /**
      * Simple controller to expose the current page to the feedback button controller

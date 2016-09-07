@@ -1374,30 +1374,6 @@ angular.module('cttvDirectives', [])
             scope: {
                 // href: '@',
             },
-            /*template :    '<ul class="masthead-navigation">'
-                        +     '<li>'
-                        +         '<span dropdown on-toggle="toggled(open)">'
-                        +             '<a href dropdown-toggle>About <span class="fa fa-angle-down"></span></a>'
-                        +             '<ul class="dropdown-menu" dropdown-menu>'
-                        +                  '<li><a href="//www.opentargets.org/">Open Targets</a></li>'
-                        +                  '<li><a href="/about">Target Validation Platform</a></li>'
-                        +             '</ul>'
-                        +          '</span>'
-                        +     '</li>'
-
-                        +     '<li dropdown on-toggle="toggled(open)"><a href dropdown-toggle>Help <span class="fa fa-angle-down"></span></a>'
-                        +         '<ul class="dropdown-menu" dropdown-menu>'
-                        +              '<li><a href="/faq">FAQs</a></li>'
-                        +              '<li><a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x25;&#x32;&#x30;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x25;&#x32;&#x30;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x25;&#x32;&#x30;&#x2D;&#x25;&#x32;&#x30;&#x68;&#x65;&#x6C;&#x70;&#x25;&#x32;&#x30;&#x72;&#x65;&#x71;&#x75;&#x65;&#x73;&#x74;">support<span class="fa fa-at"></span>targetvalidation.org</a></li>'
-                        // +              '<li><a href="/documentation/components">Docs</a></li>' // not ready yet
-                        +         '</ul>'
-                        +     '</li>'
-
-                        +     '<li><a href="/documentation/api">API</a></li>' // must force target to link outside of Angular routing
-                        +     '<li><a href="{{dumps_link}}">Downloads</a></li>'
-                        +     '<li><a href="//blog.opentargets.org/">Blog</a></li>'
-                        //+     '<li><a href="/documentation/components">Docs</a></li>'
-                        + '</ul>',*/
 
             template : '<ul class="masthead-navigation">'
                         +    '<li ng-repeat="item in nav" ng-if="item.label">'
