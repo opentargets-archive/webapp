@@ -5,7 +5,7 @@
 
     <h4 class="text-item">
       <span class="nbblock">
-        <a><span ng-bind-html="search.results.besthit.data.name | typeaheadHighlight:search.query.text"></span></a>
+        <a><span ng-bind-html="search.results.besthit.data.name | uibTypeaheadHighlight:search.query.text"></span></a>
         <span class="label cttv-text-small" ng-class="(search.results.besthit.data.type=='target') ? 'label-primary' : 'label-warning'">{{search.results.besthit.data.type=="target" ? "target" : "disease"}}</span>
         <span title="Search keyword matches an ortholog of this target" class="label label-success" ng-hide="search.results.besthit.humanMatch">Match from ortholog</span>
       </span>
@@ -31,7 +31,7 @@
     <div class="text-lowlight text-item">Targets</div>
     <div ng-repeat="item in search.results.target" class="item result-item">
       <div class="suggestions-targets-item" ng-click="linkTo({type:item.data.type, q:item.data.id, label:item.data.name})">
-        <span ng-bind-html="item.data.name | typeaheadHighlight:search.query.text" class="text-nolight"></span><span ng-bind-html="item.data.full_name | typeaheadHighlight:search.query.text" class="text-lowlight small"></span>
+        <span ng-bind-html="item.data.name | uibTypeaheadHighlight:search.query.text" class="text-nolight"></span><span ng-bind-html="item.data.full_name | uibTypeaheadHighlight:search.query.text" class="text-lowlight small"></span>
       </div>
     </div>
   </div>
@@ -45,7 +45,7 @@
     <div class="text-lowlight text-item">Diseases</div>
     <div ng-repeat="item in search.results.disease" class="item result-item">
       <div ng-click="linkTo({type:item.data.type, q:item.data.id, label:item.data.name})">
-        <div ng-bind-html="item.data.name | typeaheadHighlight:search.query.text" class="suggestions-efo-title"></div>
+        <div ng-bind-html="item.data.name | uibTypeaheadHighlight:search.query.text" class="suggestions-efo-title"></div>
 
         <!-- show the EFO hierarchy links -->
         <div class="small text-lowlight">
