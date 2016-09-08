@@ -35,43 +35,59 @@
     /**
     * Controller to allow notifications to the user
     */
-    .controller('NotifyCtrl', ['$scope', '$log', '$http', '$modal', '$cookies', function ($scope, $log, $http, $modal, $cookies) {
+    .controller('NotifyCtrl', ['$scope', '$log', '$http', '$uibModal', '$cookies', '$interval', function ($scope, $log, $http, $uibModal, $cookies, $interval) {
         'use strict';
         $log.log(" NotifyCtrl ");
         // Default behaviour on icon click
         $scope.notify = function(){};
-        $http.get('/notification.json')
-            .then (function(partial) {
-                console.log(partial);
-                if (partial.data.id) { // There is a new notification
-                    var thiscookie = $cookies.get(partial.data.id);
-                    if (thiscookie) {
-                        // We don't show the notifications icon
-                        $scope.showNotify = false;
-                        return;
-                    }
-                    $scope.showNotify = true;
-                    var currMs = Date.now();
-                    $cookies.put(partial.data.id, 1, {
-                        expires: new Date(currMs + 2592000000) // In 30 days
-                    });
-                    console.log("  COOOKIESSS ");
-                    var cs = $cookies.getAll();
-                    console.log(cs);
-                    $scope.notify = function () {
-                        console.log(partial.data.template);
-                        var modal = $modal.open({
-                            animation: true,
-                            template: "<div class=modal-header>" + partial.data.template.header + "</div><div class='modal-body modal-body-center'>" + partial.data.template.body + "</div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss(); angular.element(this).scope().showNotify=false'>OK</button></div>",
-                            size: "m",
-                            scope:$scope
-   });
-
-                    };
-                }
-            }, function (err) {
-                console.log(err);
+        $scope.addCookie = function (cookieId) {
+            $scope.showNotify = $scope.notificationsLeft > 0;
+            var currMs = Date.now();
+            $cookies.put(cookieId, 1, {
+                expires: new Date(currMs + 2592000000) // In 30 days
             });
+        };
+
+        function polling () {
+            $http.get('/notification.json')
+                .then (function(partial) {
+                    if (angular.isArray(partial.data)) { // There are notifications
+                        var newNotifications = [];
+                        for (var i=0; i<partial.data.length; i++) {
+                            var thisNotification = partial.data[i];
+                            var thisCookie = $cookies.get(thisNotification.id);
+                            if (!thisCookie) {
+                                newNotifications.push(thisNotification);
+                            }
+                        }
+                        $scope.notificationsLeft = newNotifications.length;
+
+                        if (newNotifications.length) {
+                            $scope.showNotify = true;
+                            $scope.notify = function () {
+                                // Start with the first notification
+                                var notification = newNotifications.shift();
+                                $scope.notificationsLeft = newNotifications.length;
+                                var modal = $uibModal.open({
+                                    animation: true,
+                                    scope: $scope,
+                                    template: "<div class=modal-header>" + notification.template.header + "</div>"
+                                    + "<div class='modal-body modal-body-center'>" + notification.template.body + "</div>"
+                                    + "<div class=modal-footer>"
+                                    + "    <button class='btn btn-primary' type=button onclick='angular.element(this).scope().addCookie(\"" + notification.id + "\");angular.element(this).scope().$dismiss();'>OK</button>"
+                                    + " </div>"
+                                    + "</div>",
+                                    size: "m"
+                                });
+                            };
+                        }
+                    }
+                }, function (err) {
+                    console.log(err);
+                });
+        }
+        polling();
+        $interval(polling, 5000);
     }])
 
     /**

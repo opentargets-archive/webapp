@@ -88,11 +88,17 @@
                                         <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_130x30_w.svg" width="130px" height="30px" alt="Open Targets logo"/></a>
                                     </div>
                                 </div>
+
+
                                 <div class="col-xs-5 masthead-navigation-container">
                                     <masthead-navigation-menu></masthead-navigation-menu>
                                 </div>
-                                <div ng-cloak style="margin-top:10px;color:white;margin-top:10px;font-size:22px" ng-show="showNotify" ng-controller="NotifyCtrl" class="col-xs-1" style="margin-top:10px;fontsize:22px">
-                                    <i ng-click="notify()" class="fa fa-bell-o" aria-hidden="true"></i>
+
+                                <div class="col-xs-1">
+                                    <div ng-cloak class=notification ng-show="showNotify" ng-controller="NotifyCtrl">
+                                        <div class=counter ng-bind-html="notificationsLeft"></div>
+                                        <i ng-click="notify()" class="fa fa-bell-o" aria-hidden="true"></i>
+                                    </div>
                                 </div>
 
 
@@ -140,8 +146,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div ng-cloak style="position:absolute;top:10px;left:10px;z-index:1000;color:#cc44ff" ng-show="showNotify" ng-controller="NotifyCtrl"><i ng-click="notify()" class="fa fa-bell fa-2x" aria-hidden="true"></i></div> -->
-                <!-- End Masthead -->
 
                 <!-- Authentication error -->
                 <uib-alert type="danger" ng-show="showApiErrorMsg" ng-cloak>Your session has expired, reload the page to authenticate again

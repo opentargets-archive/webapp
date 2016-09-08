@@ -180,6 +180,31 @@ body{
 }
 
 
+.masthead .notification {
+    position:relative;
+    margin-top:10px;
+    color:white;
+    margin-top:10px;
+    font-size:22px;
+    width:50px;
+
+    .counter {
+        border-radius:50%;
+        width:14px;
+        height:14px;
+        background:red;
+        position:absolute;
+        left:12px;
+        top:5px;
+        font-size:10px;
+        text-align:center;
+        pointer-events:none
+    }
+
+    >i {
+        cursor:pointer;
+    }
+}
 
 
 /*
@@ -402,6 +427,3 @@ body{
 .fixed {
     position: fixed;
 }
-
-
-
