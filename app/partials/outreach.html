@@ -1,0 +1,32 @@
+<div class="partial-page">
+    <view-title>Training</view-title>
+    <div class="cttv-content-header">
+        <div class="container">
+            <h3>Open Targets Outreach activities</h3>
+            <p></p>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="cttv-docs-section">
+            <h4>Training sessions</h4>
+            <p>We offer hands-on workshop on the Open Targets initiative and on our Target Validation Platform. Check our <a href="https://blog.opentargets.org/outreach-in-open-targets-supercharge-your-target-validation-skills/">blog post</a> for more details.</p>
+            <p ng-hide="sessions">There are no training sessions scheduled, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution</p>
+            <div ng-show="sessions">
+                <p>Our next outreach sessions will be:</p>
+                <ul>
+                    <li ng-repeat="event in sessions">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="event.external.link">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</li>
+                </ul>
+                <p>If you can't attend any of the above, <a href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution.</p>
+            </div>
+        </div>
+        <div class="cttv-docs-section">
+            <h4>Outreach resources:</h4>
+            <ul>
+                <li>Get started with our Target Validation Platform with these slides</li>
+                <li>Have a tour on your platform with this video</li>
+            </ul>
+        </div>
+    </div>
+</div>

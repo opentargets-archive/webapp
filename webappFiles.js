@@ -47,6 +47,7 @@ var webappFiles = {
             'app/js/filters.js',
             'app/js/search-controller.js',
             'app/js/search-box-controller.js',
+            'app/js/outreach-controller.js',
             'app/js/target-associations-controller.js',
             'app/js/disease-associations-controller.js',
             'app/js/target-disease-controller.js',

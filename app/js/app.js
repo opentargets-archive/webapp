@@ -80,6 +80,10 @@ function initApp (deps) {
                 when('/documentation/api', {
                     templateUrl: 'partials/api-docs.html'
                 }).
+                when('/outreach', {
+                    templateUrl: 'partials/outreach.html',
+                    controller: 'OutreachCtrl'
+                }).
                 otherwise({
                     redirectTo: '/'
                 });
