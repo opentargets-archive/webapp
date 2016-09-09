@@ -1,3 +1,4 @@
+@import "utils";
 
 #cttv-page-app {
 
@@ -336,7 +337,7 @@
     .highlight-primary {
         background-color: $clr-primary-highlight;  /* 25% of standard primary color */
     }
-    
+
     .highlight-info {
     	background-color: $clr-info-highlight;  /* 25% of standard warning color */
 	}
@@ -506,6 +507,12 @@
     }
 
 
+    /*
+    *  calendar in outreach page
+    */
+    .container .center-div {
+        @include center-div(600px);
+    }
 
     /*
      * PNG export button

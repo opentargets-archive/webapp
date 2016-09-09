@@ -1,3 +1,10 @@
+@mixin center-div ($width) {
+    width: $width;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+}
+
 @mixin border-radius($radius) {
     -webkit-border-radius: $radius;
     -moz-border-radius: $radius;

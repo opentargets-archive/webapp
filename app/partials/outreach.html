@@ -7,18 +7,24 @@
         </div>
     </div>
 
-    <div class="container">
 
+    <div class="container">
         <div class="cttv-docs-section">
             <h4>Training sessions</h4>
-            <p>We offer hands-on workshop on the Open Targets initiative and on our Target Validation Platform. Check our <a href="https://blog.opentargets.org/outreach-in-open-targets-supercharge-your-target-validation-skills/">blog post</a> for more details.</p>
-            <p ng-hide="sessions">There are no training sessions scheduled, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution</p>
-            <div ng-show="sessions">
-                <p>Our next outreach sessions will be:</p>
-                <ul>
-                    <li ng-repeat="event in sessions">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="event.external.link">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</li>
-                </ul>
-                <p>If you can't attend any of the above, <a href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution.</p>
+            <div class="container center-div">
+                <calendar selected="day" marked="sessions"></calendar>
+            </div>
+
+            <div>
+                <p>We offer hands-on workshop on the Open Targets initiative and on our Target Validation Platform. Check our <a href="https://blog.opentargets.org/outreach-in-open-targets-supercharge-your-target-validation-skills/">blog post</a> for more details.</p>
+                <p ng-hide="sessions">There are no training sessions scheduled, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution</p>
+                <div ng-show="sessions">
+                    <p>Our next outreach sessions will be:</p>
+                    <ul>
+                        <li ng-repeat="event in sessions">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="event.external.link">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</li>
+                    </ul>
+                    <p>If you can't attend any of the above, <a href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution.</p>
+                </div>
             </div>
         </div>
         <div class="cttv-docs-section">
