@@ -39,7 +39,7 @@ angular.module('cttvDirectives')
                             }
                         }
                         // Open a modal with the event details
-                        var modalInstance = $uibModal.open({
+                        $uibModal.open({
                            animation: true,
                            scope: scope,
                            template: '<div class=modal-header><h3 class=modal-title>Event details</h3></div>' +
@@ -51,6 +51,16 @@ angular.module('cttvDirectives')
                            '<div class=modal-footer><button class="btn btn-primary" type=button onclick="angular.element(this).scope().$dismiss()">Close</button></div>',
                            size: 'm'
                          });
+                    } else {
+                        $uibModal.open({
+                            animation: true,
+                            scope: scope,
+                            template: '<div class=modal-header><h3 class=modal-title>No events this day</h3></div>' +
+                            '<div class=modal-body>' +
+                            '  <div>There is no event planned for this day. If you want to organize a training session in your institution please <a href="mailto:support@targetvalidation.org">contact us</a></div>' +
+                            '</div>' +
+                            '<div class=modal-footer><button class="btn btn-primary" type=button onclick="angular.element(this).scope().$dismiss()">Close</button></div>'
+                        });
                     }
                 };
 
@@ -93,8 +103,6 @@ angular.module('cttvDirectives')
         }
 
         function eventThisDay (day) {
-            console.log("marked...");
-            console.log(marked);
             for (var i=0; i<marked.length; i++) {
                 if (day.isSame(new Date(marked[i].date), "day")) {
                     return true;

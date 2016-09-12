@@ -23,7 +23,7 @@
                     <ul>
                         <li ng-repeat="event in sessions">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="event.external.link">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</li>
                     </ul>
-                    <p>If you can't attend any of the above, <a href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution.</p>
+                    <p>If you can't attend any of the above, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution.</p>
                 </div>
             </div>
         </div>
