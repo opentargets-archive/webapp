@@ -1,10 +1,10 @@
-<tabset>
-    <tab heading="Graph">
+<uib-tabset>
+    <uib-tab heading="Graph">
         <p class="cttv-section-intro">Graph showing the diseases related with {{disease.label}}. Click on any disease to get more information about it and its associated targets</p>
         <png filename="{{disease.title}}-graph.png" track="diseaseClassification"></png>
-        <div id=cttv-efo-graph></div>
-    </tab>
-    <tab heading="Text">
+        <div id="cttv-efo-graph"></div>
+    </uib-tab>
+    <uib-tab heading="Text">
         <h4>Paths</h4>
         <ul ng-repeat="path in disease.paths">
             <b>Path {{$index+1}}</b>
@@ -17,5 +17,5 @@
             <li ng-repeat="child in disease.children">{{child.label}} <small>(<a href="/disease/{{child.code}}/associations">See target associations</a>), (<a href="/disease/{{child.code}}">Go to diseases page</a>)</small>
             </li>
         </ul>
-    </tab>
-</tabset>
+    </uib-tab>
+</uib-tabset>

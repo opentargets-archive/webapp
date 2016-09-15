@@ -138,7 +138,7 @@ body{
     }
 
     /* style the dropdown, based on bootstrap ui components */
-    .dropdown-menu {
+    .uib-dropdown-menu {
         font-size: 12px;
         border-radius: 0px;
         border-bottom-left-radius: 4px;
@@ -164,7 +164,7 @@ body{
 /* specific settings for the other pages masthead navigation */
 .masthead .masthead-navigation {
 
-    .dropdown-menu {
+    .uib-dropdown-menu {
         border-top-right-radius: 0px;
     }
 

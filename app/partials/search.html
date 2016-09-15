@@ -83,7 +83,7 @@
 
                 <div>
                     <!-- Furthermore this should only be shown when results are displayed -->
-                    <pagination ng-if="search.results.total>search.query.size" boundary-links="true" total-items="search.results.total" ng-model="state.p[0]" direction-links="true" class="pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="update()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                    <div uib-pagination ng-if="search.results.total>search.query.size" boundary-links="true" total-items="search.results.total" ng-model="state.p[0]" direction-links="true" class="uib-pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="update()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></div>
                 </div>
 
 
