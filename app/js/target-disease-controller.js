@@ -701,53 +701,83 @@
         $scope.showVariantInStructure = function (start, end, chain_id, alt) {
             // Get the struct_asym_id and the entity_id for the pdb widget
             var url = "/proxy/www.ebi.ac.uk/pdbe/api/mappings/uniprot/" + $scope.search.info.bestStructure.pdb_id;
+
             $http.get(url)
                 .then (function (mappings) {
                     var mapping = filterMappings(mappings.data[$scope.search.info.bestStructure.pdb_id].UniProt[$scope.search.info.gene.uniprot_id].mappings, start);
 
                     var clientHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
                     var modal = $modal.open({
+                        template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div id=snpInPvWidget></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
                         animation: true,
-                        template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div style='height:" + (clientHeight*0.5) + "px'><div class=pdb-widget-container style='height:" + (clientHeight*0.4) + "px;'><pdb-lite-mol id='litemol_1' pdb-id='search.info.bestStructure.pdb_id' hide-controls=true></pdb-lite-mol></div><div id=litemol_legend style='margin:20px; '><br/></div></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
-                        size: "m",
-                        scope:$scope,
-                        windowClass: 'variantStructureModalWindow'
+                        size: 'm',
+                        scope: $scope,
+                        windowClass : 'variantStructureModalWindow'
                     });
 
+
+                    // var modal = $modal.open({
+                    //     animation: true,
+                    //     template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div style='height:" + (clientHeight*0.5) + "px'><div class=pdb-widget-container style='height:" + (clientHeight*0.4) + "px;'><pdb-lite-mol id='litemol_1' pdb-id='search.info.bestStructure.pdb_id' hide-controls=true></pdb-lite-mol></div><div id=litemol_legend style='margin:20px; '><br/></div></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                    //     size: "m",
+                    //     scope:$scope,
+                    //     windowClass: 'variantStructureModalWindow'
+                    // });
+
                     $timeout(function(){ //added settimeout to complete the struture loading before applying selection
-                        //bind to litemol scope
-                        liteMolScope = bindPdbComponentScope(document.getElementById('litemol_1'));
 
-                        // Populate the litemol legend
-                        var legendContainer = document.getElementById("litemol_legend");
-                        var seqStr = d3.select(legendContainer)
-                            .append("p")
-                            .append("span");
-                        seqStr
-                            .append("div")
-                            .style({
-                                display: "inline-block",
-                                margin: "0px 5px 0px 15px",
-                                width: "30px",
-                                height: "10px",
-                                border: "1px solid rgb(0,0,0)",
-                                background: "rgb(27, 204, 52)"
+                        var parent = document.getElementById("snpInPvWidget");
+                        var options = {
+                            width: 500,
+                            height: clientHeight * 0.4,
+                            antialias: true,
+                            quality : 'medium'
+                        };
+                        var viewer = pv.Viewer(parent, options);
+
+                        $http.get('/proxy/files.rcsb.org/view/' + bestStructure.pdb_id + '.pdb')
+                            .then (function (data) {
+                                var structure = pv.io.pdb(data.data);
+                                viewer.cartoon('protein', structure, {
+                                    color: pv.color.byChain()
+                                });
+                                viewer.autoZoom();
                             });
-                        seqStr
-                            .append("text")
-                            .text("SNP position");
 
-                        d3.select(legendContainer)
-                            .append("p")
-                            .text("Alternative Aminoacid: " + alt);
 
-                        //Set background
-                        liteMolScope.LiteMolComponent.setBackground();
-
-                        // Make selection and apply color
-                        var queryParams = {entity_id: mapping.entity_id, struct_asym_id: mapping.struct_asym_id, start_residue_number: start, end_residue_number: end};
-                        var color = {r: 27, g:204, b:52};
-                        selectStructure(liteMolScope, queryParams, color);
+                        // //bind to litemol scope
+                        // liteMolScope = bindPdbComponentScope(document.getElementById('litemol_1'));
+                        //
+                        // // Populate the litemol legend
+                        // var legendContainer = document.getElementById("litemol_legend");
+                        // var seqStr = d3.select(legendContainer)
+                        //     .append("p")
+                        //     .append("span");
+                        // seqStr
+                        //     .append("div")
+                        //     .style({
+                        //         display: "inline-block",
+                        //         margin: "0px 5px 0px 15px",
+                        //         width: "30px",
+                        //         height: "10px",
+                        //         border: "1px solid rgb(0,0,0)",
+                        //         background: "rgb(27, 204, 52)"
+                        //     });
+                        // seqStr
+                        //     .append("text")
+                        //     .text("SNP position");
+                        //
+                        // d3.select(legendContainer)
+                        //     .append("p")
+                        //     .text("Alternative Aminoacid: " + alt);
+                        //
+                        // //Set background
+                        // liteMolScope.LiteMolComponent.setBackground();
+                        //
+                        // // Make selection and apply color
+                        // var queryParams = {entity_id: mapping.entity_id, struct_asym_id: mapping.struct_asym_id, start_residue_number: start, end_residue_number: end};
+                        // var color = {r: 27, g:204, b:52};
+                        // selectStructure(liteMolScope, queryParams, color);
                     }, 1000);
                 });
         };
@@ -1450,7 +1480,7 @@
                     var pub = pmdata[0];
                     // format author names
                     var auth = pub.authorString;
-                    
+
                     var authArr = [];
                     if (auth) {
                         authArr = auth.split(",");
@@ -1511,12 +1541,12 @@
                     var titleAndSource = "<span class=large><a href='#' onClick='angular.element(this).scope().openEuropePmc("+pub.pmid+")'>"+title+"</a></span>"
                         + "<br />"
                         + "<span class=small>"+auth +" "+journalInfo+ "</span>";
-                    
+
                     data[3] += titleAndSource + "<br/><br/>" +abstractString +abstract+ " <p class=small>" + (matchedSentences || "no matches available") + "</p>"
                     data[4] = pub.journalInfo.yearOfPublication; //this is column 4
 
                     data[8]=title;
-                    
+
                     data[10]=journalInfo;
                     var URL = "http://europepmc.org/abstract/MED/"+pub.pmid;
 
