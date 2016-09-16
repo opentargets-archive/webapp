@@ -479,9 +479,9 @@ angular.module('cttvDirectives', [])
             // template: '<div cttv-default-facet-contols facet="facet"></div>'
             //          +'<div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in facet.filters"></div>',
             template: '<div cttv-default-facet-controls facet="facet"></div>'
-                     +'<div ng-init="isCollapsed=true&&(!datatype.collection.isLastClicked())" ng-repeat="datatype in facet.filters track by datatype.key" >'
+                     +'<div ng-init="isCollapsed=true&&(!datatype.collection.isLastClicked())" ng-repeat="datatype in facet.filters" >' // track by datatype.key" >'
                      +'    <cttv-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
-                     +'    <div collapse="isCollapsed" style="padding-left:20px">'
+                     +'    <div uib-collapse="isCollapsed" style="padding-left:20px">'
                      //+'        <div></div>'
                      +'        <div cttv-checkbox-facet bucket="bucket" ng-repeat="bucket in datatype.collection.filters" partial="{{partial}}"></div>'
                      +'    </div>'
@@ -512,7 +512,7 @@ angular.module('cttvDirectives', [])
             template: '<div cttv-default-facet-controls facet="facet"></div>'
                      +'<div ng-init="isCollapsed=true&&(!pathway.collection.isLastClicked())" ng-repeat="pathway in facet.filters">' // TODO: try "isCollapsed=true&&(!facet.isLastClicked())"
                      +'    <cttv-parent-checkbox-facet bucket="pathway" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>'
-                     +'    <div collapse="isCollapsed" style="padding-left:20px">'
+                     +'    <div uib-collapse="isCollapsed" style="padding-left:20px">'
                      //+'          <div cttv-default-facet-contols facet="pathway.collection"></div>'
                      +'        <div cttv-checkbox-facet multiline="true" bucket="bucket" ng-repeat="bucket in pathway.collection.filters" partial="{{partial}}"></div>'
                      +'    </div>'
@@ -1285,7 +1285,7 @@ angular.module('cttvDirectives', [])
         };
     }])
 
-    .directive('png', ['$timeout', '$modal', '$analytics', function ($timeout, $modal, $analytics) {
+    .directive('png', ['$timeout', '$uibModal', '$analytics', function ($timeout, $uibModal, $analytics) {
         'use strict';
 
         return {
@@ -1325,7 +1325,7 @@ angular.module('cttvDirectives', [])
                         // We assume it is an SVG
                         var svg = container;
                         // Show a modal with the scale of the png
-                        var modal = $modal.open({
+                        var modal = $uibModal.open({
                             animation: true,
                             template: "<div class=modal-header>PNG scale factor</div><div class='modal-body modal-body-center'><span class=png-scale-factor-selection><input type=radio name=pngScale value=1 checked ng-model='$parent.currScale'> 1x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=2 ng-model='$parent.currScale'> 2x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=3 ng-model='$parent.currScale'> 3x</span></div><div class=modal-footer><button class='btn btn-primary' type=button ng-click='export(this)' onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
                             size: "sm",
@@ -1345,7 +1345,7 @@ angular.module('cttvDirectives', [])
                                 .limit({
                                     limit: 2100000,
                                     onError: function () {
-                                        $modal.open({
+                                        $uibModal.open({
                                             animation: true,
                                             template: "<div class='modal-header'>Image too large</div><div class=modal-body>The image you are trying to export is too large. Reduce the number of elements and try again.</div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
                                             size:"sm",
@@ -1414,9 +1414,9 @@ angular.module('cttvDirectives', [])
                         +             '<a href="{{item.href}}">{{item.label}}</a>'
                         +        '</div>'
 
-                        +        '<div dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
-                        +             '<a href dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
-                        +             '<ul class="dropdown-menu" dropdown-menu>'
+                        +        '<div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
+                        +             '<a href uib-dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
+                        +             '<ul class="uib-dropdown-menu" uib-dropdown-menu>'
                         +                  '<li ng-repeat="subitem in item.menu"><a href="{{subitem.href}}">{{subitem.label}}</a></li>'
                         +             '</ul>'
                         +        '</div>'

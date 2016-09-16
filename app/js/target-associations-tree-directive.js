@@ -23,8 +23,8 @@ angular.module('cttvDirectives')
                 active : '@'
             },
 
-            template: '<png filename="{{target}}-AssociationsTreeView.png" track="associationsTree"></png><div id=cttvTreeView></div>'
-            +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
+            template: '<png filename="{{target}}-AssociationsTreeView.png" track="associationsTree"></png><div style="float:left"><div id=cttvTreeView></div>'
+            +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend></div>',
 
 
             link: function (scope, elem, attrs) {
@@ -107,7 +107,6 @@ angular.module('cttvDirectives')
 
                     // TODO: This is not being used at the moment. We are fixing the size of the tree to 900px (see below)
                     var diameter = viewportH - elemOffsetTop - bottomMargin;
-                    $log.log("DIAMETER FOR TREE: " + diameter);
 
                     //var dts = JSON.parse(attrs.datatypes);
                     // var opts = {
@@ -149,7 +148,8 @@ angular.module('cttvDirectives')
                                     .therapeuticAreas(tas)
                                     .hasLegendScale(false);
 
-                                gat(fView, elem.children().eq(1)[0]);
+                                // gat(fView, elem.children().eq(1)[0]);
+                                gat(fView, elem.children().eq(1).children().eq(0)[0]);
 
                             },
                             cttvAPIservice.defaultErrorHandler

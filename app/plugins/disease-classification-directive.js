@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('diseaseClassification', ['$log', 'cttvAPIservice', '$timeout', function ($log, cttvAPIservice, $timeout) {
+    .directive('diseaseClassification', ['$log', 'cttvAPIservice', '$timeout', 'cttvUtils', function ($log, cttvAPIservice, $timeout, cttvUtils) {
         'use strict';
 
         return {

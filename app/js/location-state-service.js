@@ -61,6 +61,8 @@ angular.module('cttvServices').
          * param(obj); // returns "datatype:drugs,datatype:literature,datatype:animals,pathways:sdfs"
          */
         cttvLocationStateService.param = function(obj){
+            $log.log("cttvLocationStateService.param:");
+            $log.log(obj);
             // uses jQuery.param() method
             // $httpParamSerializerJQLike should work the same... but it doesn't and returns parentheses around arrays etc
             // so we stick with jQuery for now
@@ -71,7 +73,20 @@ angular.module('cttvServices').
                 // otherwise jQuery would convert it to something like "0=l&1=a&2=t&3=e&4=s&5=t" which turns the URL into an ugly mess
                 return obj;
             }
-            return $.param(obj,true).replace(/=/g,":").replace(/&/g,",");
+            var s = [];
+            for(var i in obj){
+                if(Array.isArray(obj[i])){
+                    obj[i].forEach(function(a){
+                        s.push(i+":"+a);
+                    })
+                }
+                if( typeof obj[i] === "string" ) {
+                    s.push(i+":"+obj[i]);
+                }
+            }
+
+            return s.join(",");
+            //return $.param(obj,true).replace(/=/g,":").replace(/&/g,",").replace(/\+/g," ");
         }
 
 

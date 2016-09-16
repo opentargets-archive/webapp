@@ -19,24 +19,24 @@
                 <hm-read-more  hm-text="{{disease.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
             </p>
 
-            <p>
-                Synonyms: <span class="cttv-profile-synonym-list" ng-repeat="syn in disease.synonyms">{{syn}}</span>
+            <p ng-show="disease.synonyms">
+                Synonyms: <span class="cttv-profile-synonym-list" ng-repeat="syn in disease.synonyms" ng-show="syn!=null">{{syn}}</span>
             </p>
 
-            <accordion close-others="false">
+            <uib-accordion close-others="false">
 
-                <!-- <accordion-group attr-section-name="Drugs" heading="Drugs" is-open="false">
+                <!-- <div uib-accordion-group attr-section-name="Drugs" heading="Drugs" is-open="false">
                     <div ng-show="!drugs.has_errors">
                         <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a></p>
                         <known-drug-table disease="{{disease.efo}}" title="disease.title" error-flag="drugs.has_errors"></known-drug-table>
                     </div>
 
-                    <alert type="danger" ng-show="drugs.has_errors" ng-cloak>
+                    <uib-alert type="danger" ng-show="drugs.has_errors" ng-cloak>
                         <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
-                    </alert>
-                </accordion-group> -->
+                    </uib-alert>
+                </div uib-accordion-group> -->
 
-                <!-- <accordion-group attr-section-name="Classification" heading="Disease Classification" is-open="true">
+                <!-- <div uib-accordion-group attr-section-name="Classification" heading="Disease Classification" is-open="true">
                     <tabset>
                         <tab heading="Graph">
                             <p class="cttv-section-intro">Graph showing the diseases related with {{disease.label}}. Click on any disease to get more information about it and its associated targets</p>
@@ -57,17 +57,17 @@
                             </ul>
                         </tab>
                     </tabset>
-                </accordion-group> -->
+                </div uib-accordion-group> -->
 
                 <!-- dynamic sections coming from plugins -->
-                <accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}">
-                    <accordion-heading>
+                <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
+                    <uib-accordion-heading>
                         <span ng-click='section.visible = !section.visible'>{{section.heading}}</span>
-                    </accordion-heading>
+                    </uib-accordion-heading>
                     <plugin-loader disease="disease" plugin="section.element" visible="{{section.visible}}" dependencies="section.dependencies" class="scroll-table-panel"></plugin-loader>
-                </accordion-group>
+                </div uib-accordion-group>
 
-            </accordion>
+            </uib-accordion>
         </div>
     </div>
 </div>

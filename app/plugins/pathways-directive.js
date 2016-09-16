@@ -11,8 +11,7 @@ angular.module('plugins')
                 width: '='
             },
             link: function (scope, element, attrs) {
-                console.log('LOADING PATHWAYS INFORMATION...');
-                var w = scope.width;
+                var w = scope.width - 30;
                 var h = 700;
                 var currentPathwayId;
                 var pathwayDiagram;
@@ -20,20 +19,23 @@ angular.module('plugins')
                 // Load all the pathways first:
                 function loadPathways () {
                     var pathways = scope.target.reactome;
+                    console.log(pathways);
                     var reactomePathways = [];
 
                     // Get the new identifiers
                     var promises = [];
                     var pathwayArr = [];
-                    for (var pathway in pathways) {
+                    for (var i=0; i<pathways.length; i++) {
+                    // for (var pathway in pathways) {
+                        var pathway = pathways[i].id;
                         var p = $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/" + pathway + "/stableIdentifier");
                         promises.push(p);
-                        pathwayArr.push(pathways[pathway]["pathway name"]);
+                        // pathwayArr.push(pathways[pathway]["pathway name"]);
+                        pathwayArr.push(pathways[i].value["pathway name"]);
                     }
                     $q
                         .all(promises)
                         .then(function (vals) {
-                            console.log(vals);
                             for (var i=0; i<vals.length; i++) {
                                 var val = vals[i].data;
                                 if (val) {
@@ -53,24 +55,19 @@ angular.module('plugins')
                 }
 
                 scope.setPathwayViewer = function (pathway) {
-                    console.log("SET PATHWAY VIEWER");
                     var pId = pathway.id;
                     if (!pathwayDiagram) {
-                        console.log("CREATE A REACTOME DIAGRAM");
                         pathwayDiagram = Reactome.Diagram.create ({
                             "proxyPrefix" : "/proxy/www.reactome.org",
                             "placeHolder": "pathwayDiagramContainer",
                             "width": w,
                             "height": h,
                         });
-                        console.log("Ok");
                         pathwayDiagram.onDiagramLoaded(function (pathwayId) {
-                            console.log("Flagging items");
                             pathwayDiagram.flagItems(scope.target.symbol);
                         });
                     }
                     if (pId !== currentPathwayId) {
-                        console.log("LOADING A DIAGRAM");
                         currentPathwayId = pId;
                         scope.pathway = pathway;
                         pathwayDiagram.loadDiagram(pId);

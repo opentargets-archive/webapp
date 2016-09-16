@@ -110,6 +110,15 @@ a {
         color: #333;
         border-bottom: 1px dotted $secondary-color;
     }
+
+    .cttv-link-quote {
+        // border-bottom: none;
+        color: #1e5799;
+        background: #f5f5f5;
+        padding: 3px;
+        border-radius: 3px;
+        border: 1px solid #eee;
+    }
 }
 
 

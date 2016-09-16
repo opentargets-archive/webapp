@@ -8,7 +8,7 @@
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$modal', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $modal, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$uibModal', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $uibModal, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
         'use strict';
         $log.log('TargetDiseaseCtrl()');
 
@@ -613,8 +613,20 @@
                     // evidence source
                     if( item.type === 'genetic_association' && checkPath(item, "evidence.variant2disease") ){
                         row.push( "<a class='cttv-external-link' href='" + item.evidence.variant2disease.urls[0].url + "' target=_blank>" + item.evidence.variant2disease.urls[0].nice_name + "</a>" );
+
                     } else {
-                        row.push( "<a class='cttv-external-link' href='" + item.evidence.urls[0].url + "' target=_blank>" + item.evidence.urls[0].nice_name + "</a>" );
+                        // Do some cleaning up for gene2Phenotype:
+                        // TODO: this will probably be removed once we reprocess the data and put the nicely formatted text and URL in the data;
+                        // I leave the hard coded strings in on purpose, so hopefully I'll remember to remove this in the future.
+                        // I'm setting manually:
+                        //  1) URL
+                        //  2) the text of the link
+                        if( db == cttvConsts.dbs.GENE_2_PHENOTYPE ){
+                            row.push( "<a class='cttv-external-link' href='http://www.ebi.ac.uk/gene2phenotype/search?panel=ALL&search_term=" + ($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name) + "' target=_blank>Further details in Gene2Phenotype database</a>" );
+                        } else {
+                            row.push( "<a class='cttv-external-link' href='" + item.evidence.urls[0].url + "' target=_blank>" + item.evidence.urls[0].nice_name + "</a>" );
+                        }
+
                     }
 
 
@@ -1188,32 +1200,26 @@
                     var samp = cttvDictionary.NA;
                     var patt = cttvDictionary.NA;
 
-                    if(item.evidence.known_mutations && item.evidence.known_mutations.length>0){
+
+                    if(item.evidence.known_mutations){
 
                         // col 2: mutation type
                         if(item.sourceID == cttvConsts.dbs.INTOGEN){
-                            mut = item.target.activity;
+                            mut = item.target.activity || mut;
                         } else {
-                            mut = arrayToList( item.evidence.known_mutations.map(function(i){return i.preferred_name || cttvDictionary.NA;}) , true );
+                            mut = item.evidence.known_mutations.preferred_name || mut;
                         }
 
 
 
                         // col 3: samples
-                        samp = arrayToList(
-                                            item.evidence.known_mutations.map(
-                                                function(i){
-                                                    if( i.number_samples_with_mutation_type ){
-                                                        return i.number_samples_with_mutation_type+"/"+i.number_mutated_samples;
-                                                    } else {
-                                                        return cttvDictionary.NA;
-                                                    }
-                                                }
-                                            ),
-                                            true );
+                        if( item.evidence.known_mutations.number_samples_with_mutation_type ){
+                            samp = item.evidence.known_mutations.number_samples_with_mutation_type+"/"+item.evidence.known_mutations.number_mutated_samples || samp;
+                        }
+
 
                         // col 4: inheritance pattern
-                        patt = arrayToList( item.evidence.known_mutations.map(function(i){return i.inheritance_pattern || cttvDictionary.NA;}) , true );
+                        patt = item.evidence.known_mutations.inheritance_pattern || patt;
                     }
 
 
@@ -1970,7 +1976,7 @@
 		};
 
 		$scope.open = function(id){
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
               animation: true,
               template: '<div onclick="angular.element(this).scope().$dismiss()">'
                        +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'

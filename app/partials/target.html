@@ -21,15 +21,15 @@
                 Synonyms: <span class="cttv-profile-synonym-list" ng-repeat="syn in synonyms">{{syn}}</span>
             </p>
 
-            <accordion close-others="false">
-                <accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}">
-                    <accordion-heading>
+            <uib-accordion close-others="false">
+                <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
+                    <uib-accordion-heading>
                         <span ng-click='section.currentVisibility = !section.currentVisibility'>{{section.heading}}</span>
-                    </accordion-heading>
+                    </uib-accordion-heading>
                     <plugin-loader target="target" plugin="section.element" visible="{{section.currentVisibility}}" dependencies="section.dependencies" page="target" track="section.track" label="section.name" class="scroll-table-panel"></plugin-loader>
-                </accordion-group>
+                </div uib-accordion-group>
 
-            </accordion>
+            </uib-accordion>
 
         </div>
 

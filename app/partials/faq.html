@@ -20,8 +20,8 @@
                         <li><a href="#efo">What is the Experimental Factor Ontology?</a></li>
                         <li><a href="#data">Where does the data come from?</a></li>
                         <li><a href="#score">How is the association score calculated?</a></li>
-                        <li><a href="#biblio">I’m looking at some gene information outside its disease context. I’ve found some articles linked to my target. Where does the bibliography come from?</a></li>
-                        <li><a href="#data_use">Do you use the information I enter into the Target Validation platform?</a></li>
+                        <li><a href="#biblio">I’m looking at a target profile and found some articles linked to my target. Where does the bibliography come from?</a></li>
+                        <li><a href="#data_use">Do you use the information I’ve searched for in platform?</a></li>
                         <li><a href="#citation">How do I cite the Target Validation Platform?</a></li>
                         <li><a href="#download">Can I download data from the Target Validation Platform?</a></li>
                         <li><a href="#contact">How can I contact the team?</a></li>
@@ -38,7 +38,7 @@
 
                 <div class="cttv-docs-section">
                     <h4><a name="target"></a>What is a target?</h4>
-                    <p>A target can be a protein, protein complex or RNA molecule. We integrate evidence to the target through the gene that codes for it. If you search for a target and cannot find it, please email us.</p>
+                    <p>A target can be a protein, protein complex or RNA molecule. We integrate evidence to the target through the gene that codes for it. If you search for a target and cannot find it, please <a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;">email us</a>.</p>
                 </div>
 
                 <div class="cttv-docs-section">
@@ -48,29 +48,29 @@
 
                 <div class="cttv-docs-section">
                     <h4><a name="efo"></a>What is the Experimental Factor Ontology?</h4>
-                    <p>The Experimental Factor Ontology (EFO) provides a systematic, machine readable description of data elements available in public databases. It combines parts of several ontologies, such as diseases, phenotypes, anatomy, and chemical compounds. The EFO is the core ontology for Open Targets.</p>
+                    <p>The <a href="http://www.ebi.ac.uk/efo/">Experimental Factor Ontology</a> (EFO) provides a systematic, machine readable description of data elements available in public databases. It combines parts of several ontologies, such as diseases, phenotypes, anatomy, and chemical compounds. The EFO is the core ontology for Open Targets.</p>
                 </div>
 
                 <div class="cttv-docs-section">
                     <h4><a name="data"></a>Where does the data come from?</h4>
-                    <p>The data comes from a number of public databases, such as GWAS Catalog, EVA, UniProt, Expression Atlas, ChEMBL, DECIPHER and others. These databases are the <a href="/data_sources">Target Validation Platform Data Sources</a>.</p>
+                    <p>The data comes from a number of public databases, such as GWAS Catalog, EVA, UniProt, Expression Atlas, ChEMBL, DECIPHER, IntOGen, and others. These databases are the <a href="/data_sources">Target Validation Platform Data Sources</a>.</p>
                 </div>
 
                 <div class="cttv-docs-section">
                     <h4><a name="score"></a>How is the association score calculated?</h4>
-                    <p>We calculate a score for each evidence from the different data sources (e.g. GWAS catalog, EVA) to summarise the strength of the evidence. The score will depends on factors that affect the relative strength of an evidence, for example p values and sample size for the GWAS data.</p>
+                    <p>We calculate a score for each evidence from the different data sources (e.g. GWAS catalog, EVA) to summarise the strength of the evidence. The score will depend on factors that affect the relative strength of an evidence, for example p values and sample size for the GWAS data.</p>
                     <p>Once we have the scores for each evidence, we calculate an overall score by taking into account the sum of the <a href="https://en.wikipedia.org/wiki/Harmonic_progression_(mathematics)">harmonic progression</a> of each score and adjusting the contribution of each of them using a heuristic weighting.</p>
                 </div>
 
                 <div class="cttv-docs-section">
-                    <h4><a name="biblio"></a>I’m looking at some gene information outside its disease context. I’ve found some articles linked to my target. Where does the bibliography come from?</h4>
-                    <p>We link the gene to its protein and get the list of articles from the Publications section in UniProt.</p>
+                    <h4><a name="biblio"></a>I’m looking at a target profile and found some articles linked to my target. Where does the bibliography come from?</h4>
+                    <p>We link the gene to its protein and get the list of articles from the Publications section in <a href="http://www.uniprot.org/">UniProt</a>.</p>
                 </div>
 
                 <div class="cttv-docs-section">
-                    <h4><a name="data_use"></a>Do you use the information I’ve searched for in the Target Validation platform?</h4>
+                    <h4><a name="data_use"></a>Do you use the information I’ve searched for in platform?</h4>
                     <p>We do not analyse the nature (e.g disease or target names) of any specific queries via the web application. We use standard encryption methods (e.g. https://) to maintain the security of the searches. For further details check the <a href="/terms_of_use">Terms of use for the Target Validation Platform</a>.</p>
-                    <p>Note that some of the components of the site are provided by third parties or make use of services provided by third parties, mostly from EMBL-EBI resources. We provide links to these external resources and the use of their services is covered by their own terms of use. We may use some metrics on the usage of pages and icons on the platform to improve its visualisation aspects.</p>
+                    <p>Note that some of the components of the site are provided by third parties, or make use of services provided by third parties, mostly from EMBL-EBI resources. We provide links to these external resources, and the use of their services is covered by their own terms of use. We may however use some metrics on the usage of pages and icons on the platform to improve its visualisation aspects.</p>
                 </div>
 
                 <div class="cttv-docs-section">
@@ -80,12 +80,12 @@
 
                 <div class="cttv-docs-section">
                     <h4><a name="download"></a>Can I download data from the Target Validation Platform?</h4>
-                    <p>Yes, you can download our data as compressed JSON files. These file dumps are available for the target-disease <a href="https://s3-eu-west-1.amazonaws.com/targetvalidation-dumps/16.04_association_data.json.gz">association objects</a> and the <a href="https://s3-eu-west-1.amazonaws.com/targetvalidation-dumps/16.04_association_data.json.gz">evidence objects</a>, the latter used to calculate each association. Both association and evidence objects are also available programmatically via our API (check our <a href="/documentation/api">API documentation</a>).</p>
+                    <p>Yes, you can download our data as compressed JSON files. These <a href="/downloads/data">file dumps are available</a> for the target-disease association objects and the evidence objects, the latter used to calculate each association. Both association and evidence objects are also available programmatically via our API (check our <a href="/documentation/api">API documentation</a>).</p>
                 </div>
 
                 <div class="cttv-docs-section">
                     <h4><a name="contact"></a>How can I contact the team?</h4>
-                    <p>If you’ve got questions or feedback, <a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;">email us</a>. You can also follow the team and keep up with the latest news on Open Targets and its Target Validation Platform through our social media channels <a href="https://twitter.com/targetvalidate">twitter</a>, <a href="https://www.facebook.com/OpenTargets">facebook</a> and <a href="https://www.facebook.com/OpenTargets">linkedin</a>.</p>
+                    <p>If you’ve got questions or feedback, <a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;">email us</a>. You can also follow the team and keep up with the latest news on Open Targets and its Target Validation Platform through our social media channels <a href="https://twitter.com/targetvalidate">Twitter</a>, <a href="https://www.facebook.com/OpenTargets">Facebook</a> and <a href="https://www.facebook.com/OpenTargets">LinkedIn</a>.</p>
                 </div>
 
 
@@ -95,4 +95,3 @@
     </div>
 
 </div>
-

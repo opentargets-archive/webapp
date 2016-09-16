@@ -143,15 +143,20 @@ angular.module('cttvDirectives')
                 active : '@'
             },
 
-            template: '<png filename="{{target}}-AssociationsBubblesView.png" track="associationsBubbles"></png><div></div>'
-            +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>',
+            template: '<div style="float:left">'
+            +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend></div>'
+            +'<png filename="{{target}}-AssociationsBubblesView.png" track="associationsBubbles"></png>',
 
 
             link: function (scope, elem, attrs, resizeCtrl) {
                 //var bubblesContainer = elem.children().eq(1).children().eq(0)[0];
-                var bubblesContainer = elem.children().eq(1)[0];
-                bubblesContainer.id = "cttvBubblesView";
+                var legendDiv = elem.children().eq(0).children().eq(0)[0];
+                var bubblesContainer = document.createElement("div");
+                bubblesContainer.id="cttvBubblesView";
                 scope.element = "cttvBubblesView";
+                elem.children().eq(0)[0].insertBefore(bubblesContainer, legendDiv);
+                // bubblesContainer.id = "cttvBubblesView";
+                // scope.element = "cttvBubblesView";
 
                 var bView;
                 var nav;
@@ -235,8 +240,7 @@ angular.module('cttvDirectives')
 
                 if (cttvUtils.browser.name !== "IE") {
                     scope.toExport = function () {
-                        var svg = decorateSVG(elem.children().eq(1)[0].querySelector("svg"));
-                        //var svg = elem.children().eq(1)[0].querySelector("svg");
+                        var svg = decorateSVG(elem.children().eq(0)[0].querySelector("svg"));
                         return svg;
                     };
                 }

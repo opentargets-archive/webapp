@@ -89,9 +89,9 @@ angular.module('cttvServices', []).
 
             return obj;
         };
-        
+
         cttvUtilsService.setTableToolsParamsExportColumns = function(obj, title){
-        	   
+
             obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>rt<"pull-left small" l><"pull-right small" p>>';
             obj.buttons = [
                 {

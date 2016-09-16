@@ -73,12 +73,12 @@
 
                 <a id="tables"></a>
 
-                <!-- Accordion -->
-                <accordion close-others="false">
+                <!-- uib-accordion -->
+                <uib-accordion close-others="false">
 
                     <!-- Genetic Associations table -->
-                    <accordion-group is-open="search.tables.genetic_associations.is_open" ng-click='sectionOpen("genetics")'>
-                        <accordion-heading>
+                    <div uib-accordion-group is-open="search.tables.genetic_associations.is_open" ng-click='sectionOpen("genetics")' class="panel-default">
+                        <uib-accordion-heading>
                             <a id="genetic_associations"></a>
                             <span class="text-nolight">
                                 <span ng-class="{ 'text-disabled': search.tables.genetic_associations.common_diseases.data.length==0 && search.tables.genetic_associations.rare_diseases.data.length==0 }">{{search.tables.genetic_associations.heading}}</span>
@@ -87,9 +87,9 @@
                                 <!-- <span class='badge' ng-show="search.tables.genetic_associations.rare_diseases.data.length" style="background:#3E8BAD">{{search.tables.genetic_associations.rare_diseases.data.length}}</span> -->
                                 <span cttv-progress-spinner class="pull-right" ng-show="search.tables.genetic_associations.is_loading"></span>
                             </span>
-                        </accordion-heading>
-                        <tabset>
-                            <tab heading="Table">
+                        </uib-accordion-heading>
+                        <uib-tabset>
+                            <uib-tab heading="Table">
                                 <div ng-show="search.tables.genetic_associations.common_diseases.data.length>0 || search.tables.genetic_associations.rare_diseases.data.length>0">
                                     <!-- <p><span class="small">Association score: {{search.association_scores[datatypes.GENETIC_ASSOCIATION] || 0}}</span></p> -->
 
@@ -128,9 +128,9 @@
                                         </div>
                                     </div>
 
-                                    <alert type="danger" ng-show="search.tables.genetic_associations.common_diseases.has_errors" ng-cloak style="margin-top:15px">
+                                    <uib-alert type="danger" ng-show="search.tables.genetic_associations.common_diseases.has_errors" ng-cloak style="margin-top:15px">
                                         <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving {{search.tables.genetic_associations.common_diseases.heading}} data. Please try again later.
-                                    </alert>
+                                    </uib-alert>
 
 
                                     <!-- common / rare disease table divider -->
@@ -169,9 +169,9 @@
                                         </div>
                                     </div>
 
-                                    <alert type="danger" ng-show="search.tables.genetic_associations.rare_diseases.has_errors" ng-cloak style="margin-top:15px">
+                                    <uib-alert type="danger" ng-show="search.tables.genetic_associations.rare_diseases.has_errors" ng-cloak style="margin-top:15px">
                                         <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving {{search.tables.genetic_associations.rare_diseases.heading}} data. Please try again later.
-                                    </alert>
+                                    </uib-alert>
 
                                 </div>
 
@@ -179,22 +179,22 @@
                                     <p>No data available</p>
                                 </div>
 
-                            </tab>
+                            </uib-tab>
 
-                            <tab heading="Browser">
+                            <uib-tab heading="Browser">
                                 <div style="overflow:hidden">
                                     <cttv-target-genome-browser width=1140 efo={{search.disease}} target="{{search.info.gene.ensembl_gene_id}}"></cttv-target-genome-browser>
                                 </div>
-                            </tab>
-                        </tabset>
+                            </uib-tab>
+                        </uib-tabset>
 
-                    </accordion-group>
+                    </div uib-accordion-group>
 
 
 
                     <!-- Somatic Mutations table -->
-                    <accordion-group is-open="search.tables.somatic_mutations.is_open" ng-click='sectionOpen("somatic")'>
-                        <accordion-heading>
+                    <div uib-accordion-group is-open="search.tables.somatic_mutations.is_open" ng-click='sectionOpen("somatic")' class="panel-default">
+                        <uib-accordion-heading>
                             <a id="somatic_mutations"></a>
                             <span class="text-nolight">
                                 <span ng-class="{ 'text-disabled': search.tables.somatic_mutations.data.length==0 }">{{search.tables.somatic_mutations.heading}}</span>
@@ -203,7 +203,7 @@
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.SOMATIC_MUTATION]" title="Association score">{{search.association_scores[datatypes.SOMATIC_MUTATION] | currency : "" : 2}}</span> -->
                                 <span cttv-progress-spinner class="pull-right" ng-show="search.tables.somatic_mutations.is_loading"></span>
                             </span>
-                        </accordion-heading>
+                        </uib-accordion-heading>
                         <div ng-show="search.tables.somatic_mutations.data.length>0 && !search.tables.somatic_mutations.has_errors">
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Cancer Gene Census</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated database</p> -->
 
@@ -233,17 +233,17 @@
                             <p>No data available</p>
                         </div>
 
-                        <alert type="danger" ng-show="search.tables.somatic_mutations.has_errors" ng-cloak>
+                        <uib-alert type="danger" ng-show="search.tables.somatic_mutations.has_errors" ng-cloak>
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
-                        </alert>
-                    </accordion-group>
+                        </uib-alert>
+                    </div uib-accordion-group>
 
 
 
                     <!-- Known drugs (as a directive) -->
 
-                    <accordion-group is-open="search.tables.known_drugs.is_open" ng-click='sectionOpen("drugs")'>
-                        <accordion-heading>
+                    <div uib-accordion-group is-open="search.tables.known_drugs.is_open" ng-click='sectionOpen("drugs")' class="panel-default">
+                        <uib-accordion-heading>
                             <a id="known_drugs"></a>
                             <span class="text-nolight">
                                 <span ng-class="{ 'text-disabled': search.tables.known_drugs.data.length==0 }">{{search.tables.known_drugs.heading}}</span>
@@ -251,7 +251,7 @@
                                 <!-- <span class="badge flower-petal" ng-show="search.association_scores[datatypes.KNOWN_DRUG]" title="Association score">{{search.association_scores[datatypes.KNOWN_DRUG] | currency: "" : 2}}</span> -->
                                 <span cttv-progress-spinner class="pull-right" ng-show="search.tables.known_drugs.is_loading"></span>
                             </span>
-                        </accordion-heading>
+                        </uib-accordion-heading>
 
                         <!-- <div ng-show="search.tables.known_drugs==true"> -->
                         <div ng-show="search.tables.known_drugs.data.length>0 && !search.tables.known_drugs.has_errors">
@@ -264,17 +264,17 @@
                             <p>No data available</p>
                         </div>
 
-                        <alert type="danger" ng-show="search.tables.known_drugs.has_errors" ng-cloak>
+                        <uib-alert type="danger" ng-show="search.tables.known_drugs.has_errors" ng-cloak>
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
-                        </alert>
+                        </uib-alert>
 
-                    </accordion-group>
+                    </div uib-accordion-group>
 
 
 
                     <!-- Affected pathways -->
-                    <accordion-group is-open="search.tables.affected_pathways.is_open" ng-click='sectionOpen("pathways")'>
-                        <accordion-heading>
+                    <div uib-accordion-group is-open="search.tables.affected_pathways.is_open" ng-click='sectionOpen("pathways")' class="panel-default">
+                        <uib-accordion-heading>
                             <a id="affected_pathways"></a>
                             <span class="text-nolight">
                                 <span ng-class="{ 'text-disabled': search.tables.affected_pathways.data.length==0 }">{{search.tables.affected_pathways.heading}}</span>
@@ -283,7 +283,7 @@
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.AFFECTED_PATHWAY]" title="Association score">{{search.association_scores[datatypes.AFFECTED_PATHWAY] | currency : "" : 2}}</span> -->
                                 <span cttv-progress-spinner class="pull-right" ng-show="search.tables.affected_pathways.is_loading"></span>
                             </span>
-                        </accordion-heading>
+                        </uib-accordion-heading>
                         <div ng-show="search.tables.affected_pathways.data.length>0 && !search.tables.affected_pathways.has_errors">
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Reactome</a> curated database</p> -->
                             <p>Source: <span ng-repeat="source in search.tables.affected_pathways.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
@@ -316,16 +316,16 @@
                             <p>No data available</p>
                         </div>
 
-                        <alert type="danger" ng-show="search.tables.affected_pathways.has_errors" ng-cloak>
+                        <uib-alert type="danger" ng-show="search.tables.affected_pathways.has_errors" ng-cloak>
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
-                        </alert>
-                    </accordion-group>
+                        </uib-alert>
+                    </div uib-accordion-group>
 
 
 
                     <!-- RNA Expression table -->
-                    <accordion-group is-open="search.tables.rna_expression.is_open" ng-click='sectionOpen("rna")'>
-                        <accordion-heading>
+                    <div uib-accordion-group is-open="search.tables.rna_expression.is_open" ng-click='sectionOpen("rna")' class="panel-default">
+                        <uib-accordion-heading>
                             <a id="rna_expression"></a>
                             <span class="text-nolight">
                                 <span ng-class="{ 'text-disabled': search.tables.rna_expression.data.length==0 }">{{search.tables.rna_expression.heading}}</span>
@@ -334,7 +334,7 @@
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.RNA_EXPRESSION]" title="Association score">{{search.association_scores[datatypes.RNA_EXPRESSION] | currency : "" : 2}}</span> -->
                                 <span cttv-progress-spinner class="pull-right" ng-show="search.tables.rna_expression.is_loading"></span>
                             </span>
-                        </accordion-heading>
+                        </uib-accordion-heading>
                         <div ng-show="search.tables.rna_expression.data.length>0 && !search.tables.rna_expression.has_errors">
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Expression Atlas</a> curated database</p> -->
                             <p>Source: <span ng-repeat="source in search.tables.rna_expression.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
@@ -371,16 +371,16 @@
                             <p>No data available</p>
                         </div>
 
-                        <alert type="danger" ng-show="search.tables.rna_expression.has_errors" ng-cloak>
+                        <uib-alert type="danger" ng-show="search.tables.rna_expression.has_errors" ng-cloak>
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
-                        </alert>
-                    </accordion-group>
+                        </uib-alert>
+                    </div uib-accordion-group>
 
 
 
                     <!-- Text mining -->
-                    <accordion-group is-open="search.tables.literature.is_open" ng-click='sectionOpen("literature")'>
-                        <accordion-heading>
+                    <div uib-accordion-group is-open="search.tables.literature.is_open" ng-click='sectionOpen("literature")' class="panel-default">
+                        <uib-accordion-heading>
                             <a id="literature"></a>
                             <span class="text-nolight">
                                 <span ng-class="{ 'text-disabled': search.tables.literature.data.length==0 }">{{search.tables.literature.heading}}</span>
@@ -388,7 +388,7 @@
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.LITERATURE]" title="Association score">{{search.association_scores[datatypes.LITERATURE] | currency : "" : 2}}</span> -->
                                 <span cttv-progress-spinner class="pull-right" ng-show="search.tables.literature.is_loading"></span>
                             </span>
-                        </accordion-heading>
+                        </uib-accordion-heading>
 
                         <div ng-show="search.tables.literature.data.length>0 && !search.tables.literature.has_errors">
 
@@ -398,7 +398,7 @@
                             <div class="clearfix">
                                 <div class="pull-right" ng-show="loading">
                                     Loading abstracts
-                                    <progressbar style="width:150px; margin-bottom:0px" animate="false" value="loaded" type="success"><b>{{loaded}}%</b></progressbar>
+                                    <uib-progressbar style="width:150px; margin-bottom:0px" animate="false" value="loaded" type="success"><b>{{loaded}}%</b></uib-progressbar>
                                 </div>
 
 
@@ -441,17 +441,17 @@
                             <p>No data available</p>
                         </div>
 
-                        <alert type="danger" ng-show="search.tables.literature.has_errors" ng-cloak>
+                        <uib-alert type="danger" ng-show="search.tables.literature.has_errors" ng-cloak>
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
-                        </alert>
+                        </uib-alert>
 
-                    </accordion-group>
+                    </div uib-accordion-group>
 
 
 
                     <!-- Mouse models -->
-                    <accordion-group is-open="search.tables.animal_models.is_open" ng-click='sectionOpen("mouse")'>
-                        <accordion-heading>
+                    <div uib-accordion-group is-open="search.tables.animal_models.is_open" ng-click='sectionOpen("mouse")' class="panel-default">
+                        <uib-accordion-heading>
                             <a id="animal_models"></a>
                             <span class="text-nolight">
                                 <span ng-class="{ 'text-disabled': search.tables.animal_models.data.length==0 }">{{search.tables.animal_models.heading}}</span>
@@ -460,7 +460,7 @@
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.ANIMAL_MODEL]" title="Association score">{{search.association_scores[datatypes.ANIMAL_MODEL] | currency : "" : 2}}</span> -->
                                 <span cttv-progress-spinner class="pull-right" ng-show="search.tables.animal_models.is_loading"></span>
                             </span>
-                        </accordion-heading>
+                        </uib-accordion-heading>
 
                         <div ng-show="search.tables.animal_models.data.length>0 && !search.tables.animal_models.has_errors">
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Phenodigm</a></p> -->
@@ -495,12 +495,12 @@
                             <p>No data available</p>
                         </div>
 
-                        <alert type="danger" ng-show="search.tables.animal_models.has_errors" ng-cloak>
+                        <uib-alert type="danger" ng-show="search.tables.animal_models.has_errors" ng-cloak>
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
-                        </alert>
-                    </accordion-group>
+                        </uib-alert>
+                    </div uib-accordion-group>
 
-                </accordion>
+                </uib-accordion>
 
 
 
