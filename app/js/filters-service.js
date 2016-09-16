@@ -9,7 +9,7 @@ angular.module('cttvServices').
     /**
      *
      */
-    factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', function($log, $location, cttvDictionary, cttvConsts, cttvAPIservice, cttvUtils, cttvLocationState) {
+    factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', '$analytics', function($log, $location, cttvDictionary, cttvConsts, cttvAPIservice, cttvUtils, cttvLocationState, $analytics) {
 
         "use strict";
 
@@ -55,7 +55,7 @@ angular.module('cttvServices').
         // Back here again :(
         // this stores all the filters organized by facet type. That's it.
         // So that we can reference the same filter from several places like in the case of pathways
-        var filtersData = {}
+        var filtersData = {};
 
 
         var status = []; // 1 == OK, 0 == not ok
@@ -651,7 +651,7 @@ angular.module('cttvServices').
          * @param status [Array] this contains ["ok"] if all facets were computed correctly by the API. In case of errors, it contains the list of facets reporting incorrect values, e.g. ["partial-facet-datatypes"]
          */
         cttvFiltersService.updateFacets = function(facets, countsToUse, status){
-
+            $log.log("updateFacets");
             // if there are no facets, return
             if(!facets){
                 return;
@@ -693,6 +693,18 @@ angular.module('cttvServices').
 
             // update the filters state?
             updateSelected();
+
+            console.log(selected);
+            // Track events in piwik
+            for (var i=0; i<selected.length; i++) {
+                var facetCollection = selected[i];
+                var collectionLabel = facetCollection.key;
+                for (var j=0; j<facetCollection.filters.length; j++) {
+                    var facetLabel = facetCollection.filters[j].key;
+                    // console.log(" -- tracking: " + collectionLabel + " - " + facetLabel);
+                    $analytics.eventTrack('collectionLabel', {"category": "associationFacet", "label": facetLabel});
+                }
+            }
         };
 
 
