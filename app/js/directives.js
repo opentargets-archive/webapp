@@ -1264,8 +1264,8 @@ angular.module('cttvDirectives', [])
                     elem.scope().$dismiss();
                 }
                 scope.ok = function(){
-                    // $log.log("scope.ok()");
-                    // $log.log(scope.onOk());
+                    $log.log("scope.ok()");
+                    $log.log(scope.onOk);
                     if(scope.onOk){
                         scope.onOk();
                     }
@@ -1329,7 +1329,7 @@ angular.module('cttvDirectives', [])
         };
     }])
 
-    .directive('png', ['$timeout', '$uibModal', '$analytics', function ($timeout, $uibModal, $analytics) {
+    .directive('png', ['$timeout', '$uibModal', '$analytics', '$log', function ($timeout, $uibModal, $analytics, $log) {
         'use strict';
 
         return {
@@ -1360,6 +1360,7 @@ angular.module('cttvDirectives', [])
                     } else {
                         // We assume it is an SVG
                         var svg = container;
+
                         // Show a modal with the scale of the png
                         var modal = $uibModal.open({
                             animation: true,
@@ -1376,6 +1377,7 @@ angular.module('cttvDirectives', [])
                             scope: scope
                         });
                         scope.export = function () {
+                            $log.log("exporting...");
                             // track in piwik
                             if (scope.track) {
                                 $analytics.eventTrack('export', {"category":scope.track, "label": scope.currScale})
@@ -1397,6 +1399,7 @@ angular.module('cttvDirectives', [])
                                         });
                                     }
                                 });
+
                             pngExporter(d3.select(svg));
                         };
                     }
