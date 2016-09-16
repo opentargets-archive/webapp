@@ -336,7 +336,7 @@
     .highlight-primary {
         background-color: $clr-primary-highlight;  /* 25% of standard primary color */
     }
-    
+
     .highlight-info {
     	background-color: $clr-info-highlight;  /* 25% of standard warning color */
 	}
@@ -522,4 +522,43 @@
 
 
 
+    /*
+     * Modals
+     */
+
+    .modal-close-btn {
+        cursor: pointer;
+
+        .fa-circle {
+            position:absolute;
+            top:-12px;
+            right:-12px;
+            color:#000;
+            font-size:24px;
+        }
+
+        .fa-times {
+            position:absolute;
+            top:-8px;
+            right:-8px;
+            color:#FFF;
+            ont-size:16px
+        }
+    }
+
+    cttv-modal{
+        .modal-header{
+            h1,h2,h3,h4,h5,h6{
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+        }
+
+        .modal-header, .modal-body, .modal-footer{
+            padding: 10px;
+        }
+    }
+
 }
+
+
