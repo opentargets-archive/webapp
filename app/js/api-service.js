@@ -451,7 +451,7 @@ angular.module('cttvServices')
             return callAPI({
                 operation : cttvAPI.API_LOG_SESSION_URL,
                 params: {
-                    event: "session"
+                    event: "appload"
                 }
             });
         };
