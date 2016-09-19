@@ -41,6 +41,17 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    .directive('logSession', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+        'use strict';
+
+        return {
+            restrict: 'E',
+            link: function (scope, elem, attrs) {
+                cttvAPIservice.logSession();
+            }
+        };
+    }])
+
     /*
     *
     */
