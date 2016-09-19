@@ -302,15 +302,19 @@
         };
 
         var convertUniprotCoords = function (variant, structure) {
+            console.log("Converting Uniprot Coords");
+            console.log(variant);
+            console.log(structure);
             for (var i=0; i<structure.mappings.length; i++) {
                 var mapping = structure.mappings[i];
                 if ((~~variant.begin > mapping.unp_start) && (~~variant.end < mapping.unp_end)) {
                     var pdbStart = ~~variant.begin - mapping.unp_start + mapping.start;
                     var pdbEnd = ~~variant.end - mapping.unp_start + mapping.start;
                     return {
-                        start: pdbStart,
-                        end: pdbEnd,
-                        coverage: mapping.coverage,
+                        mapping : mapping,
+                        // start: pdbStart,
+                        // end: pdbEnd,
+                        // coverage: mapping.coverage,
                         // chain_id: mapping.chain_id,
                         alternativeAA: variant.alternativeSequence,
                         description: variant.description
@@ -342,8 +346,9 @@
                                         }
                                     }
                                     if (snpId) {
-                                        var pdbCoords = convertUniprotCoords(variant, $scope.search.info.bestStructure);
-                                        snpsLoc[snpId] = pdbCoords;
+                                        // var pdbCoords = convertUniprotCoords(variant, $scope.search.info.bestStructure);
+                                        // snpsLoc[snpId] = pdbCoords;
+                                        snpsLoc[snpId] = variant;
                                     }
 //                                    if (snpId && pdbCoords.start && pdbCoords.end) {
                                         // var strCoords = convertUniprotCoords(variant, $scope.search.info.bestStructure);
@@ -657,7 +662,9 @@
 
                     // 3D structure?
                     if (item.variant && item.variant.pos) {
-                        var msg3d = "<div><p><a class=cttv-change-view onclick='angular.element(this).scope().showVariantInStructure(" + item.variant.pos.start + ", " + item.variant.pos.end + ", \"" + item.variant.pos.chain_id + "\"" + ", \"" + item.variant.pos.alternativeAA + "\")'>View in 3D</p></a></div>";
+                        console.log(" -- variant --");
+                        console.log(item.variant);
+                        var msg3d = "<div><p><a class=cttv-change-view onclick='angular.element(this).scope().showVariantInStructure(" + ~~item.variant.pos.begin + ", " + ~~item.variant.pos.end + ", \"" + item.variant.pos.alternativeAA + "\")'>View in 3D</p></a></div>";
                         row.push($compile(msg3d)($scope)[0].innerHTML);
                     } else {
                         row.push("N/A");
@@ -665,7 +672,6 @@
 
                     // add the row to data
                     newdata.push(row);
-
 
                 }catch(e){
                     $scope.search.tables.genetic_associations.rare_diseases.has_errors = true;
@@ -677,67 +683,47 @@
             return newdata;
         };
 
-        // Lite-mol display of the structure
-        //Method to bind component scope
-        var liteMolScope;
-        var bindPdbComponentScope = function(element){
-            return angular.element(element).isolateScope();
-        };
+        // function mapSnp (mappings, uniprot_pos) {
+        //     console.log("uniprot pos...");
+        //     console.log(uniprot_pos);
+        //     for (var i=0; i<mappings.length; i++) {
+        //         var mapping = mappings[i];
+        //         if ((mapping.start.residue_number < uniprot_pos) && (mapping.end.residue_number > uniprot_pos)) {
+        //             var pdbPos = uniprot_pos - mapping.start.author_residue_number + mapping.start.residue_number;
+        //             mapping.pos = pdbPos;
+        //             return mapping;
+        //         }
+        //     }
+        //     //return {};
+        //     console.error('No mapping found!');
+        // }
 
-        var selectStructure = function(liteMolScope, queryParams, color){
-            //Create query object from event data
-            var selectQuery = {
-                entity_id: queryParams.entity_id,
-                struct_asym_id: queryParams.struct_asym_id,
-                start_residue_number: queryParams.start_residue_number,
-                end_residue_number: queryParams.end_residue_number
-            };
-
-            //Call highlightAnnotation
-            var showSideChainForSelection = true;
-            liteMolScope.LiteMolComponent.SelectExtractFocus(selectQuery, color, showSideChainForSelection);
-        };
-
-
-        function filterMappings (mappings, pdb_pos) {
-            for (var i=0; i<mappings.length; i++) {
-                var mapping = mappings[i];
-                if (mapping.start.residue_number < pdb_pos && mapping.end.residue_number > pdb_pos) {
-                    return mapping;
-                }
-            }
-            return {};
-        }
 
         // $scope.pdbId = "4uv7";
-        $scope.showVariantInStructure = function (start, end, chain_id, alt) {
+        // Arguments are: snp start, snp end, chain_id and alternativeAA. Start ant end are in Uniprot coordinates
+        // TODO!! -- WE ARE IGNOREING CHAIN_ID! TAKE A LOOK AT EXAMPLES WITH MULTIPLE (different) CHAINS!
+        $scope.showVariantInStructure = function (start, end, alt) {
             // Get the struct_asym_id and the entity_id for the pdb widget
-            var url = "/proxy/www.ebi.ac.uk/pdbe/api/mappings/uniprot/" + $scope.search.info.bestStructure.pdb_id;
+            var url = "/proxy/www.ebi.ac.uk/pdbe/api/mappings/uniprot_segments/" + $scope.search.info.bestStructure.pdb_id;
 
             $http.get(url)
                 .then (function (mappings) {
-                    var mapping = filterMappings(mappings.data[$scope.search.info.bestStructure.pdb_id].UniProt[$scope.search.info.gene.uniprot_id].mappings, start);
-
+                    console.log("Mappings for " + $scope.search.info.bestStructure.pdb_id + " -- " + $scope.search.info.gene.uniprot_id);
+                    console.log(mappings);
+                    // var pdbPos = mapSnp(mappings.data[$scope.search.info.bestStructure.pdb_id].UniProt[$scope.search.info.gene.uniprot_id].mappings, start);
+                    // console.log("Mapping....");
+                    // console.log(pdbPos);
+                    // var pdbPos = mapSnp(mapping, start);
                     var clientHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-                    var modal = $modal.open({
-                        template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div id=snpInPvWidget></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                    var modal = $uibModal.open({
+                        template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div id=picked-atom-name></div><div id=snpInPvWidget></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
                         animation: true,
                         size: 'm',
                         scope: $scope,
                         windowClass : 'variantStructureModalWindow'
                     });
 
-
-                    // var modal = $modal.open({
-                    //     animation: true,
-                    //     template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div style='height:" + (clientHeight*0.5) + "px'><div class=pdb-widget-container style='height:" + (clientHeight*0.4) + "px;'><pdb-lite-mol id='litemol_1' pdb-id='search.info.bestStructure.pdb_id' hide-controls=true></pdb-lite-mol></div><div id=litemol_legend style='margin:20px; '><br/></div></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
-                    //     size: "m",
-                    //     scope:$scope,
-                    //     windowClass: 'variantStructureModalWindow'
-                    // });
-
-                    $timeout(function(){ //added settimeout to complete the struture loading before applying selection
-
+                    $timeout(function(){
                         var parent = document.getElementById("snpInPvWidget");
                         var options = {
                             width: 500,
@@ -747,50 +733,79 @@
                         };
                         var viewer = pv.Viewer(parent, options);
 
-                        $http.get('/proxy/files.rcsb.org/view/' + bestStructure.pdb_id + '.pdb')
+                        // Changes the color of an atom in the structure
+                        function setColorForAtom(go, atom, color) {
+                            var view = go.structure().createEmptyView();
+                            view.addAtom(atom);
+                            go.colorBy(pv.color.uniform(color), view);
+                        }
+
+                        // variable to store the previously picked atom. Required for resetting the color
+                        // whenever the mouse moves.
+                        var prevPicked = null;
+
+                        // add mouse move event listener to the div element containing the viewer. Whenever
+                        // the mouse moves, use viewer.pick() to get the current atom under the cursor.
+                        parent.addEventListener('mousemove', function(event) {
+                            var rect = viewer.boundingClientRect();
+                            var picked = viewer.pick({ x : event.clientX - rect.left,
+                                                       y : event.clientY - rect.top });
+                            if (prevPicked !== null && picked !== null &&
+                                picked.target() === prevPicked.atom) {
+                              return;
+                            }
+                            if (prevPicked !== null) {
+                              // reset color of previously picked atom.
+                              setColorForAtom(prevPicked.node, prevPicked.atom, prevPicked.color);
+                            }
+                            if (picked !== null) {
+                              var atom = picked.target();
+                              document.getElementById('picked-atom-name').innerHTML = atom ? atom.qualifiedName() : "&nbsp;";
+                              // get RGBA color and store in the color array, so we know what it was
+                              // before changing it to the highlight color.
+                              var color = [0,0,0,0];
+                              picked.node().getColorForAtom(atom, color);
+                              prevPicked = { atom : atom, color : color, node : picked.node() };
+
+                              setColorForAtom(picked.node(), atom, 'green');
+                            } else {
+                              document.getElementById('picked-atom-name').innerHTML = '&nbsp;';
+                              prevPicked = null;
+                            }
+                            viewer.requestRedraw();
+                        });
+
+                        console.log("Best structure...");
+                        console.log($scope.search.info.bestStructure);
+                        $http.get('https://files.rcsb.org/view/' + $scope.search.info.bestStructure.pdb_id + '.pdb')
                             .then (function (data) {
                                 var structure = pv.io.pdb(data.data);
                                 viewer.cartoon('protein', structure, {
                                     color: pv.color.byChain()
                                 });
+                                // Select the mapped residue
+                                var pdbSnp;
+                                structure.eachResidue(function (residue) {
+                                    console.log(residue.name() + " -- " + residue.num() + ":" + residue.index());
+                                    if (residue.num() === start) {
+                                        pdbSnp = residue;
+                                    }
+                                });
+                                // var pdbSnp = structure.select({cnam:pdbPos.chain_id, rindices:pdbPos.pos});
+                                // console.log("selected snp...");
+                                // console.log(pdbSnp);
+                                // console.log(pdbSnp.pos());
+
+                                var snpVisOpts = {
+                                    fontSize : 16, fontColor: '#2f2', backgroundAlpha : 0.4
+                                };
+                                viewer.label('label', pdbSnp.atom(0).qualifiedName(), pdbSnp.atom(0).pos(), snpVisOpts);
+                                var cm = viewer.customMesh();
+                                cm.addSphere(pdbSnp.atom(0).pos(), 1.5);
+
                                 viewer.autoZoom();
                             });
-
-
-                        // //bind to litemol scope
-                        // liteMolScope = bindPdbComponentScope(document.getElementById('litemol_1'));
-                        //
-                        // // Populate the litemol legend
-                        // var legendContainer = document.getElementById("litemol_legend");
-                        // var seqStr = d3.select(legendContainer)
-                        //     .append("p")
-                        //     .append("span");
-                        // seqStr
-                        //     .append("div")
-                        //     .style({
-                        //         display: "inline-block",
-                        //         margin: "0px 5px 0px 15px",
-                        //         width: "30px",
-                        //         height: "10px",
-                        //         border: "1px solid rgb(0,0,0)",
-                        //         background: "rgb(27, 204, 52)"
-                        //     });
-                        // seqStr
-                        //     .append("text")
-                        //     .text("SNP position");
-                        //
-                        // d3.select(legendContainer)
-                        //     .append("p")
-                        //     .text("Alternative Aminoacid: " + alt);
-                        //
-                        // //Set background
-                        // liteMolScope.LiteMolComponent.setBackground();
-                        //
-                        // // Make selection and apply color
-                        // var queryParams = {entity_id: mapping.entity_id, struct_asym_id: mapping.struct_asym_id, start_residue_number: start, end_residue_number: end};
-                        // var color = {r: 27, g:204, b:52};
-                        // selectStructure(liteMolScope, queryParams, color);
-                    }, 1000);
+                    }, 0);
                 });
         };
 
