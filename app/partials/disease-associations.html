@@ -22,10 +22,17 @@
             <div class="row" ng-if="search.total>0">
                 <div class="col-sm-3">
                     <cttv-facets></cttv-facets>
+                    <!--Choose a file with list of targets-->
+                    <form name="upload" class="form" data-ng-submit="addFile()">
+                        <input type="file" name="file"
+                               onchange="angular.element(this).scope().uploadedFile(this)" />
+                        <!--<button type="submit">Upload </button>-->
+                    </form>
+
                 </div>
 
                 <div class="col-sm-9">
-                    <cttv-disease-associations disease="search.query" filename="search.filename" filters="filters" state-id="dat"></cttv-disease-associations>
+                    <cttv-disease-associations disease="search.query" target="targetArray" filename="search.filename" excludedtargetlist="excludedTargetList" filters="filters" state-id="dat"></cttv-disease-associations>
                 </div>
             </div>
         </div>
