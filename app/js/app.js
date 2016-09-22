@@ -99,6 +99,7 @@ function initApp (deps) {
 
 var deps = [
     'ngRoute',
+    'ngCookies',
     'ui.bootstrap',
     'cttvControllers',
     'cttvDirectives',

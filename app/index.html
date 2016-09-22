@@ -76,6 +76,7 @@
 
                     <!-- Masthead (other pages) -->
                     <div ng-if="location.path()!=='/'" class="masthead ng-cloak">
+
                         <div class="container">
 
                             <div class="row" >
@@ -88,9 +89,18 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xs-6 masthead-navigation-container">
+
+                                <div class="col-xs-5 masthead-navigation-container">
                                     <masthead-navigation-menu></masthead-navigation-menu>
                                 </div>
+
+                                <div class="col-xs-1">
+                                    <div ng-cloak class=notification ng-show="showNotify" ng-controller="NotifyCtrl">
+                                        <div class=counter ng-bind-html="notificationsLeft"></div>
+                                        <i ng-click="notify()" class="fa fa-bell-o" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+
 
                                 <div class="col-xs-4" ng-controller="SearchBoxCtrl">
                                     <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
@@ -132,13 +142,10 @@
                                         </fieldset>
                                     </form>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
-                <!-- End Masthead -->
 
                 <!-- Authentication error -->
                 <uib-alert type="danger" ng-show="showApiErrorMsg" ng-cloak>Your session has expired, reload the page to authenticate again
@@ -151,7 +158,6 @@
                 </uib-alert>
 
                 <!-- FEEDBACK BUTTON -->
-                <!-- Plese re-enable when we want (after integration day?) -->
                 <div ng-cloak class="cttv-feedback-button" ng-controller="FeedbackCtrl" ng-class="{'cttv-feedback-button-round': location.path()!='/' }">
                     <a target=_blank href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x20;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x20;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x20;&#x2D;&#x20;&#x66;&#x65;&#x65;&#x64;&#x62;&#x61;&#x63;&#x6B;&body=Page URL: {{location.absUrl()}}">
                     <div>Feedback</div></a>

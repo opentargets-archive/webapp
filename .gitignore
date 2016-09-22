@@ -10,3 +10,4 @@ build
 app/docs/*.html
 .idea
 npm-debug.log
+app/notification.json
