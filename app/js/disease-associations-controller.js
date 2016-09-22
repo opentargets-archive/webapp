@@ -41,6 +41,7 @@ angular.module('cttvControllers')
         };
 
         //$scope.targetArray = ['ENSG00000113448','ENSG00000168229'];
+
         $scope.targetArray = [];
         $scope.excludedTargetList = [];
 
@@ -155,6 +156,7 @@ angular.module('cttvControllers')
         render(cttvLocationState.getState(), cttvLocationState.getOldState());
 
         $scope.uploadedFile = function (element) {
+            console.log("ELEMENT=", element);
             $scope.$apply(function ($scope) {
                 $scope.files = element.files;
                 console.log("scope.files = ", $scope.files);
@@ -162,6 +164,17 @@ angular.module('cttvControllers')
             });
 
             $scope.addFile();
+        }
+
+        $scope.removeTargets = function(){
+            var theElement = document.getElementById("myFileInput");
+            console.log("ELEMENT1=", theElement);
+            theElement.value = null;
+            $scope.targetArray = [];
+            console.log("removeTargets:$scope.files=", $scope.files );
+            $scope.files = [];
+            console.log("removeTargets:$scope.files=", $scope.files );
+            getFacets($scope.filters);
         }
 
         $scope.addFile = function () {

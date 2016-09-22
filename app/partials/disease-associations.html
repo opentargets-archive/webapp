@@ -22,15 +22,21 @@
             <div class="row" ng-if="search.total>0">
                 <div class="col-sm-3">
                     <cttv-facets></cttv-facets>
+
+                    <div class="cttv-facets-controls">
+
                     <!--Choose a file with list of targets-->
-                    <form name="upload" class="form" data-ng-submit="addFile()">
-                        <input type="file" name="file"
-                               onchange="angular.element(this).scope().uploadedFile(this)" />
-                        <!--<button type="submit">Upload </button>-->
-                    </form>
+                        <form ng-show ="targetArray.length == 0" name="upload" class="form" data-ng-submit="addFile()">
+                            <input id="myFileInput" type="file" name="file"
+                                   onchange="angular.element(this).scope().uploadedFile(this)"  /> {{files}}
+
+                        </form>
+
+                        <span ng-show ="targetArray.length > 0" ng-click="removeTargets()">{{search.total}} genes matched <i class="fa fa-times"></i></span>
+
+                    </div>
 
                 </div>
-
                 <div class="col-sm-9">
                     <cttv-disease-associations disease="search.query" target="targetArray" filename="search.filename" excludedtargetlist="excludedTargetList" filters="filters" state-id="dat"></cttv-disease-associations>
                 </div>
