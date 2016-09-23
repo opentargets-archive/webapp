@@ -1,4 +1,4 @@
-
+@import "colors";
 
 
 /*
@@ -179,9 +179,9 @@ body{
     }
 }
 
-
-.masthead .notification {
+.notification {
     position:relative;
+    float: right;
     margin-top:10px;
     color:white;
     margin-top:10px;
@@ -190,15 +190,16 @@ body{
 
     .counter {
         border-radius:50%;
+        color: white;
         width:14px;
         height:14px;
         background:red;
         position:absolute;
-        left:12px;
+        left:39px;
         top:5px;
         font-size:10px;
         text-align:center;
-        pointer-events:none
+        pointer-events:none;
     }
 
     >i {
@@ -206,6 +207,9 @@ body{
     }
 }
 
+.masthead-home .notification {
+    color: $primary-brand-color;
+}
 
 /*
 * Footer

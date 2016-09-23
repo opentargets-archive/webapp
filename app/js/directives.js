@@ -1442,7 +1442,13 @@ angular.module('cttvDirectives', [])
                 // href: '@',
             },
 
-            template : '<ul class="masthead-navigation">'
+            template : ''
+                        + '<div ng-cloak class=notification ng-show="showNotify" ng-controller="NotifyCtrl">'
+                        + '     <div class=counter ng-bind-html="notificationsLeft"></div>'
+                        + '     <i ng-click="notify()" class="fa fa-bell-o" aria-hidden="true"></i>'
+                        + '</div>'
+
+                        + '<ul class="masthead-navigation">'
                         +    '<li ng-repeat="item in nav" ng-if="item.label">'
 
                         +        '<div ng-if="item.menu==undefined">'

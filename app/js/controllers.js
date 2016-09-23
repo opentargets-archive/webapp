@@ -87,7 +87,7 @@
                 });
         }
         polling();
-        $interval(polling, 5000);
+        $interval(polling, 60000);
     }])
 
     /**

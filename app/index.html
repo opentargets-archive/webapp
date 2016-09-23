@@ -68,7 +68,7 @@
                 <div ng-controller="MastheadCtrl">
 
                     <!-- Masthead (homepage) -->
-                    <div ng-if="location.path()=='/'" class="ng-cloak masthead-navigation-container">
+                    <div ng-if="location.path()=='/'" class="ng-cloak masthead-home masthead-navigation-container">
                         <div class="container">
                             <masthead-navigation-menu></masthead-navigation-menu>
                         </div>
@@ -89,17 +89,10 @@
                                     </div>
                                 </div>
 
-
-                                <div class="col-xs-5 masthead-navigation-container">
+                                <div class="col-xs-6 masthead-navigation-container">
                                     <masthead-navigation-menu></masthead-navigation-menu>
                                 </div>
 
-                                <div class="col-xs-1">
-                                    <div ng-cloak class=notification ng-show="showNotify" ng-controller="NotifyCtrl">
-                                        <div class=counter ng-bind-html="notificationsLeft"></div>
-                                        <i ng-click="notify()" class="fa fa-bell-o" aria-hidden="true"></i>
-                                    </div>
-                                </div>
 
 
                                 <div class="col-xs-4" ng-controller="SearchBoxCtrl">
