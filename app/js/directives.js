@@ -1443,7 +1443,7 @@ angular.module('cttvDirectives', [])
             },
 
             template : ''
-                        + '<div ng-cloak class=notification ng-show="showNotify" ng-controller="NotifyCtrl">'
+                        + '<div ng-cloak class=notification ng-show="notificationsLeft" ng-controller="NotifyCtrl">'
                         + '     <div class=counter ng-bind-html="notificationsLeft"></div>'
                         + '     <i ng-click="notify()" class="fa fa-bell-o" aria-hidden="true"></i>'
                         + '</div>'

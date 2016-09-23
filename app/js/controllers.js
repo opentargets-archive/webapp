@@ -41,7 +41,6 @@
         // Default behaviour on icon click
         $scope.notify = function(){};
         $scope.addCookie = function (cookieId) {
-            $scope.showNotify = $scope.notificationsLeft > 0;
             var currMs = Date.now();
             $cookies.put(cookieId, 1, {
                 expires: new Date(currMs + 2592000000) // In 30 days
@@ -63,7 +62,6 @@
                         $scope.notificationsLeft = newNotifications.length;
 
                         if (newNotifications.length) {
-                            $scope.showNotify = true;
                             $scope.notify = function () {
                                 // Start with the first notification
                                 var notification = newNotifications.shift();
