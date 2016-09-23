@@ -42,24 +42,32 @@ angular.module('cttvDirectives')
                         $uibModal.open({
                            animation: true,
                            scope: scope,
-                           template: '<div class=modal-header><h3 class=modal-title>Event details</h3></div>' +
-                           '<div class=modal-body>' +
-                           '  <div ng-repeat="event in eventsThatDay">' +
-                           '    <p>{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="event.external.link">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</p>' +
-                           '  </div>' +
-                           '</div>' +
-                           '<div class=modal-footer><button class="btn btn-primary" type=button onclick="angular.element(this).scope().$dismiss()">Close</button></div>',
-                           size: 'm'
+                           // template: '<div class=modal-header><h3 class=modal-title>Event details</h3></div>' +
+                           // '<div class=modal-body>' +
+                           // '  <div ng-repeat="event in eventsThatDay">' +
+                           // '    <p>{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="event.external.link">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</p>' +
+                           // '  </div>' +
+                           // '</div>' +
+                           // '<div class=modal-footer><button class="btn btn-primary" type=button onclick="angular.element(this).scope().$dismiss()">Close</button></div>',
+                           size: 'm',
+                           template: '<cttv-modal header="Event details" has-ok="true">'+
+                                     '  <div ng-repeat="event in eventsThatDay">' +
+                                     '    <p>{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="event.external.link">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</p>' +
+                                     '  </div>' +
+                                     '</cttv-modal>',
                          });
                     } else {
                         $uibModal.open({
                             animation: true,
                             scope: scope,
-                            template: '<div class=modal-header><h3 class=modal-title>No events this day</h3></div>' +
-                            '<div class=modal-body>' +
-                            '  <div>There is no event planned for this day. If you want to organize a training session in your institution please <a href="mailto:support@targetvalidation.org">contact us</a></div>' +
-                            '</div>' +
-                            '<div class=modal-footer><button class="btn btn-primary" type=button onclick="angular.element(this).scope().$dismiss()">Close</button></div>'
+                            // template: '<div class=modal-header><h3 class=modal-title>No events this day</h3></div>' +
+                            // '<div class=modal-body>' +
+                            // '  <div>There is no event planned for this day. If you want to organize a training session in your institution please <a href="mailto:support@targetvalidation.org">contact us</a></div>' +
+                            // '</div>' +
+                            // '<div class=modal-footer><button class="btn btn-primary" type=button onclick="angular.element(this).scope().$dismiss()">Close</button></div>'
+                            template: '<cttv-modal header="No events this day" has-ok="true" ok-label="Close">' +
+                                      '   <p>There is no event planned for this day. If you want to organize a training session in your institution please <a href="mailto:support@targetvalidation.org">contact us</a></p>'+
+                                      '</cttv-modal>'
                         });
                     }
                 };
