@@ -141,14 +141,14 @@
                 <!-- End Masthead -->
 
                 <!-- Authentication error -->
-                <uib-alert type="danger" ng-show="showApiErrorMsg" ng-cloak>Your session has expired, reload the page to authenticate again
-                    <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
-                </uib-alert>
+                <div uib-alert class="alert-danger" ng-show="showApiErrorMsg" ng-cloak close="showApiErrorMsg=false">
+                     Your session has expired, reload the page to authenticate again <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+                </div>
 
                 <!-- API ERROR 500 -->
-                <uib-alert type="danger" ng-show="showApiError500" close="showApiError500=false" ng-cloak>A problem retrieving data has occurred. Please try to reload the page. If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a>
+                <div uib-alert class="alert-danger" ng-show="showApiError500" close="showApiError500=false" ng-cloak>A problem retrieving data has occurred. Please try to reload the page. If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a>
                     <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
-                </uib-alert>
+                </div>
 
                 <!-- FEEDBACK BUTTON -->
                 <!-- Plese re-enable when we want (after integration day?) -->
