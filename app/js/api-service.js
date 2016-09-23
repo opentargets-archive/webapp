@@ -84,53 +84,30 @@ angular.module('cttvServices')
         *              - q: query string
         *              - from: number to start from
         *              - size: number of results
+        *
         */
         var callAPI = function(queryObject){
 
-            var params;
+            var params = queryObject.params;
+            console.log("callAPI:queryObject=", queryObject);
 
             if( queryObject.method == undefined || queryObject.method == 'GET') {
-                params = queryObject.params;
                 var url = api.url[queryObject.operation](params);
-
             }
             else{
-                console.log("this is post:queryObject=", queryObject)
-                params = queryObject;
                 var theUrl = api.url[queryObject.operation]();
                 var url = theUrl.substring(0, theUrl.length - 1 );
-
             }
-            console.log("api-service.callAPI:params=", params);
 
             if (params && params.trackCall) {
                 countRequest(params.trackCall === false ? undefined : false);
             }
-            //console.warn("URL : " + url);
 
             var deferred = $q.defer();
             var promise = deferred.promise;
 
-            // Params for api.call are: url, data (for POST) and return format
-            var theFormat = "json";
-            if (params != undefined){
-                if (params.format != undefined){
-                    theFormat = params.format;
-                }
-            }
-            if(queryObject.method == 'POST'){
-                console.log("queryObject.method=",queryObject.method);
-                console.log("queryObject=", queryObject);
-                if (queryObject.data != undefined){
-                    if(queryObject.data.format) {
-                        theFormat = queryObject.data.format;
-                    }
-                }
-            }
-
-            console.log("api-service.callAPI:theFormat = ", theFormat);
-            // Params for api.call are: url, data (for POST) and return format
-            var resp = api.call(url, queryObject.method == 'POST'?queryObject.data:undefined, theFormat)
+            // Params for api.call are: url, data (for POST) and
+            var resp = api.call(url, queryObject.method == 'POST'?params:undefined)
                 .then (done)
                 .catch(function (err) {
                     console.log("GOT ERROR:", err);
@@ -138,7 +115,6 @@ angular.module('cttvServices')
                 });
 
             return promise;
-            //return resp.then(handleSuccess, handleError);
 
 
             function done(response) {
@@ -221,7 +197,7 @@ angular.module('cttvServices')
         *
         */
         cttvAPI.getSearch = function(queryObject){
-            $log.log("cttvAPI.getSearch()");
+            $log.log("cttvAPI.getSearch():queryObject = ",queryObject);
 
             return callAPI({
                 operation : cttvAPI.API_SEARCH_URL,
@@ -260,14 +236,13 @@ angular.module('cttvServices')
 
 
         /**
-        * TODO:
-        * this needs to be consolidated with the getAssociation() method as they are the exact same thing...
+        *
         */
         cttvAPI.getAssociations = function(queryObject){
+            queryObject[ cttvAPI.facets.SCORE_MIN ] = queryObject[ cttvAPI.facets.SCORE_MIN ] || [0.0] ;
             $log.log("cttvAPI.getAssociations()");
             $log.log(queryObject);
-            // queryObject[ cttvAPI.facets.SCORE_STR ] = queryObject[ cttvAPI.facets.SCORE_STR ] || [1] ; // No need for stringency for now
-            //queryObject[ cttvAPI.facets.SCORE_MIN ] = queryObject[ cttvAPI.facets.SCORE_MIN ] || [0.0] ;
+
             queryObject[ cttvAPI.facets.SCORE_MIN ] = 0.0;
             return callAPI({
                 operation : cttvAPI.API_ASSOCIATION_URL,
@@ -275,31 +250,8 @@ angular.module('cttvServices')
             });
         };
 
-
-
-        /**
-         * Careful not to confuse this with the other above (which btw should be renamed for clarity)
-         * This returns the association scores.
-         *
-         * queryObject params:
-         *  - target: ENSG id, e.g. ENSG00000107562
-         *  - efo: EFO code, e.g. EFO_0002917
-         */
-        cttvAPI.getAssociation = function(queryObject){
-            $log.log("cttvAPI.getAssociation");
-
-            // queryObject[ cttvAPI.facets.SCORE_STR ] = queryObject[ cttvAPI.facets.SCORE_STR ] || [1] ;
-            queryObject[ cttvAPI.facets.SCORE_MIN ] = queryObject[ cttvAPI.facets.SCORE_MIN ] || [0.0] ;
-
-            return callAPI({
-                operation: cttvAPI.API_ASSOCIATION_URL,
-                params: queryObject
-            });
-        };
-
         cttvAPI.getAssociationsPost = function(queryObject){
             $log.log("cttvAPI.getAssociationsPOST():queryObject = ", queryObject);
-
 
             var disease = [];
             disease.push(queryObject.disease);
@@ -309,10 +261,9 @@ angular.module('cttvServices')
             //queryObject[ cttvAPI.facets.SCORE_MIN ] = queryObject[ cttvAPI.facets.SCORE_MIN ] || [0.0] ;
             queryObject[ cttvAPI.facets.SCORE_MIN ] = 0.0;
             return callAPI({
-                method: 'POST',
+                method : "POST",
                 operation : cttvAPI.API_ASSOCIATION_URL,
-                data : queryObject //might need to convert this to json?
-                //params:
+                params : queryObject
             });
         };
 
@@ -410,7 +361,7 @@ angular.module('cttvServices')
 
 
         cttvAPI.getQuickSearch = function(queryObject){
-            $log.log("cttvAPI.getQuickSearch()");
+            $log.log("cttvAPI.getQuickSearch():queryObject =", queryObject);
 
             return callAPI({
                 operation : cttvAPI.API_QUICK_SEARCH_URL,
