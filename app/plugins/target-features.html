@@ -1,5 +1,5 @@
-<tabset>
-    <tab heading="Text">
+<uib-tabset>
+    <uib-tab heading="Text">
         <p>ID: <a target="_blank" href="http://www.uniprot.org/uniprot/{{uniprot.id}}">{{uniprot.id}}</a></p>
         <!-- <p>Accessions:</p>
         <ul>
@@ -21,9 +21,9 @@
         <ul>
             <li ng-repeat="keyword in uniprot.keywords">{{keyword}}</li>
         </ul>
-    </tab>
-    <tab heading="Graphical">
+    </uib-tab>
+    <uib-tab heading="Graphical">
         <div id="upfv"></div>
         <p><a target=_blank href="http://www.uniprot.org/uniprot/{{uniprot.id}}#showFeaturesViewer">See this information in Uniprot</a></p>
-    </tab>
-</tabset>
+    </uib-tab>
+</uib-tabset>

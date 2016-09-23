@@ -41,6 +41,17 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    .directive('logSession', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+        'use strict';
+
+        return {
+            restrict: 'E',
+            link: function (scope, elem, attrs) {
+                cttvAPIservice.logSession();
+            }
+        };
+    }])
+
     /*
     *
     */
@@ -1221,14 +1232,58 @@ angular.module('cttvDirectives', [])
         return {
 
             restrict: 'EA',
-            template: '<div>'
-                     +'    <span class="fa fa-circle" style="position:absolute; top:-12px; right:-12px; color:#000; font-size:24px;"></span>'
-                     +'    <span class="fa fa-times"  style="position:absolute; top:-8px; right:-8px; color:#FFF; font-size:16px"></span>'
+            transclude: true,
+            scope: {
+                header: "@",        // the text to be displayed in the header
+                hasClose: '=?',      // show the round close button top right corner [true | false]
+                hasOk: '=?',         // show ok button [true | false]
+                hasCancel: '=?',     // show cancel button [true | false]
+                okLabel: '@?',       // text of the OK button [ String ]
+                cancelLabel: '@?',   // text of the Cancel button [ String ]
+                onOk: "&",          // OK callback [ function ]
+                onCancel: "&"       // cancel callback [function ]
+            },
+            template: // the close button
+                      '<div class="modal-close-btn" ng-if="hasClose" ng-click="dismiss()">'
+                     +'    <span class="fa fa-circle"></span><span class="fa fa-times"></span>'
                      +'</div>'
-                     +'<div>Hello content</div>',
-            link: function (scope, elem, attrs) {
+                     // the header
+                     +'<div ng-if="header" class="modal-header"><h4>{{header}}</h4></div>'
+                     // the body:
+                     // the modal-body-content tag is only so it can be selected and replaced easily
+                     +'<div class="modal-body"><modal-body-content></modal-body-content></div>'
+                     // the footer
+                     +'<div ng-if="hasOk || hasCancel" class="modal-footer">'
+                     +'    <button ng-if="hasCancel" class="btn btn-warning" type=button ng-click="dismiss()">{{cancelLabel}}</button>'
+                     +'    <button ng-if="hasOk" class="btn btn-primary" type=button ng-click="ok()">{{okLabel}}</button>'
+                     +'</div>',
 
+            link: function (scope, elem, attrs, ctrl, transclude) {
+
+                transclude(scope.$parent, function(clone, scope) {
+                    elem.find('modal-body-content').replaceWith(clone);
+                });
+
+                scope.okLabel = scope.okLabel || "OK";
+                scope.cancelLabel = scope.cancelLabel || "Cancel";
+
+                scope.dismiss = function(){
+                    // $log.log("scope.dismiss()");
+                    if(scope.onCancel){
+                        scope.onCancel();
+                    }
+                    elem.scope().$dismiss();
+                }
+                scope.ok = function(){
+                    $log.log("scope.ok()");
+                    $log.log(scope.onOk);
+                    if(scope.onOk){
+                        scope.onOk();
+                    }
+                    elem.scope().$close();
+                }
             }
+
         };
     }])
 
@@ -1285,7 +1340,7 @@ angular.module('cttvDirectives', [])
         };
     }])
 
-    .directive('png', ['$timeout', '$uibModal', '$analytics', function ($timeout, $uibModal, $analytics) {
+    .directive('png', ['$timeout', '$uibModal', '$analytics', '$log', function ($timeout, $uibModal, $analytics, $log) {
         'use strict';
 
         return {
@@ -1316,14 +1371,24 @@ angular.module('cttvDirectives', [])
                     } else {
                         // We assume it is an SVG
                         var svg = container;
+
                         // Show a modal with the scale of the png
                         var modal = $uibModal.open({
                             animation: true,
-                            template: "<div class=modal-header>PNG scale factor</div><div class='modal-body modal-body-center'><span class=png-scale-factor-selection><input type=radio name=pngScale value=1 checked ng-model='$parent.currScale'> 1x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=2 ng-model='$parent.currScale'> 2x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=3 ng-model='$parent.currScale'> 3x</span></div><div class=modal-footer><button class='btn btn-primary' type=button ng-click='export(this)' onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                            //template: "<div class=modal-header>PNG scale factor</div><div class='modal-body modal-body-center'><span class=png-scale-factor-selection><input type=radio name=pngScale value=1 checked ng-model='$parent.currScale'> 1x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=2 ng-model='$parent.currScale'> 2x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=3 ng-model='$parent.currScale'> 3x</span></div><div class=modal-footer><button class='btn btn-primary' type=button ng-click='export(this)' onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                            template: '<cttv-modal header="Download as PNG" on-ok="export()" has-ok="true" ok-label="Download" has-cancel="true">'
+                                          +'<div class="modal-body-center">'
+                                              +'<p>Select scale factor for the image</p>'
+                                              +'<span class="png-scale-factor-selection"><input type="radio" name="pngScale" value="1" ng-model="$parent.currScale"> 1x</span>'
+                                              +'<span class="png-scale-factor-selection"><input type="radio" name="pngScale" value="2" ng-model="$parent.currScale"> 2x</span>'
+                                              +'<span class="png-scale-factor-selection"><input type="radio" name="pngScale" value="3" ng-model="$parent.currScale"> 3x</span>'
+                                          +'</div>'
+                                      +'</cttv-modal>',
                             size: "sm",
                             scope: scope
                         });
                         scope.export = function () {
+                            $log.log("exporting...");
                             // track in piwik
                             if (scope.track) {
                                 $analytics.eventTrack('export', {"category":scope.track, "label": scope.currScale})
@@ -1339,11 +1404,13 @@ angular.module('cttvDirectives', [])
                                     onError: function () {
                                         $uibModal.open({
                                             animation: true,
-                                            template: "<div class='modal-header'>Image too large</div><div class=modal-body>The image you are trying to export is too large. Reduce the number of elements and try again.</div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                                            //template: "<div class='modal-header'>Image too large</div><div class=modal-body>The image you are trying to export is too large. Reduce the number of elements and try again.</div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                                            template: "<cttv-modal header='Image too large' has-ok='true'>The image you are trying to export is too large. Reduce the number of elements or scale factor and try again.</cttv-modal>",
                                             size:"sm",
                                         });
                                     }
                                 });
+
                             pngExporter(d3.select(svg));
                         };
                     }
