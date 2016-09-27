@@ -152,7 +152,7 @@
                 },cttvAPIservice.defaultErrorHandler)
                 .then (function (target) {
                     return $http.get("/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/" + target.body.uniprot_id);
-                },cttvAPIservice.defaultErrorHandler);
+                });
 
 
              // get disease specific info with the efo() method
@@ -320,6 +320,7 @@
             return {};
         };
 
+
         var getSnpPositions = function () {
             targetPromise = targetPromise
                 .then (function (bestStructures) {
@@ -342,18 +343,8 @@
                                         }
                                     }
                                     if (snpId) {
-                                        // var pdbCoords = convertUniprotCoords(variant, $scope.search.info.bestStructure);
-                                        // snpsLoc[snpId] = pdbCoords;
                                         snpsLoc[snpId] = variant;
                                     }
-//                                    if (snpId && pdbCoords.start && pdbCoords.end) {
-                                        // var strCoords = convertUniprotCoords(variant, $scope.search.info.bestStructure);
-//                                        snpsLoc[snpId] = pdbCoords;
-                                        // snpsLoc[snpId] = {
-                                        //     start: variant.begin,
-                                        //     end  : variant.end
-                                        // };
-//                                    }
                                 }
                             }
                             return snpsLoc;
