@@ -148,7 +148,6 @@
              })
                 .then(function(resp) {
                     $scope.search.info.gene = resp.body;
-                    //updateTitle();
                     return resp;
                 },cttvAPIservice.defaultErrorHandler)
                 .then (function (target) {
@@ -302,9 +301,6 @@
         };
 
         var convertUniprotCoords = function (variant, structure) {
-            console.log("Converting Uniprot Coords");
-            console.log(variant);
-            console.log(structure);
             for (var i=0; i<structure.mappings.length; i++) {
                 var mapping = structure.mappings[i];
                 if ((~~variant.begin > mapping.unp_start) && (~~variant.end < mapping.unp_end)) {
@@ -391,11 +387,9 @@
                             var data = resp.body.data;
                             for (var i=0; i<data.length; i++) {
                                 var item = data[i];
-                                console.log(item);
                                 if (checkPath(item, "variant.id") && item.variant.id[0]) {
                                     var rsId = item.variant.id[0].split('/').pop();
-                                    if (snpsLoc[rsId]) {
-                                        console.log("uniprot info found for variant " + rsId);
+                                    if (snpsLoc[rsId] && variantIsInStructure(snpsLoc[rsId], $scope.search.info.bestStructure)) {
                                         data[i].variant.pos = snpsLoc[rsId];
                                     }
                                 }
@@ -547,7 +541,7 @@
                                 var item = data[i];
                                 if (checkPath(item, "variant.id") && item.variant.id[0]){
                                     var rsId = item.variant.id[0].split('/').pop();
-                                    if (snpsLoc[rsId]) {
+                                    if ((snpsLoc[rsId]) && variantIsInStructure(snpsLoc[rsId], $scope.search.info.bestStructure)){
                                         data[i].variant.pos = snpsLoc[rsId];
                                     }
                                 }
@@ -662,8 +656,6 @@
 
                     // 3D structure?
                     if (item.variant && item.variant.pos) {
-                        console.log(" -- variant --");
-                        console.log(item.variant);
                         var msg3d = "<div><p><a class=cttv-change-view onclick='angular.element(this).scope().showVariantInStructure(" + ~~item.variant.pos.begin + ", " + ~~item.variant.pos.end + ", \"" + item.variant.pos.alternativeAA + "\")'>View in 3D</p></a></div>";
                         row.push($compile(msg3d)($scope)[0].innerHTML);
                     } else {
@@ -701,24 +693,36 @@
 
         // $scope.pdbId = "4uv7";
         // Arguments are: snp start, snp end, chain_id and alternativeAA. Start ant end are in Uniprot coordinates
-        // TODO!! -- WE ARE IGNOREING CHAIN_ID! TAKE A LOOK AT EXAMPLES WITH MULTIPLE (different) CHAINS!
         $scope.showVariantInStructure = function (start, end, alt) {
+            console.log($scope);
             // Get the struct_asym_id and the entity_id for the pdb widget
             var url = "/proxy/www.ebi.ac.uk/pdbe/api/mappings/uniprot_segments/" + $scope.search.info.bestStructure.pdb_id;
 
             $http.get(url)
                 .then (function (mappings) {
-                    console.log("Mappings for " + $scope.search.info.bestStructure.pdb_id + " -- " + $scope.search.info.gene.uniprot_id);
-                    console.log(mappings);
+                    // console.log("Mappings for " + $scope.search.info.bestStructure.pdb_id + " -- " + $scope.search.info.gene.uniprot_id);
+                    // console.log(mappings);
                     // var pdbPos = mapSnp(mappings.data[$scope.search.info.bestStructure.pdb_id].UniProt[$scope.search.info.gene.uniprot_id].mappings, start);
                     // console.log("Mapping....");
                     // console.log(pdbPos);
                     // var pdbPos = mapSnp(mapping, start);
                     var clientHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
                     var modal = $uibModal.open({
-                        template: "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div><div class='modal-body modal-body-center'><div id=picked-atom-name></div><div id=snpInPvWidget></div></div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
+                        template: "" +
+                        "<div class=modal-header>" + $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")</div>" +
+                        "<div class='modal-body modal-body-center'>" +
+                        "    <div id=picked-atom-name></div>" +
+                        "    <div id=snpInPvWidget></div>" +
+                        "</div>" +
+                        "<div class=snpLegend>" +
+                        "    <div class=snpBall></div></span>Protein Variant</span>" +
+                        "    <div class=pdbLink><a target=_blank href=http://www.ebi.ac.uk/pdbe/entry/pdb/" + $scope.search.info.bestStructure.pdb_id + ">View structure in PDBe</a></div>" +
+                        "</div>" +
+                        "<div class=modal-footer>" +
+                        "    <button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button>" +
+                        "</div>",
                         animation: true,
-                        size: 'm',
+                        size: 'sm',
                         scope: $scope,
                         windowClass : 'variantStructureModalWindow'
                     });
@@ -726,7 +730,7 @@
                     $timeout(function(){
                         var parent = document.getElementById("snpInPvWidget");
                         var options = {
-                            width: 500,
+                            width: 300,
                             height: clientHeight * 0.4,
                             antialias: true,
                             quality : 'medium'
@@ -764,10 +768,11 @@
                               // get RGBA color and store in the color array, so we know what it was
                               // before changing it to the highlight color.
                               var color = [0,0,0,0];
-                              picked.node().getColorForAtom(atom, color);
-                              prevPicked = { atom : atom, color : color, node : picked.node() };
+                              var currCol = picked.node().getColorForAtom(atom, color);
+                              var highlightCol = [1-currCol[0], 1-currCol[1], 1-currCol[2], 1];
 
-                              setColorForAtom(picked.node(), atom, 'green');
+                              prevPicked = { atom : atom, color : color, node : picked.node() };
+                              setColorForAtom(picked.node(), atom, highlightCol);
                             } else {
                               document.getElementById('picked-atom-name').innerHTML = '&nbsp;';
                               prevPicked = null;
@@ -775,33 +780,31 @@
                             viewer.requestRedraw();
                         });
 
-                        console.log("Best structure...");
-                        console.log($scope.search.info.bestStructure);
+                        // console.log("Best structure...");
+                        // console.log($scope.search.info.bestStructure);
                         $http.get('https://files.rcsb.org/view/' + $scope.search.info.bestStructure.pdb_id + '.pdb')
                             .then (function (data) {
                                 var structure = pv.io.pdb(data.data);
                                 viewer.cartoon('protein', structure, {
-                                    color: pv.color.byChain()
+                                    color: pv.color.bySS()
                                 });
-                                // Select the mapped residue
-                                var pdbSnp;
-                                structure.eachResidue(function (residue) {
-                                    console.log(residue.name() + " -- " + residue.num() + ":" + residue.index());
-                                    if (residue.num() === start) {
-                                        pdbSnp = residue;
-                                    }
-                                });
-                                // var pdbSnp = structure.select({cnam:pdbPos.chain_id, rindices:pdbPos.pos});
-                                // console.log("selected snp...");
-                                // console.log(pdbSnp);
-                                // console.log(pdbSnp.pos());
+                                var pdbSnp = structure.select({'rnum':start});
 
+                                // label
                                 var snpVisOpts = {
-                                    fontSize : 16, fontColor: '#2f2', backgroundAlpha : 0.4
+                                    fontSize : 16, fontColor: '#000000', backgroundAlpha : 0.4
                                 };
-                                viewer.label('label', pdbSnp.atom(0).qualifiedName(), pdbSnp.atom(0).pos(), snpVisOpts);
-                                var cm = viewer.customMesh();
-                                cm.addSphere(pdbSnp.atom(0).pos(), 1.5);
+
+                                pdbSnp.eachResidue(function (res) {
+                                    var label = res.qualifiedName();
+                                    var center = res.center();
+                                    viewer.label('label', label, center, snpVisOpts);
+
+                                    var cm = viewer.customMesh();
+                                    cm.addSphere(center, 1.5, {
+                                        color: "orange"
+                                    });
+                                });
 
                                 viewer.autoZoom();
                             });
@@ -1538,11 +1541,8 @@
 
                         abstractSentences.map (function (f) {
                             var pos = abstract.indexOf(f.raw);
-                            // console.log("    POS: " + pos);
                             //abstract = abstract.replace(f.raw, f.formattedHighlighted);
                             abstract = abstract.replace(f.raw, f.formatted);
-                            //console.log("f.raw=", f.raw);
-                            //console.log("f.formatted=", f.formatted);
 
                             // If not in the abstract, try the title
                             if (pos === -1) {
