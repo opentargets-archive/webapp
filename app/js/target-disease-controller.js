@@ -294,11 +294,9 @@
             for (var i=0; i<structure.mappings.length; i++) {
                 var mapping = structure.mappings[i];
                 if ((~~variant.begin > mapping.unp_start) && (~~variant.end < mapping.unp_end)) {
-                    console.log(" -- true --");
                     return true;
                 }
             }
-            console.log(" -- false --");
             return false;
         };
 
