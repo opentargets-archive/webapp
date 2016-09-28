@@ -11,3 +11,4 @@ app/docs/*.html
 .idea
 npm-debug.log
 app/training.json
+app/notifications.json
