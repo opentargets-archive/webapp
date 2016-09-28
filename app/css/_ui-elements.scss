@@ -32,8 +32,8 @@
     //  }
      // Size
      .variantStructureModalWindow .modal-dialog {
-         width: 350px;
-         .snpLegend {
+         width: 450px;
+         .snpLegend, .snpHeader {
              margin-left: 20px;
              .pdbLink {
                  float:right;
@@ -421,6 +421,7 @@
 
     .cttv-change-view {
         cursor : pointer;
+        margin-top: 10px;
     }
 
 
