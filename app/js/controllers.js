@@ -60,8 +60,8 @@
         };
 
         function polling () {
-            $http.get("/notifications.json")
-            // $http.get('//cttv.github.io/live-files/notifications.json')
+            // $http.get("/notifications.json")
+            $http.get('//cttv.github.io/live-files/notifications.json')
                 .then (function(partial) {
                     // We compare the expiry date with today
                     if (angular.isArray(partial.data)) { // There are notifications
@@ -71,9 +71,7 @@
                             var thisCookie = $cookies.get(thisNotification.id);
                             // Check it has not expired
                             var t = moment(thisNotification.expiry).fromNow();
-                            console.log("expiry time");
-                            console.log(t);
-                            if (!thisCookie) {
+                            if (!thisCookie && (t.indexOf('ago')===-1) && (t.indexOf('in') === 0)) {
                                 newNotifications.push(thisNotification);
                             }
                         }
