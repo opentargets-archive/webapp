@@ -10,5 +10,5 @@ build
 app/docs/*.html
 .idea
 npm-debug.log
-app/training.json
+app/outreach.json
 app/notifications.json
