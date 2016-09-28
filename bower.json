@@ -25,6 +25,7 @@
   "dependencies": {
     "angular-read-more": "1.0.3",
     "angular-route": "1.4.9",
+    "angular-cookies": "1.5.8",
     "angular": "1.4.9",
     "components-font-awesome": "4.4.0",
     "bootstrap": "3.3.5",

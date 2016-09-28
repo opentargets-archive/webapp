@@ -5,12 +5,12 @@
             "href" : "/about",
             "menu" : [
                 {
-                    "label" : "Open Targets",
-                    "href" : "//www.opentargets.org/"
-                },
-                {
                     "label" : "Target Validation Platform",
                     "href" : "/about"
+                },
+                {
+                    "label" : "Open Targets Consortium",
+                    "href" : "//www.opentargets.org/"
                 }
             ]
         },
@@ -44,7 +44,6 @@
             "label" : "Blog",
             "href" : "//blog.opentargets.org/"
         }
-
     ],
 
     "show_access_level" : false,

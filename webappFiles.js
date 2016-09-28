@@ -12,6 +12,7 @@ var webappFiles = {
             'app/vendor/cola/cola.min.js',
             'app/js/angularjs-viewhead.js',
             'bower_components/angular-animate/angular-animate.min.js',
+            'bower_components/angular-cookies/angular-cookies.js',
             'bower_components/angular-read-more/dist/readmore.min.js',
             'bower_components/lodash/dist/lodash.min.js',
             'bower_components/angular-sanitize/angular-sanitize.min.js',
