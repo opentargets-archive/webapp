@@ -60,7 +60,7 @@
         };
 
         function polling () {
-            $http.get('/notification.json')
+            $http.get('//cttv.github.io/live-files/notifications.json')
                 .then (function(partial) {
                     if (angular.isArray(partial.data)) { // There are notifications
                         var newNotifications = [];
