@@ -213,7 +213,7 @@
             };
             _.extend(opts, searchObj);
 
-            return cttvAPIservice.getAssociation(opts).
+            return cttvAPIservice.getAssociations(opts).
                 then(
                     function(resp) {
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);

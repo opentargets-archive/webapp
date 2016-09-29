@@ -338,7 +338,7 @@ angular.module('cttvDirectives')
                 + '  <cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
                 + '  <cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
                 + '</div>'
-                + '<div ng-if="excludedTargetList.length>0">Could not find IDs for these these target names:{{excludedTargetList}}</div>',
+                + '<div class="row"><div class="col-md-12" style="white-space: normal !important" ng-if="excludedTargetList.length>0"><b>Could not find IDs for these target names: </b><span ng-repeat="item in excludedTargetList">{{item}}, </span></div></div>',
 
                 link: function (scope, elem, attrs) {
                     console.log("LINE341:scope",scope)
