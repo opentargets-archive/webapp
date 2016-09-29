@@ -83,7 +83,6 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
 
                 // fire the typeahead search
                 return searchPromise.then(function () {
-                    console.log("ok here");
                     return cttvAPIservice.getQuickSearch({q:$scope.search.query.text, size:3, trackCall:false})
                         .then(
                             function(resp){
