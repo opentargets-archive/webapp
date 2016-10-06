@@ -70,13 +70,13 @@
     //text-align:center;
     //margin: auto 0px;
     background: $clr-ui-background-secondary;
-    background-image: url('/imgs/graphics/ot_advancing_3.png');
+    /*background-image: url('/imgs/graphics/ot_advancing_3.png');
     background-attachment: fixed;
     background-position: center left;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;*/
     text-align: center;
     > .container {
-        max-width: 800px
+        //max-width: 800px
     }
 }
 
@@ -93,6 +93,48 @@
 .intro-statement-p{
     //color:#2B8BAC;
 }
+
+.partner-logo-block {
+    padding: 60px 0px;  // will need some media query to change it for responsive layout
+}
+
+.partner-logo {
+    max-width:90%;
+    min-width:20%;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.intro-section-data{
+    background: $secondary-color;
+    color: $primary-background-color;
+}
+
+
+
+.hp-blog-feed{
+    overflow-y: auto;
+    height:400px;
+    padding-right: 4px;
+}
+
+.hp-blog-feed-post{
+    margin-bottom: 30px;
+}
+
+.hp-blog-feed-post-header{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.hp-blog-feed-post-date{
+    padding:3px 0px 3px 8px;
+    margin-left: 8px;
+    border-left: 1px solid $clr-text-dim;
+}
+
+
 
 
 
