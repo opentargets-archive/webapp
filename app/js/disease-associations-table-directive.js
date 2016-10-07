@@ -384,57 +384,57 @@ angular.module('cttvDirectives')
                         cttvAPIservice.getAssociationsPost(optsPreFlight)
                             //cttvAPIservice.getAssociations(optsPreFlight)
                             .then(function (resp) {
-                            console.log("directive:354:resp", resp);
-                            var total = resp.body.total;
+                                console.log("directive:354:resp", resp);
+                                var total = resp.body.total;
 
-                            function columnsNumberOk(csv, n) {
-                                console.log("columnsNumberOK:csv=", csv);
-                                console.log("columnsNumberOK:n=", n);
-                                var firstRow = csv.split("\n")[0];
-                                var cols = firstRow.split(",");
-                                return cols.length === n;
-                            }
+                                function columnsNumberOk(csv, n) {
+                                    console.log("columnsNumberOK:csv=", csv);
+                                    console.log("columnsNumberOK:n=", n);
+                                    var firstRow = csv.split("\n")[0];
+                                    var cols = firstRow.split(",");
+                                    return cols.length === n;
+                                }
 
-                            function getNextChunk(size, from) {
-                                var opts = {
-                                    disease: scope.disease,
-                                    target: scope.target,
-                                    outputstructure: "flat",
-                                    facets: false,
-                                    format: "csv",
-                                    size: size,
-                                    fields: ["target.gene_info.symbol",
-                                        "association_score.overall",
-                                        "association_score.datatypes.genetic_association",
-                                        "association_score.datatypes.somatic_mutation",
-                                        "association_score.datatypes.known_drug",
-                                        "association_score.datatypes.affected_pathway",
-                                        "association_score.datatypes.rna_expression",
-                                        "association_score.datatypes.literature",
-                                        "association_score.datatypes.animal_model",
-                                        "target.gene_info.name"],
-                                    from: from
-                                };
-                                opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
+                                function getNextChunk(size, from) {
+                                    var opts = {
+                                        disease: scope.disease,
+                                        target: scope.target,
+                                        outputstructure: "flat",
+                                        facets: false,
+                                        format: "csv",
+                                        size: size,
+                                        fields: ["target.gene_info.symbol",
+                                            "association_score.overall",
+                                            "association_score.datatypes.genetic_association",
+                                            "association_score.datatypes.somatic_mutation",
+                                            "association_score.datatypes.known_drug",
+                                            "association_score.datatypes.affected_pathway",
+                                            "association_score.datatypes.rna_expression",
+                                            "association_score.datatypes.literature",
+                                            "association_score.datatypes.animal_model",
+                                            "target.gene_info.name"],
+                                        from: from
+                                    };
+                                    opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
 
-                                //opts.data =
-                                return cttvAPIservice.getAssociationsPost(opts)
-                                    //return cttvAPIservice.getAssociations(opts)
-                                    .then(function (resp) {
-                                    console.log("directive:385:resp:", resp);
-                                    var moreText = resp.body;
-                                    if (columnsNumberOk(moreText, opts.fields.length)) {
-                                        if (from > 0) {
-                                            console.log("before split")
-                                            // Not in the first page, so remove the header row
-                                            moreText = moreText.split("\n").slice(1).join("\n");
-                                            console.log("after split")
+                                    //opts.data =
+                                    return cttvAPIservice.getAssociationsPost(opts)
+                                        //return cttvAPIservice.getAssociations(opts)
+                                        .then(function (resp) {
+                                        console.log("directive:385:resp:", resp);
+                                        var moreText = resp.body;
+                                        if (columnsNumberOk(moreText, opts.fields.length)) {
+                                            if (from > 0) {
+                                                console.log("before split")
+                                                // Not in the first page, so remove the header row
+                                                moreText = moreText.split("\n").slice(1).join("\n");
+                                                console.log("after split")
+                                            }
+                                            totalText += moreText;
+                                            return totalText;
                                         }
-                                        totalText += moreText;
-                                        return totalText;
-                                    }
-                                });
-                            }
+                                    });
+                                }
 
                             var promise = $q(function (resolve, reject) {
                                 resolve("");
@@ -465,6 +465,7 @@ angular.module('cttvDirectives')
 
                         }, cttvAPIservice.defaultErrorHandler);
                     };
+
 
 
                     // TODO: check this

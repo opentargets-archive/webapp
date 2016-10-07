@@ -14,10 +14,11 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-    .controller("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService',
-    'cttvDictionary', 'cttvUtils', 'cttvLocationState',
-    function ($scope, $location, $log, cttvAPIservice, cttvFiltersService,
-              cttvDictionary, cttvUtils, cttvLocationState) {
+    .controller("diseaseAssociationsCtrl",
+        ['$rootScope','$scope', '$location', '$log', '$q', 'cttvAPIservice', 'cttvFiltersService',
+                                                            'cttvDictionary', 'cttvUtils', 'cttvLocationState',
+        function ($rootScope, $scope, $location, $log, $q, cttvAPIservice, cttvFiltersService,
+                                                            cttvDictionary, cttvUtils, cttvLocationState) {
 
         'use strict';
 
@@ -42,7 +43,11 @@ angular.module('cttvControllers')
 
         //$scope.targetArray = ['ENSG00000113448','ENSG00000168229'];
 
-        $scope.targetArray = [];
+        $scope.targetArray = []; //this one is used when we are done fetching all the target IDs
+
+        $scope.targetNameArray = [];
+        $scope.targetIdArray = [];
+
         $scope.excludedTargetList = [];
 
         // reset the filters when loading a new page
@@ -110,7 +115,7 @@ angular.module('cttvControllers')
             cttvAPIservice.getAssociations(opts).
                 then(
                 function (resp) {
-
+                    console.log("getAssociations():resp=",resp)
                     // 1: set the facets
                     // we must do this first, so we know which datatypes etc we actually have
                     //TODO Change this to POST request
@@ -202,15 +207,108 @@ angular.module('cttvControllers')
                 //do something with file content here
                 var myFileContent = evt.target.result;
                 var myFileContent1 = myFileContent.replace(/\r\n/g, '\n');
-                $scope.targetArray = myFileContent.replace(/\r/g, '\n').split('\n');
-                getFacets($scope.filters);
-                console.log("targetNameArray=", $scope.targetArray);
+                //$scope.targetArray = myFileContent1.replace(/\r/g, '\n').split('\n');
+                $scope.targetNameArray = myFileContent1.replace(/\r/g, '\n').split('\n');
+                //getFacets($scope.filters);
+                console.log("targetNameArray=", $scope.targetNameArray);
+                //$scope.targetIdArray = $scope.targetNameArray.map(getTargetId);
+                getTargetIds();
+                console.log("targetIdArray =" , $scope.targetIdArray);
 
+                //Next we need to update the targetArray
             };
 
             //var blob = file.slice(0, file.size - 1);
             reader.readAsText(file);
 
         };
+
+        var getTargetIds = function(){
+            console.log("getTargetIds")
+
+            var promise = $q(function (resolve, reject) {
+                resolve("");
+            });
+
+            $scope.targetNameArray.forEach(function (targetName){
+               console.log("doing forEach");
+                promise = promise.then(function (){
+                   return getTargetId(targetName);
+               }) ;
+            });
+
+            promise.then(function (res) {
+                console.log("targetIdArray =" , $scope.targetIdArray);
+                $scope.targetArray = $scope.targetIdArray;
+                getFacets($scope.filters);
+            });
+
+
+
+        }
+
+        var getTargetId = function (targetName) {
+            console.log("getTargetId()");
+
+            if (targetName.startsWith("ENSG")){
+                $scope.targetIdArray.push(targetName);
+            }
+            else if(typeof targetName != "string"){
+                $scope.targetIdArray.push('');
+            }
+
+            var opts = {q:targetName,
+                fields:['approved_symbol'],
+                'size':1}
+
+            return cttvAPIservice.getSearch(opts).
+                then(
+                function (resp) {
+                    console.log("getSearch:resp.body.data",resp.body.data);
+                    if (resp.body.data.length > 0) {
+                        console.log("resp.body.data[0].id=", resp.body.data[0].id);
+                        $scope.targetIdArray.push(resp.body.data[0].id);
+                    }
+                    else{
+                        $scope.targetIdArray.push('');
+                    }
+                });
+
+
+        };
+
+
+        //var getTargetId = function (targetName) {
+        //
+        //    if (targetName.startsWith("ENSG")){
+        //        return targetName;
+        //    }
+        //    else if(typeof targetName != "string"){
+        //        return ''
+        //    }
+        //
+        //    var opts = {q:targetName,
+        //        fields:['approved_symbol'],
+        //        'size':1}
+        //
+        //    cttvAPIservice.getSearch(opts).
+        //        then(
+        //        function (resp) {
+        //            console.log("getSearch:resp.body.data",resp.body.data);
+        //            if (resp.body.data.length > 0) {
+        //                console.log("resp.body.data[0].id=", resp.body.data[0].id);
+        //                return resp.body.data[0].id;
+        //            }
+        //            else{
+        //                return '';
+        //            }
+        //        },
+        //        cttvAPIservice.defaultErrorHandler
+        //    );
+        //
+        //
+        //};
+
+
 
     }]);
