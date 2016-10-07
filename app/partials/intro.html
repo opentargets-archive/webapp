@@ -10,6 +10,10 @@
             <!-- <img src="imgs/logo/ot_logo_webheader_280x104.png" class="intro-logo"/> -->
             <img src="imgs/logo/ot_logo_webheader.svg" class="intro-logo" alt="Open Targets logo"/>
 
+            <div>
+                <target-list-upload></target-list-upload>
+            </div>
+
             <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
                 <fieldset>
                     <div class="form-group has-feedback search-form">
@@ -21,11 +25,10 @@
                             <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
                             <div class="input-group-btn">
-                            <button type="submit" class="btn btn-primary">
-                            <span class="fa fa-search fa-lg"></span>
-                            </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="fa fa-search fa-lg"></span>
+                                </button>
                             </div>
-
                         </div>
 
                         <!-- Search in progress spinner -->
