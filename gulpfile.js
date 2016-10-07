@@ -2,19 +2,14 @@ var fs = require('fs');
 var gulp   = require('gulp');
 var ignore = require('gulp-ignore');
 var jshint = require('gulp-jshint');
-var mocha = require('gulp-mocha');
 var watch = require('gulp-watch');
-var karma = require("karma").server;
 var uglify = require('gulp-uglify');
-var closureCompiler = require('gulp-closure-compiler');
 var server = require('gulp-server-livereload');
 
 var browserify = require('gulp-browserify');
 var sass = require('gulp-sass');
 var csspurge = require('gulp-css-purge');
 var minifyCss = require('gulp-minify-css');
-
-var markdown = require("gulp-markdown");
 
 var gzip = require('gulp-gzip');
 var del = require("del");
@@ -133,11 +128,11 @@ gulp.task('init', function() {
     });
 });
 
-gulp.task ('build-docs', function () {
-    return gulp.src("app/docs/*.md")
-        .pipe(markdown())
-        .pipe(gulp.dest("app/docs/"));
-});
+// gulp.task ('build-docs', function () {
+//     return gulp.src("app/docs/*.md")
+//         .pipe(markdown())
+//         .pipe(gulp.dest("app/docs/"));
+// });
 
 // sass-import
 gulp.task('components-sass', function () {
@@ -307,4 +302,4 @@ gulp.task('webserver', ['build-all'], function() {
 });
 
 
-gulp.task('build-all', ['init', 'build-docs', 'build-3rdparty', 'build-components-min', 'build-webapp']);
+gulp.task('build-all', ['init', 'build-3rdparty', 'build-components-min', 'build-webapp']);
