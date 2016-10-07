@@ -130,8 +130,7 @@ angular.module('cttvControllers')
 
                     // set the total?
                     $scope.search.total = resp.body.total; //resp.body.total;
-                    $scope.excludedTargetList = resp.body.excluded_target_list;
-                    console.log("DAC: $scope.excludedTargetList",  $scope.excludedTargetList);
+         
                 },
                 cttvAPIservice.defaultErrorHandler
             );
