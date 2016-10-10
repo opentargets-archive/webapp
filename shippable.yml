@@ -1,6 +1,9 @@
+language: node_js
+node_js:
+  - "0.12"
+
 build:
-  ci:
-    - echo 'CI is running.. wish i knew what to test'
+  cache: true
   post_ci:
       - docker build -t="opentargets/webapp:$BRANCH.$BUILD_NUMBER" .
 
@@ -11,19 +14,6 @@ build:
       # GCR.io
       - docker tag opentargets/webapp:$BRANCH.$BUILD_NUMBER eu.gcr.io/open-targets/webapp:$BRANCH.$BUILD_NUMBER
       - docker push eu.gcr.io/open-targets/webapp:$BRANCH.$BUILD_NUMBER
-
-integrations:
-  # deploy:
-  #   # Public Image (docker)
-  #   - integrationName: "GKE-opentargets"
-  #     type: gke
-  #     target: GKE-opentargets
-  #     application_name: "webapp"
-  #     env_name: "cluster-dev"
-  #     image_name: "opentargets/webapp"
-  #     image_tag: "$BRANCH.$BUILD_NUMBER"
-  #
-
 
   hub:
     - integrationName: hub_docker
