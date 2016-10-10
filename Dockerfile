@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-MAINTAINER NGINX Docker Maintainers "docker-maint@nginx.com"
+MAINTAINER OpenTargets ops team "ops@opentargets.org"
 
 ENV NGINX_VERSION 1.9.6-1~jessie
 
