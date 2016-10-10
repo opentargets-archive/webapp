@@ -1,5 +1,7 @@
 build:
   cache: true
+  ci:
+    - echo 'some test should go here..'
   post_ci:
       - docker build -t="opentargets/webapp:$BRANCH.$BUILD_NUMBER" .
 
