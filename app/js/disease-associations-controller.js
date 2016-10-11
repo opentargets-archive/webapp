@@ -20,35 +20,48 @@ angular.module('cttvControllers')
         function ($rootScope, $scope, $location, $log, $q, cttvAPIservice, cttvFiltersService,
                                                             cttvDictionary, cttvUtils, cttvLocationState) {
 
-        'use strict';
+            'use strict';
 
-        $log.log('diseaseAssociationsCtrl()');
+            $log.log('diseaseAssociationsCtrl()');
 
-        cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
-
-
-        // ---------------------------
-        //  Initialiaze
-        // ---------------------------
+            cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
 
 
-        // configure the "search" object
-        // to be exposed via scope
-        $scope.search = {
-            query: $location.path().split('/')[2],
-            label: "",
-            filename: "",
-            total: "..."
-        };
+            // ---------------------------
+            //  Initialiaze
+            // ---------------------------
 
-        //$scope.targetArray = ['ENSG00000113448','ENSG00000168229'];
 
-        $scope.targetArray = []; //this one is used when we are done fetching all the target IDs
+            // configure the "search" object
+            // to be exposed via scope
+            $scope.search = {
+                query: $location.path().split('/')[2],
+                label: "",
+                filename: "",
+                total: "..."
+            };
 
-        $scope.targetNameArray = [];
-        $scope.targetIdArray = [];
+            //All the info that is needed for filtering by target list
+            //$scope.targetArray = ['ENSG00000113448','ENSG00000168229'];
 
-        $scope.excludedTargetList = [];
+
+
+                $scope.fileName = "";
+
+                $scope.targetArray = []; //this one is used when we are done fetching all the target IDs
+
+                $scope.targetNameArray = [];
+                $scope.targetIdArray = [];
+                $scope.targetNameIdDict = [];
+
+                $scope.excludedTargetArray = [];
+                $scope.fuzzyTargetArray = [];
+
+                $scope.totalNamesCollapsed = true;
+                $scope.excludedTargetsCollapsed = true;
+                $scope.fuzzyTargetsCollapsed = true;
+
+                $scope.excludedTargetList = [];
 
         // reset the filters when loading a new page
         // so we don't see the filters from the previous page...
@@ -84,6 +97,26 @@ angular.module('cttvControllers')
 
         }
 
+           var initFilterByFile =function(){
+
+                $scope.fileName = "";
+
+                $scope.targetArray = []; //this one is used when we are done fetching all the target IDs
+
+                $scope.targetNameArray = [];
+                $scope.targetIdArray = [];
+                $scope.targetNameIdDict = [];
+
+                $scope.excludedTargetArray = [];
+                $scope.fuzzyTargetArray = [];
+
+                $scope.totalNamesCollapsed = true;
+                $scope.excludedTargetsCollapsed = true;
+                $scope.fuzzyTargetsCollapsed = true;
+
+                $scope.excludedTargetList = [];
+            }
+
 
         /*
          * Get data to populate the table.
@@ -111,11 +144,11 @@ angular.module('cttvControllers')
             };
             opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
-            console.log("getFacets():opts=", opts);
+            //console.log("getFacets():opts=", opts);
             cttvAPIservice.getAssociations(opts).
                 then(
                 function (resp) {
-                    console.log("getAssociations():resp=",resp)
+                    //console.log("getAssociations():resp=",resp)
                     // 1: set the facets
                     // we must do this first, so we know which datatypes etc we actually have
                     //TODO Change this to POST request
@@ -138,32 +171,29 @@ angular.module('cttvControllers')
 
         };
 
-
         //
         // on STATECHANGED
         // Set up a listener for the URL changes and when the search change, get new data
         //
 
-
         $scope.$on(cttvLocationState.STATECHANGED, function (evt, new_state, old_state) {
             render(new_state, old_state); // if there are no facets, no worries, the API service will handle undefined
         });
 
-
         //
         // on PAGE LOAD
         //
-
 
         cttvUtils.clearErrors();
         $scope.filters = cttvLocationState.getState()[facetsId] || {};
         render(cttvLocationState.getState(), cttvLocationState.getOldState());
 
         $scope.uploadedFile = function (element) {
-            console.log("ELEMENT=", element);
+
+            //console.log("ELEMENT=", element);
             $scope.$apply(function ($scope) {
                 $scope.files = element.files;
-                console.log("scope.files = ", $scope.files);
+                //console.log("scope.files = ", $scope.files);
 
             });
 
@@ -172,88 +202,78 @@ angular.module('cttvControllers')
 
         $scope.removeTargets = function(){
             var theElement = document.getElementById("myFileInput");
-            console.log("ELEMENT1=", theElement);
+
             theElement.value = null;
-            $scope.targetArray = [];
-            console.log("removeTargets:$scope.files=", $scope.files );
-            $scope.files = [];
-            console.log("removeTargets:$scope.files=", $scope.files );
+            initFilterByFile();
+            //console.log("removeTargets:$scope.files=", $scope.files );
             getFacets($scope.filters);
         }
 
         $scope.addFile = function () {
-            console.log("addFile()");
-            console.log("addFile: scope.files = ", $scope.files);
             $scope.validateFile($scope.files[0]);
-            /*UploadService.uploadfile($scope.files,
-             function q( msg ) // success
-             {
-             console.log('uploaded');
-             },
-             function( msg ) // error
-             {
-             console.log('error');
-             });*/
         }
         $scope.validateFile = function (file) {
-            console.log("validateFile: file", file);
-            console.log(file.name);
-            console.log(file.size);
+            $scope.fileName = file.name;
             var reader = new FileReader();
-
             reader.onloadend = function (evt) {
-                console.log("loaded!!! evt.target.result", evt.target.result);
                 //do something with file content here
                 var myFileContent = evt.target.result;
-                var myFileContent1 = myFileContent.replace(/\r\n/g, '\n');
-                //$scope.targetArray = myFileContent1.replace(/\r/g, '\n').split('\n');
-                $scope.targetNameArray = myFileContent1.replace(/\r/g, '\n').split('\n');
-                //getFacets($scope.filters);
-                console.log("targetNameArray=", $scope.targetNameArray);
-                //$scope.targetIdArray = $scope.targetNameArray.map(getTargetId);
+                $scope.targetNameArray = myFileContent.replace(/(\r\n|\n|\r)/gm, '\n').split('\n');
+                $scope.targetNameArray = $scope.targetNameArray.filter(function(e){ return e.trim()}); //get rid of empty strings
+
                 getTargetIds();
-                console.log("targetIdArray =" , $scope.targetIdArray);
-
-                //Next we need to update the targetArray
             };
-
-            //var blob = file.slice(0, file.size - 1);
             reader.readAsText(file);
-
         };
 
         var getTargetIds = function(){
-            console.log("getTargetIds")
-
             var promise = $q(function (resolve, reject) {
                 resolve("");
             });
 
             $scope.targetNameArray.forEach(function (targetName){
-               console.log("doing forEach");
+
                 promise = promise.then(function (){
                    return getTargetId(targetName);
                }) ;
             });
 
             promise.then(function (res) {
-                console.log("targetIdArray =" , $scope.targetIdArray);
                 $scope.targetArray = $scope.targetIdArray;
+                $scope.excludedTargetArray =   $scope.targetNameIdDict.filter(function(e){ return !e.id});
+                $scope.fuzzyTargetArray = $scope.targetNameIdDict.filter(function(e){ return e.name.localeCompare(e.label) != 0 && e.id.localeCompare(e.name) != 0});
+
                 getFacets($scope.filters);
             });
 
+        }
 
-
+        var getExcludedOnes =  function(item){
+            //console.log("getExcludedOnes:item=", item);
+            var isIdEmpty = false;
+            //console.log("getExcludedOnes:item.id=", item.id);
+            if(item.id == ''){
+                //console.log("getExcludedOnes:item.id==''", true);
+                isIdEmpty = true;
+            }
+            if(item.id == ""){
+                //console.log("getExcludedOnes:item.id==str", true);
+                isIdEmpty = true;
+            }
+            return isIdEmpty;
         }
 
         var getTargetId = function (targetName) {
-            console.log("getTargetId()");
+
 
             if (targetName.startsWith("ENSG")){
                 $scope.targetIdArray.push(targetName);
+                $scope.targetNameIdDict.push({ id:targetName , label:targetName, name:targetName});
+
             }
             else if(typeof targetName != "string"){
                 $scope.targetIdArray.push('');
+                $scope.targetNameIdDict.push({ id:'' , label:targetName, name:targetName});
             }
 
             var opts = {q:targetName,
@@ -263,51 +283,22 @@ angular.module('cttvControllers')
             return cttvAPIservice.getSearch(opts).
                 then(
                 function (resp) {
-                    console.log("getSearch:resp.body.data",resp.body.data);
+                    //console.log("getSearch:resp.body.data",resp.body.data);
                     if (resp.body.data.length > 0) {
-                        console.log("resp.body.data[0].id=", resp.body.data[0].id);
+                        //console.log("resp.body.data[0].id=", resp.body.data[0].id);
+                        //console.log("resp.body.data[0].data.approved_symbol=", resp.body.data[0].data.approved_symbol);
+                        //TODO:Here compare label with targetNAme to see if it is a fuzzy search result
                         $scope.targetIdArray.push(resp.body.data[0].id);
+                        $scope.targetNameIdDict.push({ id: resp.body.data[0].id, label:resp.body.data[0].data.approved_symbol, name:targetName});
                     }
                     else{
                         $scope.targetIdArray.push('');
+                        $scope.targetNameIdDict.push({ id:'' , label:targetName, name:targetName});
                     }
                 });
-
-
         };
 
 
-        //var getTargetId = function (targetName) {
-        //
-        //    if (targetName.startsWith("ENSG")){
-        //        return targetName;
-        //    }
-        //    else if(typeof targetName != "string"){
-        //        return ''
-        //    }
-        //
-        //    var opts = {q:targetName,
-        //        fields:['approved_symbol'],
-        //        'size':1}
-        //
-        //    cttvAPIservice.getSearch(opts).
-        //        then(
-        //        function (resp) {
-        //            console.log("getSearch:resp.body.data",resp.body.data);
-        //            if (resp.body.data.length > 0) {
-        //                console.log("resp.body.data[0].id=", resp.body.data[0].id);
-        //                return resp.body.data[0].id;
-        //            }
-        //            else{
-        //                return '';
-        //            }
-        //        },
-        //        cttvAPIservice.defaultErrorHandler
-        //    );
-        //
-        //
-        //};
 
 
-
-    }]);
+    }]) ;

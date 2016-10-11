@@ -128,6 +128,7 @@ angular.module('cttvControllers')
 
         cttvAPIservice.getAssociations(opts)
             .then (function (resp) {
+                //console.log("target-associations-controller.js:getAssociations:resp", resp);
                 $scope.search.total = resp.body.total;
                 if (resp.body.total) {
                     $scope.search.label = resp.body.data[0].target.gene_info.symbol;
