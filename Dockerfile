@@ -31,8 +31,7 @@ RUN mkdir -p /var/www/app /usr/share/nginx_auth /usr/share/nginx_crt /opt/share/
 # If the package.json file changes then Docker will re-run the npm install sequence...
 # otherwise our modules are cached so we aren't rebuilding them every time we change our apps source code!
 COPY package.json /tmp/package.json
-# there are some dependencies not in npm library yet
-COPY components/ /tmp/components
+
 RUN cd /tmp \
     && echo 'unsafe-perm = true' > .npmrc \
     && echo 'progress=false' >> .npmrc \
