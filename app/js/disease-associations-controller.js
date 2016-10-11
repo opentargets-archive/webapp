@@ -46,22 +46,22 @@ angular.module('cttvControllers')
 
 
 
-                $scope.fileName = "";
-
-                $scope.targetArray = []; //this one is used when we are done fetching all the target IDs
-
-                $scope.targetNameArray = [];
-                $scope.targetIdArray = [];
-                $scope.targetNameIdDict = [];
-
-                $scope.excludedTargetArray = [];
-                $scope.fuzzyTargetArray = [];
-
-                $scope.totalNamesCollapsed = true;
-                $scope.excludedTargetsCollapsed = true;
-                $scope.fuzzyTargetsCollapsed = true;
-
-                $scope.excludedTargetList = [];
+                //$scope.fileName = "";
+                //
+                //$scope.targetArray = []; //this one is used when we are done fetching all the target IDs
+                //
+                //$scope.targetNameArray = [];
+                //$scope.targetIdArray = [];
+                //$scope.targetNameIdDict = [];
+                //
+                //$scope.excludedTargetArray = [];
+                //$scope.fuzzyTargetArray = [];
+                //
+                //$scope.totalNamesCollapsed = true;
+                //$scope.excludedTargetsCollapsed = true;
+                //$scope.fuzzyTargetsCollapsed = true;
+                //
+                //$scope.excludedTargetList = [];
 
         // reset the filters when loading a new page
         // so we don't see the filters from the previous page...
@@ -117,7 +117,7 @@ angular.module('cttvControllers')
                 $scope.excludedTargetList = [];
             }
 
-
+            initFilterByFile();
         /*
          * Get data to populate the table.
          *
@@ -239,10 +239,14 @@ angular.module('cttvControllers')
             });
 
             promise.then(function (res) {
+                console.log("PROMISE");
                 $scope.targetArray = $scope.targetIdArray;
                 $scope.excludedTargetArray =   $scope.targetNameIdDict.filter(function(e){ return !e.id});
                 $scope.fuzzyTargetArray = $scope.targetNameIdDict.filter(function(e){ return e.name.localeCompare(e.label) != 0 && e.id.localeCompare(e.name) != 0});
 
+                console.log("123:targetNameIdDict", $scope.targetNameIdDict);
+                console.log("123:excludedTargetArray", $scope.excludedTargetArray);
+                console.log("123:fuzzyTargetArray", $scope.fuzzyTargetArray);
                 getFacets($scope.filters);
             });
 
@@ -297,8 +301,5 @@ angular.module('cttvControllers')
                     }
                 });
         };
-
-
-
 
     }]) ;
