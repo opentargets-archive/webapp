@@ -1,0 +1,49 @@
+<div class="section">
+    <h2>Mapping:</h2>
+    <div class"row">
+
+        <div class="col-sm-4">
+            <span>{{exact.length}} exact </span>
+            <span ng-switch="exact.length">
+                <span ng-switch-when="1">match</span>
+                <span ng-switch-default>matches</span>
+            </span>
+
+            <div style="margin-top:10px; height:200px; overflow:scroll">
+                <div ng-repeat="item in exact">
+                    <span style="font-size:12px;">{{item.query}} -> {{item.result}}</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-4">
+            <span>{{fuzzy.length}} fuzzy </span>
+            <span ng-switch="fuzzy.length">
+                <span ng-switch-when="1">match</span>
+                <span ng-switch-default>matches</span>
+            </span>
+            <div style="margin-top:10px; height:200px; overflow:scroll">
+                <div ng-repeat="item in fuzzy">
+                    <span style="font-size:12px;">{{item.query}} -> {{item.result}}</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-4">
+            <span>{{notFound.length}} </span>
+            <span ng-switch="notFound.length">
+                <span ng-switch-when="1">target</span>
+                <span ng-switch-default>targets</span> not found
+            </span>
+
+            <div style="margin-top:10px; height:200px; overflow:scroll">
+                <div ng-repeat="item in notFound">
+                    <span style="font-size:12px;">{{item.query}} -> {{item.result}}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

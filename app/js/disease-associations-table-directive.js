@@ -20,6 +20,7 @@ angular.module('cttvDirectives')
 
     var draw = 1;
     var filters = {};
+    var targets;
 
     var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
@@ -143,6 +144,12 @@ angular.module('cttvDirectives')
                     search: data.search.value,
                     draw: draw
                 };
+
+                // Restrict the associations to these targets
+                if (targets) {
+                    opts.target= targets;
+                }
+
 
                 opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
@@ -289,8 +296,6 @@ angular.module('cttvDirectives')
         // state = ...
     }
 
-
-
     return {
 
         restrict: 'E',
@@ -298,6 +303,7 @@ angular.module('cttvDirectives')
         scope: {
             filename : '=',
             disease: '=',
+            targets: '=', // coming from a target list
             filters : '=',
             stateId : '@?'
         },
@@ -343,6 +349,12 @@ angular.module('cttvDirectives')
                     facets: false,
                     size: 1
                 };
+
+                // Restrict the associations to a list of targets
+                if (scope.targets) {
+                    optsPreFligh.target = scope.targets;
+                }
+
                 optsPreFlight = cttvAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
                 cttvAPIservice.getAssociations(optsPreFlight)
                     .then (function (resp) {
@@ -364,6 +376,11 @@ angular.module('cttvDirectives')
                                 fields: ["target.gene_info.symbol", "association_score.overall", "association_score.datatypes.genetic_association", "association_score.datatypes.somatic_mutation", "association_score.datatypes.known_drug", "association_score.datatypes.affected_pathway", "association_score.datatypes.rna_expression", "association_score.datatypes.literature", "association_score.datatypes.animal_model", "target.gene_info.name"],
                                 from: from
                             };
+
+                            if (scope.targets) {
+                                opts.target = scope.targets;
+                            }
+
                             opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
 
                             return cttvAPIservice.getAssociations(opts)
@@ -422,8 +439,11 @@ angular.module('cttvDirectives')
 
 
 
-            scope.$watchGroup(["filters", "disease"], function (attrs) {
+            scope.$watchGroup(["filters", "disease", "targets"], function (attrs) {
+                $log.log("targets in disease association table...");
+                $log.log(scope.targets);
                 filters = attrs[0];
+                targets = attrs[2];
                 var disease = attrs[1];
                 // actually, is disease going to change?
                 // I mean, if it changes, the page changes, right?

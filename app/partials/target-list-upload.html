@@ -1,0 +1,15 @@
+<div class="section">
+    <h2>Upload target list:</h2>
+    <div>
+        <span style="display:inline-block"><input type="file" id="targetListUpload" name="file"/></span>
+        <span><button ng-click="uploadFile()">Add</button></span>
+        <div ng-show=lists style="float:right">
+            <div>
+                <span ng-show="lists.length">Previously uploaded lists:</span>
+                <div ng-repeat="list in lists">
+                    <div><a href="" ng-click="useThisList(list.id)">{{list.id}}</a> -- {{list.list.length}} targets <span style="cursor:pointer;"><i class="fa fa-times" ng-click="removeThisList(list.id)" aria-hidden="true"></i></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

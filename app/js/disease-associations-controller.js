@@ -16,7 +16,7 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState) {
+.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvLoadedLists', '$q', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvLoadedLists, $q) {
 
     'use strict';
 
@@ -31,7 +31,6 @@ angular.module('cttvControllers')
     // ---------------------------
 
 
-
     // configure the "search" object
     // to be exposed via scope
     $scope.search = {
@@ -41,6 +40,34 @@ angular.module('cttvControllers')
         total : "..."
     };
 
+
+    $log.log("location is...");
+    $log.log($location.search());
+    var targetList = $location.search()["target-list"];
+    // var targetList = new_state["target-list"];
+    $log.log("target list is...");
+    $log.log(targetList);
+    if (targetList) {
+        var list = cttvLoadedLists.get(targetList);
+        var targets = [];
+        for (var i=0; i<list.list.length; i++) {
+            var item = list.list[i];
+            if (item.result.id) {
+                targets.push(item.result.id);
+            }
+        }
+        $log.log(targets);
+        // Passing them to the disease associations table directive
+        $scope.targets = targets;
+        $scope.targetList = list.id;
+    }
+
+    // TODO: should be done through the cttvLocationState?
+    $scope.removeTargetList = function () {
+        $location.search("target-list", null);
+        // $route.reload();
+        // $window.location.reload();
+    };
 
     // reset the filters when loading a new page
     // so we don't see the filters from the previous page...
@@ -72,12 +99,48 @@ angular.module('cttvControllers')
         // then it's a page load with no state specified, so we update that element anyway with default values
 
         // facets changed?
+        var facetsPromise = $q(function (resolve) {
+            resolve("");
+        });
         if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) || !new_state[facetsId] ){
-            getFacets( new_state[facetsId] );
+            $log.log("firing facets here...");
+            $log.log(new_state[facetsId]);
+            facetsPromise.then(function () {
+                return getFacets( new_state[facetsId] );
+            });
         }
 
-    }
-
+        // Do we have a target list?
+        // $log.log("location is...");
+        // $log.log($location.search());
+        // var targetList = $location.search()["target-list"];
+        var targetList = new_state["target-list"];
+        $log.log("target list is...");
+        $log.log(targetList);
+        if (targetList) {
+            var list = cttvLoadedLists.get(targetList);
+            var targets = [];
+            for (var i=0; i<list.list.length; i++) {
+                var item = list.list[i];
+                if (item.result.id) {
+                    targets.push(item.result.id);
+                }
+            }
+            $log.log(targets);
+            // Passing them to the disease associations table directive
+            $scope.targets = targets;
+            $scope.targetList = list.id;
+            facetsPromise.then (function () {
+                return getFacets(new_state[facetsId]);
+            });
+        } else {
+            $scope.targets = undefined;
+            $scope.targetList = undefined;
+            facetsPromise.then (function () {
+                return getFacets(new_state[facetsId]);
+            });
+        }
+    };
 
 
     /*
@@ -92,7 +155,8 @@ angular.module('cttvControllers')
      * getFacets(filters);
      */
     var getFacets = function(filters){
-
+        $log.log("in facets...");
+        $log.log(filters);
         // set the filters
         $scope.filters = filters;
 
@@ -103,18 +167,22 @@ angular.module('cttvControllers')
             // direct: false,
             size:1
         };
+
+        // Restrict to a gene list
+        if ($scope.targets) {
+            opts.target = $scope.targets;
+        }
+
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
-
-        cttvAPIservice.getAssociations(opts).
+        return cttvAPIservice.getAssociations(opts).
         then(
             function(resp){
-
+                $log.log("facets response...");
+                $log.log(resp);
                 // 1: set the facets
                 // we must do this first, so we know which datatypes etc we actually have
                 cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
-
-
 
                 // The label of the diseaes in the header
                 $scope.search.label = resp.body.data[0].disease.efo_info.label;
@@ -128,7 +196,6 @@ angular.module('cttvControllers')
             cttvAPIservice.defaultErrorHandler
         );
 
-
     };
 
 
@@ -141,6 +208,9 @@ angular.module('cttvControllers')
 
 
     $scope.$on(cttvLocationState.STATECHANGED, function (evt, new_state, old_state) {
+        $log.log("statechanged -- ");
+        $log.log(old_state);
+        $log.log(new_state);
         render( new_state, old_state ); // if there are no facets, no worries, the API service will handle undefined
     });
 

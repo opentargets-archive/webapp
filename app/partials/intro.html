@@ -10,10 +10,6 @@
             <!-- <img src="imgs/logo/ot_logo_webheader_280x104.png" class="intro-logo"/> -->
             <img src="imgs/logo/ot_logo_webheader.svg" class="intro-logo" alt="Open Targets logo"/>
 
-            <div>
-                <target-list-upload></target-list-upload>
-            </div>
-
             <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
                 <fieldset>
                     <div class="form-group has-feedback search-form">
@@ -30,6 +26,7 @@
                                 </button>
                             </div>
                         </div>
+                        <div style="margin-top:5px;color:#cccccc;font-size:12px">More than one target? Try the <a href="/batch-search">batch search page</a> <span ng-show="loadedLists">{{loadedLists}} already loaded</span></div>
 
                         <!-- Search in progress spinner -->
                         <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>

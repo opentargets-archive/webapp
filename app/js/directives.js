@@ -1432,57 +1432,6 @@ angular.module('cttvDirectives', [])
         };
     }])
 
-
-    .directive ('targetListUpload', ['$log', 'cttvAPIservice', '$q', function ($log, cttvAPIservice, $q) {
-        'use strict';
-
-        return {
-            restrict: 'E',
-            scope: {
-
-            },
-            template: '<span>Upload target list:' +
-            '<input type="file" id="targetListUpload" name="file"/>' +
-            '<button ng-click="uploadFile()">Add</button></span>',
-
-            link: function (scope, elem, attrs) {
-                scope.uploadFile = function () {
-                    $log.log("Uploading file!");
-                    $log.log(elem[0]);
-                    var file = elem[0].getElementsByTagName("input")[0].files[0];
-                    console.log(file);
-                    var reader = new FileReader();
-                    reader.onloadend = function (e) {
-                        var fileContent = e.target.result;
-                        $log.log(fileContent);
-                        var targets = fileContent.split("\n");
-                        $log.log(targets);
-                        // Fire a search with each of the targets
-                        var searchPromises = [];
-                        targets.forEach(function (target) {
-                            if (target) {
-                                $log.log(target);
-                                var p = cttvAPIservice.getSearch({
-                                    q:target,
-                                    size:1,
-                                    filter:"target"
-                                });
-                                searchPromises.push(p);
-                            }
-                        });
-
-                        $q.all(searchPromises)
-                            .then (function (vals) {
-                                $log.log(vals);
-                            });
-                    }
-                    reader.readAsText(file);
-                };
-
-            }
-        };
-    }])
-
     .directive('mastheadNavigationMenu', ['cttvConfig', function (cttvConfig) {
         'use strict';
 

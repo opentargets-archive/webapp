@@ -37,7 +37,8 @@
     "angular-sanitize": "1.5.1",
     "FileSaver": "*",
     "moment": "~2.14.1",
-    "angular-cookies": "~1.5.8"
+    "angular-cookies": "~1.5.8",
+    "angular-local-storage": "~0.5.2"
   },
   "resolutions": {
     "angular": "1.5.1"

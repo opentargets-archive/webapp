@@ -312,7 +312,4 @@ angular.module('cttvServices', []).
 
 
         return modalService;
-    }])
-
-
-
+    }]);

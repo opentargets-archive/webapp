@@ -13,6 +13,7 @@ var webappFiles = {
             'app/js/angularjs-viewhead.js',
             'bower_components/angular-animate/angular-animate.min.js',
             'bower_components/angular-cookies/angular-cookies.js',
+            'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
             'bower_components/angular-read-more/dist/readmore.min.js',
             'bower_components/lodash/dist/lodash.min.js',
             'bower_components/angular-sanitize/angular-sanitize.min.js',
@@ -46,6 +47,7 @@ var webappFiles = {
             'app/js/config-service.js',
             'app/js/location-state-service.js',
             'app/js/filters-service.js',
+            'app/js/loaded-lists-service.js',
             'app/js/filters.js',
             'app/js/search-controller.js',
             'app/js/search-box-controller.js',
@@ -63,6 +65,7 @@ var webappFiles = {
             'app/js/evidence-tables-directives.js',
             'app/js/calendar-directive.js',
             'app/js/disease-graph-directive.js',
+            'app/js/batch-search-directives.js',
             'app/js/lazyload.js',
             'app/js/plugin-directive.js',
             // Plugins -- should go in another config file

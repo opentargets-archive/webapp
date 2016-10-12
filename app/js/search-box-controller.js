@@ -7,7 +7,7 @@
  */
 angular.module('cttvControllers').
 
-controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q) {
+controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvLoadedLists', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q, cttvLoadedLists) {
 
         var APP_SEARCH_URL = "search";
         var APP_EVIDENCE_URL = "evidence";
@@ -215,5 +215,8 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             // So, for now we RESET the field, then I'll think about it.
             $scope.search.query.text = "";
         }
+
+        // See if there is any loaded list
+        $scope.loadedLists = cttvLoadedLists.getAll().length;
 
     }]);
