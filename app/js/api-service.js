@@ -53,7 +53,7 @@ angular.module('cttvServices')
             .appname("cttv-web-app")
             .secret("2J23T20O31UyepRj7754pEA2osMOYfFK")
             .verbose(true);
-            
+
         /**/
         cttvAPI.activeRequests = 0;
         function countRequest(b){
@@ -91,17 +91,16 @@ angular.module('cttvServices')
             var params = queryObject.params;
             console.log("callAPI:queryObject=", queryObject);
 
-            if( queryObject.method == undefined || queryObject.method == 'GET') {
-                var url = api.url[queryObject.operation](params);
+            var url;
+            if( queryObject.method === undefined || queryObject.method === 'GET') {
+                url = api.url[queryObject.operation](params);
             }
             else{
                 var theUrl = api.url[queryObject.operation]();
-                var url = theUrl.substring(0, theUrl.length - 1 );
+                url = theUrl.substring(0, theUrl.length - 1 );
             }
 
-            if (params && params.trackCall) {
-                countRequest(params.trackCall === false ? undefined : false);
-            }
+            countRequest(params.trackCall === false ? undefined : true);
 
             var deferred = $q.defer();
             var promise = deferred.promise;
@@ -128,9 +127,7 @@ angular.module('cttvServices')
                 // normalize internal statuses to 0
                 var status = Math.max(response.status, 0);
 
-                if (params && params.trackCall) {
-                    countRequest(params.trackCall === false ? undefined : false);
-                }
+                countRequest(params.trackCall === false ? undefined : false);
                 // we resolve the the promise on the whole response object,
                 // so essentially we pass back the un-processed response object:
                 // that means the data we're interested is in response.body.
