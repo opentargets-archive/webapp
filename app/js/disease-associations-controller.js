@@ -136,12 +136,17 @@ angular.module('cttvControllers')
 
             var opts = {
                 disease: $scope.search.query,
-                target: $scope.targetArray,
+                // target: $scope.targetArray,
                 outputstructure: "flat",
                 facets: true,
                 // direct: false,
                 size:1
             };
+
+            if ($scope.targetArray && $scope.targetArray.length) {
+                opts.target = $scope.targetArray;
+            }
+
             opts = cttvAPIservice.addFacetsOptions(filters, opts);
 
             //console.log("getFacets():opts=", opts);
@@ -163,7 +168,7 @@ angular.module('cttvControllers')
 
                     // set the total?
                     $scope.search.total = resp.body.total; //resp.body.total;
-         
+
                 },
                 cttvAPIservice.defaultErrorHandler
             );
