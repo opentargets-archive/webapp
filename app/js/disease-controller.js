@@ -11,7 +11,10 @@ angular.module('cttvControllers')
 
         var efo_code = $location.url().split("/")[2];
         cttvAPIservice.getDisease({
-            code: efo_code
+            method: 'GET',
+            params: {
+                code: efo_code
+            }
         })
         .then (function (resp) {
             var data = resp.body;
