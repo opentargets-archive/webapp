@@ -1228,8 +1228,6 @@
         */
 
         function parseResponse (recs, dt) {
-            console.log("parseResponse():recs", recs);
-            //$log.log("parseResponse():dt", dt);
             dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 var data = this.data(); //data is previously preformatted table data that we need to add abstract info that came from pm
                 //$log.log("parseResponse():data", data);
@@ -1334,7 +1332,6 @@
         var getLiteratureData = function(){
             $scope.search.tables.literature.is_loading = true;
             $scope.search.tables.literature.maxShow = 200;
-            console.log("GETLITDATA datasource=", $scope.search.tables.literature.source);
             var opts = {
                 target:$scope.search.target,
                 disease:$scope.search.disease,
@@ -1526,7 +1523,6 @@
                 }).join(" OR ");
                 var url = "/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search?pagesize=" + thisRecords.length + "&query=" + thisPMIDs + "&format=json&resulttype=core";
                 //Should not this be a service call?
-                console.log("getLiteratureAbstractsData!!!!!!GET:", url);
                 $http.get(url)
                     .then (function (res) {
                         done++;
