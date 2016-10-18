@@ -315,13 +315,15 @@ angular.module('cttvDirectives', [])
                         if( scope.target ){
 
                             cttvAPIservice.getExpression ({
-                                gene: scope.target  // TODO: should be TARGET in API!!!
+                                "method": "GET",
+                                "params" : {
+                                    gene: scope.target  // TODO: should be TARGET in API!!!
+                                }
                             })
                             .then(
 
                                 // success
                                 function (resp) {
-
                                     // set hte load progress flag to false once we get the results
                                     //scope.loadprogress = false;
 
