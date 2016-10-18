@@ -143,30 +143,34 @@
         var getInfo = function(){
             // get gene specific info
             cttvAPIservice.getTarget( {
+                method: 'GET',
+                params: {
                     target_id:$scope.search.target
-                } ).
-                then(
-                    function(resp) {
-                        $scope.search.info.gene = resp.body;
-                        //updateTitle();
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                );
-
-
+                }
+            } )
+            .then(
+                function(resp) {
+                    $scope.search.info.gene = resp.body;
+                    //updateTitle();
+                },
+                cttvAPIservice.defaultErrorHandler
+            );
             // get disease specific info with the efo() method
             cttvAPIservice.getDisease( {
+                method: 'GET',
+                params: {
                     code:$scope.search.disease
-                } ).
-                then(
-                    function(resp) {
-                        $scope.search.info.efo = resp.body;
-                        // TODO: This is not returned by the api yet. Maybe we need to remove it later
-                        $scope.search.info.efo.efo_code = $scope.search.disease;
-                        //updateTitle();
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                );
+                }
+            } )
+            .then(
+                function(resp) {
+                    $scope.search.info.efo = resp.body;
+                    // TODO: This is not returned by the api yet. Maybe we need to remove it later
+                    $scope.search.info.efo.efo_code = $scope.search.disease;
+                    //updateTitle();
+                },
+                cttvAPIservice.defaultErrorHandler
+            );
 
         };
 
@@ -213,7 +217,12 @@
             };
             _.extend(opts, searchObj);
 
-            return cttvAPIservice.getAssociation(opts).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            }
+
+            return cttvAPIservice.getAssociations (queryObject).
                 then(
                     function(resp) {
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
@@ -282,7 +291,11 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -425,7 +438,12 @@
 
             _.extend(opts, searchObj);
 
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -627,7 +645,11 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -757,7 +779,12 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -918,7 +945,11 @@
             };
             _.extend(opts, searchObj);
             $scope.search.tables.somatic_mutations.is_loading = true;
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -1088,7 +1119,12 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -1342,7 +1378,11 @@
                 // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
 

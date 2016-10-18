@@ -104,9 +104,12 @@ angular.module('cttvControllers')
             size:1
         };
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
+        var queryObject = {
+            method: 'GET',
+            params: opts
+        };
 
-
-        cttvAPIservice.getAssociations(opts).
+        cttvAPIservice.getAssociations(queryObject).
         then(
             function(resp){
 

@@ -15,7 +15,10 @@ angular.module('cttvControllers')
     $scope.targetId = $location.url().split("/")[2];
 
     cttvAPIservice.getTarget({
-        target_id: $scope.targetId
+        method: 'GET',
+        params: {
+            target_id: $scope.targetId
+        }
     })
     .then(
         // success
