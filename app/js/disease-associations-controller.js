@@ -268,7 +268,12 @@ angular.module('cttvControllers')
             'size':1
         };
 
-        return cttvAPIservice.getSearch(opts)
+        var queryObject = {
+            method: "GET",
+            params: opts
+        };
+
+        return cttvAPIservice.getSearch(queryObject)
             .then (function (resp) {
                 //console.log("getSearch:resp.body.data",resp.body.data);
                 if (resp.body.data.length > 0) {

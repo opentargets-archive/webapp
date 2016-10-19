@@ -146,7 +146,7 @@ angular.module('cttvDirectives')
                 // TODO: put this back if we put the state back
                 //data.start = stt.p*data.length || data.start;   // NaN || data.start in case it's not defined
                 var opts = {
-                    disease: disease,
+                    disease: [disease],
                     outputstructure: "flat",
                     facets: false,
                     // direct: false,
@@ -157,7 +157,7 @@ angular.module('cttvDirectives')
                     draw: draw
                 };
 
-                if (target) {
+                if (target && target.length) {
                     opts.target = target;
                 }
 
