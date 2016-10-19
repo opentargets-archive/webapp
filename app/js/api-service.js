@@ -11,7 +11,7 @@ angular.module('cttvServices')
 /**
 * The API services, with methods to call the ElasticSearch API
 */
-    .factory('cttvAPIservice', ['$http', '$log', '$location', '$rootScope', '$q', '$timeout', function($http, $log, $location, $rootScope, $q, $timeout) {
+    .factory('cttvAPIservice', ['$http', '$log', '$location', '$rootScope', '$q', '$timeout', 'liveConfig', function($http, $log, $location, $rootScope, $q, $timeout, liveConfig) {
         'use strict';
 
 
@@ -103,7 +103,12 @@ angular.module('cttvServices')
             return 200 <= status && status < 300;
         }
 
-
+        // Set the version of the rest api if it is set in the live config file
+        liveConfig.then (function (config) {
+            if (config.apiVersion) {
+                api.version(config.apiVersion);
+            }
+        });
 
         /*
         * Private function to actually call the API
@@ -121,17 +126,20 @@ angular.module('cttvServices')
 
             var deferred = $q.defer();
             var promise = deferred.promise;
-            var url = api.url[queryObject.operation](params);
-            console.warn("URL : " + url);
 
             countRequest( params.trackCall===false ? undefined : true );
 
             // Params for api.call are: url, data (for POST) and return format
-            var resp = api.call(url, (queryObject.method=="POST" ? params : undefined), (params.format || "json"))
-                .then (done)
-                .catch(function (err) {
-                    cttvAPI.defaultErrorHandler (err, params.trackCall);
-                });
+
+            liveConfig.then (function (config) {
+                var url = api.url[queryObject.operation](params);
+                console.warn("URL : " + url);
+                api.call(url, (queryObject.method=="POST" ? params : undefined), (params.format || "json"))
+                    .then (done)
+                    .catch(function (err) {
+                        cttvAPI.defaultErrorHandler (err, params.trackCall);
+                    });
+            });
 
             return promise;
             //return resp.then(handleSuccess, handleError);
