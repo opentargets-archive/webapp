@@ -372,7 +372,7 @@ angular.module('cttvDirectives')
                     method: 'POST',
                     params: optsPreFlight
                 };
-                cttvAPIservice.getAssociationsPost(queryObject)
+                cttvAPIservice.getAssociations(queryObject)
                     .then(function (resp) {
                         var total = resp.body.total;
 
