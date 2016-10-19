@@ -22,10 +22,133 @@
             <div class="row" ng-if="search.total>0">
                 <div class="col-sm-3">
                     <cttv-facets></cttv-facets>
-                </div>
 
+                    <div>
+
+                        <div role="tab" aria-selected="true" class="panel-heading cttv-facets" style="border-bottom: 1px solid #DDD; padding:10px 0">
+
+                                <h4 class="panel-title">
+                                    <a >
+                                        <span uib-accordeon-header class="ng-binding">Your target list</span>
+                                        <i style="font-size: 16px;" class="pull-right text-lowlight fa ng-scope fa-caret-down" ng-class="fa-caret-down"></i>
+                                    </a>
+                                </h4>
+
+                        </div>
+
+                        <div style="padding: 5px 0;">
+                            <div class="cttv-facets-controls">
+                            <!--Choose a file with list of targets-->
+                                <form ng-show ="targetArray.length == 0" name="upload" class="form" data-ng-submit="addFile()">
+                                    <input id="myFileInput" type="file" name="file"
+                                           onchange="angular.element(this).scope().uploadedFile(this)"  />
+                                </form>
+                                <!--<span ng-show ="targetArray.length > 0" ng-click="removeTargets()">{{search.total}} genes matched <i class="fa fa-times"></i></span>-->
+                                <span ng-show ="targetArray.length > 0" ng-click="removeTargets()">Clear targets from {{files[0].name}}&nbsp&nbsp<i class="fa fa-times"></i></span>
+                            </div>
+
+                            <!--Target Filter Results-->
+                            <div ng-show = "targetArray.length > 0">
+                                <!--FOUND IN FILE-->
+                                <div class="checkbox cttv-facet-checkbox clearfix">
+                                    <span style=" font-size: 12px; ">
+                                        <span class="cttv-facet-checkbox-label ng-binding"
+                                              ng-click="totalNamesCollapsed = !totalNamesCollapsed"
+                                              style=" cursor: pointer; cursor: hand;" title="These are all the names found in your file" data-toggle="tooltip">
+                                            Target names found in file<br>
+                                        </span>
+                                        <span class="text-lowlight cttv-facet-count pull-left ng-binding" >({{targetNameArray.length}})</span>
+                                    </span>
+                                    <span style="width:12px" class="text-lowlight pull-right">
+                                        <i class="fa fa-caret-right"  style="cursor: pointer; padding: 0px 4px;"
+                                           ng-class="{'fa-caret-right': totalNamesCollapsed, 'fa-caret-down': !totalNamesCollapsed}"
+                                           ng-click="totalNamesCollapsed = !totalNamesCollapsed"></i>
+                                    </span>
+                                </div>
+                                <div >
+                                    <span  style="width:auto; font-size: 12px; padding-left: 20px"
+                                           ng-if="!totalNamesCollapsed"
+                                           ng-repeat="item in targetNameArray">{{item}}<br></span>
+                                </div>
+
+                                <!--EXCLUDED FROM SEARCH-->
+                                <div   class="checkbox cttv-facet-checkbox clearfix">
+                                    <span style=" font-size: 12px; ">
+                                        <span class="cttv-facet-checkbox-label ng-binding"
+                                              ng-click="excludedTargetsCollapsed = !excludedTargetsCollapsed"
+                                              style=" cursor: pointer; cursor: hand;"
+                                              title="These are the target names from the uploaded file, for which no Ensembl ID was found - thus excluding them from the association search.">
+                                            Names not found in Ensembl<br>
+                                        </span>
+                                        <span class="text-lowlight cttv-facet-count pull-left ng-binding" title="15">({{excludedTargetArray.length}})</span>
+                                    </span>
+                                    <span style="width:12px" class="text-lowlight pull-right">
+                                        <i class="fa fa-caret-right"  style="cursor: pointer; padding: 0px 4px;"
+                                                        ng-class="{'fa-caret-right': excludedTargetsCollapsed, 'fa-caret-down': !excludedTargetsCollapsed}"
+                                                        ng-click="excludedTargetsCollapsed = !excludedTargetsCollapsed"></i>
+                                    </span>
+                                </div>
+                                <div >
+                                    <span  style="width:auto; font-size: 12px; padding-left: 20px"
+                                           ng-if="!excludedTargetsCollapsed"
+                                           ng-repeat="item in excludedTargetArray">{{item.name}}<br></span>
+                                </div>
+
+                                <!--FUZZY - NEED TO EXPLAUN - these are the ones that name did not match exactly-->
+                                <div  class="checkbox cttv-facet-checkbox clearfix">
+                                    <span style=" font-size: 12px; ">
+                                        <span class="cttv-facet-checkbox-label ng-binding"
+                                              ng-click="fuzzyTargetsCollapsed = !fuzzyTargetsCollapsed"
+                                              style=" cursor: pointer; cursor: hand;"
+                                              title="These are the target names from the file for which exact match was not found but fuzzy match got similar enough name ">
+                                            Fuzzy names found<br>
+                                        </span>
+                                        <span class="text-lowlight cttv-facet-count pull-left ng-binding" >({{fuzzyTargetArray.length}})</span>
+                                    </span>
+                                    <span style="width:12px" class="text-lowlight pull-right">
+                                        <i class="fa fa-caret-right"  style="cursor: pointer; padding: 0px 4px;"
+                                           ng-class="{'fa-caret-right': fuzzyTargetsCollapsed, 'fa-caret-down': !fuzzyTargetsCollapsed}"
+                                           ng-click="fuzzyTargetsCollapsed = !fuzzyTargetsCollapsed"></i>
+                                    </span>
+                                </div>
+                                <div >
+                                    <span  style="width:auto; font-size: 12px; padding-left: 20px"
+                                           ng-if="!fuzzyTargetsCollapsed"
+                                           ng-repeat="item in fuzzyTargetArray">For {{item.name}} found {{item.label}}<br></span>
+                                </div>
+
+                                <br>
+
+                                <div style=" font-size: 12px; ">
+                                        <span class="cttv-facet-checkbox-label ng-binding">
+                                            Have associations with {{search.label}}<br>
+                                        </span>
+                                        <span class="text-lowlight cttv-facet-count pull-left ng-binding" >
+                                            ({{search.total}})
+                                        </span>
+                                </div>
+
+                                <div style=" font-size: 12px; ">
+                                        <span class="cttv-facet-checkbox-label ng-binding">
+                                            No associations found for<br>
+                                        </span>
+                                        <span class="text-lowlight cttv-facet-count pull-left ng-binding" >
+                                            ({{targetNameArray.length - search.total - excludedTargetArray.lengh }})
+                                        </span>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
                 <div class="col-sm-9">
-                    <cttv-disease-associations disease="search.query" filename="search.filename" filters="filters" state-id="dat"></cttv-disease-associations>
+                    <cttv-disease-associations disease="search.query" target="targetArray"
+                                               filename="search.filename"
+                                               filters="filters" state-id="dat"></cttv-disease-associations>
                 </div>
             </div>
         </div>

@@ -220,16 +220,13 @@
             var queryObject = {
                 method: 'GET',
                 params: opts
-            }
+            };
 
-            return cttvAPIservice.getAssociations (queryObject).
-                then(
-                    function(resp) {
-                        $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
-                        updateTitle( resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label );
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                );
+            return cttvAPIservice.getAssociations (queryObject)
+                .then (function(resp) {
+                    $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
+                    updateTitle( resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label );
+                }, cttvAPIservice.defaultErrorHandler);
         };
 
 
@@ -1264,8 +1261,6 @@
         */
 
         function parseResponse (recs, dt) {
-            //$log.log("parseResponse():recs", recs);
-            //$log.log("parseResponse():dt", dt);
             dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 var data = this.data(); //data is previously preformatted table data that we need to add abstract info that came from pm
                 //$log.log("parseResponse():data", data);

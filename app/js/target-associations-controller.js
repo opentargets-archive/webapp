@@ -37,7 +37,7 @@ angular.module('cttvControllers')
     $scope.view = {
         t : ["bubbles"],    // t = the selected tab
         //tp: [1]
-    }
+    };
 
     $scope.loading = false;
 
