@@ -3,9 +3,9 @@
 */
 
 
-h1, h2, h3, h4, h5, h6 {
+/*h1, h2, h3, h4, h5, h6 {
     font-weight: 300 !important;
-}
+}*/
 
 .text-lowlight{
     color: $clr-text-dim;
@@ -56,6 +56,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
+    /* do NOT use sass for this as this will break the scarcely supported ::selection; so change color slightly to trick SASS */
     background: #FF6350;
     color: #FFD0CB;
 }

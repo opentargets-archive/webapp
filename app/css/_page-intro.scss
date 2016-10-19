@@ -12,7 +12,8 @@
  */
 
 .intro-section {
-    padding: 80px 0px;
+    padding: 120px 0px;
+    overflow: hidden;
 }
 
 
@@ -24,12 +25,23 @@
     padding: 140px 0px;
 }
 
+/* probably deprecated with new homepage*/
 .intro-logo {
     padding-bottom:60px;
     display: block;
     margin: 0 auto;
     width: 280px;
     height: 163px;
+}
+
+.intro-logo-block {
+    padding-bottom:60px;
+    margin: 0 auto;
+    width: 480px;
+}
+
+.intro-logo-tvp {
+
 }
 
 
@@ -134,7 +146,76 @@
     border-left: 1px solid $clr-text-dim;
 }
 
+.intro-section-theme-blue {
+    background: $secondary-color;
+    color: $primary-background-color;
 
+    .intro-section-panel-icon {
+        margin-bottom: 60px;
+    }
+}
 
+.intro-section-theme-red {
+    @extend .intro-section-theme-blue;
+    background: $secondary-brand-color;
+}
 
+.intro-section-theme-white {
+    background: $primary-background-color;
+}
+
+.intro-section-theme-grey {
+    background: $clr-ui-background;
+    border-top: 1px solid $clr-ui-border;
+    border-bottom: 1px solid $clr-ui-border;
+}
+
+.intro-section-theme-gradient-blue {
+    @extend .intro-section-theme-blue;
+    background-color: $masthead-background;
+    background: -webkit-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: -moz-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: -o-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+}
+
+.intro-section-panel {
+    text-align: center;
+}
+
+.intro-section-heading {
+    margin-top: 0px;
+    margin-bottom: 80px;
+    text-align: center;
+    font-weight: 200;
+}
+
+.intro-section-panel-icon {
+}
+
+.intro-section-panel-heading{
+    font-weight: 200;
+    margin-bottom: 40px;
+}
+
+.intro-section-about {
+    background-image: url('/imgs/graphics/ot_advancing_3.png');
+    background-attachment: fixed;
+    background-position: center left;
+    background-repeat: no-repeat;
+}
+
+.user-no-track {
+  //padding-left: 32px;
+  position: relative;
+}
+.user-no-track:before {
+  position: absolute;
+  font-family: 'FontAwesome';
+  top: -300px;
+  left: 100px;
+  content: "\f21b";
+  color: rgba(0,0,0,.1);
+  font-size:600px;
+}
 
