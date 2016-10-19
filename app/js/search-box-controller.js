@@ -7,7 +7,7 @@
  */
 angular.module('cttvControllers').
 
-controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts) {
+controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q) {
 
         var APP_SEARCH_URL = "search";
         var APP_EVIDENCE_URL = "evidence";
@@ -65,6 +65,13 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
          * @param {String} query
          * @returns {Object} promise object with success() or error(), or null
          */
+         /*
+         * To avoid having the problem of slower api calls coming *after* quicker ones launched after we just make sure the order is respected
+         * TODO: It may be better to discard the previous one
+         */
+         var searchPromise = $q(function (res, rej) {
+            res();
+         });
         $scope.getSuggestions = function(query){
 
             //clear the data here, so the box disappears or the content is cleared...
@@ -75,28 +82,38 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
                 $document.bind('click', dismissClickHandler);
 
                 // fire the typeahead search
-                return cttvAPIservice.getQuickSearch({q:$scope.search.query.text, size:3, trackCall:false}).
-                    then(
-                        function(resp){
-                            var i, h, h2;
-                            $log.info(resp);
-                            $scope.search.results = parseResponseData(resp.body.data);  // store the results
-                            var besthit = $scope.search.results.besthit;
-                            besthit.humanMatch = false;
-                            for (h in besthit.highlight) {
-                                if (h.startsWith("ortholog") && h.endsWith('name')) {
-                                    delete besthit.highlight[h];
+                return searchPromise.then(function () {
+                    return cttvAPIservice.getQuickSearch(
+                        {
+                            params: {
+                                q: $scope.search.query.text,
+                                size: 3
+                            },
+                            trackCall: false,
+                            method: "GET"
+                        })
+                        .then(
+                            function(resp){
+                                var i, h, h2;
+                                $log.info(resp);
+                                $scope.search.results = parseResponseData(resp.body.data);  // store the results
+                                var besthit = $scope.search.results.besthit;
+                                besthit.humanMatch = false;
+                                for (h in besthit.highlight) {
+                                    if (h.startsWith("ortholog") && h.endsWith('name')) {
+                                        delete besthit.highlight[h];
+                                    }
+                                    if (!h.startsWith("ortholog")) {
+                                        besthit.humanMatch = true;
+                                        break;
+                                    }
                                 }
-                                if (!h.startsWith("ortholog")) {
-                                    besthit.humanMatch = true;
-                                    break;
-                                }
-                            }
-                        }, cttvAPIservice.defaultErrorHandler
-                    ).
-                    finally(function(){
-                        $scope.search.progress = false;
-                    });
+                            }, cttvAPIservice.defaultErrorHandler
+                        ).
+                        finally(function(){
+                            $scope.search.progress = false;
+                        });
+                });
             }else{
                 $scope.search.progress = false;
             }

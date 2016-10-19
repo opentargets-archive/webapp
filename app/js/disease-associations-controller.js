@@ -121,28 +121,29 @@ angular.module('cttvControllers')
         }
 
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
+        var queryObject = {
+            method: 'GET',
+            params: opts
+        };
 
-        cttvAPIservice.getAssociations(opts).
-            then(
-            function (resp) {
-                // 1: set the facets
-                // we must do this first, so we know which datatypes etc we actually have
-                //TODO Change this to POST request
-                cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
+        cttvAPIservice.getAssociations(queryObject)
+        .then(function(resp) {
+            // 1: set the facets
+            // we must do this first, so we know which datatypes etc we actually have
+            //TODO Change this to POST request
+            cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
 
 
-                // The label of the diseases in the header
-                $scope.search.label = resp.body.data[0].disease.efo_info.label;
+            // The label of the diseases in the header
+            $scope.search.label = resp.body.data[0].disease.efo_info.label;
 
-                // The filename to download
-                $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(" ").join("_");
+            // The filename to download
+            $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(" ").join("_");
 
-                // set the total?
-                $scope.search.total = resp.body.total; //resp.body.total;
+            // set the total?
+            $scope.search.total = resp.body.total; //resp.body.total;
 
-            },
-            cttvAPIservice.defaultErrorHandler
-        );
+        }, cttvAPIservice.defaultErrorHandler);
 
 
     };

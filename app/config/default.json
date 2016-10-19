@@ -5,12 +5,12 @@
             "href" : "/about",
             "menu" : [
                 {
-                    "label" : "Open Targets",
-                    "href" : "//www.opentargets.org/"
-                },
-                {
                     "label" : "Target Validation Platform",
                     "href" : "/about"
+                },
+                {
+                    "label" : "Open Targets Consortium",
+                    "href" : "//www.opentargets.org/"
                 }
             ]
         },
@@ -26,7 +26,11 @@
                 {
                     "label" : "support@targetvalidation.org",
                     "href" : "mailto:support@targetvalidation.org?Subject=Target%20Validation%20Platform%20-%20help%20request"
-                }
+                }/*,
+                {
+                    "label": "Outreach",
+                    "href": "/outreach"
+                }*/
             ]
         },
 
@@ -44,7 +48,6 @@
             "label" : "Blog",
             "href" : "//blog.opentargets.org/"
         }
-
     ],
 
     "show_access_level" : false,

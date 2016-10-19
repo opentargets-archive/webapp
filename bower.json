@@ -35,7 +35,9 @@
     "jquery": "2.2.0",
     "d3": "~3.5.8",
     "angular-sanitize": "1.5.1",
-    "FileSaver": "*"
+    "FileSaver": "*",
+    "moment": "~2.14.1",
+    "angular-cookies": "~1.5.8"
   },
   "resolutions": {
     "angular": "1.5.1"

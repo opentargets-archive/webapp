@@ -90,7 +90,11 @@ angular.module('cttvDirectives')
                         opts.disease = attrs.disease;
                     }
                     _.extend(opts, searchObj);
-                    return cttvAPIservice.getFilterBy( opts ).
+                    var queryObject = {
+                        method: 'GET',
+                        params: opts
+                    };
+                    return cttvAPIservice.getFilterBy (queryObject).
                     then(
                         function(resp) {
                             if( resp.body.data ){

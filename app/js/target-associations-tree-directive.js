@@ -68,11 +68,15 @@ angular.module('cttvDirectives')
                         size: 1000
                     };
                     opts = cttvAPIservice.addFacetsOptions(facets, opts);
+                    var queryObject = {
+                        method: 'GET',
+                        params: opts
+                    };
                     $log.log(gat);
                     if (!gat) {
                         setTreeView(opts.therapeutic_area);
                     } else {
-                        cttvAPIservice.getAssociations (opts)
+                        cttvAPIservice.getAssociations (queryObject)
                             .then (function (resp) {
                                 // var data = resp.body.data;
                                 var data = cttvAPIservice.flat2tree(resp.body);
@@ -125,8 +129,12 @@ angular.module('cttvDirectives')
                         size: 1000
                     };
                     opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
+                    var queryObject = {
+                        method: 'GET',
+                        params: opts
+                    };
 
-                    cttvAPIservice.getAssociations (opts)
+                    cttvAPIservice.getAssociations (queryObject)
                         .then (
                             function (resp) {
                                 var data = cttvAPIservice.flat2tree(resp.body);

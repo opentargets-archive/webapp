@@ -162,12 +162,14 @@ angular.module('cttvDirectives')
                 }
 
                 opts = cttvAPIservice.addFacetsOptions(filters, opts);
+                var queryObject = {
+                    method: 'POST',
+                    params: opts
+                };
 
-                cttvAPIservice.getAssociationsPost(opts)
-                    //cttvAPIservice.getAssociations(opts)
+                cttvAPIservice.getAssociations(queryObject)
                     .then(function (resp) {
                         var excludedTargetList = resp.body.excluded_target_list;
-
                         var dtData = parseServerResponse(resp.body.data);
                         var o = {
                             recordsTotal: resp.body.total,
@@ -365,8 +367,12 @@ angular.module('cttvDirectives')
                     size: 1
                 };
                 optsPreFlight = cttvAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
-                cttvAPIservice.getAssociationsPost(optsPreFlight)
-                    //cttvAPIservice.getAssociations(optsPreFlight)
+
+                var queryObject = {
+                    method: 'POST',
+                    params: optsPreFlight
+                };
+                cttvAPIservice.getAssociationsPost(queryObject)
                     .then(function (resp) {
                         var total = resp.body.total;
 
@@ -399,10 +405,12 @@ angular.module('cttvDirectives')
                                 opts.target = scope.target;
                             }
                             opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
+                            var queryObject = {
+                                method: 'POST',
+                                params: opts
+                            };
 
-                            //opts.data =
-                            return cttvAPIservice.getAssociationsPost(opts)
-                                //return cttvAPIservice.getAssociations(opts)
+                            return cttvAPIservice.getAssociations(queryObject)
                                 .then(function (resp) {
                                     var moreText = resp.body;
                                     if (columnsNumberOk(moreText, opts.fields.length)) {

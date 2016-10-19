@@ -31,18 +31,18 @@
         <meta property="og:image" content="https://www.targetvalidation.org/imgs/logo/ot_logo_splash.png" />
 
 
-        <link rel="stylesheet" href="build/cttvWebapp-3rdParty.css?v=17082016" />
+        <link rel="stylesheet" href="build/cttvWebapp-3rdParty.css?v=21092016" />
         <!-- Don't bundle font-awexome.min.css or the woff files would be broken -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <!-- <link href="build/fontawesome/css/font-awesome.min.css?v=16112015" rel="stylesheet" />
         <link href="build/bootstrap/dist/css/bootstrap.min.css?v=08122015" rel="stylesheet" />-->
-        <link rel="stylesheet" href="build/cttvWebapp.min.css?v=17082016" />
+        <link rel="stylesheet" href="build/cttvWebapp.min.css?v=21092016" />
 
         <!-- Components -->
-        <link rel="stylesheet" href="build/components-cttvWebapp.min.css?v=17082016" />
+        <link rel="stylesheet" href="build/components-cttvWebapp.min.css?v=21092016" />
 
         <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
-        <script type="text/javascript" src="js/ie_console_noop.js?v=17082016"></script>
+        <script type="text/javascript" src="js/ie_console_noop.js?v=21092016"></script>
 
         <!-- NEW datatable -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/bs/jq-2.1.4,dt-1.10.10,b-1.1.0,b-flash-1.1.0,b-html5-1.1.0/datatables.min.css"/>
@@ -68,7 +68,7 @@
                 <div ng-controller="MastheadCtrl">
 
                     <!-- Masthead (homepage) -->
-                    <div ng-if="location.path()=='/'" class="ng-cloak masthead-navigation-container">
+                    <div ng-if="location.path()=='/'" class="ng-cloak masthead-home masthead-navigation-container">
                         <div class="container">
                             <masthead-navigation-menu></masthead-navigation-menu>
                         </div>
@@ -76,6 +76,7 @@
 
                     <!-- Masthead (other pages) -->
                     <div ng-if="location.path()!=='/'" class="masthead ng-cloak">
+
                         <div class="container">
 
                             <div class="row" >
@@ -91,6 +92,8 @@
                                 <div class="col-xs-6 masthead-navigation-container">
                                     <masthead-navigation-menu></masthead-navigation-menu>
                                 </div>
+
+
 
                                 <div class="col-xs-4" ng-controller="SearchBoxCtrl">
                                     <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
@@ -132,26 +135,22 @@
                                         </fieldset>
                                     </form>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
-                <!-- End Masthead -->
 
                 <!-- Authentication error -->
-                <uib-alert type="danger" ng-show="showApiErrorMsg" ng-cloak>Your session has expired, reload the page to authenticate again
-                    <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
-                </uib-alert>
+                <div uib-alert class="alert-danger" ng-show="showApiErrorMsg" ng-cloak close="showApiErrorMsg=false">
+                     Your session has expired, reload the page to authenticate again <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+                </div>
 
                 <!-- API ERROR 500 -->
-                <uib-alert type="danger" ng-show="showApiError500" close="showApiError500=false" ng-cloak>A problem retrieving data has occurred. Please try to reload the page. If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a>
+                <div uib-alert class="alert-danger" ng-show="showApiError500" close="showApiError500=false" ng-cloak>A problem retrieving data has occurred. Please try to reload the page. If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a>
                     <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
-                </uib-alert>
+                </div>
 
                 <!-- FEEDBACK BUTTON -->
-                <!-- Plese re-enable when we want (after integration day?) -->
                 <div ng-cloak class="cttv-feedback-button" ng-controller="FeedbackCtrl" ng-class="{'cttv-feedback-button-round': location.path()!='/' }">
                     <a target=_blank href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x20;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x20;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x20;&#x2D;&#x20;&#x66;&#x65;&#x65;&#x64;&#x62;&#x61;&#x63;&#x6B;&body=Page URL: {{location.absUrl()}}">
                     <div>Feedback</div></a>
@@ -205,10 +204,9 @@
                     <div class="row">
 
 
-
                         <div class="col-sm-15 col-sm-3">
                             <h6>Platform</h6>
-                            <p>Version 1.2 - 2016-08-17</p>
+                            <p>Version 1.2.1 - 2016-09-21</p>
                             <p><a href="/release-notes">Release notes</a></p>
                             <p><a href="/about">About</a></p>
                             <p><a href="/documentation/api">API</a></p>
@@ -262,17 +260,17 @@
             <script src="jspm_packages/system.js"></script>
 
             <!-- Angular && web app -->
-            <script src="build/cttvWebapp-3rdParty.js?v=17082016" type="text/javascript"></script>
-            <script src="build/cttvWebapp.min.js?v=17082016" type="text/javascript"></script>
+            <script src="build/cttvWebapp-3rdParty.js?v=21092016" type="text/javascript"></script>
+            <script src="build/cttvWebapp.min.js?v=21092016" type="text/javascript"></script>
 
             <!-- Components -->
-            <script type="text/javascript" src="build/components-cttvWebapp.min.js?v=17082016"></script>
+            <script type="text/javascript" src="build/components-cttvWebapp.min.js?v=21092016"></script>
 
             <!-- Blob.js (needed by FileSaver) -->
             <script type="text/javascript" language="javascript" src="vendor/Blob.js"></script>
 
             <!-- Pathway viewer -->
-            <script type="text/javascript" language="javascript" src="/proxy/www.reactome.org/DiagramJs/diagram/diagram.nocache.js?v=19052016"></script>
+            <script type="text/javascript" language="javascript" src="/proxy/www.reactome.org/DiagramJs/diagram/diagram.nocache.js?v=21092016"></script>
 
             <!-- PDB viewers -->
             <!-- <link rel="stylesheet" href="https://wwwdev.ebi.ac.uk/pdbe/widgets/pdb-component-library/css/pdb.component.library.beta-1.0.0.min.css" /> -->
@@ -334,6 +332,10 @@
             }
             window.onload = showRibbon;
             </script>
+
+
+            <!-- Log page app session -->
+            <log-session></log-session>
 
         </div>
 
