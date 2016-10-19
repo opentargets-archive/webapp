@@ -78,18 +78,17 @@ angular.module('cttvControllers')
 
         $scope.targetArray = []; //this one is used when we are done fetching all the target IDs
 
-        $scope.targetNameArray = [];
+        $scope.targetNameArray = [];//this one holds taregtnames as they are read from the file
         $scope.targetIdArray = [];
-        $scope.targetNameIdDict = [];
+        $scope.targetNameIdDict = [];//this has all the targetNames, id-s that were found or "", and labels tht were found for these ids
 
-        $scope.excludedTargetArray = [];
-        $scope.fuzzyTargetArray = [];
+        $scope.excludedTargetArray = [];//this has all the targets for whits no id could be found, even with fuzzy search
+        $scope.fuzzyTargetArray = [];//these are the ones for which we found id-s but for targetName that did not exactly match
 
         $scope.totalNamesCollapsed = true;
         $scope.excludedTargetsCollapsed = true;
         $scope.fuzzyTargetsCollapsed = true;
 
-        $scope.excludedTargetList = [];
     };
 
     initFilterByFile();
@@ -216,14 +215,15 @@ angular.module('cttvControllers')
         });
 
         promise.then(function (res) {
-            $log.log("PROMISE");
+            //$log.log("PROMISE");
             $scope.targetArray = $scope.targetIdArray;
             $scope.excludedTargetArray = $scope.targetNameIdDict.filter(function(e){return !e.id;});
             $scope.fuzzyTargetArray = $scope.targetNameIdDict.filter(function(e){return e.name.localeCompare(e.label) !== 0 && e.id.localeCompare(e.name) !== 0;});
 
-            $log.log("123:targetNameIdDict", $scope.targetNameIdDict);
-            $log.log("123:excludedTargetArray", $scope.excludedTargetArray);
-            $log.log("123:fuzzyTargetArray", $scope.fuzzyTargetArray);
+            //$log.log("123:targetNameIdDict", $scope.targetNameIdDict);
+            //$log.log("123:excludedTargetArray", $scope.excludedTargetArray);
+            //$log.log("123:fuzzyTargetArray", $scope.fuzzyTargetArray);
+            //$log.log("123:targetNameArray", $scope.targetNameArray);
             getFacets($scope.filters);
         });
 

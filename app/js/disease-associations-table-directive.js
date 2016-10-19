@@ -94,12 +94,11 @@ angular.module('cttvDirectives')
     /*
     Setup the table cols and return the DT object
     */
-    var setupTable = function (table, disease, target, filename, excludedTargetList, download, stt) {
+    var setupTable = function (table, disease, target, filename, download, stt) {
         stt = stt || {};
 
         var t = $(table).DataTable({
             "destroy": true,
-            //"dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
             "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
             "buttons": [
                 {
@@ -167,10 +166,10 @@ angular.module('cttvDirectives')
                     params: opts
                 };
 
+
                 cttvAPIservice.getAssociations(queryObject)
                     .then(function (resp) {
-                        var excludedTargetList = resp.body.excluded_target_list;
-                        var dtData = parseServerResponse(resp.body.data);
+                       var dtData = parseServerResponse(resp.body.data);
                         var o = {
                             recordsTotal: resp.body.total,
                             recordsFiltered: resp.body.total,
@@ -318,7 +317,6 @@ angular.module('cttvDirectives')
             filename: '=',
             target: '=',
             disease: '=',
-            excludedtargetlist: '=',
             filters: '=',
             stateId: '@?'
         },
@@ -327,8 +325,7 @@ angular.module('cttvDirectives')
         + '  <cttv-matrix-table></cttv-matrix-table>'
         + '  <cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
         + '  <cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
-        + '</div>'
-        + '<div class="row"><div class="col-md-12" style="white-space: normal !important" ng-if="excludedTargetList.length>0"><b>Could not find IDs for these target names: </b><span ng-repeat="item in excludedTargetList">{{item}}, </span></div></div>',
+        + '</div>',
 
         link: function (scope, elem, attrs) {
 
@@ -343,7 +340,7 @@ angular.module('cttvDirectives')
             // legend stuff
             scope.legendText = "Score";
             scope.colors = [];
-            scope.excludedTargetList = attrs.excludedtargetlist;
+
             for (var i = 0; i <= 100; i += 25) {
                 var j = i / 100;
                 //scope.labs.push(j);
@@ -464,13 +461,13 @@ angular.module('cttvDirectives')
             //     render( new_state, old_state ); // if there are no facets, no worries, the API service will handle undefined
             // });
 
-            scope.$watchGroup(["filters", "disease", "target", "excludedtargetlist"], function (attrs) {
+            scope.$watchGroup(["filters", "disease", "target"], function (attrs) {
 
                 filters = attrs[0];
                 var disease = attrs[1];
                 scope.target = attrs[2];
-                scope.excludedTargetList = attrs[3];
-                console.log("diseaseAssociationsTableDirective:attrs:", attrs);
+
+                //console.log("diseaseAssociationsTableDirective:attrs:", attrs);
                 // actually, is disease going to change?
                 // I mean, if it changes, the page changes, right?
                 // if the table exists, we just force an upload (will take the filters into account)
@@ -483,7 +480,7 @@ angular.module('cttvDirectives')
                 //dtable = setupTable(table, disease, scope.filename, scope.downloadTable);
                 //dtable = undefined;
                 //table.destroy();
-                dtable = setupTable(table, scope.disease, scope.target, scope.filename, scope.excludedTargetList, scope.downloadTable, state);
+                dtable = setupTable(table, scope.disease, scope.target, scope.filename, scope.downloadTable, state);
 
                 // listener for page changes
                 dtable.on('page.dt', function () {
