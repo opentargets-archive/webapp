@@ -30,20 +30,25 @@
                                 <h4 class="panel-title">
                                     <a >
                                         <span uib-accordeon-header class="ng-binding">Your target list</span>
-                                        <i style="font-size: 16px;" class="pull-right text-lowlight fa ng-scope fa-caret-down" ng-class="fa-caret-down"></i>
+                                        <i style="font-size: 16px;"
+                                           class="pull-right text-lowlight fa ng-scope fa-caret-down"
+                                           ng-class="{'fa-caret-right': filterByFileCollapsed, 'fa-caret-down': !filterByFileCollapsed}"
+                                           ng-click="filterByFileCollapsed = !filterByFileCollapsed">
+
+                                        </i>
                                     </a>
                                 </h4>
 
                         </div>
 
-                        <div style="padding: 5px 0;">
+                        <div style="padding: 5px 0;" ng-if="!filterByFileCollapsed">
                             <div class="cttv-facets-controls">
                             <!--Choose a file with list of targets-->
                                 <form ng-show ="targetArray.length == 0" name="upload" class="form" data-ng-submit="addFile()">
                                     <input id="myFileInput" type="file" name="file"
                                            onchange="angular.element(this).scope().uploadedFile(this)"  />
                                 </form>
-                                <!--<span ng-show ="targetArray.length > 0" ng-click="removeTargets()">{{search.total}} genes matched <i class="fa fa-times"></i></span>-->
+
                                 <span ng-show ="targetArray.length > 0" ng-click="removeTargets()">Clear targets from {{files[0].name}}&nbsp&nbsp<i class="fa fa-times"></i></span>
                             </div>
 
@@ -97,16 +102,15 @@
                                 <!--FUZZY - NEED TO EXPLAUN - these are the ones that name did not match exactly-->
                                 <div  class="checkbox cttv-facet-checkbox clearfix">
                                     <span style=" font-size: 12px; ">
-                                        <span class="cttv-facet-checkbox-label ng-binding"
-                                              ng-click="fuzzyTargetsCollapsed = !fuzzyTargetsCollapsed"
-                                              style=" cursor: pointer; cursor: hand;"
-                                              title="These are the target names from the file for which exact match was not found but fuzzy match got similar enough name ">
+                                        <span class="cttv-facet-checkbox-label ng-binding" style="margin-left: 20px"
+                                              title="These are the target names from the file for which exact match was not found but fuzzy match got similar enough name. By default they are included in association search. Clicking on the checkbox will exclude them from the search. ">
+                                            <input type="checkbox" ng-click="fuzzyToggle()" ng-checked="fuzziesIncludedInSearch" style=" cursor: pointer; cursor: hand; margin-left: -20px" >
                                             Fuzzy names found<br>
                                         </span>
                                         <span class="text-lowlight cttv-facet-count pull-left ng-binding" >({{fuzzyTargetArray.length}})</span>
                                     </span>
                                     <span style="width:12px" class="text-lowlight pull-right">
-                                        <i class="fa fa-caret-right"  style="cursor: pointer; padding: 0px 4px;"
+                                        <i class="fa fa-caret-right"  style="cursor: pointer; padding: 0px 4px; "
                                            ng-class="{'fa-caret-right': fuzzyTargetsCollapsed, 'fa-caret-down': !fuzzyTargetsCollapsed}"
                                            ng-click="fuzzyTargetsCollapsed = !fuzzyTargetsCollapsed"></i>
                                     </span>
@@ -117,6 +121,7 @@
                                            ng-repeat="item in fuzzyTargetArray">For {{item.name}} found {{item.label}}<br></span>
                                 </div>
 
+                                <!--FUZZY - END-->
                                 <br>
 
                                 <div style=" font-size: 12px; ">
