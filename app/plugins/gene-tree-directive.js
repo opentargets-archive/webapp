@@ -25,6 +25,7 @@ angular.module('plugins')
                     .on("notFound", function() {
                         scope.notFound = 1;
                     });
+
                 gt(newDiv);
 
 
