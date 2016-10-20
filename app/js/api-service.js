@@ -108,7 +108,7 @@ angular.module('cttvServices')
             var promise = deferred.promise;
 
             // Params for api.call are: url, data (for POST) and return format
-            var resp = api.call(url, (queryObject.method=="POST" ? params : undefined), (params.format || "json"))
+            var resp = api.call(url, (queryObject.method=="POST" ? params : undefined),  "json")
                 .then (done)
                 .catch(function (err) {
                     console.log("GOT ERROR:", err);
