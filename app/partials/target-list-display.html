@@ -1,24 +1,33 @@
 <div class="section">
-    <h2>Results</h2>
+    <h2>Associations</h2>
 
     <!-- Datatable with the result -->
     <div>
-        <h5>Diseases</h5>
-        <div class="table-panel">
-            <table class='table cttv-evidence-table' id="target-list-associated-diseases">
-                <thead>
-                    <tr>
-                        <th>Disease</th>
-                        <th>Targets associated</th>
-                        <th>Sum score</th>
-                        <th>Therapeutic Area</th>
-                    </tr>
-                </thead>
+        <uib-tabset active="active">
+            <uib-tab heading="Table">
+                <div class="table-panel">
+                    <table class='table cttv-evidence-table' id="target-list-associated-diseases">
+                        <thead>
+                            <tr>
+                                <th>Disease</th>
+                                <th>Targets associated</th>
+                                <th>Sum score</th>
+                                <th>Therapeutic Area</th>
+                            </tr>
+                        </thead>
 
-                <tbody>
-                </tbody>
-            </table>
-        </div>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </uib-tab>
+
+            <uib-tab heading="Bubbles">
+
+            </uib-tab>
+        </uib-tabset>
+
+
 
     </div>
 </div>
