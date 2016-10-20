@@ -47,7 +47,6 @@ angular.module('cttvServices')
             },
         };
 
-
         var api = cttvApi()
             .prefix("/api/")
             .version("1.2")
@@ -55,39 +54,11 @@ angular.module('cttvServices')
             .appname("cttv-web-app")
             .secret("2J23T20O31UyepRj7754pEA2osMOYfFK")
             .verbose(true);
-            //.expiry(1);
-            // .onError(cttvAPI.defaultErrorHandler);
-
-
-        // var token = {
-        //
-        //     set : function(tkn){
-        //         clearTimeout(token._int);
-        //         token._int = setTimeout(token._clear, 10000); // 1 min = 60000, 10 mins = 600000
-        //         token._id = tkn;
-        //     },
-        //
-        //     get : function(){
-        //         return token._id;
-        //     },
-        //
-        //     _id : "",
-        //
-        //     _int : -1,
-        //
-        //     _clear : function(){
-        //         $log.log("clear "+token._id);
-        //         token._id = "";
-        //         $log.log("  '"+token._id+"'");
-        //     }
-        //
-        // };
-
-
 
         /**/
         cttvAPI.activeRequests = 0;
         function countRequest(b){
+            console.log("countRequest:b=", b);
             if(b===false){
                 cttvAPI.activeRequests--;
             } else if (b===true){
@@ -120,14 +91,26 @@ angular.module('cttvServices')
         *              - q: query string
         *              - from: number to start from
         *              - size: number of results
+        *
         */
         var callAPI = function(queryObject){
+
             var params = queryObject.params;
+            console.log("callAPI:queryObject=", queryObject);
+
+            var url;
+            if( queryObject.method === undefined || queryObject.method === 'GET') {
+                url = api.url[queryObject.operation](params);
+            }
+            else{
+                var theUrl = api.url[queryObject.operation]();
+                url = theUrl.substring(0, theUrl.length - 1 );
+            }
+
+            countRequest(params.trackCall === false ? undefined : true);
 
             var deferred = $q.defer();
             var promise = deferred.promise;
-
-            countRequest( params.trackCall===false ? undefined : true );
 
             // Params for api.call are: url, data (for POST) and return format
 
@@ -137,12 +120,12 @@ angular.module('cttvServices')
                 api.call(url, (queryObject.method=="POST" ? params : undefined), (params.format || "json"))
                     .then (done)
                     .catch(function (err) {
+                        console.log("GOT ERROR:", err);
                         cttvAPI.defaultErrorHandler (err, params.trackCall);
                     });
             });
 
             return promise;
-            //return resp.then(handleSuccess, handleError);
 
 
             function done(response) {
@@ -154,8 +137,7 @@ angular.module('cttvServices')
                 // normalize internal statuses to 0
                 var status = Math.max(response.status, 0);
 
-                countRequest( params.trackCall===false ? undefined : false );
-
+                countRequest(params.trackCall === false ? undefined : false);
                 // we resolve the the promise on the whole response object,
                 // so essentially we pass back the un-processed response object:
                 // that means the data we're interested is in response.body.
@@ -173,6 +155,7 @@ angular.module('cttvServices')
                 // });
             }
         };
+
 
         /**
          * Default error handler function.
@@ -264,15 +247,10 @@ angular.module('cttvServices')
 
 
         /**
-        * TODO:
-        * this needs to be consolidated with the getAssociation() method as they are the exact same thing...
+        *
         */
         cttvAPI.getAssociations = function(queryObject){
             $log.log("cttvAPI.getAssociations()");
-            $log.log(queryObject);
-            // queryObject[ cttvAPI.facets.SCORE_STR ] = queryObject[ cttvAPI.facets.SCORE_STR ] || [1] ; // No need for stringency for now
-            queryObject[ cttvAPI.facets.SCORE_MIN ] = queryObject[ cttvAPI.facets.SCORE_MIN ] || [0.0] ;
-
             queryObject.operation = cttvAPI.API_ASSOCIATION_URL;
             return callAPI (queryObject);
         };
