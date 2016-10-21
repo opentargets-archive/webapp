@@ -98,14 +98,6 @@ angular.module('cttvServices')
             var params = queryObject.params;
             console.log("callAPI:queryObject=", queryObject);
 
-            var url;
-            if( queryObject.method === undefined || queryObject.method === 'GET') {
-                url = api.url[queryObject.operation](params);
-            }
-            else{
-                var theUrl = api.url[queryObject.operation]();
-                url = theUrl.substring(0, theUrl.length - 1 );
-            }
 
             countRequest(params.trackCall === false ? undefined : true);
 
@@ -115,7 +107,13 @@ angular.module('cttvServices')
             // Params for api.call are: url, data (for POST) and return format
 
             liveConfig.then (function (config) {
-                var url = api.url[queryObject.operation](params);
+                var url;
+                if( queryObject.method === undefined || queryObject.method === 'GET') {
+                    url = api.url[queryObject.operation](params);
+                } else {
+                    var theUrl = api.url[queryObject.operation]();
+                    url = theUrl.substring(0, theUrl.length - 1 );
+                }
                 console.warn("URL : " + url);
                 api.call(url, (queryObject.method=="POST" ? params : undefined), (params.format || "json"))
                     .then (done)
