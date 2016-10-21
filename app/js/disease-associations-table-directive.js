@@ -370,12 +370,14 @@ angular.module('cttvDirectives')
                 var size = 10000;
                 // First make a call to know how many rows there are:
                 var optsPreFlight = {
-                    disease: scope.disease,
-                    target: scope.target,
+                    disease: [scope.disease],
                     outputstructure: "flat",
                     facets: false,
                     size: 1
                 };
+                if (scope.target && scope.target.length) {
+                    optsPreFlight.target = scope.target;
+                }
                 optsPreFlight = cttvAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
 
                 var queryObject = {
@@ -396,7 +398,7 @@ angular.module('cttvDirectives')
 
                         function getNextChunk(size, from) {
                             var opts = {
-                                disease: scope.disease,
+                                disease: [scope.disease],
                                 outputstructure: "flat",
                                 facets: false,
                                 format: "csv",
@@ -413,7 +415,7 @@ angular.module('cttvDirectives')
                                     "target.gene_info.name"],
                                 from: from
                             };
-                            if (scope.target) {
+                            if (scope.target && scope.target.length) {
                                 opts.target = scope.target;
                             }
                             $log.log("DOWNLOAD:opts before addFacets:", opts);

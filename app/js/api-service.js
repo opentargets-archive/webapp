@@ -11,7 +11,7 @@ angular.module('cttvServices')
 /**
 * The API services, with methods to call the ElasticSearch API
 */
-    .factory('cttvAPIservice', ['$http', '$log', '$location', '$rootScope', '$q', '$timeout', function($http, $log, $location, $rootScope, $q, $timeout) {
+    .factory('cttvAPIservice', ['$http', '$log', '$location', '$rootScope', '$q', '$timeout', 'liveConfig', function($http, $log, $location, $rootScope, $q, $timeout, liveConfig) {
         'use strict';
 
 
@@ -74,7 +74,12 @@ angular.module('cttvServices')
             return 200 <= status && status < 300;
         }
 
-
+        // Set the version of the rest api if it is set in the live config file
+        liveConfig.then (function (config) {
+            if (config.apiVersion) {
+                api.version(config.apiVersion);
+            }
+        });
 
         /*
         * Private function to actually call the API
@@ -93,14 +98,6 @@ angular.module('cttvServices')
             var params = queryObject.params;
             console.log("callAPI:queryObject=", queryObject);
 
-            var url;
-            if( queryObject.method === undefined || queryObject.method === 'GET') {
-                url = api.url[queryObject.operation](params);
-            }
-            else{
-                var theUrl = api.url[queryObject.operation]();
-                url = theUrl.substring(0, theUrl.length - 1 );
-            }
 
             countRequest(params.trackCall === false ? undefined : true);
 
@@ -108,12 +105,24 @@ angular.module('cttvServices')
             var promise = deferred.promise;
 
             // Params for api.call are: url, data (for POST) and return format
-            var resp = api.call(url, (queryObject.method=="POST" ? params : undefined),  "json")
-                .then (done)
-                .catch(function (err) {
-                    console.log("GOT ERROR:", err);
-                    cttvAPI.defaultErrorHandler (err, params.trackCall);
-                });
+
+            liveConfig.then (function (config) {
+                var url;
+                if( queryObject.method === undefined || queryObject.method === 'GET') {
+                    url = api.url[queryObject.operation](params);
+                } else {
+                    var theUrl = api.url[queryObject.operation]();
+                    url = theUrl.substring(0, theUrl.length - 1 );
+                }
+                console.warn("URL : " + url);
+                api.call(url, (queryObject.method=="POST" ? params : undefined), (params.format || "json"))
+                    .then (done)
+                    .catch(function (err) {
+                        console.log("GOT ERROR:", err);
+                        cttvAPI.defaultErrorHandler (err, params.trackCall);
+                    });
+            });
+
 
             return promise;
 
