@@ -362,7 +362,7 @@ angular.module('cttvDirectives')
                     facets: false,
                     size: 1
                 };
-                if (scope.target.length) {
+                if (scope.target && scope.target.length) {
                     optsPreFlight.target = scope.target;
                 }
                 optsPreFlight = cttvAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
@@ -400,7 +400,7 @@ angular.module('cttvDirectives')
                                     "target.gene_info.name"],
                                 from: from
                             };
-                            if (scope.target.length) {
+                            if (scope.target && scope.target.length) {
                                 opts.target = scope.target;
                             }
                             opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
