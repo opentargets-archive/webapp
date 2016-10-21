@@ -59,14 +59,16 @@ angular.module('cttvDirectives')
 
                 $log.log("targets to retrive...");
                 $log.log(targets);
-                var opts = {
-                    "target": Object.keys(targets),
-                    // "direct": true,
-                    "facets": false,
-                    "size": 1000
-                    // fields?
+                var queryObject = {
+                    method: 'POST',
+                    params : {
+                        "target": Object.keys(targets),
+                        "facets": false,
+                        "size": 1000
+                        // fields?
+                    }
                 };
-                cttvAPIservice.getAssociations(opts, 'POST')
+                cttvAPIservice.getAssociations(queryObject)
                     .then (function (resp) {
                         $log.log("associations response...");
                         $log.log(resp);
@@ -253,9 +255,12 @@ angular.module('cttvDirectives')
                     targets.forEach(function (target) {
                         if (target) {
                             var p = cttvAPIservice.getSearch({
-                                q:target,
-                                size:1,
-                                filter:"target"
+                                method: 'GET',
+                                opts: {
+                                    q:target,
+                                    size:1,
+                                    filter:"target"
+                                }
                             });
                             // Associate target names with its search promise
                             // so we can associate them later to feedback the user

@@ -28,14 +28,15 @@
     "mkdirp": "0.5.1"
   },
   "scripts": {
-    "postinstall": "bower install --allow-root && ./node_modules/.bin/jspm install && gulp build-all",
+    "setup": "./node_modules/.bin/bower install --allow-root && ./node_modules/.bin/jspm install && ./node_modules/.bin/gulp build-all",
+    "full-install": "npm install && npm run setup",
     "start": "cd server && node server.js",
     "test": "gulp test",
     "test-single-run": "karma start tests/unit/karma.conf.js  --single-run"
   },
   "dependencies": {
-    "cttv.api": "0.0.9",
-    "cttv.diseaseGraph": "file:components/diseaseGraph",
+    "cttv.api": "0.0.10",
+    "cttv.diseaseGraph": "0.0.1",
     "cttv.flowerView": "0.0.0",
     "cttv.genome": "0.0.13",
     "cttv.spinner": "0.0.0",

@@ -123,8 +123,12 @@ angular.module('cttvDirectives')
                 };
 
                 opts = cttvAPIservice.addFacetsOptions(filters, opts);
+                var queryObject = {
+                    method: 'GET',
+                    params: opts
+                };
 
-                cttvAPIservice.getAssociations(opts)
+                cttvAPIservice.getAssociations(queryObject)
                     .then (function (resp) {
                         var dtData = parseServerResponse(resp.body.data);
                         var o = {
@@ -309,7 +313,11 @@ angular.module('cttvDirectives')
                     size: 1
                 };
                 optsPreFlight = cttvAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
-                cttvAPIservice.getAssociations(optsPreFlight)
+                var queryObject = {
+                    method: 'GET',
+                    params: optsPreFlight
+                };
+                cttvAPIservice.getAssociations(queryObject)
                     .then (function (resp) {
                         var total = resp.body.total;
 
@@ -332,7 +340,11 @@ angular.module('cttvDirectives')
                             };
                             opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
 
-                            return cttvAPIservice.getAssociations(opts)
+                            var queryObject = {
+                                method: 'GET',
+                                params: opts
+                            };
+                            return cttvAPIservice.getAssociations(queryObject)
                                 .then (function (resp) {
                                     var moreText = resp.body;
                                     if (columnsNumberOk(moreText, opts.fields.length)) {

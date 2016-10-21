@@ -1,6 +1,12 @@
 build:
+<<<<<<< HEAD
   ci:
     - echo 'CI is running.. wish i knew what to test'
+=======
+  cache: true
+  ci:
+    - echo 'some test should go here..'
+>>>>>>> master
   post_ci:
       - docker build -t="opentargets/webapp:$BRANCH.$BUILD_NUMBER" .
 
@@ -12,6 +18,7 @@ build:
       - docker tag opentargets/webapp:$BRANCH.$BUILD_NUMBER eu.gcr.io/open-targets/webapp:$BRANCH.$BUILD_NUMBER
       - docker push eu.gcr.io/open-targets/webapp:$BRANCH.$BUILD_NUMBER
 
+<<<<<<< HEAD
 integrations:
   # deploy:
   #   # Public Image (docker)
@@ -25,6 +32,8 @@ integrations:
   #
 
 
+=======
+>>>>>>> master
   hub:
     - integrationName: hub_docker
       type: docker
