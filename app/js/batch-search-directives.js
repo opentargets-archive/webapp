@@ -40,6 +40,7 @@ angular.module('cttvDirectives')
         },
         templateUrl: "partials/target-list-display.html",
         link: function (scope, el, attrs) {
+            scope.status = {}; // If the
             var table;
             scope.$watch('list', function (l) {
                 if (!l) {
@@ -289,6 +290,138 @@ angular.module('cttvDirectives')
                 };
                 reader.readAsText(file);
             };
+        }
+    };
+}])
+.directive ('targetListAssociationsFoamtree', ['$log', '$timeout', 'cttvAPIservice', function ($log, $timeout, cttvAPIservice) {
+    'use strict';
+    return {
+        restrict: 'E',
+        template: '<div id="foamtree" style="width: {{width}}px; height: {{height}}px"></div>',
+        scope: {
+            list: '=',
+            active: '='
+        },
+        link: function (scope, elem, attrs) {
+            scope.$watchGroup(['list', 'active'], function () {
+                var foamtree = {};
+
+                $log.log("active is " + scope.active);
+                if (!scope.list || !scope.active) {
+                    return;
+                }
+                $log.log('list is...');
+                $log.log(scope.list);
+
+                var container = document.createElement('div');
+                elem[0].appendChild(container);
+
+                var targetList = _.filter(_.map(scope.list.list, "result.id"));
+                $log.log("targetList passed to foamtree");
+                $log.log(targetList);
+
+                var queryObject = {
+                    method: 'POST',
+                    params: {
+                        target: targetList,
+                        outputstructure: "flat",
+                        size: 1000,
+                        facets: false
+                    }
+                };
+                cttvAPIservice.getAssociations(queryObject)
+                    .then (function (resp) {
+                        $log.log("flat tree for foamtree:");
+                        $log.log(resp);
+                    });
+
+                scope.width = angular.isDefined(scope.width) ? scope.width : 500; // set the default width
+                scope.height = angular.isDefined(scope.height) ? scope.height : 500; // set the default height
+
+                scope.clusterData =  {
+                    groups: [
+                        { id: "1", label: "Group 1", groups: [
+                            { id: "1.1", label: "Group 1.1" },
+                            { id: "1.2", label: "Group 1.2" }
+                        ]},
+                        { id: "2", label: "Group 2", groups: [
+                            { id: "2.1", label: "Group 2.1" },
+                            { id: "2.2", label: "Group 2.2" }
+                        ]},
+                        { id: "3", label: "Group 3", groups: [
+                            { id: "3.1", label: "Group 3.1" },
+                            { id: "3.2", label: "Group 3.2" }
+                        ]},
+                        { id: "4", label: "Group 4", groups: [
+                            { id: "4.1", label: "Group 4.1" },
+                            { id: "4.2", label: "Group 4.2" }
+                        ]},
+                        { id: "5", label: "Group 5", groups: [
+                            { id: "5.1", label: "Group 5.1" },
+                            { id: "5.2", label: "Group 5.2" }
+                        ]}
+                    ]
+                };
+
+                function drawFoamTree() {
+                    // need the timeout so the template can load and we have an id to use to display the foamtree
+                    $timeout( function() {
+                        foamtree = new CarrotSearchFoamTree({
+                            id: "foamtree",
+                            dataObject: scope.clusterData,
+                            // onGroupClick: scope.onCellSelect,
+                            rainbowStartColor: "hsla(0, 100%, 70%, 1)",
+                            rainbowEndColor:   "hsla(100, 100%, 70%, 1)",
+                            // groupMinDiameter: 0,
+                            // exposeDuration: 300,
+                            // groupLabelMinFontSize: 3,
+                            // parentFillOpacity: 0.5,
+                            // groupInsetWidth: 0,
+                            // groupSelectionOutlineWidth: 1,
+                            // groupBorderWidthScaling: 0.25,
+                            // rolloutDuration: 0,
+                            // pullbackDuration: 0,
+                            // groupBorderWidth : 0,
+                            // groupBorderRadius : 0,
+                            // relaxationInitializer : 'ordered',
+                            // onGroupDoubleClick: function(args) {
+                            //     scope.term = args.group.label;
+                            //     scope.breadcrumb = true;
+                            // }
+                        });
+                    }, 0);
+                }
+                drawFoamTree();
+            });
+        }
+    };
+}])
+.directive ('targetListAssociationsBubbles', ['$log', function ($log) {
+    'use strict';
+    return {
+        restrict: "E",
+        template: "",
+        scope: {
+            list: "="
+        },
+        link: function (scope, elem, attrs) {
+            scope.$watch('list', function (l) {
+                if (!l) {
+                    return;
+                }
+                var container = document.createElement("div");
+                elem[0].appendChild(container);
+
+                var targetList = _.filter(_.map(l.list, "result.id"));
+                $log.log("target list passed to tlab");
+                $log.log(targetList);
+
+                var targetListAssocBubbles = expansionView()
+                    .targets(targetList);
+                targetListAssocBubbles (container);
+
+            });
+
         }
     };
 }]);

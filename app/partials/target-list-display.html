@@ -4,7 +4,16 @@
     <!-- Datatable with the result -->
     <div>
         <uib-tabset active="active">
-            <uib-tab heading="Table">
+
+            <uib-tab heading="Therapeutic areas">
+                <h3>Therapeutic areas</h3>
+            </uib-tab>
+
+            <!-- <uib-tab index="1" heading="Table">
+                <target-list-associations-table list="list"></target-list-associations-table>
+            </uib-tab> -->
+
+            <uib-tab heading="Table Inlined">
                 <div class="table-panel">
                     <table class='table cttv-evidence-table' id="target-list-associated-diseases">
                         <thead>
@@ -23,7 +32,11 @@
             </uib-tab>
 
             <uib-tab heading="Bubbles">
+                <target-list-associations-bubbles list="list"></target-list-associations-bubbles>
+            </uib-tab>
 
+            <uib-tab heading="FoamTree" select="status.active=true">
+                <target-list-associations-foamtree list="list" active="status.active"></target-list-associations-foamtree>
             </uib-tab>
         </uib-tabset>
 

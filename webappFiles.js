@@ -20,6 +20,7 @@ var webappFiles = {
             'app/vendor/angular-swagger-ui/swagger-ui.min.js',
             'app/vendor/angular-swagger-ui/swagger-yaml-parser.min.js',
             'node_modules/js-yaml/dist/js-yaml.min.js',
+            'app/vendor/foamtree/carrotsearch.foamtree.js',
             'node_modules/marked/marked.min.js',
             'bower_components/FileSaver/FileSaver.min.js',
             'bower_components/moment/moment.js'
