@@ -38,6 +38,9 @@ angular.module('cttvControllers')
         total: "..."
     };
 
+    // Initialise possible targets and targetLists to filter the table
+    $scope.targets = [];
+    $scope.targetLists = [];
 
     $log.log("location is...");
     $log.log($location.search());
@@ -56,13 +59,21 @@ angular.module('cttvControllers')
         }
         $log.log(targets);
         // Passing them to the disease associations table directive
-        $scope.targets = targets;
-        $scope.targetList = list.id;
+        // $scope.targets = _.concat($scope.targets, targets);
+        // $scope.targetLists = _.concat($scope.targetLists, list.id);
+        // $log.log("targets after loading the " + list.id + " list");
+        // $log.log($scope.targets);
+        // $log.log("targetLists after loading the " + list.id + " list");
+        // $log.log($scope.targetLists);
+        // $scope.targets = targets;  // TODO: I think this is not needed, in render $scope.targets is set
+        // $scope.targetList = list.id; // TODO: I think this is not needed, in render $scope.targetList is set
     }
 
     // TODO: should be done through the cttvLocationState?
-    $scope.removeTargetList = function () {
+    $scope.removeTargetLists = function () {
         $location.search("target-list", null);
+        // TODO: Also remove the filter by target list feature
+        $scope.removeTargets();
         // $route.reload();
         // $window.location.reload();
     };
@@ -106,9 +117,7 @@ angular.module('cttvControllers')
         }
 
         // Do we have a target list?
-        // $log.log("location is...");
-        // $log.log($location.search());
-        // var targetList = $location.search()["target-list"];
+        // TODO: This should go into the facets service
         var targetList = new_state["target-list"];
         $log.log("target list is...");
         $log.log(targetList);
@@ -123,14 +132,21 @@ angular.module('cttvControllers')
             }
             $log.log(targets);
             // Passing them to the disease associations table directive
-            $scope.targets = targets;
-            $scope.targetList = list.id;
+            $scope.targets = _.concat($scope.targets, targets);
+            // $scope.targets = targets;
+            $scope.targetLists = _.concat($scope.targetLists, list.id);
+            // $scope.targetList = list.id;
+            $log.log("targets after loading the " + list.id + " list");
+            $log.log($scope.targets);
+            $log.log("targetLists after loading the " + list.id + " list");
+            $log.log($scope.targetLists);
+
             facetsPromise.then (function () {
                 return getFacets(new_state[facetsId]);
             });
         } else {
-            $scope.targets = undefined;
-            $scope.targetList = undefined;
+            $scope.targets = [];
+            $scope.targetList = [];
             facetsPromise.then (function () {
                 return getFacets(new_state[facetsId]);
             });
@@ -156,6 +172,7 @@ angular.module('cttvControllers')
     };
 
     initFilterByFile();
+
     /*
      * Get data to populate the table.
      *
@@ -179,8 +196,8 @@ angular.module('cttvControllers')
             size:1
         };
 
-        if ($scope.targetArray && $scope.targetArray.length) {
-            opts.target = $scope.targetArray;
+        if ($scope.targets && $scope.targets.length) {
+            opts.target = $scope.targets;
         }
 
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
@@ -218,6 +235,7 @@ angular.module('cttvControllers')
     //
 
     $scope.$on(cttvLocationState.STATECHANGED, function (evt, new_state, old_state) {
+        // $log.log("locationState statechanged!");
         render(new_state, old_state); // if there are no facets, no worries, the API service will handle undefined
     });
 
@@ -226,7 +244,6 @@ angular.module('cttvControllers')
     //
     // on PAGE LOAD
     //
-
     cttvUtils.clearErrors();
     $scope.filters = cttvLocationState.getState()[facetsId] || {};
     render(cttvLocationState.getState(), cttvLocationState.getOldState());
@@ -241,10 +258,12 @@ angular.module('cttvControllers')
 
     $scope.removeTargets = function(){
         var theElement = document.getElementById("myFileInput");
-
+        $log.log("target lists with the one to remove...");
+        $log.log($scope.targetLists);
+        $scope.targetLists.pop(); // We assume that the target list in this filter is the last one (the other one is populated first). Maybe we should be more explicit
+        $scope.targets = [];
         theElement.value = null;
         initFilterByFile();
-        //console.log("removeTargets:$scope.files=", $scope.files );
         getFacets($scope.filters);
     };
 
@@ -253,6 +272,7 @@ angular.module('cttvControllers')
     };
 
     $scope.validateFile = function (file) {
+        $scope.targetLists = _.concat($scope.TargetLists, file.name);
         $scope.fileName = file.name;
         var reader = new FileReader();
         reader.onloadend = function (evt) {
@@ -278,15 +298,11 @@ angular.module('cttvControllers')
         });
 
         promise.then(function (res) {
-            //$log.log("PROMISE");
+            $scope.targets = _.concat($scope.targets, $scope.targetIdArray);
             $scope.targetArray = $scope.targetIdArray;
             $scope.excludedTargetArray = $scope.targetNameIdDict.filter(function(e){return !e.id;});
             $scope.fuzzyTargetArray = $scope.targetNameIdDict.filter(function(e){return e.name.localeCompare(e.label) !== 0 && e.id.localeCompare(e.name) !== 0;});
 
-            //$log.log("123:targetNameIdDict", $scope.targetNameIdDict);
-            //$log.log("123:excludedTargetArray", $scope.excludedTargetArray);
-            //$log.log("123:fuzzyTargetArray", $scope.fuzzyTargetArray);
-            //$log.log("123:targetNameArray", $scope.targetNameArray);
             getFacets($scope.filters);
         });
 
