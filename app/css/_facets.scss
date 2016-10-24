@@ -46,6 +46,7 @@
 
     > span{
         cursor: pointer;
+        cursor: hand;
         margin-right:10px;
     }
 
@@ -62,7 +63,13 @@
 .cttv-facets-small-arrow{
     width: 12px;
     cursor: pointer;
+    cursor: hand;
     padding: 0px 4px;
+}
+
+.cttv-facets-child-label-no-checkbox{
+    width:auto;
+    padding-left: 20px
 }
 
 
@@ -114,6 +121,8 @@
     margin-top: 0px;
     margin-bottom: 0px;
     clear:both;
+    cursor:hand;
+    cursor:pointer;
 }
 
 .cttv-facet-checkbox-label{

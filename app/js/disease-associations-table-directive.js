@@ -311,8 +311,7 @@ angular.module('cttvDirectives')
     * Update function passes the current view (state) to the URL
     */
     function update(id, st) {
-        $log.log("update");
-        $log.log(st);
+        //$log.log("update:st =", st);
         cttvLocationState.setStateFor(id, st);
     }
 
@@ -371,7 +370,7 @@ angular.module('cttvDirectives')
 
             // Download the whole table
             scope.downloadTable = function () {
-                $log.log("DOWNLOAD:");
+
                 var size = 10000;
                 // First make a call to know how many rows there are:
                 var optsPreFlight = {
@@ -396,8 +395,7 @@ angular.module('cttvDirectives')
                         function columnsNumberOk(csv, n) {
                             var firstRow = csv.split("\n")[0];
                             var cols = firstRow.split(",");
-                            $log.log("DOWNLOAD:columnsNumberOk:cols =",cols);
-                            console.log("DOWNLOAD:columnsNumberOk:n =",n);
+
                             return cols.length === n;
                         }
 
@@ -423,9 +421,9 @@ angular.module('cttvDirectives')
                             if (scope.target && scope.target.length) {
                                 opts.target = scope.target;
                             }
-                            $log.log("DOWNLOAD:opts before addFacets:", opts);
+
                             opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
-                            $log.log("DOWNLOAD:opts after addFacets:", opts);
+
                             var queryObject = {
                                 method: 'POST',
                                 params: opts
@@ -434,7 +432,7 @@ angular.module('cttvDirectives')
                             return cttvAPIservice.getAssociations(queryObject)
                                 .then(function (resp) {
                                     var moreText = resp.body;
-                                    console.log("getAssociations:resp.body=", resp.body);
+
                                     if (columnsNumberOk(moreText, opts.fields.length)) {
 
                                         if (from > 0) {

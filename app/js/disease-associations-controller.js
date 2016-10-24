@@ -18,7 +18,7 @@ angular.module('cttvControllers')
 
     'use strict';
 
-    $log.log('diseaseAssociationsCtrl()');
+    //$log.log('diseaseAssociationsCtrl()');
 
     cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
 
