@@ -85,7 +85,7 @@ angular.module('cttvDirectives')
             title: cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]
         },
         // empty col for sorting by total score (sum)
-        {name: "", title: "total score", visible:false},
+        {name: "", title: "total score", visible:false, className:'never'},
         // empty col for the gene name
         {name: "", title: cttvDictionary.TARGET_NAME}
     ];
@@ -100,7 +100,8 @@ angular.module('cttvDirectives')
                 columnData = {
                     "title": "<div><span title='" + cols[i].title + "'>" + cols[i].title + "</span></div>",
                     "name": cols[i].name,
-                    "visible" : false
+                    "visible" : false,
+                    "className":"never"
                 }
             }
             a.push(columnData);
@@ -127,6 +128,10 @@ angular.module('cttvDirectives')
             ],
             "columns": a,
             "columnDefs": [
+                {
+                    "targets":[9],
+                    "className":"never"
+                },
                 {
                     "targets": 9,
                     "visible": false
@@ -420,7 +425,7 @@ angular.module('cttvDirectives')
                             }
                             $log.log("DOWNLOAD:opts before addFacets:", opts);
                             opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
-                            console.out("DOWNLOAD:opts after addFacets:", opts);
+                            $log.log("DOWNLOAD:opts after addFacets:", opts);
                             var queryObject = {
                                 method: 'POST',
                                 params: opts

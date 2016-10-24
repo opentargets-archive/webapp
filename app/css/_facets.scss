@@ -32,7 +32,7 @@
 }
 
 .cttv-facets-headers{
-
+    font-size: 16px;
 }
 
 .cttv-facets-controls {
@@ -57,6 +57,12 @@
     border-bottom:1px solid $clr-ui-border; // was #CCC
     margin-bottom:25px;
     padding-bottom:10px;
+}
+
+.cttv-facets-small-arrow{
+    width: 12px;
+    cursor: pointer;
+    padding: 0px 4px;
 }
 
 
