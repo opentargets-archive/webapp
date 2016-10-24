@@ -5,7 +5,7 @@ angular.module('cttvServices').
 
 
 
-    /**
+    /**º
      * The Config service.
      * This stores global config variables for the font end
      */

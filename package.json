@@ -36,11 +36,11 @@
   },
   "dependencies": {
     "cttv.api": "0.0.10",
-    "cttv.diseaseGraph": "0.0.1",
+    "cttv.diseaseGraph": "0.0.2",
     "cttv.flowerView": "0.0.0",
     "cttv.genome": "0.0.13",
     "cttv.spinner": "0.0.0",
-    "cttv.targetAssociationsBubbles": "0.0.8",
+    "cttv.targetAssociationsBubbles": "0.0.9",
     "cttv.targetAssociationsTree": "0.0.4",
     "cttv.targetGeneTree": "0.0.10",
     "js-yaml": "3.5.5",
