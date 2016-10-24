@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-.directive ('targetListDisplay', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
+.directive ('targetListDisplay', ['$log', 'cttvAPIservice', 'cttvUtils', '$q', 'cttvConfig', function ($log, cttvAPIservice, cttvUtils, $q, cttvConfig) {
     'use strict';
 
     function formatDiseaseDataToArray (diseases, listId) {
@@ -42,6 +42,7 @@ angular.module('cttvDirectives')
         link: function (scope, el, attrs) {
             scope.status = {}; // If the
             var table;
+
             scope.$watch('list', function (l) {
                 if (!l) {
                     return;
@@ -57,13 +58,11 @@ angular.module('cttvDirectives')
                     }
                 }
 
-                $log.log("targets to retrive...");
-                $log.log(targets);
                 var queryObject = {
                     method: 'POST',
                     params : {
                         "target": Object.keys(targets),
-                        "facets": false,
+                        "facets": true,
                         "size": 1000
                         // fields?
                     }
@@ -72,9 +71,11 @@ angular.module('cttvDirectives')
                     .then (function (resp) {
                         $log.log("associations response...");
                         $log.log(resp);
+                        diseasesByTA(resp, Object.keys(targets).length);
+                        pathways(Object.keys(targets));
+                        drugs(Object.keys(targets));
                         var data = resp.body.data;
                         var diseases = {};
-                        var therapeuticAreas = {};
                         for (var i=0; i<data.length; i++) {
                             var association = data[i];
                             var target = association.target.gene_info.symbol;
@@ -96,11 +97,11 @@ angular.module('cttvDirectives')
                             // Record the therapeutic areas
                             if (association.disease.efo_info.therapeutic_area.labels.length) {
                                 for (var j=0; j<association.disease.efo_info.therapeutic_area.labels.length; j++) {
-                                    therapeuticAreas[association.disease.efo_info.therapeutic_area.labels[j]] = true;
+                                    // therapeuticAreas[association.disease.efo_info.therapeutic_area.labels[j]] = true;
                                     diseases[disease].tas[association.disease.efo_info.therapeutic_area.labels[j]] = true;
                                 }
                             } else {
-                                therapeuticAreas[association.disease.efo_info.label] = true;
+                                // therapeuticAreas[association.disease.efo_info.label] = true;
                             }
                         }
 
@@ -129,6 +130,159 @@ angular.module('cttvDirectives')
 
                     });
             });
+
+            function diseasesByTA (resp, nTargets) {
+                var therapeuticAreas = resp.body.facets.therapeutic_area.buckets;
+                var tas = {};
+                for (var j=0; j<therapeuticAreas.length; j++) {
+                    tas[therapeuticAreas[j].label] = {
+                        label: therapeuticAreas[j].label,
+                        value: therapeuticAreas[j].unique_target_count.value,
+                        diseases: {},
+                        score: 100 * therapeuticAreas[j].unique_target_count.value / nTargets
+                    };
+                }
+                for (var i=0; i<resp.body.data.length; i++) {
+                    var association = resp.body.data[i];
+                    var target = association.target.gene_info.symbol;
+                    var diseaseLabel = association.disease.efo_info.label;
+                    var tasForThisDisease = association.disease.efo_info.therapeutic_area.labels;
+                    for (var k=0; k<tasForThisDisease.length; k++) {
+                        // this check shoudn't be needed, but the api treats different "other diseases" in the facets and in the data
+                        // "other diseases" vs "other"
+                        if (tas[tasForThisDisease[k]]) {
+                            if (!tas[tasForThisDisease[k]].diseases[diseaseLabel]) {
+                                tas[tasForThisDisease[k]].diseases[diseaseLabel] = {
+                                    label: diseaseLabel,
+                                    value: 0,
+                                    targets: []
+                                };
+                            }
+                            tas[tasForThisDisease[k]].diseases[diseaseLabel].value++;
+                            tas[tasForThisDisease[k]].diseases[diseaseLabel].score = 100 * tas[tasForThisDisease[k]].diseases[diseaseLabel].value / nTargets;
+                            tas[tasForThisDisease[k]].diseases[diseaseLabel].targets.push(target);
+                        }
+                    }
+                }
+                // sort tas by number of targets (value);
+                var tasArr = _.values(tas);
+                tasArr.sort(function (a, b) {
+                    return b.value - a.value;
+                });
+                for (var z=0; z<tasArr.length; z++) {
+                    var diseasesArr = _.values(tasArr[z].diseases);
+                    diseasesArr.sort (function (a, b) {
+                        return b.value - a.value;
+                    });
+                    tasArr[z].diseases = diseasesArr;
+                }
+                scope.therapeuticAreas = tasArr;
+            }
+
+            function drugs (targets) {
+                $log.log("targets...");
+                $log.log(targets);
+
+                var queryObject = {
+                    method: 'POST',
+                    trackCall: false,
+                    params: {
+                        target: targets,
+                        size: 1000,
+                        datasource: cttvConfig.evidence_sources.known_drug,
+                        fields: [
+                            "disease.efo_info",
+                            "drug",
+                            "evidence",
+                            "target",
+                            "access_level"
+                        ]
+                    }
+                };
+                cttvAPIservice.getFilterBy(queryObject)
+                    .then (function (resp) {
+                        $log.log("filter by response...");
+                        $log.log(resp);
+                        var drugs = {};
+                        for (var i=0; i<resp.body.data.length; i++) {
+                            var ev = resp.body.data[i];
+                            var target = ev.target.gene_info.symbol;
+                            var drug = ev.drug.molecule_name;
+                            if (!drugs[target]) {
+                                drugs[target] = {
+                                    target: target,
+                                    drugs: []
+                                };
+                            }
+                            drugs[target].drugs[drug] = drug;
+                        }
+                        var drugsArr = _.values(drugs);
+                        for (var j=0; j<drugsArr.length; j++) {
+                            drugsArr[j].drugs = _.values(drugsArr[j].drugs);
+                        }
+                        $log.log("drugs array");
+                        $log.log(drugsArr);
+                        scope.drugs = drugsArr;
+                    });
+            }
+
+            function pathways (targets) {
+                var targetPromises = [];
+                for (var i=0; i<targets.length; i++) {
+                    var target = targets[i];
+                    $log.log("getting info for target " + target);
+                    (function (target) {
+                        targetPromises.push(cttvAPIservice.getTarget({
+                            method: "GET",
+                            trackCall: false,
+                            params: {
+                                "target_id": target
+                            }
+                        }));
+                    })(target);
+                }
+
+                $q.all(targetPromises)
+                    .then (function (resps) {
+                        $log.log("target promises response...");
+                        $log.log(resps);
+                        var pathways = {};
+                        for (var i=0; i<resps.length; i++) {
+                            var t = resps[i].body;
+                            var targetSymbol = t.approved_symbol;
+                            $log.log("reactome pathways...");
+                            $log.log(t.reactome);
+                            for (var j=0; j<t.reactome.length; j++) {
+                                var p = t.reactome[j];
+                                for (var k=0; k<p.value["pathway types"].length; k++) {
+                                    var topLevelPathway = p.value["pathway types"][k]["pathway type name"];
+                                    if (!pathways[topLevelPathway]) {
+                                        pathways[topLevelPathway] = {
+                                            targets: {},
+                                            label: topLevelPathway
+                                        };
+                                    }
+                                    pathways[topLevelPathway].targets[targetSymbol] = {
+                                        symbol: targetSymbol
+                                    };
+                                }
+                            }
+                        }
+                        $log.log("pathways read...");
+                        $log.log(pathways);
+                        var pathwaysArr = _.values(pathways);
+                        for (var h=0; h<pathwaysArr.length; h++) {
+                            pathwaysArr[h].targets = _.values(pathwaysArr[h].targets);
+                            pathwaysArr[h].score = 100 * pathwaysArr[h].targets.length / targets.length;
+                        }
+                        pathwaysArr.sort(function (a, b) {
+                            return b.targets.length - a.targets.length;
+                        });
+                        $log.log("pathways array...");
+                        $log.log(pathwaysArr);
+                        scope.pathways = pathwaysArr;
+                    });
+            }
         }
     };
 }])
@@ -278,7 +432,6 @@ angular.module('cttvDirectives')
                                 // These promises have been already resolved previously, so execution is sequential now
                                 searchPromise
                                     .then (function (searchResult) {
-                                        $log.log("pushing " + query);
                                         listSearch.push({
                                             query: query,
                                             result: parseSearchResult(searchResult.body.data[0], query)
@@ -336,44 +489,119 @@ angular.module('cttvDirectives')
                 };
                 cttvAPIservice.getAssociations(queryObject)
                     .then (function (resp) {
-                        $log.log("flat tree for foamtree:");
-                        $log.log(resp);
+                        var dataObject = processData (resp.body);
+                        $log.log("tree processed to pass to foamtree...");
+                        $log.log(dataObject);
+                        drawFoamTree(dataObject);
                     });
+
+
+                function processData (body) {
+                    var diseaseCounts = uniqueAssociations(body.data);
+                    body.childrenProperty = "groups";
+                    var tree = cttvAPIservice.getSelf().utils.flat2tree(body);
+                    addCounts(tree, diseaseCounts);
+                    normaliseScore(tree);
+                    return tree;
+                }
+
+                // Given a tree structure and a disease this function add the counts to each node in the tree
+                function addCounts (tree, counts) {
+                    tree.association_score = counts[tree.__id] ? Object.keys(counts[tree.__id]).length : 0;
+                    tree.shared_targets_symbols = counts[tree.__id];
+                    if (!tree.groups) {
+                        return;
+                    }
+                    for (var i=0; i<tree.groups.length; i++) {
+                        addCounts(tree.groups[i], counts);
+                    }
+                }
+
+                function normaliseScore (tree) {
+                    var max = 0;
+                    for (var i=0; i<tree.groups.length; i++) {
+                        var ta = tree.groups[i];
+                        if (max < ta.association_score) {
+                            max = ta.association_score;
+                        }
+                    }
+                    fixScore(tree, max);
+                }
+
+                function fixScore (tree, max) {
+                    tree.shared_targets = tree.association_score;
+                    tree.association_score = tree.association_score/max;
+                    tree.weight = tree.association_score;
+                    if (!tree.groups) {
+                        return;
+                    }
+                    for (var i=0; i<tree.groups.length; i++) {
+                        fixScore(tree.groups[i], max);
+                    }
+                }
+
+                // Given a flat structure of associations possibly with duplicates
+                // based on a given field
+                // return an object with unique associations
+                // adding the number of times the given field has been seen
+                // These counts have to be propagated up in the hierarchy based on the "path" attribute of each node
+                function uniqueAssociations (arr) {
+                    var unique = {};
+                    for (var i=0; i<arr.length; i++) {
+                        var d = arr[i];
+
+                        // Propagate up
+                        var uniqueDiseasesInPath = getUniqueDiseasesFromPaths(d.disease.efo_info.path);
+                        for (var j=0; j<uniqueDiseasesInPath.length; j++) {
+                            addCount(unique, uniqueDiseasesInPath[j], {symbol: d.target.gene_info.symbol, id: d.target.id});
+                        }
+                    }
+                    // Remove the disease used as the entry point -- we want the expanded set of disease only
+                    return unique;
+                }
+
+                function getUniqueDiseasesFromPaths (paths) {
+                    // debugger;
+                    var u = {};
+                    for (var i=0; i<paths.length; i++) {
+                        var p = paths[i];
+                        for (var j=0; j<p.length; j++) {
+                            u[p[j]] = 1;
+                        }
+                    }
+                    var a = [];
+                    for (var id in u) {
+                        if (u.hasOwnProperty(id)) {
+                            a.push (id);
+                        }
+                    }
+                    return a;
+                }
+
+                function addCount (index, id, target) {
+                    if (!index[id]) {
+                        // index[id] = [];
+                        index[id] = {};
+                    }
+                    if (!index[id][target.symbol]) {
+                        index[id][target.symbol] = {
+                            count: 0,
+                            target: target
+                        };
+                    }
+                    index[id][target.symbol].count++;
+                    // index[id].push(target);
+                }
 
                 scope.width = angular.isDefined(scope.width) ? scope.width : 500; // set the default width
                 scope.height = angular.isDefined(scope.height) ? scope.height : 500; // set the default height
 
-                scope.clusterData =  {
-                    groups: [
-                        { id: "1", label: "Group 1", groups: [
-                            { id: "1.1", label: "Group 1.1" },
-                            { id: "1.2", label: "Group 1.2" }
-                        ]},
-                        { id: "2", label: "Group 2", groups: [
-                            { id: "2.1", label: "Group 2.1" },
-                            { id: "2.2", label: "Group 2.2" }
-                        ]},
-                        { id: "3", label: "Group 3", groups: [
-                            { id: "3.1", label: "Group 3.1" },
-                            { id: "3.2", label: "Group 3.2" }
-                        ]},
-                        { id: "4", label: "Group 4", groups: [
-                            { id: "4.1", label: "Group 4.1" },
-                            { id: "4.2", label: "Group 4.2" }
-                        ]},
-                        { id: "5", label: "Group 5", groups: [
-                            { id: "5.1", label: "Group 5.1" },
-                            { id: "5.2", label: "Group 5.2" }
-                        ]}
-                    ]
-                };
-
-                function drawFoamTree() {
+                function drawFoamTree(data) {
                     // need the timeout so the template can load and we have an id to use to display the foamtree
                     $timeout( function() {
                         foamtree = new CarrotSearchFoamTree({
                             id: "foamtree",
-                            dataObject: scope.clusterData,
+                            dataObject: data,
                             // onGroupClick: scope.onCellSelect,
                             rainbowStartColor: "hsla(0, 100%, 70%, 1)",
                             rainbowEndColor:   "hsla(100, 100%, 70%, 1)",
@@ -396,7 +624,6 @@ angular.module('cttvDirectives')
                         });
                     }, 0);
                 }
-                drawFoamTree();
             });
         }
     };

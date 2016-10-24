@@ -19,7 +19,6 @@ angular.module('plugins')
                 // Load all the pathways first:
                 function loadPathways () {
                     var pathways = scope.target.reactome;
-                    console.log(pathways);
                     var reactomePathways = [];
 
                     // Get the new identifiers
