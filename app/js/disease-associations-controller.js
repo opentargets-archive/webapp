@@ -18,7 +18,7 @@ angular.module('cttvControllers')
 
     'use strict';
 
-    $log.log('diseaseAssociationsCtrl()');
+    // $log.log('diseaseAssociationsCtrl()');
 
     cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
 
@@ -181,7 +181,6 @@ angular.module('cttvControllers')
 
         theElement.value = null;
         initFilterByFile();
-        //console.log("removeTargets:$scope.files=", $scope.files );
         getFacets($scope.filters);
     };
 
@@ -230,15 +229,15 @@ angular.module('cttvControllers')
     };
 
     var getExcludedOnes =  function(item){
-        //console.log("getExcludedOnes:item=", item);
+        //$log.log("getExcludedOnes:item=", item);
         var isIdEmpty = false;
-        //console.log("getExcludedOnes:item.id=", item.id);
+        //$log.log("getExcludedOnes:item.id=", item.id);
         if (item.id === ''){
-            //console.log("getExcludedOnes:item.id==''", true);
+            //$log.log("getExcludedOnes:item.id==''", true);
             isIdEmpty = true;
         }
         if (item.id === ""){
-            //console.log("getExcludedOnes:item.id==str", true);
+            //$log.log("getExcludedOnes:item.id==str", true);
             isIdEmpty = true;
         }
         return isIdEmpty;
@@ -275,10 +274,10 @@ angular.module('cttvControllers')
 
         return cttvAPIservice.getSearch(queryObject)
             .then (function (resp) {
-                //console.log("getSearch:resp.body.data",resp.body.data);
+                //$log.log("getSearch:resp.body.data",resp.body.data);
                 if (resp.body.data.length > 0) {
-                    //console.log("resp.body.data[0].id=", resp.body.data[0].id);
-                    //console.log("resp.body.data[0].data.approved_symbol=", resp.body.data[0].data.approved_symbol);
+                    //$log.log("resp.body.data[0].id=", resp.body.data[0].id);
+                    //$log.log("resp.body.data[0].data.approved_symbol=", resp.body.data[0].data.approved_symbol);
                     //TODO:Here compare label with targetNAme to see if it is a fuzzy search result
                     $scope.targetIdArray.push(resp.body.data[0].id);
                     $scope.targetNameIdDict.push({ id: resp.body.data[0].id, label:resp.body.data[0].data.approved_symbol, name:targetName});

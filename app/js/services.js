@@ -186,7 +186,7 @@ angular.module('cttvServices', []).
                 var search = url[1].split("&");
                 search = _.without(search, key+"="+value);
                 search.push(key+"="+value);
-                $log.log(search);
+                // $log.log(search);
                 url[1] = search.join("&");
                 $window.location.href = url.join("?");
             }
