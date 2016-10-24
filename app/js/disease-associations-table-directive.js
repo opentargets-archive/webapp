@@ -312,7 +312,7 @@ angular.module('cttvDirectives')
     */
     function update(id, st) {
         //$log.log("update:st =", st);
-        cttvLocationState.setStateFor(id, st);
+         cttvLocationState.setStateFor(id, st);
     }
 
 
@@ -491,12 +491,12 @@ angular.module('cttvDirectives')
                 var disease = attrs[1];
                 scope.target = attrs[2];
 
-                //console.log("diseaseAssociationsTableDirective:attrs:", attrs);
+                //$log.log("diseaseAssociationsTableDirective:attrs:", attrs);
                 // actually, is disease going to change?
                 // I mean, if it changes, the page changes, right?
                 // if the table exists, we just force an upload (will take the filters into account)
                 //if (dtable) {
-                //    console.log("diseaseAssociationsTableDirective:not calling setupTable:");
+                //    $log.log("diseaseAssociationsTableDirective:not calling setupTable:");
                 //    dtable.ajax.reload();
                 //} else {
                 //state = cttvLocationState.getState()[scope.stateId];

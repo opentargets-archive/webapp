@@ -155,9 +155,6 @@ angular.module('cttvDirectives', [])
                 size: '@'
             },
             link: function(scope, elem, attrs){
-                // scope.size = scope.size ? scope.size : '120px';
-                // console.log(scope.size);
-
                 scope.$watch(function(){return cttvAPIservice.activeRequests;}, function(newValue,oldValue){
                     scope.isloading = newValue>0;
                 });
@@ -370,7 +367,7 @@ angular.module('cttvDirectives', [])
                                     scope.colors = [];
                                     for(var i=1; i<=3; i++){
                                         scope.colors.push( {color:colorScale(i), label:labelScale(i)} );
-                                        $log.log(i +" : "+ labelScale(i));
+                                        // $log.log(i +" : "+ labelScale(i));
                                     }
 
                                     scope.legendData = [
@@ -820,7 +817,7 @@ angular.module('cttvDirectives', [])
                 var iframe = elem[0].children[0].children[0].contentWindow || elem[0].children[0].children[0];
 
                 iframe.onresize = function(evt){
-                    $log.log("onresize( "+evt.target.innerWidth+" x "+evt.target.innerHeight+" )");
+                    // $log.log("onresize( "+evt.target.innerWidth+" x "+evt.target.innerHeight+" )");
                     if(scope.onresize){
                         scope.onresize({w:evt.target.innerWidth, h:evt.target.innerHeight});
                     }
@@ -970,8 +967,6 @@ angular.module('cttvDirectives', [])
             },*/
 
             link: function (scope, elem, attrs) {
-                $log.log("value: "+scope.value);
-
                 scope.$watch('value', function(n, o){
                     //$log.log("value: "+scope.value+" / "+n);
                     if(n!=undefined && o==undefined){
@@ -1277,8 +1272,8 @@ angular.module('cttvDirectives', [])
                     elem.scope().$dismiss();
                 }
                 scope.ok = function(){
-                    $log.log("scope.ok()");
-                    $log.log(scope.onOk);
+                    // $log.log("scope.ok()");
+                    // $log.log(scope.onOk);
                     if(scope.onOk){
                         scope.onOk();
                     }
@@ -1312,7 +1307,7 @@ angular.module('cttvDirectives', [])
                 var windowEl = angular.element($window);
                 var handler = function() {
                     scope.scroll = windowEl[0].scrollY;
-                    $log.log(scope.scroll);
+                    // $log.log(scope.scroll);
                 };
                 windowEl.on('scroll', scope.$apply.bind(scope, handler));
                 handler();
@@ -1390,7 +1385,6 @@ angular.module('cttvDirectives', [])
                             scope: scope
                         });
                         scope.export = function () {
-                            $log.log("exporting...");
                             // track in piwik
                             if (scope.track) {
                                 $analytics.eventTrack('export', {"category":scope.track, "label": scope.currScale})

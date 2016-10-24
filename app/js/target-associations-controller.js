@@ -9,7 +9,7 @@ angular.module('cttvControllers')
 .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', '$timeout', 'cttvLocationState', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary, $timeout, cttvLocationState) {
     'use strict';
 
-	$log.log('targetAssociationsCtrl()');
+	// $log.log('targetAssociationsCtrl()');
 
 
 

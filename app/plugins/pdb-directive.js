@@ -118,7 +118,7 @@ angular.module('plugins')
                             // $http.get('/proxy/pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
                                 .then (function (data) {
                                     // Extract the title:
-                                    // console.log(data);
+                                    // $log.log(data);
                                     var lines = data.data.split("\n");
                                     for (var i=0; i<lines.length; i++) {
                                         if (lines[i].startsWith("TITLE")) {
@@ -156,7 +156,7 @@ angular.module('plugins')
                                           prevPicked = { atom : atom, color : color, node : picked.node() };
 
                                           if (currColor[0] === 1) {
-                                              console.log("setting atom to blue");
+                                            //   $log.log("setting atom to blue");
                                               setColorForAtom(picked.node(), atom, 'blue');
                                           } else {
                                               setColorForAtom(picked.node(), atom, 'red');
@@ -178,7 +178,7 @@ angular.module('plugins')
 
                                     // viewer.on('viewerReady', function() {
                                         // structure.atomSelect(function (a) {
-                                        //     console.log(a);
+                                        //     $log.log(a);
                                         // });
                                     // });
                                 });

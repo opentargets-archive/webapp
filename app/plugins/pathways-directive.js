@@ -19,7 +19,7 @@ angular.module('plugins')
                 // Load all the pathways first:
                 function loadPathways () {
                     var pathways = scope.target.reactome;
-                    console.log(pathways);
+                    // $log.log(pathways);
                     var reactomePathways = [];
 
                     // Get the new identifiers
@@ -84,7 +84,7 @@ angular.module('plugins')
                     }
                     if (Reactome) {
                         clearInterval(centinel);
-                        console.log(Reactome);
+                        // $log.log(Reactome);
 
                         var newDiv = document.createElement("div");
                         newDiv.id = "pathwayDiagramContainer";
