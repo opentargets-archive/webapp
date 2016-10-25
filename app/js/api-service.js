@@ -123,6 +123,7 @@ angular.module('cttvServices')
                     });
             });
 
+
             return promise;
 
 
@@ -160,7 +161,7 @@ angular.module('cttvServices')
          * It simply logs the error to the console. Can be used in then(succ, err) calls.
          */
         cttvAPI.defaultErrorHandler = function(error, trackCall){
-            $log.warn("CTTV API ERROR");
+            $log.warn("CTTV API ERROR:",error);
             countRequest(trackCall===false ? undefined : false);
             if (error.status === 403) {
                 $rootScope.showApiErrorMsg = true;
@@ -248,8 +249,8 @@ angular.module('cttvServices')
         *
         */
         cttvAPI.getAssociations = function(queryObject){
-            // $log.log("cttvAPI.getAssociations()");
             queryObject.operation = cttvAPI.API_ASSOCIATION_URL;
+            $log.log("cttvAPI.getAssociations():queryObject=",queryObject);
             return callAPI (queryObject);
         };
 

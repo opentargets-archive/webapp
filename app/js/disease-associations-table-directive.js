@@ -53,7 +53,7 @@ angular.module('cttvDirectives')
     var cols = [
         // empty col for the gene symbol
         {name: "", title: cttvDictionary.TARGET_SYMBOL},
-        {name: "", title: cttvDictionary.ENSEMBL_ID},
+        //{name: "", title: cttvDictionary.ENSEMBL_ID},
         {name: "", title: cttvDictionary.ASSOCIATION_SCORE},
         // here are the datatypes:
         {
@@ -85,10 +85,30 @@ angular.module('cttvDirectives')
             title: cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]
         },
         // empty col for sorting by total score (sum)
-        {name: "", title: "total score"},
+        {name: "", title: "total score", visible:false, className:'never'},
         // empty col for the gene name
         {name: "", title: cttvDictionary.TARGET_NAME}
     ];
+
+        var a = [];
+        for (var i = 0; i < cols.length; i++) {
+            var columnData = {
+                "title": "<div><span title='" + cols[i].title + "'>" + cols[i].title + "</span></div>",
+                "name": cols[i].name
+            }
+            if (i == 9){
+                columnData = {
+                    "title": "<div><span title='" + cols[i].title + "'>" + cols[i].title + "</span></div>",
+                    "name": cols[i].name,
+                    "visible" : false,
+                    "className":"never"
+                }
+            }
+            a.push(columnData);
+        }
+
+
+
 
 
     /*
@@ -106,6 +126,23 @@ angular.module('cttvDirectives')
                     action: download
                 }
             ],
+            "columns": a,
+            "columnDefs": [
+                {
+                    "targets":[9],
+                    "className":"never"
+                },
+                {
+                    "targets": 9,
+                    "visible": false
+                },
+                {
+                    "targets": [10],
+                    "orderable": false
+                },
+                {"orderSequence": ["desc", "asc"], "targets": [1, 2, 3, 4, 5, 6, 7, 8, 9]},
+                {"orderSequence": ["asc", "desc"], "targets": [0]}
+            ],
             "processing": false,
             "serverSide": true,
             "ajax": function (data, cbak, params) {
@@ -113,28 +150,28 @@ angular.module('cttvDirectives')
                 // Order options
                 // mappings:
                 // 0 => gene name alphabetically -- not supported in the api
-                // 1 => gene id alphabetically -- not supported in the api and the column is hidden
-                // 2 => overall
-                // 3 => genetic_association
-                // 4 => somatic_mutation
-                // 5 => known_drug
-                // 6 => affected_pathway
-                // 7 => rna_expression
-                // 8 => text_mining
-                // 9 => animal_model
-                // 10 => overall -- hidden column
-                // 11 => gene description -- not supported in the api
+
+                // 1 => overall
+                // 2 => genetic_association
+                // 3 => somatic_mutation
+                // 4 => known_drug
+                // 5 => affected_pathway
+                // 6 => rna_expression
+                // 7 => text_mining
+                // 8 => animal_model
+                // 9 => overall -- hidden column
+                // 10 => gene description -- not supported in the api
                 var mappings = {
                     0: "target.gene_info.symbol",
-                    2: "association_score.overall",
-                    3: "association_score.datatypes." + cttvConsts.datatypes.GENETIC_ASSOCIATION,
-                    4: "association_score.datatypes." + cttvConsts.datatypes.SOMATIC_MUTATION,
-                    5: "association_score.datatypes." + cttvConsts.datatypes.KNOWN_DRUG,
-                    6: "association_score.datatypes." + cttvConsts.datatypes.AFFECTED_PATHWAY,
-                    7: "association_score.datatypes." + cttvConsts.datatypes.RNA_EXPRESSION,
-                    8: "association_score.datatypes." + cttvConsts.datatypes.LITERATURE,
-                    9: "association_score.datatypes." + cttvConsts.datatypes.ANIMAL_MODEL,
-                    10: "association_score.overall"
+                    1: "association_score.overall",
+                    2: "association_score.datatypes." + cttvConsts.datatypes.GENETIC_ASSOCIATION,
+                    3: "association_score.datatypes." + cttvConsts.datatypes.SOMATIC_MUTATION,
+                    4: "association_score.datatypes." + cttvConsts.datatypes.KNOWN_DRUG,
+                    5: "association_score.datatypes." + cttvConsts.datatypes.AFFECTED_PATHWAY,
+                    6: "association_score.datatypes." + cttvConsts.datatypes.RNA_EXPRESSION,
+                    7: "association_score.datatypes." + cttvConsts.datatypes.LITERATURE,
+                    8: "association_score.datatypes." + cttvConsts.datatypes.ANIMAL_MODEL,
+                    9: "association_score.overall"
                 };
                 var order = [];
                 for (var i=0; i<data.order.length; i++) {
@@ -144,6 +181,7 @@ angular.module('cttvDirectives')
 
                 // TODO: put this back if we put the state back
                 //data.start = stt.p*data.length || data.start;   // NaN || data.start in case it's not defined
+                var searchValue = (data.search.value).toLowerCase();
                 var opts = {
                     disease: [disease],
                     outputstructure: "flat",
@@ -152,7 +190,7 @@ angular.module('cttvDirectives')
                     size: data.length,
                     from: data.start,
                     sort: order,
-                    search: data.search.value,
+                    search: searchValue,
                     draw: draw
                 };
 
@@ -180,30 +218,9 @@ angular.module('cttvDirectives')
                         cbak(o);
                     });
             },
-            "columns": (function () {
-                var a = [];
-                for (var i = 0; i < cols.length; i++) {
-                    a.push({
-                        "title": "<div><span title='" + cols[i].title + "'>" + cols[i].title + "</span></div>",
-                        "name": cols[i].name
-                    });
-                }
-                return a;
-            })(),
-            "columnDefs": [
-                {
-                    "targets": [1, 10],
-                    "visible": false
-                },
-                {
-                    "targets": [1, 11],
-                    "orderable": false
-                },
-                {"orderSequence": ["desc", "asc"], "targets": [2, 3, 4, 5, 6, 7, 8, 9, 10]},
-                {"orderSequence": ["asc", "desc"], "targets": [0]}
-            ],
+
             // "order" : [[2, "desc"], [10, "desc"]],
-            "order": [2, "desc"],   // stt.o || [2, "desc"],
+            "order": [1, "desc"],   // stt.o || [2, "desc"],
             "orderMulti": false,
             "autoWidth": false,
             "ordering": true,
@@ -248,7 +265,7 @@ angular.module('cttvDirectives')
             var geneDiseaseLoc = "/evidence/" + data[i].target.id + "/" + data[i].disease.id;
             row.push("<a href='" + geneDiseaseLoc + "' title='" + data[i].target.gene_info.symbol + "'>" + data[i].target.gene_info.symbol + "</a>");
             // Ensembl ID
-            row.push(data[i].target.id);
+            //row.push(data[i].target.id);
             // The association score
             row.push(getColorStyleString(data[i].association_score.overall, geneDiseaseLoc));
             // Genetic association
@@ -294,9 +311,8 @@ angular.module('cttvDirectives')
     * Update function passes the current view (state) to the URL
     */
     function update(id, st) {
-        // $log.log("update");
-        // $log.log(st);
-        cttvLocationState.setStateFor(id, st);
+        //$log.log("update:st =", st);
+         cttvLocationState.setStateFor(id, st);
     }
 
 
@@ -354,6 +370,7 @@ angular.module('cttvDirectives')
 
             // Download the whole table
             scope.downloadTable = function () {
+
                 var size = 10000;
                 // First make a call to know how many rows there are:
                 var optsPreFlight = {
@@ -378,6 +395,7 @@ angular.module('cttvDirectives')
                         function columnsNumberOk(csv, n) {
                             var firstRow = csv.split("\n")[0];
                             var cols = firstRow.split(",");
+
                             return cols.length === n;
                         }
 
@@ -403,7 +421,9 @@ angular.module('cttvDirectives')
                             if (scope.target && scope.target.length) {
                                 opts.target = scope.target;
                             }
+
                             opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
+
                             var queryObject = {
                                 method: 'POST',
                                 params: opts
@@ -412,7 +432,9 @@ angular.module('cttvDirectives')
                             return cttvAPIservice.getAssociations(queryObject)
                                 .then(function (resp) {
                                     var moreText = resp.body;
+
                                     if (columnsNumberOk(moreText, opts.fields.length)) {
+
                                         if (from > 0) {
                                             // Not in the first page, so remove the header row
                                             moreText = moreText.split("\n").slice(1).join("\n");
