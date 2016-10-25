@@ -142,8 +142,6 @@
      * Matrix table
      */
 
-
-
     table.matrix-table {
         border-collapse: collapse;
         width: 100%;
@@ -368,26 +366,10 @@
 
 
 
+
     /*
      * HPA heatmap
      */
-
-
-
-    .hpa-matrix-table {
-
-        tbody > tr > td:last-child {
-            padding-left: 0px;
-        }
-
-        thead > tr > th:last-child {
-            padding: 0px;
-            background-position: center bottom 5px ;
-            width: 5% ;
-
-            display: none ;
-        }
-    }
 
     /* Fix for the new DataTables styling */
     cttv-hpa-tissue-expression table.matrix-table thead > tr > th:last-child,
@@ -415,4 +397,9 @@
         overflow-x: auto;
     }
 
+}
+
+
+#tissuesSummaryTargetList tr th {
+    width: 25px !important;
 }
