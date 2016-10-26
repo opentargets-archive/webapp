@@ -198,7 +198,7 @@ angular.module('cttvControllers')
         reader.onloadend = function (evt) {
             //do something with file content here
             var myFileContent = evt.target.result;
-            $scope.targetNameArray = myFileContent.replace(/(\r\n|\n|\r)/gm, '\n').split('\n');
+            $scope.targetNameArray = myFileContent.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
             $scope.targetNameArray = $scope.targetNameArray.filter(function(e){ return e.trim();}); //get rid of empty strings
 
             getTargetIds();
@@ -221,7 +221,7 @@ angular.module('cttvControllers')
             //$log.log("PROMISE");
             $scope.targetArray = $scope.targetIdArray;
             $scope.excludedTargetArray = $scope.targetNameIdDict.filter(function(e){return !e.id;});
-            $scope.fuzzyTargetArray = $scope.targetNameIdDict.filter(function(e){return e.name.localeCompare(e.label) !== 0 && e.id.localeCompare(e.name) !== 0;});
+            $scope.fuzzyTargetArray = $scope.targetNameIdDict.filter(function(e){return e.name.toLowerCase().localeCompare(e.label.toLowerCase()) !== 0 && e.id.toLowerCase().localeCompare(e.name.toLowerCase()) !== 0;});
             $scope.targetIdArrayWithoutFuzzies = $scope.targetNameIdDict.map(function (e) {
                  if (e.id && (e.name.localeCompare(e.label) == 0 || e.id.localeCompare(e.name) == 0)){ //has label and not fuzzy or has name and id and they are the same (for case when name is ENS code already)
                      return e.id;
@@ -255,15 +255,8 @@ angular.module('cttvControllers')
 
 
     var getTargetId = function (targetName) {
-        if (targetName.startsWith("ENSG")){
-            $scope.targetIdArray.push(targetName);
-            $scope.targetNameIdDict.push({
-                id:targetName,
-                label:targetName,
-                name:targetName
-            });
 
-        } else if (typeof targetName != "string") {
+        if (typeof targetName != "string") {
             $scope.targetIdArray.push('');
             $scope.targetNameIdDict.push ({
                 id:'' ,
