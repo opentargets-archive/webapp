@@ -1,0 +1,19 @@
+<div class="section">
+    <h3>Diseases associated with {{targets.length}} targets</h3>
+
+    <uib-tabset active="active">
+
+        <uib-tab heading="Therapeutic areas">
+            <multiple-targets-tas associations="associations" ntargets="targets.length"></multiple-targets-tas>
+        </uib-tab>
+
+        <uib-tab heading="Table">
+            <multiple-targets-table associations="associations" ntargets="targets.length"></multiple-targets-table>
+        </uib-tab>
+
+        <uib-tab heading="Bubbles">
+            <multiple-targets-bubbles targets="targets"></multiple-targets-bubbles>
+        </uib-tab>
+
+    </uib-tabset>
+</div>

@@ -2,13 +2,7 @@
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
     <div class="container">
-
-        <!-- <batch-search> -->
-            <target-list-upload list="list"></target-list-upload>
-            <div ng-show="list">
-                <target-list-mapping list="list"></target-list-mapping>
-                <target-list-display list="list"></target-list-display>
-            </div>
-        <!-- </batch-search> -->
+        <target-list-upload list="list"></target-list-upload>
+        <target-list-mapping ng-show="list" list="list"></target-list-mapping>
     </div>
 </div>

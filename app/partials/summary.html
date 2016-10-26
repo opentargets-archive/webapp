@@ -1,0 +1,35 @@
+<div class="partial-page">
+    <cttv-page-progress-spinner></cttv-page-progress-spinner>
+
+    <div class="container">
+        <h2>Summary page</h2>
+
+        <div ng-show="targets">
+            We have several targets: {{targets}}
+
+            <!-- Associations section -->
+            <multiple-targets-associations-summary targets="targets"></multiple-targets-associations-summary>
+
+            <!-- Pathways section -->
+            <multiple-targets-pathways-summary targets="targets"></multiple-targets-pathways-summary>
+
+            <!-- Drugs section -->
+            <multiple-targets-drugs-summary targets="targets"></multiple-targets-drugs-summary>
+
+            <!-- Tissue expression section -->
+            <multiple-targets-tissues-summary targets="targets"></multiple-targets-tissue-summary>
+        </div>
+
+        <div ng-show="target">
+            We only have 1 target: {{target}}
+        </div>
+
+        <div ng-show="diseases">
+            We have several diseases
+        </div>
+
+        <div ng-show="disease">
+            We have only 1 disease: {{disease}}
+        </div>
+    </div>
+</div>

@@ -1,465 +1,5 @@
 angular.module('cttvDirectives')
 
-.directive ('targetListDisplay', ['$log', 'cttvAPIservice', 'cttvUtils', '$http', '$q', 'cttvConfig', function ($log, cttvAPIservice, cttvUtils, $http, $q, cttvConfig) {
-    'use strict';
-
-    function formatDiseaseDataToArray (diseases, listId) {
-        var data = [];
-        var diseaseArray = _.values(diseases); // Object.values is not supported in IE
-        diseaseArray.sort(function (a, b) {
-            return a.score - b.score;
-        });
-        for (var i=0; i<diseaseArray.length; i++) {
-            var row = [];
-            var d = diseaseArray[i];
-            // 0 - Disease
-            var cell = "<a href='/disease/" + d.id + "/associations?target-list=" + listId + "'>" + d.disease + "</a>";
-            row.push(cell);
-
-            // 1 - Targets associated
-            row.push(d.count);
-
-            // 2 - Score (sum)
-            row.push(d.score);
-
-            // 3 - Therapeutic areas
-            var tas = Object.keys(d.tas).join("; ");
-            row.push(tas); // therapeutic areas
-
-            // Row complete
-            data.push(row);
-        }
-
-        return data;
-    }
-
-    return {
-        restrict: 'E',
-        scope: {
-            list: '='
-        },
-        templateUrl: "partials/target-list-display.html",
-        link: function (scope, el, attrs) {
-            scope.status = {}; // If the
-            var table;
-
-            scope.$watch('list', function (l) {
-                if (!l) {
-                    return;
-                }
-
-                // Make a rest api call to get all the associations for the list of targets
-                var targets = {};
-                var thisList = l.list;
-                for (var i=0; i<thisList.length; i++) {
-                    var thisSearch = thisList[i];
-                    if (thisSearch.result.id) {
-                        targets[thisSearch.result.id] = thisSearch.result;
-                    }
-                }
-
-                var queryObject = {
-                    method: 'POST',
-                    params : {
-                        "target": Object.keys(targets),
-                        "facets": true,
-                        "size": 1000
-                        // fields?
-                    }
-                };
-                cttvAPIservice.getAssociations(queryObject)
-                    .then (function (resp) {
-                        diseasesByTA(resp, Object.keys(targets).length);
-                        pathways(Object.keys(targets));
-                        drugs(Object.keys(targets));
-                        tissues(_.values(targets));
-                        var data = resp.body.data;
-                        var diseases = {};
-                        for (var i=0; i<data.length; i++) {
-                            var association = data[i];
-                            var target = association.target.gene_info.symbol;
-                            var disease = association.disease.efo_info.label;
-                            var efo = association.disease.id;
-                            if (!diseases[disease]) {
-                                diseases[disease] = {
-                                    "disease": disease,
-                                    "id": efo,
-                                    "tas": {}, // therapeutic areas
-                                    "count": 0, // just counts
-                                    "score": 0,  // sum of scores
-                                    "targets": []
-                                };
-                            }
-                            diseases[disease].count++;
-                            diseases[disease].score += association.association_score.overall;
-                            diseases[disease].targets.push(target);
-                            // Record the therapeutic areas
-                            if (association.disease.efo_info.therapeutic_area.labels.length) {
-                                for (var j=0; j<association.disease.efo_info.therapeutic_area.labels.length; j++) {
-                                    // therapeuticAreas[association.disease.efo_info.therapeutic_area.labels[j]] = true;
-                                    diseases[disease].tas[association.disease.efo_info.therapeutic_area.labels[j]] = true;
-                                }
-                            } else {
-                                // therapeuticAreas[association.disease.efo_info.label] = true;
-                            }
-                        }
-
-                        // $log.log("therapeutic areas...");
-                        // $log.log(therapeuticAreas);
-                        //
-                        // $log.log("diseases...");
-                        // $log.log(diseases);
-
-                        // Destroy any previous table
-                        if (table) {
-                            table.destroy();
-                        }
-
-                        // Create a table
-                        // format the data
-                        table = $('#target-list-associated-diseases').DataTable( cttvUtils.setTableToolsParams({
-                            "data": formatDiseaseDataToArray(diseases, l.id),
-                            "ordering" : true,
-                            "order": [[2, 'desc']],
-                            "autoWidth": false,
-                            "paging" : true,
-                            "columnDefs" : []
-
-                        }, l.id+"-associated_diseases") );
-
-                    });
-            });
-
-            // Tissues expression
-            var tissuesOrdered = [
-                "Adipose",
-                "Adrenal Gland",
-                "Bladder",
-                "Brain",
-                "Breast",
-                "Cells",
-                "Cervix",
-                "Colon",
-                "Esophagus",
-                "Fallopian Tube",
-                "Heart",
-                "Kidney",
-                "Liver",
-                "Lung",
-                "Minor Salivary Gland",
-                "Muscle",
-                "Nerve",
-                "Ovary",
-                "Pancreas",
-                "Pituitary",
-                "Prostate",
-                "Skin",
-                "Small Intestine",
-                "Spleen",
-                "Stomach",
-                "Testis",
-                "Thyroid",
-                "Uterus",
-                "Vagina",
-                "Whole Blood"
-            ];
-
-            var tissuesTableCols = [
-                {name:"", title:""}, // first one empty
-                {name:"", title:"Target"}
-            ];
-
-            for (var z=0; z<tissuesOrdered.length; z++) {
-                tissuesTableCols.push({
-                    name: tissuesOrdered[z],
-                    title: tissuesOrdered[z]
-                });
-            }
-            tissuesTableCols.push({name:"",title:""}); // last one empty
-
-            var colorScale = cttvUtils.colorScales.BLUE_0_1;
-            var getColorStyleString = function (value) {
-                var str = "";
-                if (value <= 0) {
-                    str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
-                } else {
-                    var col = colorScale(value);
-                    var val = (value === 0) ? "0" : cttvUtils.floatPrettyPrint(value);
-                    str = "<span style='color: " + col + "; background: " + col + ";' title='Score: " + val + "'>" + val + "</span>";
-                }
-
-                return str;
-            };
-
-            //setup the table
-            var setupTissuesTable = function (table, data, filename) {
-                $(table).DataTable({
-                    "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
-                    "data": data,
-                    "columns": (function(){
-                        var a=[];
-                        for(var i=0; i<tissuesTableCols.length; i++){
-                            a.push({ "title": "<div><span title='"+tissuesTableCols[i].title+"'>"+tissuesTableCols[i].title+"</span></div>", "name":tissuesTableCols[i].name });
-                        }
-                        return a;
-                    })(),
-                    "order": [],
-                    "orderMulti": true,
-                    "autoWidth": false,
-                    "columnDefs" : [
-                        {
-                            "targets" : [0,32],
-                            "orderable": false
-                        },
-                    ],
-                    "ordering": true,
-                    "lengthMenu": [[20, 100, 500], [20, 100, 500]],
-                    "pageLength": 20,
-                    "language": {
-                        // "lengthMenu": "Display _MENU_ records per page",
-                        // "zeroRecords": "Nothing found - sorry",
-                        "info": "Showing _START_ to _END_ of _TOTAL_ shared targets",
-                        // "infoEmpty": "No records available",
-                        // "infoFiltered": "(filtered from _MAX_ total records)"
-                    }
-
-                }, filename);
-            };
-
-
-            function parseTissuesData (tissuesData) {
-                // var txt = tissuesPerTarget(tissues);
-                $log.log("tissuesPerTarget");
-                $log.log(tissuesData);
-                var newData = [];
-                for (var target in tissuesData) {
-                    // var row = [];
-                    var row = [""]; // First one empty
-                    // Target
-                    row.push(target);
-                    for (var i=0; i<tissuesOrdered.length; i++) {
-                        var tissue = tissuesOrdered[i];
-                        // Each Tissue
-                        // row.push(tissuesData[target][tissue].maxMedian);
-                        row.push(getColorStyleString(tissuesData[target][tissue].maxMedian));
-                    }
-                    row.push(""); // last one empty
-                    newData.push(row);
-                }
-                $log.log("row data");
-                $log.log(newData);
-                return newData;
-            }
-
-            function tissues (targets) {
-                $log.log("targets for tissues...");
-                $log.log(targets);
-                var gtexPromises = [];
-                var baseGtexUrlPrefix = "/proxy/gtexportal.org/api/v6p/expression/";
-                var baseGtexUrlSufix = "?boxplot=true";
-                var mapUrl = {};
-                for (var i=0; i<targets.length; i++) {
-                    var url = baseGtexUrlPrefix + targets[i].approved_symbol + baseGtexUrlSufix;
-                    $log.warn(url);
-                    mapUrl[url] = targets[i];
-                    gtexPromises.push($http.get(url));
-                }
-                $q.all(gtexPromises)
-                    .then (function (resps) {
-                        $log.log("gtex responses...");
-                        $log.log(resps);
-                        var tissuesData = {};
-                        var maxVal = 0;
-                        for (var i=0; i<resps.length; i++) {
-                            var tissues = {};
-                            var target = mapUrl[resps[i].config.url];
-                            for (var fullTissue in resps[i].data.generpkm) {
-                                var d = resps[i].data.generpkm[fullTissue];
-                                var median = d.median;
-                                var tissue = fullTissue.split(" - ")[0];
-                                if (!tissues[tissue]) {
-                                    tissues[tissue] = {
-                                        target: target,
-                                        tissue: tissue,
-                                        maxMedian: 0
-                                    };
-                                }
-                                if (median > tissues[tissue].maxMedian) {
-                                    tissues[tissue].maxMedian = median;
-                                }
-                                if (median > maxVal) {
-                                    maxVal = median;
-                                }
-                            }
-                            $log.log("tissues object...");
-                            $log.log(tissues);
-                            // var tissuesData = parseTissuesData(_.values(tissues));
-                            tissuesData[target.approved_symbol] = tissues;
-                        }
-                        colorScale.domain([0, maxVal]);
-                        $log.log("tissues data for table...");
-                        $log.log(tissuesData);
-                        var tissueDataRows = parseTissuesData(tissuesData);
-                        $log.log("tissue data rows");
-                        $log.log(tissueDataRows);
-                        var table = document.getElementById("tissuesSummaryTargetList");
-                        table.innerHTML = "";
-                        setupTissuesTable(table, tissueDataRows, "gtex-data-gene-list.txt");
-                    });
-            }
-
-            function diseasesByTA (resp, nTargets) {
-                var therapeuticAreas = resp.body.facets.therapeutic_area.buckets;
-                var tas = {};
-                for (var j=0; j<therapeuticAreas.length; j++) {
-                    tas[therapeuticAreas[j].label] = {
-                        label: therapeuticAreas[j].label,
-                        value: therapeuticAreas[j].unique_target_count.value,
-                        diseases: {},
-                        score: 100 * therapeuticAreas[j].unique_target_count.value / nTargets
-                    };
-                }
-                for (var i=0; i<resp.body.data.length; i++) {
-                    var association = resp.body.data[i];
-                    var target = association.target.gene_info.symbol;
-                    var diseaseLabel = association.disease.efo_info.label;
-                    var tasForThisDisease = association.disease.efo_info.therapeutic_area.labels;
-                    for (var k=0; k<tasForThisDisease.length; k++) {
-                        // this check shoudn't be needed, but the api treats different "other diseases" in the facets and in the data
-                        // "other diseases" vs "other"
-                        if (tas[tasForThisDisease[k]]) {
-                            if (!tas[tasForThisDisease[k]].diseases[diseaseLabel]) {
-                                tas[tasForThisDisease[k]].diseases[diseaseLabel] = {
-                                    label: diseaseLabel,
-                                    value: 0,
-                                    targets: []
-                                };
-                            }
-                            tas[tasForThisDisease[k]].diseases[diseaseLabel].value++;
-                            tas[tasForThisDisease[k]].diseases[diseaseLabel].score = 100 * tas[tasForThisDisease[k]].diseases[diseaseLabel].value / nTargets;
-                            tas[tasForThisDisease[k]].diseases[diseaseLabel].targets.push(target);
-                        }
-                    }
-                }
-                // sort tas by number of targets (value);
-                var tasArr = _.values(tas);
-                tasArr.sort(function (a, b) {
-                    return b.value - a.value;
-                });
-                for (var z=0; z<tasArr.length; z++) {
-                    var diseasesArr = _.values(tasArr[z].diseases);
-                    diseasesArr.sort (function (a, b) {
-                        return b.value - a.value;
-                    });
-                    tasArr[z].diseases = diseasesArr;
-                }
-                scope.therapeuticAreas = tasArr;
-            }
-
-            function drugs (targets) {
-                var queryObject = {
-                    method: 'POST',
-                    trackCall: false,
-                    params: {
-                        target: targets,
-                        size: 1000,
-                        datasource: cttvConfig.evidence_sources.known_drug,
-                        fields: [
-                            "disease.efo_info",
-                            "drug",
-                            "evidence",
-                            "target",
-                            "access_level"
-                        ]
-                    }
-                };
-                cttvAPIservice.getFilterBy(queryObject)
-                    .then (function (resp) {
-                        $log.log("filter by response...");
-                        $log.log(resp);
-                        var drugs = {};
-                        for (var i=0; i<resp.body.data.length; i++) {
-                            var ev = resp.body.data[i];
-                            var target = ev.target.gene_info.symbol;
-                            var drug = ev.drug.molecule_name;
-                            if (!drugs[target]) {
-                                drugs[target] = {
-                                    target: target,
-                                    drugs: []
-                                };
-                            }
-                            drugs[target].drugs[drug] = drug;
-                        }
-                        var drugsArr = _.values(drugs);
-                        for (var j=0; j<drugsArr.length; j++) {
-                            drugsArr[j].drugs = _.values(drugsArr[j].drugs);
-                        }
-                        $log.log("drugs array");
-                        $log.log(drugsArr);
-                        scope.drugs = drugsArr;
-                    });
-            }
-
-            function pathways (targets) {
-                var targetPromises = [];
-                for (var i=0; i<targets.length; i++) {
-                    var target = targets[i];
-                    $log.log("getting info for target " + target);
-                    (function (target) {
-                        targetPromises.push(cttvAPIservice.getTarget({
-                            method: "GET",
-                            trackCall: false,
-                            params: {
-                                "target_id": target
-                            }
-                        }));
-                    })(target);
-                }
-
-                $q.all(targetPromises)
-                    .then (function (resps) {
-                        $log.log("target promises response...");
-                        $log.log(resps);
-                        var pathways = {};
-                        for (var i=0; i<resps.length; i++) {
-                            var t = resps[i].body;
-                            var targetSymbol = t.approved_symbol;
-                            $log.log("reactome pathways...");
-                            $log.log(t.reactome);
-                            for (var j=0; j<t.reactome.length; j++) {
-                                var p = t.reactome[j];
-                                for (var k=0; k<p.value["pathway types"].length; k++) {
-                                    var topLevelPathway = p.value["pathway types"][k]["pathway type name"];
-                                    if (!pathways[topLevelPathway]) {
-                                        pathways[topLevelPathway] = {
-                                            targets: {},
-                                            label: topLevelPathway
-                                        };
-                                    }
-                                    pathways[topLevelPathway].targets[targetSymbol] = {
-                                        symbol: targetSymbol
-                                    };
-                                }
-                            }
-                        }
-                        $log.log("pathways read...");
-                        $log.log(pathways);
-                        var pathwaysArr = _.values(pathways);
-                        for (var h=0; h<pathwaysArr.length; h++) {
-                            pathwaysArr[h].targets = _.values(pathwaysArr[h].targets);
-                            pathwaysArr[h].score = 100 * pathwaysArr[h].targets.length / targets.length;
-                        }
-                        pathwaysArr.sort(function (a, b) {
-                            return b.targets.length - a.targets.length;
-                        });
-                        $log.log("pathways array...");
-                        $log.log(pathwaysArr);
-                        scope.pathways = pathwaysArr;
-                    });
-            }
-        }
-    };
-}])
 
 .directive ('targetListMapping', ['$log', '$sce', 'cttvLoadedLists', function ($log, $sce, cttvLoadedLists) {
     'use strict';
@@ -475,13 +15,13 @@ angular.module('cttvDirectives')
                 if (!l) {
                     return;
                 }
-                $log.log("NEW LIST AVAILABLE!");
-                $log.log(l);
 
                 var thisList = l.list;
                 scope.notFound = [];
                 scope.exact = [];
                 scope.fuzzy = [];
+
+                var targetIds = [];
 
                 for (var i=0; i<thisList.length; i++) {
                     var thisSearch = thisList[i];
@@ -491,12 +31,14 @@ angular.module('cttvDirectives')
                                 query: thisSearch.query,
                                 result: thisSearch.result.approved_symbol
                             });
+                            targetIds.push(thisSearch.result.id);
                             // scope.exact++;
                         } else {
                             scope.fuzzy.push({
                                 query: thisSearch.query,
                                 result: thisSearch.result.approved_symbol
                             });
+                            targetIds.push(thisSearch.result.id);
                             // scope.fuzzy++;
                         }
 
@@ -507,6 +49,11 @@ angular.module('cttvDirectives')
                         });
                         // scope.notFound++;
                     }
+                }
+
+                if (targetIds.length) {
+                    scope.summaryLink = "/summary?" + (targetIds.map(function (t) {return "target=" + t;}).join("&"));
+                    $log.log(scope.summaryLink);
                 }
             });
         }
@@ -625,6 +172,7 @@ angular.module('cttvDirectives')
         }
     };
 }])
+
 .directive ('targetListAssociationsFoamtree', ['$log', '$timeout', 'cttvAPIservice', function ($log, $timeout, cttvAPIservice) {
     'use strict';
     return {
@@ -799,35 +347,6 @@ angular.module('cttvDirectives')
                     }, 0);
                 }
             });
-        }
-    };
-}])
-.directive ('targetListAssociationsBubbles', ['$log', function ($log) {
-    'use strict';
-    return {
-        restrict: "E",
-        template: "",
-        scope: {
-            list: "="
-        },
-        link: function (scope, elem, attrs) {
-            scope.$watch('list', function (l) {
-                if (!l) {
-                    return;
-                }
-                var container = document.createElement("div");
-                elem[0].appendChild(container);
-
-                var targetList = _.filter(_.map(l.list, "result.id"));
-                $log.log("target list passed to tlab");
-                $log.log(targetList);
-
-                var targetListAssocBubbles = expansionView()
-                    .targets(targetList);
-                targetListAssocBubbles (container);
-
-            });
-
         }
     };
 }]);

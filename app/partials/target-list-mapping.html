@@ -18,7 +18,7 @@
         </div>
 
         <div class="col-sm-4">
-            <span>{{fuzzy.length}} fuzzy </span>
+            <span>{{fuzzy.length}} suggested </span>
             <span ng-switch="fuzzy.length">
                 <span ng-switch-when="1">match</span>
                 <span ng-switch-default>matches</span>
@@ -46,4 +46,11 @@
         </div>
 
     </div>
+</div>
+<div style="margin-top:50px;" ng-show=summaryLink>
+    <a href="{{summaryLink}}">
+        <button type="button" class="btn btn-primary">
+            See results
+        </button>
+    </a>
 </div>

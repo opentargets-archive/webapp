@@ -1,0 +1,26 @@
+<div ng-show="therapeuticAreas">
+    <h3>Therapeutic areas</h3>
+
+    <div class="table-panel" style="width:100%;">
+        <div ng-repeat="ta in therapeuticAreas" style="cursor:pointer">
+            <div class="row" ng-click="showThis=!showThis" style="font-size:18px;">
+                <div class="col-sm-3">{{ta.label}}</div>
+                <div class="col-sm-1">{{ta.value}}</div>
+                <div class="col-sm-7" style="height:10px">
+                    <div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:5px;left:0px"></div>
+                    <div style="width:{{ta.score}}%;background:#1e5799;height:100%;position:absolute;top:5px;left:0px"></div>
+                </div>
+            </div>
+            <div ng-show="showThis">
+                <div ng-repeat="disease in ta.diseases | limitTo:10" class="row">
+                    <div class="col-sm-3"><a target=_blank href="https://www.google.com">{{disease.label}}</a></div>
+                    <div class="col-sm-1">{{disease.value}}</div>
+                    <div class="col-sm-7" style="height:10px;">
+                        <div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:5px;left:0px"></div>
+                        <div style="width:{{disease.score}}%;background:#3a99d7;height:100%;position:absolute;top:5px;left:0px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

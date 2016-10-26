@@ -47,6 +47,10 @@ function initApp (deps) {
                     templateUrl: 'partials/batch-search.html',
                     controller: 'BatchSearchCtrl'
                 }).
+                when ('/summary', {
+                    templateUrl: 'partials/summary.html',
+                    controller: 'SummaryCtrl'
+                }).
 
                 // Docs
                 when('/faq', {
