@@ -235,9 +235,8 @@ angular.module('plugins')
                 width: '='
             },
             link: function (scope, element, attrs) {
-                scope.changedScore = function (newScore) {
-                    //$log.log(newScore);
-                };
+                // scope.changedScore = function (newScore) {
+                // };
 
                 // Populate overview
                 $timeout (function () {

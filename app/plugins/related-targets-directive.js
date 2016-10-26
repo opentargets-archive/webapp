@@ -15,8 +15,8 @@ angular.module('plugins')
                 .then(
                     // success
                     function (resp) {
-                        $log.log("getTargetRelation");
-                        $log.log(resp);
+                        // $log.log("getTargetRelation");
+                        // $log.log(resp);
                         scope.relations = resp.body.data.slice(1, 20);
                     },
 

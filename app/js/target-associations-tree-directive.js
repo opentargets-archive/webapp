@@ -28,7 +28,7 @@ angular.module('cttvDirectives')
 
 
             link: function (scope, elem, attrs) {
-                $log.log("tree.link()");
+                // $log.log("tree.link()");
 
                 var currTarget;
                 // legend stuff
@@ -41,18 +41,18 @@ angular.module('cttvDirectives')
 
 
                 scope.$watchGroup(['target', 'facets', 'active'], function (vals, old_vals) {
-                    $log.log("tree.watchGroup()");
+                    // $log.log("tree.watchGroup()");
                     var target = vals[0];
                     var facets = vals[1];
                     var act = vals[2];
 
-                    $log.log(scope.active +" !== " +whoiam);
+                    // $log.log(scope.active +" !== " +whoiam);
 
                     if ( scope.active !== whoiam ) {
                         return;
                     }
 
-                    $log.log(target +"!=="+ currTarget);
+                    // $log.log(target +"!=="+ currTarget);
 
                     // Remove the current tree if the target has changed
                     if (target !== currTarget) {
@@ -72,7 +72,7 @@ angular.module('cttvDirectives')
                         method: 'GET',
                         params: opts
                     };
-                    $log.log(gat);
+                    // $log.log(gat);
                     if (!gat) {
                         setTreeView(opts.therapeutic_area);
                     } else {

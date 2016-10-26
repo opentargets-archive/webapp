@@ -5,8 +5,6 @@ angular.module('cttvDirectives')
 /**
 * Matrix (heatmap) view for target associations
 */
-// .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', 'cttvConsts', '$location', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile, cttvConsts, $location) {
-
 .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', '$q', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location, $q, $analytics) {
     'use strict';
 
@@ -64,7 +62,7 @@ angular.module('cttvDirectives')
     Setup the table cols and return the DT object
     */
     var setupTable = function(table, target, filename, download){
-        $log.log("setupTable()");
+        // $log.log("setupTable()");
         // return $(table).DataTable( cttvUtils.setTableToolsParams({
         return $(table).DataTable ({
             //"dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',

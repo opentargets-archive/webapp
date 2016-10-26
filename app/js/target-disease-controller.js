@@ -10,7 +10,7 @@
      */
     .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$uibModal', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $uibModal, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
         'use strict';
-        $log.log('TargetDiseaseCtrl()');
+        // $log.log('TargetDiseaseCtrl()');
 
 		cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
         cttvUtils.clearErrors();
@@ -1833,7 +1833,7 @@
         // =================================================
 
         $scope.sectionOpen=function(who) {
-           $log.info("tdc:sectionOpen", who);
+        //    $log.info("tdc:sectionOpen", who);
             // Fire a target associations tree event for piwik to track
             $analytics.eventTrack('evidence', {"category": "evidence", "label": who});
         };
@@ -1842,9 +1842,9 @@
         //  M A I N   F L O W
         // =================================================
 
-        $log.info("target-disease-controller");
+        // $log.info("target-disease-controller");
         var path = $location.path().split("/");
-        $log.info(path);
+        // $log.info(path);
         // parse parameters
         $scope.search.target = path[2];
         $scope.search.disease = path[3];

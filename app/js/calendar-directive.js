@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive("calendar", ['$uibModal', function($uibModal) {
+    .directive("calendar", ['$uibModal', '$log', function($uibModal, $log) {
         var marked = [];
         return {
             restrict: "E",
@@ -28,7 +28,7 @@ angular.module('cttvDirectives')
 
                 scope.select = function(day) {
                     scope.selected = day.date;
-                    console.log(day);
+                    // $log.log(day);
                     if (day.isEvent) {
                         // Look for the selected events
                         scope.eventsThatDay = [];

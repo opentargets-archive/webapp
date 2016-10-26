@@ -38,7 +38,7 @@
 
     .controller('MastheadCtrl', ['$scope', '$location', '$log', 'cttvLocationState', function ($scope, $location, $log, cttvLocationState) {
         'use strict';
-        $log.log('MastheadCtrl()');
+        // $log.log('MastheadCtrl()');
         $scope.location = $location;
 
     }])
@@ -49,7 +49,7 @@
     */
     .controller('NotifyCtrl', ['$scope', '$log', '$http', '$uibModal', '$cookies', '$interval', function ($scope, $log, $http, $uibModal, $cookies, $interval) {
         'use strict';
-        $log.log(" NotifyCtrl ");
+        // $log.log(" NotifyCtrl ");
         // Default behaviour on icon click
         $scope.notify = function(){};
         $scope.addCookie = function (cookieId) {
@@ -97,7 +97,7 @@
                         }
                     }
                 }, function (err) {
-                    console.log(err);
+                    $log.warn(err);
                 });
         }
         polling();

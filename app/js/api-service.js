@@ -53,12 +53,12 @@ angular.module('cttvServices')
             // .prefix("https://www.targetvalidation.org/api/")
             .appname("cttv-web-app")
             .secret("2J23T20O31UyepRj7754pEA2osMOYfFK")
-            .verbose(true);
+            .verbose(false);
 
         /**/
         cttvAPI.activeRequests = 0;
         function countRequest(b){
-            console.log("countRequest:b=", b);
+            // $log.log("countRequest:b=", b);
             if(b===false){
                 cttvAPI.activeRequests--;
             } else if (b===true){
@@ -96,7 +96,7 @@ angular.module('cttvServices')
         var callAPI = function(queryObject){
 
             var params = queryObject.params;
-            console.log("callAPI:queryObject=", queryObject);
+            // $log.log("callAPI:queryObject=", queryObject);
 
 
             countRequest(params.trackCall === false ? undefined : true);
@@ -114,14 +114,15 @@ angular.module('cttvServices')
                     var theUrl = api.url[queryObject.operation]();
                     url = theUrl.substring(0, theUrl.length - 1 );
                 }
-                console.warn("URL : " + url);
+                // $log.warn("URL : " + url);
                 api.call(url, (queryObject.method=="POST" ? params : undefined), (params.format || "json"))
                     .then (done)
                     .catch(function (err) {
-                        console.log("GOT ERROR:", err);
+                        $log.warn("GOT ERROR:", err);
                         cttvAPI.defaultErrorHandler (err, params.trackCall);
                     });
             });
+
 
             return promise;
 
@@ -160,7 +161,7 @@ angular.module('cttvServices')
          * It simply logs the error to the console. Can be used in then(succ, err) calls.
          */
         cttvAPI.defaultErrorHandler = function(error, trackCall){
-            $log.warn("CTTV API ERROR");
+            $log.warn("CTTV API ERROR:",error);
             countRequest(trackCall===false ? undefined : false);
             if (error.status === 403) {
                 $rootScope.showApiErrorMsg = true;
@@ -201,7 +202,7 @@ angular.module('cttvServices')
         *
         * cttvAPI.getSearch({params:{q:'braf'}}).success(function(data) {
         *      $scope.search.results = data;
-        *      console.log(data);
+        *      $log.log(data);
         *  });
         *
         *
@@ -211,7 +212,7 @@ angular.module('cttvServices')
         *
         */
         cttvAPI.getSearch = function(queryObject){
-            $log.log("cttvAPI.getSearch()");
+            // $log.log("cttvAPI.getSearch()");
             queryObject.operation = cttvAPI.API_SEARCH_URL;
             return callAPI(queryObject);
         };
@@ -236,7 +237,7 @@ angular.module('cttvServices')
         * Returns a promise object with methods then(), success(), error()
         */
         cttvAPI.getEvidence = function(queryObject){
-            $log.log("cttvAPI.getEvidence()");
+            // $log.log("cttvAPI.getEvidence()");
 
             $queryObject.operation = cttvAPI.API_EVIDENCE_URL;
             return callAPI(queryObject);
@@ -247,9 +248,9 @@ angular.module('cttvServices')
         /**
         *
         */
-        cttvAPI.getAssociations = function(queryObject, method){
-            $log.log("cttvAPI.getAssociations()");
+        cttvAPI.getAssociations = function(queryObject){
             queryObject.operation = cttvAPI.API_ASSOCIATION_URL;
+            $log.log("cttvAPI.getAssociations():queryObject=",queryObject);
             return callAPI (queryObject);
         };
 
@@ -260,7 +261,7 @@ angular.module('cttvServices')
         * via call to the autocomplete() API method
         */
         cttvAPI.getAutocomplete = function(queryObject){
-            $log.log("cttvAPI.getAutocomplete()");
+            // $log.log("cttvAPI.getAutocomplete()");
             queryObject.operation = cttvAPI.API_AUTOCOMPLETE_URL;
             return callAPI (queryObject);
         };
@@ -273,7 +274,7 @@ angular.module('cttvServices')
         *  - efo: the EFO code in format "EFO_xxxxxxx"
         */
         cttvAPI.getEfo = function(queryObject){
-            $log.log("cttvAPI.getEfo");
+            // $log.log("cttvAPI.getEfo");
             queryObject.operation = cttvAPI.API_EFO_URL;
             return callAPI (queryObject);
         };
@@ -285,7 +286,7 @@ angular.module('cttvServices')
         *  - target_id: the ENSG code, e.g. "ENSG00000005339"
         */
         cttvAPI.getTarget = function(queryObject){
-            $log.log("cttvAPI.getTarget "+queryObject.target_id);
+            // $log.log("cttvAPI.getTarget "+queryObject.target_id);
             queryObject.operation = cttvAPI.API_TARGET_URL;
             return callAPI (queryObject);
         };
@@ -296,26 +297,26 @@ angular.module('cttvServices')
         *  - code: the (EFO) code
         */
         cttvAPI.getDisease = function (queryObject) {
-            $log.log ("cttvAPI.getDisease "+queryObject.code);
+            // $log.log ("cttvAPI.getDisease "+queryObject.code);
             queryObject.operation = cttvAPI.API_DISEASE_URL;
             return callAPI (queryObject);
         };
 
         cttvAPI.getFilterBy = function(queryObject){
-            $log.log("cttvAPI.getFilterBy");
+            // $log.log("cttvAPI.getFilterBy");
             queryObject.params.expandefo = queryObject.params.expandefo || true;
             queryObject.operation = cttvAPI.API_FILTERBY_URL;
             return callAPI (queryObject);
         };
 
         cttvAPI.getQuickSearch = function(queryObject){
-            $log.log("cttvAPI.getQuickSearch()");
+            // $log.log("cttvAPI.getQuickSearch()");
             queryObject.operation = cttvAPI.API_QUICK_SEARCH_URL;
             return callAPI (queryObject);
         };
 
         cttvAPI.getExpression = function(queryObject){
-            $log.log("cttvAPI.getExpression()");
+            // $log.log("cttvAPI.getExpression()");
             queryObject.operation = cttvAPI.API_EXPRESSION_URL;
             return callAPI (queryObject);
         };
@@ -342,7 +343,7 @@ angular.module('cttvServices')
          * Get relations for specified gene or targer
          */
         cttvAPI.getTargetRelation = function(queryObject){
-            $log.log("cttvAPI.getTargetRelation");
+            // $log.log("cttvAPI.getTargetRelation");
             queryObject.operation = cttvAPI.API_TARGET_RELATION_URL;
             return callAPI (queryObject);
         };
@@ -353,7 +354,7 @@ angular.module('cttvServices')
          * Get relations for specified gene or targer
          */
         cttvAPI.getDiseaseRelation = function(queryObject){
-            $log.log("cttvAPI.getTargetRelation");
+            // $log.log("cttvAPI.getTargetRelation");
             queryObject.operation = cttvAPI.API_DISEASE_RELATION_URL;
             return callAPI (queryObject);
         };
@@ -363,7 +364,7 @@ angular.module('cttvServices')
         * This call is 1-off and it doesn't
         */
         cttvAPI.logSession = function () {
-            $log.log("cttvAPI.logSession");
+            // $log.log("cttvAPI.logSession");
             var queryObject = {
                 operation : cttvAPI.API_LOG_SESSION_URL,
                 params: {

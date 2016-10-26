@@ -18,7 +18,7 @@ angular.module('cttvControllers')
 
     'use strict';
 
-    $log.log('diseaseAssociationsCtrl()');
+    //$log.log('diseaseAssociationsCtrl()');
 
     cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
 
@@ -158,16 +158,20 @@ angular.module('cttvControllers')
 
         $scope.targetArray = []; //this one is used when we are done fetching all the target IDs
 
-        $scope.targetNameArray = [];//this one holds taregtnames as they are read from the file
+        $scope.targetNameArray = [];//this one holds targetnames as they are read from the file
         $scope.targetIdArray = [];
         $scope.targetNameIdDict = [];//this has all the targetNames, id-s that were found or "", and labels tht were found for these ids
 
         $scope.excludedTargetArray = [];//this has all the targets for whits no id could be found, even with fuzzy search
         $scope.fuzzyTargetArray = [];//these are the ones for which we found id-s but for targetName that did not exactly match
+        $scope.targetIdArrayWithoutFuzzies = [];
 
         $scope.totalNamesCollapsed = true;
         $scope.excludedTargetsCollapsed = true;
         $scope.fuzzyTargetsCollapsed = true;
+        $scope.filterByFileCollapsed = false; //this should be open by default
+
+        $scope.fuzziesIncludedInSearch = true;
 
     };
 
@@ -302,26 +306,32 @@ angular.module('cttvControllers')
             $scope.targetArray = $scope.targetIdArray;
             $scope.excludedTargetArray = $scope.targetNameIdDict.filter(function(e){return !e.id;});
             $scope.fuzzyTargetArray = $scope.targetNameIdDict.filter(function(e){return e.name.localeCompare(e.label) !== 0 && e.id.localeCompare(e.name) !== 0;});
+            $scope.targetIdArrayWithoutFuzzies = $scope.targetNameIdDict.map(function (e) {
+                 if (e.id && (e.name.localeCompare(e.label) == 0 || e.id.localeCompare(e.name) == 0)){ //has label and not fuzzy or has name and id and they are the same (for case when name is ENS code already)
+                     return e.id;
+                 }
+
+            });
+            $scope.targetIdArrayWithoutFuzzies = $scope.targetIdArrayWithoutFuzzies.filter(function(e){return e;});//this step will filter out undefined
 
             getFacets($scope.filters);
         });
 
     };
 
-    var getExcludedOnes =  function(item){
-        //console.log("getExcludedOnes:item=", item);
-        var isIdEmpty = false;
-        //console.log("getExcludedOnes:item.id=", item.id);
-        if (item.id === ''){
-            //console.log("getExcludedOnes:item.id==''", true);
-            isIdEmpty = true;
+    $scope.fuzzyToggle = function(){
+        //$log.log("fuzzyToggle");
+
+        $scope.fuzziesIncludedInSearch = !$scope.fuzziesIncludedInSearch;
+        if( $scope.fuzziesIncludedInSearch){
+            $scope.targetArray = $scope.targetIdArray;
+
         }
-        if (item.id === ""){
-            //console.log("getExcludedOnes:item.id==str", true);
-            isIdEmpty = true;
+        else {
+            $scope.targetArray = $scope.targetIdArrayWithoutFuzzies;
         }
-        return isIdEmpty;
-    };
+    }
+
 
     var getTargetId = function (targetName) {
         if (targetName.startsWith("ENSG")){
@@ -354,10 +364,10 @@ angular.module('cttvControllers')
 
         return cttvAPIservice.getSearch(queryObject)
             .then (function (resp) {
-                //console.log("getSearch:resp.body.data",resp.body.data);
+                //$log.log("getSearch:resp.body.data",resp.body.data);
                 if (resp.body.data.length > 0) {
-                    //console.log("resp.body.data[0].id=", resp.body.data[0].id);
-                    //console.log("resp.body.data[0].data.approved_symbol=", resp.body.data[0].data.approved_symbol);
+                    //$log.log("resp.body.data[0].id=", resp.body.data[0].id);
+                    //$log.log("resp.body.data[0].data.approved_symbol=", resp.body.data[0].data.approved_symbol);
                     //TODO:Here compare label with targetNAme to see if it is a fuzzy search result
                     $scope.targetIdArray.push(resp.body.data[0].id);
                     $scope.targetNameIdDict.push({ id: resp.body.data[0].id, label:resp.body.data[0].data.approved_symbol, name:targetName});
