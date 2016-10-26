@@ -584,7 +584,7 @@ angular.module('cttvDirectives')
                         if (target) {
                             var p = cttvAPIservice.getSearch({
                                 method: 'GET',
-                                opts: {
+                                params: {
                                     q:target,
                                     size:1,
                                     filter:"target"
