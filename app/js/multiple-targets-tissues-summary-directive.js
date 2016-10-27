@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-.directive ('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'cttvConfig', 'cttvUtils', function ($log, $http, $q, cttvConfig, cttvUtils) {
+.directive ('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'cttvConfig', 'cttvUtils', 'cttvAPIservice', function ($log, $http, $q, cttvConfig, cttvUtils, cttvAPIservice) {
     'use strict';
 
     var tissuesOrdered = [
@@ -142,19 +142,29 @@ angular.module('cttvDirectives')
                 var gtexPromises = [];
                 var baseGtexUrlPrefix = "/proxy/gtexportal.org/api/v6p/expression/";
                 var baseGtexUrlSufix = "?boxplot=true";
-                var mapUrl = {};
                 for (var i=0; i<scope.targets.length; i++) {
                     var target = scope.targets[i];
-                    var url = baseGtexUrlPrefix + target + baseGtexUrlSufix;
-                    mapUrl[url] = target;
-                    gtexPromises.push($http.get(url));
+                    var targetPromise = cttvAPIservice.getTarget({
+                        method: 'GET',
+                        trackCall: true,
+                        params: {
+                            target_id: target
+                        }
+                    })
+                        .then (function (targetResp) {
+                            var symbol = targetResp.body.approved_symbol;
+                            var url = baseGtexUrlPrefix + symbol + baseGtexUrlSufix;
+                            return $http.get(url);
+                        });
+                    gtexPromises.push(targetPromise);
                 }
                 $q.all(gtexPromises)
                     .then (function (resps) {
                         var tissuesData = {};
                         for (var i=0; i<resps.length; i++) {
                             var tissues = {};
-                            var target = mapUrl[resps[i].config.url];
+                            var parts = resps[i].config.url.split("/");
+                            var target = parts[parts.length-1].split("?")[0];
                             for (var fullTissue in resps[i].data.generpkm) {
                                 var d = resps[i].data.generpkm[fullTissue];
                                 var median = d.median;

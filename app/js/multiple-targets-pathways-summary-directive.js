@@ -62,7 +62,6 @@ angular.module('cttvDirectives')
                                     pathways[topLevelPathway].subPathways[p.value["pathway name"]].targets[targetSymbol] = {
                                         symbol: targetSymbol,
                                     };
-                                    // pathways[topLevelPathway].subPathways[p.value["pathway name"]].link += ("pathway-target=" +targetSymbol);
                                 }
                             }
                         }
