@@ -49,7 +49,6 @@ angular.module('cttvDirectives')
     }
     tissuesTableCols.push({name:"",title:""}); // last one empty
 
-    var colorScale = cttvUtils.colorScales.BLUE_0_1;
     var getColorStyleString = function (value) {
         var str = "";
         if (value <= 0) {
@@ -100,7 +99,7 @@ angular.module('cttvDirectives')
 
 
     function parseTissuesData (tissuesData) {
-        // var txt = tissuesPerTarget(tissues);
+        $log.log(tissuesData);
         var newData = [];
         for (var target in tissuesData) {
             // var row = [];
@@ -145,7 +144,6 @@ angular.module('cttvDirectives')
                 $q.all(gtexPromises)
                     .then (function (resps) {
                         var tissuesData = {};
-                        var maxVal = 0;
                         for (var i=0; i<resps.length; i++) {
                             var tissues = {};
                             var target = mapUrl[resps[i].config.url];
@@ -157,7 +155,7 @@ angular.module('cttvDirectives')
                                     tissues[tissue] = {
                                         target: target,
                                         tissue: tissue,
-                                        maxMedian: 0
+                                        maxMedian: 0,
                                     };
                                 }
                                 if (median > tissues[tissue].maxMedian) {
@@ -170,7 +168,6 @@ angular.module('cttvDirectives')
                             // var tissuesData = parseTissuesData(_.values(tissues));
                             tissuesData[target] = tissues;
                         }
-                        colorScale.domain([0, maxVal]);
                         var tissueDataRows = parseTissuesData(tissuesData);
                         var table = document.getElementById("tissuesSummaryTargetList");
                         table.innerHTML = "";
