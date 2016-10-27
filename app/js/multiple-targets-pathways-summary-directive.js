@@ -84,7 +84,6 @@ angular.module('cttvDirectives')
                             return b.targets.length - a.targets.length;
                         });
                         scope.pathways = pathwaysArr;
-                        $log.log(pathwaysArr);
                     });
 
             });

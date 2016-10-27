@@ -49,7 +49,7 @@ angular.module('cttvDirectives')
     }
     tissuesTableCols.push({name:"",title:""}); // last one empty
 
-    var getColorStyleString = function (value) {
+    var getColorStyleString = function (value, colorScale) {
         var str = "";
         if (value <= 0) {
             str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
@@ -99,9 +99,17 @@ angular.module('cttvDirectives')
 
 
     function parseTissuesData (tissuesData) {
-        $log.log(tissuesData);
         var newData = [];
         for (var target in tissuesData) {
+            // Get the max maxMedian value
+            var maxMedianTissue = _.maxBy(_.values(tissuesData[target]), function (o) {
+                return o.maxMedian;
+            });
+            var maxMedianForTarget = maxMedianTissue.maxMedian;
+
+            var colorScale = cttvUtils.colorScales.BLUE_0_1;
+            colorScale.domain([0, maxMedianForTarget]);
+
             // var row = [];
             var row = [""]; // First one empty
             // Target
@@ -110,7 +118,7 @@ angular.module('cttvDirectives')
                 var tissue = tissuesOrdered[i];
                 // Each Tissue
                 // row.push(tissuesData[target][tissue].maxMedian);
-                row.push(getColorStyleString(tissuesData[target][tissue].maxMedian));
+                row.push(getColorStyleString(tissuesData[target][tissue].maxMedian, colorScale));
             }
             row.push(""); // last one empty
             newData.push(row);
@@ -160,9 +168,6 @@ angular.module('cttvDirectives')
                                 }
                                 if (median > tissues[tissue].maxMedian) {
                                     tissues[tissue].maxMedian = median;
-                                }
-                                if (median > maxVal) {
-                                    maxVal = median;
                                 }
                             }
                             // var tissuesData = parseTissuesData(_.values(tissues));
