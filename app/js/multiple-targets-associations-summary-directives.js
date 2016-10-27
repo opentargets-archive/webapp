@@ -43,7 +43,7 @@ angular.module('cttvDirectives')
         restrict: 'E',
         scope: {
             associations: '=',
-            ntargets: '='
+            targets: '='
         },
         templateUrl: "partials/multiple-targets-tas.html",
         link: function (scope, el, attrs) {
@@ -59,7 +59,7 @@ angular.module('cttvDirectives')
                         label: therapeuticAreas[j].label,
                         value: therapeuticAreas[j].unique_target_count.value,
                         diseases: {},
-                        score: 100 * therapeuticAreas[j].unique_target_count.value / scope.ntargets
+                        score: 100 * therapeuticAreas[j].unique_target_count.value / scope.targets.length
                     };
                 }
                 for (var i=0; i<scope.associations.data.length; i++) {
@@ -79,7 +79,7 @@ angular.module('cttvDirectives')
                                 };
                             }
                             tas[tasForThisDisease[k]].diseases[diseaseLabel].value++;
-                            tas[tasForThisDisease[k]].diseases[diseaseLabel].score = 100 * tas[tasForThisDisease[k]].diseases[diseaseLabel].value / scope.ntargets;
+                            tas[tasForThisDisease[k]].diseases[diseaseLabel].score = 100 * tas[tasForThisDisease[k]].diseases[diseaseLabel].value / scope.targets.length;
                             tas[tasForThisDisease[k]].diseases[diseaseLabel].targets.push(target);
                         }
                     }
@@ -104,7 +104,7 @@ angular.module('cttvDirectives')
 .directive('multipleTargetsTable', ['$log', 'cttvUtils', function ($log, cttvUtils) {
     'use strict';
 
-    function formatDiseaseDataToArray (diseases, ntargets) {
+    function formatDiseaseDataToArray (diseases, targets) {
         var data = [];
         var diseaseArray = _.values(diseases); // Object.values is not supported in IE
         // diseaseArray.sort(function (a, b) {
@@ -114,6 +114,7 @@ angular.module('cttvDirectives')
             var row = [];
             var d = diseaseArray[i];
             // 0 - Disease
+            //var targets = "?" + ();
             var cell = "<a href='/disease/" + d.id + "/associations'>" + d.disease + "</a>";
             row.push(cell);
 
@@ -122,7 +123,7 @@ angular.module('cttvDirectives')
 
             // 2 - Score (sum)
             // row.push(d.score);
-            var score = 100 * d.count / ntargets;
+            var score = 100 * d.count / targets.length;
             var bars = '<div style="position:relative;width:200px;height:20px">' +
             '<div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:0px;left:0px"></div>' +
             '<div style="width:' + score + '%;background:#1e5799;height:100%;position:absolute;top:0px;left:0px"></div>' +
@@ -146,7 +147,7 @@ angular.module('cttvDirectives')
         templateUrl: 'partials/multiple-targets-table.html',
         scope: {
             associations: '=',
-            ntargets: '='
+            targets: '='
         },
         link: function (scope, el, attrs) {
             scope.$watch('associations', function () {
@@ -189,14 +190,14 @@ angular.module('cttvDirectives')
                 // Create a table
                 // format the data
                 var table = $('#target-list-associated-diseases').DataTable( cttvUtils.setTableToolsParams({
-                    "data": formatDiseaseDataToArray(diseases, scope.ntargets),
+                    "data": formatDiseaseDataToArray(diseases, scope.targets),
                     "ordering" : true,
                     "order": [[1, 'desc']],
                     "autoWidth": false,
                     "paging" : true,
                     "columnDefs" : []
 
-                }, scope.ntargets + "-targets-associated_diseases") );
+                }, scope.targets.length + "-targets-associated_diseases") );
             });
         }
     };
