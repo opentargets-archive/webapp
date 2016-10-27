@@ -39,15 +39,30 @@ angular.module('cttvDirectives')
                                 var p = t.reactome[j];
                                 for (var k=0; k<p.value["pathway types"].length; k++) {
                                     var topLevelPathway = p.value["pathway types"][k]["pathway type name"];
+                                    var topLevelPathwayId = p.value["pathway types"][k]["pathway type"];
                                     if (!pathways[topLevelPathway]) {
                                         pathways[topLevelPathway] = {
                                             targets: {},
-                                            label: topLevelPathway
+                                            label: topLevelPathway,
+                                            id: topLevelPathwayId,
+                                            subPathways:{}
+                                        };
+                                    }
+                                    if (!pathways[topLevelPathway].subPathways[p.value["pathway name"]]) {
+                                        pathways[topLevelPathway].subPathways[p.value["pathway name"]] = {
+                                            targets: {},
+                                            label: p.value["pathway name"],
+                                            id: p.id,
+                                            link: "/summary?pathway=" + p.id
                                         };
                                     }
                                     pathways[topLevelPathway].targets[targetSymbol] = {
                                         symbol: targetSymbol
                                     };
+                                    pathways[topLevelPathway].subPathways[p.value["pathway name"]].targets[targetSymbol] = {
+                                        symbol: targetSymbol,
+                                    };
+                                    // pathways[topLevelPathway].subPathways[p.value["pathway name"]].link += ("pathway-target=" +targetSymbol);
                                 }
                             }
                         }
@@ -55,11 +70,21 @@ angular.module('cttvDirectives')
                         for (var h=0; h<pathwaysArr.length; h++) {
                             pathwaysArr[h].targets = _.values(pathwaysArr[h].targets);
                             pathwaysArr[h].score = 100 * pathwaysArr[h].targets.length / scope.targets.length;
+                            pathwaysArr[h].subPathways = _.values(pathwaysArr[h].subPathways);
+                            pathwaysArr[h].subPathways.sort (function (a, b) {
+                                return b.targets.length - a.targets.length;
+                            });
+                            for (var h2=0; h2<pathwaysArr[h].subPathways.length; h2++) {
+                                pathwaysArr[h].subPathways[h2].score = 100 * Object.keys(pathwaysArr[h].subPathways[h2].targets).length / scope.targets.length;
+                                // Link to pathway summary page (including all the targets)
+                                pathwaysArr[h].subPathways[h2].link += "&" + (Object.keys(pathwaysArr[h].subPathways[h2].targets).map(function (t) {return "pathway-target=" + t;})).join("&");
+                            }
                         }
                         pathwaysArr.sort(function (a, b) {
                             return b.targets.length - a.targets.length;
                         });
                         scope.pathways = pathwaysArr;
+                        $log.log(pathwaysArr);
                     });
 
             });

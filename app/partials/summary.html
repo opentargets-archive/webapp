@@ -31,5 +31,10 @@
         <div ng-show="disease">
             We have only 1 disease: {{disease}}
         </div>
+
+        <div ng-show="pathway">
+            We have 1 pathway: {{pathway}}
+            <pathway-summary pathway="pathway" targets="pathwayTargets"></pathway-summary>
+        </div>
     </div>
 </div>

@@ -53,7 +53,6 @@ angular.module('cttvDirectives')
 
                 if (targetIds.length) {
                     scope.summaryLink = "/summary?" + (targetIds.map(function (t) {return "target=" + t;}).join("&"));
-                    $log.log(scope.summaryLink);
                 }
             });
         }
@@ -67,7 +66,6 @@ angular.module('cttvDirectives')
         var parsed = {};
 
         if (search) {
-            $log.log(search);
             parsed.approved_symbol = search.data.approved_symbol;
             parsed.approved_name = search.data.approved_name;
             parsed.id = search.data.id;
@@ -105,11 +103,9 @@ angular.module('cttvDirectives')
             // Show all previous lists
             scope.lists = cttvLoadedLists.getAll();
             scope.useThisList = function (listId) {
-                $log.log("use this list: " + listId);
                 scope.list = cttvLoadedLists.get(listId);
             };
             scope.removeThisList = function (listId) {
-                $log.log("remove this list: " + listId);
                 scope.lists = cttvLoadedLists.remove(listId);
             };
 
@@ -117,13 +113,11 @@ angular.module('cttvDirectives')
             scope.uploadFile = function () {
 
                 var searches = {};
-                $log.log("Uploading file!");
                 var file = elem[0].getElementsByTagName("input")[0].files[0];
                 var reader = new FileReader();
                 reader.onloadend = function (e) {
                     var fileContent = e.target.result;
                     var targets = fileContent.split("\n");
-                    $log.log(targets);
 
                     // Fire a search with each of the targets
                     var searchPromises = [];
@@ -186,19 +180,14 @@ angular.module('cttvDirectives')
             scope.$watchGroup(['list', 'active'], function () {
                 var foamtree = {};
 
-                $log.log("active is " + scope.active);
                 if (!scope.list || !scope.active) {
                     return;
                 }
-                $log.log('list is...');
-                $log.log(scope.list);
 
                 var container = document.createElement('div');
                 elem[0].appendChild(container);
 
                 var targetList = _.filter(_.map(scope.list.list, "result.id"));
-                $log.log("targetList passed to foamtree");
-                $log.log(targetList);
 
                 var queryObject = {
                     method: 'POST',
@@ -212,8 +201,6 @@ angular.module('cttvDirectives')
                 cttvAPIservice.getAssociations(queryObject)
                     .then (function (resp) {
                         var dataObject = processData (resp.body);
-                        $log.log("tree processed to pass to foamtree...");
-                        $log.log(dataObject);
                         drawFoamTree(dataObject);
                     });
 

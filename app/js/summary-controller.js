@@ -26,12 +26,15 @@ angular.module('cttvControllers')
         }
     }
 
-    // pathways / pathway
+    // pathway
     if (search.pathway) {
-        if (angular.isArray(search.pathway)) {
-            $scope.pathways = search.pathway;
-        } else {
-            $scope.pathway = search.pathway;
+        $scope.pathway = search.pathway;
+        if (search["pathway-target"]) {
+            if (!angular.isArray(search["pathway-target"])) {
+                $scope.pathwayTargets = [search["pathway-target"]];
+            } else {
+                $scope.pathwayTargets = search["pathway-target"];
+            }
         }
     }
 

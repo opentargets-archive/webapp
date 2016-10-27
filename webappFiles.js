@@ -72,6 +72,7 @@ var webappFiles = {
             'app/js/multiple-targets-pathways-summary-directive.js',
             'app/js/multiple-targets-drugs-summary-directives.js',
             'app/js/multiple-targets-tissues-summary-directive.js',
+            'app/js/pathway-summary-directive.js',
             'app/js/lazyload.js',
             'app/js/plugin-directive.js',
             // Plugins -- should go in another config file
