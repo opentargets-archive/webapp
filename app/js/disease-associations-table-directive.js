@@ -206,7 +206,6 @@ angular.module('cttvDirectives')
                     params: opts
                 };
 
-
                 cttvAPIservice.getAssociations(queryObject)
                     .then(function (resp) {
                        var dtData = parseServerResponse(resp.body.data);

@@ -42,12 +42,8 @@ angular.module('cttvControllers')
     $scope.targets = [];
     $scope.targetLists = [];
 
-    $log.log("location is...");
-    $log.log($location.search());
     var targetList = $location.search()["target-list"];
     // var targetList = new_state["target-list"];
-    $log.log("target list is...");
-    $log.log(targetList);
     if (targetList) {
         var list = cttvLoadedLists.get(targetList);
         var targets = [];
@@ -57,7 +53,6 @@ angular.module('cttvControllers')
                 targets.push(item.result.id);
             }
         }
-        $log.log(targets);
         // Passing them to the disease associations table directive
         // $scope.targets = _.concat($scope.targets, targets);
         // $scope.targetLists = _.concat($scope.targetLists, list.id);
@@ -72,6 +67,7 @@ angular.module('cttvControllers')
     // TODO: should be done through the cttvLocationState?
     $scope.removeTargetLists = function () {
         $location.search("target-list", null);
+        $location.search("target", null);
         // TODO: Also remove the filter by target list feature
         $scope.removeTargets();
         // $route.reload();
@@ -109,37 +105,39 @@ angular.module('cttvControllers')
             resolve("");
         });
         if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) || !new_state[facetsId] ){
-            $log.log("firing facets here...");
-            $log.log(new_state[facetsId]);
             facetsPromise.then(function () {
                 return getFacets( new_state[facetsId] );
             });
         }
 
+        // Do we have targets?
+        var targets = new_state.target;
+        if (targets && !angular.isArray(targets)) {
+            targets = [targets];
+        }
+
+        if (targets) {
+
+        }
+
         // Do we have a target list?
         // TODO: This should go into the facets service
         var targetList = new_state["target-list"];
-        $log.log("target list is...");
-        $log.log(targetList);
         if (targetList) {
             var list = cttvLoadedLists.get(targetList);
-            var targets = [];
+            targets = [];
             for (var i=0; i<list.list.length; i++) {
                 var item = list.list[i];
                 if (item.result.id) {
                     targets.push(item.result.id);
                 }
             }
-            $log.log(targets);
+        }
+
+        if (targets) {
             // Passing them to the disease associations table directive
-            $scope.targets = _.concat($scope.targets, targets);
-            // $scope.targets = targets;
-            $scope.targetLists = _.concat($scope.targetLists, list.id);
-            // $scope.targetList = list.id;
-            $log.log("targets after loading the " + list.id + " list");
-            $log.log($scope.targets);
-            $log.log("targetLists after loading the " + list.id + " list");
-            $log.log($scope.targetLists);
+            $scope.targets = targets;
+            $scope.targetList = "a list of targets";
 
             facetsPromise.then (function () {
                 return getFacets(new_state[facetsId]);
@@ -262,8 +260,6 @@ angular.module('cttvControllers')
 
     $scope.removeTargets = function(){
         var theElement = document.getElementById("myFileInput");
-        $log.log("target lists with the one to remove...");
-        $log.log($scope.targetLists);
         $scope.targetLists.pop(); // We assume that the target list in this filter is the last one (the other one is populated first). Maybe we should be more explicit
         $scope.targets = [];
         theElement.value = null;
@@ -302,7 +298,7 @@ angular.module('cttvControllers')
         });
 
         promise.then(function (res) {
-            $scope.targets = _.concat($scope.targets, $scope.targetIdArray);
+            // $scope.targets = .concat($scope.targets, $scope.targetIdArray);
             $scope.targetArray = $scope.targetIdArray;
             $scope.excludedTargetArray = $scope.targetNameIdDict.filter(function(e){return !e.id;});
             $scope.fuzzyTargetArray = $scope.targetNameIdDict.filter(function(e){return e.name.localeCompare(e.label) !== 0 && e.id.localeCompare(e.name) !== 0;});

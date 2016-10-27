@@ -114,8 +114,8 @@ angular.module('cttvDirectives')
             var row = [];
             var d = diseaseArray[i];
             // 0 - Disease
-            //var targets = "?" + ();
-            var cell = "<a href='/disease/" + d.id + "/associations'>" + d.disease + "</a>";
+            var targetsLink = "?" + (_.map(targets, function (t) {return "target=" + t;})).join("&");
+            var cell = "<a href='/disease/" + d.id + "/associations" + targetsLink + "'>" + d.disease + "</a>";
             row.push(cell);
 
             // 1 - Targets associated
