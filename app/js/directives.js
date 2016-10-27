@@ -2,7 +2,18 @@
 /* Directives */
 angular.module('cttvDirectives', [])
 
-
+    /*
+     *
+     */
+    //.directive('cttvFilterByFileTargets', [function(){
+    //    'use strict';
+    //
+    //    return {
+    //        //restrict:'E',
+    //        template: 'Hello WORLD'
+    //
+    //    };
+    //}])
     /*
     *
     */
