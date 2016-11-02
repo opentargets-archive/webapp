@@ -12,20 +12,20 @@
             <div ng-if="!filterByFileCollapsed">
                 <div class="cttv-facets-controls">
                     <!--Choose a file with list of targets-->
-                    <form ng-show ="targetArray.length == 0" name="upload" data-ng-submit="addFile()">
+                    <form ng-show ="target.length == 0" name="upload" data-ng-submit="addFile()">
                         <input id="myFileInput" type="file" name="file"
                                title="File should have either target names or Ensembl IDs, one per line or comma separated."
                                onchange="angular.element(this).scope().uploadedFile(this)"
                             />
                     </form>
 
-                    <span ng-show ="targetArray.length > 0"
+                    <span ng-show ="target.length > 0"
                           ng-click="removeTargets()">Clear targets from {{files[0].name}}&nbsp&nbsp<i class="fa fa-times"></i>
                     </span>
                 </div>
 
                 <!--Target Filter Results-->
-                <div ng-show = "targetArray.length > 0">
+                <div ng-show = "target.length > 0">
 
                     <!--FOUND IN FILE-->
                     <div class="checkbox cttv-facet-checkbox clearfix">
@@ -105,7 +105,7 @@
 
                     <div class="cttv-facets">
                                         <span class="cttv-facet-checkbox-label ng-binding">
-                                            Have associations with {{diseasename}}<br>
+                                            Have associations with {{diseaseName}}<br>
                                         </span>
                                         <span class="text-lowlight cttv-facet-count pull-left ng-binding" >
                                             ({{search.total}})
@@ -114,7 +114,7 @@
 
                     <div class="cttv-facets">
                                         <span class="cttv-facet-checkbox-label ng-binding">
-                                            No associations found for {{diseasename}}<br>
+                                            No associations found for {{diseaseName}}<br>
                                         </span>
                                         <span class="text-lowlight cttv-facet-count pull-left ng-binding" >
                                             ({{targetNameArray.length - search.total - excludedTargetArray.lengh }})

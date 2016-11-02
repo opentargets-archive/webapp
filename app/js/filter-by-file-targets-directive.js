@@ -10,15 +10,15 @@ angular.module('cttvDirectives')
     .directive('cttvFilterByFileTargets', ['$log','cttvAPIservice', 'cttvFiltersService','$q',function($log, cttvAPIservice, cttvFiltersService, $q){
         'use strict';
 
-
-
-        //$log.log("cttvFilterByFileTargets");
-
         return {
+            scope: {
+                diseaseName: '=',
+                target: '=',
+                filters: '=',
+                getfacets: '=',
+                search: '='
+            },
 
-            //restrict:'E',
-            scope:true,
-            //template: 'Hello WORLD'
             templateUrl: 'partials/filter-by-file-targets.html',
             link: function(scope, elem, attrs){
                 //$log.log("cttvFilterByFileTargets:linkFunction: scope", scope);
@@ -26,9 +26,9 @@ angular.module('cttvDirectives')
 
                 scope.initFilterByFile =function(){
 
-                    scope.fileName = "";
+                    scope.target = [];
 
-                    scope.$parent.$parent.$parent.targetArray = []; //this one is used when we are done fetching all the target IDs
+                    scope.fileName = "";
 
                     scope.targetNameArray = [];//this one holds targetnames as they are read from the file
                     scope.targetIdArray = [];
@@ -49,10 +49,10 @@ angular.module('cttvDirectives')
                 scope.initFilterByFile();
 
                 scope.uploadedFile = function (element) {
-                    $log.log("cttvFilterByFileTargets:uploadedFile");
+
                     scope.$apply(function ($scope) {
                         scope.files = element.files;
-                        $log.log("cttvFilterByFileTargets:uploadedFile:scope.files:",scope.files);
+
                     });
 
                     scope.addFile();
@@ -64,8 +64,9 @@ angular.module('cttvDirectives')
                     var theElement = document.getElementById("myFileInput");
 
                     theElement.value = null;
-                    initFilterByFile();
-                    scope.$parent.$parent.$parent.getFacets(scope.$parent.$parent.$parent.filters);
+                    scope.initFilterByFile();
+                    scope.getfacets(scope.filters, scope.target);
+
                 };
 
                 scope.addFile = function () {
@@ -74,6 +75,7 @@ angular.module('cttvDirectives')
 
                 scope.validateFile = function (file) {
                     scope.fileName = file.name;
+
                     var reader = new FileReader();
                     reader.onloadend = function (evt) {
                         //do something with file content here
@@ -99,7 +101,7 @@ angular.module('cttvDirectives')
 
                     promise.then(function (res) {
                         //$log.log("PROMISE");
-                        scope.$parent.$parent.$parent.targetArray = scope.targetIdArray;
+                        scope.target = scope.targetIdArray;
                         scope.excludedTargetArray = scope.targetNameIdDict.filter(function(e){return !e.id;});
                         scope.fuzzyTargetArray = scope.targetNameIdDict.filter(function(e){return e.name.toLowerCase().localeCompare(e.label.toLowerCase()) !== 0 && e.id.toLowerCase().localeCompare(e.name.toLowerCase()) !== 0;});
                         scope.targetIdArrayWithoutFuzzies = scope.targetNameIdDict.map(function (e) {
@@ -115,23 +117,19 @@ angular.module('cttvDirectives')
                         //$log.log("123:fuzzyTargetArray", $scope.fuzzyTargetArray);
                         //$log.log("123:targetNameArray", $scope.targetNameArray);
                         //$log.log("123:targetIdArrayWithoutFuzzies", $scope.targetIdArrayWithoutFuzzies);
-                        //$log.log("118:scope",scope);
-                        //$log.log("118:scope.$parent.$parent.$parent",scope.$parent.$parent.$parent);
-                        scope.$parent.$parent.$parent.getFacets(scope.$parent.$parent.$parent.filters);
+                        scope.getfacets(scope.filters, scope.target);
                     });
 
                 };
 
                 scope.fuzzyToggle = function(){
-                    //$log.log("fuzzyToggle");
 
                     scope.fuzziesIncludedInSearch = !scope.fuzziesIncludedInSearch;
                     if( scope.fuzziesIncludedInSearch){
-                        scope.$parent.$parent.$parent.targetArray = scope.targetIdArray;
-
+                        scope.target = scope.targetIdArray;
                     }
                     else {
-                        scope.$parent.$parent.$parent.targetArray = scope.targetIdArrayWithoutFuzzies;
+                        scope.target = scope.targetIdArrayWithoutFuzzies;
                     }
                 }
 

@@ -68,12 +68,13 @@ angular.module('cttvControllers')
 
         // facets changed?
         if (!_.isEqual(new_state[facetsId], old_state[facetsId]) || !new_state[facetsId]) {
-            $scope.getFacets(new_state[facetsId]);
+            $scope.getFacets(new_state[facetsId],$scope.target.targetArray);
         }
 
     };
 
-    $scope.targetArray = [];
+    $scope.target = {};
+    $scope.target.targetArray = [];//turns out 2 way binding does not work that well on arrays
 
     /*
      * Get data to populate the table.
@@ -86,7 +87,7 @@ angular.module('cttvControllers')
      * }
      * getFacets(filters);
      */
-    $scope.getFacets = function (filters) {
+    $scope.getFacets = function (filters,targetArray) {
 
         // set the filters
         $scope.filters = filters;
@@ -98,8 +99,8 @@ angular.module('cttvControllers')
             size:1
         };
 
-        if ($scope.targetArray && $scope.targetArray.length) {
-            opts.target = $scope.targetArray;
+        if (targetArray && targetArray.length) {
+            opts.target = targetArray;
         }
 
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
