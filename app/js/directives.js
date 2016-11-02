@@ -3,18 +3,6 @@
 angular.module('cttvDirectives', [])
 
     /*
-     *
-     */
-    //.directive('cttvFilterByFileTargets', [function(){
-    //    'use strict';
-    //
-    //    return {
-    //        //restrict:'E',
-    //        template: 'Hello WORLD'
-    //
-    //    };
-    //}])
-    /*
     *
     */
     .directive('cttvTargetGenomeBrowser', ['cttvAPIservice', function (cttvAPIservice) {
