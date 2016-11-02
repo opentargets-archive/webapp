@@ -82,45 +82,16 @@ angular.module('cttvDirectives')
                         var myFileContent = evt.target.result;
                         scope.targetNameArray = myFileContent.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
                         scope.targetNameArray = scope.targetNameArray.filter(function(e){ return e.trim();}); //get rid of empty strings
-
-                        getTargetIds();
+                        scope.targetNameArray = scope.targetNameArray.map(function(value){return value.toLowerCase()});
+                        scope.targetNameArray = scope.targetNameArray.filter(function onlyUnique(value, index, self) {
+                            return self.indexOf(value) === index;
+                        });
+                        getBestHitTargetsIds(scope.targetNameArray);
                     };
                     reader.readAsText(file);
                 };
 
-                var getTargetIds = function() {
-                    var promise = $q(function (resolve) {
-                        resolve("");
-                    });
 
-                    scope.targetNameArray.forEach(function (targetName){
-                        promise = promise.then(function() {
-                            return getTargetId(targetName);
-                        });
-                    });
-
-                    promise.then(function (res) {
-                        //$log.log("PROMISE");
-                        scope.target = scope.targetIdArray;
-                        scope.excludedTargetArray = scope.targetNameIdDict.filter(function(e){return !e.id;});
-                        scope.fuzzyTargetArray = scope.targetNameIdDict.filter(function(e){return e.name.toLowerCase().localeCompare(e.label.toLowerCase()) !== 0 && e.id.toLowerCase().localeCompare(e.name.toLowerCase()) !== 0;});
-                        scope.targetIdArrayWithoutFuzzies = scope.targetNameIdDict.map(function (e) {
-                            if (e.id && (e.name.localeCompare(e.label) == 0 || e.id.localeCompare(e.name) == 0)){ //has label and not fuzzy or has name and id and they are the same (for case when name is ENS code already)
-                                return e.id;
-                            }
-
-                        });
-                        scope.targetIdArrayWithoutFuzzies = scope.targetIdArrayWithoutFuzzies.filter(function(e){return e;});//this step will filter out undefined
-
-                        //$log.log("123:targetNameIdDict", $scope.targetNameIdDict);
-                        //$log.log("123:excludedTargetArray", $scope.excludedTargetArray);
-                        //$log.log("123:fuzzyTargetArray", $scope.fuzzyTargetArray);
-                        //$log.log("123:targetNameArray", $scope.targetNameArray);
-                        //$log.log("123:targetIdArrayWithoutFuzzies", $scope.targetIdArrayWithoutFuzzies);
-                        scope.getfacets(scope.filters, scope.target);
-                    });
-
-                };
 
                 scope.fuzzyToggle = function(){
 
@@ -133,44 +104,59 @@ angular.module('cttvDirectives')
                     }
                 }
 
-
-                var getTargetId = function (targetName) {
-
-                    if (typeof targetName != "string") {
-                        scope.targetIdArray.push('');
-                        scope.targetNameIdDict.push ({
-                            id:'' ,
-                            label:targetName,
-                            name:targetName
-                        });
-                    }
-
+                var getBestHitTargetsIds = function (targetNameArray){
                     var opts = {
-                        q:targetName,
-                        fields:['approved_symbol'],
-                        'size':1
+                        q:targetNameArray
                     };
 
                     var queryObject = {
-                        method: "GET",
+                        method: "POST",
                         params: opts
                     };
 
-                    return cttvAPIservice.getSearch(queryObject)
+                    return cttvAPIservice.getBestHitSearch(queryObject)
                         .then (function (resp) {
-                        //$log.log("getSearch:resp.body.data",resp.body.data);
+                        //$log.log("getBestHitSearch:resp.body.data",resp.body.data);
                         if (resp.body.data.length > 0) {
-                            //$log.log("resp.body.data[0].id=", resp.body.data[0].id);
-                            //$log.log("resp.body.data[0].data.approved_symbol=", resp.body.data[0].data.approved_symbol);
-                            //TODO:Here compare label with targetNAme to see if it is a fuzzy search result
-                            scope.targetIdArray.push(resp.body.data[0].id);
-                            scope.targetNameIdDict.push({ id: resp.body.data[0].id, label:resp.body.data[0].data.approved_symbol, name:targetName});
-                        } else {
-                            scope.targetIdArray.push('');
-                            scope.targetNameIdDict.push({ id:'' , label:targetName, name:targetName});
+                            for(var i=0;i<resp.body.data.length;i++) {
+
+                                if(resp.body.data[i].data) {
+                                    scope.targetIdArray.push(resp.body.data[i].id);
+                                    scope.targetNameIdDict.push({
+                                        id: resp.body.data[i].id,
+                                        label: resp.body.data[i].data.approved_symbol,
+                                        name: resp.body.data[i].q
+                                    });
+                                }
+                                else{
+                                    scope.targetIdArray.push('');
+                                    scope.targetNameIdDict.push({ id:'' , label:resp.body.data[i].q, name:resp.body.data[i].q});
+                                }
+                            }
+                        }
+                        updateAllArrays();
+                    });
+                }
+
+                var updateAllArrays = function () {
+
+                    scope.target = scope.targetIdArray;
+                    scope.excludedTargetArray = scope.targetNameIdDict.filter(function(e){return !e.id;});
+                    scope.fuzzyTargetArray = scope.targetNameIdDict.filter(function(e){return e.name.toLowerCase().localeCompare(e.label.toLowerCase()) !== 0 && e.id.toLowerCase().localeCompare(e.name.toLowerCase()) !== 0;});
+                    scope.targetIdArrayWithoutFuzzies = scope.targetNameIdDict.map(function (e) {
+                        if (e.id && (e.name.localeCompare(e.label) == 0 || e.id.localeCompare(e.name) == 0)){ //has label and not fuzzy or has name and id and they are the same (for case when name is ENS code already)
+                            return e.id;
                         }
                     });
-                };
+                    scope.targetIdArrayWithoutFuzzies = scope.targetIdArrayWithoutFuzzies.filter(function(e){return e;});//this step will filter out undefined
+
+                    //$log.log("123:targetNameIdDict", scope.targetNameIdDict);
+                    //$log.log("123:excludedTargetArray", scope.excludedTargetArray);
+                    //$log.log("123:fuzzyTargetArray", scope.fuzzyTargetArray);
+                    //$log.log("123:targetNameArray", scope.targetNameArray);
+                    //$log.log("123:targetIdArrayWithoutFuzzies", scope.targetIdArrayWithoutFuzzies);
+                    scope.getfacets(scope.filters, scope.target);
+                }
 
 
             }

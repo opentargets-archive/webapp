@@ -30,6 +30,7 @@ angular.module('cttvServices')
             API_ASSOCIATION_URL : 'associations', // note: these are no longer URLs, but actual API method names
             API_GENE_URL : 'gene',
             API_QUICK_SEARCH_URL : 'quickSearch',
+            API_BEST_HIT_SEARCH_URL : 'bestHitSearch',
             API_DISEASE_URL: 'disease',
             API_EXPRESSION_URL: 'expression',
             API_TARGET_URL : 'target',
@@ -214,6 +215,12 @@ angular.module('cttvServices')
         cttvAPI.getSearch = function(queryObject){
             // $log.log("cttvAPI.getSearch()");
             queryObject.operation = cttvAPI.API_SEARCH_URL;
+            return callAPI(queryObject);
+        };
+
+        cttvAPI.getBestHitSearch = function(queryObject){
+            // $log.log("cttvAPI.getBestHitSearch()");
+            queryObject.operation = cttvAPI.API_BEST_HIT_SEARCH_URL;
             return callAPI(queryObject);
         };
 
