@@ -116,10 +116,6 @@ angular.module('cttvControllers')
             targets = [targets];
         }
 
-        if (targets) {
-
-        }
-
         // Do we have a target list?
         // TODO: This should go into the facets service
         var targetList = new_state["target-list"];

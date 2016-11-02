@@ -76,7 +76,13 @@ angular.module('cttvDirectives')
             if (search.highlight.approved_symbol) {
                 highlight = search.highlight.approved_symbol[0];
             } else if (search.highlight) {
-                highlight = search.highlight.ensembl_gene_id[0];
+                highlight = search.highlight.id;
+                // if (search.highlight.ensembl_gene_id) {
+                //     id = search.highlight.ensembl_gene_id[0];
+                // } else {
+                //     id = search.highlight.id;
+                // }
+                // highlight = search.highlight.ensembl_gene_id[0];
             }
 
             var parser = new DOMParser();

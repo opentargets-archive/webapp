@@ -107,8 +107,11 @@ angular.module('cttvDirectives')
             });
             var maxMedianForTarget = maxMedianTissue.maxMedian;
 
-            var colorScale = cttvUtils.colorScales.BLUE_0_1;
-            colorScale.domain([0, maxMedianForTarget]);
+            var colorScaleOrig = cttvUtils.colorScales.BLUE_0_1;
+            var colorScale = d3.scale.linear()
+                .range (colorScaleOrig.range())
+                .domain ([0, maxMedianForTarget]);
+            // colorScale.domain([0, maxMedianForTarget]);
 
             // var row = [];
             var row = [""]; // First one empty
