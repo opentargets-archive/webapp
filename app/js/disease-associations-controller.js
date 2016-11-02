@@ -73,30 +73,6 @@ angular.module('cttvControllers')
 
     };
 
-    //var initFilterByFile =function(){
-    //    $scope.fileName = "";
-    //
-    //    $scope.targetArray = []; //this one is used when we are done fetching all the target IDs
-    //
-    //    $scope.targetNameArray = [];//this one holds targetnames as they are read from the file
-    //    $scope.targetIdArray = [];
-    //    $scope.targetNameIdDict = [];//this has all the targetNames, id-s that were found or "", and labels tht were found for these ids
-    //
-    //    $scope.excludedTargetArray = [];//this has all the targets for whits no id could be found, even with fuzzy search
-    //    $scope.fuzzyTargetArray = [];//these are the ones for which we found id-s but for targetName that did not exactly match
-    //    $scope.targetIdArrayWithoutFuzzies = [];
-    //
-    //    $scope.totalNamesCollapsed = true;
-    //    $scope.excludedTargetsCollapsed = true;
-    //    $scope.fuzzyTargetsCollapsed = true;
-    //    $scope.filterByFileCollapsed = false; //this should be open by default
-    //
-    //    $scope.fuzziesIncludedInSearch = true;
-    //
-    //};
-    //
-    //initFilterByFile();
-
     $scope.targetArray = [];
 
     /*
