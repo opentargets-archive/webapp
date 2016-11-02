@@ -15,12 +15,13 @@
                     <form ng-show ="targetArray.length == 0" name="upload" data-ng-submit="addFile()">
                         <input id="myFileInput" type="file" name="file"
                                title="File should have either target names or Ensembl IDs, one per line or comma separated."
-                               onchange="angular.element(this).scope().uploadedFile(this)"/>
+                               onchange="angular.element(this).scope().uploadedFile(this)"
+                            />
                     </form>
 
-                                    <span ng-show ="targetArray.length > 0"
-                                          ng-click="removeTargets()">Clear targets from {{files[0].name}}&nbsp&nbsp<i class="fa fa-times"></i>
-                                    </span>
+                    <span ng-show ="targetArray.length > 0"
+                          ng-click="removeTargets()">Clear targets from {{files[0].name}}&nbsp&nbsp<i class="fa fa-times"></i>
+                    </span>
                 </div>
 
                 <!--Target Filter Results-->
@@ -104,7 +105,7 @@
 
                     <div class="cttv-facets">
                                         <span class="cttv-facet-checkbox-label ng-binding">
-                                            Have associations with {{search.label}}<br>
+                                            Have associations with {{diseasename}}<br>
                                         </span>
                                         <span class="text-lowlight cttv-facet-count pull-left ng-binding" >
                                             ({{search.total}})
@@ -113,7 +114,7 @@
 
                     <div class="cttv-facets">
                                         <span class="cttv-facet-checkbox-label ng-binding">
-                                            No associations found for<br>
+                                            No associations found for {{diseasename}}<br>
                                         </span>
                                         <span class="text-lowlight cttv-facet-count pull-left ng-binding" >
                                             ({{targetNameArray.length - search.total - excludedTargetArray.lengh }})
