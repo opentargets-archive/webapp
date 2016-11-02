@@ -13,7 +13,7 @@
             </div>
             <div ng-show="showThis">
                 <div ng-repeat="disease in ta.diseases | limitTo:10" class="row">
-                    <div class="col-sm-3"><a target=_blank href="https://www.google.com">{{disease.label}}</a></div>
+                    <div class="col-sm-3"><a href="/disease/{{disease.id}}/associations?targets={{targetsAssociationsLink}}">{{disease.label}}</a></div>
                     <div class="col-sm-1">{{disease.value}}</div>
                     <div class="col-sm-7" style="height:10px;">
                         <div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:5px;left:0px"></div>

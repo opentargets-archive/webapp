@@ -37,7 +37,7 @@
   "dependencies": {
     "cttv.api": "0.0.10",
     "cttv.diseaseGraph": "0.0.2",
-    "cttv.expansionView": "0.0.3",
+    "cttv.expansionView": "0.0.4",
     "cttv.flowerView": "0.0.0",
     "cttv.genome": "0.0.15",
     "cttv.spinner": "0.0.0",

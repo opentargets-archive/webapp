@@ -52,6 +52,8 @@ angular.module('cttvDirectives')
                     return;
                 }
 
+                scope.targetsAssociationsLink = scope.targets.map(function (t) {return "target:"+t;}).join(',');
+
                 var therapeuticAreas = scope.associations.facets.therapeutic_area.buckets;
                 var tas = {};
                 for (var j=0; j<therapeuticAreas.length; j++) {
@@ -66,6 +68,7 @@ angular.module('cttvDirectives')
                     var association = scope.associations.data[i];
                     var target = association.target.gene_info.symbol;
                     var diseaseLabel = association.disease.efo_info.label;
+                    var diseaseId = association.disease.id;
                     var tasForThisDisease = association.disease.efo_info.therapeutic_area.labels;
                     for (var k=0; k<tasForThisDisease.length; k++) {
                         // this check shoudn't be needed, but the api treats different "other diseases" in the facets and in the data
@@ -73,6 +76,7 @@ angular.module('cttvDirectives')
                         if (tas[tasForThisDisease[k]]) {
                             if (!tas[tasForThisDisease[k]].diseases[diseaseLabel]) {
                                 tas[tasForThisDisease[k]].diseases[diseaseLabel] = {
+                                    id: diseaseId,
                                     label: diseaseLabel,
                                     value: 0,
                                     targets: []
@@ -114,7 +118,7 @@ angular.module('cttvDirectives')
             var row = [];
             var d = diseaseArray[i];
             // 0 - Disease
-            var targetsLink = "?" + (_.map(targets, function (t) {return "target=" + t;})).join("&");
+            var targetsLink = "?targets=" + (targets.map(function (t) {return "target:"+t;}).join(','));
             var cell = "<a href='/disease/" + d.id + "/associations" + targetsLink + "'>" + d.disease + "</a>";
             row.push(cell);
 

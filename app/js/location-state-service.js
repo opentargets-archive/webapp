@@ -50,7 +50,7 @@ angular.module('cttvServices').
                 obj[tmp[0]].push(tmp[1]);
             });
             return obj;
-        }
+        };
 
 
 
@@ -108,15 +108,16 @@ angular.module('cttvServices').
                 cttvConsts.PATHWAY,
                 cttvConsts.DATASOURCES,
                 cttvConsts.THERAPEUTIC_AREAS,
-                cttvConsts.DATA_DISTRIBUTION
+                cttvConsts.DATA_DISTRIBUTION,
+                cttvConsts.TARGET
             ];
 
             for(var i in search){
                 if(search.hasOwnProperty(i)){
 
-                    raw[ i ] = search[i];
+                    raw[i] = search[i];
 
-                    if( typeof raw[ i ] === "string" && raw[ i ].match(/.:./)) {
+                    if (typeof raw[i] === "string" && raw[i].match(/.:./)) {
                         // this is a string the new state format (e.g. "view=t:bubble,p:1") so then we parse it
                         raw[i] = parseSearchItem(search[i]);
                     }
@@ -135,7 +136,6 @@ angular.module('cttvServices').
                     }
                 }
             }
-
 
             return raw;
         };
@@ -177,7 +177,7 @@ angular.module('cttvServices').
          * Update the state object only for the specific sub-object
          */
         cttvLocationStateService.setStateFor = function(k, so, track){
-            // $log.log("setStateFor "+k);
+            // $log.log("setStateFor ");
 
             if(track==undefined){track=true;}   // track = (track || track==undefined)
             tmp_state[k] = so;

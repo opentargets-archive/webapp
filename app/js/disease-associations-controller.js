@@ -106,15 +106,18 @@ angular.module('cttvControllers')
         });
         if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) || !new_state[facetsId] ){
             facetsPromise.then(function () {
-                return getFacets( new_state[facetsId] );
+                return getFacets (new_state[facetsId]);
             });
         }
 
         // Do we have targets?
-        var targets = new_state.target;
-        if (targets && !angular.isArray(targets)) {
-            targets = [targets];
+        var targets;
+        if (new_state.targets) {
+            targets = new_state.targets.target;
         }
+        // if (targets && !angular.isArray(targets)) {
+        //     targets = [targets];
+        // }
 
         // Do we have a target list?
         // TODO: This should go into the facets service
@@ -257,7 +260,8 @@ angular.module('cttvControllers')
     $scope.removeTargets = function(){
         var theElement = document.getElementById("myFileInput");
         $scope.targetLists.pop(); // We assume that the target list in this filter is the last one (the other one is populated first). Maybe we should be more explicit
-        $scope.targets = [];
+        // $scope.targets = [];
+        cttvLocationState.setStateFor("targets", {});
         theElement.value = null;
         initFilterByFile();
         getFacets($scope.filters);
