@@ -157,7 +157,13 @@ angular.module('cttvDirectives')
                         .then (function (targetResp) {
                             var symbol = targetResp.body.approved_symbol;
                             var url = baseGtexUrlPrefix + symbol + baseGtexUrlSufix;
-                            return $http.get(url);
+                            return $http.get(url)
+                                .then (function (resp) {
+                                    return resp;
+                                }, function (err) {
+                                    $log.warn("error... but does not matter");
+                                    return;
+                                });
                         });
                     gtexPromises.push(targetPromise);
                 }
@@ -166,25 +172,27 @@ angular.module('cttvDirectives')
                         var tissuesData = {};
                         for (var i=0; i<resps.length; i++) {
                             var tissues = {};
-                            var parts = resps[i].config.url.split("/");
-                            var target = parts[parts.length-1].split("?")[0];
-                            for (var fullTissue in resps[i].data.generpkm) {
-                                var d = resps[i].data.generpkm[fullTissue];
-                                var median = d.median;
-                                var tissue = fullTissue.split(" - ")[0];
-                                if (!tissues[tissue]) {
-                                    tissues[tissue] = {
-                                        target: target,
-                                        tissue: tissue,
-                                        maxMedian: 0,
-                                    };
+                            if (resps[i]) {
+                                var parts = resps[i].config.url.split("/");
+                                var target = parts[parts.length-1].split("?")[0];
+                                for (var fullTissue in resps[i].data.generpkm) {
+                                    var d = resps[i].data.generpkm[fullTissue];
+                                    var median = d.median;
+                                    var tissue = fullTissue.split(" - ")[0];
+                                    if (!tissues[tissue]) {
+                                        tissues[tissue] = {
+                                            target: target,
+                                            tissue: tissue,
+                                            maxMedian: 0,
+                                        };
+                                    }
+                                    if (median > tissues[tissue].maxMedian) {
+                                        tissues[tissue].maxMedian = median;
+                                    }
                                 }
-                                if (median > tissues[tissue].maxMedian) {
-                                    tissues[tissue].maxMedian = median;
-                                }
+                                // var tissuesData = parseTissuesData(_.values(tissues));
+                                tissuesData[target] = tissues;
                             }
-                            // var tissuesData = parseTissuesData(_.values(tissues));
-                            tissuesData[target] = tissues;
                         }
                         var tissueDataRows = parseTissuesData(tissuesData);
                         var table = document.getElementById("tissuesSummaryTargetList");

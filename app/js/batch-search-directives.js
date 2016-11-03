@@ -71,24 +71,7 @@ angular.module('cttvDirectives')
             parsed.id = search.data.id;
             parsed.isExact = false;
 
-            // Determine fuzzy / exact match
-            var highlight;
-            if (search.highlight.approved_symbol) {
-                highlight = search.highlight.approved_symbol[0];
-            } else if (search.highlight) {
-                highlight = search.highlight.id;
-                // if (search.highlight.ensembl_gene_id) {
-                //     id = search.highlight.ensembl_gene_id[0];
-                // } else {
-                //     id = search.highlight.id;
-                // }
-                // highlight = search.highlight.ensembl_gene_id[0];
-            }
-
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(highlight, 'text/xml');
-            var matchedText = doc.firstChild.textContent;
-            if ((query === matchedText) || (query === parsed.id)) {
+            if (query === parsed.id || query === parsed.approved_symbol || query === parsed.approved_name) {
                 parsed.isExact = true;
             }
         }
@@ -134,7 +117,8 @@ angular.module('cttvDirectives')
                                 params: {
                                     q:target,
                                     size:1,
-                                    filter:"target"
+                                    filter:"target",
+                                    fields:["approved_symbol", "approved_name", "id"]
                                 }
                             });
                             // Associate target names with its search promise
@@ -165,6 +149,7 @@ angular.module('cttvDirectives')
                         // clean & update lists in localStorage
                         cttvLoadedLists.add(file.name, listSearch);
                         scope.list = cttvLoadedLists.get(file.name);
+                        $log.log(scope.list);
                     });
                 };
                 reader.readAsText(file);

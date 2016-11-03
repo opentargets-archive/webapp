@@ -191,7 +191,7 @@ angular.module('cttvControllers')
         $scope.filters = filters;
 
         var opts = {
-            disease: $scope.search.query,
+            disease: [$scope.search.query],
             outputstructure: "flat",
             facets: true,
             size:1
@@ -203,7 +203,7 @@ angular.module('cttvControllers')
 
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
         var queryObject = {
-            method: 'GET',
+            method: 'POST',
             params: opts
         };
 
