@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-.directive ('multipleTargetsAssociationsSummary', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+.directive ('multipleTargetsAssociationsSummary', ['$log', 'cttvAPIservice', '$q', function ($log, cttvAPIservice, $q) {
     'use strict';
 
     return {
@@ -15,21 +15,54 @@ angular.module('cttvDirectives')
                     return;
                 }
 
-                // Call to the api with the targets
-                var queryObject = {
+                var associationsPromises = [];
+                // 1st get the size
+                var queryObjectForSize = {
                     method: 'POST',
-                    params : {
+                    params: {
                         "target": scope.targets,
-                        "facets": true,
-                        "size": 1000,
-                        "direct": true
-                        // fields?
+                        "facets": false,
+                        "size": 0,
+                        "fields": "total"
                     }
                 };
-                cttvAPIservice.getAssociations(queryObject)
-                .then (function (resp) {
-                    scope.associations = resp.body;
-                });
+                cttvAPIservice.getAssociations(queryObjectForSize)
+                    .then (function (resp) {
+                        for (var i=0; i<resp.body.total; i+=1000) {
+                            // Call to the api with the targets
+                            var queryObject = {
+                                method: 'POST',
+                                params : {
+                                    "target": scope.targets,
+                                    "facets": true,
+                                    "from": i,
+                                    "size": 1000
+                                }
+                            };
+                            associationsPromises.push(cttvAPIservice.getAssociations(queryObject));
+                        }
+
+                        $q.all(associationsPromises)
+                            .then (function (resps) {
+                                // facets are the same for all of them...
+                                var combined = {
+                                    facets : resps[0].body.facets,
+                                    therapeutic_areas: resps[0].body.therapeutic_areas
+                                };
+                                var all = [];
+                                for (var i=0; i<resps.length; i++) {
+                                    all = _.concat (all, resps[i].body.data);
+                                }
+                                combined.data = all;
+                                scope.associations = combined;
+                            });
+                    });
+
+
+                // cttvAPIservice.getAssociations(queryObject)
+                // .then (function (resp) {
+                //     scope.associations = resp.body;
+                // });
 
             });
         }
@@ -206,7 +239,7 @@ angular.module('cttvDirectives')
         }
     };
 }])
-.directive('multipleTargetsBubbles', ['$log', 'cttvUtils', function ($log, cttvUtils) {
+.directive('multipleTargetsBubbles', ['$log', 'cttvUtils', '$q', function ($log, cttvUtils, $q) {
     'use strict';
 
     return {
@@ -214,21 +247,29 @@ angular.module('cttvDirectives')
         templateUrl: "",
         scope: {
             // associations: '='
-            targets: '='
+            targets: '=',
+            associations: '='
         },
         link: function (scope, el, attrs) {
             // TODO: We are passing the "targets" to the expansionView
             // but we already have the associations that can be passed (and avoid the extra call to the api)
-            scope.$watch('targets', function () {
-                if (!scope.targets) {
+            scope.$watch('associations', function () {
+                if (!scope.associations) {
                     return;
                 }
 
                 var container = document.createElement("div");
                 el[0].appendChild(container);
 
+                var dataPromise = $q(function (resolve) {
+                    resolve({
+                        "body": scope.associations
+                    });
+                });
+
                 var targetListAssocBubbles = expansionView()
-                    .targets(scope.targets);
+                    .data(dataPromise);
+                    // .targets(scope.targets);
                 targetListAssocBubbles (container);
 
             });
