@@ -75,17 +75,20 @@ angular.module('cttvDirectives')
 
                 scope.validateFile = function (file) {
                     scope.fileName = file.name;
-
+                    var targetNameArrayTemp = [];
                     var reader = new FileReader();
+
                     reader.onloadend = function (evt) {
                         //do something with file content here
                         var myFileContent = evt.target.result;
-                        scope.targetNameArray = myFileContent.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
-                        scope.targetNameArray = scope.targetNameArray.filter(function(e){ return e.trim();}); //get rid of empty strings
-                        scope.targetNameArray = scope.targetNameArray.map(function(value){return value.toLowerCase()});
-                        scope.targetNameArray = scope.targetNameArray.filter(function onlyUnique(value, index, self) {
+
+                        targetNameArrayTemp = myFileContent.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
+                        targetNameArrayTemp = targetNameArrayTemp.filter(function(e){ return e.trim();}); //get rid of empty strings
+                        targetNameArrayTemp = targetNameArrayTemp.map(function(value){return value.toLowerCase()});
+                        scope.targetNameArray = targetNameArrayTemp.filter(function onlyUnique(value, index, self) {
                             return self.indexOf(value) === index;
                         });
+
                         getBestHitTargetsIds(scope.targetNameArray);
                     };
                     reader.readAsText(file);
@@ -97,10 +100,14 @@ angular.module('cttvDirectives')
 
                     scope.fuzziesIncludedInSearch = !scope.fuzziesIncludedInSearch;
                     if( scope.fuzziesIncludedInSearch){
-                        scope.target = scope.targetIdArray;
+                        scope.target = scope.targetIdArray.filter(function onlyUnique(value, index, self) {
+                            return self.indexOf(value) === index;
+                        });
                     }
                     else {
-                        scope.target = scope.targetIdArrayWithoutFuzzies;
+                        scope.target = scope.targetIdArrayWithoutFuzzies.filter(function onlyUnique(value, index, self) {
+                            return self.indexOf(value) === index;
+                        });
                     }
                 }
 
@@ -129,7 +136,7 @@ angular.module('cttvDirectives')
                                     });
                                 }
                                 else{
-                                    scope.targetIdArray.push('');
+                                    //scope.targetIdArray.push('');
                                     scope.targetNameIdDict.push({ id:'' , label:resp.body.data[i].q, name:resp.body.data[i].q});
                                 }
                             }
@@ -140,7 +147,9 @@ angular.module('cttvDirectives')
 
                 var updateAllArrays = function () {
 
-                    scope.target = scope.targetIdArray;
+                    scope.target = scope.targetIdArray.filter(function onlyUnique(value, index, self) {
+                        return self.indexOf(value) === index;
+                    });
                     scope.excludedTargetArray = scope.targetNameIdDict.filter(function(e){return !e.id;});
                     scope.fuzzyTargetArray = scope.targetNameIdDict.filter(function(e){return e.name.toLowerCase().localeCompare(e.label.toLowerCase()) !== 0 && e.id.toLowerCase().localeCompare(e.name.toLowerCase()) !== 0;});
                     scope.targetIdArrayWithoutFuzzies = scope.targetNameIdDict.map(function (e) {
