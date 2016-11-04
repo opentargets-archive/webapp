@@ -94,7 +94,7 @@ angular.module('cttvDirectives')
                         label: therapeuticAreas[j].label,
                         value: therapeuticAreas[j].unique_target_count.value,
                         diseases: {},
-                        score: 100 * therapeuticAreas[j].unique_target_count.value / scope.targets.length
+                        score: ~~(100 * therapeuticAreas[j].unique_target_count.value / scope.targets.length)
                     };
                 }
                 for (var i=0; i<scope.associations.data.length; i++) {

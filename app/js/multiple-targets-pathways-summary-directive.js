@@ -68,13 +68,14 @@ angular.module('cttvDirectives')
                         var pathwaysArr = _.values(pathways);
                         for (var h=0; h<pathwaysArr.length; h++) {
                             pathwaysArr[h].targets = _.values(pathwaysArr[h].targets);
-                            pathwaysArr[h].score = 100 * pathwaysArr[h].targets.length / scope.targets.length;
+                            pathwaysArr[h].score = ~~(100 * pathwaysArr[h].targets.length / scope.targets.length);
                             pathwaysArr[h].subPathways = _.values(pathwaysArr[h].subPathways);
                             pathwaysArr[h].subPathways.sort (function (a, b) {
                                 return b.targets.length - a.targets.length;
                             });
                             for (var h2=0; h2<pathwaysArr[h].subPathways.length; h2++) {
-                                pathwaysArr[h].subPathways[h2].score = 100 * Object.keys(pathwaysArr[h].subPathways[h2].targets).length / scope.targets.length;
+                                pathwaysArr[h].subPathways[h2].targets = Object.keys(pathwaysArr[h].subPathways[h2].targets);
+                                pathwaysArr[h].subPathways[h2].score = ~~(100 * Object.keys(pathwaysArr[h].subPathways[h2].targets).length / scope.targets.length);
                                 // Link to pathway summary page (including all the targets)
                                 pathwaysArr[h].subPathways[h2].link += "&" + (Object.keys(pathwaysArr[h].subPathways[h2].targets).map(function (t) {return "pathway-target=" + t;})).join("&");
                             }
