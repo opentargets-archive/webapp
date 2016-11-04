@@ -97,23 +97,28 @@ angular.module('cttvDirectives')
 
 
                 scope.fuzzyToggle = function(){
-
+                    //$log.log("fuzzyToggle:scope.fuzziesIncludedInSearch",scope.fuzziesIncludedInSearch);
                     scope.fuzziesIncludedInSearch = !scope.fuzziesIncludedInSearch;
+                    //$log.log("fuzzyToggle:scope.fuzziesIncludedInSearch",scope.fuzziesIncludedInSearch);
                     if( scope.fuzziesIncludedInSearch){
                         scope.target = scope.targetIdArray.filter(function onlyUnique(value, index, self) {
                             return self.indexOf(value) === index;
                         });
+
                     }
                     else {
                         scope.target = scope.targetIdArrayWithoutFuzzies.filter(function onlyUnique(value, index, self) {
                             return self.indexOf(value) === index;
                         });
                     }
+
+                    //$log.log("fuzzyToggle:scope.target", scope.target);
                 }
 
                 var getBestHitTargetsIds = function (targetNameArray){
                     var opts = {
-                        q:targetNameArray
+                        q:targetNameArray,
+                        filter:'target'
                     };
 
                     var queryObject = {
@@ -153,7 +158,7 @@ angular.module('cttvDirectives')
                     scope.excludedTargetArray = scope.targetNameIdDict.filter(function(e){return !e.id;});
                     scope.fuzzyTargetArray = scope.targetNameIdDict.filter(function(e){return e.name.toLowerCase().localeCompare(e.label.toLowerCase()) !== 0 && e.id.toLowerCase().localeCompare(e.name.toLowerCase()) !== 0;});
                     scope.targetIdArrayWithoutFuzzies = scope.targetNameIdDict.map(function (e) {
-                        if (e.id && (e.name.localeCompare(e.label) == 0 || e.id.localeCompare(e.name) == 0)){ //has label and not fuzzy or has name and id and they are the same (for case when name is ENS code already)
+                        if (e.id && (e.name.toLowerCase().localeCompare(e.label.toLowerCase()) == 0 || e.id.toLowerCase().localeCompare(e.name.toLowerCase()) == 0)){ //has label and not fuzzy or has name and id and they are the same (for case when name is ENS code already)
                             return e.id;
                         }
                     });
@@ -166,7 +171,6 @@ angular.module('cttvDirectives')
                     //$log.log("123:targetIdArrayWithoutFuzzies", scope.targetIdArrayWithoutFuzzies);
                     scope.getfacets(scope.filters, scope.target);
                 }
-
 
             }
 
