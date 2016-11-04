@@ -1473,7 +1473,7 @@ angular.module('cttvDirectives', [])
                         +        '<div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
                         +             '<a href uib-dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
                         +             '<ul class="uib-dropdown-menu" uib-dropdown-menu>'
-                        +                  '<li ng-repeat="subitem in item.menu"><a href="{{subitem.href}}">{{subitem.label}}</a></li>'
+                        +                  '<li ng-repeat="subitem in item.menu"><a ng-if="subitem.target" target={{subitem.target}} href="{{subitem.href}}">{{subitem.label}}</a><a ng-if="!subitem.target" href="{{subitem.href}}">{{subitem.label}}</a></li>'
                         +             '</ul>'
                         +        '</div>'
 
