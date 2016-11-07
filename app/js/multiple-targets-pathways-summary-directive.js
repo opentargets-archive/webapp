@@ -77,7 +77,7 @@ angular.module('cttvDirectives')
                                 pathwaysArr[h].subPathways[h2].targets = Object.keys(pathwaysArr[h].subPathways[h2].targets);
                                 pathwaysArr[h].subPathways[h2].score = ~~(100 * Object.keys(pathwaysArr[h].subPathways[h2].targets).length / scope.targets.length);
                                 // Link to pathway summary page (including all the targets)
-                                pathwaysArr[h].subPathways[h2].link += "&" + (Object.keys(pathwaysArr[h].subPathways[h2].targets).map(function (t) {return "pathway-target=" + t;})).join("&");
+                                pathwaysArr[h].subPathways[h2].link += "&" + (pathwaysArr[h].subPathways[h2].targets.map(function (t) {return "pathway-target=" + t;})).join("&");
                             }
                         }
                         pathwaysArr.sort(function (a, b) {

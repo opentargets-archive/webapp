@@ -15,7 +15,7 @@ angular.module('cttvDirectives')
                 if (!scope.pathway) {
                     return;
                 }
-
+                
                 // TODO: width should be dynamic
                 var w = 1140;
                 var h = 700;
@@ -24,8 +24,6 @@ angular.module('cttvDirectives')
                 $http.get("/proxy/www.reactome.org/ContentService/data/query/" + scope.pathway + "/more")
                     .then (function (resp) {
                         scope.displayName = resp.data.displayName;
-                        $log.log(resp.data.summation);
-                        $log.log(resp.data.summation[0].text);
                         scope.description = resp.data.summation[0].text;
                     });
 
