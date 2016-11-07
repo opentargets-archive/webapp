@@ -89,6 +89,9 @@ angular.module('cttvDirectives')
                             return self.indexOf(value) === index;
                         });
 
+                        scope.targetIdArray = new Array(scope.targetNameArray.length);
+                        scope.targetNameIdDict = new Array(scope.targetNameArray.length);
+
                         getBestHitTargetsIds(scope.targetNameArray);
                     };
                     reader.readAsText(file);
@@ -115,7 +118,36 @@ angular.module('cttvDirectives')
                     //$log.log("fuzzyToggle:scope.target", scope.target);
                 }
 
-                var getBestHitTargetsIds = function (targetNameArray){
+                var getBestHitTargetsIds = function(targetNameArray){
+
+                    var promise = $q(function (resolve, reject) {
+                        resolve("");
+                    });
+
+                    var promises = [];
+                    for (var i = 0; i < targetNameArray.length; i += 200) {
+                        promises.push({
+                            from: i,
+                            total: 200
+                        });
+
+                    }
+                    promises.forEach(function (p) {
+                        promise = promise.then(function () {
+                            return getBestHitTargetsIdsChunk(targetNameArray.slice(p.from, p.from + p.total), p.from);
+                        });
+                    });
+
+                    //got all pieces - glue it all together
+                    promise.then(function(res){
+                        updateAllArrays();
+                    });
+
+
+
+                }
+
+                var getBestHitTargetsIdsChunk = function (targetNameArray, from){
                     var opts = {
                         q:targetNameArray,
                         filter:'target'
@@ -126,19 +158,23 @@ angular.module('cttvDirectives')
                         params: opts
                     };
 
+                    //$log.log("getBestHitTargetsIdsChunk:targetNameArray",targetNameArray);
+                    //$log.log("getBestHitTargetsIdsChunk:from",from);
+
                     return cttvAPIservice.getBestHitSearch(queryObject)
                         .then (function (resp) {
-                        //$log.log("getBestHitSearch:resp.body.data",resp.body.data);
+
                         if (resp.body.data.length > 0) {
                             for(var i=0;i<resp.body.data.length;i++) {
 
                                 if(resp.body.data[i].data) {
-                                    scope.targetIdArray.push(resp.body.data[i].id);
-                                    scope.targetNameIdDict.push({
+                                    //targetIdArray.push(resp.body.data[i].id);
+                                    scope.targetIdArray[i+from] = resp.body.data[i].id;
+                                    scope.targetNameIdDict[i+from] = {
                                         id: resp.body.data[i].id,
                                         label: resp.body.data[i].data.approved_symbol,
                                         name: resp.body.data[i].q
-                                    });
+                                    };
                                 }
                                 else{
                                     //scope.targetIdArray.push('');
@@ -146,11 +182,17 @@ angular.module('cttvDirectives')
                                 }
                             }
                         }
-                        updateAllArrays();
+
+                        //$log.log("getBestHitTargetsIdsChunk:scope.targetIdArray",scope.targetIdArray);
+                        //$log.log("getBestHitTargetsIdsChunk:scope.targetNameIdDict",scope.targetNameIdDict);
+
                     });
                 }
 
                 var updateAllArrays = function () {
+
+                    //$log.log("111:targetNameIdDict", scope.targetNameIdDict);
+                    //$log.log("111:targetNameArray", scope.targetNameArray);
 
                     scope.target = scope.targetIdArray.filter(function onlyUnique(value, index, self) {
                         return self.indexOf(value) === index;

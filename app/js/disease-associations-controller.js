@@ -111,6 +111,7 @@ angular.module('cttvControllers')
 
         cttvAPIservice.getAssociations(queryObject)
         .then(function(resp) {
+            //$log.log("disease-associations-controller:getAssociations:resp", resp);
             // 1: set the facets
             // we must do this first, so we know which datatypes etc we actually have
             //TODO Change this to POST request
