@@ -81,13 +81,11 @@ angular.module('cttvDirectives')
                     reader.onloadend = function (evt) {
                         //do something with file content here
                         var myFileContent = evt.target.result;
-
                         targetNameArrayTemp = myFileContent.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
                         targetNameArrayTemp = targetNameArrayTemp.filter(function(e){ return e.trim();}); //get rid of empty strings
                         targetNameArrayTemp = targetNameArrayTemp.map(function(value){return value.toLowerCase()});
-                        scope.targetNameArray = targetNameArrayTemp.filter(function onlyUnique(value, index, self) {
-                            return self.indexOf(value) === index;
-                        });
+
+                        scope.targetNameArray = uniqueArrayFast(targetNameArrayTemp);
 
                         scope.targetIdArray = new Array(scope.targetNameArray.length);
                         scope.targetNameIdDict = new Array(scope.targetNameArray.length);
@@ -97,56 +95,32 @@ angular.module('cttvDirectives')
                     reader.readAsText(file);
                 };
 
-
+                var uniqueArrayFast = function(a) {
+                    var o = {}, i, l = a.length, r = [];
+                    for(i=0; i<l;i+=1) o[a[i]] = a[i];
+                    for(i in o) r.push(o[i]);
+                    return r;
+                };
 
                 scope.fuzzyToggle = function(){
-                    //$log.log("fuzzyToggle:scope.fuzziesIncludedInSearch",scope.fuzziesIncludedInSearch);
                     scope.fuzziesIncludedInSearch = !scope.fuzziesIncludedInSearch;
-                    //$log.log("fuzzyToggle:scope.fuzziesIncludedInSearch",scope.fuzziesIncludedInSearch);
                     if( scope.fuzziesIncludedInSearch){
-                        scope.target = scope.targetIdArray.filter(function onlyUnique(value, index, self) {
-                            return self.indexOf(value) === index;
-                        });
-
+                        scope.target = uniqueArrayFast(scope.targetIdArray);
                     }
                     else {
-                        scope.target = scope.targetIdArrayWithoutFuzzies.filter(function onlyUnique(value, index, self) {
-                            return self.indexOf(value) === index;
-                        });
+                        scope.target = uniqueArrayFast(scope.targetIdArrayWithoutFuzzies);
                     }
-
-                    //$log.log("fuzzyToggle:scope.target", scope.target);
                 }
 
                 var getBestHitTargetsIds = function(targetNameArray){
-
-                    var promise = $q(function (resolve, reject) {
-                        resolve("");
-                    });
-
-                    var promises = [];
+                    var promisesArray = [];
                     for (var i = 0; i < targetNameArray.length; i += 200) {
-                        promises.push({
-                            from: i,
-                            total: 200
-                        });
-
+                        promisesArray.push(getBestHitTargetsIdsChunk(targetNameArray.slice(i, i + 200), i))
                     }
-                    promises.forEach(function (p) {
-                        promise = promise.then(function () {
-                            return getBestHitTargetsIdsChunk(targetNameArray.slice(p.from, p.from + p.total), p.from);
-                        });
-                    });
-
-                    //got all pieces - glue it all together
-                    promise.then(function(res){
-                        updateAllArrays();
-                    });
-
-
-
+                    $q.all(promisesArray).then(updateAllArrays);
                 }
 
+                //this is a 200 long slice of the original targetNameArray
                 var getBestHitTargetsIdsChunk = function (targetNameArray, from){
                     var opts = {
                         q:targetNameArray,
@@ -158,8 +132,8 @@ angular.module('cttvDirectives')
                         params: opts
                     };
 
-                    //$log.log("getBestHitTargetsIdsChunk:targetNameArray",targetNameArray);
-                    //$log.log("getBestHitTargetsIdsChunk:from",from);
+                    //$log.log("getBestHitTargetsIdsChunk:targetNameArray[0]",targetNameArray[0]);
+                    $log.log("getBestHitTargetsIdsChunk:from",from);
 
                     return cttvAPIservice.getBestHitSearch(queryObject)
                         .then (function (resp) {
@@ -168,7 +142,6 @@ angular.module('cttvDirectives')
                             for(var i=0;i<resp.body.data.length;i++) {
 
                                 if(resp.body.data[i].data) {
-                                    //targetIdArray.push(resp.body.data[i].id);
                                     scope.targetIdArray[i+from] = resp.body.data[i].id;
                                     scope.targetNameIdDict[i+from] = {
                                         id: resp.body.data[i].id,
@@ -177,7 +150,6 @@ angular.module('cttvDirectives')
                                     };
                                 }
                                 else{
-                                    //scope.targetIdArray.push('');
                                     scope.targetNameIdDict.push({ id:'' , label:resp.body.data[i].q, name:resp.body.data[i].q});
                                 }
                             }
