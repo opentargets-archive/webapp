@@ -48,7 +48,7 @@ angular.module('cttvDirectives')
 
                 scope.initFilterByFile();
 
-                scope.uploadedFile = function (element) {º
+                scope.uploadedFile = function (element) {
 
                     scope.$apply(function ($scope) {
                         scope.files = element.files;
@@ -86,11 +86,12 @@ angular.module('cttvDirectives')
                         targetNameArrayTemp = targetNameArrayTemp.map(function(value){return value.toLowerCase()});
 
                         scope.targetNameArray = uniqueArrayFast(targetNameArrayTemp);
-
                         scope.targetIdArray = new Array(scope.targetNameArray.length);
                         scope.targetNameIdDict = new Array(scope.targetNameArray.length);
 
-                        getBestHitTargetsIds(scope.targetNameArray);
+                        //Choose either Asynch or Consecutive version for testing
+                        getBestHitTargetsIdsAsynch(scope.targetNameArray);
+                        //getBestHitTargetsIdsConsecutive(scope.targetNameArray);
                     };
                     reader.readAsText(file);
                 };
@@ -112,13 +113,40 @@ angular.module('cttvDirectives')
                     }
                 }
 
-                var getBestHitTargetsIds = function(targetNameArray){
+                var getBestHitTargetsIdsAsynch = function(targetNameArray){
                     var promisesArray = [];
                     for (var i = 0; i < targetNameArray.length; i += 200) {
                         promisesArray.push(getBestHitTargetsIdsChunk(targetNameArray.slice(i, i + 200), i))
                     }
                     $q.all(promisesArray).then(updateAllArrays);
                 }
+
+                var getBestHitTargetsIdsConsecutive = function(targetNameArray){
+
+                    var promise = $q(function (resolve, reject) {
+                        resolve("");
+                    });
+
+                    var promises = [];
+                    for (var i = 0; i < targetNameArray.length; i += 200) {
+                        promises.push({
+                            from: i,
+                            total: 200
+                        });
+
+                    }
+                    promises.forEach(function (p) {
+                        promise = promise.then(function () {
+                            return getBestHitTargetsIdsChunk(targetNameArray.slice(p.from, p.from + p.total), p.from);
+                        });
+                    });
+
+                    //got all pieces - glue it all together
+                    promise.then(function(res){
+                        updateAllArrays();
+                    });
+                }
+
 
                 //this is a 200 long slice of the original targetNameArray
                 var getBestHitTargetsIdsChunk = function (targetNameArray, from){
@@ -150,7 +178,7 @@ angular.module('cttvDirectives')
                                     };
                                 }
                                 else{
-                                    scope.targetNameIdDict.push({ id:'' , label:resp.body.data[i].q, name:resp.body.data[i].q});
+                                    scope.targetNameIdDict[i+from] = { id:'' , label:resp.body.data[i].q, name:resp.body.data[i].q};
                                 }
                             }
                         }
@@ -166,9 +194,7 @@ angular.module('cttvDirectives')
                     //$log.log("111:targetNameIdDict", scope.targetNameIdDict);
                     //$log.log("111:targetNameArray", scope.targetNameArray);
 
-                    scope.target = scope.targetIdArray.filter(function onlyUnique(value, index, self) {
-                        return self.indexOf(value) === index;
-                    });
+                    scope.target = uniqueArrayFast(scope.targetIdArray);
                     scope.excludedTargetArray = scope.targetNameIdDict.filter(function(e){return !e.id;});
                     scope.fuzzyTargetArray = scope.targetNameIdDict.filter(function(e){return e.name.toLowerCase().localeCompare(e.label.toLowerCase()) !== 0 && e.id.toLowerCase().localeCompare(e.name.toLowerCase()) !== 0;});
                     scope.targetIdArrayWithoutFuzzies = scope.targetNameIdDict.map(function (e) {
