@@ -257,7 +257,7 @@ angular.module('cttvServices')
         */
         cttvAPI.getAssociations = function(queryObject){
             queryObject.operation = cttvAPI.API_ASSOCIATION_URL;
-            $log.log("cttvAPI.getAssociations():queryObject=",queryObject);
+            // $log.log("cttvAPI.getAssociations():queryObject=",queryObject);
             return callAPI (queryObject);
         };
 
