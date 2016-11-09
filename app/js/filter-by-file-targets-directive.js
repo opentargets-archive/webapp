@@ -48,7 +48,7 @@ angular.module('cttvDirectives')
 
                 scope.initFilterByFile();
 
-                scope.uploadedFile = function (element) {
+                scope.uploadedFile = function (element) {º
 
                     scope.$apply(function ($scope) {
                         scope.files = element.files;
@@ -133,7 +133,7 @@ angular.module('cttvDirectives')
                     };
 
                     //$log.log("getBestHitTargetsIdsChunk:targetNameArray[0]",targetNameArray[0]);
-                    $log.log("getBestHitTargetsIdsChunk:from",from);
+                    // $log.log("getBestHitTargetsIdsChunk:from",from);
 
                     return cttvAPIservice.getBestHitSearch(queryObject)
                         .then (function (resp) {
@@ -190,4 +190,3 @@ angular.module('cttvDirectives')
 
         };
     }])
-
