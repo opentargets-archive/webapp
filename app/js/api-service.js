@@ -375,6 +375,7 @@ angular.module('cttvServices')
             // $log.log("cttvAPI.logSession");
             var queryObject = {
                 operation : cttvAPI.API_LOG_SESSION_URL,
+                trackCall: false,
                 params: {
                     event: "appload"
                 }

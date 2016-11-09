@@ -1428,6 +1428,25 @@ angular.module('cttvDirectives', [])
     }])
 
 
+    .directive ('cttvBetaRibbon', ['$log', '$location', function ($log, $location) {
+        'use strict';
+        return {
+            restrict: 'E',
+            scope: {},
+            template: '<div id="cttv-beta-ribbon" class="cttv-beta-ribbon">{{host}}</div>',
+            link: function (scope, el, attrs) {
+                var host = $location.host();
+                scope.host = host.split('.')[0];
+                // TODO: This assumes that targetvalidation.org resolves to www.targetvalidation.org
+                if (host.startsWith('www')) {
+                    scope.display = false;
+                } else {
+                    scope.display = true;
+                }
+            }
+        }
+    }])
+
     .directive('mastheadNavigationMenu', ['cttvConfig', function (cttvConfig) {
         'use strict';
 
@@ -1453,7 +1472,7 @@ angular.module('cttvDirectives', [])
                         +        '<div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
                         +             '<a href uib-dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
                         +             '<ul class="uib-dropdown-menu" uib-dropdown-menu>'
-                        +                  '<li ng-repeat="subitem in item.menu"><a href="{{subitem.href}}">{{subitem.label}}</a></li>'
+                        +                  '<li ng-repeat="subitem in item.menu"><a ng-if="subitem.target" target={{subitem.target}} href="{{subitem.href}}">{{subitem.label}}</a><a ng-if="!subitem.target" href="{{subitem.href}}">{{subitem.label}}</a></li>'
                         +             '</ul>'
                         +        '</div>'
 
