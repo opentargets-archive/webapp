@@ -170,6 +170,7 @@ angular.module('cttvDirectives')
                             for(var i=0;i<resp.body.data.length;i++) {
 
                                 if(resp.body.data[i].data) {
+
                                     scope.targetIdArray[i+from] = resp.body.data[i].id;
                                     scope.targetNameIdDict[i+from] = {
                                         id: resp.body.data[i].id,
@@ -190,10 +191,7 @@ angular.module('cttvDirectives')
                 }
 
                 var updateAllArrays = function () {
-
-                    //$log.log("111:targetNameIdDict", scope.targetNameIdDict);
-                    //$log.log("111:targetNameArray", scope.targetNameArray);
-
+                    scope.targetIdArray = scope.targetIdArray.filter(function(e){return !e.id;});
                     scope.target = uniqueArrayFast(scope.targetIdArray);
                     scope.excludedTargetArray = scope.targetNameIdDict.filter(function(e){return !e.id;});
                     scope.fuzzyTargetArray = scope.targetNameIdDict.filter(function(e){return e.name.toLowerCase().localeCompare(e.label.toLowerCase()) !== 0 && e.id.toLowerCase().localeCompare(e.name.toLowerCase()) !== 0;});
