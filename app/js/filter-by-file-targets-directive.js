@@ -15,8 +15,7 @@ angular.module('cttvDirectives')
                 diseaseName: '=',
                 target: '=',
                 filters: '=',
-                getfacets: '=',
-                search: '='
+                getfacets: '='
             },
 
             templateUrl: 'partials/filter-by-file-targets.html',
@@ -25,9 +24,6 @@ angular.module('cttvDirectives')
                 //$log.log("cttvFilterByFileTargets:linkFunction: elem", elem);
 
                 scope.initFilterByFile =function(){
-
-                    scope.target = [];
-
                     scope.fileName = "";
 
                     scope.targetNameArray = [];//this one holds targetnames as they are read from the file
@@ -64,6 +60,7 @@ angular.module('cttvDirectives')
                     var theElement = document.getElementById("myFileInput");
 
                     theElement.value = null;
+                    scope.target = [];
                     scope.initFilterByFile();
                     scope.getfacets(scope.filters, scope.target);
 
