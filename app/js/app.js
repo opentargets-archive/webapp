@@ -10,7 +10,7 @@ function initApp (deps) {
 
             $routeProvider.
                 when('/', {
-                    templateUrl: 'partials/intro_rebrand.html'
+                    templateUrl: 'partials/intro.html'
                 }).
                 when('/search', {
                     templateUrl: 'partials/search.html',

@@ -7,6 +7,7 @@
         <link rel="shortcut icon" href="imgs/favicons/OT_favicon.png" type="image/png" />
         <meta http-equiv="content-type" content="text/html; charset=UTF8">
         <meta name="google-site-verification" content="L6ztwjop7Soke4dHLg6YAEwUK6IrTKtQEp8cIUamlKg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- IE9 -->
         <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
@@ -47,7 +48,7 @@
         <!-- NEW datatable -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/bs/jq-2.1.4,dt-1.10.10,b-1.1.0,b-flash-1.1.0,b-html5-1.1.0/datatables.min.css"/>
 
-        <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'> -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
 
         <!-- App CSS at the end, to override anything required
         <link rel="stylesheet" href="build/cttvWebapp.min.css?v=08122015" />-->
@@ -80,15 +81,26 @@
 
                 <div ng-controller="MastheadCtrl">
 
-                    <!-- Masthead (homepage) -->
+                    <!-- Masthead (homepage)
                     <div ng-if="location.path()=='/'" class="ng-cloak masthead-navigation-container">
                         <div class="container">
-                            <masthead-navigation-menu></masthead-navigation-menu>
+                            <div class="row" >
+                                <div class="col-xs-2">
+                                    <div class="ot_logo">
+                                        <img src="imgs/logo/ot-tvp-logo-hp3.svg" class="intro-logo-tvp" width="225px" alt="Open Targets logo"/>
+                                    </div>
+                                </div>
+                                <div class="col-xs-10">
+                                    <masthead-navigation-menu></masthead-navigation-menu>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </div>-->
 
-                    <!-- Masthead (other pages) -->
-                    <div ng-if="location.path()!=='/'" class="masthead ng-cloak">
+                    <!-- Masthead (other pages)
+                    <div ng-if="location.path()!=='/'" class="masthead ng-cloak">-->
+
+                    <div class="masthead ng-cloak" ng-class="location.path()!=='/' ? 'masthead-border' : ''">
                         <div class="container">
 
                             <div class="row" >
@@ -97,54 +109,47 @@
                                     <!-- CTTV logo -->
                                     <!-- <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>-->
                                     <div class="ot_logo">
-                                        <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_130x30_w.svg" width="130px" height="30px" alt="Open Targets logo"/></a>
+                                        <!-- <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_130x30_w.svg" width="130px" height="30px" alt="Open Targets logo"/></a> -->
+                                        <a href="/"><img src="imgs/logo/ot-tvp-logo-hp3w.svg" class="intro-logo-tvp" width="225px" alt="Open Targets logo"/></a>
                                     </div>
                                 </div>
 
-                                <div class="col-xs-6 masthead-navigation-container">
-                                    <masthead-navigation-menu></masthead-navigation-menu>
+                                <div class="col-xs-6 masthead-navigation-container" ng-class="location.path()=='/' ? 'pull-right' : ''">
+                                    <masthead-navigation-menu class="hidden-xs"></masthead-navigation-menu>
+                                    <!-- <div class="hidden-sm hidden-md hidden-lg"><span class="fa fa-bars"></span>menu</div> -->
                                 </div>
 
-                                <div class="col-xs-4" ng-controller="SearchBoxCtrl">
-                                    <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
+                                <div class="col-xs-4" ng-if="location.path()!=='/'">
+
+                                    <form ng-controller="SearchBoxCtrl" novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
+                                        <a name="search"></a>
                                         <fieldset>
-                                            <div class="has-feedback search-form">
-
-
+                                            <div class="form-group has-feedback search-form">
 
                                                 <!-- Search box + search button -->
-                                                <div class="input-group input-group-sm">
+                                                <div class="input-group">
 
-                                                    <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+                                                    <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control input-search" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
                                                     <div class="input-group-btn">
-                                                        <button type="submit" class="btn btn-primary">
-                                                            <span class="fa fa-search fa-lg"></span>
-                                                        </button>
+                                                        <button type="submit" class="btn btn-search"><span class="fa fa-search fa-lg"></span></button>
                                                     </div>
 
                                                 </div>
 
                                                 <!-- Search in progress spinner -->
-                                                <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner search-form-spinner-sm" ng-show="search.progress"></span>
+                                                <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
 
                                                 <!-- Suggestions box -->
                                                 <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
 
-
-                                                <!--<span class="small">
-                                                    <i>
-                                                        Examples: <a href="/search?q=braf">BRAF</a>,
-                                                        <a href="/search?q=asthma">asthma</a>,
-                                                        <a href="/search?q=pten">PTEN</a>
-                                                    </i>
-                                                </span>-->
-
-
                                             </div>
                                         </fieldset>
                                     </form>
+
                                 </div>
+
+
 
                             </div>
                         </div>
@@ -165,12 +170,12 @@
 
                 <!-- FEEDBACK BUTTON -->
                 <!-- Plese re-enable when we want (after integration day?) -->
-                <div ng-cloak class="cttv-feedback-button" ng-controller="FeedbackCtrl" ng-class="{'cttv-feedback-button-round': location.path()!='/' }">
+                <div ng-cloak class="cttv-feedback-button hidden-xs" ng-controller="FeedbackCtrl" ng-class="{'cttv-feedback-button-round': location.path()!='/' }">
                     <a target=_blank href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x20;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x20;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x20;&#x2D;&#x20;&#x66;&#x65;&#x65;&#x64;&#x62;&#x61;&#x63;&#x6B;&body=Page URL: {{location.absUrl()}}">
                     <div>Feedback</div></a>
                 </div>
 
-                <div ng-cloak class="cttv-social-panel" ng-controller="FeedbackCtrl" ng-show="location.path()=='/'" ng-click="showSocialMedia=!showSocialMedia">
+                <div ng-cloak class="cttv-social-panel hidden-xs" ng-controller="FeedbackCtrl" ng-show="location.path()=='/'" ng-click="showSocialMedia=!showSocialMedia">
 
                     <div ng-show="showSocialMedia">
                         <a target=_blank href="https://www.linkedin.com/company/centre-for-therapeutic-target-validation"><div class="cttv-social-panel-item cttv-social-panel-linkedin"></div></a>
@@ -217,53 +222,70 @@
                 <div class="container">
                     <div class="row">
 
+                        <!-- wrap everything in 2 extra columns to get cols stacked up vertically in 2 without wasting space -->
 
-                        <div class="col-sm-15 col-sm-3">
-                            <h6>Platform</h6>
-                            <p>Version 1.2.1 - 2016-09-21</p>
-                            <p><a href="/release-notes">Release notes</a></p>
-                            <p><a href="/about">About</a></p>
-                            <p><a href="/documentation/api">API</a></p>
-                            <!-- <p><a href="/documentation/components">Docs</a></p> -->
-                            <p><a href="/terms_of_use">Terms of use</a></p>
-                        </div>
+                        <div class="col-xs-6">
+                            <div class="row">
 
-                        <div class="col-sm-15 col-sm-3">
-                            <h6>Partners</h6>
-                            <p><a href="http://www.ebi.ac.uk">EMBL-EBI</a></p>
-                            <p><a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a></p>
-                            <p><a href="http://www.gsk.com">GSK</a></p>
-                            <p><a href="https://www.biogen.com/">Biogen</a></p>
-                        </div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <h4 class="footer-section-header">Platform</h4>
+                                    <ul class="footer-menu">
+                                        <li><span class="hidden-xs hidden-sm">Version </span>1.2.1 (2016-09-21)</li>
+                                        <li><a href="/release-notes">Release notes</a></li>
+                                        <!-- <li><a href="/about">About</a></li>
+                                        <li><a href="/documentation/api">API</a></li>
+                                        <li><a href="/documentation/components">Docs</a></li> -->
+                                        <li><a href="/terms_of_use">Terms <span class="hidden-xs">of use</span> &amp; privacy</a></li>
+                                    </ul>
 
-                        <div class="col-sm-15 col-sm-3">
-                            <h6>Help</h6>
-                            <p><a href="/faq"><i class="fa fa-question-circle"></i> FAQs</a></p>
-                            <p><a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x25;&#x32;&#x30;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x25;&#x32;&#x30;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x25;&#x32;&#x30;&#x2D;&#x25;&#x32;&#x30;&#x68;&#x65;&#x6C;&#x70;&#x25;&#x32;&#x30;&#x72;&#x65;&#x71;&#x75;&#x65;&#x73;&#x74;"><span class="fa fa-envelope"></span> support<span class="fa fa-at"></span>targetvalidation.org</a></p>
-                        </div>
+                                </div>
 
-                        <div class="col-sm-15 col-sm-3">
-                            <h6>Contact</h6>
-                            <p><!-- <span class="fa fa-phone"></span> +44 (0)1223 494 665<br /> --></p>
-                            <p><a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x63;&#x6F;&#x6E;&#x74;&#x61;&#x63;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;"><span class="fa fa-envelope"></span> contact<span class="fa fa-at"></span>targetvalidation.org</a></p>
-                            <!-- social media links -->
-                            <div class="footer-social-bar">
-                                <a href="https://www.linkedin.com/company/centre-for-therapeutic-target-validation" target="_blank" alt="Link to LinkedIn Open Targets page"><span class="fa fa-linkedin"></span></a>
-                                <a href="http://twitter.com/targetvalidate" target="_blank" alt="Link to Twitter Open Targets page"><span class="fa fa-twitter"></span></a>
-                                <a href="https://www.facebook.com/OpenTargets/" target="_blank" alt="Link to Facebook Open Targets page"><span class="fa fa-facebook"></span></a>
+                                <div class="col-xs-12 col-sm-6">
+                                    <h4 class="footer-section-header">Help</h4>
+                                    <ul class="footer-menu">
+                                        <li><a href="/faq"><i class="fa fa-question-circle"></i> FAQs</a></li>
+                                        <li><a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x25;&#x32;&#x30;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x25;&#x32;&#x30;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x25;&#x32;&#x30;&#x2D;&#x25;&#x32;&#x30;&#x68;&#x65;&#x6C;&#x70;&#x25;&#x32;&#x30;&#x72;&#x65;&#x71;&#x75;&#x65;&#x73;&#x74;"><span class="fa fa-envelope"></span> support<span class="hidden-xs hidden-sm"><span class="fa fa-at"></span>targetvalidation.org</span></a></li>
+                                    </ul>
+
+                                    <h4 class="footer-section-header">Follow us</h4>
+                                    <!-- social media links -->
+                                    <ul class="footer-menu list-inline footer-social-bar">
+                                        <li><a href="https://www.linkedin.com/company/centre-for-therapeutic-target-validation" target="_blank" alt="Link to LinkedIn Open Targets page"><span class="fa fa-linkedin"></span></a></li>
+                                        <li><a href="http://twitter.com/targetvalidate" target="_blank" alt="Link to Twitter Open Targets page"><span class="fa fa-twitter"></span></a></li>
+                                        <li><a href="https://www.facebook.com/OpenTargets/" target="_blank" alt="Link to Facebook Open Targets page"><span class="fa fa-facebook"></span></a></li>
+                                    </ul>
+
+                                </div>
+
                             </div>
                         </div>
 
-                        <div class="col-sm-15 col-sm-3">
-                            <h6><a href="//www.opentargets.org">Open Targets</a></h6>
-                            <p><a href="//www.opentargets.org/about">Overview</a></p>
-                            <p><a href="//www.opentargets.org/projects">Projects</a></p>
-                            <p><a href="//www.opentargets.org/news">News</a></p>
-                            <p><a href="//www.opentargets.org/jobs">Jobs</a></p>
-                            <p><a href="//blog.opentargets.org/">Blog</a></p>
+                        <div class="col-xs-6">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <h4 class="footer-section-header">Partners</h4>
+                                    <ul class="footer-menu">
+                                        <li><a href="http://www.ebi.ac.uk">EMBL-EBI</a></li>
+                                        <li><a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a></li>
+                                        <li><a href="http://www.gsk.com">GSK</a></li>
+                                        <li><a href="https://www.biogen.com/">Biogen</a></li>
+                                    </ul>
+
+                                </div>
+
+
+                                <div class="col-xs-12 col-sm-6">
+                                    <h4 class="footer-section-header"><a href="//www.opentargets.org">Open Targets</a></h4>
+                                    <ul class="footer-menu">
+                                        <li><a href="//www.opentargets.org/about">Overview</a></li>
+                                        <li><a href="//www.opentargets.org/projects">Projects</a></li>
+                                        <li><a href="//www.opentargets.org/news">News</a></li>
+                                        <li class="hidden-xs"><a href="//www.opentargets.org/jobs">Jobs</a></li>
+                                        <li class="hidden-xs"><a href="//blog.opentargets.org/">Blog</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-
-
 
                     </div>
                 </div>

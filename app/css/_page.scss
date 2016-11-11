@@ -56,7 +56,7 @@ body{
     width:100%;
     background: $primary-background-color;
     padding-bottom:70px;
-    padding-bottom:300px;
+    padding-bottom:320px;
 }
 
 .cttv-page-wrapper {
@@ -83,9 +83,9 @@ body{
 
     //padding: 8px 0;
     height: auto;
-    border-bottom: 1px solid $masthead-border;
+
     position: relative;
-    box-shadow: 0 1px 5px 0 $clr-ui-shadow;
+
     z-index: 10; // this will need some sort of variable presumably?
 
     .container{
@@ -97,8 +97,13 @@ body{
     }
 }
 
+.masthead-border {
+    border-bottom: 1px solid $masthead-border;
+    box-shadow: 0 1px 5px 0 $clr-ui-shadow;
+}
+
 .ot_logo {
-    margin: 8px 0px;
+    margin: 10px 0px;
 }
 
 .cttv-logotype {
@@ -118,7 +123,7 @@ body{
     margin-top: 0px;
     margin-bottom: 0px;
     padding: 0px; //override browser default for ul elements
-    height: 46px;
+    height: 50px;
 
     >li {
         display: inline-block;
@@ -130,7 +135,7 @@ body{
 
             >a, >a:focus {
                 padding: 0px 10px;
-                height: 46px;
+                height: 50px;
                 display: table-cell;
                 vertical-align: middle;
             }
@@ -181,7 +186,6 @@ body{
 
 
 
-
 /*
 * Footer
 */
@@ -191,15 +195,17 @@ body{
     font-size: 14px;
     font-weight: 300;
     color: $footer-text;
-    padding: 50px 0;
-    border-top: 1px solid $footer-border;
+    padding: 24px 0;
+    //border-top: 1px solid $footer-border;
 
     background: $footer-background;
     width:100%;
-    height:300px;
+    height:320px;
     position:absolute;
     bottom:0;
     left:0;
+
+    overflow: hidden;
 
     a{
         color: inherit;
@@ -208,15 +214,24 @@ body{
         }
     }
 
-    h6{
-        color: $footer-text-dim;
-        font-weight: 400;
-        font-size: 14px;
-        text-transform: uppercase;
-    }
 }
 
+.footer-section-header {
+    color: $footer-text-dim;
+    font-weight: 400;
+    //text-transform: uppercase;
+}
 
+.footer-menu {
+    padding-left: 0;
+    margin-bottom: 20px;
+
+    li {
+        list-style-type: none;
+        margin-left: 0;
+        margin-bottom: 5px;
+    }
+}
 
 
 
@@ -265,9 +280,9 @@ body{
 
 .cttv-content-header {
     margin-bottom: 30px;
-    border-bottom: 1px solid $clr-ui-border;
-    box-shadow: 0 0 5px 0 $clr-ui-shadow;
-    background: $clr-ui-background;
+    //border-bottom: 1px solid $clr-ui-border;
+    //box-shadow: 0 0 5px 0 $clr-ui-shadow;
+    //background: $clr-ui-background;
 
     h4 {
         font-weight: 300;

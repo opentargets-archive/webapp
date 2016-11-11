@@ -7,7 +7,7 @@
 
 
 
-$primary-color: #5A5F5F;            // text grey
+$primary-color: #5c5a69; // cool grey #5A5F5F;            // text grey
 $secondary-color: #0091EB;          // links blue
 //$secondary-color: adjust-color( #0091EB, $lightness: -5% );
 
@@ -17,6 +17,8 @@ $secondary-background-color: #EEE;  // gray
 $primary-brand-color: #3E8BAD;      // flower blue
 $secondary-brand-color: #FF6350; //#8b435f;    // cttv logo red
 $extra-brand-color: #1e5799;        // new blue //#0052A3
+
+$brand-light-blue: #b2def9;
 
 
 
@@ -30,7 +32,7 @@ $masthead-background: $secondary-color;
 
 $masthead-border: adjust-color($secondary-color, $lightness: -5%);
 
-$footer-background: $primary-color; //scale-color($secondary-background-color, $lightness: -57%);
+$footer-background: scale-color($primary-color, $lightness: -50%);
 $footer-border: scale-color($secondary-background-color, $lightness: -64%);
 $footer-text: inv-color($footer-background);
 $footer-text-dim: scale-color( $footer-text, $lightness: -13%);

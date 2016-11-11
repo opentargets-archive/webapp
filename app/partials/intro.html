@@ -1,129 +1,391 @@
 <view-title>Home</view-title>
 
-<div class="container">
-    <div class="row intro-content">
-
-        <div class="col-sm-1"></div>
-
-        <div class="col-sm-10" ng-controller="SearchBoxCtrl">
-
-            <!-- <img src="imgs/logo/ot_logo_webheader_280x104.png" class="intro-logo"/> -->
-            <img src="imgs/logo/ot_logo_webheader.svg" class="intro-logo" alt="Open Targets logo"/>
-
-            <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
-                <fieldset>
-                    <div class="form-group has-feedback search-form">
 
 
-                        <!-- Search box + search button -->
-                        <div class="input-group">
+<!-- First page should go here -->
 
-                            <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+<div class="intro-section-search intro-section-theme-gradient-blue"> <!-- section -->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
 
-                            <div class="input-group-btn">
-                            <button type="submit" class="btn btn-primary">
-                            <span class="fa fa-search fa-lg"></span>
-                            </button>
+
+                <h2 class="intro-section-heading">Identify biological targets for new therapies</h2>
+
+
+                <form ng-controller="SearchBoxCtrl" novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
+                    <a name="search"></a>
+                    <fieldset>
+                        <div class="form-group has-feedback search-form">
+
+                            <!-- Search box + search button -->
+                            <div class="input-group">
+
+                                <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control input-search" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-search"><span class="fa fa-search fa-lg"></span></button>
+                                </div>
+
                             </div>
 
+                            <!-- Search in progress spinner -->
+                            <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
+
+                            <!-- Suggestions box -->
+                            <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
+
                         </div>
-
-                        <!-- Search in progress spinner -->
-                        <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
-
-                        <!-- Suggestions box -->
-                        <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
+                    </fieldset>
+                </form>
 
 
-                  <!-- examples -->
-                  <!-- <span class="small">
-                      <i>
-                        Examples: <a href="/search?q=braf">BRAF</a>,
-                        <a href="/search?q=asthma">asthma</a>,
-                        <a href="/search?q=pten">PTEN</a>
-                      </i>
-                  </span> -->
 
-
-                    </div>
-                </fieldset>
-            </form>
-
-            <div class="intro-divider"></div>
-
-            <div class="row text-lowlight">
-
-                <div class="col-sm-6">
-                    <h2 class="intro-statement intro-statement-heading">I am interested in target T:</h2>
-                    <h2 class="intro-statement intro-statement-p">Which diseases can be treated by modulating target T?</h2>
-                </div>
-
-
-                <div class="col-sm-6">
-                    <h2 class="intro-statement intro-statement-heading">I am interested in disease D:</h2>
-                    <h2 class="intro-statement intro-statement-p">Which targets can be modulated to treat disease D?</h2>
-                </div>
 
             </div>
+        </div>
+    </div>
+</div> <!-- section -->
+
+<!--
+<div class="intro-section intro-section-theme-grey">
+    <div class="container">
 
 
-            <div class="intro-divider"></div>
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="intro-section-heading">The Target Validation platform enables drug discovery scientists to identify and prioritise biological targets for new therapies.</h3>
+            </div>
+        </div>
 
-        <!-- <div class="container-fluid"> -->
 
-            <!-- Stack the columns on mobile by making one full-width and the other half-width -->
-            <div class="row">
+        <div class="col-sm-6 intro-section-panel">
+            <h3 class="intro-section-panel-heading" >Transforming target selection and prioritisation</h3>
+        </div>
+        <div class="col-sm-6 intro-section-panel">
+            <h3 class="intro-section-panel-heading">Trustworthy, comprehensive, up-to-date and free to use<span class="text-small"></h3>
+        </div>
 
-                <div class="col-sm-8">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">About the Target Validation platform</h4>
-                        </div>
-                        <div class="panel-body">
-                            <p>The Target Validation platform brings together information on the relationships between potential drug targets and diseases.  The core concept is to identify evidence of an association between a target and disease from various data types.</p>
 
-                            <p>A target can be a protein, protein complex or RNA molecule, but we integrate evidence through the gene that codes for the target. In the same way, we describe diseases through a structure of relationships called the Experimental Factor Ontology (EFO) that allows us to bring together evidence across different but related diseases.</p>
+    </div>
+</div>
+-->
 
-                            <p>The platform supports workflows starting from either a target or disease and presents the evidence for target – disease associations in a number of ways through association and evidence pages.</p>
 
-                            <p>We also present related information on the target or the disease itself through the target profile and disease profile pages.</p>
 
-                            <p><a href="/about">Read more &hellip;</a></p>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-sm-4">
+<!--
+<div class="intro-section">
+    <div class="container">
+        <div class="row">
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">FAQ</h4>
-                        </div>
-                        <div class="panel-body">
-                            <p>See all the <a href="/faq">frequently asked questions</a></p>
-
-                            <ul class="plain arrow-icon">
-                                <li><a href="/faq#what_can_I search_for">What can I search for?</a></li>
-                                <li><a href="/faq#data">Where does the data come from?</a></li>
-                                <li><a href="/faq#score">How is the association score calculated?</a></li>
-                                <li><a href="/faq#data_use">How do you use the information I enter into the platform?</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-
+            <div class="col-sm-4">
+                <h3>I’m working on the BRAF gene in patients with lung carcinoma.
+                Is this gene associated with other diseases in the Respiratory system?</h3>
             </div>
 
-            <div class="intro-divider"></div>
+            <div class="col-sm-4">
+                <h2>I’ve got a list of 50 genes associated with Parkinson’s disease and would like to prioritise my network analyses. Can I get the top three most relevant genes associated with this disease?</h2>
+            </div>
+
+            <div class="col-sm-4">
+                <p>I want to get all the co-occurrences of target-disease associations from the literature. Is this information available for download?</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+-->
+
+
+
+
+
+<div class="intro-section intro-section-theme-grey">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 intro-section-panel">
+                <h2 class="intro-section-heading">Comprehensive data</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
+                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure">30,591</span> targets</h3>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
+                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure">2,489,214</span> associations</h3>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
+                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure">9,428</span> disease</h3>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
+                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure">13</span> databases</h3>
+            </div>
 
         </div>
 
-        <div class="col-sm-1"></div>
+        <div class="row">
+            <div class="col-xs-12 intro-section-panel">
+                <div class="intro-section-panel">
+                    <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-clock-o fa-5x"></span></div>
+                    <h3 class="intro-section-panel-heading"><span class="hidden-sm hidden-md hidden-lg fa fa-clock-o"></span> Last updated on 3 Nov 2017</h3>
+                </div>
+            </div>
+        </div>
 
-    </div> <!-- close row -->
+        <!-- <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="intro-section-panel">
+                    <p class="lead"><span class="fa fa-clock-o"></span> Last updated on 3 Nov 2017</p>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="intro-section-panel">
+                    <p class="lead">Where does our data come from?</p>
+                    <a href="/data_sources" class="btn btn-default">Data sources</a>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- STATS -->
+        <!--
+        <div class="row">
+            <div class="col-sm-4">
+                <h2 class="intro-stats-heading"><span class="number-circle label-primary">30K</span> targets</h2>
+            </div>
+
+            <div class="col-sm-4">
+                <h2 class="intro-stats-heading"><span class="number-circle label-primary">2.4M</span> associations</h2>
+            </div>
+
+            <div class="col-sm-4">
+                <h2 class="intro-stats-heading"><span class="number-circle label-primary">9.4K</span> diseases</h2>
+            </div>
+
+        </div>
+        -->
+
+    </div>
+</div>
+
+
+
+
+
+<!-- Data access-->
+<div class="intro-section intro-section-theme-darkgrey"> <!-- section -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="intro-section-heading">Free data access</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-4 intro-section-panel">
+                <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-desktop fa-5x"></span></div>
+                <h3 class="intro-section-panel-heading"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-desktop"></span> Target Validation Platform</h3>
+                <p class="hidden-xs">Search and visualize in your browser</p>
+                <a href="function(){scroll(0,0)}" class="btn btn-default">Try search</a>
+            </div>
+            <!-- <div class="col-xs-12 col-md-4 intro-section-panel">
+                <div class="intro-section-panel-icon hidden-xs"><span class="fa fa-cubes fa-5x"></span></div>
+                <h3 class="intro-section-panel-heading">API</h3>
+                <p>Although probably only on larger screens</p>
+            </div> -->
+            <div class="col-xs-12 col-md-4 intro-section-panel">
+                <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-code fa-5x"></span></div>
+                <h3 class="intro-section-panel-heading"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-code"></span> Programmatic access</h3>
+                <p class="hidden-xs">Rest API, Python, R and JS clients</p>
+                <a href="/documentation/api" class="btn btn-default">Explore API</a>
+            </div>
+            <div class="col-xs-12 col-md-4 intro-section-panel">
+                <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-download fa-5x"></span></div>
+                <h3 class="intro-section-panel-heading"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-download"></span> Download all data</h3>
+                <p class="hidden-xs">All our data as compressed JSON files</p>
+                <a href="/downloads/data" class="btn btn-default">Go to downloads</a>
+            </div>
+        </div>
+
+    </div>
 
 </div>
+
+
+
+
+
+<!-- Help and docs -->
+<div class="intro-section intro-section-theme-grey"> <!-- section -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-12">
+                    <h2 class="intro-section-heading">Need some help?</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-xs-12 col-md-4 intro-section-panel">
+                <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-question-circle fa-5x"></span></div>
+                <h3 class="intro-section-panel-heading"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-question-circle"></span> FAQs</h3>
+                <!-- <p>Perhaps a one-liner would be helpful here</p> -->
+            </div>
+
+            <div class="col-xs-12 col-md-4 intro-section-panel">
+                <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-book fa-5x"></span></div>
+                <h3 class="intro-section-panel-heading"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-book"></span> Docs</h3>
+                <!-- <p>Perhaps a one-liner would be helpful here</p> -->
+            </div>
+
+            <div class="col-xs-12 col-md-4 intro-section-panel">
+                <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-user fa-5x"></span></div>
+                <h3 class="intro-section-panel-heading"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-user"></span> Outreach and tutorials</h3>
+                <!-- <p>Perhaps a one-liner would be helpful here</p> -->
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<!-- PARTNERS -->
+<div class="intro-section intro-section-statement intro-section-theme-white"> <!-- section -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- <img src="imgs/logo/ot_logo_webheader.svg" class="intro-logo-tvp" alt="Open Targets logo" style="width: 240px; padding-bottom: 40px;"/> -->
+                <h2 class="intro-statement-heading">Open Targets</h2>
+                <h3 class="intro-statement-heading">An innovative pre-competitive collaboration between Sanger, EBI, GSK and Biogen</h3>
+            </div>
+        </div>
+
+        <!-- <div class="row">
+            <div class="col-xs-6 partners-hierarchy-graph-top"></div>
+            <div class="col-xs-6"></div>
+            <div class="col-xs-12 "><div class="partners-hierarchy-graph-bottom"></div></div>
+        </div> -->
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="partner-logo-block"><a href="http://www.sanger.ac.uk"><img src="imgs/partners/color/sanger_160x47.png" alt="sanger" class="partner-logo" /></a></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="partner-logo-block"><a href="http://www.ebi.ac.uk"><img src="imgs/partners/color/ebi_195x60.png" alt="EMBL-EBI" class="partner-logo" /></a></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="partner-logo-block"><a href="http://www.gsk.com"><img src="imgs/partners/color/gsk_86x74.png" alt="GSK" class="partner-logo" /></a></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="partner-logo-block"><a href="https://www.biogen.com/"><img src="imgs/partners/color/biogen_172x60.png" alt="Biogen" class="partner-logo" /></a></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- <h2 class="intro-statement-heading">An innovative pre-competitive collaboration between Sanger, EBI, GSK and Biogen</h2> -->
+                <a href="http://www.opentargets.org/" class="btn btn-primary">Our story</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- Stories and news -->
+<div class="intro-section intro-section-theme-white"> <!-- section -->
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-4">
+                <h3 class="intro-section-panel intro-section-panel-heading"><a href="//blog.opentargets.org/"><span class="fa fa-rss fa-lg"></span> Blog</a></h3>
+                <cttv-blog-feed class="hidden-xs"></cttv-blog-feed>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <h3 class="intro-section-panel intro-section-panel-heading"><a href="//twitter.com/targetvalidate"><span class="fa fa-twitter fa-lg"></span> Twitter</a></h3>
+                <div cttv-twitter-feed class="hidden-xs"></div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <h3 class="intro-section-panel intro-section-panel-heading"><a href="//www.facebook.com/OpenTargets/"><span class="fa fa-facebook-official fa-lg"></span> Facebook</a></h3>
+                <!-- FB feed -->
+                <!-- <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FOpenTargets%2F&tabs=timeline&width=300&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="300" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
+                <div class="fb-page hidden-xs"
+                    data-href="https://www.facebook.com/OpenTargets/"
+                    data-tabs="timeline"
+                    data-small-header="true"
+                    data-adapt-container-width="true"
+                    data-hide-cover="false"
+                    data-show-facepile="false"
+                    height="400">
+                    <blockquote cite="https://www.facebook.com/OpenTargets/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/OpenTargets/">Open Targets</a></blockquote>
+                </div>
+            </div>
+
+            <div class="col-xs-12 hidden-sm hidden-md hidden-lg">
+                <div class="intro-section-panel">
+                    <h3 class="intro-section-panel-heading"><a href="https://www.linkedin.com/company/centre-for-therapeutic-target-validation"><span class="fa fa-linkedin-square fa-lg"></span> LinkedIn</a></h3>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- Final remark -->
+<div class="intro-section intro-section-theme-grey">
+    <!-- <div class="user-no-track"></div> -->
+    <div class="container">
+
+        <div class="row">
+            <!-- <div class="col-sm-12">
+                <h2 class="intro-section-heading">Concerned about your data? Have a look at our T&Cs</h2>
+                <a href="/terms_of_use" class="btn btn-primary">Read terms of use</a>
+            </div> -->
+
+            <div class="col-xs-12 intro-section-panel">
+                <div class="intro-section-panel-icon"><span class="fa fa-shield fa-5x"></span></div>
+                <h2 class="intro-section-panel-heading">Concerned about your privacy?</h2>
+                <a href="/terms_of_use" class="btn btn-primary">Read our terms of use</a>
+
+                <!-- <div class="intro-section-panel-icon hidden-xs"><span class="fa fa-lock fa-5x"></span></div>
+                    <h3 class="intro-section-panel-heading"><span class="hidden-sm hidden-md hidden-lg fa fa-lock"></span> Concerned about your data? Have a look at our T&Cs</h3>
+                    <a href="/terms_of_use" class="btn btn-primary">Read terms of use</a>
+                </div> -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 
 <!-- End first page -->
