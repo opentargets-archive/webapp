@@ -15,13 +15,16 @@ angular.module('cttvDirectives')
                 diseaseName: '=',
                 target: '=',
                 filters: '=',
-                getfacets: '='
+                getfacets: '=',
+                search: '='
             },
 
             templateUrl: 'partials/filter-by-file-targets.html',
             link: function(scope, elem, attrs){
                 //$log.log("cttvFilterByFileTargets:linkFunction: scope", scope);
                 //$log.log("cttvFilterByFileTargets:linkFunction: elem", elem);
+
+                var multiSearchChunkSize = 200;
 
                 scope.initFilterByFile =function(){
                     scope.fileName = "";
@@ -86,9 +89,11 @@ angular.module('cttvDirectives')
                         scope.targetIdArray = new Array(scope.targetNameArray.length);
                         scope.targetNameIdDict = new Array(scope.targetNameArray.length);
 
+
+                        //$log.log("UNIQUE NAMES:" + scope.targetNameArray );
                         //Choose either Asynch or Consecutive version for testing
-                        getBestHitTargetsIdsAsynch(scope.targetNameArray);
-                        //getBestHitTargetsIdsConsecutive(scope.targetNameArray);
+                        //getBestHitTargetsIdsAsynch(scope.targetNameArray);
+                        getBestHitTargetsIdsConsecutive(scope.targetNameArray);
                     };
                     reader.readAsText(file);
                 };
@@ -112,8 +117,8 @@ angular.module('cttvDirectives')
 
                 var getBestHitTargetsIdsAsynch = function(targetNameArray){
                     var promisesArray = [];
-                    for (var i = 0; i < targetNameArray.length; i += 200) {
-                        promisesArray.push(getBestHitTargetsIdsChunk(targetNameArray.slice(i, i + 200), i))
+                    for (var i = 0; i < targetNameArray.length; i += multiSearchChunkSize) {
+                        promisesArray.push(getBestHitTargetsIdsChunk(targetNameArray.slice(i, i + multiSearchChunkSize), i))
                     }
                     $q.all(promisesArray).then(updateAllArrays);
                 }
@@ -125,13 +130,14 @@ angular.module('cttvDirectives')
                     });
 
                     var promises = [];
-                    for (var i = 0; i < targetNameArray.length; i += 200) {
+                    for (var i = 0; i < targetNameArray.length; i += multiSearchChunkSize) {
                         promises.push({
                             from: i,
-                            total: 200
+                            total: multiSearchChunkSize
                         });
 
                     }
+
                     promises.forEach(function (p) {
                         promise = promise.then(function () {
                             return getBestHitTargetsIdsChunk(targetNameArray.slice(p.from, p.from + p.total), p.from);
@@ -149,7 +155,8 @@ angular.module('cttvDirectives')
                 var getBestHitTargetsIdsChunk = function (targetNameArray, from){
                     var opts = {
                         q:targetNameArray,
-                        filter:'target'
+                        filter:'target',
+                        fields:'approved_symbol'
                     };
 
                     var queryObject = {
@@ -204,6 +211,7 @@ angular.module('cttvDirectives')
                     //$log.log("123:fuzzyTargetArray", scope.fuzzyTargetArray);
                     //$log.log("123:targetNameArray", scope.targetNameArray);
                     //$log.log("123:targetIdArrayWithoutFuzzies", scope.targetIdArrayWithoutFuzzies);
+
                     scope.getfacets(scope.filters, scope.target);
                 }
 

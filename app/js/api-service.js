@@ -112,6 +112,7 @@ angular.module('cttvServices')
                 if( queryObject.method === undefined || queryObject.method === 'GET') {
                     url = api.url[queryObject.operation](params);
                 } else {
+                    //$log.log("api-service.js", queryObject);
                     var theUrl = api.url[queryObject.operation]();
                     url = theUrl.substring(0, theUrl.length - 1 );
                 }
