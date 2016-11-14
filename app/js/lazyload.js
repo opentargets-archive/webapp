@@ -2,7 +2,7 @@
 
 angular.module('cttvServices')
 
-    .factory ('lazy', ['$log', '$q', '$http', 'cttvConfig', function ($log, $q, $http, cttvConfig) {
+    .factory ('lazy', ['$log', function ($log) {
         'use strict';
 
         var ll = {

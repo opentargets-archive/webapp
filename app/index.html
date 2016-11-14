@@ -81,8 +81,10 @@
 
                 <div ng-controller="MastheadCtrl">
 
+
                     <!-- Masthead (homepage)
-                    <div ng-if="location.path()=='/'" class="ng-cloak masthead-navigation-container">
+                    <div ng-if="location.path()=='/'" class="ng-cloak masthead-home masthead-navigation-container">
+
                         <div class="container">
                             <div class="row" >
                                 <div class="col-xs-2">
@@ -101,6 +103,7 @@
                     <div ng-if="location.path()!=='/'" class="masthead ng-cloak">-->
 
                     <div class="masthead ng-cloak" ng-class="location.path()!=='/' ? 'masthead-border' : ''">
+
                         <div class="container">
 
                             <div class="row" >
@@ -122,6 +125,7 @@
                                     <!-- <div class="hidden-sm hidden-md hidden-lg"><span class="fa fa-bars"></span>menu</div> -->
                                     <!-- here should have hamburger -->
 
+
                                     <ul class="masthead-navigation hidden-md hidden-lg">
                                         <li>
                                             <div>
@@ -129,6 +133,7 @@
                                             </div>
                                         </li>
                                     </ul>
+
 
                                 </div>
 
@@ -162,28 +167,25 @@
 
                                 </div>
 
-
-
                             </div>
                         </div>
                     </div>
-
                 </div>
-                <!-- End Masthead -->
 
                 <!-- Authentication error -->
-                <div uib-alert class="alert-danger" ng-show="showApiErrorMsg" ng-cloak >Your session has expired, reload the page to authenticate again
-                    <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
-                </div uib-alert>
+                <div uib-alert class="alert-danger" ng-show="showApiErrorMsg" ng-cloak close="showApiErrorMsg=false">
+                     Your session has expired, reload the page to authenticate again <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+                </div>
 
                 <!-- API ERROR 500 -->
-                <uib-alert type="danger" ng-show="showApiError500" close="showApiError500=false" ng-cloak>A problem retrieving data has occurred. Please try to reload the page. If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a>
+                <div uib-alert class="alert-danger" ng-show="showApiError500" close="showApiError500=false" ng-cloak>A problem retrieving data has occurred. Please try to reload the page. If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a>
                     <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
-                </uib-alert>
+                </div>
 
                 <!-- FEEDBACK BUTTON -->
                 <!-- Plese re-enable when we want (after integration day?) -->
                 <div ng-cloak class="cttv-feedback-button hidden-xs" ng-controller="FeedbackCtrl" ng-class="{'cttv-feedback-button-round': location.path()!='/' }">
+
                     <a target=_blank href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x20;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x20;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x20;&#x2D;&#x20;&#x66;&#x65;&#x65;&#x64;&#x62;&#x61;&#x63;&#x6B;&body=Page URL: {{location.absUrl()}}">
                     <div>Feedback</div></a>
                 </div>

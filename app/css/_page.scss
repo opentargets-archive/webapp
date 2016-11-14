@@ -1,4 +1,4 @@
-
+@import "colors";
 
 
 /*
@@ -203,6 +203,38 @@ body{
     }
 }
 
+.notification {
+    position:relative;
+    float: right;
+    margin-top:10px;
+    color:white;
+    margin-top:10px;
+    font-size:22px;
+    width:50px;
+
+    .counter {
+        border-radius:50%;
+        color: white;
+        width:14px;
+        height:14px;
+        background:red;
+        position:absolute;
+        left:39px;
+        top:5px;
+        font-size:10px;
+        text-align:center;
+        pointer-events:none;
+    }
+
+    >i {
+        cursor:pointer;
+    }
+}
+
+
+.masthead-home .notification {
+    color: $primary-brand-color;
+}
 
 
 /*
@@ -437,6 +469,3 @@ body{
 .fixed {
     position: fixed;
 }
-
-
-
