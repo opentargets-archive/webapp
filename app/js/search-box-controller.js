@@ -70,6 +70,8 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             //clear the data here, so the box disappears or the content is cleared...
             $scope.search.results = {};
 
+            $log.log("query: "+query.length);
+
             if(query.length>1){
                 $scope.search.progress = true;  // flag for search in progress
                 $document.bind('click', dismissClickHandler);
@@ -206,5 +208,25 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             // So, for now we RESET the field, then I'll think about it.
             $scope.search.query.text = "";
         }
+
+
+
+        /**
+         * NOTE: This is only to be called by the homepage only
+         * @params id: the id of the element to scroll to (remember to add hash #)
+         * @params p: extra padding to be added
+         */
+        $scope.onFocusHandler = function(id, p, mobileonly){
+            //$log.log("hello");
+            if(mobileonly && $window.innerWidth>768){
+                return;
+            }
+            var sb = $(id);
+            if(sb){
+                $window.scrollTo( 0, sb.offset().top - p );
+            }
+        }
+
+
 
     }]);
