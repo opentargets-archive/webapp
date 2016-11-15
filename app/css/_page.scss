@@ -33,13 +33,13 @@ body{
     overflow: hidden;
     white-space: nowrap;
     color: white;
-    display: none;
     padding: 5px 50px;
     margin: 1px 0;
     font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
     text-align: center;
     border: 1px solid #faa;
 
+    z-index: 1000;
     position: absolute;
     left: -40px;
     top: 10px;
@@ -81,12 +81,14 @@ body{
 
 
 
-    //padding: 8px 0;
+    // padding: 8px 0;
     height: auto;
 
     position: relative;
 
+    // box-shadow: 0 1px 5px 0 $clr-ui-shadow;
     z-index: 10; // this will need some sort of variable presumably?
+
 
     .container{
         height: auto;

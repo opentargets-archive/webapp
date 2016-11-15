@@ -185,13 +185,17 @@ angular.module('cttvDirectives')
                         facets: false
                     };
                     opts = cttvAPIservice.addFacetsOptions(facets, opts);
+                    var queryObject = {
+                        method: 'GET',
+                        params: opts
+                    };
 
                     if (bView) {
                         bView.therapeuticAreas(opts.therapeutic_area);
-                        bView.update(cttvAPIservice.getAssociations(opts));
+                        bView.update(cttvAPIservice.getAssociations(queryObject));
                     } else {
                         setView();
-                        bView.data(cttvAPIservice.getAssociations(opts));
+                        bView.data(cttvAPIservice.getAssociations(queryObject));
                         bView.therapeuticAreas(opts.therapeutic_area);
                         bView(bubblesContainer);
                     }

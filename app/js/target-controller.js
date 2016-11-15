@@ -9,13 +9,16 @@ angular.module('cttvControllers')
 .controller ("TargetCtrl", ["$scope", "$location", "$log", "cttvAPIservice", "$sce", "$q", 'cttvUtils', 'cttvConfig', function ($scope, $location, $log, cttvAPIservice, $sce, $q, cttvUtils, cttvConfig) {
     "use strict";
 
-    $log.log('TargetCtrl()');
+    // $log.log('TargetCtrl()');
     cttvUtils.clearErrors();
 
     $scope.targetId = $location.url().split("/")[2];
 
     cttvAPIservice.getTarget({
-        target_id: $scope.targetId
+        method: 'GET',
+        params: {
+            target_id: $scope.targetId
+        }
     })
     .then(
         // success

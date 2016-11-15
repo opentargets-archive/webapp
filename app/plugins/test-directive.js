@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('testPlugin', [function () {
+    .directive('testPlugin', ['$log', function ($log) {
         'use strict';
         return {
             // Needed
@@ -9,7 +9,7 @@ angular.module('plugins')
                 target: '='
             },
             link: function (scope, element, attrs) {
-                console.log(myTest('Hello World'));
+                $log.log(myTest('Hello World'));
             }
         };
     }]);

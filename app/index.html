@@ -203,9 +203,8 @@
 
                 <!--<div class="container">-->
                 <div>
-
-                    <!-- Remove beta ribbon -->
-                    <!-- <div id="cttv-beta-ribbon" class="cttv-beta-ribbon"></div> -->
+                    <!-- beta ribbon if not in www -->
+                    <cttv-beta-ribbon></cttv-beta-ribbon>
 
                     <!-- ie < 9? -->
                     <!--[if lt IE 9]>
@@ -369,21 +368,6 @@
             <noscript><p><img src="//opentargets.piwikpro.com/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
             <!-- End Piwik Code -->
 
-            <!-- ribbon control  -->
-            <script type="text/javascript">
-            function showRibbon() {
-                var ribbon = document.getElementById('cttv-beta-ribbon');
-                if(ribbon){
-                    if (location.hostname.startsWith('www')) {
-                        ribbon.style.display = 'none';
-                    }
-                    else {
-                        ribbon.style.display = 'block';
-                        ribbon.innerHTML=location.hostname.split('.')[0].toUpperCase()
-                    }
-                }
-            }
-            window.onload = showRibbon;
             </script>
 
 

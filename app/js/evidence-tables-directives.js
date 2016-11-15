@@ -90,14 +90,18 @@ angular.module('cttvDirectives')
                         opts.disease = attrs.disease;
                     }
                     _.extend(opts, searchObj);
-                    return cttvAPIservice.getFilterBy( opts ).
+                    var queryObject = {
+                        method: 'GET',
+                        params: opts
+                    };
+                    return cttvAPIservice.getFilterBy (queryObject).
                     then(
                         function(resp) {
                             if( resp.body.data ){
                                 scope.data = resp.body.data;
                                 initTableDrugs();
                             } else {
-                                $log.warn("Empty response : drug data");
+                                // $log.warn("Empty response : drug data");
                             }
                         },
                         cttvAPIservice.defaultErrorHandler
@@ -213,8 +217,8 @@ angular.module('cttvDirectives')
                             newdata.push(row); // use push() so we don't end up with empty rows
                         }catch(e){
                             scope.errorFlag = true;
-                            $log.log("Error parsing drugs data:");
-                            $log.log(e);
+                            // $log.log("Error parsing drugs data:");
+                            // $log.log(e);
                         }
                     });
 

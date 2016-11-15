@@ -5,8 +5,6 @@ angular.module('cttvDirectives')
 /**
 * Matrix (heatmap) view for target associations
 */
-// .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'clearUnderscoresFilter', 'upperCaseFirstFilter', 'cttvUtils', 'cttvDictionary', '$compile', 'cttvConsts', '$location', function ($log, cttvAPIservice, clearUnderscores, upperCaseFirst, cttvUtils, cttvDictionary, $compile, cttvConsts, $location) {
-
 .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', '$q', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location, $q, $analytics) {
     'use strict';
 
@@ -64,7 +62,7 @@ angular.module('cttvDirectives')
     Setup the table cols and return the DT object
     */
     var setupTable = function(table, target, filename, download){
-        $log.log("setupTable()");
+        // $log.log("setupTable()");
         // return $(table).DataTable( cttvUtils.setTableToolsParams({
         return $(table).DataTable ({
             //"dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
@@ -123,8 +121,12 @@ angular.module('cttvDirectives')
                 };
 
                 opts = cttvAPIservice.addFacetsOptions(filters, opts);
+                var queryObject = {
+                    method: 'GET',
+                    params: opts
+                };
 
-                cttvAPIservice.getAssociations(opts)
+                cttvAPIservice.getAssociations(queryObject)
                     .then (function (resp) {
                         var dtData = parseServerResponse(resp.body.data);
                         var o = {
@@ -309,7 +311,11 @@ angular.module('cttvDirectives')
                     size: 1
                 };
                 optsPreFlight = cttvAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
-                cttvAPIservice.getAssociations(optsPreFlight)
+                var queryObject = {
+                    method: 'GET',
+                    params: optsPreFlight
+                };
+                cttvAPIservice.getAssociations(queryObject)
                     .then (function (resp) {
                         var total = resp.body.total;
 
@@ -332,7 +338,11 @@ angular.module('cttvDirectives')
                             };
                             opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
 
-                            return cttvAPIservice.getAssociations(opts)
+                            var queryObject = {
+                                method: 'GET',
+                                params: opts
+                            };
+                            return cttvAPIservice.getAssociations(queryObject)
                                 .then (function (resp) {
                                     var moreText = resp.body;
                                     if (columnsNumberOk(moreText, opts.fields.length)) {

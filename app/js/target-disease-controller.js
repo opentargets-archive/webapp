@@ -10,7 +10,7 @@
      */
     .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$uibModal', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $uibModal, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
         'use strict';
-        $log.log('TargetDiseaseCtrl()');
+        // $log.log('TargetDiseaseCtrl()');
 
 		cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
         cttvUtils.clearErrors();
@@ -143,30 +143,34 @@
         var getInfo = function(){
             // get gene specific info
             cttvAPIservice.getTarget( {
+                method: 'GET',
+                params: {
                     target_id:$scope.search.target
-                } ).
-                then(
-                    function(resp) {
-                        $scope.search.info.gene = resp.body;
-                        //updateTitle();
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                );
-
-
+                }
+            } )
+            .then(
+                function(resp) {
+                    $scope.search.info.gene = resp.body;
+                    //updateTitle();
+                },
+                cttvAPIservice.defaultErrorHandler
+            );
             // get disease specific info with the efo() method
             cttvAPIservice.getDisease( {
+                method: 'GET',
+                params: {
                     code:$scope.search.disease
-                } ).
-                then(
-                    function(resp) {
-                        $scope.search.info.efo = resp.body;
-                        // TODO: This is not returned by the api yet. Maybe we need to remove it later
-                        $scope.search.info.efo.efo_code = $scope.search.disease;
-                        //updateTitle();
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                );
+                }
+            } )
+            .then(
+                function(resp) {
+                    $scope.search.info.efo = resp.body;
+                    // TODO: This is not returned by the api yet. Maybe we need to remove it later
+                    $scope.search.info.efo.efo_code = $scope.search.disease;
+                    //updateTitle();
+                },
+                cttvAPIservice.defaultErrorHandler
+            );
 
         };
 
@@ -213,14 +217,16 @@
             };
             _.extend(opts, searchObj);
 
-            return cttvAPIservice.getAssociation(opts).
-                then(
-                    function(resp) {
-                        $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
-                        updateTitle( resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label );
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                );
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+
+            return cttvAPIservice.getAssociations (queryObject)
+                .then (function(resp) {
+                    $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
+                    updateTitle( resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label );
+                }, cttvAPIservice.defaultErrorHandler);
         };
 
 
@@ -282,7 +288,11 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -425,7 +435,12 @@
 
             _.extend(opts, searchObj);
 
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -627,7 +642,11 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -757,7 +776,12 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -918,7 +942,11 @@
             };
             _.extend(opts, searchObj);
             $scope.search.tables.somatic_mutations.is_loading = true;
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -1088,7 +1116,12 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -1228,8 +1261,6 @@
         */
 
         function parseResponse (recs, dt) {
-            //$log.log("parseResponse():recs", recs);
-            //$log.log("parseResponse():dt", dt);
             dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 var data = this.data(); //data is previously preformatted table data that we need to add abstract info that came from pm
                 //$log.log("parseResponse():data", data);
@@ -1342,7 +1373,11 @@
                 // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
 
@@ -1798,7 +1833,7 @@
         // =================================================
 
         $scope.sectionOpen=function(who) {
-           $log.info("tdc:sectionOpen", who);
+        //    $log.info("tdc:sectionOpen", who);
             // Fire a target associations tree event for piwik to track
             $analytics.eventTrack('evidence', {"category": "evidence", "label": who});
         };
@@ -1807,9 +1842,9 @@
         //  M A I N   F L O W
         // =================================================
 
-        $log.info("target-disease-controller");
+        // $log.info("target-disease-controller");
         var path = $location.path().split("/");
-        $log.info(path);
+        // $log.info(path);
         // parse parameters
         $scope.search.target = path[2];
         $scope.search.disease = path[3];

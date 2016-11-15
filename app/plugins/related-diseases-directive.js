@@ -181,8 +181,8 @@ angular.module('plugins')
                 var target = targets[i];
                 var objAssoc = data[object][target];
                 var sbjAssoc = data[subject][target];
-                console.log(objAssoc);
-                console.log(sbjAssoc);
+                // $log.log(objAssoc);
+                // $log.log(sbjAssoc);
                 var objDts = objAssoc.association_score.datatypes;
                 var sbjDts = sbjAssoc.association_score.datatypes;
                 var row = [];
@@ -238,7 +238,7 @@ angular.module('plugins')
             },
             link: function (scope, element, attrs) {
                 scope.changedScore = function (newScore) {
-                    console.log(newScore);
+                    // $log.log(newScore);
                 };
 
                 // Populate overview
@@ -251,8 +251,8 @@ angular.module('plugins')
                         .cttvApi(cttvAPIservice.getSelf());
 
                     // v.on("load", function (d) {
-                    //     console.log("LOADED------------------------------------");
-                    //     console.log(Object.keys(d[0].scores));
+                    //     $log.log("LOADED------------------------------------");
+                    //     $log.log(Object.keys(d[0].scores));
                     //     scope.scores = Object.keys(d[0].scores);
                     // });
 

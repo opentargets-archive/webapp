@@ -1,5 +1,5 @@
 angular.module('plugins', [])
-.directive ('pluginLoader', ['$compile', '$timeout', 'lazy', '$q', '$analytics', function ($compile, $timeout, lazy, $q, $analytics) {
+.directive ('pluginLoader', ['$log', '$compile', '$timeout', 'lazy', '$q', '$analytics', function ($log, $compile, $timeout, lazy, $q, $analytics) {
 
     return {
         restrict: 'E',
@@ -36,10 +36,10 @@ angular.module('plugins', [])
 
                 if (val === "true") {
                     if (scope.alreadyLoaded[scope.plugin]) {
-                        console.log(scope.plugin + " is already there");
+                        // $log.log(scope.plugin + " is already there");
                         return;
                     } else {
-                        console.log(scope.plugin + " does not exist yet, creating it");
+                        // $log.log(scope.plugin + " does not exist yet, creating it");
                         scope.alreadyLoaded[scope.plugin] = true;
                     }
 
@@ -66,7 +66,7 @@ angular.module('plugins', [])
                     // The component may not be able to display when the container is not visible, so we wait until it is
                     $q.all(loadedDeps)
                         .then (function () {
-                            console.log("All deps have now been loaded...");
+                            // $log.log("All deps have now been loaded...");
                             // remove the spinner
                             element[0].removeChild(spinnerDiv);
                             // var spinner = document.getElementById("section-spinner-" + scope.label);

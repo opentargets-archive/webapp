@@ -9,7 +9,7 @@ angular.module('cttvControllers')
 .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', '$timeout', 'cttvLocationState', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary, $timeout, cttvLocationState) {
     'use strict';
 
-	$log.log('targetAssociationsCtrl()');
+	// $log.log('targetAssociationsCtrl()');
 
 
 
@@ -37,7 +37,7 @@ angular.module('cttvControllers')
     $scope.view = {
         t : ["bubbles"],    // t = the selected tab
         //tp: [1]
-    }
+    };
 
     $scope.loading = false;
 
@@ -123,8 +123,12 @@ angular.module('cttvControllers')
             size: 1
         };
         opts = cttvAPIservice.addFacetsOptions(filters, opts);
+        var queryObject = {
+            method: "GET",
+            params: opts
+        };
 
-        cttvAPIservice.getAssociations(opts)
+        cttvAPIservice.getAssociations(queryObject)
             .then (function (resp) {
                 $scope.search.total = resp.body.total;
                 if (resp.body.total) {
@@ -194,5 +198,3 @@ angular.module('cttvControllers')
 
 
 }]);
-
-

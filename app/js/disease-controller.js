@@ -6,12 +6,15 @@ angular.module('cttvControllers')
 */
     .controller ('DiseaseCtrl', ["$scope", "$location", "$log", "cttvAPIservice", 'cttvUtils', 'cttvConfig', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvConfig) {
         "use strict";
-        $log.log("DiseaseCtrl()");
+        // $log.log("DiseaseCtrl()");
         cttvUtils.clearErrors();
 
         var efo_code = $location.url().split("/")[2];
         cttvAPIservice.getDisease({
-            code: efo_code
+            method: 'GET',
+            params: {
+                code: efo_code
+            }
         })
         .then (function (resp) {
             var data = resp.body;

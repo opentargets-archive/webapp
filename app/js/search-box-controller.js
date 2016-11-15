@@ -85,11 +85,19 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
 
                 // fire the typeahead search
                 return searchPromise.then(function () {
-                    return cttvAPIservice.getQuickSearch({q:$scope.search.query.text, size:3, trackCall:false})
+                    return cttvAPIservice.getQuickSearch(
+                        {
+                            params: {
+                                q: $scope.search.query.text,
+                                size: 3
+                            },
+                            trackCall: false,
+                            method: "GET"
+                        })
                         .then(
                             function(resp){
                                 var i, h, h2;
-                                $log.info(resp);
+                                // $log.info(resp);
                                 $scope.search.results = parseResponseData(resp.body.data);  // store the results
                                 var besthit = $scope.search.results.besthit;
                                 besthit.humanMatch = false;
