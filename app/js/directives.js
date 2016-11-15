@@ -1550,8 +1550,8 @@ angular.module('cttvDirectives', [])
                         +'    </div>'
                         +'</div>',
             link: function(scope, element, attrs) {
-                //$http.get('/proxy/blog.opentargets.org/rss/')
-                $http.get('rss.xml')    // JUST FOR TESTING and DEVELOPING LOCALLY WITHOUT THE PROXY
+                $http.get('/proxy/blog.opentargets.org/rss/')
+                //$http.get('rss.xml')    // JUST FOR TESTING and DEVELOPING LOCALLY WITHOUT THE PROXY
                     .then(function successCallback(response) {
 
                         var x2js = new X2JS();
