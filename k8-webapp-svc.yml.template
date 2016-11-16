@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-beta
+  labels:
+    app: webapp
+    branch: "master"
+    commit: ${WERCKER_GIT_COMMIT}
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    protocol: TCP
+    name: http
+  - port: 443
+    protocol: TCP
+    name: https
+  selector:
+    app: webapp
+    branch: "master"
+    commit: ${WERCKER_GIT_COMMIT}
