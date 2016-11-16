@@ -196,7 +196,7 @@ body{
 
     >li div {
         &.open, &:hover {
-            background: $btn-primary-bg-hover;
+            background: $clr-black-a10; //$btn-primary-bg-hover;
         }
 
         >a, >a:focus {

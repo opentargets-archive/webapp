@@ -81,7 +81,11 @@ $btn-primary-border-hover: adjust-color( $btn-primary-bg, $lightness: 10% );
 /*
  * Transparent colors
  */
-
+$clr-black-a10: rgba(0,0,0, .1);
+$clr-black-a20: rgba(0,0,0, .2);
+$clr-black-a50: rgba(0,0,0, .5);
+$clr-black-a70: rgba(0,0,0, .7);
+$clr-black-a80: rgba(0,0,0, .8);
 
 
 /*

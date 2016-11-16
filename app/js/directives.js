@@ -1458,13 +1458,12 @@ angular.module('cttvDirectives', [])
             },
 
             template : ''
-                        + '<div ng-cloak class=notification ng-show="notificationsLeft" ng-controller="NotifyCtrl">'
-                        + '     <div class=counter ng-bind-html="notificationsLeft"></div>'
+                        + '<div ng-cloak class="notification" ng-show="notificationsLeft" ng-controller="NotifyCtrl">'
+                        + '     <div class="counter" ng-bind-html="notificationsLeft"></div>'
                         + '     <i ng-click="notify()" class="fa fa-bell-o" aria-hidden="true"></i>'
                         + '</div>'
 
                         + '<ul class="masthead-navigation">'
-
                         +    '<li ng-repeat="item in nav" ng-if="item.label">'
 
                         +        '<div ng-if="item.menu==undefined">'
@@ -1477,6 +1476,16 @@ angular.module('cttvDirectives', [])
                         +                  '<li ng-repeat="subitem in item.menu"><a ng-if="subitem.target" target={{subitem.target}} href="{{subitem.href}}">{{subitem.label}}</a><a ng-if="!subitem.target" href="{{subitem.href}}">{{subitem.label}}</a></li>'
                         +             '</ul>'
                         +        '</div>'
+
+                        +    '</li>'
+                        +    '<li>'
+
+                        /*+ '<div ng-show="notificationsLeft" >'
+                        + '    <a href="">'
+                        + '       <div class=counter ng-bind-html="notificationsLeft"></div>'
+                        + '       <span ng-click="notify()" class="fa fa-bell-o fa-lg"></span> <span class="counter" ng-bind-html="notificationsLeft"></span>'
+                        + '    </a>'
+                        + '</div>'*/
 
                         +    '</li>'
                         +'</ul>',
@@ -1501,6 +1510,34 @@ angular.module('cttvDirectives', [])
 
 
 
+    .directive('cttvFacebookFeed', ['$log', function ($log) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {},
+            template :   '<div class="fb-page"'
+                        +'    data-href="https://www.facebook.com/OpenTargets/"'
+                        +'    data-tabs="timeline"'
+                        +'    data-small-header="true"'
+                        +'    data-adapt-container-width="true"'
+                        +'    data-hide-cover="false"'
+                        +'    data-show-facepile="false"'
+                        +'    height="400">'
+                        +'    <blockquote cite="https://www.facebook.com/OpenTargets/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/OpenTargets/">Open Targets</a></blockquote>'
+                        +'</div>',
+            link: function(scope, element, attrs) {
+                try{
+                    FB.XFBML.parse();
+                }catch(e){
+                    $log.warn("Cannot load Facebook feed");
+                }
+            }
+        };
+    }])
+
+
+
     .directive('cttvTwitterFeed', ['$log', function ($log) {
         'use strict';
 
@@ -1516,7 +1553,6 @@ angular.module('cttvDirectives', [])
                         +'data-chrome="noborders noheader nofooter"'
                         +'>Tweets by targetvalidate</a>',
             link: function(scope, element, attrs) {
-                $log.log("Hello twitter");
                 try{
                     twttr.widgets.load();
                 }catch(e){
