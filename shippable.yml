@@ -4,7 +4,6 @@ build:
     - echo 'some test should go here..'
   post_ci:
       - docker build -t="opentargets/webapp:$BRANCH.$BUILD_NUMBER" .
-
       # Pushing to 2 different registries
       # DockerHub
       #- docker push opentargets/webapp:$BRANCH.$BUILD_NUMBER
