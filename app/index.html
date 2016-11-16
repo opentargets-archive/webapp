@@ -48,7 +48,7 @@
         <!-- NEW datatable -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/bs/jq-2.1.4,dt-1.10.10,b-1.1.0,b-flash-1.1.0,b-html5-1.1.0/datatables.min.css"/>
 
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+        <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet"> -->
 
         <!-- App CSS at the end, to override anything required
         <link rel="stylesheet" href="build/cttvWebapp.min.css?v=08122015" />-->
@@ -60,18 +60,12 @@
         <!-- <iframe frameborder=no width=600px height=200px src=http://demo.piwik.org/index.php?module=CoreAdminHome&action=optOut&language=en></iframe> -->
 
 
-        <!-- Facebook feeds scripts -->
-        <div id="fb-root"></div>
-        <script>(function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.7";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
 
-        <!-- Twitter feeds stuff -->
-        <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+
 
         <div class="cttv-page-wrapper">
 
@@ -121,11 +115,10 @@
                                 </div>
 
                                 <div class="col-xs-2 col-sm-2 col-md-5 masthead-navigation-container" ng-class="location.path()=='/' ? 'pull-right' : ''">
+                                    <!-- navigation menu : hide on small screen-->
                                     <masthead-navigation-menu class="hidden-xs hidden-sm"></masthead-navigation-menu>
-                                    <!-- <div class="hidden-sm hidden-md hidden-lg"><span class="fa fa-bars"></span>menu</div> -->
+
                                     <!-- here should have hamburger -->
-
-
                                     <ul class="masthead-navigation hidden-md hidden-lg">
                                         <li>
                                             <div>
@@ -376,6 +369,22 @@
             <log-session></log-session>
 
         </div>
+
+
+        <!-- Facebook feeds scripts -->
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.7";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
+        <!-- Twitter feeds stuff -->
+        <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
 
     </body>
 
