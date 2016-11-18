@@ -29,6 +29,23 @@
     padding: 18vmin 0;
 }
 
+.intro-search-block {
+    margin: 20px 0px;
+}
+
+.intro-search-examples {
+    text-align: center;
+
+    a {
+        color: #B2DEF9;
+        margin-left: 15px;
+    }
+
+    a:hover {
+        color: #FFF;
+    }
+}
+
 /* probably deprecated with new homepage*/
 .intro-logo {
     padding-bottom:60px;
@@ -256,7 +273,9 @@
 
 .intro-section-panel {
     text-align: center;
-    margin: 20px 0px;
+    margin: 0px 0px;
+    margin-top: 5vm;   /* fallback for IE9 */
+    margin-top: 5vmin;
 }
 
 .border-col {
@@ -276,7 +295,7 @@
 
 .intro-section-panel-heading{
     font-weight: 200;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 
     a {
         color: inherit;
@@ -302,5 +321,13 @@
   content: "\f21b";
   color: rgba(0,0,0,.1);
   font-size:600px;
+}
+
+.intro-last {
+    margin-bottom: 0px;
+}
+
+.intro-first {
+    margin-top: 0px;
 }
 
