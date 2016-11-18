@@ -77,7 +77,7 @@ angular.module('cttvServices').
          * updates the "summary" of selected options, as well as the count
          */
         var updateSelected = function(){
-            $log.log("updateSelected");
+            // $log.log("updateSelected");
             selected.length=0;  // reset the length, not whole object
             selectedCount = 0;  // other controllers are $watch-ing this...
 
@@ -178,7 +178,7 @@ angular.module('cttvServices').
          * Takes API data for a facet (i.e. a collection of filters) and returns the config object to create that collection
          */
         var parseFacetData = function(collection, data, countsToUse){
-            $log.log("parseFacetData "+collection);
+            // $log.log("parseFacetData "+collection);
             var config={
                 key: collection,    // this is the type, really...
                 label: cttvDictionary[collection.toUpperCase()] || collection,  // set default label based on what the API has returned for this
@@ -332,7 +332,7 @@ angular.module('cttvServices').
          * It loops through the selected[] array and updates the URL accordingly.
          */
         var updateLocationSearch = function(){
-            $log.log("updateLocationSearch");
+            // $log.log("updateLocationSearch");
             var raw = {};
             selected.forEach(function(collection){
                 //raw[collection.key] = collection.filters.map(function(obj){return obj.key;});
@@ -475,7 +475,7 @@ angular.module('cttvServices').
              * Function to select and clear all the filters in the collection
              */
             FilterCollection.prototype.selectAll = function(b){
-                $log.log(b);
+                // $log.log(b);
                 this.filters.forEach(function(f){
                     f.setSelected(b);
                     if(!b && f.collection!=null){
@@ -651,7 +651,7 @@ angular.module('cttvServices').
          * @param status [Array] this contains ["ok"] if all facets were computed correctly by the API. In case of errors, it contains the list of facets reporting incorrect values, e.g. ["partial-facet-datatypes"]
          */
         cttvFiltersService.updateFacets = function(facets, countsToUse, status){
-            $log.log("updateFacets");
+            // $log.log("updateFacets");
             // if there are no facets, return
             if(!facets){
                 return;
@@ -686,7 +686,7 @@ angular.module('cttvServices').
                     try{
                         addCollection( parseFacetData(collection, facets[collection], countsToUse) );
                     } catch(e){
-                        $log.log("Error while updating facets: "+e);
+                        $log.warn("Error while updating facets: "+e);
                     }
                 }
             });
@@ -694,14 +694,14 @@ angular.module('cttvServices').
             // update the filters state?
             updateSelected();
 
-            console.log(selected);
+            // $log.log(selected);
             // Track events in piwik
             for (var i=0; i<selected.length; i++) {
                 var facetCollection = selected[i];
                 var collectionLabel = facetCollection.key;
                 for (var j=0; j<facetCollection.filters.length; j++) {
                     var facetLabel = facetCollection.filters[j].key;
-                    // console.log(" -- tracking: " + collectionLabel + " - " + facetLabel);
+                    // $log.log(" -- tracking: " + collectionLabel + " - " + facetLabel);
                     $analytics.eventTrack('collectionLabel', {"category": "associationFacet", "label": facetLabel});
                 }
             }

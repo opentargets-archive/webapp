@@ -2,7 +2,6 @@
 /* Directives */
 angular.module('cttvDirectives', [])
 
-
     /*
     *
     */
@@ -155,9 +154,6 @@ angular.module('cttvDirectives', [])
                 size: '@'
             },
             link: function(scope, elem, attrs){
-                // scope.size = scope.size ? scope.size : '120px';
-                // console.log(scope.size);
-
                 scope.$watch(function(){return cttvAPIservice.activeRequests;}, function(newValue,oldValue){
                     scope.isloading = newValue>0;
                 });
@@ -370,7 +366,7 @@ angular.module('cttvDirectives', [])
                                     scope.colors = [];
                                     for(var i=1; i<=3; i++){
                                         scope.colors.push( {color:colorScale(i), label:labelScale(i)} );
-                                        $log.log(i +" : "+ labelScale(i));
+                                        // $log.log(i +" : "+ labelScale(i));
                                     }
 
                                     scope.legendData = [
@@ -820,7 +816,7 @@ angular.module('cttvDirectives', [])
                 var iframe = elem[0].children[0].children[0].contentWindow || elem[0].children[0].children[0];
 
                 iframe.onresize = function(evt){
-                    $log.log("onresize( "+evt.target.innerWidth+" x "+evt.target.innerHeight+" )");
+                    // $log.log("onresize( "+evt.target.innerWidth+" x "+evt.target.innerHeight+" )");
                     if(scope.onresize){
                         scope.onresize({w:evt.target.innerWidth, h:evt.target.innerHeight});
                     }
@@ -970,8 +966,6 @@ angular.module('cttvDirectives', [])
             },*/
 
             link: function (scope, elem, attrs) {
-                $log.log("value: "+scope.value);
-
                 scope.$watch('value', function(n, o){
                     //$log.log("value: "+scope.value+" / "+n);
                     if(n!=undefined && o==undefined){
@@ -1170,8 +1164,8 @@ angular.module('cttvDirectives', [])
                      +'            </label>'
                      +'            <span class="text-lowlight cttv-facet-count pull-left" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>'
                      +'        </span>'
-                     +'        <span style="width:12px" class="text-lowlight pull-right">'
-                     +'            <i class="fa" ng-class="{\'fa-caret-right\': collapsed, \'fa-caret-down\': !collapsed}" ng-click="collapsed = !collapsed" style="cursor:pointer; padding:0px 4px;" ng-show="bucket.enabled"></i>'
+                     +'        <span class="text-lowlight pull-right">'
+                     +'            <i class="fa cttv-facets-small-arrow" ng-class="{\'fa-caret-right\': collapsed, \'fa-caret-down\': !collapsed}" ng-click="collapsed = !collapsed"  ng-show="bucket.enabled"></i>'
                      +'        </span>'
                      +'    </div>'
                      +'</div>',
@@ -1277,8 +1271,8 @@ angular.module('cttvDirectives', [])
                     elem.scope().$dismiss();
                 }
                 scope.ok = function(){
-                    $log.log("scope.ok()");
-                    $log.log(scope.onOk);
+                    // $log.log("scope.ok()");
+                    // $log.log(scope.onOk);
                     if(scope.onOk){
                         scope.onOk();
                     }
@@ -1312,7 +1306,7 @@ angular.module('cttvDirectives', [])
                 var windowEl = angular.element($window);
                 var handler = function() {
                     scope.scroll = windowEl[0].scrollY;
-                    $log.log(scope.scroll);
+                    // $log.log(scope.scroll);
                 };
                 windowEl.on('scroll', scope.$apply.bind(scope, handler));
                 handler();
@@ -1390,7 +1384,6 @@ angular.module('cttvDirectives', [])
                             scope: scope
                         });
                         scope.export = function () {
-                            $log.log("exporting...");
                             // track in piwik
                             if (scope.track) {
                                 $analytics.eventTrack('export', {"category":scope.track, "label": scope.currScale})
@@ -1435,6 +1428,25 @@ angular.module('cttvDirectives', [])
     }])
 
 
+    .directive ('cttvBetaRibbon', ['$log', '$location', function ($log, $location) {
+        'use strict';
+        return {
+            restrict: 'E',
+            scope: {},
+            template: '<div id="cttv-beta-ribbon" class="cttv-beta-ribbon">{{host}}</div>',
+            link: function (scope, el, attrs) {
+                var host = $location.host();
+                scope.host = host.split('.')[0];
+                // TODO: This assumes that targetvalidation.org resolves to www.targetvalidation.org
+                if (host.startsWith('www')) {
+                    scope.display = false;
+                } else {
+                    scope.display = true;
+                }
+            }
+        }
+    }])
+
     .directive('mastheadNavigationMenu', ['cttvConfig', function (cttvConfig) {
         'use strict';
 
@@ -1460,7 +1472,7 @@ angular.module('cttvDirectives', [])
                         +        '<div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
                         +             '<a href uib-dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
                         +             '<ul class="uib-dropdown-menu" uib-dropdown-menu>'
-                        +                  '<li ng-repeat="subitem in item.menu"><a href="{{subitem.href}}">{{subitem.label}}</a></li>'
+                        +                  '<li ng-repeat="subitem in item.menu"><a ng-if="subitem.target" target={{subitem.target}} href="{{subitem.href}}">{{subitem.label}}</a><a ng-if="!subitem.target" href="{{subitem.href}}">{{subitem.label}}</a></li>'
                         +             '</ul>'
                         +        '</div>'
 

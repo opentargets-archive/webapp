@@ -35,9 +35,21 @@
         },
 
         {
-            "label" : "API",
-            "href" : "/documentation/api"
+            "label": "API",
+            "href": "",
+            "menu": [
+                {
+                    "label" : "API documentation",
+                    "href" : "/documentation/api"
+                },
+                {
+                    "label" : "Python client",
+                    "href" : "http://opentargets.readthedocs.io/",
+                    "target": "_blank"
+                }
+            ]
         },
+
 
         {
             "label" : "Downloads",

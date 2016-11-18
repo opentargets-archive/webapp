@@ -101,7 +101,7 @@ angular.module('cttvDirectives')
                                 scope.data = resp.body.data;
                                 initTableDrugs();
                             } else {
-                                $log.warn("Empty response : drug data");
+                                // $log.warn("Empty response : drug data");
                             }
                         },
                         cttvAPIservice.defaultErrorHandler
@@ -217,8 +217,8 @@ angular.module('cttvDirectives')
                             newdata.push(row); // use push() so we don't end up with empty rows
                         }catch(e){
                             scope.errorFlag = true;
-                            $log.log("Error parsing drugs data:");
-                            $log.log(e);
+                            // $log.log("Error parsing drugs data:");
+                            // $log.log(e);
                         }
                     });
 

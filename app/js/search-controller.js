@@ -13,7 +13,7 @@ angular.module('cttvControllers')
     .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice, cttvUtils, cttvLocationState) {
 
         'use strict';
-        $log.log('SearchCtrl()');
+        // $log.log('SearchCtrl()');
         cttvUtils.clearErrors();
 
         /*
@@ -219,7 +219,7 @@ angular.module('cttvControllers')
 
         // on search change
         $scope.$on(cttvLocationState.STATECHANGED, function (e, args) {
-            $log.log("[handler] onStateChanged");
+            // $log.log("[handler] onStateChanged");
             setStateFromURL( (args[stateId] || {}) );
         });
 

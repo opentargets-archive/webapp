@@ -28,11 +28,11 @@ angular.module('cttvServices').
             tmp_state = _.cloneDeep( new_state );
 
             // broadcast state update event
-            $log.log("[event] cttvLocationState." + cttvLocationStateService.STATECHANGED);
+            // $log.log("[event] cttvLocationState." + cttvLocationStateService.STATECHANGED);
 
             $rootScope.$broadcast(cttvLocationStateService.STATECHANGED, _.cloneDeep(state), _.cloneDeep(old_state));
 
-        }
+        };
 
 
 
@@ -61,8 +61,9 @@ angular.module('cttvServices').
          * param(obj); // returns "datatype:drugs,datatype:literature,datatype:animals,pathways:sdfs"
          */
         cttvLocationStateService.param = function(obj){
-            $log.log("cttvLocationStateService.param:");
-            $log.log(obj);
+            // $log.log("cttvLocationStateService.param:");
+            // $log.log(obj);
+
             // uses jQuery.param() method
             // $httpParamSerializerJQLike should work the same... but it doesn't and returns parentheses around arrays etc
             // so we stick with jQuery for now
@@ -176,7 +177,7 @@ angular.module('cttvServices').
          * Update the state object only for the specific sub-object
          */
         cttvLocationStateService.setStateFor = function(k, so, track){
-            $log.log("setStateFor "+k);
+            // $log.log("setStateFor "+k);
 
             if(track==undefined){track=true;}   // track = (track || track==undefined)
             tmp_state[k] = so;
@@ -193,7 +194,7 @@ angular.module('cttvServices').
 
 
         cttvLocationStateService.resetStateFor = function(k){
-            $log.log("resetStateFor()");
+            // $log.log("resetStateFor()");
             cttvLocationStateService.setStateFor(k, {}, false);
         }
 

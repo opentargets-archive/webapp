@@ -2,8 +2,6 @@
  * F A C E T S
  */
 
-
-
 .cttv-facet .therapeuticArea .panel-heading {
     /*background-color: #c6dcec;*/
 }
@@ -32,7 +30,7 @@
 }
 
 .cttv-facets-headers{
-
+    font-size: 16px;
 }
 
 .cttv-facets-controls {
@@ -57,6 +55,18 @@
     border-bottom:1px solid $clr-ui-border; // was #CCC
     margin-bottom:25px;
     padding-bottom:10px;
+}
+
+.cttv-facets-small-arrow{
+    width: 12px;
+    cursor: pointer;
+
+    padding: 0px 4px;
+}
+
+.cttv-facets-child-label-no-checkbox{
+    width:auto;
+    padding-left: 20px
 }
 
 
@@ -101,13 +111,40 @@
     .panel-body{
         padding: 5px 0px;
     }
+
+    .boxed-scrollable {
+        max-height: 120px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        overflow-y: auto;
+        border: 1px solid $clr-ui-background;
+
+        .suggestion {
+            &.query {
+                background-color: $clr-info-highlight;
+            }
+            &.result {
+                background-color: $clr-primary-highlight;
+            }
+        }
+
+    }
+
+
+
+    /* Minimal scrollbars */
+    @include scrollbar(8px);
 }
+
+
 
 .cttv-facet-checkbox {
     /* overrides bootstrap values */
     margin-top: 0px;
     margin-bottom: 0px;
     clear:both;
+
+    cursor:pointer;
 }
 
 .cttv-facet-checkbox-label{
