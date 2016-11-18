@@ -24,6 +24,8 @@ angular.module('cttvDirectives')
                 //$log.log("cttvFilterByFileTargets:linkFunction: scope", scope);
                 //$log.log("cttvFilterByFileTargets:linkFunction: elem", elem);
 
+                scope.maxFileSize = 20000;
+
                 var multiSearchChunkSize = 200;
 
                 scope.initFilterByFile =function(){
@@ -51,10 +53,9 @@ angular.module('cttvDirectives')
 
                     scope.$apply(function ($scope) {
                         scope.files = element.files;
-
+                        scope.addFile();
                     });
 
-                    scope.addFile();
                 };
 
 
@@ -66,7 +67,6 @@ angular.module('cttvDirectives')
                     scope.target = [];
                     scope.initFilterByFile();
                     scope.getfacets(scope.filters, scope.target);
-
                 };
 
                 scope.addFile = function () {
@@ -74,7 +74,19 @@ angular.module('cttvDirectives')
                 };
 
                 scope.validateFile = function (file) {
+                    scope.fileTooBig = false;
+                    scope.wrongFileExtension = false;
+
                     scope.fileName = file.name;
+                    if (file.size > scope.maxFileSize) {
+                        scope.fileTooBig = true;
+                        return;
+                    }
+                    var extension = file.name.split('.').pop();
+                    if (_.indexOf(['txt', 'csv'], extension) === -1) {
+                        scope.wrongFileExtension = true;
+                        return;
+                    }
                     var targetNameArrayTemp = [];
                     var reader = new FileReader();
 
@@ -91,8 +103,8 @@ angular.module('cttvDirectives')
 
 
                         //$log.log("UNIQUE NAMES:" + scope.targetNameArray );
-                        //Choose either Asynch or Consecutive version for testing
-                        //getBestHitTargetsIdsAsynch(scope.targetNameArray);
+                        //Choose either Async or Consecutive version for testing
+                        //getBestHitTargetsIdsAsync(scope.targetNameArray);
                         getBestHitTargetsIdsConsecutive(scope.targetNameArray);
                     };
                     reader.readAsText(file);
@@ -115,7 +127,7 @@ angular.module('cttvDirectives')
                     }
                 }
 
-                var getBestHitTargetsIdsAsynch = function(targetNameArray){
+                var getBestHitTargetsIdsAsync = function(targetNameArray){
                     var promisesArray = [];
                     for (var i = 0; i < targetNameArray.length; i += multiSearchChunkSize) {
                         promisesArray.push(getBestHitTargetsIdsChunk(targetNameArray.slice(i, i + multiSearchChunkSize), i))
