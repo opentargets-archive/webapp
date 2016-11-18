@@ -118,11 +118,25 @@
         margin-bottom: 10px;
         overflow-y: auto;
         border: 1px solid $clr-ui-background;
+
+        .suggestion {
+            &.query {
+                background-color: $clr-info-highlight;
+            }
+            &.result {
+                background-color: $clr-primary-highlight;
+            }
+        }
+
     }
+
+
 
     /* Minimal scrollbars */
     @include scrollbar(8px);
 }
+
+
 
 .cttv-facet-checkbox {
     /* overrides bootstrap values */

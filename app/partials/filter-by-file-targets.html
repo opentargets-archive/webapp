@@ -113,7 +113,7 @@
                         <div ng-class="{'boxed-scrollable' : !fuzzyTargetsCollapsed}">
                                             <span  class="cttv-facets cttv-facets-child-label-no-checkbox"
                                                    ng-if="!fuzzyTargetsCollapsed"
-                                                   ng-repeat="item in fuzzyTargetArray">For {{item.name}} found {{item.label}}<br></span>
+                                                   ng-repeat="item in fuzzyTargetArray">For <span class="suggestion query">{{item.name}}</span> found <span class="suggestion result">{{item.label}}</span><br></span>
                         </div>
                     </div>
 
