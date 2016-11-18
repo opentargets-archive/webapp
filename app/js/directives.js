@@ -2,7 +2,6 @@
 /* Directives */
 angular.module('cttvDirectives', [])
 
-
     /*
     *
     */

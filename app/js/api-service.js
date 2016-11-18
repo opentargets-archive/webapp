@@ -30,6 +30,7 @@ angular.module('cttvServices')
             API_ASSOCIATION_URL : 'associations', // note: these are no longer URLs, but actual API method names
             API_GENE_URL : 'gene',
             API_QUICK_SEARCH_URL : 'quickSearch',
+            API_BEST_HIT_SEARCH_URL : 'bestHitSearch',
             API_DISEASE_URL: 'disease',
             API_EXPRESSION_URL: 'expression',
             API_TARGET_URL : 'target',
@@ -111,6 +112,7 @@ angular.module('cttvServices')
                 if( queryObject.method === undefined || queryObject.method === 'GET') {
                     url = api.url[queryObject.operation](params);
                 } else {
+                    //$log.log("api-service.js", queryObject);
                     var theUrl = api.url[queryObject.operation]();
                     url = theUrl.substring(0, theUrl.length - 1 );
                 }
@@ -217,6 +219,12 @@ angular.module('cttvServices')
             return callAPI(queryObject);
         };
 
+        cttvAPI.getBestHitSearch = function(queryObject){
+            // $log.log("cttvAPI.getBestHitSearch()");
+            queryObject.operation = cttvAPI.API_BEST_HIT_SEARCH_URL;
+            return callAPI(queryObject);
+        };
+
 
         cttvAPI.flat2tree = function (flat) {
             return api.utils.flat2tree(flat);
@@ -250,7 +258,7 @@ angular.module('cttvServices')
         */
         cttvAPI.getAssociations = function(queryObject){
             queryObject.operation = cttvAPI.API_ASSOCIATION_URL;
-            $log.log("cttvAPI.getAssociations():queryObject=",queryObject);
+            // $log.log("cttvAPI.getAssociations():queryObject=",queryObject);
             return callAPI (queryObject);
         };
 
