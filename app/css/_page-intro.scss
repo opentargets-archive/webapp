@@ -14,8 +14,8 @@
 .intro-section {
     //padding: 80px 0px;
     overflow: hidden;
-    padding: 12vm 0;   /* fallback for IE9 */
-    padding: 12vmin 0;
+    padding: 8vm 0;   /* fallback for IE9 */
+    padding: 8vmin 0;
 }
 
 
@@ -25,8 +25,8 @@
 
 .intro-section-search {
     //padding: 140px 0px;
-    padding: 18vm 0;   /* fallback for IE9 */
-    padding: 18vmin 0;
+    padding: 14vm 0;   /* fallback for IE9 */
+    padding: 14vmin 0;
 }
 
 .intro-search-block {
@@ -155,8 +155,8 @@
     height: 0px;
 
     //padding: 20vh 0;
-    padding: 15vm 0;   /* fallback for IE9 */
-    padding: 15vmin 0;
+    padding: 12vm 0;   /* fallback for IE9 */
+    padding: 12vmin 0;
 }
 
 .partner-logo {
@@ -274,8 +274,8 @@
 .intro-section-panel {
     text-align: center;
     margin: 0px 0px;
-    margin-top: 5vm;   /* fallback for IE9 */
-    margin-top: 5vmin;
+    margin-top: 4vm;   /* fallback for IE9 */
+    margin-top: 4vmin;
 }
 
 .border-col {
@@ -284,9 +284,14 @@
 
 .intro-section-heading {
     margin-top: 0px;
-    margin-bottom: 5%;
+    margin-bottom: 2vm;   /* fallback for IE9 */
+    margin-bottom: 2vmin;
     text-align: center;
     font-weight: 200;
+
+    a {
+        color: inherit;
+    }
 }
 
 .intro-section-panel-icon {
@@ -295,7 +300,7 @@
 
 .intro-section-panel-heading{
     font-weight: 200;
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
 
     a {
         color: inherit;
