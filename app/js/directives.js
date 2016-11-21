@@ -1347,13 +1347,11 @@ angular.module('cttvDirectives', [])
                 track: '@'
             },
             replace: false,
-            template: '<div ng-show="exportable" class="clearfix pull-right"><div><a class="btn btn-default buttons-csv buttons-html5" ng-click="exportPNG()"><span class="fa fa-picture-o" title="Download as PNG"></span></a></div></div>',
+            template: '<div ng-show="exportable" class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="exportPNG()"><span class="fa fa-picture-o" title="Download as PNG"></span></a></div></div>',
             link: function (scope, element, attrs) {
                 if (scope.inFormat === 'canvas') {
                     scope.exportPNG = function () {
                         var canvas = scope.$parent.toExport();
-                        console.log("CANVAS...");
-                        console.log(canvas);
                     }
                     return;
                 }

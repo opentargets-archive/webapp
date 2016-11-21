@@ -36,21 +36,21 @@
   },
   "dependencies": {
     "cttv.api": "0.0.11",
-    "cttv.diseaseGraph": "0.0.2",
+    "cttv.diseaseGraph": "0.0.3",
     "cttv.flowerView": "0.0.0",
-    "cttv.genome": "0.0.16",
+    "cttv.genome": "0.0.17",
     "cttv.spinner": "0.0.0",
-    "cttv.targetAssociationsBubbles": "0.0.12",
-    "cttv.targetAssociationsTree": "0.0.5",
-    "cttv.targetGeneTree": "0.0.11",
+    "cttv.targetAssociationsBubbles": "0.0.13",
+    "cttv.targetAssociationsTree": "0.0.7",
+    "cttv.targetGeneTree": "0.0.12",
     "js-yaml": "3.5.5",
     "marked": "0.3.5",
     "systemjs": "^0.19.27",
     "tnt.genome": "0.1.5",
     "tnt.rest": "0.1.1",
-    "tnt.tooltip": "0.1.0",
+    "tnt.tooltip": "0.2.0",
     "tnt.utils": "0.1.3",
-    "viz_diseases": "0.0.10"
+    "viz_diseases": "0.0.11"
   },
   "jspm": {
     "directories": {
