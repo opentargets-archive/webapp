@@ -42,7 +42,7 @@
     "cttv.spinner": "0.0.0",
     "cttv.targetAssociationsBubbles": "0.0.12",
     "cttv.targetAssociationsTree": "0.0.5",
-    "cttv.targetGeneTree": "0.0.10",
+    "cttv.targetGeneTree": "0.0.11",
     "js-yaml": "3.5.5",
     "marked": "0.3.5",
     "systemjs": "^0.19.27",

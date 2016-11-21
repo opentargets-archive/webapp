@@ -7,7 +7,9 @@ angular.module('plugins')
             template: '<p class=cttv-section-intro>Phylogenetic tree showing the history of the human gene '
             + '{{target.symbol}} based on protein sequences. The tree shows human paralogs and orthologs in'
             + 'selected species. Click on any node to get more information about the homology relationship.'
-            + 'Check / Uncheck species to prune the tree accordingly</p><p ng-if=notFound==1>No gene tree has been found for {{target.symbol}}</p><png filename="{{target.approved_symbol}}-geneTree.png" track="geneTree"></png>',
+            + 'Check / Uncheck species to prune the tree accordingly</p>'
+            + '<p ng-if=notFound==1>No gene tree has been found for {{target.symbol}}</p>'
+            + '<png filename="{{target.approved_symbol}}-geneTree.png" track="geneTree"></png>',
 
             scope: {
                 target: '=',
