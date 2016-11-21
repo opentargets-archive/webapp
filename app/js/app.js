@@ -80,6 +80,10 @@ function initApp (deps) {
                 when('/documentation/api', {
                     templateUrl: 'partials/api-docs.html'
                 }).
+                when('/outreach', {
+                    templateUrl: 'partials/outreach.html',
+                    controller: 'OutreachCtrl'
+                }).
                 otherwise({
                     redirectTo: '/'
                 });
@@ -101,9 +105,9 @@ var deps = [
     'ngRoute',
     'ngCookies',
     'ui.bootstrap',
+    'cttvFilters',
     'cttvControllers',
     'cttvDirectives',
-    'cttvFilters',
     'angulartics',
     'angulartics.piwik',
     'viewhead',

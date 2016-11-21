@@ -1,3 +1,4 @@
+@import "utils";
 
 #cttv-page-app {
 
@@ -526,6 +527,12 @@
     }
 
 
+    /*
+    *  calendar in outreach page
+    */
+    .container .center-div {
+        @include center-div(600px);
+    }
 
     /*
      * PNG export button

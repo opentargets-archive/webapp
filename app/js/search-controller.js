@@ -13,7 +13,7 @@ angular.module('cttvControllers')
     .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice, cttvUtils, cttvLocationState) {
 
         'use strict';
-        $log.log('SearchCtrl()');
+        // $log.log('SearchCtrl()');
         cttvUtils.clearErrors();
 
         /*
@@ -138,10 +138,13 @@ angular.module('cttvControllers')
                 Object.keys($scope.filters).forEach(function(k){
                     $scope.filters[k].loading = true;
                     cttvAPIservice.getSearch({
-                            q: $scope.search.query.q,
-                            size : 0,
-                            filter : k
-                        }).
+                        method: 'GET',
+                        params: {
+                                q: $scope.search.query.q,
+                                size : 0,
+                                filter : k
+                            }
+                    }).
                         then(
                             function(resp) {
                                 $scope.filters[k].total = resp.body.total;
@@ -167,14 +170,17 @@ angular.module('cttvControllers')
             if( $scope.search.query.q.length > 0 ) {
                 $scope.search.loading = true;
 
-                var queryobject = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
+                var queryObject = {
+                    method: 'GET',
+                };
+                queryObject.params = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
                 // if one and only one of the filters is selected, apply the corresponding filter
                 // cool way of mimicking a XOR operator ;)
                 if( $scope.filters.target.selected != $scope.filters.disease.selected ){
-                    queryobject.filter = $scope.filters.target.selected ? 'target' : 'disease';
+                    queryObject.filter = $scope.filters.target.selected ? 'target' : 'disease';
                 }
 
-                cttvAPIservice.getSearch( queryobject )
+                cttvAPIservice.getSearch( queryObject )
                     .then(
                         function(resp) {
                             var i, h, h2;
@@ -213,7 +219,7 @@ angular.module('cttvControllers')
 
         // on search change
         $scope.$on(cttvLocationState.STATECHANGED, function (e, args) {
-            $log.log("[handler] onStateChanged");
+            // $log.log("[handler] onStateChanged");
             setStateFromURL( (args[stateId] || {}) );
         });
 

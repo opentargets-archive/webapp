@@ -156,7 +156,7 @@ angular.module('plugins')
                                           prevPicked = { atom : atom, color : color, node : picked.node() };
 
                                           if (currColor[0] === 1) {
-                                              console.log("setting atom to blue");
+                                            //   $log.log("setting atom to blue");
                                               setColorForAtom(picked.node(), atom, 'blue');
                                           } else {
                                               setColorForAtom(picked.node(), atom, 'red');
@@ -177,7 +177,7 @@ angular.module('plugins')
 
                                     // viewer.on('viewerReady', function() {
                                         // structure.atomSelect(function (a) {
-                                        //     console.log(a);
+                                        //     $log.log(a);
                                         // });
                                     // });
                                 });

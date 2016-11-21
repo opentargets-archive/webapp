@@ -10,7 +10,7 @@
      */
     .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$uibModal', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $uibModal, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
         'use strict';
-        $log.log('TargetDiseaseCtrl()');
+        // $log.log('TargetDiseaseCtrl()');
 
 		cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
         cttvUtils.clearErrors();
@@ -140,12 +140,14 @@
          */
          var targetPromise;
          var getInfo = function(){
-             $log.log("getInfo for "+$scope.search.target + " & " + $scope.search.disease);
-
              // get gene specific info
-             targetPromise = cttvAPIservice.getTarget({
-                 target_id:$scope.search.target
-             })
+             var queryObject = {
+                 method: 'GET',
+                 params: {
+                     target_id: $scope.search.target
+                 }
+             };
+             targetPromise = cttvAPIservice.getTarget(queryObject)
                 .then(function(resp) {
                     $scope.search.info.gene = resp.body;
                     return resp;
@@ -154,11 +156,14 @@
                     return $http.get("/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/" + target.body.uniprot_id);
                 });
 
-
              // get disease specific info with the efo() method
-             cttvAPIservice.getDisease( {
-                 code:$scope.search.disease
-             } ).
+             var queryObject = {
+                 method: 'GET',
+                 params: {
+                     code: $scope.search.disease
+                 }
+             };
+             cttvAPIservice.getDisease(queryObject).
              then(
                  function(resp) {
                      $scope.search.info.efo = resp.body;
@@ -212,14 +217,16 @@
             };
             _.extend(opts, searchObj);
 
-            return cttvAPIservice.getAssociation(opts).
-                then(
-                    function(resp) {
-                        $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
-                        updateTitle( resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label );
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                );
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+
+            return cttvAPIservice.getAssociations (queryObject)
+                .then (function(resp) {
+                    $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
+                    updateTitle( resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label );
+                }, cttvAPIservice.defaultErrorHandler);
         };
 
 
@@ -372,8 +379,14 @@
                 ]
             };
             _.extend(opts, searchObj);
+
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+
             return targetPromise.then (function (snpsLoc) {
-                cttvAPIservice.getFilterBy( opts )
+                cttvAPIservice.getFilterBy( queryObject )
                 .then(
                     function(resp) {
                         if( resp.body.data ){
@@ -535,8 +548,13 @@
                 ]
             };
             _.extend(opts, searchObj);
+
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
             return targetPromise.then(function (snpsLoc) {
-                cttvAPIservice.getFilterBy( opts )
+                cttvAPIservice.getFilterBy (queryObject)
                 .then(
                     function(resp) {
                         if( resp.body.data ){
@@ -735,7 +753,7 @@
                         "    <button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button>" +
                         "</div>",
                         animation: true,
-                        size: 'sm',
+                        size: 'lg',
                         scope: $scope,
                         windowClass : 'variantStructureModalWindow'
                     });
@@ -763,32 +781,37 @@
 
                         // add mouse move event listener to the div element containing the viewer. Whenever
                         // the mouse moves, use viewer.pick() to get the current atom under the cursor.
-                        parent.addEventListener('mousemove', function(event) {
+                        parent.addEventListener('mousemove', function (event) {
                             var rect = viewer.boundingClientRect();
-                            var picked = viewer.pick({ x : event.clientX - rect.left,
-                                                       y : event.clientY - rect.top });
+                            var picked = viewer.pick({
+                                x: event.clientX - rect.left,
+                                y: event.clientY - rect.top
+                            });
                             if (prevPicked !== null && picked !== null &&
                                 picked.target() === prevPicked.atom) {
-                              return;
+                                return;
                             }
                             if (prevPicked !== null) {
-                              // reset color of previously picked atom.
-                              setColorForAtom(prevPicked.node, prevPicked.atom, prevPicked.color);
+                                // reset color of previously picked atom.
+                                setColorForAtom(prevPicked.node, prevPicked.atom, prevPicked.color);
                             }
                             if (picked !== null) {
-                              var atom = picked.target();
-                              document.getElementById('picked-atom-name').innerHTML = atom ? atom.qualifiedName() : "&nbsp;";
-                              // get RGBA color and store in the color array, so we know what it was
-                              // before changing it to the highlight color.
-                              var color = [0,0,0,0];
-                              var currCol = picked.node().getColorForAtom(atom, color);
-                              var highlightCol = [1-currCol[0], 1-currCol[1], 1-currCol[2], 1];
+                                var atom = picked.target();
+                                document.getElementById('picked-atom-name').innerHTML = atom ? atom.qualifiedName() : "&nbsp;";
+                                // get RGBA color and store in the color array, so we know what it was
+                                // before changing it to the highlight color.
+                                var color = [0, 0, 0, 0];
+                                if (picked.node().getColorForAtom) {
+                                    var currCol = picked.node().getColorForAtom(atom, color);
 
-                              prevPicked = { atom : atom, color : color, node : picked.node() };
-                              setColorForAtom(picked.node(), atom, highlightCol);
+                                    var highlightCol = [1 - currCol[0], 1 - currCol[1], 1 - currCol[2], 1];
+
+                                    prevPicked = {atom: atom, color: color, node: picked.node()};
+                                    setColorForAtom(picked.node(), atom, highlightCol);
+                                }
                             } else {
-                              document.getElementById('picked-atom-name').innerHTML = '&nbsp;';
-                              prevPicked = null;
+                                document.getElementById('picked-atom-name').innerHTML = '&nbsp;';
+                                prevPicked = null;
                             }
                             viewer.requestRedraw();
                         });
@@ -808,11 +831,13 @@
 
                                 pdbSnp.eachResidue(function (res) {
                                     var label = res.qualifiedName();
-                                    var center = res.center();
-                                    viewer.label('label', label, center, snpVisOpts);
+                                    var first = res.atom(0).pos();
+                                    // We are not using the center because it can lay outside of the backbone structure (using the first atom coords instead)
+                                    // var center = res.center();
+                                    viewer.label('label', label, first, snpVisOpts);
 
                                     var cm = viewer.customMesh();
-                                    cm.addSphere(center, 1.5, {
+                                    cm.addSphere(first, 1.5, {
                                         color: "orange"
                                     });
                                 });
@@ -898,7 +923,11 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -1028,7 +1057,12 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -1189,7 +1223,11 @@
             };
             _.extend(opts, searchObj);
             $scope.search.tables.somatic_mutations.is_loading = true;
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -1359,7 +1397,12 @@
                 ]
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
                         if( resp.body.data ){
@@ -1499,8 +1542,6 @@
         */
 
         function parseResponse (recs, dt) {
-            //$log.log("parseResponse():recs", recs);
-            //$log.log("parseResponse():dt", dt);
             dt.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
                 var data = this.data(); //data is previously preformatted table data that we need to add abstract info that came from pm
                 //$log.log("parseResponse():data", data);
@@ -1610,7 +1651,11 @@
                 // TODO: change to 'datatype: literature' once available in the API; for now disgenet will do the trick.
             };
             _.extend(opts, searchObj);
-            return cttvAPIservice.getFilterBy( opts ).
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject).
                 then(
                     function(resp) {
 
@@ -2066,7 +2111,7 @@
         // =================================================
 
         $scope.sectionOpen=function(who) {
-           $log.info("tdc:sectionOpen", who);
+        //    $log.info("tdc:sectionOpen", who);
             // Fire a target associations tree event for piwik to track
             $analytics.eventTrack('evidence', {"category": "evidence", "label": who});
         };
@@ -2075,9 +2120,9 @@
         //  M A I N   F L O W
         // =================================================
 
-        $log.info("target-disease-controller");
+        // $log.info("target-disease-controller");
         var path = $location.path().split("/");
-        $log.info(path);
+        // $log.info(path);
         // parse parameters
         $scope.search.target = path[2];
         $scope.search.disease = path[3];

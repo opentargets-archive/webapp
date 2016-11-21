@@ -1,16 +1,14 @@
-'use strict';
 
 
 /* Services */
 
 angular.module('cttvServices').
 
-
-
     /**
      * The API services, with methods to call the ElasticSearch API
      */
     factory('cttvDictionary', ['$log', function($log) {
+        'use strict';
 
         var dictionary = {
 

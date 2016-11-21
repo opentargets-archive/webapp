@@ -10,7 +10,7 @@ angular.module('plugins')
                 width: '='
             },
             link: function (scope, element, attrs) {
-                console.log(scope.disease);
+                // $log.log(scope.disease);
                 $timeout(function () {
                     var container = document.getElementById("cttv-efo-graph");
 

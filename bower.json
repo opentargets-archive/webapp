@@ -37,7 +37,8 @@
     "d3": "~3.5.8",
     "angular-sanitize": "1.5.1",
     "FileSaver": "*",
-    "bio-pv": "~1.8.1"
+    "bio-pv": "~1.8.1",
+    "moment": "~2.14.1"
   },
   "resolutions": {
     "angular": "1.5.1"

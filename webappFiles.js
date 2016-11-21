@@ -20,7 +20,8 @@ var webappFiles = {
             'app/vendor/angular-swagger-ui/swagger-yaml-parser.min.js',
             'node_modules/js-yaml/dist/js-yaml.min.js',
             'node_modules/marked/marked.min.js',
-            'bower_components/FileSaver/FileSaver.min.js'
+            'bower_components/FileSaver/FileSaver.min.js',
+            'bower_components/moment/moment.js'
         ],
 
         'css': [
@@ -51,17 +52,20 @@ var webappFiles = {
             'app/js/filters.js',
             'app/js/search-controller.js',
             'app/js/search-box-controller.js',
+            'app/js/outreach-controller.js',
             'app/js/target-associations-controller.js',
             'app/js/disease-associations-controller.js',
             'app/js/target-disease-controller.js',
             'app/js/target-controller.js',
             'app/js/disease-controller.js',
             'app/js/directives.js',
+            'app/js/filter-by-file-targets-directive.js',
             'app/js/disease-associations-table-directive.js',
             'app/js/target-associations-table-directive.js',
             'app/js/target-associations-tree-directive.js',
             'app/js/target-associations-bubbles-directive.js',
             'app/js/evidence-tables-directives.js',
+            'app/js/calendar-directive.js',
             'app/js/disease-graph-directive.js',
             'app/js/lazyload.js',
             'app/js/plugin-directive.js',

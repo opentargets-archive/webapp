@@ -26,14 +26,30 @@
                 {
                     "label" : "support@targetvalidation.org",
                     "href" : "mailto:support@targetvalidation.org?Subject=Target%20Validation%20Platform%20-%20help%20request"
-                }
+                }/*,
+                {
+                    "label": "Outreach",
+                    "href": "/outreach"
+                }*/
             ]
         },
 
         {
-            "label" : "API",
-            "href" : "/documentation/api"
+            "label": "API",
+            "href": "",
+            "menu": [
+                {
+                    "label" : "API documentation",
+                    "href" : "/documentation/api"
+                },
+                {
+                    "label" : "Python client",
+                    "href" : "http://opentargets.readthedocs.io/",
+                    "target": "_blank"
+                }
+            ]
         },
+
 
         {
             "label" : "Downloads",

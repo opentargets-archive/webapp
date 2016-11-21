@@ -5,6 +5,14 @@
 angular.module('cttvServices', []).
 
 
+    factory ('liveConfig', ['$log', '$http', function ($log, $http) {
+        'use strict';
+        return $http.get('/config/live.json')
+            .then (function (resp) {
+                return resp.data;
+            });
+    }]).
+
     /**
      * Some utility services.
      */
@@ -178,7 +186,7 @@ angular.module('cttvServices', []).
                 var search = url[1].split("&");
                 search = _.without(search, key+"="+value);
                 search.push(key+"="+value);
-                $log.log(search);
+                // $log.log(search);
                 url[1] = search.join("&");
                 $window.location.href = url.join("?");
             }
@@ -313,6 +321,3 @@ angular.module('cttvServices', []).
 
         return modalService;
     }])
-
-
-

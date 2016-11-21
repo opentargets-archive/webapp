@@ -38,7 +38,7 @@
 
     .controller('MastheadCtrl', ['$scope', '$location', '$log', 'cttvLocationState', function ($scope, $location, $log, cttvLocationState) {
         'use strict';
-        $log.log('MastheadCtrl()');
+        // $log.log('MastheadCtrl()');
         $scope.location = $location;
 
     }])
@@ -49,7 +49,7 @@
     */
     .controller('NotifyCtrl', ['$scope', '$log', '$http', '$uibModal', '$cookies', '$interval', function ($scope, $log, $http, $uibModal, $cookies, $interval) {
         'use strict';
-        $log.log(" NotifyCtrl ");
+        // $log.log(" NotifyCtrl ");
         // Default behaviour on icon click
         $scope.notify = function(){};
         $scope.addCookie = function (cookieId) {
@@ -60,14 +60,18 @@
         };
 
         function polling () {
-            $http.get('/notification.json')
+            // $http.get("/notifications.json")
+            $http.get('//cttv.github.io/live-files/notifications.json')
                 .then (function(partial) {
+                    // We compare the expiry date with today
                     if (angular.isArray(partial.data)) { // There are notifications
                         var newNotifications = [];
                         for (var i=0; i<partial.data.length; i++) {
                             var thisNotification = partial.data[i];
                             var thisCookie = $cookies.get(thisNotification.id);
-                            if (!thisCookie) {
+                            // Check it has not expired
+                            var t = moment(thisNotification.expiry).fromNow();
+                            if (!thisCookie && (t.indexOf('ago')===-1) && (t.indexOf('in') === 0)) {
                                 newNotifications.push(thisNotification);
                             }
                         }
@@ -93,7 +97,7 @@
                         }
                     }
                 }, function (err) {
-                    console.log(err);
+                    $log.warn(err);
                 });
         }
         polling();
