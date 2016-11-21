@@ -155,6 +155,10 @@ angular.module('cttvDirectives')
                     "targets": [3,4,5,6,7,8,9],
                     "asSorting": [ "desc", "asc"],
                 },
+                {
+                    "orderable": false,
+                    "targets": 11
+                },
                 { "orderSequence": ["desc", "asc"], "targets": [3,4,5,6,7,8,9,10,11] },
                 { "orderSequence": ["asc", "desc"], "targets": [0]}
             ],
