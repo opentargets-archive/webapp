@@ -104,30 +104,30 @@
 
                                 <div class="col-xs-1 col-sm-1 col-md-3">
                                     <!-- CTTV logo -->
-                                    <!-- <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>-->
-                                    <div class="ot_logo">
-                                        <!-- <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_130x30_w.svg" width="130px" height="30px" alt="Open Targets logo"/></a> -->
+                                    <div class="ot_logo" ng-if="location.path()!=='/'">
                                         <a href="/">
                                             <div class="ot_logo_graphics"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/></div>
                                             <div class="ot_logo_type hidden-xs hidden-sm"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/></div>
-                                            <!-- <div class="ot_logo_type hidden-xs hidden-sm"><img src="imgs/logo/ot-tvp-logo-hp4w.svg" class="intro-logo-tvp" width="138px" alt="Open Targets logo"/></div> -->
                                         </a>
                                     </div>
                                 </div>
 
                                 <div class="col-xs-2 col-sm-2 col-md-5 masthead-navigation-container" ng-class="location.path()=='/' ? 'pull-right' : ''">
-                                    <!-- navigation menu : hide on small screen-->
-                                    <masthead-navigation-menu class="hidden-xs hidden-sm"></masthead-navigation-menu>
 
-                                    <!-- here should have hamburger -->
-                                    <ul class="masthead-navigation hidden-md hidden-lg">
-                                        <li>
-                                            <div>
-                                                <a href="#"><span class="hidden-xs">Menu </span><span class="fa fa-bars fa-lg"></span></a>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                    <!-- menu only on other pages -->
+                                    <div ng-if="location.path()!=='/'">
+                                        <!-- navigation menu : hide on small screen-->
+                                        <masthead-navigation-menu class="hidden-xs hidden-sm"></masthead-navigation-menu>
 
+                                        <!-- here should have hamburger -->
+                                        <ul class="masthead-navigation hidden-md hidden-lg">
+                                            <li>
+                                                <div>
+                                                    <a href="#"><span class="hidden-xs">Menu </span><span class="fa fa-bars fa-lg"></span></a>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
 
                                 </div>
 
@@ -225,80 +225,11 @@
             </div>
             <!-- end main page content -->
 
+
             <!-- Footer -->
-            <div class="footer">
-                <div class="container">
-                    <div class="row">
-
-                        <!-- wrap everything in 2 extra columns to get cols stacked up vertically in 2 without wasting space -->
-
-                        <div class="col-xs-6">
-                            <div class="row">
-
-                                <div class="col-xs-12 col-sm-6">
-                                    <h4 class="footer-section-header">Platform</h4>
-                                    <ul class="footer-menu">
-                                        <li><span class="hidden-xs hidden-sm">Version </span>1.2.1 (2016-09-21)</li>
-                                        <li><a href="/release-notes">Release notes</a></li>
-                                        <!-- <li><a href="/about">About</a></li>
-                                        <li><a href="/documentation/api">API</a></li>
-                                        <li><a href="/documentation/components">Docs</a></li> -->
-                                        <li><a href="/terms_of_use">Terms <span class="hidden-xs">of use</span> &amp; privacy</a></li>
-                                    </ul>
-
-                                </div>
-
-                                <div class="col-xs-12 col-sm-6">
-                                    <h4 class="footer-section-header">Help</h4>
-                                    <ul class="footer-menu">
-                                        <li><a href="/faq"><i class="fa fa-question-circle"></i> FAQs</a></li>
-                                        <li><a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x25;&#x32;&#x30;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x25;&#x32;&#x30;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x25;&#x32;&#x30;&#x2D;&#x25;&#x32;&#x30;&#x68;&#x65;&#x6C;&#x70;&#x25;&#x32;&#x30;&#x72;&#x65;&#x71;&#x75;&#x65;&#x73;&#x74;"><span class="fa fa-envelope"></span> support<span class="hidden-xs hidden-sm"><span class="fa fa-at"></span>targetvalidation.org</span></a></li>
-                                    </ul>
-
-                                    <h4 class="footer-section-header">Follow us</h4>
-                                    <!-- social media links -->
-                                    <ul class="footer-menu list-inline footer-social-bar">
-                                        <li><a href="https://www.linkedin.com/company/centre-for-therapeutic-target-validation" target="_blank" alt="Link to LinkedIn Open Targets page"><span class="fa fa-linkedin"></span></a></li>
-                                        <li><a href="http://twitter.com/targetvalidate" target="_blank" alt="Link to Twitter Open Targets page"><span class="fa fa-twitter"></span></a></li>
-                                        <li><a href="https://www.facebook.com/OpenTargets/" target="_blank" alt="Link to Facebook Open Targets page"><span class="fa fa-facebook"></span></a></li>
-                                    </ul>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col-xs-6">
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-6">
-                                    <h4 class="footer-section-header">Partners</h4>
-                                    <ul class="footer-menu">
-                                        <li><a href="https://www.biogen.com/">Biogen</a></li>
-                                        <li><a href="http://www.ebi.ac.uk">EMBL-EBI</a></li>
-                                        <li><a href="http://www.gsk.com">GSK</a></li>
-                                        <li><a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a></li>
-                                    </ul>
-
-                                </div>
-
-
-                                <div class="col-xs-12 col-sm-6">
-                                    <h4 class="footer-section-header"><a href="//www.opentargets.org">Open Targets</a></h4>
-                                    <ul class="footer-menu">
-                                        <li><a href="//www.opentargets.org/about">Overview</a></li>
-                                        <li><a href="//www.opentargets.org/projects">Projects</a></li>
-                                        <li><a href="//www.opentargets.org/news">News</a></li>
-                                        <li class="hidden-xs"><a href="//www.opentargets.org/jobs">Jobs</a></li>
-                                        <li class="hidden-xs"><a href="//blog.opentargets.org/">Blog</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+            <div ot-footer></div>
             <!-- End Footer-->
+
 
             <!-- require.js -->
             <script src="jspm_packages/system.js"></script>

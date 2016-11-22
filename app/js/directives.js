@@ -1620,6 +1620,9 @@ angular.module('cttvDirectives', [])
 
 
 
+    /**
+     * I belive this is not working or being used right now... need to sort scope visiblity etc
+     */
     .directive('otSearchBox', ['$log', 'SearchBoxCtrl', function ($log, SearchBoxCtrl) {
         'use strict';
 
@@ -1632,4 +1635,22 @@ angular.module('cttvDirectives', [])
             }
         };
     }])
+
+
+
+    /**
+     * Directive for the footer
+     * This is mostly so the footer loads like the other page content and not before it.
+     */
+    .directive('otFooter', [function () {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {},
+            templateUrl : 'partials/footer.html',
+            link: function(scope, element, attrs) {}
+        };
+    }])
+
 
