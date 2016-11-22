@@ -40,12 +40,21 @@
                  <p>We offer hands-on workshop on the Open Targets initiative and on our Target Validation Platform. Check our <a href="https://blog.opentargets.org/outreach-in-open-targets-supercharge-your-target-validation-skills/">blog post</a> for more details.</p>
                 <p ng-hide="sessions">There are no training sessions scheduled, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution</p>
 
-                <div ng-show="sessions">
-                    <p>Our next outreach sessions will be:</p>
+                <!-- upcoming sessions -->
+                <div ng-show="upcoming" class="training-sessions">
+                    <h5>Upcoming sessions:</h5>
                     <ul>
-                        <li ng-repeat="event in sessions">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="event.external.link">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</li>
+                        <li class="event" ng-repeat="event in upcoming">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="{{event.external.link}}">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</li>
                     </ul>
                     <p>If you can't attend any of the above, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution.</p>
+                </div>
+
+                <!-- past sessions -->
+                <div ng-show="past" class="training-sessions">
+                    <h5>Past sessions:</h5>
+                    <ul>
+                        <li class="event" ng-repeat="event in past">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} <span ng-if="event.materials"><a ng-if="event.materials.link" href="{{event.materials.link}}">({{event.materials.text}})</a><span ng-if="!event.materials.link">({{event.materials.text}})</span></span></li>
+                    </ul>
                 </div>
 
             </div>

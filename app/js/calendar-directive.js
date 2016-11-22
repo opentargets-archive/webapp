@@ -17,7 +17,7 @@ angular.module('cttvDirectives')
                     }
                 });
 
-                scope.selected = _removeTime(scope.selected || moment());
+                // scope.selected = _removeTime(scope.selected || moment());
                 scope.month = scope.selected.clone();
 
                 var start = scope.selected.clone();
