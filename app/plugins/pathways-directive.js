@@ -2,6 +2,8 @@ angular.module('plugins')
     .directive('targetPathways', ['$log', '$http', '$q', function ($log, $http, $q) {
         'use strict';
 
+        // Container for the spinner
+        var spDiv;
 
         return {
             restrict: 'E',
@@ -16,6 +18,15 @@ angular.module('plugins')
                 var currentPathwayId;
                 var pathwayDiagram;
 
+                // Set the spinner
+                spDiv = document.createElement("div");
+                var sp = spinner()
+                    .size(30)
+                    .stroke(3);
+                element[0].appendChild(spDiv);
+                sp(spDiv);
+
+
                 // Load all the pathways first:
                 function loadPathways () {
                     var pathways = scope.target.reactome;
@@ -25,6 +36,11 @@ angular.module('plugins')
                     // Get the new identifiers
                     var promises = [];
                     var pathwayArr = [];
+
+                    if (!pathways.length) {
+                        scope.noPathways = true;
+                    }
+
                     for (var i=0; i<pathways.length; i++) {
                     // for (var pathway in pathways) {
                         var pathway = pathways[i].id;
@@ -47,6 +63,9 @@ angular.module('plugins')
                                     });
                                 }
                             }
+                            // Remove the spinner
+                            spDiv.parentNode.removeChild(spDiv);
+                            
                             scope.pathways = reactomePathways;
                             if (scope.pathways[0]) {
                                 scope.setPathwayViewer(scope.pathways[0]);
