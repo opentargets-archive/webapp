@@ -15,23 +15,37 @@ angular.module('cttvServices').
         var old_state = {}; // old_state is updated with value of state just before updating state, so it holds the previous state
         var tmp_state = {}; // tmp_state temporarily holds the state when a component calls updateStateFor: it is used to update the URL which is then parsed back into state
 
+        // the state now has a private property _path that stores, you guessed it,
+        // the path of the page to which the state refers to, as returned by the $location.path() function
+        // this is used to determine whether to fire the event or not
+        state._path = "";
+        old_state._path = "";
+        tmp_state._path = "";
+
 
 
         /*
          * Updates state and old_state and broadcast a message to the app
          */
         var updateState = function(new_state){
-
             // update the state and
             old_state = state;
             state = _.cloneDeep( new_state );
+            state._path = $location.path();
             tmp_state = _.cloneDeep( new_state );
+            tmp_state._path = $location.path();
 
-            // broadcast state update event
-            // $log.log("[event] cttvLocationState." + cttvLocationStateService.STATECHANGED);
 
-            $rootScope.$broadcast(cttvLocationStateService.STATECHANGED, _.cloneDeep(state), _.cloneDeep(old_state));
-
+            // if the URL changed, i.e. we went on a different page, then we don't broadcast the event
+            // as that should be taken care by the new page. This is due to two main reasons:
+            //  1. when a new page loads, it has already missed on the location change event
+            //     and therefore cannot respond to it (need to manually set on load actions)
+            //  2. the page we're leaving is still listening and we don't want to respond to
+            //     state chagnes there... it's a location change rather than a state change
+            if( state._path === old_state._path ){
+                // broadcast state update event if we're on the same page
+                $rootScope.$broadcast(cttvLocationStateService.STATECHANGED, _.cloneDeep(state), _.cloneDeep(old_state));
+            }
         };
 
 
@@ -207,7 +221,8 @@ angular.module('cttvServices').
 
             var stt = {}
             for(var i in tmp_state){
-                if(tmp_state.hasOwnProperty(i)){
+                // translate the state to the URL, but we don't want to include the _path property
+                if(tmp_state.hasOwnProperty(i) && i!=="_path" ){
                     stt[i] = cttvLocationStateService.param(tmp_state[i]);
                 }
             }
