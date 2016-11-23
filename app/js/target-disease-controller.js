@@ -307,57 +307,63 @@
             return false;
         };
 
-        var convertUniprotCoords = function (variant, structure) {
-            for (var i=0; i<structure.mappings.length; i++) {
-                var mapping = structure.mappings[i];
-                if ((~~variant.begin > mapping.unp_start) && (~~variant.end < mapping.unp_end)) {
-                    var pdbStart = ~~variant.begin - mapping.unp_start + mapping.start;
-                    var pdbEnd = ~~variant.end - mapping.unp_start + mapping.start;
-                    return {
-                        mapping : mapping,
-                        // start: pdbStart,
-                        // end: pdbEnd,
-                        // coverage: mapping.coverage,
-                        // chain_id: mapping.chain_id,
-                        alternativeAA: variant.alternativeSequence,
-                        description: variant.description
-                    };
-                }
-            }
-            return {};
-        };
+        // var convertUniprotCoords = function (variant, structure) {
+        //     for (var i=0; i<structure.mappings.length; i++) {
+        //         var mapping = structure.mappings[i];
+        //         if ((~~variant.begin > mapping.unp_start) && (~~variant.end < mapping.unp_end)) {
+        //             var pdbStart = ~~variant.begin - mapping.unp_start + mapping.start;
+        //             var pdbEnd = ~~variant.end - mapping.unp_start + mapping.start;
+        //             return {
+        //                 mapping : mapping,
+        //                 // start: pdbStart,
+        //                 // end: pdbEnd,
+        //                 // coverage: mapping.coverage,
+        //                 // chain_id: mapping.chain_id,
+        //                 alternativeAA: variant.alternativeSequence,
+        //                 description: variant.description
+        //             };
+        //         }
+        //     }
+        //     return {};
+        // };
 
+        function mapSnpsInStructure(bestStructures) {
+            if (bestStructures) {
+                $scope.search.info.bestStructure = parseBestStructure(bestStructures.data[$scope.search.info.gene.uniprot_id]);
+            }
+            var url = "/proxy/www.ebi.ac.uk/proteins/api/variation/" + $scope.search.info.gene.uniprot_id;
+            return $http.get(url)
+                .then(function (varsResp) {
+                    var snps = varsResp.data.features;
+                    var snpsLoc = {};
+                    var snpId;
+                    for (var i = 0; i < snps.length; i++) {
+                        snpId = undefined;
+
+                        var variant = snps[i];
+                        if (variant.xrefs) {
+                            for (var j = 0; j < variant.xrefs.length; j++) {
+                                if (variant.xrefs[j].id.indexOf("rs") === 0) {
+                                    snpId = variant.xrefs[j].id;
+                                    break;
+                                }
+                            }
+                            if (snpId) {
+                                snpsLoc[snpId] = variant;
+                            }
+                        }
+                    }
+                    return snpsLoc;
+                });
+        }
 
         var getSnpPositions = function () {
             targetPromise = targetPromise
                 .then (function (bestStructures) {
-                    if (bestStructures) {
-                        $scope.search.info.bestStructure = parseBestStructure(bestStructures.data[$scope.search.info.gene.uniprot_id]);
-                    }
-                    var url = "/proxy/www.ebi.ac.uk/proteins/api/variation/" + $scope.search.info.gene.uniprot_id;
-                    return $http.get(url)
-                        .then (function (varsResp) {
-                            var snps = varsResp.data.features;
-                            var snpsLoc = {};
-                            var snpId;
-                            for (var i=0; i<snps.length; i++) {
-                                snpId = undefined;
-
-                                var variant = snps[i];
-                                if (variant.xrefs) {
-                                    for (var j=0; j<variant.xrefs.length; j++) {
-                                        if (variant.xrefs[j].id.indexOf("rs")===0) {
-                                            snpId = variant.xrefs[j].id;
-                                            break;
-                                        }
-                                    }
-                                    if (snpId) {
-                                        snpsLoc[snpId] = variant;
-                                    }
-                                }
-                            }
-                            return snpsLoc;
-                        });
+                    return mapSnpsInStructure(bestStructures);
+                }, function (err) {
+                    $log.warn("No protein structure found in PDBe for " + $scope.search.info.gene.approved_symbol);
+                    return mapSnpsInStructure();
                 });
         };
 
