@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -e
 
 export REST_API_SCHEME=${REST_API_SCHEME:=https}
 export REST_API_SERVER=${REST_API_SERVER:=www.targetvalidation.org:443}

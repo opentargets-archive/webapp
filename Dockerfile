@@ -62,6 +62,6 @@ VOLUME ["/var/cache/nginx"]
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-EXPOSE 80 443
+EXPOSE 80 443 8090
 
 CMD ["nginx", "-g", "daemon off;"]
