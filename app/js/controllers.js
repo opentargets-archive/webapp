@@ -36,6 +36,10 @@
         };
     }])
 
+    /**
+     * Controller for the masthead navigations
+     * Simply exposes the location service
+     */
     .controller('MastheadCtrl', ['$scope', '$location', '$log', 'cttvLocationState', function ($scope, $location, $log, cttvLocationState) {
         'use strict';
         // $log.log('MastheadCtrl()');

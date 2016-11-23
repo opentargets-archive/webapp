@@ -93,8 +93,9 @@
                         </div>
                     </div>-->
 
-                    <!-- Masthead (other pages)
-                    <div ng-if="location.path()!=='/'" class="masthead ng-cloak">-->
+                    <!-- Masthead and navigation -->
+                    <!-- HP only has notifications -->
+                    <!-- other pages have full masthead -->
 
                     <div class="masthead ng-cloak" ng-class="location.path()!=='/' ? 'masthead-border' : ''">
 
@@ -102,12 +103,13 @@
 
                             <div class="row" >
 
-                                <div class="col-xs-1 col-sm-1 col-md-3">
-                                    <!-- CTTV logo -->
+                                <div class="col-xs-3">
+                                    <!-- OT Platform logo -->
                                     <div class="ot_logo" ng-if="location.path()!=='/'">
                                         <a href="/">
-                                            <div class="ot_logo_graphics"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/></div>
-                                            <div class="ot_logo_type hidden-xs hidden-sm"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/></div>
+                                            <!-- <div class="ot_logo_graphics"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/></div>
+                                            <div class="ot_logo_type hidden-xs hidden-sm"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/></div>-->
+                                            <img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/>
                                         </a>
                                     </div>
                                 </div>

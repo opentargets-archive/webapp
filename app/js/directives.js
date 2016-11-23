@@ -1463,7 +1463,7 @@ angular.module('cttvDirectives', [])
                         + '     <i ng-click="notify()" class="fa fa-bell-o" aria-hidden="true"></i>'
                         + '</div>'
 
-                        + '<ul class="masthead-navigation">'
+                        /*+ '<ul class="masthead-navigation">'
                         +    '<li ng-repeat="item in nav" ng-if="item.label">'
 
                         +        '<div ng-if="item.menu==undefined">'
@@ -1478,17 +1478,42 @@ angular.module('cttvDirectives', [])
                         +        '</div>'
 
                         +    '</li>'
-                        +    '<li>'
 
-                        /*+ '<div ng-show="notificationsLeft" >'
-                        + '    <a href="">'
-                        + '       <div class=counter ng-bind-html="notificationsLeft"></div>'
-                        + '       <span ng-click="notify()" class="fa fa-bell-o fa-lg"></span> <span class="counter" ng-bind-html="notificationsLeft"></span>'
-                        + '    </a>'
-                        + '</div>'*/
+                        +'</ul>',*/
 
-                        +    '</li>'
+
+                        //+    '<div><a href="#"><span class="hidden-xs">Menu </span><span class="fa fa-bars fa-lg"></span></a></div>'
+
+
+                        +    '<div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
+                        +         '<a href uib-dropdown-toggle><span class="fa fa-bars fa-lg"></span></a>'
+                        +         '<ul class="uib-dropdown-menu" uib-dropdown-menu>'
+                        +             '<li ng-repeat="item in nav" ng-if="item.label">'
+                        //+              '<li ng-repeat="subitem in item.menu"><a ng-if="subitem.target" target={{subitem.target}} href="{{subitem.href}}">{{subitem.label}}</a><a ng-if="!subitem.target" href="{{subitem.href}}">{{subitem.label}}</a></li>'
+                        +                '<div><a href="{{item.href}}">{{item.label}}</a></div>'
+                        +             '</li>'
+                        +         '</ul>'
+                        +    '</div>'
+
+
+                        /*+    '<li ng-repeat="item in nav" ng-if="item.label">'
+
+                        +        '<div ng-if="item.menu==undefined">'
+                        +             '<a href="{{item.href}}">{{item.label}}</a>'
+                        +        '</div>'
+
+                        +        '<div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
+                        +             '<a href uib-dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
+                        +             '<ul class="uib-dropdown-menu" uib-dropdown-menu>'
+                        +                  '<li ng-repeat="subitem in item.menu"><a ng-if="subitem.target" target={{subitem.target}} href="{{subitem.href}}">{{subitem.label}}</a><a ng-if="!subitem.target" href="{{subitem.href}}">{{subitem.label}}</a></li>'
+                        +             '</ul>'
+                        +        '</div>'
+
+                        +    '</li>'*/
+
                         +'</ul>',
+
+
             link: function(scope, element, attrs) {
                 scope.dumps_link = cttvConfig.dumps_link;
                 scope.nav = cttvConfig.mastheadNavigationMenu;
