@@ -28,8 +28,15 @@
         <div class="cttv-docs-section">
             <h4 id="computing-the-association-score">Computing the Association Score</h4>
 
-            <p>We start by generating a score for each evidence from different data sources (e.g. GWAS catalog, EVA) within a data type (e.g. Genetic Associations). The evidence score summarises the strength of the evidence and depends on factors that affect the relative strength of an evidence. These factors are summarised below:</p>
-
+            <p>We start by generating a score for each evidence from different data sources (e.g. GWAS catalog, EVA) within a data type (e.g. Genetic associations). We define the evidence score as:</p>
+            <p>s = F * S * C</p>
+            <p>where</p>
+            
+            <p>s = score</p>
+            <p>F = frequency, the relative occurrence of a target-disease evidence</p>
+            <p>S = severity, the magnitude or strength of the effect described by the evidence</p>
+            <p>C = confidence, overall confidence for the observation that generates the target-disease evidence</p>
+            
             <table class="table">
                 <thead>
                     <tr>
