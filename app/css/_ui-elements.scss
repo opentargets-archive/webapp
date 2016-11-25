@@ -345,6 +345,24 @@
         }
     }
 
+    .tag-section {
+      margin-right: 10px;
+      .tag {
+          margin-right: 3px;
+          &.target {
+            color: $secondary-color;
+          }
+          &.disease {
+            color: $clr-warning
+          }
+          &.ortholog {
+            color: $clr-success;
+          }
+          &.drug {
+            color: $clr-info;
+          }
+      }
+    }
 
     /*
     * Backgrounds

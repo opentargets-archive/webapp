@@ -275,7 +275,6 @@ angular.module('cttvServices', []).
                 if (h === 'id' || h === 'score' || h === 'type') {
                     continue;
                 }
-                $log.log(h);
                 if (h.startsWith("ortholog")) {
                     matches.ortholog++;
                 } else if (h.startsWith("drugs")) {
@@ -285,9 +284,7 @@ angular.module('cttvServices', []).
                     matches.human++;
                 }
             }
-
-            $log.log(matches);
-
+            
             if (!matches.human) {
                 if (matches.ortholog) {
                     r.orthologMatch = true;

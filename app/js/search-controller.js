@@ -188,7 +188,6 @@ angular.module('cttvControllers')
                                 var r = $scope.search.results.data[i];
                                 cttvUtils.addMatchedBy(r);
                             }
-                            $log.log($scope.search.results);
                         },
                         cttvAPIservice.defaultErrorHandler
                     )
