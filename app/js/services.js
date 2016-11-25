@@ -295,6 +295,12 @@ angular.module('cttvServices', []).
                 if (matches.drug) {
                     r.drugMatch = true;
                 }
+            } else {
+                for (var h2 in r.highlight) {
+                    if (h2.startsWith("ortholog") || h2.startsWith('drug')) {
+                        delete r.highlight[h2];
+                    }
+                }
             }
         };
 

@@ -98,7 +98,7 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
                                 $scope.search.results = parseResponseData(resp.body.data);  // store the results
                                 var besthit = $scope.search.results.besthit;
                                 if (besthit) {
-                                    cttvUtils.addMatchedBy(bestHit);
+                                    cttvUtils.addMatchedBy(besthit);
                                 }
                             }, cttvAPIservice.defaultErrorHandler
                         ).

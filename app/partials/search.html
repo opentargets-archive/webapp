@@ -43,7 +43,15 @@
             <div class="col-sm-10">
 
                 <div ng-repeat="result in search.results.data" class="search-result">
-                    <h4><a ng-href="/{{result.data.type}}/{{result.data.id}}/associations">{{result.data.name}}</a> <span style="font-size: 0.8em; color:#888888"> {{result.data.type == "target" ? result.data.association_counts.direct : result.data.association_counts.total}} {{result.data.type == "target" ? (result.data.association_counts.direct == 1 ? "disease" : "diseases") : (result.data.association_counts.total == 1 ? "target" : "targets")}} associated</span></h4>
+                    <h4 class="text-item">
+                      <span class="nbblock">
+                        <a><span ng-bind-html="result.data.name | uibTypeaheadHighlight:search.query.text"></span></a>
+                        <span class="label cttv-text-small" ng-class="(result.data.type=='target') ? 'label-primary' : 'label-warning'">{{result.data.type=="target" ? "target" : "disease"}}</span>
+                      </span>
+                      <span class="text-small text-lowlight" ng-if="result.data.type=='target'">{{result.data.full_name}}</span>
+                      <br />
+                      <span style="font-size: 0.8em; color:#888888"> {{result.data.type == "target" ? result.data.association_counts.direct : result.data.association_counts.total}} {{result.data.type == "target" ? (result.data.association_counts.direct == 1 ? "disease" : "diseases") : (result.data.association_counts.total == 1 ? "target" : "targets")}} associated</span>
+                    </h4>
 
                     <span class="search-description">{{result.data.description | limitTo: 300 }}<span ng-show="result.data.description.length>300">&hellip;</span></span>
 
@@ -55,7 +63,6 @@
                     </span>
 
                     <span class="search-details">
-                        <span class="label" ng-class="(result.data.type==='target') ? 'label-primary' : 'label-warning'">{{result.data.type}}</span><!-- &nbsp;|&nbsp;<span class="text-lowlight">Score: {{result.score}}</span> -->
                         <span title="Search keyword matches an ortholog of this target" class="pricetag ortholog" ng-show="result.orthologMatch">Match from ortholog</span>
                         <span title="Search keyword matches a target via drug name" class="pricetag drug" ng-show="result.drugMatch">Match from drug name</span>
                     </span>
