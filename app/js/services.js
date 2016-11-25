@@ -265,6 +265,38 @@ angular.module('cttvServices', []).
             return s;
         }
 
+        cttvUtilsService.addMatchedBy = function (r) {
+            var matches = {
+                human: 0,
+                ortholog: 0,
+                drug: 0
+            };
+            for (var h in r.highlight) {
+                if (h === 'id' || h === 'score' || h === 'type') {
+                    continue;
+                }
+                $log.log(h);
+                if (h.startsWith("ortholog")) {
+                    matches.ortholog++;
+                } else if (h.startsWith("drugs")) {
+                    matches.drug++;
+                }
+                else {
+                    matches.human++;
+                }
+            }
+
+            $log.log(matches);
+
+            if (!matches.human) {
+                if (matches.ortholog) {
+                    r.orthologMatch = true;
+                }
+                if (matches.drug) {
+                    r.drugMatch = true;
+                }
+            }
+        };
 
         // Defers a call x ms
         // If a new call is made before the time expires, discard the initial one and start deferring again

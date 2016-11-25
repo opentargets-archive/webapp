@@ -183,29 +183,12 @@ angular.module('cttvControllers')
                 cttvAPIservice.getSearch( queryObject )
                     .then(
                         function(resp) {
-                            var i, h, h2;
-                            var t;
                             $scope.search.results = resp.body;
-                            for (i=0; i<$scope.search.results.data.length; i++) {
+                            for (var i=0; i<$scope.search.results.data.length; i++) {
                                 var r = $scope.search.results.data[i];
-                                r.humanMatch = false;
-                                for (h in r.highlight) {
-                                    // if (h.startsWith("ortholog") && h.endsWith('name')) {
-                                    //     delete r.highlight[h];
-                                    // }
-                                    if (!h.startsWith("ortholog")) {
-                                        r.humanMatch = true;
-                                        break;
-                                    }
-                                }
-                                if (r.humanMatch) {
-                                    for (h2 in r.highlight) {
-                                        if (h2.startsWith("ortholog")) {
-                                            delete r.highlight[h2];
-                                        }
-                                    }
-                                }
+                                cttvUtils.addMatchedBy(r);
                             }
+                            $log.log($scope.search.results);
                         },
                         cttvAPIservice.defaultErrorHandler
                     )

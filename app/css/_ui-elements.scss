@@ -295,6 +295,60 @@
         /*background: linear-gradient(90deg, #ffe5e5 50%, #f0f5f5 50%);*/
     }
 
+    .pricetag {
+        white-space: nowrap;
+        position: relative;
+        margin: 0 5px 0 10px;
+        displaY: inline-block;
+        height: 20px;
+        border-radius: 0 5px 5px 0;
+        padding: 0 10px 0 15px;
+        &.drug {
+          background: $clr-info;
+          border: 1px solid $clr-info-hover;
+        }
+        &.ortholog {
+          background: $clr-success;
+          border: 1px solid $clr-success-hover;
+        }
+        color: white;
+        line-height: 18px;
+    }
+    .pricetag:after {
+        position: absolute;
+        right: 0;
+        margin: 1px 7px;
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .pricetag:before {
+        position: absolute;
+        &.drug {
+          background: $clr-info;
+        }
+        &.ortholog {
+          background: $clr-success;
+        }
+        content: "\25CF";
+        color: white;
+        text-shadow: 0 0 1px #aaa;
+        font-size: 12px;
+        line-height: 5px;
+        text-indent: 6px;
+        top: 3px;
+        left: -8px;
+        width: 13px;
+        height: 13px;
+        transform: rotate(45deg);
+        &.drug {
+          border-left: 1px solid $clr-info-hover;
+          border-bottom: 1px solid $clr-info-hover;
+        }
+        &.ortholog {
+          border-left: 1px solid $clr-success-hover;
+          border-bottom: 1px solid $clr-success-hover;
+        }
+    }
 
 
     /*
