@@ -50,45 +50,45 @@
                 <tbody>
                     <tr>
                         <td>Genetic associations</td>
-                        <td>GWAS Catalog score (<a href="/variants">target to variant mapping score</a>, p value, sample size, severity score), EVA normalised score (<a href="/variants">target to variant mapping score</a>, pathogenicity score from ClinVar), UniProt score (based on curation confidence)</td>
+                        <td>GWAS Catalog (<a href="/variants">target to variant mapping score</a>,  functional consequence score, normalised p value and normalised sample size), European Variation Archive germline variants(<a href="/variants">target to variant mapping score</a>, functional consequence score, pathogenicity score from ClinVar), UniProt (curator inference score based on how strong the evidence for the gene's involvement in the disease is. Not strong: 0.5. Strong 1)</td>
                     </tr>
 
                     <tr>
                         <td>Somatic mutations</td>
-                        <td>COSMIC score (based on curation confidence), EVA normalised score</td>
+                        <td>Cancer Gene Census and EVA (both based on the functional consequence score), IntOgen (binned score based on tumour type category, ranging from 0.25 if the gene exhibits several signals of positive selections in the tumour, to 0.75 if in addition to a signal of positive selection, the gene is functionally connected to other genes with evidence A and B in the tumor type</td>
                     </tr>
 
                     <tr>
                         <td>Drugs</td>
-                        <td>ChEMBL score (Drug development pipeline progression from Pre-clinical, Phase I, Phase II, Phase III, Phase IV, to Approved)</td>
+                        <td>ChEMBL  (Clinical trail phase binned score. Phase 0: 0.89, Phase I: 0.01, Phase II: 0.02, Phase III: 0.07, Phase IV: 1/0)</td>
                     </tr>
 
                     <tr>
                         <td>Affected pathways</td>
-                        <td>Reactome score (based on curation confidence)</td>
+                        <td>Reactome (curator confidence score)</td>
                     </tr>
 
                     <tr>
                         <td>RNA Expression</td>
-                        <td>Expression Atlas score (p-value, abs(log2(fold_change)), rank)</td>
+                        <td>Expression Atlas score (normalised p-value, normalised expression fold change and normalised percentile rank), rank)</td>
                     </tr>
 
                     <tr>
                         <td>Text mining</td>
-                        <td>Europe PMC (normalised co-occurrence score: title co-occurrences score + abstract co-occurrences score + full text co-occurrences score)</td>
+                        <td>Europe PMC (confidence score based on weighting document sections, sentence locations and title for full text articles and abstracts (Kafkas et al 2016)</td>
                     </tr>
 
                     <tr>
                         <td>Animal models</td>
-                        <td><a href="http://database.oxfordjournals.org/content/2013/bat025">Phenodigm</a> (<a href="http://database.oxfordjournals.org/content/2013/bat025">similarity score</a> described by <a href="http://database.oxfordjournals.org/content/2013/bat025.full#sec-3">Smedley et al</a>)</td>
+                        <td><a href="http://database.oxfordjournals.org/content/2013/bat025">Phenodigm</a> (<a href="http://database.oxfordjournals.org/content/2013/bat025">similarity score between a mouse model and a human disease</a><a href="http://database.oxfordjournals.org/content/2013/bat025.full#sec-3">(Smedley et al 2013)</a>)</td>
                     </tr>
 
                 </tbody>
             </table>
 
-            <p>Once we have the scores for each evidence, we calculate an overall score for a data type (e.g. Genetic Associations). In this step, we need to take into account that although multiple occurrences of evidence can suggest a strong association, the inclusion of further new evidence should not have a great impact on the overall score. For this reason, we’ve decided to calculate the sum of the <a href="https://en.wikipedia.org/wiki/Harmonic_progression_(mathematics)">harmonic progression</a> of each score and adjust the contribution of each of them using a heuristic weighting. Throughout this process, the value of the score is always capped to 1, the most confident association.</p>
+            <p>Once we have the scores for each evidence, we calculate an overall score for a data type (e.g. Genetic associations). In this step, we take into account that although multiple occurrences of evidence can suggest a strong association, the inclusion of further new evidence should not have a great impact on the overall score. For this reason, we calculate the sum of the <a href="https://en.wikipedia.org/wiki/Harmonic_progression_(mathematics)">harmonic progression</a> of each score and adjust the contribution of each of them using a heuristic weighting. Throughout this process, the value of the score is always capped at 1, the most confident association.</p>
 
-            <p>We’ve implemented this framework for the current version of the Target Validation Platform but Open Targets continue to explore and work on alternative statistical models to keep providing robust scoring systems for target-disease associations.</p>
+            <p>We’ve implemented this framework for the current version of the Platform but we'll continue to explore and work on alternative statistical models to keep providing robust scoring systems for target-disease associations.</p>
 
         </div>
 
