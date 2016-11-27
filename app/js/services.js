@@ -229,8 +229,6 @@ angular.module('cttvServices', []).
             });
         };
 
-
-
         cttvUtilsService.getPublicationsString = function(pmidsList){
             pmidsList = pmidsList || [];  // to avoid undefined errors
             var pub = "";
@@ -254,17 +252,7 @@ angular.module('cttvServices', []).
         cttvUtilsService.clearErrors = function () {
             $rootScope.showApiError500 = false;
         };
-
-
-        /* TODO */
-        cttvUtilsService.objToString = function(obj){
-            var s = "";
-            for(var i in obj){
-
-            }
-            return s;
-        }
-
+    
 
         // Defers a call x ms
         // If a new call is made before the time expires, discard the initial one and start deferring again
