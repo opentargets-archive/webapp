@@ -1,0 +1,9 @@
+.gtexView path,
+.gtexView line {
+  fill: none;
+  stroke: #abb2bc;
+  shape-rendering: crispEdges;
+  &.median {
+    stroke: black;
+  }
+}
