@@ -146,6 +146,25 @@ angular.module('plugins')
                             }
                         });
 
+                    // medians
+                    tissues
+                        .append("line")
+                        .attr("x1", function (d) {
+                            return valScale(d.median);
+                        })
+                        .attr("x2", function (d) {
+                            return valScale(d.median);
+                        })
+                        .attr("y1", function (d) {
+                            return 0;
+                        })
+                        .attr("y2", function (d) {
+                            return 10;
+                        })
+                        .attr("class", "median")
+                        .attr("stroke-width", 2)
+                        .attr("stroke", "black");
+
                     // Axes
                     // values axis
                     var valAxis = d3.svg.axis()
