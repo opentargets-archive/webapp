@@ -25,6 +25,7 @@
   "dependencies": {
     "angular-read-more": "1.0.3",
     "angular-route": "1.4.9",
+    "angular-cookies": "1.5.8",
     "angular": "1.4.9",
     "components-font-awesome": "4.4.0",
     "bootstrap": "3.3.5",
@@ -36,9 +37,9 @@
     "d3": "~3.5.8",
     "angular-sanitize": "1.5.1",
     "FileSaver": "*",
-    "moment": "~2.14.1",
-    "angular-cookies": "~1.5.8",
-    "abdmob/x2js": "^1.2.0"
+    "abdmob/x2js": "^1.2.0",
+    "bio-pv": "~1.8.1",
+    "moment": "~2.14.1"
   },
   "resolutions": {
     "angular": "1.5.1"

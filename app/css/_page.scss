@@ -1,5 +1,5 @@
 @import "colors";
-
+@import "utils";
 
 /*
  * Defines the main element of the single page,
@@ -17,6 +17,9 @@ body{
     color: $clr-text;
     background: $body-background;
 }
+
+@include scrollbar(14px);
+
 
 /*
 * Main index page

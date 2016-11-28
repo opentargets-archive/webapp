@@ -4,7 +4,17 @@ angular.module('plugins')
 
         return {
             restrict: 'E',
-            template: '<div ng-show="pdbId"><p class=cttv-section-intro>Below is shown the best structure found in PDBe for {{target.approved_symbol}}. It corresponds to PDBe entry {{pdbId}} based on coverage and structure quality. To get more information about this structure visit the <a target=_blank href="http://www.ebi.ac.uk/pdbe/entry/pdb/{{pdbId}}">PDBe entry for {{pdbId}}</a></p><p>Structure for {{pdbId}} ({{title | lowercase}})</p><png style="float:right" filename="{{target.approved_symbol}}-structure.png" track="targetStructure"></png><div id=picked-atom-name style="text-align:center;"">&nbsp;</div></div>',
+            template: '' +
+            '<div ng-show="noPdb">No structure found for {{target.approved_symbol}}</div>' +
+            '<div ng-show="pdbId">' +
+            '     <p class=cttv-section-intro>Below is shown the best structure found in PDBe for {{target.approved_symbol}}. It corresponds to PDBe entry {{pdbId}} based on coverage and structure quality. To get more information about this structure visit the <a target=_blank href="http://www.ebi.ac.uk/pdbe/entry/pdb/{{pdbId}}">PDBe entry for {{pdbId}}</a></p>' +
+            '     <p>Structure for <b>{{pdbId}}</b> ({{title | lowercase}})</p>' +
+            '     <png style="float:right" filename="{{target.approved_symbol}}-structure.png" track="targetStructure"></png>' +
+            '     <div style="position:relative">' +
+            '          <div id=picked-atom-name style="text-align:center;"">&nbsp;</div>' +
+            '          <div id="pdb-hamburger-menu"></div>' +
+            '     </div>' +
+            '</div>',
             // templateUrl: "plugins/pdb.html",
             scope: {
                 target: '=',
@@ -15,68 +25,75 @@ angular.module('plugins')
                 var uniprotId = scope.target.uniprot_id;
 
                 // burger menu
-                var burgerContainer = d3.select(element[0])
-                    .append("div")
-                    .style("position","relative");
-                burgerContainer
-                    .append("div")
-                    .attr("class", "hamburger-frame")
-                    .on("click", function () {
-                        if (div.style("height") === "0px") {
-                            div
-                                .transition()
-                                .duration(1000)
-                                .style("height", "550px");
-                        } else {
-                            div
-                                .transition()
-                                .duration(1000)
-                                .style("height", "0px");
-                        }
-                    });
-
-                var div = burgerContainer
-                    .append("div")
-                    .attr("class", "cttv_targetTree_legend");
-
-                var colorSection = div
-                    .append("div");
-                colorSection
-                    .append("p")
-                    .text("Color by...");
-                colorSection
-                    .append("input")
-                    .style("margin", "10px")
-                    .attr("type", "radio")
-                    .attr("name", "colorBy")
-                    .attr("value", "chain")
-                    .property("checked", true)
-                    .on("change", function () {
-                        scope.viewer.clear();
-                        scope.viewer.cartoon('protein', scope.structure, {
-                            color: pv.color.byChain()
+                $timeout(function () {
+                    var burgerContainer = d3.select(document.getElementById("pdb-hamburger-menu"));
+                    burgerContainer
+                        .append("div")
+                        .style("position", "relative");
+                    burgerContainer
+                        .append("div")
+                        .attr("class", "hamburger-frame")
+                        .on("click", function () {
+                            if (div.style("height") === "0px") {
+                                div
+                                    .transition()
+                                    .duration(1000)
+                                    .style("height", "130px");
+                            } else {
+                                div
+                                    .transition()
+                                    .duration(1000)
+                                    .style("height", "0px");
+                            }
                         });
-                    });
-                colorSection
-                    .append("label")
-                    .text (" Chain");
-                colorSection.append("br");
-                colorSection
-                    .append("input")
-                    .style("margin", "10px")
-                    .style("margin-top", "0px")
-                    .attr("type", "radio")
-                    .attr("name", "colorBy")
-                    .attr("value", "Structure")
-                    .on("change", function (v) {
-                        scope.viewer.clear();
-                        scope.viewer.cartoon('protein', scope.structure, {
-                            color: pv.color.ssSuccession()
+
+                    var div = burgerContainer
+                        .append("div")
+                        .attr("class", "cttv_targetTree_legend");
+
+                    var colorSection = div
+                        .append("div");
+                    colorSection
+                        .append("h4")
+                        .text("Color by...");
+                    colorSection
+                        .append("input")
+                        .style("margin", "10px")
+                        .attr("type", "radio")
+                        .attr("name", "colorBy")
+                        .attr("value", "chain")
+                        .property("checked", true)
+                        .on("change", function () {
+                            scope.viewer.clear();
+                            scope.viewer.cartoon('protein', scope.structure, {
+                                color: pv.color.byChain()
+                            });
                         });
-                    });
-                colorSection
-                    .append("label")
-                    .text(" Structure");
+                    colorSection
+                        .append("text")
+                        .text(" Chain");
+                    colorSection.append("br");
+                    colorSection
+                        .append("input")
+                        .style("margin", "10px")
+                        .style("margin-top", "0px")
+                        .attr("type", "radio")
+                        .attr("name", "colorBy")
+                        .attr("value", "Structure")
+                        .on("change", function (v) {
+                            scope.viewer.clear();
+                            scope.viewer.cartoon('protein', scope.structure, {
+                                color: pv.color.ssSuccession()
+                            });
+                        });
+                    colorSection
+                        .append("text")
+                        .text(" Structure");
+
+                    var burger = burgerContainer
+                        .append("div")
+                        .attr("class", "hamburger-menu");
+                }, 0);
 
                 // PV
                 var w = scope.width - 120;
@@ -84,11 +101,6 @@ angular.module('plugins')
                 newDiv.id = "pvTarget";
                 newDiv.className = "accordionCell";
                 element[0].appendChild(newDiv);
-
-
-                var burger = burgerContainer
-                    .append("div")
-                    .attr("class", "hamburger-menu");
 
 
                 $http.get("/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/" + uniprotId)
@@ -115,10 +127,10 @@ angular.module('plugins')
 
                             scope.viewer = pv.Viewer(parent, options);
                             $http.get('/proxy/files.rcsb.org/view/' + bestStructure.pdb_id + '.pdb')
+                            // $http.get('https://files.rcsb.org/view/' + bestStructure.pdb_id + ".pdb")
                             // $http.get('/proxy/pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
                                 .then (function (data) {
                                     // Extract the title:
-                                    // $log.log(data);
                                     var lines = data.data.split("\n");
                                     for (var i=0; i<lines.length; i++) {
                                         if (lines[i].startsWith("TITLE")) {
@@ -161,7 +173,6 @@ angular.module('plugins')
                                           } else {
                                               setColorForAtom(picked.node(), atom, 'red');
                                           }
-
                                         } else {
                                           document.getElementById('picked-atom-name').innerHTML = '&nbsp;';
                                           prevPicked = null;
@@ -189,9 +200,10 @@ angular.module('plugins')
 
                         },0);
                     }, function (resp) { // error
-                        var template = "<div>No structure found for {{target.approved_symbol}}</div>";
-                        var compiled = $compile(template)(scope);
-                        element.append(compiled);
+                        scope.noPdb = true;
+                        // var template = "<div>No structure found for {{target.approved_symbol}}</div>";
+                        // var compiled = $compile(template)(scope);
+                        // element.append(compiled);
                     });
 
                 if (cttvUtils.browser.name !== "IE") {

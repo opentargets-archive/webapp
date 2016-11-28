@@ -96,7 +96,7 @@ angular.module('plugins')
                 var w = scope.width - 40;
                 var newDiv = document.createElement("div");
                 newDiv.id = "targetGenomeBrowser";
-                newDiv.className = "accordionCell";
+                // newDiv.className = "accordionCell";
                 element[0].appendChild(newDiv);
 
                 var gB = tnt.board.genome()

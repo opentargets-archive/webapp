@@ -205,15 +205,16 @@ gulp.task('build-3rdparty-styles', ['copy-bootstrap', 'copy-fontawesome'], funct
         .pipe(gulp.dest(buildDir));
 });
 
+gulp.task('copy-files', function () {
+    return gulp.src(webappFiles.thirdParty.copy)
+        .pipe(gulp.dest(buildDir));
+});
 
-
-gulp.task('build-3rdparty', ['build-3rdparty-styles'], function () {
+gulp.task('build-3rdparty', ['copy-files', 'build-3rdparty-styles'], function () {
     return gulp.src(webappFiles.thirdParty.js)
         .pipe(concat(webapp3rdparty))
         .pipe(gulp.dest(buildDir));
 });
-
-
 
 gulp.task('build-webapp-styles', function () {
     return gulp.src(webappFiles.cttv.css)

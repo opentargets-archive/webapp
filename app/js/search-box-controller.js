@@ -100,14 +100,16 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
                                 // $log.info(resp);
                                 $scope.search.results = parseResponseData(resp.body.data);  // store the results
                                 var besthit = $scope.search.results.besthit;
-                                besthit.humanMatch = false;
-                                for (h in besthit.highlight) {
-                                    if (h.startsWith("ortholog") && h.endsWith('name')) {
-                                        delete besthit.highlight[h];
-                                    }
-                                    if (!h.startsWith("ortholog")) {
-                                        besthit.humanMatch = true;
-                                        break;
+                                if (besthit) {
+                                    besthit.humanMatch = false;
+                                    for (h in besthit.highlight) {
+                                        if (h.startsWith("ortholog") && h.endsWith('name')) {
+                                            delete besthit.highlight[h];
+                                        }
+                                        if (!h.startsWith("ortholog")) {
+                                            besthit.humanMatch = true;
+                                            break;
+                                        }
                                     }
                                 }
                             }, cttvAPIservice.defaultErrorHandler

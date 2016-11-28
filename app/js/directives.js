@@ -2,7 +2,6 @@
 /* Directives */
 angular.module('cttvDirectives', [])
 
-
     /*
     *
     */
@@ -1350,6 +1349,12 @@ angular.module('cttvDirectives', [])
             replace: false,
             template: '<div ng-show="exportable" class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="exportPNG()"><span class="fa fa-picture-o" title="Download as PNG"></span></a></div></div>',
             link: function (scope, element, attrs) {
+                if (scope.inFormat === 'canvas') {
+                    scope.exportPNG = function () {
+                        var canvas = scope.$parent.toExport();
+                    }
+                    return;
+                }
                 $timeout(function () {
                     scope.exportable = ((scope.$parent.toExport !== undefined) && (typeof scope.$parent.toExport === "function"));
                 }, 0);

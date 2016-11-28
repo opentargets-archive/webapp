@@ -155,6 +155,10 @@ angular.module('cttvDirectives')
                     "targets": [3,4,5,6,7,8,9],
                     "asSorting": [ "desc", "asc"],
                 },
+                {
+                    "orderable": false,
+                    "targets": 11
+                },
                 { "orderSequence": ["desc", "asc"], "targets": [3,4,5,6,7,8,9,10,11] },
                 { "orderSequence": ["asc", "desc"], "targets": [0]}
             ],
@@ -310,7 +314,7 @@ angular.module('cttvDirectives')
                     facets: false,
                     size: 1
                 };
-                optsPreFlight = cttvAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
+                optsPreFlight = cttvAPIservice.addFacetsOptions(scope.facets, optsPreFlight);
                 var queryObject = {
                     method: 'GET',
                     params: optsPreFlight
@@ -336,7 +340,7 @@ angular.module('cttvDirectives')
                                 fields: ["disease.efo_info.label", "association_score.overall", "association_score.datatypes.genetic_association", "association_score.datatypes.somatic_mutation", "association_score.datatypes.known_drug", "association_score.datatypes.affected_pathway", "association_score.datatypes.rna_expression", "association_score.datatypes.literature", "association_score.datatypes.animal_model", "disease.efo_info.therapeutic_area.labels"],
                                 from: from
                             };
-                            opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
+                            opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
 
                             var queryObject = {
                                 method: 'GET',
@@ -387,9 +391,7 @@ angular.module('cttvDirectives')
             };
 
             scope.$watchGroup(["facets", "target", "active"], function(attrs) {
-                filters = attrs[0];
-                var target = attrs[1];
-                var act = attrs[2];
+                filters = scope.facets;
                 if (scope.active !== whoiam) {
                     return;
                 }
@@ -399,7 +401,7 @@ angular.module('cttvDirectives')
                 } else {
                     // Fire a target associations tree event for piwik to track
                     $analytics.eventTrack('targetAssociationsTable', {"category": "association", "label": "table"});
-                    dtable = setupTable(table, target, scope.filename, scope.downloadTable);
+                    dtable = setupTable(table, scope.target, scope.filename, scope.downloadTable);
                 }
             });
 

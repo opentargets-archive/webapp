@@ -32,6 +32,9 @@ var webappFiles = {
         ],
         'cssCopyDir': [
             'bower_components/components-font-awesome/**/*'
+        ],
+        'copy': [
+            'bower_components/bio-pv/bio-pv.min.js'
         ]
     },
 
@@ -57,6 +60,7 @@ var webappFiles = {
             'app/js/target-controller.js',
             'app/js/disease-controller.js',
             'app/js/directives.js',
+            'app/js/filter-by-file-targets-directive.js',
             'app/js/disease-associations-table-directive.js',
             'app/js/target-associations-table-directive.js',
             'app/js/target-associations-tree-directive.js',
