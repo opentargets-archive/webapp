@@ -8,36 +8,12 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-
+                <div class="intro-search-top-pad"><!-- this is a bit of a hack--></div>
                 <div class="intro-section-heading"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-hero-logo" alt="Open Targets logo"/></div>
                 <h2 class="intro-hero-heading">Find&nbsp;new&nbsp;targets for&nbsp;drug&nbsp;discovery</h2>
 
+                <div ot-search-box id="searchbox-hp" class="intro-search-block"></div>
 
-                <form ng-controller="SearchBoxCtrl" novalidate="" name="queryForm" class="intro-search-block global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()" id="searchbox-hp">
-                    <a name="search"></a>
-                    <fieldset>
-                        <div class="form-group has-feedback search-form">
-
-                            <!-- Search box + search button -->
-                            <div class="input-group">
-
-                                <input type="text" placeholder="Search for a target or disease" class="form-control input-search" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);" ng-focus="onFocusHandler('#searchbox-hp', 10, true)">
-
-                                <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-search"><span class="fa fa-search fa-lg"></span></button>
-                                </div>
-
-                            </div>
-
-                            <!-- Search in progress spinner -->
-                            <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
-
-                            <!-- Suggestions box -->
-                            <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
-
-                        </div>
-                    </fieldset>
-                </form>
                 <p class="intro-search-examples">Try:
                     <a href="/search?src=q:BRAF">BRAF</a>
                     <a href="/search?src=q:PTEN">PTEN</a>
@@ -51,55 +27,6 @@
     </div>
 </div> <!-- section -->
 
-<!--
-<div class="intro-section intro-section-theme-grey">
-    <div class="container">
-
-
-        <div class="row">
-            <div class="col-sm-12">
-                <h2 class="intro-section-heading">The Target Validation platform enables drug discovery scientists to identify and prioritise biological targets for new therapies.</h3>
-            </div>
-        </div>
-
-
-        <div class="col-sm-6 intro-section-panel">
-            <h3 class="intro-section-panel-heading" >Transforming target selection and prioritisation</h3>
-        </div>
-        <div class="col-sm-6 intro-section-panel">
-            <h3 class="intro-section-panel-heading">Trustworthy, comprehensive, up-to-date and free to use<span class="text-small"></h3>
-        </div>
-
-
-    </div>
-</div>
--->
-
-
-
-
-<!--
-<div class="intro-section">
-    <div class="container">
-        <div class="row">
-
-            <div class="col-sm-4">
-                <h3>I’m working on the BRAF gene in patients with lung carcinoma.
-                Is this gene associated with other diseases in the Respiratory system?</h3>
-            </div>
-
-            <div class="col-sm-4">
-                <h2>I’ve got a list of 50 genes associated with Parkinson’s disease and would like to prioritise my network analyses. Can I get the top three most relevant genes associated with this disease?</h2>
-            </div>
-
-            <div class="col-sm-4">
-                <p>I want to get all the co-occurrences of target-disease associations from the literature. Is this information available for download?</p>
-            </div>
-
-        </div>
-    </div>
-</div>
--->
 
 
 
@@ -142,39 +69,6 @@
 
             </div>
         </div>
-
-        <!-- <div class="row">
-            <div class="col-xs-12 col-sm-6">
-                <div class="intro-section-panel">
-                    <p class="lead"><span class="fa fa-clock-o"></span> Last updated on 3 Nov 2017</p>
-                </div>
-            </div>
-
-            <div class="col-xs-12 col-sm-6">
-                <div class="intro-section-panel">
-                    <p class="lead">Where does our data come from?</p>
-                    <a href="/data_sources" class="btn btn-primary">Data sources</a>
-                </div>
-            </div>
-        </div> -->
-
-        <!-- STATS -->
-        <!--
-        <div class="row">
-            <div class="col-sm-4">
-                <h2 class="intro-stats-heading"><span class="number-circle label-primary">30K</span> targets</h2>
-            </div>
-
-            <div class="col-sm-4">
-                <h2 class="intro-stats-heading"><span class="number-circle label-primary">2.4M</span> associations</h2>
-            </div>
-
-            <div class="col-sm-4">
-                <h2 class="intro-stats-heading"><span class="number-circle label-primary">9.4K</span> diseases</h2>
-            </div>
-
-        </div>
-        -->
 
     </div>
 </div>

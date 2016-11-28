@@ -138,7 +138,19 @@ body{
     text-align: right;
 }
 
-/* define style for homepage masthead navigation */
+.masthead-dimmer {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 50px;
+}
+
+/*
+ * masthead navigation
+ */
+
+
+
 .masthead-navigation {
     list-style: none;
     margin-top: 0px;
@@ -155,7 +167,7 @@ body{
             }
 
             >a, >a:focus {
-                padding: 0px 8px;
+                padding: 0px 7px;
                 height: 50px;
                 display: table-cell;
                 vertical-align: middle;
@@ -180,14 +192,16 @@ body{
                 background: $clr-ui-background-secondary; //$btn-primary-bg-hover;
             }
         }
-
-
     }
-
-
 }
 
-/* specific settings for the other pages masthead navigation */
+
+.ot-dropdown-hamburger {
+    right: 0px;
+    left: inherit; // need this to invalidate default left value
+}
+
+
 .masthead .masthead-navigation {
 
     .uib-dropdown-menu {
@@ -205,14 +219,28 @@ body{
     }
 }
 
+
+
+/*
+ * Masthead notifications
+ */
+
+.masthead-notifications-menu {
+    height: 50px;
+
+}
+
+
 .notification {
     position:relative;
-    float: right;
-    margin-top:10px;
     color:white;
-    margin-top:10px;
-    font-size:22px;
-    width:50px;
+    font-size:19px;
+    margin: 12px 7px;
+
+    // float: right;
+    // margin-top:10px;
+    // margin-top:10px;
+    // width:50px;
 
     .counter {
         border-radius:50%;
@@ -221,8 +249,9 @@ body{
         height:14px;
         background:red;
         position:absolute;
-        left:39px;
-        top:5px;
+        //left:39px;
+        right: -5px;
+        top:0px;
         font-size:10px;
         text-align:center;
         pointer-events:none;
@@ -237,6 +266,45 @@ body{
 .masthead-home .notification {
     color: $primary-brand-color;
 }
+
+
+
+/*
+ * Masthead search
+ */
+
+.masthead-search-container{
+    max-width:35%;
+    //padding-left: 8px;
+}
+
+.masthead-search-menu{
+    padding-left: 7px
+}
+
+.masthead-responsive-search{
+    height: 50px;
+    padding: 14px 7px;
+    padding-right: 0px;
+    cursor: pointer;
+}
+
+.masthead-responsive-search-icon{
+    color: #fff;
+    //font-size: 19px;
+}
+
+.masthead-responsive-search-panel{
+    position: absolute;
+    top: 0px;
+    right: 0;
+    width: 50%;
+    margin: 0px 15px;
+    min-width: 290px;
+    height: 50px;
+    z-index: 10;
+}
+
 
 
 /*

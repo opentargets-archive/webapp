@@ -1448,86 +1448,105 @@ angular.module('cttvDirectives', [])
         }
     }])
 
-    .directive('mastheadNavigationMenu', ['cttvConfig', function (cttvConfig) {
+
+
+    /*
+     * The notifications bell thingy in the navigation bar
+     */
+    .directive('mastheadNotificationsMenu', [ function () {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {},
+
+            template : ''
+                        + '<div ng-cloak class="notification" ng-show="notificationsLeft" ng-controller="NotifyCtrl">'
+                        + '     <div class="counter" ng-bind-html="notificationsLeft"></div>'
+                        + '     <i ng-click="notify()" class="fa fa-bell" aria-hidden="true"></i>'
+                        + '</div>',
+
+            link: function(scope, element, attrs) {}
+        };
+    }])
+
+
+
+    /*
+     * Navigation menu with hamburger option
+     */
+    .directive('mastheadNavigationMenu', ['cttvConfig', '$log', function (cttvConfig, $log) {
         'use strict';
 
         return {
             restrict: 'EA',
             scope: {
-                // href: '@',
+                isHamburger: '=?'     // show as hamburger [true | false]
             },
 
             template : ''
-                        + '<div ng-cloak class="notification" ng-show="notificationsLeft" ng-controller="NotifyCtrl">'
-                        + '     <div class="counter" ng-bind-html="notificationsLeft"></div>'
-                        + '     <i ng-click="notify()" class="fa fa-bell-o" aria-hidden="true"></i>'
-                        + '</div>'
+                        + '<ul class="masthead-navigation">'
 
-                        /*+ '<ul class="masthead-navigation">'
-                        +    '<li ng-repeat="item in nav" ng-if="item.label">'
+                        + '    <!-- regular inline menu -->'
+                        + '    <li ng-repeat="item in nav" ng-if="!isHamburger && item.label">'
+                        + '        <div ng-if="item.menu==undefined">'
+                        + '            <a href="{{item.href}}">{{item.label}}</a>'
+                        + '        </div>'
+                        + '        <div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
+                        + '             <a href uib-dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
+                        + '             <ul class="uib-dropdown-menu" uib-dropdown-menu>'
+                        + '                 <li ng-repeat="subitem in item.menu"><a ng-if="subitem.target" target={{subitem.target}} href="{{subitem.href}}">{{subitem.label}}</a><a ng-if="!subitem.target" href="{{subitem.href}}">{{subitem.label}}</a></li>'
+                        + '             </ul>'
+                        + '        </div>'
+                        + '    </li>'
 
-                        +        '<div ng-if="item.menu==undefined">'
-                        +             '<a href="{{item.href}}">{{item.label}}</a>'
-                        +        '</div>'
-
-                        +        '<div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
-                        +             '<a href uib-dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
-                        +             '<ul class="uib-dropdown-menu" uib-dropdown-menu>'
-                        +                  '<li ng-repeat="subitem in item.menu"><a ng-if="subitem.target" target={{subitem.target}} href="{{subitem.href}}">{{subitem.label}}</a><a ng-if="!subitem.target" href="{{subitem.href}}">{{subitem.label}}</a></li>'
-                        +             '</ul>'
-                        +        '</div>'
-
-                        +    '</li>'
-
-                        +'</ul>',*/
-
-
-                        //+    '<div><a href="#"><span class="hidden-xs">Menu </span><span class="fa fa-bars fa-lg"></span></a></div>'
-
-
-                        +    '<div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
-                        +         '<a href uib-dropdown-toggle><span class="fa fa-bars fa-lg"></span></a>'
-                        +         '<ul class="uib-dropdown-menu" uib-dropdown-menu>'
-                        +             '<li ng-repeat="item in nav" ng-if="item.label">'
-                        //+              '<li ng-repeat="subitem in item.menu"><a ng-if="subitem.target" target={{subitem.target}} href="{{subitem.href}}">{{subitem.label}}</a><a ng-if="!subitem.target" href="{{subitem.href}}">{{subitem.label}}</a></li>'
-                        +                '<div><a href="{{item.href}}">{{item.label}}</a></div>'
-                        +             '</li>'
-                        +         '</ul>'
-                        +    '</div>'
-
-
-                        /*+    '<li ng-repeat="item in nav" ng-if="item.label">'
-
-                        +        '<div ng-if="item.menu==undefined">'
-                        +             '<a href="{{item.href}}">{{item.label}}</a>'
-                        +        '</div>'
-
-                        +        '<div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
-                        +             '<a href uib-dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
-                        +             '<ul class="uib-dropdown-menu" uib-dropdown-menu>'
-                        +                  '<li ng-repeat="subitem in item.menu"><a ng-if="subitem.target" target={{subitem.target}} href="{{subitem.href}}">{{subitem.label}}</a><a ng-if="!subitem.target" href="{{subitem.href}}">{{subitem.label}}</a></li>'
-                        +             '</ul>'
-                        +        '</div>'
-
-                        +    '</li>'*/
+                        + '    <!-- hamburger menu -->'
+                        + '    <li ng-if="isHamburger">'
+                        + '        <div uib-dropdown on-toggle="toggled(open)">'
+                        + '             <a href uib-dropdown-toggle><span class="fa fa-bars fa-lg"></span></a>'
+                        + '             <ul class="uib-dropdown-menu ot-dropdown-hamburger" uib-dropdown-menu>'
+                        + '                 <li ng-repeat="item in nav" ng-if="item.label">'
+                        + '                     <a href="{{item.href}}">{{item.label}}</a>'
+                        + '                 </li>'
+                        + '             </ul>'
+                        + '        </div>'
+                        + '    </li>'
 
                         +'</ul>',
+
 
 
             link: function(scope, element, attrs) {
                 scope.dumps_link = cttvConfig.dumps_link;
                 scope.nav = cttvConfig.mastheadNavigationMenu;
 
-                scope.toggled = function(open) {
-                    //$log.log('Dropdown is now: ', open);
-                };
+                // if the menu is a hamburger, we flatten the tree to display all in one list
+                if(scope.isHamburger){
 
-                /* this must be defined here I suppose; some bootstrap thingy that's called automatically */
-                scope.toggleDropdown = function($event) {
+                    scope.nav = [];
+                    cttvConfig.mastheadNavigationMenu.forEach(function(i){
+                        if(i.menu){
+                            i.menu.forEach(function(j){
+                                scope.nav.push(j);
+                            })
+                        } else {
+                            scope.nav.push(i);
+                        }
+                    })
+                }
+
+                // this can be triggered when toggling a dropdown
+                /*scope.toggled = function(open) {
+                    //$log.log('Dropdown is now: ', open);
+                };*/
+
+                // this must be defined here I suppose? some bootstrap thingy that's called automatically...
+                // UPDATE: actually, it seems to work even without, so commenting out for now
+                /*scope.toggleDropdown = function($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                     //scope.status.isopen = !scope.status.isopen;
-                };
+                };*/
 
             }
         };
@@ -1646,9 +1665,9 @@ angular.module('cttvDirectives', [])
 
 
     /**
-     * I belive this is not working or being used right now... need to sort scope visiblity etc
+     * The searchbox with search suggestions
      */
-    .directive('otSearchBox', ['$log', 'SearchBoxCtrl', function ($log, SearchBoxCtrl) {
+    .directive('otSearchBox', [function () {
         'use strict';
 
         return {

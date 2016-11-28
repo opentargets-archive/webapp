@@ -1,0 +1,25 @@
+
+<form ng-controller="SearchBoxCtrl" novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
+    <fieldset>
+        <div class="form-group has-feedback search-form">
+
+            <!-- Search box + search button -->
+            <div class="input-group">
+
+                <input type="text" placeholder="Search for a target or disease" class="form-control input-search" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-search"><span class="fa fa-search fa-lg"></span></button>
+                </div>
+
+            </div>
+
+            <!-- Search in progress spinner -->
+            <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
+
+            <!-- Suggestions box -->
+            <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
+
+        </div>
+    </fieldset>
+</form>

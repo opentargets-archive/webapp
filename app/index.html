@@ -60,112 +60,79 @@
         <!-- <iframe frameborder=no width=600px height=200px src=http://demo.piwik.org/index.php?module=CoreAdminHome&action=optOut&language=en></iframe> -->
 
 
-
-
-
-
-
-
-
         <div class="cttv-page-wrapper">
 
             <!-- main page content -->
             <div class="cttv-main-container">
 
-
+                <!-- Masthead and navigation -->
+                <!-- HP only has notifications -->
+                <!-- other pages have full masthead -->
                 <div ng-controller="MastheadCtrl">
+                <div class="masthead ng-cloak" ng-class="location.path()!=='/' ? 'masthead-border' : ''">
+                    <div ng-show="opts.showResponsiveSearch" class="masthead-dimmer"></div>
 
+                    <div class="container">
 
-                    <!-- Masthead (homepage)
-                    <div ng-if="location.path()=='/'" class="ng-cloak masthead-home masthead-navigation-container">
+                        <div class="row" >
 
-                        <div class="container">
-                            <div class="row" >
-                                <div class="col-xs-2">
-                                    <div class="ot_logo">
-                                        <img src="imgs/logo/ot-tvp-logo-hp3.svg" class="intro-logo-tvp" width="225px" alt="Open Targets logo"/>
-                                    </div>
+                            <!-- single col contains everything and content is floated -->
+                            <div class="col-xs-12">
+
+                                <!-- OT Platform logo -->
+                                <div class="ot_logo pull-left" ng-if="location.path()!=='/'" ng-class="{'invisible':opts.showResponsiveSearch}">
+                                    <a href="/">
+                                        <img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/>
+                                    </a>
                                 </div>
-                                <div class="col-xs-10">
-                                    <masthead-navigation-menu></masthead-navigation-menu>
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
 
-                    <!-- Masthead and navigation -->
-                    <!-- HP only has notifications -->
-                    <!-- other pages have full masthead -->
 
-                    <div class="masthead ng-cloak" ng-class="location.path()!=='/' ? 'masthead-border' : ''">
+                                <!-- 1: search (on other pages only) -->
 
-                        <div class="container">
+                                <div ng-if="location.path()!=='/'" class="masthead-search-container pull-right" ng-class="{'invisible':opts.showResponsiveSearch}">
+                                    <!-- full search box: hide on small screens -->
+                                    <div ot-search-box class="hidden-xs hidden-sm masthead-search-menu"></div>
 
-                            <div class="row" >
-
-                                <div class="col-xs-3">
-                                    <!-- OT Platform logo -->
-                                    <div class="ot_logo" ng-if="location.path()!=='/'">
-                                        <a href="/">
-                                            <!-- <div class="ot_logo_graphics"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/></div>
-                                            <div class="ot_logo_type hidden-xs hidden-sm"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/></div>-->
-                                            <img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/>
-                                        </a>
+                                    <!-- responsive search box-->
+                                    <div class="masthead-responsive-search hidden-md hidden-lg">
+                                        <span ng-click="opts.showResponsiveSearch=!opts.showResponsiveSearch" class="fa fa-lg masthead-responsive-search-icon fa-search"></span>
                                     </div>
                                 </div>
 
-                                <div class="col-xs-2 col-sm-2 col-md-5 masthead-navigation-container" ng-class="location.path()=='/' ? 'pull-right' : ''">
-
-                                    <!-- menu only on other pages -->
-                                    <div ng-if="location.path()!=='/'">
-                                        <!-- navigation menu : hide on small screen-->
-                                        <masthead-navigation-menu class="hidden-xs hidden-sm"></masthead-navigation-menu>
-
-                                        <!-- here should have hamburger -->
-                                        <ul class="masthead-navigation hidden-md hidden-lg">
-                                            <li>
-                                                <div>
-                                                    <a href="#"><span class="hidden-xs">Menu </span><span class="fa fa-bars fa-lg"></span></a>
+                                <div ng-show="opts.showResponsiveSearch" class="masthead-responsive-search-panel">
+                                    <!--<div class="container">
+                                        <div class="row" >
+                                            <div class="col-xs-12">-->
+                                                <div ng-click="opts.showResponsiveSearch=!opts.showResponsiveSearch" class="masthead-responsive-search pull-right">
+                                                    <span class="fa fa-lg fa-times masthead-responsive-search-icon"></span>
                                                 </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-
+                                                <div ot-search-box></div>
+                                            <!--</div>
+                                        </div>
+                                    </div>-->
                                 </div>
 
-                                <div class="col-xs-9 col-sm-9 col-md-4" ng-if="location.path()!=='/'">
 
-                                    <form ng-controller="SearchBoxCtrl" novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
-                                        <a name="search"></a>
-                                        <fieldset>
-                                            <div class="form-group has-feedback search-form">
+                                <!-- 2: notifications (as required) -->
 
-                                                <!-- Search box + search button -->
-                                                <div class="input-group">
+                                <div masthead-notifications-menu class="masthead-notifications-menu pull-right" ng-class="{'invisible':opts.showResponsiveSearch}"></div>
 
-                                                    <input type="text" placeholder="Search for a target or disease" class="form-control input-search" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
 
-                                                    <div class="input-group-btn">
-                                                        <button type="submit" class="btn btn-search"><span class="fa fa-search fa-lg"></span></button>
-                                                    </div>
+                                <!-- 3: menu (on other pages only) -->
 
-                                                </div>
+                                <div ng-if="location.path()!=='/'" class="pull-right" ng-class="{'invisible':opts.showResponsiveSearch}">
+                                    <!-- navigation menu : hide on small screen-->
+                                    <masthead-navigation-menu class="hidden-xs hidden-sm"></masthead-navigation-menu>
 
-                                                <!-- Search in progress spinner -->
-                                                <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
-
-                                                <!-- Suggestions box -->
-                                                <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
-
-                                            </div>
-                                        </fieldset>
-                                    </form>
-
+                                    <!-- here should have hamburger -->
+                                    <masthead-navigation-menu is-hamburger="true" class="hidden-md hidden-lg"></masthead-navigation-menu>
                                 </div>
 
                             </div>
+
                         </div>
                     </div>
+                </div><!-- end masthead -->
                 </div>
 
                 <!-- Authentication error -->

@@ -24,9 +24,15 @@
  */
 
 .intro-section-search {
-    //padding: 140px 0px;
-    padding: 12vm 0;   /* fallback for IE9 */
-    padding: 12vmin 0;
+    padding-bottom: 12vm ;   /* fallback for IE9 */
+    padding-bottom: 12vmin ;
+    margin-top: -50px; //
+}
+
+.intro-search-top-pad{
+    height: 12vm;   /* IE9 */
+    height: 12vmin;
+    min-height: 50px;
 }
 
 .intro-search-block {
