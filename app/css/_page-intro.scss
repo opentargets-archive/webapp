@@ -175,7 +175,7 @@
     min-width:20%;
     position: relative;
     top: 50%;*/
-    transform: translateY(-50%);
+    transform: translateY(-51%); /* for some reasons at 50% the crisp sanger logo looks fuzzy, while 51% seems to work better */
 }
 
 /* deprecated */
