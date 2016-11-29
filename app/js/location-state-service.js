@@ -122,7 +122,8 @@ angular.module('cttvServices').
                 cttvConsts.PATHWAY,
                 cttvConsts.DATASOURCES,
                 cttvConsts.THERAPEUTIC_AREAS,
-                cttvConsts.DATA_DISTRIBUTION
+                cttvConsts.DATA_DISTRIBUTION,
+                cttvConsts.TARGET_CLASS
             ];
 
             for(var i in search){
@@ -136,7 +137,7 @@ angular.module('cttvServices').
                     }
 
                     // TODO:
-                    // we will * REMOVE THIS * whole "if" block in the future, once old style facets URL have been "flused" out!
+                    // we will * REMOVE THIS * whole "if" block in the future, once old style facets URL have been "flushed" out!
                     //
                     // If any, try and convert old style facets URLs, but only if there are no new style facets
                     if (_.indexOf(fc, i) > -1) {

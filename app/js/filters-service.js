@@ -152,9 +152,14 @@ angular.module('cttvServices').
          * Returns true if a filter with the given key is selected
          */
         var isSelected=function(collection, key){
+            $log.log("is selected...");
+            $log.log(collection);
+            $log.log(key);
             // return ($location.search()[collection] && ( $location.search()[collection]===key || $location.search()[collection].indexOf(key)>=0 )) || false;
             var fcts = cttvLocationState.getState()[ cttvFiltersService.stateId ];
-            return (fcts && fcts[collection] && ( fcts[collection]===key || fcts[collection].indexOf(key)>=0 ))|| false;
+            debugger;
+            $log.log(fcts);
+            return (fcts && fcts[collection] && ( fcts[collection]==key || fcts[collection].indexOf(key)>=0 ))|| false;
         };
 
 
@@ -211,10 +216,10 @@ angular.module('cttvServices').
                     // Use a filter function to keep only those returned by the API??
                     return obj.count>0;
                 });*/
-            } else if (collection === cttvConsts.PATHWAY){
+            } else if (collection === cttvConsts.PATHWAY) {
                 config.label = cttvDictionary.PATHWAY;
                 // pathways
-                config.filters = data.buckets.map(function(obj){
+                config.filters = data.buckets.map(function (obj) {
                     var conf = {};
                     conf.key = obj.key;
                     conf.label = obj.label;
@@ -222,8 +227,23 @@ angular.module('cttvServices').
                     conf.selected = isSelected(collection, obj.key);
                     conf.facet = collection;
                     conf.collection = null;
-                    if(obj.pathway){
-                        conf.collection = parseCollection( parseFacetData(cttvConsts.PATHWAY, obj.pathway, countsToUse) );
+                    if (obj.pathway) {
+                        conf.collection = parseCollection(parseFacetData(cttvConsts.PATHWAY, obj.pathway, countsToUse));
+                    }
+                    return conf;
+                });
+            } else if (collection === cttvConsts.TARGET_CLASS) {
+                config.label = cttvDictionary.TARGET_CLASS;
+                config.filters = data.buckets.map(function (obj) {
+                    var conf = {};
+                    conf.key = obj.key;
+                    conf.label = obj.label;
+                    conf.count = obj[countsToUse].value;
+                    conf.selected = isSelected(collection, obj.key);
+                    conf.facet = collection;
+                    conf.collection = null;
+                    if (obj.target_class) {
+                        conf.collection = parseCollection(parseFacetData(cttvConsts.TARGET_CLASS, obj.target_class, countsToUse));
                     }
                     return conf;
                 });
@@ -288,7 +308,7 @@ angular.module('cttvServices').
                 config.getSelectedFilters = function(){
                     // at the moment just return all these as selected, later on we might want to flag it after user changes default value perhaps?
                     return this.filters;
-                }
+                };
 
                 config.data = {
                     buckets : (function(){var a=[]; for(var i in data.buckets){a.push({label:Number(i), value:data.buckets[i].value})} return a;})()
@@ -296,7 +316,7 @@ angular.module('cttvServices').
                                     if(a.label<b.label){return -1}
                                     if(a.label>b.label){return 1}
                                     return 0
-                                }),
+                                })
                     //min : 0,
                     //max : 1
                 }
@@ -315,7 +335,7 @@ angular.module('cttvServices').
             var collection = new FilterCollection(obj);
             collection.filters=[]; // overwrite the filters so we can add them in properly
             obj.filters.forEach(function(element){
-
+                $log.log(element);
                 var f = getFilter(element);    //new Filter(element)
                 collection.addFilter(f);    // add filter to the collection
                 // but do we want to add the filter to the selected ones as well? if needed?
@@ -530,10 +550,11 @@ angular.module('cttvServices').
          * Each constant represents the corresponding 'key' in the facets as returned by the ElasticSearch API
          */
         cttvFiltersService.facetTypes = {
-            DATATYPES: cttvConsts.DATATYPES,        // 'datatypes'
-            PATHWAYS: cttvConsts.PATHWAY,     // 'pathway_type'
-            SCORE: cttvConsts.DATA_DISTRIBUTION,    // 'data_distribution'
-            THERAPEUTIC_AREAS: cttvConsts.THERAPEUTIC_AREAS // disease
+            DATATYPES: cttvConsts.DATATYPES,                    // 'datatypes'
+            PATHWAYS: cttvConsts.PATHWAY,                       // 'pathway_type'
+            SCORE: cttvConsts.DATA_DISTRIBUTION,                // 'data_distribution'
+            THERAPEUTIC_AREAS: cttvConsts.THERAPEUTIC_AREAS,    // disease
+            TARGET_CLASS: cttvConsts.TARGET_CLASS               // target class
         };
 
 

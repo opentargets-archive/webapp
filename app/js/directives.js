@@ -411,6 +411,9 @@ angular.module('cttvDirectives', [])
                 scope.filters = cttvFiltersService.getFilters();
                 scope.selectedFilters = cttvFiltersService.getSelectedFilters();
                 scope.deselectAll = cttvFiltersService.deselectAll;
+                $log.log("filters...");
+                $log.log(scope.filters);
+
                 //scope.respStatus = 1; //cttvFiltersService.status(); // TODO: handle response status
                 //scope.updateFilter = function(id){
                 //    cttvFiltersService.getFilter(id).toggle();
@@ -446,6 +449,7 @@ angular.module('cttvDirectives', [])
             link: function (scope, elem, attrs) {},
         };
     }])
+
 
     /**
     * The therapeutic areas facet
@@ -500,10 +504,35 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    /**
+     *  The target class facet
+      */
+    .directive('cttvTargetClassFacet', ['$log', function ($log) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {
+                facet: '=',
+                partial: '@'
+            },
+
+            template: '<div cttv-default-facet-controls facet="facet"></div>' +
+                '<div ng-init="isCollapsed=true&&(!target_class.collection.isLastClicked())" ng-repeat="target_class in facet.filters">' +
+                '   <cttv-parent-checkbox-facet bucket="target_class" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>' +
+                '   <div uib-collapse="isCollapsed" style="padding-left:20px">' +
+                '      <div cttv-checkbox-facet multiline="true" bucket="bucket" ng-repeat="bucket in target_class.collection.filters" partial="{{partial}}"></div>' +
+                '   </div>' +
+                '</div>',
+
+            link : function (scope, elem, attrs ) {}
+        }
+    }])
+
 
 
     /**
-     * The Datatypes facet
+     * The Pathways facet
      */
     .directive('cttvPathwaysFacet', ['$log' , function ($log) {
         'use strict';
@@ -528,7 +557,7 @@ angular.module('cttvDirectives', [])
                      +'</div>',
 
 
-            link: function (scope, elem, attrs) {},
+            link: function (scope, elem, attrs) {}
         };
     }])
 

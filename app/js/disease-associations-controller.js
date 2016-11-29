@@ -47,8 +47,9 @@ angular.module('cttvControllers')
     // Set page filters: this defines the order in which the facets are going to be displayed
     cttvFiltersService.pageFacetsStack([
         //cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
-        cttvFiltersService.facetTypes.DATATYPES,    // adds a datatypes facet to the page
-        cttvFiltersService.facetTypes.PATHWAYS      // adds a pathways facet to the page
+        cttvFiltersService.facetTypes.DATATYPES,      // adds a datatypes facet to the page
+        cttvFiltersService.facetTypes.PATHWAYS,       // adds a pathways facet to the page
+        cttvFiltersService.facetTypes.TARGET_CLASS    // adds a target class facet
     ]);
 
 

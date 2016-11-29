@@ -45,7 +45,8 @@ angular.module('cttvServices')
                 SCORE_MAX : 'scorevalue_max', //filterbyscorevalue_max',
                 SCORE_STR : 'stringency',
                 THERAPEUTIC_AREA: 'therapeutic_area', //
-            },
+                TARGET_CLASS: 'target_class'
+            }
         };
 
         var api = cttvApi()
