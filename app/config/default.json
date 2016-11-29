@@ -74,6 +74,12 @@
             "track": false
         },*/
         {
+            "name": "phenotypes",
+            "element": "phenotypes-display",
+            "heading": "Phenotypes",
+            "track": true
+        },
+        {
             "name": "drugs",
             "element": "drugs-display",
             "heading": "Drugs",
