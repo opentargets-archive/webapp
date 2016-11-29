@@ -110,6 +110,19 @@
                     source_label : cttvConfig.evidence_sources.literature.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false,
                 },
+                literature2 : {
+                    is_open: false,
+                    is_loading: false,
+                    heading: cttvDictionary.LITERATURE,
+                    source : cttvConfig.evidence_sources.literature,
+                    source_label: cttvConfig.evidence_sources.literature.map(function (s) {
+                        return {
+                            label: cttvDictionary[cttvConsts.invert(s)],
+                            url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]
+                        };
+                    }),
+                    has_errors: false,
+                },
                 animal_models : {
                     data : [],
                     is_open : false,
@@ -238,7 +251,7 @@
 
 
         /*
-        Here we need to pull data for two tables via two separte, distinct calls to the API
+        Here we need to pull data for two tables via two separate, distinct calls to the API
          - common disease table
          - related rare disease
         */
@@ -2107,6 +2120,30 @@
         };
 
 
+        // LITERATURE 2
+        var getLiteratureTotal = function () {
+            $scope.search.tables.literature2.is_loading = true;
+            var opts = {
+                target: $scope.search.target,
+                disease: $scope.search.disease,
+                size: 0,
+                datasource: $scope.search.tables.literature.source
+            };
+            _.extend(opts, searchObj);
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject)
+                .then (function (resp) {
+                    $log.log("response for total is...");
+                    $log.log(resp.body);
+                    $scope.search.tables.literature2.total = resp.body.total;
+                    $scope.search.tables.literature2.is_loading = false;
+                });
+        };
+
+
         // =================================================
         //  H E L P E R   M E T H O D S
         // =================================================
@@ -2148,6 +2185,7 @@
                 getRnaExpressionData();
                 getPathwaysData();
                 getLiteratureData();
+                getLiteratureTotal();
                 getMouseData();
             });
 
