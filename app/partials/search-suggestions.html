@@ -10,8 +10,8 @@
         <!--<span class="label cttv-text-small" ng-class="(search.results.besthit.data.type=='target') ? 'label-primary' : 'label-warning'">{{search.results.besthit.data.type=="target" ? "target" : "disease"}}</span>-->
         <!--<span title="Search keyword matches an ortholog of this target" class="label label-success" ng-show="search.results.besthit.orthologMatch">Match from ortholog</span>-->
       </span>
-      <span class="text-small text-lowlight" ng-if="search.results.besthit.data.type=='target'">{{search.results.besthit.data.full_name}}</span>
-      <br /><span style="font-size: 0.8em; color:#888888"> {{search.results.besthit.data.type == "target" ? search.results.besthit.data.association_counts.direct : search.results.besthit.data.association_counts.total}} {{search.results.besthit.data.type == "target" ? (search.results.besthit.data.association_counts.direct == 1 ? "disease" : "diseases") : (search.results.besthit.data.association_counts.total == 1 ? "target" : "targets")}} associated</span>
+      <span class="text-small text-lowlight hidden-xs" ng-if="search.results.besthit.data.type=='target'">{{search.results.besthit.data.full_name}}<br /></span>
+      <span style="font-size: 0.8em; color:#888888"> {{search.results.besthit.data.type == "target" ? search.results.besthit.data.association_counts.direct : search.results.besthit.data.association_counts.total}} {{search.results.besthit.data.type == "target" ? (search.results.besthit.data.association_counts.direct == 1 ? "disease" : "diseases") : (search.results.besthit.data.association_counts.total == 1 ? "target" : "targets")}} associated</span>
     </h4>
 
     <span class="tag-section"><i class="fa fa-tag tag" ng-class="(search.results.besthit.data.type==='target') ? 'target' : 'disease'"></i>{{search.results.besthit.data.type | upperCaseFirst}}</span>
@@ -19,12 +19,11 @@
     <span class="tag-section" title="Search keyword matches a target via drug name" ng-show="search.results.besthit.drugMatch"><i class="fa fa-tags tag drug"></i>Match from drug</span>
 
     <!-- This is the longer description -->
-    <p class="text-item nbblock small">{{ search.results.besthit.data.description | limitTo:300 }}<span ng-show="search.results.besthit.data.description.length>300">&hellip;</span></p>
+    <p class="text-item nbblock small hidden-xs">{{ search.results.besthit.data.description | limitTo:300 }}<span ng-show="search.results.besthit.data.description.length>300">&hellip;</span></p>
   </div>
 
   <div ng-if="search.results.besthit===null">
-    <p class="text-item">
-      Oooops... Not found. <span class="text-lowlight">Try deleting some characters or a different query</span></p>
+    <p class="text-item">Oooops... Not found. <span class="text-lowlight">Try deleting some characters or a different query</span></p>
   </div>
 
 
@@ -53,7 +52,7 @@
         <div ng-bind-html="item.data.name | uibTypeaheadHighlight:search.query.text" class="suggestions-efo-title"></div>
 
         <!-- show the EFO hierarchy links -->
-        <div class="small text-lowlight">
+        <div class="small text-lowlight hidden-xs">
 
           <span ng-show="item.data.efo_path_labels[0].length>item.data.efo_path_labels[1].length">[&hellip;]<span class="fa fa-angle-right fa-md suggestions-efo-hierarchy-arrow"></span></span>
 
