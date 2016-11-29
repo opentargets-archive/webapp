@@ -229,8 +229,6 @@ angular.module('cttvServices', []).
             });
         };
 
-
-
         cttvUtilsService.getPublicationsString = function(pmidsList){
             pmidsList = pmidsList || [];  // to avoid undefined errors
             var pub = "";
@@ -255,16 +253,41 @@ angular.module('cttvServices', []).
             $rootScope.showApiError500 = false;
         };
 
-
-        /* TODO */
-        cttvUtilsService.objToString = function(obj){
-            var s = "";
-            for(var i in obj){
-
+        cttvUtilsService.addMatchedBy = function (r) {
+            var matches = {
+                human: 0,
+                ortholog: 0,
+                drug: 0
+            };
+            for (var h in r.highlight) {
+                if (h === 'id' || h === 'score' || h === 'type') {
+                    continue;
+                }
+                if (h.startsWith("ortholog")) {
+                    matches.ortholog++;
+                } else if (h.startsWith("drugs")) {
+                    matches.drug++;
+                }
+                else {
+                    matches.human++;
+                }
             }
-            return s;
-        }
-
+            
+            if (!matches.human) {
+                if (matches.ortholog) {
+                    r.orthologMatch = true;
+                }
+                if (matches.drug) {
+                    r.drugMatch = true;
+                }
+            } else {
+                for (var h2 in r.highlight) {
+                    if (h2.startsWith("ortholog") || h2.startsWith('drug')) {
+                        delete r.highlight[h2];
+                    }
+                }
+            }
+        };
 
         // Defers a call x ms
         // If a new call is made before the time expires, discard the initial one and start deferring again

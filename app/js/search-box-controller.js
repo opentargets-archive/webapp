@@ -7,7 +7,7 @@
  */
 angular.module('cttvControllers').
 
-controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q) {
+controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvUtils', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q, cttvUtils) {
 
         var APP_SEARCH_URL = "search";
         var APP_EVIDENCE_URL = "evidence";
@@ -96,21 +96,11 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
                         })
                         .then(
                             function(resp){
-                                var i, h, h2;
                                 // $log.info(resp);
                                 $scope.search.results = parseResponseData(resp.body.data);  // store the results
                                 var besthit = $scope.search.results.besthit;
                                 if (besthit) {
-                                    besthit.humanMatch = false;
-                                    for (h in besthit.highlight) {
-                                        if (h.startsWith("ortholog") && h.endsWith('name')) {
-                                            delete besthit.highlight[h];
-                                        }
-                                        if (!h.startsWith("ortholog")) {
-                                            besthit.humanMatch = true;
-                                            break;
-                                        }
-                                    }
+                                    cttvUtils.addMatchedBy(besthit);
                                 }
                             }, cttvAPIservice.defaultErrorHandler
                         ).

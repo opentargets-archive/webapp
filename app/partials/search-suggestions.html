@@ -6,12 +6,17 @@
     <h4 class="text-item">
       <span class="nbblock">
         <a><span ng-bind-html="search.results.besthit.data.name | uibTypeaheadHighlight:search.query.text"></span></a>
-        <span class="label cttv-text-small" ng-class="(search.results.besthit.data.type=='target') ? 'label-primary' : 'label-warning'">{{search.results.besthit.data.type=="target" ? "target" : "disease"}}</span>
-        <span title="Search keyword matches an ortholog of this target" class="label label-success" ng-hide="search.results.besthit.humanMatch">Match from ortholog</span>
+
+        <!--<span class="label cttv-text-small" ng-class="(search.results.besthit.data.type=='target') ? 'label-primary' : 'label-warning'">{{search.results.besthit.data.type=="target" ? "target" : "disease"}}</span>-->
+        <!--<span title="Search keyword matches an ortholog of this target" class="label label-success" ng-show="search.results.besthit.orthologMatch">Match from ortholog</span>-->
       </span>
       <span class="text-small text-lowlight hidden-xs" ng-if="search.results.besthit.data.type=='target'">{{search.results.besthit.data.full_name}}<br /></span>
       <span style="font-size: 0.8em; color:#888888"> {{search.results.besthit.data.type == "target" ? search.results.besthit.data.association_counts.direct : search.results.besthit.data.association_counts.total}} {{search.results.besthit.data.type == "target" ? (search.results.besthit.data.association_counts.direct == 1 ? "disease" : "diseases") : (search.results.besthit.data.association_counts.total == 1 ? "target" : "targets")}} associated</span>
     </h4>
+
+    <span class="tag-section"><i class="fa fa-tag tag" ng-class="(search.results.besthit.data.type==='target') ? 'target' : 'disease'"></i>{{search.results.besthit.data.type | upperCaseFirst}}</span>
+    <span class="tag-section" title="Search keyword matches an ortholog of this target" ng-show="search.results.besthit.orthologMatch"><i class="fa fa-tags tag ortholog"></i>Match from ortholog</span>
+    <span class="tag-section" title="Search keyword matches a target via drug name" ng-show="search.results.besthit.drugMatch"><i class="fa fa-tags tag drug"></i>Match from drug</span>
 
     <!-- This is the longer description -->
     <p class="text-item nbblock small hidden-xs">{{ search.results.besthit.data.description | limitTo:300 }}<span ng-show="search.results.besthit.data.description.length>300">&hellip;</span></p>
