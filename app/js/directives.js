@@ -1532,6 +1532,7 @@ angular.module('cttvDirectives', [])
                     cttvConfig.mastheadNavigationMenu.forEach(function(i){
                         if(i.menu){
                             i.menu.forEach(function(j){
+                                j.label = i.label+": "+j.label;
                                 scope.nav.push(j);
                             })
                         } else {
