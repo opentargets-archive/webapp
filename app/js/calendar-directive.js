@@ -52,7 +52,7 @@ angular.module('cttvDirectives')
                            size: 'm',
                            template: '<cttv-modal header="Event details" has-ok="true">'+
                                      '  <div ng-repeat="event in eventsThatDay">' +
-                                     '    <p>{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="event.external.link">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</p>' +
+                                     '    <p>{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="event.external.link">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>).</p>' +
                                      '  </div>' +
                                      '</cttv-modal>',
                          });
