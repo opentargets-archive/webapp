@@ -24,6 +24,30 @@ angular.module('cttvFilters', [])
         };
     })
 
+    .filter('stripTags', function() {
+        'use strict';
+
+        return function(text) {
+            return  text ? String(text).replace(/<[^>]+>/gm, '') : '';
+        };
+    })
+
+    .filter('ellipseText', function() {
+        'use strict';
+
+        return function(text, length) {
+            return  text.length>length ? text.substring(0,length)+"&hellip;" : text;
+        };
+    })
+
+    .filter('monthToString', function() {
+        'use strict';
+
+        return function(mi) {
+            var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            return  months[mi] || "";
+        };
+    })
 
     /**
      * Shorten number to thousands, millions, billions, etc.

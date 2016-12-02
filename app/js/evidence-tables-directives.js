@@ -6,7 +6,7 @@ angular.module('cttvDirectives')
 .directive('knownDrugTable', ['$log', 'cttvAPIservice', 'cttvConsts', 'cttvUtils', 'cttvConfig', '$location', 'cttvDictionary', function ($log, cttvAPIservice, cttvConsts, cttvUtils, cttvConfig, $location, cttvDictionary) {
 
     'use strict';
-    var dbs = cttvConsts.dbs;
+    // var dbs = cttvConsts.dbs;
     var searchObj = cttvUtils.search.translateKeys($location.search());
     var checkPath = cttvUtils.checkPath;
 

@@ -5,7 +5,7 @@
             "href" : "/about",
             "menu" : [
                 {
-                    "label" : "Target Validation Platform",
+                    "label" : "Open Targets Platform",
                     "href" : "/about"
                 },
                 {
@@ -74,6 +74,12 @@
             "track": false
         },*/
         {
+            "name": "phenotypes",
+            "element": "phenotypes-display",
+            "heading": "Phenotypes",
+            "track": true
+        },
+        {
             "name": "drugs",
             "element": "drugs-display",
             "heading": "Drugs",
@@ -101,13 +107,10 @@
             "element": "target-features",
             "heading": "Protein Information (from UniProt)",
             "dependencies": {
-                "https://ebi-uniprot.github.io/CDN/feature-viewer/2.0.0/featuresviewer.min.js": {
+                "https://ebi-uniprot.github.io/CDN/protvista/protvista.min.js": {
                     "format": "global"
                 },
-                "https://ebi-uniprot.github.io/CDN/feature-viewer/css/main.css!": {
-                    "loader": "css"
-                },
-                "https://ebi-uniprot.github.io/CDN/feature-viewer/css/fontello.css": {
+                "https://ebi-uniprot.github.io/CDN/protvista/css/main.css!": {
                     "loader": "css"
                 }
             },
@@ -124,7 +127,7 @@
         {
             "name": "proteinExpression",
             "element": "protein-baseline-expression",
-            "heading": "Protein baseline expression",
+            "heading": "Proein baseline expression",
             "track": true
         },
 

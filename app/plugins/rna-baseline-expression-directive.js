@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('rnaBaselineExpression', ['$log', '$timeout', '$http', function ($log, $timeout, $http) {
+    .directive('rnaBaselineExpression', ['$log', '$timeout', '$http', 'cttvUtils', function ($log, $timeout, $http, cttvUtils) {
         'use strict';
 
         return {
@@ -35,7 +35,7 @@ angular.module('plugins')
                                 .attr("height", (arr.length*20)+100)
                                 .append("g")
                                 .attr("class", "gtexView")
-                                .attr("transform", "translate(" + ~~(w*0.4) + ",50)");
+                                .attr("transform", "translate(" + ~~(w*0.4) + ",70)");
 
                             plotGtex(svg, arr);
                         });
@@ -43,7 +43,20 @@ angular.module('plugins')
                 }, 0);
 
                 function plotGtex (container, data) {
+                    data.sort(function (a, b) {
+                        return b.median - a.median;
+                    });
                     var valExtent = getExtent(data);
+
+                    // X axis legend
+                    container.append("g")
+                        .attr("transform", "translate(0,-40)")
+                        .append("text")
+                        .style({
+                            "font-size": '12px',
+                            "fill": "#555"
+                        })
+                        .text("Normalised expression (RPKM)");
 
                     var valScale = d3.scale.linear()
                         .domain(valExtent)
@@ -218,6 +231,14 @@ angular.module('plugins')
                     }
                     return [0, (max+10)];
                 }
+
+                if (cttvUtils.browser.name !== "IE") {
+                    scope.toExport = function () {
+                        var svg = d3.select("#gtexWidget").select("svg").node();
+                        return svg;
+                    };
+                }
+
             }
         };
     }]);
