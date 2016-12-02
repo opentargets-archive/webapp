@@ -200,6 +200,19 @@ angular.module('cttvDirectives')
                     row.push(pubmedId);
 
 
+                    function formatAuthor (author) {
+                        return author.LastName + " " + author.Initials;
+                    }
+
+                    // Authors formatting
+                    var authorStr = formatAuthor(d.literature.authors[0]);
+                    if (d.literature.authors.length > 2) {
+                        authorStr += " <i>et al</i>";
+                    } else if (d.literature.authors.length === 2) {
+                        authorStr += " and " + formatAuthor(d.literature.authors[1]);
+                    }
+                    authorStr += ".";
+
                     // 3 - Abstract
                     if (!d.literature.title && !d.literature.abstract && !d.literature.journal_data) {
                         row.push("N/A");
@@ -233,7 +246,6 @@ angular.module('cttvDirectives')
                             });
 
                         }
-                        var authors = "author1 et al.";
                         // var journalVolume = d.journalInfo.volume ? d.journalInfo.volume : "";
                         // var journalIssue = d.journalInfo.issue ? "(" + d.journalInfo.issue + ")" : "";
                         // var pageInfo = d.pageInfo ? ":" + d.pageInfo : "";
@@ -243,9 +255,11 @@ angular.module('cttvDirectives')
                             journalInfo = "";
                         }
 
+                        journalInfo += " " + d.literature.journal_reference;
+
                         var titleAndSource = "<span class=large><a href='#' onClick='angular.element(this).scope().openEuropePmc(" + pubmedId + ")'>" + title + "</a></span>"
                             + "<br />"
-                            + "<span class=small>" + authors + " " + journalInfo + "</span>";
+                            + "<span class=small>" + authorStr + " " + journalInfo + "</span>";
 
                         // matched sentences
                         d.evidence.literature_ref.mined_sentences.sort(function (a, b) {
@@ -308,23 +322,24 @@ angular.module('cttvDirectives')
                     }
                     row.push(year);
 
+                    // TODO: Export has been disabled, so these fields are not in use at the moment. Revise and if they are not needed anymore change the table
                     // 5 - Title
                     row.push(d.literature.title || "");
 
                     // 6 -- Authors
-                    row.push('Author One and Author Two');
+                    row.push('');
 
                     // 7 -- Journal
-                    row.push('Journal goes here');
+                    row.push('');
 
                     // 8 -- Abstract
-                    row.push('blah blah');
+                    row.push('');
 
                     // 9 -- Matches
-                    row.push('matches sentences go here')
+                    row.push('');
 
                     // 10 -- URL
-                    row.push('URL goes here');
+                    row.push('');
 
                     newData.push(row);
                 }
@@ -335,19 +350,19 @@ angular.module('cttvDirectives')
             var setupTable = function (table, target, disease, filename, download) {
                 return $(table).DataTable({
                     "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
-                    "buttons": [
-                        {
-                            text: "<span class='fa fa-download' title='Download as CSV'></span>",
-                            action: download
-                        }
-                    ],
+                    // TODO: We are disabling the download for now because there may be too many items
+                    // "buttons": [
+                    //     {
+                    //         text: "<span class='fa fa-download' title='Download as CSV'></span>",
+                    //         action: download
+                    //     }
+                    // ],
+                    "buttons": [],
                     'processing': false,
                     'searching': false,
                     'serverSide': true,
                     'autoWidth': false,
                     'ajax': function (data, cbak, params) {
-                        $log.log("data...");
-                        $log.log(data);
                         // order options
                         // mappings:
                         // 0 => access level
@@ -478,7 +493,6 @@ angular.module('cttvDirectives')
                         cttvAPIservice.getFilterBy(queryObject)
                             .then (function (resp) {
                                 var total = resp.body.total;
-                                $log.log("total items to download..." + total);
 
                                 var promise = $q(function (resolve) {
                                     resolve("");
