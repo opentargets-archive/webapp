@@ -184,6 +184,10 @@ angular.module('cttvDirectives')
                 var accessLevelPublic = "<span class='cttv-access-public' title='public data'></span>"; //"<span class='fa fa-users' title='public data'>P</span>";
                 var cat_list = ["title", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
 
+                function formatAuthor(author) {
+                    return author.LastName + " " + author.Initials;
+                }
+
                 for (var i = 0; i < data.length; i++) {
                     var d = data[i];
                     var row = [];
@@ -198,11 +202,6 @@ angular.module('cttvDirectives')
                     var parts = d.evidence.literature_ref.lit_id.split('/');
                     var pubmedId = parts.pop();
                     row.push(pubmedId);
-
-
-                    function formatAuthor (author) {
-                        return author.LastName + " " + author.Initials;
-                    }
 
                     // Authors formatting
                     var authorStr = formatAuthor(d.literature.authors[0]);
