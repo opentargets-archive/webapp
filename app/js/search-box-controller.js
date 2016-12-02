@@ -77,8 +77,6 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             //clear the data here, so the box disappears or the content is cleared...
             $scope.search.results = {};
 
-            $log.log("query: "+query.length);
-
             if(query.length>1){
                 $scope.search.progress = true;  // flag for search in progress
                 $document.bind('click', dismissClickHandler);

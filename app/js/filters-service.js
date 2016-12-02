@@ -152,13 +152,9 @@ angular.module('cttvServices').
          * Returns true if a filter with the given key is selected
          */
         var isSelected=function(collection, key){
-            $log.log("is selected...");
-            $log.log(collection);
-            $log.log(key);
             // return ($location.search()[collection] && ( $location.search()[collection]===key || $location.search()[collection].indexOf(key)>=0 )) || false;
             var fcts = cttvLocationState.getState()[ cttvFiltersService.stateId ];
             debugger;
-            $log.log(fcts);
             return (fcts && fcts[collection] && ( fcts[collection]==key || fcts[collection].indexOf(key)>=0 ))|| false;
         };
 
@@ -335,7 +331,6 @@ angular.module('cttvServices').
             var collection = new FilterCollection(obj);
             collection.filters=[]; // overwrite the filters so we can add them in properly
             obj.filters.forEach(function(element){
-                $log.log(element);
                 var f = getFilter(element);    //new Filter(element)
                 collection.addFilter(f);    // add filter to the collection
                 // but do we want to add the filter to the selected ones as well? if needed?
@@ -642,7 +637,6 @@ angular.module('cttvServices').
         // this should be deprecated now, right?
         //cttvFiltersService.parseURL = function(){
 //
-        //    $log.log(">> >>>>>>>>>>>>>>>> >> >>>>>>>>>>>>>>>>>>> >>");
         //    // datatypes=genetic_association&datatypes=known_drug&datatypes=rna_expression
 //
         //    var raw = {};
