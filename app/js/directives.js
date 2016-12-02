@@ -1510,7 +1510,7 @@ angular.module('cttvDirectives', [])
                         + '        <div uib-dropdown on-toggle="toggled(open)">'
                         + '             <a href uib-dropdown-toggle><span class="fa fa-bars fa-lg"></span></a>'
                         + '             <ul class="uib-dropdown-menu ot-dropdown-hamburger" uib-dropdown-menu>'
-                        + '                 <li ng-repeat="item in nav" ng-if="item.label">'
+                        + '                 <li ng-repeat="item in navhmb" ng-if="item.label">'
                         + '                     <a href="{{item.href}}">{{item.label}}</a>'
                         + '                 </li>'
                         + '             </ul>'
@@ -1524,19 +1524,18 @@ angular.module('cttvDirectives', [])
             link: function(scope, element, attrs) {
                 scope.dumps_link = cttvConfig.dumps_link;
                 scope.nav = cttvConfig.mastheadNavigationMenu;
+                scope.navhmb = [];
 
                 // if the menu is a hamburger, we flatten the tree to display all in one list
                 if(scope.isHamburger){
 
-                    scope.nav = [];
                     cttvConfig.mastheadNavigationMenu.forEach(function(i){
                         if(i.menu){
                             i.menu.forEach(function(j){
-                                j.label = i.label+": "+j.label;
-                                scope.nav.push(j);
+                                scope.navhmb.push( {label: i.label+": "+j.label, href: j.href} );
                             })
                         } else {
-                            scope.nav.push(i);
+                            scope.navhmb.push(i);
                         }
                     })
                 }
