@@ -18,9 +18,9 @@ angular.module('plugins')
                 };
 
                 $timeout(function () {
-                    var FeatureViewer = require("biojs-vis-proteinfeaturesviewer");
-                    var fvInstance = new FeatureViewer({
-                        anproxy: "/proxy/",
+                    var ProtVista = require('ProtVista');
+                    new ProtVista({
+                        proxy: "/proxy/",
                         el: "#upfv",
                         uniprotacc: scope.target.uniprot_accessions[0],
                         exclusions: ['seqInfo']
