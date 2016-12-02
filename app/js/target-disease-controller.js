@@ -1274,31 +1274,58 @@
                     var patt = cttvDictionary.NA;
 
 
-                    if(item.evidence.known_mutations){
+                    if(item.evidence.known_mutations && item.evidence.known_mutations.length){
+
+                        var mutation_types = "";
+                        var samples = "";
+                        var pattern = "";
+                        for (var i = 0; i < item.evidence.known_mutations.length; i++) {
+                            var m = item.evidence.known_mutations[i];
+                            if (item.sourceID == cttvConsts.dbs.INTOGEN) {
+                                mutation_types += "<div>" + clearUnderscores(item.target.activity || mut)
+                            } else {
+                                mutation_types += "<div>" + clearUnderscores(m.preferred_name || mut) + "</div>";
+                            }
+                            if (m.number_samples_with_mutation_type) {
+                                samples += "<div>" + m.number_samples_with_mutation_type+"/"+m.number_mutated_samples || samp + "</div>";
+                            } else {
+                                samples = samp;
+                            }
+                            pattern += "<div>" + (m.inheritance_pattern || patt) +  "</div>"
+                        }
+
+                        // col2: mutation type
+                        row.push (mutation_types);
+
+                        // col3: samples
+                        row.push (samples);
+
+                        // col4: inheritance pattern
+                        row.push (pattern);
 
                         // col 2: mutation type
-                        if(item.sourceID == cttvConsts.dbs.INTOGEN){
-                            mut = item.target.activity || mut;
-                        } else {
-                            mut = item.evidence.known_mutations.preferred_name || mut;
-                        }
+                        // if(item.sourceID == cttvConsts.dbs.INTOGEN){
+                        //     mut = item.target.activity || mut;
+                        // } else {
+                        //     mut = item.evidence.known_mutations.preferred_name || mut;
+                        // }
 
 
 
                         // col 3: samples
-                        if( item.evidence.known_mutations.number_samples_with_mutation_type ){
-                            samp = item.evidence.known_mutations.number_samples_with_mutation_type+"/"+item.evidence.known_mutations.number_mutated_samples || samp;
-                        }
+                        // if( item.evidence.known_mutations.number_samples_with_mutation_type ){
+                        //     samp = item.evidence.known_mutations.number_samples_with_mutation_type+"/"+item.evidence.known_mutations.number_mutated_samples || samp;
+                        // }
 
 
                         // col 4: inheritance pattern
-                        patt = item.evidence.known_mutations.inheritance_pattern || patt;
+                        // patt = item.evidence.known_mutations.inheritance_pattern || patt;
                     }
 
 
-                    row.push( clearUnderscores( mut ) );
-                    row.push( samp );
-                    row.push( patt );
+                    // row.push( clearUnderscores( mut ) );
+                    // row.push( samp );
+                    // row.push( patt );
 
 
                     // col 5: evidence source
