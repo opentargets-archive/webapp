@@ -199,6 +199,7 @@ angular.module('cttvDirectives')
                     var pubmedId = parts.pop();
                     row.push(pubmedId);
 
+
                     // 3 - Abstract
                     if (!d.literature.title && !d.literature.abstract && !d.literature.journal_data) {
                         row.push("N/A");
@@ -301,8 +302,11 @@ angular.module('cttvDirectives')
 
                     // 4 - Year
                     var date = d.literature.date;
-                    var year = moment(date).year();
-                    row.push(year || "");
+                    var year = "N/A";
+                    if (date) {
+                        year = moment(date).year();
+                    }
+                    row.push(year);
 
                     // 5 - Title
                     row.push(d.literature.title || "");
