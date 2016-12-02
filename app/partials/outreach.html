@@ -2,42 +2,17 @@
     <view-title>Training</view-title>
     <div class="cttv-content-header">
         <div class="container">
-            <h3>Open Targets Outreach activities</h3>
+            <h3>Outreach and tutorials</h3>
             <p></p>
         </div>
     </div>
 
 
     <div class="container">
-        <!-- <div class="cttv-docs-section">
-            <h4>Training sessions</h4>
-            <div class="container center-div">
-                <calendar selected="day" marked="sessions"></calendar>
-            </div>
-
-            <div>
-                <p>We offer hands-on workshop on the Open Targets initiative and on our Target Validation Platform. Check our <a href="https://blog.opentargets.org/outreach-in-open-targets-supercharge-your-target-validation-skills/">blog post</a> for more details.</p>
-                <p ng-hide="sessions">There are no training sessions scheduled, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution</p>
-                <div ng-show="sessions">
-                    <p>Our next outreach sessions will be:</p>
-                    <ul>
-                        <li ng-repeat="event in sessions">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="event.external.link">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</li>
-                    </ul>
-                    <p>If you can't attend any of the above, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution.</p>
-                </div>
-            </div>
-        </div>
-        <div class="cttv-docs-section">
-            <h4>Outreach resources:</h4>
-            <ul>
-                <li>Get started with our Target Validation Platform with these slides</li>
-                <li>Have a tour on your platform with this video</li>
-            </ul>
-        </div>-->
         <div class="row cttv-docs-section">
             <div class="col-sm-8">
                 <h4>Training sessions</h4>
-                 <p>We offer hands-on workshop on the Open Targets initiative and on our Target Validation Platform. Check our <a href="https://blog.opentargets.org/outreach-in-open-targets-supercharge-your-target-validation-skills/">blog post</a> for more details.</p>
+                 <p>We offer hands-on workshop on the Open Targets initiative and on our Open Targets Platform. Check our <a href="https://blog.opentargets.org/outreach-in-open-targets-supercharge-your-target-validation-skills/">blog post</a> for more details.</p>
                 <p ng-hide="sessions">There are no training sessions scheduled, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution</p>
 
                 <!-- upcoming sessions -->
@@ -46,14 +21,21 @@
                     <ul>
                         <li class="event" ng-repeat="event in upcoming">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="{{event.external.link}}">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</li>
                     </ul>
-                    <p>If you can't attend any of the above, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution.</p>
+                    <p>If you can't attend any of the above, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> now to arrange training sessions at your institution.</p>
                 </div>
 
                 <!-- past sessions -->
                 <div ng-show="past" class="training-sessions">
                     <h5>Past sessions:</h5>
                     <ul>
-                        <li class="event" ng-repeat="event in past">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} <span ng-if="event.materials"><a ng-if="event.materials.link" href="{{event.materials.link}}">({{event.materials.text}})</a><span ng-if="!event.materials.link">({{event.materials.text}})</span></span></li>
+                        <li class="event" ng-repeat="event in past">
+                            {{event.date | date:"fullDate"}}. {{event.event}} {{event.place}}
+                            <span ng-if="event.materials.length">(
+                                <span ng-repeat="material in event.materials">
+                                    <a target=_blank href="{{material.link}}">{{material.label}} {{$last ? '' : ' | '}}</a>
+                                </span>
+                            )</span>
+                        </li>
                     </ul>
                 </div>
 
@@ -64,15 +46,17 @@
             </div>
         </div>
 
+<!--
         <div class="row cttv-docs-section">
             <div class="col-sm-12">
-                <h4>Outreach resources:</h4>
+                <h4>Online resources</h4>
                 <ul>
-                    <li>Get started with our Target Validation Platform with <a target=_blank href="{{slidesUrl}}">these slides</a></li>
+                    <li>Get started with our Open Targets Platform with <a target=_blank href="{{slidesUrl}}">these slides</a></li>
                     <li>Have a tour on your platform with <a target=_blank href="{{videoUrl}}">this video</a></li>
                 </ul>
             </div>
         </div>
+-->
 
     </div>
 </div>

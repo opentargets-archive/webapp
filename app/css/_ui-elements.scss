@@ -295,7 +295,74 @@
         /*background: linear-gradient(90deg, #ffe5e5 50%, #f0f5f5 50%);*/
     }
 
+    @mixin pricetag ($bg, $border) {
+        white-space: nowrap;
+        position: relative;
+        margin: 0 5px 0 10px;
+        displaY: inline-block;
+        height: 20px;
+        border-radius: 0 5px 5px 0;
+        padding: 0 10px 0 15px;
+        color: white;
+        line-height: 18px;
+        background: $bg;
+        border: 1px solid $border;
 
+        &:after {
+            position: absolute;
+            right: 0;
+            margin: 1px 7px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        &:before {
+            position: absolute;
+            background: $bg;
+            content: "\25CF";
+            color: white;
+            text-shadow: 0 0 1px #aaa;
+            font-size: 12px;
+            line-height: 5px;
+            text-indent: 6px;
+            top: 3px;
+            left: -8px;
+            width: 13px;
+            height: 13px;
+            transform: rotate(45deg);
+            border-left: 1px solid $border;
+            border-bottom: 1px solid $border;
+        }
+
+    }
+
+    .pricetag {
+        &.drug {
+            @include pricetag ($clr-info, $clr-info-hover)
+        }
+        &.ortholog {
+            @include pricetag ($clr-success, $clr-success-hover)
+        }
+    }
+
+    .tag-section {
+      margin-right: 10px;
+      .tag {
+          margin-right: 3px;
+          &.target {
+            color: $secondary-color;
+          }
+          &.disease {
+            color: $clr-warning
+          }
+          &.ortholog {
+            color: $clr-success;
+          }
+          &.drug {
+            color: $clr-info;
+          }
+      }
+    }
 
     /*
     * Backgrounds
