@@ -101,7 +101,7 @@ angular.module('cttvServices')
             // $log.log("callAPI:queryObject=", queryObject);
 
 
-            countRequest(params.trackCall === false ? undefined : true);
+            countRequest(queryObject.trackCall === false ? undefined : true);
 
             var deferred = $q.defer();
             var promise = deferred.promise;
@@ -122,7 +122,7 @@ angular.module('cttvServices')
                     .then (done)
                     .catch(function (err) {
                         $log.warn("GOT ERROR:", err);
-                        cttvAPI.defaultErrorHandler (err, params.trackCall);
+                        cttvAPI.defaultErrorHandler (err, queryObject.trackCall);
                     });
             });
 
@@ -139,7 +139,7 @@ angular.module('cttvServices')
                 // normalize internal statuses to 0
                 var status = Math.max(response.status, 0);
 
-                countRequest(params.trackCall === false ? undefined : false);
+                countRequest(queryObject.trackCall === false ? undefined : false);
                 // we resolve the the promise on the whole response object,
                 // so essentially we pass back the un-processed response object:
                 // that means the data we're interested is in response.body.
