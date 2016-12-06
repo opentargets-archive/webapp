@@ -411,8 +411,6 @@ angular.module('cttvDirectives', [])
                 scope.filters = cttvFiltersService.getFilters();
                 scope.selectedFilters = cttvFiltersService.getSelectedFilters();
                 scope.deselectAll = cttvFiltersService.deselectAll;
-                $log.log("filters...");
-                $log.log(scope.filters);
 
                 //scope.respStatus = 1; //cttvFiltersService.status(); // TODO: handle response status
                 //scope.updateFilter = function(id){
@@ -1193,13 +1191,12 @@ angular.module('cttvDirectives', [])
                      +'            </label>'
                      +'            <span class="text-lowlight cttv-facet-count pull-left" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>'
                      +'        </span>'
-                     +'        <span class="text-lowlight pull-right">'
+                     +'        <span ng-show="bucket.collection.filters.length" class="text-lowlight pull-right">'
                      +'            <i class="fa cttv-facets-small-arrow" ng-class="{\'fa-caret-right\': collapsed, \'fa-caret-down\': !collapsed}" ng-click="collapsed = !collapsed"  ng-show="bucket.enabled"></i>'
                      +'        </span>'
                      +'    </div>'
-                     +'</div>',
+                     +'</div>'
 
-            link: function (scope, elem, attrs) {},
         };
     }])
 

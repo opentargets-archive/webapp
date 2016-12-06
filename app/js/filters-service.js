@@ -154,7 +154,7 @@ angular.module('cttvServices').
         var isSelected=function(collection, key){
             // return ($location.search()[collection] && ( $location.search()[collection]===key || $location.search()[collection].indexOf(key)>=0 )) || false;
             var fcts = cttvLocationState.getState()[ cttvFiltersService.stateId ];
-            debugger;
+            key = "" + key; // target class is numerical key which confuses indexOf below.
             return (fcts && fcts[collection] && ( fcts[collection]==key || fcts[collection].indexOf(key)>=0 ))|| false;
         };
 
@@ -204,7 +204,7 @@ angular.module('cttvServices').
                     conf.facet = collection;
                     conf.collection = null; //new FilterCollection("","");
                     if(dtb.datasource){
-                        conf.collection = parseCollection( parseFacetData(cttvConsts.DATASOURCES, dtb.datasource, countsToUse) );
+                        conf.collection = parseCollection (parseFacetData(cttvConsts.DATASOURCES, dtb.datasource, countsToUse));
                     }
 
                     return conf;
