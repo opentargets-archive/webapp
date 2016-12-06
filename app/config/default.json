@@ -127,7 +127,7 @@
         {
             "name": "proteinExpression",
             "element": "protein-baseline-expression",
-            "heading": "Proein baseline expression",
+            "heading": "Protein baseline expression",
             "track": true
         },
 
