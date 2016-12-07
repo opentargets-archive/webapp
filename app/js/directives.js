@@ -111,14 +111,14 @@ angular.module('cttvDirectives', [])
     /*
     * A simple progress spinner using a fontawesome icon
     * Options:
-    * size: size of the spinner icon; values 1-6; 1 is default
+    * size: size of the spinner icon; 18 is default
+    * stroke: thickness of the "ring" default is 2
     */
     .directive('cttvProgressSpinner', [function(){
         'use strict';
 
         return {
             restrict: 'EA',
-            //template: '<span class="fa-spin cttv-progress-spinner-svg-container"><svg width="100%" height="100%" viewBox="0 70 140 70" preserveAspectRatio="xMaxYMax"><path fill="#666666" d="M70,10c33.1,0,60,26,60,60h10c0-39-31.3-70-70-70S0,31,0,70h10C10,36,36.9,10,70,10z"/></span></div>',
             template: '<span></span>',
             link: function(scope, elem, attrs){
                 var size = attrs.size || 18;
@@ -127,10 +127,6 @@ angular.module('cttvDirectives', [])
                     .size(size)
                     .stroke(stroke);
                 sp(elem[0]);
-                // if(attrs.size){
-                //     elem.children(".cttv-progress-spinner-svg-container").css("width", attrs.size);
-                //     elem.children(".cttv-progress-spinner-svg-container").css("height", attrs.size);
-                // }
             }
         };
     }])

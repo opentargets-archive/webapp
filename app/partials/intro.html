@@ -33,7 +33,8 @@
 
 <!-- STATS -->
 
-<div class="intro-section intro-section-theme-grey">
+<div class="intro-section intro-section-theme-grey" ng-controller="StatsCtrl">
+    <!-- <cttv-page-progress-spinner></cttv-page-progress-spinner> -->
     <div class="container">
         <div class="row">
             <div class="col-xs-12 intro-section-panel intro-first">
@@ -44,19 +45,19 @@
         <div class="row">
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure">30,591</span> targets</h3>
+                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure"><span cttv-progress-spinner size="24" ng-show="!stats.targets.total"></span>{{stats.targets.total}}</span> targets</h3>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure">2,489,214</span> associations</h3>
+                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure"><span cttv-progress-spinner size="24" ng-show="!stats.associations.total"></span>{{stats.associations.total}}</span> associations</h3>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure">9,428</span> diseases</h3>
+                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure"><span cttv-progress-spinner size="24" ng-show="!stats.diseases.total"></span>{{stats.diseases.total}}</span> diseases</h3>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure">13</span> databases</h3>
+                <h3 class="intro-section-heading intro-section-stats-panel"><span class="intro-section-stats-figure"><span cttv-progress-spinner size="24" ng-show="!stats.datasources.total"></span>{{stats.datasources.total}}</span> data sources</h3>
             </div>
 
         </div>
