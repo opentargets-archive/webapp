@@ -19,12 +19,12 @@
                         <li><a href="#getting_started">Getting started with a text search</a></li>
                         <li><a href="#target_assoc">Diseases associated with a target</a></li>
                         <li><a href="#disease_assoc">Targets associated with a disease</a></li>
-                        <li><a href="#evidence">The evidence for target-disease associations</a></li>
+                        <li><a href="#evidence">The data sources for target-disease associations</a></li>
                         <li><a href="#target_profile">The target profile</a></li>
                         <li><a href="#disease_profile">The disease profile</a></li>
                         <li><a href="#scoring">The strength of target-disease association</a></li>
                         <li><a href="#filters">Filtering target-disease associations</a></li>
-                        <li><a href="#api">Accessing the Target Validation data with an API</a></li>
+                        <li><a href="#api">Accessing the Open Targets data with an API</a></li>
                         <li><a href="#citation">How to cite us</a></li>
                         <li><a href="#connect">Connect with us</a></li>
                     </ul>
@@ -38,7 +38,7 @@
 
                     <p>A drug target can be a protein, protein complex or RNA molecule and it’s displayed by its gene name from the Human Gene Nomenclature Committee, <a href="http://www.genenames.org/">HGNC</a>. We integrate all the evidence to the target using <a href="http://www.ensembl.org/info/genome/stable_ids/index.html">Ensembl stable IDs</a> and describe relationships between diseases by mapping them to <a href="http://www.ebi.ac.uk/efo/">Experimental Factor Ontology</a> (EFO) terms.</p>
 
-                    <p>The platform supports workflows starting from a target or disease, and shows the available evidence for target – disease associations. Target and Disease profile pages showing specific information for both target (e.g baseline expression) and disease (e.g. Disease Classification) are also available.</p>
+                    <p>The Platform supports workflows starting from a target or disease, and shows the available evidence for target – disease associations. Target and Disease profile pages showing specific information for both target (e.g baseline expression) and disease (e.g. Disease Classification) are also available.</p>
                 </div>
 
 
@@ -66,7 +66,14 @@
 
 
                     <h5 id="table-view">Table View</h5>
-                    <p>In this view, we list all diseases associated with target, ordered by the association score, which is colour coded. The darker the blue, the stronger the association. When there is no evidence to support the association, the cells in this table are coloured in white. Evidence from highly specific terms of the disease ontology is aggregated to broader, parent terms. So, if you search for BRAF, you will see evidence for disease associations for higher terms such as neoplasm, or cancer.</p>
+                    <p>In this view, we list all diseases associated with target, ordered by the association score, which is colour coded. The darker the blue, the stronger the association. When there is no 
+                        
+                        
+                        
+                        
+                        
+                        
+                        to support the association, the cells in this table are coloured in white. Evidence from highly specific terms of the disease ontology is aggregated to broader, parent terms. So, if you search for BRAF, you will see evidence for disease associations for higher terms such as neoplasm, or cancer.</p>
 
                     <p>You can order the associations by their scores for individual data types (e.g. Genetic associations, Somatic mutations). Use the search box to restrict the diseases displayed in the Table view. In our BRAF example above, if you type &quot;lung&quot;, you will restrict the table to show diseases with the word &#39;lung&#39; in their names.</p>
 
@@ -89,7 +96,7 @@
 
                 <div class="cttv-docs-section">
 
-                    <h4><a name="evidence"></a>The evidence for target-disease associations</h4>
+                    <h4><a name="evidence"></a>The data sources for target-disease associations</h4>
 
                     <p>We provide details of the evidence (e.g. UniProt) used for all the associations we have identified. Check our <a href="/data_sources">Platform Data Sources</a> to find out which evidence we have used in our computational analyses.</p>
 
