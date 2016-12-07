@@ -40,7 +40,7 @@
     "cttv.flowerView": "0.0.0",
     "cttv.genome": "0.0.20",
     "cttv.spinner": "0.0.0",
-    "cttv.targetAssociationsBubbles": "0.0.9",
+    "cttv.targetAssociationsBubbles": "0.0.14",
     "cttv.targetAssociationsTree": "0.0.8",
     "cttv.targetGeneTree": "0.0.12",
     "js-yaml": "3.5.5",
