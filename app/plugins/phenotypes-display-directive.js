@@ -4,11 +4,10 @@ angular.module('plugins')
 
         return {
             restrict: 'E',
-            template: '<div><ul><li ng-repeat="phenotype in disease.phenotypes">{{phenotype.label | upperCaseFirst}}</li></ul></div>',
+            template: '<div><div ng-show="disease.phenotypes.length==0">No phenotypes available</div><ul><li ng-repeat="phenotype in disease.phenotypes">{{phenotype.label | upperCaseFirst}}</li></ul></div>',
             scope: {
                 disease: '=',
                 width: '='
-            },
-            link: function (scope, element, attrs) {}
+            }
         };
     }]);
