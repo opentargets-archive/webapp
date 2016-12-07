@@ -8,7 +8,7 @@
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$uibModal', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $uibModal, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
         'use strict';
         // $log.log('TargetDiseaseCtrl()');
 
@@ -310,26 +310,6 @@
             return false;
         };
 
-        // var convertUniprotCoords = function (variant, structure) {
-        //     for (var i=0; i<structure.mappings.length; i++) {
-        //         var mapping = structure.mappings[i];
-        //         if ((~~variant.begin > mapping.unp_start) && (~~variant.end < mapping.unp_end)) {
-        //             var pdbStart = ~~variant.begin - mapping.unp_start + mapping.start;
-        //             var pdbEnd = ~~variant.end - mapping.unp_start + mapping.start;
-        //             return {
-        //                 mapping : mapping,
-        //                 // start: pdbStart,
-        //                 // end: pdbEnd,
-        //                 // coverage: mapping.coverage,
-        //                 // chain_id: mapping.chain_id,
-        //                 alternativeAA: variant.alternativeSequence,
-        //                 description: variant.description
-        //             };
-        //         }
-        //     }
-        //     return {};
-        // };
-
         function mapSnpsInStructure(bestStructures) {
             if (bestStructures) {
                 $scope.search.info.bestStructure = parseBestStructure(bestStructures.data[$scope.search.info.gene.uniprot_id]);
@@ -360,16 +340,6 @@
                 });
         }
 
-        var getSnpPositions = function () {
-            targetPromise = targetPromise
-                .then (function (bestStructures) {
-                    return mapSnpsInStructure(bestStructures);
-                }, function (err) {
-                    $log.warn("No protein structure found in PDBe for " + $scope.search.info.gene.approved_symbol);
-                    return mapSnpsInStructure();
-                });
-        };
-
 
         var getCommonDiseaseData = function(){
             $scope.search.tables.genetic_associations.common_diseases.is_loading = true;
@@ -394,37 +364,27 @@
                 params: opts
             };
 
-            return targetPromise.then (function (snpsLoc) {
-                cttvAPIservice.getFilterBy( queryObject )
-                .then(
-                    function(resp) {
-                        if( resp.body.data ){
-                            var data = resp.body.data;
-                            for (var i=0; i<data.length; i++) {
-                                var item = data[i];
-                                if (checkPath(item, "variant.id") && item.variant.id[0]) {
-                                    var rsId = item.variant.id[0].split('/').pop();
-                                    if (snpsLoc && snpsLoc[rsId] && variantIsInStructure(snpsLoc[rsId], $scope.search.info.bestStructure)) {
-                                        data[i].variant.pos = snpsLoc[rsId];
-                                    }
-                                }
+            return targetPromise
+                .then (function () {
+                    cttvAPIservice.getFilterBy (queryObject)
+                        .then (function (resp) {
+                            if (resp.body.data) {
+                                var data = resp.body.data;
+                                $scope.search.tables.genetic_associations.common_diseases.data = data;
+                                initCommonDiseasesTable();
+                            } else {
+                                $log.warn("Empty response: common disease");
                             }
-                            $scope.search.tables.genetic_associations.common_diseases.data = data;
-                            initCommonDiseasesTable();
-                        } else {
-                            $log.warn("Empty response : common disease");
-                        }
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                ).
-                finally(function(){
+                        })
+                }, cttvAPIservice.defaultErrorHandler)
+                .finally(function () {
                     //$scope.search.tables.genetic_associations.common_diseases.is_open = $scope.search.tables.genetic_associations.common_diseases.data.length>0 || false;
                     $scope.search.tables.genetic_associations.common_diseases.is_loading = false;
 
                     // update for parent
                     updateGeneticAssociationsSetting();
                 });
-            }, cttvAPIservice.defaultErrorHandler);
+
         };
 
 
@@ -454,14 +414,13 @@
                     // variant type
                     var t = clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) );
                     // row.push( clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) ) );
-                    if (item.variant && item.variant.pos) {
-                        // var msg3d = "<div><p><a class=cttv-change-view onclick='angular.element(this).scope().showVariantInStructure(" + ~~item.variant.pos.begin + ", " + ~~item.variant.pos.end + ", \"" + item.variant.pos.wildType + "\", \"" + item.variant.pos.alternativeSequence + "\")'>View in 3D</p></a></div>";
+                    // if (item.variant && item.variant.pos) {
                         // row.push($compile(mut + msg3d)($scope)[0].innerHTML);
-                        var partial = "<span><a onclick='angular.element(this).scope().showVariantInStructure(" + ~~item.variant.pos.begin + ", " + ~~item.variant.pos.end + ", \"" + item.variant.pos.wildType + "\", \"" + item.variant.pos.alternativeSequence + "\")'>View in 3D</a></span>";
-                        t += "<br/><div class=cttv-change-view>";
-                        t += $compile(partial)($scope)[0].innerHTML;
-                        t += "</div>";
-                    }
+                        // var partial = "<span><a onclick='angular.element(this).scope().showVariantInStructure(" + ~~item.variant.pos.begin + ", " + ~~item.variant.pos.end + ", \"" + item.variant.pos.wildType + "\", \"" + item.variant.pos.alternativeSequence + "\")'>View in 3D</a></span>";
+                        // t += "<br/><div class=cttv-change-view>";
+                        // t += $compile(partial)($scope)[0].innerHTML;
+                        // t += "</div>";
+                    // }
                     row.push(t);
 
                     // evidence source
@@ -562,36 +521,25 @@
                 method: 'GET',
                 params: opts
             };
-            return targetPromise.then(function (snpsLoc) {
-                cttvAPIservice.getFilterBy (queryObject)
-                .then(
-                    function(resp) {
-                        if( resp.body.data ){
-                            var data = resp.body.data;
-                            for (var i=0; i<data.length; i++) {
-                                var item = data[i];
-                                if (checkPath(item, "variant.id") && item.variant.id[0]){
-                                    var rsId = item.variant.id[0].split('/').pop();
-                                    if (snpsLoc && snpsLoc[rsId] && variantIsInStructure(snpsLoc[rsId], $scope.search.info.bestStructure)){
-                                        data[i].variant.pos = snpsLoc[rsId];
-                                    }
-                                }
+
+            return targetPromise
+                .then (function () {
+                    cttvAPIservice.getFilterBy (queryObject)
+                        .then (function (resp) {
+                            if (resp.body.data) {
+                                var data = resp.body.data;
+                                $scope.search.tables.genetic_associations.rare_diseases.data = data;
+                                initRareDiseasesTable();
+                            } else {
+                                $log.warn("Empty response: rare disease");
                             }
-                            $scope.search.tables.genetic_associations.rare_diseases.data = data;
-                            initRareDiseasesTable();
-                        } else {
-                            $log.warn("Empty response : rare disease");
-                        }
-                    },
-                    cttvAPIservice.defaultErrorHandler
-                ).
-                finally(function(){
-                    //$scope.search.tables.genetic_associations.rare_diseases.is_open = $scope.search.tables.genetic_associations.rare_diseases.data.length>0 || false;
-                    $scope.search.tables.genetic_associations.rare_diseases.is_loading = false;
-                    // update for parent
-                    updateGeneticAssociationsSetting();
+                        }, cttvAPIservice.defaultErrorHandler)
+                        .finally(function () {
+                            $scope.search.tables.genetic_associations.rare_diseases.is_loading = false;
+                            updateGeneticAssociationsSetting();
+                        });
                 });
-            });
+
         };
 
 
@@ -638,15 +586,6 @@
                     } else {
                         cons = "Curated evidence";
                         // row.push( "Curated evidence" );
-                    }
-                    // 3D structure?
-                    if (item.variant && item.variant.pos) {
-                        // var msg3d = "<div><p><a class=cttv-change-view onclick='angular.element(this).scope().showVariantInStructure(" + ~~item.variant.pos.begin + ", " + ~~item.variant.pos.end + ", \"" + item.variant.pos.wildType + "\", \"" + item.variant.pos.alternativeSequence + "\")'>View in 3D</p></a></div>";
-                        // row.push($compile(mut + msg3d)($scope)[0].innerHTML);
-                        var partial = "<span><a onclick='angular.element(this).scope().showVariantInStructure(" + ~~item.variant.pos.begin + ", " + ~~item.variant.pos.end + ", \"" + item.variant.pos.wildType + "\", \"" + item.variant.pos.alternativeSequence + "\")'>View in 3D</a></span>";
-                        cons += "<br/><div class=cttv-change-view>";
-                        cons += $compile(partial)($scope)[0].innerHTML;
-                        cons += "</div>";
                     }
                     row.push(cons);
 
@@ -696,15 +635,6 @@
                     // Publication ids (hidden)
                     row.push(pmidsList.join(", "));
 
-                    // 3D structure?
-                    // if (item.variant && item.variant.pos) {
-                    //     var msg3d = "<div><p><a class=cttv-change-view onclick='angular.element(this).scope().showVariantInStructure(" + ~~item.variant.pos.begin + ", " + ~~item.variant.pos.end + ", \"" + item.variant.pos.wildType + "\", \"" + item.variant.pos.alternativeSequence + "\")'>View in 3D</p></a></div>";
-                    //     console.log($compile(msg3d)($scope));
-                    //     row.push($compile(msg3d)($scope)[0].innerHTML);
-                    // } else {
-                    //     row.push("N/A");
-                    // }
-
                     // add the row to data
                     newdata.push(row);
 
@@ -718,144 +648,6 @@
             return newdata;
         };
 
-        // function mapSnp (mappings, uniprot_pos) {
-        //     console.log("uniprot pos...");
-        //     console.log(uniprot_pos);
-        //     for (var i=0; i<mappings.length; i++) {
-        //         var mapping = mappings[i];
-        //         if ((mapping.start.residue_number < uniprot_pos) && (mapping.end.residue_number > uniprot_pos)) {
-        //             var pdbPos = uniprot_pos - mapping.start.author_residue_number + mapping.start.residue_number;
-        //             mapping.pos = pdbPos;
-        //             return mapping;
-        //         }
-        //     }
-        //     //return {};
-        //     console.error('No mapping found!');
-        // }
-
-
-        // $scope.pdbId = "4uv7";
-        // Arguments are: snp start, snp end, chain_id and alternativeAA. Start ant end are in Uniprot coordinates
-        $scope.showVariantInStructure = function (start, end, wt, alt) {
-            // Get the struct_asym_id and the entity_id for the pdb widget
-            var url = "/proxy/www.ebi.ac.uk/pdbe/api/mappings/uniprot_segments/" + $scope.search.info.bestStructure.pdb_id;
-
-            $http.get(url)
-                .then (function (mappings) {
-                    var clientHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-                    var modal = $uibModal.open({
-                        template: "" +
-                        "<div class=modal-header>" +
-                        "    <div class=snpHeader>" +
-                                 $scope.search.info.gene.approved_symbol + " structure (" + $scope.search.info.bestStructure.pdb_id + ")" +
-                        "        <div class=pdbLink><a target=_blank href=http://www.ebi.ac.uk/pdbe/entry/pdb/" + $scope.search.info.bestStructure.pdb_id + ">View structure in PDBe</a></div>" +
-                        "    </div>" +
-                        "</div>" +
-                        "<div class='modal-body modal-body-center'>" +
-                        "    <div id=picked-atom-name></div>" +
-                        "    <div id=snpInPvWidget></div>" +
-                        "</div>" +
-                        "<div class=snpLegend>" +
-                        "    <div class=snpBall></div></span>Protein Variant (" + wt + ">" + alt + ")</span>" +
-                        "</div>" +
-                        "<div class=modal-footer>" +
-                        "    <button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button>" +
-                        "</div>",
-                        animation: true,
-                        size: 'lg',
-                        scope: $scope,
-                        windowClass : 'variantStructureModalWindow'
-                    });
-
-                    $timeout(function(){
-                        var parent = document.getElementById("snpInPvWidget");
-                        var options = {
-                            width: 400,
-                            height: clientHeight * 0.4,
-                            antialias: true,
-                            quality : 'medium'
-                        };
-                        var viewer = pv.Viewer(parent, options);
-
-                        // Changes the color of an atom in the structure
-                        function setColorForAtom(go, atom, color) {
-                            var view = go.structure().createEmptyView();
-                            view.addAtom(atom);
-                            go.colorBy(pv.color.uniform(color), view);
-                        }
-
-                        // variable to store the previously picked atom. Required for resetting the color
-                        // whenever the mouse moves.
-                        var prevPicked = null;
-
-                        // add mouse move event listener to the div element containing the viewer. Whenever
-                        // the mouse moves, use viewer.pick() to get the current atom under the cursor.
-                        parent.addEventListener('mousemove', function (event) {
-                            var rect = viewer.boundingClientRect();
-                            var picked = viewer.pick({
-                                x: event.clientX - rect.left,
-                                y: event.clientY - rect.top
-                            });
-                            if (prevPicked !== null && picked !== null &&
-                                picked.target() === prevPicked.atom) {
-                                return;
-                            }
-                            if (prevPicked !== null) {
-                                // reset color of previously picked atom.
-                                setColorForAtom(prevPicked.node, prevPicked.atom, prevPicked.color);
-                            }
-                            if (picked !== null) {
-                                var atom = picked.target();
-                                document.getElementById('picked-atom-name').innerHTML = atom ? atom.qualifiedName() : "&nbsp;";
-                                // get RGBA color and store in the color array, so we know what it was
-                                // before changing it to the highlight color.
-                                var color = [0, 0, 0, 0];
-                                if (picked.node().getColorForAtom) {
-                                    var currCol = picked.node().getColorForAtom(atom, color);
-
-                                    var highlightCol = [1 - currCol[0], 1 - currCol[1], 1 - currCol[2], 1];
-
-                                    prevPicked = {atom: atom, color: color, node: picked.node()};
-                                    setColorForAtom(picked.node(), atom, highlightCol);
-                                }
-                            } else {
-                                document.getElementById('picked-atom-name').innerHTML = '&nbsp;';
-                                prevPicked = null;
-                            }
-                            viewer.requestRedraw();
-                        });
-
-                        $http.get('https://files.rcsb.org/view/' + $scope.search.info.bestStructure.pdb_id + '.pdb')
-                            .then (function (data) {
-                                var structure = pv.io.pdb(data.data);
-                                viewer.cartoon('protein', structure, {
-                                    color: pv.color.bySS()
-                                });
-                                var pdbSnp = structure.select({'rnum':start});
-
-                                // label
-                                var snpVisOpts = {
-                                    fontSize : 16, fontColor: '#000000', backgroundAlpha : 0.4
-                                };
-
-                                pdbSnp.eachResidue(function (res) {
-                                    var label = res.qualifiedName();
-                                    var first = res.atom(0).pos();
-                                    // We are not using the center because it can lay outside of the backbone structure (using the first atom coords instead)
-                                    // var center = res.center();
-                                    viewer.label('label', label, first, snpVisOpts);
-
-                                    var cm = viewer.customMesh();
-                                    cm.addSphere(first, 1.5, {
-                                        color: "orange"
-                                    });
-                                });
-
-                                viewer.autoZoom();
-                            });
-                    }, 0);
-                });
-        };
 
         var initRareDiseasesTable = function(){
             $('#rare-diseases-table').DataTable( cttvUtils.setTableToolsParams({
@@ -1626,7 +1418,6 @@
 
         // and fire the info search
         getInfo();
-        getSnpPositions();
 
         // get the data for the flower graph
         getFlowerData()
