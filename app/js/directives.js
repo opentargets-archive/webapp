@@ -407,6 +407,7 @@ angular.module('cttvDirectives', [])
                 scope.filters = cttvFiltersService.getFilters();
                 scope.selectedFilters = cttvFiltersService.getSelectedFilters();
                 scope.deselectAll = cttvFiltersService.deselectAll;
+
                 //scope.respStatus = 1; //cttvFiltersService.status(); // TODO: handle response status
                 //scope.updateFilter = function(id){
                 //    cttvFiltersService.getFilter(id).toggle();
@@ -442,6 +443,7 @@ angular.module('cttvDirectives', [])
             link: function (scope, elem, attrs) {},
         };
     }])
+
 
     /**
     * The therapeutic areas facet
@@ -496,10 +498,35 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    /**
+     *  The target class facet
+      */
+    .directive('cttvTargetClassFacet', ['$log', function ($log) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {
+                facet: '=',
+                partial: '@'
+            },
+
+            template: '<div cttv-default-facet-controls facet="facet"></div>' +
+                '<div ng-init="isCollapsed=true&&(!target_class.collection.isLastClicked())" ng-repeat="target_class in facet.filters">' +
+                '   <cttv-parent-checkbox-facet bucket="target_class" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>' +
+                '   <div uib-collapse="isCollapsed" style="padding-left:20px">' +
+                '      <div cttv-checkbox-facet multiline="true" bucket="bucket" ng-repeat="bucket in target_class.collection.filters" partial="{{partial}}"></div>' +
+                '   </div>' +
+                '</div>',
+
+            link : function (scope, elem, attrs ) {}
+        }
+    }])
+
 
 
     /**
-     * The Datatypes facet
+     * The Pathways facet
      */
     .directive('cttvPathwaysFacet', ['$log' , function ($log) {
         'use strict';
@@ -524,7 +551,7 @@ angular.module('cttvDirectives', [])
                      +'</div>',
 
 
-            link: function (scope, elem, attrs) {},
+            link: function (scope, elem, attrs) {}
         };
     }])
 
@@ -1160,13 +1187,12 @@ angular.module('cttvDirectives', [])
                      +'            </label>'
                      +'            <span class="text-lowlight cttv-facet-count pull-left" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>'
                      +'        </span>'
-                     +'        <span class="text-lowlight pull-right">'
+                     +'        <span ng-show="bucket.collection.filters.length" class="text-lowlight pull-right">'
                      +'            <i class="fa cttv-facets-small-arrow" ng-class="{\'fa-caret-right\': collapsed, \'fa-caret-down\': !collapsed}" ng-click="collapsed = !collapsed"  ng-show="bucket.enabled"></i>'
                      +'        </span>'
                      +'    </div>'
-                     +'</div>',
+                     +'</div>'
 
-            link: function (scope, elem, attrs) {},
         };
     }])
 
@@ -1637,7 +1663,7 @@ angular.module('cttvDirectives', [])
 
                         var x2js = new X2JS();
                         var feed = x2js.xml_str2json(response.data);
-                        $log.log(feed);
+                        // $log.log(feed);
 
                         // The feed should be already ordered by date, but it seems sometimes it isn't,
                         // so for now we sort it; maybe in the future we won't need to... will ask Eliseo about blog pub dates

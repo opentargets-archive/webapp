@@ -177,7 +177,7 @@ angular.module('cttvControllers')
                 // if one and only one of the filters is selected, apply the corresponding filter
                 // cool way of mimicking a XOR operator ;)
                 if( $scope.filters.target.selected != $scope.filters.disease.selected ){
-                    queryObject.filter = $scope.filters.target.selected ? 'target' : 'disease';
+                    queryObject.params.filter = $scope.filters.target.selected ? 'target' : 'disease';
                 }
 
                 cttvAPIservice.getSearch( queryObject )
@@ -200,10 +200,10 @@ angular.module('cttvControllers')
 
 
         // on search change
-        $scope.$on(cttvLocationState.STATECHANGED, function (e, args) {
+        // $scope.$on(cttvLocationState.STATECHANGED, function (e, args) {
             // $log.log("[handler] onStateChanged");
-            setStateFromURL( (args[stateId] || {}) );
-        });
+            // setStateFromURL( (args[stateId] || {}) );
+        // });
 
 
         // on page load

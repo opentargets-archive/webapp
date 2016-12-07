@@ -66,6 +66,7 @@ var webappFiles = {
             'app/js/target-associations-tree-directive.js',
             'app/js/target-associations-bubbles-directive.js',
             'app/js/evidence-tables-directives.js',
+            'app/js/text-mining-table-directive.js',
             'app/js/calendar-directive.js',
             'app/js/disease-graph-directive.js',
             'app/js/lazyload.js',

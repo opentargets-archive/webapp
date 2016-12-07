@@ -378,74 +378,43 @@
 
 
                     <!-- Text mining -->
-                    <div uib-accordion-group is-open="search.tables.literature.is_open" ng-click='sectionOpen("literature")' class="panel-default">
+                    <div uib-accordion-group is-open="search.tables.literature.is_open"
+                         ng-click='sectionOpen("literature")' class="panel-default">
                         <uib-accordion-heading>
                             <a id="literature"></a>
                             <span class="text-nolight">
-                                <span ng-class="{ 'text-disabled': search.tables.literature.data.length==0 }">{{search.tables.literature.heading}}</span>
+                                <span ng-class="{ 'text-disabled': search.tables.literature.total==0 }">{{search.tables.literature.heading}}</span>
                                 <!-- Score pill -->
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.LITERATURE]" title="Association score">{{search.association_scores[datatypes.LITERATURE] | currency : "" : 2}}</span> -->
-                                <span cttv-progress-spinner class="pull-right" ng-show="search.tables.literature.is_loading"></span>
+                                <span cttv-progress-spinner class="pull-right"
+                                      ng-show="search.tables.literature.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
 
-                        <div ng-show="search.tables.literature.data.length>0 && !search.tables.literature.has_errors">
+                        <div ng-show="search.tables.literature.total>0">
 
-                            <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">DisGeNET</a> and <a href="/faq#data-provenance" target="_blank">Europe PMC</a></p> -->
-                            <!-- <p>Source: <span ng-repeat="source in search.tables.literature.source_label"><a href="/faq#data-provenance" target="_blank">{{source}}</a><span></p> -->
 
                             <div class="clearfix">
-                                <div class="pull-right" ng-show="loading">
-                                    Loading abstracts
-                                    <uib-progressbar style="width:150px; margin-bottom:0px" animate="false" value="loaded" type="success"><b>{{loaded}}%</b></uib-progressbar>
-                                </div>
 
-
-                                <p>Source: <span ng-repeat="source in search.tables.literature.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span></span></p>
+                                <p>Source: <span ng-repeat="source in search.tables.literature.source_label"><a
+                                        href="{{source.url}}" target="_blank">{{source.label}}</a><span
+                                        ng-if="!$last">, </span></span></p>
                             </div>
 
-							<p class=cttv-section-intro>Shown are the top {{search.tables.literature.data.length}} articles where <span class="highlight-primary text-content-highlight">target</span> and <span class="highlight-warning text-content-highlight">disease</span> are found in the same sentence.  </p>
+                            <p class=cttv-section-intro>Shown are the {{search.tables.literature.total}}
+                                articles where <span class="highlight-primary text-content-highlight">target</span> and
+                                <span class="highlight-warning text-content-highlight">disease</span> are found in the
+                                same sentence. </p>
 
+                            <text-mining-table target="search.target" disease="search.disease" filename="search.info.title"></text-mining-table>
 
-                            <p ng-show="search.tables.literature.total>search.tables.literature.maxShow">{{search.tables.literature.total}} records found. Showing the most relevant {{search.tables.literature.data.length}}</p>
-
-                            <div class="table-panel">
-                                <table class='table cttv-evidence-table' id="literature-table">
-                                    <thead>
-                                        <tr>
-                                            <th></th>  				<!--0 nameless col for access level -->
-                                            <th>Disease</th> 		<!--1   -->
-                                            <th>Publication ID</th> <!--2 hidden column -->
-                                            <th>Publication</th>	<!--3  -->
-                                            <th>Year</th> 			<!--4  -->
-                                            <th>Details</th> 		<!--5 hidden column -->
-                                            <th>Source</th> 		<!--6 hidden column -->
-                                            <th>EFO</th> 			<!--7 hidden column -->
-                                            <th>Title</th>			<!--8 hidden column used for export-->
-                                            <th>Authors</th>		<!--9 hidden column used for export-->
-                                            <th>Journal</th>		<!--10 hidden column used for export-->
-                                            <th>Abstract</th>		<!--11 hidden column used for export-->
-                                            <th>Matches</th>		<!--12 hidden column used for export-->
-                                            <th>URL</th>			<!--13 hidden column used for export-->
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
 
-                        <div ng-show="search.tables.literature.data.length==0 && !search.tables.literature.has_errors">
+                        <div ng-show="search.tables.literature.total==0">
                             <p>No data available</p>
                         </div>
 
-                        <uib-alert type="danger" ng-show="search.tables.literature.has_errors" ng-cloak>
-                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
-                        </uib-alert>
-
                     </div uib-accordion-group>
-
 
 
                     <!-- Mouse models -->
@@ -498,6 +467,7 @@
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
                         </uib-alert>
                     </div uib-accordion-group>
+
 
                 </uib-accordion>
 

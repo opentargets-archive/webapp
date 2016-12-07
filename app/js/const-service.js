@@ -68,6 +68,7 @@ angular.module('cttvServices').
             PATHWAY: 'pathway',
             DATASOURCES: 'datasources',
             THERAPEUTIC_AREAS: 'therapeutic_area',
+            TARGET_CLASS: 'target_class',
             UNIQUE_TARGET_COUNT: 'unique_target_count',
             UNIQUE_DISEASE_COUNT: 'unique_disease_count',
             DATA_DISTRIBUTION: 'data_distribution',
