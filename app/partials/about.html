@@ -22,7 +22,7 @@
                         <li><a href="#evidence">The data sources for target-disease associations</a></li>
                         <li><a href="#target_profile">The target profile</a></li>
                         <li><a href="#disease_profile">The disease profile</a></li>
-                        <li><a href="#scoring">The strength of target-disease association</a></li>
+                        <li><a href="#scoring">The score of target-disease associations</a></li>
                         <li><a href="#filters">Filtering target-disease associations</a></li>
                         <li><a href="#api">Accessing the Open Targets data with an API</a></li>
                         <li><a href="#citation">How to cite us</a></li>
@@ -87,7 +87,7 @@
                 <div class="cttv-docs-section">
                     <h4><a name="disease_assoc"></a>Targets associated with a disease</h4>
 
-                    <p>When you search for a disease, you will get to a page that shows an overview of all potential targets associated with the disease. This data is provided as a table, with cells ordered by the association score. The colour of the cells represents the strength of the association, ranging from white (no association) to dark blue (strong association). You can filter the targets by the data types supporting the association (e.g. Genetic associations, Somatic mutations) and by Pathway types containing the target (e.g. Signal Transduction, Metabolism).</p>
+                    <p>When you search for a disease, you will get to a page that shows an overview of all potential targets associated with the disease. This data is provided as a table, with cells ordered by the association score. The colour of the cells represents the strength of the association, ranging from white (no association) to dark blue (strong association). You can filter the targets by the data types supporting the association (e.g. Genetic associations, Somatic mutations), by pathway types containing the target (e.g. Signal Transduction, Metabolism) and by the class of the target associated with the disease (e.g. Surface antigen, Secreted protein).</p>
 
                     <p>You can also restrict the target displayed in the table.</p>
 
@@ -143,9 +143,9 @@
 
                 <div class="cttv-docs-section">
 
-                    <h4><a name="scoring"></a>The strength of target-disease association</h4>
+                    <h4><a name="scoring"></a>The score of target-disease associations</h4>
 
-                    <p>We allow for the prioritisation of targets by <a href="/scoring">scoring target-disease associations</a> . Our scoring system varies from 0 to 1, the latter represents the strongest association, and it’s calculated based on the confidence levels in the evidence.</p>
+                    <p>We allow for the prioritisation of targets by <a href="/scoring">scoring target-disease associations</a> based on our data sources. Our scoring system varies from 0 to 1, the latter represents the strongest association, and it’s calculated based on the confidence levels in the evidence.</p>
 
                 </div>
 
@@ -154,12 +154,14 @@
 
                     <h4><a name="filters"></a>Filtering target-disease associations</h4>
 
-                    <p>You can filter the associations based on three major domains:</p>
+                    <p>You can filter the associations based on four categories:</p>
 
                     <ul>
                         <li>Data types, e.g. Genetic Associations, Somatic mutations, Drugs</li>
                         <li>Therapeutic area, e.g. Genetic disorder, Eye disease</li>
                         <li>Pathway types, e.g. Signal Transduction, Cell Cycle</li>
+                        <li>Target class, e.g. Enzyme (such as Kinase), Ion channel (such as voltage-gated)</li>
+                        
                     </ul>
 
                     <p>Each of those can be further filtered, e.g. you can select GWAS catalog data under Genetic Associations.</p>
