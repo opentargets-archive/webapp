@@ -37,6 +37,7 @@ angular.module('cttvServices')
             API_TARGET_RELATION_URL : 'targetRelation',
             API_DISEASE_RELATION_URL : 'diseaseRelation',
             API_LOG_SESSION_URL : "logSession",
+            API_STATS_URL : "stats",
             facets: {
                 DATATYPE: 'datatype', // 'filterbydatatype',
                 PATHWAY: 'pathway', //filterbypathway',
@@ -368,6 +369,8 @@ angular.module('cttvServices')
             return callAPI (queryObject);
         };
 
+
+
         /**
         * Logs a session event in the API
         * This call is 1-off and it doesn't
@@ -383,6 +386,22 @@ angular.module('cttvServices')
             };
             return callAPI (queryObject);
         };
+
+
+
+        /**
+         * Get the API stats
+         */
+        cttvAPI.getStats = function () {
+            var queryObject = {
+                operation : cttvAPI.API_STATS_URL,
+                method: 'GET',
+                params: {}
+            };
+            return callAPI (queryObject);
+        };
+
+
 
         return cttvAPI;
     }])

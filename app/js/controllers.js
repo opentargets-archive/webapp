@@ -121,6 +121,8 @@
         $interval(polling, 600000);
     }])
 
+
+
     /**
      * Simple controller to expose the current page to the feedback button controller
      */
@@ -138,4 +140,47 @@
                 $scope.showSocialMedia = false;
             }
         });
+    }])
+
+
+
+    /**
+     * Simple controller to expose the current page to the feedback button controller
+     */
+    .controller('StatsCtrl', ['$scope', 'cttvAPIservice', '$log', function ($scope, cttvAPIservice, $log) { 
+        'use strict';
+        // expose the location;
+        // note that exposing the page as $location.absUrl() does not work as that would not update when URL changes
+        $scope.stats = {};
+
+        cttvAPIservice.getStats()
+            .then(
+                function(resp) {
+                    _.forOwn(resp.body, function(value, key) {
+                        $scope.stats[key] = value;
+                    });
+
+                    var dbsctn = 0;
+
+                    _.forOwn(resp.body.associations.datatypes, function(value, key) {
+                        _.forOwn(value.datasources, function(v,k){
+                            dbsctn++;
+                        });
+
+                    });
+
+                    $scope.stats.datasources = {
+                        total: dbsctn
+                    }
+
+                },
+                cttvAPIservice.defaultErrorHandler
+            )
+            // .finally(function(){
+            //     $scope.search.loading = false;
+            // });
+
     }]);
+
+
+
