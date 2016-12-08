@@ -171,7 +171,7 @@ angular.module('cttvControllers')
                 $scope.search.loading = true;
 
                 var queryObject = {
-                    method: 'GET',
+                    method: 'GET'
                 };
                 queryObject.params = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
                 // if one and only one of the filters is selected, apply the corresponding filter

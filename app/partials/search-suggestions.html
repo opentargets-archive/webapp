@@ -17,6 +17,7 @@
     <span class="tag-section"><i class="fa fa-tag tag" ng-class="(search.results.besthit.data.type==='target') ? 'target' : 'disease'"></i>{{search.results.besthit.data.type | upperCaseFirst}}</span>
     <span class="tag-section" title="Search keyword matches an ortholog of this target" ng-show="search.results.besthit.orthologMatch"><i class="fa fa-tags tag ortholog"></i>Match from ortholog</span>
     <span class="tag-section" title="Search keyword matches a target via drug name" ng-show="search.results.besthit.drugMatch"><i class="fa fa-tags tag drug"></i>Match from drug</span>
+    <span class="tag-section" title="Search keyword matches a disease via a phenotype" ng-show="search.results.besthit.phenotypeMatch"><i class="fa fa-tags tag phenotype"></i>Match from phenotype</span>
 
     <!-- This is the longer description -->
     <p class="text-item nbblock small hidden-xs">{{ search.results.besthit.data.description | limitTo:300 }}<span ng-show="search.results.besthit.data.description.length>300">&hellip;</span></p>
