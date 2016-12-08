@@ -153,7 +153,15 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
          * Execute some pre-processing of the data
          */
         var parseResponseData = function(data){
-
+            if (!data.disease) {
+                data.disease = [];
+            }
+            if (!data.target) {
+                data.target = [];
+            }
+            if (!data.besthit) {
+                data.besthit = null;
+            }
             // check the EFOs path and remove excess data
             data.disease.forEach(function(efo){
 

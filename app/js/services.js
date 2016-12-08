@@ -257,7 +257,8 @@ angular.module('cttvServices', []).
             var matches = {
                 human: 0,
                 ortholog: 0,
-                drug: 0
+                drug: 0,
+                phenotype: 0
             };
             for (var h in r.highlight) {
                 if (h === 'id' || h === 'score' || h === 'type') {
@@ -267,6 +268,8 @@ angular.module('cttvServices', []).
                     matches.ortholog++;
                 } else if (h.startsWith("drugs")) {
                     matches.drug++;
+                } else if (h.startsWith("phenotypes.label")) {
+                    matches.phenotype++;
                 }
                 else {
                     matches.human++;
@@ -280,9 +283,12 @@ angular.module('cttvServices', []).
                 if (matches.drug) {
                     r.drugMatch = true;
                 }
+                if (matches.phenotype) {
+                    r.phenotypeMatch = true;
+                }
             } else {
                 for (var h2 in r.highlight) {
-                    if (h2.startsWith("ortholog") || h2.startsWith('drug')) {
+                    if (h2.startsWith("ortholog") || h2.startsWith('drug') || h2.startsWith('phenotypes.label')) {
                         delete r.highlight[h2];
                     }
                 }

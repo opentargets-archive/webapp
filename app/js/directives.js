@@ -19,7 +19,7 @@ angular.module('cttvDirectives', [])
                     }
                     var newDiv = document.createElement("div");
                     newDiv.id = "cttvTargetGenomeBrowser";
-                    newDiv.className = "accordionCell";
+                    // newDiv.className = "accordionCell";
                     elem[0].appendChild(newDiv);
 
                     var gB = tnt.board.genome()
