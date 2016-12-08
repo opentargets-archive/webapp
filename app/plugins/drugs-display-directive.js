@@ -1,11 +1,11 @@
 angular.module('plugins')
-    .directive('drugsDisplay', ['$log', function ($log) {
+    .directive('drugsDisplay', ['$log', 'cttvConfig', 'cttvConsts', 'cttvDictionary', function ($log, cttvConfig, cttvConsts, cttvDictionary) {
         'use strict';
 
         return {
             restrict: 'E',
             template: '<div ng-show="data.length>0">'
-                    + '    <p>Source: <a href="/faq#data-provenance" target="_blank">CHEMBL</a></p>'
+                    + '    <p>Source: <span ng-repeat="source in sources"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>'
                     + '    <known-drug-table target="{{target.id}}" disease="{{disease.efo}}" title="drug" data="data"></known-drug-table>'
                     + '</div>'
                       // this is sort of redundant as it's also included in table directive
@@ -17,10 +17,7 @@ angular.module('plugins')
                 disease: '='
             },
             link: function(scope, element, attrs) {
-                // don't actually need to declare this here but it makes it clearer I guess....
-                // this is the data fetched by the drug table directive and passed out to the scope here
-                // sot it's available within the drugs display directive
-                scope.data;
+                scope.sources = cttvConfig.evidence_sources.known_drug.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; });
             }
         };
     }]);
