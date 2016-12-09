@@ -58,23 +58,24 @@
 
     .sorting::after, .sorting_asc::after, .sorting_desc::after {
         font-size:12px;
-        bottom: 5px;;
-        right: 6px;;
-        content: '\f0dc';;
-        font-family: 'FontAwesome';;
-        opacity: 1;;
+        bottom: 5px;
+        right: 6px;
+        //left: 50%;
+        content: '\f0dc';
+        font-family: 'FontAwesome';
+        opacity: 1;
         color: #DDD;
         @include transition( color 0.3s );
     }
 
     .sorting_asc::after{
         color: $clr-ui-selected;
-        content: '\f0de';;
+        content: '\f0de';
     }
 
     .sorting_desc::after {
         color: $clr-ui-selected;
-        content: '\f0dd';;
+        content: '\f0dd';
     }
 
     .sorting:hover::after {
@@ -167,21 +168,24 @@
                     background-position: center bottom 5px ;
                     padding: 5px ;
                     border: none ;
-                    width: 48px; /*5%;*/
+                    width: 7%; //48px; /*5%;*/
                     min-width: 30px;
                     /*vertical-align: middle ;*/
 
                     /* Fix for the new DataTables styling */
                     &:after {
-                        right: 25px ;
+                        //right: 25px;
+                        right: 50%;
+                        margin-right: -4px;
                     }
 
                     &:first-child:after {
-                        right: 25px ;
+                        right: 16%; //25px ;
                     }
 
                     &:last-child:after {
-                        left: 25px ;
+                        left: 16%; //25px;
+                        margin-left: -4px;
                     }
 
                     &:hover {
@@ -194,9 +198,12 @@
                         width: auto;
 
                         > div {
-                            width:0;
-                            float: right;
-                            margin-right: 24px;
+                            // width:0;
+                            // float: right;
+                            // margin-right: 24px;
+                            > span {
+                                margin-left: 86%;
+                            }
                         }
                     }
 
@@ -206,9 +213,12 @@
                         width: auto;
 
                         > div {
-                            width:0;
-                            float: left;
-                            margin-left: 24px;
+                            // width:0;
+                            // float: left;
+                            // margin-left: 24px;
+                            > span {
+                                margin-left: 14%;
+                            }
                         }
                     }
 
@@ -397,6 +407,17 @@
         visibility: hidden;
     }
 
+    cttv-hpa-tissue-expression table.matrix-table thead > tr > th:first-child{
+        > div {
+            > span {
+                margin-left: 92.5%;
+            }
+        }
+
+        &:after {
+            right: 8%;
+        }
+    }
 
 
     /*
