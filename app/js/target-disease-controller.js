@@ -151,10 +151,10 @@
                 .then(function(resp) {
                     $scope.search.info.gene = resp.body;
                     return resp;
-                },cttvAPIservice.defaultErrorHandler)
-                .then (function (target) {
-                    return $http.get("/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/" + target.body.uniprot_id);
-                });
+                },cttvAPIservice.defaultErrorHandler);
+                // .then (function (target) {
+                //     return $http.get("/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/" + target.body.uniprot_id);
+                // });
 
              // get disease specific info with the efo() method
              var queryObject = {
