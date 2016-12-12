@@ -258,11 +258,6 @@
     }
 }
 
-.intro-section-theme-red {
-    @extend .intro-section-theme-blue;
-    background: $secondary-brand-color;
-}
-
 .intro-section-theme-blue {
     background: $secondary-color;
     color: $primary-background-color;
@@ -280,6 +275,16 @@
     background: -moz-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
     background: -o-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
     background: linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+}
+
+.intro-section-theme-red {
+    @extend .intro-section-theme-blue;
+    background: $secondary-brand-color;
+}
+
+.intro-section-theme-green {
+    @extend .intro-section-theme-blue;
+    background: $clr-success;
 }
 
 .intro-section-panel {
