@@ -1461,7 +1461,7 @@ angular.module('cttvDirectives', [])
         return {
             restrict: 'E',
             scope: {},
-            template: '<div id="cttv-beta-ribbon" class="cttv-beta-ribbon">{{host}}</div>',
+            template: '<div ng-show="display" id="cttv-beta-ribbon" class="cttv-beta-ribbon">{{host}}</div>',
             link: function (scope, el, attrs) {
                 var host = $location.host();
                 scope.host = host.split('.')[0];
