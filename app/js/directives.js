@@ -1465,8 +1465,7 @@ angular.module('cttvDirectives', [])
             link: function (scope, el, attrs) {
                 var host = $location.host();
                 scope.host = host.split('.')[0];
-                // TODO: This assumes that targetvalidation.org resolves to www.targetvalidation.org
-                if (host.startsWith('www')) {
+                if (host === 'www.targetvalidation.org' || host === 'targetvalidation.org') {
                     scope.display = false;
                 } else {
                     scope.display = true;
