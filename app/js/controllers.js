@@ -78,7 +78,7 @@
 
         function polling () {
             // $http.get("/notifications.json")
-            $http.get('//cttv.github.io/live-files/notifications.json')
+            $http.get('https://cttv.github.io/live-files/notifications.json')
                 .then (function(partial) {
                     // We compare the expiry date with today
                     if (angular.isArray(partial.data)) { // There are notifications
