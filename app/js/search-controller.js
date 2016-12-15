@@ -171,40 +171,22 @@ angular.module('cttvControllers')
                 $scope.search.loading = true;
 
                 var queryObject = {
-                    method: 'GET',
+                    method: 'GET'
                 };
                 queryObject.params = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
                 // if one and only one of the filters is selected, apply the corresponding filter
                 // cool way of mimicking a XOR operator ;)
                 if( $scope.filters.target.selected != $scope.filters.disease.selected ){
-                    queryObject.filter = $scope.filters.target.selected ? 'target' : 'disease';
+                    queryObject.params.filter = $scope.filters.target.selected ? 'target' : 'disease';
                 }
 
                 cttvAPIservice.getSearch( queryObject )
                     .then(
                         function(resp) {
-                            var i, h, h2;
-                            var t;
                             $scope.search.results = resp.body;
-                            for (i=0; i<$scope.search.results.data.length; i++) {
+                            for (var i=0; i<$scope.search.results.data.length; i++) {
                                 var r = $scope.search.results.data[i];
-                                r.humanMatch = false;
-                                for (h in r.highlight) {
-                                    // if (h.startsWith("ortholog") && h.endsWith('name')) {
-                                    //     delete r.highlight[h];
-                                    // }
-                                    if (!h.startsWith("ortholog")) {
-                                        r.humanMatch = true;
-                                        break;
-                                    }
-                                }
-                                if (r.humanMatch) {
-                                    for (h2 in r.highlight) {
-                                        if (h2.startsWith("ortholog")) {
-                                            delete r.highlight[h2];
-                                        }
-                                    }
-                                }
+                                cttvUtils.addMatchedBy(r);
                             }
                         },
                         cttvAPIservice.defaultErrorHandler
@@ -218,10 +200,10 @@ angular.module('cttvControllers')
 
 
         // on search change
-        $scope.$on(cttvLocationState.STATECHANGED, function (e, args) {
+        // $scope.$on(cttvLocationState.STATECHANGED, function (e, args) {
             // $log.log("[handler] onStateChanged");
-            setStateFromURL( (args[stateId] || {}) );
-        });
+            // setStateFromURL( (args[stateId] || {}) );
+        // });
 
 
         // on page load

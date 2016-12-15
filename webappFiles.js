@@ -23,7 +23,8 @@ var webappFiles = {
             'app/vendor/foamtree/carrotsearch.foamtree.js',
             'node_modules/marked/marked.min.js',
             'bower_components/FileSaver/FileSaver.min.js',
-            'bower_components/moment/moment.js'
+            'bower_components/moment/moment.js',
+            'bower_components/abdmob/x2js/xml2json.min.js'
         ],
 
         'css': [
@@ -33,6 +34,9 @@ var webappFiles = {
         ],
         'cssCopyDir': [
             'bower_components/components-font-awesome/**/*'
+        ],
+        'copy': [
+            'bower_components/bio-pv/bio-pv.min.js'
         ]
     },
 
@@ -59,11 +63,13 @@ var webappFiles = {
             'app/js/target-controller.js',
             'app/js/disease-controller.js',
             'app/js/directives.js',
+            'app/js/filter-by-file-targets-directive.js',
             'app/js/disease-associations-table-directive.js',
             'app/js/target-associations-table-directive.js',
             'app/js/target-associations-tree-directive.js',
             'app/js/target-associations-bubbles-directive.js',
             'app/js/evidence-tables-directives.js',
+            'app/js/text-mining-table-directive.js',
             'app/js/calendar-directive.js',
             'app/js/disease-graph-directive.js',
             'app/js/batch-search-directives.js',

@@ -84,6 +84,7 @@ angular.module('cttvServices').
             TARGET_SYMBOL :                  "Target symbol",
             THERAPEUTIC_AREA :               "Therapeutic area",
             THERAPEUTIC_AREAS :              "Therapeutic areas",
+            TARGET_CLASS :                   "Target class",
 
             // U
             UNIPROT :                        "UniProt",

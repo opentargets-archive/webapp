@@ -205,15 +205,16 @@ gulp.task('build-3rdparty-styles', ['copy-bootstrap', 'copy-fontawesome'], funct
         .pipe(gulp.dest(buildDir));
 });
 
+gulp.task('copy-files', function () {
+    return gulp.src(webappFiles.thirdParty.copy)
+        .pipe(gulp.dest(buildDir));
+});
 
-
-gulp.task('build-3rdparty', ['build-3rdparty-styles'], function () {
+gulp.task('build-3rdparty', ['copy-files', 'build-3rdparty-styles'], function () {
     return gulp.src(webappFiles.thirdParty.js)
         .pipe(concat(webapp3rdparty))
         .pipe(gulp.dest(buildDir));
 });
-
-
 
 gulp.task('build-webapp-styles', function () {
     return gulp.src(webappFiles.cttv.css)
@@ -292,7 +293,8 @@ gulp.task('webserver', ['build-all'], function() {
                 {source: '/proxy/www.reactome.org/', target: 'http://www.reactome.org/'},
                 {source: '/proxy/wwwdev.ebi.ac.uk/', target: 'http://wwwdev.ebi.ac.uk/'},
                 {source: '/proxy/rest.ensembl.org/', target: 'https://rest.ensembl.org/'},
-                {source: '/proxy/reactomedev.oicr.on.ca/', target: 'http://reactomedev.oicr.on.ca/'}],
+                {source: '/proxy/reactomedev.oicr.on.ca/', target: 'http://reactomedev.oicr.on.ca/'},
+                {source: '/proxy/blog.opentargets.org/rss/', target: 'https://blog.opentargets.org/rss/'}],
 	  open: true
    }))
    .pipe(gulp.watch(gulp.watch([

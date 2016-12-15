@@ -2,7 +2,6 @@
 /* Directives */
 angular.module('cttvDirectives', [])
 
-
     /*
     *
     */
@@ -20,7 +19,7 @@ angular.module('cttvDirectives', [])
                     }
                     var newDiv = document.createElement("div");
                     newDiv.id = "cttvTargetGenomeBrowser";
-                    newDiv.className = "accordionCell";
+                    // newDiv.className = "accordionCell";
                     elem[0].appendChild(newDiv);
 
                     var gB = tnt.board.genome()
@@ -112,14 +111,14 @@ angular.module('cttvDirectives', [])
     /*
     * A simple progress spinner using a fontawesome icon
     * Options:
-    * size: size of the spinner icon; values 1-6; 1 is default
+    * size: size of the spinner icon; 18 is default
+    * stroke: thickness of the "ring" default is 2
     */
     .directive('cttvProgressSpinner', [function(){
         'use strict';
 
         return {
             restrict: 'EA',
-            //template: '<span class="fa-spin cttv-progress-spinner-svg-container"><svg width="100%" height="100%" viewBox="0 70 140 70" preserveAspectRatio="xMaxYMax"><path fill="#666666" d="M70,10c33.1,0,60,26,60,60h10c0-39-31.3-70-70-70S0,31,0,70h10C10,36,36.9,10,70,10z"/></span></div>',
             template: '<span></span>',
             link: function(scope, elem, attrs){
                 var size = attrs.size || 18;
@@ -128,10 +127,6 @@ angular.module('cttvDirectives', [])
                     .size(size)
                     .stroke(stroke);
                 sp(elem[0]);
-                // if(attrs.size){
-                //     elem.children(".cttv-progress-spinner-svg-container").css("width", attrs.size);
-                //     elem.children(".cttv-progress-spinner-svg-container").css("height", attrs.size);
-                // }
             }
         };
     }])
@@ -411,6 +406,7 @@ angular.module('cttvDirectives', [])
                 scope.filters = cttvFiltersService.getFilters();
                 scope.selectedFilters = cttvFiltersService.getSelectedFilters();
                 scope.deselectAll = cttvFiltersService.deselectAll;
+
                 //scope.respStatus = 1; //cttvFiltersService.status(); // TODO: handle response status
                 //scope.updateFilter = function(id){
                 //    cttvFiltersService.getFilter(id).toggle();
@@ -446,6 +442,7 @@ angular.module('cttvDirectives', [])
             link: function (scope, elem, attrs) {},
         };
     }])
+
 
     /**
     * The therapeutic areas facet
@@ -500,10 +497,35 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    /**
+     *  The target class facet
+      */
+    .directive('cttvTargetClassFacet', ['$log', function ($log) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {
+                facet: '=',
+                partial: '@'
+            },
+
+            template: '<div cttv-default-facet-controls facet="facet"></div>' +
+                '<div ng-init="isCollapsed=true&&(!target_class.collection.isLastClicked())" ng-repeat="target_class in facet.filters">' +
+                '   <cttv-parent-checkbox-facet bucket="target_class" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>' +
+                '   <div uib-collapse="isCollapsed" style="padding-left:20px">' +
+                '      <div cttv-checkbox-facet multiline="true" bucket="bucket" ng-repeat="bucket in target_class.collection.filters" partial="{{partial}}"></div>' +
+                '   </div>' +
+                '</div>',
+
+            link : function (scope, elem, attrs ) {}
+        }
+    }])
+
 
 
     /**
-     * The Datatypes facet
+     * The Pathways facet
      */
     .directive('cttvPathwaysFacet', ['$log' , function ($log) {
         'use strict';
@@ -528,7 +550,7 @@ angular.module('cttvDirectives', [])
                      +'</div>',
 
 
-            link: function (scope, elem, attrs) {},
+            link: function (scope, elem, attrs) {}
         };
     }])
 
@@ -1164,13 +1186,12 @@ angular.module('cttvDirectives', [])
                      +'            </label>'
                      +'            <span class="text-lowlight cttv-facet-count pull-left" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>'
                      +'        </span>'
-                     +'        <span class="text-lowlight pull-right">'
+                     +'        <span ng-show="bucket.collection.filters.length" class="text-lowlight pull-right">'
                      +'            <i class="fa cttv-facets-small-arrow" ng-class="{\'fa-caret-right\': collapsed, \'fa-caret-down\': !collapsed}" ng-click="collapsed = !collapsed"  ng-show="bucket.enabled"></i>'
                      +'        </span>'
                      +'    </div>'
-                     +'</div>',
+                     +'</div>'
 
-            link: function (scope, elem, attrs) {},
         };
     }])
 
@@ -1349,6 +1370,12 @@ angular.module('cttvDirectives', [])
             replace: false,
             template: '<div ng-show="exportable" class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="exportPNG()"><span class="fa fa-picture-o" title="Download as PNG"></span></a></div></div>',
             link: function (scope, element, attrs) {
+                if (scope.inFormat === 'canvas') {
+                    scope.exportPNG = function () {
+                        var canvas = scope.$parent.toExport();
+                    }
+                    return;
+                }
                 $timeout(function () {
                     scope.exportable = ((scope.$parent.toExport !== undefined) && (typeof scope.$parent.toExport === "function"));
                 }, 0);
@@ -1432,12 +1459,11 @@ angular.module('cttvDirectives', [])
         return {
             restrict: 'E',
             scope: {},
-            template: '<div id="cttv-beta-ribbon" class="cttv-beta-ribbon">{{host}}</div>',
+            template: '<div ng-show="display" id="cttv-beta-ribbon" class="cttv-beta-ribbon">{{host}}</div>',
             link: function (scope, el, attrs) {
                 var host = $location.host();
                 scope.host = host.split('.')[0];
-                // TODO: This assumes that targetvalidation.org resolves to www.targetvalidation.org
-                if (host.startsWith('www')) {
+                if (host === 'www.targetvalidation.org' || host === 'targetvalidation.org') {
                     scope.display = false;
                 } else {
                     scope.display = true;
@@ -1446,52 +1472,253 @@ angular.module('cttvDirectives', [])
         }
     }])
 
-    .directive('mastheadNavigationMenu', ['cttvConfig', function (cttvConfig) {
+
+
+    /*
+     * The notifications bell thingy in the navigation bar
+     */
+    .directive('mastheadNotificationsMenu', [ function () {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {},
+
+            template : ''
+                        + '<div ng-cloak class="notification" ng-show="notificationsLeft" ng-controller="NotifyCtrl">'
+                        + '     <div class="counter" ng-bind-html="notificationsLeft"></div>'
+                        + '     <i ng-click="notify()" class="fa fa-bell" aria-hidden="true"></i>'
+                        + '</div>',
+
+            link: function(scope, element, attrs) {}
+        };
+    }])
+
+
+
+    /*
+     * Navigation menu with hamburger option
+     */
+    .directive('mastheadNavigationMenu', ['cttvConfig', '$log', function (cttvConfig, $log) {
         'use strict';
 
         return {
             restrict: 'EA',
             scope: {
-                // href: '@',
+                isHamburger: '=?'     // show as hamburger [true | false]
             },
 
             template : ''
-                        + '<div ng-cloak class=notification ng-show="notificationsLeft" ng-controller="NotifyCtrl">'
-                        + '     <div class=counter ng-bind-html="notificationsLeft"></div>'
-                        + '     <i ng-click="notify()" class="fa fa-bell-o" aria-hidden="true"></i>'
-                        + '</div>'
-
                         + '<ul class="masthead-navigation">'
-                        +    '<li ng-repeat="item in nav" ng-if="item.label">'
 
-                        +        '<div ng-if="item.menu==undefined">'
-                        +             '<a href="{{item.href}}">{{item.label}}</a>'
-                        +        '</div>'
+                        + '    <!-- regular inline menu -->'
+                        + '    <li ng-repeat="item in nav" ng-if="!isHamburger && item.label">'
+                        + '        <div ng-if="item.menu==undefined">'
+                        + '            <a href="{{item.href}}">{{item.label}}</a>'
+                        + '        </div>'
+                        + '        <div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
+                        + '             <a href uib-dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
+                        + '             <ul class="uib-dropdown-menu" uib-dropdown-menu>'
+                        + '                 <li ng-repeat="subitem in item.menu"><a ng-if="subitem.target" target={{subitem.target}} href="{{subitem.href}}">{{subitem.label}}</a><a ng-if="!subitem.target" href="{{subitem.href}}">{{subitem.label}}</a></li>'
+                        + '             </ul>'
+                        + '        </div>'
+                        + '    </li>'
 
-                        +        '<div uib-dropdown on-toggle="toggled(open)" ng-if="item.menu!=undefined">'
-                        +             '<a href uib-dropdown-toggle>{{item.label}} <span class="fa fa-angle-down"></span></a>'
-                        +             '<ul class="uib-dropdown-menu" uib-dropdown-menu>'
-                        +                  '<li ng-repeat="subitem in item.menu"><a href="{{subitem.href}}">{{subitem.label}}</a></li>'
-                        +             '</ul>'
-                        +        '</div>'
+                        + '    <!-- hamburger menu -->'
+                        + '    <li ng-if="isHamburger">'
+                        + '        <div uib-dropdown on-toggle="toggled(open)">'
+                        + '             <a href uib-dropdown-toggle><span class="fa fa-bars fa-lg"></span></a>'
+                        + '             <ul class="uib-dropdown-menu ot-dropdown-hamburger" uib-dropdown-menu>'
+                        + '                 <li ng-repeat="item in navhmb" ng-if="item.label">'
+                        + '                     <a href="{{item.href}}">{{item.label}}</a>'
+                        + '                 </li>'
+                        + '             </ul>'
+                        + '        </div>'
+                        + '    </li>'
 
-                        +    '</li>'
                         +'</ul>',
+
+
+
             link: function(scope, element, attrs) {
                 scope.dumps_link = cttvConfig.dumps_link;
                 scope.nav = cttvConfig.mastheadNavigationMenu;
+                scope.navhmb = [];
 
-                scope.toggled = function(open) {
+                // if the menu is a hamburger, we flatten the tree to display all in one list
+                if(scope.isHamburger){
+
+                    cttvConfig.mastheadNavigationMenu.forEach(function(i){
+                        if(i.menu){
+                            i.menu.forEach(function(j){
+                                scope.navhmb.push( {label: i.label+": "+j.label, href: j.href} );
+                            })
+                        } else {
+                            scope.navhmb.push(i);
+                        }
+                    })
+                }
+
+                // this can be triggered when toggling a dropdown
+                /*scope.toggled = function(open) {
                     //$log.log('Dropdown is now: ', open);
-                };
+                };*/
 
-                /* this must be defined here I suppose; some bootstrap thingy that's called automatically */
-                scope.toggleDropdown = function($event) {
+                // this must be defined here I suppose? some bootstrap thingy that's called automatically...
+                // UPDATE: actually, it seems to work even without, so commenting out for now
+                /*scope.toggleDropdown = function($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                     //scope.status.isopen = !scope.status.isopen;
-                };
+                };*/
 
             }
         };
     }])
+
+
+
+    .directive('cttvFacebookFeed', ['$log', function ($log) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {},
+            template :   '<div class="fb-page"'
+                        +'    data-href="https://www.facebook.com/OpenTargets/"'
+                        +'    data-tabs="timeline"'
+                        +'    data-small-header="true"'
+                        +'    data-adapt-container-width="true"'
+                        +'    data-hide-cover="false"'
+                        +'    data-show-facepile="false"'
+                        +'    height="400">'
+                        +'    <blockquote cite="https://www.facebook.com/OpenTargets/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/OpenTargets/">Open Targets</a></blockquote>'
+                        +'</div>',
+            link: function(scope, element, attrs) {
+                try{
+                    FB.XFBML.parse();
+                }catch(e){
+                    $log.warn("Cannot load Facebook feed");
+                }
+            }
+        };
+    }])
+
+
+
+    .directive('cttvTwitterFeed', ['$log', function ($log) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {},
+            template : '<a class="twitter-timeline"'
+                        +'data-lang="en"'
+                        +'data-theme="light"'
+                        +'href="https://twitter.com/targetvalidate"'
+                        //+'data-tweet-limit="3"'
+                        +'data-height="400px"'
+                        +'data-chrome="noborders noheader nofooter"'
+                        +'>Tweets by targetvalidate</a>',
+            link: function(scope, element, attrs) {
+                try{
+                    twttr.widgets.load();
+                }catch(e){
+                    $log.warn("Cannot load Twitter feed - possibly missing twttr.widgets script");
+                }
+            }
+        };
+    }])
+
+
+
+    .directive('cttvBlogFeed', ['$log', '$http', function ($log, $http) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {},
+            template :   '<div class="hp-blog-feed">'
+                        //+'    <p>{{feed.title}}</p><p>{{feed.description}}</p>'
+                        +'    <div class="hp-blog-feed-post" ng-repeat="post in feed.item">'
+                        +'        <h5 class="hp-blog-feed-post-header"><a href="{{post.link}}">'
+                        +'            {{post.title}}'
+                        +'        </a></h5>'
+                        +'        <div class="clearfix text-lowlight">'
+                        +'            <p class="pull-left">By {{post.creator.toString()}}</p>'           // author
+                        //+'            <p class="pull-right">{{post.pubDate.toLocaleDateString("en-GB")}}</p>' // date
+                        +'            <p class="pull-right">{{post.pubDate.getDate()}} {{post.pubDate.getMonth() | monthToString}} {{post.pubDate.getFullYear()}}</p>' // date
+                        +'        </div>'
+                        +'        <div ng-bind-html="post.description | stripTags | ellipseText:130"></div>'                            // long description
+                        +'        <div class="text-lowlight text-small" ng-if="post.category"><span class="fa fa-tags"></span> {{post.category.join(", ")}}</div>'   // tags
+                        +'    </div>'
+                        +'</div>',
+            link: function(scope, element, attrs) {
+                $http.get('/proxy/blog.opentargets.org/rss/')
+                //$http.get('rss.xml')    // JUST FOR TESTING and DEVELOPING LOCALLY WITHOUT THE PROXY
+                    .then(function successCallback(response) {
+
+                        var x2js = new X2JS();
+                        var feed = x2js.xml_str2json(response.data);
+                        // $log.log(feed);
+
+                        // The feed should be already ordered by date, but it seems sometimes it isn't,
+                        // so for now we sort it; maybe in the future we won't need to... will ask Eliseo about blog pub dates
+                        // 1. parse the pub dates to unix timestamp
+                        feed.rss.channel.item.forEach(function(i){
+                            i.pubDate = new Date(i.pubDate);
+                        });
+                        // 2. sort item array by timestamp
+                        feed.rss.channel.item.sort(function (a, b) {
+                            return b.pubDate.getTime() - a.pubDate.getTime();
+                        });
+
+
+                        scope.feed = feed.rss.channel;
+
+                    }, function errorCallback(response) {
+                        // called asynchronously if an error occurs
+                        // or server returns response with an error status.
+                        $log.log(response);
+                    });
+
+            }
+        };
+    }])
+
+
+
+    /**
+     * The searchbox with search suggestions
+     */
+    .directive('otSearchBox', [function () {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {},
+            templateUrl : 'partials/search-box.html',
+            link: function(scope, element, attrs) {
+
+            }
+        };
+    }])
+
+
+
+    /**
+     * Directive for the footer
+     * This is mostly so the footer loads like the other page content and not before it.
+     */
+    .directive('otFooter', [function () {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {},
+            templateUrl : 'partials/footer.html',
+            link: function(scope, element, attrs) {}
+        };
+    }])
+
+

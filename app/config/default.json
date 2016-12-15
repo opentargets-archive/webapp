@@ -1,11 +1,15 @@
 {
     "mastheadNavigationMenu" : [
         {
+            "label": "Survey",
+            "href": "https://goo.gl/forms/p7sREp0u2OuJ4nQo1"
+        },
+        {
             "label" : "About",
             "href" : "/about",
             "menu" : [
                 {
-                    "label" : "Target Validation Platform",
+                    "label" : "Open Targets Platform",
                     "href" : "/about"
                 },
                 {
@@ -26,18 +30,30 @@
                 {
                     "label" : "support@targetvalidation.org",
                     "href" : "mailto:support@targetvalidation.org?Subject=Target%20Validation%20Platform%20-%20help%20request"
-                }/*,
+                },
                 {
-                    "label": "Outreach",
+                    "label": "Outreach and tutorials",
                     "href": "/outreach"
-                }*/
+                }
             ]
         },
 
         {
-            "label" : "API",
-            "href" : "/documentation/api"
+            "label": "API",
+            "href": "",
+            "menu": [
+                {
+                    "label" : "API documentation",
+                    "href" : "/documentation/api"
+                },
+                {
+                    "label" : "Python client",
+                    "href" : "http://opentargets.readthedocs.io/",
+                    "target": "_blank"
+                }
+            ]
         },
+
 
         {
             "label" : "Downloads",
@@ -61,6 +77,12 @@
             "heading": "Related diseases",
             "track": false
         },*/
+        {
+            "name": "phenotypes",
+            "element": "phenotypes-display",
+            "heading": "Phenotypes",
+            "track": true
+        },
         {
             "name": "drugs",
             "element": "drugs-display",
@@ -89,13 +111,10 @@
             "element": "target-features",
             "heading": "Protein Information (from UniProt)",
             "dependencies": {
-                "https://ebi-uniprot.github.io/CDN/feature-viewer/2.0.0/featuresviewer.min.js": {
+                "https://ebi-uniprot.github.io/CDN/protvista/protvista.min.js": {
                     "format": "global"
                 },
-                "https://ebi-uniprot.github.io/CDN/feature-viewer/css/main.css!": {
-                    "loader": "css"
-                },
-                "https://ebi-uniprot.github.io/CDN/feature-viewer/css/fontello.css": {
+                "https://ebi-uniprot.github.io/CDN/protvista/css/main.css!": {
                     "loader": "css"
                 }
             },

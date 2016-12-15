@@ -12,7 +12,10 @@
  */
 
 .intro-section {
-    padding: 80px 0px;
+    //padding: 80px 0px;
+    overflow: hidden;
+    padding: 8vm 0;   /* fallback for IE9 */
+    padding: 8vmin 0;
 }
 
 
@@ -21,9 +24,35 @@
  */
 
 .intro-section-search {
-    padding: 140px 0px;
+    padding: 6vm 0 12vm 0;   /* fallback for IE9 */
+    padding: 6vmin 0 12vmin 0;
+    //margin-top: -50px; //
 }
 
+.intro-search-top-pad{
+    height: 12vm;   /* IE9 */
+    height: 12vmin;
+    min-height: 50px;
+}
+
+.intro-search-block {
+    margin: 20px 0px;
+}
+
+.intro-search-examples {
+    text-align: center;
+
+    a {
+        color: #B2DEF9;
+        margin-left: 15px;
+    }
+
+    a:hover {
+        color: #FFF;
+    }
+}
+
+/* probably deprecated with new homepage*/
 .intro-logo {
     padding-bottom:60px;
     display: block;
@@ -32,10 +61,27 @@
     height: 163px;
 }
 
+.intro-logo-block {
+    padding-bottom:60px;
+    margin: 0 auto;
+    width: 480px;
+}
+
+.intro-hero-logo {
+    min-width: 280px;
+    max-width: 360px;
+    width: 100%;
+    margin-bottom: 5vm; /*IE fallback*/
+    margin-bottom: 5vmin;
+}
+
+
 
 /*
- * The stats section
+ * Stats section
  */
+
+
 
 .intro-section-stats {
     //background: $clr-ui-background-secondary;
@@ -50,6 +96,20 @@
     color:#666;
     font-weight: 200 !important;
     text-align: center;
+}
+
+
+
+.intro-section-stats-panel {
+    // text-transform: uppercase;
+
+    .intro-section-stats-figure{
+        display: block;
+        font-size: 32px;
+        // font-weight: 400;
+        margin-bottom: 4px;
+        // color: scale-color($clr-ui-background, $lightness: -30%);
+    }
 }
 
 
@@ -70,13 +130,13 @@
     //text-align:center;
     //margin: auto 0px;
     background: $clr-ui-background-secondary;
-    background-image: url('/imgs/graphics/ot_advancing_3.png');
+    /*background-image: url('/imgs/graphics/ot_advancing_3.png');
     background-attachment: fixed;
     background-position: center left;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;*/
     text-align: center;
     > .container {
-        max-width: 800px
+        //max-width: 800px
     }
 }
 
@@ -93,3 +153,209 @@
 .intro-statement-p{
     //color:#2B8BAC;
 }
+
+
+
+/*
+ * Partners section
+ */
+
+
+.partner-logo-block {
+    //padding: 60px 0px;  // will need some media query to change it for responsive layout
+    height: 0px;
+
+    //padding: 20vh 0;
+    padding: 12vm 0;   /* fallback for IE9 */
+    padding: 12vmin 0;
+}
+
+.partner-logo {
+    /*max-width:90%;
+    min-width:20%;
+    position: relative;
+    top: 50%;*/
+    transform: translateY(-51%); /* for some reasons at 50% the crisp sanger logo looks fuzzy, while 51% seems to work better */
+}
+
+/* deprecated */
+.partners-hierarchy-graph-top {
+    height: 20px;
+    border-right: 1px solid $clr-ui-border;
+}
+
+/* deprecated */
+.partners-hierarchy-graph-bottom {
+    height: 20px;
+    border: 1px solid $clr-ui-border;
+    border-bottom: none;
+}
+
+
+
+.intro-section-data{
+    background: $secondary-color;
+    color: $primary-background-color;
+}
+
+
+
+/*
+ * Social media
+ */
+
+
+
+.hp-blog-feed{
+    overflow-y: auto;
+    height:400px;
+    padding-right: 4px;
+}
+
+.hp-blog-feed-post{
+    margin-bottom: 30px;
+}
+
+.hp-blog-feed-post-header{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.hp-blog-feed-post-date{
+    padding:3px 0px 3px 8px;
+    margin-left: 8px;
+    border-left: 1px solid $clr-text-dim;
+}
+
+
+
+/*
+ * Section themes
+ */
+
+
+
+.intro-section-theme-grey {
+    background: $clr-ui-background;
+    border-top: 1px solid $clr-ui-border;
+
+    .panel-icon-lg, .panel-icon-sm{
+        color: scale-color($clr-ui-background, $lightness: -30%);
+    }
+}
+
+.intro-section-theme-white {
+    background: $primary-background-color;
+    border-top: 1px solid $clr-ui-border;
+}
+
+.intro-section-theme-darkgrey {
+    background: scale-color($clr-ui-background, $lightness: -5%); ;
+    border-top: 1px solid $clr-ui-border;
+
+    .panel-icon-lg, .panel-icon-sm{
+        color: scale-color($clr-ui-background, $lightness: -30%);
+    }
+}
+
+.intro-section-theme-blue {
+    background: $secondary-color;
+    color: $primary-background-color;
+}
+
+.intro-section-theme-lightblue {
+    @extend .intro-section-theme-grey;
+    background: $brand-light-blue;
+}
+
+.intro-section-theme-gradient-blue {
+    @extend .intro-section-theme-blue;
+    background-color: $masthead-background;
+    background: -webkit-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: -moz-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: -o-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+    background: linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
+}
+
+.intro-section-theme-red {
+    @extend .intro-section-theme-blue;
+    background: $secondary-brand-color;
+}
+
+.intro-section-theme-green {
+    @extend .intro-section-theme-blue;
+    background: $clr-success;
+}
+
+.intro-section-panel {
+    text-align: center;
+    margin: 0px 0px;
+    margin-top: 4vm;   /* fallback for IE9 */
+    margin-top: 4vmin;
+}
+
+.border-col {
+    border-right: 1px dotted;
+}
+
+.intro-section-heading {
+    margin-top: 0px;
+    margin-bottom: 2vm;   /* fallback for IE9 */
+    margin-bottom: 2vmin;
+    text-align: center;
+    font-weight: 200;
+
+    a {
+        color: inherit;
+    }
+}
+
+.intro-hero-heading {
+    @extend .intro-section-heading;
+
+    margin-bottom: 5vm;   /* fallback for IE9 */
+    margin-bottom: 5vmin;
+}
+
+.intro-section-panel-icon {
+    margin-bottom: 0px;
+}
+
+.intro-section-panel-heading{
+    font-weight: 200;
+    // margin-bottom: 20px;
+
+    a {
+        color: inherit;
+    }
+}
+
+.intro-section-about {
+    background-image: url('/imgs/graphics/ot_advancing_3.png');
+    background-attachment: fixed;
+    background-position: center left;
+    background-repeat: no-repeat;
+}
+
+.user-no-track {
+  //padding-left: 32px;
+  position: relative;
+}
+.user-no-track:before {
+  position: absolute;
+  font-family: 'FontAwesome';
+  top: -300px;
+  left: 100px;
+  content: "\f21b";
+  color: rgba(0,0,0,.1);
+  font-size:600px;
+}
+
+.intro-last {
+    margin-bottom: 0px;
+}
+
+.intro-first {
+    margin-top: 0px;
+}
+

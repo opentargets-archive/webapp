@@ -1,5 +1,5 @@
 @import "colors";
-
+@import "utils";
 
 /*
  * Defines the main element of the single page,
@@ -17,6 +17,9 @@ body{
     color: $clr-text;
     background: $body-background;
 }
+
+@include scrollbar(14px);
+
 
 /*
 * Main index page
@@ -56,7 +59,7 @@ body{
     width:100%;
     background: $primary-background-color;
     padding-bottom:70px;
-    padding-bottom:220px;
+    padding-bottom:320px;
 }
 
 .cttv-page-wrapper {
@@ -81,12 +84,14 @@ body{
 
 
 
-    //padding: 8px 0;
+    // padding: 8px 0;
     height: auto;
-    border-bottom: 1px solid $masthead-border;
+
     position: relative;
-    box-shadow: 0 1px 5px 0 $clr-ui-shadow;
-    // z-index: 10; // this will need some sort of variable presumably?
+
+    // box-shadow: 0 1px 5px 0 $clr-ui-shadow;
+    z-index: 10; // this will need some sort of variable presumably?
+
 
     .container{
         height: auto;
@@ -97,8 +102,32 @@ body{
     }
 }
 
+.masthead-border {
+    border-bottom: 1px solid $masthead-border;
+    box-shadow: 0 1px 5px 0 $clr-ui-shadow;
+}
+
 .ot_logo {
-    margin: 8px 0px;
+    margin: 10px 0px;
+    width: 195px;
+}
+
+.ot_logo_graphics, .ot_logo_type{
+    float:left;
+    height: 30px;
+    overflow: hidden;
+}
+
+.ot_logo_graphics {
+    width: 30px;
+}
+
+.ot_logo_type{
+    width: 165px;
+    img{
+        position: relative;
+        left: -30px;
+    }
 }
 
 .cttv-logotype {
@@ -112,13 +141,25 @@ body{
     text-align: right;
 }
 
-/* define style for homepage masthead navigation */
+.masthead-dimmer {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 50px;
+}
+
+/*
+ * masthead navigation
+ */
+
+
+
 .masthead-navigation {
     list-style: none;
     margin-top: 0px;
     margin-bottom: 0px;
     padding: 0px; //override browser default for ul elements
-    height: 46px;
+    height: 50px;
 
     >li {
         display: inline-block;
@@ -129,8 +170,8 @@ body{
             }
 
             >a, >a:focus {
-                padding: 0px 10px;
-                height: 46px;
+                padding: 0px 7px;
+                height: 50px;
                 display: table-cell;
                 vertical-align: middle;
             }
@@ -154,14 +195,16 @@ body{
                 background: $clr-ui-background-secondary; //$btn-primary-bg-hover;
             }
         }
-
-
     }
-
-
 }
 
-/* specific settings for the other pages masthead navigation */
+
+.ot-dropdown-hamburger {
+    right: 0px;
+    left: inherit; // need this to invalidate default left value
+}
+
+
 .masthead .masthead-navigation {
 
     .uib-dropdown-menu {
@@ -170,7 +213,7 @@ body{
 
     >li div {
         &.open, &:hover {
-            background: $btn-primary-bg-hover;
+            background: $clr-black-a10; //$btn-primary-bg-hover;
         }
 
         >a, >a:focus {
@@ -179,14 +222,28 @@ body{
     }
 }
 
+
+
+/*
+ * Masthead notifications
+ */
+
+.masthead-notifications-menu {
+    height: 50px;
+
+}
+
+
 .notification {
     position:relative;
-    float: right;
-    margin-top:10px;
     color:white;
-    margin-top:10px;
-    font-size:22px;
-    width:50px;
+    font-size:19px;
+    margin: 12px 7px;
+
+    // float: right;
+    // margin-top:10px;
+    // margin-top:10px;
+    // width:50px;
 
     .counter {
         border-radius:50%;
@@ -195,8 +252,9 @@ body{
         height:14px;
         background:red;
         position:absolute;
-        left:39px;
-        top:5px;
+        //left:39px;
+        right: -5px;
+        top:0px;
         font-size:10px;
         text-align:center;
         pointer-events:none;
@@ -207,9 +265,50 @@ body{
     }
 }
 
+
 .masthead-home .notification {
     color: $primary-brand-color;
 }
+
+
+
+/*
+ * Masthead search
+ */
+
+.masthead-search-container{
+    max-width:35%;
+    //padding-left: 8px;
+}
+
+.masthead-search-menu{
+    padding-left: 7px
+}
+
+.masthead-responsive-search{
+    height: 50px;
+    padding: 14px 7px;
+    padding-right: 0px;
+    cursor: pointer;
+}
+
+.masthead-responsive-search-icon{
+    color: #fff;
+    //font-size: 19px;
+}
+
+.masthead-responsive-search-panel{
+    position: absolute;
+    top: 0px;
+    right: 0;
+    width: 50%;
+    margin: 0px 15px;
+    min-width: 290px;
+    height: 50px;
+    z-index: 10;
+}
+
+
 
 /*
 * Footer
@@ -217,18 +316,20 @@ body{
 
 
 .footer {
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 300;
     color: $footer-text;
-    padding: 30px 0;
-    border-top: 1px solid $footer-border;
+    padding: 24px 0;
+    //border-top: 1px solid $footer-border;
 
     background: $footer-background;
     width:100%;
-    height:220px;
+    height:320px;
     position:absolute;
     bottom:0;
     left:0;
+
+    overflow: hidden;
 
     a{
         color: inherit;
@@ -237,14 +338,24 @@ body{
         }
     }
 
-    h6{
-        color: $footer-text-dim;
-        font-weight: 400;
-        font-size: 14px;
-    }
 }
 
+.footer-section-header {
+    color: $footer-text-dim;
+    font-weight: 400;
+    //text-transform: uppercase;
+}
 
+.footer-menu {
+    padding-left: 0;
+    margin-bottom: 20px;
+
+    li {
+        list-style-type: none;
+        margin-left: 0;
+        margin-bottom: 5px;
+    }
+}
 
 
 
@@ -274,6 +385,7 @@ body{
 .nbblock{
     display:block;
     margin-bottom:0px;
+    margin-top: 10px;
 }
 
 
@@ -293,9 +405,9 @@ body{
 
 .cttv-content-header {
     margin-bottom: 30px;
-    border-bottom: 1px solid $clr-ui-border;
-    box-shadow: 0 0 5px 0 $clr-ui-shadow;
-    background: $clr-ui-background;
+    //border-bottom: 1px solid $clr-ui-border;
+    //box-shadow: 0 0 5px 0 $clr-ui-shadow;
+    //background: $clr-ui-background;
 
     h4 {
         font-weight: 300;

@@ -1,129 +1,321 @@
 <view-title>Home</view-title>
 
-<div class="container">
-    <div class="row intro-content">
-
-        <div class="col-sm-1"></div>
-
-        <div class="col-sm-10" ng-controller="SearchBoxCtrl">
-
-            <!-- <img src="imgs/logo/ot_logo_webheader_280x104.png" class="intro-logo"/> -->
-            <img src="imgs/logo/ot_logo_webheader.svg" class="intro-logo" alt="Open Targets logo"/>
-
-            <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
-                <fieldset>
-                    <div class="form-group has-feedback search-form">
 
 
-                        <!-- Search box + search button -->
-                        <div class="input-group">
+<!-- SEARCH -->
 
-                            <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+<div class="intro-section-search intro-section-theme-gradient-blue"> <!-- section -->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <!--<div class="intro-search-top-pad"> this is a bit of a hack</div>-->
+                <div class="intro-section-heading"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-hero-logo" alt="Open Targets logo"/></div>
+                <h2 class="intro-hero-heading">Find&nbsp;new&nbsp;targets for&nbsp;drug&nbsp;discovery</h2>
 
-                            <div class="input-group-btn">
-                                <button type="submit" class="btn btn-primary">
-                                    <span class="fa fa-search fa-lg"></span>
-                                </button>
-                            </div>
-                        </div>
-                        <div style="margin-top:5px;color:#cccccc;font-size:12px">More than one target? Try the <a href="/batch-search">batch search page</a> <span ng-show="loadedLists">{{loadedLists}} already loaded</span></div>
+                <div ot-search-box id="searchbox-hp" class="intro-search-block"></div>
 
-                        <!-- Search in progress spinner -->
-                        <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner" ng-show="search.progress"></span>
+                <p class="intro-search-examples">Try:
+                    <a href="/search?src=q:BRAF">BRAF</a>
+                    <a href="/search?src=q:PTEN">PTEN</a>
+                    <a href="/search?src=q:Asthma">Asthma</a>
+                    <a href="/search?src=q:Inflammatory%20bowel%20disease">Inflammatory bowel disease</a>
+                </p>
 
-                        <!-- Suggestions box -->
-                        <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
-
-
-                  <!-- examples -->
-                  <!-- <span class="small">
-                      <i>
-                        Examples: <a href="/search?q=braf">BRAF</a>,
-                        <a href="/search?q=asthma">asthma</a>,
-                        <a href="/search?q=pten">PTEN</a>
-                      </i>
-                  </span> -->
-
-
-                    </div>
-                </fieldset>
-            </form>
-
-            <div class="intro-divider"></div>
-
-            <div class="row text-lowlight">
-
-                <div class="col-sm-6">
-                    <h2 class="intro-statement intro-statement-heading">I am interested in target T:</h2>
-                    <h2 class="intro-statement intro-statement-p">Which diseases can be treated by modulating target T?</h2>
-                </div>
-
-
-                <div class="col-sm-6">
-                    <h2 class="intro-statement intro-statement-heading">I am interested in disease D:</h2>
-                    <h2 class="intro-statement intro-statement-p">Which targets can be modulated to treat disease D?</h2>
-                </div>
 
             </div>
+        </div>
+    </div>
+</div> <!-- section -->
 
 
-            <div class="intro-divider"></div>
 
-        <!-- <div class="container-fluid"> -->
 
-            <!-- Stack the columns on mobile by making one full-width and the other half-width -->
-            <div class="row">
 
-                <div class="col-sm-8">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">About the Target Validation platform</h4>
-                        </div>
-                        <div class="panel-body">
-                            <p>The Target Validation platform brings together information on the relationships between potential drug targets and diseases.  The core concept is to identify evidence of an association between a target and disease from various data types.</p>
+<!-- STATS -->
+<div class="intro-section intro-section-theme-grey" ng-controller="StatsCtrl">
+    <!-- <cttv-page-progress-spinner></cttv-page-progress-spinner> -->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 intro-section-panel intro-first">
+                <h2 class="intro-section-heading">Comprehensive data</h2>
+            </div>
+        </div>
 
-                            <p>A target can be a protein, protein complex or RNA molecule, but we integrate evidence through the gene that codes for the target. In the same way, we describe diseases through a structure of relationships called the Experimental Factor Ontology (EFO) that allows us to bring together evidence across different but related diseases.</p>
+        <div class="row">
 
-                            <p>The platform supports workflows starting from either a target or disease and presents the evidence for target – disease associations in a number of ways through association and evidence pages.</p>
-
-                            <p>We also present related information on the target or the disease itself through the target profile and disease profile pages.</p>
-
-                            <p><a href="/about">Read more &hellip;</a></p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-4">
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">FAQ</h4>
-                        </div>
-                        <div class="panel-body">
-                            <p>See all the <a href="/faq">frequently asked questions</a></p>
-
-                            <ul class="plain arrow-icon">
-                                <li><a href="/faq#what_can_I search_for">What can I search for?</a></li>
-                                <li><a href="/faq#data">Where does the data come from?</a></li>
-                                <li><a href="/faq#score">How is the association score calculated?</a></li>
-                                <li><a href="/faq#data_use">How do you use the information I enter into the platform?</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-
+            <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
+                <h3 class="intro-section-heading intro-section-stats-panel"><span cttv-progress-spinner size="24" ng-show="!stats.targets.total"></span><span class="intro-section-stats-figure" ng-show="stats.targets.total">{{stats.targets.total | number}}</span> targets</h3>
             </div>
 
-            <div class="intro-divider"></div>
+            <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
+                <h3 class="intro-section-heading intro-section-stats-panel"><span cttv-progress-spinner size="24" ng-show="!stats.associations.total"></span><span class="intro-section-stats-figure" ng-show="stats.associations.total">{{stats.associations.total | number}}</span> associations</h3>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
+                <h3 class="intro-section-heading intro-section-stats-panel"><span cttv-progress-spinner size="24" ng-show="!stats.diseases.total"></span><span class="intro-section-stats-figure" ng-show="stats.diseases.total">{{stats.diseases.total | number}}</span> diseases</h3>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
+                <a href="data_sources"><h3 class="intro-section-heading intro-section-stats-panel"><span cttv-progress-spinner size="24" ng-show="!stats.datasources.total"></span><span class="intro-section-stats-figure" ng-show="stats.datasources.total">{{stats.datasources.total | number}}</span> data sources</h3></a>
+            </div>
 
         </div>
 
-        <div class="col-sm-1"></div>
+        <div class="row">
+            <div class="col-xs-12 intro-section-panel">
 
-    </div> <!-- close row -->
+                    <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-clock-o fa-5x"></span></div>
+                    <h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-clock-o"></span> Last updated <span cttv-progress-spinner size="24" ng-show="!stats.date"></span><span ng-show="stats.date">{{stats.date | date:'MMMM yyyy'}}</span></h3>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<!-- DATA ACCESS -->
+<div class="intro-section intro-section-theme-darkgrey"> <!-- section -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="intro-section-heading">Free data access</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-4 intro-section-panel intro-last">
+                <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-desktop fa-5x"></span></div>
+                <h3 class="intro-section-panel-heading"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-desktop"></span> Open Targets Platform</h3>
+                <p class="hidden-xs">Search and visualize in your browser</p>
+                <a href="function(){scroll(0,0)}" class="btn btn-primary">Try search</a>
+            </div>
+            <!-- <div class="col-xs-12 col-md-4 intro-section-panel">
+                <div class="intro-section-panel-icon hidden-xs"><span class="fa fa-cubes fa-5x"></span></div>
+                <h3 class="intro-section-panel-heading">API</h3>
+                <p>Although probably only on larger screens</p>
+            </div> -->
+            <div class="col-xs-12 col-md-4 intro-section-panel intro-last">
+                <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-code fa-5x"></span></div>
+                <h3 class="intro-section-panel-heading"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-code"></span> Programmatic access</h3>
+                <p class="hidden-xs"><a href="/documentation/api">Rest API</a>, <a href="http://opentargets.readthedocs.io/">Python</a>, R and JS clients</p>
+                <a href="/documentation/api" class="btn btn-primary">Explore the API</a>
+            </div>
+            <div class="col-xs-12 col-md-4 intro-section-panel intro-last">
+                <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-download fa-5x"></span></div>
+                <h3 class="intro-section-panel-heading"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-download"></span> Download all data</h3>
+                <p class="hidden-xs">All our data as compressed JSON files</p>
+                <a href="/downloads/data" class="btn btn-primary">Go to downloads</a>
+            </div>
+        </div>
+
+    </div>
 
 </div>
+
+
+
+
+
+<!-- HELP and DOCS -->
+<div class="intro-section intro-section-theme-grey"> <!-- section -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-12">
+                    <h2 class="intro-section-heading">Need some help?</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-xs-12 col-md-4 intro-section-panel">
+                <a href="/faq">
+                    <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-question-circle fa-5x"></span></div>
+                    <h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-question-circle"></span> <span class="hidden-xs">Frequently asked questions</span><span class="hidden-sm hidden-md hidden-lg">FAQs</span></h3>
+                </a>
+                <!-- <p>Perhaps a one-liner would be helpful here</p> -->
+            </div>
+
+            <div class="col-xs-12 col-md-4 intro-section-panel">
+                <a href="/about">
+                    <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-book fa-5x"></span></div>
+                    <h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-book"></span> Documentation</h3>
+                </a>
+                <!-- <p>Perhaps a one-liner would be helpful here</p> -->
+            </div>
+
+            <div class="col-xs-12 col-md-4 intro-section-panel">
+                <a href="/outreach">
+                    <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-user fa-5x"></span></div>
+                    <h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-user"></span> Outreach and tutorials</h3>
+                </a>
+                <!-- <p>Perhaps a one-liner would be helpful here</p> -->
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- SURVEY -->
+<div class="intro-section intro-section-theme-blue"> <!-- section -->
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-xs-12 intro-section-panel intro-first intro-last">
+                <div class="intro-section-panel-icon hidden-xs "><span class="panel-icon-lg fa fa-check-square-o fa-5x"></span></div>
+                <!-- <h3 class="intro-section-panel-heading"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-desktop"></span> Take our survey</h3> -->
+                <h2 class="intro-section-panel-heading"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-check-square-o"></span> Want to give input into the future development of our Platform?</h2>
+                <h3 class="intro-section-panel-heading hidden-xs">Please take a moment to <a href="https://goo.gl/forms/p7sREp0u2OuJ4nQo1">complete our survey</a></h3>
+                <a href="https://goo.gl/forms/p7sREp0u2OuJ4nQo1" class="btn btn-default">Take <span class="hidden-sm hidden-md hidden-lg">our</span> survey</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- PARTNERS -->
+<div class="intro-section intro-section-statement intro-section-theme-white"> <!-- section -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- <img src="imgs/logo/ot_logo_webheader.svg" class="intro-logo-tvp" alt="Open Targets logo" style="width: 240px; padding-bottom: 40px;"/> -->
+                <h2 class="intro-section-heading">Open Targets</h2>
+                <h3 class="intro-statement-heading">An innovative pre-competitive collaboration between Wellcome Trust Sanger Institute, EMBL-EBI, GSK and Biogen</h3>
+            </div>
+        </div>
+
+        <!-- <div class="row">
+            <div class="col-xs-6 partners-hierarchy-graph-top"></div>
+            <div class="col-xs-6"></div>
+            <div class="col-xs-12 "><div class="partners-hierarchy-graph-bottom"></div></div>
+        </div> -->
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="partner-logo-block"><a href="https://www.biogen.com/"><img src="imgs/partners/color/biogen_172x60.png" alt="Biogen" class="partner-logo" /></a></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="partner-logo-block"><a href="http://www.ebi.ac.uk"><img src="imgs/partners/color/ebi_195x60.png" alt="EMBL-EBI" class="partner-logo" /></a></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="partner-logo-block"><a href="http://www.gsk.com"><img src="imgs/partners/color/gsk_86x74.png" alt="GSK" class="partner-logo" /></a></div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="partner-logo-block"><a href="http://www.sanger.ac.uk"><img src="imgs/partners/color/sanger_160x47.png" alt="sanger" class="partner-logo" /></a></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- <h2 class="intro-statement-heading">An innovative pre-competitive collaboration between Sanger, EBI, GSK and Biogen</h2> -->
+                <a href="http://www.opentargets.org/" class="btn btn-primary">Our story</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- FEEDBACK - mobile only -->
+<!-- <div class="intro-section intro-section-theme-grey hidden-sm hidden-md hidden-lg">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 intro-section-panel intro-first intro-last">
+                <h3 class="intro-section-panel-heading intro-first intro-last"><span class="panel-icon-sm fa fa-bullhorn"></span> Feedback</a>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+<!-- Stories and news -->
+<div class="intro-section intro-section-theme-white"> <!-- section -->
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-4">
+                <h3 class="intro-section-panel-heading text-center intro-first"><a href="//blog.opentargets.org/"><span class="fa fa-rss fa-lg"></span> Blog</a></h3>
+                <cttv-blog-feed class="hidden-xs"></cttv-blog-feed>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <h3 class="intro-section-panel-heading text-center intro-first"><a href="//twitter.com/targetvalidate"><span class="fa fa-twitter fa-lg"></span> Twitter</a></h3>
+                <div cttv-twitter-feed class="hidden-xs"></div>
+            </div>
+
+            <div class="col-xs-12 col-sm-4">
+                <h3 class="intro-section-panel-heading text-center intro-first"><a href="//www.facebook.com/OpenTargets/"><span class="fa fa-facebook-official fa-lg"></span> Facebook</a></h3>
+                <div cttv-facebook-feed class="hidden-xs"></div>
+            </div>
+
+            <div class="col-xs-12 hidden-sm hidden-md hidden-lg">
+                <h3 class="intro-section-panel-heading text-center intro-first"><a href="https://www.linkedin.com/company/centre-for-therapeutic-target-validation"><span class="fa fa-linkedin-square fa-lg"></span> LinkedIn</a></h3>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+<!-- Final remark -->
+<div class="intro-section intro-section-theme-grey">
+    <!-- <div class="user-no-track"></div> -->
+    <div class="container">
+
+        <div class="row">
+            <!-- <div class="col-sm-12">
+                <h2 class="intro-section-heading">Concerned about your data? Have a look at our T&Cs</h2>
+                <a href="/terms_of_use" class="btn btn-primary">Read terms of use</a>
+            </div> -->
+
+            <div class="col-xs-12 intro-section-panel intro-first">
+                <div class="intro-section-panel-icon"><span class="fa fa-shield fa-5x"></span></div>
+                <h2 class="intro-section-panel-heading">Concerned about privacy?</h2>
+                <a href="/terms_of_use" class="btn btn-primary">Read our terms of use</a>
+
+                <!-- <div class="intro-section-panel-icon hidden-xs"><span class="fa fa-lock fa-5x"></span></div>
+                    <h3 class="intro-section-panel-heading"><span class="hidden-sm hidden-md hidden-lg fa fa-lock"></span> Concerned about your data? Have a look at our T&Cs</h3>
+                    <a href="/terms_of_use" class="btn btn-primary">Read terms of use</a>
+                </div> -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 
 <!-- End first page -->

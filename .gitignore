@@ -12,3 +12,4 @@ app/docs/*.html
 npm-debug.log
 app/outreach.json
 app/notifications.json
+.wercker

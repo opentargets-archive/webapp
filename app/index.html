@@ -7,6 +7,7 @@
         <link rel="shortcut icon" href="imgs/favicons/OT_favicon.png" type="image/png" />
         <meta http-equiv="content-type" content="text/html; charset=UTF8">
         <meta name="google-site-verification" content="L6ztwjop7Soke4dHLg6YAEwUK6IrTKtQEp8cIUamlKg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- IE9 -->
         <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
@@ -31,23 +32,23 @@
         <meta property="og:image" content="https://www.targetvalidation.org/imgs/logo/ot_logo_splash.png" />
 
 
-        <link rel="stylesheet" href="build/cttvWebapp-3rdParty.css?v=21092016" />
+        <link rel="stylesheet" href="build/cttvWebapp-3rdParty.css?v=13122016" />
         <!-- Don't bundle font-awexome.min.css or the woff files would be broken -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <!-- <link href="build/fontawesome/css/font-awesome.min.css?v=16112015" rel="stylesheet" />
         <link href="build/bootstrap/dist/css/bootstrap.min.css?v=08122015" rel="stylesheet" />-->
-        <link rel="stylesheet" href="build/cttvWebapp.min.css?v=21092016" />
+        <link rel="stylesheet" href="build/cttvWebapp.min.css?v=13122016" />
 
         <!-- Components -->
-        <link rel="stylesheet" href="build/components-cttvWebapp.min.css?v=21092016" />
+        <link rel="stylesheet" href="build/components-cttvWebapp.min.css?v=13122016" />
 
         <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
-        <script type="text/javascript" src="js/ie_console_noop.js?v=21092016"></script>
+        <script type="text/javascript" src="js/ie_console_noop.js?v=13122016"></script>
 
         <!-- NEW datatable -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/bs/jq-2.1.4,dt-1.10.10,b-1.1.0,b-flash-1.1.0,b-html5-1.1.0/datatables.min.css"/>
 
-        <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'> -->
+        <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet"> -->
 
         <!-- App CSS at the end, to override anything required
         <link rel="stylesheet" href="build/cttvWebapp.min.css?v=08122015" />-->
@@ -64,86 +65,67 @@
             <!-- main page content -->
             <div class="cttv-main-container">
 
-
+                <!-- Masthead and navigation -->
+                <!-- HP only has notifications -->
+                <!-- other pages have full masthead -->
                 <div ng-controller="MastheadCtrl">
+                <div class="masthead ng-cloak" ng-class="location.path()!=='/' ? 'masthead-border' : ''">
+                    <div ng-show="opts.showResponsiveSearch" class="masthead-dimmer"></div>
 
-                    <!-- Masthead (homepage) -->
-                    <div ng-if="location.path()=='/'" class="ng-cloak masthead-home masthead-navigation-container">
-                        <div class="container">
-                            <masthead-navigation-menu></masthead-navigation-menu>
-                        </div>
-                    </div>
+                    <div class="container">
 
-                    <!-- Masthead (other pages) -->
-                    <div ng-if="location.path()!=='/'" class="masthead ng-cloak">
+                        <div class="row" >
 
-                        <div class="container">
+                            <!-- single col contains everything and content is floated -->
+                            <div class="col-xs-12">
 
-                            <div class="row" >
+                                <!-- OT Platform logo -->
+                                <div class="ot_logo pull-left" ng-if="location.path()!=='/'" ng-class="{'invisible':opts.showResponsiveSearch}">
+                                    <a href="/">
+                                        <img src="imgs/logo/otp-logo-w-b.svg" class="intro-logo-tvp" width="195px" alt="Open Targets logo"/>
+                                    </a>
+                                </div>
 
-                                <div class="col-xs-2">
-                                    <!-- CTTV logo -->
-                                    <!-- <a href="/"><img src="imgs/CTTV_logo_webheader.png" width="113px" height="51px"/></a>-->
-                                    <div class="ot_logo">
-                                        <a href="/" style=""><img src="imgs/logo/ot_logo_masthead_130x30_w.svg" width="130px" height="30px" alt="Open Targets logo"/></a>
+
+                                <!-- 1: search (on other pages only) -->
+
+                                <div ng-if="location.path()!=='/'" class="masthead-search-container pull-right" ng-class="{'invisible':opts.showResponsiveSearch}">
+                                    <!-- full search box: hide on small screens -->
+                                    <div ot-search-box class="hidden-xs hidden-sm masthead-search-menu"></div>
+
+                                    <!-- responsive search box-->
+                                    <div class="masthead-responsive-search hidden-md hidden-lg">
+                                        <span ng-click="opts.showResponsiveSearch=!opts.showResponsiveSearch" class="fa fa-lg masthead-responsive-search-icon fa-search"></span>
                                     </div>
                                 </div>
 
-                                <div class="col-xs-6 masthead-navigation-container">
-                                    <masthead-navigation-menu></masthead-navigation-menu>
+                                <div ng-show="opts.showResponsiveSearch" class="masthead-responsive-search-panel">
+                                    <div ng-click="opts.showResponsiveSearch=!opts.showResponsiveSearch" class="masthead-responsive-search pull-right">
+                                        <span class="fa fa-lg fa-times masthead-responsive-search-icon"></span>
+                                    </div>
+                                    <div ot-search-box></div>
                                 </div>
 
+                                <!-- 2: notifications (as required) -->
+
+                                <div masthead-notifications-menu class="masthead-notifications-menu pull-right" ng-class="{'invisible':opts.showResponsiveSearch}"></div>
 
 
-                                <div class="col-xs-4" ng-controller="SearchBoxCtrl">
-                                    <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
-                                        <fieldset>
-                                            <div class="has-feedback search-form">
+                                <!-- 3: menu (on other pages only) -->
 
+                                <div class="pull-right" ng-class="{'invisible':opts.showResponsiveSearch}">
+                                    <!-- navigation menu : hide on small screen-->
+                                    <masthead-navigation-menu class="hidden-xs hidden-sm"></masthead-navigation-menu>
 
-
-                                                <!-- Search box + search button -->
-                                                <div class="input-group input-group-sm">
-
-                                                    <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
-
-                                                    <div class="input-group-btn">
-                                                        <button type="submit" class="btn btn-primary">
-                                                            <span class="fa fa-search fa-lg"></span>
-                                                        </button>
-                                                    </div>
-
-                                                    <a href="/batch-search">
-                                                        <div class="input-group-btn" style="color:white !important;font-size:10px;">
-                                                            <span>Batch search</span><br /><span ng-show=loadedLists>({{loadedLists}} loaded <span>lists</span>)</span>
-                                                        </div>
-                                                    </a>
-
-                                                </div>
-
-                                                <!-- Search in progress spinner -->
-                                                <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner search-form-spinner-sm" ng-show="search.progress"></span>
-
-                                                <!-- Suggestions box -->
-                                                <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
-
-
-                                                <!--<span class="small">
-                                                    <i>
-                                                        Examples: <a href="/search?q=braf">BRAF</a>,
-                                                        <a href="/search?q=asthma">asthma</a>,
-                                                        <a href="/search?q=pten">PTEN</a>
-                                                    </i>
-                                                </span>-->
-
-
-                                            </div>
-                                        </fieldset>
-                                    </form>
+                                    <!-- here should have hamburger -->
+                                    <masthead-navigation-menu is-hamburger="true" class="hidden-md hidden-lg"></masthead-navigation-menu>
                                 </div>
+
                             </div>
+
                         </div>
                     </div>
+                </div><!-- end masthead -->
                 </div>
 
                 <!-- Authentication error -->
@@ -157,12 +139,14 @@
                 </div>
 
                 <!-- FEEDBACK BUTTON -->
-                <div ng-cloak class="cttv-feedback-button" ng-controller="FeedbackCtrl" ng-class="{'cttv-feedback-button-round': location.path()!='/' }">
+                <!-- Plese re-enable when we want (after integration day?) -->
+                <div ng-cloak class="cttv-feedback-button hidden-xs" ng-controller="FeedbackCtrl" ng-class="{'cttv-feedback-button-round': location.path()!='/' }">
+
                     <a target=_blank href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x20;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x20;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x20;&#x2D;&#x20;&#x66;&#x65;&#x65;&#x64;&#x62;&#x61;&#x63;&#x6B;&body=Page URL: {{location.absUrl()}}">
                     <div>Feedback</div></a>
                 </div>
 
-                <div ng-cloak class="cttv-social-panel" ng-controller="FeedbackCtrl" ng-show="location.path()=='/'" ng-click="showSocialMedia=!showSocialMedia">
+                <div ng-cloak class="cttv-social-panel hidden-xs" ng-controller="FeedbackCtrl" ng-show="location.path()=='/'" ng-click="showSocialMedia=!showSocialMedia">
 
                     <div ng-show="showSocialMedia">
                         <a target=_blank href="https://www.linkedin.com/company/centre-for-therapeutic-target-validation"><div class="cttv-social-panel-item cttv-social-panel-linkedin"></div></a>
@@ -203,79 +187,30 @@
             </div>
             <!-- end main page content -->
 
+
             <!-- Footer -->
-            <div class="footer">
-                <div class="container">
-                    <div class="row">
-
-
-                        <div class="col-sm-15 col-sm-3">
-                            <h6>Platform</h6>
-                            <p>Version 1.2.1 - 2016-09-21</p>
-                            <p><a href="/release-notes">Release notes</a></p>
-                            <p><a href="/about">About</a></p>
-                            <p><a href="/documentation/api">API</a></p>
-                            <!-- <p><a href="/documentation/components">Docs</a></p> -->
-                            <p><a href="/terms_of_use">Terms of use</a></p>
-                        </div>
-
-                        <div class="col-sm-15 col-sm-3">
-                            <h6>Partners</h6>
-                            <p><a href="http://www.ebi.ac.uk">EMBL-EBI</a></p>
-                            <p><a href="http://www.sanger.ac.uk">Wellcome Trust Sanger Institute</a></p>
-                            <p><a href="http://www.gsk.com">GSK</a></p>
-                            <p><a href="https://www.biogen.com/">Biogen</a></p>
-                        </div>
-
-                        <div class="col-sm-15 col-sm-3">
-                            <h6>Help</h6>
-                            <p><a href="/faq"><i class="fa fa-question-circle"></i> FAQs</a></p>
-                            <p><a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;&#x3F;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&#x3D;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x25;&#x32;&#x30;&#x56;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x25;&#x32;&#x30;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x25;&#x32;&#x30;&#x2D;&#x25;&#x32;&#x30;&#x68;&#x65;&#x6C;&#x70;&#x25;&#x32;&#x30;&#x72;&#x65;&#x71;&#x75;&#x65;&#x73;&#x74;"><span class="fa fa-envelope"></span> support<span class="fa fa-at"></span>targetvalidation.org</a></p>
-                        </div>
-
-                        <div class="col-sm-15 col-sm-3">
-                            <h6>Contact</h6>
-                            <p><!-- <span class="fa fa-phone"></span> +44 (0)1223 494 665<br /> --></p>
-                            <p><a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x63;&#x6F;&#x6E;&#x74;&#x61;&#x63;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;"><span class="fa fa-envelope"></span> contact<span class="fa fa-at"></span>targetvalidation.org</a></p>
-                            <!-- social media links -->
-                            <div class="footer-social-bar">
-                                <a href="https://www.linkedin.com/company/centre-for-therapeutic-target-validation" target="_blank" alt="Link to LinkedIn Open Targets page"><span class="fa fa-linkedin"></span></a>
-                                <a href="http://twitter.com/targetvalidate" target="_blank" alt="Link to Twitter Open Targets page"><span class="fa fa-twitter"></span></a>
-                                <a href="https://www.facebook.com/OpenTargets/" target="_blank" alt="Link to Facebook Open Targets page"><span class="fa fa-facebook"></span></a>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-15 col-sm-3">
-                            <h6><a href="//www.opentargets.org">Open Targets</a></h6>
-                            <p><a href="//www.opentargets.org/about">Overview</a></p>
-                            <p><a href="//www.opentargets.org/projects">Projects</a></p>
-                            <p><a href="//www.opentargets.org/news">News</a></p>
-                            <p><a href="//www.opentargets.org/jobs">Jobs</a></p>
-                            <p><a href="//blog.opentargets.org/">Blog</a></p>
-                        </div>
-
-
-
-                    </div>
-                </div>
-            </div>
+            <div ot-footer></div>
             <!-- End Footer-->
+
 
             <!-- require.js -->
             <script src="jspm_packages/system.js"></script>
 
             <!-- Angular && web app -->
-            <script src="build/cttvWebapp-3rdParty.js?v=21092016" type="text/javascript"></script>
-            <script src="build/cttvWebapp.min.js?v=21092016" type="text/javascript"></script>
+            <script src="build/cttvWebapp-3rdParty.js?v=13122016" type="text/javascript"></script>
+            <script src="build/cttvWebapp.min.js?v=13122016" type="text/javascript"></script>
 
             <!-- Components -->
-            <script type="text/javascript" src="build/components-cttvWebapp.min.js?v=21092016"></script>
+            <script type="text/javascript" src="build/components-cttvWebapp.min.js?v=13122016"></script>
 
             <!-- Blob.js (needed by FileSaver) -->
             <script type="text/javascript" language="javascript" src="vendor/Blob.js"></script>
 
             <!-- Pathway viewer -->
-            <script type="text/javascript" language="javascript" src="/proxy/www.reactome.org/DiagramJs/diagram/diagram.nocache.js?v=21092016"></script>
+            <script type="text/javascript" language="javascript" src="/proxy/www.reactome.org/DiagramJs/diagram/diagram.nocache.js?v=13122016"></script>
+
+            <!-- Protein viewer -->
+            <script type="text/javascript" language="javascript" src="vendor/bio-pv.min.js"></script>
 
             <!-- PDB viewers -->
             <!-- <link rel="stylesheet" href="https://wwwdev.ebi.ac.uk/pdbe/widgets/pdb-component-library/css/pdb.component.library.beta-1.0.0.min.css" /> -->
@@ -321,13 +256,27 @@
             <noscript><p><img src="//opentargets.piwikpro.com/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
             <!-- End Piwik Code -->
 
-            </script>
-
 
             <!-- Log page app session -->
             <log-session></log-session>
 
         </div>
+
+
+        <!-- Facebook feeds scripts -->
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.7";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
+        <!-- Twitter feeds stuff -->
+        <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
 
     </body>
 

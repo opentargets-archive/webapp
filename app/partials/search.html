@@ -55,8 +55,10 @@
                     </span>
 
                     <span class="search-details">
-                        <span class="label" ng-class="(result.data.type==='target') ? 'label-primary' : 'label-warning'">{{result.data.type}}</span><!-- &nbsp;|&nbsp;<span class="text-lowlight">Score: {{result.score}}</span> -->
-                        <span title="Search keyword matches an ortholog of this target" class="label label-success" ng-hide="result.humanMatch">Match from ortholog</span>
+                        <span class="tag-section"><i class="fa fa-tag fa-lg tag" ng-class="(result.data.type==='target') ? 'target' : 'disease'"></i>{{result.data.type | upperCaseFirst}}</span>
+                        <span class="tag-section" title="Search keyword matches an ortholog of this target" ng-show="result.orthologMatch"><i class="fa fa-tags tag ortholog"></i>Match from ortholog</span>
+                        <span class="tag-section" title="Search keyword matches a target via drug name" ng-show="result.drugMatch"><i class="fa fa-tags tag drug"></i>Match from drug</span>
+                        <span class="tag-section" title="Search keyword matches a disease via a phenotype" ng-show="result.phenotypeMatch"><i class="fa fa-tags tag phenotype"></i>Match from phenotype</span>
                     </span>
                 </div>
 
@@ -83,7 +85,7 @@
 
                 <div>
                     <!-- Furthermore this should only be shown when results are displayed -->
-                    <div uib-pagination ng-if="search.results.total>search.query.size" boundary-links="true" total-items="search.results.total" ng-model="state.p[0]" direction-links="true" class="uib-pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="update()" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></div>
+                    <div uib-pagination ng-if="search.results.total>search.query.size" boundary-links="false" total-items="search.results.total" ng-model="state.p[0]" direction-links="true" class="uib-pagination-sm" items-per-page="search.query.size" max-size=10 ng-change="update()" previous-text="&lsaquo;" next-text="&rsaquo;"></div>
                 </div>
 
 

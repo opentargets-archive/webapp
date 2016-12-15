@@ -446,7 +446,7 @@ angular.module('cttvDirectives')
                             });
                         }
 
-                    var promise = $q(function (resolve, reject) {
+                    var promise = $q(function (resolve) {
                         resolve("");
                     });
                     var totalText = "";

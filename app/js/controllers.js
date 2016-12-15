@@ -25,7 +25,7 @@
                 animation: true,
                 template: '<cttv-modal header="API error" has-close="true">'
                                 +'<p>A problem retrieving data has occurred. Please try to reload the page.<br />'
-                                +'If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a></p>'
+                                +'If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Open Targets Platform - help request">support team</a></p>'
                                 +'<div><button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button></div>'
                           +'</cttv-modal>',
             });
@@ -36,12 +36,29 @@
         };
     }])
 
+
+
+    /**
+     * Controller for the masthead navigations
+     * Simply exposes the location service
+     */
     .controller('MastheadCtrl', ['$scope', '$location', '$log', 'cttvLocationState', function ($scope, $location, $log, cttvLocationState) {
         'use strict';
-        // $log.log('MastheadCtrl()');
+
         $scope.location = $location;
 
+        // options must be exposed as an object, or else Angular doesn't update the view
+        $scope.opts = {
+            showResponsiveSearch : false
+        }
+
+        $scope.$on('$locationChangeSuccess', function(){
+            // when we change page, close the search in case it's visible
+            $scope.opts.showResponsiveSearch = false;
+        });
+
     }])
+
 
 
     /**
@@ -61,7 +78,7 @@
 
         function polling () {
             // $http.get("/notifications.json")
-            $http.get('//cttv.github.io/live-files/notifications.json')
+            $http.get('https://cttv.github.io/live-files/notifications.json')
                 .then (function(partial) {
                     // We compare the expiry date with today
                     if (angular.isArray(partial.data)) { // There are notifications
@@ -104,6 +121,8 @@
         $interval(polling, 600000);
     }])
 
+
+
     /**
       * Controller for the target list results page
     **/
@@ -129,4 +148,55 @@
                 $scope.showSocialMedia = false;
             }
         });
+    }])
+
+
+
+    /**
+     * Simple controller to expose the current page to the feedback button controller
+     */
+    .controller('StatsCtrl', ['$scope', 'cttvAPIservice', '$log', function ($scope, cttvAPIservice, $log) { 
+        'use strict';
+        // expose the location;
+        // note that exposing the page as $location.absUrl() does not work as that would not update when URL changes
+        $scope.stats = {};
+
+        cttvAPIservice.getStats()
+            .then(
+                function(resp) {
+
+                    // copy/expose repsonse to scope
+                    _.forOwn(resp.body, function(value, key) {
+                        $scope.stats[key] = value;
+                    });
+
+                    // count the datasources
+                    var dbsctn = 0;
+
+                    _.forOwn(resp.body.associations.datatypes, function(value, key) {
+                        _.forOwn(value.datasources, function(v,k){
+                            dbsctn++;
+                        });
+
+                    });
+
+                    $scope.stats.datasources = {
+                        total: dbsctn
+                    }
+
+                    // how about release date?
+                    var d = resp.body.data_version.split(".");
+                    d[0] = "20"+d[0];   // format as "20xx"
+                    d[1] = parseInt(d[1])-1; // month starts at 0
+                    $scope.stats.date = new Date(d[0], d[1]); // expose as a Date object
+                },
+                cttvAPIservice.defaultErrorHandler
+            )
+            // .finally(function(){
+            //     $scope.search.loading = false;
+            // });
+
     }]);
+
+
+

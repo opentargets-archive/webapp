@@ -41,7 +41,8 @@ angular.module('cttvControllers')
                 "synonyms" : _.uniq(data.efo_synonyms),
                 "paths" : paths,
                 "children" : data.children,
-                "title" : data.label.split(" ").join("_")
+                "title" : data.label.split(" ").join("_"),
+                "phenotypes" : data.phenotypes
             };
 
             // Extra sections -- plugins

@@ -7,7 +7,7 @@
  */
 angular.module('cttvControllers').
 
-controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvLoadedLists', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q, cttvLoadedLists) {
+controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
 
         var APP_SEARCH_URL = "search";
         var APP_EVIDENCE_URL = "evidence";
@@ -94,19 +94,11 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
                         })
                         .then(
                             function(resp){
-                                var i, h, h2;
                                 // $log.info(resp);
                                 $scope.search.results = parseResponseData(resp.body.data);  // store the results
                                 var besthit = $scope.search.results.besthit;
-                                besthit.humanMatch = false;
-                                for (h in besthit.highlight) {
-                                    if (h.startsWith("ortholog") && h.endsWith('name')) {
-                                        delete besthit.highlight[h];
-                                    }
-                                    if (!h.startsWith("ortholog")) {
-                                        besthit.humanMatch = true;
-                                        break;
-                                    }
+                                if (besthit) {
+                                    cttvUtils.addMatchedBy(besthit);
                                 }
                             }, cttvAPIservice.defaultErrorHandler
                         ).
@@ -161,7 +153,15 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
          * Execute some pre-processing of the data
          */
         var parseResponseData = function(data){
-
+            if (!data.disease) {
+                data.disease = [];
+            }
+            if (!data.target) {
+                data.target = [];
+            }
+            if (!data.besthit) {
+                data.besthit = null;
+            }
             // check the EFOs path and remove excess data
             data.disease.forEach(function(efo){
 
@@ -226,5 +226,21 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
 
         // See if there is any loaded list
         $scope.loadedLists = cttvLoadedLists.getAll().length;
+
+        /**
+         * NOTE: This is only to be called by the homepage only
+         * @params id: the id of the element to scroll to (remember to add hash #)
+         * @params p: extra padding to be added
+         */
+        $scope.onFocusHandler = function(id, p, mobileonly){
+            //$log.log("hello");
+            if(mobileonly && $window.innerWidth>768){
+                return;
+            }
+            var sb = $(id);
+            if(sb){
+                $window.scrollTo( 0, sb.offset().top - p );
+            }
+        }
 
     }]);

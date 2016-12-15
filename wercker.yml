@@ -1,0 +1,25 @@
+box: node
+dev:
+  steps:
+    - npm-install
+    - internal/watch:
+      code: npm start
+      reload: true
+build:
+  steps:
+    - npm install
+    - npm run setup
+    # - internal/docker-push:
+    #   entrypoint: docker-entrypoint.sh
+    #   tag: latest $WERCKER_GIT_COMMIT, $WERCKER_GIT_BRANCH
+    #   registry: https://registry.hub.docker.com
+    #   repository: opentargets/webapp
+    #   username: $OT_DOCKER_HUB_USERNAME
+    #   password: $OT_DOCKER_HUB_PASSWORD
+    # - scripts: |
+    #   docker build Dockerfile.build -t "opentargets/webapp:prod-$WERCKER_GIT_COMMIT" .
+    #   docker push opentargets/webapp
+
+# deploy-to-gke:
+#   steps:
+#     -

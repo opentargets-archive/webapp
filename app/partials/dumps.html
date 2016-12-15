@@ -4,7 +4,7 @@
 
     <div class="cttv-content-header">
         <div class="container">
-            <h3 view-title>Target Validation Platform Data Download</h3>
+            <h3 view-title>Data Download</h3>
             <p></p>
         </div>
     </div>
@@ -16,7 +16,20 @@
                 <p>All data from targetvalidation.org is available for download as compressed JSON files.</p>
 
                 <p>We provide downloads of all associations between target and disease calculated by the platform, as well as all the evidence used in calculating each associations. These are the same objects returned by the corresponding <code>/public/associations</code> and <code>/public/evidence</code> API methods. Head to the <a href="/documentation/api">API documentation</a> for further details.</p>
-                <h4>2016 Sep (Latest -- includes data fixes)</h4>
+
+                <h4>2016 Dec (Latest)</h4>
+                <ul>
+                    <li><a href="https://s3-eu-west-1.amazonaws.com/targetvalidation-dumps/16.12_association_data_fixed.json.gz">Association objects</a> (2016-12-09, 215MB,
+                        <a href="https://s3-eu-west-1.amazonaws.com/targetvalidation-dumps/16.12_association_data_fixed.json.gz.md5sum">md5sum</a>)
+                    </li>
+
+                    <li><a href="https://s3-eu-west-1.amazonaws.com/targetvalidation-dumps/16.12_evidence_data.json.gz">Evidence objects</a> (2016-12-09, 4.35Gb,
+                        <a href="https://s3-eu-west-1.amazonaws.com/targetvalidation-dumps/16.12_evidence_data.json.gz.md5sum">md5sum</a>)
+                    </li>
+                </ul>
+
+
+                <h4>2016 Sep (data fixes)</h4>
                 <ul>
                     <li><a href="https://s3-eu-west-1.amazonaws.com/targetvalidation-dumps/16.08_association_data_fixed.json.gz">Association objects</a> (2016-09-22, 179MB,
                         <a href="https://s3-eu-west-1.amazonaws.com/targetvalidation-dumps/16.08_association_data_fixed.json.gz.md5sum">md5sum</a>)

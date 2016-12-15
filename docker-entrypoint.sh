@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -e
 
 export REST_API_SCHEME=${REST_API_SCHEME:=https}
 export REST_API_SERVER=${REST_API_SERVER:=www.targetvalidation.org:443}
@@ -11,15 +10,16 @@ envsubst '$REST_API_SCHEME:$ENSEMBL_API_KEY' < /etc/nginx/conf.d/rest_api_scheme
 
 echo "======================================="
 echo "TESTING CONNECTION TO REST API ..."
+echo at ${REST_API_SCHEME}://${REST_API_SERVER}
 echo ""
 
-curl -kv --max-time 30 --connect-timeout 10 ${REST_API_SCHEME}://${REST_API_SERVER}/public/utils/ping
+curl -k --max-time 30 --connect-timeout 10 ${REST_API_SCHEME}://${REST_API_SERVER}/api/latest/public/utils/ping
 
 echo "======================================="
 echo "Checking REST API version ..."
 echo ""
 
-curl -kv --max-time 30 --connect-timeout 10 ${REST_API_SCHEME}://${REST_API_SERVER}/public/utils/version
+curl -k --max-time 30 --connect-timeout 10 ${REST_API_SCHEME}://${REST_API_SERVER}/api/latest/public/utils/version
 
 
 # As argument is not related to elasticsearch,
