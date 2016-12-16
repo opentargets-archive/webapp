@@ -126,7 +126,7 @@
     /**
       * Controller for the target list results page
     **/
-    .controller('BatchSearchCtrl', ['$log', '$scope', 'cttvLoadedLists', function ($log, $scope, cttvLoadedLists) {
+    .controller('BatchSearchCtrl', ['$log', '$scope', function ($log, $scope) {
         'use strict';
         $scope.list = null;
     }])

@@ -1,6 +1,6 @@
 <div class="section">
     <h2>Mapping:</h2>
-    <div class"row">
+    <div class="row batch-search">
 
         <div class="col-sm-4">
             <span>{{exact.length}} exact </span>
@@ -9,9 +9,9 @@
                 <span ng-switch-default>matches</span>
             </span>
 
-            <div style="margin-top:10px; height:200px; overflow:scroll">
+            <div class="batch-search-mappings-container">
                 <div ng-repeat="item in exact">
-                    <span style="font-size:12px;">{{item.query}} -> {{item.result}}</span>
+                    <span class="search-item">{{item.query}} <i class="fa fa-arrow-right" aria-hidden="true"></i> {{item.result}}</span>
                 </div>
             </div>
 
@@ -23,11 +23,40 @@
                 <span ng-switch-when="1">match</span>
                 <span ng-switch-default>matches</span>
             </span>
-            <div style="margin-top:10px; height:200px; overflow:scroll">
-                <div ng-repeat="item in fuzzy">
-                    <span style="font-size:12px;">{{item.query}} -> {{item.result}}</span>
+
+
+            <div class="batch-search-mappings-container">
+                <div ng-show="!searchQuery" class="batch-search-results-container">
+                    <div ng-repeat="item in fuzzy">
+                        <span class="search-item" ng-class="item.discarded ? 'item-discarded' : ''">{{item.query}} <i class="fa fa-arrow-right" aria-hidden="true"></i> {{item.result}}</span>
+                        <span ng-class="hover ? 'search-options highlight' : 'search-options down'" ng-mouseenter="hover=true" ng-mouseleave="hover=false">
+                            <span ng-click="searchThis(item)">
+                                <i class="fa fa-search"></i>
+                            </span>
+                            <span ng-click="discardThis(item)">
+                                <i class="fa fa-times"></i>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div ng-show="searchQuery">
+                    <div class="choose-header">
+                        <span class="message">Choose a match for <span class="choose-query">{{searchQuery.query}}</span>
+                            <i ng-click="searchQuery=''" class="fa fa-times search-options"></i>
+                        </span>
+                    </div>
+                    <div class="batch-search-results-container">
+                        <span cttv-progress-spinner size="24" ng-show="!searchResults.length"></span>
+                        <div ng-repeat="target in searchResults" ng-click="selectThis(searchQuery, target)">
+                            <span class="search-item select-item">{{target.data.approved_symbol}}</span>
+                            <span ng-class="hover ? 'search-options highlight' : 'search-options down'" ng-mouseenter="hover=true" ng-mouseleave="hover=false">
+                                <i class="fa fa-check"></i>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
+
 
         </div>
 
@@ -38,9 +67,34 @@
                 <span ng-switch-default>targets</span> not found
             </span>
 
-            <div style="margin-top:10px; height:200px; overflow:scroll">
-                <div ng-repeat="item in notFound">
-                    <span style="font-size:12px;">{{item.query}} -> {{item.result}}</span>
+            <div class="batch-search-mappings-container">
+                <div ng-show="!newSearchQuery" class="batch-search-results-container">
+                    <div ng-repeat="item in notFound">
+                        <span class="search-item">{{item.query}} <i class="fa fa-arrow-right" aria-hidden="true"></i> {{item.result}}</span>
+                        <span ng-class="hover ? 'search-options highlight' : 'search-options down'" ng-mouseenter="hover=true" ng-mouseleave="hover=false">
+                            <span ng-click="newSearch(item)">
+                                <i class="fa fa-search"></i>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+
+                <div ng-show="newSearchQuery">
+                    <div class="choose-header search-header">
+                        <input class="batch-search-box" type="text" placeholder="{{newSearchQuery}}" class="form-control input-search ng-pristine ng-untouched ng-valid ng-empty" name="text" tabindex="1" ng-model="searchQueryText" ng-model-options="{debounce:500}" autocomplete="off" ng-change="getSearch(searchQueryText)">
+                        <i ng-click="newSearchQuery=''" class="fa fa-times search-options"></i>
+                        <span cttv-progress-spinner size="24" ng-show="searchInProgress"
+                              style="right:4.5em; top:3em; position:absolute"></span>
+
+                    </div>
+                    <div class="batch-search-resultscontainer">
+                        <div ng-repeat="target in newSearchResults" ng-click="setNewItem(newSearchQuery, target)">
+                            <span class="search-item select-item">{{target.data.approved_symbol}}</span>
+                            <span ng-class="hover ? 'search-options highlight' : 'search-options down'" ng-mouseenter="hover=true" ng-mouseleave="hover=false">
+                                <i class="fa fa-check"></i>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

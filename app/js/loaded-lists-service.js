@@ -23,7 +23,7 @@ angular.module('cttvServices')
         }
 
         lists.getAll = function () {
-            var targetListsStoredStr = localStorageService.get(key);
+            // var targetListsStoredStr = localStorageService.get(key);
             lists.all = getFromLS();
             return lists.all;
         };

@@ -1,4 +1,5 @@
 @import "utils";
+@import "colors";
 
 #cttv-page-app {
 
@@ -611,8 +612,6 @@
      * PNG export button
      */
 
-
-
     cttv-target-associations-bubbles, cttv-target-associations-tree{
         png > div {
             margin-top:24px;
@@ -659,6 +658,63 @@
         }
     }
 
+
+    /* The options shown in the batch search to re-assign fuzzy matches, etc */
+    .batch-search {
+        .search-item {
+            font-size:12px;
+            /* cursor: default; */
+            &.select-item {
+                cursor: pointer;
+            }
+            &.item-discarded {
+                color: $clr-ui-border;
+            }
+        }
+        .choose-header {
+            background: $clr-ui-border;
+            height: 2.5em;
+            padding-top: 0.6em;
+            margin-bottom: 10px;
+            .message {
+                margin-left: 0.4em;
+                .choose-query {
+                    background: $clr-primary-highlight;
+                }
+            }
+            &.search-header {
+                height: 3.5em;
+            }
+        }
+        .search-options {
+            float: right;
+            margin-right: 0.5em;
+            cursor: pointer;
+            &.highlight {
+                color: $primary-color;
+            }
+            &.down {
+                color: $clr-ui-border;
+            }
+        }
+
+        .batch-search-box {
+            width: 90%;
+            display: inline-block;
+            margin-left: 10px;
+            height: 2.5em;
+        }
+
+        .batch-search-mappings-container {
+            margin-top: 10px;
+            height: 200px;
+            overflow-y: scroll;
+            border: 1px solid $clr-ui-border;
+            .batch-search-results-container {
+                margin-left: 5px;
+            }
+        }
+    }
 }
 
 
