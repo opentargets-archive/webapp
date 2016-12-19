@@ -204,13 +204,16 @@ angular.module('cttvDirectives')
                     row.push(pubmedId);
 
                     // Authors formatting
-                    var authorStr = formatAuthor(d.literature.authors[0]);
-                    if (d.literature.authors.length > 2) {
-                        authorStr += " <i>et al</i>";
-                    } else if (d.literature.authors.length === 2) {
-                        authorStr += " and " + formatAuthor(d.literature.authors[1]);
+                    var authorStr = "(No authors provided)";
+                    if (d.literature.authors) {
+                        authorStr = formatAuthor(d.literature.authors[0]);
+                        if (d.literature.authors.length > 2) {
+                            authorStr += " <i>et al</i>";
+                        } else if (d.literature.authors.length === 2) {
+                            authorStr += " and " + formatAuthor(d.literature.authors[1]);
+                        }
+                        authorStr += ".";
                     }
-                    authorStr += ".";
 
                     // 3 - Abstract
                     if (!d.literature.title && !d.literature.abstract && !d.literature.journal_data) {
