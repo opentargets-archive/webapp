@@ -6,10 +6,15 @@ var watch = require('gulp-watch');
 var uglify = require('gulp-uglify');
 var server = require('gulp-server-livereload');
 
-var browserify = require('gulp-browserify');
+// var browserify = require('gulp-browserify');
+var browserify = require('browserify');
 var sass = require('gulp-sass');
 var csspurge = require('gulp-css-purge');
 var minifyCss = require('gulp-minify-css');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+var gutil = require('gulp-util');
+var babelify = require('babelify');
 
 var gzip = require('gulp-gzip');
 var del = require("del");
@@ -18,8 +23,6 @@ var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var jsonminify = require('gulp-jsonminify');
 var extend = require('gulp-extend');
-
-
 
 var buildDir = "app/build";
 var componentsConfig = "components.js";
@@ -98,22 +101,6 @@ gulp.task('unitTest', function (done) {
 //gulp.task('test', ['unitTest', 'e2eTest']);
 gulp.task('test', ['unitTest']);
 
-gulp.task('watch-components', function () {
-    return gulp.watch([
-        './components/targetAssociationsTree/src/**/*',
-        './components/diseaseGraph/src/**/*',
-        './components/targetGeneTree/src/**/*',
-        './components/targetGenomeBrowser/src/**/*'
-    ], ['build-components-min']);
-});
-
-gulp.task('watch-cttv', function () {
-    return gulp.watch([
-        './app/js/**/*',
-        './app/css/**/*'
-    ], ['build-webapp']);
-});
-
 // will remove everything in build
 gulp.task('clean', function () {
     return del ([buildDir]);
@@ -149,12 +136,28 @@ gulp.task('components-sass', function () {
 });
 
 // browserify debug
-gulp.task('build-components',['components-sass'], function() {
-    return gulp.src(componentsConfig)
-	.pipe(browserify({debug:true}))
-	.pipe(rename(componentsFile))
-	.pipe(gulp.dest(buildDir));
+// gulp.task('build-components',['components-sass'], function() {
+//     return gulp.src(componentsConfig)
+// 	.pipe(browserify({debug:true}))
+// 	.pipe(rename(componentsFile))
+// 	.pipe(gulp.dest(buildDir));
+// });
+
+gulp.task('build-components', ['components-sass'], function () {
+    return browserify({
+        entries: componentsConfig,
+        debug: true
+    })
+        .bundle()
+        .pipe(source(componentsConfig))
+        .pipe(buffer())
+        // .pipe(sourcemaps.init({loadMaps: true}))
+        // .pipe(uglify())
+        // .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(buildDir))
+        .pipe(gutil.noop());
 });
+
 
 // browserify min
 gulp.task('build-components-min',['build-components'], function() {
@@ -305,3 +308,36 @@ gulp.task('webserver', ['build-all'], function() {
 
 
 gulp.task('build-all', ['init', 'build-3rdparty', 'build-components-min', 'build-webapp']);
+
+
+// Lazy Loaded modules
+// Interactions Viewer
+var basePathIV = "node_modules/ot.interactionsViewer/";
+var outputBaseFileIV = 'interactionsViewer';
+
+var jspm = require('gulp-jspm');
+
+gulp.task('build-interactionsViewer-styles', function() {
+    return gulp.src(basePathIV + 'index.scss')
+        .pipe(sass({
+            errLogToConsole: true
+        }))
+        .pipe(rename(outputBaseFileIV + '.css'))
+        .pipe(gulp.dest(buildDir));
+});
+
+gulp.task('build-interactionsViewer', ['build-interactionsViewer-styles'], function() {
+    return browserify({
+        entries: basePathIV + 'browser.js',
+        debug: true,
+        standalone: outputBaseFileIV
+    }).transform(babelify, {presets: ["es2015"], sourceMaps: true})
+        .bundle()
+        .pipe(source(outputBaseFileIV + '.min.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(uglify())
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(buildDir))
+        .pipe(gutil.noop())
+});

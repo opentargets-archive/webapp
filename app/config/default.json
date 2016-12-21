@@ -122,6 +122,21 @@
         },
 
         {
+            "name": "interactionsViewer",
+            "element": "interactions-viewer",
+            "heading": "Protein interactions",
+            "dependencies": {
+                "build/interactionsViewer.min.js": {
+                    "format": "global"
+                },
+                "build/interactionsViewer.css": {
+                    "loader": "css"
+                }
+            },
+            "track": true
+        },
+
+        {
             "name": "genomeBrowser",
             "element": "genome-browser",
             "heading": "Variants, isoforms and genomic context",
