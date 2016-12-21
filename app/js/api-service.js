@@ -19,9 +19,11 @@ angular.module('cttvServices')
         * Initial configuration of the service, with API's URLs
         */
         var cttvAPI = {
+            LIMITS: {
+                ASSOCIATIONS: 10000,
+                EVIDENCE: 10000
+            },
             API_DEFAULT_METHOD : "GET",
-            //API_URL : "http://beta.targetvalidation.org/api/latest/",
-            // API_URL : "http://193.62.52.228/api/latest/",
             API_SEARCH_URL : "search",
             API_EVIDENCE_URL : "evidences",
             API_AUTOCOMPLETE_URL : "autocomplete",
@@ -34,6 +36,7 @@ angular.module('cttvServices')
             API_DISEASE_URL: 'disease',
             API_EXPRESSION_URL: 'expression',
             API_TARGET_URL : 'target',
+            API_MULTISEARCH_URL: 'multiSearch',
             API_TARGET_RELATION_URL : 'targetRelation',
             API_DISEASE_RELATION_URL : 'diseaseRelation',
             API_LOG_SESSION_URL : "logSession",
@@ -55,6 +58,7 @@ angular.module('cttvServices')
             .prefix('http://127.0.0.1:8123/api/')
             .version("1.2")
             // .prefix("https://www.targetvalidation.org/api/")
+            .prefix("https://localhost:6984/api/")
             .appname("cttv-web-app")
             .secret("2J23T20O31UyepRj7754pEA2osMOYfFK")
             .verbose(false);
@@ -331,6 +335,10 @@ angular.module('cttvServices')
             return callAPI (queryObject);
         };
 
+        cttvAPI.getMultiSearch = function(queryObject) {
+            queryObject.operation = cttvAPI.API_MULTISEARCH_URL;
+            return callAPI (queryObject);
+        };
 
         /**
          * Decorates a given object with the API options for the given facets and returns the original object.
