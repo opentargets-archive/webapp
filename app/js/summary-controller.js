@@ -62,29 +62,6 @@ angular.module('cttvControllers')
                                 all = _.concat(all, resps[i].body.data);
                             }
                             combined.data = all;
-
-                            // Get all the disease Ids:
-                            // var diseaseIds = [];
-                            // for (var j = 0; j < scope.associations.data.length; j++) {
-                            //     var assoc = scope.associations.data[j];
-                            //     diseaseIds.push(assoc.disease.id);
-                            // }
-                            // $log.log(diseaseIds);
-                            // var queryObjectMultiSearch = {
-                            //     method: 'POST',
-                            //     trackCall: true,
-                            //     params: {
-                            //         // q: diseaseIds.slice(0, 5),
-                            //         q: diseaseIds,
-                            //         filter: "disease",
-                            //         fields: ["association_counts"]
-                            //     }
-                            // };
-                            // cttvAPIservice.getMultiSearch(queryObjectMultiSearch)
-                            //     .then(function (resp) {
-                            //         $log.log(resp);
-                            //     });
-
                             return combined;
                         });
                 });
@@ -96,7 +73,7 @@ angular.module('cttvControllers')
         if (search.target) {
             if (angular.isArray(search.target)) {
                 getAssociations(search.target)
-                    .then(function (combined) {
+                    .then (function (combined) {
                         $log.log("associations response for a list of targets...");
                         $log.log(search.target);
                         $log.log(combined);

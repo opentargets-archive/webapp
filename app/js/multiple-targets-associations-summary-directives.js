@@ -192,6 +192,7 @@ angular.module('cttvDirectives')
         restrict: 'E',
         templateUrl: "",
         scope: {
+            // associations: '='
             targets: '=',
             associations: '='
         },
