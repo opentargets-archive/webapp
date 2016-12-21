@@ -6,66 +6,12 @@ angular.module('cttvDirectives')
     return {
         restrict: 'E',
         scope: {
-            targets: "="
+            targets: "=",
+            associations: '='
         },
-        templateUrl: "partials/multiple-targets-associations-summary.html",
-        link: function (scope, el, attrs) {
-            scope.$watch('targets', function () {
-                if (!scope.targets) {
-                    return;
-                }
-
-                var associationsPromises = [];
-                // 1st get the size
-                var queryObjectForSize = {
-                    method: 'POST',
-                    params: {
-                        "target": scope.targets,
-                        "facets": false,
-                        "size": 0,
-                        "fields": "total"
-                    }
-                };
-                cttvAPIservice.getAssociations(queryObjectForSize)
-                    .then (function (resp) {
-                        for (var i=0; i<resp.body.total; i+=1000) {
-                            // Call to the api with the targets
-                            var queryObject = {
-                                method: 'POST',
-                                params : {
-                                    "target": scope.targets,
-                                    "facets": true,
-                                    "from": i,
-                                    "size": 1000
-                                }
-                            };
-                            associationsPromises.push(cttvAPIservice.getAssociations(queryObject));
-                        }
-
-                        $q.all(associationsPromises)
-                            .then (function (resps) {
-                                // facets are the same for all of them...
-                                var combined = {
-                                    facets : resps[0].body.facets,
-                                    therapeutic_areas: resps[0].body.therapeutic_areas
-                                };
-                                var all = [];
-                                for (var i=0; i<resps.length; i++) {
-                                    all = _.concat (all, resps[i].body.data);
-                                }
-                                combined.data = all;
-                                scope.associations = combined;
-                            });
-                    });
-
-
-                // cttvAPIservice.getAssociations(queryObject)
-                // .then (function (resp) {
-                //     scope.associations = resp.body;
-                // });
-
-            });
-        }
+        templateUrl: "partials/multiple-targets-associations-summary.html"
+        // link: function (scope, el, attrs) {
+        // }
     };
 }])
 

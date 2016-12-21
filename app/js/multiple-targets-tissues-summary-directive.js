@@ -143,7 +143,7 @@ angular.module('cttvDirectives')
                 }
 
                 var gtexPromises = [];
-                var baseGtexUrlPrefix = "/proxy/gtexportal.org/api/v6p/expression/";
+                var baseGtexUrlPrefix = "/proxy/www.gtexportal.org/api/v6p/expression/";
                 var baseGtexUrlSufix = "?boxplot=true";
                 for (var i=0; i<scope.targets.length; i++) {
                     var target = scope.targets[i];

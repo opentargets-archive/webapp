@@ -23,7 +23,7 @@ angular.module('cttvDirectives')
                     method: 'POST',
                     trackCall: false,
                     params: {
-                        target: scope.targets,
+                        target: scope.targets.map(function (d) {return d.ensembl_gene_id;}),
                         size: 1000,
                         datasource: cttvConfig.evidence_sources.known_drug,
                         fields: [

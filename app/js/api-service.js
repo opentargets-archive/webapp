@@ -51,7 +51,8 @@ angular.module('cttvServices')
         };
 
         var api = cttvApi()
-            .prefix("/api/")
+            // .prefix("/api/")
+            .prefix('http://127.0.0.1:8123/api/')
             .version("1.2")
             // .prefix("https://www.targetvalidation.org/api/")
             .appname("cttv-web-app")

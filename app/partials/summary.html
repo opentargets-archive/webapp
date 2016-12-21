@@ -2,13 +2,13 @@
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
     <div class="container">
-        <h2>Summary page</h2>
+        <h2>Summary page for {{targets.length}} targets</h2>
 
         <div ng-show="targets">
-            We have several targets: {{targets}}
+            <!--We have several targets: {{targets}}-->
 
             <!-- Associations section -->
-            <multiple-targets-associations-summary targets="targets"></multiple-targets-associations-summary>
+            <multiple-targets-associations-summary targets="targets" associations="associations"></multiple-targets-associations-summary>
 
             <!-- Pathways section -->
             <multiple-targets-pathways-summary targets="targets"></multiple-targets-pathways-summary>
@@ -17,7 +17,7 @@
             <multiple-targets-drugs-summary targets="targets"></multiple-targets-drugs-summary>
 
             <!-- Tissue expression section -->
-            <multiple-targets-tissues-summary targets="targets"></multiple-targets-tissue-summary>
+            <!--<multiple-targets-tissues-summary targets="targets"></multiple-targets-tissue-summary>-->
         </div>
 
         <div ng-show="target">
