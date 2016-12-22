@@ -1,22 +1,21 @@
 angular.module('plugins', [])
-.directive ('pluginLoader', ['$log', '$compile', '$timeout', 'lazy', '$q', '$analytics', function ($log, $compile, $timeout, lazy, $q, $analytics) {
+    .directive('pluginLoader', ['$log', '$compile', '$timeout', 'lazy', '$q', '$analytics', function ($log, $compile, $timeout, lazy, $q, $analytics) {
 
-    return {
-        restrict: 'E',
-        scope: {
-            'visible': '@',
-            'plugin': '=',
-            'target': '=',
-            'disease': '=',
-            'dependencies': '=',
-            'page': '=',
-            'track': '=',
-            'label': '='
-        },
-        link: function(scope, element, attrs) {
-            scope.alreadyLoaded = {};
-
-            scope.$watch('visible', function (val) {
+        return {
+            restrict: 'E',
+            scope: {
+                'visible': '@',
+                'plugin': '=',
+                'target': '=',
+                'disease': '=',
+                'associations': '=',
+                'dependencies': '=',
+                'page': '=',
+                'track': '=',
+                'label': '='
+            },
+            link: function (scope, element, attrs) {
+                scope.alreadyLoaded = {};
 
                 // Find the first ancestor element to get the width from
                 var sectionWidth = 0;
@@ -34,12 +33,10 @@ angular.module('plugins', [])
                     }
                 }
 
-                if (val === "true") {
+                if (scope.visible === "true") {
                     if (scope.alreadyLoaded[scope.plugin]) {
-                        // $log.log(scope.plugin + " is already there");
                         return;
                     } else {
-                        // $log.log(scope.plugin + " does not exist yet, creating it");
                         scope.alreadyLoaded[scope.plugin] = true;
                     }
 
@@ -65,24 +62,28 @@ angular.module('plugins', [])
 
                     // The component may not be able to display when the container is not visible, so we wait until it is
                     $q.all(loadedDeps)
-                        .then (function () {
-                            // $log.log("All deps have now been loaded...");
+                        .then(function () {
+                            $log.log("All deps have now been loaded...");
                             // remove the spinner
                             element[0].removeChild(spinnerDiv);
+                            $log.log("... removed spinner...");
                             // var spinner = document.getElementById("section-spinner-" + scope.label);
                             // spinner.parentNode.removeChild(spinner);
-                            $timeout (function () {
-                                var template = '<' + scope.plugin + (scope.target ? (" target=target") : " ") + (scope.disease ? ("disease=disease") : "") + " width=" + sectionWidth + "></" + scope.plugin + ">";
+                            $timeout(function () {
+                                // var template = '<' + scope.plugin + " associations=" + (scope.associations ? ("associations") : '""') + " target=" + (scope.target ? ("target") : '""') + " disease=" + (scope.disease ? ("disease") : '""') + " width=" + sectionWidth + "></" + scope.plugin + ">";
+                                var template = "<" + scope.plugin + " associations=associations target=target disease=disease width=" + sectionWidth + "></" + scope.plugin + ">";
+                                $log.log("template... ");
+                                $log.log(template);
                                 var compiled = $compile(template)(scope);
                                 element.append(compiled);
                             }, 0);
+
                         });
                 } else {
                     // while (element[0].firstChild) {
                     //     element[0].removeChild(element[0].firstChild);
                     // }
                 }
-            });
-        }
-    };
-}]);
+            }
+        };
+    }]);

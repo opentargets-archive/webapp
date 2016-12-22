@@ -18,7 +18,18 @@
 
             <!-- Tissue expression section -->
             <!--<multiple-targets-tissues-summary targets="targets"></multiple-targets-tissue-summary>-->
+
+            <!-- interactions section -->
+            <div>
+                <h3>Interactions between {{targets.length}} targets</h3>
+                <plugin-loader target="targets" associations="associations" plugin="interactionsViewerPlugin.element" visible="true"
+                               dependencies="interactionsViewerPlugin.dependencies" page="multiple-targets-summary" waitfor="interactionsViewerPlugin.waitfor"
+                               track="false"></plugin-loader>
+            </div>
+
         </div>
+
+
 
         <div ng-show="target">
             We only have 1 target: {{target}}

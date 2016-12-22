@@ -14,6 +14,7 @@ angular.module('cttvControllers')
                 trackCall: true,
                 params: {
                     "id": targets,
+                    "size": targets.length,
                     "fields": ['ensembl_gene_id', 'drugs', 'approved_symbol', 'reactome', 'uniprot_id'],
                 }
             };
@@ -22,6 +23,7 @@ angular.module('cttvControllers')
 
         function getAssociations(targets) {
             var associationsPromises = [];
+            var step = 10000;
             // 1st get the size
             var queryObjectForSize = {
                 method: 'POST',
@@ -35,7 +37,7 @@ angular.module('cttvControllers')
             };
             return cttvAPIservice.getAssociations(queryObjectForSize)
                 .then(function (resp) {
-                    for (var i = 0; i < resp.body.total; i += 1000) {
+                    for (var i = 0; i < resp.body.total; i += step) {
                         // Call to the api with the targets
                         var queryObject = {
                             method: 'POST',
@@ -44,7 +46,8 @@ angular.module('cttvControllers')
                                 "target": targets,
                                 "facets": true,
                                 "from": i,
-                                "size": 1000
+                                // "scorevalue_min": 1,
+                                "size": step
                             }
                         };
                         associationsPromises.push(cttvAPIservice.getAssociations(queryObject));
@@ -95,22 +98,32 @@ angular.module('cttvControllers')
         // targets / target
         if (search.target) {
             if (angular.isArray(search.target)) {
+                // Multiple targets
                 getAssociations(search.target)
                     .then(function (combined) {
-                        $log.log("associations response for a list of targets...");
-                        $log.log(search.target);
-                        $log.log(combined);
                         $scope.associations = combined;
                     });
 
                 getTargetsInfo(search.target)
                     .then(function (resp) {
-                        $log.log("resp for targets...");
-                        $log.log(search.target);
-                        $log.log(resp);
                         $scope.targets = resp.body.data;
                     });
                 // $scope.targets = search.target;
+
+                // Interactions viewer plugin
+                $scope.interactionsViewerPlugin = {
+                    name: "interactionsViewer",
+                    element: "multiple-targets-interactions-summary",
+                    dependencies: {
+                        "build/interactionsViewer.min.js": {
+                            "format": "global"
+                        },
+                        "build/interactionsViewer.css": {
+                            "loader": "css"
+                        }
+                    }
+                };
+                // $scope.interactionsSummaryPlugin = "multiple-targets-interactions-summary";
 
             } else {
                 $scope.target = search.target;

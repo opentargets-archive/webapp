@@ -307,15 +307,12 @@ gulp.task('webserver', ['build-all'], function() {
 });
 
 
-gulp.task('build-all', ['init', 'build-3rdparty', 'build-components-min', 'build-webapp']);
-
+gulp.task('build-all', ['init', 'build-3rdparty', 'build-components-min', 'build-webapp', 'build-lazy-loaded-components']);
 
 // Lazy Loaded modules
 // Interactions Viewer
 var basePathIV = "node_modules/ot.interactionsViewer/";
 var outputBaseFileIV = 'interactionsViewer';
-
-var jspm = require('gulp-jspm');
 
 gulp.task('build-interactionsViewer-styles', function() {
     return gulp.src(basePathIV + 'index.scss')
@@ -341,3 +338,5 @@ gulp.task('build-interactionsViewer', ['build-interactionsViewer-styles'], funct
         .pipe(gulp.dest(buildDir))
         .pipe(gutil.noop())
 });
+
+gulp.task('build-lazy-loaded-components', ['build-interactionsViewer']);
