@@ -5,7 +5,7 @@ angular.module('cttvControllers')
 
     $scope.day = moment();
 
-    $http.get("https://cttv.github.io/live-files/outreach.json")
+    $http.get("https://opentargets.github.io/live-files/outreach.json")
         .then (function (resp) {
             if (angular.isObject(resp.data)) {
                 if (angular.isArray(resp.data.sessions)) {
