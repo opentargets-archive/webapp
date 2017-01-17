@@ -149,7 +149,7 @@ gulp.task('build-components', ['components-sass'], function () {
         debug: true
     })
         .bundle()
-        .pipe(source(componentsConfig))
+        .pipe(source(componentsFile))
         .pipe(buffer())
         // .pipe(sourcemaps.init({loadMaps: true}))
         // .pipe(uglify())

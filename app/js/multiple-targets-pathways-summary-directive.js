@@ -15,8 +15,8 @@ angular.module('cttvDirectives')
                     return;
                 }
 
-                $log.log("targets in the pathways directive...");
-                $log.log(scope.targets);
+                // The real number of targets for which we have pathway information
+                var uniqueTargets = {};
 
                 var pathways = {};
                 for (var i = 0; i < scope.targets.length; i++) {
@@ -43,11 +43,12 @@ angular.module('cttvDirectives')
                                     link: "/summary?pathway=" + p.id
                                 };
                             }
+                            uniqueTargets[targetSymbol] = true;
                             pathways[topLevelPathway].targets[targetSymbol] = {
                                 symbol: targetSymbol
                             };
                             pathways[topLevelPathway].subPathways[p.value["pathway name"]].targets[targetSymbol] = {
-                                symbol: targetSymbol,
+                                symbol: targetSymbol
                             };
                         }
                     }
@@ -72,6 +73,8 @@ angular.module('cttvDirectives')
                 pathwaysArr.sort(function (a, b) {
                     return b.targets.length - a.targets.length;
                 });
+
+                scope.uniqueTargets = Object.keys(uniqueTargets).length;
                 scope.pathways = pathwaysArr;
             });
         }

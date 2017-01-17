@@ -63,17 +63,13 @@ angular.module('plugins', [])
                     // The component may not be able to display when the container is not visible, so we wait until it is
                     $q.all(loadedDeps)
                         .then(function () {
-                            $log.log("All deps have now been loaded...");
                             // remove the spinner
                             element[0].removeChild(spinnerDiv);
-                            $log.log("... removed spinner...");
                             // var spinner = document.getElementById("section-spinner-" + scope.label);
                             // spinner.parentNode.removeChild(spinner);
                             $timeout(function () {
                                 // var template = '<' + scope.plugin + " associations=" + (scope.associations ? ("associations") : '""') + " target=" + (scope.target ? ("target") : '""') + " disease=" + (scope.disease ? ("disease") : '""') + " width=" + sectionWidth + "></" + scope.plugin + ">";
                                 var template = "<" + scope.plugin + " associations=associations target=target disease=disease width=" + sectionWidth + "></" + scope.plugin + ">";
-                                $log.log("template... ");
-                                $log.log(template);
                                 var compiled = $compile(template)(scope);
                                 element.append(compiled);
                             }, 0);

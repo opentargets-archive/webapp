@@ -1,5 +1,5 @@
 <div class="section" ng-show="pathways">
-    <h3>Pathways for {{targets.length}} targets</h3>
+    <h3>Pathways found for {{uniqueTargets}} targets</h3>
     <div ng-repeat="pathway in pathways">
         <div class="row" style="font-size:18px;">
             <div class="col-sm-3" ng-click="showThese=!showThese" style="cursor:pointer">{{pathway.label}}</div>

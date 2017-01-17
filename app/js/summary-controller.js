@@ -47,9 +47,13 @@ angular.module('cttvControllers')
                                 "facets": true,
                                 "from": i,
                                 // "scorevalue_min": 1,
+                                // 'targets_enrichment': "simple",
                                 "size": step
                             }
                         };
+                        if (!i) {
+                            queryObject.params.targets_enrichment = 'simple';
+                        }
                         associationsPromises.push(cttvAPIservice.getAssociations(queryObject));
                     }
 
@@ -58,7 +62,8 @@ angular.module('cttvControllers')
                             // facets are the same for all of them...
                             var combined = {
                                 facets: resps[0].body.facets,
-                                therapeutic_areas: resps[0].body.therapeutic_areas
+                                therapeutic_areas: resps[0].body.therapeutic_areas,
+                                enrichment: resps[0].body.disease_enrichment
                             };
                             var all = [];
                             for (var i = 0; i < resps.length; i++) {

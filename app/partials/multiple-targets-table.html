@@ -1,16 +1,45 @@
-<div>
+<div style="margin-top:20px;">
+    <div>Therapeutic Areas:</div>
+    <!-- Pie charts for therapeutic areas -->
+    <!-- Therapeutic areas -->
+    <div class="container" style="margin-bottom:20px;">
+        <div class="row">
+            <div title="Filter table by {{ta.label}}" class="col-sm-2" ng-repeat="ta in therapeuticAreas | orderBy: '-value'" ng-show="selectedTA=='' || ta.label==selectedTA" ng-click="selectTA(ta)" style="border: 1px solid #dddddd; padding:10px; font-size:0.9em; cursor:pointer">
+                <div style="margin-bottom:10px;overflow-x:hidden">
+                    <text style="font-weight:bold; white-space:nowrap;">{{ta.label}}</text>
+                </div>
+                <i class="fa fa-filter" style="float:right; position:absolute; right:10px; top:10px;font-size:1.4em; color:#a7a39f; background-color:#ffffff"></i>
+                <!--<span style="cursor:pointer" ng-class="{'highlight-primary': ta.label == selectedTA}">{{ta.label}}: {{ta.value}} ({{ta.score}}) {{ta.selected}}</span>-->
+                <div style="float:right">
+                    <perc-piechart title="{{ta.value}} targets associated with {{ta.label}}" score="ta.score"></perc-piechart>
+                </div>
+                <div>
+                    {{ta.value}} targets
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div>-->
+        <!--<span ng-repeat="ta in therapeuticAreas | orderBy: '-value'" ng-click="selectTA(ta)"-->
+              <!--style="margin-right: 15px;">-->
+            <!--<span style="cursor:pointer" ng-class="{'highlight-primary': ta.label == selectedTA}">{{ta.label}}: {{ta.value}} ({{ta.score}}) {{ta.selected}}</span>-->
+            <!--<perc-piechart score="ta.score"></perc-piechart>-->
+        <!--</span>-->
+    <!--</div>-->
+
+    <!-- Table -->
     <div class="table-panel">
         <table class='table cttv-evidence-table' id="target-list-associated-diseases">
             <thead>
-                <tr>
-                    <th>Disease</th>
-                    <th>Targets associated</th>
-                    <!-- <th>Sum score</th> -->
-                    <th>Targets associated</th>
-                    <th>Therapeutic Area</th>
-                </tr>
+            <tr>
+                <th>Disease</th>
+                <th>Targets associated</th>
+                <th>Enrichment</th>
+                <th>Targets associated</th>
+                <th>Therapeutic Area</th>
+                <th>Targets</th>
+            </tr>
             </thead>
-
             <tbody>
             </tbody>
         </table>

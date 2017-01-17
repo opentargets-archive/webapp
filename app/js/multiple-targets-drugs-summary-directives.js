@@ -7,7 +7,7 @@ angular.module('cttvDirectives')
         restrict: 'E',
         template: '' +
         '<div ng-show="drugs">' +
-        '    <h3>Drugs for {{targets.length}} targets</h3>' +
+        '    <h3>Drugs found for {{uniqueTargets}} targets</h3>' +
         '    <drug-summary ng-repeat="target in drugs" target="target"></drug>' +
         '</div>',
         scope: {
@@ -18,6 +18,9 @@ angular.module('cttvDirectives')
                 if (!scope.targets) {
                     return;
                 }
+
+                // The real number of targets for which we have drug data
+                var uniqueTargets = {};
 
                 var queryObject = {
                     method: 'POST',
@@ -44,6 +47,7 @@ angular.module('cttvDirectives')
                             var drug = ev.drug.molecule_name;
                             var id = ev.drug.id[0];
                             if (!drugs[target]) {
+                                uniqueTargets[target] = true;
                                 drugs[target] = {
                                     target: target,
                                     drugs: []
@@ -58,6 +62,7 @@ angular.module('cttvDirectives')
                         for (var j=0; j<drugsArr.length; j++) {
                             drugsArr[j].drugs = _.values(drugsArr[j].drugs);
                         }
+                        scope.uniqueTargets = Object.keys(uniqueTargets).length;
                         scope.drugs = drugsArr;
                     });
 

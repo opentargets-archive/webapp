@@ -13,12 +13,6 @@ angular.module('cttvDirectives')
         },
         link: function (scope, element, attrs) {
             scope.$watchGroup(['target', 'associations'], function () {
-                $log.log("in Interactions Summary!!!");
-                console.log("target...");
-                console.log(scope.target);
-                console.log("associations...");
-                console.log(scope.associations);
-
                 if (!scope.target || !scope.associations) {
                     return;
                 }
@@ -98,8 +92,6 @@ angular.module('cttvDirectives')
                         for (var k1=0; k1<tas.length; k1++) {
                             var ta = tas[k1];
                             var targets = Object.keys(indexByTas[ta]);
-                            $log.log("targets");
-                            $log.log(targets);
                             for (var m=0; m<targets.length-1; m++) {
                                 var t1 = targets[m];
                                 for (var n=m+1; n<targets.length; n++) {
