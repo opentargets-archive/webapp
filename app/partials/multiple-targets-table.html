@@ -14,7 +14,7 @@
                     <perc-piechart title="{{ta.value}} targets associated with {{ta.label}}" score="ta.score"></perc-piechart>
                 </div>
                 <div>
-                    {{ta.value}} targets
+                    {{ta.value}} <span>{{ta.value != 1 ? "targets" : "target"}}</span>
                 </div>
             </div>
         </div>

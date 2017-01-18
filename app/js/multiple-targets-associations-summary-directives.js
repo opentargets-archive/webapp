@@ -101,10 +101,6 @@ angular.module('cttvDirectives')
     }
 
     function formatDiseaseDataToArray (diseases, targets) {
-        $log.log("diseases...");
-        $log.log(diseases);
-        $log.log("targets...");
-        $log.log(targets);
         var data = [];
         var diseaseArray = _.values(diseases); // Object.values is not supported in IE
         // diseaseArray.sort(function (a, b) {
@@ -152,6 +148,9 @@ angular.module('cttvDirectives')
                 if (t) {
                     url += '<a href=/evidence/' + t.id + '/' + d.id + '>' + t.target + '</a> ';
                 }
+            }
+            if (targetsAssoc.length > 5) {
+                url += "...";
             }
             // row.push(_.take(_.map(targetsAssoc, 'target'), 5).join(", "));
             row.push(url);
