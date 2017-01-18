@@ -103,8 +103,7 @@ angular.module('cttvControllers')
             setView( new_state[stateId] );
         }
 
-    }
-
+    };
 
 
     /*
@@ -143,6 +142,18 @@ angular.module('cttvControllers')
                     // Update the facets
                     cttvFiltersService.updateFacets(resp.body.facets, cttvConsts.UNIQUE_DISEASE_COUNT );
                     //$scope.updateFacets(resp.body.facets);
+                } else {
+                    // Check if there is a profile page
+                    var profileOpts = {
+                        method: 'GET',
+                        params: {
+                            target_id: $scope.search.query
+                        }
+                    };
+                    cttvAPIservice.getTarget(profileOpts)
+                        .then (function (profileResp) {
+                            $scope.search.label = profileResp.body.approved_symbol;
+                        })
                 }
             },
             cttvAPIservice.defaultErrorHandler);

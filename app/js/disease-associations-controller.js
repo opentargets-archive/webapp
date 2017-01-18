@@ -112,22 +112,32 @@ angular.module('cttvControllers')
 
         cttvAPIservice.getAssociations(queryObject)
         .then(function(resp) {
-            //$log.log("disease-associations-controller:getAssociations:resp", resp);
-            // 1: set the facets
-            // we must do this first, so we know which datatypes etc we actually have
-            //TODO Change this to POST request
-            cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
-
-
-            // The label of the diseases in the header
-            $scope.search.label = resp.body.data[0].disease.efo_info.label;
-
-            // The filename to download
-            $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(" ").join("_");
-
             // set the total?
             $scope.search.total = resp.body.total; //resp.body.total;
 
+            if (resp.body.total) {
+                //TODO Change this to POST request
+                cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
+
+                // The label of the diseases in the header
+                $scope.search.label = resp.body.data[0].disease.efo_info.label;
+
+                // The filename to download
+                $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(" ").join("_");
+            } else {
+                // Check if there is a profile page
+                var profileOpts = {
+                    method: 'GET',
+                    params: {
+                        code: $scope.search.query
+                        // TODO: include fields here once they are available in the profile endpoint
+                    }
+                };
+                cttvAPIservice.getDisease(profileOpts)
+                    .then (function (profileResp) {
+                        $scope.search.label = profileResp.body.label;
+                    });
+            }
         }, cttvAPIservice.defaultErrorHandler);
 
 

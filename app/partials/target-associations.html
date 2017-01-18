@@ -5,8 +5,13 @@
 
     <div ng-show="search.total==0">
         <div class="container">
-            <h3 view-title>No diseases found for {{search.query}}</h3>
-            Try searching a different target or disease above
+            <h3 view-title>No diseases found for {{search.label || search.query}}</h3>
+            <p ng-show="!search.label">
+                Try searching a different target or disease above
+            </p>
+            <p ng-show="search.label" style="margin-top:10px">
+                Find more information about <span style="font-weight:bold">{{search.label}}</span> in its <a href="/target/{{search.query}}">Profile page</a>
+            </p>
         </div>
     </div>
 
