@@ -1,0 +1,32 @@
+<h2>
+    Summary page for drug {{displayName}}
+</h2>
+<div class="section">
+    <h3>Description of {{displayName}}</h3>
+</div>
+
+<div class="section">
+    <h3>Drug diagram</h3>
+    <img id="drugDiagramContainer" width="400" height="400" src=""></img>
+</div>
+<div>
+    <h3>General properties</h3>
+    <div class="drug-property">
+        <ul>
+            <li><b>Name</b>: {{displayName}}</li>
+            <li style="margin-top:8px;"><b>Molecule type</b>: {{mol_type}}</li>
+            <li style="margin-top:8px;"><b>Mechanism of action</b>: {{mechanism}}</li>
+            <li style="margin-top:8px;"><b>First approval</b>: {{first_approval}}</li>
+            <li style="margin-top:8px;"><b>Max phase</b>: {{max_phase}}</li>
+            <li style="margin-top:8px;"><b>Molecular formula</b>: {{formula}}</li>
+        </ul>
+    </div>
+</div>
+<div class="section">
+    <h3>External links</h3>
+    <ul>
+        <li>
+            <a href="https://www.ebi.ac.uk/chembl/compound/inspect/{{drug}}">Chembl information page for {{drug}}</a>
+        </li>
+    </ul>
+</div>

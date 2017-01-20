@@ -15,77 +15,77 @@ angular.module('cttvDirectives')
     };
 }])
 
-.directive ('multipleTargetsTas', ['$log', function ($log) {
-    'use strict';
-
-    return {
-        restrict: 'E',
-        scope: {
-            associations: '=',
-            targets: '='
-        },
-        templateUrl: "partials/multiple-targets-tas.html",
-        link: function (scope, el, attrs) {
-            scope.$watch('associations', function () {
-                if (!scope.associations) {
-                    return;
-                }
-
-                scope.targetsAssociationsLink = scope.targets.map(function (t) {
-                    return "target:"+t;
-                }).join(',');
-
-                var therapeuticAreas = scope.associations.facets.therapeutic_area.buckets;
-                var tas = {};
-                for (var j=0; j<therapeuticAreas.length; j++) {
-                    tas[therapeuticAreas[j].label] = {
-                        label: therapeuticAreas[j].label,
-                        value: therapeuticAreas[j].unique_target_count.value,
-                        diseases: {},
-                        score: ~~(100 * therapeuticAreas[j].unique_target_count.value / scope.targets.length)
-                    };
-                }
-                for (var i=0; i<scope.associations.data.length; i++) {
-                    var association = scope.associations.data[i];
-                    var target = association.target.gene_info.symbol;
-                    var diseaseLabel = association.disease.efo_info.label;
-                    var diseaseId = association.disease.id;
-                    var tasForThisDisease = association.disease.efo_info.therapeutic_area.labels;
-                    for (var k=0; k<tasForThisDisease.length; k++) {
-                        // this check shoudn't be needed, but the api treats different "other diseases" in the facets and in the data
-                        // "other diseases" vs "other"
-                        if (tas[tasForThisDisease[k]]) {
-                            if (!tas[tasForThisDisease[k]].diseases[diseaseLabel]) {
-                                tas[tasForThisDisease[k]].diseases[diseaseLabel] = {
-                                    id: diseaseId,
-                                    label: diseaseLabel,
-                                    value: 0,
-                                    targets: []
-                                };
-                            }
-                            tas[tasForThisDisease[k]].diseases[diseaseLabel].value++;
-                            tas[tasForThisDisease[k]].diseases[diseaseLabel].score = 100 * tas[tasForThisDisease[k]].diseases[diseaseLabel].value / scope.targets.length;
-                            tas[tasForThisDisease[k]].diseases[diseaseLabel].targets.push(target);
-                        }
-                    }
-                }
-                // sort tas by number of targets (value);
-                var tasArr = _.values(tas);
-                tasArr.sort(function (a, b) {
-                    return b.value - a.value;
-                });
-                for (var z=0; z<tasArr.length; z++) {
-                    var diseasesArr = _.values(tasArr[z].diseases);
-                    diseasesArr.sort (function (a, b) {
-                        return b.value - a.value;
-                    });
-                    tasArr[z].diseases = diseasesArr;
-                }
-                scope.therapeuticAreas = tasArr;
-            });
-        }
-    };
-}])
+// .directive ('multipleTargetsTas', ['$log', function ($log) {
+//     'use strict';
+//
+//     return {
+//         restrict: 'E',
+//         scope: {
+//             associations: '=',
+//             targets: '='
+//         },
+//         templateUrl: "partials/multiple-targets-tas.html",
+//         link: function (scope, el, attrs) {
+//             scope.$watch('associations', function () {
+//                 if (!scope.associations) {
+//                     return;
+//                 }
+//
+//                 scope.targetsAssociationsLink = scope.targets.map(function (t) {
+//                     return "target:"+t;
+//                 }).join(',');
+//
+//                 var therapeuticAreas = scope.associations.facets.therapeutic_area.buckets;
+//                 var tas = {};
+//                 for (var j=0; j<therapeuticAreas.length; j++) {
+//                     tas[therapeuticAreas[j].label] = {
+//                         label: therapeuticAreas[j].label,
+//                         value: therapeuticAreas[j].unique_target_count.value,
+//                         diseases: {},
+//                         score: ~~(100 * therapeuticAreas[j].unique_target_count.value / scope.targets.length)
+//                     };
+//                 }
+//                 for (var i=0; i<scope.associations.data.length; i++) {
+//                     var association = scope.associations.data[i];
+//                     var target = association.target.gene_info.symbol;
+//                     var diseaseLabel = association.disease.efo_info.label;
+//                     var diseaseId = association.disease.id;
+//                     var tasForThisDisease = association.disease.efo_info.therapeutic_area.labels;
+//                     for (var k=0; k<tasForThisDisease.length; k++) {
+//                         // this check shoudn't be needed, but the api treats different "other diseases" in the facets and in the data
+//                         // "other diseases" vs "other"
+//                         if (tas[tasForThisDisease[k]]) {
+//                             if (!tas[tasForThisDisease[k]].diseases[diseaseLabel]) {
+//                                 tas[tasForThisDisease[k]].diseases[diseaseLabel] = {
+//                                     id: diseaseId,
+//                                     label: diseaseLabel,
+//                                     value: 0,
+//                                     targets: []
+//                                 };
+//                             }
+//                             tas[tasForThisDisease[k]].diseases[diseaseLabel].value++;
+//                             tas[tasForThisDisease[k]].diseases[diseaseLabel].score = 100 * tas[tasForThisDisease[k]].diseases[diseaseLabel].value / scope.targets.length;
+//                             tas[tasForThisDisease[k]].diseases[diseaseLabel].targets.push(target);
+//                         }
+//                     }
+//                 }
+//                 // sort tas by number of targets (value);
+//                 var tasArr = _.values(tas);
+//                 tasArr.sort(function (a, b) {
+//                     return b.value - a.value;
+//                 });
+//                 for (var z=0; z<tasArr.length; z++) {
+//                     var diseasesArr = _.values(tasArr[z].diseases);
+//                     diseasesArr.sort (function (a, b) {
+//                         return b.value - a.value;
+//                     });
+//                     tasArr[z].diseases = diseasesArr;
+//                 }
+//                 scope.therapeuticAreas = tasArr;
+//             });
+//         }
+//     };
+// }])
 
 .directive('multipleTargetsTable', ['$log', 'cttvUtils', function ($log, cttvUtils) {
     'use strict';
@@ -286,43 +286,43 @@ angular.module('cttvDirectives')
         }
     };
 }])
-.directive('multipleTargetsBubbles', ['$log', 'cttvUtils', '$q', function ($log, cttvUtils, $q) {
-    'use strict';
-
-    return {
-        restrict: 'E',
-        templateUrl: "",
-        scope: {
-            targets: '=',
-            associations: '='
-        },
-        link: function (scope, el, attrs) {
-            // TODO: We are passing the "targets" to the expansionView
-            // but we already have the associations that can be passed (and avoid the extra call to the api)
-            scope.$watch('associations', function () {
-                if (!scope.associations) {
-                    return;
-                }
-
-                var container = document.createElement("div");
-                el[0].appendChild(container);
-
-                var dataPromise = $q(function (resolve) {
-                    resolve({
-                        "body": scope.associations
-                    });
-                });
-
-                var targetListAssocBubbles = expansionView()
-                    .data(dataPromise);
-                    // .targets(scope.targets);
-                targetListAssocBubbles (container);
-
-            });
-
-        }
-    };
-}])
+// .directive('multipleTargetsBubbles', ['$log', 'cttvUtils', '$q', function ($log, cttvUtils, $q) {
+//     'use strict';
+//
+//     return {
+//         restrict: 'E',
+//         templateUrl: "",
+//         scope: {
+//             targets: '=',
+//             associations: '='
+//         },
+//         link: function (scope, el, attrs) {
+//             // TODO: We are passing the "targets" to the expansionView
+//             // but we already have the associations that can be passed (and avoid the extra call to the api)
+//             scope.$watch('associations', function () {
+//                 if (!scope.associations) {
+//                     return;
+//                 }
+//
+//                 var container = document.createElement("div");
+//                 el[0].appendChild(container);
+//
+//                 var dataPromise = $q(function (resolve) {
+//                     resolve({
+//                         "body": scope.associations
+//                     });
+//                 });
+//
+//                 var targetListAssocBubbles = expansionView()
+//                     .data(dataPromise);
+//                     // .targets(scope.targets);
+//                 targetListAssocBubbles (container);
+//
+//             });
+//
+//         }
+//     };
+// }])
 
 .directive ('percPiechart', ['$log', '$timeout', function ($log, $timeout) {
     'use strict';

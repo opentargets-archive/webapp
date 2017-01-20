@@ -2,9 +2,10 @@
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
     <div class="container">
-        <h2>Summary page for {{targets.length}} targets</h2>
 
         <div ng-show="targets">
+            <h2>Summary page for {{targets.length}} targets</h2>
+
             <!--We have several targets: {{targets}}-->
 
             <!-- Associations section -->
@@ -44,8 +45,18 @@
         </div>
 
         <div ng-show="pathway">
-            We have 1 pathway: {{pathway}}
+            <!--<h2>Summary page for {{pathway}}</h2>-->
+
+            <!--We have 1 pathway: {{pathway}}-->
             <pathway-summary pathway="pathway" targets="pathwayTargets"></pathway-summary>
         </div>
+
+        <div ng-show="drug">
+            <!--<h2>Summary page for {{drug}}</h2>-->
+
+            <!--We have 1 drug: {{drug}}-->
+            <my-drug-summary drug="drug"></my-drug-summary>
+        </div>
+
     </div>
 </div>

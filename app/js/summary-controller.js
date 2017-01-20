@@ -157,6 +157,8 @@ angular.module('cttvControllers')
         }
 
         // drugs / drug
+        $log.log("search...");
+        $log.log(search);
         if (search.drug) {
             if (angular.isArray(search.drug)) {
                 $scope.drugs = search.drug;
