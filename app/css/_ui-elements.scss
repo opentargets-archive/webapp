@@ -16,9 +16,9 @@
     /*
      * The menu bar of the lite mol widget needs to be shown on top of the masthead
      */
-     pdb-lite-mol .lm-plugin {
-         z-index: 10000;
-     }
+     //pdb-lite-mol .lm-plugin {
+     //    z-index: 10000;
+     //}
 
     /*
      * The PDB widget CSS styling
@@ -499,6 +499,14 @@
         margin-top: 10px;
     }
 
+
+    /*
+    * Summary section
+     */
+    .summary-section-header {
+        padding: 0.5em;
+        background-color: $clr-ui-border;
+    }
 
 
     /*

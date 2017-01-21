@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-.directive('myDrugSummary', ['$log', '$http', function ($log, $http) {
+.directive('myDrugSummary', ['$log', '$http', '$q', function ($log, $http, $q) {
     'use strict';
 
     function pngToDataUrl(url, callback, outputFormat) {
@@ -26,7 +26,7 @@ angular.module('cttvDirectives')
             drug: "="
         },
         link: function (scope, el, attrs) {
-            scope.$watch ('drug', function () {
+            scope.$watch('drug', function () {
                 if (!scope.drug) {
                     return;
                 }
@@ -38,8 +38,7 @@ angular.module('cttvDirectives')
 
                 // Get the information for the drug...
                 $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule/' + scope.drug)
-                    .then (function (resp) {
-                        $log.log(resp);
+                    .then(function (resp) {
                         scope.displayName = resp.data.pref_name || resp.data.molecule_chembl_id;
                         scope.mechanism = resp.data.usan_stem_definition || 'NA';
                         scope.mol_type = resp.data.molecule_type || 'NA';
@@ -48,6 +47,57 @@ angular.module('cttvDirectives')
                         scope.formula = resp.data.molecule_properties.full_molformula || 'NA';
                     });
 
+                // Get the mechanism of action...
+                $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule_form/' + scope.drug)
+                    .then(function (resp) {
+                        var molForms = {};
+                        for (var i = 0; i < resp.data.molecule_forms.length; i++) {
+                            var form = resp.data.molecule_forms[i];
+                            molForms[form.molecule_chembl_id] = true;
+                            molForms[form.parent_chembl_id] = true;
+                        }
+                        var promises = [];
+                        Object.keys(molForms).forEach(function (mol) {
+                            promises.push($http.get('https://www.ebi.ac.uk/chembl/api/data/mechanism?molecule_chembl_id=' + mol));
+                        });
+                        $q.all(promises)
+                            .then(function (resps) {
+                                var allMecs = [];
+                                scope.mechanisms = allMecs;
+                                for (var i=0; i<resps.length; i++) {
+                                   var mecs = resps[i].data.mechanisms;
+                                   for (var j=0; j<mecs.length; j++) {
+                                       var mec = mecs[j].mechanism_of_action;
+                                       var target = mecs[j].target_chembl_id;
+                                       var refs = mecs[j].mechanism_refs;
+                                       $http.get('https://www.ebi.ac.uk/chembl/api/data/target?target_chembl_id=' + target)
+                                           .then (function (resp) {
+                                               var targetNames = [];
+                                               for (var i=0; i<resp.data.targets.length; i++) {
+                                                   var target = resp.data.targets[i];
+                                                   var uniqSyns = {};
+                                                   for (var j=0; j<target.target_components.length; j++) {
+                                                       var component = target.target_components[j];
+                                                       for (var k=0; k<component.target_component_synonyms.length; k++) {
+                                                           var synonym = component.target_component_synonyms[k];
+                                                           if (synonym.syn_type === 'GENE_SYMBOL') {
+                                                               uniqSyns[synonym.component_synonym] = true;
+                                                           }
+                                                       }
+                                                   }
+                                                   targetNames.push(target.pref_name);
+                                                   allMecs.push({
+                                                       mechanism: mec,
+                                                       targets: targetNames.join(', '),
+                                                       synonyms: Object.keys(uniqSyns).join(', '),
+                                                       refs: refs
+                                                   });
+                                               }
+                                           });
+                                   }
+                                }
+                            });
+                    });
             })
         }
     };

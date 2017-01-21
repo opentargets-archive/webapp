@@ -30,11 +30,6 @@ angular.module('cttvDirectives')
 
     return {
         restrict: 'E',
-        // template: '' +
-        // '<div ng-show="drugs">' +
-        // '    <h3>Drugs found for {{uniqueTargets}} targets</h3>' +
-        // '    <drug-summary ng-repeat="target in drugs" target="target"></drug>' +
-        // '</div>',
         templateUrl: 'partials/multiple-targets-drugs.html',
         scope: {
             targets: '='
