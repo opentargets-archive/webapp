@@ -1,12 +1,16 @@
 <div class="section">
-    <h3>Description of the {{displayName}}</h3>
+    <h2>Summary page for pathway {{displayName}}</h2>
     <hm-read-more  hm-text="{{description}}" hm-limit="500" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
     <!-- <p>{{description}}</p> -->
 </div>
 <div class="section">
-    <h3>Pathway diagram</h3>
+    <h3 class="summary-section-header">Pathway diagram</h3>
     <div ng-show="targets">
-        <p>Flag in diagram: <span ng-repeat="target in targets" ng-click="flagTarget(target)" style="cursor:pointer;margin-left: 10px"><i class="cttv-drug">{{target}}</i></span></p>
+        <p>Flag in diagram:
+            <span ng-repeat="target in targets" ng-click="flagTarget(target)" style="cursor:pointer;margin-left:10px">
+                <i class="cttv-drug" ng-style="{'border': flagged==target ? '2px solid purple' : '0px'}">{{target}}</i>
+            </span>
+        </p>
 
     </div>
     <div>
@@ -14,7 +18,7 @@
     </div>
 </div>
 <div class="section">
-    <h3>External links</h3>
+    <h3 class="summary-section-header">External links</h3>
     <ul>
         <li><a target=_blank href="http://www.reactome.org/content/detail/{{pathway}}">Reactome information page for {{pathway}}</a></li>
     </ul>

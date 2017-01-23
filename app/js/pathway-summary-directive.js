@@ -33,16 +33,22 @@ angular.module('cttvDirectives')
                         "proxyPrefix" : "/proxy/www.reactome.org",
                         "placeHolder": "pathwayDiagramContainer",
                         "width": w,
-                        "height": h,
+                        "height": h
                     });
                     scope.flagTarget = function (target) {
-                        pathwayDiagram.flagItems(target);
+                        if (scope.flagged === target) {
+                            scope.flagged = undefined;
+                            pathwayDiagram.resetFlaggedItems();
+                        } else {
+                            scope.flagged = target;
+                            pathwayDiagram.flagItems(target);
+                        }
                     };
 
                     pathwayDiagram.onDiagramLoaded(function () {
                         if (scope.targets && scope.targets.length) {
                             var target = scope.targets[0];
-                            scope.flagTarget(target);
+                            // scope.flagTarget(target);
                         }
                     });
                     pathwayDiagram.loadDiagram(pId);

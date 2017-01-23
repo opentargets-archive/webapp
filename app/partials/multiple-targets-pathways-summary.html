@@ -1,10 +1,21 @@
-
 <div class="section" ng-show="pathways">
-    <h3>Pathways found for {{uniqueTargets}} targets</h3>
+    <h3 class="summary-section-header">Pathways found for {{uniqueTargets}} targets</h3>
 
     <!-- table -->
     <div class="table-panel">
-        <table></table>
+        <table class='table cttv-evidence-table' id="target-list-pathways">
+            <thead>
+                <tr>
+                    <th>Pathway</th>
+                    <th>Targets associated</th>
+                    <th>Enrichment</th>
+                    <th>Targets associated</th>
+                    <th>Targets</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 
     <div ng-repeat="pathway in pathways">

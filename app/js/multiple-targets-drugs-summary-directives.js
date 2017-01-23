@@ -4,8 +4,6 @@ angular.module('cttvDirectives')
     'use strict';
 
     function formatDrugDataToArray (drugs) {
-        $log.log("drugs to format in table...");
-        $log.log(drugs);
         var data = [];
         for (var i=0; i<drugs.length; i++) {
             var drug = drugs[i];
@@ -61,8 +59,6 @@ angular.module('cttvDirectives')
                 };
                 cttvAPIservice.getFilterBy(queryObject)
                     .then (function (resp) {
-                        $log.log("drugs response...");
-                        $log.log(resp);
                         var drugs = {};
                         for (var i=0; i<resp.body.data.length; i++) {
                             var ev = resp.body.data[i];
@@ -81,9 +77,9 @@ angular.module('cttvDirectives')
                                     molType: molType
                                 };
                             } else {
-                                $log.log("duplicated drug...");
-                                $log.log(drugs[drug]);
-                                $log.log(ev);
+                                // $log.log("duplicated drug...");
+                                // $log.log(drugs[drug]);
+                                // $log.log(ev);
                             }
                             // drugs[target].drugs[drug] = {
                             //     name: drug,
@@ -91,7 +87,6 @@ angular.module('cttvDirectives')
                             // };
                         }
                         var drugsArr = _.values(drugs);
-                        $log.log(drugsArr);
                         // for (var j=0; j<drugsArr.length; j++) {
                         //     drugsArr[j].drugs = _.values(drugsArr[j].drugs);
                         // }
