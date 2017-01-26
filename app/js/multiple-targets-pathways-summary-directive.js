@@ -9,7 +9,7 @@ angular.module('cttvDirectives')
             var p = pathways[i];
             var row = [];
 
-            var pId = p.dbId;
+            var pId = p.stId;
             var targets = targets4pathways[pId].map(function (t) {return t.id});
 
             // 1. Pathway name
@@ -107,41 +107,42 @@ angular.module('cttvDirectives')
 
                 // Get enrichment analysis from reactome
                 // http://www.reactome.org/AnalysisService/identifiers/projection/\?pageSize\=1\&page\=1 POST
-                var url = '/proxy/www.reactome.org/AnalysisService/identifiers/projection?pageSize=10&page=1';
+                var preFlightUrl = '/proxy/www.reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
                 var postData = Object.keys(uniqueTargets).join('\n');
-                $http.post(url, postData)
+                $http.post(preFlightUrl, postData)
                     .then (function (resp) {
-                        $log.log('enrichment analysis response...');
-                        $log.log(resp);
-                        var token = resp.data.summary.token;
-                        var ps = [];
-                        for (var i=0; i<resp.data.pathways.length; i++) {
-                            var pathw = resp.data.pathways[i];
-                            var url2 = '/proxy/www.reactome.org/AnalysisService/token/' + token + '/found/all/' + pathw.dbId;
-                            ps.push($http.get(url2));
-                        }
-                        $q.all(ps)
-                            .then(function (targetPathways) {
-                                $log.log("targets in pathways...");
-                                $log.log(targetPathways);
-                                var targets4pathways = {};
-                                for (var i=0; i<targetPathways.length; i++) {
-                                    var pId = targetPathways[i].config.url.split('/').pop();
-                                    targets4pathways[pId] = targetPathways[i].data.entities;
-                                }
-
-                                // table
-                                $('#target-list-pathways').DataTable(cttvUtils.setTableToolsParams({
-                                    "data": formatPathwayDataToArray(resp.data.pathways, targets4pathways),
-                                    "ordering": true,
-                                    "order": [[2, "asc"]],
-                                    "autoWidth": false,
-                                    "paging": true,
-                                    "columnDefs": []
-                                }, scope.targets.length + "-targets-pathways"));
+                        return resp.data;
+                    })
+                    .then (function (data) {
+                        var token = data.summary.token;
+                        var nPathways = data.pathwaysFound;
+                        var url = '/proxy/www.reactome.org/AnalysisService/token/' + token + '?pageSize=' + nPathways + '&page=1&resource=UNIPROT';
+                        $http.get(url)
+                            .then (function (resp) {
+                                var token = resp.data.summary.token;
+                                var url2 = '/proxy/www.reactome.org/AnalysisService/token/' + token + '/found/all';
+                                var postData2 = resp.data.pathways.map(function (d) {
+                                    return d.stId;
+                                }).join(",");
+                                $http.post(url2, postData2)
+                                    .then (function (targetPathways) {
+                                        var targets4pathways = {};
+                                        for (var i=0; i<targetPathways.data.length; i++) {
+                                            var pId = targetPathways.data[i].pathway;
+                                            targets4pathways[pId] = targetPathways.data[i].entities;
+                                        }
+                                        // table
+                                        $('#target-list-pathways').DataTable(cttvUtils.setTableToolsParams({
+                                            "data": formatPathwayDataToArray(resp.data.pathways, targets4pathways),
+                                            "ordering": true,
+                                            "order": [[2, "asc"]],
+                                            "autoWidth": false,
+                                            "paging": true,
+                                            "columnDefs": []
+                                        }, scope.targets.length + "-targets-pathways"));
+                                    });
                             });
                     });
-
 
                 scope.uniqueTargets = Object.keys(uniqueTargets).length;
                 scope.pathways = pathwaysArr;

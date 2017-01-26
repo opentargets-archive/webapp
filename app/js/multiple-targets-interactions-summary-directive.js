@@ -35,107 +35,225 @@ angular.module('cttvDirectives')
                     }
                 });
 
-                // Get all the data...
-                var url = "/proxy/www.omnipathdb.org/interactions/" + uniprotIds.join(',') + '?format=json&fields=sources';
-                $http.get(url)
+                // Get Pathways data from Reactome
+                // Get enrichment analysis from reactome
+                // http://www.reactome.org/AnalysisService/identifiers/projection/\?pageSize\=1\&page\=1 POST
+                var preFlightUrl = '/proxy/www.reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
+                var postData = uniprotIds.join('\n');
+                // var postData = Object.keys(uniqueTargets).join('\n');
+                $http.post(preFlightUrl, postData)
                     .then (function (resp) {
-                        for (var i=0; i<resp.data.length; i++) {
-                            var link = resp.data[i];
-                            var source = mapNames[link.source];
-                            var target = mapNames[link.target];
-                            var provenances = link.sources;
+                        $log.log('enrichment analysis response in interactions section...');
+                        $log.log(resp);
+                        return resp.data;
+                    })
+                    .then (function (data) {
+                        var token = data.summary.token;
+                        var nPathways = data.pathwaysFound;
+                        var url = '/proxy/www.reactome.org/AnalysisService/token/' + token + '?pageSize=' + nPathways + '&page=1&resource=UNIPROT';
+                        $http.get(url)
+                            .then (function (resp) {
+                                var token = resp.data.summary.token;
+                                var url2 = '/proxy/www.reactome.org/AnalysisService/token/' + token + '/found/all';
+                                var postData2 = resp.data.pathways.map(function (d) {
+                                    return d.stId;
+                                }).join(",");
+                                $http.post(url2, postData2)
+                                    .then (function (targetPathways) {
+                                        var targets4pathways = {};
+                                        for (var k=0; k<targetPathways.data.length; k++) {
+                                            var pId = targetPathways.data[k].pathway;
+                                            targets4pathways[pId] = targetPathways.data[k].entities;
+                                        }
+                                        // table
+                                        // var iv_pathways = {};
+                                        for (var pName in targets4pathways) {
+                                            if (!targets4pathways.hasOwnProperty(pName)) {
+                                                continue;
+                                            }
+                                            var p = targets4pathways[pName];
+                                            if (p.length < 2) {
+                                                continue;
+                                            }
+                                            for (var i=0; i<p.length; i++) {
+                                                var i1 = mapNames[p[i].id];
+                                                for (var j=1; j<p.length; j++) {
+                                                    var i2 = mapNames[p[j].id];
+                                                    if (i1 === i2) {
+                                                        continue;
+                                                    }
 
-                            if (source && target) {
-                                if (!interactors[source].interactsWith[target]) {
-                                    interactors[source].interactsWith[target] = {
-                                        label: target,
-                                        provenance: []
-                                    };
-                                    // interactors[source].interactsWith.push(target);
-                                }
-                                if (!interactors[target].interactsWith[source]) {
-                                    interactors[target].interactsWith[source] = {
-                                        label: source,
-                                        provenance: []
-                                    };
-                                    // interactors[target].interactsWith.push(source);
-                                }
+                                                    if (!interactors[i1]) {
+                                                        interactors[i1] = {
+                                                            label: i1,
+                                                            interactsWith: {}
+                                                        }
+                                                    }
+                                                    if (!interactors[i2]) {
+                                                        interactors[i2] = {
+                                                            label: i2,
+                                                            interactsWith: {}
+                                                        }
+                                                    }
+                                                    if (!interactors[i1].interactsWith[i2]) {
+                                                        interactors[i1].interactsWith[i2] = {
+                                                            label: i2,
+                                                            provenance: []
+                                                        }
+                                                    }
+                                                    if (!interactors[i2].interactsWith[i1]) {
+                                                        interactors[i2].interactsWith[i1] = {
+                                                            label: i1,
+                                                            provenance: []
+                                                        }
+                                                    }
+                                                    interactors[i1].interactsWith[i2].provenance.push(pName);
+                                                }
+                                            }
+                                        }
 
-                                provenances.forEach(function (provenance) {
-                                    if (_.indexOf(interactors[source].interactsWith[target].provenance, provenance) === -1) {
-                                        interactors[source].interactsWith[target].provenance.push(provenance);
-                                    }
-                                    if (_.indexOf(interactors[target].interactsWith[source].provenance, provenance) === -1) {
-                                        interactors[target].interactsWith[source].provenance.push(provenance);
-                                    }
+                                        var interactorsArr = Object.values(interactors);
+
+                                        // Tooltips
+                                        var hover_tooltip;
+
+                                        function mouseoverTooltip(d) {
+                                            var obj = {};
+                                            obj.header = "";
+                                            obj.body = d.label + " (" + Object.keys(d.interactsWith).length + " interactors)";
+                                            hover_tooltip = tooltip.plain()
+                                                .width(180)
+                                                .show_closer(false)
+                                                .id(2)
+                                                .call(this, obj);
+                                        }
+                                        var iv = interactionsViewer()
+                                            .data(interactorsArr)
+                                            .size(600)
+                                            .labelSize(90)
+                                            .on("click", function (d) {
+                                                console.log("clicked on node...", d);
+                                            })
+                                            .on("mouseout", function () {
+                                                hover_tooltip.close();
+                                            })
+                                            .on("mouseover", mouseoverTooltip)
+                                            .on("interaction", function (interactors) {
+                                                // Take the interactions between both:
+
+                                                const elem = this;
+                                                var obj = {};
+                                                // obj.header = iNames.join(" - ") + " interactions";
+                                                obj.header = interactors.interactor1 + " - " + interactors.interactor2 + " interaction";
+                                                obj.rows = [];
+                                                interactors.provenance.forEach(function (i) {
+                                                    obj.rows.push({
+                                                        "label": i,
+                                                        "value": ""
+                                                    });
+                                                });
+                                                tooltip.table()
+                                                    .width(180)
+                                                    .id(1)
+                                                    .call(elem, obj);
+                                            });
+                                        $timeout(function () {
+                                            scope.showSpinner = false;
+                                            iv(document.getElementById("interactionsViewerMultipleTargets"));
+                                        }, 0);
+
+                                    });
+                            });
+                    });
 
 
-                                })
-
-                            }
-                        }
+                // Get all the data...
+                // var url = "/proxy/www.omnipathdb.org/interactions/" + uniprotIds.join(',') + '?format=json&fields=sources';
+                // $http.get(url)
+                //     .then (function (resp) {
+                //         for (var i=0; i<resp.data.length; i++) {
+                //             var link = resp.data[i];
+                //             var source = mapNames[link.source];
+                //             var target = mapNames[link.target];
+                //             var provenances = link.sources;
+                //
+                //             if (source && target) {
+                //                 if (!interactors[source].interactsWith[target]) {
+                //                     interactors[source].interactsWith[target] = {
+                //                         label: target,
+                //                         provenance: []
+                //                     };
+                //                     // interactors[source].interactsWith.push(target);
+                //                 }
+                //                 if (!interactors[target].interactsWith[source]) {
+                //                     interactors[target].interactsWith[source] = {
+                //                         label: source,
+                //                         provenance: []
+                //                     };
+                //                     // interactors[target].interactsWith.push(source);
+                //                 }
+                //
+                //                 provenances.forEach(function (provenance) {
+                //                     if (_.indexOf(interactors[source].interactsWith[target].provenance, provenance) === -1) {
+                //                         interactors[source].interactsWith[target].provenance.push(provenance);
+                //                     }
+                //                     if (_.indexOf(interactors[target].interactsWith[source].provenance, provenance) === -1) {
+                //                         interactors[target].interactsWith[source].provenance.push(provenance);
+                //                     }
+                //
+                //
+                //                 })
+                //
+                //             }
+                //         }
 
                         // Parse therapeutic area information
-                        var indexByTas = {};
-                        for (var j=0; j<scope.associations.data.length; j++) {
-                            var assoc = scope.associations.data[j];
-                            var tas = assoc.disease.efo_info.therapeutic_area.labels;
-                            for (var k=0; k<tas.length; k++) {
-                                if (!indexByTas[tas[k]]) {
-                                    indexByTas[tas[k]] = {};
-                                }
-                                // indexByTas[tas[k]].push(assoc.target.gene_info.symbol);
-                                indexByTas[tas[k]][assoc.target.gene_info.symbol] = true;
-                            }
-                        }
-                        var tas = Object.keys(indexByTas);
-                        for (var k1=0; k1<tas.length; k1++) {
-                            var ta = tas[k1];
-                            var targets = Object.keys(indexByTas[ta]);
-                            for (var m=0; m<targets.length-1; m++) {
-                                var t1 = targets[m];
-                                for (var n=m+1; n<targets.length; n++) {
-                                    var t2 = targets[n];
-                                    // TODO: interactors has been indexed by target's approved symbol but this doesn't always correspond to the association's target symbol
-                                    if(!interactors[t1] || !interactors[t2]) {
-                                        continue;
-                                    }
-                                    if (!interactors[t1].interactsWith[t2]) {
-                                        interactors[t1].interactsWith[t2] = {
-                                            label: t2,
-                                            provenance: []
-                                        }
-                                    }
-                                    if (!interactors[t2].interactsWith[t1]) {
-                                        interactors[t2].interactsWith[t1] = {
-                                            label: t1,
-                                            provenance: []
-                                        }
-                                    }
-                                    interactors[t1].interactsWith[t2].provenance.push("therapeutic_area");
-                                }
-                            }
-                        }
+                        // var indexByTas = {};
+                        // for (var j=0; j<scope.associations.data.length; j++) {
+                        //     var assoc = scope.associations.data[j];
+                        //     var tas = assoc.disease.efo_info.therapeutic_area.labels;
+                        //     for (var k=0; k<tas.length; k++) {
+                        //         if (!indexByTas[tas[k]]) {
+                        //             indexByTas[tas[k]] = {};
+                        //         }
+                        //         // indexByTas[tas[k]].push(assoc.target.gene_info.symbol);
+                        //         indexByTas[tas[k]][assoc.target.gene_info.symbol] = true;
+                        //     }
+                        // }
+                        // var tas = Object.keys(indexByTas);
+                        // for (var k1=0; k1<tas.length; k1++) {
+                        //     var ta = tas[k1];
+                        //     var targets = Object.keys(indexByTas[ta]);
+                        //     for (var m=0; m<targets.length-1; m++) {
+                        //         var t1 = targets[m];
+                        //         for (var n=m+1; n<targets.length; n++) {
+                        //             var t2 = targets[n];
+                        //             // TODO: interactors has been indexed by target's approved symbol but this doesn't always correspond to the association's target symbol
+                        //             if(!interactors[t1] || !interactors[t2]) {
+                        //                 continue;
+                        //             }
+                        //             if (!interactors[t1].interactsWith[t2]) {
+                        //                 interactors[t1].interactsWith[t2] = {
+                        //                     label: t2,
+                        //                     provenance: []
+                        //                 }
+                        //             }
+                        //             if (!interactors[t2].interactsWith[t1]) {
+                        //                 interactors[t2].interactsWith[t1] = {
+                        //                     label: t1,
+                        //                     provenance: []
+                        //                 }
+                        //             }
+                        //             interactors[t1].interactsWith[t2].provenance.push("therapeutic_area");
+                        //         }
+                        //     }
+                        // }
 
-                        var interactorsArr = [];
-                        _.forEach(interactors, function (link, index) {
-                            link.label = index;
-                            interactorsArr.push(link);
-                        });
-
-                        var iv = interactionsViewer()
-                            .data(interactorsArr)
-                            .size(600)
-                            .labelSize(90)
-                            .on("click", function (d) {
-                                console.log("clicked on node...", d);
-                            });
-
-
-                        $timeout(function () {
-                            scope.showSpinner = false;
-                            iv(document.getElementById("interactionsViewerMultipleTargets"));
-                        }, 0);
+                        // var interactorsArr = [];
+                        // _.forEach(interactors, function (link, index) {
+                        //     link.label = index;
+                        //     interactorsArr.push(link);
+                        // });
 
 
 /*
@@ -176,7 +294,7 @@ angular.module('cttvDirectives')
 */
 
 
-                    })
+                    // })
             })
         }
     }
