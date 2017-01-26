@@ -11,7 +11,7 @@
     </div>
 
     <div class="container">
-        <div class"row" style="padding-bottom:20px; margin-bottom:20px">
+        <div class="row" style="padding-bottom:20px; margin-bottom:20px">
 
             <p>
                 <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
@@ -27,7 +27,7 @@
                         <span ng-click='section.currentVisibility = !section.currentVisibility'>{{section.heading}}</span>
                     </uib-accordion-heading>
                     <plugin-loader target="target" plugin="section.element" visible="{{section.currentVisibility}}" dependencies="section.dependencies" page="target" track="section.track" label="section.name" class="scroll-table-panel"></plugin-loader>
-                </div uib-accordion-group>
+                </div>
 
             </uib-accordion>
 

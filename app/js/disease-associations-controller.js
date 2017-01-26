@@ -107,7 +107,7 @@ angular.module('cttvControllers')
         });
         if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) || !new_state[facetsId] ){
             facetsPromise.then(function () {
-                return getFacets (new_state[facetsId]);
+                return $scope.getFacets (new_state[facetsId]);
             });
         }
 
@@ -143,13 +143,13 @@ angular.module('cttvControllers')
             $scope.targetList = "a list of targets";
 
             facetsPromise.then (function () {
-                return getFacets(new_state[facetsId]);
+                return $scope.getFacets(new_state[facetsId]);
             });
         } else {
             $scope.targets = [];
             $scope.targetList = [];
             facetsPromise.then (function () {
-                return getFacets(new_state[facetsId]);
+                return $scope.getFacets(new_state[facetsId]);
             });
         }
     };
