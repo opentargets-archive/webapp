@@ -7,7 +7,7 @@ angular.module('cttvDirectives')
  *   <cttv-filter-by-file-targets> </cttv-filter-by-file-targets>
  *
  */
-    .directive('cttvFilterByFileTargets', ['$log','cttvAPIservice', 'cttvFiltersService','$q',function($log, cttvAPIservice, cttvFiltersService, $q){
+    .directive('cttvFilterByFileTargets', ['$log','cttvAPIservice', 'cttvFiltersService','$q', '$analytics', function($log, cttvAPIservice, cttvFiltersService, $q, $analytics){
         'use strict';
 
         return {
@@ -101,6 +101,8 @@ angular.module('cttvDirectives')
                         scope.targetIdArray = new Array(scope.targetNameArray.length);
                         scope.targetNameIdDict = new Array(scope.targetNameArray.length);
 
+                        // analytics event
+                        $analytics.eventTrack('filterByTargetList', {"category": "filterByTargetList", "label": ("loaded " + scope.targetNameArray.length + " targets")})
 
                         //$log.log("UNIQUE NAMES:" + scope.targetNameArray );
                         //Choose either Async or Consecutive version for testing

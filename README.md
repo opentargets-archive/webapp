@@ -24,12 +24,14 @@ npm install -g gulp
 Tools are installed via NPM. To run the installer run
 ```
 npm install
+npm run setup
 ```
 
-This installs the required node modules and calls `bower install` which takes care of all Angular dependencies.
-So `npm install` creates two directories:
+This installs the required node modules and calls `bower install`  and `jspm install` which takes care of all Angular dependencies and 3rd party widgets.
+So these commands create three directories:
 * `node_modules` - npm packages for the needed tools (bower, http-server and modules for testing)
 * `app/bower_components` - all Angular code. Note that the `bower_components` folder would normally be installed in the root folder but we change this location through the `.bowerrc` for neater deployment.
+* `app/jspm_packages` - some of the packages needed for loading widgets on demand (deferred loading)
 
 Angular code is installed via Bower includes:
 * UI Bootstrap (Angular directives)
