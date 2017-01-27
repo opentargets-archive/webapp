@@ -155,15 +155,15 @@
             "element": "rna-baseline-expression",
             "heading": "RNA baseline expression",
             "dependencies": {
-                "https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js": {
+                "https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js": {
                     "format": "global"
                 },
-                "https://www.ebi.ac.uk/gxa/resources/css/jquery-ui-1.11.4.custom/css/jquery-ui.min.css!": {
+                "https://wwwdev.ebi.ac.uk/gxa/resources/css/jquery-ui-1.11.4.custom/css/jquery-ui.min.css!": {
                     "loader": "css"
                 },
-                "https://www.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
+                "https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
                     "format": "global",
-                    "deps": ["https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"]
+                    "deps": ["https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"]
                 }
             },
             "track": true

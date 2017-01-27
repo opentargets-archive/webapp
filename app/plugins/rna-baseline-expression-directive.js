@@ -17,11 +17,12 @@ angular.module('plugins')
                 $timeout(function () {
                     // Expression Atlas
                     expressionAtlasHeatmapHighcharts.render({
+                        // atlasHost: "https://wwwdev.ebi.ac.uk",
                         params: 'geneQuery=' + scope.target.symbol + "&species=homo%20sapiens",
                         isMultiExperiment: true,
                         target: "gxaWidget",
                         disableGoogleAnalytics: true,
-                        proxyPrefix: "/proxy"
+                        // proxyPrefix: "/proxy"
                     });
 
                     // GTEx
