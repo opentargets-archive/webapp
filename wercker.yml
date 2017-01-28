@@ -7,8 +7,7 @@ dev:
         reload: true
 build:
   steps:
-    # - script:
-    #     code: export NODE_ENV='testing'
+
     - script:
         name: echo nodejs information
         code: |
@@ -20,7 +19,7 @@ build:
     #- npm-test
 
 
-release-build:
+setup-build:
   steps:
     # Run npm bower and gulp to build artifacts
     - script:
