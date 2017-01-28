@@ -25,9 +25,7 @@ setup-build:
     - script:
         name: build release code
         code: |
-          npm run build
-      # npm run setup
-
+          npm run setup
 
 
 push-release:
@@ -37,9 +35,10 @@ push-release:
     cmd: /bin/sh
 
   steps:
-    # - script:
-    #     name: copy to /var/www/app working dir
-    #     code: |
+    - script:
+        name: copy to /var/www/app working dir
+        code: |
+            ls -l /pipeline/source
     #       cp -r $WERCKER_ROOT/* /var/www/app/
 
     - script:
