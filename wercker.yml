@@ -1,4 +1,5 @@
-box: node
+# use a long-term-support (LTS) version of node. Latest is currently Boron
+box: node:boron
 dev:
   steps:
     - npm-install
@@ -13,58 +14,89 @@ build:
         code: |
           echo "node version $(node -v) running"
           echo "npm version $(npm -v) running"
-    - npm-install
 
-    # run unit tests
-    #- npm-test
+    - npm-install:
+        clear-cache-on-failed: true
+        options: --quiet
 
-
-setup-build:
-  steps:
-    # Run npm bower and gulp to build artifacts
+    # #run unit tests
+    # - npm-test
     - script:
-        name: build release code
+        name: run bower, gulp and jspm for good measure
         code: |
           npm run setup
 
+push-debug:
+  steps:
+    - internal/docker-push:
+      repository: quay.io/opentargets/webapp
+      username: $QUAY_USERNAME
+      password: $QUAY_PASSWORD
+      registry: $QUAY_HOST
+      tag: debug-$WERCKER_GIT_COMMIT
+      working-dir: /pipeline/source
+      cmd: npm start
 
 push-release:
-  # Override the node:4-slim box
+  # Override the node box
   box:
     id: nginx:alpine
     cmd: /bin/sh
 
   steps:
     - script:
-        name: copy to /var/www/app working dir
-        code: |
-            ls -l /pipeline/source
-    #       cp -r $WERCKER_ROOT/* /var/www/app/
+      name: forward deployment scripts
+      code: mv "deployment" "$WERCKER_OUTPUT_DIR"
 
     - script:
-        name: cleanup build result
-        code: |
-          rm -rf *
-
-    - script:
-      name: export latest or dev tag
+      name: mv static files
       code: |
-        [ "$WERCKER_GIT_BRANCH" = "master" ] \
-        && export LATEST_FLAG=latest \
-        || export LATEST_FLAG=dev
+        rm -rf /var/www/app/*
+        mv $WERCKER_SOURCE_DIR/* /var/www/app/
+
+    - script:
+      name: cleanup build result
+      code: rm -rf *
+
+    - internal/docker-push:
+      disable-sync: true
+      repository: quay.io/wercker/workflows-kubernetes-demo
+      username: $DOCKER_USERNAME
+      password: $DOCKER_PASSWORD
+      registry: quay.io
+      tag: release-$WERCKER_GIT_COMMIT
+
+  # steps:
+  #   - script:
+  #       name: copy to /var/www/app working dir
+  #       code: |
+  #           ls -l /pipeline/source/node_modules
+  #   #       cp -r $WERCKER_ROOT/* /var/www/app/
+  #
+  #   - script:
+  #       name: cleanup build result
+  #       code: |
+  #         rm -rf *
+  #
+  #   - script:
+  #     name: export latest or dev tag
+  #     code: |
+  #       [ "$WERCKER_GIT_BRANCH" = "master" ] \
+  #       && export LATEST_FLAG=latest \
+  #       || export LATEST_FLAG=dev
 
     # push container as-is
-    - internal/docker-push:
-            username: $QUAY_USERNAME
-            password: $QUAY_PASSWORD
-            tag: $WERCKER_GIT_COMMIT, $WERCKER_GIT_BRANCH, $LATEST_FLAG
-            repository: quay.io/opentargets/webapp
-            registry: $QUAY_HOST
-            # working-dir: /var/www/app
-            # entrypoint: /docker-entrypoint.sh
-            # cmd: supervisord
-            # ports: "80 443 8008 8009"
-            disable-sync: true
+    # - internal/docker-push:
+    #         username: $QUAY_USERNAME
+    #         password: $QUAY_PASSWORD
+    #         tag: $WERCKER_GIT_COMMIT, $WERCKER_GIT_BRANCH, $LATEST_FLAG
+    #         repository: quay.io/opentargets/webapp
+    #         registry: $QUAY_HOST
+    #         # working-dir: /var/www/app
+    #         # entrypoint: /docker-entrypoint.sh
+    #         # cmd: supervisord
+    #         # ports: "80 443 8008 8009"
+    #         disable-sync: true
 
     # - internal/docker-push:
     #   entrypoint: docker-entrypoint.sh
@@ -78,17 +110,17 @@ push-release:
     #   docker push opentargets/webapp
 
 
-    # - internal/docker-push:
-    #     username: _json_key
-    #     password: $GCR_JSON_KEY_FILE
-    #     working-dir: /var/www/app
-    #     entrypoint: /docker-entrypoint.sh
-    #     tag: $WERCKER_GIT_COMMIT
-    #     repository: $GCR_REPO
-    #     registry: $GCR_HOST
-    #     cmd: supervisord
-    #     ports: "80 443 8008 8009"
-    #     disable-sync: true
+    - internal/docker-push:
+        username: _json_key
+        password: $GCR_JSON_KEY_FILE
+        working-dir: /var/www/app
+        entrypoint: /docker-entrypoint.sh
+        tag: $WERCKER_GIT_COMMIT
+        repository: $GCR_REPO
+        registry: $GCR_HOST
+        ports: "80 443"
+        cmd: nginx -g 'daemon off;'
+
 
 
 # deploy-to-kubernetes:
