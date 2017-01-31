@@ -65,13 +65,20 @@ push-release:
       name: cleanup build result
       code: rm -rf *
 
+    - script:
+      name: export latest or dev tag
+      code: |
+        [ "$WERCKER_GIT_BRANCH" = "master" ] \
+        && export LATEST_FLAG=latest \
+        || export LATEST_FLAG=dev
+
     - internal/docker-push:
       disable-sync: true
-      repository: quay.io/wercker/workflows-kubernetes-demo
+      repository: quay.io/opentargets/webapp
       username: $QUAY_USERNAME
       password: $QUAY_PASSWORD
       registry: QUAY_HOST
-      tag: release-$WERCKER_GIT_COMMIT
+      tag: release-$WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH $LATEST_FLAG
       working-dir: /var/www/app
       entrypoint: /docker-entrypoint.sh
       ports: "80 443"
@@ -82,19 +89,13 @@ push-release:
       password: $GCR_JSON_KEY_FILE
       working-dir: /var/www/app
       entrypoint: /docker-entrypoint.sh
-      tag: release-$WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH
-      repository: $GCR_REPO
+      tag: release-$WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH $LATEST_FLAG
+      repository: eu.gcr.io/open-targets/webapp-prod
       registry: $GCR_HOST
       ports: "80 443"
       cmd: nginx -g 'daemon off;'
 
 
-    - script:
-      name: export latest or dev tag
-      code: |
-        [ "$WERCKER_GIT_BRANCH" = "master" ] \
-        && export LATEST_FLAG=latest \
-        || export LATEST_FLAG=dev
 
     # push container as-is
     # - internal/docker-push:
