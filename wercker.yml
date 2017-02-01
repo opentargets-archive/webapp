@@ -80,7 +80,6 @@ push-release:
       registry: $QUAY_HOST
       tag: release-$WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH $LATEST_FLAG
       working-dir: /var/www/app
-      entrypoint: /docker-entrypoint.sh
       ports: "80 443"
       cmd: nginx -g 'daemon off;'
 
@@ -88,7 +87,6 @@ push-release:
       username: _json_key
       password: $GCR_JSON_KEY_FILE
       working-dir: /var/www/app
-      entrypoint: /docker-entrypoint.sh
       tag: release-$WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH $LATEST_FLAG
       repository: eu.gcr.io/open-targets/webapp-prod
       registry: $GCR_HOST
