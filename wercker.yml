@@ -59,7 +59,7 @@ push-release:
       name: mv static files
       code: |
         mkdir -p /var/www/app
-        mv $WERCKER_SOURCE_DIR/* /var/www/app/
+        cp -r ./app /var/www
 
     - script:
       name: cleanup build result
@@ -77,7 +77,7 @@ push-release:
       repository: quay.io/opentargets/webapp
       username: $QUAY_USERNAME
       password: $QUAY_PASSWORD
-      registry: QUAY_HOST
+      registry: $QUAY_HOST
       tag: release-$WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH $LATEST_FLAG
       working-dir: /var/www/app
       entrypoint: /docker-entrypoint.sh
@@ -94,56 +94,3 @@ push-release:
       registry: $GCR_HOST
       ports: "80 443"
       cmd: nginx -g 'daemon off;'
-
-
-
-    # push container as-is
-    # - internal/docker-push:
-    #         username: $QUAY_USERNAME
-    #         password: $QUAY_PASSWORD
-    #         tag: $WERCKER_GIT_COMMIT, $WERCKER_GIT_BRANCH, $LATEST_FLAG
-    #         repository: quay.io/opentargets/webapp
-    #         registry: $QUAY_HOST
-    #         # working-dir: /var/www/app
-    #         # entrypoint: /docker-entrypoint.sh
-    #         # cmd: supervisord
-    #         # ports: "80 443 8008 8009"
-    #         disable-sync: true
-
-    # - internal/docker-push:
-    #   entrypoint: docker-entrypoint.sh
-    #   tag: latest $WERCKER_GIT_COMMIT, $WERCKER_GIT_BRANCH
-    #   registry: https://registry.hub.docker.com
-    #   repository: opentargets/webapp
-    #   username: $OT_DOCKER_HUB_USERNAME
-    #   password: $OT_DOCKER_HUB_PASSWORD
-    # - scripts: |
-    #   docker build Dockerfile.build -t "opentargets/webapp:prod-$WERCKER_GIT_COMMIT" .
-    #   docker push opentargets/webapp
-
-
-
-
-
-
-# deploy-to-kubernetes:
-#   steps:
-#   # https://github.com/wercker/step-bash-template
-#   # This Wercker step will look for files in our repo with a .template extension.
-#   # It will expand any environment variables in those files, then remove the
-#   # template extension.
-#   - bash-template:
-#     input: "kube-conf/*.template"
-#   - script:
-#     name: Prepare Kubernetes files
-#     code: |
-#       mkdir $WERCKER_OUTPUT_DIR/kubernetes
-#       mv $WERCKER_ROOT/kube-conf/rest_api_*.yml $WERCKER_OUTPUT_DIR/kubernetes
-#   - riceo/kubectl:
-#     name: deploy to kubernetes
-#     server: $KUBERNETES_MASTER
-#     gcloud-key-json: $GCR_JSON_KEY_FILE
-#     gke-cluster-name: $GKE_CLUSTER_NAME
-#     gke-cluster-zone: $GKE_CLUSTER_ZONE
-#     gke-cluster-project: $GKE_CLUSTER_PROJECT
-#     command: apply -f $WERCKER_OUTPUT_DIR/kubernetes/
