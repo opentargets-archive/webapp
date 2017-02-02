@@ -60,15 +60,15 @@ push-release:
     - script:
       name: move self-signed certificates in the right place
       code: |
-      cp ./nginx_conf/server.crt /usr/share/nginx_crt/
-      cp ./nginx_conf/server.key /usr/share/nginx_crt/
+        cp ./nginx_conf/server.crt /usr/share/nginx_crt/
+        cp ./nginx_conf/server.key /usr/share/nginx_crt/
 
     - script:
       name: move nginx.conf and template in the right place
       code: |
-      cp ./nginx_conf/nginx.conf /etc/nginx/nginx.conf
-      cp ./nginx_conf/app_server.template /etc/nginx/conf.d/app_server.template
-      cp ./nginx_conf/rest_api_scheme.template /etc/nginx/conf.d/rest_api_scheme.template
+        cp ./nginx_conf/nginx.conf /etc/nginx/nginx.conf
+        cp ./nginx_conf/app_server.template /etc/nginx/conf.d/app_server.template
+        cp ./nginx_conf/rest_api_scheme.template /etc/nginx/conf.d/rest_api_scheme.template
 
 
     - script:
