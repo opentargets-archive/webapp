@@ -1,6 +1,8 @@
-# CTTV Web App
+[![Docker Repository on Quay](https://quay.io/repository/opentargets/webapp/status "Docker Repository on Quay")](https://quay.io/repository/opentargets/webapp)
 
-This is the web app for the CTTV project, based on the CoreDB API.
+# OpenTargets Web App
+
+This is the web app for the Open Targets Platform, based on the Open Targets API.
 The app is based on Angular, while D3 is used for visualization and graphs.
 
 
@@ -9,7 +11,7 @@ Clone the repository and install the dependencies.
 
 
 ### Prerequisites
-You'll obvoiously need git to clone the repository.
+You'll obviously need `git` to clone the repository.
 
 Installation and tests need some node.js tools:
 you must have `node.js` and its package manager `npm` installed.  You can get them from [http://nodejs.org/](http://nodejs.org/)
@@ -40,16 +42,14 @@ Angular code is installed via Bower includes:
 * D3
 
 ## Running and deploying the app
-To test your app, you can just run the included simple `http-server` by running:
-```
-npm start
-```
-Then go to
-```
-http://localhost:8000/app/
-```
 
-All the code you need for deployment is contained in
+After building with `npm install` and `npm run setup`, all the code you need for deployment will be contained in `/app`.
+
+A docker container with a compiled version of the webapp from a NGINX web server is available.
+To run the app locally using the container:
+```sh
+docker run -d -p 8443:443 -p 8080:80 quay.io/opentargets/webapp
 ```
-/app
-```
+Then visit https://localhost:8443
+
+The standard container comes with self-signed certificates, so you will have click through a couple of security warnings to get to the app.
