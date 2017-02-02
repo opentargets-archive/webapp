@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 
 export REST_API_SCHEME=${REST_API_SCHEME:=https}
