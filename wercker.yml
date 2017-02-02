@@ -47,13 +47,9 @@ push-release:
     - script:
       name: forward deployment scripts
       code: |
-        mv "deployment" "$WERCKER_OUTPUT_DIR"
+        mv docker-entrypoint.sh "$WERCKER_OUTPUT_DIR"
         ls -l $WERCKER_OUTPUT_DIR/
 
-    - script:
-      name: look into node_modules
-      code: |
-        ls -l node_modules/
 
     - script:
       name: mv static files
