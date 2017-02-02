@@ -112,3 +112,8 @@ push-release:
       cmd: nginx -g 'daemon off;'
       entrypoint: /docker-entrypoint.sh
       volumes: /var/cache/nginx
+
+  after-steps:
+        - wantedly/pretty-slack-notify:
+            webhook_url: $SLACK_WEBHOOK_URL
+            notify_on: "failed"
