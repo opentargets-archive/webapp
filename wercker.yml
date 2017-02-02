@@ -70,12 +70,14 @@ push-release:
         cp ./nginx_conf/app_server.template /etc/nginx/conf.d/app_server.template
         cp ./nginx_conf/rest_api_scheme.template /etc/nginx/conf.d/rest_api_scheme.template
 
-
+    # i found out the hard way that the /pipeline/source directory needs
+    # to be there for things to work in wercker
     - script:
       name: cleanup all the wercker stuff
       code: |
         rm -rf /pipeline/cache
-        rm -rf /pipeline/source
+        rm -rf /pipeline/source/*
+
 
     - script:
       name: export latest or dev tag
