@@ -73,7 +73,9 @@ push-release:
 
     - script:
       name: cleanup all the wercker stuff
-      code: rm -rf /pipeline/cache
+      code: |
+        rm -rf /pipeline/cache
+        rm -rf /pipeline/source
 
     - script:
       name: export latest or dev tag
