@@ -1,7 +1,7 @@
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
 
-    .controller("SummaryCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', '$q', function ($scope, $location, $log, cttvAPIservice, $q) {
+    .controller("SummaryCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', '$q', 'cttvConfig', function ($scope, $location, $log, cttvAPIservice, $q, cttvConfig) {
         'use strict';
 
         // Parse the $location search object to determine which entities we have.
@@ -18,7 +18,10 @@ angular.module('cttvControllers')
                     "fields": ['ensembl_gene_id', 'drugs', 'approved_symbol', 'reactome', 'uniprot_id'],
                 }
             };
-            return cttvAPIservice.getTarget(queryObject);
+            return cttvAPIservice.getTarget(queryObject)
+                .then (function (r) {
+                    return r.body.data;
+                });
         }
 
         function getAssociations(targets) {
@@ -30,7 +33,7 @@ angular.module('cttvControllers')
                 trackCall: true,
                 params: {
                     "target": targets,
-                    "facets": false,
+                    "facets": "false",
                     "size": 0,
                     "fields": "total"
                 }
@@ -44,7 +47,7 @@ angular.module('cttvControllers')
                             trackCall: true,
                             params: {
                                 "target": targets,
-                                "facets": true,
+                                "facets": "true",
                                 "from": i,
                                 // "scorevalue_min": 1,
                                 // 'targets_enrichment': "simple",
@@ -104,31 +107,41 @@ angular.module('cttvControllers')
         if (search.target) {
             if (angular.isArray(search.target)) {
                 // Multiple targets
-                getAssociations(search.target)
-                    .then(function (combined) {
-                        $scope.associations = combined;
-                    });
-
-                getTargetsInfo(search.target)
-                    .then(function (resp) {
-                        $scope.targets = resp.body.data;
+                // getAssociations(search.target)
+                //     .then(function (combined) {
+                //         $scope.associations = combined;
+                //     });
+                //
+                // getTargetsInfo(search.target)
+                //     .then(function (resp) {
+                //         $scope.targets = resp.body.data;
+                //     });
+                $q.all([getTargetsInfo(search.target), getAssociations(search.target)])
+                    .then (function (resps) {
+                        $log.log("targets and associations...");
+                        $log.log(resps);
+                        $scope.targets = resps[0];
+                        $scope.associations = resps[1];
                     });
                 // $scope.targets = search.target;
 
+                // Extra sections -- plugins
+                $scope.sections = cttvConfig.summaryTargetList;
+                // Set default visibility values
+
                 // Interactions viewer plugin
-                $scope.interactionsViewerPlugin = {
-                    name: "interactionsViewer",
-                    element: "multiple-targets-interactions-summary",
-                    dependencies: {
-                        "build/interactionsViewer.min.js": {
-                            "format": "global"
-                        },
-                        "build/interactionsViewer.css": {
-                            "loader": "css"
-                        }
-                    }
-                };
-                // $scope.interactionsSummaryPlugin = "multiple-targets-interactions-summary";
+                // $scope.interactionsViewerPlugin = {
+                //     name: "interactionsViewer",
+                //     element: "multiple-targets-interactions-summary",
+                //     dependencies: {
+                //         "build/interactionsViewer.min.js": {
+                //             "format": "global"
+                //         },
+                //         "build/interactionsViewer.css": {
+                //             "loader": "css"
+                //         }
+                //     }
+                // };
 
             } else {
                 $scope.target = search.target;
@@ -157,8 +170,6 @@ angular.module('cttvControllers')
         }
 
         // drugs / drug
-        $log.log("search...");
-        $log.log(search);
         if (search.drug) {
             if (angular.isArray(search.drug)) {
                 $scope.drugs = search.drug;

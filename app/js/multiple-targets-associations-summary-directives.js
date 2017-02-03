@@ -6,7 +6,7 @@ angular.module('cttvDirectives')
     return {
         restrict: 'E',
         scope: {
-            targets: "=",
+            target: "=",
             associations: '='
         },
         templateUrl: "partials/multiple-targets-associations-summary.html"
@@ -31,7 +31,7 @@ angular.module('cttvDirectives')
 //                     return;
 //                 }
 //
-//                 scope.targetsAssociationsLink = scope.targets.map(function (t) {
+//                 scope.targetsAssociationsLink = scope.target.map(function (t) {
 //                     return "target:"+t;
 //                 }).join(',');
 //
@@ -42,7 +42,7 @@ angular.module('cttvDirectives')
 //                         label: therapeuticAreas[j].label,
 //                         value: therapeuticAreas[j].unique_target_count.value,
 //                         diseases: {},
-//                         score: ~~(100 * therapeuticAreas[j].unique_target_count.value / scope.targets.length)
+//                         score: ~~(100 * therapeuticAreas[j].unique_target_count.value / scope.target.length)
 //                     };
 //                 }
 //                 for (var i=0; i<scope.associations.data.length; i++) {
@@ -64,7 +64,7 @@ angular.module('cttvDirectives')
 //                                 };
 //                             }
 //                             tas[tasForThisDisease[k]].diseases[diseaseLabel].value++;
-//                             tas[tasForThisDisease[k]].diseases[diseaseLabel].score = 100 * tas[tasForThisDisease[k]].diseases[diseaseLabel].value / scope.targets.length;
+//                             tas[tasForThisDisease[k]].diseases[diseaseLabel].score = 100 * tas[tasForThisDisease[k]].diseases[diseaseLabel].value / scope.target.length;
 //                             tas[tasForThisDisease[k]].diseases[diseaseLabel].targets.push(target);
 //                         }
 //                     }
@@ -183,9 +183,16 @@ angular.module('cttvDirectives')
             };
 
             scope.$watch('associations', function () {
+                $log.log("attributes...");
+                $log.log(attrs);
                 if (!scope.associations) {
+                    $log.log("we don't have associations...");
                     return;
                 }
+                $log.log("we have associations...");
+                $log.log(scope.associations);
+                $log.log("we have targets...");
+                $log.log(scope.targets);
 
                 // Compile the therapeutic areas...
                 var therapeuticAreas = scope.associations.facets.therapeutic_area.buckets;
@@ -315,7 +322,7 @@ angular.module('cttvDirectives')
 //
 //                 var targetListAssocBubbles = expansionView()
 //                     .data(dataPromise);
-//                     // .targets(scope.targets);
+//                     // .targets(scope.target);
 //                 targetListAssocBubbles (container);
 //
 //             });

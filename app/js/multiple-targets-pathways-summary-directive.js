@@ -37,11 +37,11 @@ angular.module('cttvDirectives')
         restrict: 'E',
         templateUrl: 'partials/multiple-targets-pathways-summary.html',
         scope: {
-            targets: "="
+            target: "="
         },
         link: function (scope, el, attrs) {
-            scope.$watch('targets', function () {
-                if (!scope.targets) {
+            scope.$watch('target', function () {
+                if (!scope.target) {
                     return;
                 }
 
@@ -50,8 +50,8 @@ angular.module('cttvDirectives')
 
 
                 var pathways = {};
-                for (var i = 0; i < scope.targets.length; i++) {
-                    var t = scope.targets[i];
+                for (var i = 0; i < scope.target.length; i++) {
+                    var t = scope.target[i];
                     var targetSymbol = t.approved_symbol;
                     for (var j = 0; j < t.reactome.length; j++) {
                         var p = t.reactome[j];
@@ -87,14 +87,14 @@ angular.module('cttvDirectives')
                 var pathwaysArr = _.values(pathways);
                 for (var h = 0; h < pathwaysArr.length; h++) {
                     pathwaysArr[h].targets = _.values(pathwaysArr[h].targets);
-                    pathwaysArr[h].score = ~~(100 * pathwaysArr[h].targets.length / scope.targets.length);
+                    pathwaysArr[h].score = ~~(100 * pathwaysArr[h].targets.length / scope.target.length);
                     pathwaysArr[h].subPathways = _.values(pathwaysArr[h].subPathways);
                     pathwaysArr[h].subPathways.sort(function (a, b) {
                         return b.targets.length - a.targets.length;
                     });
                     for (var h2 = 0; h2 < pathwaysArr[h].subPathways.length; h2++) {
                         pathwaysArr[h].subPathways[h2].targets = Object.keys(pathwaysArr[h].subPathways[h2].targets);
-                        pathwaysArr[h].subPathways[h2].score = ~~(100 * Object.keys(pathwaysArr[h].subPathways[h2].targets).length / scope.targets.length);
+                        pathwaysArr[h].subPathways[h2].score = ~~(100 * Object.keys(pathwaysArr[h].subPathways[h2].targets).length / scope.target.length);
                         // Link to pathway summary page (including all the targets)
                         pathwaysArr[h].subPathways[h2].link += "&" + (pathwaysArr[h].subPathways[h2].targets.map(function (t) {
                                 return "pathway-target=" + t;
@@ -139,7 +139,7 @@ angular.module('cttvDirectives')
                                             "autoWidth": false,
                                             "paging": true,
                                             "columnDefs": []
-                                        }, scope.targets.length + "-targets-pathways"));
+                                        }, scope.target.length + "-targets-pathways"));
                                     });
                             });
                     });

@@ -70,6 +70,37 @@
 
     "dumps_link": "/downloads/data",
 
+    "summaryTargetList": [
+        {
+            "name": "diseases",
+            "element": "multiple-targets-associations-summary",
+            "heading": "Diseases associated"
+        },
+        {
+            "name": "pathways",
+            "element": "multiple-targets-pathways-summary",
+            "heading": "Pathways"
+        },
+        {
+            "name": "drugs",
+            "element": "multiple-targets-drugs-summary",
+            "heading": "Drugs"
+        },
+        {
+            "name": "interactions",
+            "element": "multiple-targets-interactions-summary",
+            "heading": "Interactions between targets",
+            "dependencies": {
+                "build/interactionsViewer.min.js": {
+                    "format": "global"
+                },
+                "build/interactionsViewer.css": {
+                    "loader": "css"
+                }
+            }
+        }
+    ],
+
     "diseaseSections": [
         /*{
             "name": "relatedDiseases",

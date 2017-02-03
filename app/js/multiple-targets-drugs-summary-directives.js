@@ -30,11 +30,13 @@ angular.module('cttvDirectives')
         restrict: 'E',
         templateUrl: 'partials/multiple-targets-drugs.html',
         scope: {
-            targets: '='
+            target: '='
         },
         link: function (scope, el, attrs) {
-            scope.$watch('targets', function () {
-                if (!scope.targets) {
+            scope.$watch('target', function () {
+                $log.log("scope targets in drugs...");
+                $log.log(scope.target)
+                if (!scope.target) {
                     return;
                 }
 
@@ -45,7 +47,7 @@ angular.module('cttvDirectives')
                     method: 'POST',
                     trackCall: false,
                     params: {
-                        target: scope.targets.map(function (d) {return d.ensembl_gene_id;}),
+                        target: scope.target.map(function (d) {return d.ensembl_gene_id;}),
                         size: 1000,
                         datasource: cttvConfig.evidence_sources.known_drug,
                         fields: [
@@ -101,7 +103,7 @@ angular.module('cttvDirectives')
                             "paging": true,
                             "columnDefs": []
 
-                        }, scope.targets.length + "-targets-drugs"));
+                        }, scope.target.length + "-targets-drugs"));
 
 
                     });
