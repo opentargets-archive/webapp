@@ -16,45 +16,36 @@
 <!-- Search box + search button -->
 <div class="container" style="margin-top:150px">
     <div class="row">
-        <div class="col-xs-4"></div>
-        <div class="col-xs-4" ng-controller="SearchBoxCtrl">
-            <form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">
-                <fieldset>
-                    <div class="has-feedback search-form">
+        <!--<div class="col-xs-4"></div>-->
+        <!--<div class="col-xs-4" ng-controller="SearchBoxCtrl">-->
+            <!--<form novalidate="" name="queryForm" class="global-search ng-animate ng-dirty ng-invalid ng-invalid-required ng-valid-minlength" ng-submit="setSearch()">-->
+                <!--<fieldset>-->
+                    <!--<div class="has-feedback search-form">-->
 
 
 
-                        <!-- Search box + search button -->
-                        <div class="input-group input-group-sm">
+                        <!--&lt;!&ndash; Search box + search button &ndash;&gt;-->
+                        <!--<div class="input-group input-group-sm">-->
 
-                            <input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">
+                            <!--<input type="text" placeholder="Search for a target or disease (e.g. BRAF or asthma)" class="form-control" name="text" tabindex="1" ng-model="search.query.text" ng-model-options="{ debounce: 500 }" autocomplete="off" ng-change="getSuggestions(search.query.text);">-->
 
-                            <div class="input-group-btn">
-                                <button type="submit" class="btn btn-primary">
-                                    <span class="fa fa-search fa-lg"></span>
-                                </button>
-                            </div>
+                            <!--<div class="input-group-btn">-->
+                                <!--<button type="submit" class="btn btn-primary">-->
+                                    <!--<span class="fa fa-search fa-lg"></span>-->
+                                <!--</button>-->
+                            <!--</div>-->
 
-                        <!-- Search in progress spinner -->
-                        <span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner search-form-spinner-sm" ng-show="search.progress"></span>
+                        <!--&lt;!&ndash; Search in progress spinner &ndash;&gt;-->
+                        <!--<span cttv-progress-spinner class="text-lowlight form-control-feedback search-form-spinner search-form-spinner-sm" ng-show="search.progress"></span>-->
 
-                        <!-- Suggestions box -->
-                        <div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>
+                        <!--&lt;!&ndash; Suggestions box &ndash;&gt;-->
+                        <!--<div cttv-search-suggestions ng-show="isVisible()" ng-model="search.query.results"></div>-->
 
-
-                        <!--<span class="small">
-                            <i>
-                                Examples: <a href="/search?q=braf">BRAF</a>,
-                                <a href="/search?q=asthma">asthma</a>,
-                                <a href="/search?q=pten">PTEN</a>
-                            </i>
-                        </span>-->
-
-
-                    </div>
-                </fieldset>
-            </form>
-        </div>
+                    <!--</div>-->
+                <!--</fieldset>-->
+            <!--</form>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="col-xs-4"></div>-->
     </div>
-    <div class="col-xs-4"></div>
 </div>

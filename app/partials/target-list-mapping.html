@@ -1,17 +1,22 @@
 <div class="section">
     <h2>Mapping:</h2>
+    <div>
+        <b>File</b>: {{list.id}}
+    </div>
     <div class="row batch-search">
-
         <div class="col-sm-4">
             <span>{{exact.length}} exact </span>
             <span ng-switch="exact.length">
                 <span ng-switch-when="1">match</span>
                 <span ng-switch-default>matches</span>
             </span>
+            <span ng-show="rescued.length">
+                <span class="highlight-primary">({{rescued.length}} added by search)</span>
+            </span>
 
-            <div class="batch-search-mappings-container">
+            <div class="batch-search-mappings-container" id="batch-search-mappings-container-exact">
                 <div ng-repeat="item in exact">
-                    <span class="search-item">{{item.query}} <i class="fa fa-arrow-right" aria-hidden="true"></i> {{item.result}}</span>
+                    <span ng-class="item.isNew ? 'highlight-primary' : ''" class="search-item">{{item.query}} <i class="fa fa-arrow-right" aria-hidden="true"></i> {{item.result}}</span>
                 </div>
             </div>
 
@@ -70,7 +75,7 @@
             <div class="batch-search-mappings-container">
                 <div ng-show="!newSearchQuery" class="batch-search-results-container">
                     <div ng-repeat="item in notFound">
-                        <span class="search-item">{{item.query}} <i class="fa fa-arrow-right" aria-hidden="true"></i> {{item.result}}</span>
+                        <span class="search-item item-discarded">{{item.query}} <i class="fa fa-arrow-right" aria-hidden="true"></i> {{item.result}}</span>
                         <span ng-class="hover ? 'search-options highlight' : 'search-options down'" ng-mouseenter="hover=true" ng-mouseleave="hover=false">
                             <span ng-click="newSearch(item)">
                                 <i class="fa fa-search"></i>
@@ -87,7 +92,7 @@
                               style="right:4.5em; top:3em; position:absolute"></span>
 
                     </div>
-                    <div class="batch-search-resultscontainer">
+                    <div class="batch-search-results-container">
                         <div ng-repeat="target in newSearchResults" ng-click="setNewItem(newSearchQuery, target)">
                             <span class="search-item select-item">{{target.data.approved_symbol}}</span>
                             <span ng-class="hover ? 'search-options highlight' : 'search-options down'" ng-mouseenter="hover=true" ng-mouseleave="hover=false">
@@ -100,6 +105,9 @@
         </div>
 
     </div>
+</div>
+<div>
+    Targets currently selected for analysis: {{targetIds.length}}
 </div>
 <div style="margin-top:50px;" ng-show=summaryLink>
     <a href="{{summaryLink}}">
