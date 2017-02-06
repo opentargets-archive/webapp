@@ -4,11 +4,11 @@
     <!-- Therapeutic areas -->
     <div class="container" style="margin-bottom:20px;">
         <div class="row">
-            <div title="Filter table by {{ta.label}}" class="col-sm-2" ng-repeat="ta in therapeuticAreas | orderBy: '-value'" ng-show="selectedTA=='' || ta.label==selectedTA" ng-click="selectTA(ta)" style="border: 1px solid #dddddd; padding:10px; font-size:0.9em; cursor:pointer">
+            <div title="Filter table by {{ta.label}}" class="col-sm-2" ng-repeat="ta in therapeuticAreas | orderBy: '+enrichment'" ng-show="selectedTA=='' || ta.label==selectedTA" ng-click="selectTA(ta)" style="border: 1px solid #dddddd; padding:10px; font-size:0.9em; cursor:pointer">
                 <div style="margin-bottom:10px;overflow-x:hidden">
                     <text style="font-weight:bold; white-space:nowrap;">{{ta.label}}</text>
                 </div>
-                <i class="fa fa-filter" style="float:right; position:absolute; right:10px; top:10px;font-size:1.4em; color:#a7a39f; background-color:#ffffff"></i>
+                <i ng-class="selectedTA==ta.label ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o'" style="float:right; position:absolute; right:10px; top:10px;font-size:1.4em; color:#a7a39f; background-color:#ffffff"></i>
                 <!--<span style="cursor:pointer" ng-class="{'highlight-primary': ta.label == selectedTA}">{{ta.label}}: {{ta.value}} ({{ta.score}}) {{ta.selected}}</span>-->
                 <div style="float:right">
                     <perc-piechart title="{{ta.value}} targets associated with {{ta.label}}" score="ta.score"></perc-piechart>

@@ -10,8 +10,6 @@ angular.module('cttvDirectives')
             associations: '='
         },
         templateUrl: "partials/multiple-targets-associations-summary.html"
-        // link: function (scope, el, attrs) {
-        // }
     };
 }])
 
@@ -109,9 +107,15 @@ angular.module('cttvDirectives')
         for (var i=0; i<diseaseArray.length; i++) {
             var row = [];
             var d = diseaseArray[i];
+
             // 0 - Disease
+            // limit the length of the label
+            var label = d.disease;
+            if (d.disease.length > 30) {
+                label = d.disease.substring(0, 30) + "...";
+            }
             var targetsLink = "?targets=" + (targets.map(function (t) {return "target:"+t.ensembl_gene_id;}).join(','));
-            var cell = "<a href='/disease/" + d.id + "/associations" + targetsLink + "'>" + d.disease + "</a>";
+            var cell = "<a href='/disease/" + d.id + "/associations" + targetsLink + "'>" + label + "</a>";
             row.push(cell);
 
             // 1 - Targets associated
@@ -128,9 +132,10 @@ angular.module('cttvDirectives')
             // row.push(d.score);
             var score = 100 * d.count / targets.length;
             var bars = '<div style="position:relative;width:200px;height:20px">' +
-            '<div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:0px;left:0px"></div>' +
-            '<div style="width:' + score + '%;background:#1e5799;height:100%;position:absolute;top:0px;left:0px"></div>' +
-            '</div>';
+                    '<div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:0px;left:0px"></div>' +
+                    '<div style="width:' + score + '%;background:#1e5799;height:100%;position:absolute;top:0px;left:0px"></div>' +
+                    '<div style="width:20px;border-radius:20px;text-align:center;vertical-align:middle;line-height:20px;background:#eeeeee;position:absolute;top:0px;left:3px;color:#1e5799"><span>' + d.count + '</span></div>' +
+                '</div>';
             row.push(bars);
 
             // 4 - Therapeutic areas
@@ -183,16 +188,14 @@ angular.module('cttvDirectives')
             };
 
             scope.$watch('associations', function () {
-                $log.log("attributes...");
-                $log.log(attrs);
                 if (!scope.associations) {
                     $log.log("we don't have associations...");
                     return;
                 }
-                $log.log("we have associations...");
-                $log.log(scope.associations);
-                $log.log("we have targets...");
-                $log.log(scope.targets);
+
+                // Compile enrichment
+                var enrichment = parseEnrichment(scope.associations.enrichment);
+
 
                 // Compile the therapeutic areas...
                 var therapeuticAreas = scope.associations.facets.therapeutic_area.buckets;
@@ -200,21 +203,16 @@ angular.module('cttvDirectives')
                 var tas = [];
                 for (var k=0; k<therapeuticAreas.length; k++) {
                     var ta = therapeuticAreas[k];
+                    var key = ta.key.toUpperCase();
                     tas.push({
                         label: ta.label,
+                        id: key,
+                        enrichment: enrichment[key],
                         value: ta.unique_target_count.value,
                         score: (ta.unique_target_count.value / scope.targets.length).toPrecision(1)
                     });
-                    // tas[ta.label] = {
-                    //     label: ta.label,
-                    //     value: ta.unique_target_count.value,
-                    //     score: (ta.unique_target_count.value / scope.targets.length).toPrecision(1)
-                    // }
                 }
                 scope.therapeuticAreas = tas;
-
-                // Compile enrichment
-                var enrichment = parseEnrichment(scope.associations.enrichment);
 
                 // diseases in the table
                 var data = scope.associations.data;
@@ -286,7 +284,12 @@ angular.module('cttvDirectives')
                     "order": order,
                     "autoWidth": false,
                     "paging" : true,
-                    "columnDefs" : []
+                    "columnDefs": [
+                        {
+                            targets: [1],
+                            visible: false
+                        }
+                    ]
 
                 }, scope.targets.length + "-targets-associated_diseases") );
             });

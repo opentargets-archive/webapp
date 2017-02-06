@@ -18,22 +18,22 @@
         </table>
     </div>
 
-    <div ng-repeat="pathway in pathways">
-        <div class="row" style="font-size:18px;">
-            <div class="col-sm-3" ng-click="showThese=!showThese" style="cursor:pointer">{{pathway.label}}</div>
-            <div class="col-sm-1">{{pathway.targets.length}}</div>
-            <div class="col-sm-7" style="height:10px">
-                <div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:5px;left:0px"></div>
-                <div style="width:{{pathway.score}}%;background:#1e5799;height:100%;position:absolute;top:5px;left:0px"></div>
-            </div>
-        </div>
-        <div ng-repeat="subpathway in pathway.subPathways" class="row" ng-show="showThese">
-            <div class="col-sm-3"><a href={{subpathway.link}}>{{subpathway.label}}</a></div>
-            <div class="col-sm-1">{{subpathway.targets.length}}</div>
-            <div class="col-sm-7" style="height:10px">
-                <div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:5px;left:0px"></div>
-                <div style="width:{{subpathway.score}}%;background:#3a99d7;height:100%;position:absolute;top:5px;left:0px"></div>
-            </div>
-        </div>
-    </div>
+    <!--<div ng-repeat="pathway in pathways">-->
+        <!--<div class="row" style="font-size:18px;">-->
+            <!--<div class="col-sm-3" ng-click="showThese=!showThese" style="cursor:pointer">{{pathway.label}}</div>-->
+            <!--<div class="col-sm-1">{{pathway.targets.length}}</div>-->
+            <!--<div class="col-sm-7" style="height:10px">-->
+                <!--<div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:5px;left:0px"></div>-->
+                <!--<div style="width:{{pathway.score}}%;background:#1e5799;height:100%;position:absolute;top:5px;left:0px"></div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div ng-repeat="subpathway in pathway.subPathways" class="row" ng-show="showThese">-->
+            <!--<div class="col-sm-3"><a href={{subpathway.link}}>{{subpathway.label}}</a></div>-->
+            <!--<div class="col-sm-1">{{subpathway.targets.length}}</div>-->
+            <!--<div class="col-sm-7" style="height:10px">-->
+                <!--<div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:5px;left:0px"></div>-->
+                <!--<div style="width:{{subpathway.score}}%;background:#3a99d7;height:100%;position:absolute;top:5px;left:0px"></div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>
