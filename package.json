@@ -1,7 +1,7 @@
 {
-  "name": "cttvWebapp",
+  "name": "OpenTargetsWebapp",
   "version": "0.0.1",
-  "description": "Web application for CTTV project 003",
+  "description": "Open Targets Platform frontend",
   "readme": "README.md",
   "license": "",
   "devDependencies": {
