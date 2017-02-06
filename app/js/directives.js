@@ -1421,7 +1421,7 @@ angular.module('cttvDirectives', [])
                             var pngExporter = tnt.utils.png()
                                 .filename(scope.filename || "image.png")
                                 .scale_factor(scope.currScale)
-                                .stylesheets(['components-cttvWebapp.min.css'])
+                                .stylesheets(['components-OpenTargetsWebapp.min.css'])
                                 .limit({
                                     limit: 2100000,
                                     onError: function () {
@@ -1722,5 +1722,3 @@ angular.module('cttvDirectives', [])
             link: function(scope, element, attrs) {}
         };
     }])
-
-
