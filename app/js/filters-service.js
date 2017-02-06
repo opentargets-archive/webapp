@@ -460,6 +460,7 @@ angular.module('cttvServices').
             this.filters = config.filters || [];
             this.data = config.data || undefined;
             this.isPartial = config.isPartial || 0;
+            this.options = config.options || undefined; // or {} ???
             if(config.addFilter){
                 this.addFilter = config.addFilter;
             }
@@ -569,6 +570,7 @@ angular.module('cttvServices').
             facets.forEach(function(facet){
                 pageFacetsStack.push(facet);
             });
+            $log.log(pageFacetsStack);
         };
 
 
@@ -697,9 +699,9 @@ angular.module('cttvServices').
             }
 
             orderedFacets.forEach(function(collection){
-                if (facets.hasOwnProperty(collection)) {
+                if (facets.hasOwnProperty(collection.type)) {
                     try{
-                        addCollection( parseFacetData(collection, facets[collection], countsToUse) );
+                        addCollection( parseFacetData(collection.type, facets[collection.type], countsToUse) );
                     } catch(e){
                         $log.warn("Error while updating facets: "+e);
                     }

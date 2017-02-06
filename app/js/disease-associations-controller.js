@@ -14,7 +14,7 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', '$q', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, $q, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState) {
+.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', '$q', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $log, $q, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvConfig) {
 
     'use strict';
 
@@ -45,12 +45,8 @@ angular.module('cttvControllers')
     cttvFiltersService.reset();
 
     // Set page filters: this defines the order in which the facets are going to be displayed
-    cttvFiltersService.pageFacetsStack([
-        //cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
-        cttvFiltersService.facetTypes.DATATYPES,      // adds a datatypes facet to the page
-        cttvFiltersService.facetTypes.PATHWAYS,       // adds a pathways facet to the page
-        cttvFiltersService.facetTypes.TARGET_CLASS    // adds a target class facet
-    ]);
+    // as per config JSON
+    cttvFiltersService.pageFacetsStack(cttvConfig.diseaseAssociationsFacets);
 
 
 

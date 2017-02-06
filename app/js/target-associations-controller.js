@@ -6,7 +6,7 @@ angular.module('cttvControllers')
  * AssociationsCtrl
  * Controller for the target associations page
  */
-.controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', '$timeout', 'cttvLocationState', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary, $timeout, cttvLocationState) {
+.controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', '$timeout', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary, $timeout, cttvLocationState, cttvConfig) {
     'use strict';
 
 	// $log.log('targetAssociationsCtrl()');
@@ -49,13 +49,15 @@ angular.module('cttvControllers')
     cttvFiltersService.reset();
 
     // select facets to show
-    cttvFiltersService.pageFacetsStack([
+    /*cttvFiltersService.pageFacetsStack([
         //cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
-        cttvFiltersService.facetTypes.DATATYPES,
-        cttvFiltersService.facetTypes.THERAPEUTIC_AREAS
-    ]);
+        {type:cttvFiltersService.facetTypes.DATATYPES},
+        {type:cttvFiltersService.facetTypes.THERAPEUTIC_AREAS}
+    ]);*/
 
-
+    // Set page filters: this defines the order in which the facets are going to be displayed
+    // as per config JSON
+    cttvFiltersService.pageFacetsStack(cttvConfig.targetAssociationsFacets);
 
     // state we want to export to/from the URL
     var stateId = "view";

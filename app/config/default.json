@@ -198,5 +198,61 @@
             "heading": "Bibliography",
             "track": true
         }
+    ],
+
+    /*
+    FACETS for each page. Values are
+        'datatype',
+        'pathway',
+        'datasources',
+        'therapeutic_area',
+        'target_class',
+        'data_distribution'
+    */
+
+    "targetAssociationsFacets" : [
+        /*{
+            "type":"data_distribution",
+            "options" : {
+                "open" : true
+            }
+        },*/
+        {
+            "type":"datatype",
+            "options" : {
+                "open" : true
+            }
+        },
+        {
+            "type":"therapeutic_area",
+            "options" : {
+                "open" : true
+            }
+        }
+    ],
+
+
+    "diseaseAssociationsFacets" : [
+        {
+            "type":"datatype",
+            "options" : {
+                "open" : true
+            }
+        },
+        {
+            "type":"pathway",
+            "options" : {
+                "open" : true
+            }
+        },
+        {
+            "type":"target_class",
+            "options" : {
+                "open" : true
+            }
+        }
     ]
+
+
+
 }
