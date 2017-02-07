@@ -65,8 +65,6 @@ angular.module('cttvDirectives')
                                 var postData2 = idsArr.join(',');
                                 $http.post(url2, postData2)
                                     .then (function (targetPathways) {
-                                        $log.log("targetPathways...");
-                                        $log.log(targetPathways);
                                         var targets4pathways = {};
                                         for (var k=0; k<targetPathways.data.length; k++) {
                                             var pId = targetPathways.data[k].pathway;
@@ -174,8 +172,6 @@ angular.module('cttvDirectives')
                                                 scope.$apply();
                                             })
                                             .on("interaction", function (interactors) {
-                                                $log.log("interactors...");
-                                                $log.log(interactors);
                                                 debugger;
                                                 // Take the interactions between both:
                                                 const elem = this;
