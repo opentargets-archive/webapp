@@ -40,9 +40,8 @@
     "test-single-run": "karma start tests/unit/karma.conf.js  --single-run"
   },
   "dependencies": {
-    "cttv.api": "0.0.13",
+    "cttv.api": "0.0.14",
     "cttv.diseaseGraph": "0.0.3",
-    "cttv.expansionView": "0.0.7",
     "cttv.flowerView": "0.0.0",
     "cttv.genome": "0.0.21",
     "cttv.spinner": "0.0.0",
@@ -51,6 +50,7 @@
     "cttv.targetGeneTree": "0.0.13",
     "js-yaml": "3.5.5",
     "marked": "0.3.5",
+    "ot.interactions_viewer": "0.0.2",
     "systemjs": "^0.19.27",
     "tnt.genome": "0.1.5",
     "tnt.rest": "0.1.1",

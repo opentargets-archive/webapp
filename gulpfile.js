@@ -311,7 +311,7 @@ gulp.task('build-all', ['init', 'build-3rdparty', 'build-components-min', 'build
 
 // Lazy Loaded modules
 // Interactions Viewer
-var basePathIV = "node_modules/ot.interactionsViewer/";
+var basePathIV = "node_modules/ot.interactions_viewer/";
 var outputBaseFileIV = 'interactionsViewer';
 
 gulp.task('build-interactionsViewer-styles', function() {
