@@ -1,11 +1,12 @@
 angular.module('cttvDirectives')
 
-.directive ('multipleTargetsInteractionsSummary', ['$log', 'cttvAPIservice', '$http', '$timeout', function ($log, cttvAPIservice, $http, $timeout) {
+.directive ('multipleTargetsInteractionsSummary', ['$log', 'cttvAPIservice', '$http', '$q', '$timeout', function ($log, cttvAPIservice, $http, $q, $timeout) {
     'use strict';
 
     return {
         restrict: 'E',
-        template: '<cttv-progress-spinner ng-show="scope.showSpinner"></cttv-progress-spinner><div id="interactionsViewerMultipleTargets"></div>',
+        // template: '<cttv-progress-spinner ng-show="scope.showSpinner"></cttv-progress-spinner><div id="interactionsViewerMultipleTargets"></div>',
+        templateUrl: 'partials/multiple-targets-interactions-summary.html',
         scope: {
             target: '=',
             associations: '=',
@@ -27,8 +28,8 @@ angular.module('cttvDirectives')
                     interactors[d.approved_symbol] = {
                         label: d.approved_symbol,
                         uniprot_id: d.uniprot_id,
-                        interactsWithObj: {},
-                        interactsWith: []
+                        // interactsWithObj: {},
+                        interactsWith: {}
                     };
                     if (d.uniprot_id) {
                         uniprotIds.push(d.uniprot_id);
@@ -40,11 +41,8 @@ angular.module('cttvDirectives')
                 // http://www.reactome.org/AnalysisService/identifiers/projection/\?pageSize\=1\&page\=1 POST
                 var preFlightUrl = '/proxy/www.reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
                 var postData = uniprotIds.join('\n');
-                // var postData = Object.keys(uniqueTargets).join('\n');
                 $http.post(preFlightUrl, postData)
                     .then (function (resp) {
-                        $log.log('enrichment analysis response in interactions section...');
-                        $log.log(resp);
                         return resp.data;
                     })
                     .then (function (data) {
@@ -55,18 +53,26 @@ angular.module('cttvDirectives')
                             .then (function (resp) {
                                 var token = resp.data.summary.token;
                                 var url2 = '/proxy/www.reactome.org/AnalysisService/token/' + token + '/found/all';
-                                var postData2 = resp.data.pathways.map(function (d) {
-                                    return d.stId;
-                                }).join(",");
+
+                                // Save a pathway Id => pathway label map to refer to pathway maps later
+                                var ids2names = {};
+                                var idsArr = [];
+                                for (var i=0; i<resp.data.pathways.length; i++) {
+                                    var o = resp.data.pathways[i];
+                                    ids2names[o.stId] = o.name;
+                                    idsArr.push(o.stId);
+                                }
+                                var postData2 = idsArr.join(',');
                                 $http.post(url2, postData2)
                                     .then (function (targetPathways) {
+                                        $log.log("targetPathways...");
+                                        $log.log(targetPathways);
                                         var targets4pathways = {};
                                         for (var k=0; k<targetPathways.data.length; k++) {
                                             var pId = targetPathways.data[k].pathway;
                                             targets4pathways[pId] = targetPathways.data[k].entities;
                                         }
-                                        // table
-                                        // var iv_pathways = {};
+
                                         for (var pName in targets4pathways) {
                                             if (!targets4pathways.hasOwnProperty(pName)) {
                                                 continue;
@@ -107,7 +113,14 @@ angular.module('cttvDirectives')
                                                             provenance: []
                                                         }
                                                     }
-                                                    interactors[i1].interactsWith[i2].provenance.push(pName);
+                                                    interactors[i1].interactsWith[i2].provenance.push({
+                                                        id: pName,
+                                                        label: ids2names[pName]
+                                                    });
+                                                    // interactors[i2].interactsWith[i1].provenance.push({
+                                                    //     id: pName,
+                                                    //     label: ids2names[pName]
+                                                    // })
                                                 }
                                             }
                                         }
@@ -127,29 +140,60 @@ angular.module('cttvDirectives')
                                                 .id(2)
                                                 .call(this, obj);
                                         }
+                                        scope.selectedNodes = [];
+                                        scope.unselectNode = function (node) {
+                                            iv.click(node);
+                                            for (var i = 0; i < scope.selectedNodes.length; i++) {
+                                                if (scope.selectedNodes[i].label === node.label) {
+                                                    scope.selectedNodes.splice(i, 1);
+                                                }
+                                            }
+                                        };
+
                                         var iv = interactionsViewer()
                                             .data(interactorsArr)
                                             .size(600)
                                             .labelSize(90)
-                                            .on("click", function (d) {
-                                                console.log("clicked on node...", d);
-                                            })
+                                            // .on("click", function (d) {
+                                            //     console.log("clicked on node...", d);
+                                            // })
                                             .on("mouseout", function () {
                                                 hover_tooltip.close();
                                             })
                                             .on("mouseover", mouseoverTooltip)
+                                            .on("select", function (selectedNode) {
+                                                scope.selectedNodes.push(selectedNode);
+                                                scope.$apply();
+                                            })
+                                            .on("unselect", function (unselectedNode) {
+                                                for (var i=0; i<scope.selectedNodes.length; i++) {
+                                                    if (scope.selectedNodes[i].label === unselectedNode.label) {
+                                                        scope.selectedNodes.splice(i, 1);
+                                                    }
+                                                }
+                                                scope.$apply();
+                                            })
                                             .on("interaction", function (interactors) {
+                                                $log.log("interactors...");
+                                                $log.log(interactors);
+                                                debugger;
                                                 // Take the interactions between both:
-
                                                 const elem = this;
                                                 var obj = {};
                                                 // obj.header = iNames.join(" - ") + " interactions";
                                                 obj.header = interactors.interactor1 + " - " + interactors.interactor2 + " interaction";
                                                 obj.rows = [];
+                                                obj.rows.push({
+                                                    "label": "Pathways",
+                                                    "value": ""
+                                                });
+                                                var targetOptions = [interactors.interactor1, interactors.interactor2].map(function (o) {
+                                                    return '&pathway-target=' + o;
+                                                }).join ('');
                                                 interactors.provenance.forEach(function (i) {
                                                     obj.rows.push({
-                                                        "label": i,
-                                                        "value": ""
+                                                        "value": '<a href="/summary?pathway=' + i.id + targetOptions + '">' + i.label + '</a>',
+                                                        "label": "Pathway"
                                                     });
                                                 });
                                                 tooltip.table()
