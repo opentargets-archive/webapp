@@ -110,7 +110,6 @@ angular.module('cttvControllers')
      * Get facets data as well general page info data (e.g. count, labels etc)
      */
     function getFacets (filters) {
-
         // Set the filters
         $scope.filters = filters;
 

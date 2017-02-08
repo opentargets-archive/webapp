@@ -134,7 +134,7 @@ angular.module('cttvDirectives')
             var bars = '<div style="position:relative;width:200px;height:20px">' +
                     '<div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:0px;left:0px"></div>' +
                     '<div style="width:' + score + '%;background:#1e5799;height:100%;position:absolute;top:0px;left:0px"></div>' +
-                    '<div style="width:20px;border-radius:20px;text-align:center;vertical-align:middle;line-height:20px;background:#eeeeee;position:absolute;top:0px;left:3px;color:#1e5799"><span>' + d.count + '</span></div>' +
+                    '<div style="width:16px;border-radius:16px;text-align:center;vertical-align:middle;line-height:16px;font-size:0.8em;background:#eeeeee;position:absolute;top:2px;left:3px;color:#1e5799"><span>' + d.count + '</span></div>' +
                 '</div>';
             row.push(bars);
 

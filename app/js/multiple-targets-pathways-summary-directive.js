@@ -3,7 +3,7 @@ angular.module('cttvDirectives')
 .directive ('multipleTargetsPathwaysSummary', ['$log', 'cttvAPIservice', '$http', '$q', 'cttvUtils', function ($log, cttvAPIservice, $http, $q, cttvUtils) {
     'use strict';
 
-    function formatPathwayDataToArray(pathways, targets4pathways) {
+    function formatPathwayDataToArray(pathways, targets4pathways, bg) {
         var data = [];
         for (var i=0; i<pathways.length; i++) {
             var p = pathways[i];
@@ -13,19 +13,28 @@ angular.module('cttvDirectives')
             var targets = targets4pathways[pId].map(function (t) {return t.id});
 
             // 1. Pathway name
+            // limit the length of the label
+            var label = p.name;
+            if (label.length > 30) {
+                label = label.substring(0, 30) + "...";
+            }
             var targetsInUrl = targets.map(function (t) {return 'pathway-target=' + t}).join('&');
-            row.push('<a href=/summary?pathway=' + p.stId + '&' + targetsInUrl + '>' + p.name + '</a>');
+            row.push('<a href=/summary?pathway=' + p.stId + '&' + targetsInUrl + '>' + label + '</a>');
 
-            // 2. Number of targets in this pathway
-            row.push(p.entities.found);
-
-            // 3. Enrichment
+            // 2. Enrichment
             row.push(p.entities.pValue.toPrecision(2));
 
-            // 4. Number of targets -> bars
-            row.push("");
+            // 3. Number of targets -> bars
+            var score = 100 * targets.length / bg.length;
+            var bars = '<div style="position:relative;width:200px;height:20px">' +
+                '<div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:0px;left:0px"></div>' +
+                '<div style="width:' + score + '%;background:#1e5799;height:100%;position:absolute;top:0px;left:0px"></div>' +
+                '<div style="width:16px;border-radius:16px;text-align:center;vertical-align:middle;line-height:16px;font-size:0.8em;background:#eeeeee;position:absolute;top:2px;left:3px;color:#1e5799"><span>' + targets.length + '</span></div>' +
+                '</div>';
+            row.push(bars);
 
-            // 5. Targets in pathway
+
+            // 4. Targets in pathway
             row.push(targets.join(', '));
 
             data.push(row);
@@ -138,7 +147,7 @@ angular.module('cttvDirectives')
                                         }
                                         // table
                                         $('#target-list-pathways').DataTable(cttvUtils.setTableToolsParams({
-                                            "data": formatPathwayDataToArray(resp.data.pathways, targets4pathways),
+                                            "data": formatPathwayDataToArray(resp.data.pathways, targets4pathways, scope.target),
                                             "ordering": true,
                                             "order": [[2, "asc"]],
                                             "autoWidth": false,

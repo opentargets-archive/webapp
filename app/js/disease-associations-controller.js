@@ -14,7 +14,7 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvLoadedLists', '$q', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvLoadedLists, $q) {
+.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvLoadedLists', '$q', '$route', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvLoadedLists, $q, $route) {
 
     'use strict';
 
@@ -67,9 +67,9 @@ angular.module('cttvControllers')
     // TODO: should be done through the cttvLocationState?
     $scope.removeTargetLists = function () {
         $location.search("target-list", null);
-        $location.search("target", null);
+        $location.search("targets", null);
         // TODO: Also remove the filter by target list feature
-        $scope.removeTargets();
+        // $scope.removeTargets();
         // $route.reload();
         // $window.location.reload();
     };
@@ -95,21 +95,11 @@ angular.module('cttvControllers')
      * Renders page elements based on state from locationStateService
      */
     var render = function (new_state, old_state) {
-
         // here we want to update facets, tabs, etc:
         // 1. first we check if the state of a particular element has changed;
         // 2. if it hasn't changed, and it's undefined (i.e. new=undefined, old=undefined),
         // then it's a page load with no state specified, so we update that element anyway with default values
 
-        // facets changed?
-        var facetsPromise = $q(function (resolve) {
-            resolve("");
-        });
-        if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) || !new_state[facetsId] ){
-            facetsPromise.then(function () {
-                return $scope.getFacets (new_state[facetsId]);
-            });
-        }
 
         // Do we have targets?
         var targets;
@@ -140,22 +130,33 @@ angular.module('cttvControllers')
         if (targets) {
             // Passing them to the disease associations table directive
             $scope.targets = targets;
-            $scope.targetList = "a list of targets";
+            $scope.targetLists = []; // Name of the list, but we don't know it
 
-            facetsPromise.then (function () {
-                return $scope.getFacets(new_state[facetsId]);
-            });
+            // facetsPromise.then (function () {
+            //     return $scope.getFacets(new_state[facetsId], $scope.targets);
+            // });
         } else {
             $scope.targets = [];
-            $scope.targetList = [];
-            facetsPromise.then (function () {
-                return $scope.getFacets(new_state[facetsId]);
+            $scope.targetLists = [];
+            // facetsPromise.then (function () {
+            //     return $scope.getFacets(new_state[facetsId]);
+            // });
+        }
+
+        // facets changed?
+        var facetsPromise = $q(function (resolve) {
+            resolve("");
+        });
+        if (!_.isEqual(new_state[facetsId], old_state[facetsId]) || !new_state[facetsId]) {
+            facetsPromise.then(function () {
+                return $scope.getFacets(new_state[facetsId], $scope.targets);
             });
         }
+
     };
 
-    $scope.target = {};
-    $scope.target.targetArray = [];//turns out 2 way binding does not work that well on arrays
+    // $scope.targets = {};
+    // $scope.target.targetArray = [];//turns out 2 way binding does not work that well on arrays
 
 
     /*
@@ -169,15 +170,14 @@ angular.module('cttvControllers')
      * }
      * getFacets(filters);
      */
-    $scope.getFacets = function (filters,targetArray) {
-
+    $scope.getFacets = function (filters, targetArray) {
         // set the filters
         $scope.filters = filters;
 
         var opts = {
             disease: [$scope.search.query],
             outputstructure: "flat",
-            facets: true,
+            facets: "true",
             size:1
         };
 
@@ -198,7 +198,7 @@ angular.module('cttvControllers')
         return cttvAPIservice.getAssociations(queryObject)
         .then(function(resp) {
             // set the total?
-            $scope.search.total = resp.body.total; //resp.body.total;
+            $scope.search.total = resp.body.total;
 
             if (resp.body.total) {
                 //TODO Change this to POST request
@@ -210,7 +210,7 @@ angular.module('cttvControllers')
                 // The filename to download
                 $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(" ").join("_");
             } else {
-                // Check if there is a profile page
+                // No associations for this disease. Check if there is a profile page
                 var profileOpts = {
                     method: 'GET',
                     params: {
@@ -226,8 +226,6 @@ angular.module('cttvControllers')
         }, cttvAPIservice.defaultErrorHandler);
 
     };
-
-
 
     //
     // on STATECHANGED
