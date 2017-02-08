@@ -13,6 +13,8 @@ angular.module('cttvDirectives')
             width: '='
         },
         link: function (scope, element, attrs) {
+            var ivTooltip; // the tooltip for the interaction viewer.
+
             scope.$watchGroup(['target', 'associations'], function () {
                 if (!scope.target || !scope.associations) {
                     return;
@@ -146,6 +148,7 @@ angular.module('cttvDirectives')
                                                     scope.selectedNodes.splice(i, 1);
                                                 }
                                             }
+                                            ivTooltip.close();
                                         };
 
                                         var iv = interactionsViewer()
@@ -169,6 +172,7 @@ angular.module('cttvDirectives')
                                                         scope.selectedNodes.splice(i, 1);
                                                     }
                                                 }
+                                                ivTooltip.close();
                                                 scope.$apply();
                                             })
                                             .on("interaction", function (interactors) {
@@ -192,7 +196,7 @@ angular.module('cttvDirectives')
                                                         "label": "Pathway"
                                                     });
                                                 });
-                                                tooltip.table()
+                                                ivTooltip = tooltip.table()
                                                     .width(180)
                                                     .id(1)
                                                     .call(elem, obj);

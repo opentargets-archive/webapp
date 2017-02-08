@@ -50,7 +50,7 @@
     "cttv.targetGeneTree": "0.0.13",
     "js-yaml": "3.5.5",
     "marked": "0.3.5",
-    "ot.interactions_viewer": "0.0.2",
+    "ot.interactions_viewer": "0.0.4",
     "systemjs": "^0.19.27",
     "tnt.genome": "0.1.5",
     "tnt.rest": "0.1.1",
