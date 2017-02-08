@@ -94,6 +94,14 @@ angular.module('cttvDirectives')
                 }
                 delete(scope.searchQuery);
             };
+            scope.restoreThis = function (query) {
+                for (var i=0; i<scope.list.list.length; i++) {
+                    var item = scope.list.list[i];
+                    if (item.query === query.query) {
+                        item.discarded = false;
+                    }
+                }
+            };
             scope.searchThis = function (who) {
                 scope.searchQuery = who;
 

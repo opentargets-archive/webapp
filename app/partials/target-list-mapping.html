@@ -34,12 +34,16 @@
                 <div ng-show="!searchQuery" class="batch-search-results-container">
                     <div ng-repeat="item in fuzzy">
                         <span class="search-item" ng-class="item.discarded ? 'item-discarded' : ''">{{item.query}} <i class="fa fa-arrow-right" aria-hidden="true"></i> {{item.result}}</span>
-                        <span ng-class="hover ? 'search-options highlight' : 'search-options down'" ng-mouseenter="hover=true" ng-mouseleave="hover=false">
-                            <span ng-click="searchThis(item)">
+                        <span class="search-options highlight">
+                        <!--<span ng-class="hover ? 'search-options highlight' : 'search-options down'" ng-mouseenter="hover=true" ng-mouseleave="hover=false">-->
+                            <span ng-click="searchThis(item)" title="search for this target">
                                 <i class="fa fa-search"></i>
                             </span>
-                            <span ng-click="discardThis(item)">
+                            <span ng-click="discardThis(item)" ng-show="!item.discarded" title="discard this target">
                                 <i class="fa fa-times"></i>
+                            </span>
+                            <span ng-click="restoreThis(item)" ng-show="item.discarded" title="restore this target">
+                                <i class="fa fa-check"></i>
                             </span>
                         </span>
                     </div>
