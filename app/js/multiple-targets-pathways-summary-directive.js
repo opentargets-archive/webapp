@@ -149,7 +149,7 @@ angular.module('cttvDirectives')
                                         $('#target-list-pathways').DataTable(cttvUtils.setTableToolsParams({
                                             "data": formatPathwayDataToArray(resp.data.pathways, targets4pathways, scope.target),
                                             "ordering": true,
-                                            "order": [[2, "asc"]],
+                                            "order": [[1, "asc"]],
                                             "autoWidth": false,
                                             "paging": true,
                                             "columnDefs": []
