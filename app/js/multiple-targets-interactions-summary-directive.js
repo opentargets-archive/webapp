@@ -38,9 +38,6 @@ angular.module('cttvDirectives')
                     }
                 });
 
-                // The promises to keep the data
-                var ps = [];
-
                 // Save a pathway Id => pathway label map to refer to pathway maps later
                 var ids2names = {};
 
@@ -49,7 +46,10 @@ angular.module('cttvDirectives')
                 // http://www.reactome.org/AnalysisService/identifiers/projection/\?pageSize\=1\&page\=1 POST
                 var preFlightUrl = '/proxy/www.reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
                 var postData = uniprotIds.join('\n');
-                var p = $http.post(preFlightUrl, postData)
+                // var p1 = $q(function(resolve, reject) {
+                //     resolve({data: []});
+                // });
+                var p1 = $http.post(preFlightUrl, postData)
                     .then (function (resp) {
                         return resp.data;
                     })
@@ -75,11 +75,19 @@ angular.module('cttvDirectives')
                                     });
                             });
                     });
-                ps.push(p);
 
-                $q.all(ps)
+                // Get the IntAct data from omnipathdb...
+                var url = "/proxy/www.omnipathdb.org/interactions/" + uniprotIds.join(',') + '?format=json&fields=sources';
+                var p2 = $http.get(url)
+                    .then(function (resp) {
+                        return resp;
+                    });
+
+
+                $q.all([p1, p2])
                     .then(function (resps) {
-                        console.log(resps);
+
+                        // Parse the pathways (reactome) data
                         var targetPathways = resps[0];
                         var targets4pathways = {};
                         for (var k = 0; k < targetPathways.data.length; k++) {
@@ -129,7 +137,8 @@ angular.module('cttvDirectives')
                                     }
                                     interactors[i1].interactsWith[i2].provenance.push({
                                         id: pName,
-                                        label: ids2names[pName]
+                                        label: ids2names[pName],
+                                        source: 'Reactome'
                                     });
                                     // interactors[i2].interactsWith[i1].provenance.push({
                                     //     id: pName,
@@ -139,7 +148,60 @@ angular.module('cttvDirectives')
                             }
                         }
 
+                        // Parse the IntAct (omnipathdb) data
+                        var odbData = resps[1].data;
+                        for (var i = 0; i < odbData.length; i++) {
+                            var link = odbData[i];
+                            var source = mapNames[link.source];
+                            var target = mapNames[link.target];
+                            var provenance = link.sources;
+
+                            if ((source && target) && (source !== target)) {
+                                if (!interactors[source]) {
+                                    interactors[source] = {
+                                        label: source,
+                                        interactsWith: {}
+                                    }
+                                }
+                                if (!interactors[target]) {
+                                    interactors[target] = {
+                                        label: target,
+                                        interactsWith: {}
+                                    }
+                                }
+                                if (!interactors[source].interactsWith[target]) {
+                                    interactors[source].interactsWith[target] = {
+                                        label: target,
+                                        provenance: []
+                                    }
+                                }
+                                if (!interactors[target].interactsWith[source]) {
+                                    interactors[target].interactsWith[source] = {
+                                        label: source,
+                                        provenance: []
+                                    }
+                                }
+                                // interactors[source].interactsWith[target].provenance.push({
+                                //     id: "IntAct",
+                                //     label: "PPI",
+                                //     source: 'IntAct'
+                                // });
+                                for (var f=0; f<provenance.length; f++) {
+                                    var prov = provenance[f];
+                                    interactors[source].interactsWith[target].provenance.push({
+                                        id: prov,
+                                        label: "Reactome",
+                                        source: "OmnipathDB"
+                                    })
+                                }
+                                // interactors[source].interactsWith[target].provenance = provenance;
+                            }
+                        }
+
+                        // Set up the interactors viewer
                         var interactorsArr = Object.values(interactors);
+                        $log.log("Final interactors...");
+                        $log.log(interactorsArr);
 
                         // Tooltips
                         var hover_tooltip;
@@ -195,26 +257,56 @@ angular.module('cttvDirectives')
                                 scope.$apply();
                             })
                             .on("interaction", function (interactors) {
-                                debugger;
-                                // Take the interactions between both:
-                                const elem = this;
+                                $log.log(interactors);
+                                var elem = this;
                                 var obj = {};
                                 // obj.header = iNames.join(" - ") + " interactions";
                                 obj.header = interactors.interactor1 + " - " + interactors.interactor2 + " interaction";
                                 obj.rows = [];
-                                obj.rows.push({
-                                    "label": "Pathways",
-                                    "value": ""
+
+                                // Differenciate between sources
+                                var reactome = [];
+                                var omnipathDB = [];
+                                interactors.provenance.forEach(function (p) {
+                                    if (p.source === "Reactome") {
+                                        reactome.push(p);
+                                    } else if (p.source === "OmnipathDB") {
+                                        omnipathDB.push (p);
+                                    }
                                 });
-                                var targetOptions = [interactors.interactor1, interactors.interactor2].map(function (o) {
-                                    return '&pathway-target=' + o;
-                                }).join('');
-                                interactors.provenance.forEach(function (i) {
+
+                                // Show reactome entries:
+                                if (reactome.length) {
                                     obj.rows.push({
-                                        "value": '<a href="/summary?pathway=' + i.id + targetOptions + '">' + i.label + '</a>',
-                                        "label": "Pathway"
+                                        "label": "Shared pathways (" + reactome.length + ")",
+                                        "value": ""
                                     });
-                                });
+                                    var targetOptions = [interactors.interactor1, interactors.interactor2].map(function (o) {
+                                        return '&pathway-target=' + o;
+                                    }).join('');
+                                    reactome.forEach(function (i) {
+                                        obj.rows.push({
+                                            "value": '<a href="/summary?pathway=' + i.id + targetOptions + '">' + i.label + '</a>',
+                                            // "value": i.label,
+                                            "label": "Pathway"
+                                        });
+                                    });
+                                }
+
+                                // Show OmnipathDB entries:
+                                if (omnipathDB.length) {
+                                    obj.rows.push({
+                                        "label": "Interactions (" + omnipathDB.length + ")",
+                                        "value": ""
+                                    });
+                                    omnipathDB.forEach (function (i) {
+                                        obj.rows.push({
+                                            "value": i.id,
+                                            "label": "OmnipathDB"
+                                        })
+                                    });
+                                }
+
                                 ivTooltip = tooltip.table()
                                     .width(180)
                                     .id(1)
@@ -226,22 +318,6 @@ angular.module('cttvDirectives')
                         }, 0);
 
                     });
-
-                // Get the IntAct data from omnipathdb...
-                // var url = "/proxy/www.omnipathdb.org/interactions/" + uniprotIds.join(',') + '?format=json&fields=sources';
-                // $http.get(url)
-                //     .then (function (resp) {
-                //         for (var i=0; i<resp.data.length; i++) {
-                //             var link = resp.data[i];
-                //             var source = mapNames[link.source];
-                //             var target = mapNames[link.target];
-                //             var provenances = link.sources;
-                //
-                //             if (source & target) {
-                //                 // if (!interactors)
-                //             }
-                //         }
-                //     });
 
                 // Get all the data...
                 // var url = "/proxy/www.omnipathdb.org/interactions/" + uniprotIds.join(',') + '?format=json&fields=sources';
