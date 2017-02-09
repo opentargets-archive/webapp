@@ -199,7 +199,13 @@ angular.module('cttvDirectives')
                         }
 
                         // Set up the interactors viewer
-                        var interactorsArr = Object.values(interactors);
+                        var interactorsArr = [];
+                        for (var inter in interactors) {
+                            if (interactors.hasOwnProperty(inter)) {
+                                interactorsArr.push(interactors[inter]);
+                            }
+                        }
+                        // var interactorsArr = Object.values(interactors);
                         $log.log("Final interactors...");
                         $log.log(interactorsArr);
 
