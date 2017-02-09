@@ -153,6 +153,7 @@ push-release:
     - script:
         name: log status in github
         code: |
+          apk add curl  
           if [ "$WERCKER_RESULT" = "passed" ]; then
              export WERCKER_PIPELINE_STATUS="success";
           elif [ "$WERCKER_RESULT" = "failed" ]; then
