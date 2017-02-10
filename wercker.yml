@@ -140,8 +140,8 @@ push-release:
       disable-sync: true
       username: _json_key
       password: $GCR_JSON_KEY_FILE
-      tag: release-$WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH $LATEST_FLAG
-      repository: eu.gcr.io/open-targets/webapp-prod
+      tag: $WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH $LATEST_FLAG
+      repository: eu.gcr.io/open-targets/webapp
       registry: $GCR_HOST
       working-dir: /var/www/app
       ports: "80 443"
