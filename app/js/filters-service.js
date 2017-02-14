@@ -9,13 +9,18 @@ angular.module('cttvServices').
     /**
      *
      */
-    factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', '$analytics', function($log, $location, cttvDictionary, cttvConsts, cttvAPIservice, cttvUtils, cttvLocationState, $analytics) {
+    factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', '$analytics', '$injector', 'cttvConfig', function($log, $location, cttvDictionary, cttvConsts, cttvAPIservice, cttvUtils, cttvLocationState, $analytics, $injector, cttvConfig) {
+
+        $log.log(" --- filters service ---");
+
+
 
         "use strict";
 
+        // TODO: REMOVE! as this should become deprecated here
         // set the default datatypes:
         // only animal models are filtered out (deselected) by default
-        var datatypes = [
+        /*var datatypes = [
             {key: cttvConsts.datatypes.GENETIC_ASSOCIATION, selected:true},
             {key: cttvConsts.datatypes.SOMATIC_MUTATION, selected:true},
             {key: cttvConsts.datatypes.KNOWN_DRUG, selected:true},
@@ -23,7 +28,7 @@ angular.module('cttvServices').
             {key: cttvConsts.datatypes.RNA_EXPRESSION, selected:true},
             {key: cttvConsts.datatypes.LITERATURE, selected:true},
             {key: cttvConsts.datatypes.ANIMAL_MODEL, selected:false}
-        ];
+        ];*/
 
 
         // array of FilterCollections
@@ -63,6 +68,22 @@ angular.module('cttvServices').
 
 
         var lastClicked;
+
+
+
+        // PARSERS
+        //var parser1 = $injector.get("datatypeFacetParser");
+        //parser1.parse("hey bob!");
+        var parsers = {};
+        $log.log(cttvConfig.facets);
+        /*for(var i in cttvConfig.facets){
+            parsers[i] = $injector.get("datatypeFacetParser");
+        }*/
+        parsers.datatype = $injector.get("datatypeFacetParser");
+        parsers.datasource = $injector.get("datasourceFacetParser");
+        parsers.therapeuticArea = $injector.get("therapeuticAreaFacetParser");
+        parsers.pathway = $injector.get("pathwayFacetParser");
+        parsers.targetClass = $injector.get("targetClassFacetParser");
 
 
 
@@ -178,20 +199,37 @@ angular.module('cttvServices').
         /*
          * Takes API data for a facet (i.e. a collection of filters) and returns the config object to create that collection
          */
-        var parseFacetData = function(collection, data, countsToUse){
-            // $log.log("parseFacetData "+collection);
+        var parseFacetData = function(collection, data, countsToUse, options){
+            $log.log("parseFacetData "+collection);
+
+
+            // 1.
+            // set up default options:
+            // these are mostly things for the container of each collection,
+            // like label, whether it's open or closed tostart with
+            options = options || {};
+            options.open = options.open===false ? false : true;
+            options.heading = options.heading || cttvDictionary[collection.toUpperCase()] || collection;
+
             var config={
                 key: collection,    // this is the type, really...
-                label: cttvDictionary[collection.toUpperCase()] || collection,  // set default label based on what the API has returned for this
-                isPartial: Math.min(1, (status.indexOf(collection)+1))
+                //label: options.heading || cttvDictionary[collection.toUpperCase()] || collection,  // set default label based on what the API has returned for this
+                //isPartial: Math.min(1, (status.indexOf(collection)+1)), // TODO: is this redundant now? can it be removed?
+                options : options
             };
+
+
+
+            // 2.
+            // now parse the filters:
+            // this should be somehow developed externally for each facet...
 
             if(collection === cttvConsts.DATATYPES){
                 // we have datatypes, which is a little complicated
                 // because we have DEFAULT options (i.e. filtering out mouse data)
                 // these should go into the "selected filters" (although the user hasn't selected them)
-                config.label = cttvDictionary.DATA_TYPES;
-                config.filters = datatypes.map( function(obj){
+                // config.label = cttvDictionary.DATA_TYPES;
+                /*config.filters = datatypes.map( function(obj){
                     var conf = {};
                     var def = {};
                     def[countsToUse] = {};
@@ -208,57 +246,67 @@ angular.module('cttvServices').
                     }
 
                     return conf;
-                });/*.filter( function(obj){
+                });*/
+                /*.filter( function(obj){
                     // Use a filter function to keep only those returned by the API??
                     return obj.count>0;
                 });*/
+
+                config.filters = parsers.datatype.parse(collection, data, countsToUse, options, isSelected);
+
             } else if (collection === cttvConsts.PATHWAY) {
-                config.label = cttvDictionary.PATHWAY;
+                // config.label = cttvDictionary.PATHWAY;
                 // pathways
-                config.filters = data.buckets.map(function (obj) {
-                    var conf = {};
-                    conf.key = obj.key;
-                    conf.label = obj.label;
-                    conf.count = obj[countsToUse].value;
-                    conf.selected = isSelected(collection, obj.key);
-                    conf.facet = collection;
-                    conf.collection = null;
-                    if (obj.pathway) {
-                        conf.collection = parseCollection(parseFacetData(cttvConsts.PATHWAY, obj.pathway, countsToUse));
-                    }
-                    return conf;
-                });
+                // config.filters = data.buckets.map(function (obj) {
+                //     var conf = {};
+                //     conf.key = obj.key;
+                //     conf.label = obj.label;
+                //     conf.count = obj[countsToUse].value;
+                //     conf.selected = isSelected(collection, obj.key);
+                //     conf.facet = collection;
+                //     conf.collection = null;
+                //     if (obj.pathway) {
+                //         conf.collection = parseCollection(parseFacetData(cttvConsts.PATHWAY, obj.pathway, countsToUse));
+                //     }
+                //     return conf;
+                // });
+                config.filters = parsers.pathway.parse(collection, data, countsToUse, options, isSelected);
+
             } else if (collection === cttvConsts.TARGET_CLASS) {
-                config.label = cttvDictionary.TARGET_CLASS;
-                config.filters = data.buckets.map(function (obj) {
-                    var conf = {};
-                    conf.key = obj.key;
-                    conf.label = obj.label;
-                    conf.count = obj[countsToUse].value;
-                    conf.selected = isSelected(collection, obj.key);
-                    conf.facet = collection;
-                    conf.collection = null;
-                    if (obj.target_class) {
-                        conf.collection = parseCollection(parseFacetData(cttvConsts.TARGET_CLASS, obj.target_class, countsToUse));
-                    }
-                    return conf;
-                });
+                // config.label = cttvDictionary.TARGET_CLASS;
+                // config.filters = data.buckets.map(function (obj) {
+                //     var conf = {};
+                //     conf.key = obj.key;
+                //     conf.label = obj.label;
+                //     conf.count = obj[countsToUse].value;
+                //     conf.selected = isSelected(collection, obj.key);
+                //     conf.facet = collection;
+                //     conf.collection = null;
+                //     if (obj.target_class) {
+                //         conf.collection = parseCollection(parseFacetData(cttvConsts.TARGET_CLASS, obj.target_class, countsToUse));
+                //     }
+                //     return conf;
+                // });
+                config.filters = parsers.targetClass.parse(collection, data, countsToUse, options, isSelected);
+
             } else if (collection === cttvConsts.DATASOURCES){
                 // datasources (in datatype subfacets)
-                config.filters = data.buckets.map(function(obj){
-                    var conf = {};
-                    conf.key = obj.key;
-                    //conf.label = obj.key;
-                    conf.label = cttvDictionary[ cttvConsts.invert(obj.key) ] || obj.key;
-                    conf.count = obj[countsToUse].value;
-                    conf.selected = isSelected(collection, obj.key);
-                    conf.facet = collection;
-                    conf.collection = null;
-                    return conf;
-                });
+                // config.filters = data.buckets.map(function(obj){
+                //     var conf = {};
+                //     conf.key = obj.key;
+                //     //conf.label = obj.key;
+                //     conf.label = cttvDictionary[ cttvConsts.invert(obj.key) ] || obj.key;
+                //     conf.count = obj[countsToUse].value;
+                //     conf.selected = isSelected(collection, obj.key);
+                //     conf.facet = collection;
+                //     conf.collection = null;
+                //     return conf;
+                // });
+                config.filters = parsers.datasource.parse(collection, data, countsToUse, options, isSelected);
+
             } else if (collection === cttvConsts.THERAPEUTIC_AREAS) {
                 // therapeutic area facet
-                config.filters = data.buckets.map(function (obj) {
+                /*config.filters = data.buckets.map(function (obj) {
                     var conf = {};
                     conf.key = obj.key;
                     conf.label = obj.label;
@@ -267,7 +315,8 @@ angular.module('cttvServices').
                     conf.collection = null;
                     conf.selected = isSelected(collection, obj.key);
                     return conf;
-                });
+                });*/
+                config.filters = parsers.therapeuticArea.parse(collection, data, countsToUse, options, isSelected);
             } else if (collection === cttvConsts.DATA_DISTRIBUTION){
                 // score (data_distribution)
                 config.label= cttvDictionary.SCORE;
@@ -332,6 +381,9 @@ angular.module('cttvServices').
             collection.filters=[]; // overwrite the filters so we can add them in properly
             obj.filters.forEach(function(element){
                 var f = getFilter(element);    //new Filter(element)
+                    // does it have subfilters?
+                    //if(f.collection)
+
                 collection.addFilter(f);    // add filter to the collection
                 // but do we want to add the filter to the selected ones as well? if needed?
                 // is here the best place? mmmh....
@@ -417,7 +469,9 @@ angular.module('cttvServices').
             // the value associated with this
             this.value = o.value || undefined;
             // trying to have nested filters?
-            this.collection = o.collection || null;
+            //this.collection = o.collection || null;
+            // TODO: the problem here is that we couple the Filter class to the parseCollection() method here...
+            this.collection = o.collection ? parseCollection(o.collection) : null;
         }
 
             /*
@@ -455,12 +509,16 @@ angular.module('cttvServices').
          * filters:Array - array of Filters
          */
         function FilterCollection(config){
+            // $log.log(" >> "+config.label);
+            // $log.log(config);
+            // $log.log(" << "+config.label);
             this.key = config.key || "";
             this.label = config.label || "";
             this.filters = config.filters || [];
             this.data = config.data || undefined;
             this.isPartial = config.isPartial || 0;
-            this.options = config.options || undefined; // or {} ???
+            this.options = config.options || {}; // or {} ???
+            this.open = config.open;
             if(config.addFilter){
                 this.addFilter = config.addFilter;
             }
@@ -570,7 +628,7 @@ angular.module('cttvServices').
             facets.forEach(function(facet){
                 pageFacetsStack.push(facet);
             });
-            $log.log(pageFacetsStack);
+            //$log.log(pageFacetsStack);
         };
 
 
@@ -631,32 +689,6 @@ angular.module('cttvServices').
 
 
 
-        /**
-         * Parses the search of the URL
-         * and returns an API-friendly config object with the filter options
-         */
-        // TODO:
-        // this should be deprecated now, right?
-        //cttvFiltersService.parseURL = function(){
-//
-        //    // datatypes=genetic_association&datatypes=known_drug&datatypes=rna_expression
-//
-        //    var raw = {};
-        //    var search = $location.search();
-//
-        //    for(var i in search){
-        //        if(search.hasOwnProperty(i)){
-        //            raw[ i ] = search[i];
-        //            if(typeof raw[ i ] === "string"){
-        //                raw[i] = [raw[i]];
-        //            }
-        //        }
-        //    }
-        //    return raw;
-        //};
-
-
-
         cttvFiltersService.stateId = "fcts";
 
 
@@ -668,7 +700,7 @@ angular.module('cttvServices').
          * @param status [Array] this contains ["ok"] if all facets were computed correctly by the API. In case of errors, it contains the list of facets reporting incorrect values, e.g. ["partial-facet-datatypes"]
          */
         cttvFiltersService.updateFacets = function(facets, countsToUse, status){
-            // $log.log("updateFacets");
+            $log.log("updateFacets");
             // if there are no facets, return
             if(!facets){
                 return;
@@ -701,7 +733,7 @@ angular.module('cttvServices').
             orderedFacets.forEach(function(collection){
                 if (facets.hasOwnProperty(collection.type)) {
                     try{
-                        addCollection( parseFacetData(collection.type, facets[collection.type], countsToUse) );
+                        addCollection( parseFacetData(collection.type, facets[collection.type], countsToUse, collection.options) );
                     } catch(e){
                         $log.warn("Error while updating facets: "+e);
                     }
@@ -735,13 +767,15 @@ angular.module('cttvServices').
 
 
 
-        cttvFiltersService.getDefaultSelectedDatatypes = function(){
+        // DEPRECATED???
+        // let's find out...
+        /*cttvFiltersService.getDefaultSelectedDatatypes = function(){
             return datatypes.filter(function(value){
                                 return value.selected;
                             }).map(function(obj){
                                 return obj.key;
                             });
-        }
+        }*/
 
 
 
@@ -765,12 +799,15 @@ angular.module('cttvServices').
         }
 
 
+
         cttvFiltersService.update = function(){
             update();
         }
 
 
+
         /**
+         * TODO: this in no longer returned by the API and could therefore be deprecated
          * Example status:
          * "status": ["ok"]
          * "status": ["partial-facet-datatypes"]
@@ -790,6 +827,14 @@ angular.module('cttvServices').
             }
             return status;
         }
+
+
+
+        /**
+         * Export the isSelected function
+         */
+        cttvFiltersService.isSelected = isSelected;
+
 
 
         return cttvFiltersService;

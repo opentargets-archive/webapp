@@ -388,67 +388,9 @@ angular.module('cttvDirectives', [])
 
 
     /**
-    * Top level container for all the facets.
-    * This contains accordion etc
-    */
-    .directive('cttvFacets', ['$log', 'cttvAPIservice', 'cttvFiltersService' , function ($log, cttvAPIservice, cttvFiltersService) {
-        'use strict';
-
-        return {
-
-            restrict: 'EA',
-
-            scope: {},
-
-            templateUrl: 'partials/facets.html',
-
-            link: function (scope, elem, attrs) {
-                //scope.dataDistribution =
-                scope.filters = cttvFiltersService.getFilters();
-                scope.selectedFilters = cttvFiltersService.getSelectedFilters();
-                scope.deselectAll = cttvFiltersService.deselectAll;
-
-                //scope.respStatus = 1; //cttvFiltersService.status(); // TODO: handle response status
-                //scope.updateFilter = function(id){
-                //    cttvFiltersService.getFilter(id).toggle();
-                //}
-            },
-
-        };
-
-    }])
-
-
-
-    /**
-     * The default "select all / clear all" controls for facets
-     * @param facet the facet (i.e. instance of FilterCollection from the FilterService) we are rendering, e.g. datatypes, pathways, score , etc...
-     */
-    .directive('cttvDefaultFacetControls', ['$log' , function ($log) {
-        'use strict';
-
-        return {
-
-            restrict: 'EA',
-
-            scope: {
-                facet: '='
-            },
-
-            template: '<div class="cttv-facets-controls">'
-                      + '    <span ng-click="facet.selectAll(false)">Clear all <i class="fa fa-times"></i></span>'
-                      + '    <span ng-click="facet.selectAll(true)">Select all <i class="fa fa-check"></i></span>'
-                      + '</div>',
-
-            link: function (scope, elem, attrs) {},
-        };
-    }])
-
-
-    /**
     * The therapeutic areas facet
     */
-    .directive('cttvTherapeuticAreasFacet', ['$log', function ($log) {
+    /*.directive('cttvTherapeuticAreasFacet', ['$log', function ($log) {
         'use strict';
 
         return {
@@ -466,11 +408,11 @@ angular.module('cttvDirectives', [])
             link: function (scope, elem, attrs) {
             },
         };
-    }])
+    }])*/
 
     /**
      * The Datatypes facet
-     */
+
     .directive('cttvDatatypesFacet', ['$log' , function ($log) {
         'use strict';
 
@@ -496,12 +438,12 @@ angular.module('cttvDirectives', [])
 
             link: function (scope, elem, attrs) {},
         };
-    }])
+    }])*/
 
     /**
      *  The target class facet
       */
-    .directive('cttvTargetClassFacet', ['$log', function ($log) {
+    /*.directive('cttvTargetClassFacet', ['$log', function ($log) {
         'use strict';
 
         return {
@@ -521,14 +463,14 @@ angular.module('cttvDirectives', [])
 
             link : function (scope, elem, attrs ) {}
         }
-    }])
+    }])*/
 
 
 
     /**
      * The Pathways facet
      */
-    .directive('cttvPathwaysFacet', ['$log' , function ($log) {
+    /*.directive('cttvPathwaysFacet', ['$log' , function ($log) {
         'use strict';
 
         return {
@@ -554,6 +496,7 @@ angular.module('cttvDirectives', [])
             link: function (scope, elem, attrs) {}
         };
     }])
+    */
 
 
 
@@ -1114,131 +1057,6 @@ angular.module('cttvDirectives', [])
                 }*/
 
             },
-        };
-    }])
-
-    /**
-     * A directive for plain Checkbox facets.
-     * @param bucket the instance of Filter object from the FilterService; this is likely in an ng-repeat thing like ng-repeat="bucket in filters"
-     */
-    .directive('cttvCheckboxFacet', ['$log' , function ($log) {
-        'use strict';
-
-        return {
-
-            restrict: 'EA',
-
-            scope: {
-                bucket: '=',
-                partial: '@',    // optional 'OK' status
-                multiline: '@?'  // optional multiline option
-            },
-
-            template: '<div class="checkbox cttv-facet-checkbox clearfix">'
-                     +'    <label ng-class="(!bucket.enabled ? \'disabled\' : \'\') +\' \'+ (multiline?\'cttv-facet-checkbox-label-multiline\':\'cttv-facet-checkbox-label\')" title="{{bucket.label}}">'
-                     +'        <input type="checkbox"'
-                     +'            ng-value="{{bucket.id}}"'
-                     +'            ng-checked="bucket.selected"'
-                     +'            ng-disabled="!bucket.enabled"'
-                     +'            ng-click="bucket.toggle()" >'
-                     +'<span>{{bucket.label | upperCaseFirst | clearUnderscores}}</span>'
-                     +'<span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>'
-                     +'</label>'
-                     +'<span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>'
-                     +'</div>',
-
-            link: function (scope, elem, attrs) {},
-        };
-    }])
-
-
-
-    /**
-     * A directive for plain Checkbox facets.
-     * @param bucket the instance of Filter object from the FilterService; this is likely in an ng-repeat thing like ng-repeat="bucket in filters"
-     */
-    .directive('cttvParentCheckboxFacet', ['$log' , function ($log) {
-        'use strict';
-
-        return {
-
-            restrict: 'EA',
-
-            scope: {
-                bucket: '=',
-                collapsed: '=',
-                partial: '@'
-            },
-
-            template: '<div>'
-                     +'    <div class="checkbox cttv-facet-checkbox clearfix">'
-                     // +'        <span style="width:12px" class="text-lowlight pull-right">'
-                     // +'            <i class="fa" ng-class="{\'fa-caret-right\': collapsed, \'fa-caret-down\': !collapsed}" ng-click="collapsed = !collapsed" style="cursor:pointer; padding:0px 4px;" ng-show="bucket.enabled"></i>'
-                     // +'        </span>'
-                     +'        <span style="width:auto">'
-                     +'            <label ng-class="(!bucket.enabled) ? \'disabled\' : \'\'" class="cttv-facet-checkbox-label" title="{{bucket.label}}">'
-                     +'                <input type="checkbox"'
-                     +'                    cttv-ui-indeterminate="{{bucket.collection.getSelectedFilters().length>0 && (bucket.collection.filters.length > bucket.collection.getSelectedFilters().length)}}"'
-                     +'                    value="{{bucket.id}}"'
-                     +'                    ng-checked="bucket.selected || (bucket.collection.filters.length>0 && bucket.collection.filters.length == bucket.collection.getSelectedFilters().length)"'
-                     +'                    ng-disabled="!bucket.enabled || bucket.collection.getSelectedFilters().length>0"'
-                     +'                    ng-click="bucket.toggle()" >'
-                     +'                {{bucket.label}}'
-                     +'            </label>'
-                     +'            <span class="text-lowlight cttv-facet-count pull-left" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? \' or more\' : \'\'}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>'
-                     +'        </span>'
-                     +'        <span ng-show="bucket.collection.filters.length" class="text-lowlight pull-right">'
-                     +'            <i class="fa cttv-facets-small-arrow" ng-class="{\'fa-caret-right\': collapsed, \'fa-caret-down\': !collapsed}" ng-click="collapsed = !collapsed"  ng-show="bucket.enabled"></i>'
-                     +'        </span>'
-                     +'    </div>'
-                     +'</div>'
-
-        };
-    }])
-
-
-
-    /**
-    * A directive for Checkbox facet with nested facets.
-
-    .directive('cttvMultiCheckboxFacet', ['$log' , function ($log) {
-        'use strict';
-
-        return {
-
-            restrict: 'EA',
-
-            scope: {
-                //bucket: '='
-            },
-
-            template: '',
-
-            link: function (scope, elem, attrs) {},
-        };
-    }])
-    */
-
-
-    /**
-    * A directive for Checkbox facet with nested facets.
-    */
-    .directive('cttvUiIndeterminate', ['$log' , function ($log) {
-        'use strict';
-
-        return {
-
-            restrict: 'EA',
-
-            link: function (scope, elem, attrs) {
-                if (!attrs.type || attrs.type.toLowerCase() !== 'checkbox') {
-                    return angular.noop;
-                }
-
-                scope.$watch(attrs.cttvUiIndeterminate, function(newVal) {
-                    elem[0].indeterminate = !!newVal;
-                });
-            }
         };
     }])
 

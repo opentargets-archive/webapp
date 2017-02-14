@@ -200,8 +200,34 @@
         }
     ],
 
+
     /*
-    FACETS for each page. Values are
+    Facets definition*/
+
+    "facets" : {
+        "datatype" : {
+            "id": "datatype",
+            "element": "datatype-facet"
+        },
+
+        "therapeutic_area" : {
+            "id": "therapeutic_area",
+            "element": "therapeutic-area-facet"
+        },
+
+        "pathway" : {
+            "id": "pathway",
+            "element": "pathway-facet"
+        },
+
+        "target_class" : {
+            "id": "target_class",
+            "element": "target-class-facet"
+        }
+    },
+
+    /*
+        PAGE Facets, e.g.
         'datatype',
         'pathway',
         'datasources',
@@ -218,17 +244,36 @@
             }
         },*/
         {
-            "type":"datatype",
+            "type" : "datatype",
             "options" : {
-                "open" : true
+                "open" : true/*,
+                "heading" : "Data Types"*/
             }
         },
         {
             "type":"therapeutic_area",
             "options" : {
-                "open" : true
+                "open" : false
             }
         }
+        /*
+            "name": "proteinExpression",
+            "element": "protein-baseline-expression",
+            "heading": "Protein baseline expression",
+            "track": true
+
+            // ------
+
+            "name":"therapeutic_area",
+            "id" ; ?? // for URL storage
+            "element": "protein-baseline-expression",
+
+            "options" : {
+                "open" : true,
+                "heading": "Protein baseline expression"
+            }
+
+        */
     ],
 
 
@@ -242,7 +287,7 @@
         {
             "type":"pathway",
             "options" : {
-                "open" : true
+                "open" : false
             }
         },
         {
