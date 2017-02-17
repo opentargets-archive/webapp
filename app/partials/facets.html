@@ -40,6 +40,11 @@
                 TODO:
                 here we need to automate this block based on the facet definition in config.json
             -->
+
+            <!-- <div ng-attr-facet.options.element facet='facet'></div> -->
+            <facet-loader plugin="{{facet.options.element}}" facet="facet"></facet-loader>
+
+            <!--
             <div datatype-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='datatype'"></div>
 
             <div cttv-pathway-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='pathway'"></div>
@@ -48,7 +53,7 @@
 
             <div cttv-therapeutic-area-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='therapeutic_area'"></div>
 
-            <div cttv-target-class-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='target_class'"></div>
+            <div cttv-target-class-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='target_class'"></div> -->
 
         </div>
     </uib-accordion>

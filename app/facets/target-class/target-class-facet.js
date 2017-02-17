@@ -3,7 +3,7 @@ angular.module('facets')
     /**
      * The Target class facet
      */
-    .directive('cttvTargetClassFacet', ['$log' , function ($log) {
+    .directive('targetClassFacet', ['$log' , function ($log) {
         'use strict';
 
         return {

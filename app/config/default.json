@@ -201,101 +201,123 @@
     ],
 
 
+
     /*
-    Facets definition*/
+     * Facets definition
+     * Here we define all facets available in the app.
+     * each facet is defiend as follow:
+     *    "datatype" : {    // the code name for the facet - can be anything
+     *        "key"         // IMPORTANT! the key (id) as returned by the API
+     *        "element"     // the name root as defined in the facet folder
+     *                      // where you ahve the directive (datatypeFacet) and parser (datatypeFacetParser)
+     *    }
+     */
+
+
 
     "facets" : {
         "datatype" : {
-            "id": "datatype",
-            "element": "datatype-facet"
+            "key": "datatype",
+            "element": "datatype-facet",
+            "options" : {
+                "heading" : "Datatype",
+                "open" : true
+            }
         },
 
-        "therapeutic_area" : {
-            "id": "therapeutic_area",
-            "element": "therapeutic-area-facet"
+        "therapeuticArea" : {
+            "key": "therapeutic_area",
+            "element": "therapeutic-area-facet",
+            "options" : {
+                "heading" : "Therapeutic area",
+                "open" : true
+            }
         },
 
         "pathway" : {
-            "id": "pathway",
-            "element": "pathway-facet"
+            "key": "pathway",
+            "element": "pathway-facet",
+            "options" : {
+                "heading" : "Pathway types",
+                "open" : true
+            }
         },
 
-        "target_class" : {
-            "id": "target_class",
-            "element": "target-class-facet"
+        "targetClass" : {
+            "key": "target_class",
+            "element": "target-class-facet",
+            "options" : {
+                "heading" : "Target class",
+                "open" : true
+            }
+        },
+
+        "histogram" : {
+            "key": "data_distribution",
+            "element": "data-distribution-facet",
+            "options" : {
+                "heading" : "Data distribution",
+                "open" : true
+            }
         }
     },
 
-    /*
-        PAGE Facets, e.g.
-        'datatype',
-        'pathway',
-        'datasources',
-        'therapeutic_area',
-        'target_class',
-        'data_distribution'
-    */
+
+
+    /**
+     * Page facets
+     * Define for each page the facets to be shown, in the order they appear in the array
+     * For each facet we show:
+     *     type : must match the object name in the "facets" section above;
+     *            this means the facet name and key (API) are independent, so you can have a "histogram" facet that points to "data_distribution"
+     *            e.g. "type":"therapeuticArea" (and not "therapeutic_area")
+     *     options : override the options in "facets" ("open" and "heading") specifically for the instance on this page only
+     */
+
+
 
     "targetAssociationsFacets" : [
+
         /*{
-            "type":"data_distribution",
-            "options" : {
-                "open" : true
-            }
+            "type":"histogram",
         },*/
+
         {
-            "type" : "datatype",
-            "options" : {
-                "open" : true/*,
-                "heading" : "Data Types"*/
-            }
+            "type" : "datatype" //,
+            // Override options like this:
+            // "options" : {
+            //     "open" : [true | false],
+            //     "heading" : "Datatypes and source"
+            // }
         },
+
         {
-            "type":"therapeutic_area",
+            "type":"therapeuticArea",
             "options" : {
                 "open" : false
             }
         }
-        /*
-            "name": "proteinExpression",
-            "element": "protein-baseline-expression",
-            "heading": "Protein baseline expression",
-            "track": true
 
-            // ------
-
-            "name":"therapeutic_area",
-            "id" ; ?? // for URL storage
-            "element": "protein-baseline-expression",
-
-            "options" : {
-                "open" : true,
-                "heading": "Protein baseline expression"
-            }
-
-        */
     ],
 
 
     "diseaseAssociationsFacets" : [
+
         {
-            "type":"datatype",
-            "options" : {
-                "open" : true
-            }
+            "type":"datatype"
         },
+
         {
             "type":"pathway",
             "options" : {
                 "open" : false
             }
         },
+
         {
-            "type":"target_class",
-            "options" : {
-                "open" : true
-            }
+            "type":"targetClass"
         }
+
     ]
 
 

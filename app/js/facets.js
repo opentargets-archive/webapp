@@ -15,6 +15,36 @@ angular.module('facets', [])
     * Top level container for all the facets.
     * This contains accordion etc
     */
+    .directive('facetLoader', ['$log', '$compile', '$timeout' , function ($log, $compile, $timeout) {
+        'use strict';
+
+        return {
+
+            restrict: 'EA',
+
+            scope: {
+                'plugin' : '@',
+                'facet' : '='
+            },
+
+            link: function (scope, elem, attrs) {
+                //$timeout (function () {
+                    var template = '<' + scope.plugin + " facet=facet></" + scope.plugin + ">";
+                    var compiled = $compile(template)(scope);
+                    elem.append(compiled);
+                //}, 0);
+            },
+
+        };
+
+    }])
+
+
+
+    /**
+    * Top level container for all the facets.
+    * This contains accordion etc
+    */
     .directive('cttvFacets', ['$log', 'cttvAPIservice', 'cttvFiltersService' , function ($log, cttvAPIservice, cttvFiltersService) {
         'use strict';
 

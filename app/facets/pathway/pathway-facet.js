@@ -3,7 +3,7 @@ angular.module('facets')
     /**
      * The Pathway facet
      */
-    .directive('cttvPathwayFacet', ['$log' , function ($log) {
+    .directive('pathwayFacet', ['$log' , function ($log) {
         'use strict';
 
         return {

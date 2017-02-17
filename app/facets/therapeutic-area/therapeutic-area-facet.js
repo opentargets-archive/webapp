@@ -3,7 +3,7 @@ angular.module('facets')
     /**
     * The therapeutic areas facet
     */
-    .directive('cttvTherapeuticAreaFacet', ['$log', function ($log) {
+    .directive('therapeuticAreaFacet', ['$log', function ($log) {
         'use strict';
 
         return {
