@@ -1,10 +1,6 @@
 {
     "mastheadNavigationMenu" : [
         {
-            "label": "Survey",
-            "href": "https://goo.gl/forms/p7sREp0u2OuJ4nQo1"
-        },
-        {
             "label" : "About",
             "href" : "/about",
             "menu" : [
