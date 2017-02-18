@@ -8,6 +8,18 @@ dev:
         reload: true
 build:
   steps:
+    - script:
+        name: log status in github
+        code: |
+          export WERCKER_PIPELINE_STATUS="pending";
+          # init build status
+          export GITHUB_CONTEXT="continous-integration/build"
+          export WERCKER_GITHUB_BUILD_NOTIFY_STATE="{\"state\":\"$WERCKER_PIPELINE_STATUS\",\"target_url\":\"$WERCKER_BUILD_URL\",\"context\":\"$GITHUB_CONTEXT\"}";
+          curl -L -H "Authorization: token $GITHUB_TOKEN" -H "Content-type: application/json" -X POST -d $WERCKER_GITHUB_BUILD_NOTIFY_STATE https://api.github.com/repos/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY/statuses/$WERCKER_GIT_COMMIT
+          # init container status
+          export GITHUB_CONTEXT="continous-integration/container-build"
+          export WERCKER_GITHUB_BUILD_NOTIFY_STATE="{\"state\":\"$WERCKER_PIPELINE_STATUS\",\"target_url\":\"$WERCKER_BUILD_URL\",\"context\":\"$GITHUB_CONTEXT\"}";
+          curl -L -H "Authorization: token $GITHUB_TOKEN" -H "Content-type: application/json" -X POST -d $WERCKER_GITHUB_BUILD_NOTIFY_STATE https://api.github.com/repos/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY/statuses/$WERCKER_GIT_COMMIT
 
     - script:
         name: echo nodejs information
@@ -27,12 +39,28 @@ build:
           npm run setup
 
   after-steps:
-    - mbrevda/github-status:
-        token: $GITHUB_TOKEN
-        context: webapp_deployment
-        msg: webapp code build succesful
-        fail: error in code build (npm, bower, jspm, gulp)
-        url: https://app.wercker.com/OpenTargets/webapp/runs
+    - script:
+        name: log status in github
+        code: |
+          if [ "$WERCKER_RESULT" = "passed" ]; then
+             export WERCKER_PIPELINE_STATUS="success";
+          elif [ "$WERCKER_RESULT" = "failed" ]; then
+              export WERCKER_PIPELINE_STATUS="error";
+          else
+              export WERCKER_PIPELINE_STATUS="failure";
+          fi
+          # update build status
+          export GITHUB_CONTEXT="continous-integration/build"
+          export WERCKER_GITHUB_BUILD_NOTIFY_STATE="{\"state\":\"$WERCKER_PIPELINE_STATUS\",\"target_url\":\"$WERCKER_BUILD_URL\",\"context\":\"$GITHUB_CONTEXT\"}";
+          curl -L -H "Authorization: token $GITHUB_TOKEN" -H "Content-type: application/json" -X POST -d $WERCKER_GITHUB_BUILD_NOTIFY_STATE https://api.github.com/repos/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY/statuses/$WERCKER_GIT_COMMIT
+
+          # if failed update container build status
+          if [ "$WERCKER_PIPELINE_STATUS" != "success" ]
+          then
+            export GITHUB_CONTEXT="continous-integration/container-build"
+            export WERCKER_GITHUB_BUILD_NOTIFY_STATE="{\"state\":\"$WERCKER_PIPELINE_STATUS\",\"target_url\":\"$WERCKER_BUILD_URL\",\"context\":\"$GITHUB_CONTEXT\"}";
+            curl -L -H "Authorization: token $GITHUB_TOKEN" -H "Content-type: application/json" -X POST -d $WERCKER_GITHUB_BUILD_NOTIFY_STATE https://api.github.com/repos/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY/statuses/$WERCKER_GIT_COMMIT
+          fi
 
 push-debug:
   steps:
@@ -112,8 +140,8 @@ push-release:
       disable-sync: true
       username: _json_key
       password: $GCR_JSON_KEY_FILE
-      tag: release-$WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH $LATEST_FLAG
-      repository: eu.gcr.io/open-targets/webapp-prod
+      tag: $WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH $LATEST_FLAG
+      repository: eu.gcr.io/open-targets/webapp
       registry: $GCR_HOST
       working-dir: /var/www/app
       ports: "80 443"
@@ -122,12 +150,19 @@ push-release:
       volumes: /var/cache/nginx
 
   after-steps:
-        - wantedly/pretty-slack-notify:
-            webhook_url: $SLACK_WEBHOOK_URL
-            notify_on: "failed"
-        - mbrevda/github-status:
-            token: $GITHUB_TOKEN
-            context: webapp_deployment
-            msg: release container pushed to registry
-            fail: an error has occurred while creating the release container
-            url: https://app.wercker.com/OpenTargets/webapp/runs
+    - script:
+        name: log status in github
+        code: |
+          apk --no-cache add curl  
+          if [ "$WERCKER_RESULT" = "passed" ]; then
+             export WERCKER_PIPELINE_STATUS="success";
+          elif [ "$WERCKER_RESULT" = "failed" ]; then
+              export WERCKER_PIPELINE_STATUS="error";
+          else
+              export WERCKER_PIPELINE_STATUS="failure";
+          fi
+          # update container build status
+          export GITHUB_CONTEXT="continous-integration/container-build"
+          export WERCKER_GITHUB_BUILD_NOTIFY_STATE="{\"state\":\"$WERCKER_PIPELINE_STATUS\",\"target_url\":\"$WERCKER_BUILD_URL\",\"context\":\"$GITHUB_CONTEXT\"}";
+          curl -L -H "Authorization: token $GITHUB_TOKEN" -H "Content-type: application/json" -X POST -d $WERCKER_GITHUB_BUILD_NOTIFY_STATE https://api.github.com/repos/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY/statuses/$WERCKER_GIT_COMMIT
+
