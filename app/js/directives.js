@@ -211,7 +211,7 @@ angular.module('cttvDirectives', [])
         + '</div>'
 
         // extra info
-        + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="/faq#association-score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>'
+        + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="/faq#score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>'
         ;
         return {
             restrict: 'EA',
@@ -611,7 +611,7 @@ angular.module('cttvDirectives', [])
 
 
             template: '<div>'
-                     +'    <div class="clearfix"><cttv-help-icon href="/faq#association-score" class="pull-right"/></div>'
+                     +'    <div class="clearfix"><cttv-help-icon href="/faq#score" class="pull-right"/></div>'
                      +'    <cttv-score-presets preset="preset"></cttv-score-presets>'
                      +'    <h6>Data distribution</h6>'
                      +'    <cttv-score-histogram data="facet.data.buckets" min="facet.filters[0].key" max="facet.filters[1].key" controls="false"></cttv-score-histogram>'
