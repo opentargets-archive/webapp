@@ -88,76 +88,58 @@ angular.module('cttvDirectives')
 .directive('multipleTargetsTable', ['$log', 'cttvUtils', function ($log, cttvUtils) {
     'use strict';
 
-    function parseEnrichment (enrArr) {
-        var enrObj = {};
-        for (var i=0; i<enrArr.length; i++) {
-            var thisEnr = enrArr[i];
-            var id = thisEnr.id;
-            enrObj[id] = thisEnr.score;
-        }
-        return enrObj;
-    }
-
     function formatDiseaseDataToArray (diseases, targets) {
         var data = [];
-        var diseaseArray = _.values(diseases); // Object.values is not supported in IE
-        // diseaseArray.sort(function (a, b) {
-        //     return a.score - b.score;
-        // });
-        for (var i=0; i<diseaseArray.length; i++) {
+        for (var i=0; i<diseases.length; i++) {
             var row = [];
-            var d = diseaseArray[i];
+            var d = diseases[i];
 
             // 0 - Disease
             // limit the length of the label
-            var label = d.disease;
-            if (d.disease.length > 30) {
-                label = d.disease.substring(0, 30) + "...";
+            var label = d.enriched_entity.label;
+            if (d.enriched_entity.label.length > 30) {
+                label = d.enriched_entity.label.substring(0, 30) + "...";
             }
-            var targetsLink = "?targets=" + (targets.map(function (t) {return "target:"+t.ensembl_gene_id;}).join(','));
+            var targetsLink = "?targets=" + (d.targets.map(function (t) {return t.id}));
             var cell = "<a href='/disease/" + d.id + "/associations" + targetsLink + "'>" + label + "</a>";
             row.push(cell);
 
             // 1 - Targets associated
-            row.push(d.count);
+            row.push(d.targets.length);
 
             // 2 - Enrichment
-            if (d.enrichment) {
-                row.push(d.enrichment.toPrecision(1));
-            } else {
-                row.push('NA');
-            }
+            row.push(d.enrichment.score.toPrecision(1));
 
             // 3 - Score (sum)
-            // row.push(d.score);
-            var score = 100 * d.count / targets.length;
+            var perc = 100 * d.targets.length / targets.length;
             var bars = '<div style="position:relative;width:200px;height:20px">' +
                     '<div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:0px;left:0px"></div>' +
-                    '<div style="width:' + score + '%;background:#1e5799;height:100%;position:absolute;top:0px;left:0px"></div>' +
-                    '<div style="width:16px;border-radius:16px;text-align:center;vertical-align:middle;line-height:16px;font-size:0.8em;background:#eeeeee;position:absolute;top:2px;left:3px;color:#1e5799"><span>' + d.count + '</span></div>' +
+                    '<div style="width:' + perc + '%;background:#1e5799;height:100%;position:absolute;top:0px;left:0px"></div>' +
+                    '<div style="width:16px;border-radius:16px;text-align:center;vertical-align:middle;line-height:16px;font-size:0.8em;background:#eeeeee;position:absolute;top:2px;left:3px;color:#1e5799"><span>' + d.targets.length + '</span></div>' +
                 '</div>';
             row.push(bars);
 
             // 4 - Therapeutic areas
-            var tas = Object.keys(d.tas).join("; ");
-            row.push(tas); // therapeutic areas
+            row.push(d.enriched_entity.properties.therapeutic_area.labels.join(', '));
 
             // 5 - targets
             // showing the most associated 5 targets
-            var targetsAssoc = d.targets.sort(function (t1, t2) {
-                return t2.score - t1.score;
+            var targets5 = d.targets.slice(0, 5).map(function (o) {
+                return {
+                    id: o.target.id,
+                    label: o.target.gene_info.symbol
+                }
             });
             var url = '';
             for (var j=0; j<5; j++) {
-                var t = targetsAssoc[j];
+                var t = targets5[j];
                 if (t) {
-                    url += '<a href=/evidence/' + t.id + '/' + d.id + '>' + t.target + '</a> ';
+                    url += '<a href=/evidence/' + t.id + '/' + d.enriched_entity.id + '>' + t.label + '</a> ';
                 }
             }
-            if (targetsAssoc.length > 5) {
+            if (d.targets.length > 5) {
                 url += "...";
             }
-            // row.push(_.take(_.map(targetsAssoc, 'target'), 5).join(", "));
             row.push(url);
 
             // Row complete
@@ -193,69 +175,28 @@ angular.module('cttvDirectives')
                     return;
                 }
 
-                // Compile enrichment
-                var enrichment = parseEnrichment(scope.associations.enrichment);
-
-
                 // Compile the therapeutic areas...
-                var therapeuticAreas = scope.associations.facets.therapeutic_area.buckets;
-                // var tas = {};
                 var tas = [];
-                for (var k=0; k<therapeuticAreas.length; k++) {
-                    var ta = therapeuticAreas[k];
-                    var key = ta.key.toUpperCase();
-                    tas.push({
-                        label: ta.label,
-                        id: key,
-                        enrichment: enrichment[key],
-                        value: ta.unique_target_count.value,
-                        score: (ta.unique_target_count.value / scope.targets.length).toPrecision(1)
-                    });
+                for (var k=0; k<scope.associations.length; k++) {
+                    var dis = scope.associations[k];
+                    if (!dis.enriched_entity.properties.therapeutic_area.codes.length) {
+                        // This is a therapeutic area
+                        var id = dis.enriched_entity.id;
+                        var label = dis.enriched_entity.label;
+                        var count = dis.enrichment.params.targets_in_set_in_disease;
+                        var enrichment = dis.enrichment.score;
+                        var score = (count / scope.targets.length).toPrecision(1);
+                        tas.push({
+                            label: label,
+                            id: id,
+                            enrichment: enrichment,
+                            value: count,
+                            score: score
+                        })
+                    }
                 }
+
                 scope.therapeuticAreas = tas;
-
-                // diseases in the table
-                var data = scope.associations.data;
-                var diseases = {};
-                for (var i=0; i<data.length; i++) {
-                    var association = data[i];
-                    var target = association.target.gene_info.symbol;
-                    var targetEnsId = association.target.id;
-                    // var target = association.target;
-                    // target.association_score = association.association_score.overall;
-                    var disease = association.disease.efo_info.label;
-                    var efo = association.disease.id;
-                    if (!diseases[disease]) {
-                        diseases[disease] = {
-                            "disease": disease,
-                            "id": efo,
-                            "tas": {}, // therapeutic areas
-                            "count": 0, // just counts
-                            // "score": 0,  // sum of scores
-                            "targets": [],
-                            "enrichment": enrichment[efo]
-                        };
-                    }
-                    diseases[disease].count++;
-
-                    // diseases[disease].score += association.association_score.overall;
-                    diseases[disease].targets.push({
-                        target: target,
-                        id: targetEnsId,
-                        score: association.association_score.overall
-                    });
-
-                    // Record the therapeutic areas
-                    if (association.disease.efo_info.therapeutic_area.labels.length) {
-                        for (var j=0; j<association.disease.efo_info.therapeutic_area.labels.length; j++) {
-                            // therapeuticAreas[association.disease.efo_info.therapeutic_area.labels[j]] = true;
-                            diseases[disease].tas[association.disease.efo_info.therapeutic_area.labels[j]] = true;
-                        }
-                    } else {
-                        // therapeuticAreas[association.disease.efo_info.label] = true;
-                    }
-                }
-
 
                 // Create a table
                 // Filter based on Therapeutic area...
@@ -279,7 +220,7 @@ angular.module('cttvDirectives')
                     order = [[1, 'desc']];
                 }
                 table = $('#target-list-associated-diseases').DataTable( cttvUtils.setTableToolsParams({
-                    "data": formatDiseaseDataToArray(diseases, scope.targets),
+                    "data": formatDiseaseDataToArray(scope.associations, scope.targets),
                     "ordering" : true,
                     "order": order,
                     "autoWidth": false,

@@ -24,6 +24,26 @@ angular.module('cttvControllers')
                 });
         }
 
+        function getTargetsEnrichment(targets) {
+            var queryObject = {
+                method: 'GET',
+                trackCall: true,
+                params: {
+                    "target": targets,
+                    "pvalue": 1,
+                    "size": 10000
+                }
+            };
+            return cttvAPIservice.getTargetsEnrichment(queryObject)
+                .then(function (resp) {
+                    $log.log("enrichment response...");
+                    $log.log(resp);
+                    return resp.body.data;
+                })
+        }
+
+        // Currently not used -- we are using the /private/enrichment/targets endpoint instead
+        // of collecting all the associations
         function getAssociations(targets) {
             var associationsPromises = [];
             var step = 10000;
@@ -38,6 +58,7 @@ angular.module('cttvControllers')
                     "fields": "total"
                 }
             };
+
             return cttvAPIservice.getAssociations(queryObjectForSize)
                 .then(function (resp) {
                     for (var i = 0; i < resp.body.total; i += step) {
@@ -73,29 +94,6 @@ angular.module('cttvControllers')
                                 all = _.concat(all, resps[i].body.data);
                             }
                             combined.data = all;
-
-                            // Get all the disease Ids:
-                            // var diseaseIds = [];
-                            // for (var j = 0; j < scope.associations.data.length; j++) {
-                            //     var assoc = scope.associations.data[j];
-                            //     diseaseIds.push(assoc.disease.id);
-                            // }
-                            // $log.log(diseaseIds);
-                            // var queryObjectMultiSearch = {
-                            //     method: 'POST',
-                            //     trackCall: true,
-                            //     params: {
-                            //         // q: diseaseIds.slice(0, 5),
-                            //         q: diseaseIds,
-                            //         filter: "disease",
-                            //         fields: ["association_counts"]
-                            //     }
-                            // };
-                            // cttvAPIservice.getMultiSearch(queryObjectMultiSearch)
-                            //     .then(function (resp) {
-                            //         $log.log(resp);
-                            //     });
-
                             return combined;
                         });
                 });
@@ -107,16 +105,8 @@ angular.module('cttvControllers')
         if (search.target) {
             if (angular.isArray(search.target)) {
                 // Multiple targets
-                // getAssociations(search.target)
-                //     .then(function (combined) {
-                //         $scope.associations = combined;
-                //     });
-                //
-                // getTargetsInfo(search.target)
-                //     .then(function (resp) {
-                //         $scope.targets = resp.body.data;
-                //     });
-                $q.all([getTargetsInfo(search.target), getAssociations(search.target)])
+                // $q.all([getTargetsInfo(search.target), getAssociations(search.target)])
+                $q.all([getTargetsInfo(search.target), getTargetsEnrichment(search.target)])
                     .then (function (resps) {
                         $log.log("targets and associations...");
                         $log.log(resps);
@@ -125,23 +115,8 @@ angular.module('cttvControllers')
                     });
                 // $scope.targets = search.target;
 
-                // Extra sections -- plugins
+                // Set the plugins -- plugins
                 $scope.sections = cttvConfig.summaryTargetList;
-                // Set default visibility values
-
-                // Interactions viewer plugin
-                // $scope.interactionsViewerPlugin = {
-                //     name: "interactionsViewer",
-                //     element: "multiple-targets-interactions-summary",
-                //     dependencies: {
-                //         "build/interactionsViewer.min.js": {
-                //             "format": "global"
-                //         },
-                //         "build/interactionsViewer.css": {
-                //             "loader": "css"
-                //         }
-                //     }
-                // };
 
             } else {
                 $scope.target = search.target;

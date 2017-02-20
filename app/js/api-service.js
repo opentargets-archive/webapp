@@ -41,6 +41,7 @@ angular.module('cttvServices')
             API_DISEASE_RELATION_URL : 'diseaseRelation',
             API_LOG_SESSION_URL : "logSession",
             API_STATS_URL : "stats",
+            API_TARGETS_ENRICHMENT_URL: "targetsEnrichment",
             facets: {
                 DATATYPE: 'datatype', // 'filterbydatatype',
                 PATHWAY: 'pathway', //filterbypathway',
@@ -55,7 +56,7 @@ angular.module('cttvServices')
 
         var api = cttvApi()
             .prefix("/api/")
-            // .prefix('https://127.0.0.1:8123/api/')
+            // .prefix('http://127.0.0.1:8123/api/')
             .version("latest")
             // .prefix("https://www.targetvalidation.org/api/")
             .appname("cttv-web-app")
@@ -336,6 +337,11 @@ angular.module('cttvServices')
 
         cttvAPI.getMultiSearch = function(queryObject) {
             queryObject.operation = cttvAPI.API_MULTISEARCH_URL;
+            return callAPI (queryObject);
+        };
+
+        cttvAPI.getTargetsEnrichment = function (queryObject) {
+            queryObject.operation = cttvAPI.API_TARGETS_ENRICHMENT_URL;
             return callAPI (queryObject);
         };
 
