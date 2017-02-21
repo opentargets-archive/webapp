@@ -1,25 +1,168 @@
-box: node
+# use a long-term-support (LTS) version of node. Latest is currently Boron
+box: node:boron
 dev:
   steps:
     - npm-install
     - internal/watch:
-      code: npm start
-      reload: true
+        code: npm start
+        reload: true
 build:
   steps:
-    - npm install
-    - npm run setup
-    # - internal/docker-push:
-    #   entrypoint: docker-entrypoint.sh
-    #   tag: latest $WERCKER_GIT_COMMIT, $WERCKER_GIT_BRANCH
-    #   registry: https://registry.hub.docker.com
-    #   repository: opentargets/webapp
-    #   username: $OT_DOCKER_HUB_USERNAME
-    #   password: $OT_DOCKER_HUB_PASSWORD
-    # - scripts: |
-    #   docker build Dockerfile.build -t "opentargets/webapp:prod-$WERCKER_GIT_COMMIT" .
-    #   docker push opentargets/webapp
+    - script:
+        name: log status in github
+        code: |
+          export WERCKER_PIPELINE_STATUS="pending";
+          # init build status
+          export GITHUB_CONTEXT="continous-integration/build"
+          export WERCKER_GITHUB_BUILD_NOTIFY_STATE="{\"state\":\"$WERCKER_PIPELINE_STATUS\",\"target_url\":\"$WERCKER_BUILD_URL\",\"context\":\"$GITHUB_CONTEXT\"}";
+          curl -L -H "Authorization: token $GITHUB_TOKEN" -H "Content-type: application/json" -X POST -d $WERCKER_GITHUB_BUILD_NOTIFY_STATE https://api.github.com/repos/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY/statuses/$WERCKER_GIT_COMMIT
+          # init container status
+          export GITHUB_CONTEXT="continous-integration/container-build"
+          export WERCKER_GITHUB_BUILD_NOTIFY_STATE="{\"state\":\"$WERCKER_PIPELINE_STATUS\",\"target_url\":\"$WERCKER_BUILD_URL\",\"context\":\"$GITHUB_CONTEXT\"}";
+          curl -L -H "Authorization: token $GITHUB_TOKEN" -H "Content-type: application/json" -X POST -d $WERCKER_GITHUB_BUILD_NOTIFY_STATE https://api.github.com/repos/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY/statuses/$WERCKER_GIT_COMMIT
 
-# deploy-to-gke:
-#   steps:
-#     -
+    - script:
+        name: echo nodejs information
+        code: |
+          echo "node version $(node -v) running"
+          echo "npm version $(npm -v) running"
+
+    - npm-install:
+        clear-cache-on-failed: true
+        options: --quiet
+
+    # #run unit tests
+    # - npm-test
+    - script:
+        name: run bower, gulp and jspm for good measure
+        code: |
+          npm run setup
+
+  after-steps:
+    - script:
+        name: log status in github
+        code: |
+          if [ "$WERCKER_RESULT" = "passed" ]; then
+             export WERCKER_PIPELINE_STATUS="success";
+          elif [ "$WERCKER_RESULT" = "failed" ]; then
+              export WERCKER_PIPELINE_STATUS="error";
+          else
+              export WERCKER_PIPELINE_STATUS="failure";
+          fi
+          # update build status
+          export GITHUB_CONTEXT="continous-integration/build"
+          export WERCKER_GITHUB_BUILD_NOTIFY_STATE="{\"state\":\"$WERCKER_PIPELINE_STATUS\",\"target_url\":\"$WERCKER_BUILD_URL\",\"context\":\"$GITHUB_CONTEXT\"}";
+          curl -L -H "Authorization: token $GITHUB_TOKEN" -H "Content-type: application/json" -X POST -d $WERCKER_GITHUB_BUILD_NOTIFY_STATE https://api.github.com/repos/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY/statuses/$WERCKER_GIT_COMMIT
+
+          # if failed update container build status
+          if [ "$WERCKER_PIPELINE_STATUS" != "success" ]
+          then
+            export GITHUB_CONTEXT="continous-integration/container-build"
+            export WERCKER_GITHUB_BUILD_NOTIFY_STATE="{\"state\":\"$WERCKER_PIPELINE_STATUS\",\"target_url\":\"$WERCKER_BUILD_URL\",\"context\":\"$GITHUB_CONTEXT\"}";
+            curl -L -H "Authorization: token $GITHUB_TOKEN" -H "Content-type: application/json" -X POST -d $WERCKER_GITHUB_BUILD_NOTIFY_STATE https://api.github.com/repos/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY/statuses/$WERCKER_GIT_COMMIT
+          fi
+
+push-debug:
+  steps:
+    - internal/docker-push:
+      repository: quay.io/opentargets/webapp
+      username: $QUAY_USERNAME
+      password: $QUAY_PASSWORD
+      registry: $QUAY_HOST
+      tag: debug-$WERCKER_GIT_COMMIT
+      working-dir: /pipeline/source
+      cmd: npm start
+
+push-release:
+  # Override the node box
+  box:
+    id: nginx:alpine
+    cmd: /bin/sh
+
+  steps:
+    - script:
+      name: move entrypoint script in container
+      code: |
+        mv ./docker-entrypoint.sh /
+        chmod +x /docker-entrypoint.sh
+
+
+    - script:
+      name: move app and built js modules to /var/www
+      code: |
+        mkdir -p /var/www/app
+        cp -r ./app /var/www
+
+    - script:
+      name: move self-signed certificates in the right place
+      code: |
+        cp ./nginx_conf/server.crt /usr/share/nginx/
+        cp ./nginx_conf/server.key /usr/share/nginx/
+
+    - script:
+      name: move nginx.conf and template in the right place
+      code: |
+        cp ./nginx_conf/nginx.conf /etc/nginx/nginx.conf
+        cp ./nginx_conf/app_server.template /etc/nginx/conf.d/app_server.template
+        cp ./nginx_conf/rest_api_scheme.template /etc/nginx/conf.d/rest_api_scheme.template
+
+    # i found out the hard way that the /pipeline/source directory needs
+    # to be there for things to work in wercker
+    - script:
+      name: cleanup all the wercker stuff
+      code: |
+        rm -rf /pipeline/cache
+        rm -rf /pipeline/source/*
+
+
+    - script:
+      name: export latest or dev tag
+      code: |
+        [ "$WERCKER_GIT_BRANCH" = "master" ] \
+        && export LATEST_FLAG=latest \
+        || export LATEST_FLAG=dev
+
+
+    - internal/docker-push:
+      disable-sync: true
+      username: $QUAY_USERNAME
+      password: $QUAY_PASSWORD
+      tag: release-$WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH $LATEST_FLAG
+      repository: quay.io/opentargets/webapp
+      registry: $QUAY_HOST
+      working-dir: /var/www/app
+      ports: "80 443"
+      cmd: nginx -g 'daemon off;'
+      entrypoint: /docker-entrypoint.sh
+      volumes: /var/cache/nginx
+
+    - internal/docker-push:
+      disable-sync: true
+      username: _json_key
+      password: $GCR_JSON_KEY_FILE
+      tag: $WERCKER_GIT_COMMIT $WERCKER_GIT_BRANCH $LATEST_FLAG
+      repository: eu.gcr.io/open-targets/webapp
+      registry: $GCR_HOST
+      working-dir: /var/www/app
+      ports: "80 443"
+      cmd: nginx -g 'daemon off;'
+      entrypoint: /docker-entrypoint.sh
+      volumes: /var/cache/nginx
+
+  after-steps:
+    - script:
+        name: log status in github
+        code: |
+          apk --no-cache add curl  
+          if [ "$WERCKER_RESULT" = "passed" ]; then
+             export WERCKER_PIPELINE_STATUS="success";
+          elif [ "$WERCKER_RESULT" = "failed" ]; then
+              export WERCKER_PIPELINE_STATUS="error";
+          else
+              export WERCKER_PIPELINE_STATUS="failure";
+          fi
+          # update container build status
+          export GITHUB_CONTEXT="continous-integration/container-build"
+          export WERCKER_GITHUB_BUILD_NOTIFY_STATE="{\"state\":\"$WERCKER_PIPELINE_STATUS\",\"target_url\":\"$WERCKER_BUILD_URL\",\"context\":\"$GITHUB_CONTEXT\"}";
+          curl -L -H "Authorization: token $GITHUB_TOKEN" -H "Content-type: application/json" -X POST -d $WERCKER_GITHUB_BUILD_NOTIFY_STATE https://api.github.com/repos/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY/statuses/$WERCKER_GIT_COMMIT
+
