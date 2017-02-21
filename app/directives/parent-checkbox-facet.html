@@ -10,7 +10,7 @@
                     ng-click="bucket.toggle()" >
                 {{bucket.label}}
             </label>
-            <span class="text-lowlight cttv-facet-count pull-left" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? ' or more' : ''}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>
+            <span class="text-lowlight cttv-facet-count pull-left" title="{{bucket.count | metricPrefix:0}}}">({{bucket.count | metricPrefix:0}})</span>
         </span>
         <span ng-show="bucket.collection.filters.length" class="text-lowlight pull-right">
             <i class="fa cttv-facets-small-arrow" ng-class="{'fa-caret-right': collapsed, 'fa-caret-down': !collapsed}" ng-click="collapsed = !collapsed"  ng-show="bucket.enabled"></i>

@@ -9,14 +9,11 @@ angular.module('facets')
         return {
             restrict: 'EA',
             scope: {
-                facet: '=',
-                partial: '@'
+                facet: '='
             },
             templateUrl: 'directives/generic-facetcollection.html',
 
-            link: function (scope, elem, attrs) {
-                $log.log("Bob!");
-            },
+            link: function (scope, elem, attrs) {},
         };
     }])
 

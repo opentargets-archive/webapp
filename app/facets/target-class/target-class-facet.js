@@ -11,8 +11,7 @@ angular.module('facets')
             restrict: 'EA',
 
             scope: {
-                facet: '=',
-                partial: '@'
+                facet: '='
             },
 
             templateUrl: 'directives/generic-nested-facetcollection.html',

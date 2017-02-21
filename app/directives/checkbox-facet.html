@@ -6,9 +6,9 @@
             ng-disabled="!bucket.enabled"
             ng-click="bucket.toggle()" >
 <span>{{bucket.label | upperCaseFirst | clearUnderscores}}</span>
-<span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? ' or more' : ''}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>
+<span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}">({{bucket.count | metricPrefix:0}})</span>
 </label>
-<span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}{{partial==1 ? ' or more' : ''}}">({{bucket.count | metricPrefix:0}}<span ng-if="partial==1">+</span>)</span>
+<span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}">({{bucket.count | metricPrefix:0}})</span>
 </div>
 
 

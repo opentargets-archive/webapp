@@ -114,7 +114,7 @@ angular.module('facets', [])
 
             scope: {
                 bucket: '=',
-                partial: '@',    // optional 'OK' status -- TODO: remove deprecated param
+                //partial: '@',    // optional 'OK' status -- TODO: remove deprecated param
                 multiline: '@?'  // optional multiline option
             },
 
@@ -140,8 +140,8 @@ angular.module('facets', [])
 
             scope: {
                 bucket: '=',
-                collapsed: '=',
-                partial: '@'
+                collapsed: '='//,
+                //partial: '@'
             },
 
             templateUrl: 'directives/parent-checkbox-facet.html'

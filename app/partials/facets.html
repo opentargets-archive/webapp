@@ -31,29 +31,8 @@
                 {{facet.options.heading | clearUnderscores | upperCaseFirst}}<i class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !status.isOpen, 'fa-caret-down': status.isOpen}"></i>
             </uib-accordion-heading>
 
-            <!--
-                The content panel of the facet:
-                Here we put all the templates we've got, with an ng-if statement so only the relevant one is added in
-            -->
-
-            <!--
-                TODO:
-                here we need to automate this block based on the facet definition in config.json
-            -->
-
-            <!-- <div ng-attr-facet.options.element facet='facet'></div> -->
+            <!-- load the relevant acutal facet -->
             <facet-loader plugin="{{facet.options.element}}" facet="facet"></facet-loader>
-
-            <!--
-            <div datatype-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='datatype'"></div>
-
-            <div cttv-pathway-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='pathway'"></div>
-
-            <div cttv-score-facet facet='facet' ng-if="facet.key=='data_distribution'"></div>
-
-            <div cttv-therapeutic-area-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='therapeutic_area'"></div>
-
-            <div cttv-target-class-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='target_class'"></div> -->
 
         </div>
     </uib-accordion>

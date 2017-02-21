@@ -23,7 +23,6 @@ angular.module('cttvServices').
         var filters = [];
 
 
-
         // array of user selected options, aka "Your filters"
         // these are (could be? should be?) FilterCollections i think...
         var selected = [];
@@ -34,11 +33,9 @@ angular.module('cttvServices').
         var selectedCount = 0;
 
 
-
         // This holds the list of facets we want to show for the current page.
         // The order in the array determins the display in the UI.
         var pageFacetsStack = [];
-
 
 
         // Back here again :(
@@ -50,9 +47,7 @@ angular.module('cttvServices').
         var status = []; // 1 == OK, 0 == not ok
 
 
-
         var lastClicked;
-
 
 
         // PARSERS
@@ -149,7 +144,6 @@ angular.module('cttvServices').
          * Returns true if a filter with the given key is selected
          */
         var isSelected=function(collection, key){
-            // return ($location.search()[collection] && ( $location.search()[collection]===key || $location.search()[collection].indexOf(key)>=0 )) || false;
             var fcts = cttvLocationState.getState()[ cttvFiltersService.stateId ];
             key = "" + key; // target class is numerical key which confuses indexOf below.
             return (fcts && fcts[collection] && ( fcts[collection]==key || fcts[collection].indexOf(key)>=0 ))|| false;
@@ -212,9 +206,6 @@ angular.module('cttvServices').
             collection.filters=[]; // overwrite the filters so we can add them in properly
             obj.filters.forEach(function(element){
                 var f = getFilter(element);    //new Filter(element)
-                    // does it have subfilters?
-                    //if(f.collection)
-
                 collection.addFilter(f);    // add filter to the collection
                 // but do we want to add the filter to the selected ones as well? if needed?
                 // is here the best place? mmmh....
@@ -295,10 +286,8 @@ angular.module('cttvServices').
             this.count = o.count || 0;  // the count to display
             this.enabled = this.count>0 && (o.enabled==undefined ? true : o.enabled);
             this.selected = o.selected==undefined ? false : o.selected;
-            // the value associated with this
-            this.value = o.value || undefined;
-            // trying to have nested filters?
-            //this.collection = o.collection || null;
+            this.value = o.value || undefined;  // the value associated with this
+            // has nested filters?
             // TODO: the problem here is that we couple the Filter class to the parseCollection() method here...
             this.collection = o.collection ? parseCollection(o.collection) : null;
         }
@@ -318,8 +307,6 @@ angular.module('cttvServices').
              */
             Filter.prototype.setSelected=function(b){
                 if(this.enabled){
-                    // flag the changed state
-                    //this.changed = (b!=this.selected);
                     this.selected = b;
                 }
                 return this.selected;
@@ -342,7 +329,6 @@ angular.module('cttvServices').
             this.label = config.label || "";
             this.filters = config.filters || [];
             this.data = config.data || undefined;
-            this.isPartial = config.isPartial || 0;
             this.options = config.options || {}; // or {} ???
             this.open = config.open;
             if(config.addFilter){
@@ -375,7 +361,6 @@ angular.module('cttvServices').
              * Function to select and clear all the filters in the collection
              */
             FilterCollection.prototype.selectAll = function(b){
-                // $log.log(b);
                 this.filters.forEach(function(f){
                     f.setSelected(b);
                     if(!b && f.collection!=null){
@@ -462,30 +447,6 @@ angular.module('cttvServices').
 
 
         /**
-         * Gets a list of selected filters for API call usage.
-         * Return: object containing arrays of string for each facet category
-         * Example:
-         * {
-         *    datatype: ["known_drug", "rna_expression"]
-         * }
-         */
-
-        // TODO:
-        // this also seems to be redundant ???
-        // cttvFiltersService.getSelectedFiltersRaw = function(facet){
-        //     // TODO: ok so this first part was also kinda hacked together quickly
-        //     // and ideally we can clean up a few more functions here...
-        //     $log.log("*** getSelectedFiltersRaw");
-        //     if(facet){
-        //         return getSelectedFilters(facet);
-        //     }
-//
-        //     return cttvLocationState.getState() || {};
-        // };
-
-
-
-        /**
          * Removes ALL selections
          */
         cttvFiltersService.deselectAll = function(){
@@ -507,9 +468,9 @@ angular.module('cttvServices').
          * This is the main method that parse facets data and sets them up
          * @param facets [Object] the facet object return by the API
          * @param countsToUse [String] the count to be used for display: "unique_target_count" or "unique_disease_count"
-         * @param status [Array] this contains ["ok"] if all facets were computed correctly by the API. In case of errors, it contains the list of facets reporting incorrect values, e.g. ["partial-facet-datatypes"]
+         * NOTE: i quite like passing the countsToUse directly here, so I'll leave it like this for now. This is however now set in the config file
          */
-        cttvFiltersService.updateFacets = function(facets, countsToUse, status){
+        cttvFiltersService.updateFacets = function(facets, countsToUse){
             $log.log("updateFacets");
             // if there are no facets, return
             if(!facets){
@@ -518,9 +479,6 @@ angular.module('cttvServices').
 
             // set the count to use
             countsToUse = countsToUse || cttvConsts.UNIQUE_TARGET_COUNT; // "unique_target_count";
-
-            // set the status -- DEPRECATED BY API
-            // cttvFiltersService.status(status);
 
             // reset the filters
             for (var key in filtersData){
@@ -533,15 +491,12 @@ angular.module('cttvServices').
             selectedCount = 0;
 
 
-            // The page must specify a list of specified facets
+            // The page must specify a list of specified facets:
+            // we always need facets to be EXPLICITLY DEFINED, we can't just take whatever comes from the API,
+            // as we don't necessarily know how to parse that raw info
             var orderedFacets = pageFacetsStack;
-            // if not, we just go through all the facets returned by the API
-            // UPDATE: actually, no, we don't just take whatever comes from the API:
-            // too many issues: no freedom on setting the facet name, AND we don't know how to parse that info
-            // so we always need a facet to be EXPLICITLY DEFINED
-            // if(!orderedFacets.length){
-            //     orderedFacets = Object.keys(facets);
-            // }
+
+
 
             orderedFacets.forEach(function(collection){
                 //if (facets.hasOwnProperty(collection.type)) {
@@ -595,18 +550,6 @@ angular.module('cttvServices').
 
 
 
-        // DEPRECATED???
-        // let's find out...
-        /*cttvFiltersService.getDefaultSelectedDatatypes = function(){
-            return datatypes.filter(function(value){
-                                return value.selected;
-                            }).map(function(obj){
-                                return obj.key;
-                            });
-        }*/
-
-
-
         /**
          * Resets the filters, selected filters, page facets and counts.
          * You may want to call this at the beginning of your page controller,
@@ -631,30 +574,6 @@ angular.module('cttvServices').
         cttvFiltersService.update = function(){
             update();
         }
-
-
-
-        /**
-         * TODO: this in no longer returned by the API and could therefore be deprecated
-         * Example status:
-         * "status": ["ok"]
-         * "status": ["partial-facet-datatypes"]
-         * "status": ["partial-facet-datatypes", "partial-facet-pathway"]
-         */
-        // cttvFiltersService.status = function(stt){
-        //     if(stt){
-        //         //status = stt; //(stt==cttvConsts.OK.toLowerCase()) ? 1 : 0;
-        //         if(stt[0] == cttvConsts.OK.toLowerCase()){
-        //             status = [stt[0]];
-        //         } else {
-        //             status = stt.map(function(item){
-        //                 return item.substring(14);
-        //             })
-        //         }
-
-        //     }
-        //     return status;
-        // }
 
 
 

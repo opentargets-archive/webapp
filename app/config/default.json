@@ -276,50 +276,55 @@
 
 
 
-    "targetAssociationsFacets" : [
+    "targetAssociationsFacets" : {
+        "count" : "unique_disease_count",
+        "facets" : [
 
-        /*{
-            "type":"histogram",
-        },*/
+            /*{
+                "type":"histogram",
+            },*/
 
-        {
-            "type" : "datatype" //,
-            // Override options like this:
-            // "options" : {
-            //     "open" : [true | false],
-            //     "heading" : "Datatypes and source"
-            // }
-        },
+            {
+                "type" : "datatype" //,
+                // Override options like this:
+                // "options" : {
+                //     "open" : [true | false],
+                //     "heading" : "Datatypes and source"
+                // }
+            },
 
-        {
-            "type":"therapeuticArea",
-            "options" : {
-                "open" : false
+            {
+                "type":"therapeuticArea",
+                "options" : {
+                    "open" : false
+                }
             }
-        }
 
-    ],
+        ]
+    },
 
 
-    "diseaseAssociationsFacets" : [
+    "diseaseAssociationsFacets" : {
+        "count" : "unique_target_count",
+        "facets" : [
 
-        {
-            "type":"datatype"
-        },
+            {
+                "type":"datatype"
+            },
 
-        {
-            "type":"pathway",
-            "options" : {
-                "open" : false
+            {
+                "type":"pathway",
+                "options" : {
+                    "open" : false
+                }
+            },
+
+            {
+                "type":"targetClass"
             }
-        },
 
-        {
-            "type":"targetClass"
-        }
-
-    ]
-
+        ]
+    }
 
 
 }

@@ -11,8 +11,7 @@ angular.module('facets')
             restrict: 'EA',
 
             scope: {
-                facet: '=',
-                partial: '@'
+                facet: '='
             },
 
             //templateUrl: 'facets/datatype/datatype-facet.html',

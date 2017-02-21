@@ -48,16 +48,9 @@ angular.module('cttvControllers')
     // reset the filters when loading a new page so we don't see the filters from the previous page...
     cttvFiltersService.reset();
 
-    // select facets to show
-    /*cttvFiltersService.pageFacetsStack([
-        //cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
-        {type:cttvFiltersService.facetTypes.DATATYPES},
-        {type:cttvFiltersService.facetTypes.THERAPEUTIC_AREAS}
-    ]);*/
-
     // Set page filters: this defines the order in which the facets are going to be displayed
     // as per config JSON
-    cttvFiltersService.pageFacetsStack(cttvConfig.targetAssociationsFacets);
+    cttvFiltersService.pageFacetsStack(cttvConfig.targetAssociationsFacets.facets);
 
     // state we want to export to/from the URL
     var stateId = "view";
@@ -142,7 +135,7 @@ angular.module('cttvControllers')
                     $scope.n.diseases = resp.body.total;
 
                     // Update the facets
-                    cttvFiltersService.updateFacets(resp.body.facets, cttvConsts.UNIQUE_DISEASE_COUNT );
+                    cttvFiltersService.updateFacets(resp.body.facets, cttvConfig.targetAssociationsFacets.count );
                     //$scope.updateFacets(resp.body.facets);
                 } else {
                     // Check if there is a profile page

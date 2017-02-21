@@ -46,7 +46,7 @@ angular.module('cttvControllers')
 
     // Set page filters: this defines the order in which the facets are going to be displayed
     // as per config JSON
-    cttvFiltersService.pageFacetsStack(cttvConfig.diseaseAssociationsFacets);
+    cttvFiltersService.pageFacetsStack(cttvConfig.diseaseAssociationsFacets.facets);
 
 
 
@@ -113,7 +113,7 @@ angular.module('cttvControllers')
 
             if (resp.body.total) {
                 //TODO Change this to POST request
-                cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
+                cttvFiltersService.updateFacets(resp.body.facets, cttvConfig.diseaseAssociationsFacets.count);
 
                 // The label of the diseases in the header
                 $scope.search.label = resp.body.data[0].disease.efo_info.label;
