@@ -34,8 +34,6 @@ angular.module('cttvDirectives')
         },
         link: function (scope, el, attrs) {
             scope.$watch('target', function () {
-                $log.log("scope targets in drugs...");
-                $log.log(scope.target)
                 if (!scope.target) {
                     return;
                 }

@@ -36,8 +36,6 @@ angular.module('cttvControllers')
             };
             return cttvAPIservice.getTargetsEnrichment(queryObject)
                 .then(function (resp) {
-                    $log.log("enrichment response...");
-                    $log.log(resp);
                     return resp.body.data;
                 })
         }
@@ -108,8 +106,6 @@ angular.module('cttvControllers')
                 // $q.all([getTargetsInfo(search.target), getAssociations(search.target)])
                 $q.all([getTargetsInfo(search.target), getTargetsEnrichment(search.target)])
                     .then (function (resps) {
-                        $log.log("targets and associations...");
-                        $log.log(resps);
                         $scope.targets = resps[0];
                         $scope.associations = resps[1];
                     });

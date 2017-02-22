@@ -2,19 +2,70 @@
 
 <!-- hint -->
 <div>
-    <p class="cttv-section-intro">Summary of interactions between the set of targets. When 2 are selected details on the interaction is shown (for now, only links based on <i>shared pathways</i> are shown).</p>
+    <p class="cttv-section-intro">Summary of interactions between the set of targets. When 2 are selected details on the
+        interaction is shown (for now, only links based on <i>shared pathways</i> are shown).</p>
 </div>
 
 <!-- Shows the currently selected targets -->
 <div>
     <div>Selected nodes:
-        <span style="color:#aaaaaa" ng-if="!selectedNodes.length">[Click on the targets to select / deselect them]</span>
-        <span ng-repeat="node in selectedNodes">{{node.label}}<i ng-click="unselectNode(node)" class="fa fa-times" style="margin-left:3px;margin-right:10px;cursor:pointer;"></i></span>
+        <span style="color:#aaaaaa"
+              ng-if="!selectedNodes.length">[Click on the targets to select / deselect them]</span>
+        <span ng-repeat="node in selectedNodes">{{node.label}}<i ng-click="unselectNode(node)" class="fa fa-times"
+                                                                 style="margin-left:3px;margin-right:10px;cursor:pointer;"></i></span>
         <span style="color:#aaaaaa" ng-if="selectedNodes.length==1">[Click on another target to view the interaction details]</span>
     </div>
 </div>
 
-<div style="text-align:center">
-    <div style="display:inline-block" id="interactionsViewerMultipleTargets"></div>
+<div class="row">
+    <div class="col-sm-4">
+        <div style="margin:10px;background:#eeeeee;min-height:600px">
+
+            <!-- Sources filter -->
+            <h4>Filter source</h4>
+            <div ng-repeat="(source, items) in sources" ng-click="filterSource(source)"><input
+                    type="checkbox" checked="true"> {{source}} ({{items}} interactions)
+            </div>
+
+            <!-- Interactions details -->
+            <h4>Interactions details</h4>
+            <div>
+                <div ng-if="!selectedNodes.length">
+                    <div>
+                        <span style="color:#aaaaaa">[Click on a target in the plot]</span>
+                    </div>
+                </div>
+                <div ng-if="selectedNodes.length>0">
+                    <!-- Show the information about the first selected target -->
+                    <div> Selected nodes: <span ng-repeat="node in selectedNodes">{{node.label}}<i ng-click="unselectNode(node)" class="fa fa-times"
+                                                                      style="margin-left:1px;margin-right:10px;cursor:pointer;"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="selectedNodes.length == 1">
+                <span style="color:#aaaaaa" ng-if="selectedNodes.length==1">[Click on another target to get details about the interaction]</span>
+                <!-- Show the details for selected target 1 -->
+            </div>
+
+            <div ng-if="selectedNodes.length == 2">
+
+                <div ng-if="reactome.length">
+                    <h5>Common pathways ({{reactome.length}}):</h5>
+                    <div ng-repeat="pathway in reactome"><a href='/summary?pathway={{pathway.id}}&pathway-target={{selectedNodes[0].label}}&pathway-target={{selectedNodes[1].label}}'><i style="margin-right:5px;" class="fa fa-sitemap"></i>{{pathway.label}}</a></div>
+                </div>
+
+                <div ng-if="omnipathdb.length">
+                    <h5>Interactions</h5>
+                    <div ng-repeat="source in omnipathdb">{{source.label}}</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8" id="interactionsViewerMultipleTargets"></div>
 </div>
+
+<!--<div style="text-align:center">-->
+<!--<div style="display:inline-block" id="interactionsViewerMultipleTargets"></div>-->
+<!--</div>-->
 

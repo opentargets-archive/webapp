@@ -5,18 +5,16 @@ angular.module('cttvDirectives')
 
     return {
         restrict: 'E',
-        // template: '<cttv-progress-spinner ng-show="scope.showSpinner"></cttv-progress-spinner><div id="interactionsViewerMultipleTargets"></div>',
         templateUrl: 'partials/multiple-targets-interactions-summary.html',
         scope: {
             target: '=',
-            associations: '=',
             width: '='
         },
         link: function (scope, element, attrs) {
             var ivTooltip; // the tooltip for the interaction viewer.
 
             scope.$watchGroup(['target', 'associations'], function () {
-                if (!scope.target || !scope.associations) {
+                if (!scope.target) {
                     return;
                 }
 
@@ -83,6 +81,8 @@ angular.module('cttvDirectives')
                         return resp;
                     });
 
+                // Sources filter (store the source and the number of interactions it supports)
+                var sources = {};
 
                 $q.all([p1, p2])
                     .then(function (resps) {
@@ -135,6 +135,13 @@ angular.module('cttvDirectives')
                                             provenance: []
                                         }
                                     }
+                                    // Record in sources filter
+                                    if (!sources.Reactome) {
+                                        sources.Reactome = 0;
+                                    }
+                                    sources.Reactome++;
+
+
                                     interactors[i1].interactsWith[i2].provenance.push({
                                         id: pName,
                                         label: ids2names[pName],
@@ -142,6 +149,7 @@ angular.module('cttvDirectives')
                                     });
                                     // interactors[i2].interactsWith[i1].provenance.push({
                                     //     id: pName,
+                                    //     label: ids2names[pName],
                                     //     label: ids2names[pName]
                                     // })
                                 }
@@ -188,9 +196,13 @@ angular.module('cttvDirectives')
                                 // });
                                 for (var f=0; f<provenance.length; f++) {
                                     var prov = provenance[f];
+                                    if (!sources[prov]) {
+                                        sources[prov] = 0;
+                                    }
+                                    sources[prov]++;
                                     interactors[source].interactsWith[target].provenance.push({
                                         id: prov,
-                                        label: "Reactome",
+                                        label: prov,
                                         source: "OmnipathDB"
                                     })
                                 }
@@ -209,6 +221,8 @@ angular.module('cttvDirectives')
                         $log.log("Final interactors...");
                         $log.log(interactorsArr);
 
+                        scope.sources = sources;
+
                         // Tooltips
                         var hover_tooltip;
 
@@ -223,8 +237,24 @@ angular.module('cttvDirectives')
                                 .call(this, obj);
                         }
 
+                        // Keep track of the filtering
+                        scope.filterOut = {};
+                        scope.filterSource = function (source) {
+                            $log.log("filter source " + source);
+                            if (scope.filterOut[source]) {
+                                delete(scope.filterOut[source]);
+                            } else {
+                                scope.filterOut[source] = true;
+                            }
+                            $log.log(scope.filterOut);
+                            iv.filters(scope.filterOut);
+                            iv.update();
+                        };
+
                         scope.selectedNodes = [];
                         scope.unselectNode = function (node) {
+                            $log.log('simulating a click in ');
+                            $log.log(node);
                             iv.click(node);
                             for (var i = 0; i < scope.selectedNodes.length; i++) {
                                 if (scope.selectedNodes[i].label === node.label) {
@@ -236,8 +266,17 @@ angular.module('cttvDirectives')
                             }
                         };
 
+                        $log.log("interactors array");
+                        $log.log(interactorsArr);
+
+
                         var iv = interactionsViewer()
-                            .data(interactorsArr)
+                            .data(interactorsArr.sort(function (a, b) {
+                                // Sort interactors alphabetically
+                                if (a.label < b.label) return -1;
+                                if (a.label > b.label) return 1;
+                                return 0;
+                            }))
                             .size(600)
                             .labelSize(90)
                             // .on("click", function (d) {
@@ -248,6 +287,22 @@ angular.module('cttvDirectives')
                             })
                             .on("mouseover", mouseoverTooltip)
                             .on("select", function (selectedNode) {
+                                // We process the selected Node to offer provenance by source
+                                selectedNode.sources = {};
+                                for (var inter in selectedNode.interactsWith) {
+                                    if (selectedNode.interactsWith.hasOwnProperty(inter)) {
+                                        for (var i=0; i<selectedNode.interactsWith[inter].provenance.length; i++) {
+                                            var prov = selectedNode.interactsWith[inter].provenance[i];
+                                            if (!selectedNode.sources[prov.source]) {
+                                                selectedNode.sources[prov.source] = {
+                                                    total: 0
+                                                };
+                                            }
+                                            selectedNode.sources[prov.source][inter] = true;
+                                            selectedNode.sources[prov.source].total = Object.keys(selectedNode.sources[prov.source]).length - 1;
+                                        }
+                                    }
+                                }
                                 scope.selectedNodes.push(selectedNode);
                                 scope.$apply();
                             })
@@ -313,6 +368,11 @@ angular.module('cttvDirectives')
                                     });
                                 }
 
+                                scope.reactome = reactome;
+                                $log.log(scope.reactome);
+                                scope.omnipathdb = omnipathDB;
+                                $log.log(scope.omnipathdb);
+
                                 ivTooltip = tooltip.table()
                                     .width(180)
                                     .id(1)
@@ -324,135 +384,6 @@ angular.module('cttvDirectives')
                         }, 0);
 
                     });
-
-                // Get all the data...
-                // var url = "/proxy/www.omnipathdb.org/interactions/" + uniprotIds.join(',') + '?format=json&fields=sources';
-                // $http.get(url)
-                //     .then (function (resp) {
-                //         for (var i=0; i<resp.data.length; i++) {
-                //             var link = resp.data[i];
-                //             var source = mapNames[link.source];
-                //             var target = mapNames[link.target];
-                //             var provenances = link.sources;
-                //
-                //             if (source && target) {
-                //                 if (!interactors[source].interactsWith[target]) {
-                //                     interactors[source].interactsWith[target] = {
-                //                         label: target,
-                //                         provenance: []
-                //                     };
-                //                     // interactors[source].interactsWith.push(target);
-                //                 }
-                //                 if (!interactors[target].interactsWith[source]) {
-                //                     interactors[target].interactsWith[source] = {
-                //                         label: source,
-                //                         provenance: []
-                //                     };
-                //                     // interactors[target].interactsWith.push(source);
-                //                 }
-                //
-                //                 provenances.forEach(function (provenance) {
-                //                     if (_.indexOf(interactors[source].interactsWith[target].provenance, provenance) === -1) {
-                //                         interactors[source].interactsWith[target].provenance.push(provenance);
-                //                     }
-                //                     if (_.indexOf(interactors[target].interactsWith[source].provenance, provenance) === -1) {
-                //                         interactors[target].interactsWith[source].provenance.push(provenance);
-                //                     }
-                //
-                //
-                //                 })
-                //
-                //             }
-                //         }
-
-                        // Parse therapeutic area information
-                        // var indexByTas = {};
-                        // for (var j=0; j<scope.associations.data.length; j++) {
-                        //     var assoc = scope.associations.data[j];
-                        //     var tas = assoc.disease.efo_info.therapeutic_area.labels;
-                        //     for (var k=0; k<tas.length; k++) {
-                        //         if (!indexByTas[tas[k]]) {
-                        //             indexByTas[tas[k]] = {};
-                        //         }
-                        //         // indexByTas[tas[k]].push(assoc.target.gene_info.symbol);
-                        //         indexByTas[tas[k]][assoc.target.gene_info.symbol] = true;
-                        //     }
-                        // }
-                        // var tas = Object.keys(indexByTas);
-                        // for (var k1=0; k1<tas.length; k1++) {
-                        //     var ta = tas[k1];
-                        //     var targets = Object.keys(indexByTas[ta]);
-                        //     for (var m=0; m<targets.length-1; m++) {
-                        //         var t1 = targets[m];
-                        //         for (var n=m+1; n<targets.length; n++) {
-                        //             var t2 = targets[n];
-                        //             // TODO: interactors has been indexed by target's approved symbol but this doesn't always correspond to the association's target symbol
-                        //             if(!interactors[t1] || !interactors[t2]) {
-                        //                 continue;
-                        //             }
-                        //             if (!interactors[t1].interactsWith[t2]) {
-                        //                 interactors[t1].interactsWith[t2] = {
-                        //                     label: t2,
-                        //                     provenance: []
-                        //                 }
-                        //             }
-                        //             if (!interactors[t2].interactsWith[t1]) {
-                        //                 interactors[t2].interactsWith[t1] = {
-                        //                     label: t1,
-                        //                     provenance: []
-                        //                 }
-                        //             }
-                        //             interactors[t1].interactsWith[t2].provenance.push("therapeutic_area");
-                        //         }
-                        //     }
-                        // }
-
-                        // var interactorsArr = [];
-                        // _.forEach(interactors, function (link, index) {
-                        //     link.label = index;
-                        //     interactorsArr.push(link);
-                        // });
-
-
-/*
-                        let filtered = {};
-                        // First pass -- get all uniprot Ids associated with our protein
-                        let interactors = new Set();
-                        for (let link of data) {
-                            let {source, target} = link;
-                            if (source === uniprotId) {
-                                interactors.add(target);
-                            }
-                            if (target === uniprotId) {
-                                interactors.add(source);
-                            }
-                        }
-
-                        for (let interactor of interactors) {
-                            filtered[interactor] = {
-                                label: interactor,
-                                interactsWith: new Set()
-                            }
-                        }
-
-                        for (let link of data) {
-                            let {source, target} = link;
-                            if (interactors.has(source) && interactors.has(target)) {
-                                if ((source !== uniprotId) && (target !== uniprotId)) {
-                                    filtered[source].interactsWith.add(target);
-                                    filtered[target].interactsWith.add(source); // TODO: For now this gets duplicated.
-                                }
-                            }
-                        }
-
-                        // Return the array
-                        let omnipathData = Object.keys(filtered).map((k) = > filtered[k]
-                        )
-                        console.log(omnipathData);
-*/
-
-
-                    // })
             })
         }
     }
