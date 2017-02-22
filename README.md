@@ -52,6 +52,6 @@ To run the app locally using the container:
 ```sh
 docker run -d -p 8443:443 -p 8080:80 quay.io/opentargets/webapp
 ```
-Then visit https://localhost:8443
+Then visit `https://localhost:8443`
 
 The standard container comes with self-signed certificates, so you will have click through a couple of security warnings to get to the app.
