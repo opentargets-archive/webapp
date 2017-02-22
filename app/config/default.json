@@ -290,10 +290,7 @@
             },
 
             {
-                "type":"therapeuticArea",
-                "options" : {
-                    "open" : false
-                }
+                "type":"therapeuticArea"
             }
 
         ]
@@ -309,10 +306,7 @@
             },
 
             {
-                "type":"pathway",
-                "options" : {
-                    "open" : false
-                }
+                "type":"pathway"
             },
 
             {
