@@ -3,6 +3,57 @@ angular.module('cttvDirectives')
 .directive ('multipleTargetsInteractionsSummary', ['$log', 'cttvAPIservice', '$http', '$q', '$timeout', function ($log, cttvAPIservice, $http, $q, $timeout) {
     'use strict';
 
+    // Map between omnipathdb sources and type of interactions
+    // Not considered:
+    // laudana_*: Combined, mixed sources
+    // Wang: Combines several sources (mostly Pathways information)
+    var omnipathDBsources = {
+        // Pathways
+        'SignaLink3': 'Pathways',
+        'Signor': 'Pathways',
+        // 'Reactome': 'Pathways', // This data is coming from Reactome directly, so removed from here
+        'SPIKE': 'Pathways',
+
+        // Enzyme-substrate
+        'PhosphoPoint': 'Enzyme-substrate',
+        'HPRD': 'Enzyme-substrate',
+        'HPRD-phos': 'Enzyme-substrate',
+        'MIMP': 'Enzyme-substrate',
+        'HuPho': 'Enzyme-substrate',
+
+        // PPI
+        'BioGRID': 'PPI',
+        'InnateDB': 'PPI',
+        'IntAct': 'PPI',
+        'DIP': 'PPI',
+        'STRING': 'PPI'
+    };
+
+    var omnipathCategories = {
+        'Pathways': {
+            'SignaLink3': true,
+            'Signor': true,
+            'Reactome': true,
+            'SPIKE': true
+        },
+        'Enzyme-substrate': {
+            'PhosphoPoint': true,
+            'HPRD': true,
+            'HPRD-phos': true,
+            'MIMP': true,
+            'HuPho': true
+        },
+        'PPI': {
+            'BioGRID': true,
+            'InnateDB': true,
+            'IntAct': true,
+            'DIP': true,
+            'STRING': true
+        }
+    };
+
+    var selectedNodesColors = ['#ffe6e6', '#e6ecff'];
+
     return {
         restrict: 'E',
         templateUrl: 'partials/multiple-targets-interactions-summary.html',
@@ -11,7 +62,7 @@ angular.module('cttvDirectives')
             width: '='
         },
         link: function (scope, element, attrs) {
-            var ivTooltip; // the tooltip for the interaction viewer.
+            // var ivTooltip; // the tooltip for the interaction viewer.
 
             scope.$watchGroup(['target', 'associations'], function () {
                 if (!scope.target) {
@@ -82,7 +133,8 @@ angular.module('cttvDirectives')
                     });
 
                 // Sources filter (store the source and the number of interactions it supports)
-                var sources = {};
+                // var sources = {};
+                var sourceCategories = {};
 
                 $q.all([p1, p2])
                     .then(function (resps) {
@@ -136,22 +188,24 @@ angular.module('cttvDirectives')
                                         }
                                     }
                                     // Record in sources filter
-                                    if (!sources.Reactome) {
-                                        sources.Reactome = 0;
+                                    if (!sourceCategories.Pathways) {
+                                        sourceCategories.Pathways = 0;
                                     }
-                                    sources.Reactome++;
+                                    sourceCategories.Pathways++;
 
 
                                     interactors[i1].interactsWith[i2].provenance.push({
                                         id: pName,
                                         label: ids2names[pName],
-                                        source: 'Reactome'
+                                        source: 'Reactome',
+                                        category: 'Pathways'
                                     });
-                                    // interactors[i2].interactsWith[i1].provenance.push({
-                                    //     id: pName,
-                                    //     label: ids2names[pName],
-                                    //     label: ids2names[pName]
-                                    // })
+                                    interactors[i2].interactsWith[i1].provenance.push({
+                                        id: pName,
+                                        label: ids2names[pName],
+                                        source: 'Reactome',
+                                        category: 'Pathways'
+                                    })
                                 }
                             }
                         }
@@ -196,15 +250,29 @@ angular.module('cttvDirectives')
                                 // });
                                 for (var f=0; f<provenance.length; f++) {
                                     var prov = provenance[f];
-                                    if (!sources[prov]) {
-                                        sources[prov] = 0;
+                                    var sourceCat = omnipathDBsources[prov];
+                                    if (!sourceCat) {
+                                        $log.warn('omnipath source ' + prov + ' does not have a category -- skipping source');
+                                        continue;
                                     }
-                                    sources[prov]++;
+
+                                    if (!sourceCategories[sourceCat]) {
+                                        sourceCategories[sourceCat] = 0;
+                                    }
+                                    // sources[prov]++;
+                                    sourceCategories[sourceCat]++;
                                     interactors[source].interactsWith[target].provenance.push({
                                         id: prov,
                                         label: prov,
-                                        source: "OmnipathDB"
-                                    })
+                                        source: prov,
+                                        category: sourceCat
+                                    });
+                                    interactors[target].interactsWith[source].provenance.push({
+                                        id: prov,
+                                        label: prov,
+                                        source: prov,
+                                        category: sourceCat
+                                    });
                                 }
                                 // interactors[source].interactsWith[target].provenance = provenance;
                             }
@@ -221,7 +289,7 @@ angular.module('cttvDirectives')
                         $log.log("Final interactors...");
                         $log.log(interactorsArr);
 
-                        scope.sources = sources;
+                        scope.categories = sourceCategories;
 
                         // Tooltips
                         var hover_tooltip;
@@ -240,12 +308,18 @@ angular.module('cttvDirectives')
                         // Keep track of the filtering
                         scope.filterOut = {};
                         scope.filterSource = function (source) {
-                            $log.log("filter source " + source);
-                            if (scope.filterOut[source]) {
-                                delete(scope.filterOut[source]);
-                            } else {
-                                scope.filterOut[source] = true;
+                            // The filter can be in a category, so convert to individual sources
+                            var sourcesForCategory = omnipathCategories[source];
+                            if (sourcesForCategory) {
+                                for (var s in sourcesForCategory) {
+                                    if (scope.filterOut[s]) {
+                                        delete(scope.filterOut[s]);
+                                    } else {
+                                        scope.filterOut[s] = true;
+                                    }
+                                }
                             }
+
                             $log.log(scope.filterOut);
                             iv.filters(scope.filterOut);
                             iv.update();
@@ -261,9 +335,6 @@ angular.module('cttvDirectives')
                                     scope.selectedNodes.splice(i, 1);
                                 }
                             }
-                            if (ivTooltip) {
-                                ivTooltip.close();
-                            }
                         };
 
                         $log.log("interactors array");
@@ -277,6 +348,7 @@ angular.module('cttvDirectives')
                                 if (a.label > b.label) return 1;
                                 return 0;
                             }))
+                            .selectedNodesColors(selectedNodesColors)
                             .size(600)
                             .labelSize(90)
                             // .on("click", function (d) {
@@ -288,21 +360,21 @@ angular.module('cttvDirectives')
                             .on("mouseover", mouseoverTooltip)
                             .on("select", function (selectedNode) {
                                 // We process the selected Node to offer provenance by source
-                                selectedNode.sources = {};
-                                for (var inter in selectedNode.interactsWith) {
-                                    if (selectedNode.interactsWith.hasOwnProperty(inter)) {
-                                        for (var i=0; i<selectedNode.interactsWith[inter].provenance.length; i++) {
-                                            var prov = selectedNode.interactsWith[inter].provenance[i];
-                                            if (!selectedNode.sources[prov.source]) {
-                                                selectedNode.sources[prov.source] = {
-                                                    total: 0
-                                                };
-                                            }
-                                            selectedNode.sources[prov.source][inter] = true;
-                                            selectedNode.sources[prov.source].total = Object.keys(selectedNode.sources[prov.source]).length - 1;
-                                        }
-                                    }
-                                }
+                                // selectedNode.sources = {};
+                                // for (var inter in selectedNode.interactsWith) {
+                                //     if (selectedNode.interactsWith.hasOwnProperty(inter)) {
+                                //         for (var i=0; i<selectedNode.interactsWith[inter].provenance.length; i++) {
+                                //             var prov = selectedNode.interactsWith[inter].provenance[i];
+                                //             if (!selectedNode.sources[prov.source]) {
+                                //                 selectedNode.sources[prov.source] = {
+                                //                     total: 0
+                                //                 };
+                                //             }
+                                //             selectedNode.sources[prov.source][inter] = true;
+                                //             selectedNode.sources[prov.source].total = Object.keys(selectedNode.sources[prov.source]).length - 1;
+                                //         }
+                                //     }
+                                // }
                                 scope.selectedNodes.push(selectedNode);
                                 scope.$apply();
                             })
@@ -312,9 +384,9 @@ angular.module('cttvDirectives')
                                         scope.selectedNodes.splice(i, 1);
                                     }
                                 }
-                                if (ivTooltip) {
-                                    ivTooltip.close();
-                                }
+                                // if (ivTooltip) {
+                                //     ivTooltip.close();
+                                // }
                                 scope.$apply();
                             })
                             .on("interaction", function (interactors) {
@@ -326,57 +398,62 @@ angular.module('cttvDirectives')
                                 obj.rows = [];
 
                                 // Differenciate between sources
-                                var reactome = [];
-                                var omnipathDB = [];
+                                var pathways = [];
+                                var ppis = [];
+                                var enzSubs = [];
                                 interactors.provenance.forEach(function (p) {
-                                    if (p.source === "Reactome") {
-                                        reactome.push(p);
-                                    } else if (p.source === "OmnipathDB") {
-                                        omnipathDB.push (p);
+                                    if (p.category === "Pathways") {
+                                        pathways.push(p);
+                                    } else if (p.category === "PPI") {
+                                        ppis.push (p);
+                                    } else if (p.category === 'Enzyme-substrate') {
+                                        enzSubs.push(p);
                                     }
                                 });
 
                                 // Show reactome entries:
-                                if (reactome.length) {
-                                    obj.rows.push({
-                                        "label": "Shared pathways (" + reactome.length + ")",
-                                        "value": ""
-                                    });
-                                    var targetOptions = [interactors.interactor1, interactors.interactor2].map(function (o) {
-                                        return '&pathway-target=' + o;
-                                    }).join('');
-                                    reactome.forEach(function (i) {
-                                        obj.rows.push({
-                                            "value": '<a href="/summary?pathway=' + i.id + targetOptions + '">' + i.label + '</a>',
-                                            // "value": i.label,
-                                            "label": "Pathway"
-                                        });
-                                    });
-                                }
+                                // if (pathways.length) {
+                                //     obj.rows.push({
+                                //         "label": "Shared pathways (" + pathways.length + ")",
+                                //         "value": ""
+                                //     });
+                                //     var targetOptions = [interactors.interactor1, interactors.interactor2].map(function (o) {
+                                //         return '&pathway-target=' + o;
+                                //     }).join('');
+                                //     pathways.forEach(function (i) {
+                                //         obj.rows.push({
+                                //             "value": '<a href="/summary?pathway=' + i.id + targetOptions + '">' + i.label + '</a>',
+                                //             // "value": i.label,
+                                //             "label": "Pathway"
+                                //         });
+                                //     });
+                                // }
+                                //
+                                // // Show OmnipathDB entries:
+                                // if (omnipathDB.length) {
+                                //     obj.rows.push({
+                                //         "label": "Interactions (" + omnipathDB.length + ")",
+                                //         "value": ""
+                                //     });
+                                //     omnipathDB.forEach (function (i) {
+                                //         obj.rows.push({
+                                //             "value": i.id,
+                                //             "label": "OmnipathDB"
+                                //         })
+                                //     });
+                                // }
 
-                                // Show OmnipathDB entries:
-                                if (omnipathDB.length) {
-                                    obj.rows.push({
-                                        "label": "Interactions (" + omnipathDB.length + ")",
-                                        "value": ""
-                                    });
-                                    omnipathDB.forEach (function (i) {
-                                        obj.rows.push({
-                                            "value": i.id,
-                                            "label": "OmnipathDB"
-                                        })
-                                    });
-                                }
+                                scope.pathways = pathways;
+                                $log.log(scope.pathways);
+                                scope.ppis = ppis;
+                                $log.log(scope.ppis);
+                                scope.enzSubs = enzSubs;
+                                $log.log(enzSubs);
 
-                                scope.reactome = reactome;
-                                $log.log(scope.reactome);
-                                scope.omnipathdb = omnipathDB;
-                                $log.log(scope.omnipathdb);
-
-                                ivTooltip = tooltip.table()
-                                    .width(180)
-                                    .id(1)
-                                    .call(elem, obj);
+                                // ivTooltip = tooltip.table()
+                                //     .width(180)
+                                //     .id(1)
+                                //     .call(elem, obj);
                             });
                         $timeout(function () {
                             scope.showSpinner = false;
