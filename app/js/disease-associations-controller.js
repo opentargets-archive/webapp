@@ -101,7 +101,8 @@ angular.module('cttvControllers')
         // Do we have targets?
         var targets;
         if (new_state.targets) {
-            targets = new_state.targets.target;
+            // targets = new_state.targets.target;
+            targets = new_state.targets;
         }
 
         // if (!_.isEqual(new_state[facetsId], old_state[facetsId]) || !new_state[facetsId]) {
@@ -126,7 +127,7 @@ angular.module('cttvControllers')
 
         if (targets) {
             // Passing them to the disease associations table directive
-            $scope.targets = targets;
+            $scope.targets = targets.split(',');
             $scope.targetLists = []; // Name of the list, but we don't know it
 
             // facetsPromise.then (function () {
