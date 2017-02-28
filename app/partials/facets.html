@@ -26,26 +26,13 @@
     <!-- Facets and filters -->
     <h4>Filter by</h4>
     <uib-accordion close-others=false>
-        <div uib-accordion-group ng-init="status = {isOpen: true}" is-open="status.isOpen" ng-repeat="facet in filters track by facet.key" ng-if="facet.filters.length>0" class="panel-default">
+        <div uib-accordion-group ng-init="status = {isOpen: facet.options.open}" is-open="status.isOpen" ng-repeat="facet in filters track by facet.key" ng-if="facet.filters.length>0" class="panel-default">
             <uib-accordion-heading class="cttv-facets-headers">
-                {{facet.label | clearUnderscores | upperCaseFirst}}<i  class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !status.isOpen, 'fa-caret-down': status.isOpen}"></i>
+                {{facet.options.heading | clearUnderscores | upperCaseFirst}}<i class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !status.isOpen, 'fa-caret-down': status.isOpen}"></i>
             </uib-accordion-heading>
 
-
-            <!--
-                The content panel of the facet:
-                Here we put all the templates we've got, with an ng-if statement so only the relevant one is added in
-            -->
-
-            <div cttv-datatypes-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='datatype'"></div>
-
-            <div cttv-pathways-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='pathway'"></div>
-
-            <div cttv-score-facet facet='facet' ng-if="facet.key=='data_distribution'"></div>
-
-            <div cttv-therapeutic-areas-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='therapeutic_area'"></div>
-
-            <div cttv-target-class-facet facet='facet' partial='{{facet.isPartial}}' ng-if="facet.key=='target_class'"></div>
+            <!-- load the relevant acutal facet -->
+            <facet-loader plugin="{{facet.options.element}}" facet="facet"></facet-loader>
 
         </div>
     </uib-accordion>
