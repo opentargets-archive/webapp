@@ -1,10 +1,6 @@
 {
     "mastheadNavigationMenu" : [
         {
-            "label": "Survey",
-            "href": "https://goo.gl/forms/p7sREp0u2OuJ4nQo1"
-        },
-        {
             "label" : "About",
             "href" : "/about",
             "menu" : [
@@ -244,5 +240,127 @@
             "heading": "Bibliography",
             "track": true
         }
-    ]
+    ],
+
+
+
+    /*
+     * Facets definition
+     * Here we define all facets available in the app.
+     * each facet is defiend as follow:
+     *    "datatype" : {    // the code name for the facet - can be anything
+     *        "key"         // IMPORTANT! the key (id) as returned by the API
+     *        "element"     // the name root as defined in the facet folder
+     *                      // where you ahve the directive (datatypeFacet) and parser (datatypeFacetParser)
+     *    }
+     */
+
+
+
+    "facets" : {
+        "datatype" : {
+            "key": "datatype",
+            "element": "datatype-facet",
+            "options" : {
+                "heading" : "Datatype",
+                "open" : true
+            }
+        },
+
+        "therapeuticArea" : {
+            "key": "therapeutic_area",
+            "element": "therapeutic-area-facet",
+            "options" : {
+                "heading" : "Therapeutic area",
+                "open" : true
+            }
+        },
+
+        "pathway" : {
+            "key": "pathway",
+            "element": "pathway-facet",
+            "options" : {
+                "heading" : "Pathway types",
+                "open" : true
+            }
+        },
+
+        "targetClass" : {
+            "key": "target_class",
+            "element": "target-class-facet",
+            "options" : {
+                "heading" : "Target class",
+                "open" : true
+            }
+        },
+
+        "histogram" : {
+            "key": "data_distribution",
+            "element": "data-distribution-facet",
+            "options" : {
+                "heading" : "Data distribution",
+                "open" : true
+            }
+        }
+    },
+
+
+
+    /**
+     * Page facets
+     * Define for each page the facets to be shown, in the order they appear in the array
+     * For each facet we show:
+     *     type : must match the object name in the "facets" section above;
+     *            this means the facet name and key (API) are independent, so you can have a "histogram" facet that points to "data_distribution"
+     *            e.g. "type":"therapeuticArea" (and not "therapeutic_area")
+     *     options : override the options in "facets" ("open" and "heading") specifically for the instance on this page only
+     */
+
+
+
+    "targetAssociationsFacets" : {
+        "count" : "unique_disease_count",
+        "facets" : [
+
+            /*{
+                "type":"histogram",
+            },*/
+
+            {
+                "type" : "datatype" //,
+                // Override options like this:
+                // "options" : {
+                //     "open" : [true | false],
+                //     "heading" : "Datatypes and source"
+                // }
+            },
+
+            {
+                "type":"therapeuticArea"
+            }
+
+        ]
+    },
+
+
+    "diseaseAssociationsFacets" : {
+        "count" : "unique_target_count",
+        "facets" : [
+
+            {
+                "type":"datatype"
+            },
+
+            {
+                "type":"pathway"
+            },
+
+            {
+                "type":"targetClass"
+            }
+
+        ]
+    }
+
+
 }

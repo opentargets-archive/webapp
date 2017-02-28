@@ -100,8 +100,8 @@ angular.module('cttvDirectives')
             if (d.enriched_entity.label.length > 30) {
                 label = d.enriched_entity.label.substring(0, 30) + "...";
             }
-            var targetsLink = "?targets=" + (d.targets.map(function (t) {return t.id}));
-            var cell = "<a href='/disease/" + d.id + "/associations" + targetsLink + "'>" + label + "</a>";
+            var targetsLink = "?targets=" + (d.targets.map(function (t) {return t.target.id}));
+            var cell = "<a href='/disease/" + d.enriched_entity.id + "/associations" + targetsLink + "'>" + label + "</a>";
             row.push(cell);
 
             // 1 - Targets associated

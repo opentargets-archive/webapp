@@ -83,12 +83,14 @@ var webappFiles = {
             'app/js/drug-summary-directive.js',
             'app/js/lazyload.js',
             'app/js/plugin-directive.js',
+            'app/js/facets.js',
             // Plugins -- should go in another config file
             // 'app/plugins/pdb-directive.js',
             // 'app/plugins/proteinFeatures-directive.js',
             // 'app/plugins/protein-baseline-expression-directive.js',
             // 'app/plugins/test-directive.js',
-            'app/plugins/*.js'
+            'app/plugins/*.js',
+            'app/facets/*/*.js'
         ],
 
         css: [

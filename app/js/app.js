@@ -129,7 +129,8 @@ var deps = [
     'hm.readmore',
     'ngSanitize',
     'swaggerUi',
-    'plugins'
+    'plugins',
+    'facets'
 ];
 
 /*

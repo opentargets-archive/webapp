@@ -14,7 +14,8 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvLoadedLists', '$q', '$route', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvLoadedLists, $q, $route) {
+// .controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvLoadedLists', '$q', '$route', function ($scope, $location, $log, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvLoadedLists, $q, $route) {
+.controller ("diseaseAssociationsCtrl", ['$scope', '$location', '$log', '$q', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvConfig', '$route', 'cttvLoadedLists', function ($scope, $location, $log, $q, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvConfig, $route, cttvLoadedLists) {
 
     'use strict';
 
@@ -79,12 +80,8 @@ angular.module('cttvControllers')
     cttvFiltersService.reset();
 
     // Set page filters: this defines the order in which the facets are going to be displayed
-    cttvFiltersService.pageFacetsStack([
-        //cttvFiltersService.facetTypes.SCORE,        // adds a score facet to the page
-        cttvFiltersService.facetTypes.DATATYPES,      // adds a datatypes facet to the page
-        cttvFiltersService.facetTypes.PATHWAYS,       // adds a pathways facet to the page
-        cttvFiltersService.facetTypes.TARGET_CLASS    // adds a target class facet
-    ]);
+    // as per config JSON
+    cttvFiltersService.pageFacetsStack(cttvConfig.diseaseAssociationsFacets.facets);
 
 
 
@@ -202,7 +199,7 @@ angular.module('cttvControllers')
 
             if (resp.body.total) {
                 //TODO Change this to POST request
-                cttvFiltersService.updateFacets(resp.body.facets, undefined, resp.body.status);
+                cttvFiltersService.updateFacets(resp.body.facets, cttvConfig.diseaseAssociationsFacets.count);
 
                 // The label of the diseases in the header
                 $scope.search.label = resp.body.data[0].disease.efo_info.label;
