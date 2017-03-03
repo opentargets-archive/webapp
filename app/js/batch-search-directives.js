@@ -27,33 +27,32 @@ angular.module('cttvDirectives')
                 return cttvAPIservice.getSearch(queryObject)
             }
 
-            scope.setNewItem = function (oldQuery, res) {
-                var queryIndex = _.findIndex(scope.list.list, function (o) {
-                    return (o.query === oldQuery);
-                });
-                scope.list.list.splice(queryIndex, 1);
-                scope.list.list.unshift({
-                    query: res.data.approved_symbol,
-                    result: {
-                        approved_symbol: res.data.approved_symbol,
-                        id: res.id,
-                        query: res.data.approved_symbol,
-                        isExact: true,
-                        isNew: true
-                    }
-                });
-                scope.newSearchQuery = '';
-
-                // Scroll top the batch-search-mappings-container-exact div
-                $('#batch-search-mappings-container-exact').scrollTop(0);
-            };
+            // scope.setNewItem = function (oldQuery, res) {
+            //     var queryIndex = _.findIndex(scope.list.list, function (o) {
+            //         return (o.query === oldQuery);
+            //     });
+            //     scope.list.list.splice(queryIndex, 1);
+            //     scope.list.list.unshift({
+            //         query: res.data.approved_symbol,
+            //         result: {
+            //             approved_symbol: res.data.approved_symbol,
+            //             id: res.id,
+            //             query: res.data.approved_symbol,
+            //             isExact: true,
+            //             isNew: true
+            //         }
+            //     });
+            //
+            //     // Scroll top the batch-search-mappings-container-exact div
+            //     $('#batch-search-mappings-container-exact').scrollTop(0);
+            // };
 
             scope.getSearch = function (queryTxt) {
                 if (queryTxt) {
                     scope.searchInProgress = true;
                     search (queryTxt)
                         .then (function (resp) {
-                            scope.searchInProgress = false;
+                            // scope.searchInProgress = false;
                             scope.newSearchResults = resp.body.data;
                         })
                         .finally (function () {
@@ -66,42 +65,92 @@ angular.module('cttvDirectives')
                 }
             };
 
-            scope.newSearch = function (query) {
-                scope.newSearchQuery = query.query;
+            // scope.newSearch = function (query) {
+            //     scope.newSearchQuery = query.query;
+            // };
+
+            scope.toggleThis = function (query) {
+                for (var i=0; i<scope.list.list.length; i++) {
+                    var item = scope.list.list[i];
+                    if (item.query === query.query) {
+                        item.selected = !item.selected;
+                        break;
+                    }
+                }
+            };
+
+            scope.toAddFromSearch = {};
+            scope.addRemove = function (search) {
+                if (scope.toAddFromSearch[search.data.approved_symbol]) {
+                    delete scope.toAddFromSearch[search.data.approved_symbol];
+                } else {
+                    if (search.id && search.data) {
+                        var parsed = {
+                            approved_symbol: search.data.approved_symbol,
+                            id: search.id,
+                            // isExact: true,
+                            query: search.data.approved_symbol,
+                            isNew: true
+                        };
+                    }
+
+                    scope.toAddFromSearch[search.data.approved_symbol] = {
+                        query: search.data.approved_symbol,
+                        selected: true,
+                        result: parsed
+                    };
+                }
+            };
+
+            scope.discardSearch = function () {
+                scope.newSearchQuery = '';
+                scope.searchQueryText = '';
+                scope.newSearchResults = [];
+
+                // We incorporate the selected search results
+                for (var res in scope.toAddFromSearch) {
+                    if (scope.toAddFromSearch.hasOwnProperty(res)) {
+                        scope.list.list.unshift(scope.toAddFromSearch[res]);
+                        delete scope.toAddFromSearch[res];
+                    }
+                }
             };
 
 
             //
-            scope.discardThis = function (query) {
-                // query.discarded = true;
-                for (var i=0; i<scope.list.list.length; i++) {
-                    var item = scope.list.list[i];
-                    if (item.query === query.query) {
-                        item.discarded = true;
-                    }
-                }
-            };
+            // scope.discardThis = function (query) {
+            //     // query.discarded = true;
+            //     for (var i=0; i<scope.list.list.length; i++) {
+            //         var item = scope.list.list[i];
+            //         if (item.query === query.query) {
+            //             item.discarded = true;
+            //             break;
+            //         }
+            //     }
+            // };
+            //
+            // scope.selectThis = function (query, match) {
+            //     for (var i=0; i<scope.list.list.length; i++) {
+            //         var item = scope.list.list[i];
+            //         item.discarded = false;
+            //         if (item.query === query.query) {
+            //             item.result.id = match.id;
+            //             item.result.approved_symbol = match.data.approved_symbol;
+            //             item.discarded = false;
+            //         }
+            //     }
+            //     delete(scope.searchQuery);
+            // };
 
-            scope.selectThis = function (query, match) {
-                for (var i=0; i<scope.list.list.length; i++) {
-                    var item = scope.list.list[i];
-                    item.discarded = false;
-                    if (item.query === query.query) {
-                        item.result.id = match.id;
-                        item.result.approved_symbol = match.data.approved_symbol;
-                        item.discarded = false;
-                    }
-                }
-                delete(scope.searchQuery);
-            };
-            scope.restoreThis = function (query) {
-                for (var i=0; i<scope.list.list.length; i++) {
-                    var item = scope.list.list[i];
-                    if (item.query === query.query) {
-                        item.discarded = false;
-                    }
-                }
-            };
+            // scope.restoreThis = function (query) {
+            //     for (var i=0; i<scope.list.list.length; i++) {
+            //         var item = scope.list.list[i];
+            //         if (item.query === query.query) {
+            //             item.discarded = false;
+            //         }
+            //     }
+            // };
+
             scope.searchThis = function (who) {
                 scope.searchQuery = who;
 
@@ -122,28 +171,42 @@ angular.module('cttvDirectives')
                 scope.fuzzy = [];
                 scope.rescued = [];
 
+
                 scope.targetIds = [];
 
                 for (var i=0; i<thisList.length; i++) {
+
                     var thisSearch = thisList[i];
+
                     if (thisSearch.result && thisSearch.result.approved_symbol) {
                         if (thisSearch.result.isExact) {
                             scope.exact.push({
                                 query: thisSearch.query,
-                                result: thisSearch.result.approved_symbol,
-                                isNew: thisSearch.result.isNew
+                                selected: thisSearch.selected,
+                                // discarded: thisSearch.discarded,
+                                result: thisSearch.result.approved_symbol
+                                // isNew: thisSearch.result.isNew
                             });
-                            if (thisSearch.result.isNew) {
-                                scope.rescued.push(thisSearch.query);
+                            if (thisSearch.selected) {
+                                scope.targetIds.push(thisSearch.result.id);
                             }
-                            scope.targetIds.push(thisSearch.result.id);
+                        } else if (thisSearch.result.isNew) {
+                            scope.rescued.push({
+                                query: thisSearch.query,
+                                selected: thisSearch.selected,
+                                result: thisSearch.result.approved_symbol
+                            });
+                            if (thisSearch.selected) {
+                                scope.targetIds.push(thisSearch.result.id);
+                            }
                         } else {
                             scope.fuzzy.push({
                                 query: thisSearch.query,
-                                discarded: thisSearch.discarded,
+                                // discarded: thisSearch.discarded,
+                                selected: thisSearch.selected,
                                 result: thisSearch.result.approved_symbol
                             });
-                            if (!thisSearch.discarded) {
+                            if (thisSearch.selected) {
                                 scope.targetIds.push(thisSearch.result.id);
                             }
                         }
@@ -188,6 +251,12 @@ angular.module('cttvDirectives')
             // Show the latest loaded list by default:
             scope.list = scope.lists[scope.lists.length-1];
 
+            // Loads the sample list
+            scope.loadExample = function () {
+                var exampleTargets = ["PTGS2", "PTGS1", "AC026248.1", "TSPAN14", "SPRED2", "CDC37", "UBAC2", "IL27", "ADO", "NKX2-3", "TYK2", "GPR35", "MAP3K8", "SLC39A11", "PTGER4", "PARK7", "GPR183", "RORC", "NXPE1", "KLF3", "HLA-DQB1", "BANK1", "CUL2", "NR5A2", "IPMK", "IFNG", "CLCN2", "ALOX5", "RGS14", "AQP8", "LITAF", "TUBD1", "KRAS", "ADCY3", "RNF186", "ZGPAT", "LSP1", "CSF2RB", "ERAP2", "VDR", "CCL7", "TNFSF15", "ANKRD55", "GABRG3", "GABRG2", "GABRG1", "SP140", "ITGA4", "PDGFB", "RIT1"];
+                searchTargets("sampleList", exampleTargets);
+            };
+
             // In searches we store the searched term (target in the list) with its search promise
             scope.uploadFile = function () {
                 var file = elem[0].getElementsByTagName("input")[0].files[0];
@@ -195,49 +264,56 @@ angular.module('cttvDirectives')
                 reader.onloadend = function (e) {
                     var fileContent = e.target.result;
                     var targets = fileContent.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
-                    targets = targets.filter(function (t) {if (t) return true;})
-
-                    var opts = {
-                        q: targets,
-                        filter: 'target',
-                        fields: 'approved_symbol'
-                    };
-
-                    var queryObject = {
-                        method: "POST",
-                        params: opts
-                    };
-
-                    var listSearch = [];
-                    cttvAPIservice.getBestHitSearch(queryObject)
-                        .then (function (resp) {
-                            var parsed;
-                            for (var i=0; i<resp.body.data.length; i++) {
-                                var search = resp.body.data[i];
-                                parsed = undefined;
-                                if (search.id && search.data) {
-                                    parsed = {
-                                        approved_symbol: search.data.approved_symbol,
-                                        id: search.id,
-                                        isExact: search.exact,
-                                        query: search.q
-                                    };
-                                }
-                                listSearch.push({
-                                    query: search.q,
-                                    result: parsed
-                                })
-                            }
-                            cttvLoadedLists.add(file.name, listSearch);
-
-                            // Show all previous lists
-                            scope.lists = cttvLoadedLists.getAll();
-                            scope.list = cttvLoadedLists.get(file.name);
-                        });
+                    targets = targets.filter(function (t) {
+                        if (t) return true;
+                    });
+                    searchTargets (file.name, targets);
 
                 };
                 reader.readAsText(file);
             };
+
+            function searchTargets (name, targets) {
+                var opts = {
+                    q: targets,
+                    filter: 'target',
+                    fields: 'approved_symbol'
+                };
+
+                var queryObject = {
+                    method: "POST",
+                    params: opts
+                };
+
+                var listSearch = [];
+                return cttvAPIservice.getBestHitSearch(queryObject)
+                    .then(function (resp) {
+                        var parsed;
+                        for (var i = 0; i < resp.body.data.length; i++) {
+                            var search = resp.body.data[i];
+                            parsed = undefined;
+                            if (search.id && search.data) {
+                                parsed = {
+                                    approved_symbol: search.data.approved_symbol,
+                                    id: search.id,
+                                    isExact: search.exact,
+                                    query: search.q
+                                };
+                            }
+                            listSearch.push({
+                                query: search.q,
+                                selected: true,
+                                result: parsed
+                            })
+                        }
+                        cttvLoadedLists.add(name, listSearch);
+
+                        // Show all previous lists
+                        scope.lists = cttvLoadedLists.getAll();
+                        scope.list = cttvLoadedLists.get(name);
+                    });
+
+            }
         }
     };
 }]);

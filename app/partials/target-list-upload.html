@@ -1,15 +1,20 @@
 <div class="section">
-    <h2>Upload target list:</h2>
+    <div style="margin-bottom:20px;">
+        <h2>1. Upload your target list:</h2>
+        <p style="color:#aaaaaa">A text file with one target per line. A maximum of 200 targets is currently
+            allowed.</p>
+    </div>
     <div>
         <span style="display:inline-block"><input type="file" id="targetListUpload" name="file" onchange="angular.element(this).scope().uploadFile(this)"/></span>
         <div ng-show=lists style="float:right">
             <div>
                 <span ng-show="lists.length">Previously uploaded lists:</span>
                 <div ng-repeat="l in lists track by $index">
-                    <div><a href="" ng-click="useThisList(l.id)">{{l.id}}</a> -- {{l.list.length}} targets <span style="cursor:pointer;"><i class="fa fa-times" ng-click="removeThisList(l.id)" aria-hidden="true"></i></span></div>
+                    <div><a href="" ng-click="useThisList(l.id)">{{l.id}}</a> ({{l.list.length}} targets) <span style="cursor:pointer;"><i class="fa fa-times" ng-click="removeThisList(l.id)" aria-hidden="true"></i></span></div>
                 </div>
             </div>
         </div>
+        <p ng-click="loadExample()" style="font-size:0.8em;margin-top:5px;"><a href="#">Load example with 50 targets</a></p>
     </div>
 </div>
 
