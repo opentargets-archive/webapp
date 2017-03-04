@@ -1,7 +1,7 @@
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
 
-    .controller("SummaryCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', '$q', 'cttvConfig', function ($scope, $location, $log, cttvAPIservice, $q, cttvConfig) {
+    .controller("SummaryCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', '$q', 'cttvConfig', 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, $q, cttvConfig, cttvUtils) {
         'use strict';
 
         // Parse the $location search object to determine which entities we have.
@@ -100,6 +100,10 @@ angular.module('cttvControllers')
 
         // Recognised entities:
         // targets / target
+        if (!angular.isArray(search.target)) {
+            // search.target = expandTargetIds(search.target);
+            search.target = cttvUtils.expandTargetIds(search.target.split(','));
+        }
         if (search.target) {
             if (angular.isArray(search.target)) {
                 // Multiple targets

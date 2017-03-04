@@ -253,6 +253,38 @@ angular.module('cttvServices', []).
             $rootScope.showApiError500 = false;
         };
 
+        // Input: array with ensembl ids
+        // Output: array with the significant bits of the ensembl ids
+        cttvUtilsService.compressTargetIds = function (ids) {
+            var compressed = [];
+            for (var i = 0; i < ids.length; i++) {
+                var target = ids[i];
+                for (var pos = 4; pos < target.length; pos++) {
+                    if (target[pos] !== "0") {
+                        var c = target.slice(pos, target.length);
+                        compressed.push(c);
+                        break;
+                    }
+                }
+            }
+
+            return compressed;
+        };
+
+        // Input: array with the significant bits of an ensembl id
+        // Output: array with the expanded ids
+        cttvUtilsService.expandTargetIds = function (compressedIds) {
+            var targets = [];
+
+            for (var i=0; i<compressedIds.length; i++) {
+                var compT = compressedIds[i];
+                var expanded = 'ENSG' + (Array(12 - compT.length).join('0') + compT);
+                targets.push(expanded);
+            }
+            return targets;
+        };
+
+
         cttvUtilsService.addMatchedBy = function (r) {
             var matches = {
                 human: 0,

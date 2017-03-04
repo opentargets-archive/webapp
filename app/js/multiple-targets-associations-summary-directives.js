@@ -100,7 +100,11 @@ angular.module('cttvDirectives')
             if (d.enriched_entity.label.length > 30) {
                 label = d.enriched_entity.label.substring(0, 30) + "...";
             }
-            var targetsLink = "?targets=" + (d.targets.map(function (t) {return t.target.id}));
+            // var compressedTargetIds = cttvUtils.compressTargetIds(d.targets);
+            var t4d = d.targets.map(function (t) {return t.target.id});
+            var compressedTargetIds = cttvUtils.compressTargetIds(t4d);
+            // var targetsLink = "?targets=" + (d.targets.map(function (t) {return t.target.id}));
+            var targetsLink = "?targets=" + compressedTargetIds.join(',');
             var cell = "<a href='/disease/" + d.enriched_entity.id + "/associations" + targetsLink + "'>" + label + "</a>";
             row.push(cell);
 

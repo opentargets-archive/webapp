@@ -1,7 +1,7 @@
 angular.module('cttvDirectives')
 
 
-.directive ('targetListMapping', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+.directive ('targetListMapping', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
     'use strict';
 
     return {
@@ -220,7 +220,9 @@ angular.module('cttvDirectives')
                 }
 
                 if (scope.targetIds.length) {
-                    scope.summaryLink = "/summary?" + (scope.targetIds.map(function (t) {return "target=" + t;}).join("&"));
+                    var compressedUrl = cttvUtils.compressTargetIds(scope.targetIds).join(',');
+                    scope.summaryLink = "/summary?target=" + compressedUrl;
+                    // scope.summaryLink = "/summary?" + (scope.targetIds.map(function (t) {return "target=" + t;}).join("&"));
                 }
             }, true); // Deep watching the list
         }
