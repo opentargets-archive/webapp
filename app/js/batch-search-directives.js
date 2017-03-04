@@ -221,7 +221,8 @@ angular.module('cttvDirectives')
 
                 if (scope.targetIds.length) {
                     var compressedUrl = cttvUtils.compressTargetIds(scope.targetIds).join(',');
-                    scope.summaryLink = "/summary?target=" + compressedUrl;
+                    scope.summaryLink = "/summary?targets=" + compressedUrl;
+                    // scope.summaryLink = "/summary?target-list=" + l.id;
                     // scope.summaryLink = "/summary?" + (scope.targetIds.map(function (t) {return "target=" + t;}).join("&"));
                 }
             }, true); // Deep watching the list
@@ -304,7 +305,7 @@ angular.module('cttvDirectives')
                             }
                             listSearch.push({
                                 query: search.q,
-                                selected: true,
+                                selected: (parsed !== undefined),
                                 result: parsed
                             })
                         }

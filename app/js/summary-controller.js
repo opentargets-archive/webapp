@@ -1,7 +1,7 @@
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
 
-    .controller("SummaryCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', '$q', 'cttvConfig', 'cttvUtils', function ($scope, $location, $log, cttvAPIservice, $q, cttvConfig, cttvUtils) {
+    .controller("SummaryCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', '$q', 'cttvConfig', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, $log, cttvAPIservice, $q, cttvConfig, cttvUtils, cttvLoadedLists) {
         'use strict';
 
         // Parse the $location search object to determine which entities we have.
@@ -26,11 +26,12 @@ angular.module('cttvControllers')
 
         function getTargetsEnrichment(targets) {
             var queryObject = {
-                method: 'GET',
+                method: 'POST',
                 trackCall: true,
                 params: {
                     "target": targets,
                     "pvalue": 1,
+                    "from": 0,
                     "size": 10000
                 }
             };
@@ -68,8 +69,6 @@ angular.module('cttvControllers')
                                 "target": targets,
                                 "facets": "true",
                                 "from": i,
-                                // "scorevalue_min": 1,
-                                // 'targets_enrichment': "simple",
                                 "size": step
                             }
                         };
@@ -99,28 +98,41 @@ angular.module('cttvControllers')
         }
 
         // Recognised entities:
-        // targets / target
-        if (!angular.isArray(search.target)) {
-            // search.target = expandTargetIds(search.target);
-            search.target = cttvUtils.expandTargetIds(search.target.split(','));
-        }
-        if (search.target) {
-            if (angular.isArray(search.target)) {
-                // Multiple targets
-                // $q.all([getTargetsInfo(search.target), getAssociations(search.target)])
-                $q.all([getTargetsInfo(search.target), getTargetsEnrichment(search.target)])
-                    .then (function (resps) {
-                        $scope.targets = resps[0];
-                        $scope.associations = resps[1];
-                    });
-                // $scope.targets = search.target;
 
-                // Set the plugins -- plugins
-                $scope.sections = cttvConfig.summaryTargetList;
-
-            } else {
-                $scope.target = search.target;
+        // target-list (=> expand to targets)
+        if (search['target-list']) {
+            var targetList = cttvLoadedLists.get(search['target-list']);
+            var targets = [];
+            for (var i=0; i<targetList.list.length; i++) {
+                var target = targetList.list[i];
+                if (target.selected) {
+                    targets.push(target.result.id);
+                }
             }
+            // a target list overwrite any other target in the url
+            // search.targets = targets;
+
+            // TODO: Unnecessary, we compress to decompress in the next step
+            search.targets = cttvUtils.compressTargetIds(targets);
+        }
+
+        // multiple targets
+        if (search.targets) {
+            search.targets = cttvUtils.expandTargetIds(search.targets.split(','));
+            $q.all([getTargetsInfo(search.targets), getTargetsEnrichment(search.targets)])
+                .then(function (resps) {
+                    $scope.targets = resps[0];
+                    $scope.associations = resps[1];
+                });
+
+            // Set the plugins -- plugins
+            $scope.sections = cttvConfig.summaryTargetList;
+        }
+
+        // 1 target
+        if (search.target) {
+                // Only one target
+                $scope.target = search.target;
         }
 
         // diseases / disease
