@@ -8,7 +8,7 @@
         <span style="display:inline-block"><input type="file" id="targetListUpload" name="file" onchange="angular.element(this).scope().uploadFile(this)"/></span>
         <div ng-show=lists style="float:right">
             <div>
-                <span ng-show="lists.length">Previously uploaded lists:</span>
+                <span ng-show="lists.length"><h4>Previously uploaded lists:</h4></span>
                 <div ng-repeat="l in lists track by $index">
                     <div><a href="" ng-click="useThisList(l.id)">{{l.id}}</a> ({{l.list.length}} targets) <span style="cursor:pointer;"><i class="fa fa-times" ng-click="removeThisList(l.id)" aria-hidden="true"></i></span></div>
                 </div>

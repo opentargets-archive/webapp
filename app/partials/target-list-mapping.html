@@ -212,11 +212,18 @@
         <p style="color:#aaaaaa">These are the targets to be analysed. Save the current list in your computer if needed.</p>
     </div>
 
-    Targets currently selected for analysis: {{targetIds.length}}
+    <p>
+        <span style="font-size:1.4em;">{{targetIds.length}}</span> targets currently selected for analysis
+    </p>
+
     <div style="margin-top:50px;" ng-show=summaryLink>
         <a href="{{summaryLink}}">
             <button type="button" class="btn btn-primary">
-                Go
+                Analyze targets
+            </button>
+            <button>
+                <!--<i class="fa fa-download"></i>-->
+                Download list
             </button>
         </a>
     </div>

@@ -1,7 +1,7 @@
 angular.module('cttvDirectives')
 
 
-.directive ('targetListMapping', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
+.directive ('targetListMapping', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvLoadedLists', function ($log, cttvAPIservice, cttvUtils, cttvLoadedLists) {
     'use strict';
 
     return {
@@ -77,6 +77,7 @@ angular.module('cttvDirectives')
                         break;
                     }
                 }
+                cttvLoadedLists.save();
             };
 
             scope.toAddFromSearch = {};
@@ -114,6 +115,7 @@ angular.module('cttvDirectives')
                         delete scope.toAddFromSearch[res];
                     }
                 }
+                cttvLoadedLists.save();
             };
 
 
@@ -129,18 +131,18 @@ angular.module('cttvDirectives')
             //     }
             // };
             //
-            // scope.selectThis = function (query, match) {
-            //     for (var i=0; i<scope.list.list.length; i++) {
-            //         var item = scope.list.list[i];
-            //         item.discarded = false;
-            //         if (item.query === query.query) {
-            //             item.result.id = match.id;
-            //             item.result.approved_symbol = match.data.approved_symbol;
-            //             item.discarded = false;
-            //         }
-            //     }
-            //     delete(scope.searchQuery);
-            // };
+            scope.selectThis = function (query, match) {
+                for (var i=0; i<scope.list.list.length; i++) {
+                    var item = scope.list.list[i];
+                    if (item.query === query.query) {
+                        item.result.id = match.id;
+                        item.result.approved_symbol = match.data.approved_symbol;
+                        item.selected = true;
+                    }
+                }
+                delete(scope.searchQuery);
+                cttvLoadedLists.save();
+            };
 
             // scope.restoreThis = function (query) {
             //     for (var i=0; i<scope.list.list.length; i++) {
@@ -151,6 +153,7 @@ angular.module('cttvDirectives')
             //     }
             // };
 
+
             scope.searchThis = function (who) {
                 scope.searchQuery = who;
 
@@ -160,6 +163,7 @@ angular.module('cttvDirectives')
                     });
             };
 
+            scope.newSearchResults = [];
             scope.$watch('list', function (l) {
                 if (!l) {
                     return;
