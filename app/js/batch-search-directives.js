@@ -48,18 +48,29 @@ angular.module('cttvDirectives')
             // };
 
             scope.getSearch = function (queryTxt) {
+                scope.newSearchResults = [];
+                scope.duplicated = [];
                 if (queryTxt) {
                     scope.searchInProgress = true;
                     search (queryTxt)
                         .then (function (resp) {
-                            // scope.searchInProgress = false;
-                            scope.newSearchResults = resp.body.data;
+                            // We filter out search results that are already in the list
+                            for (var i=0; i<resp.body.data.length; i++) {
+                                var thisSearch = resp.body.data[i];
+                                if (scope.list.keys[thisSearch.id]) {
+                                    scope.duplicated.push(thisSearch.data.approved_symbol);
+                                } else {
+                                    scope.newSearchResults.push(thisSearch);
+                                }
+                            }
+                            // scope.newSearchResults = resp.body.data;
                         })
                         .finally (function () {
                             scope.searchInProgress = false;
                         });
                 } else {
                     scope.newSearchResults = [];
+                    scope.duplicated = [];
                     scope.searchInProgress = false;
                     scope.$apply(scope.newSearchResults);
                 }
@@ -82,8 +93,8 @@ angular.module('cttvDirectives')
 
             scope.toAddFromSearch = {};
             scope.addRemove = function (search) {
-                if (scope.toAddFromSearch[search.data.approved_symbol]) {
-                    delete scope.toAddFromSearch[search.data.approved_symbol];
+                if (scope.toAddFromSearch[search.id]) {
+                    delete scope.toAddFromSearch[search.id];
                 } else {
                     if (search.id && search.data) {
                         var parsed = {
@@ -95,7 +106,7 @@ angular.module('cttvDirectives')
                         };
                     }
 
-                    scope.toAddFromSearch[search.data.approved_symbol] = {
+                    scope.toAddFromSearch[search.id] = {
                         query: search.data.approved_symbol,
                         selected: true,
                         result: parsed
@@ -107,10 +118,12 @@ angular.module('cttvDirectives')
                 scope.newSearchQuery = '';
                 scope.searchQueryText = '';
                 scope.newSearchResults = [];
+                scope.duplicated = [];
 
                 // We incorporate the selected search results
                 for (var res in scope.toAddFromSearch) {
                     if (scope.toAddFromSearch.hasOwnProperty(res)) {
+                        scope.list.keys[scope.toAddFromSearch[res].result.id] = true;
                         scope.list.list.unshift(scope.toAddFromSearch[res]);
                         delete scope.toAddFromSearch[res];
                     }
@@ -164,6 +177,7 @@ angular.module('cttvDirectives')
             };
 
             scope.newSearchResults = [];
+            scope.duplicated = [];
             scope.$watch('list', function (l) {
                 if (!l) {
                     return;
@@ -296,10 +310,17 @@ angular.module('cttvDirectives')
                 return cttvAPIservice.getBestHitSearch(queryObject)
                     .then(function (resp) {
                         var parsed;
+                        var keys = {};
                         for (var i = 0; i < resp.body.data.length; i++) {
                             var search = resp.body.data[i];
                             parsed = undefined;
+                            // Avoid target duplication
+                            // TODO: I'm not sure how the getBestHitSearch rest api endpoint handles duplicated entries. Just in case, we avoid duplications here as well
+                            if (keys[search.id]) {
+                                continue;
+                            }
                             if (search.id && search.data) {
+                                keys[search.id] = true;
                                 parsed = {
                                     approved_symbol: search.data.approved_symbol,
                                     id: search.id,
@@ -313,7 +334,7 @@ angular.module('cttvDirectives')
                                 result: parsed
                             })
                         }
-                        cttvLoadedLists.add(name, listSearch);
+                        cttvLoadedLists.add(name, listSearch, keys);
 
                         // Show all previous lists
                         scope.lists = cttvLoadedLists.getAll();

@@ -30,14 +30,13 @@ angular.module('cttvServices')
 
         // Updates a list. This list needs to be the first
         lists.save = function () {
-            // $log.log('updating id ' + list.id);
-            // $log.log(list);
-            // var allLists = lists.getAll();
-            // allLists[allLists.length-1] = list;
             storeInLS(lists.all);
         };
 
-        lists.add = function (id, list) {
+        // id is the id for the list (normally the file name
+        // list is the actual list
+        // keys has all the target ids for the list
+        lists.add = function (id, list, keys) {
             // Is there a list with the same id already? if yes, overwrite it, if not push the new list
             var index;
             for (var i=0; i<lists.all.length; i++) {
@@ -47,24 +46,26 @@ angular.module('cttvServices')
                     break;
                 }
             }
-            if (index !== undefined) {
+            if (index) {
                 lists.all.splice(index, 1, {
                     id: id,
+                    keys: keys,
                     list: list
                 });
             } else {
                 lists.all.push({
                     id: id,
+                    keys: keys,
                     list: list
                 });
             }
             storeInLS(lists.all);
         };
 
-        lists.getLast = function () {
-            lists.all = getFromLS();
-            return lists.all[lists.all.length-1];
-        };
+        // lists.getLast = function () {
+        //     lists.all = getFromLS();
+        //     return lists.all[lists.all.length-1];
+        // };
 
         // Gets the list by id,
         // but also moves this list in the last position (if it is not there)

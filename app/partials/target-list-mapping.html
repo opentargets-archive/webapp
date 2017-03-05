@@ -120,7 +120,7 @@
             <div class="batch-search-mappings-container">
 
                 <div class="choose-header search-header">
-                    <input class="batch-search-box" type="text" placeholder="Search for a target"
+                    <input class="batch-search-box" type="text" placeholder="Search for more targets"
                            class="form-control input-search ng-pristine ng-untouched ng-valid ng-empty" name="text"
                            tabindex="1" ng-model="searchQueryText" ng-model-options="{debounce:500}" autocomplete="off"
                            ng-change="getSearch(searchQueryText)">
@@ -133,17 +133,27 @@
                     <div ng-repeat="target in newSearchResults">
                         <input ng-click="addRemove(target)" type="checkbox" ng-checked="target.selected">
                         <span class="search-item select-item">{{target.data.approved_symbol}}</span>
-                        <span ng-class="hover ? 'search-options highlight' : 'search-options down'"
-                              ng-mouseenter="hover=true" ng-mouseleave="hover=false">
-                                <i class="fa fa-check"></i>
-                        </span>
+                        <!--<span ng-class="hover ? 'search-options highlight' : 'search-options down'"-->
+                              <!--ng-mouseenter="hover=true" ng-mouseleave="hover=false">-->
+                                <!--<i class="fa fa-check"></i>-->
+                        <!--</span>-->
                     </div>
+
+                    <!-- duplicated -->
+                    <div ng-show="duplicated.length>0">
+                        <div style="margin-top:10px;margin-bottom:5px;">
+                            Targets already in your list:
+                        </div>
+                        <div class="search-item" ng-repeat="dup in duplicated">{{dup}}</div>
+                    </div>
+
+
                     <p style="margin-top:10px;" ng-click="discardSearch()"><a href="#">Done</a></p>
                 </div>
 
                 <!-- the result of the searches -->
                 <div class="batch-search-results-container" ng-show="newSearchResults.length==0">
-                    <p>These targets have been added to your list:</p>
+                    <p ng-show="rescued.length>0">These targets have been added to your list:</p>
                     <div ng-repeat="item in rescued">
                         <input ng-click="toggleThis(item)" type="checkbox" ng-checked="item.selected">
                         <span class="search-item">{{item.query}}
