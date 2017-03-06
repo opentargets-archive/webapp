@@ -108,12 +108,12 @@ angular.module('cttvDirectives')
             row.push(cell);
 
             // 1 - Targets associated
-            row.push(d.targets.length);
+            // row.push(d.targets.length);
 
-            // 2 - Enrichment / Relevance
+            // 1 - Enrichment / Relevance
             row.push(d.enrichment.score.toPrecision(1));
 
-            // 3 - Score (sum)
+            // 2 - Score (sum)
             var perc = 100 * d.targets.length / targets.length;
             var bars = '<div style="position:relative;width:200px;height:20px">' +
                     '<div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:0px;left:0px"></div>' +
@@ -122,17 +122,19 @@ angular.module('cttvDirectives')
                 '</div>';
             row.push(bars);
 
-            // 4 - Therapeutic areas (hidden)
+            // 3 - Therapeutic areas (hidden)
             row.push(d.enriched_entity.properties.therapeutic_area.labels.join(', '));
 
-            // 5 - targets
+            // 4 - targets (computing 5 and 6)
             // showing the most associated 10 targets
-            var targets10 = d.targets.slice(0, 10).map(function (o) {
+            var allTargets = d.targets.map(function (o) {
                 return {
                     id: o.target.id,
                     label: o.target.gene_info.symbol
-                }
+                };
             });
+
+            var targets10 = allTargets.slice(0, 10);
             var url = '';
             for (var j=0; j<10; j++) {
                 var t = targets10[j];
@@ -144,6 +146,11 @@ angular.module('cttvDirectives')
                 url += "...";
             }
             row.push(url);
+
+            // 5 - All targets
+            row.push(allTargets.map(function (o) {
+                    return o.label;
+                }).join(' '));
 
             // Row complete
             data.push(row);
@@ -233,9 +240,9 @@ angular.module('cttvDirectives')
                 // decide if the table sorts by number of targets or enrichment
                 var order;
                 if (scope.targets.length >= 2) {
-                    order = [[2, 'asc']];
+                    order = [[1, 'asc']];
                 } else {
-                    order = [[1, 'desc']];
+                    order = [[2, 'desc']];
                 }
                 table = $('#target-list-associated-diseases').DataTable (cttvUtils.setTableToolsParams({
                     "data": formatDiseaseDataToArray(scope.associations, scope.targets),
@@ -245,7 +252,7 @@ angular.module('cttvDirectives')
                     "paging" : true,
                     "columnDefs": [
                         {
-                            targets: [1,4],
+                            targets: [3,5],
                             visible: false
                         }
                     ]
