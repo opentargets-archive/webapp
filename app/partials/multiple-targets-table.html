@@ -1,21 +1,60 @@
 <div style="margin-top:20px;">
-    <div>Therapeutic Areas:</div>
-    <!-- Pie charts for therapeutic areas -->
+    <h5>Therapeutic Areas: (sorted by relevance to your list)</h5>
+
+
+    <!-- TAs filter -- new design -->
+    <div class="container" style="margin-bottom:20px;">
+        <div class="row">
+            <div class="col-sm-11" style="overflow-y:hidden;" ng-style="{'max-height': showAll ? '' : '25px'}">
+                <span title="Filter table by {{ta.label}}" ng-click="selectTA(ta)" ng-repeat="ta in therapeuticAreas | orderBy: '+enrichment'" style="background:#e6ecff;vertical-align:middle;padding:4px;display:inline-block;cursor:pointer;margin-right:10px;margin-bottom:8px;">
+                    <!--<button>-->
+                        <span style="white-space:nowrap;">{{ta.label | upperCaseFirst}}</span>
+                    <!--</button>-->
+                </span>
+            </div>
+            <div ng-click="toggleTaFilter()" style="cursor:pointer;padding:4px;vertical-align:middle;" class="col-sm-1">More <i class="fa fa-caret-down" style="font-size:0.8em;"></i></div>
+
+            <!--<div title="Filter table by {{ta.label}}" class="col-sm-2" ng-repeat="ta in therapeuticAreas | orderBy: '+enrichment'" ng-show="selectedTA=='' || ta.label==selectedTA" ng-click="selectTA(ta)" style="border: 1px solid #dddddd; padding:10px; font-size:0.9em; cursor:pointer">-->
+                <!--<div style="margin-bottom:10px;overflow-x:hidden">-->
+                    <!--<text style="font-weight:bold; white-space:nowrap;">{{ta.label}}</text>-->
+                <!--</div>-->
+                <!--<i ng-class="selectedTA==ta.label ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o'" style="float:right; position:absolute; right:10px; top:10px;font-size:1.4em; color:#a7a39f; background-color:#ffffff"></i>-->
+                <!--&lt;!&ndash;<span style="cursor:pointer" ng-class="{'highlight-primary': ta.label == selectedTA}">{{ta.label}}: {{ta.value}} ({{ta.score}}) {{ta.selected}}</span>&ndash;&gt;-->
+                <!--<div style="float:right">-->
+                    <!--<perc-piechart title="{{ta.value}} targets associated with {{ta.label}}" score="ta.score"></perc-piechart>-->
+                <!--</div>-->
+                <!--<div>-->
+                    <!--{{ta.value}} <span>{{ta.value != 1 ? "targets" : "target"}}</span>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+
+
     <!-- Therapeutic areas -->
     <div class="container" style="margin-bottom:20px;">
         <div class="row">
-            <div title="Filter table by {{ta.label}}" class="col-sm-2" ng-repeat="ta in therapeuticAreas | orderBy: '+enrichment'" ng-show="selectedTA=='' || ta.label==selectedTA" ng-click="selectTA(ta)" style="border: 1px solid #dddddd; padding:10px; font-size:0.9em; cursor:pointer">
-                <div style="margin-bottom:10px;overflow-x:hidden">
-                    <text style="font-weight:bold; white-space:nowrap;">{{ta.label}}</text>
-                </div>
-                <i ng-class="selectedTA==ta.label ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o'" style="float:right; position:absolute; right:10px; top:10px;font-size:1.4em; color:#a7a39f; background-color:#ffffff"></i>
-                <!--<span style="cursor:pointer" ng-class="{'highlight-primary': ta.label == selectedTA}">{{ta.label}}: {{ta.value}} ({{ta.score}}) {{ta.selected}}</span>-->
-                <div style="float:right">
-                    <perc-piechart title="{{ta.value}} targets associated with {{ta.label}}" score="ta.score"></perc-piechart>
-                </div>
-                <div>
-                    {{ta.value}} <span>{{ta.value != 1 ? "targets" : "target"}}</span>
-                </div>
+            <div class="col-sm-3" ng-repeat="ta in therapeuticAreas" ng-show="ta.label==selectedTA" style="border: 1px solid #dddddd; padding:10px; font-size:0.9em; cursor:pointer">
+                <a href="/disease/{{ta.id}}/associations?targets={{ta.compressedTargetIds}}">
+                    <div style="margin-bottom:10px;overflow-x:hidden">
+                        <text style="font-weight:bold; white-space:nowrap;">{{ta.label}}</text>
+                    </div>
+                    <!--<i ng-class="selectedTA==ta.label ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o'" style="float:right; position:absolute; right:10px; top:10px;font-size:1.4em; color:#a7a39f; background-color:#ffffff"></i>-->
+                    <!--<span style="cursor:pointer" ng-class="{'highlight-primary': ta.label == selectedTA}">{{ta.label}}: {{ta.value}} ({{ta.score}}) {{ta.selected}}</span>-->
+                    <div style="float:right; position:absolute; right:0px;top:15px;">
+                        <perc-piechart title="{{ta.value}} targets associated with {{ta.label}}" score="ta.score"></perc-piechart>
+                    </div>
+                    <div>
+                        {{ta.value}} <span>{{ta.value != 1 ? "targets" : "target"}}</span>
+                    </div>
+                    <div>
+                        Relevance (pvalue): {{ta.enrichment.toPrecision(1)}}
+                    </div>
+                </a>
+
+            </div>
+            <div ng-show="selectedTA!=''" ng-click="removeTaFilter()" class="col-sm-2" style="cursor:pointer;">
+                <span style="font-size:0.9em;">Remove Filter</span>
             </div>
         </div>
     </div>
@@ -34,7 +73,7 @@
             <tr>
                 <th>Disease</th>
                 <th>Targets associated</th>
-                <th>Enrichment</th>
+                <th>Relevance (pvalue)</th>
                 <th>Targets associated</th>
                 <th>Therapeutic Area</th>
                 <th>Targets</th>

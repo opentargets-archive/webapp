@@ -100,7 +100,6 @@ angular.module('cttvDirectives')
             if (d.enriched_entity.label.length > 30) {
                 label = d.enriched_entity.label.substring(0, 30) + "...";
             }
-            // var compressedTargetIds = cttvUtils.compressTargetIds(d.targets);
             var t4d = d.targets.map(function (t) {return t.target.id});
             var compressedTargetIds = cttvUtils.compressTargetIds(t4d);
             // var targetsLink = "?targets=" + (d.targets.map(function (t) {return t.target.id}));
@@ -111,7 +110,7 @@ angular.module('cttvDirectives')
             // 1 - Targets associated
             row.push(d.targets.length);
 
-            // 2 - Enrichment
+            // 2 - Enrichment / Relevance
             row.push(d.enrichment.score.toPrecision(1));
 
             // 3 - Score (sum)
@@ -123,25 +122,25 @@ angular.module('cttvDirectives')
                 '</div>';
             row.push(bars);
 
-            // 4 - Therapeutic areas
+            // 4 - Therapeutic areas (hidden)
             row.push(d.enriched_entity.properties.therapeutic_area.labels.join(', '));
 
             // 5 - targets
-            // showing the most associated 5 targets
-            var targets5 = d.targets.slice(0, 5).map(function (o) {
+            // showing the most associated 10 targets
+            var targets10 = d.targets.slice(0, 10).map(function (o) {
                 return {
                     id: o.target.id,
                     label: o.target.gene_info.symbol
                 }
             });
             var url = '';
-            for (var j=0; j<5; j++) {
-                var t = targets5[j];
+            for (var j=0; j<10; j++) {
+                var t = targets10[j];
                 if (t) {
-                    url += '<a href=/evidence/' + t.id + '/' + d.enriched_entity.id + '>' + t.label + '</a> ';
+                    url += '<a title="View evidence" href=/evidence/' + t.id + '/' + d.enriched_entity.id + '>' + t.label + '</a> ';
                 }
             }
-            if (d.targets.length > 5) {
+            if (d.targets.length > 10) {
                 url += "...";
             }
             row.push(url);
@@ -166,16 +165,26 @@ angular.module('cttvDirectives')
             scope.selectedTA = '';
             scope.selectTA = function(ta) {
                 if (scope.selectedTA === ta.label) {
-                    scope.selectedTA = '';
+                    // scope.selectedTA = '';
+                    scope.removeTaFilter();
                 } else {
                     scope.selectedTA = ta.label;
                 }
                 table.draw();
+                scope.showAll = false;
+            };
+
+            scope.removeTaFilter = function () {
+                scope.selectedTA = '';
+            };
+
+            scope.showAll = false;
+            scope.toggleTaFilter = function () {
+                scope.showAll = !scope.showAll;
             };
 
             scope.$watch('associations', function () {
                 if (!scope.associations) {
-                    $log.log("we don't have associations...");
                     return;
                 }
 
@@ -190,12 +199,17 @@ angular.module('cttvDirectives')
                         var count = dis.enrichment.params.targets_in_set_in_disease;
                         var enrichment = dis.enrichment.score;
                         var score = (count / scope.targets.length).toPrecision(1);
+                        var targets = dis.targets.map(function (d) {
+                            return d.target.id;
+                        });
+                        var compressedTargetIds = cttvUtils.compressTargetIds(targets).join(',');
                         tas.push({
                             label: label,
                             id: id,
                             enrichment: enrichment,
                             value: count,
-                            score: score
+                            score: score,
+                            compressedTargetIds: compressedTargetIds
                         })
                     }
                 }
@@ -204,26 +218,26 @@ angular.module('cttvDirectives')
 
                 // Create a table
                 // Filter based on Therapeutic area...
-                $.fn.dataTable.ext.search.push(
+                // TODO: WARNING: This is set for the whole app
+                $.fn.dataTable.ext.search = [
                     function (settings, data, dataIndex) {
                         if (!scope.selectedTA) {
                             return true;
                         }
-                        var disease = data[0];
                         var tas = data[4];
-                        return ((disease === scope.selectedTA) || (tas.indexOf(scope.selectedTA) >= 0))
+                        return ((tas.indexOf(scope.selectedTA) >= 0));
                     }
-                );
+                ];
 
                 // format the data
                 // decide if the table sorts by number of targets or enrichment
                 var order;
-                if (scope.targets.length >= 10) {
+                if (scope.targets.length >= 2) {
                     order = [[2, 'asc']];
                 } else {
                     order = [[1, 'desc']];
                 }
-                table = $('#target-list-associated-diseases').DataTable( cttvUtils.setTableToolsParams({
+                table = $('#target-list-associated-diseases').DataTable (cttvUtils.setTableToolsParams({
                     "data": formatDiseaseDataToArray(scope.associations, scope.targets),
                     "ordering" : true,
                     "order": order,
@@ -231,7 +245,7 @@ angular.module('cttvDirectives')
                     "paging" : true,
                     "columnDefs": [
                         {
-                            targets: [1],
+                            targets: [1,4],
                             visible: false
                         }
                     ]
@@ -241,6 +255,8 @@ angular.module('cttvDirectives')
         }
     };
 }])
+
+
 // .directive('multipleTargetsBubbles', ['$log', 'cttvUtils', '$q', function ($log, cttvUtils, $q) {
 //     'use strict';
 //
@@ -288,7 +304,7 @@ angular.module('cttvDirectives')
              score: '=' // [0,1]
          },
          link: function (scope, el, attrs) {
-             scope.radius = 20;
+             scope.radius = 50;
 
              scope.$watch('score', function () {
                  if (!scope.score) {
@@ -298,13 +314,13 @@ angular.module('cttvDirectives')
                  $timeout (function () {
                      var svg_g = d3.select(el[0])
                          .append("svg")
-                         .attr("width", scope.radius)
-                         .attr("height", scope.radius)
+                         .attr("width", scope.radius * 1.5)
+                         .attr("height", scope.radius * 1.5)
                          .append("g")
                          .attr("transform", "translate(" + ~~scope.radius/2 + "," + ~~scope.radius/2 + ")");
 
                      var arc = d3.svg.arc()
-                         .outerRadius(scope.radius - 10)
+                         .outerRadius(scope.radius - ~~(scope.radius/2))
                          .innerRadius(0);
 
                      var pie = d3.layout.pie()
