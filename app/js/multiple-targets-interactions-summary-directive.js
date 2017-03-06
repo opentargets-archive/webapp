@@ -125,7 +125,7 @@ angular.module('cttvDirectives')
                             });
                     });
 
-                // Get the IntAct data from omnipathdb...
+                // Get data from omnipathdb...
                 var url = "/proxy/www.omnipathdb.org/interactions/" + uniprotIds.join(',') + '?format=json&fields=sources';
                 var p2 = $http.get(url)
                     .then(function (resp) {
@@ -282,12 +282,15 @@ angular.module('cttvDirectives')
                         var interactorsArr = [];
                         for (var inter in interactors) {
                             if (interactors.hasOwnProperty(inter)) {
-                                interactorsArr.push(interactors[inter]);
+                                // Leave out nodes without interactions
+                                if (Object.keys(interactors[inter].interactsWith).length) {
+                                    interactorsArr.push(interactors[inter]);
+                                }
                             }
                         }
                         // var interactorsArr = Object.values(interactors);
-                        $log.log("Final interactors...");
-                        $log.log(interactorsArr);
+                        // $log.log("Final interactors...");
+                        // $log.log(interactorsArr);
 
                         scope.categories = sourceCategories;
 
@@ -320,15 +323,13 @@ angular.module('cttvDirectives')
                                 }
                             }
 
-                            $log.log(scope.filterOut);
+                            // $log.log(scope.filterOut);
                             iv.filters(scope.filterOut);
                             iv.update();
                         };
 
                         scope.selectedNodes = [];
                         scope.unselectNode = function (node) {
-                            $log.log('simulating a click in ');
-                            $log.log(node);
                             iv.click(node);
                             for (var i = 0; i < scope.selectedNodes.length; i++) {
                                 if (scope.selectedNodes[i].label === node.label) {
@@ -336,10 +337,6 @@ angular.module('cttvDirectives')
                                 }
                             }
                         };
-
-                        $log.log("interactors array");
-                        $log.log(interactorsArr);
-
 
                         var iv = interactionsViewer()
                             .data(interactorsArr.sort(function (a, b) {
@@ -390,7 +387,6 @@ angular.module('cttvDirectives')
                                 scope.$apply();
                             })
                             .on("interaction", function (interactors) {
-                                $log.log(interactors);
                                 var elem = this;
                                 var obj = {};
                                 // obj.header = iNames.join(" - ") + " interactions";
@@ -444,11 +440,8 @@ angular.module('cttvDirectives')
                                 // }
 
                                 scope.pathways = pathways;
-                                $log.log(scope.pathways);
                                 scope.ppis = ppis;
-                                $log.log(scope.ppis);
                                 scope.enzSubs = enzSubs;
-                                $log.log(enzSubs);
 
                                 // ivTooltip = tooltip.table()
                                 //     .width(180)

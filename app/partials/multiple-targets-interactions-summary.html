@@ -41,7 +41,7 @@
 
                     <div ng-if="selectedNodes.length>0">
                         <!-- Show the labels for the selected targets -->
-                        <div> Selected nodes: <span ng-repeat="node in selectedNodes" style="margin-right:10px; border:1px solid #ccc; border-radius:6px; font-size:0.8em; padding:3px; background-color:{{node.color}}">{{node.label}}&nbsp;<i
+                        <div> Selected nodes: <span ng-repeat="node in selectedNodes" style="margin-right:10px; border:1px solid #ccc; border-radius:6px; font-size:0.8em; padding:3px; background-color:{{node.color}};white-space:nowrap">{{node.label}}&nbsp;<i
                                 ng-click="unselectNode(node)" class="fa fa-times"
                                 style="margin-left:1px;cursor:pointer;"></i></span>
                         </div>
