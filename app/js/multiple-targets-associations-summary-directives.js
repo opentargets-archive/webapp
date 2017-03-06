@@ -225,13 +225,13 @@ angular.module('cttvDirectives')
 
                 // Create a table
                 // Filter based on Therapeutic area...
-                // TODO: WARNING: This is set for the whole app
+                // TODO: WARNING: This is set for the whole app (and removing any other search)
                 $.fn.dataTable.ext.search = [
                     function (settings, data, dataIndex) {
                         if (!scope.selectedTA) {
                             return true;
                         }
-                        var tas = data[4];
+                        var tas = data[3];
                         return ((tas.indexOf(scope.selectedTA) >= 0));
                     }
                 ];

@@ -75,7 +75,6 @@ angular.module('cttvServices', []).
          *
          */
         cttvUtilsService.setTableToolsParams = function(obj, title){
-            $.fn.dataTable.ext.search = []; // remove previous filters
 
             //obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
             //obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
