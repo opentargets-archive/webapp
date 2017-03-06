@@ -176,6 +176,19 @@ angular.module('cttvDirectives')
                     });
             };
 
+            // Downloads the list
+            scope.downloadList = function () {
+                var listText = '';
+                for (var i=0; i<scope.list.list.length; i++) {
+                    var item = scope.list.list[i];
+                    if (item.result) {
+                        listText += item.result.approved_symbol + "\n";
+                    }
+                }
+                var b = new Blob([listText], {type: "text/csv;charset=utf-8"});
+                saveAs(b, scope.list.id);
+            };
+
             scope.newSearchResults = [];
             scope.duplicated = [];
             scope.$watch('list', function (l) {
