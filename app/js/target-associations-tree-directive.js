@@ -154,6 +154,7 @@ angular.module('cttvDirectives')
                                     .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
                                     .target(scope.target)
                                     .therapeuticAreas(tas)
+                                    .colors(colorScale.range())
                                     .hasLegendScale(false);
 
                                 // gat(fView, elem.children().eq(1)[0]);

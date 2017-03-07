@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-.directive ('multipleTargetsInteractionsSummary', ['$log', 'cttvAPIservice', '$http', '$q', '$timeout', function ($log, cttvAPIservice, $http, $q, $timeout) {
+.directive ('multipleTargetsInteractionsSummary', ['$log', 'cttvAPIservice', '$http', '$q', '$timeout', 'cttvUtils', function ($log, cttvAPIservice, $http, $q, $timeout, cttvUtils) {
     'use strict';
 
     // Map between omnipathdb sources and type of interactions
@@ -278,13 +278,24 @@ angular.module('cttvDirectives')
                             }
                         }
 
+
                         // Set up the interactors viewer
                         var interactorsArr = [];
+                        scope.dataRange = [Infinity, 0];
                         for (var inter in interactors) {
                             if (interactors.hasOwnProperty(inter)) {
                                 // Leave out nodes without interactions
                                 if (Object.keys(interactors[inter].interactsWith).length) {
                                     interactorsArr.push(interactors[inter]);
+                                }
+
+                                // Calculate data range
+                                var il = Object.keys(interactors[inter].interactsWith).length;
+                                if (il < scope.dataRange[0]) {
+                                    scope.dataRange[0] = il;
+                                }
+                                if (il > scope.dataRange[1]) {
+                                    scope.dataRange[1] = il;
                                 }
                             }
                         }
@@ -452,6 +463,16 @@ angular.module('cttvDirectives')
                             scope.showSpinner = false;
                             iv(document.getElementById("interactionsViewerMultipleTargets"));
                         }, 0);
+
+                        // Setting up legend
+                        var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+                        // scope.legendText = "Number of interactors";
+                        scope.colors = [];
+                        for (var i = 0; i <= 100; i += 25) {
+                            var j = i / 100;
+                            //scope.labs.push(j);
+                            scope.colors.push({color: colorScale(j), label: j});
+                        }
 
                     });
             })
