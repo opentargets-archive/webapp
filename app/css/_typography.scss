@@ -79,6 +79,7 @@ a {
     &:hover {
         text-decoration: none;
         color: $clr-link-hover;
+        cursor: pointer;
     }
 
     &:focus {

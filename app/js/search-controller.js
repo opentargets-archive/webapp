@@ -10,7 +10,7 @@ angular.module('cttvControllers')
      * SearchAppCtrl
      * Controller for the search/results page
      */
-    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice, cttvUtils, cttvLocationState) {
+    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', '$q', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice, cttvUtils, cttvLocationState, $q) {
 
         'use strict';
         // $log.log('SearchCtrl()');
@@ -161,6 +161,79 @@ angular.module('cttvControllers')
 
 
 
+        var getTargetInfo = function(id){
+            var queryObject = {
+                 method: 'GET',
+                 params: {
+                    target_id: id,
+                    fields: ["approved_symbol"]
+                 }
+             };
+            return cttvAPIservice.getTarget(queryObject)
+                .then(function(resp) {
+                    try{
+                        $scope.search.results.data[0].data.top_associations.parsed.find(function(p){
+                            return p.id===id;
+                        }).label = resp.body.approved_symbol;
+                    }catch(e){
+                        $log.log("Error getting Target information");
+                    }
+                },cttvAPIservice.defaultErrorHandler);
+        }
+
+
+
+        var getDiseaseInfo = function(id){
+            var queryObject = {
+                method: 'GET',
+                params: {
+                    code: id,
+                    fields: ["label"]
+                }
+            };
+            return cttvAPIservice.getDisease(queryObject)
+                .then( function(resp) {
+                    try{
+                        $scope.search.results.data[0].data.top_associations.parsed.find(function(p){
+                            return p.id===id;
+                        }).label = resp.body.label;
+                    }catch(e){
+                        $log.log("Error getting disease information");
+                    }
+                }, cttvAPIservice.defaultErrorHandler );
+        }
+
+
+
+        var getDrugInfo = function(id, type){
+            var queryObject = {
+                method: 'GET',
+                params: {
+                    //target: id,
+                    datasource: "chembl",
+                    size: 1000,
+                    fields:[
+                        "drug.max_phase_for_all_diseases.numeric_index",
+                        "drug.molecule_name"
+                    ]
+                }
+            };
+
+            queryObject.params[type] = id;
+
+
+            return cttvAPIservice.getFilterBy(queryObject).then(function (resp) {
+                    var d = resp.body.data.filter(function(i){
+                        return i.drug.max_phase_for_all_diseases.numeric_index == 4;
+                    });
+                    d = _.uniqBy(d, 'drug.molecule_name');
+                    return d.length;
+                });
+
+        }
+
+
+
         var getResults = function(){
 
             // before getting new results,
@@ -183,10 +256,86 @@ angular.module('cttvControllers')
                 cttvAPIservice.getSearch( queryObject )
                     .then(
                         function(resp) {
+
                             $scope.search.results = resp.body;
-                            for (var i=0; i<$scope.search.results.data.length; i++) {
-                                var r = $scope.search.results.data[i];
-                                cttvUtils.addMatchedBy(r);
+
+                            $scope.search.results.data.forEach(function(result, i){
+                                cttvUtils.addMatchedBy(result);
+                            });
+
+
+                            return resp;
+                        },
+                        cttvAPIservice.defaultErrorHandler
+                    )
+
+                    .then(
+                        function(resp) {
+
+                            // Picasso panel:
+                            // for the first result, parse a few info:
+                            if( resp.body.from==0 ){
+
+                                var result = $scope.search.results.data[0];
+
+
+                                //
+                                // the top associations
+                                //
+                                result.data.top_associations.parsed = result.data.top_associations.total.slice(0,5);
+                                result.data.top_associations.parsed = result.data.top_associations.parsed.map(function(p){
+                                    // split ID "ENSG00000073756-EFO_0007214"
+                                    var id = p.id.split("-")[ +(result.data.type==="target") ]
+                                    return {
+                                        id : id,
+                                        label: result.data.type==="target" ? getDiseaseInfo(id) : getTargetInfo(id)
+                                    };
+                                })
+
+
+                                //
+                                // phase IV drugs
+                                //
+                                result.data.drug_summary = {
+                                    total : "..."
+                                };
+                                getDrugInfo(result.data.id, result.data.type)
+                                        .then(
+                                            function(d){
+                                                $log.log("got d "+d);
+                                                result.data.drug_summary.total = d;
+                                            }
+                                        );
+
+
+                                //
+                                // DISEASE specific
+                                //
+                                if( result.data.type === 'disease' ){
+                                    // parse therapeutic areas to unique entries
+                                    var utas = {};
+                                    result.data.unique_ta = [];
+                                    result.data.efo_path_labels.forEach(function(ta, i){
+                                        if(!utas[ta[0]]){
+                                            utas[ta[0]]=true; // just to use has hashmap
+                                            result.data.unique_ta.push({
+                                                label: ta[0],
+                                                efo: result.data.efo_path_codes[i][0]
+                                            })
+                                        }
+                                    });
+
+                                } // end disease specific stuff
+
+
+                                //
+                                // TARGETS specific
+                                //
+                                if( result.data.type === 'target' ){
+                                    // get drugs phase 4 count
+
+                                }
+
                             }
                         },
                         cttvAPIservice.defaultErrorHandler
