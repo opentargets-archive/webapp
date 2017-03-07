@@ -12,6 +12,11 @@
         'use strict';
         // $log.log('TargetDiseaseCtrl()');
 
+
+        // Reset the datatables search;
+        $.fn.dataTable.ext.search = [];
+
+
 		cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
         cttvUtils.clearErrors();
 
@@ -463,7 +468,6 @@
 
 
         var initCommonDiseasesTable = function(){
-
             $('#common-diseases-table').DataTable( cttvUtils.setTableToolsParams({
                 "data": formatCommonDiseaseDataToArray($scope.search.tables.genetic_associations.common_diseases.data),
                 "ordering" : true,

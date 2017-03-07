@@ -85,11 +85,15 @@ angular.module('cttvDirectives')
 //     };
 // }])
 
-.directive('multipleTargetsTable', ['$log', 'cttvUtils', function ($log, cttvUtils) {
+.directive('multipleTargetsTable', ['$log', 'cttvUtils', 'cttvConsts', function ($log, cttvUtils, cttvConsts) {
     'use strict';
 
     function formatDiseaseDataToArray (diseases, targets) {
         var data = [];
+
+        // $log.log("these are the targets...");
+        // $log.log(targets);
+
         for (var i=0; i<diseases.length; i++) {
             var row = [];
             var d = diseases[i];
@@ -169,6 +173,59 @@ angular.module('cttvDirectives')
             targets: '='
         },
         link: function (scope, el, attrs) {
+            // Datatypes;
+            scope.datatypes = [];
+            var datatypes = cttvConsts.datatypesOrder;
+            for (var i = 0; i < datatypes.length; i++) {
+                scope.datatypes.push({
+                    label: cttvConsts.datatypesLabels[datatypes[i]],
+                    id: cttvConsts.datatypes[datatypes[i]],
+                    selected: true
+                })
+            }
+
+            // Toggle Datatype filter
+            scope.toggleDatatypeFilter = function (datatype) {
+                datatype.selected = !datatype.selected;
+
+                // Filter out the data
+                var newData = [];
+                loop1:
+                for (var i=0; i<scope.associations.length; i++) {
+                    var assoc = scope.associations[i];
+                    var targets = assoc.targets;
+                    var newTargets = [];
+                    loop2:
+                    for (var j=0; j<targets.length; j++) {
+                        var t = targets[j];
+                        for (var k=0; k<scope.datatypes.length; k++) {
+                            var dt = scope.datatypes[k];
+                            if (dt.selected) {
+                                if (t.association_score.datatypes[dt.id] > 0) {
+                                    // This target has the datatype
+                                    newTargets.push(t);
+                                    continue loop2;
+                                }
+                            }
+                        }
+                    }
+                    if (newTargets.length > 0) {
+                        // The association has this datatype, so we include it
+                        newData.push({
+                            targets: newTargets,
+                            enrichment: assoc.enrichment,
+                            enriched_entity: assoc.enriched_entity
+                        });
+                    }
+                }
+                var dtapi = $('#target-list-associated-diseases').dataTable().api();
+                var rows = formatDiseaseDataToArray(newData, scope.targets);
+                dtapi.clear();
+                dtapi.rows.add(rows);
+                dtapi.draw();
+            };
+
+
             scope.selectedTA = '';
             scope.selectTA = function(ta) {
                 if (scope.selectedTA === ta.label) {
@@ -218,7 +275,7 @@ angular.module('cttvDirectives')
                             value: count,
                             score: score,
                             compressedTargetIds: compressedTargetIds
-                        })
+                        });
                     }
                 }
 
