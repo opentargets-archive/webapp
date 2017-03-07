@@ -1,0 +1,28 @@
+<div class="checkbox cttv-facet-checkbox clearfix">
+    <label ng-class="(!bucket.enabled ? 'disabled' : '') +' '+ (multiline?'cttv-facet-checkbox-label-multiline':'cttv-facet-checkbox-label')" title="{{bucket.label}}">
+        <input type="checkbox"
+            ng-value="{{bucket.id}}"
+            ng-checked="bucket.selected"
+            ng-disabled="!bucket.enabled"
+            ng-click="bucket.toggle()" >
+<span>{{bucket.label | upperCaseFirst | clearUnderscores}}</span>
+<span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}">({{bucket.count | metricPrefix:0}})</span>
+</label>
+<span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}">({{bucket.count | metricPrefix:0}})</span>
+</div>
+
+
+<!-- NEW CHECKBOX TEMPLATE -->
+<!-- <div class="checkbox cttv-facet-checkbox clearfix">
+    <span ng-click="bucket.toggle()">
+        <span ng-class="(!bucket.enabled ? 'disabled' : '') +' '+ (multiline?'cttv-facet-checkbox-label-multiline':'cttv-facet-checkbox-label')">
+            <span style="width:1.1em; display:inline-block; vertical-align: middle; font-size:1.1em">
+                <span class="fa fa-square-o" ng-if="!bucket.selected"></span>
+                <span class="fa fa-check-square" ng-if="bucket.selected"></span>
+            </span>
+            <span title="{{bucket.label | upperCaseFirst | clearUnderscores}}">{{bucket.label | upperCaseFirst | clearUnderscores}}</span>
+            <span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}">({{bucket.count | metricPrefix:0}})</span>
+        </span>
+        <span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}">({{bucket.count | metricPrefix:0}})</span>
+    </span>
+</div>-->

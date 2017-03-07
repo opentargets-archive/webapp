@@ -275,7 +275,7 @@ angular.module('cttvServices', []).
                     matches.human++;
                 }
             }
-            
+
             if (!matches.human) {
                 if (matches.ortholog) {
                     r.orthologMatch = true;
@@ -350,3 +350,7 @@ angular.module('cttvServices', []).
 
         return modalService;
     }])
+
+
+
+

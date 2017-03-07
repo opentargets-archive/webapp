@@ -9,21 +9,10 @@ angular.module('cttvServices').
     /**
      *
      */
-    factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', '$analytics', function($log, $location, cttvDictionary, cttvConsts, cttvAPIservice, cttvUtils, cttvLocationState, $analytics) {
+    factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', '$analytics', '$injector', 'cttvConfig', function($log, $location, cttvDictionary, cttvConsts, cttvAPIservice, cttvUtils, cttvLocationState, $analytics, $injector, cttvConfig) {
 
         "use strict";
 
-        // set the default datatypes:
-        // only animal models are filtered out (deselected) by default
-        var datatypes = [
-            {key: cttvConsts.datatypes.GENETIC_ASSOCIATION, selected:true},
-            {key: cttvConsts.datatypes.SOMATIC_MUTATION, selected:true},
-            {key: cttvConsts.datatypes.KNOWN_DRUG, selected:true},
-            {key: cttvConsts.datatypes.AFFECTED_PATHWAY, selected:true},
-            {key: cttvConsts.datatypes.RNA_EXPRESSION, selected:true},
-            {key: cttvConsts.datatypes.LITERATURE, selected:true},
-            {key: cttvConsts.datatypes.ANIMAL_MODEL, selected:false}
-        ];
 
 
         // array of FilterCollections
@@ -32,7 +21,6 @@ angular.module('cttvServices').
         // for display purposes only
         // I know.... perhaps it's a little overkilling it....
         var filters = [];
-
 
 
         // array of user selected options, aka "Your filters"
@@ -45,11 +33,9 @@ angular.module('cttvServices').
         var selectedCount = 0;
 
 
-
         // This holds the list of facets we want to show for the current page.
         // The order in the array determins the display in the UI.
         var pageFacetsStack = [];
-
 
 
         // Back here again :(
@@ -61,8 +47,15 @@ angular.module('cttvServices').
         var status = []; // 1 == OK, 0 == not ok
 
 
-
         var lastClicked;
+
+
+        // PARSERS
+        // load and link the parser service for each facet
+        var parsers = {};
+        for(var i in cttvConfig.facets){
+            parsers[ cttvConfig.facets[i].key ] = $injector.get( _.camelCase(cttvConfig.facets[i].element)+"Parser" );
+        }
 
 
 
@@ -77,7 +70,6 @@ angular.module('cttvServices').
          * updates the "summary" of selected options, as well as the count
          */
         var updateSelected = function(){
-            // $log.log("updateSelected");
             selected.length=0;  // reset the length, not whole object
             selectedCount = 0;  // other controllers are $watch-ing this...
 
@@ -152,7 +144,6 @@ angular.module('cttvServices').
          * Returns true if a filter with the given key is selected
          */
         var isSelected=function(collection, key){
-            // return ($location.search()[collection] && ( $location.search()[collection]===key || $location.search()[collection].indexOf(key)>=0 )) || false;
             var fcts = cttvLocationState.getState()[ cttvFiltersService.stateId ];
             key = "" + key; // target class is numerical key which confuses indexOf below.
             return (fcts && fcts[collection] && ( fcts[collection]==key || fcts[collection].indexOf(key)>=0 ))|| false;
@@ -178,144 +169,27 @@ angular.module('cttvServices').
         /*
          * Takes API data for a facet (i.e. a collection of filters) and returns the config object to create that collection
          */
-        var parseFacetData = function(collection, data, countsToUse){
-            // $log.log("parseFacetData "+collection);
+        var parseFacetData = function(collection, data, countsToUse, options){
+
+            // 1. default options:
+            // mostly things for the collection container, like label, whether it's open or closed to start with
+            options = options || {};
+            options.open = options.open===false ? false : true;
+            options.heading = options.heading || cttvDictionary[collection.toUpperCase()] || collection;
+
             var config={
                 key: collection,    // this is the type, really...
-                label: cttvDictionary[collection.toUpperCase()] || collection,  // set default label based on what the API has returned for this
-                isPartial: Math.min(1, (status.indexOf(collection)+1))
+                options : options
             };
 
-            if(collection === cttvConsts.DATATYPES){
-                // we have datatypes, which is a little complicated
-                // because we have DEFAULT options (i.e. filtering out mouse data)
-                // these should go into the "selected filters" (although the user hasn't selected them)
-                config.label = cttvDictionary.DATA_TYPES;
-                config.filters = datatypes.map( function(obj){
-                    var conf = {};
-                    var def = {};
-                    def[countsToUse] = {};
-                    var dtb = data.buckets.filter(function(o){return o.key===obj.key;})[0] || def;
-                    conf.key = obj.key;
-                    conf.label = cttvDictionary[obj.key.toUpperCase()] || "";
-                    conf.count = dtb[countsToUse].value; //dtb.doc_count;
-                    conf.enabled = dtb.key !== undefined; // it's actually coming from the API and not {}
-                    conf.selected = isSelected(collection, obj.key); // && conf.count>0;    // do we want to show disabled items (with count==0) as selected or not?
-                    conf.facet = collection;
-                    conf.collection = null; //new FilterCollection("","");
-                    if(dtb.datasource){
-                        conf.collection = parseCollection (parseFacetData(cttvConsts.DATASOURCES, dtb.datasource, countsToUse));
-                    }
 
-                    return conf;
-                });/*.filter( function(obj){
-                    // Use a filter function to keep only those returned by the API??
-                    return obj.count>0;
-                });*/
-            } else if (collection === cttvConsts.PATHWAY) {
-                config.label = cttvDictionary.PATHWAY;
-                // pathways
-                config.filters = data.buckets.map(function (obj) {
-                    var conf = {};
-                    conf.key = obj.key;
-                    conf.label = obj.label;
-                    conf.count = obj[countsToUse].value;
-                    conf.selected = isSelected(collection, obj.key);
-                    conf.facet = collection;
-                    conf.collection = null;
-                    if (obj.pathway) {
-                        conf.collection = parseCollection(parseFacetData(cttvConsts.PATHWAY, obj.pathway, countsToUse));
-                    }
-                    return conf;
-                });
-            } else if (collection === cttvConsts.TARGET_CLASS) {
-                config.label = cttvDictionary.TARGET_CLASS;
-                config.filters = data.buckets.map(function (obj) {
-                    var conf = {};
-                    conf.key = obj.key;
-                    conf.label = obj.label;
-                    conf.count = obj[countsToUse].value;
-                    conf.selected = isSelected(collection, obj.key);
-                    conf.facet = collection;
-                    conf.collection = null;
-                    if (obj.target_class) {
-                        conf.collection = parseCollection(parseFacetData(cttvConsts.TARGET_CLASS, obj.target_class, countsToUse));
-                    }
-                    return conf;
-                });
-            } else if (collection === cttvConsts.DATASOURCES){
-                // datasources (in datatype subfacets)
-                config.filters = data.buckets.map(function(obj){
-                    var conf = {};
-                    conf.key = obj.key;
-                    //conf.label = obj.key;
-                    conf.label = cttvDictionary[ cttvConsts.invert(obj.key) ] || obj.key;
-                    conf.count = obj[countsToUse].value;
-                    conf.selected = isSelected(collection, obj.key);
-                    conf.facet = collection;
-                    conf.collection = null;
-                    return conf;
-                });
-            } else if (collection === cttvConsts.THERAPEUTIC_AREAS) {
-                // therapeutic area facet
-                config.filters = data.buckets.map(function (obj) {
-                    var conf = {};
-                    conf.key = obj.key;
-                    conf.label = obj.label;
-                    conf.count = obj[countsToUse].value;
-                    conf.facet = collection;
-                    conf.collection = null;
-                    conf.selected = isSelected(collection, obj.key);
-                    return conf;
-                });
-            } else if (collection === cttvConsts.DATA_DISTRIBUTION){
-                // score (data_distribution)
-                config.label= cttvDictionary.SCORE;
-                var search = cttvFiltersService.parseURL();
-                    search.score_min = search.score_min || [cttvConsts.defaults.SCORE_MIN.toFixed(2)];
-                    search.score_max = search.score_max || [cttvConsts.defaults.SCORE_MAX.toFixed(2)];
-                    search.score_str = search.score_str || [cttvConsts.defaults.STRINGENCY];
-
-                // set the 3 filters for the score: min, max, stringency
-                config.filters = [
-                    {
-                        facet : "score_min",
-                        label : "min",
-                        key : search.score_min[0],
-                        selected : true
-                    },
-                    {
-                        facet : "score_max",
-                        label : "max",
-                        key : search.score_max[0],
-                        selected : true
-                    },
-                    {
-                        facet : "score_str",
-                        label : "stringency",
-                        key : search.score_str[0],
-                        selected : true
-                    }
-                ];
-
-
-                // score facet is different than the default checkbox lists
-                // so we need to overwrite the getSelected method
-                config.getSelectedFilters = function(){
-                    // at the moment just return all these as selected, later on we might want to flag it after user changes default value perhaps?
-                    return this.filters;
-                };
-
-                config.data = {
-                    buckets : (function(){var a=[]; for(var i in data.buckets){a.push({label:Number(i), value:data.buckets[i].value})} return a;})()
-                                .sort(function(a,b){
-                                    if(a.label<b.label){return -1}
-                                    if(a.label>b.label){return 1}
-                                    return 0
-                                })
-                    //min : 0,
-                    //max : 1
-                }
+            // 2. parse data:
+            // the parse function for each parser is defined in the corresponding facet/plugin
+            try{
+                config = parsers[collection].parse(config, data, countsToUse, isSelected);
+            }catch(e){
+                $log.warn("Facet parser error for "+collection);
+                $log.warn(e);
             }
 
             return config;
@@ -350,13 +224,11 @@ angular.module('cttvServices').
             // $log.log("updateLocationSearch");
             var raw = {};
             selected.forEach(function(collection){
-                //raw[collection.key] = collection.filters.map(function(obj){return obj.key;});
                 collection.filters.forEach(function(obj){
                     raw[obj.facet] = raw[obj.facet] || [];
                     raw[obj.facet].push( obj.key )
                 })
             })
-            // $location.search(raw);
             cttvLocationState.setStateFor( cttvFiltersService.stateId , raw );
         }
 
@@ -414,10 +286,10 @@ angular.module('cttvServices').
             this.count = o.count || 0;  // the count to display
             this.enabled = this.count>0 && (o.enabled==undefined ? true : o.enabled);
             this.selected = o.selected==undefined ? false : o.selected;
-            // the value associated with this
-            this.value = o.value || undefined;
-            // trying to have nested filters?
-            this.collection = o.collection || null;
+            this.value = o.value || undefined;  // the value associated with this
+            // has nested filters?
+            // TODO: the problem here is that we couple the Filter class to the parseCollection() method here...
+            this.collection = o.collection ? parseCollection(o.collection) : null;
         }
 
             /*
@@ -435,8 +307,6 @@ angular.module('cttvServices').
              */
             Filter.prototype.setSelected=function(b){
                 if(this.enabled){
-                    // flag the changed state
-                    //this.changed = (b!=this.selected);
                     this.selected = b;
                 }
                 return this.selected;
@@ -459,7 +329,8 @@ angular.module('cttvServices').
             this.label = config.label || "";
             this.filters = config.filters || [];
             this.data = config.data || undefined;
-            this.isPartial = config.isPartial || 0;
+            this.options = config.options || {}; // or {} ???
+            this.open = config.open;
             if(config.addFilter){
                 this.addFilter = config.addFilter;
             }
@@ -490,7 +361,6 @@ angular.module('cttvServices').
              * Function to select and clear all the filters in the collection
              */
             FilterCollection.prototype.selectAll = function(b){
-                // $log.log(b);
                 this.filters.forEach(function(f){
                     f.setSelected(b);
                     if(!b && f.collection!=null){
@@ -540,21 +410,6 @@ angular.module('cttvServices').
 
 
         /**
-         * List of constants for the types of facets we support.
-         * These are passed to the pageFacetsStack() function to define the facets for the given page
-         * Each constant represents the corresponding 'key' in the facets as returned by the ElasticSearch API
-         */
-        cttvFiltersService.facetTypes = {
-            DATATYPES: cttvConsts.DATATYPES,                    // 'datatypes'
-            PATHWAYS: cttvConsts.PATHWAY,                       // 'pathway_type'
-            SCORE: cttvConsts.DATA_DISTRIBUTION,                // 'data_distribution'
-            THERAPEUTIC_AREAS: cttvConsts.THERAPEUTIC_AREAS,    // disease
-            TARGET_CLASS: cttvConsts.TARGET_CLASS               // target class
-        };
-
-
-
-        /**
          * Set the facets to be shown on the current page.
          * The order in which they're added is also the order
          * in which they'll appear in the UI.
@@ -592,30 +447,6 @@ angular.module('cttvServices').
 
 
         /**
-         * Gets a list of selected filters for API call usage.
-         * Return: object containing arrays of string for each facet category
-         * Example:
-         * {
-         *    datatype: ["known_drug", "rna_expression"]
-         * }
-         */
-
-        // TODO:
-        // this also seems to be redundant ???
-        // cttvFiltersService.getSelectedFiltersRaw = function(facet){
-        //     // TODO: ok so this first part was also kinda hacked together quickly
-        //     // and ideally we can clean up a few more functions here...
-        //     $log.log("*** getSelectedFiltersRaw");
-        //     if(facet){
-        //         return getSelectedFilters(facet);
-        //     }
-//
-        //     return cttvLocationState.getState() || {};
-        // };
-
-
-
-        /**
          * Removes ALL selections
          */
         cttvFiltersService.deselectAll = function(){
@@ -629,32 +460,6 @@ angular.module('cttvServices').
 
 
 
-        /**
-         * Parses the search of the URL
-         * and returns an API-friendly config object with the filter options
-         */
-        // TODO:
-        // this should be deprecated now, right?
-        //cttvFiltersService.parseURL = function(){
-//
-        //    // datatypes=genetic_association&datatypes=known_drug&datatypes=rna_expression
-//
-        //    var raw = {};
-        //    var search = $location.search();
-//
-        //    for(var i in search){
-        //        if(search.hasOwnProperty(i)){
-        //            raw[ i ] = search[i];
-        //            if(typeof raw[ i ] === "string"){
-        //                raw[i] = [raw[i]];
-        //            }
-        //        }
-        //    }
-        //    return raw;
-        //};
-
-
-
         cttvFiltersService.stateId = "fcts";
 
 
@@ -663,10 +468,10 @@ angular.module('cttvServices').
          * This is the main method that parse facets data and sets them up
          * @param facets [Object] the facet object return by the API
          * @param countsToUse [String] the count to be used for display: "unique_target_count" or "unique_disease_count"
-         * @param status [Array] this contains ["ok"] if all facets were computed correctly by the API. In case of errors, it contains the list of facets reporting incorrect values, e.g. ["partial-facet-datatypes"]
+         * NOTE: i quite like passing the countsToUse directly here, so I'll leave it like this for now. This is however now set in the config file
          */
-        cttvFiltersService.updateFacets = function(facets, countsToUse, status){
-            // $log.log("updateFacets");
+        cttvFiltersService.updateFacets = function(facets, countsToUse){
+            $log.log("updateFacets");
             // if there are no facets, return
             if(!facets){
                 return;
@@ -674,9 +479,6 @@ angular.module('cttvServices').
 
             // set the count to use
             countsToUse = countsToUse || cttvConsts.UNIQUE_TARGET_COUNT; // "unique_target_count";
-
-            // set the status
-            cttvFiltersService.status(status);
 
             // reset the filters
             for (var key in filtersData){
@@ -689,19 +491,35 @@ angular.module('cttvServices').
             selectedCount = 0;
 
 
-            // If the page has a list of specified facets, we use that
-            // if not, we just go through all the facets returned by the API
+            // The page must specify a list of specified facets:
+            // we always need facets to be EXPLICITLY DEFINED, we can't just take whatever comes from the API,
+            // as we don't necessarily know how to parse that raw info
             var orderedFacets = pageFacetsStack;
-            if(!orderedFacets.length){
-                orderedFacets = Object.keys(facets);
-            }
+
+
 
             orderedFacets.forEach(function(collection){
-                if (facets.hasOwnProperty(collection)) {
+                //if (facets.hasOwnProperty(collection.type)) {
+                if (facets.hasOwnProperty( cttvConfig.facets[collection.type].key )) {
                     try{
-                        addCollection( parseFacetData(collection, facets[collection], countsToUse) );
+                        // default options from facet definition can be overriden with info in pageFacetStack for the page
+                        var opts = {};
+                        for(var i in cttvConfig.facets[collection.type].options){
+                            opts[i] = (collection.options && collection.options[i]!=undefined) ? collection.options[i] : cttvConfig.facets[collection.type].options[i];
+                        }
+                        opts.element = cttvConfig.facets[collection.type].element;
+
+                        addCollection(
+                            parseFacetData(
+                                cttvConfig.facets[collection.type].key,
+                                facets[ cttvConfig.facets[collection.type].key ],    //facets[collection.type],
+                                countsToUse,
+                                opts // collection.options
+                            )
+                        );
                     } catch(e){
-                        $log.warn("Error while updating facets: "+e);
+                        $log.warn("Error while updating facets: "+collection.type);
+                        $log.warn(e);
                     }
                 }
             });
@@ -709,7 +527,6 @@ angular.module('cttvServices').
             // update the filters state?
             updateSelected();
 
-            // $log.log(selected);
             // Track events in piwik
             for (var i=0; i<selected.length; i++) {
                 var facetCollection = selected[i];
@@ -733,16 +550,6 @@ angular.module('cttvServices').
 
 
 
-        cttvFiltersService.getDefaultSelectedDatatypes = function(){
-            return datatypes.filter(function(value){
-                                return value.selected;
-                            }).map(function(obj){
-                                return obj.key;
-                            });
-        }
-
-
-
         /**
          * Resets the filters, selected filters, page facets and counts.
          * You may want to call this at the beginning of your page controller,
@@ -763,31 +570,18 @@ angular.module('cttvServices').
         }
 
 
+
         cttvFiltersService.update = function(){
             update();
         }
 
 
-        /**
-         * Example status:
-         * "status": ["ok"]
-         * "status": ["partial-facet-datatypes"]
-         * "status": ["partial-facet-datatypes", "partial-facet-pathway"]
-         */
-        cttvFiltersService.status = function(stt){
-            if(stt){
-                //status = stt; //(stt==cttvConsts.OK.toLowerCase()) ? 1 : 0;
-                if(stt[0] == cttvConsts.OK.toLowerCase()){
-                    status = [stt[0]];
-                } else {
-                    status = stt.map(function(item){
-                        return item.substring(14);
-                    })
-                }
 
-            }
-            return status;
-        }
+        /**
+         * Export the isSelected function
+         */
+        cttvFiltersService.isSelected = isSelected;
+
 
 
         return cttvFiltersService;
