@@ -182,7 +182,8 @@ angular.module('cttvDirectives')
             };
 
             scope.removeTaFilter = function () {
-                scope.selectedTA = '';
+                scope.selectedTA = undefined;
+                table.draw();
             };
 
             scope.showAll = false;
