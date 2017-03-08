@@ -342,6 +342,7 @@
         ]
     },
 
+    "targetListLimit": 200,
 
     "diseaseAssociationsFacets" : {
         "count" : "unique_target_count",

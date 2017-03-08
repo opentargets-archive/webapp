@@ -225,13 +225,26 @@
     <p>
         <span style="font-size:1.4em;">{{targetIds.length}}</span> targets currently selected for analysis
     </p>
+    <p ng-show="targetIds.length > listLengthLimit" style="color:red;">
+        The current limit of this functionality is {{listLengthLimit}} targets. Please unselect some targets or load a new list
+    </p>
 
     <div style="margin-top:50px;" ng-show=summaryLink>
-        <a href="{{summaryLink}}">
-            <button type="button" class="btn btn-primary">
-                Analyze targets
-            </button>
-        </a>
+        <!-- We are in the limit of bacth search -->
+        <span ng-show="targetIds.length <= listLengthLimit">
+            <a href="{{summaryLink}}">
+                <button type="button" class="btn btn-primary">
+                    Analyze targets
+                </button>
+            </a>
+        </span>
+
+        <span ng-show="targetIds.length > listLengthLimit">
+                <button type="button" class="btn btn-default">
+                    Analyze targets
+                </button>
+        </span>
+
         <button ng-click="downloadList();">
             <!--<i class="fa fa-download"></i>-->
             Download list

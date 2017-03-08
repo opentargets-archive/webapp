@@ -1,7 +1,7 @@
 angular.module('cttvDirectives')
 
 
-.directive ('targetListMapping', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvLoadedLists', function ($log, cttvAPIservice, cttvUtils, cttvLoadedLists) {
+.directive ('targetListMapping', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvLoadedLists', 'cttvConfig', function ($log, cttvAPIservice, cttvUtils, cttvLoadedLists, cttvConfig) {
     'use strict';
 
     return {
@@ -11,6 +11,10 @@ angular.module('cttvDirectives')
         },
         templateUrl: "partials/target-list-mapping.html",
         link: function (scope, el, attrs) {
+
+            // Setting the limit for the list:
+            scope.listLengthLimit = cttvConfig.targetListLimit;
+
 
             function search (q) {
                 var queryObject = {
@@ -24,7 +28,7 @@ angular.module('cttvDirectives')
                     }
                 };
 
-                return cttvAPIservice.getSearch(queryObject)
+                return cttvAPIservice.getSearch(queryObject);
             }
 
             // scope.setNewItem = function (oldQuery, res) {
@@ -261,7 +265,7 @@ angular.module('cttvDirectives')
     };
 }])
 
-.directive ('targetListUpload', ['$log', 'cttvAPIservice', 'cttvLoadedLists', '$q', function ($log, cttvAPIservice, cttvLoadedLists, $q) {
+.directive ('targetListUpload', ['$log', 'cttvAPIservice', 'cttvLoadedLists', 'cttvConfig', function ($log, cttvAPIservice, cttvLoadedLists, cttvConfig) {
     'use strict';
 
     return {
@@ -271,6 +275,9 @@ angular.module('cttvDirectives')
         },
         templateUrl: "partials/target-list-upload.html",
         link: function (scope, elem, attrs) {
+
+            // Current limit of targets
+            scope.targetListLimit = cttvConfig.targetListLimit
 
             // Show all previous lists
             scope.lists = cttvLoadedLists.getAll();
