@@ -44,7 +44,7 @@
 
                 <div ng-repeat="result in search.results.data" class="search-result">
 
-                    <!-- Picasso panel-->
+                    <!-- Picasso panel -->
                     <div ng-if="search.results.from==0 && $first" class="panel panel-default">
                         <div class="panel-body">
 
@@ -62,8 +62,6 @@
 
                             <!-- Description -->
                             <div class="search-description">
-                                <!-- {{result.data.description | limitTo: 600 }}<span ng-if="result.data.description.length>600" ng-init="expd=false"><span ng-show="!expd" ng-click="expd=!expd">&hellip; [show more]</span><span ng-show="expd">{{result.data.description | limitTo:result.data.description.length:600 }}<span ng-click="expd=!expd">[show less]</span></span>
-                                </span>-->
                                 <span more-less-text data="result.data.description" limit=450></span>
                                 <span ng-if="!result.data.description || result.data.description.length==0">(No description available)</span>
                             </div>
@@ -75,7 +73,7 @@
                                     <!-- Top Associations -->
                                     <h5>Top associated {{ (result.data.type == "target") ? "diseases" : "targets" }}</h5>
                                     <div ng-repeat="assoc in result.data.top_associations.parsed">
-                                        <a ng-href="{{(result.data.type == 'target') ? 'disease' : 'target'}}/{{assoc.id}}">{{assoc.label}}</a>
+                                        <a ng-href="evidence/{{(result.data.type == 'target') ? result.data.id : assoc.id}}/{{(result.data.type == 'target') ? assoc.id : result.data.id }}">{{assoc.label}}</a>
                                     </div>
 
                                 </div>
@@ -143,7 +141,7 @@
                                 <span class="search-match-sec-content" ng-bind-html="val.join(', ')"></span>
                             </span>
                         </span>
-
+                        Orto: {{result.orthologMatch}}
                         <span class="search-details">
                             <span class="tag-section"><i class="fa fa-tag fa-lg tag" ng-class="(result.data.type==='target') ? 'target' : 'disease'"></i>{{result.data.type | upperCaseFirst}}</span>
                             <span class="tag-section" title="Search keyword matches an ortholog of this target" ng-show="result.orthologMatch"><i class="fa fa-tags tag ortholog"></i>Match from ortholog</span>
