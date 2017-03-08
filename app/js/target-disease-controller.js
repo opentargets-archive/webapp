@@ -13,10 +13,6 @@
         // $log.log('TargetDiseaseCtrl()');
 
 
-        // Reset the datatables search;
-        $.fn.dataTable.ext.search = [];
-
-
 		cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
         cttvUtils.clearErrors();
 
