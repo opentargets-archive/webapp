@@ -23,6 +23,7 @@ angular.module('cttvDirectives')
     var targets;
 
     var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+    // var colorScale = d3.interpolateYlGnBu;
 
     var state = {};
 

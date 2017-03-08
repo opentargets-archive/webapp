@@ -190,7 +190,6 @@ angular.module('cttvDirectives')
 
                 // Filter out the data
                 var newData = [];
-                loop1:
                 for (var i=0; i<scope.associations.length; i++) {
                     var assoc = scope.associations[i];
                     var targets = assoc.targets;
