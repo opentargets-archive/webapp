@@ -183,7 +183,9 @@ angular.module('cttvDirectives')
 
             // 4 - targets (computing 5 and 6)
             // showing the most associated 10 targets
+            var allTargetIds = [];
             var allTargets = d.targets.map(function (o) {
+                allTargetIds.push(o.target.id);
                 return {
                     id: o.target.id,
                     label: o.target.gene_info.symbol
@@ -207,6 +209,10 @@ angular.module('cttvDirectives')
             row.push(allTargets.map(function (o) {
                     return o.label;
                 }).join(' '));
+
+            // 6 - Use this list
+            var listUrl = '/summary?targets=' + cttvUtils.compressTargetIds(allTargetIds).join(',');
+            row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Go</button></a>");
 
             // Row complete
             data.push(row);

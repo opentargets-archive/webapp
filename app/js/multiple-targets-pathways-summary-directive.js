@@ -3,14 +3,18 @@ angular.module('cttvDirectives')
 .directive ('multipleTargetsPathwaysSummary', ['$log', 'cttvAPIservice', '$http', '$q', 'cttvUtils', function ($log, cttvAPIservice, $http, $q, cttvUtils) {
     'use strict';
 
-    function formatPathwayDataToArray(pathways, targets4pathways, bg) {
+    function formatPathwayDataToArray(pathways, targets4pathways, symbol2id, bg) {
         var data = [];
         for (var i=0; i<pathways.length; i++) {
             var p = pathways[i];
             var row = [];
 
             var pId = p.stId;
-            var targets = targets4pathways[pId].map(function (t) {return t.id});
+            var targetIds = [];
+            var targets = targets4pathways[pId].map(function (t) {
+                targetIds.push(symbol2id[t.id]);
+                return t.id;
+            });
 
             // 1. Pathway name
             // limit the length of the label
@@ -18,7 +22,9 @@ angular.module('cttvDirectives')
             if (label.length > 30) {
                 label = label.substring(0, 30) + "...";
             }
-            var targetsInUrl = targets.map(function (t) {return 'pathway-target=' + t}).join('&');
+            var targetsInUrl = targets.map(function (t) {
+                return 'pathway-target=' + t
+            }).join('&');
             row.push('<a href=/summary?pathway=' + p.stId + '&' + targetsInUrl + '>' + label + '</a>');
 
             // 2. Enrichment
@@ -36,6 +42,11 @@ angular.module('cttvDirectives')
 
             // 4. Targets in pathway
             row.push(targets.join(', '));
+
+            // 5 - Use this list
+            var listUrl = '/summary?targets=' + cttvUtils.compressTargetIds(targetIds).join(',');
+            row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Go</button></a>");
+
 
             data.push(row);
         }
@@ -59,9 +70,12 @@ angular.module('cttvDirectives')
 
 
                 // var pathways = {};
+                var symbol2id = {};
                 for (var i = 0; i < scope.target.length; i++) {
                     var t = scope.target[i];
                     var targetSymbol = t.approved_symbol;
+                    symbol2id[targetSymbol] = t.ensembl_gene_id;
+
                     uniqueTargets[targetSymbol] = true;
 
                     // for (var j = 0; j < t.reactome.length; j++) {
@@ -147,7 +161,7 @@ angular.module('cttvDirectives')
                                         }
                                         // table
                                         $('#target-list-pathways').DataTable(cttvUtils.setTableToolsParams({
-                                            "data": formatPathwayDataToArray(resp.data.pathways, targets4pathways, scope.target),
+                                            "data": formatPathwayDataToArray(resp.data.pathways, targets4pathways, symbol2id, scope.target),
                                             "ordering": true,
                                             "order": [[1, "asc"]],
                                             "autoWidth": false,
