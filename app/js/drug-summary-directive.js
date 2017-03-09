@@ -31,11 +31,6 @@ angular.module('cttvDirectives')
                     return;
                 }
 
-                pngToDataUrl('https://www.ebi.ac.uk/chembl/api/data/image/' + scope.drug, function (base64Img) {
-                    var img = document.getElementById('drugDiagramContainer');
-                    img.setAttribute('src', base64Img);
-                });
-
                 // Get the information for the drug...
                 $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule/' + scope.drug)
                     .then(function (resp) {
@@ -44,8 +39,20 @@ angular.module('cttvDirectives')
                         scope.mol_type = resp.data.molecule_type || 'NA';
                         scope.first_approval = resp.data.first_approval || 'NA';
                         scope.max_phase = resp.data.max_phase || 'NA';
-                        scope.formula = resp.data.molecule_properties.full_molformula || 'NA';
+                        if (resp.data.molecule_properties && resp.data.molecule_properties.full_molformula) {
+                            scope.formula = resp.data.molecule_properties.full_molformula;
+                        } else {
+                            scope.formula = 'NA';
+                        }
+
+                        if (scope.mol_type !== "Antibody") {
+                            pngToDataUrl('https://www.ebi.ac.uk/chembl/api/data/image/' + scope.drug, function (base64Img) {
+                                var img = document.getElementById('drugDiagramContainer');
+                                img.setAttribute('src', base64Img);
+                            });
+                        }
                     });
+
 
                 // Get the mechanism of action...
                 $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule_form/' + scope.drug)

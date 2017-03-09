@@ -2,12 +2,13 @@
     Summary page for drug {{displayName}}
 </h2>
 
-<div class="section" style="float:right;margin-top:70px;">
-    <img id="drugDiagramContainer" width="300" height="300" src=""></img>
+<div class="section" style="float:right;margin-top:70px;" ng-cloak>
+    <img class="drug-img" ng-if="mol_type=='Antibody'" width="200" height="200" src="/imgs/ab.png">
+    <img class="drug-img" ng-if="mol_type!='Antibody'" width="200" height="200" src="" id="drugDiagramContainer">
 </div>
 <div class="section">
     <h3 class="summary-section-header">General properties</h3>
-    <div class="drug-property" style="min-height:300px">
+    <div class="drug-property" style="min-height:200px">
         <ul>
             <li><b>Name</b>: {{displayName}}</li>
             <li style="margin-top:8px;"><b>Molecule type</b>: {{mol_type}}</li>
