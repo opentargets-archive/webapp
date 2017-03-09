@@ -16,7 +16,7 @@
                         </span>
                     </div>
                     <div ng-click="toggleTaFilter()" style="cursor:pointer;padding:4px;vertical-align:middle;"
-                         class="col-sm-1">More <i class="fa fa-caret-down" style="font-size:0.8em;"></i></div>
+                         class="col-sm-1"><span ng-show="!showAll">More <i class="fa fa-caret-right" style="font-size:0.8em;"></i></span><span ng-show="showAll">Less <i class="fa fa-caret-down" style="font-size:0.8em;"></i></span></div>
 
                     <!--<div title="Filter table by {{ta.label}}" class="col-sm-2" ng-repeat="ta in therapeuticAreas | orderBy: '+enrichment'" ng-show="selectedTA=='' || ta.label==selectedTA" ng-click="selectTA(ta)" style="border: 1px solid #dddddd; padding:10px; font-size:0.9em; cursor:pointer">-->
                     <!--<div style="margin-bottom:10px;overflow-x:hidden">-->
