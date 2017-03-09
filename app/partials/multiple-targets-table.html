@@ -10,7 +10,7 @@
                 <div class="row">
                     <div class="col-sm-11" style="overflow-y:hidden;" ng-style="{'max-height': showAll ? '' : '25px'}">
                         <span title="Filter table by {{ta.label}}" ng-click="selectTA(ta)"
-                              ng-repeat="ta in therapeuticAreas | orderBy: '+enrichment'"
+                              ng-repeat="ta in therapeuticAreas"
                               style="background:#e6ecff;vertical-align:middle;padding:4px;display:inline-block;cursor:pointer;margin-right:10px;margin-bottom:8px;">
                                 <span style="white-space:nowrap;">{{ta.label | upperCaseFirst}}</span>
                         </span>

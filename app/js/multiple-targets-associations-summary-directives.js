@@ -88,6 +88,58 @@ angular.module('cttvDirectives')
 .directive('multipleTargetsTable', ['$log', 'cttvUtils', 'cttvConsts', function ($log, cttvUtils, cttvConsts) {
     'use strict';
 
+    function resolveTies (input, pvalPos, sortedTAs) {
+        // input is an array of TAs that have a tie
+        // if it is able to resolve the ties, push the ordered list to sortedTAs,
+        // if not, calls itself recursively
+
+        //sort the array
+        input.sort(function (a, b) {
+            return a.diseasePvals[pvalPos] - b.diseasePvals[pvalPos];
+        });
+
+        // look for ties
+        // group ties in an array and call resolveTies recursively
+        var nextGroup = [];
+        for (var i=0; i<input.length; i++) {
+            nextGroup.push(input[i]);
+            for (var j=i+1; j<input.length; j++) {
+                // same group
+                if (input[i].diseasePvals[pvalPos] === input[j].diseasePvals[pvalPos]) {
+                    nextGroup.push(input[j]);
+                } else {
+                    // different group
+                    break;
+                }
+            }
+            // We may have a group here, so resolve ties and substitute current position with the resolved one
+            if (nextGroup.length > 1) {
+                // $log.log("this group will be placed at " + (inputPos) + " and expand " + (nextGroup.length) + " positions in the array");
+                // input.splice(inputPos, nextGroup.length, resolveTies(nextGroup, (pvalPos+1), (inputPos+i)));
+                resolveTies(nextGroup, (pvalPos+1), sortedTAs);
+            } else {
+                // Only 1 item in group, we have managed to resolve all the ties
+                sortedTAs.push(input[i]);
+            }
+            nextGroup = [];
+            i = j-1;
+        }
+    }
+
+    function sortTAs (unsorted, sorted) {
+        // 1st sort the disease pvalues of each TA
+        // TODO: They should come sorted from the api (default sorting from enrichment endpoint). So this may not be needed
+        for (var i=0; i<unsorted.length; i++) {
+            var ta = unsorted[i];
+            ta.diseasePvals.sort(function (a,b) {
+                return a-b;
+            });
+        }
+
+        // loop over the TAs and choose which one is the best ranked based on the pvals
+        resolveTies(unsorted, 0, sorted);
+    }
+
     function formatDiseaseDataToArray (diseases, targets) {
         var data = [];
 
@@ -253,11 +305,13 @@ angular.module('cttvDirectives')
                 }
 
                 // Compile the therapeutic areas...
+                // To improve the ranking of TAs we compile the pvalues of all the diseases under the TA and sort based on those (not the enrichment of the TA itself)
                 var tas = [];
+                var pvals4TAs = {}; // We store in an object the set of pvalues for any disease belonging to a TA
                 for (var k=0; k<scope.associations.length; k++) {
                     var dis = scope.associations[k];
+                    // If it is a TA
                     if (!dis.enriched_entity.properties.therapeutic_area.codes.length) {
-                        // This is a therapeutic area
                         var id = dis.enriched_entity.id;
                         var label = dis.enriched_entity.label;
                         var count = dis.enrichment.params.targets_in_set_in_disease;
@@ -270,15 +324,36 @@ angular.module('cttvDirectives')
                         tas.push({
                             label: label,
                             id: id,
-                            enrichment: enrichment,
+                            enrichment: +enrichment,
                             value: count,
                             score: score,
                             compressedTargetIds: compressedTargetIds
                         });
                     }
+                    // If not, get the pvalue of the disease and put it under the TA(s)
+                    else {
+                        var pval = dis.enrichment.score;
+                        var tas4disease = dis.enriched_entity.properties.therapeutic_area.codes;
+                        for (var i=0; i<tas4disease.length; i++) {
+                            var ta = tas4disease[i]; // TA is the code
+                            if (!pvals4TAs[ta]) {
+                                pvals4TAs[ta] = [];
+                            }
+                            pvals4TAs[ta].push(pval);
+                        }
+                    }
                 }
 
-                scope.therapeuticAreas = tas;
+                // Enrich the TAs with the disease pvals
+                for (var l=0; l<tas.length; l++) {
+                    var thisTA = tas[l];
+                    thisTA.diseasePvals = pvals4TAs[thisTA.id];
+                }
+
+                // scope.unsortedTherapeuticAreas = tas;
+                scope.sortedTAs = [];
+                sortTAs(tas, scope.sortedTAs);
+                scope.therapeuticAreas = scope.sortedTAs;
 
                 // Create a table
                 // Filter based on Therapeutic area...
