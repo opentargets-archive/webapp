@@ -12,22 +12,28 @@
             <div ng-if="!filterByFileCollapsed">
                 <div class="cttv-facets-controls">
                     <!--Choose a file with list of targets-->
-                    <form ng-show ="target.length == 0" name="upload">
+                    <form ng-show="targets.length==0" name="upload">
                         <input id="myFileInput" type="file" name="file"
                                title="File should have either target names or Ensembl IDs, one per line or comma separated."
                                onchange="angular.element(this).scope().uploadedFile(this)"
                             />
                     </form>
-                    <!--<div ng-show="target.length == 0">-->
+                    <!--<div ng-show="targets.length==0">-->
                         <!--<span style="display:inline-block"><input type="file" id="targetListUpload" name="file" ng-change="uploadFile()"/></span>-->
                         <!--<span><button ng-click="uploadFile()">Add</button></span>-->
                     <!--</div>-->
 
-
-                    <span ng-show ="target.length > 0"
-                          ng-click="removeTargets()">Clear targets from {{files[0].name}}&nbsp&nbsp<i class="fa fa-times"></i>
+                    <span ng-show ="targets.length>0" ng-click="removeTargets()">Clear targets from list <i class="fa fa-times"></i>
                     </span>
                 </div>
+
+                <div style="margin-top:10px;" ng-show="targets.length==0 && lists.length>0">
+                    Available lists:
+                    <div ng-repeat="list in lists track by $index">
+                        <a href="" ng-click="useList(list)">{{list.id}}</a>
+                    </div>
+                </div>
+
 
                 <!-- Target File Problem -->
                 <div ng-show="fileTooBig">
@@ -42,15 +48,15 @@
                 </div>
 
                 <!--Target Filter Results-->
-                <div ng-show = "target.length > 0">
+                <div ng-show = "targets.length > 0">
 
                     <!--FOUND IN FILE-->
                     <div class="checkbox cttv-facet-checkbox clearfix">
                                         <span class="cttv-facets">
                                             <span class="cttv-facet-checkbox-label ng-binding"
                                                   ng-click="totalNamesCollapsed = !totalNamesCollapsed"
-                                                  title="These are all the names found in your file" data-toggle="tooltip">
-                                                Target names found in file<br>
+                                                  title="These are all the names found in your list" data-toggle="tooltip">
+                                                Target names in list<br>
                                             </span>
                                             <span class="text-lowlight cttv-facet-count pull-left ng-binding" >({{targetNameArray.length}})</span>
                                         </span>

@@ -277,7 +277,7 @@ angular.module('cttvDirectives')
         link: function (scope, elem, attrs) {
 
             // Current limit of targets
-            scope.targetListLimit = cttvConfig.targetListLimit
+            scope.targetListLimit = cttvConfig.targetListLimit;
 
             // Show all previous lists
             scope.lists = cttvLoadedLists.getAll();
@@ -309,7 +309,6 @@ angular.module('cttvDirectives')
                         if (t) return true;
                     });
                     searchTargets (file.name, targets);
-
                 };
                 reader.readAsText(file);
             };
@@ -326,39 +325,13 @@ angular.module('cttvDirectives')
                     params: opts
                 };
 
-                var listSearch = [];
                 return cttvAPIservice.getBestHitSearch(queryObject)
                     .then(function (resp) {
-                        var parsed;
-                        var keys = {};
-                        for (var i = 0; i < resp.body.data.length; i++) {
-                            var search = resp.body.data[i];
-                            parsed = undefined;
-                            // Avoid target duplication
-                            // TODO: I'm not sure how the getBestHitSearch rest api endpoint handles duplicated entries. Just in case, we avoid duplications here as well
-                            if (keys[search.id]) {
-                                continue;
-                            }
-                            if (search.id && search.data) {
-                                keys[search.id] = true;
-                                parsed = {
-                                    approved_symbol: search.data.approved_symbol,
-                                    id: search.id,
-                                    isExact: search.exact,
-                                    query: search.q
-                                };
-                            }
-                            listSearch.push({
-                                query: search.q,
-                                selected: (parsed !== undefined),
-                                result: parsed
-                            })
-                        }
-                        cttvLoadedLists.add(name, listSearch, keys);
+                        var listName = cttvLoadedLists.parseBestHitSearch(name, resp.body);
 
                         // Show all previous lists
                         scope.lists = cttvLoadedLists.getAll();
-                        scope.list = cttvLoadedLists.get(name);
+                        scope.list = cttvLoadedLists.get(listName);
                     });
 
             }

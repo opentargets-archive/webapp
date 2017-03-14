@@ -106,5 +106,36 @@ angular.module('cttvServices')
             return lists.all;
         };
 
+        lists.parseBestHitSearch = function (name, resp) {
+            var listSearch = [];
+            var parsed;
+            var keys = {};
+            for (var i = 0; i < resp.data.length; i++) {
+                var search = resp.data[i];
+                parsed = undefined;
+                // Avoid target duplication
+                // TODO: I'm not sure how the getBestHitSearch rest api endpoint handles duplicated entries. Just in case, we avoid duplications here as well
+                if (keys[search.id]) {
+                    continue;
+                }
+                if (search.id && search.data) {
+                    keys[search.id] = true;
+                    parsed = {
+                        approved_symbol: search.data.approved_symbol,
+                        id: search.id,
+                        isExact: search.exact,
+                        query: search.q
+                    };
+                }
+                listSearch.push({
+                    query: search.q,
+                    selected: (parsed !== undefined),
+                    result: parsed
+                })
+            }
+            lists.add(name, listSearch, keys);
+            return name;
+        };
+
         return lists;
     }]);
