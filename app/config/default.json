@@ -301,6 +301,15 @@
                 "heading" : "Data distribution",
                 "open" : true
             }
+        },
+
+        "uniprotKeyword" : {
+            "key": "uniprotkw",
+            "element": "uniprot-kw-facet",
+            "options" : {
+                "heading" : "UniProt keyword",
+                "open" : true
+            }
         }
     },
 
@@ -337,6 +346,10 @@
 
             {
                 "type":"therapeuticArea"
+            },
+
+            {
+                "type":"uniprotKeyword"
             }
 
         ]
