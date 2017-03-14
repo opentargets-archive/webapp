@@ -408,7 +408,7 @@
                     row.push( item.disease.efo_info.label );
 
                     // Variant
-                    var mut ="<a class='cttv-external-link' href='http://www.ensembl.org/Homo_sapiens/Variation/Explore?v="+item.variant.id[0].split('/').pop()+"' target='_blank'>"+item.variant.id[0].split('/').pop()+"</a>";
+                    var mut ="<a class='cttv-external-link' href='http://www.ensembl.org/Homo_sapiens/Variation/Explore?v="+item.variant.id.split('/').pop()+"' target='_blank'>"+item.variant.id.split('/').pop()+"</a>";
                     row.push(mut);
 
                     // variant type
@@ -427,7 +427,7 @@
                     row.push( cttvDictionary.CTTV_PIPELINE );
 
                     // evidence source
-                    row.push( "<a class='cttv-external-link' href='https://www.ebi.ac.uk/gwas/search?query="+item.variant.id[0].split('/').pop()+"' target='_blank'>"
+                    row.push( "<a class='cttv-external-link' href='https://www.ebi.ac.uk/gwas/search?query="+item.variant.id.split('/').pop()+"' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
 
@@ -569,8 +569,8 @@
 
                     // mutation
                     var mut = cttvDictionary.NA;
-                    if( checkPath(item, "variant.id") && item.variant.id[0]){
-                        var rsId = item.variant.id[0].split('/').pop();
+                    if( checkPath(item, "variant.id") && item.variant.id){
+                        var rsId = item.variant.id.split('/').pop();
                         mut = "<a class='cttv-external-link' href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=" + rsId + " target=_blank>" + rsId + "</a>";
                     }
                     row.push(mut);
