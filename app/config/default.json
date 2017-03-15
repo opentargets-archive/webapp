@@ -260,6 +260,7 @@
     "facets" : {
         "datatype" : {
             "key": "datatype",
+            "key-api" : "datatype",
             "element": "datatype-facet",
             "options" : {
                 "heading" : "Datatype",
@@ -269,6 +270,7 @@
 
         "therapeuticArea" : {
             "key": "therapeutic_area",
+            "key-api" : "therapeutic_area",
             "element": "therapeutic-area-facet",
             "options" : {
                 "heading" : "Therapeutic area",
@@ -278,6 +280,7 @@
 
         "pathway" : {
             "key": "pathway",
+            "key-api" : "pathway",
             "element": "pathway-facet",
             "options" : {
                 "heading" : "Pathway types",
@@ -287,6 +290,7 @@
 
         "targetClass" : {
             "key": "target_class",
+            "key-api" : "target_class",
             "element": "target-class-facet",
             "options" : {
                 "heading" : "Target class",
@@ -296,6 +300,7 @@
 
         "histogram" : {
             "key": "data_distribution",
+            "key-api" : "data_distribution",
             "element": "data-distribution-facet",
             "options" : {
                 "heading" : "Data distribution",
@@ -305,6 +310,7 @@
 
         "uniprotKeyword" : {
             "key": "uniprotkw",
+            "key-api" : "uniprotkw",
             "element": "uniprot-kw-facet",
             "options" : {
                 "heading" : "UniProt keyword",
