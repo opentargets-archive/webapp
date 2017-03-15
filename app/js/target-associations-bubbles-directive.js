@@ -138,6 +138,7 @@ angular.module('cttvDirectives')
             restrict: 'E',
             require: '?^resize',
             scope: {
+                nocancers: '@',
                 facets : '=',
                 target : '@',
                 active : '@'
@@ -169,7 +170,7 @@ angular.module('cttvDirectives')
                 }, true);
 
                 // Change of target or facets
-                scope.$watchGroup(["target", "facets", "active"], function (vals) {
+                scope.$watchGroup(["target", "facets", "active", "nocancers"], function (vals) {
                     var target = vals[0];
                     var facets = vals[1];
                     var act = vals[2];
@@ -190,12 +191,55 @@ angular.module('cttvDirectives')
                         params: opts
                     };
 
+                    var promise = cttvAPIservice.getAssociations(queryObject);
+                    if (scope.nocancers === "true") {
+                        promise = promise
+                            .then(function (resp) {
+                                for (var i = 0; i < resp.body.data.length; i++) {
+                                    var dis = resp.body.data[i].disease;
+                                    for (var j = 0; j < dis.efo_info.therapeutic_area.labels.length; j++) {
+                                        var ta = dis.efo_info.therapeutic_area.labels[j];
+                                        if (ta === 'neoplasm') {
+                                            var newCodes = [];
+                                            var newLabels = [];
+                                            var newPaths = [];
+
+                                            // This disease has neoplasm
+                                            // If there are more therapeutic areas, so we need to:
+                                            // 1.- Remove any other TA from codes
+                                            // 2.- Remove any other TA from labels
+                                            // 3.- Remove any path leading to any TA that is not neoplasm
+                                            // var neoplasmCode = dis.efo_info.therapeutic_area.codes[j];
+                                            var neoplasmCode = "EFO_0000616";
+                                            newCodes = [neoplasmCode];
+                                            newLabels = ["neoplasm"];
+                                            newPaths = [];
+                                            for (var k = 0; k < dis.efo_info.path.length; k++) {
+                                                var path = dis.efo_info.path[k];
+                                                if (path[0] === neoplasmCode) {
+                                                    newPaths.push(path);
+                                                }
+                                            }
+                                            dis.efo_info.path = newPaths;
+                                            dis.efo_info.therapeutic_area = {
+                                                'codes': newCodes,
+                                                'labels': newLabels
+                                            };
+                                            break;
+                                        }
+                                    }
+                                }
+                                return resp;
+                            });
+
+                    }
+                    
                     if (bView) {
                         bView.therapeuticAreas(opts.therapeutic_area);
-                        bView.update(cttvAPIservice.getAssociations(queryObject));
+                        bView.update(promise);
                     } else {
                         setView();
-                        bView.data(cttvAPIservice.getAssociations(queryObject));
+                        bView.data(promise);
                         bView.therapeuticAreas(opts.therapeutic_area);
                         bView(bubblesContainer);
                     }

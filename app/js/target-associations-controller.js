@@ -54,6 +54,7 @@ angular.module('cttvControllers')
 
     // state we want to export to/from the URL
     var stateId = "view";
+    var cancersExcId = "cancers";
     var facetsId = cttvFiltersService.stateId;
 
 
@@ -74,7 +75,14 @@ angular.module('cttvControllers')
         // update the scope; only the tab is needed at the moment
         $scope.view.t = obj.t;
 
-    }
+    };
+
+    var setCancersExclusion = function (obj) {
+        obj = obj || {};
+        obj.exc = [(obj.exc[0]==='true')] || [false];
+
+        $scope.cancersExcluded = obj.exc[0];
+    };
 
 
 
@@ -96,6 +104,11 @@ angular.module('cttvControllers')
         // view changed?
         if( ! _.isEqual( new_state[stateId], old_state[stateId] ) || !new_state[stateId] ){
             setView( new_state[stateId] );
+        }
+
+        // exclude cancers changed?
+        if( ! _.isEqual( new_state[cancersExcId], old_state[cancersExcId] ) || !new_state[cancersExcId] ){
+            setCancersExclusion(new_state[cancersExcId]);
         }
 
     };
@@ -157,9 +170,11 @@ angular.module('cttvControllers')
 
     /*
      * Update function passes the current view (state) to the URL
+     * Also the current status for excluding cancers is updated
      */
     function update(){
         cttvLocationState.setStateFor(stateId, $scope.view);
+        cttvLocationState.setStateFor(cancersExcId, $scope.cancers);
     }
 
 
@@ -171,7 +186,7 @@ angular.module('cttvControllers')
     $scope.setActiveTab = function (tab) {
         $scope.view.t[0] = tab;
         update();
-    }
+    };
 
 
 
@@ -187,12 +202,32 @@ angular.module('cttvControllers')
     });
 
 
+    $scope.cancersExcluded = false;
+    $scope.excludeCancers = function () {
+        $scope.cancersExcluded = !$scope.cancersExcluded;
+        $scope.cancers = {
+            exc: [$scope.cancersExcluded]
+        };
+        update();
+
+        // Update facets
+        // TODO: We are passing the "exclude cancers" option as a new option. Another option could be joining this with the passed filters
+        // if ($scope.cancersExcluded) {
+        //     if (!$scope.filters) {
+        //         $scope.filters = {};
+        //     }
+        //     $scope.filters["cancersExcluded"] = true;
+        // } else {
+        //     // TODO: Not sure this is needed
+        //     if (!Object.keys($scope.filters).length) {
+        //         delete $scope.filters;
+        //     }
+        // }
+    };
 
     //
     // on PAGE LOAD
     //
-
-
 
     cttvUtils.clearErrors();
     $scope.search.query = $location.path().split('/')[2];

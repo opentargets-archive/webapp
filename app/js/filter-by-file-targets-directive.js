@@ -227,7 +227,7 @@ angular.module('cttvDirectives')
                         params: opts
                     };
 
-                    //$log.log("getBestHitTargetsIdsChunk:targetNameArray[0]",targetNameArray[0]);
+                    // $log.log("getBestHitTargetsIdsChunk:targetNameArray[0]",targetNameArray[0]);
                     // $log.log("getBestHitTargetsIdsChunk:from",from);
 
                     return cttvAPIservice.getBestHitSearch(queryObject)
