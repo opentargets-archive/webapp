@@ -79,7 +79,7 @@ angular.module('cttvControllers')
 
     var setCancersExclusion = function (obj) {
         obj = obj || {};
-        obj.exc = [(obj.exc[0]==='true')] || [false];
+        obj.exc = obj.exc ? [(obj.exc[0]==='true')] : [false];
 
         $scope.cancersExcluded = obj.exc[0];
     };
