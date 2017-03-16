@@ -1171,7 +1171,29 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    .directive('otPopover', ['$log', 'otDefinitions', function ($log, otDefinitions) {
+        'use strict';
 
+        return {
+            restrict: 'E',
+            scope: {
+                key: '@'
+            },
+            template: '<span ng-if="link" uib-popover="{{content}}" popover-animation="true" popover-title="{{key}}" popover-trigger="\'mouseenter\'" style="font-size:0.8em;float:right;"><a ng-click="$event.stopPropagation()" href="{{link}}"><i class="fa fa-info-circle"></i></a></span>' +
+            '<span ng-if="!link" ng-click="$event.stopPropagation()" uib-popover="{{content}}" popover-trigger="\'mouseenter\'" style="font-size:0.8em;float:right;"><i class="fa fa-info-circle"></i></span>',
+
+            link: function (scope, el, attrs) {
+                var def = otDefinitions[scope.key];
+                if (def) {
+                    scope.content = def.description;
+                    scope.link = def.link;
+                } else {
+                    scope.content = "";
+                }
+            }
+
+        };
+    }])
 
     /**
      * Directive for the footer

@@ -51,6 +51,7 @@ var webappFiles = {
             'app/js/services.js',
             'app/js/api-service.js',
             'app/js/dictionary-service.js',
+            'app/js/definitions-service.js',
             'app/js/const-service.js',
             'app/js/config-service.js',
             'app/js/location-state-service.js',
