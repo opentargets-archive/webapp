@@ -92,7 +92,7 @@ angular.module('cttvControllers')
         var opts = {
             disease: [$scope.search.query],
             outputstructure: "flat",
-            facets: true,
+            facets: "true",
             size:1
         };
 
