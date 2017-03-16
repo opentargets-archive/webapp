@@ -11,6 +11,8 @@ angular.module('cttvDirectives')
     var whoiam = "table";
     var draw = 1;
     var filters = {};
+    var nocancers;
+    var myscope;
 
     var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
@@ -172,6 +174,40 @@ angular.module('cttvDirectives')
         filename );
     };
 
+    function excludeCancersFromOtherTAs (dis) {
+        for (var j = 0; j < dis.efo_info.therapeutic_area.labels.length; j++) {
+            var ta = dis.efo_info.therapeutic_area.labels[j];
+            if (ta === 'neoplasm') {
+                var newCodes = [];
+                var newLabels = [];
+                var newPaths = [];
+
+                // This disease has neoplasm
+                // If there are more therapeutic areas, so we need to:
+                // 1.- Remove any other TA from codes
+                // 2.- Remove any other TA from labels
+                // 3.- Remove any path leading to any TA that is not neoplasm
+                // var neoplasmCode = dis.efo_info.therapeutic_area.codes[j];
+                var neoplasmCode = "EFO_0000616";
+                newCodes = [neoplasmCode];
+                newLabels = ["neoplasm"];
+                newPaths = [];
+                for (var k = 0; k < dis.efo_info.path.length; k++) {
+                    var path = dis.efo_info.path[k];
+                    if (path[0] === neoplasmCode) {
+                        newPaths.push(path);
+                    }
+                }
+                dis.efo_info.path = newPaths;
+                dis.efo_info.therapeutic_area = {
+                    'codes': newCodes,
+                    'labels': newLabels
+                };
+                break;
+            }
+        }
+    }
+
     function parseServerResponse (d) {
         // scope.n.diseases = resp.total;
         var newData = [];
@@ -198,10 +234,41 @@ angular.module('cttvDirectives')
 
         var getScore = function(i, dt){
             return ( !d[i].association_score.datatypes[dt] && !d[i].evidence_count.datatypes[dt] ) ? -1 : d[i].association_score.datatypes[dt] ;
-        }
+        };
 
+        myscope.filteredOutByExcNeoplasm = 0;
+        
         for (var i=0; i<d.length; i++) {
             var data = d[i];
+
+            // If the nocancers option is true:
+            if (nocancers === "true") {
+                // First remove the extra therapeutic areas from the data.
+                excludeCancersFromOtherTAs(data.disease);
+
+                // Then check if the row still has to be there...
+                var ok = false;
+
+                if (filters && filters.therapeutic_area && filters.therapeutic_area.length) {
+                    loop1:
+                    for (var k = 0; k < data.disease.efo_info.therapeutic_area.codes.length; k++) {
+                        var code = data.disease.efo_info.therapeutic_area.codes[k];
+                        for (var f = 0; f < filters.therapeutic_area.length; f++) {
+                            var fta = filters.therapeutic_area[f].toUpperCase();
+                            if (fta === code) {
+                               ok = true;
+                               break loop1;
+                            }
+                        }
+                    }
+                } else {
+                    ok = true;
+                }
+                if (!ok) {
+                    myscope.filteredOutByExcNeoplasm++;
+                    continue;
+                }
+            }
             // No cttv root anymore in the data retrieved by the API
             // if (data.efo_code === "cttv_disease") {
             //     continue;
@@ -262,6 +329,7 @@ angular.module('cttvDirectives')
 
         scope: {
             target : '=',
+            nocancers: '@',
             loadprogress : '=',
             filename : '=',
             facets : '=',
@@ -271,6 +339,7 @@ angular.module('cttvDirectives')
 
         template: '<div>'
         //+ ' <div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
+        +'<h5 ng-show="filteredOutByExcNeoplasm>0">Filtered out {{filteredOutByExcNeoplasm}} neoplasm diseases from other therapeutic areas</h5>'
         +'<div></div>'
         +'<cttv-matrix-table></cttv-matrix-table>'
         +'<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
@@ -280,13 +349,16 @@ angular.module('cttvDirectives')
 
         link: function (scope, elem, attrs) {
 
+            // Making the scope accessible in the table processing
+            myscope = scope;
+
             // -----------------------
             // Initialize table etc
             // -----------------------
 
             // table itself
             // var table = elem.children().eq(0)[0];
-            var table = elem.children().eq(0).children().eq(1)[0];
+            var table = elem.children().eq(0).children().eq(2)[0];
             var dtable;
             // var dtable = setupTable(table, scope.filename);
 
@@ -390,7 +462,8 @@ angular.module('cttvDirectives')
                     }, cttvAPIservice.defaultErrorHandler);
             };
 
-            scope.$watchGroup(["facets", "target", "active"], function(attrs) {
+            scope.$watchGroup(["facets", "target", "active", "nocancers"], function(attrs) {
+                nocancers = scope.nocancers;
                 filters = scope.facets;
                 if (scope.active !== whoiam) {
                     return;
