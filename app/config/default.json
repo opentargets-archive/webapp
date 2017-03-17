@@ -249,7 +249,7 @@
      * Here we define all facets available in the app.
      * each facet is defiend as follow:
      *    "datatype" : {    // the code name for the facet - can be anything
-     *        "key"         // IMPORTANT! the key (id) as returned by the API
+     *        "key"         // the key used to store facet in the URL. MUST MATCH key in api filters
      *        "element"     // the name root as defined in the facet folder
      *                      // where you ahve the directive (datatypeFacet) and parser (datatypeFacetParser)
      *    }
@@ -260,7 +260,6 @@
     "facets" : {
         "datatype" : {
             "key": "datatype",
-            "key-api" : "datatype",
             "element": "datatype-facet",
             "options" : {
                 "heading" : "Datatype",
@@ -270,7 +269,6 @@
 
         "therapeuticArea" : {
             "key": "therapeutic_area",
-            "key-api" : "therapeutic_area",
             "element": "therapeutic-area-facet",
             "options" : {
                 "heading" : "Therapeutic area",
@@ -280,7 +278,6 @@
 
         "pathway" : {
             "key": "pathway",
-            "key-api" : "pathway",
             "element": "pathway-facet",
             "options" : {
                 "heading" : "Pathway types",
@@ -290,7 +287,6 @@
 
         "targetClass" : {
             "key": "target_class",
-            "key-api" : "target_class",
             "element": "target-class-facet",
             "options" : {
                 "heading" : "Target class",
@@ -300,7 +296,6 @@
 
         "histogram" : {
             "key": "data_distribution",
-            "key-api" : "data_distribution",
             "element": "data-distribution-facet",
             "options" : {
                 "heading" : "Data distribution",
@@ -310,7 +305,6 @@
 
         "uniprotKeyword" : {
             "key": "uniprotkw",
-            "key-api" : "uniprotkw",
             "element": "uniprot-kw-facet",
             "options" : {
                 "heading" : "UniProt keyword",
@@ -352,11 +346,11 @@
 
             {
                 "type":"therapeuticArea"
-            },
+            }/*,
 
             {
                 "type":"uniprotKeyword"
-            }
+            }*/
 
         ]
     },

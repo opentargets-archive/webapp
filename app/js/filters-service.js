@@ -471,7 +471,7 @@ angular.module('cttvServices').
          * NOTE: i quite like passing the countsToUse directly here, so I'll leave it like this for now. This is however now set in the config file
          */
         cttvFiltersService.updateFacets = function(facets, countsToUse){
-            $log.log("updateFacets");
+            // $log.log("updateFacets");
             // if there are no facets, return
             if(!facets){
                 return;

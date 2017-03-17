@@ -57,10 +57,12 @@ angular.module('cttvServices')
         // facets now come from the config:
         // it maps each webapp facet key ("key" - e.g. "datatype" or "smin")
         // to its corresponding facet key in the API ("key-api" - e.g. "datatype" or "scorevalue_min")
-        cttvAPI.facets = {};
+        // TODO:
+        // put back when we have a flexible mapping of key-app <-> key-api ....
+        /*cttvAPI.facets = {};
             for(var i in cttvConfig.facets){
                 cttvAPI.facets[cttvConfig.facets[i].key] = cttvConfig.facets[i]["key-api"];
-            }
+            }*/
 
 
         var api = cttvApi()
@@ -363,7 +365,8 @@ angular.module('cttvServices')
             obj = obj || {};
             for(var i in facets){
                 if( facets.hasOwnProperty(i)){
-                    obj[cttvAPI.facets[i]] = facets[i];
+                    // obj[cttvAPI.facets[i]] = facets[i];  // this is unnecessary until we have a flexible mapping of key-app -> key-api
+                    obj[i] = facets[i]; // just map it simply for now
                 }
             }
             return obj;
