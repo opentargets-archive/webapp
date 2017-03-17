@@ -10,7 +10,7 @@ angular.module('cttvServices').
 
         var definitions = {
             'ENRICHMENT': {
-                "description": "This value represents the relevance of this disease with respect to the target list provided",
+                "description": "This is the probability (expressed as a p-value) of finding a disease associated with the targets in your list. The lower this value, the higher the probability your targets are specific to the disease",
                 "link": ""
             }
         };
