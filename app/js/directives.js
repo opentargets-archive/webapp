@@ -1179,8 +1179,8 @@ angular.module('cttvDirectives', [])
             scope: {
                 key: '@'
             },
-            template: '<span ng-if="link" uib-popover-template="\'partials/popover.html\'" uib-popover="{{content}}" popover-animation="true" popover-title="{{key}}" popover-trigger="\'mouseenter\'" style="font-size:0.8em;float:right;"><a ng-click="$event.stopPropagation()" href="{{link}}"><i class="fa fa-info-circle"></i></a></span>' +
-            '<span ng-if="!link" uib-popover-template="\'partials/popover.html\'" popover-trigger="\'mouseenter\'" ng-click="$event.stopPropagation()" style="font-size:0.8em;float:right;"><i class="fa fa-info-circle"></i></span>',
+            template: '<span ng-if="link" uib-popover-template="\'partials/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'" style="font-size:0.8em;float:right;"><a ng-click="$event.stopPropagation()" href="{{link}}"><i class="fa fa-info-circle"></i></a></span>' +
+            '<span ng-if="!link" uib-popover-template="\'partials/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'" ng-click="$event.stopPropagation()" style="font-size:0.8em;float:right;"><i class="fa fa-info-circle"></i></span>',
 
             link: function (scope, el, attrs) {
                 var def = otDefinitions[scope.key];
