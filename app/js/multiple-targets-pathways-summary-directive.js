@@ -45,7 +45,7 @@ angular.module('cttvDirectives')
 
             // 5 - Use this list
             var listUrl = '/summary?targets=' + cttvUtils.compressTargetIds(targetIds).join(',');
-            row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Go</button></a>");
+            row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Use target list</button></a>");
 
 
             data.push(row);

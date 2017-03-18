@@ -212,7 +212,7 @@ angular.module('cttvDirectives')
 
             // 6 - Use this list
             var listUrl = '/summary?targets=' + cttvUtils.compressTargetIds(allTargetIds).join(',');
-            row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Go</button></a>");
+            row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Use target list</button></a>");
 
             // Row complete
             data.push(row);
