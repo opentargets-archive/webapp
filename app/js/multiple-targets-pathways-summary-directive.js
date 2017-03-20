@@ -44,8 +44,12 @@ angular.module('cttvDirectives')
             row.push(targets.join(', '));
 
             // 5 - Use this list
-            var listUrl = '/summary?targets=' + cttvUtils.compressTargetIds(targetIds).join(',');
-            row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Use target list</button></a>");
+            if (targetIds.length > 1) {
+                var listUrl = '/summary?targets=' + cttvUtils.compressTargetIds(targetIds).join(',');
+                row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Use target list</button></a>");
+            } else {
+                row.push('N/A');
+            }
 
 
             data.push(row);

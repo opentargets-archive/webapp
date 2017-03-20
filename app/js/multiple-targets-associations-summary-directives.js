@@ -211,8 +211,12 @@ angular.module('cttvDirectives')
                 }).join(' '));
 
             // 6 - Use this list
-            var listUrl = '/summary?targets=' + cttvUtils.compressTargetIds(allTargetIds).join(',');
-            row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Use target list</button></a>");
+            if (allTargetIds.length > 1) {
+                var listUrl = '/summary?targets=' + cttvUtils.compressTargetIds(allTargetIds).join(',');
+                row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Use target list</button></a>");
+            } else {
+                row.push('N/A');
+            }
 
             // Row complete
             data.push(row);
