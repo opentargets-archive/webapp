@@ -299,8 +299,6 @@ angular.module('cttvDirectives')
             };
 
             scope.loadPastedList = function () {
-                $log.log("loadPastedList called...");
-                $log.log(scope.pastedListName + " --> " + scope.pastedList);
                 if (!scope.pastedListName) {
                     scope.noNameForPastedList = true;
                 } else {
@@ -347,8 +345,6 @@ angular.module('cttvDirectives')
                         // Show all previous lists
                         scope.lists = cttvLoadedLists.getAll();
                         scope.list = cttvLoadedLists.get(listName);
-                        $log.log("storeList is...");
-                        $log.log(scope.storeList);
                         if (!scope.storeList) {
                             cttvLoadedLists.remove(listName);
                         }
