@@ -39,6 +39,27 @@
     margin: 20px 0px;
 }
 
+.intro-search-batch-search {
+    text-align: center;
+    color: #B2DEF9;
+
+    .batch-search-label {
+        a {
+            color: #FFF;
+        }
+
+    }
+
+    .batch-search-new {
+        background-color: $secondary-brand-color;
+        //background-color: red;
+        padding-left: 2px;
+        padding-right: 2px;
+        color: #FFF;
+    }
+}
+
+
 .intro-search-examples {
     text-align: center;
 
