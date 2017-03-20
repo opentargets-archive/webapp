@@ -125,7 +125,12 @@ angular.module('cttvServices', []).
                         //.range(["#AEDEF7", "#0091EB"]),
                         //.range(["#97D5F5", "#0081D2"]),
                         // .range(["#B6DDFC", "#0052A3"]), // extra brand blue
-                        .range(["#FFFF00", '#007AFF']), // yellow - blue
+                        // .range(["#FFFF00", '#007AFF']), // yellow - blue
+                        // .range(["#feffd8", '#2354a3']), // yellow - blue (shorter range)
+                        // .range(["#feffd8", '#081d58']), // yellow - blue (longer range ylgrbu)
+                        // .range(["#fbf583", '#0465b2']), // yellow - blue (custom)
+                        .range(["#fbf583", '#375E97']), // sky - sunflower (custom)
+                        // .range(['#FED69C', "#2A4E6E"]), // yellow - blue (custom made)
                         // .range(["#FFFFd8", '#007AFF']), // toned down yellow - blue
                         //.range(["#FFD0CB", "#FF6350"]), // brand red
 
