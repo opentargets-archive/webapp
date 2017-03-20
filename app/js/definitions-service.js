@@ -16,8 +16,11 @@ angular.module('cttvServices').
             'ENRICHMENT.PATHWAYS': {
                 "description": "This is the probability (expressed as a p-value) of finding a pathway associated with the targets in your list. The lower this value, the higher the probability your targets are specific to the pathway",
                 "link": ""
+            },
+            'KEEPLOADEDLISTS': {
+                "description": "If this option is checked your lists will be stored in the browser for easier access. You can still remove them at any time",
+                "link": ""
             }
-
         };
 
         return definitions;
