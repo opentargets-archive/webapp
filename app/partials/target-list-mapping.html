@@ -4,7 +4,7 @@
         <p style="color:#aaaaaa">Edit your list here. Add more targets by using the search box.</p>
     </div>
     <div>
-        <b>File</b>: {{list.id}}
+        <b>List</b>: {{list.id}}
     </div>
 
     <!-- Let's try the pill-like style of showing the targets -->
@@ -37,11 +37,11 @@
 
     <div class="row batch-search">
         <div class="col-sm-4">
-            <span>{{exact.length}} exact </span>
+            <h4><span>{{exact.length}} exact </span>
             <span ng-switch="exact.length">
                 <span ng-switch-when="1">match</span>
                 <span ng-switch-default>matches</span>
-            </span>
+            </span></h4>
 
             <div class="batch-search-mappings-container" id="batch-search-mappings-container-exact">
                 <div class="batch-search-results-container">
@@ -66,11 +66,11 @@
         </div>
 
         <div class="col-sm-4">
-            <span>{{fuzzy.length}} suggested </span>
+            <h4><span>{{fuzzy.length}} suggested </span>
             <span ng-switch="fuzzy.length">
                 <span ng-switch-when="1">match</span>
                 <span ng-switch-default>matches</span>
-            </span>
+            </span></h4>
 
 
             <div class="batch-search-mappings-container">
@@ -115,7 +115,7 @@
 
 
         <div class="col-sm-4">
-            <span>Add more targets to your list</span>
+            <h4><span>Add more targets to your list</span></h4>
 
             <div class="batch-search-mappings-container">
 
@@ -124,7 +124,7 @@
                            class="form-control input-search ng-pristine ng-untouched ng-valid ng-empty" name="text"
                            tabindex="1" ng-model="searchQueryText" ng-model-options="{debounce:500}" autocomplete="off"
                            ng-change="getSearch(searchQueryText)">
-                    <i ng-click="discardSearch()" class="fa fa-times search-options"></i>
+                    <!--<i ng-click="discardSearch()" class="fa fa-times search-options"></i>-->
                     <span cttv-progress-spinner size="24" ng-show="searchInProgress"
                           style="right:4.5em; top:3em; position:absolute"></span>
 
@@ -222,9 +222,9 @@
         <p style="color:#aaaaaa">These are the targets to be analysed. Save the current list in your computer if needed.</p>
     </div>
 
-    <p>
+    <h4>
         <span style="font-size:1.4em;">{{targetIds.length}}</span> targets currently selected for analysis
-    </p>
+    </h4>
     <p ng-show="targetIds.length > listLengthLimit" style="color:red;">
         The current limit of this functionality is {{listLengthLimit}} targets. Please unselect some targets or load a new list
     </p>
