@@ -345,9 +345,9 @@ angular.module('cttvDirectives')
                         // Show all previous lists
                         scope.lists = cttvLoadedLists.getAll();
                         scope.list = cttvLoadedLists.get(listName);
-                        if (!scope.storeList) {
-                            cttvLoadedLists.remove(listName);
-                        }
+                        // if (!scope.storeList) {
+                        //     cttvLoadedLists.remove(listName);
+                        // }
                     });
 
             }
