@@ -18,7 +18,7 @@
                         <li><a href="#target">What is a target?</a></li>
                         <li><a href="#diseases">How are diseases described?</a></li>
                         <li><a href="#efo">What is the Experimental Factor Ontology?</a></li>
-                        <li><a href="#why-efo">Why does Open Targets use EFO instead of other disease ontology?</a></li>
+                        <li><a href="#why-efo">Why does Open Targets use EFO?</a></li>
                         <li><a href="#direct">What is the difference between direct and non-direct associations for targets and diseases?</a></li>
                         <li><a href="#data">Where does the data come from?</a></li>
                         <li><a href="#assembly">What genome assembly is Open Targets using?</a></li>
@@ -39,7 +39,7 @@
 
                 <div class="cttv-docs-section">
                     <h4><a name="search"></a>What can I search for?</h4>
-                    <p>You can search for disease names (e.g. Alzheimers), gene names (e.g. apolipoprotein E), official gene symbols (e.g. APOE), Ensembl gene IDs (e.g. ENSG00000130203) or protein symbols (e.g. P02649). You may also be able to search for synonyms and abbreviations for both genes (e.g. apolipoprotein, p94) and diseases (e.g. IBD). You can also search for drugs (e.g. humira) and phenotypes (hyperlordosis), which will get matched to their associated diseases and targets.</p>
+                    <p>You can search for disease names (e.g. Alzheimers), gene names (e.g. apolipoprotein E), official gene symbols (e.g. APOE), Ensembl gene IDs (e.g. ENSG00000130203) or protein symbols (e.g. P02649). You may also be able to search for synonyms and abbreviations for both genes (e.g. apolipoprotein, p94) and diseases (e.g. IBD). You can also search for drugs (e.g. ADALIMUMAB) and phenotypes (hyperlordosis), which will get matched to their associated diseases and targets.</p>
                 </div>
 
                 <div class="cttv-docs-section">
@@ -49,7 +49,7 @@
 
                 <div class="cttv-docs-section">
                     <h4><a name="disease"></a>How are diseases described?</h4>
-                    <p>We map diseases to ontology terms in the Experimental Factor Ontology. This enables us to integrate evidence from different sources and to describe relationships between diseases.</p>
+                    <p>We map diseases to ontology terms in the Experimental Factor Ontology (EFO). This enables us to integrate evidence from different sources and to describe relationships between diseases.</p>
                 </div>
 
                 <div class="cttv-docs-section">
@@ -58,8 +58,8 @@
                 </div>
 
                 <div class="cttv-docs-section">
-                    <h4><a name="why-efo"></a>Why does Open Targets use EFO instead of other disease ontology?</h4>
-                    <p>These are the reasons for choosing the Experimental Factor Ontology over other alternatives:</p>
+                    <h4><a name="why-efo"></a>Why does Open Targets use EFO?</h4>
+                    <p>These are the reasons for choosing the Experimental Factor Ontology:</p>
                     <ul>
                         <li>It is an application ontology, therefore it can incorporate parts (or the whole) of other ontologies, such as the rare disease ontology ORDO.</li>
                         <li>It is able to bring in additional (not disease only) ontologies.</li>
@@ -70,7 +70,7 @@
 
                 <div class="cttv-docs-section">
                     <h4><a name="direct"></a>What is the difference between direct and non-direct associations for targets and diseases?</h4>
-                    <p>We take into account the <a href="#disease">ontology of a diseases</a> to propagate evidence up to its parent terms. This allows us to compute new target-disease associations when there is no direct (known and observed) evidence for them.</p>
+                    <p>We take into account the ontology of diseases from the Experimental Factor Ontology (EFO) to propagate evidence up to their parent terms. This allows us to compute new target-disease associations when there is no direct (known and observed) evidence for them.</p>
                 </div>
 
 
@@ -81,29 +81,29 @@
 
                 <div class="cttv-docs-section">
                     <h4><a name="assembly"></a>What genome assembly is Open Targets using?</h4>
-                    <p>We use GRCh38 (sometimes referred to as hg38). This is the latest human genome provided by the Genome Reference Consortium. This is relevant when we display SNPs and other features on the genome. It also affects the set of targets that we use, which is based on the latest Ensembl version at the time of our release. However, because our focus is on evidence associating targets and diseases, we support most evidence data irrespective of the genome assembly that may have been used for their original analysis.</p>
+                    <p>We use GRCh38 (sometimes referred to as hg38). This is the latest human genome provided by the <a href="https://www.ncbi.nlm.nih.gov/grc">Genome Reference Consortium</a>. This is relevant when we display SNPs and other features on the genome. It also affects the set of targets that we use, which is based on the latest Ensembl version at the time of our release. However, because our focus is on evidence associating targets and diseases, we support most evidence data irrespective of the genome assembly that may have been used for their original analysis.</p>
                 </div>
 
                 <div class="cttv-docs-section">
                     <h4><a name="variants"></a>How does Open Targets assign variants (e.g. SNPs) to genes?</h4>
-                    <p>We map and annotate variants to genes and transcripts using the Ensembl Variant Effect Predictor (VEP). If a variant maps to a gene with different transcripts, we assign it the most severe consequence based on Sequence Ontology (SO) terms. (e.g. missense or stop loss). If the variant is located outside a gene (i.e. variants mapping to intergenic regions), we will assign the variant to the 5' end (ie.e. nearest likely promoter) of the closest protein coding gene on either strand (forward or reverse) within a 500kb window</p>
+                    <p>We map and annotate variants to genes and transcripts using the Ensembl Variant Effect Predictor (VEP). If a variant maps to a gene with different transcripts, we will assign it the most severe <a href="/variants">variant definitions or consequence term (e.g. start loss, stop gained) from the Sequence Ontology (SO). If the variant maps to intergenic regions, we will assign the variant to the 5' end (i.e. nearest likely promoter) of the closest protein coding gene on either strand (forward or reverse) within a 500kb window</p>
                 </div>
 
                 <div class="cttv-docs-section">
                     <h4><a name="missing-data"></a>The Platform does not report a known association between gene A and disease B. Why isn't this information in Open Targets?</h4>
-                    <p>If we have missed known associations that are described elsewhere, please <a href="mailto:support@targetvalidation.org?Subject='Open Targets Platform feedback'">get in touch</a>. The reasons can be severalfold and we will look at the examples on a case-by-case basis. If the known association is described in a recent paper, it will not have made it through the curation process within our data sources yet. If the known association is based on a variant with an ID (e.g. rs123, His166Tyr), please include that information as well. We are revisiting our variant-to-gene assignment to assess if eQTLs could give a more likely assignment that the one we currently use, <a href="#variants">which is based on functional data only</a>. By providing this information, you can help us improve our analyses ofr variant-to-gene assignment.</p>
+                    <p>If we miss known associations that are described elsewhere, please <a href="mailto:support@targetvalidation.org?">get in touch</a>. The reasons can be severalfold and we will look at the examples on a case-by-case basis. If the known association is described in a recent paper, it will not have made it through the curation process within our data sources yet. If the known association is based on a variant with an ID (e.g. rs123, His166Tyr), please include that information as well. We are revisiting our variant-to-gene assignment to assess if eQTLs could give a more likely assignment that the one we currently use, which is based on functional data only as described in <a href="#variants">"How does Open Target assign variants (e.g. SNPs) to genes?"</a>. By providing this information, you can help us improve our analyses for variant-to-gene assignment.</p>
                 </div>
 
                 <div class="cttv-docs-section">
                     <h4><a name="clinical-trials"></a>What are clinical trials?</h4>
-                    <p>Clinical trials are studies carried out in human volunteers over a period of 10-15 years to investigate the safety and/or efficacy of a medicine. The Food and Drug Administration (FDA) describes the following phases for their drug review process:</p>
+                    <p>Clinical trials are studies carried out in human volunteers over a period of 10-15 years to investigate the safety and/or efficacy of a medicine. The Food and Drug Administration (FDA) describes the following phases:</p>
                     <ul>
-                        <li><b>Phase</b> I to assess the drug's most frequent (and serious) adverse events and how the drug is metabolised and excreted. The number of subjects (either healthy volunteers or people with the disease/condition) ranges from 20 to 100. Phase I takes several months.</li>
-                        <li><b>Phase II</b> provides provides preliminary data on the biological activity of a drug. Safety continues to be evaluated and short-term adverse events studied. The number of subjects (volunteers with the disease/condition) ranges from a few dozens to 300. Phase II takes between several months to two years.</li>
-                        <li><b>Phase III</b> continues assessing effectiveness and adverse reactions. It is carried out in 300 - 3,000 volunteers with the disease/condition from different human populations. Different dosages and the combinatino with other drugs can be assessed. This phase takes between one and four years</li>
-                        <li><b>Phase IV</b> occurs once the FDA authorises a drug for marketing. Further information on drug's safety, efficacy and/or optimal use will be assessed in pharmacovigilance.<br/>Some phase IV drugs (e.g. from ClinicalTrials.gov) may also be in postmarketing surveillance and used for conditions different from the ones for which the drug has been originally approved for. Several thousands volunterrs who have the disease/condition are studied.</li>
+                        <li><b>Phase I</b> to assess the drug's most frequent (and serious) adverse events and how the drug is metabolised and excreted. The number of subjects (either healthy volunteers or people with the disease/condition) ranges from 20 to 100. Phase I takes several months.</li>
+                        <li><b>Phase II</b> provides provides preliminary data on the biological activity of a drug. Safety continues to be evaluated and short-term adverse events studied. Up to 300 subjects (volunteers with the disease/condition) are studied. Phase II takes between several months to two years.</li>
+                        <li><b>Phase III</b> continues assessing effectiveness and adverse reactions. It is carried out in 300 - 3,000 volunteers with the disease/condition from different human populations. Different dosages and the combination with other drugs can be assessed. This phase takes between one and four years</li>
+                        <li><b>Phase IV</b> occurs once the FDA authorises a drug for marketing. Further information on drug's safety, efficacy and/or optimal use will be assessed in pharmacovigilance.<br/>Some phase IV drugs (e.g. <a href="https://clinicaltrials.gov/">from ClinicalTrials.gov</a>) may also be in postmarketing surveillance, and used for conditions different from the ones for which the drug has been originally approved for. Several thousands volunteers who have the disease/condition are studied.</li>
                     </ul>
-                    <p>This FDA onfographic gives a summary of the different phases in a clinical trial:</p>
+                    <p>This <a href="https://www.fda.gov/downloads/Drugs/ResourcesForYou/Consumers/UCM284393.pdf">FDA infographic</a> gives a summary of the different phases in a clinical trial:</p>
                 </div>
 
 
