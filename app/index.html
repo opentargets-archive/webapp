@@ -26,16 +26,13 @@
         </script>
         <![endif]-->
 
-        <script>
-            console.log("detecting browser...");
-        </script>
 
-        <!--[if IE 11]>
-        <script>
-            console.log("IE11 detected...");
+        <!-- Loading Babel polyfill only for IE 11 -->
+        <!-- TODO: This loads the polyfill always even if the components that require it are not loaded ever. Can this be included as a conditional dependency in jspm/systemjs? -->
+        <script type="text/javascript">
+            if (/Trident.*rv:/.test(navigator.userAgent))
+                document.write('<script src="build/polyfill.min.js"><\/script>');
         </script>
-        <script src="build/polyfill.min.js"></script>
-        <![endif]-->
 
 
         <!-- info for social media sharing -->
