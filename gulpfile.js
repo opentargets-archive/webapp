@@ -323,7 +323,12 @@ gulp.task('build-interactionsViewer-styles', function() {
         .pipe(gulp.dest(buildDir));
 });
 
-gulp.task('build-interactionsViewer', ['build-interactionsViewer-styles'], function() {
+gulp.task('copy-babel-polyfill', function () {
+    return gulp.src('node_modules/babel-polyfill/dist/polyfill.min.js')
+        .pipe(gulp.dest(buildDir));
+});
+
+gulp.task('build-interactionsViewer', ['copy-babel-polyfill', 'build-interactionsViewer-styles'], function() {
     return browserify({
         entries: basePathIV + 'browser.js',
         debug: true,
