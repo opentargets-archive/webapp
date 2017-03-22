@@ -1,10 +1,13 @@
-<!--<cttv-progress-spinner ng-show="scope.showSpinner"></cttv-progress-spinner>-->
-
 <!-- hint -->
 <div>
     <p class="cttv-section-intro">Summary of interactions between the set of targets based on <a target=_blank href="http://www.reactome.org/">Reactome</a> and <a target=_blank href="http://omnipathdb.org/">OmniPath DB</a>. When 2 are selected details on the
         interaction is shown.</p>
 </div>
+
+<div style="min-height:40px;" ng-show="showSpinner">
+    <cttv-progress-spinner size="30"></cttv-progress-spinner>
+</div>
+
 
 <!-- Shows the currently selected targets -->
 <!--<div>-->
@@ -17,7 +20,11 @@
     <!--</div>-->
 <!--</div>-->
 
-<div class="row">
+<div ng-show="nInteractors==0">
+    No interactors found for this target
+</div>
+
+<div class="row" ng-show="!showSpinner && nInteractors>0">
     <div class="col-sm-3">
         <div style="margin:10px;">
 
@@ -124,7 +131,7 @@
         </div>
     </div>
     <div class="col-sm-9" >
-        <div id="interactionsViewerMultipleTargets"></div>
+        <div id="interactionsViewerMultipleTargets" style="overflow-x:auto;overflow-y:hidden"></div>
         <div>
             <p style="font-size:0.9em; padding-left:15px;">Number of interactors per node</p>
             <cttv-matrix-legend legend-text="legendText" labels="dataRange" colors="colors" layout="h"></cttv-matrix-legend>

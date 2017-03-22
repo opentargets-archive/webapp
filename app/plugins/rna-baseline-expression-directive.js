@@ -27,7 +27,6 @@ angular.module('plugins')
 
                     // GTEx
                     var url = '/proxy/www.gtexportal.org/api/v6p/expression/' + target + '?boxplot=true';
-                    $log.log(url);
                     $http.get(url)
                         .then(function (resp) {
                             var arr = obj2array(resp.data.generpkm);

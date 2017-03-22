@@ -4,15 +4,53 @@ angular.module('cttvDirectives')
     'use strict';
 
     var selectedNodesColors = ['#ffe6e6', '#e6ecff'];
+    var maxNodes = 180;
+
+    function takeBestInteractors (interactors, n) {
+        // We have more than 200 interactors
+        // 'best' is based on the number of connected nodes
+
+        // First store the number of interactors to facilitate sorting
+        interactors.map (function (d) {
+            d.nInteractors = Object.keys(d.interactsWith).length;
+        });
+
+        var interactorsSelected = interactors.sort(function (a, b) {
+            return b.nInteractors - a.nInteractors;
+        }).slice(0, n);
+
+
+        // We need to eliminate the discarded nodes also from the interaction objects inside the nodes
+        // interactors is now sorted, so we just have to take the slice [n,interactors.length]
+        var interactorsDiscarded = interactors.slice(n, interactors.length);
+        var discardedIndex = {};
+        for (var i=0; i<interactorsDiscarded.length; i++) {
+            discardedIndex[interactorsDiscarded[i].label] = true;
+        }
+        for (var j=0; j<interactorsSelected.length; j++) {
+            var interactor = interactorsSelected[j];
+            for (var interacted in interactor.interactsWith) {
+                if (interactor.interactsWith.hasOwnProperty(interacted)) {
+                    if (discardedIndex[interacted]) {
+                        delete interactor.interactsWith[interacted];
+                    }
+                }
+            }
+        }
+
+
+        return interactorsSelected;
+    }
 
     return {
         restrict: 'E',
         templateUrl: 'partials/multiple-targets-interactions-summary.html',
         scope: {
             interactors: '=',
-            categories: '=',
+            categories: '='
         },
         link: function (scope, elem, attrs) {
+            scope.showSpinner = true;
 
             scope.$watchGroup(['interactors', 'categories'], function () {
                 if (!scope.interactors) {
@@ -41,6 +79,16 @@ angular.module('cttvDirectives')
                         }
                     }
                 }
+
+                scope.nInteractors = interactorsArr.length;
+
+                // The star plot is currently limited to 200 nodes.
+                // At this point if we have more than 200 we take the first 200 based on number of connections
+                if (interactorsArr.length > maxNodes) {
+                    $log.log(interactorsArr.length + " interactors found, limiting to " + maxNodes);
+                    interactorsArr = takeBestInteractors(interactorsArr, maxNodes);
+                }
+
 
                 // Tooltips
                 var hover_tooltip;
@@ -85,6 +133,7 @@ angular.module('cttvDirectives')
                     }
                 };
 
+                // At this point we hide the spinner and show the star plot
                 var iv = interactionsViewer()
                     .data(interactorsArr.sort(function (a, b) {
                         // Sort interactors alphabetically
@@ -196,7 +245,7 @@ angular.module('cttvDirectives')
                         //     .call(elem, obj);
                     });
                 $timeout(function () {
-                    // scope.showSpinner = false;
+                    scope.showSpinner = false;
                     iv(document.getElementById("interactionsViewerMultipleTargets"));
                 }, 0);
 
