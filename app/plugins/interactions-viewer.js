@@ -5,12 +5,16 @@ angular.module('plugins')
             var mapNames = {};
             for (var i = 0; i < bestHits.length; i++) {
                 var bestHit = bestHits[i];
-                mapNames[bestHit.q] = {
-                    approved_symbol: bestHit.data.approved_symbol,
-                    association_counts: bestHit.data.association_counts,
-                    uniprot_id: bestHit.q,
-                    ensembl_id: bestHit.data.ensembl_gene_id
-                };
+
+                // TODO: There are cases where the bestHitSearch doesn't give anything back. For now, we filter them out
+                if (bestHit.data) {
+                    mapNames[bestHit.q] = {
+                        approved_symbol: bestHit.data.approved_symbol,
+                        association_counts: bestHit.data.association_counts,
+                        uniprot_id: bestHit.q,
+                        ensembl_id: bestHit.data.ensembl_gene_id
+                    };
+                }
             }
             return mapNames;
         }
@@ -27,8 +31,6 @@ angular.module('plugins')
                 var url = "/proxy/www.omnipathdb.org/interactions/" + uniprotId + '?format=json';
                 $http.get(url)
                     .then(function (resp) {
-                        $log.log("omnipathdb resp...");
-                        $log.log(resp);
                         var interactors = {};
 
                         for (var i = 0; i < resp.data.length; i++) {
@@ -46,6 +48,12 @@ angular.module('plugins')
 
                     })
                     .then(function (uniprotIds) {
+                        // If there are not interactors, we don't make any other call
+                        if (!uniprotIds.length) {
+                            scope.interactors = {};
+                            return;
+                        }
+
                         var promises = [];
 
                         // Promise -- second pass in omnipathdb...
@@ -61,7 +69,8 @@ angular.module('plugins')
 
                         var queryObject = {
                             method: "POST",
-                            params: opts
+                            params: opts,
+                            trackCall: false
                         };
 
                         promises.push(cttvAPIservice.getBestHitSearch(queryObject));
@@ -79,6 +88,7 @@ angular.module('plugins')
 
                                 var interactors = {};
                                 var sourceCategories = {};
+                                var missingSources = {};
 
                                 for (var i = 0; i < odbData.length; i++) {
                                     var link = odbData[i];
@@ -129,7 +139,11 @@ angular.module('plugins')
                                             var prov = provenance[f];
                                             var sourceCat = omnipathdbSources[prov];
                                             if (!sourceCat) {
-                                                $log.warn('omnipath source ' + prov + ' does not have a category -- skipping source');
+                                                if (!missingSources[prov]) {
+                                                    missingSources[prov] = 0;
+                                                }
+                                                missingSources[prov]++;
+                                                // $log.warn('omnipath source ' + prov + ' does not have a category -- skipping source');
                                                 continue;
                                             }
 
@@ -153,6 +167,12 @@ angular.module('plugins')
                                         }
                                         // interactors[source].interactsWith[target].provenance = provenance;
                                     }
+                                }
+
+                                // Reporting in the console the omnipath sources that haven't been assigned a category yet. See omnipathdbSources and omnipathdbCategories
+                                if (Object.keys(missingSources).length) {
+                                    $log.warn('These omnipath sources does not have a category described and have been skipped');
+                                    $log.warn(missingSources);
                                 }
 
                                 scope.interactors = interactors;
