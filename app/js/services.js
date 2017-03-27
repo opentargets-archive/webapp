@@ -121,7 +121,7 @@ angular.module('cttvServices', []).
         cttvUtilsService.colorScales = {
             BLUE_0_1 : d3.scale.linear()
                         .domain([0,1])
-                        //.range(["#CBDCEA", "#005299"]), // blue orig
+                        .range(["#CBDCEA", "#005299"]), // blue orig
                         //.range(["#AEDEF7", "#0091EB"]),
                         //.range(["#97D5F5", "#0081D2"]),
                         // .range(["#B6DDFC", "#0052A3"]), // extra brand blue
@@ -129,7 +129,7 @@ angular.module('cttvServices', []).
                         // .range(["#feffd8", '#2354a3']), // yellow - blue (shorter range)
                         // .range(["#feffd8", '#081d58']), // yellow - blue (longer range ylgrbu)
                         // .range(["#fbf583", '#0465b2']), // yellow - blue (custom)
-                        .range(["#fbf583", '#375E97']), // sky - sunflower (custom)
+                        // .range(["#fbf583", '#375E97']), // sky - sunflower (custom)
                         // .range(['#FED69C', "#2A4E6E"]), // yellow - blue (custom made)
                         // .range(["#FFFFd8", '#007AFF']), // toned down yellow - blue
                         //.range(["#FFD0CB", "#FF6350"]), // brand red

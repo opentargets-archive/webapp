@@ -359,6 +359,7 @@ angular.module('cttvDirectives')
                             .selectedNodesColors(selectedNodesColors)
                             .size(600)
                             .labelSize(90)
+                            .colorScale(cttvUtils.colorScales.BLUE_0_1)
                             // .on("click", function (d) {
                             //     console.log("clicked on node...", d);
                             // })
@@ -398,7 +399,7 @@ angular.module('cttvDirectives')
                                 scope.$apply();
                             })
                             .on("interaction", function (interactors) {
-                                var elem = this;
+                                // var elem = this;
                                 var obj = {};
                                 // obj.header = iNames.join(" - ") + " interactions";
                                 obj.header = interactors.interactor1 + " - " + interactors.interactor2 + " interaction";
