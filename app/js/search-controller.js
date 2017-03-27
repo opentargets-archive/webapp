@@ -259,11 +259,11 @@ angular.module('cttvControllers')
 
                             $scope.search.results = resp.body;
 
-                            $scope.search.results.data.forEach(function(result, i){
+                            $scope.search.results.data.forEach(function(result){
                                 cttvUtils.addMatchedBy(result);
                             });
 
-
+                            //$log.log($scope.search.results.data[0]);
                             return resp;
                         },
                         cttvAPIservice.defaultErrorHandler
@@ -277,7 +277,6 @@ angular.module('cttvControllers')
                             if( resp.body.from==0 ){
 
                                 var result = $scope.search.results.data[0];
-
 
                                 //
                                 // the top associations
@@ -302,7 +301,6 @@ angular.module('cttvControllers')
                                 getDrugInfo(result.data.id, result.data.type)
                                         .then(
                                             function(d){
-                                                $log.log("got d "+d);
                                                 result.data.drug_summary.total = d;
                                             }
                                         );
