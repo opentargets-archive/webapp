@@ -571,7 +571,11 @@
                     var mut = cttvDictionary.NA;
                     if( checkPath(item, "variant.id") && item.variant.id){
                         var rsId = item.variant.id.split('/').pop();
-                        mut = "<a class='cttv-external-link' href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=" + rsId + " target=_blank>" + rsId + "</a>";
+                        if (rsId.indexOf('rs') === 0) {
+                            mut = "<a class='cttv-external-link' href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=" + rsId + " target=_blank>" + rsId + "</a>";
+                        } else {
+                            mut = rsId;
+                        }
                     }
                     row.push(mut);
 
