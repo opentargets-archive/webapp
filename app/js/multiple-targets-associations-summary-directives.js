@@ -143,8 +143,10 @@ angular.module('cttvDirectives')
     function formatDiseaseDataToArray (diseases, targets) {
         var data = [];
 
-        // $log.log("these are the targets...");
-        // $log.log(targets);
+        var targetIds = targets.map(function (t) {
+            return t.ensembl_gene_id;
+        });
+        var compressedTargetIds = cttvUtils.compressTargetIds(targetIds);
 
         for (var i=0; i<diseases.length; i++) {
             var row = [];
@@ -156,15 +158,17 @@ angular.module('cttvDirectives')
             if (d.enriched_entity.label.length > 30) {
                 label = d.enriched_entity.label.substring(0, 30) + "...";
             }
-            var t4d = d.targets.map(function (t) {return t.target.id});
-            var compressedTargetIds = cttvUtils.compressTargetIds(t4d);
+            // var t4d = d.targets.map(function (t) {
+            //     return t.target.id
+            // });
+            // var compressedTargetIds = cttvUtils.compressTargetIds(t4d);
             // var targetsLink = "?targets=" + (d.targets.map(function (t) {return t.target.id}));
             var targetsLink = "?targets=" + compressedTargetIds.join(',');
             var cell = "<a href='/disease/" + d.enriched_entity.id + "/associations" + targetsLink + "'>" + label + "</a>";
             row.push(cell);
 
-            // 1 - Targets associated
-            // row.push(d.targets.length);
+            // 0.b -- full disease name (for searching)
+            row.push(d.enriched_entity.label);
 
             // 1 - Enrichment / Relevance
             row.push(d.enrichment.score.toPrecision(1));
@@ -383,9 +387,9 @@ angular.module('cttvDirectives')
                 // decide if the table sorts by number of targets or enrichment
                 var order;
                 if (scope.targets.length >= 2) {
-                    order = [[1, 'asc']];
+                    order = [[2, 'asc']];
                 } else {
-                    order = [[2, 'desc']];
+                    order = [[3, 'desc']];
                 }
                 table = $('#target-list-associated-diseases').DataTable (cttvUtils.setTableToolsParams({
                     "data": formatDiseaseDataToArray(scope.associations, scope.targets),
@@ -395,7 +399,7 @@ angular.module('cttvDirectives')
                     "paging" : true,
                     "columnDefs": [
                         {
-                            targets: [3,5],
+                            targets: [1,4,6],
                             visible: false
                         }
                     ]

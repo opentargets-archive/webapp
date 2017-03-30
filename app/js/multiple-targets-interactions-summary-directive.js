@@ -93,37 +93,37 @@ angular.module('cttvDirectives')
                 // Get Pathways data from Reactome
                 // Get enrichment analysis from reactome
                 // http://www.reactome.org/AnalysisService/identifiers/projection/\?pageSize\=1\&page\=1 POST
-                var preFlightUrl = '/proxy/www.reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
-                var postData = uniprotIds.join('\n');
-                // var p1 = $q(function(resolve, reject) {
-                //     resolve({data: []});
-                // });
-                var p1 = $http.post(preFlightUrl, postData)
-                    .then (function (resp) {
-                        return resp.data;
-                    })
-                    .then (function (data) {
-                        var token = data.summary.token;
-                        var nPathways = data.pathwaysFound;
-                        var url = '/proxy/www.reactome.org/AnalysisService/token/' + token + '?pageSize=' + nPathways + '&page=1&resource=UNIPROT';
-                        return $http.get(url)
-                            .then (function (resp) {
-                                var token = resp.data.summary.token;
-                                var url2 = '/proxy/www.reactome.org/AnalysisService/token/' + token + '/found/all';
-
-                                var idsArr = [];
-                                for (var i=0; i<resp.data.pathways.length; i++) {
-                                    var o = resp.data.pathways[i];
-                                    ids2names[o.stId] = o.name;
-                                    idsArr.push(o.stId);
-                                }
-                                var postData2 = idsArr.join(',');
-                                return $http.post(url2, postData2)
-                                    .then (function (targetPathways) {
-                                        return targetPathways;
-                                    });
-                            });
-                    });
+                // var preFlightUrl = '/proxy/www.reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
+                // var postData = uniprotIds.join('\n');
+                var p1 = $q(function(resolve, reject) {
+                    resolve({data: []});
+                });
+                // var p1 = $http.post(preFlightUrl, postData)
+                //     .then (function (resp) {
+                //         return resp.data;
+                //     })
+                //     .then (function (data) {
+                //         var token = data.summary.token;
+                //         var nPathways = data.pathwaysFound;
+                //         var url = '/proxy/www.reactome.org/AnalysisService/token/' + token + '?pageSize=' + nPathways + '&page=1&resource=UNIPROT';
+                //         return $http.get(url)
+                //             .then (function (resp) {
+                //                 var token = resp.data.summary.token;
+                //                 var url2 = '/proxy/www.reactome.org/AnalysisService/token/' + token + '/found/all';
+                //
+                //                 var idsArr = [];
+                //                 for (var i=0; i<resp.data.pathways.length; i++) {
+                //                     var o = resp.data.pathways[i];
+                //                     ids2names[o.stId] = o.name;
+                //                     idsArr.push(o.stId);
+                //                 }
+                //                 var postData2 = idsArr.join(',');
+                //                 return $http.post(url2, postData2)
+                //                     .then (function (targetPathways) {
+                //                         return targetPathways;
+                //                     });
+                //             });
+                //     });
 
                 // Get data from omnipathdb...
                 var url = "/proxy/www.omnipathdb.org/interactions/" + uniprotIds.join(',') + '?format=json&fields=sources';
