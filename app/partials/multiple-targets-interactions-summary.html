@@ -21,7 +21,7 @@
 <!--</div>-->
 
 <div ng-show="nInteractors==0">
-    No interactors found for this target
+    No interactions found
 </div>
 
 <div class="row" ng-show="!showSpinner && nInteractors>0">
@@ -29,7 +29,7 @@
         <div style="margin:10px;">
 
             <!-- Categories filter -->
-            <div ng-init="showCategories=false;">
+            <div ng-init="showCategories=true;">
                 <h4>Sources <span stlye="font-size=0.5em"><i class="fa pull-right text-lowlight" ng-click="showCategories=!showCategories" ng-class="{'fa-caret-right':!showCategories, 'fa-caret-down':showCategories}"></i></span></h4>
                 <div ng-show="showCategories" ng-repeat="(category, items) in categories" ng-click="filterSource(category)"><input
                         type="checkbox" checked="true"> {{category}} ({{items}} interaction<span ng-if="items!=1">s</span>)
