@@ -1,16 +1,13 @@
 <div class="section">
     <h2>1. Upload your target list:</h2>
-    <p style="color:#aaaaaa">A text file with one target per line. A maximum of {{targetListLimit}} targets is currently
-        allowed.</p>
+    <p style="color:#aaaaaa">List format is one target per line. A maximum of {{targetListLimit}} targets is currently allowed.</p>
+    <p><span ng-click="loadExample()"><a href="#">Load example with 50 targets</a></span></p>
 
     <div class="container" style="margin-top:30px;margin-bottom:80px;">
         <div class="row">
             <div class="col-xs-4">
                 <h4>Load your list from a file:</h4>
-                <span style="display:inline-block"><input type="file" id="targetListUpload" name="file"
-                                                          onchange="angular.element(this).scope().uploadFile(this)"/></span>
-                <p ng-click="loadExample()" style="font-size:0.8em;margin-top:5px;"><a href="#">Load example with 50
-                    targets</a></p>
+                <span style="display:inline-block"><input type="file" id="targetListUpload" name="file" onchange="angular.element(this).scope().uploadFile(this)"/></span>
             </div>
 
             <div class="col-xs-4">
@@ -20,12 +17,12 @@
                         <input ng-style='{"border-color": noNameForPastedList ? "red" : "#cccccc"}' ng-model="pastedListName" style="padding-left:5px;line-height:2em;width:100%;margin-bottom:10px;border-style:solid;border-width:1px;" type="text" placeholder="Give your list a name">
                     </div>
                     <div>
-                        <textarea ng-model="pastedList" style="padding-left:5px;overflow-y:scroll;width:100%;resize:none;border-color:#cccccc" rows="10"
+                        <textarea ng-style='{"border-color": noPastedList ? "red" : "#cccccc"}' ng-model="pastedList" style="padding-left:5px;overflow-y:scroll;width:100%;resize:none;border-color:#cccccc" rows="10"
                                   placeholder="Your target list"></textarea>
                     </div>
                     <div>
                         <button ng-click="loadPastedList()" class="btn btn-primary">Load</button>
-                        <button ng-click="pastedList='';pastedListName=''" class="btn btn-default">Clear</button>
+                        <button ng-click="pastedList='';pastedListName='';noPastedList=false;noNameForPastedList=false;" class="btn btn-default">Clear</button>
                     </div>
                 </form>
             </div>
@@ -44,7 +41,7 @@
                 <div ng-show="lists.length" style="margin-top:15px;">
                     <!--<input ng-model="storeList" type="checkbox" checked> Keep loaded lists in the browser<ot-popover key="KEEPLOADEDLISTS"></ot-popover>-->
                     <i class="fa fa-exclamation-circle" style="margin-right:5px;"></i>
-                    Your lists are stored in the browser cache for easier access. You can remove them from the cache at any time by clicking the icon next to them
+                    Your lists are stored in the browser cache for easier access. You can remove them at any time by clicking the icon next to them
                 </div>
 
             </div>

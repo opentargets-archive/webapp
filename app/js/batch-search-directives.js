@@ -205,7 +205,7 @@ angular.module('cttvDirectives')
                 scope.exact = [];
                 scope.fuzzy = [];
                 scope.rescued = [];
-
+                scope.duplications = l.duplications;
 
                 scope.targetIds = [];
 
@@ -305,10 +305,16 @@ angular.module('cttvDirectives')
                     scope.noNameForPastedList = false;
                 }
 
-                var targets = scope.pastedList.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
-                if (targets.length) {
-                    searchTargets(scope.pastedListName, targets);
+                if (!scope.pastedList) {
+                    scope.noPastedList = true;
+                } else {
+                    scope.noPastedList = false;
+                    var targets = scope.pastedList.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
+                    if (targets.length) {
+                        searchTargets(scope.pastedListName, targets);
+                    }
                 }
+
             };
 
             // In searches we store the searched term (target in the list) with its search promise

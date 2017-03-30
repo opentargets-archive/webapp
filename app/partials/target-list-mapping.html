@@ -1,11 +1,15 @@
 <div class="section">
     <div style="margin-bottom:20px;">
         <h2>2. Revise the mappings:</h2>
-        <p style="color:#aaaaaa">Edit your list here. Add more targets by using the search box.</p>
+        <p style="color:#aaaaaa">Edit your list</p>
     </div>
     <div>
         <b>List</b>: {{list.id}}
     </div>
+
+    <div ng-show="notFound.length" style="margin-top:10px;">{{notFound.length}} unrecognised targets: <span ng-repeat="target in notFound" style="background-color:#ffe6e6;margin-right:10px;">{{target.query}}</span></div>
+    <div ng-show="duplications" style="margin-top:10px;">{{duplications}} duplicated targets</div>
+
 
     <!-- Let's try the pill-like style of showing the targets -->
     <!--<div class="batch-search">-->
@@ -213,13 +217,11 @@
 
     </div>
 </div>
-<div ng-show="notFound.length" style="margin-top:10px;">Unrecognised targets: <span ng-repeat="target in notFound" style="background-color:#ffe6e6;margin-right:10px;">{{target.query}}</span></div>
-
 
 <div class="section">
     <div style="margin-top:50px;">
         <h2>3. Analyse your list:</h2>
-        <p style="color:#aaaaaa">These are the targets to be analysed. Save the current list in your computer if needed.</p>
+        <p style="color:#aaaaaa">These are the targets to be analysed.</p>
     </div>
 
     <h4>
@@ -228,10 +230,13 @@
     <p ng-show="targetIds.length > listLengthLimit" style="color:red;">
         The current limit of this functionality is {{listLengthLimit}} targets. Please unselect some targets or load a new list
     </p>
+    <p ng-show="targetIds.length < 2" style="color:red;">
+        At least 2 targets are needed. Please add more targets to the selection or try the <a href="/">simple search</a> instead
+    </p>
 
     <div style="margin-top:50px;" ng-show=summaryLink>
         <!-- We are in the limit of bacth search -->
-        <span ng-show="targetIds.length <= listLengthLimit">
+        <span ng-show="targetIds.length<=listLengthLimit && targetIds.length>=2">
             <a href="{{summaryLink}}">
                 <button type="button" class="btn btn-primary">
                     Analyze targets
@@ -239,8 +244,8 @@
             </a>
         </span>
 
-        <span ng-show="targetIds.length > listLengthLimit">
-                <button type="button" class="btn btn-default">
+        <span ng-show="targetIds.length>listLengthLimit || targetIds.length<2">
+                <button type="button" class="btn btn-disabled">
                     Analyze targets
                 </button>
         </span>

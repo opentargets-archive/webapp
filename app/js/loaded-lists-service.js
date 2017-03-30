@@ -36,7 +36,7 @@ angular.module('cttvServices')
         // id is the id for the list (normally the file name
         // list is the actual list
         // keys has all the target ids for the list
-        lists.add = function (id, list, keys) {
+        lists.add = function (id, list, duplications, keys) {
             // Is there a list with the same id already? if yes, overwrite it, if not push the new list
             var index;
             for (var i=0; i<lists.all.length; i++) {
@@ -46,16 +46,18 @@ angular.module('cttvServices')
                     break;
                 }
             }
-            if (index) {
+            if (index !== undefined) {
                 lists.all.splice(index, 1, {
                     id: id,
                     keys: keys,
+                    duplications: duplications,
                     list: list
                 });
             } else {
                 lists.all.push({
                     id: id,
                     keys: keys,
+                    duplications: duplications,
                     list: list
                 });
             }
@@ -110,12 +112,14 @@ angular.module('cttvServices')
             var listSearch = [];
             var parsed;
             var keys = {};
+            var duplications = 0;
             for (var i = 0; i < resp.data.length; i++) {
                 var search = resp.data[i];
                 parsed = undefined;
                 // Avoid target duplication
                 // TODO: I'm not sure how the getBestHitSearch rest api endpoint handles duplicated entries. Just in case, we avoid duplications here as well
                 if (keys[search.id]) {
+                    duplications++;
                     continue;
                 }
                 if (search.id && search.data) {
@@ -133,7 +137,7 @@ angular.module('cttvServices')
                     result: parsed
                 })
             }
-            lists.add(name, listSearch, keys);
+            lists.add(name, listSearch, duplications, keys);
             return name;
         };
 
