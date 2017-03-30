@@ -263,6 +263,10 @@
     .panel-icon-lg, .panel-icon-sm{
         color: scale-color($clr-ui-background, $lightness: -30%);
     }
+
+    .panel-inline {
+        vertical-align:middle;
+    }
 }
 
 .intro-section-theme-white {
@@ -344,7 +348,7 @@
 
 .intro-section-panel-heading{
     font-weight: 200;
-    // margin-bottom: 20px;
+    //margin-bottom: 20px;
 
     a {
         color: inherit;
@@ -378,5 +382,10 @@
 
 .intro-first {
     margin-top: 0px;
+}
+
+.intro-data-section-header {
+    margin-top: 0px;
+    margin-bottom: 30px;
 }
 
