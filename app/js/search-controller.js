@@ -302,7 +302,6 @@ angular.module('cttvControllers')
                                 getDrugInfo(result.data.id, result.data.type)
                                         .then(
                                             function(d){
-                                                $log.log("got d "+d);
                                                 result.data.drug_summary.total = d;
                                             }
                                         );
