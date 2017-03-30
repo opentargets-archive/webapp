@@ -18,7 +18,7 @@ angular.module('cttvDirectives')
             restrict: 'E',
 
             scope: {
-                nocancers : '@',
+                // nocancers : '@',
                 facets : '=',
                 target : '@',
                 active : '@'
@@ -41,7 +41,7 @@ angular.module('cttvDirectives')
                 }
 
 
-                scope.$watchGroup(['target', 'facets', 'active', 'nocancers'], function (vals, old_vals) {
+                scope.$watchGroup(['target', 'facets', 'active'], function (vals, old_vals) {
                     // $log.log("tree.watchGroup()");
                     var target = vals[0];
                     var facets = vals[1];
@@ -81,9 +81,9 @@ angular.module('cttvDirectives')
                             .then (function (resp) {
                                 // var data = resp.body.data;
 
-                                if (scope.nocancers === "true") {
-                                    excludeCancersFromOtherTAs(resp); // side effects on the resp
-                                }
+                                // if (scope.nocancers === "true") {
+                                //     excludeCancersFromOtherTAs(resp); // side effects on the resp
+                                // }
 
                                 var data = cttvAPIservice.flat2tree(resp.body);
                                 if (data) {
@@ -100,43 +100,43 @@ angular.module('cttvDirectives')
 
                 });
 
-                var excludeCancersFromOtherTAs = function (resp) {
-                    // Exclude the cancers from other therapeutic areas if needed
-                    for (var i = 0; i < resp.body.data.length; i++) {
-                        var dis = resp.body.data[i].disease;
-                        for (var j = 0; j < dis.efo_info.therapeutic_area.labels.length; j++) {
-                            var ta = dis.efo_info.therapeutic_area.labels[j];
-                            if (ta === 'neoplasm') {
-                                var newCodes = [];
-                                var newLabels = [];
-                                var newPaths = [];
-
-                                // This disease has neoplasm
-                                // If there are more therapeutic areas, so we need to:
-                                // 1.- Remove any other TA from codes
-                                // 2.- Remove any other TA from labels
-                                // 3.- Remove any path leading to any TA that is not neoplasm
-                                // var neoplasmCode = dis.efo_info.therapeutic_area.codes[j];
-                                var neoplasmCode = "EFO_0000616";
-                                newCodes = [neoplasmCode];
-                                newLabels = ["neoplasm"];
-                                newPaths = [];
-                                for (var k = 0; k < dis.efo_info.path.length; k++) {
-                                    var path = dis.efo_info.path[k];
-                                    if (path[0] === neoplasmCode) {
-                                        newPaths.push(path);
-                                    }
-                                }
-                                dis.efo_info.path = newPaths;
-                                dis.efo_info.therapeutic_area = {
-                                    'codes': newCodes,
-                                    'labels': newLabels
-                                };
-                                break;
-                            }
-                        }
-                    }
-                };
+                // var excludeCancersFromOtherTAs = function (resp) {
+                //     // Exclude the cancers from other therapeutic areas if needed
+                //     for (var i = 0; i < resp.body.data.length; i++) {
+                //         var dis = resp.body.data[i].disease;
+                //         for (var j = 0; j < dis.efo_info.therapeutic_area.labels.length; j++) {
+                //             var ta = dis.efo_info.therapeutic_area.labels[j];
+                //             if (ta === 'neoplasm') {
+                //                 var newCodes = [];
+                //                 var newLabels = [];
+                //                 var newPaths = [];
+                //
+                //                 // This disease has neoplasm
+                //                 // If there are more therapeutic areas, so we need to:
+                //                 // 1.- Remove any other TA from codes
+                //                 // 2.- Remove any other TA from labels
+                //                 // 3.- Remove any path leading to any TA that is not neoplasm
+                //                 // var neoplasmCode = dis.efo_info.therapeutic_area.codes[j];
+                //                 var neoplasmCode = "EFO_0000616";
+                //                 newCodes = [neoplasmCode];
+                //                 newLabels = ["neoplasm"];
+                //                 newPaths = [];
+                //                 for (var k = 0; k < dis.efo_info.path.length; k++) {
+                //                     var path = dis.efo_info.path[k];
+                //                     if (path[0] === neoplasmCode) {
+                //                         newPaths.push(path);
+                //                     }
+                //                 }
+                //                 dis.efo_info.path = newPaths;
+                //                 dis.efo_info.therapeutic_area = {
+                //                     'codes': newCodes,
+                //                     'labels': newLabels
+                //                 };
+                //                 break;
+                //             }
+                //         }
+                //     }
+                // };
                 
                 var setTreeView = function (tas) {
                     // Fire a target associations tree event for piwik to track
@@ -182,9 +182,9 @@ angular.module('cttvDirectives')
                         .then (
                             function (resp) {
 
-                                if (scope.nocancers === "true") {
-                                    excludeCancersFromOtherTAs(resp); // side effect on resp
-                                }
+                                // if (scope.nocancers === "true") {
+                                //     excludeCancersFromOtherTAs(resp); // side effect on resp
+                                // }
 
                                 var data = cttvAPIservice.flat2tree(resp.body);
                                 // var data = resp.body.data;

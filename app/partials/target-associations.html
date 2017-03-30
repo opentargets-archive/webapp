@@ -30,9 +30,9 @@
 
                 <div class="col-md-3 cttv-facet">
                     <cttv-facets></cttv-facets>
-                    <h4 class="cttv-facets panel-title">
-                        <input type="checkbox" ng-checked="cancersExcluded" ng-click="excludeCancers()"> Exclude neoplasm diseases from other Therapeutic Areas
-                    </h4>
+                    <!--<h4 class="cttv-facets panel-title">-->
+                        <!--<input type="checkbox" ng-checked="cancersExcluded" ng-click="excludeCancers()"> Exclude neoplasm diseases from other Therapeutic Areas-->
+                    <!--</h4>-->
                 </div>
 
                 <div class="col-md-9">
@@ -51,18 +51,18 @@
                         <!-- <div ng-show="view.t[0]=='bubbles'"> -->
                         <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='bubbles'}">
                             <resize>
-                                <cttv-target-associations-bubbles target="{{search.query}}" nocancers="{{cancersExcluded}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-bubbles>
+                                <cttv-target-associations-bubbles target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-bubbles>
                             </resize>
                         </div>
 
                         <!-- <div ng-show="view.t[0]=='table'"> -->
                         <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='table'}">
-                            <cttv-target-associations-table target="search.query" nocancers="{{cancersExcluded}}" filename="search.filename" loadprogress="loading" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-table>
+                            <cttv-target-associations-table target="search.query" filename="search.filename" loadprogress="loading" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-table>
                         </div>
 
                         <!-- <div ng-show="view.t[0]=='tree'"> -->
                         <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='tree'}">
-                            <cttv-target-associations-tree target="{{search.query}}" nocancers="{{cancersExcluded}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-tree>
+                            <cttv-target-associations-tree target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-tree>
                         </div>
                     </div>
 
