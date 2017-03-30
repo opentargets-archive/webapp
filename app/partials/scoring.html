@@ -22,13 +22,13 @@
 
         <div class="cttv-docs-section">
             <h4><a name="Association_score"></a>The Association Score</h4>
-            <p>Our association score between a target and a disease is a numerical value varying from 0 to 1, which indicates the strength of the association. A score of 0 corresponds to no evidence supporting an association, whereas a score of 1 refers to the strongest association. Throughout the pages in the Open Targets Platform we also indicate the score in shades of blue: the darker the blue, the stronger the association (i.e. 1).</p>
+            <p>Our association score between a target and a disease is a numerical value varying from 0 to 1, which indicates the strength of the association. A score of 0 corresponds to no evidence supporting an association, whereas a score of 1 refers to the strongest association. In the Open Targets Platform, we indicate the different scores in shades of blue: the darker the blue, the stronger the association.</p>
         </div>
 
         <div class="cttv-docs-section">
             <h4 id="computing-the-association-score">Computing the Association Score</h4>
 
-            <p>We start by generating a score for each evidence from different data sources (e.g. GWAS catalog, EVA) within a data type (e.g. Genetic associations). We define the evidence score as:</p>
+            <p>We start by generating a score for each evidence from different data sources (e.g. GWAS catalog, European Variation Archive) within a data type (e.g. Genetic associations). We define the evidence score as:</p>
             <p>s = F * S * C</p>
             <p>where</p>
 
@@ -37,45 +37,45 @@
             <p>S = severity, the magnitude or strength of the effect described by the evidence</p>
             <p>C = confidence, overall confidence for the observation that generates the target-disease evidence</p>
 
-            <p>The evidence score summarises the strength of the evidence and depends on factors that affect the relative strength of an evidence. These factors are summarised below:</p>
+            <p>The evidence score summarises the strength of the evidence and depends on factors that affect its relative strength. These factors are summarised below:</p>
 
             <table class="table">
                 <thead>
                     <tr>
                         <th>Data type</th>
-                        <th>Evidence scores and factors affecting their relative strength</th>
+                        <th>Data sources and factors that affect the relative strength of the evidence scores</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr>
                         <td>Genetic associations</td>
-                        <td>GWAS Catalog (functional consequence score, normalised p value and normalised sample size), European Variation Archive germline variants(functional consequence score), UniProt (curator inference score based on how strong the evidence for the gene's involvement in the disease is: not strong - 0.5 - , strong - 1)</td>
+                        <td>GWAS Catalog (functional consequence score of <a target=_blank href="https://www.targetvalidation.org/variants">variants</a>, normalised p-value and normalised sample size), European Variation Archive (functional consequence score of variants e.g. germline variants that cause transcrip ablation will have a score of 1, whereas variants that are intronic will have a score of 0.5); UniProt (curator inference score based on how strong the evidence for the gene's involvement in the disease is. If the evidence is strong, the score will be 1. For evidence deemed not to be strong by the curator, the score will be 0.5); Gene2Phenotype (variants are inferred by curators and will have a score of 1, the highest functional consequence score)</td>
                     </tr>
 
                     <tr>
                         <td>Somatic mutations</td>
-                        <td>Cancer Gene Census and EVA (both based on the functional consequence score), IntOgen (binned score based on tumour type category, ranging from 0.25 if the gene exhibits several signals of positive selections in the tumour, to 0.75 if in addition to a signal of positive selection, the gene is functionally connected to other genes with evidence A and B in the tumor type)</td>
+                        <td>Cancer Gene Census (functional consequence score of variants); European Variation Archive (functional consequence score of variants), IntOgen (binned score based on tumour type categories. If the gene has several signals of positive selections in the tumour, the score will be 0.25. If the gene is already described as a cancer gene and exhibits a signal of positive selection in a tumor type, the score will be 0.5. If in addition to a signal of positive selection, the gene is functionally connected to other genes in the same tumor type, the score will be 0.75)</td>
                     </tr>
 
                     <tr>
                         <td>Drugs</td>
-                        <td>ChEMBL  (Clinical trail phase binned score. Phase 0: 0.09, Phase I: 0.01, Phase II: 0.02, Phase III: 0.07, Phase IV: 1/0)</td>
+                        <td>ChEMBL  (Clinical trials phase binned score. Scores will be 0.09 for phase 0, 0.01 for phase I, 0.02 for Phase II, 0.07 for Phase III, and 1 for Phase IV drugs)</td>
                     </tr>
 
                     <tr>
                         <td>Affected pathways</td>
-                        <td>Reactome (curator confidence score)</td>
+                        <td>Reactome (functional consequence of 1 for a pathaway inferred by a curator)</td>
                     </tr>
 
                     <tr>
                         <td>RNA Expression</td>
-                        <td>Expression Atlas score (normalised p-value, normalised expression fold change and normalised percentile rank), rank)</td>
+                        <td>Expression Atlas score (normalised p-value, normalised expression fold change and normalised percentile rank)</td>
                     </tr>
 
                     <tr>
                         <td>Text mining</td>
-                        <td>Europe PMC (confidence score based on weighting document sections, sentence locations and title for full text articles and abstracts (<a target=_blank href="https://opentargets.org/sites/default/files/documents/literature_evidence_in_cttv_-_a_target_validation_platform.pdf">Kafkas et al 2016</a>)</td>
+                        <td>Europe PMC (weighting document sections, sentence locations and title for full text articles and abstracts (<a target=_blank href="https://opentargets.org/sites/default/files/documents/literature_evidence_in_cttv_-_a_target_validation_platform.pdf">Kafkas et al 2016</a>)</td>
                     </tr>
 
                     <tr>
