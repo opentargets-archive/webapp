@@ -6,6 +6,15 @@ angular.module('cttvDirectives')
     var selectedNodesColors = ['#ffe6e6', '#e6ecff'];
     var maxNodes = 180;
 
+    function getSelectedNode (all, one) {
+        for (var i = 0; i < all.length; i++) {
+            if (all[i].label === one) {
+                return all[i];
+            }
+        }
+
+    }
+
     function takeBestInteractors (interactors, n) {
         // We have more than 200 interactors
         // 'best' is based on the number of connected nodes
@@ -47,7 +56,8 @@ angular.module('cttvDirectives')
         templateUrl: 'partials/multiple-targets-interactions-summary.html',
         scope: {
             interactors: '=',
-            categories: '='
+            categories: '=',
+            selected: '='
         },
         link: function (scope, elem, attrs) {
             scope.showSpinner = true;
@@ -104,16 +114,41 @@ angular.module('cttvDirectives')
                         .call(this, obj);
                 }
 
-                // Keep track of the filtering
-                scope.filterOut = {};
-                scope.filterSource = function (source) {
+                // Keep track of the types filtering
+                var currentTypesSelection = {};
+                scope.filterInteractionType = function (category) {
+                    if (currentTypesSelection[category]) {
+                        delete (currentTypesSelection[category]);
+                    } else {
+                        currentTypesSelection[category] = true;
+                    }
+
+                    var leftOutCats = {};
+                    $log.log(currentTypesSelection);
+                    if (Object.keys(currentTypesSelection).length) {
+                        for (var c in scope.categories) {
+                            if (scope.categories.hasOwnProperty(c)) {
+                                leftOutCats[c] = true;
+                            }
+                        }
+                        for (var cat in currentTypesSelection) {
+                            if (currentTypesSelection.hasOwnProperty(cat)) {
+                                delete (leftOutCats[cat]);
+                            }
+                        }
+                    }
+                    filterCategories(Object.keys(leftOutCats));
+                };
+
+                function filterCategories (cats) {
+                    scope.filterOut = {};
+
                     // The filter can be in a category, so convert to individual sources
-                    var sourcesForCategory = omnipathdbCategories[source];
-                    if (sourcesForCategory) {
-                        for (var s in sourcesForCategory) {
-                            if (scope.filterOut[s]) {
-                                delete(scope.filterOut[s]);
-                            } else {
+                    for (var i=0; i<cats.length; i++) {
+                        var cat = cats[i];
+                        var sourcesForCategory = omnipathdbCategories[cat];
+                        if (sourcesForCategory) {
+                            for (var s in sourcesForCategory) {
                                 scope.filterOut[s] = true;
                             }
                         }
@@ -121,7 +156,8 @@ angular.module('cttvDirectives')
 
                     iv.filters(scope.filterOut);
                     iv.update();
-                };
+
+                }
 
                 scope.selectedNodes = [];
                 scope.unselectNode = function (node) {
@@ -243,6 +279,15 @@ angular.module('cttvDirectives')
                         //     .width(180)
                         //     .id(1)
                         //     .call(elem, obj);
+                    })
+                    .on ("loaded", function () {
+                        // If the "selected" attribute is passed, we select the node programmatically...
+                        // We need to wait until the star has been loaded in the screen
+                        if (scope.selected) {
+                            var selectedNode = getSelectedNode(interactorsArr, scope.selected);
+                            iv.click(selectedNode);
+                        }
+
                     });
                 $timeout(function () {
                     scope.showSpinner = false;

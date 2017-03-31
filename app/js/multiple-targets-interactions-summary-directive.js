@@ -5,7 +5,11 @@ angular.module('cttvDirectives')
 
     return {
         restrict: 'E',
-        template: '<interactors-star-plot interactors="interactors" categories="categories"></interactors-star-plot>',
+        template: '<!-- hint -->' +
+            '<div>' +
+            '    <p class="cttv-section-intro">Summary of interactions for the set of targets based on <a target=_blank href="http://omnipathdb.org/">OmniPath DB</a> data. When 2 targets are selected details on the interaction are shown.</p>' +
+            '</div>' +
+            '<interactors-star-plot interactors="interactors" categories="categories"></interactors-star-plot>',
         scope: {
             target: '=',
             width: '='
