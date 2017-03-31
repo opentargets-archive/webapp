@@ -378,7 +378,7 @@ angular.module('cttvDirectives')
                         if (!scope.selectedTA) {
                             return true;
                         }
-                        var tas = data[3];
+                        var tas = data[4];
                         return ((tas.indexOf(scope.selectedTA) >= 0));
                     }
                 ];
