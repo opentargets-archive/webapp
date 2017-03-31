@@ -143,6 +143,7 @@ angular.module('cttvDirectives')
                     }))
                     .selectedNodesColors(selectedNodesColors)
                     .size(600)
+                    .colorScale(cttvUtils.colorScales.BLUE_0_1)
                     .labelSize(90)
                     // .on("click", function (d) {
                     //     console.log("clicked on node...", d);
