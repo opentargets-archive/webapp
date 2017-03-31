@@ -161,7 +161,7 @@ angular.module('cttvDirectives')
 
                 scope.selectedNodes = [];
                 scope.unselectNode = function (node) {
-                    iv.click(node);
+                    iv.click(node, false); // If the click should fire a "select"/"unselect" event
                     for (var i = 0; i < scope.selectedNodes.length; i++) {
                         if (scope.selectedNodes[i].label === node.label) {
                             scope.selectedNodes.splice(i, 1);
@@ -206,6 +206,7 @@ angular.module('cttvDirectives')
                         //     }
                         // }
                         scope.selectedNodes.push(selectedNode);
+                        $log.log("apply from select");
                         scope.$apply();
                     })
                     .on("unselect", function (unselectedNode) {
@@ -217,6 +218,7 @@ angular.module('cttvDirectives')
                         // if (ivTooltip) {
                         //     ivTooltip.close();
                         // }
+                        $log.log("apply from unselect");
                         scope.$apply();
                     })
                     .on("interaction", function (interactors) {
