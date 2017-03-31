@@ -184,7 +184,6 @@ angular.module('cttvDirectives')
                         scope.$apply();
                     })
                     .on("interaction", function (interactors) {
-                        var elem = this;
                         var obj = {};
                         // obj.header = iNames.join(" - ") + " interactions";
                         obj.header = interactors.interactor1 + " - " + interactors.interactor2 + " interaction";
