@@ -169,6 +169,13 @@ angular.module('cttvDirectives')
                     }
                 };
 
+                // Color scale for the nodes (using the BLUE_0_1 range)
+                var range = cttvUtils.colorScales.BLUE_0_1.range(); //blue orig
+                var newColorScale = d3.scale.linear()
+                    .domain([0, 1])
+                    .range(range); // blue orig
+
+
                 // At this point we hide the spinner and show the star plot
                 var iv = interactionsViewer()
                     .data(interactorsArr.sort(function (a, b) {
@@ -179,7 +186,7 @@ angular.module('cttvDirectives')
                     }))
                     .selectedNodesColors(selectedNodesColors)
                     .size(600)
-                    .colorScale(cttvUtils.colorScales.BLUE_0_1)
+                    .colorScale(newColorScale)
                     .labelSize(90)
                     // .on("click", function (d) {
                     //     console.log("clicked on node...", d);
@@ -297,13 +304,12 @@ angular.module('cttvDirectives')
                 }, 0);
 
                 // Setting up legend
-                var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
                 // scope.legendText = "Number of interactors";
                 scope.colors = [];
                 for (var i = 0; i <= 100; i += 25) {
                     var j = i / 100;
                     //scope.labs.push(j);
-                    scope.colors.push({color: colorScale(j), label: j});
+                    scope.colors.push({color: newColorScale(j), label: j});
                 }
 
             });
