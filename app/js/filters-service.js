@@ -66,6 +66,20 @@ angular.module('cttvServices').
 
 
         /*
+         * Functions for mapping API facets keys (e.g. "datatypes") to a webapp URL specific keys (e.g. "dt")
+         */
+
+        var getFacetConfigByKey = function (k) {
+            return _.find(cttvConfig.facets, function(o){return o.key==k})
+        }
+
+        var getFacetConfigByKeyApp = function(k){
+            return _.find(cttvConfig.facets, function(o){return o.keyapp==k})
+        }
+
+
+
+        /*
          * goes thorugh all the filters and
          * updates the "summary" of selected options, as well as the count
          */
@@ -146,6 +160,7 @@ angular.module('cttvServices').
         var isSelected=function(collection, key){
             var fcts = cttvLocationState.getState()[ cttvFiltersService.stateId ];
             key = "" + key; // target class is numerical key which confuses indexOf below.
+            collection = getFacetConfigByKey(collection).keyapp || collection;
             return (fcts && fcts[collection] && ( fcts[collection]==key || fcts[collection].indexOf(key)>=0 ))|| false;
         };
 
@@ -225,8 +240,12 @@ angular.module('cttvServices').
             var raw = {};
             selected.forEach(function(collection){
                 collection.filters.forEach(function(obj){
-                    raw[obj.facet] = raw[obj.facet] || [];
-                    raw[obj.facet].push( obj.key )
+                    //raw[obj.facet] = raw[obj.facet] || [];
+                    //raw[obj.facet].push( obj.key )
+
+                    var k = getFacetConfigByKey(obj.facet).keyapp || ""; // look up the mapping for key<->keyapp
+                    raw[k] = raw[k] || [];
+                    raw[k].push( obj.key );
                 })
             })
             cttvLocationState.setStateFor( cttvFiltersService.stateId , raw );
@@ -281,7 +300,7 @@ angular.module('cttvServices').
          */
         function Filter(o){
             this.facet = o.facet || ""; // the collection key, e.g. "datatype" or "pathway"
-            this.key = o.key || "";     // the filter id, e.g. "rna_expression" or "react_15518"
+            this.key = o.key || "";     // the filter id, e.g. "rna_expression" or "react_15518" // NOTE: "key" here is misleading...
             this.label = o.label || ""; // the label to display
             this.count = o.count || 0;  // the count to display
             this.enabled = this.count>0 && (o.enabled==undefined ? true : o.enabled);
@@ -471,7 +490,7 @@ angular.module('cttvServices').
          * NOTE: i quite like passing the countsToUse directly here, so I'll leave it like this for now. This is however now set in the config file
          */
         cttvFiltersService.updateFacets = function(facets, countsToUse){
-            // $log.log("updateFacets");
+            //$log.log("updateFacets");
             // if there are no facets, return
             if(!facets){
                 return;
@@ -512,6 +531,7 @@ angular.module('cttvServices').
                         addCollection(
                             parseFacetData(
                                 cttvConfig.facets[collection.type].key,
+                                //cttvConfig.facets[collection.type].keyapp,
                                 facets[ cttvConfig.facets[collection.type].key ],    //facets[collection.type],
                                 countsToUse,
                                 opts // collection.options
@@ -573,6 +593,19 @@ angular.module('cttvServices').
 
         cttvFiltersService.update = function(){
             update();
+        }
+
+
+
+        /**
+         * This maps a webapp URL facests list to API compatible keys:
+         * takes a list of facets as returned from the statelocation service (so with facets in webapp keys)
+         * and return a new object with keys mapped to API-compatible form
+         */
+        cttvFiltersService.facets2Api = function(facets){
+            return _.mapKeys(facets, function(value, key) {
+              return getFacetConfigByKeyApp(key).key;
+            });
         }
 
 

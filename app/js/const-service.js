@@ -99,10 +99,8 @@ angular.module('cttvServices').
             var k;
             for(var i in o){
                 if(o.hasOwnProperty(i)){
-                    //$log.log(v+") "+i+" = "+o[i]);
                     if(o[i]==v){
                         k = i;
-                        //$log.log("   "+k);
                         return k;
                     }
                     if( typeof o[i] == 'object' ){

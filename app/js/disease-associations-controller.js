@@ -147,7 +147,7 @@ angular.module('cttvControllers')
         });
         if (!_.isEqual(new_state[facetsId], old_state[facetsId]) || !new_state[facetsId]) {
             facetsPromise.then(function () {
-                return $scope.getFacets(new_state[facetsId], $scope.targets);
+                return $scope.getFacets( cttvFiltersService.facets2Api(new_state[facetsId]), $scope.targets );
             });
         }
 
