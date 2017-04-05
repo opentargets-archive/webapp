@@ -1,11 +1,15 @@
 <div class="section">
     <div style="margin-bottom:20px;">
         <h2>2. Revise the mappings:</h2>
-        <p style="color:#aaaaaa">Edit your list here. Add more targets by using the search box.</p>
+        <p style="color:#aaaaaa">Edit your list</p>
     </div>
     <div>
-        <b>File</b>: {{list.id}}
+        <b>List</b>: {{list.id}}
     </div>
+
+    <div ng-show="notFound.length" style="margin-top:10px;">{{notFound.length}} unrecognised targets: <span ng-repeat="target in notFound" style="background-color:#ffe6e6;margin-right:10px;">{{target.query}}</span></div>
+    <div ng-show="duplications" style="margin-top:10px;">{{duplications}} duplicated targets</div>
+
 
     <!-- Let's try the pill-like style of showing the targets -->
     <!--<div class="batch-search">-->
@@ -37,11 +41,11 @@
 
     <div class="row batch-search">
         <div class="col-sm-4">
-            <span>{{exact.length}} exact </span>
+            <h4><span>{{exact.length}} exact </span>
             <span ng-switch="exact.length">
                 <span ng-switch-when="1">match</span>
                 <span ng-switch-default>matches</span>
-            </span>
+            </span></h4>
 
             <div class="batch-search-mappings-container" id="batch-search-mappings-container-exact">
                 <div class="batch-search-results-container">
@@ -66,11 +70,11 @@
         </div>
 
         <div class="col-sm-4">
-            <span>{{fuzzy.length}} suggested </span>
+            <h4><span>{{fuzzy.length}} suggested </span>
             <span ng-switch="fuzzy.length">
                 <span ng-switch-when="1">match</span>
                 <span ng-switch-default>matches</span>
-            </span>
+            </span></h4>
 
 
             <div class="batch-search-mappings-container">
@@ -115,7 +119,7 @@
 
 
         <div class="col-sm-4">
-            <span>Add more targets to your list</span>
+            <h4><span>Add more targets to your list</span></h4>
 
             <div class="batch-search-mappings-container">
 
@@ -124,7 +128,7 @@
                            class="form-control input-search ng-pristine ng-untouched ng-valid ng-empty" name="text"
                            tabindex="1" ng-model="searchQueryText" ng-model-options="{debounce:500}" autocomplete="off"
                            ng-change="getSearch(searchQueryText)">
-                    <i ng-click="discardSearch()" class="fa fa-times search-options"></i>
+                    <!--<i ng-click="discardSearch()" class="fa fa-times search-options"></i>-->
                     <span cttv-progress-spinner size="24" ng-show="searchInProgress"
                           style="right:4.5em; top:3em; position:absolute"></span>
 
@@ -213,25 +217,26 @@
 
     </div>
 </div>
-<div ng-show="notFound.length" style="margin-top:10px;">Unrecognised targets: <span ng-repeat="target in notFound" style="background-color:#ffe6e6;margin-right:10px;">{{target.query}}</span></div>
-
 
 <div class="section">
     <div style="margin-top:50px;">
         <h2>3. Analyse your list:</h2>
-        <p style="color:#aaaaaa">These are the targets to be analysed. Save the current list in your computer if needed.</p>
+        <p style="color:#aaaaaa">These are the targets to be analysed.</p>
     </div>
 
-    <p>
+    <h4>
         <span style="font-size:1.4em;">{{targetIds.length}}</span> targets currently selected for analysis
-    </p>
+    </h4>
     <p ng-show="targetIds.length > listLengthLimit" style="color:red;">
         The current limit of this functionality is {{listLengthLimit}} targets. Please unselect some targets or load a new list
+    </p>
+    <p ng-show="targetIds.length < 2" style="color:red;">
+        At least 2 targets are needed. Please add more targets to the selection or try the <a href="/">simple search</a> instead
     </p>
 
     <div style="margin-top:50px;" ng-show=summaryLink>
         <!-- We are in the limit of bacth search -->
-        <span ng-show="targetIds.length <= listLengthLimit">
+        <span ng-show="targetIds.length<=listLengthLimit && targetIds.length>=2">
             <a href="{{summaryLink}}">
                 <button type="button" class="btn btn-primary">
                     Analyze targets
@@ -239,8 +244,8 @@
             </a>
         </span>
 
-        <span ng-show="targetIds.length > listLengthLimit">
-                <button type="button" class="btn btn-default">
+        <span ng-show="targetIds.length>listLengthLimit || targetIds.length<2">
+                <button type="button" class="btn btn-disabled">
                     Analyze targets
                 </button>
         </span>

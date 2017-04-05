@@ -66,7 +66,7 @@ angular.module('cttvDirectives')
                             var drug = ev.drug.molecule_name;
                             var molType = ev.drug.molecule_type;
                             var maxPhase = ev.drug.max_phase_for_all_diseases;
-                            var id = ev.drug.id[0];
+                            var id = ev.drug.id;
                             if (!drugs[drug]) {
                                 uniqueTargets[target] = true;
                                 drugs[drug] = {

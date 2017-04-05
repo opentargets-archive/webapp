@@ -1,10 +1,8 @@
-<cttv-progress-spinner ng-show="scope.showSpinner"></cttv-progress-spinner>
 
-<!-- hint -->
-<div>
-    <p class="cttv-section-intro">Summary of interactions between the set of targets. When 2 are selected details on the
-        interaction is shown (for now, only links based on <i>shared pathways</i> are shown).</p>
+<div style="min-height:40px;" ng-show="showSpinner">
+    <cttv-progress-spinner size="30"></cttv-progress-spinner>
 </div>
+
 
 <!-- Shows the currently selected targets -->
 <!--<div>-->
@@ -17,15 +15,19 @@
     <!--</div>-->
 <!--</div>-->
 
-<div class="row">
+<div ng-show="nInteractors==0">
+    No interactions found
+</div>
+
+<div class="row" ng-show="!showSpinner && nInteractors>0">
     <div class="col-sm-3">
         <div style="margin:10px;">
 
             <!-- Categories filter -->
-            <div ng-init="showCategories=false;">
-                <h4>Sources <span stlye="font-size=0.5em"><i class="fa pull-right text-lowlight" ng-click="showCategories=!showCategories" ng-class="{'fa-caret-right':!showCategories, 'fa-caret-down':showCategories}"></i></span></h4>
-                <div ng-show="showCategories" ng-repeat="(category, items) in categories" ng-click="filterSource(category)"><input
-                        type="checkbox" checked="true"> {{category}} ({{items}} interaction<span ng-if="items!=1">s</span>)
+            <div ng-init="showCategories=true;">
+                <h4>Filter by interaction type <span stlye="font-size=0.5em"><i class="fa pull-right text-lowlight" ng-click="showCategories=!showCategories" ng-class="{'fa-caret-right':!showCategories, 'fa-caret-down':showCategories}"></i></span></h4>
+                <div ng-show="showCategories" ng-repeat="(category, items) in categories" ng-click="filterInteractionType(category)"><input
+                        type="checkbox"> {{category}} ({{items}} interaction<span ng-if="items!=1">s</span>)
                 </div>
             </div>
 
@@ -80,13 +82,17 @@
                         </div>
 
                         <!-- Shared pathways -->
-                        <div ng-if="pathways.length" ng-init="showSharedPathways=true">
-                            <div style="text-align:left; padding:6px;"><span style="font-size:1.5em; vertical-align:middle">&#x2022</span> <span style="vertical-align:middle;">{{pathways.length}} shared pathway</span><span ng-if="pathways.length!=1">s</span> <span ng-click="showSharedPathways=!showSharedPathways" class="fa pull-right text-lowlight" ng-class="{'fa-caret-right':!showSharedPathways, 'fa-caret-down':showSharedPathways}"></span></div>
-                            <div style="padding-bottom:7px;">
-                                <div style="margin-left:15px; text-align:left; font-size:0.9em;" ng-show="showSharedPathways" ng-repeat="pathway in pathways"><a
-                                        href='/summary?pathway={{pathway.id}}&pathway-target={{selectedNodes[0].label}}&pathway-target={{selectedNodes[1].label}}'><i
-                                        style="margin-right:5px;" class="fa fa-sitemap"></i>{{pathway.label}}</a></div>
-                            </div>
+                        <!--<div ng-if="pathways.length" ng-init="showSharedPathways=true">-->
+                            <!--<div style="text-align:left; padding:6px;"><span style="font-size:1.5em; vertical-align:middle">&#x2022</span> <span style="vertical-align:middle;">{{pathways.length}} shared pathway</span><span ng-if="pathways.length!=1">s</span> <span ng-click="showSharedPathways=!showSharedPathways" class="fa pull-right text-lowlight" ng-class="{'fa-caret-right':!showSharedPathways, 'fa-caret-down':showSharedPathways}"></span></div>-->
+                            <!--<div style="padding-bottom:7px;">-->
+                                <!--<div style="margin-left:15px; text-align:left; font-size:0.9em;" ng-show="showSharedPathways" ng-repeat="pathway in pathways"><a-->
+                                        <!--href='/summary?pathway={{pathway.id}}&pathway-target={{selectedNodes[0].label}}&pathway-target={{selectedNodes[1].label}}'><i-->
+                                        <!--style="margin-right:5px;" class="fa fa-sitemap"></i>{{pathway.label}}</a></div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <div ng-if="pathways.length" style="padding:6px;">
+                            <span style="font-size:1.5em; vertical-align:middle">&#x2022</span> <span style="vertical-align:middle;">Shared pathway</span>
                         </div>
 
                         <div ng-if="ppis.length" style="padding:6px;">
@@ -124,7 +130,7 @@
         </div>
     </div>
     <div class="col-sm-9" >
-        <div id="interactionsViewerMultipleTargets"></div>
+        <div id="interactionsViewerMultipleTargets" style="overflow-x:auto;overflow-y:hidden"></div>
         <div>
             <p style="font-size:0.9em; padding-left:15px;">Number of interactors per node</p>
             <cttv-matrix-legend legend-text="legendText" labels="dataRange" colors="colors" layout="h"></cttv-matrix-legend>

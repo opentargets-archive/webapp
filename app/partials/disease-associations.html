@@ -17,7 +17,7 @@
         <div class="cttv-content-header">
             <div class="container">
                 <h3 view-title>{{search.total}} {{search.total===1 ? "target" : "targets"}} associated with {{search.label}}</h3>
-                <h5 ng-show="targets.length">Only targets in your list <span ng-repeat="list in targetLists">{{list}} </span> associated with {{search.label}} are shown. <a href="" ng-click="removeTargetLists()">Remove this filter</a></h5>
+                <h5 ng-show="targets.length">Only targets in your list associated with {{search.label}} are shown. <a href="" ng-click="removeTargetLists()">Remove this filter</a></h5>
                 <p><!-- Found {{search.total}} {{search.total===1 ? "target" : "targets"}}<span class="cttv-interpage-link">--><a href="/disease/{{search.query}}"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span> View disease profile</span></a>
                 </p>
             </div>
@@ -27,7 +27,7 @@
             <div class="row" ng-if="search.total>0">
                 <div class="col-sm-3">
                     <cttv-facets></cttv-facets>
-                    <cttv-filter-by-file-targets disease-name="search.label" target="target.targetArray"
+                    <cttv-filter-by-file-targets disease-name="search.label" targets="targets"
                                                  filters="filters" getfacets="getFacets" search="search">
 
                     </cttv-filter-by-file-targets>

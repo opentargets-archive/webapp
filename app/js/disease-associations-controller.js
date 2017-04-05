@@ -43,17 +43,17 @@ angular.module('cttvControllers')
     $scope.targets = [];
     $scope.targetLists = [];
 
-    var targetList = $location.search()["target-list"];
+    // var targetList = $location.search()["target-list"];
     // var targetList = new_state["target-list"];
-    if (targetList) {
-        var list = cttvLoadedLists.get(targetList);
-        var targets = [];
-        for (var i=0; i<list.list.length; i++) {
-            var item = list.list[i];
-            if (item.result.id) {
-                targets.push(item.result.id);
-            }
-        }
+    // if (targetList) {
+    //     var list = cttvLoadedLists.get(targetList);
+    //     var targets = [];
+    //     for (var i=0; i<list.list.length; i++) {
+    //         var item = list.list[i];
+    //         if (item.result.id) {
+    //             targets.push(item.result.id);
+    //         }
+    //     }
         // Passing them to the disease associations table directive
         // $scope.targets = _.concat($scope.targets, targets);
         // $scope.targetLists = _.concat($scope.targetLists, list.id);
@@ -63,11 +63,11 @@ angular.module('cttvControllers')
         // $log.log($scope.targetLists);
         // $scope.targets = targets;  // TODO: I think this is not needed, in render $scope.targets is set
         // $scope.targetList = list.id; // TODO: I think this is not needed, in render $scope.targetList is set
-    }
+    // }
 
     // TODO: should be done through the cttvLocationState?
     $scope.removeTargetLists = function () {
-        $location.search("target-list", null);
+        // $location.search("target-list", null);
         $location.search("targets", null);
         // TODO: Also remove the filter by target list feature
         // $scope.removeTargets();
@@ -113,29 +113,29 @@ angular.module('cttvControllers')
 
         // Do we have a target list?
         // TODO: This should go into the facets service
-        var targetList = new_state["target-list"];
-        if (targetList) {
-            var list = cttvLoadedLists.get(targetList);
-            targets = [];
-            for (var i=0; i<list.list.length; i++) {
-                var item = list.list[i];
-                if (item.result.id) {
-                    targets.push(item.result.id);
-                }
-            }
-        }
+        // var targetList = new_state["target-list"];
+        // if (targetList) {
+        //     var list = cttvLoadedLists.get(targetList);
+        //     targets = [];
+        //     for (var i=0; i<list.list.length; i++) {
+        //         var item = list.list[i];
+        //         if (item.result.id) {
+        //             targets.push(item.result.id);
+        //         }
+        //     }
+        // }
 
         if (targets) {
             // Passing them to the disease associations table directive
             $scope.targets = targets;
-            $scope.targetLists = []; // Name of the list, but we don't know it
+            // $scope.targetLists = []; // Name of the list, but we don't know it
 
             // facetsPromise.then (function () {
             //     return $scope.getFacets(new_state[facetsId], $scope.targets);
             // });
         } else {
             $scope.targets = [];
-            $scope.targetLists = [];
+            // $scope.targetLists = [];
             // facetsPromise.then (function () {
             //     return $scope.getFacets(new_state[facetsId]);
             // });
@@ -244,4 +244,4 @@ angular.module('cttvControllers')
     $scope.filters = cttvLocationState.getState()[facetsId] || {};
     render(cttvLocationState.getState(), cttvLocationState.getOldState());
 
-}]) ;
+}]);

@@ -3,6 +3,11 @@
 
 #cttv-page-app {
 
+    .popover {
+        min-width: 378px;
+        max-width: 100%;
+    }
+
     /*
     * one line modals
     */
@@ -681,7 +686,8 @@
             }
         }
         .choose-header {
-            background: $clr-ui-border;
+            //background: $clr-ui-border;
+            text-align:center;
             height: 2.5em;
             padding-top: 0.6em;
             margin-bottom: 10px;
@@ -708,10 +714,12 @@
         }
 
         .batch-search-box {
-            width: 90%;
-            display: inline-block;
-            margin-left: 10px;
+            width: 95%;
+            //display: inline-block;
+            //margin-left: 5px;
             height: 2.5em;
+            padding-left:5px;
+            @include border-radius (6px);
         }
 
         .batch-search-mappings-container {

@@ -181,10 +181,10 @@ angular.module('cttvServices').
          * Set the temp state object to the given one (full override)
          */
         cttvLocationStateService.setState = function(so){
-            //$log.log("!!!! setState()");
+            // $log.log("setState()");
             tmp_state = so;
             cttvLocationStateService.updateStateURL();
-        }
+        };
 
 
 
@@ -211,16 +211,16 @@ angular.module('cttvServices').
         cttvLocationStateService.resetStateFor = function(k){
             // $log.log("resetStateFor()");
             cttvLocationStateService.setStateFor(k, {}, false);
-        }
+        };
 
 
         /**
          * Updates the URL search with the current state object
          */
         cttvLocationStateService.updateStateURL = function(){
-            //$log.log("!!!! updateStateURL");
+            // $log.log("updateStateURL");
 
-            var stt = {}
+            var stt = {};
             for(var i in tmp_state){
                 // translate the state to the URL, but we don't want to include the _path property
                 if(tmp_state.hasOwnProperty(i) && i!=="_path" ){
@@ -229,7 +229,7 @@ angular.module('cttvServices').
             }
 
             $location.search(stt);
-        }
+        };
 
 
 
