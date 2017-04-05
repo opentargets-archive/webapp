@@ -362,11 +362,11 @@
 
             {
                 "type":"therapeuticArea"
-            },
+            }/*,
 
             {
                 "type":"uniprotKeyword"
-            }
+            }*/
 
         ]
     },
