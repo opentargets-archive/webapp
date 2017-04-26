@@ -38,12 +38,12 @@
                 <div class="col-md-9">
 
                     <!-- TABS views -->
-
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs">
                         <li role="presentation" ng-class="(view.t[0]=='bubbles') ? 'active' : ''" ><a href="#" ng-click='setActiveTab("bubbles")'>Bubbles</a></li>
                         <li role="presentation" ng-class="(view.t[0]=='table') ? 'active' : ''"><a href="#" ng-click='setActiveTab("table")'>Table</a></li>
                         <li role="presentation" ng-class="(view.t[0]=='tree') ? 'active' : ''"><a href="#" ng-click='setActiveTab("tree")'>Tree</a></li>
+                        <li role="presentation" ng-class="(view.t[0]=='treemap') ? 'active' : ''"><a href="#" ng-click='setActiveTab("treemap")'>TreeMap</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -63,6 +63,13 @@
                         <!-- <div ng-show="view.t[0]=='tree'"> -->
                         <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='tree'}">
                             <cttv-target-associations-tree target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-tree>
+                        </div>
+
+                        <!-- <div ng-show="view.t[0]=='treemap'"> -->
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='treemap'}">
+                            <resize>
+                                <cttv-target-associations-treemap target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-treemap>
+                            </resize>
                         </div>
                     </div>
 

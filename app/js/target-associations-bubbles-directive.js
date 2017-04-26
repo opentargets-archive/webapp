@@ -233,7 +233,7 @@ angular.module('cttvDirectives')
                     //         });
                     //
                     // }
-                    
+
                     if (bView) {
                         bView.therapeuticAreas(opts.therapeutic_area);
                         bView.update(promise);
