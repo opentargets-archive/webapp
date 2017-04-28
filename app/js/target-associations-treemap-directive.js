@@ -11,6 +11,19 @@ angular.module('cttvDirectives')
 
         var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
+        var margin = {top: 20, right: 0, bottom: 0, left: 0},
+            height = 522,   // the height of the actual treemap (i.e. not including the navigation at top)
+            width = 845;
+
+        var fader = function(color) { return d3.interpolateRgb(color, "#fff")(0.2); },
+            color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
+            format = d3.format(",d");
+
+
+
+        // TODO
+        // just for reference for now. remove when done with it
+
         /*
         function decorateSVG (from_svg) {
             var clone = from_svg.cloneNode(true);
@@ -132,10 +145,21 @@ angular.module('cttvDirectives')
             return clone;
         }
         */
+
+
+        function name(d) {
+            return d.parent
+            ? name(d.parent) + "." + d.name
+            : d.name;
+        }
+
         var config = {
             therapeuticAreas: []
         };
 
+
+        // keeps only the selected TAs
+        // since the API will return *all* TA's containing diseases from teh selected TA
         function filterOutTAs (data) {
             var onlyThisTAs;
             if (config.therapeuticAreas && config.therapeuticAreas.length) {
@@ -161,6 +185,49 @@ angular.module('cttvDirectives')
             data.children = newTAs;
         }
 
+
+
+        // TODO:
+        // implement zooming function
+        function transition(d){
+
+            /*if (transitioning || !d) return;
+            transitioning = true;
+
+            var g2 = display(d),
+            t1 = g1.transition().duration(750),
+            t2 = g2.transition().duration(750);
+
+            // Update the domain only after entering new elements.
+            x.domain([d.x, d.x + d.dx]);
+            y.domain([d.y, d.y + d.dy]);
+
+            // Enable anti-aliasing during the transition.
+            svg.style("shape-rendering", null);
+
+            // Draw child nodes on top of parent nodes.
+            svg.selectAll(".depth").sort(function(a, b) { return a.depth - b.depth; });
+
+            // Fade-in entering text.
+            g2.selectAll("text").style("fill-opacity", 0);
+
+            // Transition to the new view.
+            t1.selectAll("text").call(text).style("fill-opacity", 0);
+            t2.selectAll("text").call(text).style("fill-opacity", 1);
+            t1.selectAll("rect").call(rect);
+            t2.selectAll("rect").call(rect);
+
+            // Remove the old node when the transition is finished.
+            t1.remove().each("end", function() {
+            svg.style("shape-rendering", "crispEdges");
+            transitioning = false;
+            });*/
+        }
+
+
+
+
+
         return {
             restrict: 'E',
             require: '?^resize',
@@ -171,19 +238,12 @@ angular.module('cttvDirectives')
             },
 
             template: '<div style="float:left">'
-            +'<svg width="845" height="522"></svg>' // golden ratio 1.618
-            /*+'<form>'
-            +'  <label><input type="radio" value="sumBySize" checked ng-click="sumBySize()"> Size</label>'
-            +'  <label><input type="radio" value="sumByCount" ng-click="sumByCount()"> Count</label>'
-            +'</form>'*/
+            +'<svg></svg>'
             +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend></div>',
             //+'<png filename="{{target}}-AssociationsBubblesView.png" track="associationsBubbles"></png>',
 
 
             link: function (scope, elem, attrs, resizeCtrl) {
-
-                // scope.sumBySize = sumBySize;
-                // scope.sumByCount = sumByCount;
 
                 scope.$watchGroup(["target", "facets", "active"], function (vals) {
                     var target = vals[0];
@@ -206,6 +266,9 @@ angular.module('cttvDirectives')
                         params: opts
                     };
 
+
+                    // from bubble view:
+
                     /*var promise = cttvAPIservice.getAssociations(queryObject);
 
                     if (bView) {
@@ -226,7 +289,7 @@ angular.module('cttvDirectives')
                         function(resp){
                             $log.log(resp);
                             var data = cttvApi().utils.flat2tree(resp.body);
-                            //filterOutTAs(data);
+                            // filterOutTAs(data);
                             onData(data);
                         },
                         cttvAPIservice.defaultErrorHandler
@@ -234,16 +297,39 @@ angular.module('cttvDirectives')
                 });
 
 
-
+                // setup the SVG
                 var s = elem.children().eq(0).children().eq(0)[0];
 
-                var svg = d3.select( s ),
-                    width = +svg.attr("width"),
-                    height = +svg.attr("height");
+                var svg = d3.select( s )
+                    .attr("width", width)
+                    .attr("height", (height + margin.top))
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                    .style("shape-rendering", "crispEdges");
 
-                var fader = function(color) { return d3.interpolateRgb(color, "#fff")(0.2); },
-                    color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
-                    format = d3.format(",d");
+                var nav = svg.append("g")
+                    .attr("class", "tm-nav");
+                    //.attr("width", width)
+                    //.attr("height", margin.top);
+
+                    nav.append("rect")
+                        .attr("x", 2)
+                        .attr("y", -margin.top)
+                        .attr("width", width-4)
+                        .attr("height", margin.top)
+                        .style("fill", "#336699");
+
+                    nav.append("text")
+                        .attr("x", 6)
+                        .attr("y", 6 - margin.top)
+                        .attr("dy", ".75em")
+                        .text("")
+
+                var chart = svg.append("g")
+                    .attr("class", "tm-chart")
+                    .attr("width", width)
+                    .attr("height", height);
+
 
                 var treemap = d3.treemap()
                     .tile(d3.treemapResquarify)
@@ -273,7 +359,15 @@ angular.module('cttvDirectives')
                     // TODO
                     // actually we'll see how to do this so we can animate transitions
                     // but for now this will do...
-                    svg.selectAll("*").remove();
+
+                    nav.selectAll("text").text("");
+                    chart.selectAll("*").remove();
+
+
+
+                    // -------
+                    // Approach 1 : this works btw, so keep this code
+                    // -------
 
 
 
@@ -376,27 +470,37 @@ angular.module('cttvDirectives')
 
 
 
+                    // ----------
+                    // Approach 2: nested structure, trying to zoom
+                    // ----------
 
-                    var cell = svg.selectAll("g")
+
+
+                    var cell = chart.selectAll("g")
                         .data(root.children)
 
                         .enter().append("g")
                         .attr("transform", function(d) { return "translate(" + d.x0 + "," + d.y0 + ")"; })
                         .attr("class", "treemap-ta");
-                        //.attr("class", function(d){console.log(d); return "bob-treemap-disease"})
 
 
-                    cell.selectAll("treemap-bob")
+
+                        var ch = cell.selectAll("treemap-bob")
                             .data(function(d){ $log.log(d.children); return d.children})
                             .enter()
                             .append("rect")
-                            .attr("transform", function(d) { return "translate(" + (d.x0-1) + "," + (d.y0-1) + ")"; })
+                            //.attr("transform", function(d) { return "translate(" + (d.x0-1) + "," + (d.y0-1) + ")"; })
+                            .attr("x", function(d) { return d.x0 - d.parent.x0; })
+                            .attr("y", function(d) { return d.y0 - d.parent.y0; })
                             .attr("width", function(d) { return d.x1 - d.x0; })
-                             .attr("height", function(d) { return d.y1 - d.y0; })
+                            .attr("height", function(d) { return d.y1 - d.y0; })
                             .attr("fill", function(d) { return colorScale(d.data.__association_score); })
                             .attr("fill-opacity", 0.8)
-                            .attr("class", "treemap-bob");
+                            //.attr("class", "treemap-bob")
+                            ;
 
+                            var bob = d3.scaleOrdinal(d3.schemeCategory20);
+                            bob.domain([0,1]);
 
                     //
                     cell.append("rect")
@@ -404,53 +508,84 @@ angular.module('cttvDirectives')
                         .attr("height", function(d) { return d.y1 - d.y0 -2; })
                         .attr("x", 1)
                         .attr("y", 1)
-                        .attr("fill", function(d) { return colorScale(d.data.__association_score); })
-                        .attr("fill-opacity", 0.8)
-                        .on("click", function(d) { console.log(d) })
+                        //.attr("fill", function(d) { return colorScale(d.data.__association_score); })
+                        .attr("fill", function(d) { return color(d.data.__id); })
+                        .attr("fill-opacity", 0.7)
+                        .on("click", transition)
+                        .attr("id", function(d){return d.data.__id})
                         ;
 
+
+                    // clipping path for labels
+                    cell.append("clipPath")
+                        .attr("id", function(d) { return "clip-" + d.data.__id; })
+                        //.append("use")
+                        //.attr("xlink:href", function(d) { return "#" + d.data.id; })
+                        .append("rect")
+                        .attr("x", 4)
+                        .attr("y", 4)
+                        .attr("width", function(d) { return d.x1 - d.x0 -8; })
+                        .attr("height", function(d) { return d.y1 - d.y0 -8; });
+
+
                     // Text labels
-                    cell.append("text")
-                        .text(function(d) { return d.data.name + " ("+d.children.length +")"; })
+
+                    // text for TA
+                    cell
+                        .filter(function(d){return (d.children && d.children.length>0)})
+                        .append("text")
+                        .text(function(d) { return d.data.name; })
+                        .attr("x", 4)
+                        .attr("y", 16)
+                        .attr("clip-path", function(d) { return "url(#clip-" + d.data.__id + ")"; })
+                        .style("fill", function(d){ return d.data.__association_score>0.5 ? "#FFF" : "#000"} )
+                        //.style("fill-opacity", 0.8)
+                        .style("visibility", function(d){ return (d.x1 - d.x0)>10 ? "visible" : "hidden"  })
+
+                    var taLabelInfo = cell.filter(function(d){return (d.children && d.children.length>0)}).append("text")
+                        .attr("font-size", "12px")
+                        .attr("clip-path", function(d) { return "url(#clip-" + d.data.__id + ")"; })
+                        .style("fill", function(d) { return d.data.__association_score > 0.5 ? "#fff" : "#000"} )
+                        //.attr("fill-opacity", 0.9)
+                        .style("visibility", function(d){ return (d.x1 - d.x0)>10 ? "visible" : "hidden"  })
+                        ;
+
+                        taLabelInfo.append("tspan")
+                            .attr("x", 4)
+                            .attr("dy", 32)
+                            .text( function(d){return "Association score: "+d.data.__association_score.toFixed(2)} )
+                        ;
+
+                        taLabelInfo.append("tspan")
+                            .attr("x", 4)
+                            .attr("dy", 12)
+                            .text( function(d){return "Diseases: " + d.children.length } )
+                        ;
+
+
+                    // text for leaf... if we can zoom
+                    cell
+                        .filter(function(d){return !d.children || d.children.length==0 })
+                        .append("text")
+                        .text(function(d) { return d.data.name })
                         .attr("x", 4)
                         .attr("y", function(d) { return d.y1 - d.y0 - 6; })
                         .attr("fill", function(d){ return d.data.__association_score>0.5 ? "#FFF" : "#000"} )
                         .attr("fill-opacity", 0.8)
                         .attr("font-size", "12px")
-                        .attr("visibility", function(d){return (this.getComputedTextLength()<(d.x1 - d.x0 - 10)) ? "visible" : "hidden"  })
+                        .attr("clip-path", function(d) { return "url(#clip-" + d.data.__id + ")"; })
                         ;
 
 
-                    $log.log("root:");
-                    $log.log(root);
-
-                    $log.log("ancestors");
-                    $log.log(root.ancestors());
-
-                    $log.log("descendants");
-                    $log.log(root.descendants());
-
-                    $log.log("leaves");
-                    $log.log(root.leaves());
+                    cell.append("title")
+                        .text(function(d) { return d.data.id });
 
 
 
 
 
 
-
-
-                      /*d3.selectAll("input")
-                          .data([sumBySize, sumByCount], function(d) { return d ? d.name : this.value; })
-                          .on("change", changed);*/
-
-                      /*var timeout = d3.timeout(function() {
-                        d3.select("input[value=\"sumByCount\"]")
-                            .property("checked", true)
-                            .dispatch("change");
-                      }, 2000);
-
-                    scope.changed = function(sum) {
+                    /*scope.changed = function(sum) {
                         timeout.stop();
 
                         treemap(root.sum(sum));
