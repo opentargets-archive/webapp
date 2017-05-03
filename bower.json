@@ -34,7 +34,7 @@
     "lodash": "4.14.0",
     "angulartics": "~0.20.2",
     "jquery": "2.2.0",
-    "d3": "~3.5.8",
+    "d3": "4.8.0",
     "angular-sanitize": "1.5.1",
     "FileSaver": "*",
     "abdmob/x2js": "^1.2.0",

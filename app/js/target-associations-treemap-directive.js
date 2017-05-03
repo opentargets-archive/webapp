@@ -15,6 +15,14 @@ angular.module('cttvDirectives')
             height = 522,   // the height of the actual treemap (i.e. not including the navigation at top)
             width = 845;
 
+        var x = d3.scaleLinear()
+            .domain([0, width])
+            .range([0, width]);
+
+        var y = d3.scaleLinear()
+            .domain([0, height])
+            .range([0, height]);
+
         var fader = function(color) { return d3.interpolateRgb(color, "#fff")(0.2); },
             color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
             format = d3.format(",d");
@@ -153,6 +161,19 @@ angular.module('cttvDirectives')
             : d.name;
         }
 
+        function text(text) {
+            text.attr("x", function(d) { return x(d.x) + 6; })
+            .attr("y", function(d) { return y(d.y) + 6; });
+        }
+
+        function rect(rect) {
+            rect
+                .attr("x", 1)
+                .attr("y", 1)
+                .attr("width", function(d) { return x(d.x1 - d.x0) -2; })
+                .attr("height", function(d) { return y(d.y1 - d.y0) -2; })
+        }
+
         var config = {
             therapeuticAreas: []
         };
@@ -191,7 +212,7 @@ angular.module('cttvDirectives')
         // implement zooming function
         function transition(d){
 
-            /*if (transitioning || !d) return;
+            if (transitioning || !d) return;
             transitioning = true;
 
             var g2 = display(d),
@@ -221,7 +242,7 @@ angular.module('cttvDirectives')
             t1.remove().each("end", function() {
             svg.style("shape-rendering", "crispEdges");
             transitioning = false;
-            });*/
+            });
         }
 
 
@@ -475,12 +496,14 @@ angular.module('cttvDirectives')
                     // ----------
 
 
+                    /*
+                    $log.log("-- nested approach -- ");
 
                     var cell = chart.selectAll("g")
                         .data(root.children)
 
                         .enter().append("g")
-                        .attr("transform", function(d) { return "translate(" + d.x0 + "," + d.y0 + ")"; })
+                        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.y0) + ")"; })
                         .attr("class", "treemap-ta");
 
 
@@ -490,10 +513,10 @@ angular.module('cttvDirectives')
                             .enter()
                             .append("rect")
                             //.attr("transform", function(d) { return "translate(" + (d.x0-1) + "," + (d.y0-1) + ")"; })
-                            .attr("x", function(d) { return d.x0 - d.parent.x0; })
-                            .attr("y", function(d) { return d.y0 - d.parent.y0; })
-                            .attr("width", function(d) { return d.x1 - d.x0; })
-                            .attr("height", function(d) { return d.y1 - d.y0; })
+                            .attr("x", function(d) { return x(d.x0 - d.parent.x0); })
+                            .attr("y", function(d) { return y(d.y0 - d.parent.y0); })
+                            .attr("width", function(d) { return x(d.x1 - d.x0); })
+                            .attr("height", function(d) { return y(d.y1 - d.y0); })
                             .attr("fill", function(d) { return colorScale(d.data.__association_score); })
                             .attr("fill-opacity", 0.8)
                             //.attr("class", "treemap-bob")
@@ -504,10 +527,7 @@ angular.module('cttvDirectives')
 
                     //
                     cell.append("rect")
-                        .attr("width", function(d) { return d.x1 - d.x0 -2; })
-                        .attr("height", function(d) { return d.y1 - d.y0 -2; })
-                        .attr("x", 1)
-                        .attr("y", 1)
+                        .call(rect)
                         //.attr("fill", function(d) { return colorScale(d.data.__association_score); })
                         .attr("fill", function(d) { return color(d.data.__id); })
                         .attr("fill-opacity", 0.7)
@@ -524,8 +544,8 @@ angular.module('cttvDirectives')
                         .append("rect")
                         .attr("x", 4)
                         .attr("y", 4)
-                        .attr("width", function(d) { return d.x1 - d.x0 -8; })
-                        .attr("height", function(d) { return d.y1 - d.y0 -8; });
+                        .attr("width", function(d) { return x(d.x1 - d.x0) -8; })
+                        .attr("height", function(d) { return y(d.y1 - d.y0) -8; });
 
 
                     // Text labels
@@ -540,14 +560,14 @@ angular.module('cttvDirectives')
                         .attr("clip-path", function(d) { return "url(#clip-" + d.data.__id + ")"; })
                         .style("fill", function(d){ return d.data.__association_score>0.5 ? "#FFF" : "#000"} )
                         //.style("fill-opacity", 0.8)
-                        .style("visibility", function(d){ return (d.x1 - d.x0)>10 ? "visible" : "hidden"  })
+                        .style("visibility", function(d){ return x(d.x1 - d.x0)>10 ? "visible" : "hidden"  })
 
                     var taLabelInfo = cell.filter(function(d){return (d.children && d.children.length>0)}).append("text")
                         .attr("font-size", "12px")
                         .attr("clip-path", function(d) { return "url(#clip-" + d.data.__id + ")"; })
                         .style("fill", function(d) { return d.data.__association_score > 0.5 ? "#fff" : "#000"} )
                         //.attr("fill-opacity", 0.9)
-                        .style("visibility", function(d){ return (d.x1 - d.x0)>10 ? "visible" : "hidden"  })
+                        .style("visibility", function(d){ return x(d.x1 - d.x0)>10 ? "visible" : "hidden"  })
                         ;
 
                         taLabelInfo.append("tspan")
@@ -569,7 +589,7 @@ angular.module('cttvDirectives')
                         .append("text")
                         .text(function(d) { return d.data.name })
                         .attr("x", 4)
-                        .attr("y", function(d) { return d.y1 - d.y0 - 6; })
+                        .attr("y", function(d) { return y(d.y1 - d.y0) - 6; })
                         .attr("fill", function(d){ return d.data.__association_score>0.5 ? "#FFF" : "#000"} )
                         .attr("fill-opacity", 0.8)
                         .attr("font-size", "12px")
@@ -580,7 +600,14 @@ angular.module('cttvDirectives')
                     cell.append("title")
                         .text(function(d) { return d.data.id });
 
+                    */
 
+
+
+
+                    // ----------------
+                    // approach 3 : zoomable thingy...
+                    // ----------------
 
 
 
@@ -599,7 +626,7 @@ angular.module('cttvDirectives')
                       }*/
 
 
-                }
+                } // end onData()
 
                 /*
                 var legendDiv = elem.children().eq(0).children().eq(0)[0];

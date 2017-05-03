@@ -7,7 +7,7 @@ var webappFiles = {
             'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
             'bower_components/angulartics/dist/angulartics.min.js',
             'bower_components/angulartics/dist/angulartics-piwik.min.js',
-            //'bower_components/d3/d3.min.js',
+            'bower_components/d3/d3.min.js', // version 4 now
 //            'node_modules/d3-color/build/d3-color.min.js',
 //            'node_modules/d3-interpolate/build/d3-interpolate.min.js',
 //            'node_modules/d3-scale-chromatic/build/d3-scale-chromatic.min.js',
