@@ -591,6 +591,10 @@
                         cons = "Curated evidence";
                         // row.push( "Curated evidence" );
                     }
+
+                    if (cons === 'trinucleotide repeat microsatellite feature') {
+                        cons = 'trinucleotide expansion';
+                    }
                     row.push(cons);
 
 
