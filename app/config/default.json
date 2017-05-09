@@ -262,7 +262,7 @@
             "key": "datatype",
             "element": "datatype-facet",
             "options" : {
-                "heading" : "Datatype",
+                "heading" : "Data type",
                 "open" : true
             }
         },
