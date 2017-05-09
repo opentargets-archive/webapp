@@ -573,6 +573,8 @@
                         var rsId = item.variant.id.split('/').pop();
                         if (rsId.indexOf('rs') === 0) {
                             mut = "<a class='cttv-external-link' href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=" + rsId + " target=_blank>" + rsId + "</a>";
+                        } else if (rsId.indexOf('RCV') === 0) {
+                            mut = "<a class='cttv-external-link' href=https://www.ncbi.nlm.nih.gov/clinvar/" + rsId + "/ target=_blank>" + rsId + "</a>";
                         } else {
                             mut = rsId;
                         }

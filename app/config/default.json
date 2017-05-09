@@ -182,13 +182,13 @@
             "element": "rna-baseline-expression",
             "heading": "RNA baseline expression",
             "dependencies": {
-                "https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js": {
+                "https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js": {
                     "format": "global"
                 },
-                "https://wwwdev.ebi.ac.uk/gxa/resources/css/jquery-ui-1.11.4.custom/css/jquery-ui.min.css!": {
+                "https://www.ebi.ac.uk/gxa/resources/css/jquery-ui-1.11.4.custom/css/jquery-ui.min.css!": {
                     "loader": "css"
                 },
-                "https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
+                "https://www.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
                     "format": "global",
                     "deps": ["https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"]
                 }
