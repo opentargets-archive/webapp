@@ -62,7 +62,7 @@
         <!-- NEW datatable -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/bs/jq-2.1.4,dt-1.10.10,b-1.1.0,b-flash-1.1.0,b-html5-1.1.0/datatables.min.css"/>
 
-        <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet"> -->
+        <!-- <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet"> -->
 
         <!-- App CSS at the end, to override anything required
         <link rel="stylesheet" href="build/OpenTargetsWebapp.min.css?v=08122015" />-->
@@ -167,15 +167,25 @@
                 </div><!-- end masthead -->
                 </div>
 
-                <!-- Authentication error -->
-                <div uib-alert class="alert-danger" ng-show="showApiErrorMsg" ng-cloak close="showApiErrorMsg=false">
-                     Your session has expired, reload the page to authenticate again <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+
+                <!-- ERRORS -->
+                <div class="container main-alert-container">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div> </div>
+                            <!-- Authentication error -->
+                            <div uib-alert class="alert-danger" ng-show="showApiErrorMsg" ng-cloak close="showApiErrorMsg=false">
+                                 Your session has expired, reload the page to authenticate again <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+                            </div>
+
+                            <!-- API ERROR 500 -->
+                            <div uib-alert class="alert-danger" ng-show="showApiError500" close="showApiError500=false" ng-cloak>A problem retrieving data has occurred. Please try to reload the page. If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a>
+                                <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- API ERROR 500 -->
-                <div uib-alert class="alert-danger" ng-show="showApiError500" close="showApiError500=false" ng-cloak>A problem retrieving data has occurred. Please try to reload the page. If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Target Validation Platform - help request">support team</a>
-                    <button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button>
-                </div>
 
                 <!-- FEEDBACK BUTTON -->
                 <!-- Plese re-enable when we want (after integration day?) -->
