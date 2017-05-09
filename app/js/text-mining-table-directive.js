@@ -353,13 +353,13 @@ angular.module('cttvDirectives')
                 return $(table).DataTable({
                     "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
                     // TODO: We are disabling the download for now because there may be too many items
-                    // "buttons": [
-                    //     {
-                    //         text: "<span class='fa fa-download' title='Download as CSV'></span>",
-                    //         action: download
-                    //     }
-                    // ],
-                    "buttons": [],
+                    "buttons": [
+                        {
+                            text: "<span class='fa fa-download' title='Download as CSV (max 200 articles)'></span>",
+                            action: download
+                        }
+                    ],
+                    // "buttons": [],
                     'processing': false,
                     'searching': false,
                     'serverSide': true,
@@ -382,10 +382,12 @@ angular.module('cttvDirectives')
                             1: "disease.efo_info.label",
                             4: "literature.date"
                         };
-                        var order = [];
+
+                        // We save the order condition for the server side rendering to use it for the download
+                        dirScope.order = [];
                         for (var i = 0; i < data.order.length; i++) {
                             var prefix = data.order[i].dir === 'asc' ? '~' : '';
-                            order.push(prefix + mappings[data.order[i].column]);
+                            dirScope.order.push(prefix + mappings[data.order[i].column]);
                         }
 
                         var opts = {
@@ -394,7 +396,7 @@ angular.module('cttvDirectives')
                             datasource: cttvConfig.evidence_sources.literature,
                             size: data.length,
                             from: data.start,
-                            sort: order,
+                            sort: dirScope.order,
                             search: data.search.value,
                             draw: draw
                         };
@@ -448,6 +450,8 @@ angular.module('cttvDirectives')
                 }, (filename + "-text_mining"));
             };
 
+            var dirScope;
+
             return {
                 restrict: 'EA',
                 templateUrl: 'partials/text-mining-table.html',
@@ -457,6 +461,7 @@ angular.module('cttvDirectives')
                     filename: '='
                 },
                 link: function (scope, elem, attrs) {
+                    dirScope = scope;
                     scope.openEuropePmc = function (pmid) {
                         var URL = "http://europepmc.org/abstract/MED/" + pmid;
                         window.open(URL);
@@ -479,71 +484,93 @@ angular.module('cttvDirectives')
 
                     // TODO: If we move all the evidence tables to server side, this should be abstracted out probably in a service
                     scope.downloadTable = function () {
-                        var size = 10000;
-                        // First make a call to know how many rows there are:
-                        var optsPreFlight = {
+                        var size = 200;
+                        var opts = {
                             disease: scope.disease,
                             target: scope.target,
-                            size: 0,
                             datasource: cttvConfig.evidence_sources.literature,
-
+                            format: 'csv',
+                            size: size,
+                            from: 0,
+                            sort: dirScope.order
                         };
+
                         var queryObject = {
                             method: 'GET',
-                            params: optsPreFlight
+                            params: opts
                         };
+
                         cttvAPIservice.getFilterBy(queryObject)
                             .then (function (resp) {
-                                var total = resp.body.total;
-
-                                var promise = $q(function (resolve) {
-                                    resolve("");
-                                });
-                                var totalText = "";
-                                var promises = [];
-                                for (var i=0; i<total; i+=size) {
-                                    promises.push({
-                                        from: i,
-                                        total: size
-                                    });
-                                }
-                                promises.forEach (function (p) {
-                                    promise = promise.then (function () {
-                                        return getNextChunk(p.total, p.from);
-                                    })
-                                });
-                                promise.then (function (res) {
-                                    var b = new Blob ([totalText], {type: "text/csv;charset=utf-8"});
-                                    saveAs(b, scope.filename + ".csv");
-                                });
-
-                                function getNextChunk(size, from) {
-                                    var opts = {
-                                        disease: scope.disease,
-                                        target: scope.target,
-                                        datasource: cttvConfig.evidence_sources.literature,
-                                        format: "csv",
-                                        size: size,
-                                        from: from
-                                    };
-
-                                    var queryObject = {
-                                        method: 'GET',
-                                        params: opts
-                                    };
-
-                                    return cttvAPIservice.getFilterBy(queryObject)
-                                        .then(function (resp) {
-                                            var moreText = resp.body;
-                                            if (from > 0) {
-                                                // Not in the first page, so remove the header row
-                                                moreText = moreText.split("\n").slice(1).join("\n");
-                                            }
-                                            totalText += moreText;
-                                        });
-                                }
-
+                                var totalText = resp.body;
+                                var b = new Blob([totalText], {type: "text/csv;charset=utf-8"});
+                                saveAs(b, scope.filename + '.csv');
                             });
+
+                        // First make a call to know how many rows there are:
+                        // var optsPreFlight = {
+                        //     disease: scope.disease,
+                        //     target: scope.target,
+                        //     size: 0,
+                        //     datasource: cttvConfig.evidence_sources.literature,
+                        //
+                        // };
+                        // var queryObject = {
+                        //     method: 'GET',
+                        //     params: optsPreFlight
+                        // };
+                        // cttvAPIservice.getFilterBy(queryObject)
+                        //     .then (function (resp) {
+                        //         var total = resp.body.total;
+                        //
+                        //         var promise = $q(function (resolve) {
+                        //             resolve("");
+                        //         });
+                        //         var totalText = "";
+                        //         var promises = [];
+                        //         for (var i=0; i<total; i+=size) {
+                        //             promises.push({
+                        //                 from: i,
+                        //                 total: size
+                        //             });
+                        //         }
+                        //         promises.forEach (function (p) {
+                        //             promise = promise.then (function () {
+                        //                 return getNextChunk(p.total, p.from);
+                        //             })
+                        //         });
+                        //         promise.then (function (res) {
+                        //             var b = new Blob ([totalText], {type: "text/csv;charset=utf-8"});
+                        //             saveAs(b, scope.filename + ".csv");
+                        //         });
+                        //
+                        //         function getNextChunk(size, from) {
+                        //             var opts = {
+                        //                 disease: scope.disease,
+                        //                 target: scope.target,
+                        //                 datasource: cttvConfig.evidence_sources.literature,
+                        //                 format: "csv",
+                        //                 size: size,
+                        //                 from: from
+                        //             };
+                        //
+                        //             var queryObject = {
+                        //                 method: 'GET',
+                        //                 params: opts
+                        //             };
+                        //
+                        //             return cttvAPIservice.getFilterBy(queryObject)
+                        //                 .then(function (resp) {
+                        //                     var moreText = resp.body;
+                        //                     if (from > 0) {
+                        //                         // Not in the first page, so remove the header row
+                        //                         moreText = moreText.split("\n").slice(1).join("\n");
+                        //                     }
+                        //                     totalText += moreText;
+                        //                 });
+                        //         }
+                        //
+                        //     });
                     };
 
                 }
