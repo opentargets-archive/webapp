@@ -547,5 +547,12 @@ body{
 
 
 .main-alert-container {
-    margin-top: 20px;
+    .alert{
+        margin-top: 20px;
+    }
+
+    .row>div{
+        /* reset the min height of columns */
+        min-height:0px;
+    }
 }
