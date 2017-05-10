@@ -489,10 +489,11 @@ angular.module('cttvDirectives')
                             disease: scope.disease,
                             target: scope.target,
                             datasource: cttvConfig.evidence_sources.literature,
-                            format: 'csv',
+                            // format: 'csv',
                             size: size,
                             from: 0,
-                            sort: dirScope.order
+                            sort: dirScope.order,
+                            fields: ['disease.efo_info.label', 'literature.references', 'literature.title', 'literature.authors']
                         };
 
                         var queryObject = {
@@ -502,7 +503,30 @@ angular.module('cttvDirectives')
 
                         cttvAPIservice.getFilterBy(queryObject)
                             .then (function (resp) {
-                                var totalText = resp.body;
+                                var totalText = 'disease,publication id,title,authors\n';
+                                var data = resp.body.data;
+                                for (var i=0; i<data.length; i++) {
+                                    var d = data[i];
+                                    var row = [];
+                                    // Disease
+                                    row.push(d.disease.efo_info.label);
+                                    // Publication id
+                                    row.push(d.literature.references[0].lit_id.split('/').pop());
+                                    // title
+                                    row.push('\"' + d.literature.title + '\"');
+                                    // Authors
+                                    var authorsStr = '';
+                                    if (d.literature.authors) {
+                                        var authors = d.literature.authors.map(function (k) {
+                                            return k.short_name;
+                                        });
+                                        authorsStr = '\"' + authors.join(', ') + '\"';
+                                    }
+                                    row.push(authorsStr);
+
+                                    totalText += row.join(',');
+                                    totalText += '\n';
+                                }
                                 var b = new Blob([totalText], {type: "text/csv;charset=utf-8"});
                                 saveAs(b, scope.filename + '.csv');
                             });
