@@ -199,7 +199,7 @@
                 var key = cttvConsts.datatypesOrder[i];
                 fd.push({
                     // "value": lookDatasource(data, cttvConsts.datatypes[key]).score,
-                    "value": data[dkey],
+                    "value": data ? data[dkey] : 0,
                     "label": cttvConsts.datatypesLabels[key],
                     "active": true,
                 });
@@ -225,8 +225,26 @@
 
             return cttvAPIservice.getAssociations (queryObject)
                 .then (function(resp) {
-                    $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
-                    updateTitle( resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label );
+                    if (!resp.body.data.length) {
+                        $scope.search.flower_data = processFlowerData();
+
+                        // return cttvAPIservice.getTarget({
+                        //     method: 'GET',
+                        //     params: {
+                        //         target_id: $scope.targetId,
+                        //         fields: ['approved_symbol']
+                        //     }
+                        // })
+                        //     .then (function (r) {
+                        //         $log.log(r);
+                        //         $scope.search.flower_data = processFlowerData();
+                        //         updateTitle(r.approved_symbol);
+                        //     })
+                    } else {
+                        $log.log(resp.body.data[0].association_score.datatypes);
+                        $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
+                        updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
+                    }
                 }, cttvAPIservice.defaultErrorHandler);
         };
 
