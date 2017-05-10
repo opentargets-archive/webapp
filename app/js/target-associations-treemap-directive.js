@@ -11,9 +11,10 @@ angular.module('cttvDirectives')
 
         var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
-        var margin = {top: 20, right: 0, bottom: 0, left: 0},
+        var margin = {top: 30, right: 0, bottom: 0, left: 0},
             height = 522,   // the height of the actual treemap (i.e. not including the navigation at top)
-            width = 845;
+            width = 845,
+            transitioning;
 
         var x = d3.scaleLinear()
             .domain([0, width])
@@ -155,7 +156,7 @@ angular.module('cttvDirectives')
         */
 
 
-        function name(d) {
+        /*function name(d) {
             return d.parent
             ? name(d.parent) + "." + d.name
             : d.name;
@@ -172,7 +173,10 @@ angular.module('cttvDirectives')
                 .attr("y", 1)
                 .attr("width", function(d) { return x(d.x1 - d.x0) -2; })
                 .attr("height", function(d) { return y(d.y1 - d.y0) -2; })
-        }
+        }*/
+
+
+
 
         var config = {
             therapeuticAreas: []
@@ -208,44 +212,6 @@ angular.module('cttvDirectives')
 
 
 
-        // TODO:
-        // implement zooming function
-        function transition(d){
-
-            if (transitioning || !d) return;
-            transitioning = true;
-
-            var g2 = display(d),
-            t1 = g1.transition().duration(750),
-            t2 = g2.transition().duration(750);
-
-            // Update the domain only after entering new elements.
-            x.domain([d.x, d.x + d.dx]);
-            y.domain([d.y, d.y + d.dy]);
-
-            // Enable anti-aliasing during the transition.
-            svg.style("shape-rendering", null);
-
-            // Draw child nodes on top of parent nodes.
-            svg.selectAll(".depth").sort(function(a, b) { return a.depth - b.depth; });
-
-            // Fade-in entering text.
-            g2.selectAll("text").style("fill-opacity", 0);
-
-            // Transition to the new view.
-            t1.selectAll("text").call(text).style("fill-opacity", 0);
-            t2.selectAll("text").call(text).style("fill-opacity", 1);
-            t1.selectAll("rect").call(rect);
-            t2.selectAll("rect").call(rect);
-
-            // Remove the old node when the transition is finished.
-            t1.remove().each("end", function() {
-            svg.style("shape-rendering", "crispEdges");
-            transitioning = false;
-            });
-        }
-
-
 
 
 
@@ -259,6 +225,7 @@ angular.module('cttvDirectives')
             },
 
             template: '<div style="float:left">'
+
             +'<svg></svg>'
             +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend></div>',
             //+'<png filename="{{target}}-AssociationsBubblesView.png" track="associationsBubbles"></png>',
@@ -330,21 +297,19 @@ angular.module('cttvDirectives')
 
                 var nav = svg.append("g")
                     .attr("class", "tm-nav");
-                    //.attr("width", width)
-                    //.attr("height", margin.top);
 
                     nav.append("rect")
-                        .attr("x", 2)
+                        .attr("x", 1)
                         .attr("y", -margin.top)
-                        .attr("width", width-4)
+                        .attr("width", width-2)
                         .attr("height", margin.top)
-                        .style("fill", "#336699");
+                        //.style("fill", "#336699");
 
                     nav.append("text")
                         .attr("x", 6)
                         .attr("y", 6 - margin.top)
                         .attr("dy", ".75em")
-                        .text("")
+                        .text("");
 
                 var chart = svg.append("g")
                     .attr("class", "tm-chart")
@@ -355,9 +320,9 @@ angular.module('cttvDirectives')
                 var treemap = d3.treemap()
                     .tile(d3.treemapResquarify)
                     .size([width, height])
-                    .round(true)
-                    .paddingInner(1)
-                    .paddingOuter(1);
+                    .round(true);
+                    //.paddingInner(1) // padding brakes zoomable version
+                    //.paddingOuter(1);
 
 
 
@@ -366,7 +331,11 @@ angular.module('cttvDirectives')
                  */
                 var onData = function(data){
 
-                    var root = d3.hierarchy(data)
+
+                    // ------
+                    //  setup for (1) and (2) below
+                    // ------
+                    /*var root = d3.hierarchy(data)
                         .eachBefore(function(d) { d.data.id = ((d.parent && d.parent.data.id!="cttv_disease") ? d.parent.data.id + " > " : "") + d.data.name; })
                         .sum(function(d) { return d.children ? 0 : d.__association_score; })
                         .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
@@ -382,13 +351,13 @@ angular.module('cttvDirectives')
                     // but for now this will do...
 
                     nav.selectAll("text").text("");
-                    chart.selectAll("*").remove();
+                    chart.selectAll("*").remove();*/
 
 
 
-                    // -------
-                    // Approach 1 : this works btw, so keep this code
-                    // -------
+                // -------
+                // Approach 1 : this works btw, so keep this code
+                // -------
 
 
 
@@ -491,9 +460,10 @@ angular.module('cttvDirectives')
 
 
 
-                    // ----------
-                    // Approach 2: nested structure, trying to zoom
-                    // ----------
+                // ----------
+                // Approach 2: nested structure, trying to zoom
+                // ----------
+
 
 
                     /*
@@ -605,10 +575,205 @@ angular.module('cttvDirectives')
 
 
 
-                    // ----------------
-                    // approach 3 : zoomable thingy...
-                    // ----------------
+                // ----------------
+                // approach 3 : zoomable thingy, still inside data handler...
+                // ----------------
 
+
+
+                    // var r = d3.hierarchy(data.children);
+                    var r = d3.hierarchy(data)
+                          .eachBefore(function(d) { d.data.id = (d.parent ? d.parent.data.id + "." : "") + d.data.name; })
+                          .sum(function(d){ return d.children ? 0 : d.__association_score; })
+                          .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
+                    treemap(r);
+                    display(r);
+
+
+                    function display(d) {
+
+                        //$log.log("\n----------\ndisplay\n----------\n");
+
+                        // navigation
+
+                        nav
+                            .datum(d.parent)
+                            .on("click", transition)
+                            .classed("tm-nav-hidden", name(d).length==0 )
+                            .select("text")
+                            .text(name(d));
+
+
+                        // actual treemap
+
+                        var g1 = chart.append("g")
+                            .datum(d.children)
+
+                        var cell = g1.selectAll("g")
+                            .data(d.children)
+                            .enter().append("g");
+
+                        // add click to cells with children
+                        cell.filter(function(d) { return d.children; })
+                            .classed("children", true)
+                            .on("click", transition);
+
+                        // define a clippath to cut text
+                        cell.append("clipPath")
+                            .attr("id", function(d) { return "clip-" + d.data.__id; })
+                            //.append("use")
+                            //.attr("xlink:href", function(d) { return "#clip-" + d.data.__id; })
+                            .append("rect")
+                            .attr("class", "clippath")
+                            .call(path)
+                            ;
+
+                        // draw the children, if any
+                        cell.selectAll(".child")
+                            .data( function(d) { return d.children || [d]; } )
+                            .enter()
+                            .append("rect")
+                                .attr("class", "cell child")
+                                .call(rect)
+                                .append("title")
+                                    .text(function(d) { return name(d); });
+
+                        // add a parent rectangle
+                        cell.append("rect")
+                            .attr("class", "cell parent")
+                            .call(rect)
+                            // add color??
+                            //.attr("fill", function(d) { return color(d.data.__id); })
+                            .append("title")
+                                .text(function(d) { return name(d); });
+
+                        // Text
+                        // we want to differentiate between therapeutic areas (i.e. those with children)
+                        // and diseases (i.e. leaves)... just to complicate things a little
+                        var cellLabel = cell.append("text")
+                                .text(function(d) { return d.data.name; })
+                                .attr("class", function(d){ return d.children ? "ta-label" : "disease-label"  })
+                                .attr("clip-path", function(d) { return "url(#clip-" + d.data.__id + ")"; });
+
+                            cellLabel.append("tspan")
+                                .attr("class", "ta-label-details")
+                                .text( function(d){return "Association score: "+d.data.__association_score.toFixed(2)} )
+                            ;
+
+                            cellLabel.filter(function(d) { return d.children; })
+                                .append("tspan")
+                                .attr("class", "ta-label-details")
+                                .text( function(d){return "Diseases: " + d.children.length } )
+                            ;
+
+
+                            cellLabel.call(text)
+                            cellLabel.append("title")
+                                .text(function(d) { return name(d); });
+
+
+                        function transition(d) {
+
+
+                            //$log.log("\n----------\ntransition\n----------\n");
+
+                            if (transitioning || !d) return;
+                            transitioning = true;
+
+                            var g2 = display(d);
+                            var t1 = g1.transition().duration(750);     // the old stuff to move out
+                            var t2 = g2.transition().duration(750);     // the new stuff coming in
+
+                            //$log.log("\n     -----\ncontinue...\n     -----\n");
+
+                            // Update the domain only after entering new elements.
+                            x.domain([d.x0, d.x1]);
+                            y.domain([d.y0, d.y1]);
+
+                            // Enable anti-aliasing during the transition
+                            svg.style("shape-rendering", null);
+
+                            // Draw child nodes on top of parent nodes
+                            svg.selectAll(".tm-chart").nodes().sort(
+                                function(a, b) {
+                                    return a.depth - b.depth;
+                                });
+
+                            // Fade-in entering text.
+                            g2.selectAll("text").style("fill-opacity", 0);
+
+                            // Transition to the new view:
+                            // text
+                            t1.selectAll("text").call(text).style("fill-opacity", 0);
+                            t2.selectAll("text").call(text).style("fill-opacity", 1);
+                            // rectangles
+                            t1.selectAll(".cell").call(rect);
+                            t2.selectAll(".cell").call(rect);
+                            // clippaths (yup, these also have to be scaled, although probably no need for animation)
+                            t1.selectAll(".clippath").call(path);
+                            t2.selectAll(".clippath").call(path);
+
+
+                            // Remove the old node when the transition is finished.
+                            t1.remove().on("end", function(){
+                                console.log("t1 done");
+                                svg.style("shape-rendering", "crispEdges");
+                                transitioning = false;
+                            });
+                        }
+
+
+
+                        return cell;
+
+
+                    } // end display
+
+
+
+                    function text(text) {
+                        // set position and visibility based on cell size (so after each transition)
+                        text
+                            .attr("dy", ".75em")
+                            .attr("x", function(d) { return x(d.x0) + 6; })
+                            .attr("y", function(d) { return y(d.y0) + 6; })
+                            .style("visibility", function(d){
+                                var cw = x(d.x1) - x(d.x0);
+                                var ch = y(d.y1) - y(d.y0);
+                                return (ch>=24 && cw>=30) ? "visible" : "hidden";
+                            })
+
+                            .selectAll(".ta-label-details")
+                                .attr("x", function(d,i) { return x(d.x0) + 6; })
+                                .attr("y", function(d,i) { return y(d.y0) + (i*12 + 32); })
+                            ;
+                    }
+
+
+                    function rect(rect) {
+                        rect.attr("x", function(d) { return x(d.x0); })
+                            .attr("y", function(d) { return y(d.y0); })
+                            .attr("width", function(d) { return x(d.x1) - x(d.x0); })
+                            .attr("height", function(d) { return y(d.y1) - y(d.y0); });
+                    }
+
+
+                    function name(d) {
+                        return d
+                                .ancestors()
+                                .reverse()
+                                .map(function(i){return i.data.name})
+                                .slice(1)
+                                .join(" > ");
+                    }
+
+
+                    function path(path){
+                        path.attr("x", function(d) { return x(d.x0)+4; })
+                            .attr("y", function(d) { return y(d.y0)+4; })
+                            .attr("width", function(d) { return Math.max( 0, (x(d.x1) - x(d.x0) - 8) ) ; })
+                            .attr("height", function(d) { return Math.max( 0, (y(d.y1) - y(d.y0) - 8) ) ; });
+                    }
 
 
 
@@ -627,6 +792,8 @@ angular.module('cttvDirectives')
 
 
                 } // end onData()
+
+
 
                 /*
                 var legendDiv = elem.children().eq(0).children().eq(0)[0];

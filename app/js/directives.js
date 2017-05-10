@@ -114,19 +114,20 @@ angular.module('cttvDirectives', [])
     * size: size of the spinner icon; 18 is default
     * stroke: thickness of the "ring" default is 2
     */
-    .directive('cttvProgressSpinner', [function(){
+    .directive('cttvProgressSpinner', ['$log',function ($log){
         'use strict';
 
         return {
             restrict: 'EA',
             template: '<span></span>',
             link: function(scope, elem, attrs){
-                var size = attrs.size || 18;
+                $log.warn("Check cttvProgressSpinner code!");
+                /*var size = attrs.size || 18;
                 var stroke = attrs.stroke || 2;
                 var sp = spinner()
                     .size(size)
                     .stroke(stroke);
-                sp(elem[0]);
+                sp(elem[0]);*/
             }
         };
     }])

@@ -1,6 +1,7 @@
 <!-- search app / results -->
 
 <div class="partial-page">
+
     <cttv-page-progress-spinner></cttv-page-progress-spinner>
 
     <div ng-show="search.total==0">
@@ -68,7 +69,7 @@
                         <!-- <div ng-show="view.t[0]=='treemap'"> -->
                         <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='treemap'}">
                             <resize>
-                                <cttv-target-associations-treemap target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-treemap>
+                                <cttv-target-associations-treemap target="{{search.query}}" facets="filters" active="{{view.t[0]}}" style="margin-top:20px; display:block"></cttv-target-associations-treemap>
                             </resize>
                         </div>
                     </div>
