@@ -227,23 +227,9 @@
                 .then (function(resp) {
                     if (!resp.body.data.length) {
                         $scope.search.flower_data = processFlowerData();
-
-                        // return cttvAPIservice.getTarget({
-                        //     method: 'GET',
-                        //     params: {
-                        //         target_id: $scope.targetId,
-                        //         fields: ['approved_symbol']
-                        //     }
-                        // })
-                        //     .then (function (r) {
-                        //         $log.log(r);
-                        //         $scope.search.flower_data = processFlowerData();
-                        //         updateTitle(r.approved_symbol);
-                        //     })
                     } else {
-                        $log.log(resp.body.data[0].association_score.datatypes);
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
-                        updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
+                        // updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
                     }
                 }, cttvAPIservice.defaultErrorHandler);
         };
@@ -1160,7 +1146,7 @@
                         refs = item.evidence.provenance_type.literature.references;
                     }
                     var pmidsList = cttvUtils.getPmidsList( refs );
-                    row.push( cttvUtils.getPublicationsString( pmidsList ) );
+                    row.push( pmidsList.length ? cttvUtils.getPublicationsString( pmidsList ) : 'N/A' );
 
                     // col 7: pub ids (hidden)
                     row.push(pmidsList.join(", "));
