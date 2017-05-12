@@ -1,0 +1,75 @@
+.tm-chart{
+
+    .children {
+
+    }
+
+    .child{
+        fill: #DDD;
+    }
+
+
+    rect {
+        fill: none;
+        stroke: #fff;
+    }
+
+    rect.parent {
+        stroke-width: 2px;
+    }
+
+
+    .children rect.parent{
+        cursor: pointer;
+    }
+
+    .children rect.parent {
+        fill: #bbb;
+        fill-opacity: .5;
+    }
+
+    .children:hover rect.child {
+        fill: #bbb;
+    }
+
+    .ta-label, .disease-label{
+        fill: #333;
+        font-weight: bold;
+
+        .ta-label-details {
+            font-size: 12px;
+            fill: #555;
+            font-weight:normal;
+        }
+    }
+
+    .ta-label {
+        font-size: 14px;
+    }
+
+    .disease-label{
+        font-size: 12px;
+
+
+    }
+}
+
+.tm-nav{
+    rect {
+        fill: orange;
+        stroke-width: 2px;
+        cursor: pointer;
+    }
+
+    &:hover rect {
+        fill: #ee9700;
+    }
+
+    &.tm-nav-hidden {
+        display: none;
+    }
+
+    text {
+        font-size: 12px;
+    }
+}

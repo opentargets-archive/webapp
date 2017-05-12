@@ -45,6 +45,8 @@
                         <li role="presentation" ng-class="(view.t[0]=='table') ? 'active' : ''"><a href="#" ng-click='setActiveTab("table")'>Table</a></li>
                         <li role="presentation" ng-class="(view.t[0]=='tree') ? 'active' : ''"><a href="#" ng-click='setActiveTab("tree")'>Tree</a></li>
                         <li role="presentation" ng-class="(view.t[0]=='treemap') ? 'active' : ''"><a href="#" ng-click='setActiveTab("treemap")'>TreeMap</a></li>
+                        <!-- <li role="presentation" ng-class="(view.t[0]=='treemap2') ? 'active' : ''"><a href="#" ng-click='setActiveTab("treemap2")'>TreeMap 2</a></li>
+                        <li role="presentation" ng-class="(view.t[0]=='treemap3') ? 'active' : ''"><a href="#" ng-click='setActiveTab("treemap3")'>TreeMap 3</a></li> -->
                     </ul>
 
                     <!-- Tab panes -->
@@ -66,12 +68,26 @@
                             <cttv-target-associations-tree target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></cttv-target-associations-tree>
                         </div>
 
-                        <!-- <div ng-show="view.t[0]=='treemap'"> -->
+
                         <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='treemap'}">
+                            <cttv-target-associations-treemap target="{{search.query}}" facets="filters" active="{{view.t[0]}}" style="margin-top:20px; display:block">
+                            </cttv-target-associations-treemap>
+                        </div>
+
+                        <!--
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='treemap2'}">
                             <resize>
-                                <cttv-target-associations-treemap target="{{search.query}}" facets="filters" active="{{view.t[0]}}" style="margin-top:20px; display:block"></cttv-target-associations-treemap>
+                                <cttv-target-associations-treemap-two target="{{search.query}}" facets="filters" active="{{view.t[0]}}" style="margin-top:20px; display:block"></cttv-target-associations-treemap-two>
                             </resize>
                         </div>
+
+
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='treemap3'}">
+                            <resize>
+                                <cttv-target-associations-treemap-three target="{{search.query}}" facets="filters" active="{{view.t[0]}}" style="margin-top:20px; display:block"></cttv-target-associations-treemap-three>
+                            </resize>
+                        </div>-->
+
                     </div>
 
 
