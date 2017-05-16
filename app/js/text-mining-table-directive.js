@@ -88,13 +88,10 @@ angular.module('cttvDirectives')
                     }, []);
 
                     var text = sentence.text;
-                    // console.log("ORIG: " + text);
                     sentence.breakpoints.map(function (bp) {
-                        // console.log(bp);
                         if (bp.extra) {
                             text = text.slice(0, bp.pos + bp.acc) + bp.extra + text.slice(bp.pos + bp.acc);
                         }
-                        // console.log("=> " + text);
                     });
 
                     if (sentence.section === "abstract" || sentence.section === "title") {

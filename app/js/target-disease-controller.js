@@ -170,7 +170,7 @@
                      $scope.search.info.efo = resp.body;
                      // TODO: This is not returned by the api yet. Maybe we need to remove it later
                      $scope.search.info.efo.efo_code = $scope.search.disease;
-                     //updateTitle();
+                     // updateTitle();
                  },
                  cttvAPIservice.defaultErrorHandler
              );
@@ -229,7 +229,7 @@
                         $scope.search.flower_data = processFlowerData();
                     } else {
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
-                        // updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
+                        updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
                     }
                 }, cttvAPIservice.defaultErrorHandler);
         };
