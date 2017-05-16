@@ -373,15 +373,24 @@
             },
 
             {
-                "type":"pathway"
+                "type":"pathway",
+                "options" : {
+                    "open" : false
+                }
             },
 
             {
-                "type":"targetClass"
+                "type":"targetClass",
+                "options" : {
+                    "open" : false
+                }
             },
 
             {
-                "type":"uniprotKeyword"
+                "type":"uniprotKeyword",
+                "options" : {
+                    "open" : false
+                }
             }
 
         ]
