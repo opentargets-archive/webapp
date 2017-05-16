@@ -185,17 +185,16 @@
                 "https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js": {
                     "format": "global"
                 },
-                "https://wwwdev.ebi.ac.uk/gxa/resources/css/jquery-ui-1.11.4.custom/css/jquery-ui.min.css!": {
+                "https://wwwdev.ebi.ac.uk/gxa/resources/css/alt-customized-bootstrap-3.3.5.css!": {
                     "loader": "css"
                 },
                 "https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
                     "format": "global",
                     "deps": ["https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"]
                 }
-            },
+             },
             "track": true
         },
-
         {
             "name": "geneOntology",
             "element": "gene-ontology",
@@ -263,7 +262,7 @@
             "keyapp": "datatype",
             "element": "datatype-facet",
             "options" : {
-                "heading" : "Datatype",
+                "heading" : "Data type",
                 "open" : true
             }
         },

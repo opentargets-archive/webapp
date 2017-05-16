@@ -48,7 +48,7 @@
     "cttv.spinner": "0.0.0",
     "cttv.targetAssociationsBubbles": "0.0.16",
     "cttv.targetAssociationsTree": "0.0.10",
-    "cttv.targetGeneTree": "0.0.13",
+    "cttv.targetGeneTree": "0.0.14",
     "js-yaml": "3.5.5",
     "marked": "0.3.5",
     "ot.interactions_viewer": "0.0.9",

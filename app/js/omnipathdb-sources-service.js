@@ -12,7 +12,7 @@ angular.module('cttvServices')
         // laudana_*: Combined, mixed sources
         // Wang: Combines several sources (mostly Pathways information)
 
-        var omnipathdb = {
+        return {
             // Pathways
             'SignaLink3': 'Pathways',
             'Signor': 'Pathways',
@@ -33,11 +33,9 @@ angular.module('cttvServices')
             'DIP': 'PPI',
             'STRING': 'PPI'
         };
-
-        return omnipathdb;
     }])
     .factory('omnipathdbCategories', [function () {
-        var omnipathdb = {} = {
+        return {
             'Pathways': {
                 'SignaLink3': true,
                 'Signor': true,
@@ -59,6 +57,4 @@ angular.module('cttvServices')
                 'STRING': true
             }
         };
-
-        return omnipathdb;
     }]);

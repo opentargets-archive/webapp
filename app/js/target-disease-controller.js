@@ -170,7 +170,7 @@
                      $scope.search.info.efo = resp.body;
                      // TODO: This is not returned by the api yet. Maybe we need to remove it later
                      $scope.search.info.efo.efo_code = $scope.search.disease;
-                     //updateTitle();
+                     // updateTitle();
                  },
                  cttvAPIservice.defaultErrorHandler
              );
@@ -199,7 +199,7 @@
                 var key = cttvConsts.datatypesOrder[i];
                 fd.push({
                     // "value": lookDatasource(data, cttvConsts.datatypes[key]).score,
-                    "value": data[dkey],
+                    "value": data ? data[dkey] : 0,
                     "label": cttvConsts.datatypesLabels[key],
                     "active": true,
                 });
@@ -225,8 +225,12 @@
 
             return cttvAPIservice.getAssociations (queryObject)
                 .then (function(resp) {
-                    $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
-                    updateTitle( resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label );
+                    if (!resp.body.data.length) {
+                        $scope.search.flower_data = processFlowerData();
+                    } else {
+                        $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
+                        updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
+                    }
                 }, cttvAPIservice.defaultErrorHandler);
         };
 
@@ -573,6 +577,8 @@
                         var rsId = item.variant.id.split('/').pop();
                         if (rsId.indexOf('rs') === 0) {
                             mut = "<a class='cttv-external-link' href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=" + rsId + " target=_blank>" + rsId + "</a>";
+                        } else if (rsId.indexOf('RCV') === 0) {
+                            mut = "<a class='cttv-external-link' href=https://www.ncbi.nlm.nih.gov/clinvar/" + rsId + "/ target=_blank>" + rsId + "</a>";
                         } else {
                             mut = rsId;
                         }
@@ -590,6 +596,10 @@
                     } else {
                         cons = "Curated evidence";
                         // row.push( "Curated evidence" );
+                    }
+
+                    if (cons === 'trinucleotide repeat microsatellite feature') {
+                        cons = 'trinucleotide expansion';
                     }
                     row.push(cons);
 
@@ -1136,7 +1146,7 @@
                         refs = item.evidence.provenance_type.literature.references;
                     }
                     var pmidsList = cttvUtils.getPmidsList( refs );
-                    row.push( cttvUtils.getPublicationsString( pmidsList ) );
+                    row.push( pmidsList.length ? cttvUtils.getPublicationsString( pmidsList ) : 'N/A' );
 
                     // col 7: pub ids (hidden)
                     row.push(pmidsList.join(", "));
