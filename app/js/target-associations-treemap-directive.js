@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
         'use strict';
 
         var whoiam = "treemap";
-        var bottomMargin = 220;
+        //var bottomMargin = 220;
         var bView;
         //var offset = 300;
         var ratio = 2;
@@ -165,6 +165,7 @@ angular.module('cttvDirectives')
                     .tile(d3.treemapSquarify.ratio(1))
                     .size([width/ratio, height])
                     //.round(true)
+                    //.paddingOuter(1);
                     ;
 
 
@@ -192,6 +193,8 @@ angular.module('cttvDirectives')
 
                     function updateNodeValue(n){
 
+                        // cts = children total score;
+                        // this is the sum of score of the direct children of the node (i.e. only one level down)
                         if(n.children){
                             n.cts = n.children.reduce(function(a,v){return a+v.data.__association_score;}, 0);
                         }else{

@@ -49,10 +49,11 @@ angular.module('plugins', [])
                         // spinner
                         // TODO: substitute by spinner directive
                         var spinnerDiv = document.createElement("div");
-                        var sp = spinner()
+                        // TODO: put this back when D3 upgrade is done
+                        /*var sp = spinner()
                             .size(30)
                             .stroke(3);
-                        sp(spinnerDiv);
+                        sp(spinnerDiv);*/
                         element[0].appendChild(spinnerDiv);
 
                         // Lazy load the dependencies

@@ -239,6 +239,12 @@
             "element": "bibliography-target",
             "heading": "Bibliography",
             "track": true
+        },
+        {
+            "name": "bibliographyTreemap",
+            "element": "bibliography-target-treemap",
+            "heading": "Bibliography Treemap",
+            "track": true
         }
     ],
 
