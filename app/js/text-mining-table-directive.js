@@ -182,7 +182,7 @@ angular.module('cttvDirectives')
                 var cat_list = ["title", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
 
                 function formatAuthor(author) {
-                    return author.LastName + " " + author.Initials;
+                    return author.short_name;
                 }
 
                 for (var i = 0; i < data.length; i++) {
