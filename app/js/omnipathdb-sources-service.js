@@ -37,7 +37,7 @@ angular.module('cttvServices')
         return omnipathdb;
     }])
     .factory('omnipathdbCategories', [function () {
-        var omnipathdb = {} = {
+        return {
             'Pathways': {
                 'SignaLink3': true,
                 'Signor': true,
@@ -59,6 +59,4 @@ angular.module('cttvServices')
                 'STRING': true
             }
         };
-
-        return omnipathdb;
     }]);
