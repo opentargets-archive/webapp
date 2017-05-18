@@ -21,6 +21,8 @@
                     <a href="/disease/EFO_0003767/associations">Inflammatory bowel disease</a>
                 </p>
 
+                <p class="intro-search-batch-search">More than one target? Try our  <span class="batch-search-label"><a href="/batch-search">new batch search</a></span></p>
+
 
             </div>
         </div>
@@ -37,7 +39,28 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 intro-section-panel intro-first">
-                <h2 class="intro-section-heading">Comprehensive data</h2>
+                <!--<h2 class="intro-section-heading">Comprehensive data</h2>-->
+                <div class="row">
+                    <div class="col-xs-12 intro-section-panel">
+
+                        <h3 class="intro-section-panel-heading intro-data-section-header intro-last">
+                            <div>
+                                <span class="panel-icon-lg hidden-lg fa fa-clock-o fa-2x">
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <span class="panel-icon-sm hidden-xs hidden-sm hidden-md panel-inline fa fa-clock-o fa-2x"></span>
+                                    <span class="panel-inline">Data last updated</span>
+                                    <span cttv-progress-spinner size="24" ng-show="!stats.date"></span>
+                                    <span class="panel-inline" ng-show="stats.date">{{stats.date | date:'MMMM yyyy'}}</span>
+                                </span>
+                            </div>
+                        </h3>
+
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -61,14 +84,14 @@
 
         </div>
 
-        <div class="row">
-            <div class="col-xs-12 intro-section-panel">
+        <!--<div class="row">-->
+            <!--<div class="col-xs-12 intro-section-panel">-->
 
-                    <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-clock-o fa-5x"></span></div>
-                    <h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-clock-o"></span> Last updated <span cttv-progress-spinner size="24" ng-show="!stats.date"></span><span ng-show="stats.date">{{stats.date | date:'MMMM yyyy'}}</span></h3>
+                    <!--<div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-clock-o fa-5x"></span></div>-->
+                    <!--<h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-clock-o"></span> Last updated <span cttv-progress-spinner size="24" ng-show="!stats.date"></span><span ng-show="stats.date">{{stats.date | date:'MMMM yyyy'}}</span></h3>-->
 
-            </div>
-        </div>
+            <!--</div>-->
+        <!--</div>-->
 
     </div>
 </div>
@@ -224,6 +247,25 @@
         </div>
     </div>
 </div> -->
+
+
+
+
+
+<!-- PUBLICATIONS -->
+<div class="intro-section intro-section-statement intro-section-theme-blue">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="intro-section-heading">Publications</h2>
+                <h3 style="color:#fff">See our latest publication on Nucleic Acid Research:</h3>
+                <h4><a href="https://doi.org/10.1093/nar/gkw1055">&quot;Open Targets: a platform for therapeutic target identification and validation&quot;</a></h4>
+                <!--<h3 class="intro-statement-heading" style="color:#fff">NAR article <a href="https://doi.org/10.1093/nar/gkw1055">&quot;Open Targets: a platform for therapeutic target identification and validation&quot;</a>, <i>Nucleic Acids Research</i>, 45 (D1): D985-D994.</h3>-->
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 

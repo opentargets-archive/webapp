@@ -18,10 +18,16 @@
                         <li><a href="#target">What is a target?</a></li>
                         <li><a href="#diseases">How are diseases described?</a></li>
                         <li><a href="#efo">What is the Experimental Factor Ontology?</a></li>
+                        <li><a href="#why-efo">Why does Open Targets use EFO?</a></li>
+                        <li><a href="#direct">What is the difference between direct and non-direct associations for targets and diseases?</a></li>
                         <li><a href="#data">Where does the data come from?</a></li>
+                        <li><a href="#assembly">What genome assembly is Open Targets using?</a></li>
+                        <li><a href="#variants">How does Open Targets assign variants (e.g. SNPs) to genes?</a></li>
+                        <li><a href="#missing-data">The Platform does not report a known association between gene A and disease B. Why isn't this information in Open Targets?</a></li>
+                        <li><a href="#clinical-trials">What are clinical trials?</a></li>
                         <li><a href="#score">How is the association score calculated?</a></li>
-                        <li><a href="#biblio">I’m looking at a target profile and found some articles linked to my target. Where does the bibliography come from?</a></li>
-                        <li><a href="#data_use">Do you use the information I’ve searched for in platform?</a></li>
+                        <li><a href="#biblio">I am looking at a target profile and found some articles linked to my target. Where does the bibliography come from?</a></li>
+                        <li><a href="#data_use">Do you use the information I have searched for in platform?</a></li>
                         <li><a href="#citation">How do I cite the Open Targets Platform?</a></li>
                         <li><a href="#download">Can I download data from the Open Targets Platform?</a></li>
                         <li><a href="#contact">How can I contact the team?</a></li>
@@ -33,7 +39,7 @@
 
                 <div class="cttv-docs-section">
                     <h4><a name="search"></a>What can I search for?</h4>
-                    <p>You can search for a disease name (e.g. Alzheimers), a gene name (e.g. apolipoprotein E), official gene symbol (e.g. APOE) and Ensembl gene IDs (e.g. ENSG00000130203) or a protein symbol (e.g. P02649). You may also be able to search for synonyms and abbreviations for both genes (e.g. APO-E) and diseases (e.g. AD).</p>
+                    <p>You can search for disease names (e.g. Alzheimers), gene names (e.g. apolipoprotein E), official gene symbols (e.g. APOE), Ensembl gene IDs (e.g. ENSG00000130203) or protein symbols (e.g. P02649). You may also be able to search for synonyms and abbreviations for both genes (e.g. apolipoprotein, p94) and diseases (e.g. IBD). You can also search for drugs (e.g. ADALIMUMAB) and phenotypes (hyperlordosis), which will get matched to their associated diseases and targets.</p>
                 </div>
 
                 <div class="cttv-docs-section">
@@ -43,7 +49,7 @@
 
                 <div class="cttv-docs-section">
                     <h4><a name="disease"></a>How are diseases described?</h4>
-                    <p>We map diseases to ontology terms in the Experimental Factor Ontology. This enables us to integrate evidence from different sources and to describe relationships between diseases.</p>
+                    <p>We map diseases to ontology terms in the Experimental Factor Ontology (EFO). This enables us to integrate evidence from different sources and to describe relationships between diseases.</p>
                 </div>
 
                 <div class="cttv-docs-section">
@@ -52,9 +58,54 @@
                 </div>
 
                 <div class="cttv-docs-section">
+                    <h4><a name="why-efo"></a>Why does Open Targets use EFO?</h4>
+                    <p>These are the reasons for choosing the Experimental Factor Ontology:</p>
+                    <ul>
+                        <li>It is an application ontology, therefore it can incorporate parts (or the whole) of other ontologies, such as the rare disease ontology ORDO.</li>
+                        <li>It is able to bring in additional (not disease only) ontologies.</li>
+                        <li>It can easily accommodate our requests for new ontology terms in addition to updates and changes, as Open Targets and the EFO team collaborate closely.</li>
+                        <li>It is the ontology of controlled vocabulary used by the GWAS catalog and the Expression Atlas. Therefore, no extra step was needed when incorporating those two data sources in our pipeline.</li>
+                    </ul>
+                </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="direct"></a>What is the difference between direct and non-direct associations for targets and diseases?</h4>
+                    <p>We take into account the ontology of diseases from the Experimental Factor Ontology (EFO) to propagate evidence up to their parent terms. This allows us to compute new target-disease associations when there is no direct (known and observed) evidence for them.</p>
+                </div>
+
+
+                <div class="cttv-docs-section">
                     <h4><a name="data"></a>Where does the data come from?</h4>
                     <p>The data comes from a number of public databases, such as GWAS Catalog, EVA, UniProt, Expression Atlas, ChEMBL, DECIPHER, IntOGen, and others. These databases are the <a href="/data_sources">Open Targets Platform Data Sources</a>.</p>
                 </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="assembly"></a>What genome assembly is Open Targets using?</h4>
+                    <p>We use GRCh38 (sometimes referred to as hg38). This is the latest human genome provided by the <a href="https://www.ncbi.nlm.nih.gov/grc">Genome Reference Consortium</a>. This is relevant when we display SNPs and other features on the genome. It also affects the set of targets that we use, which is based on the latest Ensembl version at the time of our release. However, because our focus is on evidence associating targets and diseases, we support most evidence data irrespective of the genome assembly that may have been used for their original analysis.</p>
+                </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="variants"></a>How does Open Targets assign variants (e.g. SNPs) to genes?</h4>
+                    <p>We map and annotate variants to genes and transcripts using the Ensembl Variant Effect Predictor (VEP). If a variant maps to a gene with different transcripts, we will assign it the most severe <a href="/variants">variant definitions</a> or consequence term (e.g. start loss, stop gained) from the Sequence Ontology (SO). If the variant maps to intergenic regions, we will assign the variant to the 5' end (i.e. nearest likely promoter) of the closest protein coding gene on either strand (forward or reverse) within a 500kb window</p>
+                </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="missing-data"></a>The Platform does not report a known association between gene A and disease B. Why isn't this information in Open Targets?</h4>
+                    <p>If we miss known associations that are described elsewhere, please <a href="mailto:support@targetvalidation.org?">get in touch</a>. The reasons can be severalfold and we will look at the examples on a case-by-case basis. If the known association is described in a recent paper, it will not have made it through the curation process within our data sources yet. If the known association is based on a variant with an ID (e.g. rs123, His166Tyr), please include that information as well. We are revisiting our variant-to-gene assignment to assess if eQTLs could give a more likely assignment that the one we currently use, which is based on functional data only as described in <a href="#variants">"How does Open Target assign variants (e.g. SNPs) to genes?"</a>. By providing this information, you can help us improve our analyses for variant-to-gene assignment.</p>
+                </div>
+
+                <div class="cttv-docs-section">
+                    <h4><a name="clinical-trials"></a>What are clinical trials?</h4>
+                    <p>Clinical trials are studies carried out in human volunteers over a period of 10-15 years to investigate the safety and/or efficacy of a medicine. The Food and Drug Administration (FDA) describes the following phases:</p>
+                    <ul>
+                        <li><b>Phase I</b> to assess the drug's most frequent (and serious) adverse events and how the drug is metabolised and excreted. The number of subjects (either healthy volunteers or people with the disease/condition) ranges from 20 to 100. Phase I takes several months.</li>
+                        <li><b>Phase II</b> provides provides preliminary data on the biological activity of a drug. Safety continues to be evaluated and short-term adverse events studied. Up to 300 subjects (volunteers with the disease/condition) are studied. Phase II takes between several months to two years.</li>
+                        <li><b>Phase III</b> continues assessing effectiveness and adverse reactions. It is carried out in 300 - 3,000 volunteers with the disease/condition from different human populations. Different dosages and the combination with other drugs can be assessed. This phase takes between one and four years</li>
+                        <li><b>Phase IV</b> occurs once the FDA authorises a drug for marketing. Further information on drug's safety, efficacy and/or optimal use will be assessed in pharmacovigilance.<br/>Some phase IV drugs (e.g. from <a href="https://clinicaltrials.gov/">ClinicalTrials.gov</a>) may also be in postmarketing surveillance, and used for conditions different from the ones for which the drug has been originally approved for. Several thousands volunteers who have the disease/condition are studied.</li>
+                    </ul>
+                    <p>This <a href="https://www.fda.gov/downloads/Drugs/ResourcesForYou/Consumers/UCM284393.pdf">FDA infographic</a> gives a summary of the different phases in a clinical trial:</p>
+                </div>
+
 
                 <div class="cttv-docs-section">
                     <h4><a name="score"></a>How is the association score calculated?</h4>
@@ -63,14 +114,14 @@
                 </div>
 
                 <div class="cttv-docs-section">
-                    <h4><a name="biblio"></a>I’m looking at a target profile and found some articles linked to my target. Where does the bibliography come from?</h4>
+                    <h4><a name="biblio"></a>I am looking at a target profile and found some articles linked to my target. Where does the bibliography come from?</h4>
                     <p>We link the gene to its protein and get the list of articles from the Publications section in <a href="http://www.uniprot.org/">UniProt</a>.</p>
                 </div>
 
                 <div class="cttv-docs-section">
-                    <h4><a name="data_use"></a>Do you use the information I’ve searched for in platform?</h4>
+                    <h4><a name="data_use"></a>Do you use the information I have searched for in platform?</h4>
                     <p>We do not analyse the nature (e.g disease or target names) of any specific queries via the web application. We use standard encryption methods (e.g. https://) to maintain the security of the searches. For further details check the <a href="/terms_of_use">Terms of use for the Open Targets Platform</a>.</p>
-                    <p>Note that some of the components of the site are provided by third parties, or make use of services provided by third parties, mostly from EMBL-EBI resources. We provide links to these external resources, and the use of their services is covered by their own terms of use. We may however use some metrics on the usage of pages and icons on the platform to improve its visualisation aspects.</p>
+                    <p>Note that some of the components of the site are provided by third parties, or make use of services provided by third parties, mostly from EMBL-EBI resources. We provide links to these external resources, and the use of their services is covered by their own terms of use. We may however use some metrics on the usage of pages and icons on the platform to improve its visualisation aspects. If you any concerns, please contact our <a href="mailto:support@targetvalidation.org?Subject='Open Targets Platform feedback'">support</a> team</p>
                 </div>
 
                 <div class="cttv-docs-section">
@@ -85,7 +136,7 @@
 
                 <div class="cttv-docs-section">
                     <h4><a name="contact"></a>How can I contact the team?</h4>
-                    <p>If you’ve got questions or feedback, <a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;">email us</a>. You can also follow the team and keep up with the latest news on Open Targets and its Open Targets Platform through our social media channels <a href="https://twitter.com/targetvalidate">Twitter</a>, <a href="https://www.facebook.com/OpenTargets">Facebook</a> and <a href="https://www.facebook.com/OpenTargets">LinkedIn</a>.</p>
+                    <p>If you have questions or feedback, <a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;">email us</a>. You can also follow the team and keep up with the latest news on Open Targets and its Open Targets Platform through our social media channels <a href="https://twitter.com/targetvalidate">Twitter</a>, <a href="https://www.facebook.com/OpenTargets">Facebook</a> and <a href="https://www.facebook.com/OpenTargets">LinkedIn</a>.</p>
                 </div>
 
 

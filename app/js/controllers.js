@@ -1,7 +1,7 @@
   /* Controllers */
 
     angular.module('cttvControllers', [])
-    .run (['$rootScope', '$window', '$uibModalStack', function ($rootScope, $window, $uibModalStack) {
+    .run (['$rootScope', '$window', '$uibModalStack', '$log', function ($rootScope, $window, $uibModalStack, $log) {
         'use strict';
 
         // Close all the modal windows when the route changes
@@ -12,6 +12,9 @@
 
             $rootScope.showApiErrorMsg = false;
             $rootScope.showApiError500 = false;
+
+            // Reset the datatables search;
+            $.fn.dataTable.ext.search = [];
         });
 
         $rootScope.$on("cttvApiError", function (event, data) {
@@ -122,6 +125,14 @@
     }])
 
 
+
+    /**
+      * Controller for the target list results page
+    **/
+    .controller('BatchSearchCtrl', ['$log', '$scope', function ($log, $scope) {
+        'use strict';
+        $scope.list = null;
+    }])
 
     /**
      * Simple controller to expose the current page to the feedback button controller

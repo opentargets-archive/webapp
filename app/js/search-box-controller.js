@@ -7,7 +7,7 @@
  */
 angular.module('cttvControllers').
 
-controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvUtils', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q, cttvUtils) {
+controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
 
         var APP_SEARCH_URL = "search";
         var APP_EVIDENCE_URL = "evidence";
@@ -224,7 +224,8 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             $scope.search.query.text = "";
         }
 
-
+        // See if there is any loaded list
+        $scope.loadedLists = cttvLoadedLists.getAll().length;
 
         /**
          * NOTE: This is only to be called by the homepage only
@@ -241,7 +242,5 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
                 $window.scrollTo( 0, sb.offset().top - p );
             }
         }
-
-
 
     }]);

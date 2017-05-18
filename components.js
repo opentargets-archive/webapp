@@ -18,5 +18,8 @@ var spinner = require("cttv.spinner");
 
 var diseaseGraph = require("cttv.diseaseGraph");
 var targetGeneTree = require("cttv.targetGeneTree");
-var cttvApi = require("cttv.api");
+
 var cttvDiseaseRelations = require("viz_diseases");
+
+// var targetListBubbles = require("cttv.expansionView");
+var cttvApi = require("cttv.api");

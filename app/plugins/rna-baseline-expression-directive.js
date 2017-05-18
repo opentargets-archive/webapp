@@ -17,11 +17,13 @@ angular.module('plugins')
                 $timeout(function () {
                     // Expression Atlas
                     expressionAtlasHeatmapHighcharts.render({
-                        params: 'geneQuery=' + scope.target.symbol + "&species=homo%20sapiens",
-                        isMultiExperiment: true,
-                        target: "gxaWidget",
-                        disableGoogleAnalytics: true,
-                        proxyPrefix: "/proxy"
+                        atlasUrl: 'https://wwwdev.ebi.ac.uk/gxa/',
+                        target: 'gxaWidget',
+                        query: {
+                            species: 'homo sapiens',
+                            gene: scope.target.symbol
+                        },
+                        disableGoogleAnalytics: true
                     });
 
                     // GTEx

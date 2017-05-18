@@ -64,7 +64,7 @@ angular.module('cttvServices').
                 obj[tmp[0]].push(tmp[1]);
             });
             return obj;
-        }
+        };
 
 
 
@@ -123,15 +123,16 @@ angular.module('cttvServices').
                 cttvConsts.DATASOURCES,
                 cttvConsts.THERAPEUTIC_AREAS,
                 cttvConsts.DATA_DISTRIBUTION,
+                cttvConsts.TARGET,
                 cttvConsts.TARGET_CLASS
             ];
 
             for(var i in search){
                 if(search.hasOwnProperty(i)){
 
-                    raw[ i ] = search[i];
+                    raw[i] = search[i];
 
-                    if( typeof raw[ i ] === "string" && raw[ i ].match(/.:./)) {
+                    if (typeof raw[i] === "string" && raw[i].match(/.:./)) {
                         // this is a string the new state format (e.g. "view=t:bubble,p:1") so then we parse it
                         raw[i] = parseSearchItem(search[i]);
                     }
@@ -150,7 +151,6 @@ angular.module('cttvServices').
                     }
                 }
             }
-
 
             return raw;
         };
@@ -181,10 +181,10 @@ angular.module('cttvServices').
          * Set the temp state object to the given one (full override)
          */
         cttvLocationStateService.setState = function(so){
-            //$log.log("!!!! setState()");
+            // $log.log("setState()");
             tmp_state = so;
             cttvLocationStateService.updateStateURL();
-        }
+        };
 
 
 
@@ -192,7 +192,7 @@ angular.module('cttvServices').
          * Update the state object only for the specific sub-object
          */
         cttvLocationStateService.setStateFor = function(k, so, track){
-            // $log.log("setStateFor "+k);
+            // $log.log("setStateFor ");
 
             if(track==undefined){track=true;}   // track = (track || track==undefined)
             tmp_state[k] = so;
@@ -211,16 +211,16 @@ angular.module('cttvServices').
         cttvLocationStateService.resetStateFor = function(k){
             // $log.log("resetStateFor()");
             cttvLocationStateService.setStateFor(k, {}, false);
-        }
+        };
 
 
         /**
          * Updates the URL search with the current state object
          */
         cttvLocationStateService.updateStateURL = function(){
-            //$log.log("!!!! updateStateURL");
+            // $log.log("updateStateURL");
 
-            var stt = {}
+            var stt = {};
             for(var i in tmp_state){
                 // translate the state to the URL, but we don't want to include the _path property
                 if(tmp_state.hasOwnProperty(i) && i!=="_path" ){
@@ -229,7 +229,7 @@ angular.module('cttvServices').
             }
 
             $location.search(stt);
-        }
+        };
 
 
 

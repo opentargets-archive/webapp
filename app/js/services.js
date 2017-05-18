@@ -121,10 +121,17 @@ angular.module('cttvServices', []).
         cttvUtilsService.colorScales = {
             BLUE_0_1 : d3.scale.linear()
                         .domain([0,1])
-                        //.range(["#CBDCEA", "#005299"]), // blue orig
+                        .range(["#CBDCEA", "#005299"]), // blue orig
                         //.range(["#AEDEF7", "#0091EB"]),
                         //.range(["#97D5F5", "#0081D2"]),
-                        .range(["#B6DDFC", "#0052A3"]), // extra brand blue
+                        // .range(["#B6DDFC", "#0052A3"]), // extra brand blue
+                        // .range(["#FFFF00", '#007AFF']), // yellow - blue
+                        // .range(["#feffd8", '#2354a3']), // yellow - blue (shorter range)
+                        // .range(["#feffd8", '#081d58']), // yellow - blue (longer range ylgrbu)
+                        // .range(["#fbf583", '#0465b2']), // yellow - blue (custom)
+                        // .range(["#fbf583", '#375E97']), // sky - sunflower (custom)
+                        // .range(['#FED69C', "#2A4E6E"]), // yellow - blue (custom made)
+                        // .range(["#FFFFd8", '#007AFF']), // toned down yellow - blue
                         //.range(["#FFD0CB", "#FF6350"]), // brand red
 
             BLUE_1_3 : d3.scale.linear()
@@ -253,6 +260,38 @@ angular.module('cttvServices', []).
             $rootScope.showApiError500 = false;
         };
 
+        // Input: array with ensembl ids
+        // Output: array with the significant bits of the ensembl ids
+        cttvUtilsService.compressTargetIds = function (ids) {
+            var compressed = [];
+            for (var i = 0; i < ids.length; i++) {
+                var target = ids[i];
+                for (var pos = 4; pos < target.length; pos++) {
+                    if (target[pos] !== "0") {
+                        var c = target.slice(pos, target.length);
+                        compressed.push(c);
+                        break;
+                    }
+                }
+            }
+
+            return compressed;
+        };
+
+        // Input: array with the significant bits of an ensembl id
+        // Output: array with the expanded ids
+        cttvUtilsService.expandTargetIds = function (compressedIds) {
+            var targets = [];
+
+            for (var i=0; i<compressedIds.length; i++) {
+                var compT = compressedIds[i];
+                var expanded = 'ENSG' + (Array(12 - compT.length).join('0') + compT);
+                targets.push(expanded);
+            }
+            return targets;
+        };
+
+
         cttvUtilsService.addMatchedBy = function (r) {
             var matches = {
                 human: 0,
@@ -349,8 +388,4 @@ angular.module('cttvServices', []).
 
 
         return modalService;
-    }])
-
-
-
-
+    }]);

@@ -66,6 +66,37 @@
 
     "dumps_link": "/downloads/data",
 
+    "summaryTargetList": [
+        {
+            "name": "diseases",
+            "element": "multiple-targets-associations-summary",
+            "heading": "Diseases associated"
+        },
+        {
+            "name": "pathways",
+            "element": "multiple-targets-pathways-summary",
+            "heading": "Pathways"
+        },
+        {
+            "name": "drugs",
+            "element": "multiple-targets-drugs-summary",
+            "heading": "Drugs"
+        },
+        {
+            "name": "interactions",
+            "element": "multiple-targets-interactions-summary",
+            "heading": "Interactions between targets",
+            "dependencies": {
+                "build/interactionsViewer.min.js": {
+                    "format": "global"
+                },
+                "build/interactionsViewer.css": {
+                    "loader": "css"
+                }
+            }
+        }
+    ],
+
     "diseaseSections": [
         /*{
             "name": "relatedDiseases",
@@ -118,6 +149,21 @@
         },
 
         {
+            "name": "interactionsViewer",
+            "element": "interactions-viewer",
+            "heading": "Protein interactions",
+            "dependencies": {
+                "build/interactionsViewer.min.js": {
+                    "format": "global"
+                },
+                "build/interactionsViewer.css": {
+                    "loader": "css"
+                }
+            },
+            "track": true
+        },
+
+        {
             "name": "genomeBrowser",
             "element": "genome-browser",
             "heading": "Variants, isoforms and genomic context",
@@ -136,20 +182,19 @@
             "element": "rna-baseline-expression",
             "heading": "RNA baseline expression",
             "dependencies": {
-                "https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js": {
+                "https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js": {
                     "format": "global"
                 },
-                "https://www.ebi.ac.uk/gxa/resources/css/jquery-ui-1.11.4.custom/css/jquery-ui.min.css!": {
+                "https://wwwdev.ebi.ac.uk/gxa/resources/css/alt-customized-bootstrap-3.3.5.css!": {
                     "loader": "css"
                 },
-                "https://www.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
+                "https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
                     "format": "global",
-                    "deps": ["https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"]
+                    "deps": ["https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"]
                 }
-            },
+             },
             "track": true
         },
-
         {
             "name": "geneOntology",
             "element": "gene-ontology",
@@ -216,7 +261,7 @@
             "key": "datatype",
             "element": "datatype-facet",
             "options" : {
-                "heading" : "Datatype",
+                "heading" : "Data type",
                 "open" : true
             }
         },
@@ -296,6 +341,7 @@
         ]
     },
 
+    "targetListLimit": 200,
 
     "diseaseAssociationsFacets" : {
         "count" : "unique_target_count",

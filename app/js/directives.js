@@ -192,13 +192,12 @@ angular.module('cttvDirectives', [])
     /*
     *
     */
-    .directive ('cttvMatrixLegend', function () {
+    .directive ('cttvMatrixLegend', ['$log', function ($log) {
         'use strict';
         var template = '<div class="matrix-legend matrix-legend-layout-{{layout}} clearfix">'
 
         // label above (v layout) or left (h layout) of legend
         +    '<span class="matrix-legend-from" ng-show="layout==\'h\'">{{labels[0] || colors[0].label}}</span>'
-
         // create the color swatches
         +    '<span class="matrix-legend-item clearfix" ng-repeat="item in colors">'
         +       '<span class="matrix-legend-background" ng-style="{\'background\':item.color}" ng-class="item.class"></span>'
@@ -229,7 +228,7 @@ angular.module('cttvDirectives', [])
             }]
 
         };
-    })
+    }])
 
 
     /**
@@ -905,7 +904,6 @@ angular.module('cttvDirectives', [])
     }])
 
 
-
     .directive ('cttvBetaRibbon', ['$log', '$location', function ($log, $location) {
         'use strict';
         return {
@@ -1172,3 +1170,53 @@ angular.module('cttvDirectives', [])
             link: function(scope, element, attrs) {}
         };
     }])
+
+    .directive('otPopover', ['$log', 'otDefinitions', function ($log, otDefinitions) {
+        'use strict';
+
+        return {
+            restrict: 'E',
+            scope: {
+                key: '@'
+            },
+            template: '<span ng-if="link" uib-popover-template="\'partials/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'" style="font-size:0.8em;float:right;"><a ng-click="$event.stopPropagation()" href="{{link}}"><i class="fa fa-info-circle"></i></a></span>' +
+            '<span ng-if="!link" uib-popover-template="\'partials/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'" ng-click="$event.stopPropagation()" style="margin-left:8px;"><i class="fa fa-info-circle"></i></span>',
+
+            link: function (scope, el, attrs) {
+                var def = otDefinitions[scope.key];
+                if (def) {
+                    scope.content = def.description;
+                    scope.link = def.link;
+                } else {
+                    scope.content = "";
+                }
+            }
+
+        };
+    }])
+
+    /**
+     * Directive for the footer
+     * This is mostly so the footer loads like the other page content and not before it.
+     */
+    .directive('moreLessText', ['$log', function ($log) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {
+                data: '=',
+                limit: '@'
+            },
+            template :  '<span>{{data | limitTo: limit }}</span>'
+                      + '<span ng-if="data.length>limit" ng-init="expd=false">'
+                      +     '<span ng-show="!expd" ng-click="expd=!expd"> &hellip; <a>[show more]</a></span>'
+                      +     '<span ng-show="expd">{{data | limitTo: data.length:limit }}<span ng-click="expd=!expd"> <a>[show less]</a></span></span>'
+                      + '</span>',
+            link: function(scope, element, attrs) {
+                $log.log(scope);
+            }
+        };
+    }])
+
+
