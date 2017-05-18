@@ -185,7 +185,7 @@
                 "/proxy/wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js": {
                     "format": "global"
                 },
-                "/proxy/wwwdev.ebi.ac.uk/gxa/resources/css/alt-customized-bootstrap-3.3.5.css!": {
+                "https://wwwdev.ebi.ac.uk/gxa/resources/css/alt-customized-bootstrap-3.3.5.css!": {
                     "loader": "css"
                 },
                 "/proxy/wwwdev.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
