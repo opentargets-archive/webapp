@@ -1,4 +1,4 @@
-/api/*  https://www.targetvalidation.org:443/:splat  200
+/api/*  https://www.targetvalidation.org/api/:splat  200
 /proxy/www.reactome.org/* http://www.reactome.org/:splat 200
 /proxy/files.rcsb.org/* http://files.rcsb.org/:splat 200
 /proxy/www.gtexportal.org/* http://www.gtexportal.org/:splat 200
