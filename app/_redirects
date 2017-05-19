@@ -1,1 +1,10 @@
-/api/*  https://www.targetvalidation.org:443/  200
+/api/*  https://www.targetvalidation.org:443/:splat  200
+/proxy/www.reactome.org/* http://www.reactome.org/:splat 200
+/proxy/files.rcsb.org/* http://files.rcsb.org/:splat 200
+/proxy/www.gtexportal.org/* http://www.gtexportal.org/:splat 200
+/proxy/www.omnipathdb.org/* http://www.omnipathdb.org/:splat 200
+/proxy/www.ebi.ac.uk/* https://www.ebi.ac.uk/:splat 200
+/proxy/wwwdev.ebi.ac.uk/* http://wwwdev.ebi.ac.uk/:splat 200
+/proxy/rest.ensembl.org/* https://rest.ensembl.org/:splat 200
+/proxy/reactomedev.oicr.on.ca/* http://reactomedev.oicr.on.ca/:splat 200
+/proxy/blog.opentargets.org/rss/* https://blog.opentargets.org/rss/:splat 200
