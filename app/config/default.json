@@ -182,6 +182,9 @@
             "element": "rna-baseline-expression",
             "heading": "RNA baseline expression",
             "dependencies": {
+                "https://wwwdev.ebi.ac.uk/gxa/resources/js/lib/fetch-polyfill.min.js" : {
+                    "format": "global"
+                },
                 "https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js": {
                     "format": "global"
                 },
