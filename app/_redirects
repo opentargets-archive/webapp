@@ -1,1 +1,2 @@
-/api/*  https://www.targetvalidation.org/api/:splat  200
+/api/*  https://www.targetvalidation.org/api/:splat  200!
+/proxy/* https://proxy.targetvalidation.org/:splat 200!
