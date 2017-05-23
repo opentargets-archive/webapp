@@ -193,7 +193,7 @@
                 },
                 "https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
                     "format": "global",
-                    "deps": ["https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"]
+                    "deps": ["https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js", "https://wwwdev.ebi.ac.uk/gxa/resources/js/lib/fetch-polyfill.min.js"]
                 }
              },
             "track": true
