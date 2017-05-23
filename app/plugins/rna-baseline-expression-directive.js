@@ -15,6 +15,7 @@ angular.module('plugins')
                 var target = scope.target.symbol;
 
                 $timeout(function () {
+                    
                     // Expression Atlas
                     expressionAtlasHeatmapHighcharts.render({
                         atlasUrl: 'https://wwwdev.ebi.ac.uk/gxa/',
