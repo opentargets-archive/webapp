@@ -20,6 +20,10 @@ angular.module('cttvServices').
             'KEEPLOADEDLISTS': {
                 "description": "If this option is checked your lists will be stored in the browser for easier access. You can still remove them at any time",
                 "link": ""
+            },
+            'TEP': {
+                "description": "TEPs provide a critical mass of reagents and knowledge on a protein target to allow rapid biochemical and chemical exploration and characterisation of proteins with genetic linkage to key disease areas. Click on this icon to know more about TEPs",
+                "link": 'http://www.thesgc.org/tep'
             }
         };
 
