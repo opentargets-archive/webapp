@@ -21,6 +21,10 @@
                 Synonyms: <span class="cttv-profile-synonym-list" ng-repeat="syn in synonyms">{{syn}}</span>
             </p>
 
+            <p ng-show="target.tep">
+                <img width=50 style="vertical-align:bottom" src="imgs/partners/SGC.png"> This target is part of a Target Enabling Package (TEP). <a target=_blank href="http://www.thesgc.org/tep/{{target.tep}}">Get more details</a>
+            </p>
+
             <uib-accordion close-others="false">
                 <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
                     <uib-accordion-heading>

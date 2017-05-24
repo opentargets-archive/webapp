@@ -53,6 +53,7 @@ var webappFiles = {
             'app/js/dictionary-service.js',
             'app/js/definitions-service.js',
             'app/js/omnipathdb-sources-service.js',
+            'app/js/teps-service.js',
             'app/js/const-service.js',
             'app/js/config-service.js',
             'app/js/location-state-service.js',
