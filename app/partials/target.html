@@ -21,9 +21,16 @@
                 Synonyms: <span class="cttv-profile-synonym-list" ng-repeat="syn in synonyms">{{syn}}</span>
             </p>
 
+            <!-- Show if there is a TEP for the target -->
             <p ng-show="target.tep">
+                <div style='width:60px;display:inline-block'>
                 <img src="imgs/partners/TEP.png">
-                This target is part of a Target Enabling Package (TEP) <ot-popover key="TEP"></ot-popover>. Get more details on <a target=_blank href="http://www.thesgc.org/tep/{{target.tep}}">{{target.symbol}} TEP</a>
+                </div>
+                <div style="display:inline-block;vertical-align:middle;">
+                    This target is part of a Target Enabling Package (TEP) <ot-popover key="TEP"></ot-popover>. Get more details on <a target=_blank href="http://www.thesgc.org/tep/{{target.tep}}">{{target.symbol}} TEP</a>
+                    <br />
+                    TEPs are provided by the <a href="http://www.thesgc.org/">Structural Genomics Consortium</a>
+                </div>
             </p>
 
             <uib-accordion close-others="false">
