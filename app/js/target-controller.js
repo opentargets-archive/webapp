@@ -43,7 +43,6 @@ angular.module('cttvControllers')
 
             // Check if the target is a TEP (Target Enabling Package)
             if (otTEPs[$scope.targetId]) {
-                $log.log('setting $scope.tep to ' + otTEPs[$scope.targetId].symbol);
                 $scope.target.tep = otTEPs[$scope.targetId].symbol;
             }
 

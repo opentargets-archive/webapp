@@ -22,16 +22,16 @@
             </p>
 
             <!-- Show if there is a TEP for the target -->
-            <p ng-show="target.tep">
+            <div ng-show="target.tep" style="margin-top:15px;margin-bottom:15px;">
                 <div style='width:60px;display:inline-block'>
                 <img src="imgs/partners/TEP.png">
                 </div>
                 <div style="display:inline-block;vertical-align:middle;">
-                    This target is part of a Target Enabling Package (TEP) <ot-popover key="TEP"></ot-popover>. Get more details on <a target=_blank href="http://www.thesgc.org/tep/{{target.tep}}">{{target.symbol}} TEP</a>
+                    A Target Enabling Package (TEP) <sup><ot-popover key="TEP"></ot-popover></sup> has been developed for this target. Get more details on <a target=_blank href="http://www.thesgc.org/tep/{{target.tep}}">{{target.symbol}} TEP</a>
                     <br />
                     TEPs are provided by the <a href="http://www.thesgc.org/">Structural Genomics Consortium</a>
                 </div>
-            </p>
+            </div>
 
             <uib-accordion close-others="false">
                 <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
