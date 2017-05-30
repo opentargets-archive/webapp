@@ -1,4 +1,5 @@
 app/config/custom.json
+.vscode
 bower_components
 **/*~
 node_modules
