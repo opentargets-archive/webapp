@@ -47,6 +47,7 @@ angular.module('cttvServices').
             GENE_2_PHENOTYPE :               "Gene2Phenotype",
             GENETIC_ASSOCIATION :            "Genetic associations",
             GWAS :                           "GWAS catalog",
+            PHEWAS :                         "PHEWAS catalog",
 
             // H
             // I

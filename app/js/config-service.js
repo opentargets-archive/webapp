@@ -24,7 +24,7 @@ angular.module('cttvServices').
             evidence_sources : {
                 genetic_association : {
                     common : [dbs.GWAS],
-                    rare : [dbs.UNIPROT, dbs.EVA, dbs.UNIPROT_LITERATURE, dbs.GENE_2_PHENOTYPE]
+                    rare : [dbs.UNIPROT, dbs.EVA, dbs.UNIPROT_LITERATURE, dbs.GENE_2_PHENOTYPE, dbs.PHEWAS]
                 },
                 somatic_mutation : [dbs.CANCER_GENE_CENSUS, dbs.EVA_SOMATIC, dbs.INTOGEN],
                 known_drug : [dbs.CHEMBL],
