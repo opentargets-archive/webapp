@@ -7,4 +7,4 @@
 # Deploy Preview context: All Deploy Previews
 # will inherit these settings.
 [context.set-api.environment]
-  APIHOST = "https://beta.opentargets.io/api/"
+  APIHOST = "https://104.199.16.253/api/"
