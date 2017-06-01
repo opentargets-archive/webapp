@@ -1,0 +1,10 @@
+# Global settings applied to the whole site.
+[build]
+  base    = "/"
+  publish = "app/"
+  command = "npm install && npm run setup"
+
+# Deploy Preview context: All Deploy Previews
+# will inherit these settings.
+[context.set-api.environment]
+  APIHOST = "https://beta.opentargets.io/api/"
