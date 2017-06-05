@@ -48,6 +48,7 @@ angular.module('cttvServices').
             GENETIC_ASSOCIATION :            "Genetic associations",
             GWAS :                           "GWAS catalog",
             PHEWAS :                         "PHEWAS catalog",
+            PHEWAS_23andme :                 "23andme",
 
             // H
             // I
