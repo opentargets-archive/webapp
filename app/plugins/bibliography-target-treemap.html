@@ -1,0 +1,11 @@
+<div>
+    <svg></svg>
+    <div class="bob">
+
+        <div ng-repeat="hit in hits.hits">
+            <h5>{{hit._source.title}}</h5>
+            <p><span ng-repeat="auth in hit._source.authors"><a ng-href='https://europepmc.org/search?query=AUTH:"{{auth.full_name}}"&page=1'>{{auth.short_name}}</a><span ng-if="!$last">, </span></span></p>
+            <p>{{hit._source.abstract}}</p>
+        </div>
+    </div>
+</div>

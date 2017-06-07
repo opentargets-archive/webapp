@@ -1,7 +1,7 @@
 /* Bubbles directive for associations */
 angular.module('cttvDirectives')
 
-    .directive('cttvTargetAssociationsTreemap', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvConsts', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvConsts, $analytics) {
+    .directive('cttvTargetAssociationsTreemap', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvConsts', '$analytics', '$location', function ($log, cttvAPIservice, cttvUtils, cttvConsts, $analytics, $location) {
         'use strict';
 
         var whoiam = "treemap";
@@ -170,6 +170,13 @@ angular.module('cttvDirectives')
 
 
 
+                function navigate(d){
+                    $location.path("/evidence/" + scope.target + "/" + d.data.__id);
+                    scope.$apply(); // or the location.path doesn't take effect...
+                }
+
+
+
                 /*
                  * data handler
                  */
@@ -262,6 +269,8 @@ angular.module('cttvDirectives')
                             .append("rect")
                                 .attr("class", "cell child")
                                 .call(rect)
+                                .on("click", navigate)
+                                //.attr("a href", "google.com")
                                 // add color?? ... awww... don't be ridiculous!
                                 //.attr("fill", function(d) { return colorScale(d.data.__association_score); })
                                 .append("title")
