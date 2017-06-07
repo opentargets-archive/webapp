@@ -191,9 +191,9 @@
                 "https://www.ebi.ac.uk/gxa/resources/css/alt-customized-bootstrap-3.3.5.css!": {
                     "loader": "css"
                 },
-                "https://wwwdev.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
+                "https://www.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
                     "format": "global",
-                    "deps": ["https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js", "https://www.ebi.ac.uk/gxa/resources/js/lib/fetch-polyfill.min.js"]
+                    "deps": ["https://www.ebi.ac.uk/gxa/resources/js/lib/fetch-polyfill.min.js", "https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"]
                 }
              },
             "track": true
