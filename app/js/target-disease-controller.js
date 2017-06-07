@@ -447,7 +447,7 @@
                     }
 
                     var pmidsList = cttvUtils.getPmidsList( refs );
-                    row.push( cttvUtils.getPublicationsString( pmidsList ) );
+                    row.push( pmidsList.length ? cttvUtils.getPublicationsString( pmidsList ) : 'N/A' );
 
                     // Publication ids (hidden)
                     row.push(pmidsList.join(", "));
@@ -644,7 +644,7 @@
                     }
 
                     var pmidsList = cttvUtils.getPmidsList( refs );
-                    row.push( cttvUtils.getPublicationsString( pmidsList ) );
+                    row.push( pmidsList.length ? cttvUtils.getPublicationsString( pmidsList ) : 'N/A' );
 
                     // Publication ids (hidden)
                     row.push(pmidsList.join(", "));

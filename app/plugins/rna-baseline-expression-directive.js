@@ -17,7 +17,7 @@ angular.module('plugins')
                 $timeout(function () {
                     // Expression Atlas
                     expressionAtlasHeatmapHighcharts.render({
-                        atlasUrl: 'https://wwwdev.ebi.ac.uk/gxa/',
+                        atlasUrl: 'https://www.ebi.ac.uk/gxa/',
                         target: 'gxaWidget',
                         query: {
                             species: 'homo sapiens',
