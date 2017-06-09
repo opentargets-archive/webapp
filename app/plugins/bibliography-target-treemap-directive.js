@@ -36,6 +36,27 @@ angular.module('plugins')
             g2
             ;
 
+        function cleanSpaces(input) {
+            return input.replace(/ /g,'_');
+        }
+
+        function invertScales(){
+            // x
+            $log.log("x");
+            $log.log(x.domain(), x.range());
+            var xd = x.domain();
+            var xr = x.range();
+            x.domain(xr);
+            x.range(xd);
+            $log.log(x.domain(), x.range());
+
+            // y
+            var yd = y.domain();
+            var ys = y.range();
+            y.domain(ys);
+            y.range(yd);
+        }
+
         /*
             {"query":{"query_string":{"query":"BRAF"}},"controls":{"use_significance":true,"sample_size":2000,"timeout":5000},"connections":{"vertices":[{"field":"abstract","min_doc_count":10,"size":10}]},"vertices":[{"field":"abstract","min_doc_count":10,"size":10}]}
 
@@ -130,23 +151,6 @@ angular.module('plugins')
                         .style("shape-rendering", "crispEdges");
 
 
-                    nav = svg.append("g")
-                        .attr("class", "tm-nav");
-
-                        nav.append("rect")
-                            .attr("x", 1)
-                            .attr("y", -margin.top)
-                            .attr("width", width-2)
-                            .attr("height", margin.top)
-                            //.style("fill", "#336699");
-
-                        nav.append("text")
-                            .attr("x", 6)
-                            .attr("y", 6 - margin.top)
-                            .attr("dy", ".75em")
-                            .text("");
-
-
                     chart = svg.append("g")
                         .attr("class", "tm-chart")
                         .attr("width", width)
@@ -160,6 +164,22 @@ angular.module('plugins')
                         //.round(true)
                         ;
 
+
+                    nav = svg.append("g")
+                        .attr("class", "tm-nav");
+
+                        nav.append("rect")
+                            .attr("x", 1)
+                            .attr("y", -margin.top)
+                            .attr("width", width-2)
+                            .attr("height", margin.top-2)
+                            //.style("fill", "#336699");
+
+                        nav.append("text")
+                            .attr("x", 6)
+                            .attr("y", 6 - margin.top)
+                            .attr("dy", ".75em")
+                            .text("");
 
                     // search ?
                     selected = selected || [scope.target.approved_symbol.toLowerCase()];
@@ -175,7 +195,7 @@ angular.module('plugins')
                 function onData(data){
 
                     // treemap
-                    $log.log("data:");
+                    $log.log("data: ");
                     $log.log(data);
 
                     //var children = data.aggregations.abstract_significant_terms.buckets.filter(function(b){
@@ -187,11 +207,20 @@ angular.module('plugins')
                     var r = d3.hierarchy({children:children})
                             //.eachBefore(function(d) { d.data.id = (d.parent ? d.parent.data.id + "." : "") + d.data.name; })
                             //.sum(function(d){ return d.children ? 0 : d.__association_score; })
-                            .sum(function(d){ return d.score; })
+                            //.sum(function(d){ return d.score; })
+                            .sum(function(d){ return d.doc_count; })
                             .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
 
                     treemap(r);
 
+                    // since we get data every time, the treemap is flat and has no knowledge of depth
+                    // so we set that manually here.
+                    // we need it for convenience when doing the transitions
+                    r.depth = selected.length;
+                    r.children.forEach(function(c){
+                        c.depth = r.depth+1;
+                    })
+                    $log.log("treemap : ", r);
 
                     //display(r);
                     transition(r);
@@ -232,7 +261,7 @@ angular.module('plugins')
 
                     // define a clippath to cut text
                     cell.append("clipPath")
-                        .attr("id", function(d) { return "clip-" + d.data.key; })
+                        .attr("id", function(d) { return "clip-" + cleanSpaces(d.data.key); })
                         //.append("use")
                         //.attr("xlink:href", function(d) { return "#clip-" + d.data.__id; })
                         .append("rect")
@@ -267,11 +296,12 @@ angular.module('plugins')
                     var cellLabel = cell.append("text")
                             .text(function(d) { return d.data.key; })
                             .attr("class", function(d){ return d.children ? "ta-label" : "disease-label"  })
-                            .attr("clip-path", function(d) { return "url(#clip-" + d.data.key + ")"; });
+                            .attr("clip-path", function(d) { return "url(#clip-" + cleanSpaces(d.data.key) + ")"; });
 
                         cellLabel.append("tspan")
                             .attr("class", "ta-label-details")
-                            .text( function(d){return "Score: "+d.data.score.toFixed(2)} )
+                            //.text( function(d){return "Score: "+d.data.score.toFixed(2)} )
+                            .text( function(d){return d.data.doc_count} )
                         ;
 
                         /*cellLabel.filter(function(d) { return d.children; })
@@ -293,16 +323,20 @@ angular.module('plugins')
 
 
 
+                /*
+                 * d is the treemap layout
+                 */
                 function transition(d) {
                     $log.log("transition");
 
                     if (transitioning || !d) return;
+
                     transitioning = true;
 
 
                     // Update the domain only after entering new elements.
-                    x.domain([d.x0 * ratio, d.x1 * ratio]);
-                    y.domain([d.y0, d.y1]);
+                    //x.domain([d.x0 * ratio, d.x1 * ratio]);
+                    //y.domain([d.y0, d.y1]);
 
                     // Enable anti-aliasing during the transition
                     svg.style("shape-rendering", null);
@@ -314,38 +348,112 @@ angular.module('plugins')
                         });
 
 
-                    // Transitioning out of the old view (if there is one)
+                    var d0;
+
+
+                    var zoom =  d.depth;
+                    $log.log("depth: "+zoom);
+
+                    // Transitioning out of the old view:
+                    // this is the normal case, except on first load
                     if(g1){
-                        // $log.log("g1");
+                        $log.log("g1 : ", g1);
+
+                        // testing stuff
+
+                        $log.log("data: ", g1.data());
+
+                        // test parent:
+                        var par = g1.select(function(){return this.parentNode});
+                        $log.log("par:", par);
+
+                        var bob = g1.filter(function(d){
+                            $log.log("--");
+                            $log.log(d);
+                            return d.data.key.toLowerCase() === selected[selected.length-1].toLowerCase();
+                        });
+
+                        // $log.log("g1:");
                         // $log.log(g1);
+                        // $log.log(g1.data());
+                        // $log.log(g1.data()[0].x0);
+
+                        //bob = bob || g1; //.select(function(){return this.parentNode});
+                        if(bob.empty()){
+                            bob = g1; //.select(function(){return this.parentNode});
+                            // if bob is empty, then we didn't click on any of the cells
+                            // which means we must have clicked on the back button
+                            // in which case the data d is one level up
+                        }
+
+                        // $log.log("bob:");
+                        // $log.log(bob);
+                        // $log.log(bob.data());
+                        // $log.log(bob.data()[0].x0);
+
+
+                        d0 = bob.data()[0];
+
+                        x.domain([d0.x0 * ratio, d0.x1 * ratio]);
+                        y.domain([d0.y0, d0.y1]);
+
                         var t1 = g1.select(function(){return this.parentNode})  // since display returns the cell, here we need the 'parent'
-                                    .transition().duration(500);
+                                    .transition().duration(750);
                         t1.selectAll("text").call(text).style("fill-opacity", 0);
                         t1.selectAll(".cell").call(rect);
                         t1.selectAll(".clippath").call(path);
 
                         // Remove the old node when the transition is finished.
                         t1.remove().on("end", function(){
-                            console.log("t1 done");
-                            t2ing();
+                            $log.log("t1 done");
+                            //t2ing();
                         });
-                    } else{
-                        t2ing();
                     }
+
+                    //else{
+                        t2ing();
+                    //}
+
 
 
                     // and into the new one:
                     function t2ing(){
+
+                        x.domain([d.x0 * ratio, d.x1 * ratio]);
+                        y.domain([d.y0, d.y1]);
+
                         g2 = display(d);
                         // $log.log("g2");
                         // $log.log(g2);
+                        if(d0){
+                            // x.domain([ (d0.x0 * ratio)/(d.x0 * ratio), (d0.x1 * ratio)/(d.x1 * ratio)]);
+                            // y.domain([ d0.y0/d.y0, d0.y1/d.y1]);
+
+                            // x.domain([d0.x0 * ratio, d0.x1 * ratio]);
+                            // y.domain([d0.y0, d0.y1]);
+                            // invertScales();
+
+                            x.range([d0.x0 * ratio, d0.x1 * ratio]);
+                            y.range([d0.y0, d0.y1]);
+                        }
+
+                        g2.selectAll("text").call(text).style("fill-opacity", 0.2);
+                        g2.selectAll(".cell").call(rect).style("fill-opacity", 0.2)
+
+                        // x.domain([d.x0 * ratio, d.x1 * ratio]);
+                        // y.domain([d.y0, d.y1]);
+                        // invertScales();
+                        x.range([0, width]);
+                        y.range([0, height]);
+
                         var t2 = g2.transition().duration(750);     // the new stuff coming in
-                        g2.selectAll("text").style("fill-opacity", 0);
                         t2.selectAll("text").call(text).style("fill-opacity", 1);
                         t2.selectAll(".cell").call(rect);
+
+                        t2.selectAll(".cell").style("fill-opacity",1);
                         t2.selectAll(".clippath").call(path);
                         t2.on("end", function(){
-                            console.log("t2 done");
+                            $log.log("t2 done");
                             svg.style("shape-rendering", "crispEdges");
                             transitioning = false;
                             g1 = g2;

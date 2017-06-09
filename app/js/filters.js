@@ -49,6 +49,14 @@ angular.module('cttvFilters', [])
         };
     })
 
+    .filter('spaceToUnder', function(){
+        'use strict';
+
+        return function (str){
+            return str.replaceAll(" ","_");
+        }
+    })
+
     /**
      * Shorten number to thousands, millions, billions, etc.
      * http://en.wikipedia.org/wiki/Metric_prefix

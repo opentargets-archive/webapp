@@ -1215,7 +1215,7 @@ angular.module('cttvDirectives', [])
                       +     '<span ng-show="expd">{{data | limitTo: data.length:limit }}<span ng-click="expd=!expd"> <a>[show less]</a></span></span>'
                       + '</span>',
             link: function(scope, element, attrs) {
-                $log.log(scope);
+                // $log.log(scope);
             }
         };
     }])
