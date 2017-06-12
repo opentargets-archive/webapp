@@ -27,7 +27,8 @@ angular.module('plugins')
                     });
 
                     // GTEx
-                    var url = '/proxy/www.gtexportal.org/api/v6p/expression/' + target + '?boxplot=true';
+                    var url = '/proxy/www.gtexportal.org/rest/v1/dataset/expression?gene_id=' + target + '&boxplot=true';
+                    // var url = '/proxy/www.gtexportal.org/api/v6p/expression/' + target + '?boxplot=true';
                     $http.get(url)
                         .then(function (resp) {
                             var arr = obj2array(resp.data.generpkm);
