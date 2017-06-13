@@ -13,13 +13,9 @@ angular.module('plugins')
             width = 938,
             transitioning;
 
-        var x = d3.scaleLinear()
-            .domain([0, width])
-            .range([0, width]);
-
-        var y = d3.scaleLinear()
-            .domain([0, height])
-            .range([0, height]);
+        var x = d3.scaleLinear();
+        var y = d3.scaleLinear();
+        resetScales();
 
         var fader = function(color) { return d3.interpolateRgb(color, "#fff")(0.2); },
             color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
@@ -35,6 +31,14 @@ angular.module('plugins')
             g1,
             g2
             ;
+
+        function resetScales(){
+            x.domain([0, width])
+             .range([0, width]);
+
+            y.domain([0, height])
+             .range([0, height]);
+        }
 
         function cleanSpaces(input) {
             return input.replace(/ /g,'_');
@@ -103,7 +107,7 @@ angular.module('plugins')
                 */
 
                 function addSelected(s){
-                    selected.push(s.toLowerCase()); // to lower case for more accurate matching
+                    selected.push(s); // to lower case for more accurate matching
                     return selected;
                 }
 
@@ -220,6 +224,7 @@ angular.module('plugins')
                     r.children.forEach(function(c){
                         c.depth = r.depth+1;
                     })
+                    r.qid = selected[selected.length-1] ; // what did we click on to get this data? same as data.key
                     $log.log("treemap : ", r);
 
                     //display(r);
@@ -247,7 +252,8 @@ angular.module('plugins')
 
                     // actual treemap
                     var g1 = chart.append("g")
-                        .datum(d.children)
+                        //.datum(d.children)
+                        .datum(d);
 
                     var cell = g1.selectAll("g")
                         .data(d.children)
@@ -316,7 +322,7 @@ angular.module('plugins')
                             .text(function(d) { return name(d); });
 
 
-                    return cell;
+                    return g1; //cell;
 
 
                 } // end display
@@ -326,11 +332,11 @@ angular.module('plugins')
                 /*
                  * d is the treemap layout
                  */
-                function transition(d) {
+                function transition(d2) {
+
                     $log.log("transition");
 
-                    if (transitioning || !d) return;
-
+                    if (transitioning || !d2) return;
                     transitioning = true;
 
 
@@ -348,57 +354,87 @@ angular.module('plugins')
                         });
 
 
-                    var d0;
+                    var d1;
 
 
-                    var zoom =  d.depth;
-                    $log.log("depth: "+zoom);
+                    var depth =  d2.depth;
+                    $log.log("d : ",d2);
+
+
+
+                    // set things up
+                    //x.domain([d.x0 * ratio, d.x1 * ratio]);
+                    //y.domain([d.y0, d.y1]);
+                    g2 = display(d2);
+
+                    // t2ing();
 
                     // Transitioning out of the old view:
                     // this is the normal case, except on first load
                     if(g1){
-                        $log.log("g1 : ", g1);
 
+                        /*
+                        // ----------
                         // testing stuff
-
-                        $log.log("data: ", g1.data());
-
+                        $log.log("g1 : ", g1);
+                        $log.log("data: ", g1.datum());
                         // test parent:
-                        var par = g1.select(function(){return this.parentNode});
+                        var par = g1.filter(function(d){
+                            $log.log("d : ", d);
+                        })
                         $log.log("par:", par);
+                        // -----------
+                        */
 
-                        var bob = g1.filter(function(d){
-                            $log.log("--");
-                            $log.log(d);
-                            return d.data.key.toLowerCase() === selected[selected.length-1].toLowerCase();
-                        });
+                        var zoom = d2.depth - g1.datum().depth;
+                        //$log.log("zoom : ", zoom);  // +1 == in ; -1 == out
 
-                        // $log.log("g1:");
-                        // $log.log(g1);
-                        // $log.log(g1.data());
-                        // $log.log(g1.data()[0].x0);
+                        var bob;
 
-                        //bob = bob || g1; //.select(function(){return this.parentNode});
-                        if(bob.empty()){
-                            bob = g1; //.select(function(){return this.parentNode});
-                            // if bob is empty, then we didn't click on any of the cells
-                            // which means we must have clicked on the back button
-                            // in which case the data d is one level up
+                        // if zoomin in :: scale things UP
+                        if(zoom>0){
+                            // which thing did we click on?
+                            bob = g1.selectAll("g").filter(function(d){
+                                return d.data.key === g2.datum().qid; //selected[selected.length-1];
+                            });
+                            // $log.log("bob : ", bob.data());
+                            d1 = bob.data()[0]; // bob.data() returns an array of 1 (i suppose cause we only selected one thing up here)
+                            x.domain([d1.x0*ratio, d1.x1*ratio]);
+                            y.domain([d1.y0, d1.y1]);
+
                         }
 
-                        // $log.log("bob:");
-                        // $log.log(bob);
-                        // $log.log(bob.data());
-                        // $log.log(bob.data()[0].x0);
+                        // else if zoomin out :: scale things DOWN!
+                        else if(zoom<0){
+
+                            // $log.log("zoom out : "+selected[selected.length-1].toLowerCase());
+                            // $log.log("g1 : ", g1.datum());
+                            // $log.log("g2 : ", g2.datum());
+                            // $log.log("find "+g1.datum().qid+" in "+g2.datum().children);
+                            bob = g2.selectAll("g").filter(function(d){
+                                // $log.log("-- ", d);
+                                return d.data.key === g1.datum().qid; //selected[selected.length-1].toLowerCase();
+                            });
+
+                            //bob = g1;
+                            $log.log("bob : ", bob.data());
+                            d1 = bob.data()[0];
+
+                            // x.domain([0, width]);
+                            // y.domain([0, height]);
+                            // x.range([d1.x0 * ratio, d1.x1 * ratio]);
+                            // y.range([d1.y0, d1.y1]);
+                            // x.domain([  x(x(d2.x0*ratio))  , x(x(d2.x1*ratio))  ]);
+                            // y.domain([  y(y(d2.y0)), y(y(d2.y1)) ]);
+                            x.domain([  x(x(d1.x0*ratio))  , x(x(d1.x1*ratio))  ]);
+                            y.domain([  y(y(d1.y0)), y(y(d1.y1)) ]);
+                            invertScales();
+                        }
 
 
-                        d0 = bob.data()[0];
-
-                        x.domain([d0.x0 * ratio, d0.x1 * ratio]);
-                        y.domain([d0.y0, d0.y1]);
-
-                        var t1 = g1.select(function(){return this.parentNode})  // since display returns the cell, here we need the 'parent'
-                                    .transition().duration(750);
+                        // var t1 = g1.select(function(){return this.parentNode})  // since display returns the cell, here we need the 'parent'
+                        //             .transition().duration(750);
+                        var t1 = g1.transition().duration(750);
                         t1.selectAll("text").call(text).style("fill-opacity", 0);
                         t1.selectAll(".cell").call(rect);
                         t1.selectAll(".clippath").call(path);
@@ -408,33 +444,102 @@ angular.module('plugins')
                             $log.log("t1 done");
                             //t2ing();
                         });
+
+
+
+                        // so do we scale the new g2 stuff in here?
+                        // yes...
+                        // x.domain([0, width]);
+                        // y.domain([0, height]);
+                        // x.range([d1.x0 * ratio, d1.x1 * ratio]);
+                        // y.range([d1.y0, d1.y1]);
+
+                        invertScales();
+
+                        g2.selectAll("text").call(text);
+                        g2.selectAll(".cell").call(rect);
+
+                        // x.domain([d1.x0 * ratio, d1.x1 * ratio]);
+                        // y.domain([d1.y0, d1.y1]);
+                        resetScales();
+
                     }
 
-                    //else{
-                        t2ing();
-                    //}
+
+
+
+                    // $log.log("g2");
+                    // $log.log(g2);
+                    /*if(d1){
+                        // x.domain([ (d1.x0 * ratio)/(d.x0 * ratio), (d1.x1 * ratio)/(d.x1 * ratio)]);
+                        // y.domain([ d1.y0/d.y0, d1.y1/d.y1]);
+
+                        // x.domain([d1.x0 * ratio, d1.x1 * ratio]);
+                        // y.domain([d1.y0, d1.y1]);
+                        // invertScales();
+
+                        x.domain([0, width]);
+                        y.domain([0, height]);
+                        x.range([d1.x0 * ratio, d1.x1 * ratio]);
+                        y.range([d1.y0, d1.y1]);
+
+                        g2.selectAll("text").call(text);
+                        g2.selectAll(".cell").call(rect);
+
+                        // x.domain([d1.x0 * ratio, d1.x1 * ratio]);
+                        // y.domain([d1.y0, d1.y1]);
+                        resetScales();
+                    }*/
+
+                    g2.selectAll("text").style("fill-opacity", 0.2);
+                    g2.selectAll(".cell").style("fill-opacity", 0.2);
+
+
+                    // x.domain([d.x0 * ratio, d.x1 * ratio]);
+                    // y.domain([d.y0, d.y1]);
+                    // invertScales();
+                    // x.range([0, width]);
+                    // y.range([0, height]);
+
+
+
+
+                    var t2 = g2.transition().duration(750);     // the new stuff coming in
+                    t2.selectAll("text").call(text).style("fill-opacity", 1);
+                    t2.selectAll(".cell").call(rect);
+
+                    t2.selectAll(".cell").style("fill-opacity",1);
+                    t2.selectAll(".clippath").call(path);
+                    t2.on("end", function(){
+                        $log.log("t2 done");
+                        svg.style("shape-rendering", "crispEdges");
+                        transitioning = false;
+                        g1 = g2;
+                    });
+
 
 
 
                     // and into the new one:
-                    function t2ing(){
+                    /*function t2ing(){
 
                         x.domain([d.x0 * ratio, d.x1 * ratio]);
                         y.domain([d.y0, d.y1]);
 
                         g2 = display(d);
+
                         // $log.log("g2");
                         // $log.log(g2);
-                        if(d0){
-                            // x.domain([ (d0.x0 * ratio)/(d.x0 * ratio), (d0.x1 * ratio)/(d.x1 * ratio)]);
-                            // y.domain([ d0.y0/d.y0, d0.y1/d.y1]);
+                        if(d1){
+                            // x.domain([ (d1.x0 * ratio)/(d.x0 * ratio), (d1.x1 * ratio)/(d.x1 * ratio)]);
+                            // y.domain([ d1.y0/d.y0, d1.y1/d.y1]);
 
-                            // x.domain([d0.x0 * ratio, d0.x1 * ratio]);
-                            // y.domain([d0.y0, d0.y1]);
+                            // x.domain([d1.x0 * ratio, d1.x1 * ratio]);
+                            // y.domain([d1.y0, d1.y1]);
                             // invertScales();
 
-                            x.range([d0.x0 * ratio, d0.x1 * ratio]);
-                            y.range([d0.y0, d0.y1]);
+                            x.range([d1.x0 * ratio, d1.x1 * ratio]);
+                            y.range([d1.y0, d1.y1]);
                         }
 
                         g2.selectAll("text").call(text).style("fill-opacity", 0.2);
@@ -458,7 +563,7 @@ angular.module('plugins')
                             transitioning = false;
                             g1 = g2;
                         });
-                    }
+                    }*/
 
                 }
 
