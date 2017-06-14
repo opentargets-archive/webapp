@@ -121,7 +121,13 @@ angular.module('cttvDirectives', [])
             restrict: 'EA',
             template: '<span></span>',
             link: function(scope, elem, attrs){
+
                 $log.warn("Check cttvProgressSpinner code!");
+                //var newDiv = document.createTextNode("SPINNER!");
+                var newDiv = document.createElement("span");
+                newDiv.innerHTML="<span class='fa fa-circle-o-notch fa-spin fa-3x fa-fw'></span>";
+                elem[0].appendChild(newDiv);
+
                 /*var size = attrs.size || 18;
                 var stroke = attrs.stroke || 2;
                 var sp = spinner()
@@ -148,12 +154,15 @@ angular.module('cttvDirectives', [])
             //template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner class="text-lowlight fa-{{size}}x"></span></div>',
             template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner size="50" stroke="3" class="text-lowlight"></span></div>',
             scope: {
-                size: '@'
+                size: '@',
+                isloading: '=?'
             },
             link: function(scope, elem, attrs){
-                scope.$watch(function(){return cttvAPIservice.activeRequests;}, function(newValue,oldValue){
-                    scope.isloading = newValue>0;
-                });
+                if(scope.isloading==undefined){
+                    scope.$watch(function(){return cttvAPIservice.activeRequests;}, function(newValue,oldValue){
+                        scope.isloading = newValue>0;
+                    });
+                }
             }
         };
     }])

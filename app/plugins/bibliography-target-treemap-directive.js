@@ -10,7 +10,7 @@ angular.module('plugins')
         var margin = {top: 30, right: 0, bottom: 0, left: 0},
             //height = 522,   // the height of the actual treemap (i.e. not including the navigation at top)
             height = 250,
-            width = 938,
+            width = 908,
             transitioning;
 
         var x = d3.scaleLinear();
@@ -125,27 +125,48 @@ angular.module('plugins')
                 }
 
                 function getData(){
-                    //t0 = Date.now();
                     if( selected.length>0 ){
+                        scope.isloading = true;
                         var targets = selected.join(",");
                         $http.get("https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search?query="+targets+"&aggs=true")
-                            .then (function (resp) {
-                                return resp.data;
-                            })
-                            .then( function (data){
-                                $log.warn("call took: " + data.took); //(Date.now() - t0)
-                                onData(data);
-                            })
+                            .then (
+                                // success
+                                function (resp) {
+                                    return resp.data;
+                                },
+                                // failure
+                                function (resp){
+                                    $log.warn("Error: ",resp);
+                                    // TODO:
+                                    // so here, in case of an error, we remove the last selected thing in the list (since we didn't get the data for it)
+                                    // Perhaps a better approach is to add it only once we have a successful response
+                                    selected.pop();
+                                }
+                            )
+                            .then (
+                                // success
+                                function (data){
+                                    $log.warn("call took: " + data.took);
+                                    onData(data);
+                                }
+                            )
+                            .finally (
+                                function(d){
+                                    $log.log(" -- finally -- ");
+                                    scope.isloading = false;
+                                }
+                            )
                     }
                 }
 
 
                 // setup the SVG
+                // needs to be in a timeout if the template is external
                 $timeout(function(){
 
-                    biblio = s = elem.children().eq(0).children().eq(1)[0];
+                    //biblio = s = elem.children().eq(0).children().eq(2)[0];
 
-                    s = elem.children().eq(0).children().eq(0)[0];
+                    s = elem.children().eq(0).children().eq(1)[0];
 
                     svg = d3.select( s )
                         .attr("width", width)
@@ -173,24 +194,21 @@ angular.module('plugins')
                         .attr("class", "tm-nav");
 
                         nav.append("rect")
-                            .attr("x", 1)
+                            .attr("x", 0)
                             .attr("y", -margin.top)
-                            .attr("width", width-2)
-                            .attr("height", margin.top-2)
+                            .attr("width", width)
+                            .attr("height", margin.top)
                             //.style("fill", "#336699");
 
                         nav.append("text")
                             .attr("x", 6)
-                            .attr("y", 6 - margin.top)
+                            .attr("y", 9 - margin.top)
                             .attr("dy", ".75em")
                             .text("");
 
                     // search ?
-                    selected = selected || [scope.target.approved_symbol.toLowerCase()];
+                    selected = selected || [scope.target.approved_symbol]; //.toLowerCase()];
                     getData();
-
-
-
 
                 })
 
@@ -205,7 +223,8 @@ angular.module('plugins')
                     //var children = data.aggregations.abstract_significant_terms.buckets.filter(function(b){
                     //var children = data.aggregations.top_chunks_significant_terms.buckets.filter(function(b){
                     var children = data.aggregations.keywords_significant_terms.buckets.filter(function(b){
-                        return !selected.includes(b.key.toLowerCase());
+                        //return !selected.includes(b.key.toLowerCase());
+                        return !selected.includes(b.key);
                     })
 
                     var r = d3.hierarchy({children:children})
@@ -237,9 +256,10 @@ angular.module('plugins')
 
 
 
+                /*
+                 *
+                 */
                 function display(d) {
-
-                    //$log.log(d);
 
                     // navigation
                     nav
@@ -330,7 +350,7 @@ angular.module('plugins')
 
 
                 /*
-                 * d is the treemap layout
+                 * d2 is the treemap layout
                  */
                 function transition(d2) {
 
@@ -358,7 +378,7 @@ angular.module('plugins')
 
 
                     var depth =  d2.depth;
-                    $log.log("d : ",d2);
+                    $log.log("d2 : ",d2);
 
 
 
@@ -458,6 +478,7 @@ angular.module('plugins')
 
                         g2.selectAll("text").call(text);
                         g2.selectAll(".cell").call(rect);
+                        g2.selectAll(".clippath").call(path);
 
                         // x.domain([d1.x0 * ratio, d1.x1 * ratio]);
                         // y.domain([d1.y0, d1.y1]);
@@ -506,9 +527,7 @@ angular.module('plugins')
 
                     var t2 = g2.transition().duration(750);     // the new stuff coming in
                     t2.selectAll("text").call(text).style("fill-opacity", 1);
-                    t2.selectAll(".cell").call(rect);
-
-                    t2.selectAll(".cell").style("fill-opacity",1);
+                    t2.selectAll(".cell").call(rect).style("fill-opacity",1);
                     t2.selectAll(".clippath").call(path);
                     t2.on("end", function(){
                         $log.log("t2 done");
@@ -516,7 +535,6 @@ angular.module('plugins')
                         transitioning = false;
                         g1 = g2;
                     });
-
 
 
 
