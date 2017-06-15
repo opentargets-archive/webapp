@@ -122,18 +122,18 @@ angular.module('cttvDirectives', [])
             template: '<span></span>',
             link: function(scope, elem, attrs){
 
-                $log.warn("Check cttvProgressSpinner code!");
+                //$log.warn("Check cttvProgressSpinner code!");
                 //var newDiv = document.createTextNode("SPINNER!");
-                var newDiv = document.createElement("span");
-                newDiv.innerHTML="<span class='fa fa-circle-o-notch fa-spin fa-3x fa-fw'></span>";
-                elem[0].appendChild(newDiv);
+                //var newDiv = document.createElement("span");
+                //newDiv.innerHTML="<span class='fa fa-circle-o-notch fa-spin fa-3x fa-fw'></span>";
+                //elem[0].appendChild(newDiv);
 
-                /*var size = attrs.size || 18;
+                var size = attrs.size || 18;
                 var stroke = attrs.stroke || 2;
                 var sp = spinner()
                     .size(size)
                     .stroke(stroke);
-                sp(elem[0]);*/
+                sp(elem[0]);
             }
         };
     }])
