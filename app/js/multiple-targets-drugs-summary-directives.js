@@ -46,7 +46,7 @@ angular.module('cttvDirectives')
                     trackCall: false,
                     params: {
                         target: scope.target.map(function (d) {return d.ensembl_gene_id;}),
-                        size: 1000,
+                        size: 10000,
                         datasource: cttvConfig.evidence_sources.known_drug,
                         fields: [
                             "disease.efo_info",
