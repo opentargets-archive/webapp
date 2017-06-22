@@ -15,6 +15,7 @@ angular.module('plugins')
 
         var x = d3.scaleLinear();
         var y = d3.scaleLinear();
+        var k = d3.scaleLinear();
         resetScales();
 
         var fader = function(color) { return d3.interpolateRgb(color, "#fff")(0.2); },
@@ -29,7 +30,8 @@ angular.module('plugins')
             treemap,
             selected,
             g1,
-            g2
+            g2,
+            hobj            // the hierarchy object
             ;
 
         function resetScales(){
@@ -65,6 +67,7 @@ angular.module('plugins')
         */
         return {
             restrict: 'E',
+            //require: 'resize',
             templateUrl: 'plugins/bibliography-target-treemap.html',
             //template: '<div><svg></svg></div>',
             scope: {
@@ -103,13 +106,38 @@ angular.module('plugins')
                     //.then (function (data) {})
                 */
 
+
+                // set initial width to fit container
+                width = elem[0].firstChild.offsetWidth;
+
+                scope.onres = function(r){
+                    $log.log(' > onres : ', r);
+
+                    width = r.w;
+                    resetScales();
+
+                    d3.select( s ).attr("width", width);
+                    nav.select("rect").attr("width", width);
+                    chart.attr("width", width);
+
+                    treemap.size([width/ratio, height]);
+                    updateTreemap();
+
+                    chart.selectAll("g").remove();
+                    g1 = display(hobj);
+
+                }
+
+
+
                 function addSelected(s){
                     selected.push(s); // to lower case for more accurate matching
                     return selected;
                 }
 
+
+
                 function onClick(d){
-                    // $log.log(d);
                     addSelected(d.data.key);
                     getData();
                 }
@@ -209,6 +237,29 @@ angular.module('plugins')
 
 
 
+                function updateTreemap(){
+
+                    // reset the depths
+                    hobj.depth = 0;
+                    hobj.children.forEach(function(c){
+                        c.depth = hobj.depth+1;
+                    })
+
+                    // recalculate layout
+                    treemap(hobj);
+
+                    // since we get data every time, the treemap is flat and has no knowledge of depth
+                    // so we set that manually here.
+                    // we need it for convenience when doing the transitions
+                    hobj.depth = selected.length;
+                    hobj.children.forEach(function(c){
+                        c.depth = hobj.depth+1;
+                    })
+                    hobj.qid = selected[selected.length-1] ; // what did we click on to get this data? same as data.key
+                }
+
+
+
                 /*
                  * Handler for the response data
                  */
@@ -221,24 +272,15 @@ angular.module('plugins')
                         return !selected.includes(b.key);
                     })
 
-                    var r = d3.hierarchy({children:children})
+                    hobj = d3.hierarchy({children:children})
                             //.sum(function(d){ return d.score; })
                             .sum(function(d){ return d.doc_count; })
                             .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
 
-                    treemap(r);
-
-                    // since we get data every time, the treemap is flat and has no knowledge of depth
-                    // so we set that manually here.
-                    // we need it for convenience when doing the transitions
-                    r.depth = selected.length;
-                    r.children.forEach(function(c){
-                        c.depth = r.depth+1;
-                    })
-                    r.qid = selected[selected.length-1] ; // what did we click on to get this data? same as data.key
+                    updateTreemap();
 
                     // don't call display directly, instead let transition do the work
-                    transition(r);
+                    transition(hobj);
 
                     // literature
                     scope.hits = data.hits;

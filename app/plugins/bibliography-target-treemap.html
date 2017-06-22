@@ -1,6 +1,8 @@
 <div style="position:relative;">
     <cttv-page-progress-spinner isloading="isloading"></cttv-page-progress-spinner>
+
     <svg style="background:#ccc"></svg>
+    <cttv-size-listener onresize="onres"></cttv-size-listener>
 
     <div>
         <p ng-show="hits.hits.length && hits.total">Showing {{hits.hits.length}} of {{hits.total}}</p>
