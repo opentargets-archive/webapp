@@ -3,14 +3,14 @@ angular.module('plugins')
         'use strict';
 
         var t0;
-        var ratio = 2;
+        var ratio = 2;  // this is to make the cells more "horizontal"
 
         var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
         var margin = {top: 30, right: 0, bottom: 0, left: 0},
-            //height = 522,   // the height of the actual treemap (i.e. not including the navigation at top)
-            height = 250,
+            //height = 250,
             width = 908,
+            height = Math.floor(width/4),   // the height of the actual treemap (i.e. not including the navigation at top)
             transitioning;
 
         var x = d3.scaleLinear();
@@ -69,7 +69,6 @@ angular.module('plugins')
             restrict: 'E',
             //require: 'resize',
             templateUrl: 'plugins/bibliography-target-treemap.html',
-            //template: '<div><svg></svg></div>',
             scope: {
                 target: '=',
                 label: '='
@@ -109,6 +108,7 @@ angular.module('plugins')
 
                 // set initial width to fit container
                 width = elem[0].firstChild.offsetWidth;
+                height = Math.floor(width/4),
 
                 scope.onres = function(r){
                     $log.log(' > onres : ', r);
@@ -177,7 +177,6 @@ angular.module('plugins')
                             )
                             .finally (
                                 function(d){
-                                    $log.log(" -- finally -- ");
                                     scope.isloading = false;
                                 }
                             )
@@ -221,7 +220,6 @@ angular.module('plugins')
                             .attr("y", -margin.top)
                             .attr("width", width)
                             .attr("height", margin.top)
-                            //.style("fill", "#336699");
 
                         nav.append("text")
                             .attr("x", 6)
@@ -487,6 +485,7 @@ angular.module('plugins')
                             .slice(1)
                             .join(" > ");
                 }
+
 
                 function path(path){
                     path.attr("x", function(d) { return x(d.x0 * ratio)+4; })
