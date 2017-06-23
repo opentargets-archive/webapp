@@ -437,7 +437,7 @@
                             + clearUnderscores(item.sourceID)
                             + "</a>");
                      }
-                     else if ( item.sourceID == 'phewas_catalog' ) {
+                     else if ( item.sourceID == 'phewascatalog' ) {
                         row.push( "<a class='cttv-external-link' href='https://phewascatalog.org/phewas' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
