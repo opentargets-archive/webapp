@@ -5,8 +5,12 @@
     }
 
     .child{
-        fill: #DDD;
+        fill: #CCC;
         cursor: pointer;
+
+        &:hover {
+            fill: #BBB;
+        }
     }
 
 

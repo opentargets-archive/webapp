@@ -152,8 +152,8 @@ angular.module('plugins')
                 function getData(){
                     if( selected.length>0 ){
                         scope.isloading = true;
-                        var targets = selected.join(",");
-                        $http.get("https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search?query="+targets+"&aggs=true")
+                        var targets = selected.join("\"AND\"");
+                        $http.get("https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search?query=\""+targets+"\"&aggs=true")
                             .then (
                                 // success
                                 function (resp) {
