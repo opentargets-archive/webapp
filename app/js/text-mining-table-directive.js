@@ -260,6 +260,9 @@ angular.module('cttvDirectives')
                             + "<br />"
                             + "<span class=small>" + authorStr + " " + journalInfo + "</span>";
 
+                        // PMID
+                        var pmidStr = '<span style="color:#aaaaaa">PMID: ' + pubmedId + '</span>';
+
                         // matched sentences
                         d.evidence.literature_ref.mined_sentences.sort(function (a, b) {
                             var a = a.section.toLowerCase();
@@ -307,7 +310,7 @@ angular.module('cttvDirectives')
                             }).join("") + "</div>"
 
 
-                        row.push(titleAndSource + "<br/><br/>" + abstractString + abstract + " <p class=small>" + (matchedSentences || "no matches available") + "</p>");
+                        row.push(titleAndSource + "<br/>" + pmidStr + "<br/><br/>" + abstractString + abstract + " <p class=small>" + (matchedSentences || "no matches available") + "</p>");
 
                     }
 
