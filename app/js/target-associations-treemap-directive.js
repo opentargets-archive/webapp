@@ -142,15 +142,15 @@ angular.module('cttvDirectives')
                     .attr("class", "tm-nav");
 
                     nav.append("rect")
-                        .attr("x", 1)
+                        .attr("x", 0)
                         .attr("y", -margin.top)
-                        .attr("width", width-2)
+                        .attr("width", width)
                         .attr("height", margin.top)
                         //.style("fill", "#336699");
 
                     nav.append("text")
                         .attr("x", 6)
-                        .attr("y", 6 - margin.top)
+                        .attr("y", 9 - margin.top)
                         .attr("dy", ".75em")
                         .text("");
 

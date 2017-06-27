@@ -237,6 +237,8 @@ angular.module('plugins')
 
                 function updateTreemap(){
 
+                    $log.log(" > hobj : ", hobj);
+
                     // reset the depths
                     hobj.depth = 0;
                     hobj.children.forEach(function(c){
@@ -268,21 +270,51 @@ angular.module('plugins')
                     var children = data.aggregations.keywords_significant_terms.buckets.filter(function(b){
                         //return !selected.includes(b.key.toLowerCase());
                         return !selected.includes(b.key);
-                    })
+                    });
 
-                    hobj = d3.hierarchy({children:children})
-                            //.sum(function(d){ return d.score; })
-                            .sum(function(d){ return d.doc_count; })
-                            .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
+                    $log.log(" > onData 1 : ", data.aggregations.keywords_significant_terms.buckets.map(function(i){return i.key}));
+                    $log.log(" > onData 2 : ", children.map(function(i){return i.key}));
 
-                    updateTreemap();
+                    scope.aggs_result_total = children.length;
 
-                    // don't call display directly, instead let transition do the work
-                    transition(hobj);
+                    if(children.length>0){
+                        // d3.select( s )
+                        // .attr("height", (height + margin.top));
+                        var ts = d3.select( s ).transition().duration(500);
+                        ts.attr("height", (height + margin.top));
 
-                    // literature
-                    scope.hits = data.hits;
+                        hobj = d3.hierarchy({children:children})
+                                //.sum(function(d){ return d.score; })
+                                .sum(function(d){ return d.doc_count; })
+                                .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
 
+                        updateTreemap();
+
+                        // don't call display directly, instead let transition do the work
+                        transition(hobj);
+
+                        // literature
+                        scope.hits = data.hits;
+                    } else {
+                        // d3.select( s )
+                        // .attr("height", (margin.top));
+                        var ts = d3.select( s ).transition().duration(500);
+                        ts.attr("height", (margin.top));
+
+                        updateNav();
+                    }
+
+                }
+
+
+
+                function updateNav(){
+                    nav
+                        //.datum(selected)
+                        .on("click", onBack)
+                        .classed("tm-nav-hidden", selected.length==0 )
+                        .select("text")
+                        .text( selected.join(" > ") );
                 }
 
 
@@ -294,12 +326,7 @@ angular.module('plugins')
                 function display(d) {
 
                     // navigation
-                    nav
-                        //.datum(selected)
-                        .on("click", onBack)
-                        .classed("tm-nav-hidden", selected.length==0 )
-                        .select("text")
-                        .text( selected.join(" > ") );
+                    updateNav();
 
 
                     // actual treemap

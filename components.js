@@ -14,12 +14,15 @@ var targetAssociations = require("cttv.targetAssociationsBubbles"); // new bubbl
 var geneAssociationsTree = require("cttv.targetAssociationsTree");
 var flowerView = require("cttv.flowerView");
 
-var spinner = require("cttv.spinner");
+
 
 var diseaseGraph = require("cttv.diseaseGraph");
 var targetGeneTree = require("cttv.targetGeneTree");
 
-var cttvDiseaseRelations = require("viz_diseases");
+// TODO: check if we need this after D3v4 merge
+// var cttvDiseaseRelations = require("viz_diseases");
 
 // var targetListBubbles = require("cttv.expansionView");
 var cttvApi = require("cttv.api");
+
+var spinner = require("cttv.spinner");
