@@ -2,63 +2,7 @@ angular.module('plugins')
     .directive('bibliographyTargetTreemap', ['$log', '$http', 'cttvUtils', '$timeout', function ($log, $http, cttvUtils, $timeout) {
         'use strict';
 
-        var t0;
-        var ratio = 2;  // this is to make the cells more "horizontal"
 
-        var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
-
-        var margin = {top: 30, right: 0, bottom: 0, left: 0},
-            //height = 250,
-            width = 908,
-            height = Math.floor(width/4),   // the height of the actual treemap (i.e. not including the navigation at top)
-            transitioning;
-
-        var x = d3.scaleLinear();
-        var y = d3.scaleLinear();
-        var k = d3.scaleLinear();
-        resetScales();
-
-        var fader = function(color) { return d3.interpolateRgb(color, "#fff")(0.2); },
-            color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
-            format = d3.format(",d");
-
-        var s,
-            svg,
-            nav,
-            chart,
-            biblio,
-            treemap,
-            selected,
-            g1,
-            g2,
-            hobj            // the hierarchy object
-            ;
-
-        function resetScales(){
-            x.domain([0, width])
-             .range([0, width]);
-
-            y.domain([0, height])
-             .range([0, height]);
-        }
-
-        function cleanSpaces(input) {
-            return input.replace(/ /g,'_');
-        }
-
-        function invertScales(){
-            // x
-            var xd = x.domain();
-            var xr = x.range();
-            x.domain(xr);
-            x.range(xd);
-
-            // y
-            var yd = y.domain();
-            var ys = y.range();
-            y.domain(ys);
-            y.range(yd);
-        }
 
         /*
             {"query":{"query_string":{"query":"BRAF"}},"controls":{"use_significance":true,"sample_size":2000,"timeout":5000},"connections":{"vertices":[{"field":"abstract","min_doc_count":10,"size":10}]},"vertices":[{"field":"abstract","min_doc_count":10,"size":10}]}
@@ -106,12 +50,84 @@ angular.module('plugins')
                 */
 
 
+
+                //
+                // Initialize things
+                //
+
+
+
+                var t0;
+                var ratio = 2;  // this is to make the cells more "horizontal"
+
+                var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+
+                var margin = {top: 30, right: 0, bottom: 0, left: 0},
+                    //height = 250,
+                    width = 908,
+                    height = Math.floor(width/4),   // the height of the actual treemap (i.e. not including the navigation at top)
+                    transitioning;
+
+                var x = d3.scaleLinear();
+                var y = d3.scaleLinear();
+                var k = d3.scaleLinear();
+                resetScales();
+
+                var fader = function(color) { return d3.interpolateRgb(color, "#fff")(0.2); },
+                    color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
+                    format = d3.format(",d");
+
+                var s,
+                    svg,
+                    nav,
+                    chart,
+                    biblio,
+                    treemap,
+                    selected,
+                    g1,
+                    g2,
+                    hobj            // the hierarchy object
+                    ;
+
+                function resetScales(){
+                    x.domain([0, width])
+                     .range([0, width]);
+
+                    y.domain([0, height])
+                     .range([0, height]);
+                }
+
+                function cleanSpaces(input) {
+                    return input.replace(/ /g,'_');
+                }
+
+                function invertScales(){
+                    // x
+                    var xd = x.domain();
+                    var xr = x.range();
+                    x.domain(xr);
+                    x.range(xd);
+
+                    // y
+                    var yd = y.domain();
+                    var ys = y.range();
+                    y.domain(ys);
+                    y.range(yd);
+                }
+
+
+
                 // set initial width to fit container
                 width = elem[0].firstChild.offsetWidth;
                 height = Math.floor(width/4),
 
+
+
+                /*
+                 * Scale things on resize
+                 */
                 scope.onres = function(r){
-                    $log.log(' > onres : ', r);
+                    // $log.log(' > onres : ', r);
 
                     width = r.w;
                     resetScales();
@@ -137,11 +153,19 @@ angular.module('plugins')
 
 
 
+                /*
+                 * Handler for when clicking on a cell
+                 */
                 function onClick(d){
                     addSelected(d.data.key);
                     getData();
                 }
 
+
+
+                /*
+                 * Handler for when we click on breadcrumb bar
+                 */
                 function onBack(){
                     if(selected.length>1){
                         selected.pop();
@@ -149,11 +173,33 @@ angular.module('plugins')
                     }
                 }
 
+
+
+                /*
+                 * Builds and returns the search query string for target OR synomyms AND all other terms
+                 */
+                function getQuery(){
+                    //selected[0];
+                    var ss = scope.target.symbol_synonyms || [];
+                    var ns = /*scope.target.name_synonyms ||*/ [];  // don't use any name synomyms for now
+                    var q = "(\"" + [selected[0]].concat(ss).concat(ns).join("\"OR\"") +"\")"; // e.g. : ("braf"AND"braf1"AND"braf2")
+                    if( selected.length > 1){
+                        q = q + "AND\"" + selected.slice(1).join("\"AND\"")+ "\"";  // e.g. : ("braf"AND"braf1"AND"braf2")AND"NRAS"AND"NRAS mutation"
+                    }
+                    return q;
+                }
+
+
+
+                /*
+                 * Get data from the API
+                 */
                 function getData(){
                     if( selected.length>0 ){
                         scope.isloading = true;
                         var targets = selected.join("\"AND\"");
-                        $http.get("https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search?query=\""+targets+"\"&aggs=true")
+                        // $log.log(" > getQuery() : ", getQuery());
+                        $http.get("https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search?query="+getQuery()+"&aggs=true")
                             .then (
                                 // success
                                 function (resp) {
@@ -228,7 +274,8 @@ angular.module('plugins')
                             .text("");
 
                     // search ?
-                    selected = selected || [scope.target.approved_symbol]; //.toLowerCase()];
+                    // selected = selected || [scope.target.approved_symbol]; //.toLowerCase()];
+                    selected = [scope.target.approved_symbol];
                     getData();
 
                 })
@@ -236,8 +283,6 @@ angular.module('plugins')
 
 
                 function updateTreemap(){
-
-                    $log.log(" > hobj : ", hobj);
 
                     // reset the depths
                     hobj.depth = 0;
@@ -272,8 +317,8 @@ angular.module('plugins')
                         return !selected.includes(b.key);
                     });
 
-                    $log.log(" > onData 1 : ", data.aggregations.keywords_significant_terms.buckets.map(function(i){return i.key}));
-                    $log.log(" > onData 2 : ", children.map(function(i){return i.key}));
+                    // $log.log(" > onData 1 : ", data.aggregations.keywords_significant_terms.buckets.map(function(i){return i.key}));
+                    // $log.log(" > onData 2 : ", children.map(function(i){return i.key}));
 
                     scope.aggs_result_total = children.length;
 
