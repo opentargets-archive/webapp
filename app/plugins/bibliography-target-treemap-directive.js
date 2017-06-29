@@ -347,8 +347,7 @@ angular.module('plugins')
                         // don't call display directly, instead let transition do the work
                         transition(hobj);
 
-                        // literature
-                        scope.hits = data.hits;
+
                     } else {
                         // d3.select( s )
                         // .attr("height", (margin.top));
@@ -357,6 +356,9 @@ angular.module('plugins')
 
                         updateNav();
                     }
+
+                    // literature
+                    scope.hits = data.hits;
 
                 }
 
