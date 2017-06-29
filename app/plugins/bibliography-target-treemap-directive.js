@@ -313,12 +313,21 @@ angular.module('plugins')
                     //var children = data.aggregations.abstract_significant_terms.buckets.filter(function(b){
                     //var children = data.aggregations.top_chunks_significant_terms.buckets.filter(function(b){
                     var children = data.aggregations.keywords_significant_terms.buckets.filter(function(b){
+                        /*
+                        don't add these to the treemap if they appears in the "selected" array (i.e. those we clicked on)
+                        or in the symbol synonyms
+                        */
+
                         //return !selected.includes(b.key.toLowerCase());
-                        return !selected.includes(b.key);
+
+                        // filter: case sensitive
+                        // return !selected.includes(b.key) && !scope.target.symbol_synonyms.includes(b.key);
+
+                        // filter: case insensitive
+                        return selected.filter(function(a){return a.toLowerCase()==b.key.toLowerCase()}).length==0   &&   scope.target.symbol_synonyms.filter(function(a){return a.toLowerCase()==b.key.toLowerCase()}).length==0;
                     });
 
-                    // $log.log(" > onData 1 : ", data.aggregations.keywords_significant_terms.buckets.map(function(i){return i.key}));
-                    // $log.log(" > onData 2 : ", children.map(function(i){return i.key}));
+                    $log.log(" > children : ", children);
 
                     scope.aggs_result_total = children.length;
 
