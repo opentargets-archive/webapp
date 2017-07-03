@@ -57,6 +57,8 @@ angular.module('plugins')
 
 
 
+                var API_URL = "https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search";
+
                 var t0;
                 var ratio = 2;  // this is to make the cells more "horizontal"
 
@@ -89,145 +91,12 @@ angular.module('plugins')
                     hobj            // the hierarchy object
                     ;
 
-                function resetScales(){
-                    x.domain([0, width])
-                     .range([0, width]);
-
-                    y.domain([0, height])
-                     .range([0, height]);
-                }
-
-                function cleanSpaces(input) {
-                    return input.replace(/ /g,'_');
-                }
-
-                function invertScales(){
-                    // x
-                    var xd = x.domain();
-                    var xr = x.range();
-                    x.domain(xr);
-                    x.range(xd);
-
-                    // y
-                    var yd = y.domain();
-                    var ys = y.range();
-                    y.domain(ys);
-                    y.range(yd);
-                }
-
 
 
                 // set initial width to fit container
                 width = elem[0].firstChild.offsetWidth;
-                height = Math.floor(width/4),
+                height = Math.floor(width/4);
 
-
-
-                /*
-                 * Scale things on resize
-                 */
-                scope.onres = function(r){
-                    // $log.log(' > onres : ', r);
-
-                    width = r.w;
-                    resetScales();
-
-                    d3.select( s ).attr("width", width);
-                    nav.select("rect").attr("width", width);
-                    chart.attr("width", width);
-
-                    treemap.size([width/ratio, height]);
-                    updateTreemap();
-
-                    chart.selectAll("g").remove();
-                    g1 = display(hobj);
-
-                }
-
-
-
-                function addSelected(s){
-                    selected.push(s); // to lower case for more accurate matching
-                    return selected;
-                }
-
-
-
-                /*
-                 * Handler for when clicking on a cell
-                 */
-                function onClick(d){
-                    addSelected(d.data.key);
-                    getData();
-                }
-
-
-
-                /*
-                 * Handler for when we click on breadcrumb bar
-                 */
-                function onBack(){
-                    if(selected.length>1){
-                        selected.pop();
-                        getData();
-                    }
-                }
-
-
-
-                /*
-                 * Builds and returns the search query string for target OR synomyms AND all other terms
-                 */
-                function getQuery(){
-                    //selected[0];
-                    var ss = scope.target.symbol_synonyms || [];
-                    var ns = /*scope.target.name_synonyms ||*/ [];  // don't use any name synomyms for now
-                    var q = "(\"" + [selected[0]].concat(ss).concat(ns).join("\"OR\"") +"\")"; // e.g. : ("braf"AND"braf1"AND"braf2")
-                    if( selected.length > 1){
-                        q = q + "AND\"" + selected.slice(1).join("\"AND\"")+ "\"";  // e.g. : ("braf"AND"braf1"AND"braf2")AND"NRAS"AND"NRAS mutation"
-                    }
-                    return q;
-                }
-
-
-
-                /*
-                 * Get data from the API
-                 */
-                function getData(){
-                    if( selected.length>0 ){
-                        scope.isloading = true;
-                        var targets = selected.join("\"AND\"");
-                        // $log.log(" > getQuery() : ", getQuery());
-                        $http.get("https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search?query="+getQuery()+"&aggs=true")
-                            .then (
-                                // success
-                                function (resp) {
-                                    return resp.data;
-                                },
-                                // failure
-                                function (resp){
-                                    $log.warn("Error: ",resp);
-                                    // TODO:
-                                    // so here, in case of an error, we remove the last selected thing in the list (since we didn't get the data for it)
-                                    // Perhaps a better approach is to add it only once we have a successful response
-                                    selected.pop();
-                                }
-                            )
-                            .then (
-                                // success
-                                function (data){
-                                    $log.warn("call took: " + data.took);
-                                    onData(data);
-                                }
-                            )
-                            .finally (
-                                function(d){
-                                    scope.isloading = false;
-                                }
-                            )
-                    }
-                }
 
 
                 // setup the SVG
@@ -282,6 +151,251 @@ angular.module('plugins')
 
 
 
+                function resetScales(){
+                    x.domain([0, width])
+                     .range([0, width]);
+
+                    y.domain([0, height])
+                     .range([0, height]);
+                }
+
+
+
+                function cleanSpaces(input) {
+                    return input.replace(/ /g,'_');
+                }
+
+
+
+                function invertScales(){
+                    // x
+                    var xd = x.domain();
+                    var xr = x.range();
+                    x.domain(xr);
+                    x.range(xd);
+
+                    // y
+                    var yd = y.domain();
+                    var ys = y.range();
+                    y.domain(ys);
+                    y.range(yd);
+                }
+
+
+
+
+                function addSelected(s){
+                    selected.push(s); // to lower case for more accurate matching
+                    return selected;
+                }
+
+
+
+                /*
+                 * Handler for when clicking on a cell
+                 */
+                function onClick(d){
+                    addSelected(d.data.key);
+                    getData();
+                }
+
+
+
+                /*
+                 * Handler for when we click on breadcrumb bar
+                 */
+                function onBack(){
+                    if(selected.length>1){
+                        selected.pop();
+                        getData();
+                    }
+                }
+
+
+
+                /*
+                 * Builds and returns the search query string for target OR synomyms AND all other terms
+                 */
+                function getQuery(){
+                    var ss = scope.target.symbol_synonyms || [];
+                    var ns = /*scope.target.name_synonyms ||*/ [];  // don't use any name synomyms for now
+                    var q = "(\"" + [selected[0]].concat(ss).concat(ns).join("\"OR\"") +"\")"; // e.g. : ("braf"AND"braf1"AND"braf2")
+                    if( selected.length > 1){
+                        q = q + "AND\"" + selected.slice(1).join("\"AND\"")+ "\"";  // e.g. : ("braf"AND"braf1"AND"braf2")AND"NRAS"AND"NRAS mutation"
+                    }
+                    return q;
+                }
+
+
+
+                /*
+                 * Get data from the API
+                 * we use one function to get all data because when we click on treemap we reset the literature
+                 */
+                function getData(){
+                    if( selected.length>0 ){
+                        scope.isloading = true;
+                        var targets = selected.join("\"AND\"");
+                        $http.get( API_URL+"?query="+getQuery()+"&aggs=true" )
+                            .then (
+                                function (resp) {
+                                    return resp.data; // success
+                                },
+                                function (resp){
+                                    $log.warn("Error: ",resp); // failure
+                                    // TODO:
+                                    // so here, in case of an error, we remove the last selected thing in the list (since we didn't get the data for it)
+                                    // Perhaps a better approach is to add it only once we have a successful response
+                                    selected.pop();
+                                }
+                            )
+                            .then (
+                                function (data){
+                                    onData(data); // success
+                                }
+                            )
+                            .finally (
+                                function(d){
+                                    scope.isloading = false;
+                                }
+                            )
+                    }
+                }
+
+
+
+                /*
+                 * Get more literature data:
+                 * - fetch data from the last thing we got on previous result
+                 * - no aggregations for treemap
+                 */
+                function getMoreData(){
+
+                    // the  last element of the last page
+                    var last = scope.hits[scope.hits.length-1].hits[scope.hits[scope.hits.length-1].hits.length-1];
+                    var after = last.sort[0] || undefined ; // e.g. 1483228800000
+                    var after_id = last._id || undefined ;  // e.g. 27921184
+
+                    if(after && after_id){
+
+                        $http.get( API_URL+"?query="+getQuery()+"&search_after="+after+"&search_after_id="+after_id )
+                                .then (
+                                    function (resp) {
+                                        return resp.data; // success
+                                    },
+                                    function (resp){
+                                        $log.warn("Error: ",resp); // failure
+                                    }
+                                )
+                                .then (
+                                    function (data){
+                                        onData(data); // success
+                                    }
+                                )
+                                .finally (
+                                    function(d){
+                                        scope.isloading = false;
+                                    }
+                                )
+
+                    }
+                }
+
+
+
+                /*
+                 * Handler for the response data
+                 */
+                function onData(data){
+                    if( data.aggregations ){
+                        onAggsData(data);
+                    }
+
+                    if( data.hits ){
+                        onLiteratureData(data, data.aggregations!=undefined);
+                    }
+                }
+
+
+
+                /*
+                 * Handler for the aggregations data for the treemap
+                 */
+                function onAggsData(data){
+
+                    //var children = data.aggregations.abstract_significant_terms.buckets.filter(function(b){
+                    //var children = data.aggregations.top_chunks_significant_terms.buckets.filter(function(b){
+                    var children = data.aggregations.keywords_significant_terms.buckets.filter(function(b){
+                        /*
+                        don't add these to the treemap if they appears in the "selected" array (i.e. those we clicked on)
+                        or in the symbol synonyms
+                        */
+
+                        //return !selected.includes(b.key.toLowerCase());
+
+                        // filter: case sensitive
+                        // return !selected.includes(b.key) && !scope.target.symbol_synonyms.includes(b.key);
+
+                        // filter: case insensitive
+                        return selected.filter(function(a){return a.toLowerCase()==b.key.toLowerCase()}).length==0   &&   scope.target.symbol_synonyms.filter(function(a){return a.toLowerCase()==b.key.toLowerCase()}).length==0;
+                    });
+
+                    //$log.log(" > children : ", children);
+
+                    scope.aggs_result_total = children.length;
+
+                    if(children.length>0){
+
+                        // d3.select( s )
+                        // .attr("height", (height + margin.top));
+                        var ts = d3.select( s ).transition().duration(500);
+                        ts.attr("height", (height + margin.top));
+
+                        hobj = d3.hierarchy({children:children})
+                                //.sum(function(d){ return d.score; })
+                                .sum(function(d){ return d.doc_count; })
+                                .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
+
+                        updateTreemap();
+
+                        // don't call display directly, instead let transition do the work
+                        transition(hobj);
+
+                    } else {
+
+                        // d3.select( s )
+                        // .attr("height", (margin.top));
+                        var ts = d3.select( s ).transition().duration(500);
+                        ts.attr("height", (margin.top));
+
+                        updateNav();
+                    }
+                }
+
+
+
+                /*
+                 * Handler for literature data
+                 * data : the API response data
+                 * reset : if true, previous literature data is removed; if false (DEFAULT), new literature data is appended (e.g. pagination)
+                 */
+                function onLiteratureData(data, reset){
+                    reset = reset || false;
+                    if(reset){
+                        scope.hits = [];
+                        scope.noftotal = 0;
+                    }
+                    // literature
+                    // scope.hits = data.hits;
+                    scope.hits.push(data.hits); // store every batch as a "page" of results
+                    // calculate the number of papers shown
+                    scope.noftotal = scope.hits.reduce(function(a,b){return a + b.hits.length}, 0);
+                    // a flattened list of just the hits (publications) to avoid nested looping in the HTML if we want to
+                    // scope.papers = scope.hits.reduce( function(a,b){ return a.concat(b.hits)} , [] );
+                }
+
+
+
                 function updateTreemap(){
 
                     // reset the depths
@@ -301,65 +415,6 @@ angular.module('plugins')
                         c.depth = hobj.depth+1;
                     })
                     hobj.qid = selected[selected.length-1] ; // what did we click on to get this data? same as data.key
-                }
-
-
-
-                /*
-                 * Handler for the response data
-                 */
-                function onData(data){
-
-                    //var children = data.aggregations.abstract_significant_terms.buckets.filter(function(b){
-                    //var children = data.aggregations.top_chunks_significant_terms.buckets.filter(function(b){
-                    var children = data.aggregations.keywords_significant_terms.buckets.filter(function(b){
-                        /*
-                        don't add these to the treemap if they appears in the "selected" array (i.e. those we clicked on)
-                        or in the symbol synonyms
-                        */
-
-                        //return !selected.includes(b.key.toLowerCase());
-
-                        // filter: case sensitive
-                        // return !selected.includes(b.key) && !scope.target.symbol_synonyms.includes(b.key);
-
-                        // filter: case insensitive
-                        return selected.filter(function(a){return a.toLowerCase()==b.key.toLowerCase()}).length==0   &&   scope.target.symbol_synonyms.filter(function(a){return a.toLowerCase()==b.key.toLowerCase()}).length==0;
-                    });
-
-                    $log.log(" > children : ", children);
-
-                    scope.aggs_result_total = children.length;
-
-                    if(children.length>0){
-                        // d3.select( s )
-                        // .attr("height", (height + margin.top));
-                        var ts = d3.select( s ).transition().duration(500);
-                        ts.attr("height", (height + margin.top));
-
-                        hobj = d3.hierarchy({children:children})
-                                //.sum(function(d){ return d.score; })
-                                .sum(function(d){ return d.doc_count; })
-                                .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
-
-                        updateTreemap();
-
-                        // don't call display directly, instead let transition do the work
-                        transition(hobj);
-
-
-                    } else {
-                        // d3.select( s )
-                        // .attr("height", (margin.top));
-                        var ts = d3.select( s ).transition().duration(500);
-                        ts.attr("height", (margin.top));
-
-                        updateNav();
-                    }
-
-                    // literature
-                    scope.hits = data.hits;
-
                 }
 
 
@@ -432,11 +487,15 @@ angular.module('plugins')
                             .attr("class", function(d){ return d.children ? "ta-label" : "disease-label"  })
                             .attr("clip-path", function(d) { return "url(#clip-" + cleanSpaces(d.data.key) + ")"; });
 
+                        // remove the count for now, just to test based on feedback....
+                        // TODO: we might want it back?
+                        /*
                         cellLabel.append("tspan")
                             .attr("class", "ta-label-details")
                             //.text( function(d){return "Score: "+d.data.score.toFixed(2)} )
                             .text( function(d){return d.data.doc_count} )
                         ;
+                        */
 
                         cellLabel.call(text)
                         cellLabel.append("title")
@@ -578,6 +637,39 @@ angular.module('plugins')
                 }
 
 
+
+                //////////////////////////////////////////
+
+                //  SCOPE FUNCTIONS
+
+                //////////////////////////////////////////
+
+
+
+                scope.getMoreData = getMoreData;
+
+
+
+                /*
+                 * Scale things on resize
+                 */
+                scope.onres = function(r){
+                    // $log.log(' > onres : ', r);
+
+                    width = r.w;
+                    resetScales();
+
+                    d3.select( s ).attr("width", width);
+                    nav.select("rect").attr("width", width);
+                    chart.attr("width", width);
+
+                    treemap.size([width/ratio, height]);
+                    updateTreemap();
+
+                    chart.selectAll("g").remove();
+                    g1 = display(hobj);
+
+                }
 
 
 
