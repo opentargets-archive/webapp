@@ -24,6 +24,8 @@ var sourcemaps = require('gulp-sourcemaps');
 var jsonminify = require('gulp-jsonminify');
 var extend = require('gulp-extend');
 
+var through = require('through2');
+
 var buildDir = "app/build";
 var componentsConfig = "components.js";
 var packageConfig = require("./package.json");
@@ -239,7 +241,7 @@ gulp.task('build-webapp-styles', function () {
  */
 gulp.task('init-config', function(){
 
-    var c = fs.stat(webappConfigSources[1], function(err, stat){
+    fs.stat(webappConfigSources[1], function(err, stat){
         if(!stat){
             var content = "/*\n"
                         + "Custom config options\n"
@@ -256,6 +258,20 @@ gulp.task('init-config', function(){
 });
 
 
+// replace the API host in the config files based on the APIHOST env variable
+function setApi () {
+    function substituteApi(file, enc, cb) {
+        var apiHost = process.env.APIHOST; // APIHOST to define an API to point to
+        if (apiHost) {
+            var search = /"api":\s?".*"\s?,/;
+            var replacement = '"api": "' + apiHost + '",';
+
+            file.contents = new Buffer(String(file.contents).replace(search, replacement));
+        }
+        return cb(null, file);
+    }
+    return through.obj(substituteApi);
+}
 
 /**
  * Merges default and custom config json files.
@@ -264,6 +280,7 @@ gulp.task('init-config', function(){
 gulp.task('build-config', ['init-config'], function(){
 
     return gulp.src( webappConfigSources )
+        .pipe(setApi())
         .pipe(jsonminify())                     // remove comments
         .pipe(extend(webappConfigFile, false))  // merge files; no deep-checking, just first level, so careful to overwrite objects
         .pipe(gulp.dest(buildDir));
