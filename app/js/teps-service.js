@@ -58,6 +58,6 @@ angular.module('cttvServices').
             ENSG00000196632: {
                 id: 'ENSG00000196632',
                 symbol: 'WNK3'
-            },
+            }
         };
     }]);
