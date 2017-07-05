@@ -245,6 +245,18 @@
             "element": "bibliography-target-treemap",
             "heading": "Bibliography Treemap",
             "track": true
+        },
+        {
+            "name": "bibliographyTreechip",
+            "element": "bibliography-target-treechip",
+            "heading": "Bibliography Treechip",
+            "track": true
+        },
+        {
+            "name": "bibliographyChips",
+            "element": "bibliography-target-chips",
+            "heading": "Bibliography chips",
+            "track": true
         }
     ],
 
