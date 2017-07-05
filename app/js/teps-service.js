@@ -38,6 +38,26 @@ angular.module('cttvServices').
             ENSG00000167258: {
                 id: 'ENSG00000167258',
                 symbol: 'CDK12'
+            },
+            ENSG00000106683: {
+                id: 'ENSG00000106683',
+                symbol: 'LIMK1'
+            },
+            ENSG00000198924: {
+                id: 'ENSG00000198924',
+                symbol: 'DCLRE1A'
+            },
+            ENSG00000172269: {
+                id: 'ENSG00000172269',
+                symbol: 'DPAGT1'
+            },
+            ENSG00000008311: {
+                id: 'ENSG00000008311',
+                symbol: 'AASS'
+            },
+            ENSG00000196632: {
+                id: 'ENSG00000196632',
+                symbol: 'WNK3'
             }
         };
     }]);
