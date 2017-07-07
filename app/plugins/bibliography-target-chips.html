@@ -3,10 +3,12 @@
 
     <!-- <svg style="background:#ccc"></svg> -->
     <div>
-        <span ng-repeat="chip in chips" class="tm-chip">{{chip.key}}</span>
+        <span ng-repeat="sel in selected" class="tm-chip btn btn-default">{{sel}}</span>
+        <span ng-repeat="chip in chips" class="tm-chip btn btn-success">{{chip.key}}</span>
     </div>
     <div ng-show="aggs_result_total==0" style="text-align:center; background:#ccc; padding:15px; border:1px solid #fff; margin-top:-3px">No further terms found</div>
-    <cttv-size-listener onresize="onres"></cttv-size-listener>
+
+    <!-- <cttv-size-listener onresize="onres"></cttv-size-listener> -->
 
     <div>
         <p ng-show="noftotal && hits[0].total">Showing {{noftotal}} of {{hits[0].total}} results</p>
