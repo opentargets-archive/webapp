@@ -1,3 +1,2 @@
-/api/*  https://104.199.16.253/api/:splat  200!
 /proxy/* https://proxy.targetvalidation.org/:splat 200!
 /* /index.html 200

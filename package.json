@@ -29,6 +29,7 @@
     "gulp-watch": "3.0.0",
     "jspm": "^0.16.34",
     "mkdirp": "0.5.1",
+    "through2": "^2.0.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
