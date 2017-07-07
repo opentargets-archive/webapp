@@ -10,9 +10,13 @@
     <div class="container">
         <div class"row">
 
-            <div md-parser url="api/latest/docs"></div>
+           <!--  <div md-parser url="api/latest/docs"></div>
 
-            <div swagger-ui url="'api/latest/swagger'" api-explorer="true" parser="yaml" validator-url="false"></div>
+            <div swagger-ui url="'api/latest/swagger'" api-explorer="true" parser="yaml" validator-url="false"></div> -->
+
+            <div md-parser url="{{cttvConfig.api}}/latest/docs"></div>
+
+            <div swagger-ui url="'{{cttvConfig.api}}/latest/swagger'" api-explorer="true" parser="yaml" validator-url="false"></div>
 
         </div>
     </div>

@@ -199,6 +199,17 @@
             //     $scope.search.loading = false;
             // });
 
+    }])
+
+
+
+    /**
+     * A generic page controller;
+     * Can be used to pass common variables, constants or services to all pages
+     */
+    .controller('PageCtrl', ['$scope', 'cttvConfig', function ($scope, cttvConfig) {
+        'use strict';
+        $scope.cttvConfig = cttvConfig;
     }]);
 
 
