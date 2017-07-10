@@ -4,7 +4,7 @@
 
 # OpenTargets Web App
 
-This is the web app for the Open Targets Platform, based on the Open Targets API.
+This is the web app for the Open Targets Platform, based on the Open Targets REST API.
 The app is based on Angular, while D3 is used for visualization and graphs.
 
 

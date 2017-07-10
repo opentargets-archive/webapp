@@ -603,6 +603,12 @@
                     }
                     row.push(cons);
 
+                    // Clinical consequences
+                    var clin = 'N/A';
+                    if (item.evidence.variant2disease && item.evidence.variant2disease.clinical_significance) {
+                        clin = item.evidence.variant2disease.clinical_significance;
+                    }
+                    row.push(clin);
 
                     // evidence source
                     if( item.type === 'genetic_association' && checkPath(item, "evidence.variant2disease") ){
@@ -622,8 +628,6 @@
                         }
 
                     }
-
-
 
                     // publications
                     var refs = [];
@@ -677,16 +681,16 @@
                         "width" : "3%"
                     },
                     {
-                        "targets": [6],
+                        "targets": [7],
                         "visible": false
                     },
                     {
-                        "targets": [2,5],
+                        "targets": [2,6],
                         "width": "14%"
                     },
                     {
-                        "targets": [3,4],
-                        "width": "22%"
+                        "targets": [3,4,5],
+                        "width": "20%"
                     }
                 ],
             }, $scope.search.info.title+"-rare_diseases") );

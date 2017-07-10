@@ -259,18 +259,19 @@ gulp.task('init-config', function(){
 
 
 // replace the API host in the config files based on the APIHOST env variable
-function setApi () {
-    function substituteApi(file, enc, cb) {
-        var apiHost = process.env.APIHOST; // APIHOST to define an API to point to
-        if (apiHost) {
-            var search = /"api":\s?".*"\s?,/;
-            var replacement = '"api": "' + apiHost + '",';
+function setApi() {
+  function substituteApi(file, enc, cb) {
+    var apiHost = process.env.APIHOST; // APIHOST to define an API to point to
+    if (apiHost) {
+      var search = /"api":\s?".*"\s?,/;
+      var replacement = '"api": "' + apiHost + '",';
 
-            file.contents = new Buffer(String(file.contents).replace(search, replacement));
-        }
-        return cb(null, file);
+      file.contents = new Buffer(String(file.contents).replace(search, replacement));
     }
-    return through.obj(substituteApi);
+    return cb(null, file);
+  }
+
+  return through.obj(substituteApi);
 }
 
 /**
