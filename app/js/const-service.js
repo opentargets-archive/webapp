@@ -33,7 +33,7 @@ angular.module('cttvServices').
                 CHEMBL :              "chembl",
                 DISGENET :            "disgenet",
                 EPMC :                "europepmc",
-                NFERX :               "nferx"
+                NFERX :               "nferx",
                 EVA_SOMATIC :         "eva_somatic",
                 INTOGEN :             "intogen",
                 GENE_2_PHENOTYPE :    "gene2phenotype"
