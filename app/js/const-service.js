@@ -18,7 +18,8 @@ angular.module('cttvServices').
                 RNA_EXPRESSION :      "rna_expression",
                 AFFECTED_PATHWAY :    "affected_pathway",
                 ANIMAL_MODEL :        "animal_model",
-                LITERATURE :          "literature"
+                LITERATURE :          "literature",
+                LITERATURE_NFERX :    "literature_nferx"
             },
             dbs : {
                 EXPRESSION_ATLAS :    "expression_atlas",
@@ -32,6 +33,7 @@ angular.module('cttvServices').
                 CHEMBL :              "chembl",
                 DISGENET :            "disgenet",
                 EPMC :                "europepmc",
+                NFERX :               "nferx"
                 EVA_SOMATIC :         "eva_somatic",
                 INTOGEN :             "intogen",
                 GENE_2_PHENOTYPE :    "gene2phenotype"
@@ -48,12 +50,13 @@ angular.module('cttvServices').
                 CHEMBL :              "/data_sources#chembl",
                 DISGENET :            "/data_sources",  // no longer used
                 EPMC :                "/data_sources#text_mining",
+                NFERX :                "/data_sources#nferx",
                 EVA_SOMATIC :         "/data_sources#eva",
                 INTOGEN :             "/data_sources#intogen",
                 GENE_2_PHENOTYPE :    "/data_sources#gene2phenotype"
             },
             datatypesOrder: [
-                "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "ANIMAL_MODEL"
+                "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "LITERATURE_NFERX","ANIMAL_MODEL"
             ],
             datatypesLabels: {
                 GENETIC_ASSOCIATION: "Genetics",
@@ -62,7 +65,8 @@ angular.module('cttvServices').
                 RNA_EXPRESSION: "RNA",
                 AFFECTED_PATHWAY: "Pathways",
                 ANIMAL_MODEL: "Mouse",
-                LITERATURE: "Text Mining"
+                LITERATURE: "Text Mining",
+                LITERATURE_NFERX: "Literature Nferx"
             },
             DATATYPES: 'datatype',
             PATHWAY: 'pathway',

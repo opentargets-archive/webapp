@@ -35,6 +35,7 @@ angular.module('cttvServices').
             // E
             ENSEMBL_ID :                     "Ensembl ID",
             EPMC :                           "Europe PMC",
+            NFERX :                          "Literature NFERX",
             EVA :                            "European Variation Archive (EVA)",
             EVA_SOMATIC :                    "European Variation Archive (EVA)",
             EXP_DISEASE_ASSOC_LABEL :        "targets_associated_with_",
@@ -57,6 +58,7 @@ angular.module('cttvServices').
 
             // L
             LITERATURE :                     "Text mining",
+            LITERATURE_NFERX:                "Literature Nferx",
 
             // M
             MOUSE_MODEL :                    "Animal models",

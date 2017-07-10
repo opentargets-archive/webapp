@@ -31,7 +31,8 @@ angular.module('cttvServices').
                 rna_expression : [dbs.EXPRESSION_ATLAS],
                 pathway : [dbs.REACTOME],
                 animal_model : [dbs.PHENODIGM],
-                literature : [dbs.EPMC]
+                literature : [dbs.EPMC],
+                literature_nferx : [dbs.NFERX]
             },
         };
 
