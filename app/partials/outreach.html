@@ -19,7 +19,7 @@
                 <div ng-show="upcoming" class="training-sessions">
                     <h5>Upcoming sessions:</h5>
                     <ul>
-                        <li class="event" ng-repeat="event in upcoming">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} (<a ng-if="event.external.link" href="{{event.external.link}}">{{event.external.text}}</a><span ng-if="!event.external.link">{{event.external.text}}</span>)</li>
+                        <li class="event" ng-repeat="event in upcoming">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} <span ng-if="event.external.link">(<a href="{{event.external.link}}">{{event.external.text}}</a>)</span><span ng-if="!event.external.link && event.external.text">({{event.external.text}})</span></li>
                     </ul>
                     <p>If you can't attend any of the above, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> now to arrange training sessions at your institution.</p>
                 </div>
