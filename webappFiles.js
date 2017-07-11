@@ -80,6 +80,7 @@ var webappFiles = {
             'app/js/disease-graph-directive.js',
             'app/js/batch-search-directives.js',
             'app/js/summary-controller.js',
+            'app/js/data-sources-controller.js',
             'app/js/multiple-targets-associations-summary-directives.js',
             'app/js/multiple-targets-pathways-summary-directive.js',
             'app/js/multiple-targets-drugs-summary-directives.js',
