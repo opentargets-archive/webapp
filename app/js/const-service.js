@@ -18,8 +18,7 @@ angular.module('cttvServices').
                 RNA_EXPRESSION :      "rna_expression",
                 AFFECTED_PATHWAY :    "affected_pathway",
                 ANIMAL_MODEL :        "animal_model",
-                LITERATURE :          "literature",
-                LITERATURE_NFERX :    "literature_nferx"
+                LITERATURE :          "literature"
             },
             dbs : {
                 EXPRESSION_ATLAS :    "expression_atlas",
@@ -29,7 +28,7 @@ angular.module('cttvServices').
                 EVA :                 "eva",
                 PHENODIGM :           "phenodigm",
                 GWAS :                "gwas_catalog",
-                PHEWAS :              "phewascatalog",
+                PHEWAS :              "phewas_catalog",
                 PHEWAS_23andme :      "23andme",
                 GENOMICS_ENGLAND:     "genomics_england",
                 CANCER_GENE_CENSUS :  "cancer_gene_census",
@@ -62,7 +61,7 @@ angular.module('cttvServices').
                 GENE_2_PHENOTYPE :    "/data_sources#gene2phenotype"
             },
             datatypesOrder: [
-                "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "LITERATURE_NFERX","ANIMAL_MODEL"
+                "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE","ANIMAL_MODEL"
             ],
             datatypesLabels: {
                 GENETIC_ASSOCIATION: "Genetics",
@@ -71,8 +70,7 @@ angular.module('cttvServices').
                 RNA_EXPRESSION: "RNA",
                 AFFECTED_PATHWAY: "Pathways",
                 ANIMAL_MODEL: "Mouse",
-                LITERATURE: "Text Mining",
-                LITERATURE_NFERX: "Nferx"
+                LITERATURE: "Text Mining"
             },
             DATATYPES: 'datatype',
             PATHWAY: 'pathway',

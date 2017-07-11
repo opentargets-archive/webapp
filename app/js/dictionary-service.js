@@ -58,8 +58,7 @@ angular.module('cttvServices').
             KNOWN_DRUG :                     "Drugs",
 
             // L
-            LITERATURE :                     "Text mining",
-            LITERATURE_NFERX:                "Literature Nferx",
+            LITERATURE :                     "Text mining"
 
             // M
             MOUSE_MODEL :                    "Animal models",

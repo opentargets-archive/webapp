@@ -208,9 +208,6 @@ angular.module('plugins')
                 row.push( getColorStyleString( objDts.rna_expression, sbjDts.rna_expression, geneObjDiseaseLoc +      (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=rna_expression", geneSbjDiseaseLoc +      (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=rna_expression") );
                 // Literature
                 row.push( getColorStyleString( objDts.literature, sbjDts.literature, geneObjDiseaseLoc +(geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature", geneSbjDiseaseLoc +(geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature"));
-                // Nferx
-                row.push( getColorStyleString( objDts.literature_nferx, sbjDts.literature_nferx, geneObjDiseaseLoc +(geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature", geneSbjDiseaseLoc +(geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=literature"));
-
                 // Animal model
                 row.push( getColorStyleString( objDts.animal_model, sbjDts.animal_model, geneObjDiseaseLoc +        (geneObjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models", geneSbjDiseaseLoc +        (geneSbjDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + "sec=animal_models") );
 

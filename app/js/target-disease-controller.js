@@ -111,15 +111,6 @@
                     source_label : cttvConfig.evidence_sources.literature.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false,
                 },
-                literature_nferx : {
-                    data : [],
-                    is_open : false,
-                    is_loading: false,
-                    heading : cttvDictionary.LITERATURE_NFERX,
-                    source : cttvConfig.evidence_sources.literature_nferx,
-                    source_label : cttvConfig.evidence_sources.literature_nferx.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
-                    has_errors: false,
-                },
                 animal_models : {
                     data : [],
                     is_open : false,
@@ -446,7 +437,7 @@
                             + clearUnderscores(item.sourceID)
                             + "</a>");
                      }
-                     else if ( item.sourceID === 'phewascatalog' ) {
+                     else if ( item.sourceID === 'phewas_catalog' ) {
                         row.push( "<a class='cttv-external-link' href='https://phewascatalog.org/phewas' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
