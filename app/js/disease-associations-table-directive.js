@@ -83,6 +83,10 @@ angular.module('cttvDirectives')
             title: cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]
         },
         {
+            name: cttvConsts.datatypes.LITERATURE_NFERX,
+            title: cttvDictionary[cttvConsts.datatypes.LITERATURE_NFERX.toUpperCase()]
+        },
+        {
             name: cttvConsts.datatypes.ANIMAL_MODEL,
             title: cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]
         },
@@ -282,6 +286,8 @@ angular.module('cttvDirectives')
             row.push(getColorStyleString(getScore(i, "rna_expression"), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + "view=sec:rna_expression"));
             // Literature
             row.push(getColorStyleString(getScore(i, "literature"), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + "view=sec:literature"));
+            // Literature
+            row.push(getColorStyleString(getScore(i, "literature_nferx"), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + "view=sec:literature_nferx"));
             // Animal model
             row.push(getColorStyleString(getScore(i, "animal_model"), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + "view=sec:animal_models"));
 
@@ -416,6 +422,7 @@ angular.module('cttvDirectives')
                                     "association_score.datatypes.affected_pathway",
                                     "association_score.datatypes.rna_expression",
                                     "association_score.datatypes.literature",
+                                    "association_score.datatypes.literature_nferx",
                                     "association_score.datatypes.animal_model",
                                     "target.gene_info.name"],
                                 from: from
