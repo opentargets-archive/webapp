@@ -432,12 +432,12 @@
                     row.push( cttvDictionary.CTTV_PIPELINE );
 
                     // evidence source
-                     if ( item.sourceID == '23andme' ) {
+                     if ( item.sourceID === '23andme' ) {
                         row.push( "<a class='cttv-external-link' href='https://test-rvizapps.biogen.com/23andmeDev/' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
                      }
-                     else if ( item.sourceID == 'phewas_catalog' ) {
+                     else if ( item.sourceID === 'phewascatalog' ) {
                         row.push( "<a class='cttv-external-link' href='https://phewascatalog.org/phewas' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
