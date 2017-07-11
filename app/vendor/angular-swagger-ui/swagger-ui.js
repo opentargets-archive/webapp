@@ -16,7 +16,7 @@ angular
 			templateUrl: 'templates/swagger-ui.html',
 			scope: {
 				// Swagger specification URL (string, required)
-				url: '=?',
+				url: '@',
 				// Swagger specification parser type (string, optional, default = "auto")
 				// Built-in allowed values:
 				// 		"auto": (default) parser is based on response Content-Type
