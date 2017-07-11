@@ -66,7 +66,7 @@ angular.module('cttvServices').
                 AFFECTED_PATHWAY: "Pathways",
                 ANIMAL_MODEL: "Mouse",
                 LITERATURE: "Text Mining",
-                LITERATURE_NFERX: "Literature Nferx"
+                LITERATURE_NFERX: "Nferx"
             },
             DATATYPES: 'datatype',
             PATHWAY: 'pathway',
