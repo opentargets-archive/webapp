@@ -28,8 +28,9 @@ angular.module('cttvServices').
                 EVA :                 "eva",
                 PHENODIGM :           "phenodigm",
                 GWAS :                "gwas_catalog",
-                PHEWAS :              "phewas_catalog",
+                PHEWAS :              "phewascatalog",
                 PHEWAS_23andme :      "23andme",
+                GENOMICS_ENGLAND:     "genomics_england",
                 CANCER_GENE_CENSUS :  "cancer_gene_census",
                 CHEMBL :              "chembl",
                 DISGENET :            "disgenet",
@@ -48,6 +49,7 @@ angular.module('cttvServices').
                 GWAS :                "/data_sources#gwas",
                 PHEWAS :              "/data_sources#phewas",
                 PHEWAS_23andme :      "/data_sources#phewas_23andme",
+                GENOMICS_ENGLAND:     "/data_sources#genomics_england",
                 CANCER_GENE_CENSUS :  "/data_sources#census",
                 CHEMBL :              "/data_sources#chembl",
                 DISGENET :            "/data_sources",  // no longer used
