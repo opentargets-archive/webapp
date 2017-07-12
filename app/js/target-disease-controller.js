@@ -432,9 +432,21 @@
                     row.push( cttvDictionary.CTTV_PIPELINE );
 
                     // evidence source
-                    row.push( "<a class='cttv-external-link' href='https://www.ebi.ac.uk/gwas/search?query="+item.variant.id.split('/').pop()+"' target='_blank'>"
+                     if ( item.sourceID === '23andme' ) {
+                        row.push( "<a class='cttv-external-link' href='https://test-rvizapps.biogen.com/23andmeDev/' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
+                     }
+                     else if ( item.sourceID === 'phewascatalog' ) {
+                        row.push( "<a class='cttv-external-link' href='https://phewascatalog.org/phewas' target='_blank'>"
+                            + clearUnderscores(item.sourceID)
+                            + "</a>");
+                     }
+                     else {
+                        row.push( "<a class='cttv-external-link' href='https://www.ebi.ac.uk/gwas/search?query="+item.variant.id.split('/').pop()+"' target='_blank'>"
+                            + clearUnderscores(item.sourceID)
+                            + "</a>");
+                     }
 
                     // p-value
                     row.push( item.evidence.variant2disease.resource_score.value.toPrecision(1) );

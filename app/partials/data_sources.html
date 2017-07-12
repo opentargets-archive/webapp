@@ -17,6 +17,8 @@
                     <li><a href="#genetic">Genetic associations</a>
                         <ul class="plain arrow-icon">
                             <li><a href="#gwas">GWAS Catalog</a></li>
+                            <li ng-show="phewascatalog"><a href="#phewas">PHEWAS Catalog</a></li>
+                            <li ng-show="phewas_23andme"><a href="#phewas_23andme">23andMe</a></li>
                             <li><a href="#uniprot">UniProt</a></li>
                             <li><a href="#uniprot_lit">UniProt literature</a></li>
                             <li><a href="#eva">European Variation Archive (EVA)</a></li>
@@ -29,6 +31,7 @@
                             <li><a href="#census">The Cancer Gene Census</a></li>
                             <li><a href="#eva_somatic">European Variation Archive (EVA)</a></li>
                             <li><a href="#intogen">IntOGen</a></li>
+                            <li><a href="#genomics_england"</li>
                         </ul>
                     </li>
 
@@ -79,6 +82,16 @@
                     <h5><a name="gwas"></a>GWAS Catalog</h5>
                     <p>The NHGRI-EBI <a href="https://www.ebi.ac.uk/gwas/docs/about">GWAS catalog</a> provides evidence on the association of genes (targets) and common diseases. This data comes from the manual curation of published Genome Wide Association Studies (GWAS). The catalog gives a list of the genetic variants (e.g. SNPs) that are most associated with a disease, by genomic region. We include all associations with p-values ≤ 10-5, so that we broaden the coverage of diseases. We assess the link between variant and gene using the Open Targets custom annotation pipeline to find the association between a disease and its most likely target. Variants are assigned to a gene by first considering any deleterious consequence within the coding region of that gene, followed by whether the variant is located within introns or regulatory regions. If the variant is intergenic, it will be assigned to the promoter region of the nearest gene. The consequences of these variants are annotated using the <a href="http://www.ensembl.org/info/docs/tools/vep/index.html">Variant Effect Predictor</a>.</p>
 
+                    <div ng-show="phewascatalog">
+                        <h5><a name="phewas"></a>PheWAS Catalog</h5>
+                        <p>Phenome-wide association studies <a href="https://phewascatalog.org">PheWAS </a> analyze many phenotypes compared to a single genetic variant (or other attribute). This method was originally described using electronic medical record (EMR) data from EMR-linked in the Vanderbilt DNA biobank, BioVU, but can also be applied to other richly phenotyped sets. The original PheWAS catalog contains the PheWAS results for 3,144 single-nucleotide polymorphisms (SNPs) present in the NHGRI GWAS Catalog as of 4/17/2012 in 13,835 European-ancestry individuals from five sites of the Electronic Medical Records and Genomics (eMERGE) network. A total of 1,358 EMR-derived phenotypes were analyzed for each SNP. This PheWAS replicated 66% (51/77) of sufficiently powered prior GWAS associations, and 210/751 of all prior GWAS associations. We also identified 63 potentially pleiotropic associations with p < 4.6x10-6 (false discovery rate < 0.1); the strongest of these novel associations replicated in an independent cohort (n=7,406). The catalog contains all associations with p < 0.05 (uncorrected).</p>
+                    </div>
+
+                    <div ng-show="phewas_23andme">
+                        <h5><a name="phewas_23andme"></a>23andMe</h5>
+                        <p> <a href="https://www.23andme.com/howitworks">23andMe</a> has collected a large cohort of self-reported phenotype data along with genetic data. Through a collaboration between Biogen and 23andMe, Biogen has acquired genome-wide association study (GWAS) summary statistics for over 100 phenotypes (PheWAS).</p>
+                    </div>
+
                     <h5><a name="uniprot"></a>UniProt</h5>
                     <p>The Universal Protein Resource (<a href="http://www.uniprot.org/">UniProt</a>) provides protein sequence and functional information. It manually curates associations between genes and rare (Mendelian) diseases from literature and public databases. These curated variants must be in the coding region of a gene, deleterious, observed in patients, and segregating within their families. </p>
 
@@ -93,7 +106,6 @@
 
                     <h5><a name="gene2phenotype"></a>Gene2Phenotype</h5>
                     <p>The data in <a href="http://www.ebi.ac.uk/gene2phenotype">Gene2Phenotype</a> (G2P) is produced and curated from the literature by consultant clinical geneticists in the UK. This data is comprised of both short scale (i.e. sequence variants such as SNPs) and large structural variants (e.g. copy number variants), and can allow targeted filtering of genome-wide data for diagnostic purposes. The variants were provided by <a href="https://decipher.sanger.ac.uk/index">DECIPHER</a>, a database of genomic variants and phenotypes in patients with developmental disorders.</p>
-
                 </div>
 
 
@@ -109,6 +121,9 @@
 
                     <h5><a name="intogen"></a>IntOGen</h5>
                     <p><a href="http://www.intogen.org/search">IntOGen</a> provides somatic mutations, genes and pathways involved in tumorigenesis. We have imported the latest data from 6,792 samples across 28 cancer types (<a href="http://www.ncbi.nlm.nih.gov/pubmed/25759023">Rubio-Perez et al</a>). In these new dataset, false mutation calls have been filtered out and additional expression data is available for a larger number of samples in certain tumour types. This IntOgen analysis is updated and has not yet been released on the IntOgen website; so there can be discrepancies between targetvalidation.org and the IntOgen site.</p>
+
+                    <h5><a name="genomics_england"></a>Genomics England PanelApp</h5>
+                    <p><a href="https://bioinfo.extge.co.uk/crowdsourcing/PanelApp/">Genomics England PanelApp</a> is a crowdsourcing tool to allow gene panels to be shared, downloaded, viewed and evaluated by the Scientific Community.</p>
                 </div>
 
 
