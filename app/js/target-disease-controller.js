@@ -354,6 +354,7 @@
                 size: 1000,
                 datasource: cttvConfig.evidence_sources.genetic_association.common,
                 fields:[
+                    "unique_association_fields",
                     "disease",
                     "evidence",
                     "variant",
@@ -405,7 +406,6 @@
                 var row = [];
 
                 try{
-
                     // data origin: public / private
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
@@ -449,8 +449,15 @@
                      }
 
                     // p-value
-                    row.push( item.evidence.variant2disease.resource_score.value.toPrecision(1) );
-                    //row.push( item.evidence.variant2disease.resource_score.value.toExponential(1) );
+                    var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
+                    if (item.sourceID === 'phewascatalog') {
+                        msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
+                    }
+                    else if (item.sourceID === '23andme') {
+                        msg += '<br/>Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '<br />Phenotype: ' + item.unique_association_fields.phenotype;
+                    }
+                    row.push(msg);
+                    // row.push( item.evidence.variant2disease.resource_score.value.toPrecision(1) );
 
                     // publications
                     var refs = [];
@@ -463,7 +470,6 @@
 
                     // Publication ids (hidden)
                     row.push(pmidsList.join(", "));
-
 
                     newdata.push(row);
 
