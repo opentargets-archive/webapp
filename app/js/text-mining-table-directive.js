@@ -488,7 +488,7 @@ angular.module('cttvDirectives')
                         var opts = {
                             disease: scope.disease,
                             target: scope.target,
-                            datasource: cttvConfig.evidence_sources.literature,
+                            datasource: cttvConfig.evidence_sources.literature[0],
                             // format: 'csv',
                             size: size,
                             from: 0,
