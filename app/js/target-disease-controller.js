@@ -706,11 +706,11 @@
                         "visible": false
                     },
                     {
-                        "targets": [2,6],
+                        "targets": [2,5,6],
                         "width": "14%"
                     },
                     {
-                        "targets": [3,4,5],
+                        "targets": [3,4],
                         "width": "20%"
                     }
                 ],
