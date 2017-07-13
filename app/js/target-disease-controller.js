@@ -115,9 +115,9 @@
                         is_open : false,
                         is_loading: false,
                         heading : cttvDictionary.NFERX,
-                        source : cttvConfig.evidence_sources.literature[1]
+                        source : cttvConfig.evidence_sources.literature[1],
                         has_errors: false,
-                    },
+                    }
                 },
                 animal_models : {
                     data : [],
