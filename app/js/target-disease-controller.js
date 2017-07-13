@@ -534,7 +534,8 @@
                     "evidence",
                     "variant",
                     "type",
-                    "access_level"
+                    "access_level",
+                    "sourceID"
                 ]
             };
             _.extend(opts, searchObj);
@@ -574,12 +575,13 @@
 
                 try{
 
-                    var db = "";
-                    if( item.evidence.variant2disease ){
-                        db = item.evidence.variant2disease.provenance_type.database.id.toLowerCase();   // or gene2variant
-                    }else if ( item.evidence.provenance_type.database ){
-                        db = item.evidence.provenance_type.database.id.toLowerCase();
-                    }
+                    // var db = "";
+                    // if( item.evidence.variant2disease ){
+                    //     db = item.evidence.variant2disease.provenance_type.database.id.toLowerCase();   // or gene2variant
+                    // }else if ( item.evidence.provenance_type.database ){
+                    //     db = item.evidence.provenance_type.database.id.toLowerCase();
+                    // }
+                    var db = item.sourceID;
 
                     // data origin: public / private
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
@@ -616,6 +618,8 @@
                         // row.push( "Curated evidence" );
                     }
 
+                    // TODO: This is a hack in the UI that needs to be solved at the data level
+                    // In the next release this should go
                     if (cons === 'trinucleotide repeat microsatellite feature') {
                         cons = 'trinucleotide expansion';
                     }
@@ -633,14 +637,13 @@
                         row.push( "<a class='cttv-external-link' href='" + item.evidence.variant2disease.urls[0].url + "' target=_blank>" + item.evidence.variant2disease.urls[0].nice_name + "</a>" );
 
                     } else {
-                        // Do some cleaning up for gene2Phenotype:
-                        // TODO: this will probably be removed once we reprocess the data and put the nicely formatted text and URL in the data;
-                        // I leave the hard coded strings in on purpose, so hopefully I'll remember to remove this in the future.
-                        // I'm setting manually:
-                        //  1) URL
-                        //  2) the text of the link
-                        if( db == cttvConsts.dbs.GENE_2_PHENOTYPE ){
-                            row.push( "<a class='cttv-external-link' href='http://www.ebi.ac.uk/gene2phenotype/search?panel=ALL&search_term=" + ($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name) + "' target=_blank>Further details in Gene2Phenotype database</a>" );
+                        // TODO: Genomics England URLs are wrong, so (hopefully temporarily) we need to hack them in the UI
+                        // TODO: We can't use cttvConsts.dbs.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
+                        if (db === cttvConsts.dbs.GENOMICS_ENGLAND) {
+                            item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
+                        }
+                        if( db == cttvConsts.dbs.GENE_2_PHENOTYPE ) {
+                            row.push("<a class='cttv-external-link' href='" + item.evidence.urls[0].url + "' target=_blank>Further details in Gene2Phenotype database</a>");
                         } else {
                             row.push( "<a class='cttv-external-link' href='" + item.evidence.urls[0].url + "' target=_blank>" + item.evidence.urls[0].nice_name + "</a>" );
                         }
