@@ -393,7 +393,7 @@ angular.module('cttvDirectives')
                         var opts = {
                             target: target,
                             disease: disease,
-                            datasource: cttvConfig.evidence_sources.literature,
+                            datasource: cttvConfig.evidence_sources.literature[0],
                             size: data.length,
                             from: data.start,
                             sort: dirScope.order,
