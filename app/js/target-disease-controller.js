@@ -116,6 +116,7 @@
                         is_loading: false,
                         heading : cttvDictionary.NFERX,
                         source : cttvConfig.evidence_sources.literature[1],
+                        source_label : cttvConfig.evidence_sources.literature.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                         has_errors: false,
                     }
                 },
