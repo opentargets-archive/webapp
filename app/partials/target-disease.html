@@ -409,6 +409,12 @@
 
                             <text-mining-table target="search.target" disease="search.disease" filename="search.info.title"></text-mining-table>
 
+                              <!-- text-mining / nferx evidences table divider -->
+                            <div ng-show="search.tables.literature.data.length>0 && search.tables.literature.nferx.data.length>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
+
+
+                            <nferx-table target="search.target" disease="search.disease" ></nferx-table>
+
                         </div>
 
                         <div ng-show="search.tables.literature.total==0">
