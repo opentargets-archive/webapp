@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('nferxtable', ['$log',
+    .directive('nferxTable', ['$log',
         'cttvAPIservice',
         'cttvUtils',
         '$timeout',
