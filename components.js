@@ -4,7 +4,7 @@ if (typeof tnt === "undefined") {
 tnt.board = require("tnt.genome");
 tnt.utils = require("tnt.utils");
 tnt.tooltip = require("tnt.tooltip");
-//tnt.ensembl = require("tnt.ensembl");
+tnt.ensembl = require("tnt.ensembl");
 tnt.rest = require("tnt.rest");
 
 var targetGenomeBrowser = require("cttv.genome");
