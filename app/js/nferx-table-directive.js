@@ -125,33 +125,33 @@ angular.module('cttvDirectives')
 //                    "ordering": true,
 //                    "order" : [[4, "desc"]],
 //                    "orderMulti": false,
-//                    "columnDefs": [
+                    "columnDefs": [
 //                        {
 //                            "targets": [2, 5, 6, 7, 8, 9, 10],
 //                            "visible": false
 //                        },
-//                        {
-//                            "targets": [4],
-//                            "orderSequence": ["desc", "asc"]
-//                        },
-//                        {
-//                            "targets": [1],
-//                            "orderSequence": ["asc", "desc"]
-//                        },
-//                        {
-//                            "targets": [3],
-//                            "orderable": false
-//                        },
-//                        {
-//                            "targets": [0],    // the access-level (public/private icon)
-//                            "visible": cttvConfig.show_access_level,
-//                            "width": "3%"
-//                        },
-//                        {
-//                            "targets": [1], //disease?
-//                            "width": "12%"
-//                        }
-//                    ]
+                       {
+                           "targets": [2],
+                           "orderable": false
+                       },
+                        {
+                           "targets": [1],
+                           "orderable": false
+                       },
+                       {
+                           "targets": [3],
+                           "orderable": false
+                       },
+                       {
+                           "targets": [0],    // the access-level (public/private icon)
+                           "visible": cttvConfig.show_access_level,
+                           "width": "3%"
+                       },
+                       {
+                           "targets": [1], //disease?
+                           "width": "12%"
+                       }
+                     ]
                 }, ( filename + "_nferx"));
             };
 
@@ -181,10 +181,10 @@ angular.module('cttvDirectives')
                         if (!scope.target || !scope.disease ) {
                             return;
                         }
-                        $timeout(function () {
-                            setupTable(document.getElementById('literature3-table'), scope.target, scope.disease, scope.filename);
-                        }, 0);
-                        // setupTable();
+                        // $timeout(function () {
+                        //     setupTable(document.getElementById('literature3-table'), scope.target, scope.disease, scope.filename);
+                        // }, 0);
+                        setupTable(document.getElementById('literature3-table'), scope.target, scope.disease, scope.filename);
                     });
 
 

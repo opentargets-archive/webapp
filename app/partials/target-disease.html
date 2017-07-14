@@ -392,25 +392,25 @@
                             </span>
                         </uib-accordion-heading>
 
-                        <!--<div ng-show="search.tables.literature.total>0">-->
+                        <div ng-show="search.tables.literature.total>0">
 
 
-                            <!--<div class="clearfix">-->
+                            <div class="clearfix">
 
-                                <!--<p>Source: <span ng-repeat="source in search.tables.literature.source_label"><a-->
-                                        <!--href="{{source.url}}" target="_blank">{{source.label}}</a><span-->
-                                        <!--ng-if="!$last">, </span></span></p>-->
-                            <!--</div>-->
+                                <p>Source: <span ng-repeat="source in search.tables.literature.source_label"><a
+                                        href="{{source.url}}" target="_blank">{{source.label}}</a><span
+                                        ng-if="!$last">, </span></span></p>
+                            </div>
 
-                            <!--<p class=cttv-section-intro>Shown are the {{search.tables.literature.total}}-->
-                                <!--articles where <span class="highlight-primary text-content-highlight">target</span> and-->
-                                <!--<span class="highlight-warning text-content-highlight">disease</span> are found in the-->
-                                <!--same sentence. </p>-->
+                            <p class=cttv-section-intro>Shown are the {{search.tables.literature.total}}
+                                articles where <span class="highlight-primary text-content-highlight">target</span> and
+                                <span class="highlight-warning text-content-highlight">disease</span> are found in the
+                                same sentence. </p>
 
-                            <!--<text-mining-table target="search.target" disease="search.disease" filename="search.info.title"></text-mining-table>-->
+                            <text-mining-table target="search.target" disease="search.disease" filename="search.info.title"></text-mining-table>
 
 
-                        <!--</div>-->
+                        </div>
 
                           <!-- text-mining / nferx evidences table divider -->
                         <div ng-show="search.tables.literature.total>0 && search.tables.literature.nferx.total>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
