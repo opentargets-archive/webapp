@@ -70,29 +70,23 @@ angular.module('cttvDirectives')
                     'ajax': function (data, cbak, params) {
                         // order options
                         // mappings:
-                        // 0 => access level
+                        // 0 => access level(Hidden)
                         // 1 => Disease
-                        // 2 => Pubmed Id (hidden)
-                        // 3 => Abstract
-                        // 4 => Year
-                        // 5 => Title (hidden -- used for export)
-                        // 6 => Authors (hidden -- used for export)
-                        // 7 => Journal (hidden -- used for export)
-                        // 8 => Abstract (hidden -- used for export)
-                        // 9 => Matches (hidden -- used for export)
-                        // 10 => URL (hidden -- used for export)
+                        // 2 => Serial Id
+                        // 3 => Pvalue
+                        // 4 => URL
                         var mappings = {
                             1: "disease.efo_info.label",
-                            2: "unique_association_fields.serial_id",
-                            3: "evidence.resource_score.value",
-                            4: "unique_association_fields.link_url"
+                            // 2: "unique_association_fields.serial_id",
+                            // 3: "evidence.resource_score.value",
+                            // 4: "unique_association_fields.link_url"
                         };
 
                         // We save the order condition for the server side rendering to use it for the download
                         dirScope.order = [];
                         for (var i = 0; i < data.order.length; i++) {
-                            var prefix = data.order[i].dir === 'asc' ? '~' : '';
-                            dirScope.order.push(prefix + mappings[data.order[i].column]);
+
+                            dirScope.order.push( mappings[data.order[i].column]);
                         }
 
                         var opts = {
@@ -123,7 +117,7 @@ angular.module('cttvDirectives')
                             });
                     },
                    "ordering": true,
-                   "order" : [[3, "desc"]],
+                   "order" : [[1, "asc"]],
                    "orderMulti": false,
                     "columnDefs": [
 //                        {
@@ -136,11 +130,12 @@ angular.module('cttvDirectives')
                        },
                         {
                            "targets": [1],
-                           "orderable": false
+                            "orderSequence": ["asc", "desc"]
                        },
                        {
                            "targets": [3],
-                           "orderSequence": ["desc", "asc"]
+                           //"orderSequence": ["desc", "asc"]
+                           "orderable": false
                        },
                        {
                            "targets": [0],    // the access-level (public/private icon)
