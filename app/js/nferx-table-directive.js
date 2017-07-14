@@ -122,9 +122,9 @@ angular.module('cttvDirectives')
                                 cbak(o);
                             });
                     },
-//                    "ordering": true,
-//                    "order" : [[4, "desc"]],
-//                    "orderMulti": false,
+                   "ordering": true,
+                   "order" : [[3, "desc"]],
+                   "orderMulti": false,
                     "columnDefs": [
 //                        {
 //                            "targets": [2, 5, 6, 7, 8, 9, 10],
@@ -140,7 +140,7 @@ angular.module('cttvDirectives')
                        },
                        {
                            "targets": [3],
-                           "orderable": false
+                           "orderSequence": ["desc", "asc"]
                        },
                        {
                            "targets": [0],    // the access-level (public/private icon)
