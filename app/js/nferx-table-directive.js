@@ -38,7 +38,7 @@ angular.module('cttvDirectives')
                     var row = [];
 
                     // 0 - Access level
-                    row.push((d.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push(accessLevelPublic);
 
                     // 1 - Disease label
                     row.push(d.disease.efo_info.label);
@@ -62,7 +62,7 @@ angular.module('cttvDirectives')
             var setupTable = function (table, target, disease, filename) {
                 return $(table).DataTable({
                     "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
-
+                    "buttons": [],
                     'processing': false,
                     'searching': false,
                     'serverSide': true,
@@ -144,7 +144,7 @@ angular.module('cttvDirectives')
                        },
                        {
                            "targets": [0],    // the access-level (public/private icon)
-                           "visible": cttvConfig.show_access_level,
+                           "visible": false,
                            "width": "3%"
                        },
                        {
