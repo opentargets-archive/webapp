@@ -108,7 +108,7 @@
                     is_loading: false,
                     heading : cttvDictionary.LITERATURE,
                     source : cttvConfig.evidence_sources.literature[0],
-                    source_label : cttvConfig.evidence_sources.literature.map(function(s){ if (s != 'NFERX') {
+                    source_label : cttvConfig.evidence_sources.literature.map(function(s){ if (s !== 'NFERX') {
                         return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }} ),
                     has_errors: false,
                     nferx : {

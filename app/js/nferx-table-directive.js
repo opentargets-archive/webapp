@@ -53,7 +53,7 @@ angular.module('cttvDirectives')
                     var nferx_link_url = "<span class=large><a href='#' onClick='angular.element(this).scope().openNferx(" + d.unique_association_fields.link_url + ")'></a></span>"
                         + "<br />";
 
-                    row.push(d.unique_association_fields.link_url);
+                    row.push(nferx_link_url);
 
 
                     newData.push(row);
@@ -165,7 +165,7 @@ angular.module('cttvDirectives')
                 },
                 link: function (scope, elem, attrs) {
                     dirScope = scope;
-                   scope.openNferx = function (nferx_link_url) {
+                    scope.openNferx = function (nferx_link_url) {
                        window.open(nferx_link_url);
                    };
 
