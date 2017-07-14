@@ -50,8 +50,7 @@ angular.module('cttvDirectives')
                     row.push(d.evidence.resource_score.value);
 
                     // 4 - Nferx Url
-                    var nferx_link_url = "<span class=large><a href='#' onClick='angular.element(this).scope().openNferx(" + d.unique_association_fields.link_url + ")'></a></span>"
-                        + "<br />";
+                    var nferx_link_url = "<span class=small><a href='#' onClick='angular.element(this).scope().openNferx(" + d.unique_association_fields.link_url + ")'>" + d.unique_association_fields.link_url + "</a></span>"
 
                     row.push(nferx_link_url);
 
