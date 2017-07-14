@@ -50,6 +50,9 @@ angular.module('cttvDirectives')
                     row.push(d.evidence.resource_score.value);
 
                     // 4 - Nferx Url
+                    var nferx_link_url = "<span class=large><a href='#' onClick='angular.element(this).scope().openNferx(" + d.unique_association_fields.link_url + ")'></a></span>"
+                        + "<br />";
+
                     row.push(d.unique_association_fields.link_url);
 
 
@@ -162,15 +165,10 @@ angular.module('cttvDirectives')
                 },
                 link: function (scope, elem, attrs) {
                     dirScope = scope;
-//                    scope.openNferx = function (pmid) {
-//                        var URL = "http://europepmc.org/abstract/MED/" + pmid;
-//                        window.open(URL);
-//                    };
-//
-//                    scope.displaySentences = function (id) {
-//                        //make the collapse content to be shown or hide
-//                        $('#' + id).toggle("fast");
-//                    };
+                   scope.openNferx = function (nferx_link_url) {
+                       window.open(nferx_link_url);
+                   };
+
 
                     scope.$watchGroup(['target', 'disease','filename'], function (vals) {
                         if (!scope.target || !scope.disease ) {
