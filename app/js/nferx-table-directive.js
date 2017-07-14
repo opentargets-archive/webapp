@@ -83,8 +83,8 @@ angular.module('cttvDirectives')
                         // 10 => URL (hidden -- used for export)
                         var mappings = {
                             1: "disease.efo_info.label",
-                            2: "unique_association_fields.serial_id"
-                            3: "evidence.resource_score.value"
+                            2: "unique_association_fields.serial_id",
+                            3: "evidence.resource_score.value",
                             4: "unique_association_fields.link_url"
                         };
 
