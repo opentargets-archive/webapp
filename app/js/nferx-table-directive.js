@@ -59,7 +59,7 @@ angular.module('cttvDirectives')
                 return newData;
             }
 
-            var setupTable = function (table, target, disease) {
+            var setupTable = function (table, target, disease, filename) {
                 return $(table).DataTable({
                     "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
 
@@ -152,7 +152,7 @@ angular.module('cttvDirectives')
 //                            "width": "12%"
 //                        }
 //                    ]
-                }, (filename + "-text_mining"));
+                }, ( filename + "_nferx"));
             };
 
             var dirScope;
@@ -162,7 +162,8 @@ angular.module('cttvDirectives')
                 templateUrl: 'partials/nferx-table.html',
                 scope: {
                     target: '=',
-                    disease: '='
+                    disease: '=',
+                    filename: '='
                 },
                 link: function (scope, elem, attrs) {
                     dirScope = scope;
@@ -176,12 +177,12 @@ angular.module('cttvDirectives')
 //                        $('#' + id).toggle("fast");
 //                    };
 
-                    scope.$watchGroup(['target', 'disease'], function (vals) {
+                    scope.$watchGroup(['target', 'disease','filename'], function (vals) {
                         if (!scope.target || !scope.disease ) {
                             return;
                         }
                         $timeout(function () {
-                            setupTable(document.getElementById('literature3-table'), scope.target, scope.disease);
+                            setupTable(document.getElementById('literature3-table'), scope.target, scope.disease, scope.filename);
                         }, 0);
                         // setupTable();
                     });
