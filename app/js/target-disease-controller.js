@@ -117,7 +117,7 @@
                         is_loading: false,
                         heading : cttvDictionary.NFERX,
                         source : cttvConfig.evidence_sources.literature[1],
-                        source_label : {label:cttvDictionary[ 'NFERX' ], url:cttvConsts.dbs_info_url['NFERX']},
+                        source_label : {label:cttvDictionary.NFERX, url:cttvConsts.dbs_info_url.NFERX},
                         has_errors: false,
                     }
                 },
