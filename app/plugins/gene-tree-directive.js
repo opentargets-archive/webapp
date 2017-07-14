@@ -103,6 +103,7 @@ angular.module('plugins')
                     "target_taxons": species,
                     "format": "full"
                 });
+                scope.showSpinner = true;
                 rest.call(homologsUrl)
                     .then (function (resp) {
                         var infoUrl = '/proxy/rest.ensembl.org/lookup/id/';
@@ -115,6 +116,7 @@ angular.module('plugins')
                         };
                         rest.call(infoUrl, post)
                             .then (function (resp2) {
+                                scope.showSpinner = false;
                                 $timeout(function () {
                                     $('#gene-homologues-table').DataTable( cttvUtils.setTableToolsParams({
                                         "data": formatHomologuesDataToArray(resp.body.data[0].homologies, resp2.body),

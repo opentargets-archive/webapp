@@ -13,7 +13,11 @@
     </uib-tab>
 
     <uib-tab heading="Orthology table">
-        <div class="table-panel" style="margin-top:20px;">
+        <div style="min-height:40px;" ng-show="showSpinner">
+            <cttv-progress-spinner size="30"></cttv-progress-spinner>
+        </div>
+
+        <div ng-show="!showSpinner" class="table-panel" style="margin-top:20px;">
             <table class='table cttv-evidence-table' id="gene-homologues-table">
                 <thead>
                     <tr>
