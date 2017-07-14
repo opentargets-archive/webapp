@@ -108,7 +108,8 @@
                     is_loading: false,
                     heading : cttvDictionary.LITERATURE,
                     source : cttvConfig.evidence_sources.literature[0],
-                    source_label : cttvConfig.evidence_sources.literature[0].map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label : cttvConfig.evidence_sources.literature.map(function(s){ if (s != 'NFERX') {
+                        return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }} ),
                     has_errors: false,
                     nferx : {
                         data : [],
@@ -116,7 +117,7 @@
                         is_loading: false,
                         heading : cttvDictionary.NFERX,
                         source : cttvConfig.evidence_sources.literature[1],
-                        source_label : cttvConfig.evidence_sources.literature[1].map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                        source_label : {label:cttvDictionary[ 'NFERX' ], url:cttvConsts.dbs_info_url['NFERX']},
                         has_errors: false,
                     }
                 },
