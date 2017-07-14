@@ -18,5 +18,5 @@
 
 # CAREFUL!!! When you point a particular branch to a specific API below,
 # the change will not continue working once the branch is merged into master.
-[context.feature.environment]
-  APIHOST = "https://open-targets-eu-dev.appspot.com/api/"
+[context.es5.environment]
+  APIHOST = "https://mk-es5safter-dot-open-targets-eu-dev.appspot.com/api/"
