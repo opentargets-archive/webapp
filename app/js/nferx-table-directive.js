@@ -67,6 +67,7 @@ angular.module('cttvDirectives')
             var setupTable = function (table, target, disease, filename) {
                 return $(table).DataTable({
                     "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
+                    "destroy":true,
                     "buttons": [],
                     'processing': false,
                     'searching': false,
