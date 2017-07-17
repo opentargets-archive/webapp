@@ -50,7 +50,8 @@ angular.module('cttvDirectives')
                     row.push(d.evidence.resource_score.value);
 
                     // 4 - Nferx Url
-                    var nferx_link_url = "<span class=small><a href='#' onClick='angular.element(this).scope().openNferx(" + d.unique_association_fields.link_url + ")'>" + d.unique_association_fields.link_url + "</a></span>";
+                    var url = d.unique_association_fields.link_url
+                    var nferx_link_url = "<span class=small><a href='#' onClick='angular.element(this).scope().openNferx(" + url + ")'>" + d.unique_association_fields.link_url + "</a></span>";
 
                     row.push(nferx_link_url);
 
@@ -136,9 +137,13 @@ angular.module('cttvDirectives')
                        },
                        {
                            "targets": [3],
-                           //"orderSequence": ["desc", "asc"]
                            "orderable": false
                        },
+
+                        {
+                            "targets": [4],
+                            "orderable": false
+                        },
                        {
                            "targets": [0],    // the access-level (public/private icon)
                            "visible": false,
@@ -164,10 +169,9 @@ angular.module('cttvDirectives')
                 },
                 link: function (scope, elem, attrs) {
                     dirScope = scope;
-                    scope.openNferx = function (nferx_link_url) {
-                       window.open(nferx_link_url);
+                    scope.openNferx = function (url) {
+                       window.open(url);
                    };
-
 
                     scope.$watchGroup(['target', 'disease','filename'], function (vals) {
                         if (!scope.target || !scope.disease ) {
