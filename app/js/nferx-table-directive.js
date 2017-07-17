@@ -47,7 +47,7 @@ angular.module('cttvDirectives')
                     row.push(d.unique_association_fields.serial_id);
 
                     // 3 - P-value
-                    row.push(d.evidence.resource_score.value);
+                    row.push(d.evidence.resource_score.value.toPrecision(2));
 
 
                     // 4 - Nferx Url
