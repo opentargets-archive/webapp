@@ -49,11 +49,16 @@ angular.module('cttvDirectives')
                     // 3 - P-value
                     row.push(d.evidence.resource_score.value);
 
-                    // 4 - Nferx Url
-                    var url = d.unique_association_fields.link_url
-                    var nferx_link_url = "<span class=small><a href='#' onClick='angular.element(this).scope().openNferx(" + url + ")'>" + d.unique_association_fields.link_url + "</a></span>";
 
-                    row.push(nferx_link_url);
+                    // 4 - Nferx Url
+                    // var url = d.unique_association_fields.link_url
+                    // var nferx_link_url = "<span class=small><a href='#' onClick='angular.element(this).scope().openNferx(" + url + ")'>" + d.unique_association_fields.link_url + "</a></span>";
+                    //
+                    // row.push(nferx_link_url);
+
+                    row.push( "<a class='cttv-external-link' href='https://test-rvizapps.biogen.com/23andmeDev/' target='_blank'>"
+                        + clearUnderscores(d.sourceID)
+                        + "</a>");
 
 
                     newData.push(row);
@@ -123,10 +128,7 @@ angular.module('cttvDirectives')
                    "order" : [[1, "asc"]],
                    "orderMulti": false,
                     "columnDefs": [
-//                        {
-//                            "targets": [2, 5, 6, 7, 8, 9, 10],
-//                            "visible": false
-//                        },
+
                        {
                            "targets": [2],
                            "orderable": false
@@ -139,11 +141,10 @@ angular.module('cttvDirectives')
                            "targets": [3],
                            "orderable": false
                        },
-
-                        {
+                       {
                             "targets": [4],
                             "orderable": false
-                        },
+                       },
                        {
                            "targets": [0],    // the access-level (public/private icon)
                            "visible": false,
