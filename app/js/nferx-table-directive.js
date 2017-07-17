@@ -51,12 +51,12 @@ angular.module('cttvDirectives')
 
 
                     // 4 - Nferx Url
-                    // var url = d.unique_association_fields.link_url
+                    var nferx_url = d.unique_association_fields.link_url
                     // var nferx_link_url = "<span class=small><a href='#' onClick='angular.element(this).scope().openNferx(" + url + ")'>" + d.unique_association_fields.link_url + "</a></span>";
                     //
                     // row.push(nferx_link_url);
 
-                    row.push( "<a class='cttv-external-link' href='https://test-rvizapps.biogen.com/23andmeDev/' target='_blank'>"
+                    row.push( "<a class='cttv-external-link' href=nferx_url target='_blank'>"
                         + clearUnderscores(d.sourceID)
                         + "</a>");
 
