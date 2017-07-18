@@ -437,7 +437,7 @@
                             + clearUnderscores(item.sourceID)
                             + "</a>");
                      }
-                     else if ( item.sourceID === 'phewascatalog' ) {
+                     else if ( item.sourceID === 'phewas_catalog' ) {
                         row.push( "<a class='cttv-external-link' href='https://phewascatalog.org/phewas' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
@@ -450,7 +450,7 @@
 
                     // p-value
                     var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
-                    if (item.sourceID === 'phewascatalog') {
+                    if (item.sourceID === 'phewas_catalog') {
                         msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
                     }
                     else if (item.sourceID === '23andme') {
