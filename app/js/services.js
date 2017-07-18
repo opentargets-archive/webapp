@@ -134,6 +134,10 @@ angular.module('cttvServices', []).
                         // .range(["#FFFFd8", '#007AFF']), // toned down yellow - blue
                         //.range(["#FFD0CB", "#FF6350"]), // brand red
 
+            BLUE_1_10 : d3.scale.linear()
+                .domain([1,10])
+                .range(['#CBDCEA', '#005299']),
+
             BLUE_1_3 : d3.scale.linear()
                         .domain([1,3])
                         .range(["#B6DDFC", "#0052A3"]),
