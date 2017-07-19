@@ -416,6 +416,7 @@ angular.module('cttvDirectives')
                                     "association_score.datatypes.affected_pathway",
                                     "association_score.datatypes.rna_expression",
                                     "association_score.datatypes.literature",
+                                    "association_score.datatypes.literature_nferx",
                                     "association_score.datatypes.animal_model",
                                     "target.gene_info.name"],
                                 from: from
