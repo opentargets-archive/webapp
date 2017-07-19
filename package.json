@@ -1,7 +1,7 @@
 {
   "name": "OpenTargetsWebapp",
   "version": "0.0.1",
-  "description": "Open Targets Platform frontend",
+  "description": "Open Targets Platform frontend ",
   "readme": "README.md",
   "license": "",
   "devDependencies": {
