@@ -1154,7 +1154,9 @@ angular.module('cttvDirectives', [])
 
         return {
             restrict: 'EA',
-            scope: {},
+            scope: {
+                limit: "@"
+            },
             template :   '<div class="hp-blog-feed">'
                         //+'    <p>{{feed.title}}</p><p>{{feed.description}}</p>'
                         +'    <div class="hp-blog-feed-post" ng-repeat="post in posts">'
@@ -1173,14 +1175,17 @@ angular.module('cttvDirectives', [])
                         +'    </div>'
                         +'</div>',
             link: function(scope, element, attrs) {
-
+                scope.limit = scope.limit || "all";
                 var url = ghost.url.api('posts', {
-                        limit: '5',
+                        limit: scope.limit,
                         include: 'posts, author, tags',
                         fields: 'title, html, meta_description, published_at, slug, author, tags'
                       });
-                $log.log("calling...", url);
                 var proxy_url = "/proxy/" + url.substr(8);
+                var href_url = ghost.url.api().split('ghost')[0];
+
+                //$log.log("url : ",url);
+
                 //$http.get('https://proxy.targetvalidation.org/blog.opentargets.org/ghost/api/v0.1/tags/?limit=all&include=count.posts&order=count.posts%20DESC&client_id=ghost-frontend&client_secret=a9fe83f50655')
                 //$http.get('/proxy/blog.opentargets.org/ghost/api/v0.1/tags/?limit=all&include=count.posts&order=count.posts%20DESC&client_id=ghost-frontend&client_secret=a9fe83f50655')
                 $http.get(proxy_url)
@@ -1188,8 +1193,9 @@ angular.module('cttvDirectives', [])
                     .then(function successCallback(response) {
                         scope.posts = response.data.posts || [];
                         scope.posts.forEach(function(i){
-                            i.pubDate = new Date(i.published_at);
-                            i.desc = i.meta_description || i.html;
+                            i.pubDate = new Date(i.published_at);   // make published_at string into Date object for easier formating
+                            i.desc = i.meta_description || i.html;  // authors don't always put a description
+                            i.link = href_url+i.slug;
                         })
 
                     }, function errorCallback(response) {
