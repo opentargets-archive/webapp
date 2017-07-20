@@ -1179,7 +1179,8 @@ angular.module('cttvDirectives', [])
                 var url = ghost.url.api('posts', {
                         limit: scope.limit,
                         include: 'posts, author, tags',
-                        fields: 'title, html, meta_description, published_at, slug, author, tags'
+                        fields: 'title, html, meta_description, published_at, slug, author, tags',
+                        order: 'published_at DESC'
                       });
                 var proxy_url = "/proxy/" + url.substr(8);
                 var href_url = ghost.url.api().split('ghost')[0];
