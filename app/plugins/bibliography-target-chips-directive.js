@@ -172,7 +172,7 @@ angular.module('plugins')
                  * Handler for when clicking on a cell
                  */
                 function onClick(d){
-                    addSelected(d.data.key);
+                    addSelected(d);
                     getData();
                 }
 
@@ -181,14 +181,16 @@ angular.module('plugins')
                 /*
                  * Handler for when we click on breadcrumb bar
                  */
-                function onBack(){
-                    if(selected.length>1){
-                        selected.pop();
+                function onBack(d){
+                    if(d<selected.length){
+                        selected.splice(d,1);
                         getData();
                     }
                 }
 
 
+                scope.onclick = onClick;
+                scope.onback = onBack;
 
                 /*
                  * Builds and returns the search query string for target OR synomyms AND all other terms

@@ -3,10 +3,10 @@
 
     <!-- <svg style="background:#ccc"></svg> -->
     <div>
-        <span ng-repeat="sel in selected" class="tm-chip btn btn-default">{{sel}}</span>
-        <span ng-repeat="chip in chips" class="tm-chip btn btn-success">{{chip.key}}</span>
+        <span class="tm-chip btn btn-default disabled">{{selected[0]}}</span><span ng-repeat="sel in selected" class="tm-chip btn btn-default" ng-click="onback($index)" ng-if="!$first">{{sel}} <span class="fa fa-lg fa-times-circle"></span></span><span ng-repeat="chip in chips" class="tm-chip btn btn-primary" ng-click="onclick(chip.key)">{{chip.key}}</span>
     </div>
-    <div ng-show="aggs_result_total==0" style="text-align:center; background:#ccc; padding:15px; border:1px solid #fff; margin-top:-3px">No further terms found</div>
+
+    <!-- <div ng-show="aggs_result_total==0" style="text-align:center; background:#ccc; padding:15px; border:1px solid #fff; margin-top:-3px">No further terms found</div> -->
 
     <!-- <cttv-size-listener onresize="onres"></cttv-size-listener> -->
 
