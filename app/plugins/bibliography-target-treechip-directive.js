@@ -3,12 +3,6 @@ angular.module('plugins')
         'use strict';
 
 
-
-        /*
-            {"query":{"query_string":{"query":"BRAF"}},"controls":{"use_significance":true,"sample_size":2000,"timeout":5000},"connections":{"vertices":[{"field":"abstract","min_doc_count":10,"size":10}]},"vertices":[{"field":"abstract","min_doc_count":10,"size":10}]}
-
-            https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/graph/explore
-        */
         return {
             restrict: 'E',
             //require: 'resize',
@@ -18,37 +12,6 @@ angular.module('plugins')
                 label: '='
             },
             link: function (scope, elem, attrs) {
-
-                // network ?
-                /*
-                var preFlightUrl = 'https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/graph/explore'; //Object.keys(uniqueTargets).join('\n');
-                var postData = {
-                                    "query":{
-                                        "query_string":{"query":"BRAF"}
-                                    },
-                                    "controls":{
-                                        "use_significance":true,
-                                        "sample_size":2000,
-                                        "timeout":5000
-                                    },
-                                    "connections":{
-                                        "vertices":[
-                                            {"field":"abstract","min_doc_count":10,"size":10}
-                                        ]
-                                    },
-                                    "vertices":[
-                                        {"field":"abstract","min_doc_count":10,"size":10}
-                                    ]
-                                };
-                $http.post(preFlightUrl, postData)
-                    .then (function (resp) {
-                        $log.log("*****");
-                        $log.log(resp)
-                        return resp.data;
-                    })
-                    //.then (function (data) {})
-                */
-
 
 
                 //
@@ -64,7 +27,7 @@ angular.module('plugins')
 
                 var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
 
-                var margin = {top: 30, right: 0, bottom: 0, left: 0},
+                var margin = {top: 0, right: 0, bottom: 0, left: 0},
                     //height = 250,
                     width = 908,
                     height = Math.floor(width/4),   // the height of the actual treemap (i.e. not including the navigation at top)
@@ -103,7 +66,7 @@ angular.module('plugins')
                 // needs to be in a timeout if the template is external
                 $timeout(function(){
 
-                    s = elem.children().eq(0).children().eq(1)[0];
+                    s = elem.children().eq(0).children().eq(2)[0];
 
                     svg = d3.select( s )
                         .attr("width", width)
@@ -127,7 +90,7 @@ angular.module('plugins')
                         ;
 
 
-                    nav = svg.append("g")
+                    /*nav = svg.append("g")
                         .attr("class", "tm-nav");
 
                         nav.append("rect")
@@ -141,10 +104,13 @@ angular.module('plugins')
                             .attr("y", 9 - margin.top)
                             .attr("dy", ".75em")
                             .text("");
+                    */
 
                     // search ?
                     // selected = selected || [scope.target.approved_symbol]; //.toLowerCase()];
                     selected = [scope.target.approved_symbol];
+                    scope.selected = selected;
+                    scope.onremove = onRemove;
                     getData();
 
                 })
@@ -211,6 +177,14 @@ angular.module('plugins')
                     }
                 }
 
+
+
+                function onRemove(d){
+                    if(d<selected.length){
+                        selected.splice(d,1);
+                        getData();
+                    }
+                }
 
 
                 /*
@@ -340,14 +314,11 @@ angular.module('plugins')
                         return selected.filter(function(a){return a.toLowerCase()==b.key.toLowerCase()}).length==0   &&   scope.target.symbol_synonyms.filter(function(a){return a.toLowerCase()==b.key.toLowerCase()}).length==0;
                     });
 
-                    //$log.log(" > children : ", children);
 
                     scope.aggs_result_total = children.length;
 
                     if(children.length>0){
 
-                        // d3.select( s )
-                        // .attr("height", (height + margin.top));
                         var ts = d3.select( s ).transition().duration(500);
                         ts.attr("height", (height + margin.top));
 
@@ -363,8 +334,6 @@ angular.module('plugins')
 
                     } else {
 
-                        // d3.select( s )
-                        // .attr("height", (margin.top));
                         var ts = d3.select( s ).transition().duration(500);
                         ts.attr("height", (margin.top));
 
@@ -420,12 +389,15 @@ angular.module('plugins')
 
 
                 function updateNav(){
+                    // we've removed navigation
+                    /*
                     nav
                         //.datum(selected)
                         .on("click", onBack)
                         .classed("tm-nav-hidden", selected.length==0 )
                         .select("text")
                         .text( selected.join(" > ") );
+                    */
                 }
 
 
@@ -551,7 +523,7 @@ angular.module('plugins')
                         }else if(zoom<0){
                             d1 = g2.selectAll("g").filter(function(d){
                                 return d.data.key === g1.datum().qid;
-                            }).data()[0];
+                            }).data()[0] || {x0:0, x1:width, y0:0, y1:height};
                             x.range([d1.x0*ratio, d1.x1*ratio]);
                             y.range([d1.y0, d1.y1]);
                         }
@@ -654,20 +626,31 @@ angular.module('plugins')
                  * Scale things on resize
                  */
                 scope.onres = function(r){
-                    // $log.log(' > onres : ', r);
+                    // resize things only if the width has changed
+                    // (this is because the event is fired on load when not needed)
+                    if( r.w != width){
+                        width = r.w;
+                        resetScales();
 
-                    width = r.w;
-                    resetScales();
+                        d3.select( s ).attr("width", width);
 
-                    d3.select( s ).attr("width", width);
-                    nav.select("rect").attr("width", width);
-                    chart.attr("width", width);
+                        if(chart){
+                            chart.attr("width", width);
+                            chart.selectAll("g").remove();
+                        }
 
-                    treemap.size([width/ratio, height]);
-                    updateTreemap();
+                        // if(nav){
+                            // we've actually removed the navigation
+                        //     nav.select("rect").attr("width", width);
+                        // }
 
-                    chart.selectAll("g").remove();
-                    g1 = display(hobj);
+                        if(treemap){
+                            treemap.size([width/ratio, height]);
+                            updateTreemap();
+                        }
+
+                        g1 = display(hobj);
+                    }
 
                 }
 
