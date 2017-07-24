@@ -9,7 +9,7 @@
 
 # Master branch
 [context.production.environment]
-  APIHOST = "https://open-targets-eu-dev.appspot.com/api/"
+  APIHOST = "http://api1706.targetvalidation.org/api/"
 
 # Deploy Preview context: All Deploy Previews (ie.PRs)
 # will inherit these settings.
