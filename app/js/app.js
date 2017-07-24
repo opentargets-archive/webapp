@@ -59,11 +59,12 @@ function initApp (deps) {
                 }).
                 when('/data_sources', {
                     //templateUrl: 'docs/data_sources.html'
+                    controller: 'DataSourcesCtrl',
                     templateUrl: 'partials/data_sources.html'
                 }).
                 when('/terms_of_use', {
                     //templateUrl: 'docs/terms_of_use.html',
-                    templateUrl: 'partials/terms_of_use.html',
+                    templateUrl: 'partials/terms_of_use.html'
                 }).
                 when('/release-notes', {
                     templateUrl: 'partials/release-notes.html'

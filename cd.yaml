@@ -4,4 +4,4 @@
 
 staging:
   vars:
-    API_VERSION: master
+    API_VERSION: phewas-catalog

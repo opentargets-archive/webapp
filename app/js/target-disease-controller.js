@@ -354,6 +354,7 @@
                 size: 1000,
                 datasource: cttvConfig.evidence_sources.genetic_association.common,
                 fields:[
+                    "unique_association_fields",
                     "disease",
                     "evidence",
                     "variant",
@@ -405,7 +406,6 @@
                 var row = [];
 
                 try{
-
                     // data origin: public / private
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
 
@@ -429,16 +429,38 @@
                     row.push(t);
 
                     // evidence source
-                    row.push( cttvDictionary.CTTV_PIPELINE );
+                    // row.push( cttvDictionary.CTTV_PIPELINE );
 
                     // evidence source
-                    row.push( "<a class='cttv-external-link' href='https://www.ebi.ac.uk/gwas/search?query="+item.variant.id.split('/').pop()+"' target='_blank'>"
+                    if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
+                        row.push("<a class='cttv-external-link' href='https://test-rvizapps.biogen.com/23andmeDev/' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
+                    }
+                    else if (item.sourceID === cttvConsts.dbs.PHEWAS) {
+                        row.push("<a class='cttv-external-link' href='https://phewascatalog.org/phewas' target='_blank'>"
+                            + clearUnderscores(item.sourceID)
+                            + "</a>");
+                    }
+                    else {
+                        row.push("<a class='cttv-external-link' href='https://www.ebi.ac.uk/gwas/search?query=" + item.variant.id.split('/').pop() + "' target='_blank'>"
+                            + clearUnderscores(item.sourceID)
+                            + "</a>");
+                    }
 
                     // p-value
-                    row.push( item.evidence.variant2disease.resource_score.value.toPrecision(1) );
-                    //row.push( item.evidence.variant2disease.resource_score.value.toExponential(1) );
+                    var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
+                    // if (item.sourceID === cttvConsts.dbs.GWAS) {
+                    //     msg = '<div style="margin-top:5px;">Sample size: ' + item.unique_association_fields.sample_size + '<br />Panel resolution: ' + parseFloat(item.unique_association_fields.gwas_panel_resolution).toPrecision(2) + '</div>';
+                    // }
+
+                    if (item.sourceID === cttvConsts.dbs.PHEWAS) {
+                        msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
+                    }
+                    else if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
+                        msg += '<br/>Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '<br />Phenotype: ' + item.unique_association_fields.phenotype;
+                    }
+                    row.push(msg);
 
                     // publications
                     var refs = [];
@@ -451,7 +473,6 @@
 
                     // Publication ids (hidden)
                     row.push(pmidsList.join(", "));
-
 
                     newdata.push(row);
 
@@ -467,6 +488,16 @@
 
 
 
+        jQuery.fn.dataTableExt.oSort["pval-more-asc"] = function (x, y) {
+            var a = x.split('<')[0];
+            var b = y.split('<')[0];
+            return a - b;
+        };
+        jQuery.fn.dataTableExt.oSort["pval-more-desc"] = function (x, y) {
+            var a = x.split('<')[0];
+            var b = y.split('<')[0];
+            return b - a;
+        };
         var initCommonDiseasesTable = function(){
             $('#common-diseases-table').DataTable( cttvUtils.setTableToolsParams({
                 "data": formatCommonDiseaseDataToArray($scope.search.tables.genetic_associations.common_diseases.data),
@@ -476,20 +507,24 @@
                 "paging" : true,
                 "columnDefs" : [
                     {
+                        "sType": 'pval-more',
+                        "targets": 5
+                    },
+                    {
                         "targets" : [0],    // the access-level (public/private icon)
                         "visible" : cttvConfig.show_access_level,
                         "width" : "3%"
                     },
                     {
-                        "targets": [8],
+                        "targets": [7],
                         "visible": false
                     },
                     {
-                        "targets": [3,4,5,7],
+                        "targets": [2,3,4,6],
                         "width": "14%"
                     },
                     {
-                        "targets": [2,6],
+                        "targets": [1,5],
                         "width": "10%"
                     }
 
@@ -516,7 +551,8 @@
                     "evidence",
                     "variant",
                     "type",
-                    "access_level"
+                    "access_level",
+                    "sourceID"
                 ]
             };
             _.extend(opts, searchObj);
@@ -556,12 +592,13 @@
 
                 try{
 
-                    var db = "";
-                    if( item.evidence.variant2disease ){
-                        db = item.evidence.variant2disease.provenance_type.database.id.toLowerCase();   // or gene2variant
-                    }else if ( item.evidence.provenance_type.database ){
-                        db = item.evidence.provenance_type.database.id.toLowerCase();
-                    }
+                    // var db = "";
+                    // if( item.evidence.variant2disease ){
+                    //     db = item.evidence.variant2disease.provenance_type.database.id.toLowerCase();   // or gene2variant
+                    // }else if ( item.evidence.provenance_type.database ){
+                    //     db = item.evidence.provenance_type.database.id.toLowerCase();
+                    // }
+                    var db = item.sourceID;
 
                     // data origin: public / private
                     row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
@@ -598,6 +635,8 @@
                         // row.push( "Curated evidence" );
                     }
 
+                    // TODO: This is a hack in the UI that needs to be solved at the data level
+                    // In the next release this should go
                     if (cons === 'trinucleotide repeat microsatellite feature') {
                         cons = 'trinucleotide expansion';
                     }
@@ -615,14 +654,13 @@
                         row.push( "<a class='cttv-external-link' href='" + item.evidence.variant2disease.urls[0].url + "' target=_blank>" + item.evidence.variant2disease.urls[0].nice_name + "</a>" );
 
                     } else {
-                        // Do some cleaning up for gene2Phenotype:
-                        // TODO: this will probably be removed once we reprocess the data and put the nicely formatted text and URL in the data;
-                        // I leave the hard coded strings in on purpose, so hopefully I'll remember to remove this in the future.
-                        // I'm setting manually:
-                        //  1) URL
-                        //  2) the text of the link
-                        if( db == cttvConsts.dbs.GENE_2_PHENOTYPE ){
-                            row.push( "<a class='cttv-external-link' href='http://www.ebi.ac.uk/gene2phenotype/search?panel=ALL&search_term=" + ($scope.search.info.gene.approved_symbol || $scope.search.info.gene.ensembl_external_name) + "' target=_blank>Further details in Gene2Phenotype database</a>" );
+                        // TODO: Genomics England URLs are wrong, so (hopefully temporarily) we need to hack them in the UI
+                        // TODO: We can't use cttvConsts.dbs.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
+                        if (db === cttvConsts.dbs.GENOMICS_ENGLAND) {
+                            item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
+                        }
+                        if( db == cttvConsts.dbs.GENE_2_PHENOTYPE ) {
+                            row.push("<a class='cttv-external-link' href='" + item.evidence.urls[0].url + "' target=_blank>Further details in Gene2Phenotype database</a>");
                         } else {
                             row.push( "<a class='cttv-external-link' href='" + item.evidence.urls[0].url + "' target=_blank>" + item.evidence.urls[0].nice_name + "</a>" );
                         }
@@ -685,11 +723,11 @@
                         "visible": false
                     },
                     {
-                        "targets": [2,6],
+                        "targets": [2,5,6],
                         "width": "14%"
                     },
                     {
-                        "targets": [3,4,5],
+                        "targets": [3,4],
                         "width": "20%"
                     }
                 ],
