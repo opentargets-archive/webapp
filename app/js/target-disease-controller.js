@@ -429,35 +429,38 @@
                     row.push(t);
 
                     // evidence source
-                    row.push( cttvDictionary.CTTV_PIPELINE );
+                    // row.push( cttvDictionary.CTTV_PIPELINE );
 
                     // evidence source
-                     if ( item.sourceID === '23andme' ) {
-                        row.push( "<a class='cttv-external-link' href='https://test-rvizapps.biogen.com/23andmeDev/' target='_blank'>"
+                    if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
+                        row.push("<a class='cttv-external-link' href='https://test-rvizapps.biogen.com/23andmeDev/' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
-                     }
-                     else if ( item.sourceID === 'phewascatalog' ) {
-                        row.push( "<a class='cttv-external-link' href='https://phewascatalog.org/phewas' target='_blank'>"
+                    }
+                    else if (item.sourceID === cttvConsts.dbs.PHEWAS) {
+                        row.push("<a class='cttv-external-link' href='https://phewascatalog.org/phewas' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
-                     }
-                     else {
-                        row.push( "<a class='cttv-external-link' href='https://www.ebi.ac.uk/gwas/search?query="+item.variant.id.split('/').pop()+"' target='_blank'>"
+                    }
+                    else {
+                        row.push("<a class='cttv-external-link' href='https://www.ebi.ac.uk/gwas/search?query=" + item.variant.id.split('/').pop() + "' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
-                     }
+                    }
 
                     // p-value
                     var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
-                    if (item.sourceID === 'phewascatalog') {
+                    // if (item.sourceID === cttvConsts.dbs.GWAS) {
+                    //     msg = '<div style="margin-top:5px;">Sample size: ' + item.unique_association_fields.sample_size + '<br />Panel resolution: ' + parseFloat(item.unique_association_fields.gwas_panel_resolution).toPrecision(2) + '</div>';
+                    // }
+
+                    if (item.sourceID === cttvConsts.dbs.PHEWAS) {
                         msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
                     }
-                    else if (item.sourceID === '23andme') {
+                    else if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
                         msg += '<br/>Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '<br />Phenotype: ' + item.unique_association_fields.phenotype;
                     }
                     row.push(msg);
-                    // row.push( item.evidence.variant2disease.resource_score.value.toPrecision(1) );
 
                     // publications
                     var refs = [];
@@ -485,6 +488,16 @@
 
 
 
+        jQuery.fn.dataTableExt.oSort["pval-more-asc"] = function (x, y) {
+            var a = x.split('<')[0];
+            var b = y.split('<')[0];
+            return a - b;
+        };
+        jQuery.fn.dataTableExt.oSort["pval-more-desc"] = function (x, y) {
+            var a = x.split('<')[0];
+            var b = y.split('<')[0];
+            return b - a;
+        };
         var initCommonDiseasesTable = function(){
             $('#common-diseases-table').DataTable( cttvUtils.setTableToolsParams({
                 "data": formatCommonDiseaseDataToArray($scope.search.tables.genetic_associations.common_diseases.data),
@@ -494,20 +507,24 @@
                 "paging" : true,
                 "columnDefs" : [
                     {
+                        "sType": 'pval-more',
+                        "targets": 5
+                    },
+                    {
                         "targets" : [0],    // the access-level (public/private icon)
                         "visible" : cttvConfig.show_access_level,
                         "width" : "3%"
                     },
                     {
-                        "targets": [8],
+                        "targets": [7],
                         "visible": false
                     },
                     {
-                        "targets": [3,4,5,7],
+                        "targets": [2,3,4,6],
                         "width": "14%"
                     },
                     {
-                        "targets": [2,6],
+                        "targets": [1,5],
                         "width": "10%"
                     }
 
