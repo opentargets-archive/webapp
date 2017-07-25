@@ -27,4 +27,4 @@
   APIHOST = "https://open-targets-eu-dev.appspot.com/api/"
 
 [context.master.environment]
-  APIHOST = "https://api1706.targetvalidation.org/api/"
+  APIHOST = "https://open-targets-eu-dev.appspot.com/api/"
