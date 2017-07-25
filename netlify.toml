@@ -25,3 +25,6 @@
 # the change will not continue working once the branch is merged into master.
 [context.feature.environment]
   APIHOST = "https://open-targets-eu-dev.appspot.com/api/"
+
+[context.master.environment]
+  APIHOST = "https://api1706.targetvalidation.org/api/"
