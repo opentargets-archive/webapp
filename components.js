@@ -4,7 +4,7 @@ if (typeof tnt === "undefined") {
 tnt.board = require("tnt.genome");
 tnt.utils = require("tnt.utils");
 tnt.tooltip = require("tnt.tooltip");
-//tnt.ensembl = require("tnt.ensembl");
+tnt.ensembl = require("tnt.ensembl");
 tnt.rest = require("tnt.rest");
 
 var targetGenomeBrowser = require("cttv.genome");
@@ -19,7 +19,7 @@ var spinner = require("cttv.spinner");
 var diseaseGraph = require("cttv.diseaseGraph");
 var targetGeneTree = require("cttv.targetGeneTree");
 
-var cttvDiseaseRelations = require("viz_diseases");
+// var cttvDiseaseRelations = require("viz_diseases");
 
 // var targetListBubbles = require("cttv.expansionView");
 var cttvApi = require("cttv.api");

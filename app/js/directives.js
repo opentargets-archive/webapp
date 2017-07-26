@@ -247,19 +247,30 @@ angular.module('cttvDirectives', [])
         'use strict';
 
         var colorScale = cttvUtils.colorScales.BLUE_1_3; //blue orig
+        var colorScale10 = cttvUtils.colorScales.BLUE_1_10;
 
         var labelScale = d3.scale.ordinal()
             .domain([1,2,3])
             .range(["Low", "Medium", "High"]);
 
-        var getColorStyleString = function(value){
+        var labelScale10 = function (v) {
+            if (v < 4) {
+                return 'Low';
+            }
+            if (v < 7) {
+                return 'Medium';
+            }
+            return 'High';
+        };
+
+        var getColorStyleString = function(value, scale, label){
             var span="";
 
             if(value===0){
                 span = "<span class='value-0' title='Not expressed'>"+value+"</span>";
             } else if(value>0){
-                var c = colorScale(value);
-                var l = labelScale(value);
+                var c = scale(value);
+                var l = label(value);
                 span = "<span style='color: "+c+"; background: "+c+";' title='Expression: "+l+"'>"+value+"</span>";
             } else {
                 span = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
@@ -324,8 +335,8 @@ angular.module('cttvDirectives', [])
                                     for (var tissue in data) {
                                         var row = [];
                                         row.push( tissue );
-                                        row.push( getColorStyleString(data[tissue].protein.level) );
-                                        row.push( getColorStyleString(data[tissue].rna.level) );
+                                        row.push( getColorStyleString(data[tissue].protein.level, colorScale, labelScale) );
+                                        row.push( getColorStyleString(data[tissue].rna.level, colorScale10, labelScale10) );
                                         row.push("");
                                         newData.push(row);
 
