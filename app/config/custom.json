@@ -13,6 +13,6 @@ Custom config options
     "rna_expression" : ["EXPRESSION_ATLAS"],
     "pathway" : ["REACTOME"],
     "animal_model" : ["PHENODIGM"],
-    "literature" : ["EPMC","NFERX"]
+    "literature" : ["EPMC"]
   }
 }
