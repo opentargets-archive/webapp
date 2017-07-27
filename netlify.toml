@@ -9,7 +9,7 @@
 
 # Master branch
 [context.production.environment]
-  APIHOST = "http://api.opentargets.io/api/"
+  APIHOST = "https://api.opentargets.io/api/"
 
 # Deploy Preview context: All Deploy Previews (ie.PRs)
 # will inherit these settings.
