@@ -4,6 +4,11 @@ function initApp (deps) {
 
     var app = angular.module('cttvApp', deps);
 
+    // app.config([localStorageServiceProvider, function (localStorageServiceProvider) {
+    //   localStorageServiceProvider
+    //     .setPrefix('openTargets');
+    // }]);
+
     app.config(['$routeProvider', '$locationProvider',
         function($routeProvider, $locationProvider) {
             'use strict';
@@ -38,6 +43,14 @@ function initApp (deps) {
             		templateUrl: 'partials/disease.html',
             		controller: 'DiseaseCtrl'
         	    }).
+                when('/batch-search', {
+                    templateUrl: 'partials/batch-search.html',
+                    controller: 'BatchSearchCtrl'
+                }).
+                when ('/summary', {
+                    templateUrl: 'partials/summary.html',
+                    controller: 'SummaryCtrl'
+                }).
 
                 // Docs
                 when('/faq', {
@@ -46,11 +59,12 @@ function initApp (deps) {
                 }).
                 when('/data_sources', {
                     //templateUrl: 'docs/data_sources.html'
+                    controller: 'DataSourcesCtrl',
                     templateUrl: 'partials/data_sources.html'
                 }).
                 when('/terms_of_use', {
                     //templateUrl: 'docs/terms_of_use.html',
-                    templateUrl: 'partials/terms_of_use.html',
+                    templateUrl: 'partials/terms_of_use.html'
                 }).
                 when('/release-notes', {
                     templateUrl: 'partials/release-notes.html'
@@ -104,6 +118,7 @@ function initApp (deps) {
 var deps = [
     'ngRoute',
     'ngCookies',
+    'LocalStorageModule',
     'ui.bootstrap',
     'cttvFilters',
     'cttvControllers',

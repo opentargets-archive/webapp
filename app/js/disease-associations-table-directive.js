@@ -20,8 +20,10 @@ angular.module('cttvDirectives')
 
     var draw = 1;
     var filters = {};
+    var targets;
 
     var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+    // var colorScale = d3.interpolateYlGnBu;
 
     var state = {};
 
@@ -194,6 +196,7 @@ angular.module('cttvDirectives')
                     draw: draw
                 };
 
+                // Restrict the associations to these targets
                 if (target && target.length) {
                     opts.target = target;
                 }
@@ -203,7 +206,6 @@ angular.module('cttvDirectives')
                     method: 'POST',
                     params: opts
                 };
-
 
                 cttvAPIservice.getAssociations(queryObject)
                     .then(function (resp) {
@@ -324,17 +326,16 @@ angular.module('cttvDirectives')
         // state = ...
     }
 
-
     return {
 
         restrict: 'E',
 
         scope: {
             filename: '=',
-            target: '=',
+            targets: '=',
             disease: '=',
-            filters: '=',
-            stateId: '@?'
+            filters : '=',
+            stateId : '@?'
         },
 
         template: '<div>'
@@ -379,8 +380,9 @@ angular.module('cttvDirectives')
                     facets: false,
                     size: 1
                 };
-                if (scope.target && scope.target.length) {
-                    optsPreFlight.target = scope.target;
+                // Restrict the associations to a list of targets
+                if (scope.targets && scope.targets.length) {
+                    optsPreFlight.target = scope.targets;
                 }
                 optsPreFlight = cttvAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
 
@@ -418,8 +420,8 @@ angular.module('cttvDirectives')
                                     "target.gene_info.name"],
                                 from: from
                             };
-                            if (scope.target && scope.target.length) {
-                                opts.target = scope.target;
+                            if (scope.targets && scope.targets.length) {
+                                opts.target = scope.targets;
                             }
 
                             opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
@@ -485,11 +487,12 @@ angular.module('cttvDirectives')
             //     render( new_state, old_state ); // if there are no facets, no worries, the API service will handle undefined
             // });
 
-            scope.$watchGroup(["filters", "disease", "target"], function (attrs) {
+            scope.$watchGroup(["filters", "disease", "targets"], function (attrs) {
 
                 filters = attrs[0];
+                targets = attrs[2];
                 var disease = attrs[1];
-                scope.target = attrs[2];
+                // scope.targets = attrs[2];
 
                 //$log.log("diseaseAssociationsTableDirective:attrs:", attrs);
                 // actually, is disease going to change?
@@ -504,7 +507,7 @@ angular.module('cttvDirectives')
                 //dtable = setupTable(table, disease, scope.filename, scope.downloadTable);
                 //dtable = undefined;
                 //table.destroy();
-                dtable = setupTable(table, scope.disease, scope.target, scope.filename, scope.downloadTable, state);
+                dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
 
                 // listener for page changes
                 dtable.on('page.dt', function () {

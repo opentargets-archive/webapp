@@ -281,15 +281,18 @@ angular.module('cttvControllers')
                                 //
                                 // the top associations
                                 //
-                                result.data.top_associations.parsed = result.data.top_associations.total.slice(0,5);
+                                // If a target we get the best 5 *direct*ly associated diseases
+                                // If a disease we get the best 5 associated targets
+                                var associationsField = result.data.type === 'target' ? 'direct' : 'total';
+                                result.data.top_associations.parsed = result.data.top_associations[associationsField].slice(0,5);
                                 result.data.top_associations.parsed = result.data.top_associations.parsed.map(function(p){
                                     // split ID "ENSG00000073756-EFO_0007214"
-                                    var id = p.id.split("-")[ +(result.data.type==="target") ]
+                                    var id = p.id.split("-")[ +(result.data.type==="target") ];
                                     return {
                                         id : id,
                                         label: result.data.type==="target" ? getDiseaseInfo(id) : getTargetInfo(id)
                                     };
-                                })
+                                });
 
 
                                 //

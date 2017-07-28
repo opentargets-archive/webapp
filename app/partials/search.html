@@ -73,7 +73,10 @@
                                     <!-- Top Associations -->
                                     <h5>Top associated {{ (result.data.type == "target") ? "diseases" : "targets" }}</h5>
                                     <div ng-repeat="assoc in result.data.top_associations.parsed">
-                                        <a ng-href="evidence/{{(result.data.type == 'target') ? result.data.id : assoc.id}}/{{(result.data.type == 'target') ? assoc.id : result.data.id }}">{{assoc.label}}</a>
+
+                                        <!--<a ng-href="{{(result.data.type == 'target') ? 'disease' : 'target'}}/{{assoc.id}}">{{assoc.label}}</a>-->
+                                        <a ng-href="/evidence/{{(result.data.type == 'target') ? result.data.id+'/'+assoc.id : assoc.id+'/'+result.data.id}}">{{assoc.label}}</a>
+
                                     </div>
 
                                 </div>

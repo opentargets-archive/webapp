@@ -181,8 +181,6 @@ angular.module('plugins')
                 var target = targets[i];
                 var objAssoc = data[object][target];
                 var sbjAssoc = data[subject][target];
-                // $log.log(objAssoc);
-                // $log.log(sbjAssoc);
                 var objDts = objAssoc.association_score.datatypes;
                 var sbjDts = sbjAssoc.association_score.datatypes;
                 var row = [];
@@ -237,9 +235,8 @@ angular.module('plugins')
                 width: '='
             },
             link: function (scope, element, attrs) {
-                scope.changedScore = function (newScore) {
-                    // $log.log(newScore);
-                };
+                // scope.changedScore = function (newScore) {
+                // };
 
                 // Populate overview
                 $timeout (function () {

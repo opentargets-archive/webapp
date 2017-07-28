@@ -1,0 +1,39 @@
+<uib-tabset>
+    <uib-tab heading="Gene tree">
+        <p class=cttv-section-intro>Phylogenetic tree showing the history of the human gene
+            {{target.symbol}} based on protein sequences. All branches in this tree have
+            the same length (unscaled branches). You can also view the branches in
+            different lengths based on the number of evolutionary changes in the tree (select scaled branches)
+            All species are shown by default, but you can prune it to a subset of species by unticking the species accordingly.
+            Check Protein trees and orthologies for further details. </p>
+        <p ng-if=notFound==1>No gene tree has been found for {{target.symbol}}</p>
+
+        <png filename="{{target.approved_symbol}}-geneTree.png" track="geneTree"></png>
+        <div id="gene-tree"></div>
+    </uib-tab>
+
+    <uib-tab heading="Orthology table">
+        <div style="min-height:40px;" ng-show="showSpinner">
+            <cttv-progress-spinner size="30"></cttv-progress-spinner>
+        </div>
+
+        <div ng-show="!showSpinner" class="table-panel" style="margin-top:20px;">
+            <table class='table cttv-evidence-table' id="gene-homologues-table">
+                <thead>
+                    <tr>
+                        <th>Species</th>  <!-- nameless col for access level -->
+                        <th>Homology type</th>
+                        <th>Orthologue</th>
+                        <th>dN/dS</th>
+                        <th>Query %id</th>
+                        <th>Target %id</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </uib-tab>
+
+</uib-tabset>

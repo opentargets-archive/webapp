@@ -11,7 +11,7 @@ angular.module('cttvServices')
 /**
 * The API services, with methods to call the ElasticSearch API
 */
-    .factory('cttvAPIservice', ['$http', '$log', '$location', '$rootScope', '$q', '$timeout', 'liveConfig', function($http, $log, $location, $rootScope, $q, $timeout, liveConfig) {
+    .factory('cttvAPIservice', ['$http', '$log', '$location', '$rootScope', '$q', '$timeout', 'liveConfig', 'cttvConfig', function($http, $log, $location, $rootScope, $q, $timeout, liveConfig, cttvConfig) {
         'use strict';
 
 
@@ -19,9 +19,11 @@ angular.module('cttvServices')
         * Initial configuration of the service, with API's URLs
         */
         var cttvAPI = {
+            LIMITS: {
+                ASSOCIATIONS: 10000,
+                EVIDENCE: 10000
+            },
             API_DEFAULT_METHOD : "GET",
-            //API_URL : "http://beta.targetvalidation.org/api/latest/",
-            // API_URL : "http://193.62.52.228/api/latest/",
             API_SEARCH_URL : "search",
             API_EVIDENCE_URL : "evidences",
             API_AUTOCOMPLETE_URL : "autocomplete",
@@ -34,10 +36,12 @@ angular.module('cttvServices')
             API_DISEASE_URL: 'disease',
             API_EXPRESSION_URL: 'expression',
             API_TARGET_URL : 'target',
+            API_MULTISEARCH_URL: 'multiSearch',
             API_TARGET_RELATION_URL : 'targetRelation',
             API_DISEASE_RELATION_URL : 'diseaseRelation',
             API_LOG_SESSION_URL : "logSession",
             API_STATS_URL : "stats",
+            API_TARGETS_ENRICHMENT_URL: "targetsEnrichment",
             facets: {
                 DATATYPE: 'datatype', // 'filterbydatatype',
                 PATHWAY: 'pathway', //filterbypathway',
@@ -51,9 +55,11 @@ angular.module('cttvServices')
         };
 
         var api = cttvApi()
-            .prefix("/api/")
-            .version("latest")
+            .prefix(cttvConfig.api)
+            // .prefix("/api/")
+            // .prefix('http://127.0.0.1:8123/api/')
             // .prefix("https://www.targetvalidation.org/api/")
+            .version("latest")
             .appname("cttv-web-app")
             .secret("2J23T20O31UyepRj7754pEA2osMOYfFK")
             .verbose(false);
@@ -311,7 +317,6 @@ angular.module('cttvServices')
             return callAPI (queryObject);
         };
 
-
         cttvAPI.getFilterBy = function(queryObject){
             // $log.log("cttvAPI.getFilterBy");
             queryObject.params.expandefo = queryObject.params.expandefo || true;
@@ -331,6 +336,15 @@ angular.module('cttvServices')
             return callAPI (queryObject);
         };
 
+        cttvAPI.getMultiSearch = function(queryObject) {
+            queryObject.operation = cttvAPI.API_MULTISEARCH_URL;
+            return callAPI (queryObject);
+        };
+
+        cttvAPI.getTargetsEnrichment = function (queryObject) {
+            queryObject.operation = cttvAPI.API_TARGETS_ENRICHMENT_URL;
+            return callAPI (queryObject);
+        };
 
         /**
          * Decorates a given object with the API options for the given facets and returns the original object.

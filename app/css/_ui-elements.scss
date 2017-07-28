@@ -1,6 +1,12 @@
 @import "utils";
+@import "colors";
 
 #cttv-page-app {
+
+    .popover {
+        min-width: 378px;
+        max-width: 100%;
+    }
 
     /*
     * one line modals
@@ -15,9 +21,9 @@
     /*
      * The menu bar of the lite mol widget needs to be shown on top of the masthead
      */
-     pdb-lite-mol .lm-plugin {
-         z-index: 10000;
-     }
+     //pdb-lite-mol .lm-plugin {
+     //    z-index: 10000;
+     //}
 
     /*
      * The PDB widget CSS styling
@@ -499,6 +505,14 @@
     }
 
 
+    /*
+    * Summary section
+     */
+    .summary-section-header {
+        padding: 0.5em;
+        background-color: $clr-ui-border;
+    }
+
 
     /*
      * Flower
@@ -611,8 +625,6 @@
      * PNG export button
      */
 
-
-
     cttv-target-associations-bubbles, cttv-target-associations-tree{
         png > div {
             margin-top:24px;
@@ -659,6 +671,67 @@
         }
     }
 
+
+    /* The options shown in the batch search to re-assign fuzzy matches, etc */
+    .batch-search {
+        margin-top: 15px;
+        .search-item {
+            font-size:12px;
+            /* cursor: default; */
+            &.select-item {
+                cursor: pointer;
+            }
+            &.item-discarded {
+                color: $clr-ui-border;
+            }
+        }
+        .choose-header {
+            //background: $clr-ui-border;
+            text-align:center;
+            height: 2.5em;
+            padding-top: 0.6em;
+            margin-bottom: 10px;
+            .message {
+                margin-left: 0.4em;
+                .choose-query {
+                    background: $clr-primary-highlight;
+                }
+            }
+            &.search-header {
+                height: 3.5em;
+            }
+        }
+        .search-options {
+            float: right;
+            margin-right: 0.5em;
+            cursor: pointer;
+            &.highlight {
+                color: $primary-color;
+            }
+            &.down {
+                color: $clr-ui-border;
+            }
+        }
+
+        .batch-search-box {
+            width: 95%;
+            //display: inline-block;
+            //margin-left: 5px;
+            height: 2.5em;
+            padding-left:5px;
+            @include border-radius (6px);
+        }
+
+        .batch-search-mappings-container {
+            margin-top: 10px;
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid $clr-ui-border;
+            .batch-search-results-container {
+                margin-left: 5px;
+            }
+        }
+    }
 }
 
 

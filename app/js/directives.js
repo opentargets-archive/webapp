@@ -192,13 +192,12 @@ angular.module('cttvDirectives', [])
     /*
     *
     */
-    .directive ('cttvMatrixLegend', function () {
+    .directive ('cttvMatrixLegend', ['$log', function ($log) {
         'use strict';
         var template = '<div class="matrix-legend matrix-legend-layout-{{layout}} clearfix">'
 
         // label above (v layout) or left (h layout) of legend
         +    '<span class="matrix-legend-from" ng-show="layout==\'h\'">{{labels[0] || colors[0].label}}</span>'
-
         // create the color swatches
         +    '<span class="matrix-legend-item clearfix" ng-repeat="item in colors">'
         +       '<span class="matrix-legend-background" ng-style="{\'background\':item.color}" ng-class="item.class"></span>'
@@ -229,7 +228,7 @@ angular.module('cttvDirectives', [])
             }]
 
         };
-    })
+    }])
 
 
     /**
@@ -248,19 +247,30 @@ angular.module('cttvDirectives', [])
         'use strict';
 
         var colorScale = cttvUtils.colorScales.BLUE_1_3; //blue orig
+        var colorScale10 = cttvUtils.colorScales.BLUE_1_10;
 
         var labelScale = d3.scale.ordinal()
             .domain([1,2,3])
             .range(["Low", "Medium", "High"]);
 
-        var getColorStyleString = function(value){
+        var labelScale10 = function (v) {
+            if (v < 4) {
+                return 'Low';
+            }
+            if (v < 7) {
+                return 'Medium';
+            }
+            return 'High';
+        };
+
+        var getColorStyleString = function(value, scale, label){
             var span="";
 
             if(value===0){
                 span = "<span class='value-0' title='Not expressed'>"+value+"</span>";
             } else if(value>0){
-                var c = colorScale(value);
-                var l = labelScale(value);
+                var c = scale(value);
+                var l = label(value);
                 span = "<span style='color: "+c+"; background: "+c+";' title='Expression: "+l+"'>"+value+"</span>";
             } else {
                 span = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
@@ -325,8 +335,8 @@ angular.module('cttvDirectives', [])
                                     for (var tissue in data) {
                                         var row = [];
                                         row.push( tissue );
-                                        row.push( getColorStyleString(data[tissue].protein.level) );
-                                        row.push( getColorStyleString(data[tissue].rna.level) );
+                                        row.push( getColorStyleString(data[tissue].protein.level, colorScale, labelScale) );
+                                        row.push( getColorStyleString(data[tissue].rna.level, colorScale10, labelScale10) );
                                         row.push("");
                                         newData.push(row);
 
@@ -905,7 +915,6 @@ angular.module('cttvDirectives', [])
     }])
 
 
-
     .directive ('cttvBetaRibbon', ['$log', '$location', function ($log, $location) {
         'use strict';
         return {
@@ -1173,7 +1182,29 @@ angular.module('cttvDirectives', [])
         };
     }])
 
+    .directive('otPopover', ['$log', 'otDefinitions', function ($log, otDefinitions) {
+        'use strict';
 
+        return {
+            restrict: 'E',
+            scope: {
+                key: '@'
+            },
+            template: '<span ng-if="link" uib-popover-template="\'partials/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'"><a target=_blank ng-click="$event.stopPropagation()" href="{{link}}"><i class="fa fa-info-circle"></i></a></span>' +
+            '<span ng-if="!link" uib-popover-template="\'partials/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'" ng-click="$event.stopPropagation()" style="margin-left:8px;"><i class="fa fa-info-circle"></i></span>',
+
+            link: function (scope, el, attrs) {
+                var def = otDefinitions[scope.key];
+                if (def) {
+                    scope.content = def.description;
+                    scope.link = def.link;
+                } else {
+                    scope.content = "";
+                }
+            }
+
+        };
+    }])
 
     /**
      * Directive for the footer
@@ -1200,3 +1231,30 @@ angular.module('cttvDirectives', [])
     }])
 
 
+
+    /**
+     * Directive to parse Markdown documents
+     */
+    .directive('mdParser', ['$log','$http', '$sce', function ($log, $http, $sce) {
+        'use strict';
+
+        return {
+            restrict: 'EA',
+            scope: {
+                url: '@'     // the url of the resource
+            },
+            template : '<div ng-bind-html="md"></div>',
+            link: function(scope, element, attrs) {
+                $http.get(scope.url)
+                .then(function successCallback(response) {
+                    // this callback will be called asynchronously
+                    // when the response is available
+                    scope.md = $sce.trustAsHtml( marked(response.data) );
+                }, function errorCallback(response) {
+                    // called asynchronously if an error occurs
+                    // or server returns response with an error status.
+                    $log.log(response)
+                });
+            }
+        };
+    }])

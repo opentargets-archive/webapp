@@ -543,3 +543,16 @@ body{
 .fixed {
     position: fixed;
 }
+
+
+
+.main-alert-container {
+    .alert{
+        margin-top: 20px;
+    }
+
+    .row>div{
+        /* reset the min height of columns */
+        min-height:0px;
+    }
+}

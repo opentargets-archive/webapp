@@ -35,16 +35,18 @@ angular.module('cttvServices').
             // E
             ENSEMBL_ID :                     "Ensembl ID",
             EPMC :                           "Europe PMC",
-            EXPRESSION_ATLAS :               "Expression Atlas",
             EVA :                            "European Variation Archive (EVA)",
             EVA_SOMATIC :                    "European Variation Archive (EVA)",
             EXP_DISEASE_ASSOC_LABEL :        "targets_associated_with_",
             EXP_TARGET_ASSOC_LABEL :         "diseases_associated_with_",
+            EXPRESSION_ATLAS:                "Expression Atlas",
+
 
             // F
             // G
             GENE_2_PHENOTYPE :               "Gene2Phenotype",
             GENETIC_ASSOCIATION :            "Genetic associations",
+            GENOMICS_ENGLAND:                "Genomics England PanelApp",
             GWAS :                           "GWAS catalog",
 
             // H
@@ -68,6 +70,8 @@ angular.module('cttvServices').
             // P
             PATHWAY :                        "Pathway types",
             PHENODIGM :                      "Phenodigm",
+            PHEWAS :                         "PheWAS catalog",
+            PHEWAS_23andme :                 "23andme",
 
             // Q
             // R
@@ -102,12 +106,12 @@ angular.module('cttvServices').
 
         dictionary.get = function(w){
             //return en[w] || undefined;
-        }
+        };
 
         dictionary.invert = function(val){
             var a = invLookup(dictionary, val);
             return a;
-        }
+        };
 
         function invLookup(o ,v){
             var k = undefined;

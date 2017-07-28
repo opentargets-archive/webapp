@@ -6,10 +6,12 @@
   "license": "",
   "devDependencies": {
     "angular-mocks": "1.3.9",
-    "bower": "1.7.6",
+    "babel-preset-es2015": "^6.18.0",
+    "babelify": "^7.3.0",
+    "bower": "1.8.0",
+    "browserify": "^13.1.1",
     "del": "1.2.0",
     "gulp": "3.8.10",
-    "gulp-browserify": "0.5.1",
     "gulp-concat": "2.6.0",
     "gulp-css-purge": "1.0.27",
     "gulp-extend": "0.2.0",
@@ -23,9 +25,13 @@
     "gulp-server-livereload": "1.8.1",
     "gulp-sourcemaps": "1.6.0",
     "gulp-uglify": "1.2.0",
+    "gulp-util": "^3.0.7",
     "gulp-watch": "3.0.0",
     "jspm": "^0.16.34",
-    "mkdirp": "0.5.1"
+    "mkdirp": "0.5.1",
+    "through2": "^2.0.3",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
     "setup": "./node_modules/.bin/bower install --allow-root && ./node_modules/.bin/jspm install && ./node_modules/.bin/gulp build-all",
@@ -35,22 +41,25 @@
     "test-single-run": "karma start tests/unit/karma.conf.js  --single-run"
   },
   "dependencies": {
-    "cttv.api": "0.0.13",
+    "babel-polyfill": "6.23.0",
+    "cttv.api": "0.0.15",
     "cttv.diseaseGraph": "0.0.3",
     "cttv.flowerView": "0.0.0",
-    "cttv.genome": "0.0.22",
-    "cttv.spinner": "0.0.0",
-    "cttv.targetAssociationsBubbles": "0.0.15",
-    "cttv.targetAssociationsTree": "0.0.9",
-    "cttv.targetGeneTree": "0.0.13",
+    "cttv.genome": "0.0.27",
+    "cttv.spinner": "0.0.1",
+    "cttv.targetAssociationsBubbles": "0.0.16",
+    "cttv.targetAssociationsTree": "0.0.10",
+    "cttv.targetGeneTree": "0.0.14",
     "js-yaml": "3.5.5",
     "marked": "0.3.5",
+    "ot.interactions_viewer": "0.0.9",
     "systemjs": "^0.19.27",
-    "tnt.genome": "0.1.5",
+    "tnt.genome": "0.1.7",
+    "tnt.ensembl": "0.0.13",
     "tnt.rest": "0.1.1",
     "tnt.tooltip": "0.2.0",
     "tnt.utils": "0.1.3",
-    "viz_diseases": "0.0.13"
+    "viz_diseases": "0.0.14"
   },
   "jspm": {
     "directories": {
