@@ -2,7 +2,7 @@
 
 
 export REST_API_SCHEME=${REST_API_SCHEME:=https}
-export REST_API_SERVER=${REST_API_SERVER:=www.targetvalidation.org:443}
+export REST_API_SERVER=${REST_API_SERVER:=api.targetvalidation.org:443}
 export ENSEMBL_API_KEY=${ENSEMBL_API_KEY:=YOUR_KEY_HERE}
 
 # substitute the rest API address in the nginx configuration
