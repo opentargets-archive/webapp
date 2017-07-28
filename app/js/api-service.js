@@ -41,7 +41,7 @@ angular.module('cttvServices')
             API_DISEASE_RELATION_URL : 'diseaseRelation',
             API_LOG_SESSION_URL : "logSession",
             API_STATS_URL : "stats",
-            API_TARGETS_ENRICHMENT_URL: "targetsEnrichment",
+            API_TARGETS_ENRICHMENT_URL: "targetsEnrichment"/*,
             facets: {
                 DATATYPE: 'datatype', // 'filterbydatatype',
                 PATHWAY: 'pathway', //filterbypathway',
@@ -51,8 +51,19 @@ angular.module('cttvServices')
                 SCORE_STR : 'stringency',
                 THERAPEUTIC_AREA: 'therapeutic_area', //
                 TARGET_CLASS: 'target_class'
-            }
+            }*/
         };
+
+        // facets now come from the config:
+        // it maps each webapp facet key ("key" - e.g. "datatype" or "smin")
+        // to its corresponding facet key in the API ("key-api" - e.g. "datatype" or "scorevalue_min")
+        // TODO:
+        // put back when we have a flexible mapping of key-app <-> key-api ....
+        /*cttvAPI.facets = {};
+            for(var i in cttvConfig.facets){
+                cttvAPI.facets[cttvConfig.facets[i].key] = cttvConfig.facets[i]["key-api"];
+            }*/
+
 
         var api = cttvApi()
             .prefix(cttvConfig.api)
@@ -355,7 +366,8 @@ angular.module('cttvServices')
             obj = obj || {};
             for(var i in facets){
                 if( facets.hasOwnProperty(i)){
-                    obj[cttvAPI.facets[i.toUpperCase()]] = facets[i];
+                    // obj[cttvAPI.facets[i]] = facets[i];  // this is unnecessary until we have a flexible mapping of key-app -> key-api
+                    obj[i] = facets[i]; // just map it simply for now
                 }
             }
             return obj;

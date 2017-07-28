@@ -98,7 +98,7 @@ angular.module('cttvControllers')
 
         // facets changed?
         if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) || !new_state[facetsId] ){
-            getFacets( new_state[facetsId] );
+            getFacets( cttvFiltersService.facets2Api(new_state[facetsId]) );
         }
 
         // view changed?

@@ -52,7 +52,7 @@ angular.module('facets')
                 if(dtb.datasource){
                     // if there are subfilters, we pass those as a Collection config object with the parameter "filters"
                     conf.collection = {
-                        filters: datasourceFacetParser.parse({key:"datasources"}, dtb.datasource, countsToUse, isSelected ).filters
+                        filters: datasourceFacetParser.parse({key:"datasource"}, dtb.datasource, countsToUse, isSelected ).filters
                     }
                 }
 

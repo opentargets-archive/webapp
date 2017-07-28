@@ -266,7 +266,7 @@
      * Here we define all facets available in the app.
      * each facet is defiend as follow:
      *    "datatype" : {    // the code name for the facet - can be anything
-     *        "key"         // IMPORTANT! the key (id) as returned by the API
+     *        "key"         // the key used to store facet in the URL. MUST MATCH key in api filters
      *        "element"     // the name root as defined in the facet folder
      *                      // where you ahve the directive (datatypeFacet) and parser (datatypeFacetParser)
      *    }
@@ -277,6 +277,7 @@
     "facets" : {
         "datatype" : {
             "key": "datatype",
+            "keyapp": "datatype",
             "element": "datatype-facet",
             "options" : {
                 "heading" : "Data type",
@@ -286,6 +287,7 @@
 
         "therapeuticArea" : {
             "key": "therapeutic_area",
+            "keyapp": "therapeutic_area",
             "element": "therapeutic-area-facet",
             "options" : {
                 "heading" : "Therapeutic area",
@@ -295,6 +297,7 @@
 
         "pathway" : {
             "key": "pathway",
+            "keyapp": "pathway",
             "element": "pathway-facet",
             "options" : {
                 "heading" : "Pathway types",
@@ -304,6 +307,7 @@
 
         "targetClass" : {
             "key": "target_class",
+            "keyapp": "target_class",
             "element": "target-class-facet",
             "options" : {
                 "heading" : "Target class",
@@ -313,10 +317,31 @@
 
         "histogram" : {
             "key": "data_distribution",
+            "keyapp": "data_distribution",
             "element": "data-distribution-facet",
             "options" : {
                 "heading" : "Data distribution",
                 "open" : true
+            }
+        },
+
+        "uniprotKeyword" : {
+            "key": "uniprotkw",
+            "keyapp": "upkw",
+            "element": "uniprot-kw-facet",
+            "options" : {
+                "heading" : "UniProt keyword",
+                "open" : true
+            }
+        },
+
+        "dataSource" : {
+            "key": "datasource",
+            "keyapp": "datasource",
+            "element": "datasource-facet",
+            "options" : {
+                "heading" : "Datasource",
+                "open" : false
             }
         }
     },
@@ -338,10 +363,6 @@
     "targetAssociationsFacets" : {
         "count" : "unique_disease_count",
         "facets" : [
-
-            /*{
-                "type":"histogram",
-            },*/
 
             {
                 "type" : "datatype" //,
@@ -370,11 +391,24 @@
             },
 
             {
-                "type":"pathway"
+                "type":"pathway",
+                "options" : {
+                    "open" : false
+                }
             },
 
             {
-                "type":"targetClass"
+                "type":"targetClass",
+                "options" : {
+                    "open" : false
+                }
+            },
+
+            {
+                "type":"uniprotKeyword",
+                "options" : {
+                    "open" : false
+                }
             }
 
         ]

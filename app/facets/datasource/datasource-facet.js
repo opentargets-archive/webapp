@@ -3,7 +3,7 @@ angular.module('facets')
     /**
      * The Datasource facet
      */
-    .directive('datasoruceFacet', ['$log', 'cttvFiltersService', function ($log, cttvFiltersService) {
+    .directive('datasourceFacet', ['$log', 'cttvFiltersService', function ($log, cttvFiltersService) {
         'use strict';
 
         return {
