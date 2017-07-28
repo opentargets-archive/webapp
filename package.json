@@ -11,6 +11,7 @@
     "bower": "1.8.0",
     "browserify": "^13.1.1",
     "del": "1.2.0",
+    "eslint": "^4.3.0",
     "gulp": "3.8.10",
     "gulp-concat": "2.6.0",
     "gulp-css-purge": "1.0.27",
@@ -38,7 +39,8 @@
     "full-install": "npm install && npm run setup",
     "start": "cd server && node server.js",
     "test": "./node_modules/.bin/gulp test",
-    "test-single-run": "karma start tests/unit/karma.conf.js  --single-run"
+    "test-single-run": "karma start tests/unit/karma.conf.js  --single-run",
+    "eslint": "./node_modules/.bin/eslint 'app/js/**.js'"
   },
   "dependencies": {
     "babel-polyfill": "6.23.0",
