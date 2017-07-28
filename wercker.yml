@@ -80,6 +80,17 @@ push-release:
     cmd: /bin/sh
 
   steps:
+
+    - script:
+      name: install npm
+      code: |
+        apk update && apk add nodejs
+    
+    - script:
+      name: install gulp
+      code: |
+        npm install -g gulp
+
     - script:
       name: move entrypoint script in container
       code: |
