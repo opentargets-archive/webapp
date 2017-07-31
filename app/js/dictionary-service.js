@@ -46,6 +46,7 @@ angular.module('cttvServices').
             // G
             GENE_2_PHENOTYPE :               "Gene2Phenotype",
             GENETIC_ASSOCIATION :            "Genetic associations",
+            GENOMICS_ENGLAND:                "Genomics England PanelApp",
             GWAS :                           "GWAS catalog",
 
             // H
@@ -69,6 +70,8 @@ angular.module('cttvServices').
             // P
             PATHWAY :                        "Pathway types",
             PHENODIGM :                      "Phenodigm",
+            PHEWAS :                         "PheWAS catalog",
+            PHEWAS_23andme :                 "23andme",
 
             // Q
             // R

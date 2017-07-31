@@ -11,7 +11,7 @@ angular.module('cttvServices')
 /**
 * The API services, with methods to call the ElasticSearch API
 */
-    .factory('cttvAPIservice', ['$http', '$log', '$location', '$rootScope', '$q', '$timeout', 'liveConfig', 'cttvConfig', function($http, $log, $location, $rootScope, $q, $timeout, liveConfig, cttvConfig) {
+    .factory('cttvAPIservice', ['$http', '$log', '$location', '$rootScope', '$q', '$timeout', 'cttvConfig', function($http, $log, $location, $rootScope, $q, $timeout, cttvConfig) {
         'use strict';
 
 
@@ -84,11 +84,11 @@ angular.module('cttvServices')
         }
 
         // Set the version of the rest api if it is set in the live config file
-        liveConfig.then (function (config) {
-            if (config.apiVersion) {
-                api.version(config.apiVersion);
-            }
-        });
+        // liveConfig.then (function (config) {
+        //     if (config.apiVersion) {
+        //         api.version(config.apiVersion);
+        //     }
+        // });
 
         /*
         * Private function to actually call the API
@@ -115,22 +115,22 @@ angular.module('cttvServices')
 
             // Params for api.call are: url, data (for POST) and return format
 
-            liveConfig.then (function (config) {
-                var url;
-                if( queryObject.method === undefined || queryObject.method === 'GET') {
-                    url = api.url[queryObject.operation](params);
-                } else {
-                    var theUrl = api.url[queryObject.operation]();
-                    url = theUrl.substring(0, theUrl.length - 1 );
-                }
-                // $log.warn("URL : " + url);
-                api.call(url, (queryObject.method=="POST" ? params : undefined), (params.format || "json"))
-                    .then (done)
-                    .catch(function (err) {
-                        $log.warn("GOT ERROR:", err);
-                        cttvAPI.defaultErrorHandler (err, queryObject.trackCall);
-                    });
-            });
+            // liveConfig.then (function (config) {
+            var url;
+            if( queryObject.method === undefined || queryObject.method === 'GET') {
+                url = api.url[queryObject.operation](params);
+            } else {
+                var theUrl = api.url[queryObject.operation]();
+                url = theUrl.substring(0, theUrl.length - 1 );
+            }
+            // $log.warn("URL : " + url);
+            api.call(url, (queryObject.method=="POST" ? params : undefined), (params.format || "json"))
+                .then (done)
+                .catch(function (err) {
+                    $log.warn("GOT ERROR:", err);
+                    cttvAPI.defaultErrorHandler (err, queryObject.trackCall);
+                });
+            // });
 
 
             return promise;
