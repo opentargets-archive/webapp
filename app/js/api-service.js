@@ -118,7 +118,10 @@ angular.module('cttvServices')
             liveConfig.then (function (config) {
                 var url;
                 if( queryObject.method === undefined || queryObject.method === 'GET') {
+                    console.log(queryObject);
+                    console.log(params);
                     url = api.url[queryObject.operation](params);
+
                 } else {
                     var theUrl = api.url[queryObject.operation]();
                     url = theUrl.substring(0, theUrl.length - 1 );
