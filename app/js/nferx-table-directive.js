@@ -43,14 +43,11 @@ angular.module('cttvDirectives')
                     // 1 - Disease label
                     row.push(d.disease.efo_info.label);
 
-                    // 2 - Nferx Serial Id
-                    row.push(d.unique_association_fields.serial_id);
-
-                    // 3 - P-value
+                    // 2 - Cosine Distance
                     row.push(d.evidence.resource_score.value.toPrecision(2));
 
 
-                    // 4 - Nferx Url
+                    // 3 - Nferx Url
 
 
                     row.push( "<a class='cttv-external-link' href='" + d.unique_association_fields.link_url + "' target='_blank'>"
@@ -138,10 +135,6 @@ angular.module('cttvDirectives')
                        {
                            "targets": [3],
                            "orderable": false
-                       },
-                       {
-                            "targets": [4],
-                            "orderable": false
                        },
                        {
                            "targets": [0],    // the access-level (public/private icon)
