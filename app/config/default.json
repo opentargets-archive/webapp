@@ -1,5 +1,5 @@
 {
-    "api": "https://www.targetvalidation.org/api/",
+    "api": "/api/",
     "mastheadNavigationMenu" : [
         {
             "label" : "About",
