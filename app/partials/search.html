@@ -56,7 +56,7 @@
                                 <span class="search-match-sec-content" ng-bind-html="val.join(', ')"></span>
                             </span>
                         </span>
-                        Orto: {{result.orthologMatch}}
+
                         <span class="search-details">
                             <span class="tag-section"><i class="fa fa-tag fa-lg tag" ng-class="(result.data.type==='target') ? 'target' : 'disease'"></i>{{result.data.type | upperCaseFirst}}</span>
                             <span class="tag-section" title="Search keyword matches an ortholog of this target" ng-show="result.orthologMatch"><i class="fa fa-tags tag ortholog"></i>Match from ortholog</span>
