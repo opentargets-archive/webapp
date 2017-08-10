@@ -2,17 +2,17 @@
 Custom config options
 */
 {
-  "api": "https://10.240.11.123/api/",
+  "api": "https://opentargets.biogen.com/api/",
   "evidence_sources" : {
-    "genetic_association" : {
-      "common" : ["GWAS", "PHEWAS", "PHEWAS_23andme"],
-      "rare" : ["UNIPROT", "EVA", "UNIPROT_LITERATURE", "GENE_2_PHENOTYPE", "GENOMICS_ENGLAND"]
-    },
-    "somatic_mutation": ["CANCER_GENE_CENSUS", "EVA_SOMATIC", "INTOGEN"],
-    "known_drug" : ["CHEMBL"],
-    "rna_expression" : ["EXPRESSION_ATLAS"],
-    "pathway" : ["REACTOME"],
-    "animal_model" : ["PHENODIGM"],
-    "literature" : ["EPMC","NFERX"]
-  }
+        "genetic_association" : {
+            "common" : ["GWAS", "PHEWAS", "PHEWAS_23andme"],
+            "rare" : ["UNIPROT", "EVA", "UNIPROT_LITERATURE", "GENE_2_PHENOTYPE", "GENOMICS_ENGLAND"]
+        },
+        "somatic_mutation": ["CANCER_GENE_CENSUS", "EVA_SOMATIC", "INTOGEN"],
+        "known_drug" : ["CHEMBL"],
+        "rna_expression" : ["EXPRESSION_ATLAS"],
+        "pathway" : ["REACTOME"],
+        "animal_model" : ["PHENODIGM"],
+        "literature" : ["EPMC","NFERX"]
+    }
 }
