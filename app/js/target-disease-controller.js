@@ -477,12 +477,14 @@
                     if ( checkPath(item, "evidence.variant2disease.provenance_type.literature.references") ) {
                         refs = item.evidence.variant2disease.provenance_type.literature.references;
                     }
+
                     if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
-                        var pmidsList = 'N/A';
+                        var pmidsList = []
                     }
                     else{
                         var pmidsList = cttvUtils.getPmidsList( refs );
                     }
+
                     row.push( pmidsList.length ? cttvUtils.getPublicationsString( pmidsList ) : 'N/A' );
 
                     // Publication ids (hidden)
