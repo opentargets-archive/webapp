@@ -358,7 +358,8 @@ angular.module('cttvDirectives', [])
                                             return a;
                                         })(),
                                         "columnDefs" : [
-                                            { "orderSequence": [ "desc", "asc"], "targets": "_all" }
+                                            { "orderSequence": [ "desc", "asc"], "targets": "_all" },
+                                            { "targets": [2], "visible": false }
                                         ],
                                         "order" : [[0, "asc"]],
                                         "autoWidth": false,
