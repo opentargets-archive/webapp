@@ -2,7 +2,7 @@
 Custom config options
 */
 {
-  "api": "https://10.240.11.123/api/",
+  "api": "https://web-augmentin.aal.amazon.biogen.com/api/",
   "evidence_sources" : {
         "genetic_association" : {
             "common" : ["GWAS", "PHEWAS", "PHEWAS_23andme"],
