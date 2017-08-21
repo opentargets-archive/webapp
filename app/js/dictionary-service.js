@@ -71,7 +71,7 @@ angular.module('cttvServices').
             // P
             PATHWAY :                        "Pathway types",
             PHENODIGM :                      "Phenodigm",
-            PHEWAS :                         "PHEWAS catalog",
+            PHEWAS :                         "PheWAS catalog",
             PHEWAS_23andme :                 "23andme",
 
             // Q
