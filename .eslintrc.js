@@ -75,6 +75,7 @@ module.exports = {
                 "controller": "controller"
             }
         }],
+        "angular/controller-as": 0,
         /**
          * Compatibility rules
          */
