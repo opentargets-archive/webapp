@@ -25,25 +25,25 @@ angular.module('facets')
 
             // array of filters
             config.filters = data.buckets.map(function (obj) {
-                    var conf = {};
-                    conf.key = obj.key;
-                    conf.label = obj.label;
-                    conf.count = obj[countsToUse].value;
-                    conf.selected = isSelected(config.key, obj.key);
-                    conf.facet = config.key;
-                    conf.collection = null;
-                    if (obj.target_class) {
-                        conf.collection = {
-                            filters: parser.parse({key:cttvConsts.TARGET_CLASS}, obj.target_class, countsToUse, isSelected).filters
-                        }
-                    }
-                    return conf;
-                });
+                var conf = {};
+                conf.key = obj.key;
+                conf.label = obj.label;
+                conf.count = obj[countsToUse].value;
+                conf.selected = isSelected(config.key, obj.key);
+                conf.facet = config.key;
+                conf.collection = null;
+                if (obj.target_class) {
+                    conf.collection = {
+                        filters: parser.parse({key:cttvConsts.TARGET_CLASS}, obj.target_class, countsToUse, isSelected).filters
+                    };
+                }
+                return conf;
+            });
 
             return config;
-        }
+        };
 
         return parser;
-    }])
+    }]);
 
 

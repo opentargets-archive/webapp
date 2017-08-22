@@ -29,8 +29,8 @@ angular.module('plugins')
                 if (gosByOntology.F.length) {
                     goArr.push (
                         {
-                            "Ontology" : "Molecular Function",
-                            "terms" : gosByOntology.F
+                            'Ontology' : 'Molecular Function',
+                            'terms' : gosByOntology.F
                         }
                     );
                 }
@@ -38,8 +38,8 @@ angular.module('plugins')
                 if (gosByOntology.P.length) {
                     goArr.push (
                         {
-                            "Ontology" : "Biological Process",
-                            "terms" : gosByOntology.P
+                            'Ontology' : 'Biological Process',
+                            'terms' : gosByOntology.P
                         }
                     );
                 }
@@ -47,8 +47,8 @@ angular.module('plugins')
                 if (gosByOntology.C.length) {
                     goArr.push (
                         {
-                            "Ontology" : "Cellular Component",
-                            "terms" : gosByOntology.C
+                            'Ontology' : 'Cellular Component',
+                            'terms' : gosByOntology.C
                         }
                     );
                 }

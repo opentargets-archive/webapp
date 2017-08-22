@@ -1,6 +1,6 @@
 angular.module('plugins')
     .directive('relatedTargets', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
-        "use strict";
+        'use strict';
 
         return {
             restrict: 'E',
@@ -12,17 +12,17 @@ angular.module('plugins')
                 cttvAPIservice.getTargetRelation({
                     id: scope.target.id,
                 })
-                .then(
+                    .then(
                     // success
-                    function (resp) {
+                        function (resp) {
                         // $log.log("getTargetRelation");
                         // $log.log(resp);
-                        scope.relations = resp.body.data.slice(1, 20);
-                    },
+                            scope.relations = resp.body.data.slice(1, 20);
+                        },
 
-                    // error handler
-                    cttvAPIservice.defaultErrorHandler
-                );
+                        // error handler
+                        cttvAPIservice.defaultErrorHandler
+                    );
 
             }
         };

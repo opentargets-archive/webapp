@@ -52,8 +52,8 @@ angular.module('cttvControllers')
         //
 
         // state we want to export to/from the URL
-        var stateId = "src";
-        var stateIdLegacy = "q";    // the old style query
+        var stateId = 'src';
+        var stateIdLegacy = 'q';    // the old style query
         var state = {};
         cttvLocationState.resetStateFor(stateId);
         cttvLocationState.resetStateFor(stateIdLegacy); // reset state for old style queries, just in case
@@ -63,12 +63,12 @@ angular.module('cttvControllers')
          * Note properties from the state service object are always arrays
          */
         var initState = function(obj){
-            state.q = ( obj.q || [] )[0] ? obj.q : [""];
+            state.q = ( obj.q || [] )[0] ? obj.q : [''];
             state.p = ( obj.p || [] )[0] ? obj.p : [1];
             state.f = ( obj.f || [] )[0] ? obj.f : [];
 
             // ensure filters are only allowed terms
-            state.f = state.f.filter(function(filter){return filter=="target" || filter=="disease";});
+            state.f = state.f.filter(function(filter){return filter=='target' || filter=='disease';});
             return state;
         };
 
@@ -140,10 +140,10 @@ angular.module('cttvControllers')
                     cttvAPIservice.getSearch({
                         method: 'GET',
                         params: {
-                                q: $scope.search.query.q,
-                                size : 0,
-                                filter : k
-                            }
+                            q: $scope.search.query.q,
+                            size : 0,
+                            filter : k
+                        }
                     }).
                         then(
                             function(resp) {
@@ -163,12 +163,12 @@ angular.module('cttvControllers')
 
         var getTargetInfo = function(id){
             var queryObject = {
-                 method: 'GET',
-                 params: {
+                method: 'GET',
+                params: {
                     target_id: id,
-                    fields: ["approved_symbol"]
-                 }
-             };
+                    fields: ['approved_symbol']
+                }
+            };
             return cttvAPIservice.getTarget(queryObject)
                 .then(function(resp) {
                     try{
@@ -176,10 +176,10 @@ angular.module('cttvControllers')
                             return p.id===id;
                         }).label = resp.body.approved_symbol;
                     }catch(e){
-                        $log.log("Error getting Target information");
+                        $log.log('Error getting Target information');
                     }
                 },cttvAPIservice.defaultErrorHandler);
-        }
+        };
 
 
 
@@ -188,7 +188,7 @@ angular.module('cttvControllers')
                 method: 'GET',
                 params: {
                     code: id,
-                    fields: ["label"]
+                    fields: ['label']
                 }
             };
             return cttvAPIservice.getDisease(queryObject)
@@ -198,10 +198,10 @@ angular.module('cttvControllers')
                             return p.id===id;
                         }).label = resp.body.label;
                     }catch(e){
-                        $log.log("Error getting disease information");
+                        $log.log('Error getting disease information');
                     }
                 }, cttvAPIservice.defaultErrorHandler );
-        }
+        };
 
 
 
@@ -210,11 +210,11 @@ angular.module('cttvControllers')
                 method: 'GET',
                 params: {
                     //target: id,
-                    datasource: "chembl",
+                    datasource: 'chembl',
                     size: 1000,
                     fields:[
-                        "drug.max_phase_for_all_diseases.numeric_index",
-                        "drug.molecule_name"
+                        'drug.max_phase_for_all_diseases.numeric_index',
+                        'drug.molecule_name'
                     ]
                 }
             };
@@ -223,14 +223,14 @@ angular.module('cttvControllers')
 
 
             return cttvAPIservice.getFilterBy(queryObject).then(function (resp) {
-                    var d = resp.body.data.filter(function(i){
-                        return i.drug.max_phase_for_all_diseases.numeric_index == 4;
-                    });
-                    d = _.uniqBy(d, 'drug.molecule_name');
-                    return d.length;
+                var d = resp.body.data.filter(function(i){
+                    return i.drug.max_phase_for_all_diseases.numeric_index == 4;
                 });
+                d = _.uniqBy(d, 'drug.molecule_name');
+                return d.length;
+            });
 
-        }
+        };
 
 
 
@@ -287,10 +287,10 @@ angular.module('cttvControllers')
                                 result.data.top_associations.parsed = result.data.top_associations[associationsField].slice(0,5);
                                 result.data.top_associations.parsed = result.data.top_associations.parsed.map(function(p){
                                     // split ID "ENSG00000073756-EFO_0007214"
-                                    var id = p.id.split("-")[ +(result.data.type==="target") ];
+                                    var id = p.id.split('-')[ +(result.data.type==='target') ];
                                     return {
                                         id : id,
-                                        label: result.data.type==="target" ? getDiseaseInfo(id) : getTargetInfo(id)
+                                        label: result.data.type==='target' ? getDiseaseInfo(id) : getTargetInfo(id)
                                     };
                                 });
 
@@ -299,14 +299,14 @@ angular.module('cttvControllers')
                                 // phase IV drugs
                                 //
                                 result.data.drug_summary = {
-                                    total : "..."
+                                    total : '...'
                                 };
                                 getDrugInfo(result.data.id, result.data.type)
-                                        .then(
-                                            function(d){
-                                                result.data.drug_summary.total = d;
-                                            }
-                                        );
+                                    .then(
+                                        function(d){
+                                            result.data.drug_summary.total = d;
+                                        }
+                                    );
 
 
                                 //
@@ -322,7 +322,7 @@ angular.module('cttvControllers')
                                             result.data.unique_ta.push({
                                                 label: ta[0],
                                                 efo: result.data.efo_path_codes[i][0]
-                                            })
+                                            });
                                         }
                                     });
 

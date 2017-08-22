@@ -1,6 +1,6 @@
-  /* Controllers */
+/* Controllers */
 
-    angular.module('cttvControllers', [])
+angular.module('cttvControllers', [])
     .run (['$rootScope', '$window', '$uibModalStack', '$log', function ($rootScope, $window, $uibModalStack, $log) {
         'use strict';
 
@@ -17,7 +17,7 @@
             $.fn.dataTable.ext.search = [];
         });
 
-        $rootScope.$on("cttvApiError", function (event, data) {
+        $rootScope.$on('cttvApiError', function (event, data) {
             if (data.status === 403) {
                 $rootScope.showApiErrorMsg = true;
             }
@@ -53,7 +53,7 @@
         // options must be exposed as an object, or else Angular doesn't update the view
         $scope.opts = {
             showResponsiveSearch : false
-        }
+        };
 
         $scope.$on('$locationChangeSuccess', function(){
             // when we change page, close the search in case it's visible
@@ -105,13 +105,13 @@
                                 var modal = $uibModal.open({
                                     animation: true,
                                     scope: $scope,
-                                    template: "<div class=modal-header>" + notification.template.header + "</div>"
-                                    + "<div class='modal-body modal-body-center'>" + notification.template.body + "</div>"
-                                    + "<div class=modal-footer>"
-                                    + "    <button class='btn btn-primary' type=button onclick='angular.element(this).scope().addCookie(\"" + notification.id + "\");angular.element(this).scope().$dismiss();'>OK</button>"
-                                    + " </div>"
-                                    + "</div>",
-                                    size: "m"
+                                    template: '<div class=modal-header>' + notification.template.header + '</div>'
+                                    + '<div class=\'modal-body modal-body-center\'>' + notification.template.body + '</div>'
+                                    + '<div class=modal-footer>'
+                                    + '    <button class=\'btn btn-primary\' type=button onclick=\'angular.element(this).scope().addCookie("' + notification.id + '");angular.element(this).scope().$dismiss();\'>OK</button>'
+                                    + ' </div>'
+                                    + '</div>',
+                                    size: 'm'
                                 });
                             };
                         }
@@ -185,19 +185,19 @@
 
                     $scope.stats.datasources = {
                         total: dbsctn
-                    }
+                    };
 
                     // how about release date?
-                    var d = resp.body.data_version.split(".");
-                    d[0] = "20"+d[0];   // format as "20xx"
+                    var d = resp.body.data_version.split('.');
+                    d[0] = '20'+d[0];   // format as "20xx"
                     d[1] = parseInt(d[1])-1; // month starts at 0
                     $scope.stats.date = new Date(d[0], d[1]); // expose as a Date object
                 },
                 cttvAPIservice.defaultErrorHandler
-            )
-            // .finally(function(){
-            //     $scope.search.loading = false;
-            // });
+            );
+        // .finally(function(){
+        //     $scope.search.loading = false;
+        // });
 
     }])
 

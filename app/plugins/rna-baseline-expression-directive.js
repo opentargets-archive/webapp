@@ -6,7 +6,7 @@ angular.module('plugins')
             restrict: 'E',
             templateUrl: 'plugins/rna-baseline-expression.html',
             scope: {
-                target: "=",
+                target: '=',
                 width: '='
             },
             link: function (scope, element, attrs) {
@@ -32,13 +32,13 @@ angular.module('plugins')
                     $http.get(url)
                         .then(function (resp) {
                             var arr = obj2array(resp.data.generpkm);
-                            var svg = d3.select("#gtexWidget")
-                                .append("svg")
-                                .attr("width", (w-150))
-                                .attr("height", (arr.length*20)+100)
-                                .append("g")
-                                .attr("class", "gtexView")
-                                .attr("transform", "translate(" + ~~(w*0.4) + ",70)");
+                            var svg = d3.select('#gtexWidget')
+                                .append('svg')
+                                .attr('width', (w-150))
+                                .attr('height', (arr.length*20)+100)
+                                .append('g')
+                                .attr('class', 'gtexView')
+                                .attr('transform', 'translate(' + ~~(w*0.4) + ',70)');
 
                             plotGtex(svg, arr);
                         });
@@ -52,14 +52,14 @@ angular.module('plugins')
                     var valExtent = getExtent(data);
 
                     // X axis legend
-                    container.append("g")
-                        .attr("transform", "translate(0,-40)")
-                        .append("text")
+                    container.append('g')
+                        .attr('transform', 'translate(0,-40)')
+                        .append('text')
                         .style({
-                            "font-size": '12px',
-                            "fill": "#555"
+                            'font-size': '12px',
+                            'fill': '#555'
                         })
-                        .text("Normalised expression (RPKM)");
+                        .text('Normalised expression (RPKM)');
 
                     var valScale = d3.scale.linear()
                         .domain(valExtent)
@@ -67,82 +67,82 @@ angular.module('plugins')
 
                     var colScale = d3.scale.category20();
 
-                    var tissues = container.selectAll(".tissue")
+                    var tissues = container.selectAll('.tissue')
                         .data(data)
                         .enter()
-                        .append("g")
-                        .attr("class", "tissue")
-                        .attr("transform", function (d, i) {
-                            return "translate(0," + (i*20) + ")";
+                        .append('g')
+                        .attr('class', 'tissue')
+                        .attr('transform', function (d, i) {
+                            return 'translate(0,' + (i*20) + ')';
                         });
 
                     // box
                     tissues
-                        .append("rect")
-                        .attr("x", function (d) {
-                            return valScale(d.q1)
+                        .append('rect')
+                        .attr('x', function (d) {
+                            return valScale(d.q1);
                         })
-                        .attr("width", function (d) {
+                        .attr('width', function (d) {
                             return valScale((d.q3)-(d.q1));
                         })
-                        .attr("y", 0)
-                        .attr("height", 10)
-                        .attr("fill", function (d, i) {
+                        .attr('y', 0)
+                        .attr('height', 10)
+                        .attr('fill', function (d, i) {
                             return colScale(i%20);
                         });
 
                     // high whisker
                     tissues
-                        .append("line")
-                        .attr("x1", function (d) {
+                        .append('line')
+                        .attr('x1', function (d) {
                             return valScale(d.q3);
                         })
-                        .attr("x2", function (d) {
+                        .attr('x2', function (d) {
                             return valScale(d.high_whisker);
                         })
-                        .attr("y1", 5)
-                        .attr("y2", 5)
-                        .attr("stroke-width", 1)
-                        .attr("stroke", "gray");
+                        .attr('y1', 5)
+                        .attr('y2', 5)
+                        .attr('stroke-width', 1)
+                        .attr('stroke', 'gray');
                     tissues
-                        .append("line")
-                        .attr("x1", function (d) {
+                        .append('line')
+                        .attr('x1', function (d) {
                             return valScale(d.high_whisker);
                         })
-                        .attr("x2", function (d) {
+                        .attr('x2', function (d) {
                             return valScale(d.high_whisker);
                         })
-                        .attr("y1", 0)
-                        .attr("y2", 10)
-                        .attr("stroke-width", 1)
-                        .attr("stroke", "gray");
+                        .attr('y1', 0)
+                        .attr('y2', 10)
+                        .attr('stroke-width', 1)
+                        .attr('stroke', 'gray');
 
 
                     // lower whisker
                     tissues
-                        .append("line")
-                        .attr("x1", function (d) {
+                        .append('line')
+                        .attr('x1', function (d) {
                             return valScale(d.q1);
                         })
-                        .attr("x2", function (d) {
+                        .attr('x2', function (d) {
                             return valScale(d.low_whisker);
                         })
-                        .attr("y1", 5)
-                        .attr("y2", 5)
-                        .attr("stroke-width", 1)
-                        .attr("stroke", "gray");
+                        .attr('y1', 5)
+                        .attr('y2', 5)
+                        .attr('stroke-width', 1)
+                        .attr('stroke', 'gray');
                     tissues
-                        .append("line")
-                        .attr("x1", function (d) {
+                        .append('line')
+                        .attr('x1', function (d) {
                             return valScale(d.low_whisker);
                         })
-                        .attr("x2", function (d) {
+                        .attr('x2', function (d) {
                             return valScale(d.low_whisker);
                         })
-                        .attr("y1", 0)
-                        .attr("y2", 10)
-                        .attr("stroke-width", 1)
-                        .attr("stroke", "gray");
+                        .attr('y1', 0)
+                        .attr('y2', 10)
+                        .attr('stroke-width', 1)
+                        .attr('stroke', 'gray');
 
                     // outliers
                     tissues
@@ -150,42 +150,42 @@ angular.module('plugins')
                             for (var i=0; i<d.outliers.length; i++) {
                                 var o = d.outliers[i];
                                 d3.select(this)
-                                    .append("circle")
-                                    .attr("cx", function () {
+                                    .append('circle')
+                                    .attr('cx', function () {
                                         return valScale(o);
                                     })
-                                    .attr("cy", 5)
-                                    .attr("r", 2)
-                                    .attr("stroke", "gray")
-                                    .attr("stroke-width", 1)
-                                    .attr("fill", "none");
+                                    .attr('cy', 5)
+                                    .attr('r', 2)
+                                    .attr('stroke', 'gray')
+                                    .attr('stroke-width', 1)
+                                    .attr('fill', 'none');
                             }
                         });
 
                     // medians
                     tissues
-                        .append("line")
-                        .attr("x1", function (d) {
+                        .append('line')
+                        .attr('x1', function (d) {
                             return valScale(d.median);
                         })
-                        .attr("x2", function (d) {
+                        .attr('x2', function (d) {
                             return valScale(d.median);
                         })
-                        .attr("y1", function (d) {
+                        .attr('y1', function (d) {
                             return 0;
                         })
-                        .attr("y2", function (d) {
+                        .attr('y2', function (d) {
                             return 10;
                         })
-                        .attr("class", "median")
-                        .attr("stroke-width", 2)
-                        .attr("stroke", "black");
+                        .attr('class', 'median')
+                        .attr('stroke-width', 2)
+                        .attr('stroke', 'black');
 
                     // Axes
                     // values axis
                     var valAxis = d3.svg.axis()
                         .scale(valScale)
-                        .orient("top")
+                        .orient('top')
                         .ticks(5);
 
                     // tissues axis
@@ -198,13 +198,13 @@ angular.module('plugins')
 
                     var tissuesAxis = d3.svg.axis()
                         .scale(tissuesScale)
-                        .orient("left");
+                        .orient('left');
 
                     container.call(tissuesAxis);
                     container
-                        .append("g")
-                        .attr("class", "axis")
-                        .attr("transform", "translate(0," + (-10) + ")")
+                        .append('g')
+                        .attr('class', 'axis')
+                        .attr('transform', 'translate(0,' + (-10) + ')')
                         .call(valAxis);
 
                 }
@@ -235,9 +235,9 @@ angular.module('plugins')
                     return [0, (max+10)];
                 }
 
-                if (cttvUtils.browser.name !== "IE") {
+                if (cttvUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
-                        var svg = d3.select("#gtexWidget").select("svg").node();
+                        var svg = d3.select('#gtexWidget').select('svg').node();
                         return svg;
                     };
                 }

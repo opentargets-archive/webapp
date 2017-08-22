@@ -1,7 +1,7 @@
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
 
-    .controller("SummaryCtrl", ['$scope', '$location', '$log', 'cttvAPIservice', '$q', 'cttvConfig', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, $log, cttvAPIservice, $q, cttvConfig, cttvUtils, cttvLoadedLists) {
+    .controller('SummaryCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', '$q', 'cttvConfig', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, $log, cttvAPIservice, $q, cttvConfig, cttvUtils, cttvLoadedLists) {
         'use strict';
 
         // Parse the $location search object to determine which entities we have.
@@ -13,9 +13,9 @@ angular.module('cttvControllers')
                 method: 'POST',
                 trackCall: true,
                 params: {
-                    "id": targets,
-                    "size": targets.length,
-                    "fields": ['ensembl_gene_id', 'drugs', 'approved_symbol', 'reactome', 'uniprot_id'],
+                    'id': targets,
+                    'size': targets.length,
+                    'fields': ['ensembl_gene_id', 'drugs', 'approved_symbol', 'reactome', 'uniprot_id'],
                 }
             };
             return cttvAPIservice.getTarget(queryObject)
@@ -29,16 +29,16 @@ angular.module('cttvControllers')
                 method: 'POST',
                 trackCall: true,
                 params: {
-                    "target": targets,
-                    "pvalue": 1,
-                    "from": 0,
-                    "size": 10000
+                    'target': targets,
+                    'pvalue': 1,
+                    'from': 0,
+                    'size': 10000
                 }
             };
             return cttvAPIservice.getTargetsEnrichment(queryObject)
                 .then(function (resp) {
                     return resp.body.data;
-                })
+                });
         }
 
         // Currently not used -- we are using the /private/enrichment/targets endpoint instead
@@ -51,10 +51,10 @@ angular.module('cttvControllers')
                 method: 'POST',
                 trackCall: true,
                 params: {
-                    "target": targets,
-                    "facets": "false",
-                    "size": 0,
-                    "fields": "total"
+                    'target': targets,
+                    'facets': 'false',
+                    'size': 0,
+                    'fields': 'total'
                 }
             };
 
@@ -66,10 +66,10 @@ angular.module('cttvControllers')
                             method: 'POST',
                             trackCall: true,
                             params: {
-                                "target": targets,
-                                "facets": "true",
-                                "from": i,
-                                "size": step
+                                'target': targets,
+                                'facets': 'true',
+                                'from': i,
+                                'size': step
                             }
                         };
                         if (!i) {
@@ -131,8 +131,8 @@ angular.module('cttvControllers')
 
         // 1 target
         if (search.target) {
-                // Only one target
-                $scope.target = search.target;
+            // Only one target
+            $scope.target = search.target;
         }
 
         // diseases / disease
@@ -147,11 +147,11 @@ angular.module('cttvControllers')
         // pathway
         if (search.pathway) {
             $scope.pathway = search.pathway;
-            if (search["pathway-target"]) {
-                if (!angular.isArray(search["pathway-target"])) {
-                    $scope.pathwayTargets = [search["pathway-target"]];
+            if (search['pathway-target']) {
+                if (!angular.isArray(search['pathway-target'])) {
+                    $scope.pathwayTargets = [search['pathway-target']];
                 } else {
-                    $scope.pathwayTargets = search["pathway-target"];
+                    $scope.pathwayTargets = search['pathway-target'];
                 }
             }
         }

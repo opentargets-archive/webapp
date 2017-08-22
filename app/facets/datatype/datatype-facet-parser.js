@@ -17,7 +17,7 @@ angular.module('facets')
 
 
 
-        var parser = {}
+        var parser = {};
 
         /**
          * Parse function
@@ -42,7 +42,7 @@ angular.module('facets')
                 def[countsToUse] = {};
                 var dtb = data.buckets.filter(function(o){return o.key===obj.key;})[0] || def;
                 conf.key = obj.key;
-                conf.label = cttvDictionary[obj.key.toUpperCase()] || "";
+                conf.label = cttvDictionary[obj.key.toUpperCase()] || '';
                 conf.count = dtb[countsToUse].value; //dtb.doc_count;
                 conf.enabled = dtb.key !== undefined; // it's actually coming from the API and not {}
                 conf.selected = isSelected(config.key, obj.key); // && conf.count>0;    // do we want to show disabled items (with count==0) as selected or not?
@@ -52,8 +52,8 @@ angular.module('facets')
                 if(dtb.datasource){
                     // if there are subfilters, we pass those as a Collection config object with the parameter "filters"
                     conf.collection = {
-                        filters: datasourceFacetParser.parse({key:"datasources"}, dtb.datasource, countsToUse, isSelected ).filters
-                    }
+                        filters: datasourceFacetParser.parse({key:'datasources'}, dtb.datasource, countsToUse, isSelected ).filters
+                    };
                 }
 
                 /*.filter( function(obj){
@@ -65,9 +65,9 @@ angular.module('facets')
             });
 
             return config;
-        }
+        };
 
         return parser;
-    }])
+    }]);
 
 

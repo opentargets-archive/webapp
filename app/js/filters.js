@@ -36,7 +36,7 @@ angular.module('cttvFilters', [])
         'use strict';
 
         return function(text, length) {
-            return  text.length>length ? text.substring(0,length)+"&hellip;" : text;
+            return  text.length>length ? text.substring(0,length)+'&hellip;' : text;
         };
     })
 
@@ -44,8 +44,8 @@ angular.module('cttvFilters', [])
         'use strict';
 
         return function(mi) {
-            var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            return  months[mi] || "";
+            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return  months[mi] || '';
         };
     })
 

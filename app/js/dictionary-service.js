@@ -14,86 +14,86 @@ angular.module('cttvServices').
 
 
             // A
-            AFFECTED_PATHWAY :               "Affected pathways",
-            ANIMAL_MODEL :                   "Animal models",
-            ASSOCIATION_SCORE :              "Association score",
+            AFFECTED_PATHWAY :               'Affected pathways',
+            ANIMAL_MODEL :                   'Animal models',
+            ASSOCIATION_SCORE :              'Association score',
 
             // B
             // C
-            CANCER_GENE_CENSUS :             "Cancer Gene Census",
-            CHEMBL :                         "CHEMBL",
-            COMMON_DISEASES :                "Common diseases",
-            CTTV_PIPELINE :                  "Open Targets pipeline",
+            CANCER_GENE_CENSUS :             'Cancer Gene Census',
+            CHEMBL :                         'CHEMBL',
+            COMMON_DISEASES :                'Common diseases',
+            CTTV_PIPELINE :                  'Open Targets pipeline',
 
             // D
-            DATA_DISTRIBUTION :              "Data distribution",
-            DATATYPES :                      "Data types",
-            DATA_TYPES :                     "Data types",
-            DISEASE :                        "Disease",
-            DISGENET :                       "DisGeNET",
+            DATA_DISTRIBUTION :              'Data distribution',
+            DATATYPES :                      'Data types',
+            DATA_TYPES :                     'Data types',
+            DISEASE :                        'Disease',
+            DISGENET :                       'DisGeNET',
 
             // E
-            ENSEMBL_ID :                     "Ensembl ID",
-            EPMC :                           "Europe PMC",
-            EVA :                            "European Variation Archive (EVA)",
-            EVA_SOMATIC :                    "European Variation Archive (EVA)",
-            EXP_DISEASE_ASSOC_LABEL :        "targets_associated_with_",
-            EXP_TARGET_ASSOC_LABEL :         "diseases_associated_with_",
-            EXPRESSION_ATLAS:                "Expression Atlas",
+            ENSEMBL_ID :                     'Ensembl ID',
+            EPMC :                           'Europe PMC',
+            EVA :                            'European Variation Archive (EVA)',
+            EVA_SOMATIC :                    'European Variation Archive (EVA)',
+            EXP_DISEASE_ASSOC_LABEL :        'targets_associated_with_',
+            EXP_TARGET_ASSOC_LABEL :         'diseases_associated_with_',
+            EXPRESSION_ATLAS:                'Expression Atlas',
 
 
             // F
             // G
-            GENE_2_PHENOTYPE :               "Gene2Phenotype",
-            GENETIC_ASSOCIATION :            "Genetic associations",
-            GENOMICS_ENGLAND:                "Genomics England PanelApp",
-            GWAS :                           "GWAS catalog",
+            GENE_2_PHENOTYPE :               'Gene2Phenotype',
+            GENETIC_ASSOCIATION :            'Genetic associations',
+            GENOMICS_ENGLAND:                'Genomics England PanelApp',
+            GWAS :                           'GWAS catalog',
 
             // H
             // I
-            INTOGEN :                        "IntOGen",
+            INTOGEN :                        'IntOGen',
             // J
             // K
-            KNOWN_DRUG :                     "Drugs",
+            KNOWN_DRUG :                     'Drugs',
 
             // L
-            LITERATURE :                     "Text mining",
+            LITERATURE :                     'Text mining',
 
             // M
-            MOUSE_MODEL :                    "Animal models",
+            MOUSE_MODEL :                    'Animal models',
 
             // N
-            NA :                             "N/A",
-            NO_DATA :                        "No data",
+            NA :                             'N/A',
+            NO_DATA :                        'No data',
 
             // O
             // P
-            PATHWAY :                        "Pathway types",
-            PHENODIGM :                      "Phenodigm",
-            PHEWAS :                         "PheWAS catalog",
-            PHEWAS_23andme :                 "23andme",
+            PATHWAY :                        'Pathway types',
+            PHENODIGM :                      'Phenodigm',
+            PHEWAS :                         'PheWAS catalog',
+            PHEWAS_23andme :                 '23andme',
 
             // Q
             // R
-            RARE_DISEASES :                  "Rare diseases",
-            REACTOME :                       "Reactome",
-            RNA_EXPRESSION:                  "RNA expression",
+            RARE_DISEASES :                  'Rare diseases',
+            REACTOME :                       'Reactome',
+            RNA_EXPRESSION:                  'RNA expression',
 
             // S
-            SCORE :                          "Association strength", //confidence", // "Score",
-            SOMATIC_MUTATION :               "Somatic mutations",
+            SCORE :                          'Association strength', //confidence", // "Score",
+            SOMATIC_MUTATION :               'Somatic mutations',
 
             // T
-            TARGET_NAME :                    "Target name",
-            TARGET_SYMBOL :                  "Target symbol",
-            THERAPEUTIC_AREA :               "Therapeutic area",
-            THERAPEUTIC_AREAS :              "Therapeutic areas",
-            TARGET_CLASS :                   "Target class",
+            TARGET_NAME :                    'Target name',
+            TARGET_SYMBOL :                  'Target symbol',
+            THERAPEUTIC_AREA :               'Therapeutic area',
+            THERAPEUTIC_AREAS :              'Therapeutic areas',
+            TARGET_CLASS :                   'Target class',
 
             // U
-            UNIPROT :                        "UniProt",
-            UNIPROT_LITERATURE:              "UniProt literature",
-            UP_OR_DOWN:                      "unclassified",
+            UNIPROT :                        'UniProt',
+            UNIPROT_LITERATURE:              'UniProt literature',
+            UP_OR_DOWN:                      'unclassified',
 
             // V
             // W

@@ -26,84 +26,84 @@ angular.module('plugins')
 
                 // burger menu
                 $timeout(function () {
-                    var burgerContainer = d3.select(document.getElementById("pdb-hamburger-menu"));
+                    var burgerContainer = d3.select(document.getElementById('pdb-hamburger-menu'));
                     burgerContainer
-                        .append("div")
-                        .style("position", "relative");
+                        .append('div')
+                        .style('position', 'relative');
                     burgerContainer
-                        .append("div")
-                        .attr("class", "hamburger-frame")
-                        .on("click", function () {
-                            if (div.style("height") === "0px") {
+                        .append('div')
+                        .attr('class', 'hamburger-frame')
+                        .on('click', function () {
+                            if (div.style('height') === '0px') {
                                 div
                                     .transition()
                                     .duration(1000)
-                                    .style("height", "130px");
+                                    .style('height', '130px');
                             } else {
                                 div
                                     .transition()
                                     .duration(1000)
-                                    .style("height", "0px");
+                                    .style('height', '0px');
                             }
                         });
 
                     var div = burgerContainer
-                        .append("div")
-                        .attr("class", "cttv_targetTree_legend");
+                        .append('div')
+                        .attr('class', 'cttv_targetTree_legend');
 
                     var colorSection = div
-                        .append("div");
+                        .append('div');
                     colorSection
-                        .append("h4")
-                        .text("Color by...");
+                        .append('h4')
+                        .text('Color by...');
                     colorSection
-                        .append("input")
-                        .style("margin", "10px")
-                        .attr("type", "radio")
-                        .attr("name", "colorBy")
-                        .attr("value", "chain")
-                        .property("checked", true)
-                        .on("change", function () {
+                        .append('input')
+                        .style('margin', '10px')
+                        .attr('type', 'radio')
+                        .attr('name', 'colorBy')
+                        .attr('value', 'chain')
+                        .property('checked', true)
+                        .on('change', function () {
                             scope.viewer.clear();
                             scope.viewer.cartoon('protein', scope.structure, {
                                 color: pv.color.byChain()
                             });
                         });
                     colorSection
-                        .append("text")
-                        .text(" Chain");
-                    colorSection.append("br");
+                        .append('text')
+                        .text(' Chain');
+                    colorSection.append('br');
                     colorSection
-                        .append("input")
-                        .style("margin", "10px")
-                        .style("margin-top", "0px")
-                        .attr("type", "radio")
-                        .attr("name", "colorBy")
-                        .attr("value", "Structure")
-                        .on("change", function (v) {
+                        .append('input')
+                        .style('margin', '10px')
+                        .style('margin-top', '0px')
+                        .attr('type', 'radio')
+                        .attr('name', 'colorBy')
+                        .attr('value', 'Structure')
+                        .on('change', function (v) {
                             scope.viewer.clear();
                             scope.viewer.cartoon('protein', scope.structure, {
                                 color: pv.color.ssSuccession()
                             });
                         });
                     colorSection
-                        .append("text")
-                        .text(" Structure");
+                        .append('text')
+                        .text(' Structure');
 
                     var burger = burgerContainer
-                        .append("div")
-                        .attr("class", "hamburger-menu");
+                        .append('div')
+                        .attr('class', 'hamburger-menu');
                 }, 0);
 
                 // PV
                 var w = scope.width - 120;
-                var newDiv = document.createElement("div");
-                newDiv.id = "pvTarget";
-                newDiv.className = "accordionCell";
+                var newDiv = document.createElement('div');
+                newDiv.id = 'pvTarget';
+                newDiv.className = 'accordionCell';
                 element[0].appendChild(newDiv);
 
 
-                $http.get("/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/" + uniprotId)
+                $http.get('/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/' + uniprotId)
                     .then (function (resp) {
                         var bestStructure = resp.data[uniprotId][0];
                         scope.pdbId = bestStructure.pdb_id;
@@ -131,12 +131,12 @@ angular.module('plugins')
                             // $http.get('/proxy/pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
                                 .then (function (data) {
                                     // Extract the title:
-                                    var lines = data.data.split("\n");
+                                    var lines = data.data.split('\n');
                                     for (var i=0; i<lines.length; i++) {
-                                        if (lines[i].startsWith("TITLE")) {
+                                        if (lines[i].startsWith('TITLE')) {
                                             var titleCols = lines[i].split(/\s+/);
                                             titleCols.shift();
-                                            scope.title = titleCols.join(" ").trim();
+                                            scope.title = titleCols.join(' ').trim();
                                         }
                                     }
 
@@ -155,27 +155,27 @@ angular.module('plugins')
                                             return;
                                         }
                                         if (prevPicked !== null) {
-                                          // reset color of previously picked atom.
-                                          setColorForAtom(prevPicked.node, prevPicked.atom, prevPicked.color);
+                                            // reset color of previously picked atom.
+                                            setColorForAtom(prevPicked.node, prevPicked.atom, prevPicked.color);
                                         }
                                         if (picked !== null) {
-                                          var atom = picked.target();
-                                          document.getElementById('picked-atom-name').innerHTML = atom.qualifiedName();
-                                          // get RGBA color and store in the color array, so we know what it was
-                                          // before changing it to the highlight color.
-                                          var color = [0,0,0,0];
-                                          var currColor = picked.node().getColorForAtom(atom, color);
-                                          prevPicked = { atom : atom, color : color, node : picked.node() };
+                                            var atom = picked.target();
+                                            document.getElementById('picked-atom-name').innerHTML = atom.qualifiedName();
+                                            // get RGBA color and store in the color array, so we know what it was
+                                            // before changing it to the highlight color.
+                                            var color = [0,0,0,0];
+                                            var currColor = picked.node().getColorForAtom(atom, color);
+                                            prevPicked = { atom : atom, color : color, node : picked.node() };
 
-                                          if (currColor[0] === 1) {
+                                            if (currColor[0] === 1) {
                                             //   $log.log("setting atom to blue");
-                                              setColorForAtom(picked.node(), atom, 'blue');
-                                          } else {
-                                              setColorForAtom(picked.node(), atom, 'red');
-                                          }
+                                                setColorForAtom(picked.node(), atom, 'blue');
+                                            } else {
+                                                setColorForAtom(picked.node(), atom, 'red');
+                                            }
                                         } else {
-                                          document.getElementById('picked-atom-name').innerHTML = '&nbsp;';
-                                          prevPicked = null;
+                                            document.getElementById('picked-atom-name').innerHTML = '&nbsp;';
+                                            prevPicked = null;
                                         }
                                         scope.viewer.requestRedraw();
                                     });
@@ -188,15 +188,15 @@ angular.module('plugins')
                                     scope.viewer.autoZoom();
 
                                     // viewer.on('viewerReady', function() {
-                                        // structure.atomSelect(function (a) {
-                                        //     $log.log(a);
-                                        // });
+                                    // structure.atomSelect(function (a) {
+                                    //     $log.log(a);
+                                    // });
                                     // });
                                 });
-                                scope.toExport = function () {
-                                    var canvas = newDiv.getElementsByTagName("canvas");
-                                    return canvas[0];
-                                };
+                            scope.toExport = function () {
+                                var canvas = newDiv.getElementsByTagName('canvas');
+                                return canvas[0];
+                            };
 
                         },0);
                     }, function (resp) { // error
@@ -206,9 +206,9 @@ angular.module('plugins')
                         // element.append(compiled);
                     });
 
-                if (cttvUtils.browser.name !== "IE") {
+                if (cttvUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
-                        var canvas = element[0].querySelector("div#pvTarget > canvas");
+                        var canvas = element[0].querySelector('div#pvTarget > canvas');
                         return canvas;
                     };
                 }

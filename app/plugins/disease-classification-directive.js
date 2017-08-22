@@ -12,7 +12,7 @@ angular.module('plugins')
             link: function (scope, element, attrs) {
                 // $log.log(scope.disease);
                 $timeout(function () {
-                    var container = document.getElementById("cttv-efo-graph");
+                    var container = document.getElementById('cttv-efo-graph');
 
                     var efoGraph = diseaseGraph()
                         .width(scope.width - 40) // 40 for margins
@@ -23,9 +23,9 @@ angular.module('plugins')
                     efoGraph(container);
 
                     // The PNG export routine
-                    if (cttvUtils.browser.name !== "IE") {
+                    if (cttvUtils.browser.name !== 'IE') {
                         scope.toExport = function () {
-                            var svg = document.getElementById("cttv-efo-graph").querySelector("svg");
+                            var svg = document.getElementById('cttv-efo-graph').querySelector('svg');
                             return svg;
                         };
                     }

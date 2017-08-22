@@ -7,7 +7,7 @@ angular.module('cttvDirectives')
             restrict: 'E',
 
             scope: {
-                efo : "&disease"
+                efo : '&disease'
             },
 
             link: function (scope, elem, attrs) {

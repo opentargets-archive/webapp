@@ -1,4 +1,4 @@
- /*  Service to keep track of lazy loaded resources  */
+/*  Service to keep track of lazy loaded resources  */
 
 angular.module('cttvServices')
 
@@ -10,7 +10,7 @@ angular.module('cttvServices')
                 // Systemjs has already been configured based on config sections in app.js
                 return System.import(file);
             },
-       };
+        };
 
-      return ll;
+        return ll;
     }]);

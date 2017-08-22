@@ -8,7 +8,7 @@ angular.module('cttvServices').
 
     factory('cttvLocationState', ['$log', '$location', '$rootScope', 'cttvConsts', function($log, $location, $rootScope, cttvConsts) {
 
-        "use strict";
+        'use strict';
 
         var cttvLocationStateService = {};
         var state = {};     // state is the parsed $location.search() object
@@ -18,9 +18,9 @@ angular.module('cttvServices').
         // the state now has a private property _path that stores, you guessed it,
         // the path of the page to which the state refers to, as returned by the $location.path() function
         // this is used to determine whether to fire the event or not
-        state._path = "";
-        old_state._path = "";
-        tmp_state._path = "";
+        state._path = '';
+        old_state._path = '';
+        tmp_state._path = '';
 
 
 
@@ -58,8 +58,8 @@ angular.module('cttvServices').
          */
         var parseSearchItem = function(item_string){
             var obj = {};
-            item_string.split(",").forEach(function(itm){
-                var tmp = itm.split(":");
+            item_string.split(',').forEach(function(itm){
+                var tmp = itm.split(':');
                 obj[tmp[0]] = obj[tmp[0]] || []; // make sure the returned value is always an array so we don't have to check every time
                 obj[tmp[0]].push(tmp[1]);
             });
@@ -81,7 +81,7 @@ angular.module('cttvServices').
             // uses jQuery.param() method
             // $httpParamSerializerJQLike should work the same... but it doesn't and returns parentheses around arrays etc
             // so we stick with jQuery for now
-            if( typeof obj === "string" ) {
+            if( typeof obj === 'string' ) {
                 // this is to handle simple cases where obj is a simple string,
                 // say like in the case of &version=latest
                 // it returns "latest";
@@ -92,17 +92,17 @@ angular.module('cttvServices').
             for(var i in obj){
                 if(Array.isArray(obj[i])){
                     obj[i].forEach(function(a){
-                        s.push(i+":"+a);
-                    })
+                        s.push(i+':'+a);
+                    });
                 }
-                if( typeof obj[i] === "string" ) {
-                    s.push(i+":"+obj[i]);
+                if( typeof obj[i] === 'string' ) {
+                    s.push(i+':'+obj[i]);
                 }
             }
 
-            return s.join(",");
+            return s.join(',');
             //return $.param(obj,true).replace(/=/g,":").replace(/&/g,",").replace(/\+/g," ");
-        }
+        };
 
 
 
@@ -132,7 +132,7 @@ angular.module('cttvServices').
 
                     raw[i] = search[i];
 
-                    if (typeof raw[i] === "string" && raw[i].match(/.:./)) {
+                    if (typeof raw[i] === 'string' && raw[i].match(/.:./)) {
                         // this is a string the new state format (e.g. "view=t:bubble,p:1") so then we parse it
                         raw[i] = parseSearchItem(search[i]);
                     }
@@ -145,7 +145,7 @@ angular.module('cttvServices').
                         // so if this is an old style facet, check if there are any new style ones, and if not, let's try parse the old facet into new syntax
                         if(!search.fcts){
                             raw.fcts = raw.fcts || {};    // create a "fcts" objects if needed
-                            raw.fcts[i] = ( typeof search[ i ] === "string" ) ? [search[i]] : search[i];    // add facets to "fcts"
+                            raw.fcts[i] = ( typeof search[ i ] === 'string' ) ? [search[i]] : search[i];    // add facets to "fcts"
                         }
                         delete raw[i];  // in any case, now delete the old style facet
                     }
@@ -163,7 +163,7 @@ angular.module('cttvServices').
         cttvLocationStateService.getState = function(){
             //$log.log("!!!! getState()");
             return _.cloneDeep( state );
-        }
+        };
 
 
 
@@ -173,7 +173,7 @@ angular.module('cttvServices').
         cttvLocationStateService.getOldState = function(){
             //$log.log("!!!! getOldState()");
             return _.cloneDeep( old_state );
-        }
+        };
 
 
 
@@ -205,7 +205,7 @@ angular.module('cttvServices').
                 cttvLocationStateService.updateStateURL();
             }
 
-        }
+        };
 
 
         cttvLocationStateService.resetStateFor = function(k){
@@ -223,7 +223,7 @@ angular.module('cttvServices').
             var stt = {};
             for(var i in tmp_state){
                 // translate the state to the URL, but we don't want to include the _path property
-                if(tmp_state.hasOwnProperty(i) && i!=="_path" ){
+                if(tmp_state.hasOwnProperty(i) && i!=='_path' ){
                     stt[i] = cttvLocationStateService.param(tmp_state[i]);
                 }
             }
@@ -240,12 +240,12 @@ angular.module('cttvServices').
          */
         cttvLocationStateService.init = function(){
             // do nothing!
-        }
+        };
 
 
 
         // event constants: STATECHANGED to register listeners for when the state changes
-        cttvLocationStateService.STATECHANGED = "cttv_app_state_change";
+        cttvLocationStateService.STATECHANGED = 'cttv_app_state_change';
 
 
 

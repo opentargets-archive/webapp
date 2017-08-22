@@ -4,7 +4,7 @@ angular.module('plugins')
         return {
             // Needed
             restrict: 'E',
-            template: "<p>Hello world!</p>",
+            template: '<p>Hello world!</p>',
             scope: {
                 target: '='
             },

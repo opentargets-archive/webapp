@@ -86,15 +86,15 @@ angular.module('facets')
                      +'    <cttv-score-presets preset="preset"></cttv-score-presets>'
                      +'    <h6>Data distribution</h6>'
                      +'    <cttv-score-histogram data="facet.data.buckets" min="facet.filters[0].key" max="facet.filters[1].key" controls="false"></cttv-score-histogram>'
-                    // +'    <div class="clearfix"><span class="pull-left small">Min: {{facet.filters[0].key}}</span><span class="pull-right small">Max: {{facet.filters[1].key}}</span></div>'
-                    // +'    <div>'
-                    // +'        <span class="small">Stringency:</span>'
+            // +'    <div class="clearfix"><span class="pull-left small">Min: {{facet.filters[0].key}}</span><span class="pull-right small">Max: {{facet.filters[1].key}}</span></div>'
+            // +'    <div>'
+            // +'        <span class="small">Stringency:</span>'
                      //+'        <cttv-slider min=1 max=10 config="{snap:true, values:[0.5, 1, 3, 5], labels:[\'min\', \'default\',\'high\',\'max\']}" value="facet.filters[2].key" ></cttv-slider>'
-                    // +'        <cttv-slider config="{snap:true, values:[0.5, 1, 3, 5], labels:[\'min\', \'|\',\'|\',\'max\']}" value="facet.filters[2].key" ></cttv-slider>'
-                    // +'    <cttv-slider config="{snap:true, values:[0,1,2,3], labels:[\'min\', \'|\',\'|\',\'max\']}" value="preset" ></cttv-slider>'
+            // +'        <cttv-slider config="{snap:true, values:[0.5, 1, 3, 5], labels:[\'min\', \'|\',\'|\',\'max\']}" value="facet.filters[2].key" ></cttv-slider>'
+            // +'    <cttv-slider config="{snap:true, values:[0,1,2,3], labels:[\'min\', \'|\',\'|\',\'max\']}" value="preset" ></cttv-slider>'
 
-                    // +'    </div>'
-                    // +'    <div><button type="button" class="btn btn-primary btn-xs" ng-click="facet.update()">Apply</button></div>'
+            // +'    </div>'
+            // +'    <div><button type="button" class="btn btn-primary btn-xs" ng-click="facet.update()">Apply</button></div>'
                      +'</div>',
 
 
@@ -196,72 +196,72 @@ angular.module('facets')
 
                     var xAxis = d3.svg.axis()
                         .scale(x)
-                        .orient("bottom")
+                        .orient('bottom')
                         .tickSize(0)
                         .tickPadding(8)
                         .ticks(data.length);
 
-                    var svg = d3.select(elem.children().eq(0)[0]).append("svg")
-                        .attr("width", width + margin.left + margin.right)
-                        .attr("height", height + margin.top + margin.bottom)
-                        .append("g")
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                    var svg = d3.select(elem.children().eq(0)[0]).append('svg')
+                        .attr('width', width + margin.left + margin.right)
+                        .attr('height', height + margin.top + margin.bottom)
+                        .append('g')
+                        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-                    var bar = svg.selectAll(".bar")
+                    var bar = svg.selectAll('.bar')
                         .data(data)
-                        .enter().append("g")
-                        .attr("class", "bar")
-                        .attr("transform", function(d,i) { return "translate(" + x( i/data.length ) + "," + y(d.value) + ")"; });
+                        .enter().append('g')
+                        .attr('class', 'bar')
+                        .attr('transform', function(d,i) { return 'translate(' + x( i/data.length ) + ',' + y(d.value) + ')'; });
 
-                    bar.append("rect")
-                        .attr("x", 1)
-                        .attr("width", barWidth - 1)
-                        .attr("class", function(d){ return (d.label>=scope.min && d.label<scope.max) ? "selected" : "deselected" })
-                        .attr("height", function(d) { return height - y(d.value); });
+                    bar.append('rect')
+                        .attr('x', 1)
+                        .attr('width', barWidth - 1)
+                        .attr('class', function(d){ return (d.label>=scope.min && d.label<scope.max) ? 'selected' : 'deselected'; })
+                        .attr('height', function(d) { return height - y(d.value); });
 
-                    bar.append("text")
-                        .attr("x", barWidth / 2)
-                        .attr("y", -13)
-                        .attr("dy", ".75em")
-                        .attr("text-anchor", "middle")
-                        .attr("class", function(d){ return (d.label>=scope.min && d.label<scope.max) ? "selected" : "deselected" })
+                    bar.append('text')
+                        .attr('x', barWidth / 2)
+                        .attr('y', -13)
+                        .attr('dy', '.75em')
+                        .attr('text-anchor', 'middle')
+                        .attr('class', function(d){ return (d.label>=scope.min && d.label<scope.max) ? 'selected' : 'deselected'; })
                         .text(function(d) { return d.value; });
 
-                    svg.append("g")
-                        .attr("class", "x axis")
-                        .attr("transform", "translate(0," + height + ")")
+                    svg.append('g')
+                        .attr('class', 'x axis')
+                        .attr('transform', 'translate(0,' + height + ')')
                         .call(xAxis);
 
                     var update = function(o){
                         scope.min = o.min;
                         scope.max = o.max;
-                    }
+                    };
 
 
-                    if(scope.controls.toLowerCase()==="true"){
+                    if(scope.controls.toLowerCase()==='true'){
 
                         var mybrush = d3.svg.brush()
                             .x(x)
                             .extent([scope.min, scope.max])
-                            .on("brush", function(){ scope.$apply(onBrush) })
-                            .on("brushend", onBrushEnd);
+                            .on('brush', function(){ scope.$apply(onBrush); })
+                            .on('brushend', onBrushEnd);
 
                         // brush graphics
-                        var gBrush = svg.append("g")
-                            .attr("class", "brush")
+                        var gBrush = svg.append('g')
+                            .attr('class', 'brush')
                             .call(mybrush);
 
-                        gBrush.selectAll(".resize").append("circle")
-                            .attr("class", "handle")
-                            .attr("transform", "translate(0," + height/2 + ")")
-                            .attr("r", 4);
+                        gBrush.selectAll('.resize').append('circle')
+                            .attr('class', 'handle')
+                            .attr('transform', 'translate(0,' + height/2 + ')')
+                            .attr('r', 4);
 
-                        gBrush.selectAll("rect")
-                            .attr("height", height);
+                        gBrush.selectAll('rect')
+                            .attr('height', height);
 
                         var onBrushEnd = function(){
                             d3.select(this).call(mybrush.extent([scope.min, scope.max]));
-                        }
+                        };
 
                         var onBrush = function(){
                             var extent0 = mybrush.extent();
@@ -270,10 +270,10 @@ angular.module('facets')
                                 max: cttvUtils.roundToNearest(extent0[1], tick).toFixed(2),// extent0[1].toFixed(2)
                             } );
                             //mybrush.extent(scope.min, scope.max);
-                        }
+                        };
 
                     }
-                }
+                };
 
                 scope.$watch('data',function(d){
                     // $log.log("************");
@@ -283,7 +283,7 @@ angular.module('facets')
                     if(d){
                         init();
                     }
-                })
+                });
             },
         };
     }])

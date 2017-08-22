@@ -5,7 +5,7 @@ angular.module('facets')
 
 
 
-        var parser = {}
+        var parser = {};
 
         /**
          * Parse function
@@ -36,9 +36,9 @@ angular.module('facets')
             });
 
             return config;
-        }
+        };
 
         return parser;
-    }])
+    }]);
 
 

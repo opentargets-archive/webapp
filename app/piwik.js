@@ -1,9 +1,9 @@
 var _paq = _paq || [];
-_paq.push(["setDomains", ["*.www.targetvalidation.org"]]);
+_paq.push(['setDomains', ['*.www.targetvalidation.org']]);
 //_paq.push(['trackPageView']);
 _paq.push(['enableLinkTracking']);
 (function() {
-    var u="//opentargets.piwikpro.com/";
+    var u='//opentargets.piwikpro.com/';
     _paq.push(['setTrackerUrl', u+'piwik.php']);
     _paq.push(['setSiteId', 1]);
     var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];

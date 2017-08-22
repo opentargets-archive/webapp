@@ -4,7 +4,7 @@ angular.module('cttvDirectives')
     .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvConsts', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvConsts, $analytics) {
         'use strict';
 
-        var whoiam = "bubbles";
+        var whoiam = 'bubbles';
         var bottomMargin = 220;
         var bView;
         var offset = 300;
@@ -13,10 +13,10 @@ angular.module('cttvDirectives')
             var clone = from_svg.cloneNode(true);
             // Remove the defs and the therapeutic area labels
             d3.select(clone)
-                .select("defs")
+                .select('defs')
                 .remove();
             d3.select(clone)
-                .selectAll(".topLabel")
+                .selectAll('.topLabel')
                 .remove();
 
             // Move the bubbles view to the right to leave space for the new TA labels
@@ -25,8 +25,8 @@ angular.module('cttvDirectives')
             // d3.select(clone).select("g").attr("transform", "translate(" + offset + ",0)");
 
             // Get all therapeutic area labels on a side
-            var g = d3.select(clone).select("g");
-            var root = d3.select(".bubblesViewRoot")
+            var g = d3.select(clone).select('g');
+            var root = d3.select('.bubblesViewRoot')
                 .datum();
 
             function okOverlaps(p, angle, others) {
@@ -46,7 +46,7 @@ angular.module('cttvDirectives')
                 return p;
             }
             var labelPositions = {};
-            var taBubbles = d3.selectAll(".bubblesViewInternal")
+            var taBubbles = d3.selectAll('.bubblesViewInternal')
                 .each(function (d, i) {
                     // i=0 is the root circle
                     if (!i) {
@@ -91,24 +91,24 @@ angular.module('cttvDirectives')
                     // var y2 = root.y + (root.r * Math.sin(angleRadians));
 
                     g
-                        .append("line")
-                        .attr("class", "TA-label")
-                        .attr("x1", p1.x)
-                        .attr("y1", p1.y)
-                        .attr("x2", p2.x)
-                        .attr("y2", p2.y)
-                        .attr("stroke", "gray");
+                        .append('line')
+                        .attr('class', 'TA-label')
+                        .attr('x1', p1.x)
+                        .attr('y1', p1.y)
+                        .attr('x2', p2.x)
+                        .attr('y2', p2.y)
+                        .attr('stroke', 'gray');
                     g
-                        .append("g")
-                        .attr("transform", "translate(" + p2.x + "," + p2.y + ")")
-                        .append("text")
-                        .style("font-size", "12px")
-                        .style("text-anchor", function () {
+                        .append('g')
+                        .attr('transform', 'translate(' + p2.x + ',' + p2.y + ')')
+                        .append('text')
+                        .style('font-size', '12px')
+                        .style('text-anchor', function () {
                             var angle = (angleRadians * 180 / Math.PI);
                             if ((angle < -90) || (angle>90)) {
-                                return "end";
+                                return 'end';
                             }
-                            return "start";
+                            return 'start';
                         })
                         .text(function() {
                             return d.name;
@@ -116,7 +116,7 @@ angular.module('cttvDirectives')
                 });
 
             // Resize the whole div
-            var longestLabel = "";
+            var longestLabel = '';
             taBubbles
                 .each(function (d) {
                     if (d.name.length > longestLabel.length) {
@@ -124,12 +124,12 @@ angular.module('cttvDirectives')
                     }
                 });
             var l = longestLabel.length * 6;
-            var currWidth = ~~d3.select(clone).attr("width");
-            var currHeight = ~~d3.select(clone).attr("height");
+            var currWidth = ~~d3.select(clone).attr('width');
+            var currHeight = ~~d3.select(clone).attr('height');
             d3.select(clone)
-                .attr("width", currWidth + l*2)
-                .attr("height", currHeight + 50);
-            g.attr("transform", "translate(" + l + "," + "25)");
+                .attr('width', currWidth + l*2)
+                .attr('height', currHeight + 50);
+            g.attr('transform', 'translate(' + l + ',' + '25)');
 
             return clone;
         }
@@ -152,9 +152,9 @@ angular.module('cttvDirectives')
             link: function (scope, elem, attrs, resizeCtrl) {
                 //var bubblesContainer = elem.children().eq(1).children().eq(0)[0];
                 var legendDiv = elem.children().eq(0).children().eq(0)[0];
-                var bubblesContainer = document.createElement("div");
-                bubblesContainer.id="cttvBubblesView";
-                scope.element = "cttvBubblesView";
+                var bubblesContainer = document.createElement('div');
+                bubblesContainer.id='cttvBubblesView';
+                scope.element = 'cttvBubblesView';
                 elem.children().eq(0)[0].insertBefore(bubblesContainer, legendDiv);
                 // bubblesContainer.id = "cttvBubblesView";
                 // scope.element = "cttvBubblesView";
@@ -170,7 +170,7 @@ angular.module('cttvDirectives')
                 }, true);
 
                 // Change of target or facets
-                scope.$watchGroup(["target", "facets", "active"], function (vals) {
+                scope.$watchGroup(['target', 'facets', 'active'], function (vals) {
                     var target = vals[0];
                     var facets = vals[1];
                     var act = vals[2];
@@ -180,7 +180,7 @@ angular.module('cttvDirectives')
                     }
                     var opts = {
                         target: target,
-                        outputstructure: "flat",
+                        outputstructure: 'flat',
                         size: 1000,
                         direct: true,
                         facets: false
@@ -247,7 +247,7 @@ angular.module('cttvDirectives')
 
                 function setView (data) { // data is a promise
                     // Fire a target associations tree event for piwik to track
-                    $analytics.eventTrack('targetAssociationsBubbles', {"category": "association", "label": "bubbles"});
+                    $analytics.eventTrack('targetAssociationsBubbles', {'category': 'association', 'label': 'bubbles'});
 
                     var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
                     var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
@@ -263,17 +263,17 @@ angular.module('cttvDirectives')
                         // .target("ENSG00000157764")
                         .target(scope.target)
                         .diameter(diameter)
-                        .linkPrefix("")
+                        .linkPrefix('')
                         .showAll(true)
                         .colors(cttvUtils.colorScales.BLUE_0_1.range())
                         // .colors(['#e7e1ef', '#dd1c77'])
-                        .useFullPath(cttvUtils.browser.name !== "IE")
+                        .useFullPath(cttvUtils.browser.name !== 'IE')
                         .tooltipsOnTA(true)
                         .showMenu(false);
 
 
                     // Setting up legend
-                    scope.legendText = "Score";
+                    scope.legendText = 'Score';
                     scope.colors = [];
                     for(var i=0; i<=100; i+=25){
                         var j=i/100;
@@ -286,9 +286,9 @@ angular.module('cttvDirectives')
 
                 }
 
-                if (cttvUtils.browser.name !== "IE") {
+                if (cttvUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
-                        var svg = decorateSVG(elem.children().eq(0)[0].querySelector("svg"));
+                        var svg = decorateSVG(elem.children().eq(0)[0].querySelector('svg'));
                         return svg;
                     };
                 }

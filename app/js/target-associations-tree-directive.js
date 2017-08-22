@@ -33,7 +33,7 @@ angular.module('cttvDirectives')
 
                 var currTarget;
                 // legend stuff
-                scope.legendText = "Score";
+                scope.legendText = 'Score';
                 scope.colors = [];
                 for(var i=0; i<=100; i+=25){
                     var j=i/100;
@@ -63,7 +63,7 @@ angular.module('cttvDirectives')
 
                     var opts = {
                         target: scope.target,
-                        outputstructure: "false",
+                        outputstructure: 'false',
                         direct: true,
                         facets: false,
                         size: 1000
@@ -92,9 +92,9 @@ angular.module('cttvDirectives')
                                         .therapeuticAreas(opts.therapeutic_area)
                                         //.datatypes(dts)
                                         .update();
-                                    }
-                                },
-                                cttvAPIservice.defaultErrorHandler
+                                }
+                            },
+                            cttvAPIservice.defaultErrorHandler
                             );
                     }
 
@@ -140,7 +140,7 @@ angular.module('cttvDirectives')
                 
                 var setTreeView = function (tas) {
                     // Fire a target associations tree event for piwik to track
-                    $analytics.eventTrack('targetAssociationsTree', {"category": "association", "label": "tree"});
+                    $analytics.eventTrack('targetAssociationsTree', {'category': 'association', 'label': 'tree'});
 
                     ////// Tree view
                     // viewport Size
@@ -167,7 +167,7 @@ angular.module('cttvDirectives')
 
                     var opts = {
                         target: scope.target,
-                        outputstructure: "flat",
+                        outputstructure: 'flat',
                         direct: true,
                         facets: false,
                         size: 1000
@@ -192,15 +192,15 @@ angular.module('cttvDirectives')
                                     return;
                                 }
                                 var fView = flowerView()
-                                .fontsize(9)
-                                .diagonal(100);
+                                    .fontsize(9)
+                                    .diagonal(100);
                                 gat = geneAssociationsTree()
                                     .data(data)
                                     //.datatypes(dts)
                                     .names(cttvConsts)
                                     .filters(scope.facets)
                                     .diameter(900)
-                                    .legendText("<a xlink:href='/faq#association-score'><text style=\"fill:#3a99d7;cursor:pointer\" alignment-baseline=central>Score</text></a>")
+                                    .legendText('<a xlink:href=\'/faq#association-score\'><text style="fill:#3a99d7;cursor:pointer" alignment-baseline=central>Score</text></a>')
                                     .target(scope.target)
                                     .therapeuticAreas(tas)
                                     .colors(colorScale.range())
@@ -214,10 +214,10 @@ angular.module('cttvDirectives')
                         );
                 };
 
-                if (cttvUtils.browser.name !== "IE") {
+                if (cttvUtils.browser.name !== 'IE') {
 
                     scope.toExport = function () {
-                        var svg = elem.children().eq(1)[0].querySelector("svg");
+                        var svg = elem.children().eq(1)[0].querySelector('svg');
                         return svg;
                     };
                 }

@@ -47,56 +47,56 @@ angular.module('facets')
             // this is not gonna work now!
             // NEED TO CHANGE all facets to return a config object rathen than just the list of filters...
             var search = cttvFiltersService.parseURL();
-                    search.score_min = search.score_min || [cttvConsts.defaults.SCORE_MIN.toFixed(2)];
-                    search.score_max = search.score_max || [cttvConsts.defaults.SCORE_MAX.toFixed(2)];
-                    search.score_str = search.score_str || [cttvConsts.defaults.STRINGENCY];
+            search.score_min = search.score_min || [cttvConsts.defaults.SCORE_MIN.toFixed(2)];
+            search.score_max = search.score_max || [cttvConsts.defaults.SCORE_MAX.toFixed(2)];
+            search.score_str = search.score_str || [cttvConsts.defaults.STRINGENCY];
 
-                // set the 3 filters for the score: min, max, stringency
-                config.filters = [
-                    {
-                        facet : "score_min",
-                        label : "min",
-                        key : search.score_min[0],
-                        selected : true
-                    },
-                    {
-                        facet : "score_max",
-                        label : "max",
-                        key : search.score_max[0],
-                        selected : true
-                    },
-                    {
-                        facet : "score_str",
-                        label : "stringency",
-                        key : search.score_str[0],
-                        selected : true
-                    }
-                ];
+            // set the 3 filters for the score: min, max, stringency
+            config.filters = [
+                {
+                    facet : 'score_min',
+                    label : 'min',
+                    key : search.score_min[0],
+                    selected : true
+                },
+                {
+                    facet : 'score_max',
+                    label : 'max',
+                    key : search.score_max[0],
+                    selected : true
+                },
+                {
+                    facet : 'score_str',
+                    label : 'stringency',
+                    key : search.score_str[0],
+                    selected : true
+                }
+            ];
 
 
-                // score facet is different than the default checkbox lists
-                // so we need to overwrite the getSelected method
-                config.getSelectedFilters = function(){
-                    // at the moment just return all these as selected, later on we might want to flag it after user changes default value perhaps?
-                    return this.filters;
-                };
+            // score facet is different than the default checkbox lists
+            // so we need to overwrite the getSelected method
+            config.getSelectedFilters = function(){
+                // at the moment just return all these as selected, later on we might want to flag it after user changes default value perhaps?
+                return this.filters;
+            };
 
-                config.data = {
-                    buckets : (function(){var a=[]; for(var i in data.buckets){a.push({label:Number(i), value:data.buckets[i].value})} return a;})()
-                                .sort(function(a,b){
-                                    if(a.label<b.label){return -1}
-                                    if(a.label>b.label){return 1}
-                                    return 0
-                                })
+            config.data = {
+                buckets : (function(){var a=[]; for(var i in data.buckets){a.push({label:Number(i), value:data.buckets[i].value});} return a;})()
+                    .sort(function(a,b){
+                        if(a.label<b.label){return -1;}
+                        if(a.label>b.label){return 1;}
+                        return 0;
+                    })
                     //min : 0,
                     //max : 1
-                }
+            };
 
-                return config;
+            return config;
 
-        }
+        };
 
         return parser;
-    }])
+    }]);
 
 

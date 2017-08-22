@@ -17,8 +17,8 @@ angular.module('plugins')
                 var gt = targetGeneTree()
                     .id(scope.target.id)
                     .width(width)
-                    .proxy("/proxy/rest.ensembl.org")
-                    .on("notFound", function() {
+                    .proxy('/proxy/rest.ensembl.org')
+                    .on('notFound', function() {
                         scope.notFound = 1;
                     });
 
@@ -27,38 +27,38 @@ angular.module('plugins')
                     gt(el);
                 }, 0);
 
-                if (cttvUtils.browser.name !== "IE") {
+                if (cttvUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
-                        var svg = newDiv.querySelector("svg");
+                        var svg = newDiv.querySelector('svg');
                         return svg;
                     };
                 }
 
                 // Orthology table
                 var homologyType = {
-                    "ortholog_one2one" : "ortholog 1:1",
-                    "ortholog_one2many" : "ortholog 1:many",
-                    "within_species_paralog" : "paralog",
+                    'ortholog_one2one' : 'ortholog 1:1',
+                    'ortholog_one2many' : 'ortholog 1:many',
+                    'within_species_paralog' : 'paralog',
                 };
 
                 var scientific2common = {
-                    "homo_sapiens" : "Human",
-                    "mus_musculus_reference" : "Mouse",
-                    "mus_musculus": "Mouse",
-                    "cavia_porcellus" : "Guinea pig",
-                    "macaca_mulatta" : "Macaque",
-                    "canis_lupus_familiaris" : "Dog",
-                    "canis_familiaris": "Dog",
-                    "oryctolagus_cuniculus" : "Rabbit",
-                    "rattus_norvegicus" : "Rat",
-                    "sus_scrofa" : "Pig",
-                    "xenopus_tropicalis" : "Frog",
-                    "danio_rerio" : "Zebrafish",
-                    "drosophila_melanogaster": "Fly",
-                    "caenorhabditis_elegans": "Worm",
-                    "pan_troglodytes": "Chimpanzee",
-                    "mus_musculus_reference_(CL57BL6)": "Mouse",
-                    "caenorhabditis_elegans_N2": "Worm"
+                    'homo_sapiens' : 'Human',
+                    'mus_musculus_reference' : 'Mouse',
+                    'mus_musculus': 'Mouse',
+                    'cavia_porcellus' : 'Guinea pig',
+                    'macaca_mulatta' : 'Macaque',
+                    'canis_lupus_familiaris' : 'Dog',
+                    'canis_familiaris': 'Dog',
+                    'oryctolagus_cuniculus' : 'Rabbit',
+                    'rattus_norvegicus' : 'Rat',
+                    'sus_scrofa' : 'Pig',
+                    'xenopus_tropicalis' : 'Frog',
+                    'danio_rerio' : 'Zebrafish',
+                    'drosophila_melanogaster': 'Fly',
+                    'caenorhabditis_elegans': 'Worm',
+                    'pan_troglodytes': 'Chimpanzee',
+                    'mus_musculus_reference_(CL57BL6)': 'Mouse',
+                    'caenorhabditis_elegans_N2': 'Worm'
                 };
 
 
@@ -96,12 +96,12 @@ angular.module('plugins')
 
 
                 var rest = tnt.ensembl()
-                    .proxyUrl("/proxy/rest.ensembl.org");
+                    .proxyUrl('/proxy/rest.ensembl.org');
 
                 var homologsUrl = rest.url.homologues({
-                    "id": scope.target.id,
-                    "target_taxons": species,
-                    "format": "full"
+                    'id': scope.target.id,
+                    'target_taxons': species,
+                    'format': 'full'
                 });
                 scope.showSpinner = true;
                 rest.call(homologsUrl)
@@ -119,16 +119,16 @@ angular.module('plugins')
                                 scope.showSpinner = false;
                                 $timeout(function () {
                                     $('#gene-homologues-table').DataTable( cttvUtils.setTableToolsParams({
-                                        "data": formatHomologuesDataToArray(resp.body.data[0].homologies, resp2.body),
-                                        "ordering" : true,
-                                        "order": [[4, 'desc']],
-                                        "autoWidth": false,
-                                        "paging" : true
-                                    }, scope.target.id+"-homologies") );
+                                        'data': formatHomologuesDataToArray(resp.body.data[0].homologies, resp2.body),
+                                        'ordering' : true,
+                                        'order': [[4, 'desc']],
+                                        'autoWidth': false,
+                                        'paging' : true
+                                    }, scope.target.id+'-homologies') );
                                 }, 0);
                             });
 
-                    })
+                    });
 
             }
         };

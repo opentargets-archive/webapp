@@ -36,7 +36,7 @@ angular.module('facets')
             });
 
             return config;
-        }
+        };
 
         return parser;
-    }])
+    }]);

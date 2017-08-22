@@ -5,7 +5,7 @@ angular.module('cttvServices')
     .factory('cttvLoadedLists', ['$log', 'localStorageService', function($log, localStorageService) {
         var lists = {};
         // lists.all = [];
-        var key = "targetLists";
+        var key = 'targetLists';
 
         // Gets all the lists from local storage
         function getFromLS () {
@@ -135,7 +135,7 @@ angular.module('cttvServices')
                     query: search.q,
                     selected: (parsed !== undefined),
                     result: parsed
-                })
+                });
             }
             lists.add(name, listSearch, duplications, keys);
             return name;

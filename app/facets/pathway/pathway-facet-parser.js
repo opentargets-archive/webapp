@@ -34,16 +34,16 @@ angular.module('facets')
                 conf.collection = null;
                 if (obj.pathway) {
                     conf.collection = {
-                        filters: parser.parse(/*cttvConsts.PATHWAY*/ {key:"pathway"}, obj.pathway, countsToUse, isSelected).filters
-                    }
+                        filters: parser.parse(/*cttvConsts.PATHWAY*/ {key:'pathway'}, obj.pathway, countsToUse, isSelected).filters
+                    };
                 }
                 return conf;
             });
 
             return config;
-        }
+        };
 
         return parser;
-    }])
+    }]);
 
 

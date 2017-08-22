@@ -7,15 +7,15 @@
  */
 angular.module('cttvControllers').
 
-controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
+    controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
 
-        var APP_SEARCH_URL = "search";
-        var APP_EVIDENCE_URL = "evidence";
-        var APP_AUTOCOMPLETE_URL = "autocomplete";
+        var APP_SEARCH_URL = 'search';
+        var APP_EVIDENCE_URL = 'evidence';
+        var APP_AUTOCOMPLETE_URL = 'autocomplete';
 
         $scope.search = {
             query: {
-                text: ""
+                text: ''
             },
             results:{
 
@@ -65,13 +65,13 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
          * @param {String} query
          * @returns {Object} promise object with success() or error(), or null
          */
-         /*
+        /*
          * To avoid having the problem of slower api calls coming *after* quicker ones launched after we just make sure the order is respected
          * TODO: It may be better to discard the previous one
          */
-         var searchPromise = $q(function (res, rej) {
+        var searchPromise = $q(function (res, rej) {
             res();
-         });
+        });
         $scope.getSuggestions = function(query){
 
             //clear the data here, so the box disappears or the content is cleared...
@@ -90,7 +90,7 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
                                 size: 3
                             },
                             trackCall: false,
-                            method: "GET"
+                            method: 'GET'
                         })
                         .then(
                             function(resp){
@@ -194,13 +194,13 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
          */
         $scope.linkTo =function(s){
             // parse the options:
-            if( s.type.toLowerCase()=="target" ){
-                $location.url("/target/" + s.q + "/associations");
-            } else if ( s.type.toLowerCase()=="disease" ){
-                $location.url("/disease/" + s.q + "/associations");
+            if( s.type.toLowerCase()=='target' ){
+                $location.url('/target/' + s.q + '/associations');
+            } else if ( s.type.toLowerCase()=='disease' ){
+                $location.url('/disease/' + s.q + '/associations');
             }
 
-            $scope.search.query.text = "";
+            $scope.search.query.text = '';
         };
 
 
@@ -221,8 +221,8 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             // the search result page should probably still show this, the problem is that the scope of this search box is separate
             // so if we then go to the gene, or association page, this would still show the original query...
             // So, for now we RESET the field, then I'll think about it.
-            $scope.search.query.text = "";
-        }
+            $scope.search.query.text = '';
+        };
 
         // See if there is any loaded list
         $scope.loadedLists = cttvLoadedLists.getAll().length;
@@ -241,6 +241,6 @@ controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$documen
             if(sb){
                 $window.scrollTo( 0, sb.offset().top - p );
             }
-        }
+        };
 
     }]);

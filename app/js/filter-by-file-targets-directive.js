@@ -73,7 +73,7 @@ angular.module('cttvDirectives')
                 };
 
                 scope.initFilterByFile =function(){
-                    scope.fileName = "";
+                    scope.fileName = '';
 
                     // $log.log("scope targets is...");
                     // $log.log(scope.targets);
@@ -105,9 +105,9 @@ angular.module('cttvDirectives')
                 };
 
                 scope.removeTargets = function(){
-                    var theElement = document.getElementById("myFileInput");
+                    var theElement = document.getElementById('myFileInput');
 
-                    $location.search("targets", null);
+                    $location.search('targets', null);
                     scope.targets = [];
                     scope.initFilterByFile();
                     //
@@ -145,14 +145,14 @@ angular.module('cttvDirectives')
                         var myFileContent = evt.target.result;
                         targetNameArrayTemp = myFileContent.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
                         targetNameArrayTemp = targetNameArrayTemp.filter(function(e){ return e.trim();}); //get rid of empty strings
-                        targetNameArrayTemp = targetNameArrayTemp.map(function(value){return value.toLowerCase()});
+                        targetNameArrayTemp = targetNameArrayTemp.map(function(value){return value.toLowerCase();});
 
                         scope.targetNameArray = uniqueArrayFast(targetNameArrayTemp);
                         scope.targetIdArray = new Array(scope.targetNameArray.length);
                         scope.targetNameIdDict = new Array(scope.targetNameArray.length);
 
                         // analytics event
-                        $analytics.eventTrack('filterByTargetList', {"category": "filterByTargetList", "label": ("loaded " + scope.targetNameArray.length + " targets")})
+                        $analytics.eventTrack('filterByTargetList', {'category': 'filterByTargetList', 'label': ('loaded ' + scope.targetNameArray.length + ' targets')});
 
                         //$log.log("UNIQUE NAMES:" + scope.targetNameArray );
                         //Choose either Async or Consecutive version for testing
@@ -164,8 +164,8 @@ angular.module('cttvDirectives')
 
                 var uniqueArrayFast = function(a) {
                     var o = {}, i, l = a.length, r = [];
-                    for(i=0; i<l;i+=1) o[a[i]] = a[i];
-                    for(i in o) r.push(o[i]);
+                    for(i=0; i<l;i+=1) {o[a[i]] = a[i];}
+                    for(i in o) {r.push(o[i]);}
                     return r;
                 };
 
@@ -190,7 +190,7 @@ angular.module('cttvDirectives')
                 var getBestHitTargetsIdsConsecutive = function(targetNameArray){
 
                     var promise = $q(function (resolve, reject) {
-                        resolve("");
+                        resolve('');
                     });
 
                     var promises = [];
@@ -223,7 +223,7 @@ angular.module('cttvDirectives')
                     };
 
                     var queryObject = {
-                        method: "POST",
+                        method: 'POST',
                         params: opts
                     };
 
@@ -283,9 +283,9 @@ angular.module('cttvDirectives')
                     $location.search('targets=' + compressedTargets.join(','));
 
                     // scope.getfacets(scope.filters, scope.targets);
-                }
+                };
 
             }
 
         };
-    }])
+    }]);

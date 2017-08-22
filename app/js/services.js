@@ -27,8 +27,8 @@ angular.module('cttvServices', []).
          */
         cttvUtilsService.browser = {
             init: function () {
-                this.name = this.searchString(this.dataBrowser) || "Other";
-                this.version = this.searchVersion(navigator.userAgent) || this.searchVersion(navigator.appVersion) || "Unknown";
+                this.name = this.searchString(this.dataBrowser) || 'Other';
+                this.version = this.searchVersion(navigator.userAgent) || this.searchVersion(navigator.appVersion) || 'Unknown';
             },
             searchString: function (data) {
                 for (var i = 0; i < data.length; i++) {
@@ -46,8 +46,8 @@ angular.module('cttvServices', []).
                     return;
                 }
 
-                var rv = dataString.indexOf("rv:");
-                if (this.versionSearchString === "Trident" && rv !== -1) {
+                var rv = dataString.indexOf('rv:');
+                if (this.versionSearchString === 'Trident' && rv !== -1) {
                     return parseFloat(dataString.substring(rv + 3));
                 } else {
                     return parseFloat(dataString.substring(index + this.versionSearchString.length + 1));
@@ -55,12 +55,12 @@ angular.module('cttvServices', []).
             },
 
             dataBrowser: [
-                {string: navigator.userAgent, subString: "Chrome", identity: "Chrome"},
-                {string: navigator.userAgent, subString: "MSIE", identity: "IE"},
-                {string: navigator.userAgent, subString: "Trident", identity: "IE"},
-                {string: navigator.userAgent, subString: "Firefox", identity: "Firefox"},
-                {string: navigator.userAgent, subString: "Safari", identity: "Safari"},
-                {string: navigator.userAgent, subString: "Opera", identity: "Opera"}
+                {string: navigator.userAgent, subString: 'Chrome', identity: 'Chrome'},
+                {string: navigator.userAgent, subString: 'MSIE', identity: 'IE'},
+                {string: navigator.userAgent, subString: 'Trident', identity: 'IE'},
+                {string: navigator.userAgent, subString: 'Firefox', identity: 'Firefox'},
+                {string: navigator.userAgent, subString: 'Safari', identity: 'Safari'},
+                {string: navigator.userAgent, subString: 'Opera', identity: 'Opera'}
             ]
 
         };
@@ -87,7 +87,7 @@ angular.module('cttvServices', []).
                 // },
                 {
                     extend: 'csv', //extend: 'csvHtml5',
-                    text: "<span class='fa fa-download' title='Download as .csv'><span>",
+                    text: '<span class=\'fa fa-download\' title=\'Download as .csv\'><span>',
                     title: title//,
                     //exportOptions: {
                     //    columns: ':visible'
@@ -104,7 +104,7 @@ angular.module('cttvServices', []).
             obj.buttons = [
                 {
                     extend: 'csv', //extend: 'csvHtml5',
-                    text: "<span class='fa fa-download' title='Download as .csv'><span>",
+                    text: '<span class=\'fa fa-download\' title=\'Download as .csv\'><span>',
                     title: title,
                     exportOptions: {
                         columns: [1,2,4,6,7,8,9,10,11,12,13]
@@ -120,31 +120,31 @@ angular.module('cttvServices', []).
 
         cttvUtilsService.colorScales = {
             BLUE_0_1 : d3.scale.linear()
-                        .domain([0,1])
-                        .range(["#CBDCEA", "#005299"]), // blue orig
-                        //.range(["#AEDEF7", "#0091EB"]),
-                        //.range(["#97D5F5", "#0081D2"]),
-                        // .range(["#B6DDFC", "#0052A3"]), // extra brand blue
-                        // .range(["#FFFF00", '#007AFF']), // yellow - blue
-                        // .range(["#feffd8", '#2354a3']), // yellow - blue (shorter range)
-                        // .range(["#feffd8", '#081d58']), // yellow - blue (longer range ylgrbu)
-                        // .range(["#fbf583", '#0465b2']), // yellow - blue (custom)
-                        // .range(["#fbf583", '#375E97']), // sky - sunflower (custom)
-                        // .range(['#FED69C', "#2A4E6E"]), // yellow - blue (custom made)
-                        // .range(["#FFFFd8", '#007AFF']), // toned down yellow - blue
-                        //.range(["#FFD0CB", "#FF6350"]), // brand red
+                .domain([0,1])
+                .range(['#CBDCEA', '#005299']), // blue orig
+            //.range(["#AEDEF7", "#0091EB"]),
+            //.range(["#97D5F5", "#0081D2"]),
+            // .range(["#B6DDFC", "#0052A3"]), // extra brand blue
+            // .range(["#FFFF00", '#007AFF']), // yellow - blue
+            // .range(["#feffd8", '#2354a3']), // yellow - blue (shorter range)
+            // .range(["#feffd8", '#081d58']), // yellow - blue (longer range ylgrbu)
+            // .range(["#fbf583", '#0465b2']), // yellow - blue (custom)
+            // .range(["#fbf583", '#375E97']), // sky - sunflower (custom)
+            // .range(['#FED69C', "#2A4E6E"]), // yellow - blue (custom made)
+            // .range(["#FFFFd8", '#007AFF']), // toned down yellow - blue
+            //.range(["#FFD0CB", "#FF6350"]), // brand red
 
             BLUE_1_10 : d3.scale.linear()
                 .domain([1,10])
                 .range(['#CBDCEA', '#005299']),
 
             BLUE_1_3 : d3.scale.linear()
-                        .domain([1,3])
-                        .range(["#B6DDFC", "#0052A3"]),
+                .domain([1,3])
+                .range(['#B6DDFC', '#0052A3']),
 
             BLUE_RED : d3.scale.linear()
-                        .domain([-1,1])
-                        .range(['#582A72', '#AAAA39'])
+                .domain([-1,1])
+                .range(['#582A72', '#AAAA39'])
 
         };
 
@@ -152,15 +152,15 @@ angular.module('cttvServices', []).
             translateKeys : function (searchObj) {
                 for (var key in searchObj) {
                     switch (key) {
-                        case "score_min":
+                    case 'score_min':
                         searchObj.filterbyscorevalue_min = searchObj.score_min;
                         delete searchObj.score_min;
                         break;
-                        case "score_max":
+                    case 'score_max':
                         searchObj.filterbyscorevalue_max = searchObj.score_max;
                         delete searchObj.score_max;
                         break;
-                        case "score_str":
+                    case 'score_str':
                         searchObj.stringency = searchObj.score_str;
                         delete searchObj.score_str;
                         break;
@@ -172,16 +172,16 @@ angular.module('cttvServices', []).
             format : function (searchObj) {
                 var opts = [];
                 for (var key in searchObj) {
-                    opts.push(key + "=" + searchObj[key]);
+                    opts.push(key + '=' + searchObj[key]);
                 }
-                var searchStr = opts.join("&");
-                return "?" + searchStr;
+                var searchStr = opts.join('&');
+                return '?' + searchStr;
             },
 
             searchString : function(key, value){
-                var url = $window.location.href.split("?");
+                var url = $window.location.href.split('?');
                 // var search = window.location.href.split('?')[1] || "";
-                url[1] = url[1] || "";
+                url[1] = url[1] || '';
 
                 // in no args supplied, return the query string
                 if(arguments.length === 0){
@@ -194,12 +194,12 @@ angular.module('cttvServices', []).
                 // to keep the order in which the filters are applied
                 // and if the same value is already set in the string, we need to remove it first
 
-                var search = url[1].split("&");
-                search = _.without(search, key+"="+value);
-                search.push(key+"="+value);
+                var search = url[1].split('&');
+                search = _.without(search, key+'='+value);
+                search.push(key+'='+value);
                 // $log.log(search);
-                url[1] = search.join("&");
-                $window.location.href = url.join("?");
+                url[1] = search.join('&');
+                $window.location.href = url.join('?');
             }
 
         };
@@ -242,20 +242,20 @@ angular.module('cttvServices', []).
 
         cttvUtilsService.getPublicationsString = function(pmidsList){
             pmidsList = pmidsList || [];  // to avoid undefined errors
-            var pub = "";
+            var pub = '';
             if (pmidsList.length>0){
-                pub = "<span class='cttv-publications-string'>";
-                    pub += "<span class='badge'>"+pmidsList.length+"</span>";
-                    pub += ( pmidsList.length===1 ? " publication" : " publications" );
-                    if (pmidsList.length===1) {
-                        pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/abstract/MED/' + pmidsList[0] + '">'+pub+'</a>';
-                    } else {
-                        var pmids = pmidsList.map(function (ref) {
-                            return "EXT_ID:" + ref;
-                        }).join (" OR ");
-                        pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">'+pub+'</a>';
-                    }
-                pub += "</span>";
+                pub = '<span class=\'cttv-publications-string\'>';
+                pub += '<span class=\'badge\'>'+pmidsList.length+'</span>';
+                pub += ( pmidsList.length===1 ? ' publication' : ' publications' );
+                if (pmidsList.length===1) {
+                    pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/abstract/MED/' + pmidsList[0] + '">'+pub+'</a>';
+                } else {
+                    var pmids = pmidsList.map(function (ref) {
+                        return 'EXT_ID:' + ref;
+                    }).join (' OR ');
+                    pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">'+pub+'</a>';
+                }
+                pub += '</span>';
             }
             return pub;
         };
@@ -271,7 +271,7 @@ angular.module('cttvServices', []).
             for (var i = 0; i < ids.length; i++) {
                 var target = ids[i];
                 for (var pos = 4; pos < target.length; pos++) {
-                    if (target[pos] !== "0") {
+                    if (target[pos] !== '0') {
                         var c = target.slice(pos, target.length);
                         compressed.push(c);
                         break;
@@ -307,11 +307,11 @@ angular.module('cttvServices', []).
                 if (h === 'id' || h === 'score' || h === 'type') {
                     continue;
                 }
-                if (h.startsWith("ortholog")) {
+                if (h.startsWith('ortholog')) {
                     matches.ortholog++;
-                } else if (h.startsWith("drugs")) {
+                } else if (h.startsWith('drugs')) {
                     matches.drug++;
-                } else if (h.startsWith("phenotypes.label")) {
+                } else if (h.startsWith('phenotypes.label')) {
                     matches.phenotype++;
                 }
                 else {
@@ -331,7 +331,7 @@ angular.module('cttvServices', []).
                 }
             } else {
                 for (var h2 in r.highlight) {
-                    if (h2.startsWith("ortholog") || h2.startsWith('drug') || h2.startsWith('phenotypes.label')) {
+                    if (h2.startsWith('ortholog') || h2.startsWith('drug') || h2.startsWith('phenotypes.label')) {
                         delete r.highlight[h2];
                     }
                 }

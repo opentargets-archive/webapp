@@ -32,7 +32,7 @@ angular.module('plugins')
             },
             link: function (scope, elem, attrs) {
                 var uniprotId = scope.target.uniprot_id;
-                var url = "/proxy/www.omnipathdb.org/interactions/" + uniprotId + '?format=json';
+                var url = '/proxy/www.omnipathdb.org/interactions/' + uniprotId + '?format=json';
                 $http.get(url)
                     .then(function (resp) {
                         var interactors = {};
@@ -61,7 +61,7 @@ angular.module('plugins')
                         var promises = [];
 
                         // Promise -- second pass in omnipathdb...
-                        var url = "/proxy/www.omnipathdb.org/interactions/" + uniprotIds.join(',') + '?format=json&fields=sources';
+                        var url = '/proxy/www.omnipathdb.org/interactions/' + uniprotIds.join(',') + '?format=json&fields=sources';
                         promises.push($http.get(url));
 
                         // Promise -- get the names from bestHitSearch
@@ -72,7 +72,7 @@ angular.module('plugins')
                         };
 
                         var queryObject = {
-                            method: "POST",
+                            method: 'POST',
                             params: opts,
                             trackCall: false
                         };
@@ -114,25 +114,25 @@ angular.module('plugins')
                                             interactors[source] = {
                                                 label: source,
                                                 interactsWith: {}
-                                            }
+                                            };
                                         }
                                         if (!interactors[target]) {
                                             interactors[target] = {
                                                 label: target,
                                                 interactsWith: {}
-                                            }
+                                            };
                                         }
                                         if (!interactors[source].interactsWith[target]) {
                                             interactors[source].interactsWith[target] = {
                                                 label: target,
                                                 provenance: []
-                                            }
+                                            };
                                         }
                                         if (!interactors[target].interactsWith[source]) {
                                             interactors[target].interactsWith[source] = {
                                                 label: source,
                                                 provenance: []
-                                            }
+                                            };
                                         }
                                         // interactors[source].interactsWith[target].provenance.push({
                                         //     id: "IntAct",
@@ -184,5 +184,5 @@ angular.module('plugins')
                             });
                     });
             }
-        }
+        };
     }]);

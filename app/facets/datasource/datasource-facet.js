@@ -16,7 +16,7 @@ angular.module('facets')
             },
 
             //templateUrl: 'facets/datasoruce/datatype-facet.html',
-            template: "",   // not needed for now as datasources are only show under each datatype
+            template: '',   // not needed for now as datasources are only show under each datatype
 
             link: function (scope, elem, attrs) {},
         };

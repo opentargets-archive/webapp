@@ -102,13 +102,13 @@ function initApp (deps) {
                     redirectTo: '/'
                 });
 
-                // function supports_history_api() {
-                //     return !!(window.history && history.pushState);
-                // }
+            // function supports_history_api() {
+            //     return !!(window.history && history.pushState);
+            // }
 
             $locationProvider.html5Mode(true).hashPrefix('!');
 
-    }]);
+        }]);
 
     return app;
 }
@@ -187,17 +187,17 @@ function configSystemjs (config, $q) {
 
     // Configure Systemjs
     System.config({
-        "baseURL": "./",
-        "defaultJSExtensions": false,
-        "transpiler": false,
-        "paths": {
-            "github:*": "jspm_packages/github/*"
+        'baseURL': './',
+        'defaultJSExtensions': false,
+        'transpiler': false,
+        'paths': {
+            'github:*': 'jspm_packages/github/*'
         },
 
-        "map": {
-            "css": "github:/systemjs/plugin-css@0.1.21/css.js",
+        'map': {
+            'css': 'github:/systemjs/plugin-css@0.1.21/css.js',
         },
-        "meta": meta
+        'meta': meta
     });
 
     var depsToLoad = Object.keys(preloads);

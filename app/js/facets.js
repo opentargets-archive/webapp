@@ -29,9 +29,9 @@ angular.module('facets', [])
 
             link: function (scope, elem, attrs) {
                 //$timeout (function () {
-                    var template = '<' + scope.plugin + " facet=facet></" + scope.plugin + ">";
-                    var compiled = $compile(template)(scope);
-                    elem.append(compiled);
+                var template = '<' + scope.plugin + ' facet=facet></' + scope.plugin + '>';
+                var compiled = $compile(template)(scope);
+                elem.append(compiled);
                 //}, 0);
             },
 

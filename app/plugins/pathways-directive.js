@@ -19,7 +19,7 @@ angular.module('plugins')
                 var pathwayDiagram;
 
                 // Set the spinner
-                spDiv = document.createElement("div");
+                spDiv = document.createElement('div');
                 var sp = spinner()
                     .size(30)
                     .stroke(3);
@@ -43,10 +43,10 @@ angular.module('plugins')
                     for (var i=0; i<pathways.length; i++) {
                     // for (var pathway in pathways) {
                         var pathway = pathways[i].id;
-                        var p = $http.get("/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/" + pathway + "/stableIdentifier");
+                        var p = $http.get('/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/' + pathway + '/stableIdentifier');
                         promises.push(p);
                         // pathwayArr.push(pathways[pathway]["pathway name"]);
-                        pathwayArr.push(pathways[i].value["pathway name"]);
+                        pathwayArr.push(pathways[i].value['pathway name']);
                     }
                     $q
                         .all(promises)
@@ -54,11 +54,11 @@ angular.module('plugins')
                             for (var i=0; i<vals.length; i++) {
                                 var val = vals[i].data;
                                 if (val) {
-                                    var idRaw = val.split("\t")[1];
+                                    var idRaw = val.split('\t')[1];
                                     var id = idRaw.split('.')[0];
                                     reactomePathways.push({
-                                        "id": id,
-                                        "name" : pathwayArr[i]
+                                        'id': id,
+                                        'name' : pathwayArr[i]
                                     });
                                 }
                             }
@@ -76,10 +76,10 @@ angular.module('plugins')
                     var pId = pathway.id;
                     if (!pathwayDiagram) {
                         pathwayDiagram = Reactome.Diagram.create ({
-                            "proxyPrefix" : "/proxy/www.reactome.org",
-                            "placeHolder": "pathwayDiagramContainer",
-                            "width": w,
-                            "height": h,
+                            'proxyPrefix' : '/proxy/www.reactome.org',
+                            'placeHolder': 'pathwayDiagramContainer',
+                            'width': w,
+                            'height': h,
                         });
                         pathwayDiagram.onDiagramLoaded(function (pathwayId) {
                             pathwayDiagram.flagItems(scope.target.symbol);
@@ -104,9 +104,9 @@ angular.module('plugins')
                         clearInterval(centinel);
                         // $log.log(Reactome);
 
-                        var newDiv = document.createElement("div");
-                        newDiv.id = "pathwayDiagramContainer";
-                        newDiv.className += " pwp-DiagramCanvas";
+                        var newDiv = document.createElement('div');
+                        newDiv.id = 'pathwayDiagramContainer';
+                        newDiv.className += ' pwp-DiagramCanvas';
                         element[0].appendChild(newDiv);
 
                         loadPathways();

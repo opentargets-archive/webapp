@@ -11,7 +11,7 @@ angular.module('cttvServices').
      */
     factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', '$analytics', '$injector', 'cttvConfig', function($log, $location, cttvDictionary, cttvConsts, cttvAPIservice, cttvUtils, cttvLocationState, $analytics, $injector, cttvConfig) {
 
-        "use strict";
+        'use strict';
 
 
 
@@ -54,7 +54,7 @@ angular.module('cttvServices').
         // load and link the parser service for each facet
         var parsers = {};
         for(var i in cttvConfig.facets){
-            parsers[ cttvConfig.facets[i].key ] = $injector.get( _.camelCase(cttvConfig.facets[i].element)+"Parser" );
+            parsers[ cttvConfig.facets[i].key ] = $injector.get( _.camelCase(cttvConfig.facets[i].element)+'Parser' );
         }
 
 
@@ -94,7 +94,7 @@ angular.module('cttvServices').
                 selected.push(c);
             }
             return c;
-        }
+        };
 
 
 
@@ -136,7 +136,7 @@ angular.module('cttvServices').
                 }
 
             });
-        }
+        };
 
 
 
@@ -145,7 +145,7 @@ angular.module('cttvServices').
          */
         var isSelected=function(collection, key){
             var fcts = cttvLocationState.getState()[ cttvFiltersService.stateId ];
-            key = "" + key; // target class is numerical key which confuses indexOf below.
+            key = '' + key; // target class is numerical key which confuses indexOf below.
             return (fcts && fcts[collection] && ( fcts[collection]==key || fcts[collection].indexOf(key)>=0 ))|| false;
         };
 
@@ -156,12 +156,12 @@ angular.module('cttvServices').
          */
         var getSelectedFilters = function(facetKey){
             var f = selected.filter(function(obj){
-                        return obj.key===facetKey;
-                    })[0] || {filters:[]};
+                return obj.key===facetKey;
+            })[0] || {filters:[]};
 
             return f.filters.map(function(obj){
-                        return obj.key;
-                    });
+                return obj.key;
+            });
         };
 
 
@@ -188,7 +188,7 @@ angular.module('cttvServices').
             try{
                 config = parsers[collection].parse(config, data, countsToUse, isSelected);
             }catch(e){
-                $log.warn("Facet parser error for "+collection);
+                $log.warn('Facet parser error for '+collection);
                 $log.warn(e);
             }
 
@@ -226,11 +226,11 @@ angular.module('cttvServices').
             selected.forEach(function(collection){
                 collection.filters.forEach(function(obj){
                     raw[obj.facet] = raw[obj.facet] || [];
-                    raw[obj.facet].push( obj.key )
-                })
-            })
+                    raw[obj.facet].push( obj.key );
+                });
+            });
             cttvLocationState.setStateFor( cttvFiltersService.stateId , raw );
-        }
+        };
 
 
 
@@ -240,7 +240,7 @@ angular.module('cttvServices').
         var update = function(){
             updateSelected();
             updateLocationSearch();
-        }
+        };
 
 
 
@@ -259,13 +259,13 @@ angular.module('cttvServices').
          */
         var getFilter = function(f){
             if(!filtersData[f.facet]){
-                filtersData[f.facet] = {}
+                filtersData[f.facet] = {};
             }
             if(!filtersData[f.facet][f.key]){
                 filtersData[f.facet][f.key] = new Filter(f);
             }
             return filtersData[f.facet][f.key];
-        }
+        };
 
 
 
@@ -280,9 +280,9 @@ angular.module('cttvServices').
          * o:Object - optional config object
          */
         function Filter(o){
-            this.facet = o.facet || ""; // the collection key, e.g. "datatype" or "pathway"
-            this.key = o.key || "";     // the filter id, e.g. "rna_expression" or "react_15518"
-            this.label = o.label || ""; // the label to display
+            this.facet = o.facet || ''; // the collection key, e.g. "datatype" or "pathway"
+            this.key = o.key || '';     // the filter id, e.g. "rna_expression" or "react_15518"
+            this.label = o.label || ''; // the label to display
             this.count = o.count || 0;  // the count to display
             this.enabled = this.count>0 && (o.enabled==undefined ? true : o.enabled);
             this.selected = o.selected==undefined ? false : o.selected;
@@ -292,29 +292,29 @@ angular.module('cttvServices').
             this.collection = o.collection ? parseCollection(o.collection) : null;
         }
 
-            /*
+        /*
              * Toggles the state selected-deselected and updates the URL accordingly (which triggers an update)
              */
-            Filter.prototype.toggle = function(){
-                this.setSelected(!this.selected);
-                update();
-                lastClicked = this.toString() || undefined;
-                return this.selected;
-            };
+        Filter.prototype.toggle = function(){
+            this.setSelected(!this.selected);
+            update();
+            lastClicked = this.toString() || undefined;
+            return this.selected;
+        };
 
-            /*
+        /*
              * Triggers the selected property to the specified value and DOES NOT update the URL
              */
-            Filter.prototype.setSelected=function(b){
-                if(this.enabled){
-                    this.selected = b;
-                }
-                return this.selected;
-            };
-
-            Filter.prototype.toString=function(){
-                return this.facet+":"+this.key;
+        Filter.prototype.setSelected=function(b){
+            if(this.enabled){
+                this.selected = b;
             }
+            return this.selected;
+        };
+
+        Filter.prototype.toString=function(){
+            return this.facet+':'+this.key;
+        };
 
 
         /**
@@ -325,8 +325,8 @@ angular.module('cttvServices').
          * filters:Array - array of Filters
          */
         function FilterCollection(config){
-            this.key = config.key || "";
-            this.label = config.label || "";
+            this.key = config.key || '';
+            this.label = config.label || '';
             this.filters = config.filters || [];
             this.data = config.data || undefined;
             this.options = config.options || {}; // or {} ???
@@ -345,57 +345,57 @@ angular.module('cttvServices').
             }
         }
 
-            /**
+        /**
              * Add the specified filter (instance of Filter class) to this collection
              */
-            FilterCollection.prototype.addFilter = function(filter){
+        FilterCollection.prototype.addFilter = function(filter){
 
-                // we should check the filter doesn't already exist...
-                if( this.filters.filter(function(f){ return f.key===filter.key}).length==0 ){
-                    this.filters.push(filter);
-                }
+            // we should check the filter doesn't already exist...
+            if( this.filters.filter(function(f){ return f.key===filter.key;}).length==0 ){
+                this.filters.push(filter);
+            }
 
-            };
+        };
 
-            /**
+        /**
              * Function to select and clear all the filters in the collection
              */
-            FilterCollection.prototype.selectAll = function(b){
-                this.filters.forEach(function(f){
-                    f.setSelected(b);
-                    if(!b && f.collection!=null){
-                        f.collection.selectAll(b);
-                    }
-                });
-                update();
-            };
+        FilterCollection.prototype.selectAll = function(b){
+            this.filters.forEach(function(f){
+                f.setSelected(b);
+                if(!b && f.collection!=null){
+                    f.collection.selectAll(b);
+                }
+            });
+            update();
+        };
 
-            /**
+        /**
              * Returns an array of the filters in this collection that are selected
              */
-            FilterCollection.prototype.getSelectedFilters = function(){
-                return this.filters.filter(function(obj){
-                    var sub = false;
-                    if(obj.collection ){
-                        if( obj.collection.getSelectedFilters != undefined){
-                            sub = (obj.collection.filters.length == obj.collection.getSelectedFilters().length);
-                        }
+        FilterCollection.prototype.getSelectedFilters = function(){
+            return this.filters.filter(function(obj){
+                var sub = false;
+                if(obj.collection ){
+                    if( obj.collection.getSelectedFilters != undefined){
+                        sub = (obj.collection.filters.length == obj.collection.getSelectedFilters().length);
                     }
-                    return obj.selected || sub;
-                });
-            };
+                }
+                return obj.selected || sub;
+            });
+        };
 
 
-            FilterCollection.prototype.update = function(){
-                update();
-            }
+        FilterCollection.prototype.update = function(){
+            update();
+        };
 
 
-            FilterCollection.prototype.isLastClicked = function(){
-                return this.filters.some(function(f){
-                    return f.toString() == lastClicked;
-                });
-            }
+        FilterCollection.prototype.isLastClicked = function(){
+            return this.filters.some(function(f){
+                return f.toString() == lastClicked;
+            });
+        };
 
 
 
@@ -460,7 +460,7 @@ angular.module('cttvServices').
 
 
 
-        cttvFiltersService.stateId = "fcts";
+        cttvFiltersService.stateId = 'fcts';
 
 
 
@@ -471,7 +471,7 @@ angular.module('cttvServices').
          * NOTE: i quite like passing the countsToUse directly here, so I'll leave it like this for now. This is however now set in the config file
          */
         cttvFiltersService.updateFacets = function(facets, countsToUse){
-            $log.log("updateFacets");
+            $log.log('updateFacets');
             // if there are no facets, return
             if(!facets){
                 return;
@@ -518,7 +518,7 @@ angular.module('cttvServices').
                             )
                         );
                     } catch(e){
-                        $log.warn("Error while updating facets: "+collection.type);
+                        $log.warn('Error while updating facets: '+collection.type);
                         $log.warn(e);
                     }
                 }
@@ -534,7 +534,7 @@ angular.module('cttvServices').
                 for (var j=0; j<facetCollection.filters.length; j++) {
                     var facetLabel = facetCollection.filters[j].key;
                     // $log.log(" -- tracking: " + collectionLabel + " - " + facetLabel);
-                    $analytics.eventTrack('collectionLabel', {"category": "associationFacet", "label": facetLabel});
+                    $analytics.eventTrack('collectionLabel', {'category': 'associationFacet', 'label': facetLabel});
                 }
             }
         };
@@ -567,13 +567,13 @@ angular.module('cttvServices').
             selected.length = 0;
             selectedCount = 0;
             pageFacetsStack.length = 0;
-        }
+        };
 
 
 
         cttvFiltersService.update = function(){
             update();
-        }
+        };
 
 
 

@@ -35,7 +35,7 @@ angular.module('plugins', [])
                         }
                     }
 
-                    if (scope.visible === "true") {
+                    if (scope.visible === 'true') {
                         if (scope.alreadyLoaded[scope.plugin]) {
                             return;
                         } else {
@@ -43,12 +43,12 @@ angular.module('plugins', [])
                         }
 
                         if (scope.track) {
-                            $analytics.eventTrack('profile', {"category": attrs.page, "label": scope.label});
+                            $analytics.eventTrack('profile', {'category': attrs.page, 'label': scope.label});
                         }
 
                         // spinner
                         // TODO: substitute by spinner directive
-                        var spinnerDiv = document.createElement("div");
+                        var spinnerDiv = document.createElement('div');
                         var sp = spinner()
                             .size(30)
                             .stroke(3);
@@ -71,7 +71,7 @@ angular.module('plugins', [])
                                 // spinner.parentNode.removeChild(spinner);
                                 $timeout(function () {
                                     // var template = '<' + scope.plugin + " associations=" + (scope.associations ? ("associations") : '""') + " target=" + (scope.target ? ("target") : '""') + " disease=" + (scope.disease ? ("disease") : '""') + " width=" + sectionWidth + "></" + scope.plugin + ">";
-                                    var template = "<" + scope.plugin + " associations=associations target=target disease=disease width=" + sectionWidth + "></" + scope.plugin + ">";
+                                    var template = '<' + scope.plugin + ' associations=associations target=target disease=disease width=' + sectionWidth + '></' + scope.plugin + '>';
                                     var compiled = $compile(template)(scope);
                                     element.append(compiled);
                                 }, 0);
@@ -82,7 +82,7 @@ angular.module('plugins', [])
                         //     element[0].removeChild(element[0].firstChild);
                         // }
                     }
-                })
+                });
             }
         };
     }]);

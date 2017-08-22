@@ -10,15 +10,15 @@ angular.module('cttvDirectives')
         'clearUnderscoresFilter',
         '$q',
         function ($log,
-                  cttvAPIservice,
-                  cttvUtils,
-                  $timeout,
-                  cttvConfig,
-                  cttvConsts,
-                  cttvDictionary,
-                  upperCaseFirst,
-                  clearUnderscores,
-                  $q) {
+            cttvAPIservice,
+            cttvUtils,
+            $timeout,
+            cttvConfig,
+            cttvConsts,
+            cttvDictionary,
+            upperCaseFirst,
+            clearUnderscores,
+            $q) {
             'use strict';
 
             var draw = 1;
@@ -36,10 +36,10 @@ angular.module('cttvDirectives')
                         var pos = match.index;
                         sentence.text = sentence.text.replace('u' + match[1], String.fromCharCode(parseInt(match[1], 16)));
                         sentence.breakpoints.push({
-                            "type": "unicode",
-                            "pos": pos,
-                            "extra": "",
-                            "span": 1
+                            'type': 'unicode',
+                            'pos': pos,
+                            'extra': '',
+                            'span': 1
                         });
 
                     }
@@ -52,27 +52,27 @@ angular.module('cttvDirectives')
 
                     if (sentence.t_start !== sentence.t_end) {
                         sentence.breakpoints.push({
-                            "type": "t_start",
-                            "pos": sentence.t_start,
-                            "extra": '<span class="highlight-primary text-content-highlight">'
+                            'type': 't_start',
+                            'pos': sentence.t_start,
+                            'extra': '<span class="highlight-primary text-content-highlight">'
                         });
                         sentence.breakpoints.push({
-                            "type": "t_end",
-                            "pos": sentence.t_end + 1,
-                            "extra": "</span>"
+                            'type': 't_end',
+                            'pos': sentence.t_end + 1,
+                            'extra': '</span>'
                         });
                     }
 
                     if (sentence.d_start !== sentence.d_end) {
                         sentence.breakpoints.push({
-                            "type": "d_start",
-                            "pos": sentence.d_start,
-                            "extra": '<span class="highlight-warning text-content-highlight">'
+                            'type': 'd_start',
+                            'pos': sentence.d_start,
+                            'extra': '<span class="highlight-warning text-content-highlight">'
                         });
                         sentence.breakpoints.push({
-                            "type": "d_end",
-                            "pos": sentence.d_end + 1,
-                            "extra": "</span>"
+                            'type': 'd_end',
+                            'pos': sentence.d_end + 1,
+                            'extra': '</span>'
                         });
                     }
                     // Sort the breakpoints by pos
@@ -94,9 +94,9 @@ angular.module('cttvDirectives')
                         }
                     });
 
-                    if (sentence.section === "abstract" || sentence.section === "title") {
+                    if (sentence.section === 'abstract' || sentence.section === 'title') {
                         var highlightedSentence = '<span class="highlight-info text-content-highlight">' + text + '</span>';
-                        if (sentence.section === "abstract") {
+                        if (sentence.section === 'abstract') {
 
                             abstractSentences.push({
                                 'raw': sentence.text.trim(),
@@ -111,7 +111,7 @@ angular.module('cttvDirectives')
                             });
                         }
                     }
-                    if (sentence.section === "abstract") {
+                    if (sentence.section === 'abstract') {
                         sentence.formattedHighlightedText = '<span class="highlight-info text-content-highlight">' + text + '</span>';
                     }
 
@@ -143,13 +143,13 @@ angular.module('cttvDirectives')
                 var sectionSentenceMap = {};
                 sentences.map(function (sentence) {
 
-                    if (sentence.section != "abstract") {
+                    if (sentence.section != 'abstract') {
                         if (sectionSentenceMap[sentence.section] === undefined) {
-                            sectionSentenceMap[sentence.section] = "";
-                            sectionSentenceMap[sentence.section] += "<li>" + sentence.formattedText + "</li>";
+                            sectionSentenceMap[sentence.section] = '';
+                            sectionSentenceMap[sentence.section] += '<li>' + sentence.formattedText + '</li>';
                         }
                         else {
-                            sectionSentenceMap[sentence.section] += "<li>" + sentence.formattedText + "</li>";
+                            sectionSentenceMap[sentence.section] += '<li>' + sentence.formattedText + '</li>';
                         }
                     }
                 });
@@ -162,11 +162,11 @@ angular.module('cttvDirectives')
                 var sectionSentenceMap = {};
                 sentences.map(function (sentence) {
                     if (sectionSentenceMap[sentence.section] === undefined) {
-                        sectionSentenceMap[sentence.section] = "";
-                        sectionSentenceMap[sentence.section] += " " + sentence.formattedText + " ";
+                        sectionSentenceMap[sentence.section] = '';
+                        sectionSentenceMap[sentence.section] += ' ' + sentence.formattedText + ' ';
                     }
                     else {
-                        sectionSentenceMap[sentence.section] += " " + sentence.formattedText + " ";
+                        sectionSentenceMap[sentence.section] += ' ' + sentence.formattedText + ' ';
                     }
                 });
 
@@ -177,9 +177,9 @@ angular.module('cttvDirectives')
             function parseServerResponse(data) {
                 var newData = [];
 
-                var accessLevelPrivate = "<span class='cttv-access-private' title='private data'></span>"; //"<span class='fa fa-users' title='private data'>G</span>";
-                var accessLevelPublic = "<span class='cttv-access-public' title='public data'></span>"; //"<span class='fa fa-users' title='public data'>P</span>";
-                var cat_list = ["title", "intro", "result", "discussion", "conclusion", "other"];   // preferred sorting order
+                var accessLevelPrivate = '<span class=\'cttv-access-private\' title=\'private data\'></span>'; //"<span class='fa fa-users' title='private data'>G</span>";
+                var accessLevelPublic = '<span class=\'cttv-access-public\' title=\'public data\'></span>'; //"<span class='fa fa-users' title='public data'>P</span>";
+                var cat_list = ['title', 'intro', 'result', 'discussion', 'conclusion', 'other'];   // preferred sorting order
 
                 function formatAuthor(author) {
                     return author.short_name;
@@ -201,30 +201,30 @@ angular.module('cttvDirectives')
                     row.push(pubmedId);
 
                     // Authors formatting
-                    var authorStr = "(No authors provided)";
+                    var authorStr = '(No authors provided)';
                     if (d.literature.authors) {
                         authorStr = formatAuthor(d.literature.authors[0]);
                         if (d.literature.authors.length > 2) {
-                            authorStr += " <i>et al</i>";
+                            authorStr += ' <i>et al</i>';
                         } else if (d.literature.authors.length === 2) {
-                            authorStr += " and " + formatAuthor(d.literature.authors[1]);
+                            authorStr += ' and ' + formatAuthor(d.literature.authors[1]);
                         }
-                        authorStr += ".";
+                        authorStr += '.';
                     }
 
                     // 3 - Abstract
                     if (!d.literature.title && !d.literature.abstract && !d.literature.journal_data) {
-                        row.push("N/A");
+                        row.push('N/A');
                     } else {
                         var abstractSentences = getMatchedSentences(d);
-                        var abstractSection = "Abstract";
-                        var abstractText = d.literature.abstract || "Not abstract supplied.";
-                        var abstract = "<div id='" + pubmedId + abstractSection + "'>" + abstractText + "</div>";
+                        var abstractSection = 'Abstract';
+                        var abstractText = d.literature.abstract || 'Not abstract supplied.';
+                        var abstract = '<div id=\'' + pubmedId + abstractSection + '\'>' + abstractText + '</div>';
 
-                        var abstractString = "<p class='small'><span onclick='angular.element(this).scope().displaySentences(\"" + pubmedId + abstractSection + "\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>Abstract</span></p>";
+                        var abstractString = '<p class=\'small\'><span onclick=\'angular.element(this).scope().displaySentences("' + pubmedId + abstractSection + '")\'style=\'cursor:pointer\'><i class=\'fa fa-chevron-circle-down\' aria-hidden=\'true\'></i>&nbsp;<span class=\'bold\'>Abstract</span></p>';
                         // var matchedSentences = $('#literature-table').DataTable().row(rowIdx).data()[5]; //this is details
 
-                        var title = d.literature.title || "";
+                        var title = d.literature.title || '';
                         // var abstractSentences;
                         //
                         // if ($scope.search.tables.literature.abstractSentences[data[2]][data[6]]) {
@@ -249,16 +249,16 @@ angular.module('cttvDirectives')
                         // var journalIssue = d.journalInfo.issue ? "(" + d.journalInfo.issue + ")" : "";
                         // var pageInfo = d.pageInfo ? ":" + d.pageInfo : "";
                         // var journalInfo = (d.journalInfo.journal.medlineAbbreviation || d.journalInfo.journal.title) + " " + journalVolume + journalIssue + pageInfo;
-                        var journalInfo = (d.literature.journal_data.medlineAbbreviation || d.literature.journal_data.title || "");
+                        var journalInfo = (d.literature.journal_data.medlineAbbreviation || d.literature.journal_data.title || '');
                         if (!journalInfo) {
-                            journalInfo = "";
+                            journalInfo = '';
                         }
 
-                        journalInfo += " " + d.literature.journal_reference;
+                        journalInfo += ' ' + d.literature.journal_reference;
 
-                        var titleAndSource = "<span class=large><a href='#' onClick='angular.element(this).scope().openEuropePmc(" + pubmedId + ")'>" + title + "</a></span>"
-                            + "<br />"
-                            + "<span class=small>" + authorStr + " " + journalInfo + "</span>";
+                        var titleAndSource = '<span class=large><a href=\'#\' onClick=\'angular.element(this).scope().openEuropePmc(' + pubmedId + ')\'>' + title + '</a></span>'
+                            + '<br />'
+                            + '<span class=small>' + authorStr + ' ' + journalInfo + '</span>';
 
                         // PMID
                         var pmidStr = '<span style="color:#aaaaaa">PMID: ' + pubmedId + '</span>';
@@ -277,7 +277,7 @@ angular.module('cttvDirectives')
                                 if (b.substr(0, li.length) === li) {
                                     bi = i;
                                 }
-                            })
+                            });
 
                             return +(ai > bi) || +(ai === bi) - 1;
                         });
@@ -289,32 +289,32 @@ angular.module('cttvDirectives')
 
                         var matchedSentences = d.evidence.literature_ref.mined_sentences.map(function (sent) {
 
-                                var section = upperCaseFirst(clearUnderscores(sent.section));
-                                var sentenceString = "";
-                                if (section != 'Title' && section != 'Abstract') {
+                            var section = upperCaseFirst(clearUnderscores(sent.section));
+                            var sentenceString = '';
+                            if (section != 'Title' && section != 'Abstract') {
 
-                                    if (previousSection != sent.section) {
-                                        if (previousSection != null) { //this is not the first section with matched sentences
-                                            sentenceString = sentenceString + '</div>';
-                                        }
-                                        sentenceString += "<p class='small'><span onclick='angular.element(this).scope().displaySentences(\"" + pubmedId + sent.section + "\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>" + section + ": </span>" + sectionCount[sent.section];
-                                        if (sectionCount[sent.section] === 1) {
-                                            sentenceString += " matched sentence</span></p>";
-                                        } else {
-                                            sentenceString += " matched sentences</span></p>";
-                                        }
-                                        previousSection = sent.section;
-
+                                if (previousSection != sent.section) {
+                                    if (previousSection != null) { //this is not the first section with matched sentences
+                                        sentenceString = sentenceString + '</div>';
                                     }
+                                    sentenceString += '<p class=\'small\'><span onclick=\'angular.element(this).scope().displaySentences("' + pubmedId + sent.section + '")\'style=\'cursor:pointer\'><i class=\'fa fa-chevron-circle-down\' aria-hidden=\'true\'></i>&nbsp;<span class=\'bold\'>' + section + ': </span>' + sectionCount[sent.section];
+                                    if (sectionCount[sent.section] === 1) {
+                                        sentenceString += ' matched sentence</span></p>';
+                                    } else {
+                                        sentenceString += ' matched sentences</span></p>';
+                                    }
+                                    previousSection = sent.section;
 
-                                    sentenceString += "<div id='" + pubmedId + sent.section + "' style='display:none'><ul style='margin-left: 10px;'>" + sectionSentences[sent.section] + "</ul></div>";
                                 }
 
-                                return sentenceString;
-                            }).join("") + "</div>"
+                                sentenceString += '<div id=\'' + pubmedId + sent.section + '\' style=\'display:none\'><ul style=\'margin-left: 10px;\'>' + sectionSentences[sent.section] + '</ul></div>';
+                            }
+
+                            return sentenceString;
+                        }).join('') + '</div>';
 
 
-                        row.push(titleAndSource + "<br/>" + pmidStr + "<br/><br/>" + abstractString + abstract + " <p class=small>" + (matchedSentences || "no matches available") + "</p>");
+                        row.push(titleAndSource + '<br/>' + pmidStr + '<br/><br/>' + abstractString + abstract + ' <p class=small>' + (matchedSentences || 'no matches available') + '</p>');
 
                     }
 
@@ -322,7 +322,7 @@ angular.module('cttvDirectives')
 
                     // 4 - Year
                     var date = d.literature.date;
-                    var year = "N/A";
+                    var year = 'N/A';
                     if (date) {
                         year = moment(date).year();
                     }
@@ -330,7 +330,7 @@ angular.module('cttvDirectives')
 
                     // TODO: Export has been disabled, so these fields are not in use at the moment. Revise and if they are not needed anymore change the table
                     // 5 - Title
-                    row.push(d.literature.title || "");
+                    row.push(d.literature.title || '');
 
                     // 6 -- Authors
                     row.push('');
@@ -355,11 +355,11 @@ angular.module('cttvDirectives')
 
             var setupTable = function (table, target, disease, filename, download) {
                 return $(table).DataTable({
-                    "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
+                    'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
                     // TODO: We are disabling the download for now because there may be too many items
-                    "buttons": [
+                    'buttons': [
                         {
-                            text: "<span class='fa fa-download' title='Download as CSV (max 200 articles)'></span>",
+                            text: '<span class=\'fa fa-download\' title=\'Download as CSV (max 200 articles)\'></span>',
                             action: download
                         }
                     ],
@@ -383,8 +383,8 @@ angular.module('cttvDirectives')
                         // 9 => Matches (hidden -- used for export)
                         // 10 => URL (hidden -- used for export)
                         var mappings = {
-                            1: "disease.efo_info.label",
-                            4: "literature.date"
+                            1: 'disease.efo_info.label',
+                            4: 'literature.date'
                         };
 
                         // We save the order condition for the server side rendering to use it for the download
@@ -421,37 +421,37 @@ angular.module('cttvDirectives')
                                 cbak(o);
                             });
                     },
-                    "ordering": true,
-                    "order" : [[4, "desc"]],
-                    "orderMulti": false,
-                    "columnDefs": [
+                    'ordering': true,
+                    'order' : [[4, 'desc']],
+                    'orderMulti': false,
+                    'columnDefs': [
                         {
-                            "targets": [2, 5, 6, 7, 8, 9, 10],
-                            "visible": false
+                            'targets': [2, 5, 6, 7, 8, 9, 10],
+                            'visible': false
                         },
                         {
-                            "targets": [4],
-                            "orderSequence": ["desc", "asc"]
+                            'targets': [4],
+                            'orderSequence': ['desc', 'asc']
                         },
                         {
-                            "targets": [1],
-                            "orderSequence": ["asc", "desc"]
+                            'targets': [1],
+                            'orderSequence': ['asc', 'desc']
                         },
                         {
-                            "targets": [3],
-                            "orderable": false
+                            'targets': [3],
+                            'orderable': false
                         },
                         {
-                            "targets": [0],    // the access-level (public/private icon)
-                            "visible": cttvConfig.show_access_level,
-                            "width": "3%"
+                            'targets': [0],    // the access-level (public/private icon)
+                            'visible': cttvConfig.show_access_level,
+                            'width': '3%'
                         },
                         {
-                            "targets": [1], //disease?
-                            "width": "12%"
+                            'targets': [1], //disease?
+                            'width': '12%'
                         }
                     ]
-                }, (filename + "-text_mining"));
+                }, (filename + '-text_mining'));
             };
 
             var dirScope;
@@ -467,13 +467,13 @@ angular.module('cttvDirectives')
                 link: function (scope, elem, attrs) {
                     dirScope = scope;
                     scope.openEuropePmc = function (pmid) {
-                        var URL = "http://europepmc.org/abstract/MED/" + pmid;
+                        var URL = 'http://europepmc.org/abstract/MED/' + pmid;
                         window.open(URL);
                     };
 
                     scope.displaySentences = function (id) {
                         //make the collapse content to be shown or hide
-                        $('#' + id).toggle("fast");
+                        $('#' + id).toggle('fast');
                     };
 
                     scope.$watchGroup(['target', 'disease', 'filename'], function (vals) {
@@ -531,7 +531,7 @@ angular.module('cttvDirectives')
                                     totalText += row.join(',');
                                     totalText += '\n';
                                 }
-                                var b = new Blob([totalText], {type: "text/csv;charset=utf-8"});
+                                var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
                                 saveAs(b, scope.filename + '.csv');
                             });
 
@@ -602,6 +602,6 @@ angular.module('cttvDirectives')
                     };
 
                 }
-            }
+            };
         }])
 ;
