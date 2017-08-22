@@ -22,7 +22,7 @@ function initApp (deps) {
                     controller: 'SearchAppCtrl'
                 }).
         	    when('/target/:id/associations', {
-                    templateUrl: 'src/partials/target-associations.html',
+                    templateUrl: 'src/pages/target-associations/target-associations.html',
                     controller: 'targetAssociationsCtrl',
                     reloadOnSearch: false
         	    }).
@@ -32,15 +32,15 @@ function initApp (deps) {
                     reloadOnSearch: false
         	    }).
         	    when('/evidence/:id/:id', {
-                    templateUrl: 'src/partials/target-disease.html',
+                    templateUrl: 'src/pages/evidence/target-disease.html',
                     controller: 'TargetDiseaseCtrl'
         	    }).
         	    when('/target/:id', {
-            		templateUrl: 'src/partials/target.html',
+            		templateUrl: 'src/pages/target-profile/target.html',
             		controller: 'TargetCtrl'
         	    }).
         	    when('/disease/:id', {
-            		templateUrl: 'src/partials/disease.html',
+            		templateUrl: 'src/pages/disease-profile/disease.html',
             		controller: 'DiseaseCtrl'
         	    }).
                 when('/batch-search', {

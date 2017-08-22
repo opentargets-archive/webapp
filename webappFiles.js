@@ -49,6 +49,10 @@ var webappFiles = {
             'app/src/js/modules.js',
             // Processed (pages)
             'app/src/pages/disease-associations/disease-associations-controller.js',
+            'app/src/pages/target-associations/target-associations-controller.js',
+            'app/src/pages/evidence/target-disease-controller.js',
+            'app/src/pages/target-profile/target-controller.js',
+            'app/src/pages/disease-profile/disease-controller.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
@@ -67,10 +71,6 @@ var webappFiles = {
             'app/src/js/search-controller.js',
             'app/src/js/search-box-controller.js',
             'app/src/js/outreach-controller.js',
-            'app/src/js/target-associations-controller.js',
-            'app/src/js/target-disease-controller.js',
-            'app/src/js/target-controller.js',
-            'app/src/js/disease-controller.js',
             'app/src/js/directives.js',
             'app/src/js/filter-by-file-targets-directive.js',
             'app/src/js/disease-associations-table-directive.js',
