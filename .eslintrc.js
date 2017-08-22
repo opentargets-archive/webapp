@@ -11,7 +11,15 @@ module.exports = {
         "compat",
         "jsdoc"
     ],
+    "globals": {
+        "angular": true,
+        "d3": true,
+        '_': true,
+        'moment': true,
+        '$': true
+    },
     "rules": {
+        "curly": 2,
         "indent": [
             "error",
             4
@@ -36,12 +44,10 @@ module.exports = {
          * eg. *Ctrl.js will throw an error, so the following rule
          * could be switched off (0).
          */
-        // "angular/controller-name": 0
         "angular/no-inline-template": [2, {
             "allowSimple": true
         }],
-        "angular/di": 2,
-        "angular/di-order": 2,
+        "angular/di": [2, "array"],
         "angular/interval-service": 2,
         "angular/timeout-service": 2,
         "angular/document-service": 2,
@@ -49,7 +55,25 @@ module.exports = {
         "angular/log": 2,
         "angular/directive-restrict": [2, {
             "explicit": "always",
-            // "restrict": "E"
+        }],
+        "angular/component-limit": 2,
+        "angular/di-unused": 2,
+        "angular/function-type": [2, "anonymous"],
+        "angular/no-service-method": 2,
+        "angular/watchers-execution": [2, "$apply"],
+        "angular/angularelement": 2,
+        "angular/controller-name": [2, "/[A-Z].*Ctrl/"],
+        "angular/directive-name": [2, "ot"],
+        "angular/factory-name": [2, "ot"],
+        "angular/filter-name": [2, "ot"],
+        "angular/module-name": [2, "ot"],
+        "angular/file-name": [2, {
+            "typeSeparator": "dash",
+            "nameStyle": "dash",
+            "ignorePrefix": "ot",
+            "componentTypeMappings": {
+                "controller": "controller"
+            }
         }],
         /**
          * Compatibility rules
