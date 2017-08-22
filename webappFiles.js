@@ -55,6 +55,9 @@ var webappFiles = {
             'app/src/pages/disease-profile/disease-controller.js',
             'app/src/pages/search/search-controller.js',
             'app/src/pages/outreach/outreach-controller.js',
+            'app/src/pages/batch-search/batch-search-controller.js',
+            'app/src/pages/summary/summary-controller.js',
+            'app/src/pages/data-sources/data-sources-controller.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
@@ -82,8 +85,6 @@ var webappFiles = {
             'app/src/js/calendar-directive.js',
             'app/src/js/disease-graph-directive.js',
             'app/src/js/batch-search-directives.js',
-            'app/src/js/summary-controller.js',
-            'app/src/js/data-sources-controller.js',
             'app/src/js/multiple-targets-associations-summary-directives.js',
             'app/src/js/multiple-targets-pathways-summary-directive.js',
             'app/src/js/multiple-targets-drugs-summary-directives.js',

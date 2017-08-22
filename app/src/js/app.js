@@ -44,11 +44,11 @@ function initApp (deps) {
             		controller: 'DiseaseCtrl'
         	    }).
                 when('/batch-search', {
-                    templateUrl: 'src/partials/batch-search.html',
+                    templateUrl: 'src/pages/batch-search/batch-search.html',
                     controller: 'BatchSearchCtrl'
                 }).
                 when ('/summary', {
-                    templateUrl: 'src/partials/summary.html',
+                    templateUrl: 'src/pages/summary/summary.html',
                     controller: 'SummaryCtrl'
                 }).
 
@@ -60,7 +60,7 @@ function initApp (deps) {
                 when('/data_sources', {
                     //templateUrl: 'docs/data_sources.html'
                     controller: 'DataSourcesCtrl',
-                    templateUrl: 'src/partials/data_sources.html'
+                    templateUrl: 'src/pages/data-sources/data_sources.html'
                 }).
                 when('/terms_of_use', {
                     //templateUrl: 'docs/terms_of_use.html',

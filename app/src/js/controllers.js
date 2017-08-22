@@ -127,14 +127,6 @@ angular.module('cttvControllers')
 
 
     /**
-      * Controller for the target list results page
-    **/
-    .controller('BatchSearchCtrl', ['$log', '$scope', function ($log, $scope) {
-        'use strict';
-        $scope.list = null;
-    }])
-
-    /**
      * Simple controller to expose the current page to the feedback button controller
      */
     .controller('FeedbackCtrl', ['$scope', '$location', '$log', 'cttvLocationState', function ($scope, $location, $log, cttvLocationState) {
