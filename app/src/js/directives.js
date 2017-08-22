@@ -59,7 +59,7 @@ angular.module('cttvDirectives', [])
 
         return {
             restrict:'EA',
-            templateUrl: 'partials/search-suggestions.html',
+            templateUrl: 'src/partials/search-suggestions.html',
             replace: true,
             link: function(scope, elem, attrs){
 
@@ -1217,7 +1217,7 @@ angular.module('cttvDirectives', [])
         return {
             restrict: 'EA',
             scope: {},
-            templateUrl : 'partials/search-box.html',
+            templateUrl : 'src/partials/search-box.html',
             link: function(scope, element, attrs) {
 
             }
@@ -1236,7 +1236,7 @@ angular.module('cttvDirectives', [])
         return {
             restrict: 'EA',
             scope: {},
-            templateUrl : 'partials/footer.html',
+            templateUrl : 'src/partials/footer.html',
             link: function(scope, element, attrs) {}
         };
     }])
@@ -1249,8 +1249,8 @@ angular.module('cttvDirectives', [])
             scope: {
                 key: '@'
             },
-            template: '<span ng-if="link" uib-popover-template="\'partials/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'"><a target=_blank ng-click="$event.stopPropagation()" href="{{link}}"><i class="fa fa-info-circle"></i></a></span>' +
-            '<span ng-if="!link" uib-popover-template="\'partials/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'" ng-click="$event.stopPropagation()" style="margin-left:8px;"><i class="fa fa-info-circle"></i></span>',
+            template: '<span ng-if="link" uib-popover-template="\'src/partials/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'"><a target=_blank ng-click="$event.stopPropagation()" href="{{link}}"><i class="fa fa-info-circle"></i></a></span>' +
+            '<span ng-if="!link" uib-popover-template="\'src/partials/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'" ng-click="$event.stopPropagation()" style="margin-left:8px;"><i class="fa fa-info-circle"></i></span>',
 
             link: function (scope, el, attrs) {
                 var def = otDefinitions[scope.key];

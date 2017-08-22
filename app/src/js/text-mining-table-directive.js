@@ -458,7 +458,7 @@ angular.module('cttvDirectives')
 
             return {
                 restrict: 'EA',
-                templateUrl: 'partials/text-mining-table.html',
+                templateUrl: 'src/partials/text-mining-table.html',
                 scope: {
                     target: '=',
                     disease: '=',

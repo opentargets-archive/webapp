@@ -53,7 +53,7 @@ angular.module('cttvDirectives')
 
         return {
             restrict: 'E',
-            templateUrl: 'partials/multiple-targets-interactions-summary.html',
+            templateUrl: 'src/partials/multiple-targets-interactions-summary.html',
             scope: {
                 interactors: '=',
                 categories: '=',

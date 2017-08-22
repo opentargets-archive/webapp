@@ -4,7 +4,7 @@ angular.module('cttvDirectives')
         var marked = [];
         return {
             restrict: 'E',
-            templateUrl: 'partials/calendar.html',
+            templateUrl: 'src/partials/calendar.html',
             scope: {
                 selected: '=',
                 marked: '='

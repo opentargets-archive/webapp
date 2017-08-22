@@ -132,7 +132,7 @@ angular.module('cttvDirectives')
 
         return {
             restrict: 'E',
-            templateUrl: 'partials/multiple-targets-tissues-summary.html',
+            templateUrl: 'src/partials/multiple-targets-tissues-summary.html',
             scope: {
                 targets: '='
             },

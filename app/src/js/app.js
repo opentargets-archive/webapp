@@ -15,87 +15,87 @@ function initApp (deps) {
 
             $routeProvider.
                 when('/', {
-                    templateUrl: 'partials/intro.html'
+                    templateUrl: 'src/partials/intro.html'
                 }).
                 when('/search', {
-                    templateUrl: 'partials/search.html',
+                    templateUrl: 'src/partials/search.html',
                     controller: 'SearchAppCtrl'
                 }).
         	    when('/target/:id/associations', {
-                    templateUrl: 'partials/target-associations.html',
+                    templateUrl: 'src/partials/target-associations.html',
                     controller: 'targetAssociationsCtrl',
                     reloadOnSearch: false
         	    }).
         	    when('/disease/:id/associations', {
-                    templateUrl: 'partials/disease-associations.html',
+                    templateUrl: 'src/partials/disease-associations.html',
                     controller: 'diseaseAssociationsCtrl',
                     reloadOnSearch: false
         	    }).
         	    when('/evidence/:id/:id', {
-                    templateUrl: 'partials/target-disease.html',
+                    templateUrl: 'src/partials/target-disease.html',
                     controller: 'TargetDiseaseCtrl'
         	    }).
         	    when('/target/:id', {
-            		templateUrl: 'partials/target.html',
+            		templateUrl: 'src/partials/target.html',
             		controller: 'TargetCtrl'
         	    }).
         	    when('/disease/:id', {
-            		templateUrl: 'partials/disease.html',
+            		templateUrl: 'src/partials/disease.html',
             		controller: 'DiseaseCtrl'
         	    }).
                 when('/batch-search', {
-                    templateUrl: 'partials/batch-search.html',
+                    templateUrl: 'src/partials/batch-search.html',
                     controller: 'BatchSearchCtrl'
                 }).
                 when ('/summary', {
-                    templateUrl: 'partials/summary.html',
+                    templateUrl: 'src/partials/summary.html',
                     controller: 'SummaryCtrl'
                 }).
 
                 // Docs
                 when('/faq', {
                     //templateUrl: 'docs/faq.html'
-                    templateUrl: 'partials/faq.html'
+                    templateUrl: 'src/partials/faq.html'
                 }).
                 when('/data_sources', {
                     //templateUrl: 'docs/data_sources.html'
                     controller: 'DataSourcesCtrl',
-                    templateUrl: 'partials/data_sources.html'
+                    templateUrl: 'src/partials/data_sources.html'
                 }).
                 when('/terms_of_use', {
                     //templateUrl: 'docs/terms_of_use.html',
-                    templateUrl: 'partials/terms_of_use.html'
+                    templateUrl: 'src/partials/terms_of_use.html'
                 }).
                 when('/release-notes', {
-                    templateUrl: 'partials/release-notes.html'
+                    templateUrl: 'src/partials/release-notes.html'
                 }).
                 when('/scoring', {
                     //templateUrl: 'docs/scoring.html'
-                    templateUrl: 'partials/scoring.html'
+                    templateUrl: 'src/partials/scoring.html'
                 }).
                 when('/about', {
                     //templateUrl: 'docs/about.html'
-                    templateUrl: 'partials/about.html'
+                    templateUrl: 'src/partials/about.html'
                 }).
                 when('/personal-data-collected-examples', {
                     //templateUrl: 'docs/personal-data-collected-examples.html'
-                    templateUrl: 'partials/personal-data-collected-examples.html'
+                    templateUrl: 'src/partials/personal-data-collected-examples.html'
                 }).
                 when('/variants', {
                     //templateUrl: 'docs/variants.html'
-                    templateUrl: 'partials/variants.html'
+                    templateUrl: 'src/partials/variants.html'
                 }).
                 when('/documentation/components', {
-                    templateUrl: 'partials/docs.html'
+                    templateUrl: 'src/partials/docs.html'
                 }).
                 when('/downloads/data', {
-                    templateUrl: 'partials/dumps.html'
+                    templateUrl: 'src/partials/dumps.html'
                 }).
                 when('/documentation/api', {
-                    templateUrl: 'partials/api-docs.html'
+                    templateUrl: 'src/partials/api-docs.html'
                 }).
                 when('/outreach', {
-                    templateUrl: 'partials/outreach.html',
+                    templateUrl: 'src/partials/outreach.html',
                     controller: 'OutreachCtrl'
                 }).
                 otherwise({

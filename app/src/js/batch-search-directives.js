@@ -9,7 +9,7 @@ angular.module('cttvDirectives')
             scope: {
                 list: '='
             },
-            templateUrl: 'partials/target-list-mapping.html',
+            templateUrl: 'src/partials/target-list-mapping.html',
             link: function (scope, el, attrs) {
 
             // Setting the limit for the list:
@@ -273,7 +273,7 @@ angular.module('cttvDirectives')
             scope: {
                 list: '='
             },
-            templateUrl: 'partials/target-list-upload.html',
+            templateUrl: 'src/partials/target-list-upload.html',
             link: function (scope, elem, attrs) {
 
             // Current limit of targets (just to show the limit in the sub header)

@@ -59,7 +59,7 @@ angular.module('cttvDirectives')
 
         return {
             restrict: 'E',
-            templateUrl: 'partials/multiple-targets-pathways-summary.html',
+            templateUrl: 'src/partials/multiple-targets-pathways-summary.html',
             scope: {
                 target: '='
             },
