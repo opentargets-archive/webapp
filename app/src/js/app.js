@@ -15,7 +15,7 @@ function initApp (deps) {
 
             $routeProvider.
                 when('/', {
-                    templateUrl: 'src/partials/intro.html'
+                    templateUrl: 'src/pages/static/intro.html'
                 }).
                 when('/search', {
                     templateUrl: 'src/pages/search/search.html',
@@ -54,45 +54,38 @@ function initApp (deps) {
 
                 // Docs
                 when('/faq', {
-                    //templateUrl: 'docs/faq.html'
-                    templateUrl: 'src/partials/faq.html'
+                    templateUrl: 'src/pages/static/faq.html'
                 }).
                 when('/data_sources', {
-                    //templateUrl: 'docs/data_sources.html'
                     controller: 'DataSourcesCtrl',
                     templateUrl: 'src/pages/data-sources/data_sources.html'
                 }).
                 when('/terms_of_use', {
-                    //templateUrl: 'docs/terms_of_use.html',
-                    templateUrl: 'src/partials/terms_of_use.html'
+                    templateUrl: 'src/pages/static/terms_of_use.html'
                 }).
                 when('/release-notes', {
-                    templateUrl: 'src/partials/release-notes.html'
+                    templateUrl: 'src/pages/static/release-notes.html'
                 }).
                 when('/scoring', {
-                    //templateUrl: 'docs/scoring.html'
-                    templateUrl: 'src/partials/scoring.html'
+                    templateUrl: 'src/pages/static/scoring.html'
                 }).
                 when('/about', {
-                    //templateUrl: 'docs/about.html'
-                    templateUrl: 'src/partials/about.html'
+                    templateUrl: 'src/pages/static/about.html'
                 }).
                 when('/personal-data-collected-examples', {
-                    //templateUrl: 'docs/personal-data-collected-examples.html'
-                    templateUrl: 'src/partials/personal-data-collected-examples.html'
+                    templateUrl: 'src/pages/static/personal-data-collected-examples.html'
                 }).
                 when('/variants', {
-                    //templateUrl: 'docs/variants.html'
-                    templateUrl: 'src/partials/variants.html'
+                    templateUrl: 'src/pages/static/variants.html'
                 }).
                 when('/documentation/components', {
-                    templateUrl: 'src/partials/docs.html'
+                    templateUrl: 'src/pages/static/docs.html'
                 }).
                 when('/downloads/data', {
-                    templateUrl: 'src/partials/dumps.html'
+                    templateUrl: 'src/pages/static/dumps.html'
                 }).
                 when('/documentation/api', {
-                    templateUrl: 'src/partials/api-docs.html'
+                    templateUrl: 'src/pages/static/api-docs.html'
                 }).
                 when('/outreach', {
                     templateUrl: 'src/pages/outreach/outreach.html',
