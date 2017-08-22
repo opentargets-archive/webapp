@@ -82,14 +82,14 @@ push-release:
   steps:
 
     - script:
-      name: install npm
+      name: install jq
       code: |
-        apk update && apk add nodejs
+        apk update && apk add jq
     
-    - script:
-      name: install gulp
-      code: |
-        npm install -g gulp
+    # - script:
+    #   name: install gulp
+    #   code: |
+    #     npm install -g gulp-cli
 
     - script:
       name: move entrypoint script in container
