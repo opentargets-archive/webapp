@@ -16,6 +16,8 @@ if [ -f /var/www/app/config/custom.json ]; then
     jq -s '.[0] * .[1]' /var/www/app/config/default.json /var/www/app/config/custom.json > /var/www/app/build/config.json  
 else
     echo "No custom.json found"
+    # this actually does not happen because our current gulp mechanism creates a
+    # custom.json if not there. But still here in case that changes.
 fi
 
 echo "======================================="
