@@ -66,7 +66,7 @@ to point to a different API, change the `API_HOST` env var and run `gulp build-c
 
 The app will point to the API specified with `API_HOST` in the `netlify.toml` file.
 
-The `custom.json` cannot be changed without commiting it to the branch code.
+When deploying with netlify, the `custom.json` cannot be changed without commiting it to the branch code.
 
 
 ### Docker container
@@ -88,5 +88,7 @@ REST_API_SERVER="server:port" (eg `rest_api:8080` to point to a container named 
 To mount a `custom.json` on the container at runtime:
 
 ```sh
-docker -v "$PWD/custom.json:/var/www/app/config/custom.json" -p 8443:443 -p 8080:80 run quay.io/opentargets/webapp
+docker run -d -v "$PWD/mycustomtest.json:/var/www/app/config/custom.json" -p 8443:443 -p 8080:80 quay.io/opentargets/webapp
 ```
+
+This can be useful to toggle data sources on/off in private instances and fork of the webapp.
