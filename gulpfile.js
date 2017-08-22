@@ -243,7 +243,7 @@ gulp.task('init-config', function(){
 
     fs.stat(webappConfigSources[1], function(err, stat){
         if(!stat){
-            var content = "}";
+            var content = "{}";
             fs.writeFileSync(webappConfigSources[1], content);
         }
     })
