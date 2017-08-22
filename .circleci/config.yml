@@ -1,0 +1,59 @@
+version: 2
+jobs:
+   build:
+     docker:
+      # use a long-term-support (LTS) version of node. Latest is currently Boron
+       - image: circleci/node:boron
+     steps:
+       - checkout
+       - run:
+          name: update npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install npm
+          command: npm install --quiet
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: run bower, gulp and jspm for good measure
+          command: npm run setup
+
+      # - run:
+      #     name: code-coverage
+      #     command: './node_modules/.bin/nyc report --reporter=text-lcov'
+      # - store_artifacts:
+      #     path: test-results.xml
+      #     prefix: tests
+      # - store_artifacts:
+      #     path: coverage
+      #     prefix: coverage
+      # - store_test_results:
+      #     path: test-results.xml
+
+      - setup_remote_docker
+      - run:
+          name: Build container
+          command: |
+            docker build -t circle-${CIRCLE_SHA1} .
+      - run:
+          name: Push container to quay.io
+          command: |
+            docker login -u="opentargets+quaybot" -p="${QUAYBOT_PASSWORD}" quay.io
+            ## branch tag and push
+            docker tag circle-${CIRCLE_SHA1} ${QUAY_REPO}:${CIRCLE_BRANCH}
+            docker push ${QUAY_REPO}:${CIRCLE_BRANCH}
+            ## sha commit push
+            docker tag ${QUAY_REPO}:${CIRCLE_BRANCH} ${QUAY_REPO}:circle-${CIRCLE_SHA1}
+            docker push ${QUAY_REPO}:circle-${CIRCLE_SHA1}
+            ## push latest tag only if master
+            if [ "$CIRCLE_BRANCH" = "master" ] 
+              then
+                docker tag ${QUAY_REPO}:${CIRCLE_BRANCH} ${QUAY_REPO}:latest
+                docker push ${QUAY_REPO}:latest
+            fi
+ 
+
