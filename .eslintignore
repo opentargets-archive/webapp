@@ -1,0 +1,5 @@
+# Ignore the following files/directories
+# (node_modules and bower_components ignored by default)
+app/build/*
+app/jspm_packages/*
+app/vendor/*
