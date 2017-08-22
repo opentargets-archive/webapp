@@ -243,14 +243,7 @@ gulp.task('init-config', function(){
 
     fs.stat(webappConfigSources[1], function(err, stat){
         if(!stat){
-            var content = "/*\n"
-                        + "Custom config options\n"
-                        + "*/\n"
-                        + "{\n"
-                        + "    /*\n"
-                        + "    Insert here options to override those defined in default.json\n"
-                        + "    */\n"
-                        + "}";
+            var content = "}";
             fs.writeFileSync(webappConfigSources[1], content);
         }
     })
