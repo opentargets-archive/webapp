@@ -18,7 +18,7 @@ function initApp (deps) {
                     templateUrl: 'src/partials/intro.html'
                 }).
                 when('/search', {
-                    templateUrl: 'src/partials/search.html',
+                    templateUrl: 'src/pages/search/search.html',
                     controller: 'SearchAppCtrl'
                 }).
         	    when('/target/:id/associations', {
@@ -95,7 +95,7 @@ function initApp (deps) {
                     templateUrl: 'src/partials/api-docs.html'
                 }).
                 when('/outreach', {
-                    templateUrl: 'src/partials/outreach.html',
+                    templateUrl: 'src/pages/outreach/outreach.html',
                     controller: 'OutreachCtrl'
                 }).
                 otherwise({

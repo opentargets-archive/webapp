@@ -53,6 +53,8 @@ var webappFiles = {
             'app/src/pages/evidence/target-disease-controller.js',
             'app/src/pages/target-profile/target-controller.js',
             'app/src/pages/disease-profile/disease-controller.js',
+            'app/src/pages/search/search-controller.js',
+            'app/src/pages/outreach/outreach-controller.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
@@ -68,9 +70,7 @@ var webappFiles = {
             'app/src/js/filters-service.js',
             'app/src/js/loaded-lists-service.js',
             'app/src/js/filters.js',
-            'app/src/js/search-controller.js',
             'app/src/js/search-box-controller.js',
-            'app/src/js/outreach-controller.js',
             'app/src/js/directives.js',
             'app/src/js/filter-by-file-targets-directive.js',
             'app/src/js/disease-associations-table-directive.js',
