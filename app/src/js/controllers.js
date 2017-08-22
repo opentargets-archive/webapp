@@ -1,6 +1,6 @@
 /* Controllers */
 
-angular.module('cttvControllers', [])
+angular.module('cttvControllers')
     .run (['$rootScope', '$window', '$uibModalStack', '$log', function ($rootScope, $window, $uibModalStack, $log) {
         'use strict';
 

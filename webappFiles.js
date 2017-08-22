@@ -45,6 +45,10 @@ var webappFiles = {
 
     cttv: {
         'js': [
+            // Load modules first
+            'app/src/js/modules.js',
+            // Processed (pages)
+            'app/src/pages/disease-associations/disease-associations-controller.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
@@ -64,7 +68,6 @@ var webappFiles = {
             'app/src/js/search-box-controller.js',
             'app/src/js/outreach-controller.js',
             'app/src/js/target-associations-controller.js',
-            'app/src/js/disease-associations-controller.js',
             'app/src/js/target-disease-controller.js',
             'app/src/js/target-controller.js',
             'app/src/js/disease-controller.js',

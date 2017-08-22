@@ -27,7 +27,7 @@ function initApp (deps) {
                     reloadOnSearch: false
         	    }).
         	    when('/disease/:id/associations', {
-                    templateUrl: 'src/partials/disease-associations.html',
+                    templateUrl: 'src/pages/disease-associations/disease-associations.html',
                     controller: 'diseaseAssociationsCtrl',
                     reloadOnSearch: false
         	    }).
