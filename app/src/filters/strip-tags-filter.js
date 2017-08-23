@@ -1,5 +1,5 @@
 angular.module('cttvFilters')
-    .filter('stripTags', function() {
+    .filter('otStripTags', function() {
         'use strict';
 
         return function(text) {
