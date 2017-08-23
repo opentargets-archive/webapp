@@ -6,9 +6,9 @@
             ng-disabled="!bucket.enabled"
             ng-click="bucket.toggle()" >
 <span>{{bucket.label | upperCaseFirst | clearUnderscores}}</span>
-<span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}">({{bucket.count | metricPrefix:0}})</span>
+<span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | otMetricPrefix:0}}">({{bucket.count | otMetricPrefix:0}})</span>
 </label>
-<span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}">({{bucket.count | metricPrefix:0}})</span>
+<span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | otMetricPrefix:0}}">({{bucket.count | otMetricPrefix:0}})</span>
 </div>
 
 
@@ -21,8 +21,8 @@
                 <span class="fa fa-check-square" ng-if="bucket.selected"></span>
             </span>
             <span title="{{bucket.label | upperCaseFirst | clearUnderscores}}">{{bucket.label | upperCaseFirst | clearUnderscores}}</span>
-            <span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}">({{bucket.count | metricPrefix:0}})</span>
+            <span ng-if="multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | otMetricPrefix:0}}">({{bucket.count | otMetricPrefix:0}})</span>
         </span>
-        <span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | metricPrefix:0}}">({{bucket.count | metricPrefix:0}})</span>
+        <span ng-if="!multiline" class="text-lowlight cttv-facet-count" title="{{bucket.count | otMetricPrefix:0}}">({{bucket.count | otMetricPrefix:0}})</span>
     </span>
 </div>-->

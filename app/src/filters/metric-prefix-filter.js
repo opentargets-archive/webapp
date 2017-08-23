@@ -27,7 +27,7 @@ angular.module('cttvFilters')
  * // returns 0.12345
  * shortenLargeNumber(0.12345)
  */
-    .filter('metricPrefix', function () {
+    .filter('otMetricPrefix', function () {
         'use strict';
 
         return function (num, digits) {
