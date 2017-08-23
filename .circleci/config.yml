@@ -47,6 +47,9 @@ jobs:
       - store_artifacts:
           path: eslint.html
           prefix: eslint
+          destination: eslint
+
+      #TODO: splitting test (above) when they get added :) and container push
 
       - setup_remote_docker
       - run:
