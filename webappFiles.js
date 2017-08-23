@@ -88,12 +88,12 @@ var webappFiles = {
             'app/src/components/known-drug-table/known-drug-table-directive.js',
             'app/src/components/batch-search/target-list-mapping-directive.js',
             'app/src/components/batch-search/target-list-upload-directive.js',
+            'app/src/components/text-mining-table/text-mining-table-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
             'app/src/js/search-box-controller.js',
             'app/src/js/directives.js',
-            'app/src/js/text-mining-table-directive.js',
             'app/src/js/calendar-directive.js',
             'app/src/js/multiple-targets-associations-summary-directives.js',
             'app/src/js/multiple-targets-pathways-summary-directive.js',
