@@ -98,6 +98,7 @@ var webappFiles = {
             'app/src/components/facets/facets.js',
             'app/src/components/search-suggestions/search-suggestions-directive.js',
             'app/src/components/popover/popover-directive.js',
+            'app/src/components/footer/footer-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
