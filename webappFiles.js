@@ -78,6 +78,9 @@ var webappFiles = {
             // Processed (directives)
             'app/src/components/plugin-loader/plugin-loader-directive.js',
             'app/src/components/pathway-summary/pathway-summary-directive.js',
+            'app/src/components/target-associations/target-associations-table-directive.js',
+            'app/src/components/target-associations/target-associations-tree-directive.js',
+            'app/src/components/target-associations/target-associations-bubbles-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
@@ -85,9 +88,6 @@ var webappFiles = {
             'app/src/js/directives.js',
             'app/src/js/filter-by-file-targets-directive.js',
             'app/src/js/disease-associations-table-directive.js',
-            'app/src/js/target-associations-table-directive.js',
-            'app/src/js/target-associations-tree-directive.js',
-            'app/src/js/target-associations-bubbles-directive.js',
             'app/src/js/evidence-tables-directives.js',
             'app/src/js/text-mining-table-directive.js',
             'app/src/js/calendar-directive.js',
