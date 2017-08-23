@@ -19,14 +19,26 @@ jobs:
           name: install npm
           command: npm install --quiet
 
+
+      - restore_cache:
+          keys:
+            - v1-bower-deps-{{ checksum "bower.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-bower-deps-
+
+      - run:
+          name: run bower, gulp and jspm for good measure
+          command: npm run setup
+
       - save_cache:
           key: v1-npm-deps-{{ checksum "package.json" }}
           paths:
             - node_modules
 
-      - run:
-          name: run bower, gulp and jspm for good measure
-          command: npm run setup
+      - save_cache:
+          key: v1-bower-deps-{{ checksum "bower.json" }}
+          paths:
+            - bower_components
 
       - run:
           name: running es lint
