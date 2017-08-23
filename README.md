@@ -69,9 +69,17 @@ The app will point to the API specified with `API_HOST` in the `netlify.toml` fi
 When deploying with netlify, the `custom.json` cannot be changed without commiting it to the branch code.
 
 
-### Docker container
+### Deploy in a docker container
 
-A docker container with a compiled version of the webapp from a NGINX web server is available.
+A docker container with a compiled version of the webapp from a NGINX web server is available on quay.io [![Docker Repository on Quay](https://quay.io/repository/opentargets/webapp/status "Docker Repository on Quay")](https://quay.io/repository/opentargets/webapp)
+
+However, if you wanted to build your own container you could simply:
+```sh
+git clone https://github.com/opentargets/webapp.git
+cd webapp
+docker build -t mywebapp .
+```
+
 To run the app locally using the container:
 ```sh
 docker run -d -p 8443:443 -p 8080:80 quay.io/opentargets/webapp
@@ -90,5 +98,9 @@ To mount a `custom.json` on the container at runtime:
 ```sh
 docker run -d -v "$PWD/mycustomtest.json:/var/www/app/config/custom.json" -p 8443:443 -p 8080:80 quay.io/opentargets/webapp
 ```
+*NOTE* It's possible to override the `"api"` variable by adding: 
+`"api": "https://myown.api/api/"` in your `custom.json`. However, that would stop the
+REST_API_SCHEME and REST_API_SERVER environment variables from working. 
+Both approaches work, **just don't use them at the same time**.
 
 This can be useful to toggle data sources on/off in private instances and fork of the webapp.
