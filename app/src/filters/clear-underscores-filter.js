@@ -1,5 +1,5 @@
 angular.module('cttvFilters')
-    .filter('clearUnderscores', function () {
+    .filter('otClearUnderscores', function () {
         'use strict';
 
         return function (input) {

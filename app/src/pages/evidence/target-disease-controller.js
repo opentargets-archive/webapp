@@ -8,7 +8,7 @@ angular.module('cttvControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', '$analytics', 'cttvLocationState', '$anchorScroll', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscoresFilter, $analytics, cttvLocationState, $anchorScroll) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'otClearUnderscoresFilter', '$analytics', 'cttvLocationState', '$anchorScroll', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, otClearUnderscoresFilter, $analytics, cttvLocationState, $anchorScroll) {
 
         'use strict';
 
@@ -344,23 +344,23 @@ angular.module('cttvControllers')
                     row.push(mut);
 
                     // variant type
-                    var t = clearUnderscoresFilter( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) );
+                    var t = otClearUnderscoresFilter( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) );
                     row.push(t);
 
                     // evidence source
                     if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
                         row.push('<a class=\'cttv-external-link\' href=\'https://test-rvizapps.biogen.com/23andmeDev/\' target=\'_blank\'>'
-                            + clearUnderscoresFilter(item.sourceID)
+                            + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
                     }
                     else if (item.sourceID === cttvConsts.dbs.PHEWAS) {
                         row.push('<a class=\'cttv-external-link\' href=\'https://phewascatalog.org/phewas\' target=\'_blank\'>'
-                            + clearUnderscoresFilter(item.sourceID)
+                            + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
                     }
                     else {
                         row.push('<a class=\'cttv-external-link\' href=\'https://www.ebi.ac.uk/gwas/search?query=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>'
-                            + clearUnderscoresFilter(item.sourceID)
+                            + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
                     }
 
@@ -532,9 +532,9 @@ angular.module('cttvControllers')
                     // mutation consequence
                     var cons = '';
                     if( item.type === 'genetic_association' && checkPath(item, 'evidence.gene2variant') ){
-                        cons = clearUnderscoresFilter( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) );
+                        cons = otClearUnderscoresFilter( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) );
                     } else if( item.type === 'somatic_mutation' ){
-                        cons = clearUnderscoresFilter(item.type);
+                        cons = otClearUnderscoresFilter(item.type);
                     } else {
                         cons = 'Curated evidence';
                     }
@@ -727,7 +727,7 @@ angular.module('cttvControllers')
                     row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.urls[0].url+'\' target=\'_blank\'>' + item.evidence.urls[0].nice_name + '</a>');
 
                     // activity
-                    row.push( cttvDictionary[item.target.activity.toUpperCase()] || clearUnderscoresFilter(item.target.activity) ); // "up_or_down"->"unclassified" via dictionary
+                    row.push( cttvDictionary[item.target.activity.toUpperCase()] || otClearUnderscoresFilter(item.target.activity) ); // "up_or_down"->"unclassified" via dictionary
 
                     // mutations
                     var mut = cttvDictionary.NA;
@@ -1033,9 +1033,9 @@ angular.module('cttvControllers')
                         for (var i = 0; i < item.evidence.known_mutations.length; i++) {
                             var m = item.evidence.known_mutations[i];
                             if (item.sourceID == cttvConsts.dbs.INTOGEN) {
-                                mutation_types += '<div>' + clearUnderscoresFilter(item.target.activity || mut);
+                                mutation_types += '<div>' + otClearUnderscoresFilter(item.target.activity || mut);
                             } else {
-                                mutation_types += '<div>' + clearUnderscoresFilter(m.preferred_name || mut) + '</div>';
+                                mutation_types += '<div>' + otClearUnderscoresFilter(m.preferred_name || mut) + '</div>';
                             }
                             if (m.number_samples_with_mutation_type) {
                                 samples += '<div>' + m.number_samples_with_mutation_type+'/'+m.number_mutated_samples || samp + '</div>';

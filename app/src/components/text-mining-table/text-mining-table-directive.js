@@ -7,7 +7,7 @@ angular.module('cttvDirectives')
         'cttvConsts',
         'cttvDictionary',
         'upperCaseFirstFilter',
-        'clearUnderscoresFilter',
+        'otClearUnderscoresFilter',
         '$q',
         function ($log,
             cttvAPIservice,
@@ -17,7 +17,7 @@ angular.module('cttvDirectives')
             cttvConsts,
             cttvDictionary,
             upperCaseFirst,
-            clearUnderscores,
+            otClearUnderscores,
             $q) {
             'use strict';
 
@@ -289,7 +289,7 @@ angular.module('cttvDirectives')
 
                         var matchedSentences = d.evidence.literature_ref.mined_sentences.map(function (sent) {
 
-                            var section = upperCaseFirst(clearUnderscores(sent.section));
+                            var section = upperCaseFirst(otClearUnderscores(sent.section));
                             var sentenceString = '';
                             if (section != 'Title' && section != 'Abstract') {
 
