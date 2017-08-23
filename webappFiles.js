@@ -117,6 +117,8 @@ var webappFiles = {
             'app/src/components/matrix/matrix-legend-directive.js',
             'app/src/components/md-parser/md-parser-directive.js',
             'app/src/components/more-less-text/more-less-text-directive.js',
+            'app/src/components/help-icon/help-icon-directive.js',
+            'app/src/components/beta-ribbon/beta-ribbon-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',

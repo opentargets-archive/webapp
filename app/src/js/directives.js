@@ -328,35 +328,3 @@ angular.module('cttvDirectives')
 
 
 
-    .directive('cttvHelpIcon', [function () {
-        'use strict';
-
-        return {
-            restrict: 'EA',
-            scope: {
-                href: '@'
-            },
-            template : '<a href="{{href}}"><span class="fa fa-question-circle"></span></a>',
-            link: function(scope, element, attrs) {}
-        };
-    }])
-
-
-    .directive ('cttvBetaRibbon', ['$log', '$location', function ($log, $location) {
-        'use strict';
-        return {
-            restrict: 'E',
-            scope: {},
-            template: '<div ng-show="display" id="cttv-beta-ribbon" class="cttv-beta-ribbon">{{host}}</div>',
-            link: function (scope, el, attrs) {
-                var host = $location.host();
-                scope.host = host.split('.')[0];
-                if (host === 'www.targetvalidation.org' || host === 'targetvalidation.org') {
-                    scope.display = false;
-                } else {
-                    scope.display = true;
-                }
-            }
-        };
-    }])
-
