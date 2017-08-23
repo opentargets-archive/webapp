@@ -12,7 +12,7 @@ angular.module('cttvDirectives')
 
         return {
             restrict: 'EA',
-            templateUrl: 'src/partials/known-drug-table.html',
+            templateUrl: 'src/components/known-drug-table/known-drug-table.html',
             scope: {
                 loadFlag : '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
                 data : '=?',        // optional data link to pass the data out of the directive
