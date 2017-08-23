@@ -1,4 +1,4 @@
-FROM: nginx-alpine
+FROM nginx:alpine
 
 # use jq to update custom.json at runtime
 RUN apk update && apk add jq
