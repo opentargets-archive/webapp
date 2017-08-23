@@ -16,59 +16,6 @@ angular.module('cttvDirectives')
 
 
 
-
-
-    /*
-    * A simple progress spinner using a fontawesome icon
-    * Options:
-    * size: size of the spinner icon; 18 is default
-    * stroke: thickness of the "ring" default is 2
-    */
-    .directive('cttvProgressSpinner', [function(){
-        'use strict';
-
-        return {
-            restrict: 'EA',
-            template: '<span></span>',
-            link: function(scope, elem, attrs){
-                var size = attrs.size || 18;
-                var stroke = attrs.stroke || 2;
-                var sp = spinner()
-                    .size(size)
-                    .stroke(stroke);
-                sp(elem[0]);
-            }
-        };
-    }])
-
-
-
-    /*
-    * This creates a light-box style div with a spinner.
-    * The spinner is automatically visible when there are *any* pending requests
-    * Options:
-    * size: as per cttvProgressSpinner; Default is 3.
-    */
-    .directive('cttvPageProgressSpinner', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
-        'use strict';
-
-        return {
-            restrict: 'EA',
-            //template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner class="text-lowlight fa-{{size}}x"></span></div>',
-            template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner size="50" stroke="3" class="text-lowlight"></span></div>',
-            scope: {
-                size: '@'
-            },
-            link: function(scope, elem, attrs){
-                scope.$watch(function(){return cttvAPIservice.activeRequests;}, function(newValue,oldValue){
-                    scope.isloading = newValue>0;
-                });
-            }
-        };
-    }])
-
-
-
     /*
     *  Esssentially just a wrapper for the table tag, defined in hte template
     */
