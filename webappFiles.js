@@ -99,10 +99,11 @@ var webappFiles = {
             'app/src/components/search-suggestions/search-suggestions-directive.js',
             'app/src/components/popover/popover-directive.js',
             'app/src/components/footer/footer-directive.js',
+            'app/src/components/search-box/search-box-directive.js',
+            'app/src/components/search-box/search-box-controller.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
-            'app/src/js/search-box-controller.js',
             'app/src/js/directives.js',
             'app/src/js/calendar-directive.js',
             // Plugins -- should go in another config file

@@ -1192,23 +1192,6 @@ angular.module('cttvDirectives')
 
 
 
-    /**
-     * The searchbox with search suggestions
-     */
-    .directive('otSearchBox', [function () {
-        'use strict';
-
-        return {
-            restrict: 'EA',
-            scope: {},
-            templateUrl : 'src/partials/search-box.html',
-            link: function(scope, element, attrs) {
-
-            }
-        };
-    }])
-
-
 
 
     /**
