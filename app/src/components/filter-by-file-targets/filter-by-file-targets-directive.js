@@ -19,7 +19,7 @@ angular.module('cttvDirectives')
                 search: '='
             },
 
-            templateUrl: 'src/partials/filter-by-file-targets.html',
+            templateUrl: 'src/components/filter-by-file-targets/filter-by-file-targets.html',
             link: function(scope, elem, attrs){
                 //$log.log("cttvFilterByFileTargets:linkFunction: scope", scope);
                 //$log.log("cttvFilterByFileTargets:linkFunction: elem", elem);

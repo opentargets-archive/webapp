@@ -82,12 +82,12 @@ var webappFiles = {
             'app/src/components/target-associations/target-associations-tree-directive.js',
             'app/src/components/target-associations/target-associations-bubbles-directive.js',
             'app/src/components/disease-associations/disease-associations-table-directive.js',
+            'app/src/components/filter-by-file-targets/filter-by-file-targets-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
             'app/src/js/search-box-controller.js',
             'app/src/js/directives.js',
-            'app/src/js/filter-by-file-targets-directive.js',
             'app/src/js/evidence-tables-directives.js',
             'app/src/js/text-mining-table-directive.js',
             'app/src/js/calendar-directive.js',
