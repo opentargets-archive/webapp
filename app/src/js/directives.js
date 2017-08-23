@@ -51,22 +51,6 @@ angular.module('cttvDirectives')
         };
     }])
 
-    /*
-    *
-    */
-    .directive('cttvSearchSuggestions', [function(){
-        'use strict';
-
-        return {
-            restrict:'EA',
-            templateUrl: 'src/partials/search-suggestions.html',
-            replace: true,
-            link: function(scope, elem, attrs){
-
-            }
-        };
-    }])
-
 
 
     /**
