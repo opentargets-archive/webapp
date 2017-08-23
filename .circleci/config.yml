@@ -15,16 +15,21 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run:
-          name: install npm
-          command: npm install --quiet
+      # - run:
+      #     name: install npm
+      #     command: npm install --quiet
+
+      - run: yarn install
+
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
+
       - run:
           name: run bower, gulp and jspm for good measure
           command: npm run setup
+      
       - run:
           name: run es lint
           command: npm run eslint
