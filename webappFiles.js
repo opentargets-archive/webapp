@@ -119,6 +119,9 @@ var webappFiles = {
             'app/src/components/more-less-text/more-less-text-directive.js',
             'app/src/components/help-icon/help-icon-directive.js',
             'app/src/components/beta-ribbon/beta-ribbon-directive.js',
+            'app/src/components/size-listener/size-listener-directive.js',
+            'app/src/components/resize/resize-directive.js',
+            'app/src/components/png/png-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
