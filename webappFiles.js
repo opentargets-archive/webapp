@@ -72,10 +72,11 @@ var webappFiles = {
             'app/src/services/location-state-service.js',
             'app/src/services/filters-service.js',
             'app/src/services/loaded-lists-service.js',
+            // Processed (filters)
+            'app/src/filters/filters.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
-            'app/src/js/filters.js',
             'app/src/js/search-box-controller.js',
             'app/src/js/directives.js',
             'app/src/js/filter-by-file-targets-directive.js',
