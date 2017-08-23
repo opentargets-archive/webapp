@@ -21,7 +21,7 @@ angular.module('cttvDirectives')
 
         return {
             restrict: 'E',
-            templateUrl: 'src/partials/drug-summary.html',
+            templateUrl: 'src/components/drug-summary/drug-summary.html',
             scope: {
                 drug: '='
             },

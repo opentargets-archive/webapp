@@ -84,6 +84,7 @@ var webappFiles = {
             'app/src/components/disease-associations/disease-associations-table-directive.js',
             'app/src/components/filter-by-file-targets/filter-by-file-targets-directive.js',
             'app/src/components/disease-efo-graph/disease-efo-graph-directive.js',
+            'app/src/components/drug-summary/drug-summary-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
@@ -98,7 +99,6 @@ var webappFiles = {
             'app/src/js/multiple-targets-drugs-summary-directives.js',
             'app/src/js/multiple-targets-tissues-summary-directive.js',
             'app/src/js/multiple-targets-interactions-summary-directive.js',
-            'app/src/js/drug-summary-directive.js',
             'app/src/js/interactions-viewer-directive.js',
             
             'app/src/js/facets.js',
