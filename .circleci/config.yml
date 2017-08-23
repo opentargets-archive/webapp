@@ -21,6 +21,9 @@ jobs:
       - run:
           name: run bower, gulp and jspm for good measure
           command: npm run setup
+      - run:
+          name: run es lint
+          command: npm run eslint
 
       # - run:
       #     name: code-coverage
