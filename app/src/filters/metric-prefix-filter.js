@@ -27,21 +27,21 @@ angular.module('cttvFilters')
  * // returns 0.12345
  * shortenLargeNumber(0.12345)
  */
-.filter('metricPrefix', function () {
-    'use strict';
+    .filter('metricPrefix', function () {
+        'use strict';
 
-    return function (num, digits) {
-        var units = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'],
-            decimal;
+        return function (num, digits) {
+            var units = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'],
+                decimal;
 
-        for(var i=units.length-1; i>=0; i--) {
-            decimal = Math.pow(1000, i+1);
+            for(var i=units.length-1; i>=0; i--) {
+                decimal = Math.pow(1000, i+1);
 
-            if(num <= -decimal || num >= decimal) {
-                return +(num / decimal).toFixed(digits) + units[i];
+                if(num <= -decimal || num >= decimal) {
+                    return +(num / decimal).toFixed(digits) + units[i];
+                }
             }
-        }
 
-        return num;
-    };
-});
+            return num;
+        };
+    });
