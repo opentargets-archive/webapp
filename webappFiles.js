@@ -94,13 +94,13 @@ var webappFiles = {
             'app/src/components/multiple-targets/multiple-targets-drugs-summary-directives.js',
             'app/src/components/multiple-targets/multiple-targets-tissues-summary-directive.js',
             'app/src/components/multiple-targets/multiple-targets-interactions-summary-directive.js',
+            'app/src/components/multiple-targets/interactions-viewer-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
             'app/src/js/search-box-controller.js',
             'app/src/js/directives.js',
             'app/src/js/calendar-directive.js',
-            'app/src/js/interactions-viewer-directive.js',
             'app/src/js/facets.js',
             // Plugins -- should go in another config file
             // 'app/plugins/pdb-directive.js',
