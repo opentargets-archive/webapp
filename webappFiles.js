@@ -105,6 +105,11 @@ var webappFiles = {
             'app/src/components/gene-disease-association/gene-disease-association-directive.js',
             'app/src/components/spinners/progress-spinner-directive.js',
             'app/src/components/spinners/page-progress-spinner-directive.js',
+            'app/src/components/feeds/blog-feed-directive.js',
+            'app/src/components/feeds/facebook-feed-directive.js',
+            'app/src/components/feeds/twitter-feed-directive.js',
+            'app/src/components/masthead/masthead-navigation-menu-directive.js',
+            'app/src/components/masthead/masthead-notifications-menu-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
