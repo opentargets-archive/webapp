@@ -54,7 +54,7 @@ angular.module('facets', [])
 
             scope: {},
 
-            templateUrl: 'src/partials/facets.html',
+            templateUrl: 'src/components/facets/facets.html',
 
             link: function (scope, elem, attrs) {
                 //scope.dataDistribution =
