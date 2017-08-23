@@ -101,6 +101,7 @@ var webappFiles = {
             'app/src/components/footer/footer-directive.js',
             'app/src/components/search-box/search-box-directive.js',
             'app/src/components/search-box/search-box-controller.js',
+            'app/src/components/target-genome-browser/target-genome-browser-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
