@@ -22,7 +22,7 @@ angular.module('cttvDirectives')
                         +'        </a></h5>'
                         +'        <div class="clearfix text-lowlight">'
                         +'            <p class="pull-left">By {{post.author.name}}</p>' // author
-                        +'            <p class="pull-right">{{post.pubDate.getDate()}} {{post.pubDate.getMonth() | monthToString}} {{post.pubDate.getFullYear()}}</p>' // date
+                        +'            <p class="pull-right">{{post.pubDate.getDate()}} {{post.pubDate.getMonth() | otMonthToString}} {{post.pubDate.getFullYear()}}</p>' // date
                         +'        </div>'
                         +'        <div ng-bind-html="post.desc | stripTags | otEllipseText:130"></div>' // long description
                         +'        <div class="text-lowlight text-small" ng-if="post.tags.length>0">'
@@ -78,7 +78,7 @@ angular.module('cttvDirectives')
 //                     +'        <div class="clearfix text-lowlight">'
 //                     +'            <p class="pull-left">By {{post.creator.toString()}}</p>'           // author
 //                     //+'            <p class="pull-right">{{post.pubDate.toLocaleDateString("en-GB")}}</p>' // date
-//                     +'            <p class="pull-right">{{post.pubDate.getDate()}} {{post.pubDate.getMonth() | monthToString}} {{post.pubDate.getFullYear()}}</p>' // date
+//                     +'            <p class="pull-right">{{post.pubDate.getDate()}} {{post.pubDate.getMonth() | otMonthToString}} {{post.pubDate.getFullYear()}}</p>' // date
 //                     +'        </div>'
 //                     +'        <div ng-bind-html="post.description | stripTags | otEllipseText:130"></div>'                            // long description
 //                     +'        <div class="text-lowlight text-small" ng-if="post.category"><span class="fa fa-tags"></span> {{post.category.join(", ")}}</div>'   // tags

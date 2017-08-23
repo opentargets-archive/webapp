@@ -1,5 +1,5 @@
 angular.module('cttvFilters')
-    .filter('monthToString', function() {
+    .filter('otMonthToString', function() {
         'use strict';
 
         return function(mi) {
