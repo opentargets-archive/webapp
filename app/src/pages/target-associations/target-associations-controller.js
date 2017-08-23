@@ -2,16 +2,12 @@
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
 
-/**
- * AssociationsCtrl
- * Controller for the target associations page
- */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', '$log', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvConsts', 'cttvDictionary', '$timeout', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $log, cttvUtils, cttvAPIservice, cttvFiltersService, cttvConsts, cttvDictionary, $timeout, cttvLocationState, cttvConfig) {
+    /**
+     * AssociationsCtrl
+     * Controller for the target associations page
+     */
+    .controller('targetAssociationsCtrl', ['$scope', '$location', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvLocationState', 'cttvConfig', function ($scope, $location, cttvUtils, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvLocationState, cttvConfig) {
         'use strict';
-
-        // $log.log('targetAssociationsCtrl()');
-
-
 
         cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
 
@@ -22,7 +18,7 @@ angular.module('cttvControllers')
 
         // scope vars
         $scope.search = {
-	    query : ''
+            query : ''
         };
 
         $scope.labels = {
@@ -35,8 +31,7 @@ angular.module('cttvControllers')
 
         // the scope view is essentially the state
         $scope.view = {
-            t : ['bubbles'],    // t = the selected tab
-        //tp: [1]
+            t : ['bubbles']    // t = the selected tab
         };
 
         $scope.loading = false;
@@ -60,9 +55,9 @@ angular.module('cttvControllers')
 
 
         /*
-     * The view is essentially the state for the page;
-     * filters are autonomous and do their own business
-     */
+         * The view is essentially the state for the page;
+         * filters are autonomous and do their own business
+         */
         var setView = function(obj){
 
         // should work also for obj==undefined at page load
@@ -87,8 +82,8 @@ angular.module('cttvControllers')
 
 
         /*
-     * Takes object from locationStateService, initialize the page/component state and fire a query which then updates the screen
-     */
+         * Takes object from locationStateService, initialize the page/component state and fire a query which then updates the screen
+         */
         var render = function(new_state, old_state){
 
         // here we want to update facets, tabs, etc:
@@ -148,9 +143,8 @@ angular.module('cttvControllers')
 
                         // Update the facets
                         cttvFiltersService.updateFacets(resp.body.facets, cttvConfig.targetAssociationsFacets.count );
-                    //$scope.updateFacets(resp.body.facets);
                     } else {
-                    // Check if there is a profile page
+                        // Check if there is a profile page
                         var profileOpts = {
                             method: 'GET',
                             params: {
@@ -169,9 +163,9 @@ angular.module('cttvControllers')
 
 
         /*
-     * Update function passes the current view (state) to the URL
-     * Also the current status for excluding cancers is updated
-     */
+         * Update function passes the current view (state) to the URL
+         * Also the current status for excluding cancers is updated
+         */
         function update(){
             cttvLocationState.setStateFor(stateId, $scope.view);
             cttvLocationState.setStateFor(cancersExcId, $scope.cancers);
@@ -179,10 +173,10 @@ angular.module('cttvControllers')
 
 
 
-        /**
-     * Called from the tables in the HTML, this sets the active tab id.
-     * Valid tabs are: "bubbles", "table", "tree"
-     */
+        /*
+         * Called from the tables in the HTML, this sets the active tab id.
+         * Valid tabs are: "bubbles", "table", "tree".
+         */
         $scope.setActiveTab = function (tab) {
             $scope.view.t[0] = tab;
             update();
@@ -210,19 +204,19 @@ angular.module('cttvControllers')
             };
             update();
 
-        // Update facets
-        // TODO: We are passing the "exclude cancers" option as a new option. Another option could be joining this with the passed filters
-        // if ($scope.cancersExcluded) {
-        //     if (!$scope.filters) {
-        //         $scope.filters = {};
-        //     }
-        //     $scope.filters["cancersExcluded"] = true;
-        // } else {
-        //     // TODO: Not sure this is needed
-        //     if (!Object.keys($scope.filters).length) {
-        //         delete $scope.filters;
-        //     }
-        // }
+            // Update facets
+            // TODO: We are passing the "exclude cancers" option as a new option. Another option could be joining this with the passed filters
+            // if ($scope.cancersExcluded) {
+            //     if (!$scope.filters) {
+            //         $scope.filters = {};
+            //     }
+            //     $scope.filters["cancersExcluded"] = true;
+            // } else {
+            //     // TODO: Not sure this is needed
+            //     if (!Object.keys($scope.filters).length) {
+            //         delete $scope.filters;
+            //     }
+            // }
         };
 
         //

@@ -8,9 +8,9 @@ angular.module('cttvControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', '$analytics', 'cttvLocationState', '$anchorScroll', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscoresFilter, $analytics, cttvLocationState, $anchorScroll) {
+
         'use strict';
-        // $log.log('TargetDiseaseCtrl()');
 
 
         cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
@@ -153,12 +153,9 @@ angular.module('cttvControllers')
                     $scope.search.info.gene = resp.body;
                     return resp;
                 },cttvAPIservice.defaultErrorHandler);
-            // .then (function (target) {
-            //     return $http.get("/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/" + target.body.uniprot_id);
-            // });
 
             // get disease specific info with the efo() method
-            var queryObject = {
+            queryObject = {
                 method: 'GET',
                 params: {
                     code: $scope.search.disease
@@ -170,7 +167,6 @@ angular.module('cttvControllers')
                         $scope.search.info.efo = resp.body;
                         // TODO: This is not returned by the api yet. Maybe we need to remove it later
                         $scope.search.info.efo.efo_code = $scope.search.disease;
-                        // updateTitle();
                     },
                     cttvAPIservice.defaultErrorHandler
                 );
@@ -275,75 +271,6 @@ angular.module('cttvControllers')
             return label;
         };
 
-        // var getSoLabel = function(arr_info, arr_code){
-        //     var label = "nearest_gene_five_prime_end";
-        //     // first look for the SO id in the array
-        //     for(var i=0; i<arr_code.length; i++){
-        //         if(arr_code[i].substr(0,2).toUpperCase() === "SO"){
-        //             label = getEcoLabel( arr_info, arr_code[i]);
-        //             break;
-        //         }
-        //     }
-        //     return label;
-        // }
-
-        var parseBestStructure = function (structures) {
-            var best = {
-                pdb_id : structures[0].pdb_id,
-                mappings: [structures[0]]
-            };
-            // Look for the other structures with the same id:
-            for (var i=1; i<structures.length; i++) {
-                var struct = structures[i];
-                if (struct.pdb_id === best.pdb_id) {
-                    best.mappings.push(struct);
-                }
-            }
-            return best;
-        };
-
-        var variantIsInStructure = function (variant, structure) {
-            if (!structure) {
-                return false;
-            }
-            for (var i=0; i<structure.mappings.length; i++) {
-                var mapping = structure.mappings[i];
-                if ((~~variant.begin > mapping.unp_start) && (~~variant.end < mapping.unp_end)) {
-                    return true;
-                }
-            }
-            return false;
-        };
-
-        function mapSnpsInStructure(bestStructures) {
-            if (bestStructures) {
-                $scope.search.info.bestStructure = parseBestStructure(bestStructures.data[$scope.search.info.gene.uniprot_id]);
-            }
-            var url = '/proxy/www.ebi.ac.uk/proteins/api/variation/' + $scope.search.info.gene.uniprot_id;
-            return $http.get(url)
-                .then(function (varsResp) {
-                    var snps = varsResp.data.features;
-                    var snpsLoc = {};
-                    var snpId;
-                    for (var i = 0; i < snps.length; i++) {
-                        snpId = undefined;
-
-                        var variant = snps[i];
-                        if (variant.xrefs) {
-                            for (var j = 0; j < variant.xrefs.length; j++) {
-                                if (variant.xrefs[j].id.indexOf('rs') === 0) {
-                                    snpId = variant.xrefs[j].id;
-                                    break;
-                                }
-                            }
-                            if (snpId) {
-                                snpsLoc[snpId] = variant;
-                            }
-                        }
-                    }
-                    return snpsLoc;
-                });
-        }
 
 
         var getCommonDiseaseData = function(){
@@ -417,42 +344,28 @@ angular.module('cttvControllers')
                     row.push(mut);
 
                     // variant type
-                    var t = clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) );
-                    // row.push( clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) ) );
-                    // if (item.variant && item.variant.pos) {
-                    // row.push($compile(mut + msg3d)($scope)[0].innerHTML);
-                    // var partial = "<span><a onclick='angular.element(this).scope().showVariantInStructure(" + ~~item.variant.pos.begin + ", " + ~~item.variant.pos.end + ", \"" + item.variant.pos.wildType + "\", \"" + item.variant.pos.alternativeSequence + "\")'>View in 3D</a></span>";
-                    // t += "<br/><div class=cttv-change-view>";
-                    // t += $compile(partial)($scope)[0].innerHTML;
-                    // t += "</div>";
-                    // }
+                    var t = clearUnderscoresFilter( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) );
                     row.push(t);
-
-                    // evidence source
-                    // row.push( cttvDictionary.CTTV_PIPELINE );
 
                     // evidence source
                     if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
                         row.push('<a class=\'cttv-external-link\' href=\'https://test-rvizapps.biogen.com/23andmeDev/\' target=\'_blank\'>'
-                            + clearUnderscores(item.sourceID)
+                            + clearUnderscoresFilter(item.sourceID)
                             + '</a>');
                     }
                     else if (item.sourceID === cttvConsts.dbs.PHEWAS) {
                         row.push('<a class=\'cttv-external-link\' href=\'https://phewascatalog.org/phewas\' target=\'_blank\'>'
-                            + clearUnderscores(item.sourceID)
+                            + clearUnderscoresFilter(item.sourceID)
                             + '</a>');
                     }
                     else {
                         row.push('<a class=\'cttv-external-link\' href=\'https://www.ebi.ac.uk/gwas/search?query=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>'
-                            + clearUnderscores(item.sourceID)
+                            + clearUnderscoresFilter(item.sourceID)
                             + '</a>');
                     }
 
                     // p-value
                     var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
-                    // if (item.sourceID === cttvConsts.dbs.GWAS) {
-                    //     msg = '<div style="margin-top:5px;">Sample size: ' + item.unique_association_fields.sample_size + '<br />Panel resolution: ' + parseFloat(item.unique_association_fields.gwas_panel_resolution).toPrecision(2) + '</div>';
-                    // }
 
                     if (item.sourceID === cttvConsts.dbs.PHEWAS) {
                         msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
@@ -592,12 +505,6 @@ angular.module('cttvControllers')
 
                 try{
 
-                    // var db = "";
-                    // if( item.evidence.variant2disease ){
-                    //     db = item.evidence.variant2disease.provenance_type.database.id.toLowerCase();   // or gene2variant
-                    // }else if ( item.evidence.provenance_type.database ){
-                    //     db = item.evidence.provenance_type.database.id.toLowerCase();
-                    // }
                     var db = item.sourceID;
 
                     // data origin: public / private
@@ -625,14 +532,11 @@ angular.module('cttvControllers')
                     // mutation consequence
                     var cons = '';
                     if( item.type === 'genetic_association' && checkPath(item, 'evidence.gene2variant') ){
-                        cons = clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) );
-                        // row.push( clearUnderscores( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) ) );
+                        cons = clearUnderscoresFilter( getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop() ) );
                     } else if( item.type === 'somatic_mutation' ){
-                        cons = clearUnderscores(item.type);
-                        // row.push( clearUnderscores(item.type) );
+                        cons = clearUnderscoresFilter(item.type);
                     } else {
                         cons = 'Curated evidence';
-                        // row.push( "Curated evidence" );
                     }
 
                     // TODO: This is a hack in the UI that needs to be solved at the data level
@@ -797,7 +701,6 @@ angular.module('cttvControllers')
                     cttvAPIservice.defaultErrorHandler
                 ).
                 finally(function(){
-                    //$scope.search.pathways.is_open = $scope.search.pathways.data.length>0 || false; // might trigger an error...
                     $scope.search.tables.affected_pathways.is_loading = false;
                 });
         };
@@ -824,7 +727,7 @@ angular.module('cttvControllers')
                     row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.urls[0].url+'\' target=\'_blank\'>' + item.evidence.urls[0].nice_name + '</a>');
 
                     // activity
-                    row.push( cttvDictionary[item.target.activity.toUpperCase()] || clearUnderscores(item.target.activity) ); // "up_or_down"->"unclassified" via dictionary
+                    row.push( cttvDictionary[item.target.activity.toUpperCase()] || clearUnderscoresFilter(item.target.activity) ); // "up_or_down"->"unclassified" via dictionary
 
                     // mutations
                     var mut = cttvDictionary.NA;
@@ -932,7 +835,6 @@ angular.module('cttvControllers')
                     cttvAPIservice.defaultErrorHandler
                 ).
                 finally(function(){
-                    //$scope.search.tables.rna_expression.is_open = $scope.search.tables.rna_expression.data.length>0 || false;
                     $scope.search.tables.rna_expression.is_loading = false;
                 });
         };
@@ -967,7 +869,6 @@ angular.module('cttvControllers')
 
                     // tissue / cell
                     row.push( item.disease.biosample.name );
-                    // row.push( checkPath(data[i], "biological_object.properties.biosamples") ? data[i].biological_object.properties.biosamples : cttvDictionary.NA );
 
                     // evidence source
                     row.push( getEcoLabel( item.evidence.evidence_codes_info, item.evidence.evidence_codes[0]) );
@@ -1059,7 +960,6 @@ angular.module('cttvControllers')
 
 
         var getMutationData = function(){
-            //$log.log("getMutationData()");
             var opts = {
                 target:$scope.search.target,
                 disease:$scope.search.disease,
@@ -1133,9 +1033,9 @@ angular.module('cttvControllers')
                         for (var i = 0; i < item.evidence.known_mutations.length; i++) {
                             var m = item.evidence.known_mutations[i];
                             if (item.sourceID == cttvConsts.dbs.INTOGEN) {
-                                mutation_types += '<div>' + clearUnderscores(item.target.activity || mut);
+                                mutation_types += '<div>' + clearUnderscoresFilter(item.target.activity || mut);
                             } else {
-                                mutation_types += '<div>' + clearUnderscores(m.preferred_name || mut) + '</div>';
+                                mutation_types += '<div>' + clearUnderscoresFilter(m.preferred_name || mut) + '</div>';
                             }
                             if (m.number_samples_with_mutation_type) {
                                 samples += '<div>' + m.number_samples_with_mutation_type+'/'+m.number_mutated_samples || samp + '</div>';
@@ -1153,31 +1053,7 @@ angular.module('cttvControllers')
 
                         // col4: inheritance pattern
                         row.push (pattern);
-
-                        // col 2: mutation type
-                        // if(item.sourceID == cttvConsts.dbs.INTOGEN){
-                        //     mut = item.target.activity || mut;
-                        // } else {
-                        //     mut = item.evidence.known_mutations.preferred_name || mut;
-                        // }
-
-
-
-                        // col 3: samples
-                        // if( item.evidence.known_mutations.number_samples_with_mutation_type ){
-                        //     samp = item.evidence.known_mutations.number_samples_with_mutation_type+"/"+item.evidence.known_mutations.number_mutated_samples || samp;
-                        // }
-
-
-                        // col 4: inheritance pattern
-                        // patt = item.evidence.known_mutations.inheritance_pattern || patt;
                     }
-
-
-                    // row.push( clearUnderscores( mut ) );
-                    // row.push( samp );
-                    // row.push( patt );
-
 
                     // col 5: evidence source
                     row.push('<a href=\''+item.evidence.urls[0].url+'\' target=\'_blank\' class=\'cttv-external-link\'>'+item.evidence.urls[0].nice_name+'</a>');
@@ -1234,15 +1110,7 @@ angular.module('cttvControllers')
                     {
                         'targets' : [3],
                         'width' : '9%'
-                    },
-                    /*{
-                        "targets" : [4],
-                        "width" : "22%"
-                    },
-                    {
-                        "targets" : [0],
-                        "width" : "0%"
-                    }*/
+                    }
                 ],
             }, $scope.search.info.title+'-somatic_mutations') );
         };
@@ -1299,7 +1167,6 @@ angular.module('cttvControllers')
                     cttvAPIservice.defaultErrorHandler
                 ).
                 finally(function(){
-                    //$scope.search.mouse.is_open = $scope.search.mouse.data.length>0 || false;
                     $scope.search.tables.animal_models.is_loading = false;
                 });
         };
@@ -1456,7 +1323,6 @@ angular.module('cttvControllers')
         // =================================================
 
         $scope.sectionOpen=function(who) {
-        //    $log.info("tdc:sectionOpen", who);
             // Fire a target associations tree event for piwik to track
             $analytics.eventTrack('evidence', {'category': 'evidence', 'label': who});
         };
@@ -1465,9 +1331,7 @@ angular.module('cttvControllers')
         //  M A I N   F L O W
         // =================================================
 
-        // $log.info("target-disease-controller");
         var path = $location.path().split('/');
-        // $log.info(path);
         // parse parameters
         $scope.search.target = path[2];
         $scope.search.disease = path[3];
@@ -1489,7 +1353,7 @@ angular.module('cttvControllers')
                 getMouseData();
             });
 
-        var render = function(new_state, old_state){
+        var render = function(new_state){
             var view = new_state.view || {};
             var sec = view.sec;
             if(sec && sec[0] && $scope.search.tables[ sec[0] ]){

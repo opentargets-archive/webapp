@@ -1,6 +1,6 @@
 angular.module('cttvControllers')
 
-    .controller('OutreachCtrl', ['$scope', '$log', '$http', function ($scope, $log, $http) {
+    .controller('OutreachCtrl', ['$scope', '$http', function ($scope, $http) {
         'use strict';
 
         $scope.day = moment();

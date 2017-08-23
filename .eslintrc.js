@@ -1,7 +1,8 @@
 module.exports = {
     "parser": "babel-eslint",
     "env": {
-        "browser": true
+        "browser": true,
+        "jquery": true
     },
     "extends": [
         "eslint:recommended",
@@ -61,7 +62,7 @@ module.exports = {
         "angular/function-type": [2, "anonymous"],
         "angular/no-service-method": 2,
         "angular/watchers-execution": [2, "$apply"],
-        "angular/angularelement": 2,
+        "angular/angularelement": 1,
         "angular/controller-name": [2, "/[A-Z].*Ctrl/"],
         "angular/directive-name": [2, "ot"],
         "angular/factory-name": [2, "ot"],

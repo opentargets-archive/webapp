@@ -6,10 +6,9 @@ angular.module('cttvControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-    .controller ('TargetCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', '$sce', '$q', 'cttvUtils', 'cttvConfig', 'otTEPs', function ($scope, $location, $log, cttvAPIservice, $sce, $q, cttvUtils, cttvConfig, otTEPs) {
+    .controller ('TargetCtrl', ['$scope', '$location', 'cttvAPIservice', 'cttvUtils', 'cttvConfig', 'otTEPs', function ($scope, $location, cttvAPIservice, cttvUtils, cttvConfig, otTEPs) {
         'use strict';
 
-        // $log.log('TargetCtrl()');
         cttvUtils.clearErrors();
 
         $scope.targetId = $location.url().split('/')[2];
@@ -32,14 +31,6 @@ angular.module('cttvControllers')
                     $scope.target.name = resp.approved_name || resp.ensembl_description;
                     $scope.target.title = (resp.approved_symbol || resp.ensembl_external_name).split(' ').join('_');
                     $scope.target.description = resp.uniprot_function[0];
-                    // $scope.target = {
-                    //     label : resp.approved_name || resp.ensembl_external_name,
-                    //     symbol : resp.approved_symbol || resp.ensembl_external_name, //resp.approved_symbol || resp.approved_name || resp.ensembl_external_name,
-                    //     id : resp.approved_id || resp.ensembl_gene_id,
-                    //     description : resp.uniprot_function[0],
-                    //     name : resp.approved_name || resp.ensembl_description,
-                    //     title : (resp.approved_symbol || resp.ensembl_external_name).split(" ").join("_")
-                    // };
 
                     // Check if the target is a TEP (Target Enabling Package)
                     if (otTEPs[$scope.targetId]) {

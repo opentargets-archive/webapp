@@ -1,7 +1,7 @@
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
 
-    .controller('SummaryCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', '$q', 'cttvConfig', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, $log, cttvAPIservice, $q, cttvConfig, cttvUtils, cttvLoadedLists) {
+    .controller('SummaryCtrl', ['$scope', '$location', 'cttvAPIservice', '$q', 'cttvConfig', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, cttvAPIservice, $q, cttvConfig, cttvUtils, cttvLoadedLists) {
         'use strict';
 
         // Parse the $location search object to determine which entities we have.
@@ -41,9 +41,10 @@ angular.module('cttvControllers')
                 });
         }
 
+        // TODO: will we need this in the future?
         // Currently not used -- we are using the /private/enrichment/targets endpoint instead
         // of collecting all the associations
-        function getAssociations(targets) {
+        /* function getAssociations(targets) {
             var associationsPromises = [];
             var step = 10000;
             // 1st get the size
@@ -95,7 +96,7 @@ angular.module('cttvControllers')
                         });
                 });
 
-        }
+        } */
 
         // Recognised entities:
 
