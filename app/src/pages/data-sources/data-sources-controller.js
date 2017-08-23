@@ -1,5 +1,3 @@
-/* Controllers */
-
 angular.module('cttvControllers')
 
 /**
@@ -7,7 +5,7 @@ angular.module('cttvControllers')
  * Controller for the data sources used in the webapp
  * It loads the config file to know which definitions to show
  */
-    .controller('DataSourcesCtrl', ['$scope', '$log', 'cttvConfig', function ($scope, $log, cttvConfig) {
+    .controller('DataSourcesCtrl', ['$scope', 'cttvConfig', function ($scope, cttvConfig) {
         'use strict';
 
         function applyDataSources (obj) {
@@ -17,7 +15,6 @@ angular.module('cttvControllers')
                         applyDataSources(obj[prop]);
                     } else {
                         for (var i=0; i<obj[prop].length; i++) {
-                            var item = obj[prop][i];
                             $scope[obj[prop][i]] = true;
                         }
                     }

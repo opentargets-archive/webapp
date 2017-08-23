@@ -1,12 +1,13 @@
 angular.module('cttvControllers')
-/**
-* DiseaseCtrl
-* Controller for the disease page
-* It loads general information about a given disease
-*/
-    .controller ('DiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvConfig', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvConfig) {
+
+    /*
+     * DiseaseCtrl
+     * Controller for the disease page
+     * It loads general information about a given disease
+     */
+    .controller ('DiseaseCtrl', ['$scope', '$location', 'cttvAPIservice', 'cttvUtils', 'cttvConfig', function ($scope, $location, cttvAPIservice, cttvUtils, cttvConfig) {
         'use strict';
-        // $log.log("DiseaseCtrl()");
+        
         cttvUtils.clearErrors();
 
         var efo_code = $location.url().split('/')[2];
@@ -20,7 +21,6 @@ angular.module('cttvControllers')
                 var data = resp.body;
                 var paths = [];
                 for (var i=0; i<data.path.length; i++) {
-                // data.path[i].shift();
                     var path=[];
                     for(var j=0; j<data.path[i].length; j++){
                         path.push({
