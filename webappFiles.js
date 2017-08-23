@@ -113,6 +113,8 @@ var webappFiles = {
             'app/src/components/sticky-scroller/sticky-scroller-directive.js',
             'app/src/components/modal/modal-directive.js',
             'app/src/components/slider/slider-directive.js',
+            'app/src/components/matrix/matrix-table-directive.js',
+            'app/src/components/matrix/matrix-legend-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
