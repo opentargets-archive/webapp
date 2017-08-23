@@ -1,6 +1,5 @@
-
-/**
- * Controller for the little search box
+/*
+ * Controller for the little search box.
  */
 angular.module('cttvControllers')
 
@@ -10,10 +9,10 @@ angular.module('cttvControllers')
      * SearchAppCtrl
      * Controller for the search/results page
      */
-    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', '$q', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice, cttvUtils, cttvLocationState, $q) {
+    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice, cttvUtils, cttvLocationState) {
 
         'use strict';
-        // $log.log('SearchCtrl()');
+
         cttvUtils.clearErrors();
 
         /*
