@@ -9,7 +9,7 @@ angular.module('cttvDirectives')
                 target: '=',
                 associations: '='
             },
-            templateUrl: 'src/partials/multiple-targets-associations-summary.html'
+            templateUrl: 'src/components/multiple-targets/multiple-targets-associations-summary.html'
         };
     }])
 
@@ -22,7 +22,7 @@ angular.module('cttvDirectives')
 //             associations: '=',
 //             targets: '='
 //         },
-//         templateUrl: "src/partials/multiple-targets-tas.html",
+//         templateUrl: "src/components/multiple-targets/multiple-targets-tas.html",
 //         link: function (scope, el, attrs) {
 //             scope.$watch('associations', function () {
 //                 if (!scope.associations) {
@@ -233,7 +233,7 @@ angular.module('cttvDirectives')
 
         return {
             restrict: 'E',
-            templateUrl: 'src/partials/multiple-targets-table.html',
+            templateUrl: 'src/components/multiple-targets/multiple-targets-table.html',
             scope: {
                 associations: '=',
                 targets: '='
