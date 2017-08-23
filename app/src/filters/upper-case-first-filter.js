@@ -1,5 +1,5 @@
 angular.module('cttvFilters')
-    .filter('upperCaseFirst', function () {
+    .filter('otUpperCaseFirst', function () {
         'use strict';
 
         return function (input) {

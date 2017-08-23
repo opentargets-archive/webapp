@@ -58,7 +58,7 @@
                         </span>
 
                         <span class="search-details">
-                            <span class="tag-section"><i class="fa fa-tag fa-lg tag" ng-class="(result.data.type==='target') ? 'target' : 'disease'"></i>{{result.data.type | upperCaseFirst}}</span>
+                            <span class="tag-section"><i class="fa fa-tag fa-lg tag" ng-class="(result.data.type==='target') ? 'target' : 'disease'"></i>{{result.data.type | otUpperCaseFirst}}</span>
                             <span class="tag-section" title="Search keyword matches an ortholog of this target" ng-show="result.orthologMatch"><i class="fa fa-tags tag ortholog"></i>Match from ortholog</span>
                             <span class="tag-section" title="Search keyword matches a target via drug name" ng-show="result.drugMatch"><i class="fa fa-tags tag drug"></i>Match from drug</span>
                             <span class="tag-section" title="Search keyword matches a disease via a phenotype" ng-show="result.phenotypeMatch"><i class="fa fa-tags tag phenotype"></i>Match from phenotype</span>
@@ -111,7 +111,7 @@
                         </h4>
 
                         <span class="search-details" style="margin:10px 0px">
-                            <span class="tag-section"><i class="fa fa-tag fa-lg tag" ng-class="(result.data.type==='target') ? 'target' : 'disease'"></i>{{result.data.type | upperCaseFirst}}</span>
+                            <span class="tag-section"><i class="fa fa-tag fa-lg tag" ng-class="(result.data.type==='target') ? 'target' : 'disease'"></i>{{result.data.type | otUpperCaseFirst}}</span>
                             <span class="tag-section" title="Search keyword matches an ortholog of this target" ng-show="result.orthologMatch"><i class="fa fa-tags tag ortholog"></i>Match from ortholog</span>
                             <span class="tag-section" title="Search keyword matches a target via drug name" ng-show="result.drugMatch"><i class="fa fa-tags tag drug"></i>Match from drug</span>
                             <span class="tag-section" title="Search keyword matches a disease via a phenotype" ng-show="result.phenotypeMatch"><i class="fa fa-tags tag phenotype"></i>Match from phenotype</span>
@@ -146,7 +146,7 @@
                         <div ng-if="result.data.type == 'target'">
                             <!-- biotype -->
                             <h5>Biotype</h5>
-                            <span>{{result.data.biotype | otClearUnderscores | upperCaseFirst}}</span>
+                            <span>{{result.data.biotype | otClearUnderscores | otUpperCaseFirst}}</span>
 
 
                             <!-- uniprot -->

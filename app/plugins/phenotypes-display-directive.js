@@ -4,7 +4,7 @@ angular.module('plugins')
 
         return {
             restrict: 'E',
-            template: '<div><div ng-show="uniquePhenotypes.length==0">No phenotypes available</div><ul><li ng-repeat="phenotype in uniquePhenotypes">{{phenotype | upperCaseFirst}}</li></ul></div>',
+            template: '<div><div ng-show="uniquePhenotypes.length==0">No phenotypes available</div><ul><li ng-repeat="phenotype in uniquePhenotypes">{{phenotype | otUpperCaseFirst}}</li></ul></div>',
             scope: {
                 disease: '=',
                 width: '='
