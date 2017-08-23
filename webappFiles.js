@@ -74,7 +74,13 @@ var webappFiles = {
             'app/src/services/loaded-lists-service.js',
             'app/src/services/lazyload.js',
             // Processed (filters)
-            'app/src/filters/filters.js',
+            'app/src/filters/clear-underscores-filter.js',
+            'app/src/filters/ellipse-text-filter.js',
+            'app/src/filters/metric-prefix-filter.js',
+            'app/src/filters/month-to-string-filter.js',
+            'app/src/filters/split-filter.js',
+            'app/src/filters/strip-tags-filter.js',
+            'app/src/filters/upper-case-first-filter.js',
             // Processed (directives)
             'app/src/components/plugin-loader/plugin-loader-directive.js',
             'app/src/components/pathway-summary/pathway-summary-directive.js',
