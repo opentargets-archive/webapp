@@ -122,10 +122,11 @@ var webappFiles = {
             'app/src/components/size-listener/size-listener-directive.js',
             'app/src/components/resize/resize-directive.js',
             'app/src/components/png/png-directive.js',
+            'app/src/components/log-session/log-session-directive.js',
+            'app/src/components/hpa-tissue-expression/hpa-tissue-expression-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
-            'app/src/js/directives.js',
             'app/src/js/calendar-directive.js',
             // Plugins -- should go in another config file
             // 'app/plugins/pdb-directive.js',

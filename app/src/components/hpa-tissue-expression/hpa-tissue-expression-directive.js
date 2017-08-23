@@ -1,22 +1,4 @@
-
-/* Directives */
 angular.module('cttvDirectives')
-
-
-    .directive('logSession', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
-        'use strict';
-
-        return {
-            restrict: 'E',
-            link: function (scope, elem, attrs) {
-                cttvAPIservice.logSession();
-            }
-        };
-    }])
-
-
-
-
     /**
     *
     * Options for configuration are:
@@ -29,7 +11,7 @@ angular.module('cttvDirectives')
     *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
     *   This is useful in conjunction with a spinner where you can have ng-show="loading"
     */
-    .directive('cttvHpaTissueExpression', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
+    .directive('cttvHpaTissueExpression', ['cttvAPIservice', 'cttvUtils', function (cttvAPIservice, cttvUtils) {
         'use strict';
 
         var colorScale = cttvUtils.colorScales.BLUE_1_3; //blue orig
@@ -75,7 +57,7 @@ angular.module('cttvDirectives')
 
         return {
 
-            restrict: 'EA',
+            restrict: 'AE',
 
             scope: {
                 target : '=',
@@ -179,7 +161,4 @@ angular.module('cttvDirectives')
 
             } // end link
         }; // end return
-    }])
-
-
-
+    }]);
