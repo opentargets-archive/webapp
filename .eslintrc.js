@@ -67,14 +67,15 @@ module.exports = {
         "angular/factory-name": [2, "ot"],
         "angular/filter-name": [2, "ot"],
         "angular/module-name": [2, "ot"],
-        "angular/file-name": [2, {
-            "typeSeparator": "dash",
-            "nameStyle": "dash",
-            "ignorePrefix": "ot",
-            "componentTypeMappings": {
-                "controller": "controller"
-            }
-        }],
+        // "angular/file-name": [2, {
+        //     "typeSeparator": "dash",
+        //     "nameStyle": "dash",
+        //     "ignorePrefix": "ot",
+        //     "componentTypeMappings": {
+        //         "controller": "controller"
+        //     }
+        // }],
+        "angular/file-name": 0,
         "angular/controller-as": 0,
         /**
          * Compatibility rules
