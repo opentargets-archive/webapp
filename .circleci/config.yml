@@ -28,10 +28,9 @@ jobs:
           name: run bower, gulp and jspm for good measure
           command: npm run setup
 
-
       - run:
           name: running es lint
-          command: './node_modules/.bin/eslint -f html -o eslint.html 'app/js/**.js'; exit 0'
+          command: ./node_modules/.bin/eslint -f html -o eslint.html 'app/js/**.js'; exit 0
 
       - store_artifacts:
           path: eslint.html
