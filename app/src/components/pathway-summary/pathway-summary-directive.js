@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
 
         return {
             restrict: 'E',
-            templateUrl: 'src/partials/pathways-summary.html',
+            templateUrl: 'src/components/pathway-summary/pathway-summary.html',
             scope: {
                 pathway: '=',
                 targets: '='

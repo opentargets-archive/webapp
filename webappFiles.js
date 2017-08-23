@@ -75,6 +75,9 @@ var webappFiles = {
             'app/src/services/lazyload.js',
             // Processed (filters)
             'app/src/filters/filters.js',
+            // Processed (directives)
+            'app/src/components/plugin-loader/plugin-loader-directive.js',
+            'app/src/components/pathway-summary/pathway-summary-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
@@ -95,10 +98,9 @@ var webappFiles = {
             'app/src/js/multiple-targets-drugs-summary-directives.js',
             'app/src/js/multiple-targets-tissues-summary-directive.js',
             'app/src/js/multiple-targets-interactions-summary-directive.js',
-            'app/src/js/pathway-summary-directive.js',
             'app/src/js/drug-summary-directive.js',
             'app/src/js/interactions-viewer-directive.js',
-            'app/src/js/plugin-directive.js',
+            
             'app/src/js/facets.js',
             // Plugins -- should go in another config file
             // 'app/plugins/pdb-directive.js',

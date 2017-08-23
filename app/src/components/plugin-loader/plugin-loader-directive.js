@@ -1,4 +1,4 @@
-angular.module('plugins', [])
+angular.module('plugins')
     .directive('pluginLoader', ['$log', '$compile', '$timeout', 'lazy', '$q', '$analytics', function ($log, $compile, $timeout, lazy, $q, $analytics) {
 
         return {

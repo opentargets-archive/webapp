@@ -1,6 +1,6 @@
 
 /* Directives */
-angular.module('cttvDirectives', [])
+angular.module('cttvDirectives')
 
     /*
     *
