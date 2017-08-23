@@ -72,6 +72,7 @@ var webappFiles = {
             'app/src/services/location-state-service.js',
             'app/src/services/filters-service.js',
             'app/src/services/loaded-lists-service.js',
+            'app/src/services/lazyload.js',
             // Processed (filters)
             'app/src/filters/filters.js',
             // Our angular stuff
@@ -97,7 +98,6 @@ var webappFiles = {
             'app/src/js/pathway-summary-directive.js',
             'app/src/js/drug-summary-directive.js',
             'app/src/js/interactions-viewer-directive.js',
-            'app/src/js/lazyload.js',
             'app/src/js/plugin-directive.js',
             'app/src/js/facets.js',
             // Plugins -- should go in another config file
