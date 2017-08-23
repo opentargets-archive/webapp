@@ -83,6 +83,7 @@ var webappFiles = {
             'app/src/components/target-associations/target-associations-bubbles-directive.js',
             'app/src/components/disease-associations/disease-associations-table-directive.js',
             'app/src/components/filter-by-file-targets/filter-by-file-targets-directive.js',
+            'app/src/components/disease-efo-graph/disease-efo-graph-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
@@ -91,7 +92,6 @@ var webappFiles = {
             'app/src/js/evidence-tables-directives.js',
             'app/src/js/text-mining-table-directive.js',
             'app/src/js/calendar-directive.js',
-            'app/src/js/disease-graph-directive.js',
             'app/src/js/batch-search-directives.js',
             'app/src/js/multiple-targets-associations-summary-directives.js',
             'app/src/js/multiple-targets-pathways-summary-directive.js',
