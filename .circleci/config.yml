@@ -32,6 +32,14 @@ jobs:
           name: run es lint
           command: npm run eslint
 
+      - run:
+          name: es lint
+          command: './node_modules/.bin/eslint -f html -o eslint.html 'app/js/**.js'; exit 0'
+
+      - store_artifacts:
+          path: eslint.html
+          prefix: eslint
+
       - setup_remote_docker
       - run:
           name: Build container

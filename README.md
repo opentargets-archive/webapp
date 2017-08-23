@@ -1,6 +1,6 @@
-[![Docker Repository on Quay](https://quay.io/repository/opentargets/webapp/status "Docker Repository on Quay")](https://quay.io/repository/opentargets/webapp)
+Docker container: [![Docker Repository on Quay](https://quay.io/repository/opentargets/webapp/status "Docker Repository on Quay")](https://quay.io/repository/opentargets/webapp)
 
-[![wercker status](https://app.wercker.com/status/11b0582ab0336ded75ef289929e9b83d/s/master "wercker status")](https://app.wercker.com/project/byKey/11b0582ab0336ded75ef289929e9b83d)
+CircleCI build: [![CircleCI](https://circleci.com/gh/opentargets/webapp.svg?style=svg)](https://circleci.com/gh/opentargets/webapp)
 
 # OpenTargets Web App
 
