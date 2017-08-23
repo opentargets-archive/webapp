@@ -3,10 +3,10 @@
 /* Services */
 
 angular.module('cttvServices')
-.factory('cttvModal', ['$log', '$window', '$rootScope', '$uibModal', function($log, $window, $rootScope, $uibModal) {
-    var modalService = {};
+    .factory('cttvModal', ['$log', '$window', '$rootScope', '$uibModal', function($log, $window, $rootScope, $uibModal) {
+        var modalService = {};
 
-    /*modalService.modalInstance; // the single modal instance?
+        /*modalService.modalInstance; // the single modal instance?
     modalService.sayHello  = function(){$log.log("hello world")};
     modalService.test = function(){
         $log.log("modal test!");
@@ -23,8 +23,8 @@ angular.module('cttvServices')
         });
     }*/
 
-    // open; instance is stored as modalInstance so can always be retrieved (assuming)
-    /*modalService.open = function(o){
+        // open; instance is stored as modalInstance so can always be retrieved (assuming)
+        /*modalService.open = function(o){
         if(modalService.modalInstance){
             modalService.modalInstance.close();
         }
@@ -34,5 +34,5 @@ angular.module('cttvServices')
 
 
 
-    return modalService;
-}]);
+        return modalService;
+    }]);
