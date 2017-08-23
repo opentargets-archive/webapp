@@ -3,3 +3,4 @@ angular.module('cttvControllers', []);
 angular.module('cttvServices', []);
 angular.module('plugins', []);
 angular.module('cttvDirectives', []);
+angular.module('cttvFilters', []);
