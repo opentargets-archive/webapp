@@ -97,6 +97,7 @@ var webappFiles = {
             'app/src/components/multiple-targets/interactions-viewer-directive.js',
             'app/src/components/facets/facets.js',
             'app/src/components/search-suggestions/search-suggestions-directive.js',
+            'app/src/components/popover/popover-directive.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
