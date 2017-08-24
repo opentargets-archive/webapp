@@ -4,7 +4,7 @@ angular.module('cttvDirectives')
     /*
     *
     */
-    .directive('cttvTargetAssociationsTree', ['otAPIservice', 'otConsts', 'otUtils', '$analytics', function (otAPIservice, otConsts, otUtils, $analytics) {
+    .directive('otTargetAssociationsTree', ['otAPIservice', 'otConsts', 'otUtils', '$analytics', function (otAPIservice, otConsts, otUtils, $analytics) {
         'use strict';
 
         var whoiam = 'tree';
