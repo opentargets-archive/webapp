@@ -56,7 +56,6 @@ angular.module('cttvControllers')
          * filters are autonomous and do their own business
          */
         var setView = function (obj) {
-
         // should work also for obj==undefined at page load
         // or if navigating back through browser history
 
@@ -66,7 +65,6 @@ angular.module('cttvControllers')
 
             // update the scope; only the tab is needed at the moment
             $scope.view.t = obj.t;
-
         };
 
         var setCancersExclusion = function (obj) {
@@ -81,7 +79,6 @@ angular.module('cttvControllers')
          * Takes object from locationStateService, initialize the page/component state and fire a query which then updates the screen
          */
         var render = function (new_state, old_state) {
-
         // here we want to update facets, tabs, etc:
         // 1. first we check if the state of a particular element has changed;
         // 2. if it hasn't changed, and it's undefined (new=undefined, old=undefined),
@@ -101,7 +98,6 @@ angular.module('cttvControllers')
             if (! _.isEqual(new_state[cancersExcId], old_state[cancersExcId]) || !new_state[cancersExcId]) {
                 setCancersExclusion(new_state[cancersExcId]);
             }
-
         };
 
 
@@ -220,6 +216,4 @@ angular.module('cttvControllers')
         $scope.filters = cttvLocationState.getState()[facetsId] || {};
 
         render(cttvLocationState.getState(), cttvLocationState.getOldState());
-
-
     }]);

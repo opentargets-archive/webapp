@@ -22,7 +22,6 @@ angular.module('facets')
          * It returns an Array of filters.
          */
         parser.parse = function (config, data, countsToUse, options, isSelected) {
-
             // array of filters
             /* config.filters = data.buckets.map(function (obj) {
                     var conf = {};
@@ -81,10 +80,10 @@ angular.module('facets')
             };
 
             config.data = {
-                buckets: (function () {var a = []; for (var i in data.buckets) {a.push({label: Number(i), value: data.buckets[i].value});} return a;})()
+                buckets: (function () { var a = []; for (var i in data.buckets) { a.push({label: Number(i), value: data.buckets[i].value}); } return a; })()
                     .sort(function (a, b) {
-                        if (a.label < b.label) {return -1;}
-                        if (a.label > b.label) {return 1;}
+                        if (a.label < b.label) { return -1; }
+                        if (a.label > b.label) { return 1; }
                         return 0;
                     })
                     // min : 0,
@@ -92,7 +91,6 @@ angular.module('facets')
             };
 
             return config;
-
         };
 
         return parser;

@@ -9,7 +9,6 @@ angular.module('cttvControllers')
      * It loads the evidence for the given target <-> disease pair
      */
     .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'otClearUnderscoresFilter', '$analytics', 'cttvLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, otClearUnderscoresFilter, $analytics, cttvLocationState, $anchorScroll) {
-
         'use strict';
 
 
@@ -53,7 +52,7 @@ angular.module('cttvControllers')
                         is_loading: false,
                         heading: cttvDictionary.COMMON_DISEASES,
                         source: cttvConfig.evidence_sources.genetic_association.common,
-                        source_label: cttvConfig.evidence_sources.genetic_association.common.map(function (s) {return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                        source_label: cttvConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                         has_errors: false
                     },
                     rare_diseases: {
@@ -62,7 +61,7 @@ angular.module('cttvControllers')
                         is_loading: false,
                         heading: cttvDictionary.RARE_DISEASES,
                         source: cttvConfig.evidence_sources.genetic_association.rare,
-                        source_label: cttvConfig.evidence_sources.genetic_association.rare.map(function (s) {return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                        source_label: cttvConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                         has_errors: false
                     }
                 },
@@ -72,7 +71,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: cttvDictionary.RNA_EXPRESSION,
                     source: cttvConfig.evidence_sources.rna_expression,
-                    source_label: cttvConfig.evidence_sources.rna_expression.map(function (s) {return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.rna_expression.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 affected_pathways: {
@@ -81,7 +80,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: cttvDictionary.AFFECTED_PATHWAY,
                     source: cttvConfig.evidence_sources.pathway,
-                    source_label: cttvConfig.evidence_sources.pathway.map(function (s) {return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.pathway.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 known_drugs: {
@@ -90,7 +89,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: cttvDictionary.KNOWN_DRUG,
                     source: cttvConfig.evidence_sources.known_drug,
-                    source_label: cttvConfig.evidence_sources.known_drug.map(function (s) {return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.known_drug.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 somatic_mutations: {
@@ -99,7 +98,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: cttvDictionary.SOMATIC_MUTATION,
                     source: cttvConfig.evidence_sources.somatic_mutation,
-                    source_label: cttvConfig.evidence_sources.somatic_mutation.map(function (s) {return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 literature: {
@@ -108,7 +107,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: cttvDictionary.LITERATURE,
                     source: cttvConfig.evidence_sources.literature,
-                    source_label: cttvConfig.evidence_sources.literature.map(function (s) {return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.literature.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 animal_models: {
@@ -117,7 +116,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: cttvDictionary.ANIMAL_MODEL,
                     source: cttvConfig.evidence_sources.animal_model,
-                    source_label: cttvConfig.evidence_sources.animal_model.map(function (s) {return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.animal_model.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 }
             }
@@ -170,7 +169,6 @@ angular.module('cttvControllers')
                     },
                     otAPIservice.defaultErrorHandler
                 );
-
         };
 
 
@@ -310,7 +308,6 @@ angular.module('cttvControllers')
                     // update for parent
                     updateGeneticAssociationsSetting();
                 });
-
         };
 
 
@@ -321,7 +318,6 @@ angular.module('cttvControllers')
             var newdata = [];
 
             data.forEach(function (item) {
-
                 // create rows:
                 var row = [];
 
@@ -345,13 +341,11 @@ angular.module('cttvControllers')
                         row.push('<a class=\'cttv-external-link\' href=\'https://test-rvizapps.biogen.com/23andmeDev/\' target=\'_blank\'>'
                             + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
-                    }
-                    else if (item.sourceID === cttvConsts.dbs.PHEWAS) {
+                    } else if (item.sourceID === cttvConsts.dbs.PHEWAS) {
                         row.push('<a class=\'cttv-external-link\' href=\'https://phewascatalog.org/phewas\' target=\'_blank\'>'
                             + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
-                    }
-                    else {
+                    } else {
                         row.push('<a class=\'cttv-external-link\' href=\'https://www.ebi.ac.uk/gwas/search?query=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>'
                             + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
@@ -362,8 +356,7 @@ angular.module('cttvControllers')
 
                     if (item.sourceID === cttvConsts.dbs.PHEWAS) {
                         msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
-                    }
-                    else if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
+                    } else if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
                         msg += '<br/>Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '<br />Phenotype: ' + item.unique_association_fields.phenotype;
                     }
                     row.push(msg);
@@ -381,7 +374,6 @@ angular.module('cttvControllers')
                     row.push(pmidsList.join(', '));
 
                     newdata.push(row);
-
                 } catch (e) {
                     $scope.search.tables.genetic_associations.common_diseases.has_errors = true;
                     $log.error('Error parsing common disease data:');
@@ -482,7 +474,6 @@ angular.module('cttvControllers')
                             updateGeneticAssociationsSetting();
                         });
                 });
-
         };
 
 
@@ -493,7 +484,6 @@ angular.module('cttvControllers')
                 var row = [];
 
                 try {
-
                     var db = item.sourceID;
 
                     // data origin: public / private
@@ -545,7 +535,6 @@ angular.module('cttvControllers')
                     // evidence source
                     if (item.type === 'genetic_association' && checkPath(item, 'evidence.variant2disease')) {
                         row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.variant2disease.urls[0].url + '\' target=_blank>' + item.evidence.variant2disease.urls[0].nice_name + '</a>');
-
                     } else {
                         // TODO: Genomics England URLs are wrong, so (hopefully temporarily) we need to hack them in the UI
                         // TODO: We can't use cttvConsts.dbs.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
@@ -557,7 +546,6 @@ angular.module('cttvControllers')
                         } else {
                             row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>' + item.evidence.urls[0].nice_name + '</a>');
                         }
-
                     }
 
                     // publications
@@ -586,7 +574,6 @@ angular.module('cttvControllers')
 
                     // add the row to data
                     newdata.push(row);
-
                 } catch (e) {
                     $scope.search.tables.genetic_associations.rare_diseases.has_errors = true;
                     $log.warn('Error parsing rare disease data:');
@@ -703,7 +690,6 @@ angular.module('cttvControllers')
                 var row = [];
 
                 try {
-
                     // data origin: public / private
                     row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
@@ -719,7 +705,7 @@ angular.module('cttvControllers')
                     // mutations
                     var mut = cttvDictionary.NA;
                     if (item.evidence.known_mutations && item.evidence.known_mutations.length > 0) {
-                        mut = arrayToList(item.evidence.known_mutations.map(function (i) {return i.preferred_name || cttvDictionary.NA;}), true);
+                        mut = arrayToList(item.evidence.known_mutations.map(function (i) { return i.preferred_name || cttvDictionary.NA; }), true);
                     }
                     row.push(mut);
 
@@ -739,7 +725,6 @@ angular.module('cttvControllers')
 
 
                     newdata.push(row); // use push() so we don't end up with empty rows
-
                 } catch (e) {
                     $scope.search.tables.affected_pathways.has_errors = true;
                     $log.error('Error parsing pathways data:');
@@ -834,7 +819,6 @@ angular.module('cttvControllers')
                 var row = [];
 
                 try {
-
                     // data origin: public / private
                     row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
@@ -882,7 +866,6 @@ angular.module('cttvControllers')
 
 
                     newdata.push(row); // push, so we don't end up with empty rows
-
                 } catch (e) {
                     $scope.search.tables.rna_expression.has_errors = true;
                     $log.log('Error parsing RNA-expression data:');
@@ -896,7 +879,6 @@ angular.module('cttvControllers')
 
 
         var initTableRNA = function () {
-
             $('#rna-expression-table').DataTable(cttvUtils.setTableToolsParams({
                 'data': formatRnaDataToArray($scope.search.tables.rna_expression.data),
                 'order': [[1, 'asc']],
@@ -990,7 +972,6 @@ angular.module('cttvControllers')
             data.forEach(function (item) {
                 var row = [];
                 try {
-
                     // col 0: data origin: public / private
                     row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
@@ -1004,7 +985,6 @@ angular.module('cttvControllers')
 
 
                     if (item.evidence.known_mutations && item.evidence.known_mutations.length) {
-
                         var mutation_types = '';
                         var samples = '';
                         var pattern = '';
@@ -1061,7 +1041,6 @@ angular.module('cttvControllers')
 
 
         var initTableMutations = function () {
-
             $('#mutations-table').DataTable(cttvUtils.setTableToolsParams({
                 'data': formatMutationsDataToArray($scope.search.tables.somatic_mutations.data),
                 // "ordering" : true,
@@ -1157,7 +1136,6 @@ angular.module('cttvControllers')
                 var row = [];
 
                 try {
-
                     // data origin: public / private
                     row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
@@ -1165,10 +1143,10 @@ angular.module('cttvControllers')
                     row.push(item.disease.efo_info.label);    // or item.disease.efo_info.label ???
 
                     // human
-                    row.push('<ul>' + item.evidence.disease_model_association.human_phenotypes.map(function (hp) {return '<li>' + hp.label + '</li>';}).join('') + '</ul>');
+                    row.push('<ul>' + item.evidence.disease_model_association.human_phenotypes.map(function (hp) { return '<li>' + hp.label + '</li>'; }).join('') + '</ul>');
 
                     // mouse
-                    row.push('<ul>' + item.evidence.disease_model_association.model_phenotypes.map(function (hp) {return '<li>' + hp.label + '</li>';}).join('') + '</ul>');
+                    row.push('<ul>' + item.evidence.disease_model_association.model_phenotypes.map(function (hp) { return '<li>' + hp.label + '</li>'; }).join('') + '</ul>');
 
                     // mouse model
                     var mousemodel = processMouseModelLinks(item.evidence.biological_model.allelic_composition, item.evidence.biological_model.allele_ids)
@@ -1197,7 +1175,6 @@ angular.module('cttvControllers')
 
 
         var initTableMouse = function () {
-
             $('#mouse-table').DataTable(cttvUtils.setTableToolsParams({
                 'data': formatMouseDataToArray($scope.search.tables.animal_models.data),
                 'autoWidth': false,
@@ -1231,7 +1208,7 @@ angular.module('cttvControllers')
          * Takes a string like "Casr<Nuf>/Casr<+>" and returns "Casr<sup>Nuf</sup>/Casr<sup>+</sup>"
          */
         var processMouseModelData = function (mmd) {
-            return mmd.replace(/<(.*?)>/g, function (match) {return '<sup>' + match.substr(1, match.length - 2) + '</sup>';});
+            return mmd.replace(/<(.*?)>/g, function (match) { return '<sup>' + match.substr(1, match.length - 2) + '</sup>'; });
         };
 
 

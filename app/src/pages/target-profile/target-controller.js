@@ -22,7 +22,6 @@ angular.module('cttvControllers')
             .then(
                 // success
                 function (resp) {
-
                     resp = JSON.parse(resp.text);
                     $scope.target = resp;
                     $scope.target.label = resp.approved_name || resp.ensembl_external_name;
@@ -76,7 +75,6 @@ angular.module('cttvControllers')
                         $scope.sections[t].defaultVisibility = $scope.sections[t].visible || false;
                         $scope.sections[t].currentVisibility = $scope.sections[t].visible || false;
                     }
-
                 },
                 // error handler
                 otAPIservice.defaultErrorHandler

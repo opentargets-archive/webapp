@@ -58,7 +58,6 @@ angular.module('cttvControllers')
             // when we change page, close the search in case it's visible
             $scope.opts.showResponsiveSearch = false;
         });
-
     }])
 
 
@@ -155,7 +154,6 @@ angular.module('cttvControllers')
         otAPIservice.getStats()
             .then(
                 function (resp) {
-
                     // copy/expose repsonse to scope
                     _.forOwn(resp.body, function (value, key) {
                         $scope.stats[key] = value;
@@ -168,7 +166,6 @@ angular.module('cttvControllers')
                         _.forOwn(value.datasources, function (v, k) {
                             dbsctn++;
                         });
-
                     });
 
                     $scope.stats.datasources = {
@@ -186,7 +183,6 @@ angular.module('cttvControllers')
         // .finally(function(){
         //     $scope.search.loading = false;
         // });
-
     }])
 
 

@@ -142,7 +142,6 @@ angular.module('plugins')
         }
 
         function getData (object, subject, targets, table, filename) {
-
             var paramsObj = {};
             paramsObj.disease = [object, subject];
             paramsObj.target = targets.slice(0, 100);
@@ -301,7 +300,6 @@ angular.module('plugins')
 
                     v(document.getElementById('relatedDiseasesOverview'));
                 }, 0);
-
             }
         };
     }]);

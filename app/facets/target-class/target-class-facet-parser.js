@@ -21,7 +21,6 @@ angular.module('facets')
          * It returns an Array of filters.
          */
         parser.parse = function (config, data, countsToUse, isSelected) {
-
             // array of filters
             config.filters = data.buckets.map(function (obj) {
                 var conf = {};

@@ -23,7 +23,6 @@ angular.module('plugins')
                         // error handler
                         otAPIservice.defaultErrorHandler
                     );
-
             }
         };
     }]);

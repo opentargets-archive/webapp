@@ -8,7 +8,6 @@ angular.module('cttvServices')
      *
      */
     .factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', 'otAPIservice', 'cttvUtils', 'cttvLocationState', '$analytics', '$injector', 'cttvConfig', function ($log, $location, cttvDictionary, cttvConsts, otAPIservice, cttvUtils, cttvLocationState, $analytics, $injector, cttvConfig) {
-
         'use strict';
 
 
@@ -82,7 +81,7 @@ angular.module('cttvServices')
          * added to the created array and then returned.
          */
         var getCollectionForSelected = function (key, label) {
-            var c = selected.filter(function (obj) {return obj.key == key;})[0];
+            var c = selected.filter(function (obj) { return obj.key == key; })[0];
             if (c == undefined) {
                 c = new FilterCollection({key: key, label: label});
                 selected.push(c);
@@ -96,10 +95,8 @@ angular.module('cttvServices')
          * If filters contain sub-filters, these are parsed recursively
          */
         var parseCollectionSelected = function (collection) {
-
             // loop thorugh all the collection's 'filters
             collection.filters.forEach(function (fs) {
-
                 // if this has subfilters and *some* of them are selected, we deselect the 'parent' (i.e. current filter)
                 // then parse parent (if selected) and all the children.
                 // So here we update the selected state based on subfilters if needed
@@ -127,7 +124,6 @@ angular.module('cttvServices')
                 if (fs.collection != null && (fs.collection instanceof FilterCollection)) {
                     parseCollectionSelected(fs.collection);
                 }
-
             });
         };
 
@@ -160,7 +156,6 @@ angular.module('cttvServices')
          * Takes API data for a facet (i.e. a collection of filters) and returns the config object to create that collection
          */
         var parseFacetData = function (collection, data, countsToUse, options) {
-
             // 1. default options:
             // mostly things for the collection container, like label, whether it's open or closed to start with
             options = options || {};
@@ -332,12 +327,10 @@ angular.module('cttvServices')
              * Add the specified filter (instance of Filter class) to this collection
              */
         FilterCollection.prototype.addFilter = function (filter) {
-
             // we should check the filter doesn't already exist...
-            if (this.filters.filter(function (f) { return f.key === filter.key;}).length == 0) {
+            if (this.filters.filter(function (f) { return f.key === filter.key; }).length == 0) {
                 this.filters.push(filter);
             }
-
         };
 
         /**
@@ -554,6 +547,4 @@ angular.module('cttvServices')
 
 
         return cttvFiltersService;
-
-
     }]);

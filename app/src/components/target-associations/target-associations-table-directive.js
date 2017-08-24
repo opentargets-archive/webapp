@@ -456,9 +456,7 @@ angular.module('cttvDirectives')
                             // hiddenElement.download = scope.filename + ".csv";
                             // hiddenElement.click();
                             });
-
                         }, otAPIservice.defaultErrorHandler);
-
                 };
 
                 scope.$watchGroup(['facets', 'target', 'active'], function () {

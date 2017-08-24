@@ -50,8 +50,6 @@ angular.module('cttvServices')
                 qo.gene = queryObject.q.title || queryObject.q;
                 qo.datastructure = 'simple';
                 break;
-
-
             }
 
             return qo;

@@ -1,6 +1,5 @@
 angular.module('plugins')
     .directive('interactionsViewer', ['$log', '$timeout', '$http', '$q', 'otAPIservice', 'omnipathdbSources', function ($log, $timeout, $http, $q, otAPIservice, omnipathdbSources) {
-
         function getNames (bestHits) {
             var mapNames = {};
             for (var i = 0; i < bestHits.length; i++) {
@@ -49,7 +48,6 @@ angular.module('plugins')
                         return $q(function (resolve) {
                             resolve(uniprotIds);
                         });
-
                     })
                     .then(function (uniprotIds) {
                         // If there are not interactors, we don't make any other call
@@ -82,7 +80,6 @@ angular.module('plugins')
                         // Both promises run in parallel
                         $q.all(promises)
                             .then(function (resps) {
-
                                 // Get the mappings between uniprot ids and gene symbols
                                 var mapNames = getNames(resps[1].body.data);
 

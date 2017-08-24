@@ -90,7 +90,6 @@ angular.module('plugins')
                         scope.pathway = pathway;
                         pathwayDiagram.loadDiagram(pId);
                     }
-
                 };
 
                 var count = 0;

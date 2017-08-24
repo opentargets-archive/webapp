@@ -62,7 +62,6 @@ angular.module('cttvServices')
      *
      */
         cttvUtilsService.setTableToolsParams = function (obj, title) {
-
         // obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
         // obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
 
@@ -86,7 +85,6 @@ angular.module('cttvServices')
         };
 
         cttvUtilsService.setTableToolsParamsExportColumns = function (obj, title) {
-
             obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>rt<"pull-left small" l><"pull-right small" p>>';
             obj.buttons = [
                 {
@@ -298,8 +296,7 @@ angular.module('cttvServices')
                     matches.drug++;
                 } else if (h.startsWith('phenotypes.label')) {
                     matches.phenotype++;
-                }
-                else {
+                } else {
                     matches.human++;
                 }
             }

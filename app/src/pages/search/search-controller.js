@@ -9,7 +9,6 @@ angular.module('cttvControllers')
      * Controller for the search/results page
      */
     .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'otAppToAPIService', 'otAPIservice', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, otAppToAPIService, otAPIservice, cttvUtils, cttvLocationState) {
-
         'use strict';
 
         cttvUtils.clearErrors();
@@ -66,7 +65,7 @@ angular.module('cttvControllers')
             state.f = (obj.f || [])[0] ? obj.f : [];
 
             // ensure filters are only allowed terms
-            state.f = state.f.filter(function (filter) {return filter == 'target' || filter == 'disease';});
+            state.f = state.f.filter(function (filter) { return filter == 'target' || filter == 'disease'; });
             return state;
         };
 
@@ -104,7 +103,6 @@ angular.module('cttvControllers')
 
 
         $scope.update = function () {
-
             // query and page are taken care of directly via the model
             // so here just update the filters
             var f = Object.keys($scope.filters).filter(function (k) {
@@ -127,7 +125,6 @@ angular.module('cttvControllers')
          */
         var getFiltersData = function () {
             if ($scope.search.query.q.length > 0) {
-
                 Object.keys($scope.filters).forEach(function (k) {
                     $scope.filters[k].loading = true;
                     otAPIservice.getSearch({
@@ -149,7 +146,6 @@ angular.module('cttvControllers')
                         });
                 });
             }
-
         };
 
 
@@ -219,12 +215,10 @@ angular.module('cttvControllers')
                 d = _.uniqBy(d, 'drug.molecule_name');
                 return d.length;
             });
-
         };
 
 
         var getResults = function () {
-
             // before getting new results,
             // we make sure we clear any current results (like in the case
             // of applying a filter), which also causes the spinner to show...
@@ -245,7 +239,6 @@ angular.module('cttvControllers')
                 otAPIservice.getSearch(queryObject)
                     .then(
                         function (resp) {
-
                             $scope.search.results = resp.body;
 
                             $scope.search.results.data.forEach(function (result) {
@@ -260,11 +253,9 @@ angular.module('cttvControllers')
 
                     .then(
                         function (resp) {
-
                             // Picasso panel:
                             // for the first result, parse a few info:
                             if (resp.body.from == 0) {
-
                                 var result = $scope.search.results.data[0];
 
                                 //
@@ -314,7 +305,6 @@ angular.module('cttvControllers')
                                             });
                                         }
                                     });
-
                                 } // end disease specific stuff
 
 
@@ -325,7 +315,6 @@ angular.module('cttvControllers')
                                     // get drugs phase 4 count
 
                                 }
-
                             }
                         },
                         otAPIservice.defaultErrorHandler
@@ -352,5 +341,4 @@ angular.module('cttvControllers')
         }
 
         setStateFromURL(cttvLocationState.parseLocationSearch()[stateId] || {q: [cttvLocationState.parseLocationSearch()[stateIdLegacy]]});
-
     }]);

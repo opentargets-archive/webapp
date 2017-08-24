@@ -1,6 +1,5 @@
 
 function initApp (deps) {
-
     var app = angular.module('cttvApp', deps);
 
     // app.config([localStorageServiceProvider, function (localStorageServiceProvider) {
@@ -99,7 +98,6 @@ function initApp (deps) {
             // }
 
             $locationProvider.html5Mode(true).hashPrefix('!');
-
         }]);
 
     return app;

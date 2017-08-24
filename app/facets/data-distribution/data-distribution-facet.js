@@ -97,8 +97,6 @@ angular.module('facets')
 
 
             link: function (scope, elem, attrs) {
-
-
                 // work out the preset to use and pass that to the slider
                 // TODO: work out a custom option if the user messes up with the URL directly...
                 scope.preset = -1; // set to -1 (custom) to start with...
@@ -134,7 +132,6 @@ angular.module('facets')
                         scope.facet.update();
                     }
                 });
-
             }
         };
     }])
@@ -187,7 +184,7 @@ angular.module('facets')
                         // .ticks(data.length);
 
                     var y = d3.scale.linear()
-                        .domain([0, d3.max(data, function (d) {return d.value;})])
+                        .domain([0, d3.max(data, function (d) { return d.value; })])
                         .range([height, 0]);
 
                     var xAxis = d3.svg.axis()
@@ -235,7 +232,6 @@ angular.module('facets')
 
 
                     if (scope.controls.toLowerCase() === 'true') {
-
                         var mybrush = d3.svg.brush()
                             .x(x)
                             .extent([scope.min, scope.max])
@@ -267,7 +263,6 @@ angular.module('facets')
                             });
                             // mybrush.extent(scope.min, scope.max);
                         };
-
                     }
                 };
 

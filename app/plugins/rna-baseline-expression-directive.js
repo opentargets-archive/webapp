@@ -10,7 +10,6 @@ angular.module('plugins')
                 width: '='
             },
             link: function (scope, element, attrs) {
-
                 var w = scope.width - 40;
                 var target = scope.target.symbol;
 
@@ -42,7 +41,6 @@ angular.module('plugins')
 
                             plotGtex(svg, arr);
                         });
-
                 }, 0);
 
                 function plotGtex (container, data) {
@@ -206,7 +204,6 @@ angular.module('plugins')
                         .attr('class', 'axis')
                         .attr('transform', 'translate(0,' + (-10) + ')')
                         .call(valAxis);
-
                 }
 
                 function obj2array (obj) {
@@ -241,7 +238,6 @@ angular.module('plugins')
                         return svg;
                     };
                 }
-
             }
         };
     }]);

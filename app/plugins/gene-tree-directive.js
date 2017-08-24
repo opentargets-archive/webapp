@@ -127,9 +127,7 @@ angular.module('plugins')
                                     }, scope.target.id + '-homologies'));
                                 }, 0);
                             });
-
                     });
-
             }
         };
     }]);

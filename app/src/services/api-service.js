@@ -99,7 +99,6 @@ angular.module('cttvServices')
          *
          */
         var callAPI = function (queryObject) {
-
             var params = queryObject.params;
 
             countRequest(queryObject.trackCall === false ? undefined : true);
@@ -132,7 +131,7 @@ angular.module('cttvServices')
 
             function done (response) {
                 resolvePromise(response);
-                if (!$rootScope.$$phase) {$rootScope.$apply();}
+                if (!$rootScope.$$phase) { $rootScope.$apply(); }
             }
 
             function resolvePromise (response) {
@@ -183,7 +182,7 @@ angular.module('cttvServices')
             if (error.status >= 500) {
                 $rootScope.showApiError500 = true;
             }
-            if (!$rootScope.$$phase) {$rootScope.$apply();}
+            if (!$rootScope.$$phase) { $rootScope.$apply(); }
         };
 
         // var optionsToString = function (obj) {

@@ -32,13 +32,12 @@ angular.module('facets')
          * It returns an Array of filters.
          */
         parser.parse = function (config, data, countsToUse, isSelected) {
-
             // set array of filters
             config.filters = datatypes.map(function (obj) {
                 var conf = {};
                 var def = {};
                 def[countsToUse] = {};
-                var dtb = data.buckets.filter(function (o) {return o.key === obj.key;})[0] || def;
+                var dtb = data.buckets.filter(function (o) { return o.key === obj.key; })[0] || def;
                 conf.key = obj.key;
                 conf.label = cttvDictionary[obj.key.toUpperCase()] || '';
                 conf.count = dtb[countsToUse].value; // dtb.doc_count;

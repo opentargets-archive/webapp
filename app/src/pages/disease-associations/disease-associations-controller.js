@@ -15,7 +15,6 @@ angular.module('cttvControllers')
  */
 
     .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'otAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $q, otAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvConfig) {
-
         'use strict';
 
         cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
@@ -65,7 +64,6 @@ angular.module('cttvControllers')
          * Renders page elements based on state from locationStateService
          */
         var render = function (new_state, old_state) {
-
             // here we want to update facets, tabs, etc:
             // 1. first we check if the state of a particular element has changed;
             // 2. if it hasn't changed, and it's undefined (i.e. new=undefined, old=undefined),
@@ -94,7 +92,6 @@ angular.module('cttvControllers')
                     return $scope.getFacets(new_state[facetsId], $scope.targets);
                 });
             }
-
         };
 
 
@@ -159,7 +156,6 @@ angular.module('cttvControllers')
                             });
                     }
                 }, otAPIservice.defaultErrorHandler);
-
         };
 
         //
@@ -178,5 +174,4 @@ angular.module('cttvControllers')
         cttvUtils.clearErrors();
         $scope.filters = cttvLocationState.getState()[facetsId] || {};
         render(cttvLocationState.getState(), cttvLocationState.getOldState());
-
     }]);

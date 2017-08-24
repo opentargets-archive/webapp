@@ -30,7 +30,6 @@ angular.module('plugins')
                         };
                     }
                 }, 0);
-
             }
         };
     }]);

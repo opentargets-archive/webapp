@@ -17,7 +17,7 @@ angular.module('plugins')
                 disease: '='
             },
             link: function (scope, element, attrs) {
-                scope.sources = cttvConfig.evidence_sources.known_drug.map(function (s) {return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; });
+                scope.sources = cttvConfig.evidence_sources.known_drug.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; });
             }
         };
     }]);

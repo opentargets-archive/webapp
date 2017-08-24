@@ -21,7 +21,6 @@ angular.module('plugins')
                 width: '='
             },
             link: function (scope, element, attrs) {
-
                 var uniprotId = scope.target.uniprot_id;
 
                 // burger menu
@@ -197,7 +196,6 @@ angular.module('plugins')
                                 var canvas = newDiv.getElementsByTagName('canvas');
                                 return canvas[0];
                             };
-
                         }, 0);
                     }, function (resp) { // error
                         scope.noPdb = true;

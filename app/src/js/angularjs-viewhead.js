@@ -1,6 +1,5 @@
 
 (function (angular, document) {
-
     var mod = angular.module('viewhead', []);
 
     mod.directive(
@@ -63,5 +62,4 @@
             };
         }
     );
-
 })(angular, document);

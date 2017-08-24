@@ -5,7 +5,6 @@ angular.module('cttvServices')
 
 
     .factory('cttvLocationState', ['$log', '$location', '$rootScope', 'cttvConsts', function ($log, $location, $rootScope, cttvConsts) {
-
         'use strict';
 
         var cttvLocationStateService = {};
@@ -123,7 +122,6 @@ angular.module('cttvServices')
 
             for (var i in search) {
                 if (search.hasOwnProperty(i)) {
-
                     raw[i] = search[i];
 
                     if (typeof raw[i] === 'string' && raw[i].match(/.:./)) {
@@ -184,7 +182,7 @@ angular.module('cttvServices')
         cttvLocationStateService.setStateFor = function (k, so, track) {
             // $log.log("setStateFor ");
 
-            if (track == undefined) {track = true;}   // track = (track || track==undefined)
+            if (track == undefined) { track = true; }   // track = (track || track==undefined)
             tmp_state[k] = so;
 
             if (!tmp_state[k] || Object.keys(tmp_state[k]).length == 0) {
@@ -194,7 +192,6 @@ angular.module('cttvServices')
             if (track) {
                 cttvLocationStateService.updateStateURL();
             }
-
         };
 
 
@@ -246,6 +243,4 @@ angular.module('cttvServices')
 
 
         return cttvLocationStateService;
-
-
     }]);
