@@ -6,11 +6,11 @@ angular.module('cttvDirectives')
      * be used to create nav bars that become sticky as the user scrolls the page
      * @param scroll-position - the name of the variable to hold the scroll amount
      * Example:
-     *  <div sticky-scroller scroll-position="scroll" ng-class="scroll>80 ? 'fixed' : ''">
+     *  <div ot-sticky-scroller scroll-position="scroll" ng-class="scroll>80 ? 'fixed' : ''">
      *      Hello
      *  </div>
      */
-    .directive('stickyScroller', ['$window', function ($window) {
+    .directive('otStickyScroller', ['$window', function ($window) {
         'use strict';
 
         return {
