@@ -84,6 +84,7 @@ module.exports = {
         "eol-last": 2,
         "array-bracket-spacing": 2,
         "block-spacing": 2,
+        "no-warning-comments": 2,
         /**
          * Angular rules
          * By default, this uses 
