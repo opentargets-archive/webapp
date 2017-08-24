@@ -298,7 +298,11 @@ angular.module('cttvDirectives')
                                             sentenceString = sentenceString + '</div>';
                                         }
                                         sentenceString += "<p class='small'><span onclick='angular.element(this).scope().displaySentences(\"" + pubmedId + sent.section + "\")'style='cursor:pointer'><i class='fa fa-chevron-circle-down' aria-hidden='true'></i>&nbsp;<span class='bold'>" + section + ": </span>" + sectionCount[sent.section];
-                                        sentenceString += " matched sentences</span></p>";
+                                        if (sectionCount[sent.section] === 1) {
+                                            sentenceString += " matched sentence</span></p>";
+                                        } else {
+                                            sentenceString += " matched sentences</span></p>";
+                                        }
                                         previousSection = sent.section;
 
                                     }
