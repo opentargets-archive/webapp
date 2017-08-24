@@ -6,7 +6,7 @@ angular.module('cttvServices')
     /**
      * The API services, with methods to call the ElasticSearch API
      */
-    .factory('cttvDictionary', [function () {
+    .factory('otDictionary', [function () {
         'use strict';
 
         var dictionary = {

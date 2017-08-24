@@ -14,7 +14,7 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'otAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $q, otAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvConfig) {
+    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'cttvUtils', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $q, otAPIservice, cttvFiltersService, otDictionary, cttvUtils, cttvLocationState, cttvConfig) {
         'use strict';
 
         cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
@@ -140,7 +140,7 @@ angular.module('cttvControllers')
                         $scope.search.label = resp.body.data[0].disease.efo_info.label;
 
                         // The filename to download
-                        $scope.search.filename = cttvDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(' ').join('_');
+                        $scope.search.filename = otDictionary.EXP_DISEASE_ASSOC_LABEL + resp.body.data[0].disease.efo_info.label.split(' ').join('_');
                     } else {
                         // No associations for this disease. Check if there is a profile page
                         var profileOpts = {

@@ -3,7 +3,7 @@
 angular.module('cttvDirectives')
 
 /* Directive to display the known drug evidence table */
-    .directive('knownDrugTable', ['otAPIservice', 'cttvConsts', 'cttvUtils', 'cttvConfig', '$location', 'cttvDictionary', function (otAPIservice, cttvConsts, cttvUtils, cttvConfig, $location, cttvDictionary) {
+    .directive('knownDrugTable', ['otAPIservice', 'cttvConsts', 'cttvUtils', 'cttvConfig', '$location', 'otDictionary', function (otAPIservice, cttvConsts, cttvUtils, cttvConfig, $location, otDictionary) {
         'use strict';
         // var dbs = cttvConsts.dbs;
         var searchObj = cttvUtils.search.translateKeys($location.search());
@@ -143,7 +143,7 @@ angular.module('cttvDirectives')
                                 row.push(item.drug.max_phase_for_all_diseases.numeric_index);
 
                                 // 5: status
-                                var sts = cttvDictionary.NA;
+                                var sts = otDictionary.NA;
                                 if (cttvUtils.checkPath(item, 'evidence.drug2clinic.status')) {
                                     sts = item.evidence.drug2clinic.status;
                                 }
@@ -194,9 +194,9 @@ angular.module('cttvDirectives')
                                 //             + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
                                 // 9: target class
-                                var trgc = cttvDictionary.NA;
+                                var trgc = otDictionary.NA;
                                 if (cttvUtils.checkPath(item, 'target.target_class')) {
-                                    trgc = item.target.target_class[0] || cttvDictionary.NA;
+                                    trgc = item.target.target_class[0] || otDictionary.NA;
                                 }
                                 row.push(trgc);
 

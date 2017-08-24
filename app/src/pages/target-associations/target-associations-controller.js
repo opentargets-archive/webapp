@@ -6,7 +6,7 @@ angular.module('cttvControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', 'cttvUtils', 'otAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvLocationState', 'cttvConfig', function ($scope, $location, cttvUtils, otAPIservice, cttvFiltersService, cttvDictionary, cttvLocationState, cttvConfig) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', 'cttvUtils', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'cttvLocationState', 'cttvConfig', function ($scope, $location, cttvUtils, otAPIservice, cttvFiltersService, otDictionary, cttvLocationState, cttvConfig) {
         'use strict';
 
         cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
@@ -21,7 +21,7 @@ angular.module('cttvControllers')
         };
 
         $scope.labels = {
-            therapeutic_areas: cttvDictionary.THERAPEUTIC_AREAS
+            therapeutic_areas: otDictionary.THERAPEUTIC_AREAS
         };
 
         $scope.n = {
@@ -128,7 +128,7 @@ angular.module('cttvControllers')
                         $scope.search.label = resp.body.data[0].target.gene_info.symbol;
 
                         // set the filename
-                        $scope.search.filename = cttvDictionary.EXP_TARGET_ASSOC_LABEL + resp.body.data[0].target.gene_info.symbol;
+                        $scope.search.filename = otDictionary.EXP_TARGET_ASSOC_LABEL + resp.body.data[0].target.gene_info.symbol;
 
                         // Set the total number of diseases
                         $scope.n.diseases = resp.body.total;

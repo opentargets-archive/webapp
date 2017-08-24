@@ -14,7 +14,7 @@ angular.module('cttvDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('cttvDiseaseAssociations', ['cttvUtils', 'cttvDictionary', 'cttvConsts', 'otAPIservice', '$q', function (cttvUtils, cttvDictionary, cttvConsts, otAPIservice, $q) {
+    .directive('cttvDiseaseAssociations', ['cttvUtils', 'otDictionary', 'cttvConsts', 'otAPIservice', '$q', function (cttvUtils, otDictionary, cttvConsts, otAPIservice, $q) {
         'use strict';
 
         var draw = 1;
@@ -53,42 +53,42 @@ angular.module('cttvDirectives')
      */
         var cols = [
         // empty col for the gene symbol
-            {name: '', title: cttvDictionary.TARGET_SYMBOL},
-            // {name: "", title: cttvDictionary.ENSEMBL_ID},
-            {name: '', title: cttvDictionary.ASSOCIATION_SCORE},
+            {name: '', title: otDictionary.TARGET_SYMBOL},
+            // {name: "", title: otDictionary.ENSEMBL_ID},
+            {name: '', title: otDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
             {
                 name: cttvConsts.datatypes.GENETIC_ASSOCIATION,
-                title: cttvDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]
+                title: otDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]
             },
             {
                 name: cttvConsts.datatypes.SOMATIC_MUTATION,
-                title: cttvDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]
+                title: otDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]
             },
             {
                 name: cttvConsts.datatypes.KNOWN_DRUG,
-                title: cttvDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]
+                title: otDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]
             },
             {
                 name: cttvConsts.datatypes.AFFECTED_PATHWAY,
-                title: cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]
+                title: otDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]
             },
             {
                 name: cttvConsts.datatypes.RNA_EXPRESSION,
-                title: cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]
+                title: otDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]
             },
             {
                 name: cttvConsts.datatypes.LITERATURE,
-                title: cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]
+                title: otDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]
             },
             {
                 name: cttvConsts.datatypes.ANIMAL_MODEL,
-                title: cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]
+                title: otDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]
             },
             // empty col for sorting by total score (sum)
             {name: '', title: 'total score', visible: false, className: 'never'},
             // empty col for the gene name
-            {name: '', title: cttvDictionary.TARGET_NAME}
+            {name: '', title: otDictionary.TARGET_NAME}
         ];
 
         var a = [];

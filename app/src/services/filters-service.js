@@ -7,7 +7,7 @@ angular.module('cttvServices')
     /**
      *
      */
-    .factory('cttvFiltersService', ['$log', '$location', 'cttvDictionary', 'cttvConsts', 'otAPIservice', 'cttvUtils', 'cttvLocationState', '$analytics', '$injector', 'cttvConfig', function ($log, $location, cttvDictionary, cttvConsts, otAPIservice, cttvUtils, cttvLocationState, $analytics, $injector, cttvConfig) {
+    .factory('cttvFiltersService', ['$log', '$location', 'otDictionary', 'cttvConsts', 'otAPIservice', 'cttvUtils', 'cttvLocationState', '$analytics', '$injector', 'cttvConfig', function ($log, $location, otDictionary, cttvConsts, otAPIservice, cttvUtils, cttvLocationState, $analytics, $injector, cttvConfig) {
         'use strict';
 
 
@@ -160,7 +160,7 @@ angular.module('cttvServices')
             // mostly things for the collection container, like label, whether it's open or closed to start with
             options = options || {};
             options.open = options.open === false ? false : true;
-            options.heading = options.heading || cttvDictionary[collection.toUpperCase()] || collection;
+            options.heading = options.heading || otDictionary[collection.toUpperCase()] || collection;
 
             var config = {
                 key: collection,    // this is the type, really...

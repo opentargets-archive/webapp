@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
 /**
 * Matrix (heatmap) view for target associations
 */
-    .directive('cttvTargetAssociationsTable', ['otAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$q', '$analytics', function (otAPIservice, cttvUtils, cttvDictionary, cttvConsts, $q, $analytics) {
+    .directive('cttvTargetAssociationsTable', ['otAPIservice', 'cttvUtils', 'otDictionary', 'cttvConsts', '$q', '$analytics', function (otAPIservice, cttvUtils, otDictionary, cttvConsts, $q, $analytics) {
         'use strict';
 
         var whoiam = 'table';
@@ -45,19 +45,19 @@ angular.module('cttvDirectives')
 
 
         var cols = [
-            {name: '', title: cttvDictionary.DISEASE},
+            {name: '', title: otDictionary.DISEASE},
             {name: '', title: 'EFO'},
             {name: '', title: 'TherapeuticArea EFO'},
-            {name: '', title: cttvDictionary.ASSOCIATION_SCORE},
+            {name: '', title: otDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
-            {name: cttvConsts.datatypes.GENETIC_ASSOCIATION, title: cttvDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
-            {name: cttvConsts.datatypes.SOMATIC_MUTATION, title: cttvDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
-            {name: cttvConsts.datatypes.KNOWN_DRUG, title: cttvDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
-            {name: cttvConsts.datatypes.AFFECTED_PATHWAY, title: cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
-            {name: cttvConsts.datatypes.RNA_EXPRESSION, title: cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
-            {name: cttvConsts.datatypes.LITERATURE, title: cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
-            {name: cttvConsts.datatypes.ANIMAL_MODEL, title: cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
-            {name: '', title: cttvDictionary.THERAPEUTIC_AREA}
+            {name: cttvConsts.datatypes.GENETIC_ASSOCIATION, title: otDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
+            {name: cttvConsts.datatypes.SOMATIC_MUTATION, title: otDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
+            {name: cttvConsts.datatypes.KNOWN_DRUG, title: otDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
+            {name: cttvConsts.datatypes.AFFECTED_PATHWAY, title: otDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
+            {name: cttvConsts.datatypes.RNA_EXPRESSION, title: otDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
+            {name: cttvConsts.datatypes.LITERATURE, title: otDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
+            {name: cttvConsts.datatypes.ANIMAL_MODEL, title: otDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
+            {name: '', title: otDictionary.THERAPEUTIC_AREA}
         ];
 
         /*

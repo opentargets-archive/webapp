@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('datatypeFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', 'datasourceFacetParser', function ($log, cttvDictionary, cttvConsts, datasourceFacetParser) {
+    .factory('datatypeFacetParser', ['$log', 'otDictionary', 'cttvConsts', 'datasourceFacetParser', function ($log, otDictionary, cttvConsts, datasourceFacetParser) {
         'use strict';
 
 
@@ -39,7 +39,7 @@ angular.module('facets')
                 def[countsToUse] = {};
                 var dtb = data.buckets.filter(function (o) { return o.key === obj.key; })[0] || def;
                 conf.key = obj.key;
-                conf.label = cttvDictionary[obj.key.toUpperCase()] || '';
+                conf.label = otDictionary[obj.key.toUpperCase()] || '';
                 conf.count = dtb[countsToUse].value; // dtb.doc_count;
                 conf.enabled = dtb.key !== undefined; // it's actually coming from the API and not {}
                 conf.selected = isSelected(config.key, obj.key); // && conf.count>0;    // do we want to show disabled items (with count==0) as selected or not?

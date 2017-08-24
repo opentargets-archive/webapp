@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('datasourceFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', function ($log, cttvDictionary, cttvConsts) {
+    .factory('datasourceFacetParser', ['$log', 'otDictionary', 'cttvConsts', function ($log, otDictionary, cttvConsts) {
         'use strict';
 
 
@@ -25,7 +25,7 @@ angular.module('facets')
             config.filters = data.buckets.map(function (obj) {
                 var conf = {};
                 conf.key = obj.key;
-                conf.label = cttvDictionary[cttvConsts.invert(obj.key)] || obj.key;
+                conf.label = otDictionary[cttvConsts.invert(obj.key)] || obj.key;
                 conf.count = obj[countsToUse].value;
                 conf.selected = isSelected(config.key, obj.key);
                 conf.facet = config.key;

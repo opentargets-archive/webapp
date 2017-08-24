@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('therapeuticAreaFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', 'datasourceFacetParser', function ($log, cttvDictionary, cttvConsts, datasourceFacetParser) {
+    .factory('therapeuticAreaFacetParser', ['$log', 'otDictionary', 'cttvConsts', 'datasourceFacetParser', function ($log, otDictionary, cttvConsts, datasourceFacetParser) {
         'use strict';
 
 

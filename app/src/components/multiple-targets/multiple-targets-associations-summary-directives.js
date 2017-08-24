@@ -85,7 +85,7 @@ angular.module('cttvDirectives')
 //     };
 // }])
 
-    .directive('multipleTargetsTable', ['$log', 'cttvUtils', 'cttvConsts', 'cttvDictionary', function ($log, cttvUtils, cttvConsts, cttvDictionary) {
+    .directive('multipleTargetsTable', ['$log', 'cttvUtils', 'cttvConsts', 'otDictionary', function ($log, cttvUtils, cttvConsts, otDictionary) {
         'use strict';
 
         function resolveTies (input, pvalPos, sortedTAs) {
@@ -245,7 +245,7 @@ angular.module('cttvDirectives')
                 for (var i = 0; i < datatypes.length; i++) {
                     scope.datatypes.push({
                     // label: cttvConsts.datatypesLabels[datatypes[i]],
-                        label: cttvDictionary[datatypes[i]],
+                        label: otDictionary[datatypes[i]],
                         id: cttvConsts.datatypes[datatypes[i]],
                         selected: true
                     });

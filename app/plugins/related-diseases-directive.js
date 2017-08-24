@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('relatedDiseases', ['$log', 'cttvUtils', 'cttvConsts', 'cttvDictionary', 'otAPIservice', '$timeout', function ($log, cttvUtils, cttvConsts, cttvDictionary, otAPIservice, $timeout) {
+    .directive('relatedDiseases', ['$log', 'cttvUtils', 'cttvConsts', 'otDictionary', 'otAPIservice', '$timeout', function ($log, cttvUtils, cttvConsts, otDictionary, otAPIservice, $timeout) {
         'use strict';
 
         // Details table --
@@ -51,22 +51,22 @@ angular.module('plugins')
         };
 
         var cols = [
-            {name: '', title: cttvDictionary.TARGET_SYMBOL},
-            {name: '', title: cttvDictionary.ENSEMBL_ID},
+            {name: '', title: otDictionary.TARGET_SYMBOL},
+            {name: '', title: otDictionary.ENSEMBL_ID},
 
             // Datatypes for the OBJECT
-            {name: '', title: cttvDictionary.ASSOCIATION_SCORE},
-            {name: cttvConsts.datatypes.GENETIC_ASSOCIATION, title: cttvDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
-            {name: cttvConsts.datatypes.SOMATIC_MUTATION, title: cttvDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
-            {name: cttvConsts.datatypes.KNOWN_DRUG, title: cttvDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
-            {name: cttvConsts.datatypes.AFFECTED_PATHWAY, title: cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
-            {name: cttvConsts.datatypes.RNA_EXPRESSION, title: cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
-            {name: cttvConsts.datatypes.LITERATURE, title: cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
-            {name: cttvConsts.datatypes.ANIMAL_MODEL, title: cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
+            {name: '', title: otDictionary.ASSOCIATION_SCORE},
+            {name: cttvConsts.datatypes.GENETIC_ASSOCIATION, title: otDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
+            {name: cttvConsts.datatypes.SOMATIC_MUTATION, title: otDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
+            {name: cttvConsts.datatypes.KNOWN_DRUG, title: otDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
+            {name: cttvConsts.datatypes.AFFECTED_PATHWAY, title: otDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
+            {name: cttvConsts.datatypes.RNA_EXPRESSION, title: otDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
+            {name: cttvConsts.datatypes.LITERATURE, title: otDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
+            {name: cttvConsts.datatypes.ANIMAL_MODEL, title: otDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
             {name: '', title: 'total score'},
 
             // empty col for the gene name
-            {name: '', title: cttvDictionary.TARGET_NAME}
+            {name: '', title: otDictionary.TARGET_NAME}
         ];
 
         // setup the table

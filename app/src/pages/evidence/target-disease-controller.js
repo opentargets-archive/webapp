@@ -8,7 +8,7 @@ angular.module('cttvControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'otClearUnderscoresFilter', '$analytics', 'cttvLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, otClearUnderscoresFilter, $analytics, cttvLocationState, $anchorScroll) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'cttvUtils', 'otDictionary', 'cttvConsts', 'cttvConfig', 'otClearUnderscoresFilter', '$analytics', 'cttvLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, cttvUtils, otDictionary, cttvConsts, cttvConfig, otClearUnderscoresFilter, $analytics, cttvLocationState, $anchorScroll) {
         'use strict';
 
 
@@ -45,23 +45,23 @@ angular.module('cttvControllers')
                 genetic_associations: {
                     is_open: false,
                     is_loading: false,
-                    heading: cttvDictionary.GENETIC_ASSOCIATION,
+                    heading: otDictionary.GENETIC_ASSOCIATION,
                     common_diseases: {
                         data: [],
                         is_open: false,
                         is_loading: false,
-                        heading: cttvDictionary.COMMON_DISEASES,
+                        heading: otDictionary.COMMON_DISEASES,
                         source: cttvConfig.evidence_sources.genetic_association.common,
-                        source_label: cttvConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                        source_label: cttvConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                         has_errors: false
                     },
                     rare_diseases: {
                         data: [],
                         is_open: false,
                         is_loading: false,
-                        heading: cttvDictionary.RARE_DISEASES,
+                        heading: otDictionary.RARE_DISEASES,
                         source: cttvConfig.evidence_sources.genetic_association.rare,
-                        source_label: cttvConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                        source_label: cttvConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                         has_errors: false
                     }
                 },
@@ -69,54 +69,54 @@ angular.module('cttvControllers')
                     data: [],
                     is_open: false,
                     is_loading: false,
-                    heading: cttvDictionary.RNA_EXPRESSION,
+                    heading: otDictionary.RNA_EXPRESSION,
                     source: cttvConfig.evidence_sources.rna_expression,
-                    source_label: cttvConfig.evidence_sources.rna_expression.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.rna_expression.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 affected_pathways: {
                     data: [],
                     is_open: false,
                     is_loading: false,
-                    heading: cttvDictionary.AFFECTED_PATHWAY,
+                    heading: otDictionary.AFFECTED_PATHWAY,
                     source: cttvConfig.evidence_sources.pathway,
-                    source_label: cttvConfig.evidence_sources.pathway.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.pathway.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 known_drugs: {
                     data: [],
                     is_open: false,
                     is_loading: false,
-                    heading: cttvDictionary.KNOWN_DRUG,
+                    heading: otDictionary.KNOWN_DRUG,
                     source: cttvConfig.evidence_sources.known_drug,
-                    source_label: cttvConfig.evidence_sources.known_drug.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 somatic_mutations: {
                     data: [],
                     is_open: false,
                     is_loading: false,
-                    heading: cttvDictionary.SOMATIC_MUTATION,
+                    heading: otDictionary.SOMATIC_MUTATION,
                     source: cttvConfig.evidence_sources.somatic_mutation,
-                    source_label: cttvConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 literature: {
                     data: [],
                     is_open: false,
                     is_loading: false,
-                    heading: cttvDictionary.LITERATURE,
+                    heading: otDictionary.LITERATURE,
                     source: cttvConfig.evidence_sources.literature,
-                    source_label: cttvConfig.evidence_sources.literature.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.literature.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 animal_models: {
                     data: [],
                     is_open: false,
                     is_loading: false,
-                    heading: cttvDictionary.ANIMAL_MODEL,
+                    heading: otDictionary.ANIMAL_MODEL,
                     source: cttvConfig.evidence_sources.animal_model,
-                    source_label: cttvConfig.evidence_sources.animal_model.map(function (s) { return {label: cttvDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: cttvConfig.evidence_sources.animal_model.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 }
             }
@@ -495,7 +495,7 @@ angular.module('cttvControllers')
 
 
                     // mutation
-                    var mut = cttvDictionary.NA;
+                    var mut = otDictionary.NA;
                     if (checkPath(item, 'variant.id') && item.variant.id) {
                         var rsId = item.variant.id.split('/').pop();
                         if (rsId.indexOf('rs') === 0) {
@@ -700,12 +700,12 @@ angular.module('cttvControllers')
                     row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=\'_blank\'>' + item.evidence.urls[0].nice_name + '</a>');
 
                     // activity
-                    row.push(cttvDictionary[item.target.activity.toUpperCase()] || otClearUnderscoresFilter(item.target.activity)); // "up_or_down"->"unclassified" via dictionary
+                    row.push(otDictionary[item.target.activity.toUpperCase()] || otClearUnderscoresFilter(item.target.activity)); // "up_or_down"->"unclassified" via dictionary
 
                     // mutations
-                    var mut = cttvDictionary.NA;
+                    var mut = otDictionary.NA;
                     if (item.evidence.known_mutations && item.evidence.known_mutations.length > 0) {
-                        mut = arrayToList(item.evidence.known_mutations.map(function (i) { return i.preferred_name || cttvDictionary.NA; }), true);
+                        mut = arrayToList(item.evidence.known_mutations.map(function (i) { return i.preferred_name || otDictionary.NA; }), true);
                     }
                     row.push(mut);
 
@@ -849,7 +849,7 @@ angular.module('cttvControllers')
                     row.push(item.evidence.log2_fold_change.percentile_rank);
 
                     // experiment overview
-                    var expOverview = (item.evidence.urls[2] || item.evidence.urls[0]).url || cttvDictionary.NA;
+                    var expOverview = (item.evidence.urls[2] || item.evidence.urls[0]).url || otDictionary.NA;
                     row.push('<a class=\'cttv-external-link\' href=\'' + expOverview + '\' target=\'_blank\'>' + (item.evidence.experiment_overview || 'Experiment overview and raw data') + '</a>');
 
 
@@ -979,9 +979,9 @@ angular.module('cttvControllers')
                     row.push(item.disease.efo_info.label);
 
 
-                    var mut = cttvDictionary.NA;
-                    var samp = cttvDictionary.NA;
-                    var patt = cttvDictionary.NA;
+                    var mut = otDictionary.NA;
+                    var samp = otDictionary.NA;
+                    var patt = otDictionary.NA;
 
 
                     if (item.evidence.known_mutations && item.evidence.known_mutations.length) {
@@ -1156,7 +1156,7 @@ angular.module('cttvControllers')
 
 
                     // evidence source
-                    row.push(cttvDictionary.PHENODIGM);
+                    row.push(otDictionary.PHENODIGM);
 
                     // score -- hidden column now
                     row.push((item.scores.association_score).toFixed(2));

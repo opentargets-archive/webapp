@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('dataDistributionFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', function ($log, cttvDictionary, cttvConsts) {
+    .factory('dataDistributionFacetParser', ['$log', 'otDictionary', 'cttvConsts', function ($log, otDictionary, cttvConsts) {
         'use strict';
 
 

@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('targetClassFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', function ($log, cttvDictionary, cttvConsts) {
+    .factory('targetClassFacetParser', ['$log', 'otDictionary', 'cttvConsts', function ($log, otDictionary, cttvConsts) {
         'use strict';
 
 
