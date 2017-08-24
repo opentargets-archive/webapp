@@ -65,7 +65,7 @@ angular.module('cttvControllers')
             state.f = (obj.f || [])[0] ? obj.f : [];
 
             // ensure filters are only allowed terms
-            state.f = state.f.filter(function (filter) { return filter == 'target' || filter == 'disease'; });
+            state.f = state.f.filter(function (filter) { return filter === 'target' || filter === 'disease'; });
             return state;
         };
 
@@ -110,7 +110,7 @@ angular.module('cttvControllers')
             });
 
             // if some filter changed, so reset the page number:
-            if (state.f.length != f.length) {
+            if (state.f.length !== f.length) {
                 state.p[0] = 1;
             }
 
@@ -210,7 +210,7 @@ angular.module('cttvControllers')
 
             return otAPIservice.getFilterBy(queryObject).then(function (resp) {
                 var d = resp.body.data.filter(function (i) {
-                    return i.drug.max_phase_for_all_diseases.numeric_index == 4;
+                    return i.drug.max_phase_for_all_diseases.numeric_index === 4;
                 });
                 d = _.uniqBy(d, 'drug.molecule_name');
                 return d.length;
@@ -232,7 +232,7 @@ angular.module('cttvControllers')
                 queryObject.params = otAppToAPIService.getApiQueryObject(otAppToAPIService.SEARCH, $scope.search.query);
                 // if one and only one of the filters is selected, apply the corresponding filter
                 // cool way of mimicking a XOR operator ;)
-                if ($scope.filters.target.selected != $scope.filters.disease.selected) {
+                if ($scope.filters.target.selected !== $scope.filters.disease.selected) {
                     queryObject.params.filter = $scope.filters.target.selected ? 'target' : 'disease';
                 }
 
@@ -255,7 +255,7 @@ angular.module('cttvControllers')
                         function (resp) {
                             // Picasso panel:
                             // for the first result, parse a few info:
-                            if (resp.body.from == 0) {
+                            if (resp.body.from === 0) {
                                 var result = $scope.search.results.data[0];
 
                                 //

@@ -135,7 +135,7 @@ angular.module('cttvControllers')
         // perhaps we should use our locationstate service instead?
         $scope.$on('$locationChangeSuccess', function () {
             // when the location is back to the homepage, we hide the social media icons and show the "follow us" instead...
-            if ($location.path() == '/') {
+            if ($location.path() === '/') {
                 $scope.showSocialMedia = false;
             }
         });

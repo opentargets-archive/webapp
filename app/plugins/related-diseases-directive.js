@@ -121,7 +121,7 @@ angular.module('plugins')
                 if (!targets[t]) {
                     targets[t] = 1;
                     n++;
-                    if (n == max) {
+                    if (n === max) {
                         break;
                     }
                 }
@@ -196,19 +196,19 @@ angular.module('plugins')
                 // Association score
                 row.push(getColorStyleString(objAssoc.association_score.overall, sbjAssoc.association_score.overall, geneObjDiseaseLoc, geneSbjDiseaseLoc));
                 // Genetic association
-                row.push(getColorStyleString(objDts.genetic_association, sbjDts.genetic_association, geneObjDiseaseLoc + (geneObjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=genetic_associations', geneSbjDiseaseLoc + (geneSbjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=genetic_associations'));
+                row.push(getColorStyleString(objDts.genetic_association, sbjDts.genetic_association, geneObjDiseaseLoc + (geneObjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=genetic_associations', geneSbjDiseaseLoc + (geneSbjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=genetic_associations'));
                 // Somatic mutation
-                row.push(getColorStyleString(objDts.somatic_mutation, sbjDts.somatic_mutation, geneObjDiseaseLoc +    (geneObjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=somatic_mutations', geneSbjDiseaseLoc +    (geneSbjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=somatic_mutations'));
+                row.push(getColorStyleString(objDts.somatic_mutation, sbjDts.somatic_mutation, geneObjDiseaseLoc +    (geneObjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=somatic_mutations', geneSbjDiseaseLoc +    (geneSbjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=somatic_mutations'));
                 // Known drug
-                row.push(getColorStyleString(objDts.known_drug, sbjDts.known_drug, geneObjDiseaseLoc + (geneObjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=known_drugs', geneSbjDiseaseLoc + (geneSbjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=known_drugs'));
+                row.push(getColorStyleString(objDts.known_drug, sbjDts.known_drug, geneObjDiseaseLoc + (geneObjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=known_drugs', geneSbjDiseaseLoc + (geneSbjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=known_drugs'));
                 // Affected pathway
-                row.push(getColorStyleString(objDts.affected_pathway, sbjDts.affected_pathway, geneObjDiseaseLoc +    (geneObjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=affected_pathways', geneSbjDiseaseLoc +    (geneSbjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=affected_pathways'));
+                row.push(getColorStyleString(objDts.affected_pathway, sbjDts.affected_pathway, geneObjDiseaseLoc +    (geneObjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=affected_pathways', geneSbjDiseaseLoc +    (geneSbjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=affected_pathways'));
                 // Expression atlas
-                row.push(getColorStyleString(objDts.rna_expression, sbjDts.rna_expression, geneObjDiseaseLoc +      (geneObjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=rna_expression', geneSbjDiseaseLoc +      (geneSbjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=rna_expression'));
+                row.push(getColorStyleString(objDts.rna_expression, sbjDts.rna_expression, geneObjDiseaseLoc +      (geneObjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=rna_expression', geneSbjDiseaseLoc +      (geneSbjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=rna_expression'));
                 // Literature
-                row.push(getColorStyleString(objDts.literature, sbjDts.literature, geneObjDiseaseLoc + (geneObjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=literature', geneSbjDiseaseLoc + (geneSbjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=literature'));
+                row.push(getColorStyleString(objDts.literature, sbjDts.literature, geneObjDiseaseLoc + (geneObjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=literature', geneSbjDiseaseLoc + (geneSbjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=literature'));
                 // Animal model
-                row.push(getColorStyleString(objDts.animal_model, sbjDts.animal_model, geneObjDiseaseLoc +        (geneObjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=animal_models', geneSbjDiseaseLoc +        (geneSbjDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'sec=animal_models'));
+                row.push(getColorStyleString(objDts.animal_model, sbjDts.animal_model, geneObjDiseaseLoc +        (geneObjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=animal_models', geneSbjDiseaseLoc +        (geneSbjDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'sec=animal_models'));
 
                 // Total score
                 row.push(objDts.genetic_association +

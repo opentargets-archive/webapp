@@ -81,8 +81,8 @@ angular.module('cttvServices')
          * added to the created array and then returned.
          */
         var getCollectionForSelected = function (key, label) {
-            var c = selected.filter(function (obj) { return obj.key == key; })[0];
-            if (c == undefined) {
+            var c = selected.filter(function (obj) { return obj.key === key; })[0];
+            if (c === undefined) {
                 c = new FilterCollection({key: key, label: label});
                 selected.push(c);
             }
@@ -100,7 +100,7 @@ angular.module('cttvServices')
                 // if this has subfilters and *some* of them are selected, we deselect the 'parent' (i.e. current filter)
                 // then parse parent (if selected) and all the children.
                 // So here we update the selected state based on subfilters if needed
-                if (fs.collection != null && fs.collection.getSelectedFilters().length > 0) {
+                if (fs.collection !== null && fs.collection.getSelectedFilters().length > 0) {
                     if (fs.collection.getSelectedFilters().length < fs.collection.filters.length) {
                         fs.selected = false;
                     }
@@ -121,7 +121,7 @@ angular.module('cttvServices')
                     selectedCount++;
                 }
 
-                if (fs.collection != null && (fs.collection instanceof FilterCollection)) {
+                if (fs.collection !== null && (fs.collection instanceof FilterCollection)) {
                     parseCollectionSelected(fs.collection);
                 }
             });
@@ -134,7 +134,7 @@ angular.module('cttvServices')
         var isSelected = function (collection, key) {
             var fcts = otLocationState.getState()[cttvFiltersService.stateId];
             key = '' + key; // target class is numerical key which confuses indexOf below.
-            return (fcts && fcts[collection] && (fcts[collection] == key || fcts[collection].indexOf(key) >= 0)) || false;
+            return (fcts && fcts[collection] && (fcts[collection] === key || fcts[collection].indexOf(key) >= 0)) || false;
         };
 
 
@@ -262,8 +262,8 @@ angular.module('cttvServices')
             this.key = o.key || '';     // the filter id, e.g. "rna_expression" or "react_15518"
             this.label = o.label || ''; // the label to display
             this.count = o.count || 0;  // the count to display
-            this.enabled = this.count > 0 && (o.enabled == undefined ? true : o.enabled);
-            this.selected = o.selected == undefined ? false : o.selected;
+            this.enabled = this.count > 0 && (o.enabled === undefined ? true : o.enabled);
+            this.selected = o.selected === undefined ? false : o.selected;
             this.value = o.value || undefined;  // the value associated with this
             // has nested filters?
             // TODO: the problem here is that we couple the Filter class to the parseCollection() method here...
@@ -328,7 +328,7 @@ angular.module('cttvServices')
              */
         FilterCollection.prototype.addFilter = function (filter) {
             // we should check the filter doesn't already exist...
-            if (this.filters.filter(function (f) { return f.key === filter.key; }).length == 0) {
+            if (this.filters.filter(function (f) { return f.key === filter.key; }).length === 0) {
                 this.filters.push(filter);
             }
         };
@@ -339,7 +339,7 @@ angular.module('cttvServices')
         FilterCollection.prototype.selectAll = function (b) {
             this.filters.forEach(function (f) {
                 f.setSelected(b);
-                if (!b && f.collection != null) {
+                if (!b && f.collection !== null) {
                     f.collection.selectAll(b);
                 }
             });
@@ -353,8 +353,8 @@ angular.module('cttvServices')
             return this.filters.filter(function (obj) {
                 var sub = false;
                 if (obj.collection) {
-                    if (obj.collection.getSelectedFilters != undefined) {
-                        sub = (obj.collection.filters.length == obj.collection.getSelectedFilters().length);
+                    if (obj.collection.getSelectedFilters !== undefined) {
+                        sub = (obj.collection.filters.length === obj.collection.getSelectedFilters().length);
                     }
                 }
                 return obj.selected || sub;
@@ -369,7 +369,7 @@ angular.module('cttvServices')
 
         FilterCollection.prototype.isLastClicked = function () {
             return this.filters.some(function (f) {
-                return f.toString() == lastClicked;
+                return f.toString() === lastClicked;
             });
         };
 
@@ -472,7 +472,7 @@ angular.module('cttvServices')
                         // default options from facet definition can be overriden with info in pageFacetStack for the page
                         var opts = {};
                         for (var i in otConfig.facets[collection.type].options) {
-                            opts[i] = (collection.options && collection.options[i] != undefined) ? collection.options[i] : otConfig.facets[collection.type].options[i];
+                            opts[i] = (collection.options && collection.options[i] !== undefined) ? collection.options[i] : otConfig.facets[collection.type].options[i];
                         }
                         opts.element = otConfig.facets[collection.type].element;
 

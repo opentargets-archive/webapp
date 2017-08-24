@@ -182,10 +182,10 @@ angular.module('cttvServices')
         otLocationStateService.setStateFor = function (k, so, track) {
             // $log.log("setStateFor ");
 
-            if (track == undefined) { track = true; }   // track = (track || track==undefined)
+            if (track === undefined) { track = true; }   // track = (track || track==undefined)
             tmp_state[k] = so;
 
-            if (!tmp_state[k] || Object.keys(tmp_state[k]).length == 0) {
+            if (!tmp_state[k] || Object.keys(tmp_state[k]).length === 0) {
                 delete tmp_state[k];
             }
 

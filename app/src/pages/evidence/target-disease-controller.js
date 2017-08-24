@@ -125,7 +125,7 @@ angular.module('cttvControllers')
         $scope.datatypes = datatypes;
 
         var arrayToList = function (arr, oneToString) {
-            if (oneToString && arr.length == 1) {
+            if (oneToString && arr.length === 1) {
                 return arr[0];
             }
             return '<ul><li>' + arr.join('</li><li>') + '</li></ul>';
@@ -323,7 +323,7 @@ angular.module('cttvControllers')
 
                 try {
                     // data origin: public / private
-                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // disease name
                     row.push(item.disease.efo_info.label);
@@ -487,7 +487,7 @@ angular.module('cttvControllers')
                     var db = item.sourceID;
 
                     // data origin: public / private
-                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
 
                     // disease
@@ -541,7 +541,7 @@ angular.module('cttvControllers')
                         if (db === otConsts.dbs.GENOMICS_ENGLAND) {
                             item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
                         }
-                        if (db == otConsts.dbs.GENE_2_PHENOTYPE) {
+                        if (db === otConsts.dbs.GENE_2_PHENOTYPE) {
                             row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>Further details in Gene2Phenotype database</a>');
                         } else {
                             row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>' + item.evidence.urls[0].nice_name + '</a>');
@@ -691,7 +691,7 @@ angular.module('cttvControllers')
 
                 try {
                     // data origin: public / private
-                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // disease
                     row.push(item.disease.efo_info.label);
@@ -820,7 +820,7 @@ angular.module('cttvControllers')
 
                 try {
                     // data origin: public / private
-                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // disease
                     row.push(item.disease.efo_info.label);
@@ -973,7 +973,7 @@ angular.module('cttvControllers')
                 var row = [];
                 try {
                     // col 0: data origin: public / private
-                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // col 1: disease
                     row.push(item.disease.efo_info.label);
@@ -990,7 +990,7 @@ angular.module('cttvControllers')
                         var pattern = '';
                         for (var i = 0; i < item.evidence.known_mutations.length; i++) {
                             var m = item.evidence.known_mutations[i];
-                            if (item.sourceID == otConsts.dbs.INTOGEN) {
+                            if (item.sourceID === otConsts.dbs.INTOGEN) {
                                 mutation_types += '<div>' + otClearUnderscoresFilter(item.target.activity || mut);
                             } else {
                                 mutation_types += '<div>' + otClearUnderscoresFilter(m.preferred_name || mut) + '</div>';
@@ -1137,7 +1137,7 @@ angular.module('cttvControllers')
 
                 try {
                     // data origin: public / private
-                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // disease
                     row.push(item.disease.efo_info.label);    // or item.disease.efo_info.label ???

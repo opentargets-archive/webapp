@@ -101,27 +101,21 @@ angular.module('facets')
                 // TODO: work out a custom option if the user messes up with the URL directly...
                 scope.preset = -1; // set to -1 (custom) to start with...
                 var init = scope.$watch('facet.filters', function (val, old) {
-                    // $log.log("facet ready?" + scope.preset);
-                    // $log.log(scope.facet.filters);
                     if (scope.facet.filters[0] && scope.facet.filters[1] && scope.facet.filters[2]) {
                         score_presets.forEach(function (item, i) {
-                            // $log.log(i+" "+item.min+"=="+scope.facet.filters[0].key +" : "+ (item.min==scope.facet.filters[0].key) );
-                            // $log.log(i+" "+item.max+"=="+scope.facet.filters[1].key +" : "+ (item.max==scope.facet.filters[1].key) );
-                            // $log.log(i+" "+item.stringency+"=="+scope.facet.filters[2].key +" : "+ (item.stringency==scope.facet.filters[2].key) );
-                            if (item.min == scope.facet.filters[0].key &&
-                                item.max == scope.facet.filters[1].key &&
-                                item.stringency == scope.facet.filters[2].key) {
+                            if (item.min === scope.facet.filters[0].key &&
+                                item.max === scope.facet.filters[1].key &&
+                                item.stringency === scope.facet.filters[2].key) {
                                 scope.preset = i;
                             }
                         });
-                        // $log.log("Preset: "+scope.preset);
                         init(); // remove the watch after first initialization...
                     }
                 });
 
                 // scope.$watch('facet.filters[2].key', function(val, old){
                 scope.$watch('preset', function (val, old) {
-                    if (old !== undefined && old != val) {
+                    if (old !== undefined && old !== val) {
                         // set the stringency
                         scope.facet.filters[2].key = score_presets[val].stringency.toFixed(0);
                         // set the min
