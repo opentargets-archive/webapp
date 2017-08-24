@@ -8,7 +8,7 @@ angular.module('cttvControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'otUtils', 'otDictionary', 'cttvConsts', 'cttvConfig', 'otClearUnderscoresFilter', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, otUtils, otDictionary, cttvConsts, cttvConfig, otClearUnderscoresFilter, $analytics, otLocationState, $anchorScroll) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'otUtils', 'otDictionary', 'cttvConsts', 'otConfig', 'otClearUnderscoresFilter', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, otUtils, otDictionary, cttvConsts, otConfig, otClearUnderscoresFilter, $analytics, otLocationState, $anchorScroll) {
         'use strict';
 
 
@@ -51,8 +51,8 @@ angular.module('cttvControllers')
                         is_open: false,
                         is_loading: false,
                         heading: otDictionary.COMMON_DISEASES,
-                        source: cttvConfig.evidence_sources.genetic_association.common,
-                        source_label: cttvConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                        source: otConfig.evidence_sources.genetic_association.common,
+                        source_label: otConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                         has_errors: false
                     },
                     rare_diseases: {
@@ -60,8 +60,8 @@ angular.module('cttvControllers')
                         is_open: false,
                         is_loading: false,
                         heading: otDictionary.RARE_DISEASES,
-                        source: cttvConfig.evidence_sources.genetic_association.rare,
-                        source_label: cttvConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                        source: otConfig.evidence_sources.genetic_association.rare,
+                        source_label: otConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                         has_errors: false
                     }
                 },
@@ -70,8 +70,8 @@ angular.module('cttvControllers')
                     is_open: false,
                     is_loading: false,
                     heading: otDictionary.RNA_EXPRESSION,
-                    source: cttvConfig.evidence_sources.rna_expression,
-                    source_label: cttvConfig.evidence_sources.rna_expression.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source: otConfig.evidence_sources.rna_expression,
+                    source_label: otConfig.evidence_sources.rna_expression.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 affected_pathways: {
@@ -79,8 +79,8 @@ angular.module('cttvControllers')
                     is_open: false,
                     is_loading: false,
                     heading: otDictionary.AFFECTED_PATHWAY,
-                    source: cttvConfig.evidence_sources.pathway,
-                    source_label: cttvConfig.evidence_sources.pathway.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source: otConfig.evidence_sources.pathway,
+                    source_label: otConfig.evidence_sources.pathway.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 known_drugs: {
@@ -88,8 +88,8 @@ angular.module('cttvControllers')
                     is_open: false,
                     is_loading: false,
                     heading: otDictionary.KNOWN_DRUG,
-                    source: cttvConfig.evidence_sources.known_drug,
-                    source_label: cttvConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source: otConfig.evidence_sources.known_drug,
+                    source_label: otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 somatic_mutations: {
@@ -97,8 +97,8 @@ angular.module('cttvControllers')
                     is_open: false,
                     is_loading: false,
                     heading: otDictionary.SOMATIC_MUTATION,
-                    source: cttvConfig.evidence_sources.somatic_mutation,
-                    source_label: cttvConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source: otConfig.evidence_sources.somatic_mutation,
+                    source_label: otConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 literature: {
@@ -106,8 +106,8 @@ angular.module('cttvControllers')
                     is_open: false,
                     is_loading: false,
                     heading: otDictionary.LITERATURE,
-                    source: cttvConfig.evidence_sources.literature,
-                    source_label: cttvConfig.evidence_sources.literature.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source: otConfig.evidence_sources.literature,
+                    source_label: otConfig.evidence_sources.literature.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 animal_models: {
@@ -115,8 +115,8 @@ angular.module('cttvControllers')
                     is_open: false,
                     is_loading: false,
                     heading: otDictionary.ANIMAL_MODEL,
-                    source: cttvConfig.evidence_sources.animal_model,
-                    source_label: cttvConfig.evidence_sources.animal_model.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source: otConfig.evidence_sources.animal_model,
+                    source_label: otConfig.evidence_sources.animal_model.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false
                 }
             }
@@ -270,7 +270,7 @@ angular.module('cttvControllers')
                 target: $scope.search.target,
                 disease: $scope.search.disease,
                 size: 1000,
-                datasource: cttvConfig.evidence_sources.genetic_association.common,
+                datasource: otConfig.evidence_sources.genetic_association.common,
                 fields: [
                     'unique_association_fields',
                     'disease',
@@ -409,7 +409,7 @@ angular.module('cttvControllers')
                     },
                     {
                         'targets': [0],    // the access-level (public/private icon)
-                        'visible': cttvConfig.show_access_level,
+                        'visible': otConfig.show_access_level,
                         'width': '3%'
                     },
                     {
@@ -440,7 +440,7 @@ angular.module('cttvControllers')
                 target: $scope.search.target,
                 disease: $scope.search.disease,
                 size: 1000,
-                datasource: cttvConfig.evidence_sources.genetic_association.rare,
+                datasource: otConfig.evidence_sources.genetic_association.rare,
                 fields: [
                     'disease.efo_info',
                     'evidence',
@@ -595,7 +595,7 @@ angular.module('cttvControllers')
                 'columnDefs': [
                     {
                         'targets': [0],    // the access-level (public/private icon)
-                        'visible': cttvConfig.show_access_level,
+                        'visible': otConfig.show_access_level,
                         'width': '3%'
                     },
                     {
@@ -649,7 +649,7 @@ angular.module('cttvControllers')
                 target: $scope.search.target,
                 disease: $scope.search.disease,
                 size: 1000,
-                datasource: $scope.search.tables.affected_pathways.source, // cttvConfig.evidence_sources.pathway,
+                datasource: $scope.search.tables.affected_pathways.source, // otConfig.evidence_sources.pathway,
                 fields: [
                     'target',
                     'disease',
@@ -745,7 +745,7 @@ angular.module('cttvControllers')
                 'columnDefs': [
                     {
                         'targets': [0],    // the access-level (public/private icon)
-                        'visible': cttvConfig.show_access_level,
+                        'visible': otConfig.show_access_level,
                         'width': '3%'
                     },
                     {
@@ -776,7 +776,7 @@ angular.module('cttvControllers')
                 target: $scope.search.target,
                 disease: $scope.search.disease,
                 size: 1000,
-                datasource: $scope.search.tables.rna_expression.source, // cttvConfig.evidence_sources.rna_expression,
+                datasource: $scope.search.tables.rna_expression.source, // otConfig.evidence_sources.rna_expression,
                 fields: [
                     'disease',
                     'evidence',
@@ -887,7 +887,7 @@ angular.module('cttvControllers')
                 'columnDefs': [
                     {
                         'targets': [0],    // the access-level (public/private icon)
-                        'visible': cttvConfig.show_access_level,
+                        'visible': otConfig.show_access_level,
                         'width': '3%'
                     },
                     {
@@ -925,7 +925,7 @@ angular.module('cttvControllers')
                 target: $scope.search.target,
                 disease: $scope.search.disease,
                 size: 1000,
-                datasource: $scope.search.tables.somatic_mutations.source, // cttvConfig.evidence_sources.somatic_mutation ,
+                datasource: $scope.search.tables.somatic_mutations.source, // otConfig.evidence_sources.somatic_mutation ,
                 fields: [
                     'disease.efo_info', // disease
                     'evidence.evidence_codes_info',  // evidence source
@@ -1050,7 +1050,7 @@ angular.module('cttvControllers')
                 'columnDefs': [
                     {
                         'targets': [0],    // the access-level (public/private icon)
-                        'visible': cttvConfig.show_access_level,
+                        'visible': otConfig.show_access_level,
                         'width': '3%'
                     },
                     {
@@ -1094,7 +1094,7 @@ angular.module('cttvControllers')
                 target: $scope.search.target,
                 disease: $scope.search.disease,
                 size: 1000,
-                datasource: $scope.search.tables.animal_models.source, // cttvConfig.evidence_sources.animal_model,
+                datasource: $scope.search.tables.animal_models.source, // otConfig.evidence_sources.animal_model,
                 fields: [
                     'disease',
                     'evidence',
@@ -1184,7 +1184,7 @@ angular.module('cttvControllers')
                 'columnDefs': [
                     {
                         'targets': [0],    // the access-level (public/private icon)
-                        'visible': cttvConfig.show_access_level,
+                        'visible': otConfig.show_access_level,
                         'width': '3%'
                     },
                     {

@@ -7,7 +7,7 @@ angular.module('cttvServices')
 /**
  * The API services, with methods to call the ElasticSearch API
  */
-    .factory('otAPIservice', ['$log', '$rootScope', '$q', 'cttvConfig', function ($log, $rootScope, $q, cttvConfig) {
+    .factory('otAPIservice', ['$log', '$rootScope', '$q', 'otConfig', function ($log, $rootScope, $q, otConfig) {
         'use strict';
 
 
@@ -51,7 +51,7 @@ angular.module('cttvServices')
         };
 
         var api = cttvApi()
-            .prefix(cttvConfig.api)
+            .prefix(otConfig.api)
             // .prefix("/api/")
             // .prefix('http://127.0.0.1:8123/api/')
             // .prefix("https://www.targetvalidation.org/api/")

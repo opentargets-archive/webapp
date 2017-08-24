@@ -2,7 +2,7 @@ angular.module('cttvDirectives')
     /*
      * Navigation menu with hamburger option
      */
-    .directive('mastheadNavigationMenu', ['cttvConfig', function (cttvConfig) {
+    .directive('mastheadNavigationMenu', ['otConfig', function (otConfig) {
         'use strict';
 
         return {
@@ -43,13 +43,13 @@ angular.module('cttvDirectives')
 
 
             link: function (scope) {
-                scope.dumps_link = cttvConfig.dumps_link;
-                scope.nav = cttvConfig.mastheadNavigationMenu;
+                scope.dumps_link = otConfig.dumps_link;
+                scope.nav = otConfig.mastheadNavigationMenu;
                 scope.navhmb = [];
 
                 // if the menu is a hamburger, we flatten the tree to display all in one list
                 if (scope.isHamburger) {
-                    cttvConfig.mastheadNavigationMenu.forEach(function (i) {
+                    otConfig.mastheadNavigationMenu.forEach(function (i) {
                         if (i.menu) {
                             i.menu.forEach(function (j) {
                                 scope.navhmb.push({label: i.label + ': ' + j.label, href: j.href});

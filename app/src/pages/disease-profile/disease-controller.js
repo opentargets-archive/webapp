@@ -5,7 +5,7 @@ angular.module('cttvControllers')
      * Controller for the disease page
      * It loads general information about a given disease
      */
-    .controller('DiseaseCtrl', ['$scope', '$location', 'otAPIservice', 'otUtils', 'cttvConfig', function ($scope, $location, otAPIservice, otUtils, cttvConfig) {
+    .controller('DiseaseCtrl', ['$scope', '$location', 'otAPIservice', 'otUtils', 'otConfig', function ($scope, $location, otAPIservice, otUtils, otConfig) {
         'use strict';
 
         otUtils.clearErrors();
@@ -46,7 +46,7 @@ angular.module('cttvControllers')
                 };
 
                 // Extra sections -- plugins
-                $scope.sections = cttvConfig.diseaseSections;
+                $scope.sections = otConfig.diseaseSections;
                 for (var t = 0; t < $scope.sections.length; t++) {
                     $scope.sections[t].defaultVisibility = $scope.sections[t].visible;
                 }

@@ -8,7 +8,7 @@ angular.module('cttvServices')
      * The Config service.
      * This stores global config variables for the font end
      */
-    .factory('cttvConfig', ['cttvConsts', 'initConfig', function (cttvConsts, initConfig) {
+    .factory('otConfig', ['cttvConsts', 'initConfig', function (cttvConsts, initConfig) {
         'use strict';
 
         function applyDb (obj) {

@@ -6,7 +6,7 @@ angular.module('cttvControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', 'otUtils', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'otLocationState', 'cttvConfig', function ($scope, $location, otUtils, otAPIservice, cttvFiltersService, otDictionary, otLocationState, cttvConfig) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', 'otUtils', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otAPIservice, cttvFiltersService, otDictionary, otLocationState, otConfig) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -43,7 +43,7 @@ angular.module('cttvControllers')
 
         // Set page filters: this defines the order in which the facets are going to be displayed
         // as per config JSON
-        cttvFiltersService.pageFacetsStack(cttvConfig.targetAssociationsFacets.facets);
+        cttvFiltersService.pageFacetsStack(otConfig.targetAssociationsFacets.facets);
 
         // state we want to export to/from the URL
         var stateId = 'view';
@@ -134,7 +134,7 @@ angular.module('cttvControllers')
                         $scope.n.diseases = resp.body.total;
 
                         // Update the facets
-                        cttvFiltersService.updateFacets(resp.body.facets, cttvConfig.targetAssociationsFacets.count);
+                        cttvFiltersService.updateFacets(resp.body.facets, otConfig.targetAssociationsFacets.count);
                     } else {
                         // Check if there is a profile page
                         var profileOpts = {

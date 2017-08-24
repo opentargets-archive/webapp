@@ -6,7 +6,7 @@ angular.module('cttvControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-    .controller('TargetCtrl', ['$scope', '$location', 'otAPIservice', 'otUtils', 'cttvConfig', 'otTEPs', function ($scope, $location, otAPIservice, otUtils, cttvConfig, otTEPs) {
+    .controller('TargetCtrl', ['$scope', '$location', 'otAPIservice', 'otUtils', 'otConfig', 'otTEPs', function ($scope, $location, otAPIservice, otUtils, otConfig, otTEPs) {
         'use strict';
 
         otUtils.clearErrors();
@@ -69,7 +69,7 @@ angular.module('cttvControllers')
                     };
 
                     // Extra sections -- plugins
-                    $scope.sections = cttvConfig.targetSections;
+                    $scope.sections = otConfig.targetSections;
                     // Set default visibility values
                     for (var t = 0; t < $scope.sections.length; t++) {
                         $scope.sections[t].defaultVisibility = $scope.sections[t].visible || false;

@@ -3,7 +3,7 @@
 angular.module('cttvDirectives')
 
 /* Directive to display the known drug evidence table */
-    .directive('knownDrugTable', ['otAPIservice', 'cttvConsts', 'otUtils', 'cttvConfig', '$location', 'otDictionary', function (otAPIservice, cttvConsts, otUtils, cttvConfig, $location, otDictionary) {
+    .directive('knownDrugTable', ['otAPIservice', 'cttvConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otAPIservice, cttvConsts, otUtils, otConfig, $location, otDictionary) {
         'use strict';
         // var dbs = cttvConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -72,7 +72,7 @@ angular.module('cttvDirectives')
                         // target:attrs.target,
                         // disease:attrs.disease,
                             size: 1000,
-                            datasource: cttvConfig.evidence_sources.known_drug,
+                            datasource: otConfig.evidence_sources.known_drug,
                             fields: [
                                 'disease.efo_info',
                                 'drug',
@@ -262,7 +262,7 @@ angular.module('cttvDirectives')
                                 {'iDataSort': 3, 'aTargets': [4]},
                                 {
                                     'targets': [0],    // the access-level (public/private icon)
-                                    'visible': cttvConfig.show_access_level,
+                                    'visible': otConfig.show_access_level,
                                     'width': '3%'
                                 },
                                 {

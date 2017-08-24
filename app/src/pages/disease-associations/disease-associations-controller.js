@@ -14,7 +14,7 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'otUtils', 'otLocationState', 'cttvConfig', function ($scope, $location, $q, otAPIservice, cttvFiltersService, otDictionary, otUtils, otLocationState, cttvConfig) {
+    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'otUtils', 'otLocationState', 'otConfig', function ($scope, $location, $q, otAPIservice, cttvFiltersService, otDictionary, otUtils, otLocationState, otConfig) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -53,7 +53,7 @@ angular.module('cttvControllers')
 
         // Set page filters: this defines the order in which the facets are going to be displayed
         // as per config JSON
-        cttvFiltersService.pageFacetsStack(cttvConfig.diseaseAssociationsFacets.facets);
+        cttvFiltersService.pageFacetsStack(otConfig.diseaseAssociationsFacets.facets);
 
 
         // state we want to export to/from the URL
@@ -134,7 +134,7 @@ angular.module('cttvControllers')
 
                     if (resp.body.total) {
                         // TODO Change this to POST request
-                        cttvFiltersService.updateFacets(resp.body.facets, cttvConfig.diseaseAssociationsFacets.count);
+                        cttvFiltersService.updateFacets(resp.body.facets, otConfig.diseaseAssociationsFacets.count);
 
                         // The label of the diseases in the header
                         $scope.search.label = resp.body.data[0].disease.efo_info.label;

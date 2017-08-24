@@ -2,14 +2,14 @@ angular.module('cttvDirectives')
     .directive('textMiningTable', [
         'otAPIservice',
         '$timeout',
-        'cttvConfig',
+        'otConfig',
         'cttvConsts',
         'otUpperCaseFirstFilter',
         'otClearUnderscoresFilter',
         function (
             otAPIservice,
             $timeout,
-            cttvConfig,
+            otConfig,
             cttvConsts,
             otUpperCaseFirstFilter,
             otClearUnderscoresFilter) {
@@ -375,7 +375,7 @@ angular.module('cttvDirectives')
                         var opts = {
                             target: target,
                             disease: disease,
-                            datasource: cttvConfig.evidence_sources.literature,
+                            datasource: otConfig.evidence_sources.literature,
                             size: data.length,
                             from: data.start,
                             sort: dirScope.order,
@@ -421,7 +421,7 @@ angular.module('cttvDirectives')
                         },
                         {
                             'targets': [0],    // the access-level (public/private icon)
-                            'visible': cttvConfig.show_access_level,
+                            'visible': otConfig.show_access_level,
                             'width': '3%'
                         },
                         {
@@ -470,7 +470,7 @@ angular.module('cttvDirectives')
                         var opts = {
                             disease: scope.disease,
                             target: scope.target,
-                            datasource: cttvConfig.evidence_sources.literature,
+                            datasource: otConfig.evidence_sources.literature,
                             // format: 'csv',
                             size: size,
                             from: 0,
@@ -518,7 +518,7 @@ angular.module('cttvDirectives')
                         //     disease: scope.disease,
                         //     target: scope.target,
                         //     size: 0,
-                        //     datasource: cttvConfig.evidence_sources.literature,
+                        //     datasource: otConfig.evidence_sources.literature,
                         //
                         // };
                         // var queryObject = {
@@ -554,7 +554,7 @@ angular.module('cttvDirectives')
                         //             var opts = {
                         //                 disease: scope.disease,
                         //                 target: scope.target,
-                        //                 datasource: cttvConfig.evidence_sources.literature,
+                        //                 datasource: otConfig.evidence_sources.literature,
                         //                 format: "csv",
                         //                 size: size,
                         //                 from: from

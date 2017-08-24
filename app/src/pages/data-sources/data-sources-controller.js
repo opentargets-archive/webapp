@@ -5,7 +5,7 @@ angular.module('cttvControllers')
  * Controller for the data sources used in the webapp
  * It loads the config file to know which definitions to show
  */
-    .controller('DataSourcesCtrl', ['$scope', 'cttvConfig', function ($scope, cttvConfig) {
+    .controller('DataSourcesCtrl', ['$scope', 'otConfig', function ($scope, otConfig) {
         'use strict';
 
         function applyDataSources (obj) {
@@ -22,5 +22,5 @@ angular.module('cttvControllers')
             }
         }
 
-        applyDataSources(cttvConfig.evidence_sources);
+        applyDataSources(otConfig.evidence_sources);
     }]);

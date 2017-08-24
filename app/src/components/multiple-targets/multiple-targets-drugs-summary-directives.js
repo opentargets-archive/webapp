@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsDrugsSummary', ['otAPIservice', 'cttvConfig', 'otUtils', function (otAPIservice, cttvConfig, otUtils) {
+    .directive('multipleTargetsDrugsSummary', ['otAPIservice', 'otConfig', 'otUtils', function (otAPIservice, otConfig, otUtils) {
         'use strict';
 
         function formatDrugDataToArray (drugs) {
@@ -47,7 +47,7 @@ angular.module('cttvDirectives')
                         params: {
                             target: scope.target.map(function (d) { return d.ensembl_gene_id; }),
                             size: 10000,
-                            datasource: cttvConfig.evidence_sources.known_drug,
+                            datasource: otConfig.evidence_sources.known_drug,
                             fields: [
                                 'disease.efo_info',
                                 'drug',

@@ -7,7 +7,7 @@ angular.module('cttvServices')
     /**
      *
      */
-    .factory('cttvFiltersService', ['$log', '$location', 'otDictionary', 'cttvConsts', 'otAPIservice', 'otUtils', 'otLocationState', '$analytics', '$injector', 'cttvConfig', function ($log, $location, otDictionary, cttvConsts, otAPIservice, otUtils, otLocationState, $analytics, $injector, cttvConfig) {
+    .factory('cttvFiltersService', ['$log', '$location', 'otDictionary', 'cttvConsts', 'otAPIservice', 'otUtils', 'otLocationState', '$analytics', '$injector', 'otConfig', function ($log, $location, otDictionary, cttvConsts, otAPIservice, otUtils, otLocationState, $analytics, $injector, otConfig) {
         'use strict';
 
 
@@ -49,8 +49,8 @@ angular.module('cttvServices')
         // PARSERS
         // load and link the parser service for each facet
         var parsers = {};
-        for (var i in cttvConfig.facets) {
-            parsers[cttvConfig.facets[i].key] = $injector.get(_.camelCase(cttvConfig.facets[i].element) + 'Parser');
+        for (var i in otConfig.facets) {
+            parsers[otConfig.facets[i].key] = $injector.get(_.camelCase(otConfig.facets[i].element) + 'Parser');
         }
 
 
@@ -467,19 +467,19 @@ angular.module('cttvServices')
 
             orderedFacets.forEach(function (collection) {
                 // if (facets.hasOwnProperty(collection.type)) {
-                if (facets.hasOwnProperty(cttvConfig.facets[collection.type].key)) {
+                if (facets.hasOwnProperty(otConfig.facets[collection.type].key)) {
                     try {
                         // default options from facet definition can be overriden with info in pageFacetStack for the page
                         var opts = {};
-                        for (var i in cttvConfig.facets[collection.type].options) {
-                            opts[i] = (collection.options && collection.options[i] != undefined) ? collection.options[i] : cttvConfig.facets[collection.type].options[i];
+                        for (var i in otConfig.facets[collection.type].options) {
+                            opts[i] = (collection.options && collection.options[i] != undefined) ? collection.options[i] : otConfig.facets[collection.type].options[i];
                         }
-                        opts.element = cttvConfig.facets[collection.type].element;
+                        opts.element = otConfig.facets[collection.type].element;
 
                         addCollection(
                             parseFacetData(
-                                cttvConfig.facets[collection.type].key,
-                                facets[cttvConfig.facets[collection.type].key],    // facets[collection.type],
+                                otConfig.facets[collection.type].key,
+                                facets[otConfig.facets[collection.type].key],    // facets[collection.type],
                                 countsToUse,
                                 opts // collection.options
                             )

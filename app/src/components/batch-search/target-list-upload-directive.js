@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('targetListUpload', ['otAPIservice', 'otLoadedLists', 'cttvConfig', function (otAPIservice, otLoadedLists, cttvConfig) {
+    .directive('targetListUpload', ['otAPIservice', 'otLoadedLists', 'otConfig', function (otAPIservice, otLoadedLists, otConfig) {
         'use strict';
 
         return {
@@ -10,7 +10,7 @@ angular.module('cttvDirectives')
             templateUrl: 'src/components/batch-search/target-list-upload.html',
             link: function (scope, elem) {
             // Current limit of targets (just to show the limit in the sub header)
-                scope.targetListLimit = cttvConfig.targetListLimit;
+                scope.targetListLimit = otConfig.targetListLimit;
 
                 // Show all previous lists
                 scope.lists = otLoadedLists.getAll();

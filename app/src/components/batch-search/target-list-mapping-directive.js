@@ -1,7 +1,7 @@
 angular.module('cttvDirectives')
 
 
-    .directive('targetListMapping', ['otAPIservice', 'otUtils', 'otLoadedLists', 'cttvConfig', function (otAPIservice, otUtils, otLoadedLists, cttvConfig) {
+    .directive('targetListMapping', ['otAPIservice', 'otUtils', 'otLoadedLists', 'otConfig', function (otAPIservice, otUtils, otLoadedLists, otConfig) {
         'use strict';
 
         return {
@@ -12,7 +12,7 @@ angular.module('cttvDirectives')
             templateUrl: 'src/components/batch-search/target-list-mapping.html',
             link: function (scope) {
             // Setting the limit for the list:
-                scope.listLengthLimit = cttvConfig.targetListLimit;
+                scope.listLengthLimit = otConfig.targetListLimit;
 
 
                 function search (q) {

@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('drugsDisplay', ['$log', 'cttvConfig', 'cttvConsts', 'otDictionary', function ($log, cttvConfig, cttvConsts, otDictionary) {
+    .directive('drugsDisplay', ['$log', 'otConfig', 'cttvConsts', 'otDictionary', function ($log, otConfig, cttvConsts, otDictionary) {
         'use strict';
 
         return {
@@ -17,7 +17,7 @@ angular.module('plugins')
                 disease: '='
             },
             link: function (scope, element, attrs) {
-                scope.sources = cttvConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; });
+                scope.sources = otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; });
             }
         };
     }]);
