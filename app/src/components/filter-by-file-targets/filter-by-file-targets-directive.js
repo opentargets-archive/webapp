@@ -7,7 +7,7 @@ angular.module('cttvDirectives')
  *   <cttv-filter-by-file-targets> </cttv-filter-by-file-targets>
  *
  */
-    .directive('cttvFilterByFileTargets', ['$log', 'cttvAPIservice', 'cttvFiltersService', '$q', '$analytics', 'cttvLoadedLists', '$location', 'cttvUtils', function ($log, cttvAPIservice, cttvFiltersService, $q, $analytics, cttvLoadedLists, $location, cttvUtils) {
+    .directive('cttvFilterByFileTargets', ['$log', 'otAPIservice', 'cttvFiltersService', '$q', '$analytics', 'cttvLoadedLists', '$location', 'cttvUtils', function ($log, otAPIservice, cttvFiltersService, $q, $analytics, cttvLoadedLists, $location, cttvUtils) {
         'use strict';
 
         return {
@@ -230,7 +230,7 @@ angular.module('cttvDirectives')
                     // $log.log("getBestHitTargetsIdsChunk:targetNameArray[0]",targetNameArray[0]);
                     // $log.log("getBestHitTargetsIdsChunk:from",from);
 
-                    return cttvAPIservice.getBestHitSearch(queryObject)
+                    return otAPIservice.getBestHitSearch(queryObject)
                         .then(function (resp) {
                             if (resp.body.data.length) {
 

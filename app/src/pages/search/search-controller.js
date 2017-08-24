@@ -8,7 +8,7 @@ angular.module('cttvControllers')
      * SearchAppCtrl
      * Controller for the search/results page
      */
-    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'cttvAppToAPIService', 'cttvAPIservice', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, cttvAppToAPIService, cttvAPIservice, cttvUtils, cttvLocationState) {
+    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'otAppToAPIService', 'otAPIservice', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, otAppToAPIService, otAPIservice, cttvUtils, cttvLocationState) {
 
         'use strict';
 
@@ -27,7 +27,7 @@ angular.module('cttvControllers')
                 results:{}
             }
         */
-        $scope.search = cttvAppToAPIService.createSearchInitObject();
+        $scope.search = otAppToAPIService.createSearchInitObject();
 
         // filters object used to render the fake facets
         $scope.filters = {
@@ -130,7 +130,7 @@ angular.module('cttvControllers')
 
                 Object.keys($scope.filters).forEach(function (k) {
                     $scope.filters[k].loading = true;
-                    cttvAPIservice.getSearch({
+                    otAPIservice.getSearch({
                         method: 'GET',
                         params: {
                             q: $scope.search.query.q,
@@ -142,7 +142,7 @@ angular.module('cttvControllers')
                             function (resp) {
                                 $scope.filters[k].total = resp.body.total;
                             },
-                            cttvAPIservice.defaultErrorHandler
+                            otAPIservice.defaultErrorHandler
                         )
                         .finally(function () {
                             $scope.filters[k].loading = false;
@@ -161,7 +161,7 @@ angular.module('cttvControllers')
                     fields: ['approved_symbol']
                 }
             };
-            return cttvAPIservice.getTarget(queryObject)
+            return otAPIservice.getTarget(queryObject)
                 .then(function (resp) {
                     try {
                         $scope.search.results.data[0].data.top_associations.parsed.find(function (p) {
@@ -170,7 +170,7 @@ angular.module('cttvControllers')
                     } catch (e) {
                         $log.log('Error getting Target information');
                     }
-                }, cttvAPIservice.defaultErrorHandler);
+                }, otAPIservice.defaultErrorHandler);
         };
 
 
@@ -182,7 +182,7 @@ angular.module('cttvControllers')
                     fields: ['label']
                 }
             };
-            return cttvAPIservice.getDisease(queryObject)
+            return otAPIservice.getDisease(queryObject)
                 .then(function (resp) {
                     try {
                         $scope.search.results.data[0].data.top_associations.parsed.find(function (p) {
@@ -191,7 +191,7 @@ angular.module('cttvControllers')
                     } catch (e) {
                         $log.log('Error getting disease information');
                     }
-                }, cttvAPIservice.defaultErrorHandler);
+                }, otAPIservice.defaultErrorHandler);
         };
 
 
@@ -212,7 +212,7 @@ angular.module('cttvControllers')
             queryObject.params[type] = id;
 
 
-            return cttvAPIservice.getFilterBy(queryObject).then(function (resp) {
+            return otAPIservice.getFilterBy(queryObject).then(function (resp) {
                 var d = resp.body.data.filter(function (i) {
                     return i.drug.max_phase_for_all_diseases.numeric_index == 4;
                 });
@@ -235,14 +235,14 @@ angular.module('cttvControllers')
                 var queryObject = {
                     method: 'GET'
                 };
-                queryObject.params = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
+                queryObject.params = otAppToAPIService.getApiQueryObject(otAppToAPIService.SEARCH, $scope.search.query);
                 // if one and only one of the filters is selected, apply the corresponding filter
                 // cool way of mimicking a XOR operator ;)
                 if ($scope.filters.target.selected != $scope.filters.disease.selected) {
                     queryObject.params.filter = $scope.filters.target.selected ? 'target' : 'disease';
                 }
 
-                cttvAPIservice.getSearch(queryObject)
+                otAPIservice.getSearch(queryObject)
                     .then(
                         function (resp) {
 
@@ -255,7 +255,7 @@ angular.module('cttvControllers')
                             // $log.log($scope.search.results.data[0]);
                             return resp;
                         },
-                        cttvAPIservice.defaultErrorHandler
+                        otAPIservice.defaultErrorHandler
                     )
 
                     .then(
@@ -328,7 +328,7 @@ angular.module('cttvControllers')
 
                             }
                         },
-                        cttvAPIservice.defaultErrorHandler
+                        otAPIservice.defaultErrorHandler
                     )
                     .finally(function () {
                         $scope.search.loading = false;

@@ -6,7 +6,7 @@ angular.module('cttvControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', 'cttvUtils', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvLocationState', 'cttvConfig', function ($scope, $location, cttvUtils, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvLocationState, cttvConfig) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', 'cttvUtils', 'otAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvLocationState', 'cttvConfig', function ($scope, $location, cttvUtils, otAPIservice, cttvFiltersService, cttvDictionary, cttvLocationState, cttvConfig) {
         'use strict';
 
         cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
@@ -119,13 +119,13 @@ angular.module('cttvControllers')
                 direct: true,
                 size: 1
             };
-            opts = cttvAPIservice.addFacetsOptions(filters, opts);
+            opts = otAPIservice.addFacetsOptions(filters, opts);
             var queryObject = {
                 method: 'GET',
                 params: opts
             };
 
-            cttvAPIservice.getAssociations(queryObject)
+            otAPIservice.getAssociations(queryObject)
                 .then(function (resp) {
                     $scope.search.total = resp.body.total;
                     if (resp.body.total) {
@@ -147,13 +147,13 @@ angular.module('cttvControllers')
                                 target_id: $scope.search.query
                             }
                         };
-                        cttvAPIservice.getTarget(profileOpts)
+                        otAPIservice.getTarget(profileOpts)
                             .then(function (profileResp) {
                                 $scope.search.label = profileResp.body.approved_symbol;
                             });
                     }
                 },
-                cttvAPIservice.defaultErrorHandler);
+                otAPIservice.defaultErrorHandler);
         }
 
 

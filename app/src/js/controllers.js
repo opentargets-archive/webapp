@@ -146,13 +146,13 @@ angular.module('cttvControllers')
     /**
      * Simple controller to expose the current page to the feedback button controller
      */
-    .controller('StatsCtrl', ['$scope', 'cttvAPIservice', '$log', function ($scope, cttvAPIservice, $log) {
+    .controller('StatsCtrl', ['$scope', 'otAPIservice', '$log', function ($scope, otAPIservice, $log) {
         'use strict';
         // expose the location;
         // note that exposing the page as $location.absUrl() does not work as that would not update when URL changes
         $scope.stats = {};
 
-        cttvAPIservice.getStats()
+        otAPIservice.getStats()
             .then(
                 function (resp) {
 
@@ -181,7 +181,7 @@ angular.module('cttvControllers')
                     d[1] = parseInt(d[1]) - 1; // month starts at 0
                     $scope.stats.date = new Date(d[0], d[1]); // expose as a Date object
                 },
-                cttvAPIservice.defaultErrorHandler
+                otAPIservice.defaultErrorHandler
             );
         // .finally(function(){
         //     $scope.search.loading = false;

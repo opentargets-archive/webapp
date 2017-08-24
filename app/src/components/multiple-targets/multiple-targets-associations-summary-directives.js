@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsAssociationsSummary', ['$log', 'cttvAPIservice', '$q', function ($log, cttvAPIservice, $q) {
+    .directive('multipleTargetsAssociationsSummary', ['$log', 'otAPIservice', '$q', function ($log, otAPIservice, $q) {
         'use strict';
 
         return {

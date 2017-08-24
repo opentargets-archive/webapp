@@ -4,7 +4,7 @@ angular.module('cttvDirectives')
     /*
     *
     */
-    .directive('cttvTargetAssociationsTree', ['$log', 'cttvAPIservice', 'cttvConsts', 'cttvUtils', '$analytics', function ($log, cttvAPIservice, cttvConsts, cttvUtils, $analytics) {
+    .directive('cttvTargetAssociationsTree', ['$log', 'otAPIservice', 'cttvConsts', 'cttvUtils', '$analytics', function ($log, otAPIservice, cttvConsts, cttvUtils, $analytics) {
         'use strict';
 
         var whoiam = 'tree';
@@ -68,7 +68,7 @@ angular.module('cttvDirectives')
                         facets: false,
                         size: 1000
                     };
-                    opts = cttvAPIservice.addFacetsOptions(facets, opts);
+                    opts = otAPIservice.addFacetsOptions(facets, opts);
                     var queryObject = {
                         method: 'GET',
                         params: opts
@@ -77,7 +77,7 @@ angular.module('cttvDirectives')
                     if (!gat) {
                         setTreeView(opts.therapeutic_area);
                     } else {
-                        cttvAPIservice.getAssociations(queryObject)
+                        otAPIservice.getAssociations(queryObject)
                             .then(function (resp) {
                                 // var data = resp.body.data;
 
@@ -85,7 +85,7 @@ angular.module('cttvDirectives')
                                 //     excludeCancersFromOtherTAs(resp); // side effects on the resp
                                 // }
 
-                                var data = cttvAPIservice.flat2tree(resp.body);
+                                var data = otAPIservice.flat2tree(resp.body);
                                 if (data) {
                                     gat
                                         .data(data)
@@ -94,7 +94,7 @@ angular.module('cttvDirectives')
                                         .update();
                                 }
                             },
-                            cttvAPIservice.defaultErrorHandler
+                            otAPIservice.defaultErrorHandler
                             );
                     }
 
@@ -172,13 +172,13 @@ angular.module('cttvDirectives')
                         facets: false,
                         size: 1000
                     };
-                    opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
+                    opts = otAPIservice.addFacetsOptions(scope.facets, opts);
                     var queryObject = {
                         method: 'GET',
                         params: opts
                     };
 
-                    cttvAPIservice.getAssociations(queryObject)
+                    otAPIservice.getAssociations(queryObject)
                         .then(
                             function (resp) {
 
@@ -186,7 +186,7 @@ angular.module('cttvDirectives')
                                 //     excludeCancersFromOtherTAs(resp); // side effect on resp
                                 // }
 
-                                var data = cttvAPIservice.flat2tree(resp.body);
+                                var data = otAPIservice.flat2tree(resp.body);
                                 // var data = resp.body.data;
                                 if (_.isEmpty(data)) {
                                     return;
@@ -210,7 +210,7 @@ angular.module('cttvDirectives')
                                 gat(fView, elem.children().eq(1).children().eq(0)[0]);
 
                             },
-                            cttvAPIservice.defaultErrorHandler
+                            otAPIservice.defaultErrorHandler
                         );
                 };
 

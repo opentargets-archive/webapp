@@ -3,10 +3,10 @@ describe('Service: cttvServices', function () {
     // Load the services
     // beforeEach (module('cttvServices'));
 
-    // describe ('cttvAppToAPIService', function () {
+    // describe ('otAppToAPIService', function () {
     // 	var searchService;
-    // 	beforeEach (inject(function (cttvAppToAPIService) {
-    // 	    searchService = cttvAppToAPIService;
+    // 	beforeEach (inject(function (otAppToAPIService) {
+    // 	    searchService = otAppToAPIService;
     // 	}));
 	// it ("returns a 'search' object", function () {
 	//     assert.isObject(searchService);

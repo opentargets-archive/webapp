@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('pathwaySummary', ['$log', 'cttvAPIservice', '$timeout', '$http', function ($log, cttvAPIservice, $timeout, $http) {
+    .directive('pathwaySummary', ['$log', 'otAPIservice', '$timeout', '$http', function ($log, otAPIservice, $timeout, $http) {
         'use strict';
 
         return {

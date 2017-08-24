@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsInteractionsSummary', ['$log', 'cttvAPIservice', '$http', '$q', '$timeout', 'cttvUtils', 'omnipathdbSources', function ($log, cttvAPIservice, $http, $q, $timeout, cttvUtils, omnipathdbSources) {
+    .directive('multipleTargetsInteractionsSummary', ['$log', 'otAPIservice', '$http', '$q', '$timeout', 'cttvUtils', 'omnipathdbSources', function ($log, otAPIservice, $http, $q, $timeout, cttvUtils, omnipathdbSources) {
         'use strict';
 
         return {

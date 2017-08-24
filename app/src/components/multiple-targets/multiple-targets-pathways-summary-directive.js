@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsPathwaysSummary', ['$log', 'cttvAPIservice', '$http', '$q', 'cttvUtils', function ($log, cttvAPIservice, $http, $q, cttvUtils) {
+    .directive('multipleTargetsPathwaysSummary', ['$log', 'otAPIservice', '$http', '$q', 'cttvUtils', function ($log, otAPIservice, $http, $q, cttvUtils) {
         'use strict';
 
         function formatPathwayDataToArray (pathways, targets4pathways, symbol2id, bg) {

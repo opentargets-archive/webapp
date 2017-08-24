@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
 /**
 * Matrix (heatmap) view for target associations
 */
-    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', '$q', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location, $q, $analytics) {
+    .directive('cttvTargetAssociationsTable', ['$log', 'otAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', '$q', '$analytics', function ($log, otAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location, $q, $analytics) {
         'use strict';
 
         var whoiam = 'table';
@@ -122,13 +122,13 @@ angular.module('cttvDirectives')
                         draw: draw
                     };
 
-                    opts = cttvAPIservice.addFacetsOptions(filters, opts);
+                    opts = otAPIservice.addFacetsOptions(filters, opts);
                     var queryObject = {
                         method: 'GET',
                         params: opts
                     };
 
-                    cttvAPIservice.getAssociations(queryObject)
+                    otAPIservice.getAssociations(queryObject)
                         .then(function (resp) {
                             var dtData = parseServerResponse(resp.body.data);
                             var o = {
@@ -387,12 +387,12 @@ angular.module('cttvDirectives')
                         facets: false,
                         size: 1
                     };
-                    optsPreFlight = cttvAPIservice.addFacetsOptions(scope.facets, optsPreFlight);
+                    optsPreFlight = otAPIservice.addFacetsOptions(scope.facets, optsPreFlight);
                     var queryObject = {
                         method: 'GET',
                         params: optsPreFlight
                     };
-                    cttvAPIservice.getAssociations(queryObject)
+                    otAPIservice.getAssociations(queryObject)
                         .then(function (resp) {
                             var total = resp.body.total;
 
@@ -413,13 +413,13 @@ angular.module('cttvDirectives')
                                     fields: ['disease.efo_info.label', 'association_score.overall', 'association_score.datatypes.genetic_association', 'association_score.datatypes.somatic_mutation', 'association_score.datatypes.known_drug', 'association_score.datatypes.affected_pathway', 'association_score.datatypes.rna_expression', 'association_score.datatypes.literature', 'association_score.datatypes.animal_model', 'disease.efo_info.therapeutic_area.labels'],
                                     from: from
                                 };
-                                opts = cttvAPIservice.addFacetsOptions(scope.facets, opts);
+                                opts = otAPIservice.addFacetsOptions(scope.facets, opts);
 
                                 var queryObject = {
                                     method: 'GET',
                                     params: opts
                                 };
-                                return cttvAPIservice.getAssociations(queryObject)
+                                return otAPIservice.getAssociations(queryObject)
                                     .then(function (resp) {
                                         var moreText = resp.body;
                                         if (columnsNumberOk(moreText, opts.fields.length)) {
@@ -460,7 +460,7 @@ angular.module('cttvDirectives')
                             // hiddenElement.click();
                             });
 
-                        }, cttvAPIservice.defaultErrorHandler);
+                        }, otAPIservice.defaultErrorHandler);
                 };
 
                 scope.$watchGroup(['facets', 'target', 'active'], function (attrs) {

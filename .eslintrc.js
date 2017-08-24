@@ -17,7 +17,8 @@ module.exports = {
         "d3": true,
         '_': true,
         'moment': true,
-        '$': true
+        '$': true,
+        'cttvApi': true
     },
     "rules": {
         "curly": 2,

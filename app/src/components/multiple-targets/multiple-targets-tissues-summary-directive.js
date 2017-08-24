@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'cttvConfig', 'cttvUtils', 'cttvAPIservice', function ($log, $http, $q, cttvConfig, cttvUtils, cttvAPIservice) {
+    .directive('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'cttvConfig', 'cttvUtils', 'otAPIservice', function ($log, $http, $q, cttvConfig, cttvUtils, otAPIservice) {
         'use strict';
 
         var tissuesOrdered = [
@@ -147,7 +147,7 @@ angular.module('cttvDirectives')
                     var baseGtexUrlSufix = '?boxplot=true';
                     for (var i = 0; i < scope.targets.length; i++) {
                         var target = scope.targets[i];
-                        var targetPromise = cttvAPIservice.getTarget({
+                        var targetPromise = otAPIservice.getTarget({
                             method: 'GET',
                             trackCall: true,
                             params: {

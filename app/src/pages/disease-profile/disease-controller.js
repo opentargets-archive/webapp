@@ -5,13 +5,13 @@ angular.module('cttvControllers')
      * Controller for the disease page
      * It loads general information about a given disease
      */
-    .controller('DiseaseCtrl', ['$scope', '$location', 'cttvAPIservice', 'cttvUtils', 'cttvConfig', function ($scope, $location, cttvAPIservice, cttvUtils, cttvConfig) {
+    .controller('DiseaseCtrl', ['$scope', '$location', 'otAPIservice', 'cttvUtils', 'cttvConfig', function ($scope, $location, otAPIservice, cttvUtils, cttvConfig) {
         'use strict';
 
         cttvUtils.clearErrors();
 
         var efo_code = $location.url().split('/')[2];
-        cttvAPIservice.getDisease({
+        otAPIservice.getDisease({
             method: 'GET',
             params: {
                 code: efo_code

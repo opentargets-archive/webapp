@@ -3,7 +3,7 @@
 angular.module('cttvDirectives')
 
 /* Directive to display the known drug evidence table */
-    .directive('knownDrugTable', ['$log', 'cttvAPIservice', 'cttvConsts', 'cttvUtils', 'cttvConfig', '$location', 'cttvDictionary', function ($log, cttvAPIservice, cttvConsts, cttvUtils, cttvConfig, $location, cttvDictionary) {
+    .directive('knownDrugTable', ['$log', 'otAPIservice', 'cttvConsts', 'cttvUtils', 'cttvConfig', '$location', 'cttvDictionary', function ($log, otAPIservice, cttvConsts, cttvUtils, cttvConfig, $location, cttvDictionary) {
 
         'use strict';
         // var dbs = cttvConsts.dbs;
@@ -94,7 +94,7 @@ angular.module('cttvDirectives')
                             method: 'GET',
                             params: opts
                         };
-                        return cttvAPIservice.getFilterBy(queryObject)
+                        return otAPIservice.getFilterBy(queryObject)
                             .then(
                                 function (resp) {
                                     if (resp.body.data) {
@@ -104,7 +104,7 @@ angular.module('cttvDirectives')
                                         // $log.warn("Empty response : drug data");
                                     }
                                 },
-                                cttvAPIservice.defaultErrorHandler
+                                otAPIservice.defaultErrorHandler
                             )
                             .finally(function () {
                                 scope.loadFlag = false;

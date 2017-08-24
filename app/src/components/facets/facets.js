@@ -40,7 +40,7 @@ angular.module('facets', [])
     * Top level container for all the facets.
     * This contains accordion etc
     */
-    .directive('cttvFacets', ['$log', 'cttvAPIservice', 'cttvFiltersService', function ($log, cttvAPIservice, cttvFiltersService) {
+    .directive('cttvFacets', ['$log', 'otAPIservice', 'cttvFiltersService', function ($log, otAPIservice, cttvFiltersService) {
         'use strict';
 
         return {

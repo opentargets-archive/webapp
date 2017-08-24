@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsDrugsSummary', ['$log', 'cttvAPIservice', 'cttvConfig', 'cttvUtils', function ($log, cttvAPIservice, cttvConfig, cttvUtils) {
+    .directive('multipleTargetsDrugsSummary', ['$log', 'otAPIservice', 'cttvConfig', 'cttvUtils', function ($log, otAPIservice, cttvConfig, cttvUtils) {
         'use strict';
 
         function formatDrugDataToArray (drugs) {
@@ -57,7 +57,7 @@ angular.module('cttvDirectives')
                             ]
                         }
                     };
-                    cttvAPIservice.getFilterBy(queryObject)
+                    otAPIservice.getFilterBy(queryObject)
                         .then(function (resp) {
                             var drugs = {};
                             for (var i = 0; i < resp.body.data.length; i++) {

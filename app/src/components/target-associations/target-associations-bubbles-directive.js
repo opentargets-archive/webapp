@@ -1,7 +1,7 @@
 /* Bubbles directive for associations */
 angular.module('cttvDirectives')
 
-    .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvConsts', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvConsts, $analytics) {
+    .directive('cttvTargetAssociationsBubbles', ['$log', 'otAPIservice', 'cttvUtils', 'cttvConsts', '$analytics', function ($log, otAPIservice, cttvUtils, cttvConsts, $analytics) {
         'use strict';
 
         var whoiam = 'bubbles';
@@ -185,13 +185,13 @@ angular.module('cttvDirectives')
                         direct: true,
                         facets: false
                     };
-                    opts = cttvAPIservice.addFacetsOptions(facets, opts);
+                    opts = otAPIservice.addFacetsOptions(facets, opts);
                     var queryObject = {
                         method: 'GET',
                         params: opts
                     };
 
-                    var promise = cttvAPIservice.getAssociations(queryObject);
+                    var promise = otAPIservice.getAssociations(queryObject);
                     // if (scope.nocancers === "true") {
                     //     promise = promise
                     //         .then(function (resp) {

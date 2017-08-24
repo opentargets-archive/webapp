@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('relatedTargets', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+    .directive('relatedTargets', ['$log', 'otAPIservice', function ($log, otAPIservice) {
         'use strict';
 
         return {
@@ -9,7 +9,7 @@ angular.module('plugins')
                 target: '='
             },
             link: function (scope, element, attrs) {
-                cttvAPIservice.getTargetRelation({
+                otAPIservice.getTargetRelation({
                     id: scope.target.id
                 })
                     .then(
@@ -21,7 +21,7 @@ angular.module('plugins')
                         },
 
                         // error handler
-                        cttvAPIservice.defaultErrorHandler
+                        otAPIservice.defaultErrorHandler
                     );
 
             }
