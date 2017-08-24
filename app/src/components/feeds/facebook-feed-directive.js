@@ -1,6 +1,6 @@
 
 angular.module('cttvDirectives')
-    .directive('cttvFacebookFeed', ['$log', function ($log) {
+    .directive('otFacebookFeed', ['$log', function ($log) {
         'use strict';
 
         return {
