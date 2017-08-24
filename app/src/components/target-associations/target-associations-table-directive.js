@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
 /**
 * Matrix (heatmap) view for target associations
 */
-    .directive('cttvTargetAssociationsTable', ['otAPIservice', 'otUtils', 'otDictionary', 'otConsts', '$q', '$analytics', function (otAPIservice, otUtils, otDictionary, otConsts, $q, $analytics) {
+    .directive('otTargetAssociationsTable', ['otAPIservice', 'otUtils', 'otDictionary', 'otConsts', '$q', '$analytics', function (otAPIservice, otUtils, otDictionary, otConsts, $q, $analytics) {
         'use strict';
 
         var whoiam = 'table';
@@ -477,4 +477,4 @@ angular.module('cttvDirectives')
             } // end link
 
         }; // end return
-    }]);    // end directive cttvTargetAssociationsTable
+    }]);    // end directive otTargetAssociationsTable
