@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsDrugsSummary', ['$log', 'cttvAPIservice', 'cttvConfig', 'cttvUtils', function ($log, cttvAPIservice, cttvConfig, cttvUtils) {
+    .directive('multipleTargetsDrugsSummary', ['cttvAPIservice', 'cttvConfig', 'cttvUtils', function (cttvAPIservice, cttvConfig, cttvUtils) {
         'use strict';
 
         function formatDrugDataToArray (drugs) {
@@ -32,7 +32,7 @@ angular.module('cttvDirectives')
             scope: {
                 target: '='
             },
-            link: function (scope, el, attrs) {
+            link: function (scope) {
                 scope.$watch('target', function () {
                     if (!scope.target) {
                         return;
@@ -93,7 +93,7 @@ angular.module('cttvDirectives')
                             scope.uniqueTargets = Object.keys(uniqueTargets).length;
                             scope.drugs = drugsArr;
 
-                            var table = $('#target-list-drugs').DataTable(cttvUtils.setTableToolsParams({
+                            $('#target-list-drugs').DataTable(cttvUtils.setTableToolsParams({
                                 'data': formatDrugDataToArray(scope.drugs),
                                 'ordering': true,
                                 'order': [[2, 'desc']],

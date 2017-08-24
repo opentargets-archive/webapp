@@ -2,7 +2,7 @@ angular.module('cttvDirectives')
     /*
      * Navigation menu with hamburger option
      */
-    .directive('mastheadNavigationMenu', ['cttvConfig', '$log', function (cttvConfig, $log) {
+    .directive('mastheadNavigationMenu', ['cttvConfig', function (cttvConfig) {
         'use strict';
 
         return {
@@ -42,7 +42,7 @@ angular.module('cttvDirectives')
                         + '</ul>',
 
 
-            link: function (scope, element, attrs) {
+            link: function (scope) {
                 scope.dumps_link = cttvConfig.dumps_link;
                 scope.nav = cttvConfig.mastheadNavigationMenu;
                 scope.navhmb = [];

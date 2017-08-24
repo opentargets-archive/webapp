@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
 /**
 * Matrix (heatmap) view for target associations
 */
-    .directive('cttvTargetAssociationsTable', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$location', '$q', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $location, $q, $analytics) {
+    .directive('cttvTargetAssociationsTable', ['cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', '$q', '$analytics', function (cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, $q, $analytics) {
         'use strict';
 
         var whoiam = 'table';
@@ -32,7 +32,7 @@ angular.module('cttvDirectives')
             }*/
             } else {
                 var col = colorScale(value);
-                var val = (value == 0) ? '0' : cttvUtils.floatPrettyPrint(value);
+                var val = (value === 0) ? '0' : cttvUtils.floatPrettyPrint(value);
                 str = '<span style=\'color: ' + col + '; background: ' + col + ';\' title=\'Score: ' + val + '\'>' + val + '</span>';
             }
 
@@ -77,7 +77,7 @@ angular.module('cttvDirectives')
                 ],
                 'processing': false,
                 'serverSide': true,
-                'ajax': function (data, cbak, params) {
+                'ajax': function (data, cbak) {
                 // Order options
                 // mappings:
                 // 0 => gene name alphabetically -- not supported in the api
@@ -300,19 +300,19 @@ angular.module('cttvDirectives')
                 row.push(getColorStyleString(data.association_score.overall, geneDiseaseLoc));
 
                 // Genetic association
-                row.push(getColorStyleString(getScore(i, 'genetic_association'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:genetic_associations'));
+                row.push(getColorStyleString(getScore(i, 'genetic_association'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:genetic_associations'));
                 // Somatic mutation
-                row.push(getColorStyleString(getScore(i, 'somatic_mutation'), geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:somatic_mutations'));
+                row.push(getColorStyleString(getScore(i, 'somatic_mutation'), geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:somatic_mutations'));
                 // Known drug
-                row.push(getColorStyleString(getScore(i, 'known_drug'), geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:known_drugs'));
+                row.push(getColorStyleString(getScore(i, 'known_drug'), geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:known_drugs'));
                 // Affected pathway
-                row.push(getColorStyleString(getScore(i, 'affected_pathway'), geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:affected_pathways'));
+                row.push(getColorStyleString(getScore(i, 'affected_pathway'), geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:affected_pathways'));
                 // Expression atlas
-                row.push(getColorStyleString(getScore(i, 'rna_expression'), geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:rna_expression'));
+                row.push(getColorStyleString(getScore(i, 'rna_expression'), geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:rna_expression'));
                 // Literature
-                row.push(getColorStyleString(getScore(i, 'literature'), geneDiseaseLoc +            (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:literature'));
+                row.push(getColorStyleString(getScore(i, 'literature'), geneDiseaseLoc +            (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:literature'));
                 // Animal model
-                row.push(getColorStyleString(getScore(i, 'animal_model'), geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:animal_models'));
+                row.push(getColorStyleString(getScore(i, 'animal_model'), geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:animal_models'));
                 // Therapeutic area
                 var area = _.reduce(data.disease.efo_info.therapeutic_area.labels, iterateeLabel, '');
                 row.push('<span title=\'' + area + '\'>' + area + '</span>');
@@ -347,7 +347,7 @@ angular.module('cttvDirectives')
         + '</div>',
 
 
-            link: function (scope, elem, attrs) {
+            link: function (scope, elem) {
             // Making the scope accessible in the table processing
                 myscope = scope;
 
@@ -447,7 +447,7 @@ angular.module('cttvDirectives')
                                     return getNextChunk(p.total, p.from);
                                 });
                             });
-                            promise.then(function (res) {
+                            promise.then(function () {
                                 var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
                                 saveAs(b, scope.filename + '.csv');
                             // var hiddenElement = document.createElement('a');
@@ -459,7 +459,7 @@ angular.module('cttvDirectives')
                         }, cttvAPIservice.defaultErrorHandler);
                 };
 
-                scope.$watchGroup(['facets', 'target', 'active'], function (attrs) {
+                scope.$watchGroup(['facets', 'target', 'active'], function () {
                 // nocancers = scope.nocancers;
                     filters = scope.facets;
                     if (scope.active !== whoiam) {

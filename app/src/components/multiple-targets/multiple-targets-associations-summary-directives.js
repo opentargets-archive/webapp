@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsAssociationsSummary', ['$log', 'cttvAPIservice', '$q', function ($log, cttvAPIservice, $q) {
+    .directive('multipleTargetsAssociationsSummary', [function () {
         'use strict';
 
         return {
@@ -238,7 +238,7 @@ angular.module('cttvDirectives')
                 associations: '=',
                 targets: '='
             },
-            link: function (scope, el, attrs) {
+            link: function (scope) {
             // Datatypes;
                 scope.datatypes = [];
                 var datatypes = cttvConsts.datatypesOrder;

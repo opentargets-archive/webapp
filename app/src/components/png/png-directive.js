@@ -12,10 +12,10 @@ angular.module('cttvDirectives')
             },
             replace: false,
             template: '<div ng-show="exportable" class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="exportPNG()"><span class="fa fa-picture-o" title="Download as PNG"></span></a></div></div>',
-            link: function (scope, element, attrs) {
+            link: function (scope) {
                 if (scope.inFormat === 'canvas') {
                     scope.exportPNG = function () {
-                        var canvas = scope.$parent.toExport();
+                        scope.$parent.toExport();
                     };
                     return;
                 }
@@ -38,7 +38,7 @@ angular.module('cttvDirectives')
                         var svg = container;
 
                         // Show a modal with the scale of the png
-                        var modal = $uibModal.open({
+                        $uibModal.open({
                             animation: true,
                             // template: "<div class=modal-header>PNG scale factor</div><div class='modal-body modal-body-center'><span class=png-scale-factor-selection><input type=radio name=pngScale value=1 checked ng-model='$parent.currScale'> 1x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=2 ng-model='$parent.currScale'> 2x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=3 ng-model='$parent.currScale'> 3x</span></div><div class=modal-footer><button class='btn btn-primary' type=button ng-click='export(this)' onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
                             template: '<cttv-modal header="Download as PNG" on-ok="export()" has-ok="true" ok-label="Download" has-cancel="true">'

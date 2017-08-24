@@ -264,7 +264,7 @@ angular.module('cttvDirectives')
                         return e.name.toLowerCase().localeCompare(e.label.toLowerCase()) !== 0 && e.id.toLowerCase().localeCompare(e.name.toLowerCase()) !== 0;
                     });
                     scope.targetIdArrayWithoutFuzzies = scope.targetNameIdDict.map(function (e) {
-                        if (e.id && (e.name.toLowerCase().localeCompare(e.label.toLowerCase()) == 0 || e.id.toLowerCase().localeCompare(e.name.toLowerCase()) == 0)) { // has label and not fuzzy or has name and id and they are the same (for case when name is ENS code already)
+                        if (e.id && (e.name.toLowerCase().localeCompare(e.label.toLowerCase()) === 0 || e.id.toLowerCase().localeCompare(e.name.toLowerCase()) === 0)) { // has label and not fuzzy or has name and id and they are the same (for case when name is ENS code already)
                             return e.id;
                         }
                     });
