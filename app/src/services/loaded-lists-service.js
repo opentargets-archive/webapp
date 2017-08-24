@@ -2,7 +2,7 @@
 
 angular.module('cttvServices')
 
-    .factory('otLoadedLists', ['$log', 'localStorageService', function ($log, localStorageService) {
+    .factory('otLoadedLists', ['localStorageService', function (localStorageService) {
         var lists = {};
         // lists.all = [];
         var key = 'targetLists';

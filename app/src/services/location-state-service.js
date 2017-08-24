@@ -4,7 +4,7 @@
 angular.module('cttvServices')
 
 
-    .factory('otLocationState', ['$log', '$location', '$rootScope', 'otConsts', function ($log, $location, $rootScope, otConsts) {
+    .factory('otLocationState', ['$location', '$rootScope', 'otConsts', function ($location, $rootScope, otConsts) {
         'use strict';
 
         var otLocationStateService = {};

@@ -3,7 +3,7 @@ angular.module('cttvServices')
 /**
  * Some utility services.
  */
-    .factory('otUtils', ['$log', '$window', '$rootScope', function ($log, $window, $rootScope) {
+    .factory('otUtils', ['$window', '$rootScope', function ($window, $rootScope) {
         'use strict';
 
         var otUtilsService = {};

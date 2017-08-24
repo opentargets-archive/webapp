@@ -2,7 +2,7 @@
 /* Services */
 
 angular.module('cttvServices')
-    .factory('cttvModal', ['$log', '$window', '$rootScope', '$uibModal', function ($log, $window, $rootScope, $uibModal) {
+    .factory('cttvModal', [function () {
         var modalService = {};
 
         /* modalService.modalInstance; // the single modal instance?
