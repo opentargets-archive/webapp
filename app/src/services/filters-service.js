@@ -7,7 +7,7 @@ angular.module('cttvServices')
     /**
      *
      */
-    .factory('cttvFiltersService', ['$log', '$location', 'otDictionary', 'cttvConsts', 'otAPIservice', 'otUtils', 'cttvLocationState', '$analytics', '$injector', 'cttvConfig', function ($log, $location, otDictionary, cttvConsts, otAPIservice, otUtils, cttvLocationState, $analytics, $injector, cttvConfig) {
+    .factory('cttvFiltersService', ['$log', '$location', 'otDictionary', 'cttvConsts', 'otAPIservice', 'otUtils', 'otLocationState', '$analytics', '$injector', 'cttvConfig', function ($log, $location, otDictionary, cttvConsts, otAPIservice, otUtils, otLocationState, $analytics, $injector, cttvConfig) {
         'use strict';
 
 
@@ -132,7 +132,7 @@ angular.module('cttvServices')
          * Returns true if a filter with the given key is selected
          */
         var isSelected = function (collection, key) {
-            var fcts = cttvLocationState.getState()[cttvFiltersService.stateId];
+            var fcts = otLocationState.getState()[cttvFiltersService.stateId];
             key = '' + key; // target class is numerical key which confuses indexOf below.
             return (fcts && fcts[collection] && (fcts[collection] == key || fcts[collection].indexOf(key) >= 0)) || false;
         };
@@ -212,7 +212,7 @@ angular.module('cttvServices')
                     raw[obj.facet].push(obj.key);
                 });
             });
-            cttvLocationState.setStateFor(cttvFiltersService.stateId, raw);
+            otLocationState.setStateFor(cttvFiltersService.stateId, raw);
         };
 
 

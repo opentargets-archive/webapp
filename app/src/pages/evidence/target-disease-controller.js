@@ -8,11 +8,11 @@ angular.module('cttvControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'otUtils', 'otDictionary', 'cttvConsts', 'cttvConfig', 'otClearUnderscoresFilter', '$analytics', 'cttvLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, otUtils, otDictionary, cttvConsts, cttvConfig, otClearUnderscoresFilter, $analytics, cttvLocationState, $anchorScroll) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'otUtils', 'otDictionary', 'cttvConsts', 'cttvConfig', 'otClearUnderscoresFilter', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, otUtils, otDictionary, cttvConsts, cttvConfig, otClearUnderscoresFilter, $analytics, otLocationState, $anchorScroll) {
         'use strict';
 
 
-        cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
+        otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
         otUtils.clearErrors();
 
         var checkPath = otUtils.checkPath;
@@ -1314,15 +1314,15 @@ angular.module('cttvControllers')
             }
         };
 
-        $scope.$on(cttvLocationState.STATECHANGED, function (e, new_state, old_state) {
+        $scope.$on(otLocationState.STATECHANGED, function (e, new_state, old_state) {
             // at the moment this shouldn't be trigger other than when rerouting from an old style link
             render(new_state, old_state);
         });
 
         // if old link, do a rerouting to new style links
-        if (!cttvLocationState.getState().view && cttvLocationState.getState().sec) {
-            $location.search('view=sec:' + cttvLocationState.getState().sec);
+        if (!otLocationState.getState().view && otLocationState.getState().sec) {
+            $location.search('view=sec:' + otLocationState.getState().sec);
         }
 
-        render(cttvLocationState.getState(), cttvLocationState.getOldState());
+        render(otLocationState.getState(), otLocationState.getOldState());
     }]);

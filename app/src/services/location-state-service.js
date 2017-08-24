@@ -4,10 +4,10 @@
 angular.module('cttvServices')
 
 
-    .factory('cttvLocationState', ['$log', '$location', '$rootScope', 'cttvConsts', function ($log, $location, $rootScope, cttvConsts) {
+    .factory('otLocationState', ['$log', '$location', '$rootScope', 'cttvConsts', function ($log, $location, $rootScope, cttvConsts) {
         'use strict';
 
-        var cttvLocationStateService = {};
+        var otLocationStateService = {};
         var state = {};     // state is the parsed $location.search() object
         var old_state = {}; // old_state is updated with value of state just before updating state, so it holds the previous state
         var tmp_state = {}; // tmp_state temporarily holds the state when a component calls updateStateFor: it is used to update the URL which is then parsed back into state
@@ -40,7 +40,7 @@ angular.module('cttvServices')
             //     state chagnes there... it's a location change rather than a state change
             if (state._path === old_state._path) {
                 // broadcast state update event if we're on the same page
-                $rootScope.$broadcast(cttvLocationStateService.STATECHANGED, _.cloneDeep(state), _.cloneDeep(old_state));
+                $rootScope.$broadcast(otLocationStateService.STATECHANGED, _.cloneDeep(state), _.cloneDeep(old_state));
             }
         };
 
@@ -68,8 +68,8 @@ angular.module('cttvServices')
          * var obj = {datatype:["drugs","literature","animals"], pathways:"sdfs"}
          * param(obj); // returns "datatype:drugs,datatype:literature,datatype:animals,pathways:sdfs"
          */
-        cttvLocationStateService.param = function (obj) {
-            // $log.log("cttvLocationStateService.param:");
+        otLocationStateService.param = function (obj) {
+            // $log.log("otLocationStateService.param:");
             // $log.log(obj);
 
             // uses jQuery.param() method
@@ -105,7 +105,7 @@ angular.module('cttvServices')
          * var search={ ftcs:"datatype:drugs,datatype:literature,datatype:animals,pathways:sdfs" }
          * parseLocationSearch(search) // returns {ftcs:{datatype:["drugs","literature","animals"], pathways:"sdfs"}}
          */
-        cttvLocationStateService.parseLocationSearch = function (search) {
+        otLocationStateService.parseLocationSearch = function (search) {
             // $log.log("parseLocationSearch");
             search = search || $location.search();
             var raw = {};
@@ -151,7 +151,7 @@ angular.module('cttvServices')
         /**
          * get the state object
          */
-        cttvLocationStateService.getState = function () {
+        otLocationStateService.getState = function () {
             // $log.log("!!!! getState()");
             return _.cloneDeep(state);
         };
@@ -160,7 +160,7 @@ angular.module('cttvServices')
         /**
          * get the state object
          */
-        cttvLocationStateService.getOldState = function () {
+        otLocationStateService.getOldState = function () {
             // $log.log("!!!! getOldState()");
             return _.cloneDeep(old_state);
         };
@@ -169,17 +169,17 @@ angular.module('cttvServices')
         /**
          * Set the temp state object to the given one (full override)
          */
-        cttvLocationStateService.setState = function (so) {
+        otLocationStateService.setState = function (so) {
             // $log.log("setState()");
             tmp_state = so;
-            cttvLocationStateService.updateStateURL();
+            otLocationStateService.updateStateURL();
         };
 
 
         /**
          * Update the state object only for the specific sub-object
          */
-        cttvLocationStateService.setStateFor = function (k, so, track) {
+        otLocationStateService.setStateFor = function (k, so, track) {
             // $log.log("setStateFor ");
 
             if (track == undefined) { track = true; }   // track = (track || track==undefined)
@@ -190,28 +190,28 @@ angular.module('cttvServices')
             }
 
             if (track) {
-                cttvLocationStateService.updateStateURL();
+                otLocationStateService.updateStateURL();
             }
         };
 
 
-        cttvLocationStateService.resetStateFor = function (k) {
+        otLocationStateService.resetStateFor = function (k) {
             // $log.log("resetStateFor()");
-            cttvLocationStateService.setStateFor(k, {}, false);
+            otLocationStateService.setStateFor(k, {}, false);
         };
 
 
         /**
          * Updates the URL search with the current state object
          */
-        cttvLocationStateService.updateStateURL = function () {
+        otLocationStateService.updateStateURL = function () {
             // $log.log("updateStateURL");
 
             var stt = {};
             for (var i in tmp_state) {
                 // translate the state to the URL, but we don't want to include the _path property
                 if (tmp_state.hasOwnProperty(i) && i !== '_path') {
-                    stt[i] = cttvLocationStateService.param(tmp_state[i]);
+                    stt[i] = otLocationStateService.param(tmp_state[i]);
                 }
             }
 
@@ -224,13 +224,13 @@ angular.module('cttvServices')
          * But call it at the beginning of your controller to sort of wake up / instantiate the service,
          * ensuring it's ready and available in your controller
          */
-        cttvLocationStateService.init = function () {
+        otLocationStateService.init = function () {
             // do nothing!
         };
 
 
         // event constants: STATECHANGED to register listeners for when the state changes
-        cttvLocationStateService.STATECHANGED = 'cttv_app_state_change';
+        otLocationStateService.STATECHANGED = 'cttv_app_state_change';
 
 
         // This is the main part of the service:
@@ -238,9 +238,9 @@ angular.module('cttvServices')
         // all components that need to update their state based on this will be listening
         // $rootScope.$on('$locationChangeSuccess', function(){
         $rootScope.$on('$locationChangeSuccess', function () {
-            updateState(cttvLocationStateService.parseLocationSearch($location.search()));
+            updateState(otLocationStateService.parseLocationSearch($location.search()));
         });
 
 
-        return cttvLocationStateService;
+        return otLocationStateService;
     }]);

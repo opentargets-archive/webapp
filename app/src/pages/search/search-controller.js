@@ -8,7 +8,7 @@ angular.module('cttvControllers')
      * SearchAppCtrl
      * Controller for the search/results page
      */
-    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'otAppToAPIService', 'otAPIservice', 'otUtils', 'cttvLocationState', function ($scope, $location, $log, otAppToAPIService, otAPIservice, otUtils, cttvLocationState) {
+    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'otAppToAPIService', 'otAPIservice', 'otUtils', 'otLocationState', function ($scope, $location, $log, otAppToAPIService, otAPIservice, otUtils, otLocationState) {
         'use strict';
 
         otUtils.clearErrors();
@@ -52,8 +52,8 @@ angular.module('cttvControllers')
         var stateId = 'src';
         var stateIdLegacy = 'q';    // the old style query
         var state = {};
-        cttvLocationState.resetStateFor(stateId);
-        cttvLocationState.resetStateFor(stateIdLegacy); // reset state for old style queries, just in case
+        otLocationState.resetStateFor(stateId);
+        otLocationState.resetStateFor(stateIdLegacy); // reset state for old style queries, just in case
 
         /*
          * Check config and initialize from given object or default values
@@ -115,7 +115,7 @@ angular.module('cttvControllers')
             }
 
             state.f = f;
-            cttvLocationState.setStateFor(stateId, state);
+            otLocationState.setStateFor(stateId, state);
         };
 
 
@@ -327,7 +327,7 @@ angular.module('cttvControllers')
 
 
         // on search change
-        // $scope.$on(cttvLocationState.STATECHANGED, function (e, args) {
+        // $scope.$on(otLocationState.STATECHANGED, function (e, args) {
             // $log.log("[handler] onStateChanged");
             // setStateFromURL( (args[stateId] || {}) );
         // });
@@ -336,9 +336,9 @@ angular.module('cttvControllers')
         // on page load
 
         // if old style query, do a rerouting to new style query
-        if (!cttvLocationState.parseLocationSearch()[stateId] && cttvLocationState.parseLocationSearch()[stateIdLegacy]) {
-            $location.search('src=q:' + cttvLocationState.parseLocationSearch()[stateIdLegacy]);
+        if (!otLocationState.parseLocationSearch()[stateId] && otLocationState.parseLocationSearch()[stateIdLegacy]) {
+            $location.search('src=q:' + otLocationState.parseLocationSearch()[stateIdLegacy]);
         }
 
-        setStateFromURL(cttvLocationState.parseLocationSearch()[stateId] || {q: [cttvLocationState.parseLocationSearch()[stateIdLegacy]]});
+        setStateFromURL(otLocationState.parseLocationSearch()[stateId] || {q: [otLocationState.parseLocationSearch()[stateIdLegacy]]});
     }]);

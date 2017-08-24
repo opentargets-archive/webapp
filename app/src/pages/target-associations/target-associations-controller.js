@@ -6,10 +6,10 @@ angular.module('cttvControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', 'otUtils', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'cttvLocationState', 'cttvConfig', function ($scope, $location, otUtils, otAPIservice, cttvFiltersService, otDictionary, cttvLocationState, cttvConfig) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', 'otUtils', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'otLocationState', 'cttvConfig', function ($scope, $location, otUtils, otAPIservice, cttvFiltersService, otDictionary, otLocationState, cttvConfig) {
         'use strict';
 
-        cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
+        otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
 
 
         // Initial setup
@@ -158,8 +158,8 @@ angular.module('cttvControllers')
          * Also the current status for excluding cancers is updated
          */
         function update () {
-            cttvLocationState.setStateFor(stateId, $scope.view);
-            cttvLocationState.setStateFor(cancersExcId, $scope.cancers);
+            otLocationState.setStateFor(stateId, $scope.view);
+            otLocationState.setStateFor(cancersExcId, $scope.cancers);
         }
 
 
@@ -179,7 +179,7 @@ angular.module('cttvControllers')
         //
 
 
-        $scope.$on(cttvLocationState.STATECHANGED, function (evt, new_state, old_state) {
+        $scope.$on(otLocationState.STATECHANGED, function (evt, new_state, old_state) {
             render(new_state, old_state); // args is the same as getState()
         });
 
@@ -213,7 +213,7 @@ angular.module('cttvControllers')
 
         otUtils.clearErrors();
         $scope.search.query = $location.path().split('/')[2];
-        $scope.filters = cttvLocationState.getState()[facetsId] || {};
+        $scope.filters = otLocationState.getState()[facetsId] || {};
 
-        render(cttvLocationState.getState(), cttvLocationState.getOldState());
+        render(otLocationState.getState(), otLocationState.getOldState());
     }]);

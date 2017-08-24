@@ -308,7 +308,7 @@ angular.module('cttvDirectives')
     */
         // function update (id, st) {
         // // $log.log("update:st =", st);
-        //     cttvLocationState.setStateFor(id, st);
+        //     otLocationState.setStateFor(id, st);
         // }
 
 
@@ -340,8 +340,8 @@ angular.module('cttvDirectives')
 
             link: function (scope, elem) {
             // TODO: initialize the state if we enable this feature
-            // cttvLocationState.init();
-            // state = cttvLocationState.getState()[scope.stateId] || {};
+            // otLocationState.init();
+            // state = otLocationState.getState()[scope.stateId] || {};
 
             // table itself
                 var table = elem.children().eq(0).children().eq(0)[0];
@@ -474,7 +474,7 @@ angular.module('cttvDirectives')
                 // Do we want the directive to listen for changes in the URL?
                 // Probably so, but not with this implementation of DataTables...
                 // So for now we leave it OUT
-                // scope.$on(cttvLocationState.STATECHANGED, function (evt, new_state, old_state) {
+                // scope.$on(otLocationState.STATECHANGED, function (evt, new_state, old_state) {
                 //     render( new_state, old_state ); // if there are no facets, no worries, the API service will handle undefined
                 // });
 
@@ -492,7 +492,7 @@ angular.module('cttvDirectives')
                     //    $log.log("diseaseAssociationsTableDirective:not calling setupTable:");
                     //    dtable.ajax.reload();
                     // } else {
-                    // state = cttvLocationState.getState()[scope.stateId];
+                    // state = otLocationState.getState()[scope.stateId];
                     // create a new table
                     // dtable = setupTable(table, disease, scope.filename, scope.downloadTable);
                     // dtable = undefined;

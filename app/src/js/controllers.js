@@ -44,7 +44,7 @@ angular.module('cttvControllers')
      * Controller for the masthead navigations
      * Simply exposes the location service
      */
-    .controller('MastheadCtrl', ['$scope', '$location', '$log', 'cttvLocationState', function ($scope, $location, $log, cttvLocationState) {
+    .controller('MastheadCtrl', ['$scope', '$location', '$log', 'otLocationState', function ($scope, $location, $log, otLocationState) {
         'use strict';
 
         $scope.location = $location;
@@ -125,7 +125,7 @@ angular.module('cttvControllers')
     /**
      * Simple controller to expose the current page to the feedback button controller
      */
-    .controller('FeedbackCtrl', ['$scope', '$location', '$log', 'cttvLocationState', function ($scope, $location, $log, cttvLocationState) {
+    .controller('FeedbackCtrl', ['$scope', '$location', '$log', 'otLocationState', function ($scope, $location, $log, otLocationState) {
         'use strict';
         // expose the location;
         // note that exposing the page as $location.absUrl() does not work as that would not update when URL changes

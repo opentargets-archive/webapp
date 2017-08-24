@@ -14,10 +14,10 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'otUtils', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $q, otAPIservice, cttvFiltersService, otDictionary, otUtils, cttvLocationState, cttvConfig) {
+    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'otUtils', 'otLocationState', 'cttvConfig', function ($scope, $location, $q, otAPIservice, cttvFiltersService, otDictionary, otUtils, otLocationState, cttvConfig) {
         'use strict';
 
-        cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
+        otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
 
 
         // ---------------------------
@@ -38,7 +38,7 @@ angular.module('cttvControllers')
         $scope.targets = [];
         $scope.targetLists = [];
 
-        // TODO: should be done through the cttvLocationState?
+        // TODO: should be done through the otLocationState?
         $scope.removeTargetLists = function () {
             $location.search('targets', null);
             // TODO: Also remove the filter by target list feature
@@ -163,7 +163,7 @@ angular.module('cttvControllers')
         // Set up a listener for the URL changes and when the search change, get new data
         //
 
-        $scope.$on(cttvLocationState.STATECHANGED, function (evt, new_state, old_state) {
+        $scope.$on(otLocationState.STATECHANGED, function (evt, new_state, old_state) {
             render(new_state, old_state); // if there are no facets, no worries, the API service will handle undefined
         });
 
@@ -172,6 +172,6 @@ angular.module('cttvControllers')
         // on PAGE LOAD
         //
         otUtils.clearErrors();
-        $scope.filters = cttvLocationState.getState()[facetsId] || {};
-        render(cttvLocationState.getState(), cttvLocationState.getOldState());
+        $scope.filters = otLocationState.getState()[facetsId] || {};
+        render(otLocationState.getState(), otLocationState.getOldState());
     }]);
