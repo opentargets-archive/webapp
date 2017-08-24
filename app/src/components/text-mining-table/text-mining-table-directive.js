@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('textMiningTable', [
+    .directive('otTextMiningTable', [
         'otAPIservice',
         '$timeout',
         'otConfig',
