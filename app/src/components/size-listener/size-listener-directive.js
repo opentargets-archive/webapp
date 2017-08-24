@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('cttvSizeListener', [function () {
+    .directive('otSizeListener', [function () {
         'use strict';
 
         return {

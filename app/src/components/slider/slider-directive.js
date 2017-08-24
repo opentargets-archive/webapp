@@ -22,7 +22,7 @@ angular.module('cttvDirectives')
                 // labels: Array
             },
 
-            // template: '<cttv-size-listener onresize="resize"></cttv-size-listener>',
+            // template: '<ot-size-listener onresize="resize"></ot-size-listener>',
 
             /*
             link: function (scope, elem, attrs) {
