@@ -25,7 +25,12 @@ module.exports = {
         "flowerView": true,
         "spinner": true,
         "Reactome": true,
-        "targetAssociations": true
+        "targetAssociations": true,
+        "saveAs": true,
+        "tooltip": true,
+        "interactionsViewer": true,
+        "tnt": true,
+        "geneAssociationsTree": true
     },
     "rules": {
         "curly": 2,
