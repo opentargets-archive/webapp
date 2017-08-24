@@ -63,9 +63,9 @@ module.exports = {
         "eqeqeq": 2,
         "space-before-blocks": 2,
         "spaced-comment": 2,
-        // "padded-blocks": [2, "never"],
+        "padded-blocks": [2, "never"],
         "comma-dangle": 2,
-        // "brace-style": 2,
+        "brace-style": 2,
         // "no-magic-numbers": 2,
         "no-loop-func": 2,
         "dot-location": [2, "property"],
@@ -73,6 +73,8 @@ module.exports = {
         "object-curly-spacing": 2,
         "computed-property-spacing": 2,
         "eol-last": 2,
+        "array-bracket-spacing": 2,
+        "block-spacing": 2,
         /**
          * Angular rules
          * By default, this uses 
@@ -100,8 +102,8 @@ module.exports = {
         "angular/watchers-execution": [2, "$apply"],
         "angular/angularelement": 1,
         "angular/controller-name": [2, "/[A-Z].*Ctrl/"],
-        "angular/directive-name": [2, "ot"],
-        "angular/factory-name": [2, "ot"],
+        // "angular/directive-name": [2, "ot"],
+        // "angular/factory-name": [2, "ot"],
         "angular/filter-name": [2, "ot"],
         "angular/module-name": [2, "ot"],
         // "angular/file-name": [2, {
