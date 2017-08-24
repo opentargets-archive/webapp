@@ -3,11 +3,8 @@ angular.module('cttvDirectives')
         'use strict';
 
         return {
-            restrict: 'EA',
+            restrict: 'AE',
             templateUrl: 'src/components/search-suggestions/search-suggestions.html',
-            replace: true,
-            link: function (scope, elem, attrs) {
-
-            }
+            replace: true
         };
     }]);
