@@ -14,7 +14,7 @@ angular.module('cttvDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('cttvDiseaseAssociations', ['cttvUtils', 'cttvDictionary', 'cttvConsts', 'otAPIservice', '$q', 'cttvLocationState', function (cttvUtils, cttvDictionary, cttvConsts, otAPIservice, $q, cttvLocationState) {
+    .directive('cttvDiseaseAssociations', ['cttvUtils', 'cttvDictionary', 'cttvConsts', 'otAPIservice', '$q', function (cttvUtils, cttvDictionary, cttvConsts, otAPIservice, $q) {
         'use strict';
 
         var draw = 1;
@@ -306,19 +306,19 @@ angular.module('cttvDirectives')
     * TODO: currently not being called - will check when we put this back
     * Update function passes the current view (state) to the URL
     */
-        function update (id, st) {
-        // $log.log("update:st =", st);
-            cttvLocationState.setStateFor(id, st);
-        }
+        // function update (id, st) {
+        // // $log.log("update:st =", st);
+        //     cttvLocationState.setStateFor(id, st);
+        // }
 
 
         /*
     * Renders page elements based on state from locationStateService
     */
-        function render (new_state, old_state) {
+        // function render (new_state, old_state) {
         // TODO: might not need this?
         // state = ...
-        }
+        // }
 
         return {
 
@@ -338,7 +338,7 @@ angular.module('cttvDirectives')
         + '  <cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
         + '</div>',
 
-            link: function (scope, elem, attrs) {
+            link: function (scope, elem) {
             // TODO: initialize the state if we enable this feature
             // cttvLocationState.init();
             // state = cttvLocationState.getState()[scope.stateId] || {};
@@ -434,6 +434,8 @@ angular.module('cttvDirectives')
                                             }
                                             totalText += moreText;
                                             return totalText;
+                                        } else {
+                                            return null;
                                         }
                                     });
                             }
@@ -455,7 +457,7 @@ angular.module('cttvDirectives')
                                     return getNextChunk(p.total, p.from);
                                 });
                             });
-                            promise.then(function (res) {
+                            promise.then(function () {
                                 var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
                                 saveAs(b, scope.filename + '.csv');
                                 // var hiddenElement = document.createElement('a');
@@ -479,7 +481,7 @@ angular.module('cttvDirectives')
                 scope.$watchGroup(['filters', 'disease', 'targets'], function (attrs) {
                     filters = attrs[0];
                     targets = attrs[2];
-                    var disease = attrs[1];
+                    // var disease = attrs[1];
                     // scope.targets = attrs[2];
 
                     // $log.log("diseaseAssociationsTableDirective:attrs:", attrs);

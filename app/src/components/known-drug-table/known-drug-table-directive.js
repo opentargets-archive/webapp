@@ -3,15 +3,14 @@
 angular.module('cttvDirectives')
 
 /* Directive to display the known drug evidence table */
-    .directive('knownDrugTable', ['$log', 'otAPIservice', 'cttvConsts', 'cttvUtils', 'cttvConfig', '$location', 'cttvDictionary', function ($log, otAPIservice, cttvConsts, cttvUtils, cttvConfig, $location, cttvDictionary) {
-
+    .directive('knownDrugTable', ['otAPIservice', 'cttvConsts', 'cttvUtils', 'cttvConfig', '$location', 'cttvDictionary', function (otAPIservice, cttvConsts, cttvUtils, cttvConfig, $location, cttvDictionary) {
         'use strict';
         // var dbs = cttvConsts.dbs;
         var searchObj = cttvUtils.search.translateKeys($location.search());
         var checkPath = cttvUtils.checkPath;
 
         return {
-            restrict: 'EA',
+            restrict: 'AE',
             templateUrl: 'src/components/known-drug-table/known-drug-table.html',
             scope: {
                 loadFlag: '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
@@ -126,7 +125,7 @@ angular.module('cttvDirectives')
                                 });
 
                                 // 0: data origin: public / private
-                                row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                                row.push((item.access_level === cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                                 // 1: disease
                                 row.push('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');

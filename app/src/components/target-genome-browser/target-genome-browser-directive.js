@@ -1,8 +1,4 @@
 angular.module('cttvDirectives')
-
-    /*
-    *
-    */
     .directive('cttvTargetGenomeBrowser', ['otAPIservice', function (otAPIservice) {
         'use strict';
 
@@ -17,7 +13,6 @@ angular.module('cttvDirectives')
                     }
                     var newDiv = document.createElement('div');
                     newDiv.id = 'cttvTargetGenomeBrowser';
-                    // newDiv.className = "accordionCell";
                     elem[0].appendChild(newDiv);
 
                     var gB = tnt.board.genome()
@@ -26,8 +21,6 @@ angular.module('cttvDirectives')
                         .context(20)
                         .width(w);
 
-                    // gB.rest().proxyUrl("/ensembl");
-                    // gB.rest().proxyUrl("/api/latest/ensembl")
                     gB.rest().prefix('/proxy/rest.ensembl.org').protocol('').domain('');
                     var theme = targetGenomeBrowser()
                         .efo(efo)

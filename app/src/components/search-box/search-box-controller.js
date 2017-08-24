@@ -6,8 +6,7 @@
  */
 angular.module('cttvControllers')
 
-    .controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'otAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $log, $location, $window, $document, $element, otAPIservice, $timeout, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
-
+    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otAPIservice', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, $window, $document, $element, otAPIservice, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
         var APP_SEARCH_URL = 'search';
         var APP_EVIDENCE_URL = 'evidence';
         var APP_AUTOCOMPLETE_URL = 'autocomplete';
@@ -136,7 +135,7 @@ angular.module('cttvControllers')
          * @param {String} url
          */
         var setLocation = function (url) {
-            if ($location.url() != url) {
+            if ($location.url() !== url) {
                 $location.url(url);
             }
         };
@@ -158,7 +157,7 @@ angular.module('cttvControllers')
             // check the EFOs path and remove excess data
             data.disease.forEach(function (efo) {
                 // first we don't want that "CTTV Root" thingy at the beginning, if it's there
-                if (efo.data.efo_path_labels[0][0] == cttvConsts.CTTV_ROOT_NAME && efo.data.efo_path_labels[0].length == efo.data.efo_path_codes[0].length) {
+                if (efo.data.efo_path_labels[0][0] === cttvConsts.CTTV_ROOT_NAME && efo.data.efo_path_labels[0].length === efo.data.efo_path_codes[0].length) {
                     efo.data.efo_path_labels[0] = efo.data.efo_path_labels[0].slice(1);
                     efo.data.efo_path_codes[0] = efo.data.efo_path_codes[0].slice(1);
                 }
@@ -185,9 +184,9 @@ angular.module('cttvControllers')
          */
         $scope.linkTo = function (s) {
             // parse the options:
-            if (s.type.toLowerCase() == 'target') {
+            if (s.type.toLowerCase() === 'target') {
                 $location.url('/target/' + s.q + '/associations');
-            } else if (s.type.toLowerCase() == 'disease') {
+            } else if (s.type.toLowerCase() === 'disease') {
                 $location.url('/disease/' + s.q + '/associations');
             }
 
@@ -200,7 +199,7 @@ angular.module('cttvControllers')
          */
         $scope.setSearch = function () {
             // show search results page, nice and easy...
-            if ($location.url() != APP_SEARCH_URL) {
+            if ($location.url() !== APP_SEARCH_URL) {
                 $location.url(APP_SEARCH_URL);
             }
             $location.search('src=q:' + $scope.search.query.text);

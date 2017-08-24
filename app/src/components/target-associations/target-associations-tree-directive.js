@@ -4,7 +4,7 @@ angular.module('cttvDirectives')
     /*
     *
     */
-    .directive('cttvTargetAssociationsTree', ['$log', 'otAPIservice', 'cttvConsts', 'cttvUtils', '$analytics', function ($log, otAPIservice, cttvConsts, cttvUtils, $analytics) {
+    .directive('cttvTargetAssociationsTree', ['otAPIservice', 'cttvConsts', 'cttvUtils', '$analytics', function (otAPIservice, cttvConsts, cttvUtils, $analytics) {
         'use strict';
 
         var whoiam = 'tree';
@@ -28,7 +28,7 @@ angular.module('cttvDirectives')
             + '<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend></div>',
 
 
-            link: function (scope, elem, attrs) {
+            link: function (scope, elem) {
                 // $log.log("tree.link()");
 
                 var currTarget;
@@ -41,19 +41,13 @@ angular.module('cttvDirectives')
                 }
 
 
-                scope.$watchGroup(['target', 'facets', 'active'], function (vals, old_vals) {
-                    // $log.log("tree.watchGroup()");
+                scope.$watchGroup(['target', 'facets', 'active'], function (vals) {
                     var target = vals[0];
                     var facets = vals[1];
-                    var act = vals[2];
-
-                    // $log.log(scope.active +" !== " +whoiam);
 
                     if (scope.active !== whoiam) {
                         return;
                     }
-
-                    // $log.log(target +"!=="+ currTarget);
 
                     // Remove the current tree if the target has changed
                     if (target !== currTarget) {
@@ -141,19 +135,12 @@ angular.module('cttvDirectives')
                     // Fire a target associations tree event for piwik to track
                     $analytics.eventTrack('targetAssociationsTree', {'category': 'association', 'label': 'tree'});
 
-                    // //// Tree view
-                    // viewport Size
-                    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-                    var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-
-                    // Element Coord
-                    var elemOffsetTop = elem[0].parentNode.offsetTop;
-
-                    // BottomMargin
-                    var bottomMargin = 50;
-
                     // TODO: This is not being used at the moment. We are fixing the size of the tree to 900px (see below)
-                    var diameter = viewportH - elemOffsetTop - bottomMargin;
+                    // var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                    // var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+                    // var elemOffsetTop = elem[0].parentNode.offsetTop;
+                    // var bottomMargin = 50;
+                    // var diameter = viewportH - elemOffsetTop - bottomMargin;
 
                     // var dts = JSON.parse(attrs.datatypes);
                     // var opts = {

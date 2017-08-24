@@ -5,6 +5,7 @@ angular.module('cttvDirectives')
         var w = angular.element($window);
 
         return {
+            restrict: 'AE',
             scope: {},
             controller: ['$scope', function ($scope) {
                 this.dims = function () {

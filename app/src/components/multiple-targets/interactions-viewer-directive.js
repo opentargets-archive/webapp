@@ -58,7 +58,7 @@ angular.module('cttvDirectives')
                 categories: '=',
                 selected: '='
             },
-            link: function (scope, elem, attrs) {
+            link: function (scope) {
                 scope.showSpinner = true;
 
                 scope.$watchGroup(['interactors', 'categories'], function () {

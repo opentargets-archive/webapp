@@ -26,6 +26,12 @@ module.exports = {
         "spinner": true,
         "Reactome": true,
         "targetAssociations": true,
+        "saveAs": true,
+        "tooltip": true,
+        "interactionsViewer": true,
+        "tnt": true,
+        "geneAssociationsTree": true,
+        "targetGenomeBrowser": true,
         'cttvApi': true
     },
     "rules": {
