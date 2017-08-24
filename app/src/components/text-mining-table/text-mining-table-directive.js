@@ -4,15 +4,15 @@ angular.module('cttvDirectives')
         '$timeout',
         'cttvConfig',
         'cttvConsts',
-        'otUpperCaseFirst',
-        'otClearUnderscores',
+        'otUpperCaseFirstFilter',
+        'otClearUnderscoresFilter',
         function (
             cttvAPIservice,
             $timeout,
             cttvConfig,
             cttvConsts,
-            otUpperCaseFirst,
-            otClearUnderscores) {
+            otUpperCaseFirstFilter,
+            otClearUnderscoresFilter) {
             'use strict';
 
             var draw = 1;
@@ -270,7 +270,7 @@ angular.module('cttvDirectives')
                         var previousSection = null;
 
                         var matchedSentences = d.evidence.literature_ref.mined_sentences.map(function (sent) {
-                            var section = otUpperCaseFirst(otClearUnderscores(sent.section));
+                            var section = otUpperCaseFirstFilter(otClearUnderscoresFilter(sent.section));
                             var sentenceString = '';
                             if (section !== 'Title' && section !== 'Abstract') {
                                 if (previousSection !== sent.section) {
