@@ -65,7 +65,9 @@ module.exports = {
         "spaced-comment": 2,
         "padded-blocks": [2, "never"],
         "comma-dangle": 2,
-        "brace-style": 2,
+        "brace-style": [2, "1tbs", {
+            "allowSingleLine": true
+        }],
         // "no-magic-numbers": 2,
         "no-loop-func": 2,
         "dot-location": [2, "property"],
