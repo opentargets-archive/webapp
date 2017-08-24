@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
     * Options:
     * size: as per cttvProgressSpinner; Default is 3.
     */
-    .directive('cttvPageProgressSpinner', ['otAPIservice', function (otAPIservice) {
+    .directive('otPageProgressSpinner', ['otAPIservice', function (otAPIservice) {
         'use strict';
 
         return {
