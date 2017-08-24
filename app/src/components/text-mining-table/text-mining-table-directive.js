@@ -35,7 +35,6 @@ angular.module('cttvDirectives')
                             'extra': '',
                             'span': 1
                         });
-
                     }
                 });
 
@@ -43,7 +42,6 @@ angular.module('cttvDirectives')
                 // Order the breakpoints
                 // var pubmedId = data.evidence.literature_ref.lit_id.split("/").pop();
                 data.evidence.literature_ref.mined_sentences.map(function (sentence) {
-
                     if (sentence.t_start !== sentence.t_end) {
                         sentence.breakpoints.push({
                             'type': 't_start',
@@ -108,7 +106,6 @@ angular.module('cttvDirectives')
                     }
 
                     sentence.formattedText = text;
-
                 });
 
                 return abstractSentences;
@@ -273,7 +270,6 @@ angular.module('cttvDirectives')
                         var previousSection = null;
 
                         var matchedSentences = d.evidence.literature_ref.mined_sentences.map(function (sent) {
-
                             var section = otUpperCaseFirst(otClearUnderscores(sent.section));
                             var sentenceString = '';
                             if (section !== 'Title' && section !== 'Abstract') {

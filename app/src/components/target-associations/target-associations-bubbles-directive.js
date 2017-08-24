@@ -163,7 +163,7 @@ angular.module('cttvDirectives')
                 var nav;
 
                 // Change of dims
-                scope.$watch(function () {if (resizeCtrl) {return resizeCtrl.dims();}}, function (val) {
+                scope.$watch(function () { if (resizeCtrl) { return resizeCtrl.dims(); } }, function (val) {
                     if (bView) {
                         bView.diameter(val.height - bottomMargin);
                     }
@@ -283,7 +283,6 @@ angular.module('cttvDirectives')
                     scope.legendData = [
                         // {label:"Therapeutic Area", class:"no-data"}
                     ];
-
                 }
 
                 if (cttvUtils.browser.name !== 'IE') {

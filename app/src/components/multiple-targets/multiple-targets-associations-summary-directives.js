@@ -493,8 +493,6 @@ angular.module('cttvDirectives')
                                 }
                                 return '#eeeeee';
                             });
-
-
                     }, 0);
                 });
             }

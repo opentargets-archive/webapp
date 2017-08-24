@@ -49,7 +49,6 @@ angular.module('cttvDirectives')
 
                 // if the menu is a hamburger, we flatten the tree to display all in one list
                 if (scope.isHamburger) {
-
                     cttvConfig.mastheadNavigationMenu.forEach(function (i) {
                         if (i.menu) {
                             i.menu.forEach(function (j) {
@@ -73,7 +72,6 @@ angular.module('cttvDirectives')
                     $event.stopPropagation();
                     //scope.status.isopen = !scope.status.isopen;
                 };*/
-
             }
         };
     }]);

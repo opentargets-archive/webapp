@@ -11,7 +11,6 @@ angular.module('cttvDirectives')
             },
             templateUrl: 'src/components/batch-search/target-list-mapping.html',
             link: function (scope) {
-
             // Setting the limit for the list:
                 scope.listLengthLimit = cttvConfig.targetListLimit;
 
@@ -210,7 +209,6 @@ angular.module('cttvDirectives')
                     scope.targetIds = [];
 
                     for (var i = 0; i < thisList.length; i++) {
-
                         var thisSearch = thisList[i];
 
                         if (thisSearch.result && thisSearch.result.approved_symbol) {
@@ -245,7 +243,6 @@ angular.module('cttvDirectives')
                                     scope.targetIds.push(thisSearch.result.id);
                                 }
                             }
-
                         } else {
                             scope.notFound.push({
                                 query: thisSearch.query,

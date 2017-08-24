@@ -70,7 +70,6 @@ angular.module('cttvDirectives')
             + '<cttv-matrix-legend colors="colors" layout="h"></cttv-matrix-legend>',
 
             link: function (scope, elem) {
-
                 // set the load progress flag to true before starting the API call
                 // scope.loadprogress = true;
 
@@ -78,12 +77,10 @@ angular.module('cttvDirectives')
                 scope.$watch(
                     'target',
                     function () {
-
                         // move cttvAPIservice.getExpression ({ in here
                         // ......
 
                         if (scope.target) {
-
                             cttvAPIservice.getExpression({
                                 'method': 'GET',
                                 'params': {
@@ -107,7 +104,6 @@ angular.module('cttvDirectives')
                                             row.push(getColorStyleString(data[tissue].rna.level, colorScale10, labelScale10));
                                             row.push('');
                                             newData.push(row);
-
                                         }
 
                                         // -----------------------
@@ -126,7 +122,7 @@ angular.module('cttvDirectives')
                                                 return a;
                                             })(),
                                             'columnDefs': [
-                                                {'orderSequence': [ 'desc', 'asc'], 'targets': '_all'}
+                                                {'orderSequence': ['desc', 'asc'], 'targets': '_all'}
                                             ],
                                             'order': [[0, 'asc']],
                                             'autoWidth': false,
@@ -147,8 +143,6 @@ angular.module('cttvDirectives')
                                             {label: 'No data', class: 'no-data'},
                                             {label: 'Not expressed', class: 'value-0'}
                                         ];
-
-
                                     },
 
                                     // error
@@ -158,7 +152,6 @@ angular.module('cttvDirectives')
                     }
 
                 ); // end watch
-
             } // end link
         }; // end return
     }]);

@@ -1,6 +1,5 @@
 angular.module('plugins')
     .directive('pluginLoader', ['$compile', '$timeout', 'lazy', '$q', '$analytics', function ($compile, $timeout, lazy, $q, $analytics) {
-
         return {
             restrict: 'E',
             scope: {
@@ -18,7 +17,6 @@ angular.module('plugins')
                 scope.alreadyLoaded = {};
 
                 scope.$watch('visible', function () {
-
                     // Find the first ancestor element to get the width from
                     var sectionWidth = 0;
                     var e = element[0];
@@ -75,7 +73,6 @@ angular.module('plugins')
                                     var compiled = $compile(template)(scope);
                                     element.append(compiled);
                                 }, 0);
-
                             });
                     } else {
                         // while (element[0].firstChild) {

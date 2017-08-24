@@ -199,7 +199,6 @@ angular.module('cttvDirectives')
                             table.innerHTML = '';
                             setupTissuesTable(table, tissueDataRows, 'gtex-data-gene-list.txt');
                         });
-
                 });
             }
         };

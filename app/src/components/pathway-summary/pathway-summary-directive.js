@@ -75,7 +75,6 @@ angular.module('cttvDirectives')
                         }, 500); // Check reactome is loaded every 500 ms
                     }, 0);
                 });
-
             }
         };
     }]);

@@ -30,7 +30,6 @@ angular.module('facets', [])
             }
 
         };
-
     }])
 
 
@@ -62,7 +61,6 @@ angular.module('facets', [])
             }
 
         };
-
     }])
 
 

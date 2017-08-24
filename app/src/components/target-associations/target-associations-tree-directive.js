@@ -97,7 +97,6 @@ angular.module('cttvDirectives')
                             cttvAPIservice.defaultErrorHandler
                             );
                     }
-
                 });
 
                 // var excludeCancersFromOtherTAs = function (resp) {
@@ -181,7 +180,6 @@ angular.module('cttvDirectives')
                     cttvAPIservice.getAssociations(queryObject)
                         .then(
                             function (resp) {
-
                                 // if (scope.nocancers === "true") {
                                 //     excludeCancersFromOtherTAs(resp); // side effect on resp
                                 // }
@@ -208,14 +206,12 @@ angular.module('cttvDirectives')
 
                                 // gat(fView, elem.children().eq(1)[0]);
                                 gat(fView, elem.children().eq(1).children().eq(0)[0]);
-
                             },
                             cttvAPIservice.defaultErrorHandler
                         );
                 };
 
                 if (cttvUtils.browser.name !== 'IE') {
-
                     scope.toExport = function () {
                         var svg = elem.children().eq(1)[0].querySelector('svg');
                         return svg;

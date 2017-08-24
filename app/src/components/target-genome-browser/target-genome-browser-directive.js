@@ -11,7 +11,7 @@ angular.module('cttvDirectives')
             link: function (scope, elem, attrs) {
                 var efo = attrs.efo;
                 var w = (attrs.width || elem[0].parentNode.offsetWidth) - 40;
-                scope.$watch(function () {return attrs.target; }, function (target) {
+                scope.$watch(function () { return attrs.target; }, function (target) {
                     if (target === '') {
                         return;
                     }

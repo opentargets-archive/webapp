@@ -15,7 +15,6 @@ angular.module('cttvDirectives')
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
     .directive('cttvDiseaseAssociations', ['cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', '$q', 'cttvLocationState', function (cttvUtils, cttvDictionary, cttvConsts, cttvAPIservice, $q, cttvLocationState) {
-
         'use strict';
 
         var draw = 1;
@@ -145,7 +144,6 @@ angular.module('cttvDirectives')
                 'processing': false,
                 'serverSide': true,
                 'ajax': function (data, cbak, params) {
-
                 // Order options
                 // mappings:
                 // 0 => gene name alphabetically -- not supported in the api
@@ -342,7 +340,6 @@ angular.module('cttvDirectives')
         + '</div>',
 
             link: function (scope, elem, attrs) {
-
             // TODO: initialize the state if we enable this feature
             // cttvLocationState.init();
             // state = cttvLocationState.getState()[scope.stateId] || {};
@@ -368,7 +365,6 @@ angular.module('cttvDirectives')
 
                 // Download the whole table
                 scope.downloadTable = function () {
-
                     var size = 10000;
                     // First make a call to know how many rows there are:
                     var optsPreFlight = {
@@ -433,7 +429,6 @@ angular.module('cttvDirectives')
                                         var moreText = resp.body;
 
                                         if (columnsNumberOk(moreText, opts.fields.length)) {
-
                                             if (from > 0) {
                                             // Not in the first page, so remove the header row
                                                 moreText = moreText.split('\n').slice(1).join('\n');
@@ -470,7 +465,6 @@ angular.module('cttvDirectives')
                                 // hiddenElement.download = scope.filename + ".csv";
                                 // hiddenElement.click();
                             });
-
                         }, cttvAPIservice.defaultErrorHandler);
                 };
 
@@ -484,7 +478,6 @@ angular.module('cttvDirectives')
                 // });
 
                 scope.$watchGroup(['filters', 'disease', 'targets'], function (attrs) {
-
                     filters = attrs[0];
                     targets = attrs[2];
                     var disease = attrs[1];
@@ -548,7 +541,6 @@ angular.module('cttvDirectives')
             //
             // }
             // });
-
             } // end link
         }; // end return
     }]);

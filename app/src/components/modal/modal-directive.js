@@ -32,7 +32,6 @@ angular.module('cttvDirectives')
                      + '</div>',
 
             link: function (scope, elem, attrs, ctrl, transclude) {
-
                 transclude(scope.$parent, function (clone) {
                     elem.find('modal-body-content').replaceWith(clone);
                 });

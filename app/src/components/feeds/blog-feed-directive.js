@@ -48,13 +48,11 @@ angular.module('cttvDirectives')
                             i.desc = i.meta_description || i.html;  // authors don't always put a description, so let's use the full html as a backup plan
                             i.link = href_url + i.slug;               // the url to the full post on the blog
                         });
-
                     }, function errorCallback (response) {
                         // called asynchronously if an error occurs
                         // or server returns response with an error status.
                         $log.warn('Error fetching blog posts. ', response);
                     });
-
             }
         };
     }]);

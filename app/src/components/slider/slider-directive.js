@@ -139,7 +139,6 @@ angular.module('cttvDirectives')
             link: function (scope, elem, attrs) {
                 scope.$watch('value', function (n, o) {
                     if (n != undefined && o == undefined) {
-
                         // set up dimentions
                         var margin = {top: 0, right: 10, bottom: 10, left: 10},
                             width = (scope.config.width || elem[0].offsetWidth) - margin.left - margin.right,   // initialize width to the div width
@@ -152,7 +151,7 @@ angular.module('cttvDirectives')
                         var ticks = config.ticks || config.values.length || 10;
                         var tick = config.tick || 1;
                         var snap = config.snap || false;
-                        var values = config.values || [ (scope.min || 0), (scope.max || 1) ];
+                        var values = config.values || [(scope.min || 0), (scope.max || 1)];
                         var labels = config.labels;
 
                         scope.value = scope.value || scope.min;
@@ -243,7 +242,6 @@ angular.module('cttvDirectives')
                                 scope.value = v(brush.extent()[0]);
                             }
                         };
-
                     }
                 });
 
@@ -257,7 +255,6 @@ angular.module('cttvDirectives')
                     svg.attr("width", width + margin.left + margin.right);
 
                 }*/
-
             }
         };
     }]);

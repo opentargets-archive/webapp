@@ -12,7 +12,6 @@ angular.module('cttvDirectives')
                     return all[i];
                 }
             }
-
         }
 
         function takeBestInteractors (interactors, n) {
@@ -156,7 +155,6 @@ angular.module('cttvDirectives')
 
                         iv.filters(scope.filterOut);
                         iv.update();
-
                     }
 
                     scope.selectedNodes = [];
@@ -180,8 +178,8 @@ angular.module('cttvDirectives')
                     var iv = interactionsViewer()
                         .data(interactorsArr.sort(function (a, b) {
                         // Sort interactors alphabetically
-                            if (a.label < b.label) {return -1;}
-                            if (a.label > b.label) {return 1;}
+                            if (a.label < b.label) { return -1; }
+                            if (a.label > b.label) { return 1; }
                             return 0;
                         }))
                         .selectedNodesColors(selectedNodesColors)
@@ -296,7 +294,6 @@ angular.module('cttvDirectives')
                                 var selectedNode = getSelectedNode(interactorsArr, scope.selected);
                                 iv.click(selectedNode);
                             }
-
                         });
                     $timeout(function () {
                         scope.showSpinner = false;
@@ -311,7 +308,6 @@ angular.module('cttvDirectives')
                         // scope.labs.push(j);
                         scope.colors.push({color: newColorScale(j), label: j});
                     }
-
                 });
             }
         };

@@ -7,7 +7,6 @@
 angular.module('cttvControllers')
 
     .controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
-
         var APP_SEARCH_URL = 'search';
         var APP_EVIDENCE_URL = 'evidence';
         var APP_AUTOCOMPLETE_URL = 'autocomplete';
@@ -71,7 +70,6 @@ angular.module('cttvControllers')
             res();
         });
         $scope.getSuggestions = function (query) {
-
             // clear the data here, so the box disappears or the content is cleared...
             $scope.search.results = {};
 
@@ -158,7 +156,6 @@ angular.module('cttvControllers')
             }
             // check the EFOs path and remove excess data
             data.disease.forEach(function (efo) {
-
                 // first we don't want that "CTTV Root" thingy at the beginning, if it's there
                 if (efo.data.efo_path_labels[0][0] == cttvConsts.CTTV_ROOT_NAME && efo.data.efo_path_labels[0].length == efo.data.efo_path_codes[0].length) {
                     efo.data.efo_path_labels[0] = efo.data.efo_path_labels[0].slice(1);
@@ -201,7 +198,6 @@ angular.module('cttvControllers')
          * Sets a new search via the URL
          */
         $scope.setSearch = function () {
-
             // show search results page, nice and easy...
             if ($location.url() != APP_SEARCH_URL) {
                 $location.url(APP_SEARCH_URL);
@@ -234,5 +230,4 @@ angular.module('cttvControllers')
                 $window.scrollTo(0, sb.offset().top - p);
             }
         };
-
     }]);

@@ -3,7 +3,7 @@ angular.module('cttvDirectives')
     /*
      * The notifications bell thingy in the navigation bar
      */
-    .directive('mastheadNotificationsMenu', [ function () {
+    .directive('mastheadNotificationsMenu', [function () {
         'use strict';
 
         return {

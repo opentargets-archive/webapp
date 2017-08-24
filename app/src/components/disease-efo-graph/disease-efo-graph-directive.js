@@ -18,7 +18,7 @@ angular.module('cttvDirectives')
                     .height(700)
                     .cttvApi(cttvAPIservice.getSelf());
 
-                scope.$watch(function () {return attrs.efo;}, function (efo_str) {
+                scope.$watch(function () { return attrs.efo; }, function (efo_str) {
                     // console.warn (efo);
                     if (!efo_str) {
                         return;

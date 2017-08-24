@@ -16,7 +16,7 @@ angular.module('cttvDirectives')
                 size: '@'
             },
             link: function (scope, elem, attrs) {
-                scope.$watch(function () {return cttvAPIservice.activeRequests;}, function (newValue, oldValue) {
+                scope.$watch(function () { return cttvAPIservice.activeRequests; }, function (newValue, oldValue) {
                     scope.isloading = newValue > 0;
                 });
             }

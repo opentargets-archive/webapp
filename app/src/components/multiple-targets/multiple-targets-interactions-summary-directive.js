@@ -91,7 +91,6 @@ angular.module('cttvDirectives')
 
                     $q.all([p1, p2])
                         .then(function (resps) {
-
                         // Parse the pathways (reactome) data
                             var targetPathways = resps[0];
                             var targets4pathways = {};
@@ -232,10 +231,8 @@ angular.module('cttvDirectives')
                             }
                             scope.categories = sourceCategories;
                             scope.interactors = interactors;
-
                         });
                 });
             }
         };
-
     }]);
