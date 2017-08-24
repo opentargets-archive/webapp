@@ -1,24 +1,18 @@
 angular.module('cttvDirectives')
-    .directive('textMiningTable', ['$log',
+    .directive('textMiningTable', [
         'cttvAPIservice',
-        'cttvUtils',
         '$timeout',
         'cttvConfig',
         'cttvConsts',
-        'cttvDictionary',
-        'otUpperCaseFirstFilter',
-        'otClearUnderscoresFilter',
-        '$q',
-        function ($log,
+        'otUpperCaseFirst',
+        'otClearUnderscores',
+        function (
             cttvAPIservice,
-            cttvUtils,
             $timeout,
             cttvConfig,
             cttvConsts,
-            cttvDictionary,
             otUpperCaseFirst,
-            otClearUnderscores,
-            $q) {
+            otClearUnderscores) {
             'use strict';
 
             var draw = 1;
@@ -97,14 +91,12 @@ angular.module('cttvDirectives')
                     if (sentence.section === 'abstract' || sentence.section === 'title') {
                         var highlightedSentence = '<span class="highlight-info text-content-highlight">' + text + '</span>';
                         if (sentence.section === 'abstract') {
-
                             abstractSentences.push({
                                 'raw': sentence.text.trim(),
                                 'formatted': text,
                                 'formattedHighlighted': highlightedSentence
                             });
-                        }
-                        else {// title
+                        } else { // title
                             abstractSentences.push({
                                 'raw': sentence.text.trim(),
                                 'formatted': text
@@ -126,11 +118,9 @@ angular.module('cttvDirectives')
             var countSentences = function (sentences) {
                 var count = {};
                 sentences.map(function (sentence) {
-
                     if (count[sentence.section] === undefined) {
                         count[sentence.section] = 1;
-                    }
-                    else {
+                    } else {
                         count[sentence.section]++;
                     }
                 });
@@ -142,13 +132,11 @@ angular.module('cttvDirectives')
             var prepareSectionSentences = function (sentences) {
                 var sectionSentenceMap = {};
                 sentences.map(function (sentence) {
-
-                    if (sentence.section != 'abstract') {
+                    if (sentence.section !== 'abstract') {
                         if (sectionSentenceMap[sentence.section] === undefined) {
                             sectionSentenceMap[sentence.section] = '';
                             sectionSentenceMap[sentence.section] += '<li>' + sentence.formattedText + '</li>';
-                        }
-                        else {
+                        } else {
                             sectionSentenceMap[sentence.section] += '<li>' + sentence.formattedText + '</li>';
                         }
                     }
@@ -164,8 +152,7 @@ angular.module('cttvDirectives')
                     if (sectionSentenceMap[sentence.section] === undefined) {
                         sectionSentenceMap[sentence.section] = '';
                         sectionSentenceMap[sentence.section] += ' ' + sentence.formattedText + ' ';
-                    }
-                    else {
+                    } else {
                         sectionSentenceMap[sentence.section] += ' ' + sentence.formattedText + ' ';
                     }
                 });
@@ -190,7 +177,7 @@ angular.module('cttvDirectives')
                     var row = [];
 
                     // 0 - Access level
-                    row.push((d.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((d.access_level === cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // 1 - Disease label
                     row.push(d.disease.efo_info.label);
@@ -231,7 +218,6 @@ angular.module('cttvDirectives')
                         //     abstractSentences = $scope.search.tables.literature.abstractSentences[data[2]][data[6]][data[7]];
                         // }
                         if (abstractSentences && abstract) {
-
                             abstractSentences.map(function (f) {
                                 var pos = abstract.indexOf(f.raw);
                                 // abstract = abstract.replace(f.raw, f.formattedHighlighted);
@@ -243,7 +229,6 @@ angular.module('cttvDirectives')
                                     title = title.replace(f.raw, f.formatted);
                                 }
                             });
-
                         }
                         // var journalVolume = d.journalInfo.volume ? d.journalInfo.volume : "";
                         // var journalIssue = d.journalInfo.issue ? "(" + d.journalInfo.issue + ")" : "";
@@ -291,10 +276,9 @@ angular.module('cttvDirectives')
 
                             var section = otUpperCaseFirst(otClearUnderscores(sent.section));
                             var sentenceString = '';
-                            if (section != 'Title' && section != 'Abstract') {
-
-                                if (previousSection != sent.section) {
-                                    if (previousSection != null) { // this is not the first section with matched sentences
+                            if (section !== 'Title' && section !== 'Abstract') {
+                                if (previousSection !== sent.section) {
+                                    if (previousSection !== null) { // this is not the first section with matched sentences
                                         sentenceString = sentenceString + '</div>';
                                     }
                                     sentenceString += '<p class=\'small\'><span onclick=\'angular.element(this).scope().displaySentences("' + pubmedId + sent.section + '")\'style=\'cursor:pointer\'><i class=\'fa fa-chevron-circle-down\' aria-hidden=\'true\'></i>&nbsp;<span class=\'bold\'>' + section + ': </span>' + sectionCount[sent.section];
@@ -304,7 +288,6 @@ angular.module('cttvDirectives')
                                         sentenceString += ' matched sentences</span></p>';
                                     }
                                     previousSection = sent.section;
-
                                 }
 
                                 sentenceString += '<div id=\'' + pubmedId + sent.section + '\' style=\'display:none\'><ul style=\'margin-left: 10px;\'>' + sectionSentences[sent.section] + '</ul></div>';
@@ -315,7 +298,6 @@ angular.module('cttvDirectives')
 
 
                         row.push(titleAndSource + '<br/>' + pmidStr + '<br/><br/>' + abstractString + abstract + ' <p class=small>' + (matchedSentences || 'no matches available') + '</p>');
-
                     }
 
                     // row.push(d.literature.abstract || "");
@@ -368,7 +350,7 @@ angular.module('cttvDirectives')
                     'searching': false,
                     'serverSide': true,
                     'autoWidth': false,
-                    'ajax': function (data, cbak, params) {
+                    'ajax': function (data, cbak) {
                         // order options
                         // mappings:
                         // 0 => access level
@@ -457,14 +439,14 @@ angular.module('cttvDirectives')
             var dirScope;
 
             return {
-                restrict: 'EA',
+                restrict: 'AE',
                 templateUrl: 'src/components/text-mining-table/text-mining-table.html',
                 scope: {
                     target: '=',
                     disease: '=',
                     filename: '='
                 },
-                link: function (scope, elem, attrs) {
+                link: function (scope) {
                     dirScope = scope;
                     scope.openEuropePmc = function (pmid) {
                         var URL = 'http://europepmc.org/abstract/MED/' + pmid;
@@ -476,7 +458,7 @@ angular.module('cttvDirectives')
                         $('#' + id).toggle('fast');
                     };
 
-                    scope.$watchGroup(['target', 'disease', 'filename'], function (vals) {
+                    scope.$watchGroup(['target', 'disease', 'filename'], function () {
                         if (!scope.target || !scope.disease || !scope.filename) {
                             return;
                         }
@@ -517,14 +499,14 @@ angular.module('cttvDirectives')
                                     // Publication id
                                     row.push(d.literature.references[0].lit_id.split('/').pop());
                                     // title
-                                    row.push('\"' + d.literature.title + '\"');
+                                    row.push('"' + d.literature.title + '"');
                                     // Authors
                                     var authorsStr = '';
                                     if (d.literature.authors) {
                                         var authors = d.literature.authors.map(function (k) {
                                             return k.short_name;
                                         });
-                                        authorsStr = '\"' + authors.join(', ') + '\"';
+                                        authorsStr = '"' + authors.join(', ') + '"';
                                     }
                                     row.push(authorsStr);
 
@@ -600,7 +582,6 @@ angular.module('cttvDirectives')
                         //
                         //     });
                     };
-
                 }
             };
         }]);
