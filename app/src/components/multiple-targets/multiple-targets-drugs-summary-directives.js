@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsDrugsSummary', ['otAPIservice', 'cttvConfig', 'cttvUtils', function (otAPIservice, cttvConfig, cttvUtils) {
+    .directive('multipleTargetsDrugsSummary', ['otAPIservice', 'cttvConfig', 'otUtils', function (otAPIservice, cttvConfig, otUtils) {
         'use strict';
 
         function formatDrugDataToArray (drugs) {
@@ -93,7 +93,7 @@ angular.module('cttvDirectives')
                             scope.uniqueTargets = Object.keys(uniqueTargets).length;
                             scope.drugs = drugsArr;
 
-                            $('#target-list-drugs').DataTable(cttvUtils.setTableToolsParams({
+                            $('#target-list-drugs').DataTable(otUtils.setTableToolsParams({
                                 'data': formatDrugDataToArray(scope.drugs),
                                 'ordering': true,
                                 'order': [[2, 'desc']],

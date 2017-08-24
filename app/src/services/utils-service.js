@@ -3,16 +3,16 @@ angular.module('cttvServices')
 /**
  * Some utility services.
  */
-    .factory('cttvUtils', ['$log', '$window', '$rootScope', function ($log, $window, $rootScope) {
+    .factory('otUtils', ['$log', '$window', '$rootScope', function ($log, $window, $rootScope) {
         'use strict';
 
-        var cttvUtilsService = {};
+        var otUtilsService = {};
 
         /**
      * Inspects the browser name and version and
      * sets browser.name and browser.version properties.
      */
-        cttvUtilsService.browser = {
+        otUtilsService.browser = {
             init: function () {
                 this.name = this.searchString(this.dataBrowser) || 'Other';
                 this.version = this.searchVersion(navigator.userAgent) || this.searchVersion(navigator.appVersion) || 'Unknown';
@@ -51,7 +51,7 @@ angular.module('cttvServices')
             ]
 
         };
-        cttvUtilsService.browser.init();
+        otUtilsService.browser.init();
 
 
         /**
@@ -61,7 +61,7 @@ angular.module('cttvServices')
      *               E.g. "bob" will produce bob.pdf and bob.csv when exporting in those formats.
      *
      */
-        cttvUtilsService.setTableToolsParams = function (obj, title) {
+        otUtilsService.setTableToolsParams = function (obj, title) {
         // obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
         // obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
 
@@ -84,7 +84,7 @@ angular.module('cttvServices')
             return obj;
         };
 
-        cttvUtilsService.setTableToolsParamsExportColumns = function (obj, title) {
+        otUtilsService.setTableToolsParamsExportColumns = function (obj, title) {
             obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>rt<"pull-left small" l><"pull-right small" p>>';
             obj.buttons = [
                 {
@@ -101,7 +101,7 @@ angular.module('cttvServices')
         };
 
 
-        cttvUtilsService.colorScales = {
+        otUtilsService.colorScales = {
             BLUE_0_1: d3.scale.linear()
                 .domain([0, 1])
                 .range(['#CBDCEA', '#005299']), // blue orig
@@ -131,7 +131,7 @@ angular.module('cttvServices')
 
         };
 
-        cttvUtilsService.search = {
+        otUtilsService.search = {
             translateKeys: function (searchObj) {
                 for (var key in searchObj) {
                     switch (key) {
@@ -187,7 +187,7 @@ angular.module('cttvServices')
 
         };
 
-        cttvUtilsService.checkPath = function (obj, path) {
+        otUtilsService.checkPath = function (obj, path) {
             var prop;
             var props = path.split('.');
 
@@ -202,11 +202,11 @@ angular.module('cttvServices')
 
         // n: number
         // t: tick
-        cttvUtilsService.roundToNearest = function (n, t) {
+        otUtilsService.roundToNearest = function (n, t) {
             return (Math.round(n / t) * t);
         };
 
-        cttvUtilsService.floatPrettyPrint = function (x) {
+        otUtilsService.floatPrettyPrint = function (x) {
             var value = x;
             if (x < 0.0001) {
                 value = value.toExponential(2);
@@ -216,14 +216,14 @@ angular.module('cttvServices')
             return value;
         };
 
-        cttvUtilsService.getPmidsList = function (refs) {
+        otUtilsService.getPmidsList = function (refs) {
             refs = refs || [];  // to avoid undefined errors
             return refs.map(function (ref) {
                 return ref.lit_id.split('/').pop();
             });
         };
 
-        cttvUtilsService.getPublicationsString = function (pmidsList) {
+        otUtilsService.getPublicationsString = function (pmidsList) {
             pmidsList = pmidsList || [];  // to avoid undefined errors
             var pub = '';
             if (pmidsList.length > 0) {
@@ -243,13 +243,13 @@ angular.module('cttvServices')
             return pub;
         };
 
-        cttvUtilsService.clearErrors = function () {
+        otUtilsService.clearErrors = function () {
             $rootScope.showApiError500 = false;
         };
 
         // Input: array with ensembl ids
         // Output: array with the significant bits of the ensembl ids
-        cttvUtilsService.compressTargetIds = function (ids) {
+        otUtilsService.compressTargetIds = function (ids) {
             var compressed = [];
             for (var i = 0; i < ids.length; i++) {
                 var target = ids[i];
@@ -267,7 +267,7 @@ angular.module('cttvServices')
 
         // Input: array with the significant bits of an ensembl id
         // Output: array with the expanded ids
-        cttvUtilsService.expandTargetIds = function (compressedIds) {
+        otUtilsService.expandTargetIds = function (compressedIds) {
             var targets = [];
 
             for (var i = 0; i < compressedIds.length; i++) {
@@ -279,7 +279,7 @@ angular.module('cttvServices')
         };
 
 
-        cttvUtilsService.addMatchedBy = function (r) {
+        otUtilsService.addMatchedBy = function (r) {
             var matches = {
                 human: 0,
                 ortholog: 0,
@@ -322,7 +322,7 @@ angular.module('cttvServices')
 
         // Defers a call x ms
         // If a new call is made before the time expires, discard the initial one and start deferring again
-        // cttvUtilsService.defer = function (cbak, ms) {
+        // otUtilsService.defer = function (cbak, ms) {
         //     var tick;
         //
         //     var defer_cancel = function () {
@@ -337,5 +337,5 @@ angular.module('cttvServices')
         //     return defer_cancel;
         // };
 
-        return cttvUtilsService;
+        return otUtilsService;
     }]);

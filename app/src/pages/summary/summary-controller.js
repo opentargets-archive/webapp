@@ -1,7 +1,7 @@
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
 
-    .controller('SummaryCtrl', ['$scope', '$location', 'otAPIservice', '$q', 'cttvConfig', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, otAPIservice, $q, cttvConfig, cttvUtils, cttvLoadedLists) {
+    .controller('SummaryCtrl', ['$scope', '$location', 'otAPIservice', '$q', 'cttvConfig', 'otUtils', 'cttvLoadedLists', function ($scope, $location, otAPIservice, $q, cttvConfig, otUtils, cttvLoadedLists) {
         'use strict';
 
         // Parse the $location search object to determine which entities we have.
@@ -114,12 +114,12 @@ angular.module('cttvControllers')
             // search.targets = targets;
 
             // TODO: Unnecessary, we compress to decompress in the next step
-            search.targets = cttvUtils.compressTargetIds(targets);
+            search.targets = otUtils.compressTargetIds(targets);
         }
 
         // multiple targets
         if (search.targets) {
-            search.targets = cttvUtils.expandTargetIds(search.targets.split(','));
+            search.targets = otUtils.expandTargetIds(search.targets.split(','));
             $q.all([getTargetsInfo(search.targets), getTargetsEnrichment(search.targets)])
                 .then(function (resps) {
                     $scope.targets = resps[0];

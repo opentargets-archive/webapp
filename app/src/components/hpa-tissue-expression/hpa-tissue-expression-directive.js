@@ -11,11 +11,11 @@ angular.module('cttvDirectives')
     *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
     *   This is useful in conjunction with a spinner where you can have ng-show="loading"
     */
-    .directive('cttvHpaTissueExpression', ['otAPIservice', 'cttvUtils', function (otAPIservice, cttvUtils) {
+    .directive('cttvHpaTissueExpression', ['otAPIservice', 'otUtils', function (otAPIservice, otUtils) {
         'use strict';
 
-        var colorScale = cttvUtils.colorScales.BLUE_1_3; // blue orig
-        var colorScale10 = cttvUtils.colorScales.BLUE_1_10;
+        var colorScale = otUtils.colorScales.BLUE_1_3; // blue orig
+        var colorScale10 = otUtils.colorScales.BLUE_1_10;
 
         var labelScale = d3.scale.ordinal()
             .domain([1, 2, 3])
@@ -112,7 +112,7 @@ angular.module('cttvDirectives')
 
                                         // table itself
                                         var table = elem.children().eq(0)[0];
-                                        var dtable = $(table).dataTable(cttvUtils.setTableToolsParams({
+                                        var dtable = $(table).dataTable(otUtils.setTableToolsParams({
                                             'data': newData,
                                             'columns': (function () {
                                                 var a = [];

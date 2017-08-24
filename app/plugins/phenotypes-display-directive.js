@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('phenotypesDisplay', ['$log', 'cttvUtils', function ($log, cttvUtils) {
+    .directive('phenotypesDisplay', ['$log', 'otUtils', function ($log, otUtils) {
         'use strict';
 
         return {

@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('rnaBaselineExpression', ['$log', '$timeout', '$http', 'cttvUtils', function ($log, $timeout, $http, cttvUtils) {
+    .directive('rnaBaselineExpression', ['$log', '$timeout', '$http', 'otUtils', function ($log, $timeout, $http, otUtils) {
         'use strict';
 
         return {
@@ -232,7 +232,7 @@ angular.module('plugins')
                     return [0, (max + 10)];
                 }
 
-                if (cttvUtils.browser.name !== 'IE') {
+                if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
                         var svg = d3.select('#gtexWidget').select('svg').node();
                         return svg;

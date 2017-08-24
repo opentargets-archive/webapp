@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsPathwaysSummary', ['$http', 'cttvUtils', function ($http, cttvUtils) {
+    .directive('multipleTargetsPathwaysSummary', ['$http', 'otUtils', function ($http, otUtils) {
         'use strict';
 
         function formatPathwayDataToArray (pathways, targets4pathways, symbol2id, bg) {
@@ -45,7 +45,7 @@ angular.module('cttvDirectives')
 
                 // 5 - Use this list
                 // if (targetIds.length > 1) {
-                //     var listUrl = '/summary?targets=' + cttvUtils.compressTargetIds(targetIds).join(',');
+                //     var listUrl = '/summary?targets=' + otUtils.compressTargetIds(targetIds).join(',');
                 //     row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Use target list</button></a>");
                 // } else {
                 //     row.push('N/A');
@@ -164,7 +164,7 @@ angular.module('cttvDirectives')
                                                 scope.pathways = true; // flag to show the pathways section
                                             }
                                             // table
-                                            $('#target-list-pathways').DataTable(cttvUtils.setTableToolsParams({
+                                            $('#target-list-pathways').DataTable(otUtils.setTableToolsParams({
                                                 'data': formatPathwayDataToArray(resp.data.pathways, targets4pathways, symbol2id, scope.target),
                                                 'ordering': true,
                                                 'order': [[1, 'asc']],

@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('geneTree', ['$log', 'cttvUtils', '$timeout', function ($log, cttvUtils, $timeout, $http) {
+    .directive('geneTree', ['$log', 'otUtils', '$timeout', function ($log, otUtils, $timeout, $http) {
         'use strict';
 
         return {
@@ -27,7 +27,7 @@ angular.module('plugins')
                     gt(el);
                 }, 0);
 
-                if (cttvUtils.browser.name !== 'IE') {
+                if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
                         var svg = newDiv.querySelector('svg');
                         return svg;
@@ -118,7 +118,7 @@ angular.module('plugins')
                             .then(function (resp2) {
                                 scope.showSpinner = false;
                                 $timeout(function () {
-                                    $('#gene-homologues-table').DataTable(cttvUtils.setTableToolsParams({
+                                    $('#gene-homologues-table').DataTable(otUtils.setTableToolsParams({
                                         'data': formatHomologuesDataToArray(resp.body.data[0].homologies, resp2.body),
                                         'ordering': true,
                                         'order': [[4, 'desc']],

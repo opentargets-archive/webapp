@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'cttvUtils', 'otAPIservice', function ($log, $http, $q, cttvUtils, otAPIservice) {
+    .directive('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'otUtils', 'otAPIservice', function ($log, $http, $q, otUtils, otAPIservice) {
         'use strict';
 
         var tissuesOrdered = [
@@ -55,7 +55,7 @@ angular.module('cttvDirectives')
                 str = '<span class=\'no-data\' title=\'No data\'></span>'; // quick hack: where there's no data, don't put anything so the sorting works better
             } else {
                 var col = colorScale(value);
-                var val = (value === 0) ? '0' : cttvUtils.floatPrettyPrint(value);
+                var val = (value === 0) ? '0' : otUtils.floatPrettyPrint(value);
                 str = '<span style=\'color: ' + col + '; background: ' + col + ';\' title=\'Score: ' + val + '\'>' + val + '</span>';
             }
 
@@ -107,7 +107,7 @@ angular.module('cttvDirectives')
                 });
                 var maxMedianForTarget = maxMedianTissue.maxMedian;
 
-                var colorScaleOrig = cttvUtils.colorScales.BLUE_0_1;
+                var colorScaleOrig = otUtils.colorScales.BLUE_0_1;
                 var colorScale = d3.scale.linear()
                     .range(colorScaleOrig.range())
                     .domain([0, maxMedianForTarget]);

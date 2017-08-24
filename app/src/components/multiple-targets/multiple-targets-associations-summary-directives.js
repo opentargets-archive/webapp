@@ -85,7 +85,7 @@ angular.module('cttvDirectives')
 //     };
 // }])
 
-    .directive('multipleTargetsTable', ['$log', 'cttvUtils', 'cttvConsts', 'otDictionary', function ($log, cttvUtils, cttvConsts, otDictionary) {
+    .directive('multipleTargetsTable', ['$log', 'otUtils', 'cttvConsts', 'otDictionary', function ($log, otUtils, cttvConsts, otDictionary) {
         'use strict';
 
         function resolveTies (input, pvalPos, sortedTAs) {
@@ -146,7 +146,7 @@ angular.module('cttvDirectives')
             var targetIds = targets.map(function (t) {
                 return t.ensembl_gene_id;
             });
-            var compressedTargetIds = cttvUtils.compressTargetIds(targetIds);
+            var compressedTargetIds = otUtils.compressTargetIds(targetIds);
 
             for (var i = 0; i < diseases.length; i++) {
                 var row = [];
@@ -161,7 +161,7 @@ angular.module('cttvDirectives')
                 // var t4d = d.targets.map(function (t) {
                 //     return t.target.id
                 // });
-                // var compressedTargetIds = cttvUtils.compressTargetIds(t4d);
+                // var compressedTargetIds = otUtils.compressTargetIds(t4d);
                 // var targetsLink = "?targets=" + (d.targets.map(function (t) {return t.target.id}));
                 var targetsLink = '?targets=' + compressedTargetIds.join(',');
                 var cell = '<a href=\'/disease/' + d.enriched_entity.id + '/associations' + targetsLink + '\'>' + label + '</a>';
@@ -216,7 +216,7 @@ angular.module('cttvDirectives')
 
                 // 6 - Use this list
                 // if (allTargetIds.length > 1) {
-                //     var listUrl = '/summary?targets=' + cttvUtils.compressTargetIds(allTargetIds).join(',');
+                //     var listUrl = '/summary?targets=' + otUtils.compressTargetIds(allTargetIds).join(',');
                 //     row.push("<a href=" + listUrl + "><button class='bt bt-primary'>Use target list</button></a>");
                 // } else {
                 //     row.push('N/A');
@@ -335,7 +335,7 @@ angular.module('cttvDirectives')
                             var targets = dis.targets.map(function (d) {
                                 return d.target.id;
                             });
-                            var compressedTargetIds = cttvUtils.compressTargetIds(targets).join(',');
+                            var compressedTargetIds = otUtils.compressTargetIds(targets).join(',');
                             tas.push({
                                 label: label,
                                 id: id,
@@ -391,7 +391,7 @@ angular.module('cttvDirectives')
                     } else {
                         order = [[3, 'desc']];
                     }
-                    table = $('#target-list-associated-diseases').DataTable(cttvUtils.setTableToolsParams({
+                    table = $('#target-list-associated-diseases').DataTable(otUtils.setTableToolsParams({
                         'data': formatDiseaseDataToArray(scope.associations, scope.targets),
                         'ordering': true,
                         'order': order,
@@ -411,7 +411,7 @@ angular.module('cttvDirectives')
     }])
 
 
-// .directive('multipleTargetsBubbles', ['$log', 'cttvUtils', '$q', function ($log, cttvUtils, $q) {
+// .directive('multipleTargetsBubbles', ['$log', 'otUtils', '$q', function ($log, otUtils, $q) {
 //     'use strict';
 //
 //     return {

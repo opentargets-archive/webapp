@@ -1,7 +1,7 @@
 angular.module('cttvDirectives')
 
 
-    .directive('targetListMapping', ['otAPIservice', 'cttvUtils', 'cttvLoadedLists', 'cttvConfig', function (otAPIservice, cttvUtils, cttvLoadedLists, cttvConfig) {
+    .directive('targetListMapping', ['otAPIservice', 'otUtils', 'cttvLoadedLists', 'cttvConfig', function (otAPIservice, otUtils, cttvLoadedLists, cttvConfig) {
         'use strict';
 
         return {
@@ -252,7 +252,7 @@ angular.module('cttvDirectives')
                     }
 
                     if (scope.targetIds.length) {
-                        var compressedUrl = cttvUtils.compressTargetIds(scope.targetIds).join(',');
+                        var compressedUrl = otUtils.compressTargetIds(scope.targetIds).join(',');
                         scope.summaryLink = '/summary?targets=' + compressedUrl;
                     // scope.summaryLink = "/summary?target-list=" + l.id;
                     // scope.summaryLink = "/summary?" + (scope.targetIds.map(function (t) {return "target=" + t;}).join("&"));

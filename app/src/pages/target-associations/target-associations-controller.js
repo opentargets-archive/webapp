@@ -6,7 +6,7 @@ angular.module('cttvControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', 'cttvUtils', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'cttvLocationState', 'cttvConfig', function ($scope, $location, cttvUtils, otAPIservice, cttvFiltersService, otDictionary, cttvLocationState, cttvConfig) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', 'otUtils', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'cttvLocationState', 'cttvConfig', function ($scope, $location, otUtils, otAPIservice, cttvFiltersService, otDictionary, cttvLocationState, cttvConfig) {
         'use strict';
 
         cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
@@ -211,7 +211,7 @@ angular.module('cttvControllers')
         // on PAGE LOAD
         //
 
-        cttvUtils.clearErrors();
+        otUtils.clearErrors();
         $scope.search.query = $location.path().split('/')[2];
         $scope.filters = cttvLocationState.getState()[facetsId] || {};
 

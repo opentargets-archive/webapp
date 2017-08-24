@@ -14,14 +14,14 @@ angular.module('cttvDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('cttvDiseaseAssociations', ['cttvUtils', 'otDictionary', 'cttvConsts', 'otAPIservice', '$q', function (cttvUtils, otDictionary, cttvConsts, otAPIservice, $q) {
+    .directive('cttvDiseaseAssociations', ['otUtils', 'otDictionary', 'cttvConsts', 'otAPIservice', '$q', function (otUtils, otDictionary, cttvConsts, otAPIservice, $q) {
         'use strict';
 
         var draw = 1;
         var filters = {};
         var targets;
 
-        var colorScale = cttvUtils.colorScales.BLUE_0_1; // blue orig
+        var colorScale = otUtils.colorScales.BLUE_0_1; // blue orig
         // var colorScale = d3.interpolateYlGnBu;
 
         var state = {};
@@ -36,7 +36,7 @@ angular.module('cttvDirectives')
                 str = '<span class=\'no-data\' title=\'No data\'></span>'; // quick hack: where there's no data, don't put anything so the sorting works better
             } else {
                 var col = colorScale(value);
-                var val = (value === 0) ? '0' : cttvUtils.floatPrettyPrint(value);
+                var val = (value === 0) ? '0' : otUtils.floatPrettyPrint(value);
                 str = '<span style=\'color: ' + col + '; background: ' + col + ';\' title=\'Score: ' + val + '\'>' + val + '</span>';
             }
 

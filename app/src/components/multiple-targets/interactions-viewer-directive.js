@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('interactorsStarPlot', ['$log', '$timeout', 'omnipathdbCategories', 'cttvUtils', function ($log, $timeout, omnipathdbCategories, cttvUtils) {
+    .directive('interactorsStarPlot', ['$log', '$timeout', 'omnipathdbCategories', 'otUtils', function ($log, $timeout, omnipathdbCategories, otUtils) {
         'use strict';
 
         var selectedNodesColors = ['#ffe6e6', '#e6ecff'];
@@ -168,7 +168,7 @@ angular.module('cttvDirectives')
                     };
 
                     // Color scale for the nodes (using the BLUE_0_1 range)
-                    var range = cttvUtils.colorScales.BLUE_0_1.range(); // blue orig
+                    var range = otUtils.colorScales.BLUE_0_1.range(); // blue orig
                     var newColorScale = d3.scale.linear()
                         .domain([0, 1])
                         .range(range); // blue orig

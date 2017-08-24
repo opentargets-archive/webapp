@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('genomeBrowser', ['$log', 'otAPIservice', 'cttvUtils', function ($log, otAPIservice, cttvUtils) {
+    .directive('genomeBrowser', ['$log', 'otAPIservice', 'otUtils', function ($log, otAPIservice, otUtils) {
         'use strict';
 
         // Decorate the svg for exporting
@@ -111,7 +111,7 @@ angular.module('plugins')
                     .cttvRestApi(otAPIservice.getSelf());
                 theme(gB, newDiv);
 
-                if (cttvUtils.browser.name !== 'IE') {
+                if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
                         var svg = decorateSVG(newDiv.querySelector('svg'), theme, scope.target.approved_symbol);
                         return svg;

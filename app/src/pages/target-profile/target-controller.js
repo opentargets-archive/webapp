@@ -6,10 +6,10 @@ angular.module('cttvControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-    .controller('TargetCtrl', ['$scope', '$location', 'otAPIservice', 'cttvUtils', 'cttvConfig', 'otTEPs', function ($scope, $location, otAPIservice, cttvUtils, cttvConfig, otTEPs) {
+    .controller('TargetCtrl', ['$scope', '$location', 'otAPIservice', 'otUtils', 'cttvConfig', 'otTEPs', function ($scope, $location, otAPIservice, otUtils, cttvConfig, otTEPs) {
         'use strict';
 
-        cttvUtils.clearErrors();
+        otUtils.clearErrors();
 
         $scope.targetId = $location.url().split('/')[2];
 

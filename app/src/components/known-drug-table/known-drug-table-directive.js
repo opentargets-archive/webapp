@@ -3,11 +3,11 @@
 angular.module('cttvDirectives')
 
 /* Directive to display the known drug evidence table */
-    .directive('knownDrugTable', ['otAPIservice', 'cttvConsts', 'cttvUtils', 'cttvConfig', '$location', 'otDictionary', function (otAPIservice, cttvConsts, cttvUtils, cttvConfig, $location, otDictionary) {
+    .directive('knownDrugTable', ['otAPIservice', 'cttvConsts', 'otUtils', 'cttvConfig', '$location', 'otDictionary', function (otAPIservice, cttvConsts, otUtils, cttvConfig, $location, otDictionary) {
         'use strict';
         // var dbs = cttvConsts.dbs;
-        var searchObj = cttvUtils.search.translateKeys($location.search());
-        var checkPath = cttvUtils.checkPath;
+        var searchObj = otUtils.search.translateKeys($location.search());
+        var checkPath = otUtils.checkPath;
 
         return {
             restrict: 'AE',
@@ -144,7 +144,7 @@ angular.module('cttvDirectives')
 
                                 // 5: status
                                 var sts = otDictionary.NA;
-                                if (cttvUtils.checkPath(item, 'evidence.drug2clinic.status')) {
+                                if (otUtils.checkPath(item, 'evidence.drug2clinic.status')) {
                                     sts = item.evidence.drug2clinic.status;
                                 }
                                 row.push(sts);
@@ -162,7 +162,7 @@ angular.module('cttvDirectives')
                                 }
 
                                 if (refs.length > 0) {
-                                    action += '<br />' + cttvUtils.getPublicationsString(cttvUtils.getPmidsList(refs));
+                                    action += '<br />' + otUtils.getPublicationsString(otUtils.getPmidsList(refs));
                                 }
 
                                 if (item.evidence.target2drug.urls && item.evidence.target2drug.urls[2]) {
@@ -195,7 +195,7 @@ angular.module('cttvDirectives')
 
                                 // 9: target class
                                 var trgc = otDictionary.NA;
-                                if (cttvUtils.checkPath(item, 'target.target_class')) {
+                                if (otUtils.checkPath(item, 'target.target_class')) {
                                     trgc = item.target.target_class[0] || otDictionary.NA;
                                 }
                                 row.push(trgc);
@@ -251,7 +251,7 @@ angular.module('cttvDirectives')
                     function initTableDrugs () {
                     // $('#drugs-table') // Not anymore
                         var table = elem[0].getElementsByTagName('table');
-                        $(table).dataTable(cttvUtils.setTableToolsParams({
+                        $(table).dataTable(otUtils.setTableToolsParams({
                             'data': formatDrugsDataToArray(scope.data),
                             'autoWidth': false,
                             'paging': true,

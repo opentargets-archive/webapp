@@ -8,10 +8,10 @@ angular.module('cttvControllers')
      * SearchAppCtrl
      * Controller for the search/results page
      */
-    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'otAppToAPIService', 'otAPIservice', 'cttvUtils', 'cttvLocationState', function ($scope, $location, $log, otAppToAPIService, otAPIservice, cttvUtils, cttvLocationState) {
+    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'otAppToAPIService', 'otAPIservice', 'otUtils', 'cttvLocationState', function ($scope, $location, $log, otAppToAPIService, otAPIservice, otUtils, cttvLocationState) {
         'use strict';
 
-        cttvUtils.clearErrors();
+        otUtils.clearErrors();
 
         /*
         Search holds query data as well as results from call
@@ -242,7 +242,7 @@ angular.module('cttvControllers')
                             $scope.search.results = resp.body;
 
                             $scope.search.results.data.forEach(function (result) {
-                                cttvUtils.addMatchedBy(result);
+                                otUtils.addMatchedBy(result);
                             });
 
                             // $log.log($scope.search.results.data[0]);

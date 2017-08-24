@@ -4,11 +4,11 @@ angular.module('cttvDirectives')
     /*
     *
     */
-    .directive('cttvTargetAssociationsTree', ['otAPIservice', 'cttvConsts', 'cttvUtils', '$analytics', function (otAPIservice, cttvConsts, cttvUtils, $analytics) {
+    .directive('cttvTargetAssociationsTree', ['otAPIservice', 'cttvConsts', 'otUtils', '$analytics', function (otAPIservice, cttvConsts, otUtils, $analytics) {
         'use strict';
 
         var whoiam = 'tree';
-        var colorScale = cttvUtils.colorScales.BLUE_0_1; // blue orig
+        var colorScale = otUtils.colorScales.BLUE_0_1; // blue orig
 
         var gat;
         // var currTarget;
@@ -198,7 +198,7 @@ angular.module('cttvDirectives')
                         );
                 };
 
-                if (cttvUtils.browser.name !== 'IE') {
+                if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
                         var svg = elem.children().eq(1)[0].querySelector('svg');
                         return svg;

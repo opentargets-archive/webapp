@@ -1,7 +1,7 @@
 /* Bubbles directive for associations */
 angular.module('cttvDirectives')
 
-    .directive('cttvTargetAssociationsBubbles', ['otAPIservice', 'cttvUtils', '$analytics', function (otAPIservice, cttvUtils, $analytics) {
+    .directive('cttvTargetAssociationsBubbles', ['otAPIservice', 'otUtils', '$analytics', function (otAPIservice, otUtils, $analytics) {
         'use strict';
 
         var whoiam = 'bubbles';
@@ -255,7 +255,7 @@ angular.module('cttvDirectives')
 
                     var diameter = viewportH - elemOffsetTop - bottomMargin;
 
-                    var colorScale = cttvUtils.colorScales.BLUE_0_1; // blue orig
+                    var colorScale = otUtils.colorScales.BLUE_0_1; // blue orig
 
                     bView = targetAssociations()
                         // .target("ENSG00000157764")
@@ -263,9 +263,9 @@ angular.module('cttvDirectives')
                         .diameter(diameter)
                         .linkPrefix('')
                         .showAll(true)
-                        .colors(cttvUtils.colorScales.BLUE_0_1.range())
+                        .colors(otUtils.colorScales.BLUE_0_1.range())
                         // .colors(['#e7e1ef', '#dd1c77'])
-                        .useFullPath(cttvUtils.browser.name !== 'IE')
+                        .useFullPath(otUtils.browser.name !== 'IE')
                         .tooltipsOnTA(true)
                         .showMenu(false);
 
@@ -283,7 +283,7 @@ angular.module('cttvDirectives')
                     ];
                 }
 
-                if (cttvUtils.browser.name !== 'IE') {
+                if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
                         var svg = decorateSVG(elem.children().eq(0)[0].querySelector('svg'));
                         return svg;

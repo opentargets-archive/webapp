@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('pdbTarget', ['$log', '$http', '$compile', 'cttvUtils', '$timeout', function ($log, $http, $compile, cttvUtils, $timeout) {
+    .directive('pdbTarget', ['$log', '$http', '$compile', 'otUtils', '$timeout', function ($log, $http, $compile, otUtils, $timeout) {
         'use strict';
 
         return {
@@ -204,7 +204,7 @@ angular.module('plugins')
                         // element.append(compiled);
                     });
 
-                if (cttvUtils.browser.name !== 'IE') {
+                if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
                         var canvas = element[0].querySelector('div#pvTarget > canvas');
                         return canvas;

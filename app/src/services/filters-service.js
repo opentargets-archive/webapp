@@ -7,7 +7,7 @@ angular.module('cttvServices')
     /**
      *
      */
-    .factory('cttvFiltersService', ['$log', '$location', 'otDictionary', 'cttvConsts', 'otAPIservice', 'cttvUtils', 'cttvLocationState', '$analytics', '$injector', 'cttvConfig', function ($log, $location, otDictionary, cttvConsts, otAPIservice, cttvUtils, cttvLocationState, $analytics, $injector, cttvConfig) {
+    .factory('cttvFiltersService', ['$log', '$location', 'otDictionary', 'cttvConsts', 'otAPIservice', 'otUtils', 'cttvLocationState', '$analytics', '$injector', 'cttvConfig', function ($log, $location, otDictionary, cttvConsts, otAPIservice, otUtils, cttvLocationState, $analytics, $injector, cttvConfig) {
         'use strict';
 
 

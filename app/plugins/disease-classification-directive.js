@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('diseaseClassification', ['$log', 'otAPIservice', '$timeout', 'cttvUtils', function ($log, otAPIservice, $timeout, cttvUtils) {
+    .directive('diseaseClassification', ['$log', 'otAPIservice', '$timeout', 'otUtils', function ($log, otAPIservice, $timeout, otUtils) {
         'use strict';
 
         return {
@@ -23,7 +23,7 @@ angular.module('plugins')
                     efoGraph(container);
 
                     // The PNG export routine
-                    if (cttvUtils.browser.name !== 'IE') {
+                    if (otUtils.browser.name !== 'IE') {
                         scope.toExport = function () {
                             var svg = document.getElementById('cttv-efo-graph').querySelector('svg');
                             return svg;

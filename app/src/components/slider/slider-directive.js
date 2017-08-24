@@ -2,7 +2,7 @@ angular.module('cttvDirectives')
     /**
      * A generic slider
      */
-    .directive('cttvSlider', ['cttvUtils', function (cttvUtils) {
+    .directive('cttvSlider', ['otUtils', function (otUtils) {
         // 'use strict';
 
         return {
@@ -108,7 +108,7 @@ angular.module('cttvDirectives')
                     if (d3.event.sourceEvent) { // not a programmatic event
                         value = x.invert(d3.mouse(this)[0]);
                         if(snap){
-                            value = cttvUtils.roundToNearest( value, tick );
+                            value = otUtils.roundToNearest( value, tick );
                         }
                         brush.extent([value, value]);
                     }
@@ -226,7 +226,7 @@ angular.module('cttvDirectives')
                             if (d3.event.sourceEvent) { // not a programmatic event
                                 value = x.invert(d3.mouse(this)[0]);
                                 if (snap) {
-                                    value = cttvUtils.roundToNearest(value, tick);
+                                    value = otUtils.roundToNearest(value, tick);
                                 }
                                 brush.extent([value, value]);
                             }

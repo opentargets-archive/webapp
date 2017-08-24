@@ -1,10 +1,10 @@
 angular.module('plugins')
-    .directive('relatedDiseases', ['$log', 'cttvUtils', 'cttvConsts', 'otDictionary', 'otAPIservice', '$timeout', function ($log, cttvUtils, cttvConsts, otDictionary, otAPIservice, $timeout) {
+    .directive('relatedDiseases', ['$log', 'otUtils', 'cttvConsts', 'otDictionary', 'otAPIservice', '$timeout', function ($log, otUtils, cttvConsts, otDictionary, otAPIservice, $timeout) {
         'use strict';
 
         // Details table --
-        // var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
-        var colorScale = cttvUtils.colorScales.BLUE_RED; // blue <-> red
+        // var colorScale = otUtils.colorScales.BLUE_0_1; //blue orig
+        var colorScale = otUtils.colorScales.BLUE_RED; // blue <-> red
 
         var currTable;
         var spDiv;
@@ -18,7 +18,7 @@ angular.module('plugins')
         //     if( value<=0 ){
         //         str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, we don't put anything, so the sorting works better
         //     } else {
-        //         str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+cttvUtils.floatPrettyPrint(value)+"'>"+cttvUtils.floatPrettyPrint(value)+"</span>";
+        //         str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+otUtils.floatPrettyPrint(value)+"'>"+otUtils.floatPrettyPrint(value)+"</span>";
         //         if( href ){
         //             str = "<a href=" + href + ">" + str + "</a>";
         //         }
@@ -30,7 +30,7 @@ angular.module('plugins')
         //     var str = "";
         //     var delta = value1-value2;
         //     var opacity = (value1 + value2) / 2;
-        //     str = "<span style='color:" + colorScale(delta) + "; background:" + colorScale(delta) + "; opacity:" + opacity + "' title= Score: "+cttvUtils.floatPrettyPrint(delta)+"'>"+cttvUtils.floatPrettyPrint(delta)+"</span>";
+        //     str = "<span style='color:" + colorScale(delta) + "; background:" + colorScale(delta) + "; opacity:" + opacity + "' title= Score: "+otUtils.floatPrettyPrint(delta)+"'>"+otUtils.floatPrettyPrint(delta)+"</span>";
         //
         //     if (href){
         //         str = "<a href=" + href + ">" + str + "</a>";
@@ -45,7 +45,7 @@ angular.module('plugins')
             var barScale1 = d3.scale.linear()
                 .domain([0, 1])
                 .range([0, width]); // Each cell is 48px
-            str = '<div style=\'background:#EEEEEE; color:#EEEEEE\'><a href=' + hrefObj + '><div style=\'display:inline-block; height:15px; width:' + barScale1(value1) + 'px; background:#582A72; margin-left:' + (width - barScale1(value1)) + 'px;\'></div></a><a href=' + hrefSbj + '><div style=\'display:inline-block; height:15px; width:' + barScale1(value2) + 'px; background:#AAAA39;\'></div></a>' + cttvUtils.floatPrettyPrint(value1) + '</div>';
+            str = '<div style=\'background:#EEEEEE; color:#EEEEEE\'><a href=' + hrefObj + '><div style=\'display:inline-block; height:15px; width:' + barScale1(value1) + 'px; background:#582A72; margin-left:' + (width - barScale1(value1)) + 'px;\'></div></a><a href=' + hrefSbj + '><div style=\'display:inline-block; height:15px; width:' + barScale1(value2) + 'px; background:#AAAA39;\'></div></a>' + otUtils.floatPrettyPrint(value1) + '</div>';
 
             return str;
         };

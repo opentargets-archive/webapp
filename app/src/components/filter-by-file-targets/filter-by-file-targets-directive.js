@@ -7,7 +7,7 @@ angular.module('cttvDirectives')
  *   <cttv-filter-by-file-targets> </cttv-filter-by-file-targets>
  *
  */
-    .directive('cttvFilterByFileTargets', ['$log', 'otAPIservice', '$q', '$analytics', 'cttvLoadedLists', '$location', 'cttvUtils', function ($log, otAPIservice, $q, $analytics, cttvLoadedLists, $location, cttvUtils) {
+    .directive('cttvFilterByFileTargets', ['$log', 'otAPIservice', '$q', '$analytics', 'cttvLoadedLists', '$location', 'otUtils', function ($log, otAPIservice, $q, $analytics, cttvLoadedLists, $location, otUtils) {
         'use strict';
 
         return {
@@ -228,7 +228,7 @@ angular.module('cttvDirectives')
                     });
 
                     // Update the url with the targets in the list
-                    var compressedTargets = cttvUtils.compressTargetIds(scope.targets);
+                    var compressedTargets = otUtils.compressTargetIds(scope.targets);
                     $location.search('targets=' + compressedTargets.join(','));
                 };
             }

@@ -6,7 +6,7 @@
  */
 angular.module('cttvControllers')
 
-    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otAPIservice', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, $window, $document, $element, otAPIservice, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
+    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otAPIservice', 'cttvConsts', '$q', 'otUtils', 'cttvLoadedLists', function ($scope, $location, $window, $document, $element, otAPIservice, cttvConsts, $q, otUtils, cttvLoadedLists) {
         var APP_SEARCH_URL = 'search';
         var APP_EVIDENCE_URL = 'evidence';
         var APP_AUTOCOMPLETE_URL = 'autocomplete';
@@ -94,7 +94,7 @@ angular.module('cttvControllers')
                                 $scope.search.results = parseResponseData(resp.body.data);  // store the results
                                 var besthit = $scope.search.results.besthit;
                                 if (besthit) {
-                                    cttvUtils.addMatchedBy(besthit);
+                                    otUtils.addMatchedBy(besthit);
                                 }
                             }, otAPIservice.defaultErrorHandler
                         )

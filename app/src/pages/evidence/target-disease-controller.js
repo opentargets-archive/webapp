@@ -8,16 +8,16 @@ angular.module('cttvControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'cttvUtils', 'otDictionary', 'cttvConsts', 'cttvConfig', 'otClearUnderscoresFilter', '$analytics', 'cttvLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, cttvUtils, otDictionary, cttvConsts, cttvConfig, otClearUnderscoresFilter, $analytics, cttvLocationState, $anchorScroll) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'otUtils', 'otDictionary', 'cttvConsts', 'cttvConfig', 'otClearUnderscoresFilter', '$analytics', 'cttvLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, otUtils, otDictionary, cttvConsts, cttvConfig, otClearUnderscoresFilter, $analytics, cttvLocationState, $anchorScroll) {
         'use strict';
 
 
         cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
-        cttvUtils.clearErrors();
+        otUtils.clearErrors();
 
-        var checkPath = cttvUtils.checkPath;
+        var checkPath = otUtils.checkPath;
 
-        var searchObj = cttvUtils.search.translateKeys($location.search());
+        var searchObj = otUtils.search.translateKeys($location.search());
 
         // var dbs = cttvConsts.dbs;
         var datatypes = cttvConsts.datatypes;
@@ -367,8 +367,8 @@ angular.module('cttvControllers')
                         refs = item.evidence.variant2disease.provenance_type.literature.references;
                     }
 
-                    var pmidsList = cttvUtils.getPmidsList(refs);
-                    row.push(pmidsList.length ? cttvUtils.getPublicationsString(pmidsList) : 'N/A');
+                    var pmidsList = otUtils.getPmidsList(refs);
+                    row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : 'N/A');
 
                     // Publication ids (hidden)
                     row.push(pmidsList.join(', '));
@@ -396,7 +396,7 @@ angular.module('cttvControllers')
             return b - a;
         };
         var initCommonDiseasesTable = function () {
-            $('#common-diseases-table').DataTable(cttvUtils.setTableToolsParams({
+            $('#common-diseases-table').DataTable(otUtils.setTableToolsParams({
                 'data': formatCommonDiseaseDataToArray($scope.search.tables.genetic_associations.common_diseases.data),
                 'ordering': true,
                 'order': [[1, 'asc']],
@@ -566,8 +566,8 @@ angular.module('cttvControllers')
                         }
                     }
 
-                    var pmidsList = cttvUtils.getPmidsList(refs);
-                    row.push(pmidsList.length ? cttvUtils.getPublicationsString(pmidsList) : 'N/A');
+                    var pmidsList = otUtils.getPmidsList(refs);
+                    row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : 'N/A');
 
                     // Publication ids (hidden)
                     row.push(pmidsList.join(', '));
@@ -586,7 +586,7 @@ angular.module('cttvControllers')
 
 
         var initRareDiseasesTable = function () {
-            $('#rare-diseases-table').DataTable(cttvUtils.setTableToolsParams({
+            $('#rare-diseases-table').DataTable(otUtils.setTableToolsParams({
                 'data': formatRareDiseaseDataToArray($scope.search.tables.genetic_associations.rare_diseases.data),
                 'ordering': true,
                 'order': [[1, 'asc']],
@@ -717,8 +717,8 @@ angular.module('cttvControllers')
                     if (checkPath(item, 'evidence.provenance_type.literature.references')) {
                         refs = item.evidence.provenance_type.literature.references;
                     }
-                    var pmidsList = cttvUtils.getPmidsList(refs);
-                    row.push(cttvUtils.getPublicationsString(pmidsList));
+                    var pmidsList = otUtils.getPmidsList(refs);
+                    row.push(otUtils.getPublicationsString(pmidsList));
 
                     // Publication ids (hidden)
                     row.push(pmidsList.join(', '));
@@ -736,7 +736,7 @@ angular.module('cttvControllers')
 
 
         var initTablePathways = function () {
-            $('#pathways-table').DataTable(cttvUtils.setTableToolsParams({
+            $('#pathways-table').DataTable(otUtils.setTableToolsParams({
                 'data': formatPathwaysDataToArray($scope.search.tables.affected_pathways.data),
                 'ordering': true,
                 'order': [[1, 'asc']],
@@ -858,8 +858,8 @@ angular.module('cttvControllers')
                     if (checkPath(item, 'evidence.provenance_type.literature.references')) {
                         refs = item.evidence.provenance_type.literature.references;
                     }
-                    var pmidsList = cttvUtils.getPmidsList(refs);
-                    row.push(cttvUtils.getPublicationsString(pmidsList));
+                    var pmidsList = otUtils.getPmidsList(refs);
+                    row.push(otUtils.getPublicationsString(pmidsList));
 
                     // Publication ids (hidden)
                     row.push(pmidsList.join(', '));
@@ -879,7 +879,7 @@ angular.module('cttvControllers')
 
 
         var initTableRNA = function () {
-            $('#rna-expression-table').DataTable(cttvUtils.setTableToolsParams({
+            $('#rna-expression-table').DataTable(otUtils.setTableToolsParams({
                 'data': formatRnaDataToArray($scope.search.tables.rna_expression.data),
                 'order': [[1, 'asc']],
                 'autoWidth': false,
@@ -1021,8 +1021,8 @@ angular.module('cttvControllers')
                     if (checkPath(item, 'evidence.provenance_type.literature.references')) {
                         refs = item.evidence.provenance_type.literature.references;
                     }
-                    var pmidsList = cttvUtils.getPmidsList(refs);
-                    row.push(pmidsList.length ? cttvUtils.getPublicationsString(pmidsList) : 'N/A');
+                    var pmidsList = otUtils.getPmidsList(refs);
+                    row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : 'N/A');
 
                     // col 7: pub ids (hidden)
                     row.push(pmidsList.join(', '));
@@ -1041,7 +1041,7 @@ angular.module('cttvControllers')
 
 
         var initTableMutations = function () {
-            $('#mutations-table').DataTable(cttvUtils.setTableToolsParams({
+            $('#mutations-table').DataTable(otUtils.setTableToolsParams({
                 'data': formatMutationsDataToArray($scope.search.tables.somatic_mutations.data),
                 // "ordering" : true,
                 'order': [[1, 'asc']],
@@ -1175,7 +1175,7 @@ angular.module('cttvControllers')
 
 
         var initTableMouse = function () {
-            $('#mouse-table').DataTable(cttvUtils.setTableToolsParams({
+            $('#mouse-table').DataTable(otUtils.setTableToolsParams({
                 'data': formatMouseDataToArray($scope.search.tables.animal_models.data),
                 'autoWidth': false,
                 'paging': true,

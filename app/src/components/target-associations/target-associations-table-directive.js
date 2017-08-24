@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
 /**
 * Matrix (heatmap) view for target associations
 */
-    .directive('cttvTargetAssociationsTable', ['otAPIservice', 'cttvUtils', 'otDictionary', 'cttvConsts', '$q', '$analytics', function (otAPIservice, cttvUtils, otDictionary, cttvConsts, $q, $analytics) {
+    .directive('cttvTargetAssociationsTable', ['otAPIservice', 'otUtils', 'otDictionary', 'cttvConsts', '$q', '$analytics', function (otAPIservice, otUtils, otDictionary, cttvConsts, $q, $analytics) {
         'use strict';
 
         var whoiam = 'table';
@@ -14,7 +14,7 @@ angular.module('cttvDirectives')
         // var nocancers;
         var myscope;
 
-        var colorScale = cttvUtils.colorScales.BLUE_0_1; // blue orig
+        var colorScale = otUtils.colorScales.BLUE_0_1; // blue orig
 
         /*
     * Generates and returns the string representation of the span element
@@ -32,7 +32,7 @@ angular.module('cttvDirectives')
             }*/
             } else {
                 var col = colorScale(value);
-                var val = (value === 0) ? '0' : cttvUtils.floatPrettyPrint(value);
+                var val = (value === 0) ? '0' : otUtils.floatPrettyPrint(value);
                 str = '<span style=\'color: ' + col + '; background: ' + col + ';\' title=\'Score: ' + val + '\'>' + val + '</span>';
             }
 
@@ -65,7 +65,7 @@ angular.module('cttvDirectives')
     */
         var setupTable = function (table, target, filename, download) {
         // $log.log("setupTable()");
-        // return $(table).DataTable( cttvUtils.setTableToolsParams({
+        // return $(table).DataTable( otUtils.setTableToolsParams({
             return $(table).DataTable({
             // "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
                 'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',

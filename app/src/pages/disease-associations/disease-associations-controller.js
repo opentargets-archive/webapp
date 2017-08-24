@@ -14,7 +14,7 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'cttvUtils', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $q, otAPIservice, cttvFiltersService, otDictionary, cttvUtils, cttvLocationState, cttvConfig) {
+    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'otUtils', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $q, otAPIservice, cttvFiltersService, otDictionary, otUtils, cttvLocationState, cttvConfig) {
         'use strict';
 
         cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
@@ -73,7 +73,7 @@ angular.module('cttvControllers')
             // Do we have targets?
             var targets;
             if (new_state.targets) {
-                targets = cttvUtils.expandTargetIds(new_state.targets.split(','));
+                targets = otUtils.expandTargetIds(new_state.targets.split(','));
             }
 
             if (targets) {
@@ -171,7 +171,7 @@ angular.module('cttvControllers')
         //
         // on PAGE LOAD
         //
-        cttvUtils.clearErrors();
+        otUtils.clearErrors();
         $scope.filters = cttvLocationState.getState()[facetsId] || {};
         render(cttvLocationState.getState(), cttvLocationState.getOldState());
     }]);
