@@ -3,14 +3,14 @@ angular.module('cttvDirectives')
         'otAPIservice',
         '$timeout',
         'otConfig',
-        'cttvConsts',
+        'otConsts',
         'otUpperCaseFirstFilter',
         'otClearUnderscoresFilter',
         function (
             otAPIservice,
             $timeout,
             otConfig,
-            cttvConsts,
+            otConsts,
             otUpperCaseFirstFilter,
             otClearUnderscoresFilter) {
             'use strict';
@@ -174,7 +174,7 @@ angular.module('cttvDirectives')
                     var row = [];
 
                     // 0 - Access level
-                    row.push((d.access_level === cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((d.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // 1 - Disease label
                     row.push(d.disease.efo_info.label);

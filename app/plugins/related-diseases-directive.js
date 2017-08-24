@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('relatedDiseases', ['$log', 'otUtils', 'cttvConsts', 'otDictionary', 'otAPIservice', '$timeout', function ($log, otUtils, cttvConsts, otDictionary, otAPIservice, $timeout) {
+    .directive('relatedDiseases', ['$log', 'otUtils', 'otConsts', 'otDictionary', 'otAPIservice', '$timeout', function ($log, otUtils, otConsts, otDictionary, otAPIservice, $timeout) {
         'use strict';
 
         // Details table --
@@ -56,13 +56,13 @@ angular.module('plugins')
 
             // Datatypes for the OBJECT
             {name: '', title: otDictionary.ASSOCIATION_SCORE},
-            {name: cttvConsts.datatypes.GENETIC_ASSOCIATION, title: otDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
-            {name: cttvConsts.datatypes.SOMATIC_MUTATION, title: otDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
-            {name: cttvConsts.datatypes.KNOWN_DRUG, title: otDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
-            {name: cttvConsts.datatypes.AFFECTED_PATHWAY, title: otDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
-            {name: cttvConsts.datatypes.RNA_EXPRESSION, title: otDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
-            {name: cttvConsts.datatypes.LITERATURE, title: otDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
-            {name: cttvConsts.datatypes.ANIMAL_MODEL, title: otDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
+            {name: otConsts.datatypes.GENETIC_ASSOCIATION, title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
+            {name: otConsts.datatypes.SOMATIC_MUTATION, title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
+            {name: otConsts.datatypes.KNOWN_DRUG, title: otDictionary[otConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
+            {name: otConsts.datatypes.AFFECTED_PATHWAY, title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
+            {name: otConsts.datatypes.RNA_EXPRESSION, title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
+            {name: otConsts.datatypes.LITERATURE, title: otDictionary[otConsts.datatypes.LITERATURE.toUpperCase()]},
+            {name: otConsts.datatypes.ANIMAL_MODEL, title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
             {name: '', title: 'total score'},
 
             // empty col for the gene name

@@ -85,7 +85,7 @@ angular.module('cttvDirectives')
 //     };
 // }])
 
-    .directive('multipleTargetsTable', ['$log', 'otUtils', 'cttvConsts', 'otDictionary', function ($log, otUtils, cttvConsts, otDictionary) {
+    .directive('multipleTargetsTable', ['$log', 'otUtils', 'otConsts', 'otDictionary', function ($log, otUtils, otConsts, otDictionary) {
         'use strict';
 
         function resolveTies (input, pvalPos, sortedTAs) {
@@ -241,12 +241,12 @@ angular.module('cttvDirectives')
             link: function (scope) {
             // Datatypes;
                 scope.datatypes = [];
-                var datatypes = cttvConsts.datatypesOrder;
+                var datatypes = otConsts.datatypesOrder;
                 for (var i = 0; i < datatypes.length; i++) {
                     scope.datatypes.push({
-                    // label: cttvConsts.datatypesLabels[datatypes[i]],
+                    // label: otConsts.datatypesLabels[datatypes[i]],
                         label: otDictionary[datatypes[i]],
-                        id: cttvConsts.datatypes[datatypes[i]],
+                        id: otConsts.datatypes[datatypes[i]],
                         selected: true
                     });
                 }

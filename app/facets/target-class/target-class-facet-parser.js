@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('targetClassFacetParser', ['$log', 'otDictionary', 'cttvConsts', function ($log, otDictionary, cttvConsts) {
+    .factory('targetClassFacetParser', ['$log', 'otDictionary', 'otConsts', function ($log, otDictionary, otConsts) {
         'use strict';
 
 
@@ -32,7 +32,7 @@ angular.module('facets')
                 conf.collection = null;
                 if (obj.target_class) {
                     conf.collection = {
-                        filters: parser.parse({key: cttvConsts.TARGET_CLASS}, obj.target_class, countsToUse, isSelected).filters
+                        filters: parser.parse({key: otConsts.TARGET_CLASS}, obj.target_class, countsToUse, isSelected).filters
                     };
                 }
                 return conf;

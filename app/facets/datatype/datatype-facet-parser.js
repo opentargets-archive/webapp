@@ -1,17 +1,17 @@
 angular.module('facets')
 
-    .factory('datatypeFacetParser', ['$log', 'otDictionary', 'cttvConsts', 'datasourceFacetParser', function ($log, otDictionary, cttvConsts, datasourceFacetParser) {
+    .factory('datatypeFacetParser', ['$log', 'otDictionary', 'otConsts', 'datasourceFacetParser', function ($log, otDictionary, otConsts, datasourceFacetParser) {
         'use strict';
 
 
         var datatypes = [
-            {key: cttvConsts.datatypes.GENETIC_ASSOCIATION, selected: true},
-            {key: cttvConsts.datatypes.SOMATIC_MUTATION, selected: true},
-            {key: cttvConsts.datatypes.KNOWN_DRUG, selected: true},
-            {key: cttvConsts.datatypes.AFFECTED_PATHWAY, selected: true},
-            {key: cttvConsts.datatypes.RNA_EXPRESSION, selected: true},
-            {key: cttvConsts.datatypes.LITERATURE, selected: true},
-            {key: cttvConsts.datatypes.ANIMAL_MODEL, selected: false}
+            {key: otConsts.datatypes.GENETIC_ASSOCIATION, selected: true},
+            {key: otConsts.datatypes.SOMATIC_MUTATION, selected: true},
+            {key: otConsts.datatypes.KNOWN_DRUG, selected: true},
+            {key: otConsts.datatypes.AFFECTED_PATHWAY, selected: true},
+            {key: otConsts.datatypes.RNA_EXPRESSION, selected: true},
+            {key: otConsts.datatypes.LITERATURE, selected: true},
+            {key: otConsts.datatypes.ANIMAL_MODEL, selected: false}
         ];
 
 

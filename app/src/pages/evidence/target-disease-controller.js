@@ -8,7 +8,7 @@ angular.module('cttvControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'otUtils', 'otDictionary', 'cttvConsts', 'otConfig', 'otClearUnderscoresFilter', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, otUtils, otDictionary, cttvConsts, otConfig, otClearUnderscoresFilter, $analytics, otLocationState, $anchorScroll) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'otUtils', 'otDictionary', 'otConsts', 'otConfig', 'otClearUnderscoresFilter', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, otUtils, otDictionary, otConsts, otConfig, otClearUnderscoresFilter, $analytics, otLocationState, $anchorScroll) {
         'use strict';
 
 
@@ -19,8 +19,8 @@ angular.module('cttvControllers')
 
         var searchObj = otUtils.search.translateKeys($location.search());
 
-        // var dbs = cttvConsts.dbs;
-        var datatypes = cttvConsts.datatypes;
+        // var dbs = otConsts.dbs;
+        var datatypes = otConsts.datatypes;
 
         //
         var accessLevelPrivate = '<span class=\'cttv-access-private\' title=\'private data\'></span>'; // "<span class='fa fa-users' title='private data'>G</span>";
@@ -52,7 +52,7 @@ angular.module('cttvControllers')
                         is_loading: false,
                         heading: otDictionary.COMMON_DISEASES,
                         source: otConfig.evidence_sources.genetic_association.common,
-                        source_label: otConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                        source_label: otConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                         has_errors: false
                     },
                     rare_diseases: {
@@ -61,7 +61,7 @@ angular.module('cttvControllers')
                         is_loading: false,
                         heading: otDictionary.RARE_DISEASES,
                         source: otConfig.evidence_sources.genetic_association.rare,
-                        source_label: otConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                        source_label: otConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                         has_errors: false
                     }
                 },
@@ -71,7 +71,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: otDictionary.RNA_EXPRESSION,
                     source: otConfig.evidence_sources.rna_expression,
-                    source_label: otConfig.evidence_sources.rna_expression.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: otConfig.evidence_sources.rna_expression.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 affected_pathways: {
@@ -80,7 +80,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: otDictionary.AFFECTED_PATHWAY,
                     source: otConfig.evidence_sources.pathway,
-                    source_label: otConfig.evidence_sources.pathway.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: otConfig.evidence_sources.pathway.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 known_drugs: {
@@ -89,7 +89,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: otDictionary.KNOWN_DRUG,
                     source: otConfig.evidence_sources.known_drug,
-                    source_label: otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 somatic_mutations: {
@@ -98,7 +98,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: otDictionary.SOMATIC_MUTATION,
                     source: otConfig.evidence_sources.somatic_mutation,
-                    source_label: otConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: otConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 literature: {
@@ -107,7 +107,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: otDictionary.LITERATURE,
                     source: otConfig.evidence_sources.literature,
-                    source_label: otConfig.evidence_sources.literature.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: otConfig.evidence_sources.literature.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                     has_errors: false
                 },
                 animal_models: {
@@ -116,7 +116,7 @@ angular.module('cttvControllers')
                     is_loading: false,
                     heading: otDictionary.ANIMAL_MODEL,
                     source: otConfig.evidence_sources.animal_model,
-                    source_label: otConfig.evidence_sources.animal_model.map(function (s) { return {label: otDictionary[cttvConsts.invert(s)], url: cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
+                    source_label: otConfig.evidence_sources.animal_model.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                     has_errors: false
                 }
             }
@@ -187,13 +187,13 @@ angular.module('cttvControllers')
         function processFlowerData (data) {
             var fd = [];
 
-            for (var i = 0; i < cttvConsts.datatypesOrder.length; i++) {
-                var dkey = cttvConsts.datatypes[cttvConsts.datatypesOrder[i]];
-                var key = cttvConsts.datatypesOrder[i];
+            for (var i = 0; i < otConsts.datatypesOrder.length; i++) {
+                var dkey = otConsts.datatypes[otConsts.datatypesOrder[i]];
+                var key = otConsts.datatypesOrder[i];
                 fd.push({
-                    // "value": lookDatasource(data, cttvConsts.datatypes[key]).score,
+                    // "value": lookDatasource(data, otConsts.datatypes[key]).score,
                     'value': data ? data[dkey] : 0,
-                    'label': cttvConsts.datatypesLabels[key],
+                    'label': otConsts.datatypesLabels[key],
                     'active': true
                 });
             }
@@ -323,7 +323,7 @@ angular.module('cttvControllers')
 
                 try {
                     // data origin: public / private
-                    row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // disease name
                     row.push(item.disease.efo_info.label);
@@ -337,11 +337,11 @@ angular.module('cttvControllers')
                     row.push(t);
 
                     // evidence source
-                    if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
+                    if (item.sourceID === otConsts.dbs.PHEWAS_23andme) {
                         row.push('<a class=\'cttv-external-link\' href=\'https://test-rvizapps.biogen.com/23andmeDev/\' target=\'_blank\'>'
                             + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
-                    } else if (item.sourceID === cttvConsts.dbs.PHEWAS) {
+                    } else if (item.sourceID === otConsts.dbs.PHEWAS) {
                         row.push('<a class=\'cttv-external-link\' href=\'https://phewascatalog.org/phewas\' target=\'_blank\'>'
                             + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
@@ -354,9 +354,9 @@ angular.module('cttvControllers')
                     // p-value
                     var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
 
-                    if (item.sourceID === cttvConsts.dbs.PHEWAS) {
+                    if (item.sourceID === otConsts.dbs.PHEWAS) {
                         msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
-                    } else if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
+                    } else if (item.sourceID === otConsts.dbs.PHEWAS_23andme) {
                         msg += '<br/>Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '<br />Phenotype: ' + item.unique_association_fields.phenotype;
                     }
                     row.push(msg);
@@ -487,7 +487,7 @@ angular.module('cttvControllers')
                     var db = item.sourceID;
 
                     // data origin: public / private
-                    row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
 
                     // disease
@@ -537,11 +537,11 @@ angular.module('cttvControllers')
                         row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.variant2disease.urls[0].url + '\' target=_blank>' + item.evidence.variant2disease.urls[0].nice_name + '</a>');
                     } else {
                         // TODO: Genomics England URLs are wrong, so (hopefully temporarily) we need to hack them in the UI
-                        // TODO: We can't use cttvConsts.dbs.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
-                        if (db === cttvConsts.dbs.GENOMICS_ENGLAND) {
+                        // TODO: We can't use otConsts.dbs.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
+                        if (db === otConsts.dbs.GENOMICS_ENGLAND) {
                             item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
                         }
-                        if (db == cttvConsts.dbs.GENE_2_PHENOTYPE) {
+                        if (db == otConsts.dbs.GENE_2_PHENOTYPE) {
                             row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>Further details in Gene2Phenotype database</a>');
                         } else {
                             row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>' + item.evidence.urls[0].nice_name + '</a>');
@@ -691,7 +691,7 @@ angular.module('cttvControllers')
 
                 try {
                     // data origin: public / private
-                    row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // disease
                     row.push(item.disease.efo_info.label);
@@ -820,7 +820,7 @@ angular.module('cttvControllers')
 
                 try {
                     // data origin: public / private
-                    row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // disease
                     row.push(item.disease.efo_info.label);
@@ -973,7 +973,7 @@ angular.module('cttvControllers')
                 var row = [];
                 try {
                     // col 0: data origin: public / private
-                    row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // col 1: disease
                     row.push(item.disease.efo_info.label);
@@ -990,7 +990,7 @@ angular.module('cttvControllers')
                         var pattern = '';
                         for (var i = 0; i < item.evidence.known_mutations.length; i++) {
                             var m = item.evidence.known_mutations[i];
-                            if (item.sourceID == cttvConsts.dbs.INTOGEN) {
+                            if (item.sourceID == otConsts.dbs.INTOGEN) {
                                 mutation_types += '<div>' + otClearUnderscoresFilter(item.target.activity || mut);
                             } else {
                                 mutation_types += '<div>' + otClearUnderscoresFilter(m.preferred_name || mut) + '</div>';
@@ -1137,7 +1137,7 @@ angular.module('cttvControllers')
 
                 try {
                     // data origin: public / private
-                    row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((item.access_level == otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                     // disease
                     row.push(item.disease.efo_info.label);    // or item.disease.efo_info.label ???

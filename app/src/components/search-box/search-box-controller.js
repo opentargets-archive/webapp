@@ -6,7 +6,7 @@
  */
 angular.module('cttvControllers')
 
-    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otAPIservice', 'cttvConsts', '$q', 'otUtils', 'otLoadedLists', function ($scope, $location, $window, $document, $element, otAPIservice, cttvConsts, $q, otUtils, otLoadedLists) {
+    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otAPIservice', 'otConsts', '$q', 'otUtils', 'otLoadedLists', function ($scope, $location, $window, $document, $element, otAPIservice, otConsts, $q, otUtils, otLoadedLists) {
         var APP_SEARCH_URL = 'search';
         var APP_EVIDENCE_URL = 'evidence';
         var APP_AUTOCOMPLETE_URL = 'autocomplete';
@@ -157,7 +157,7 @@ angular.module('cttvControllers')
             // check the EFOs path and remove excess data
             data.disease.forEach(function (efo) {
                 // first we don't want that "CTTV Root" thingy at the beginning, if it's there
-                if (efo.data.efo_path_labels[0][0] === cttvConsts.CTTV_ROOT_NAME && efo.data.efo_path_labels[0].length === efo.data.efo_path_codes[0].length) {
+                if (efo.data.efo_path_labels[0][0] === otConsts.CTTV_ROOT_NAME && efo.data.efo_path_labels[0].length === efo.data.efo_path_codes[0].length) {
                     efo.data.efo_path_labels[0] = efo.data.efo_path_labels[0].slice(1);
                     efo.data.efo_path_codes[0] = efo.data.efo_path_codes[0].slice(1);
                 }

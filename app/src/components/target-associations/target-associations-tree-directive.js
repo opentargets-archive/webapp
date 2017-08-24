@@ -4,7 +4,7 @@ angular.module('cttvDirectives')
     /*
     *
     */
-    .directive('cttvTargetAssociationsTree', ['otAPIservice', 'cttvConsts', 'otUtils', '$analytics', function (otAPIservice, cttvConsts, otUtils, $analytics) {
+    .directive('cttvTargetAssociationsTree', ['otAPIservice', 'otConsts', 'otUtils', '$analytics', function (otAPIservice, otConsts, otUtils, $analytics) {
         'use strict';
 
         var whoiam = 'tree';
@@ -182,7 +182,7 @@ angular.module('cttvDirectives')
                                 gat = geneAssociationsTree()
                                     .data(data)
                                     // .datatypes(dts)
-                                    .names(cttvConsts)
+                                    .names(otConsts)
                                     .filters(scope.facets)
                                     .diameter(900)
                                     .legendText('<a xlink:href=\'/faq#association-score\'><text style="fill:#3a99d7;cursor:pointer" alignment-baseline=central>Score</text></a>')

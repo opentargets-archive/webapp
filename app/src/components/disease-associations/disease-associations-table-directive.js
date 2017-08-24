@@ -14,7 +14,7 @@ angular.module('cttvDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('cttvDiseaseAssociations', ['otUtils', 'otDictionary', 'cttvConsts', 'otAPIservice', '$q', function (otUtils, otDictionary, cttvConsts, otAPIservice, $q) {
+    .directive('cttvDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otAPIservice', '$q', function (otUtils, otDictionary, otConsts, otAPIservice, $q) {
         'use strict';
 
         var draw = 1;
@@ -58,32 +58,32 @@ angular.module('cttvDirectives')
             {name: '', title: otDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
             {
-                name: cttvConsts.datatypes.GENETIC_ASSOCIATION,
-                title: otDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]
+                name: otConsts.datatypes.GENETIC_ASSOCIATION,
+                title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]
             },
             {
-                name: cttvConsts.datatypes.SOMATIC_MUTATION,
-                title: otDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]
+                name: otConsts.datatypes.SOMATIC_MUTATION,
+                title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]
             },
             {
-                name: cttvConsts.datatypes.KNOWN_DRUG,
-                title: otDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]
+                name: otConsts.datatypes.KNOWN_DRUG,
+                title: otDictionary[otConsts.datatypes.KNOWN_DRUG.toUpperCase()]
             },
             {
-                name: cttvConsts.datatypes.AFFECTED_PATHWAY,
-                title: otDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]
+                name: otConsts.datatypes.AFFECTED_PATHWAY,
+                title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]
             },
             {
-                name: cttvConsts.datatypes.RNA_EXPRESSION,
-                title: otDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]
+                name: otConsts.datatypes.RNA_EXPRESSION,
+                title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.toUpperCase()]
             },
             {
-                name: cttvConsts.datatypes.LITERATURE,
-                title: otDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]
+                name: otConsts.datatypes.LITERATURE,
+                title: otDictionary[otConsts.datatypes.LITERATURE.toUpperCase()]
             },
             {
-                name: cttvConsts.datatypes.ANIMAL_MODEL,
-                title: otDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]
+                name: otConsts.datatypes.ANIMAL_MODEL,
+                title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.toUpperCase()]
             },
             // empty col for sorting by total score (sum)
             {name: '', title: 'total score', visible: false, className: 'never'},
@@ -161,13 +161,13 @@ angular.module('cttvDirectives')
                     var mappings = {
                         0: 'target.gene_info.symbol',
                         1: 'association_score.overall',
-                        2: 'association_score.datatypes.' + cttvConsts.datatypes.GENETIC_ASSOCIATION,
-                        3: 'association_score.datatypes.' + cttvConsts.datatypes.SOMATIC_MUTATION,
-                        4: 'association_score.datatypes.' + cttvConsts.datatypes.KNOWN_DRUG,
-                        5: 'association_score.datatypes.' + cttvConsts.datatypes.AFFECTED_PATHWAY,
-                        6: 'association_score.datatypes.' + cttvConsts.datatypes.RNA_EXPRESSION,
-                        7: 'association_score.datatypes.' + cttvConsts.datatypes.LITERATURE,
-                        8: 'association_score.datatypes.' + cttvConsts.datatypes.ANIMAL_MODEL,
+                        2: 'association_score.datatypes.' + otConsts.datatypes.GENETIC_ASSOCIATION,
+                        3: 'association_score.datatypes.' + otConsts.datatypes.SOMATIC_MUTATION,
+                        4: 'association_score.datatypes.' + otConsts.datatypes.KNOWN_DRUG,
+                        5: 'association_score.datatypes.' + otConsts.datatypes.AFFECTED_PATHWAY,
+                        6: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION,
+                        7: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE,
+                        8: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL,
                         9: 'association_score.overall'
                     };
                     var order = [];

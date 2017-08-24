@@ -3,9 +3,9 @@
 angular.module('cttvDirectives')
 
 /* Directive to display the known drug evidence table */
-    .directive('knownDrugTable', ['otAPIservice', 'cttvConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otAPIservice, cttvConsts, otUtils, otConfig, $location, otDictionary) {
+    .directive('knownDrugTable', ['otAPIservice', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otAPIservice, otConsts, otUtils, otConfig, $location, otDictionary) {
         'use strict';
-        // var dbs = cttvConsts.dbs;
+        // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
         var checkPath = otUtils.checkPath;
 
@@ -125,7 +125,7 @@ angular.module('cttvDirectives')
                                 });
 
                                 // 0: data origin: public / private
-                                row.push((item.access_level === cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                                row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                                 // 1: disease
                                 row.push('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');

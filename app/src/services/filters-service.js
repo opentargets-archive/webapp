@@ -7,7 +7,7 @@ angular.module('cttvServices')
     /**
      *
      */
-    .factory('cttvFiltersService', ['$log', '$location', 'otDictionary', 'cttvConsts', 'otAPIservice', 'otUtils', 'otLocationState', '$analytics', '$injector', 'otConfig', function ($log, $location, otDictionary, cttvConsts, otAPIservice, otUtils, otLocationState, $analytics, $injector, otConfig) {
+    .factory('cttvFiltersService', ['$log', '$location', 'otDictionary', 'otConsts', 'otAPIservice', 'otUtils', 'otLocationState', '$analytics', '$injector', 'otConfig', function ($log, $location, otDictionary, otConsts, otAPIservice, otUtils, otLocationState, $analytics, $injector, otConfig) {
         'use strict';
 
 
@@ -446,7 +446,7 @@ angular.module('cttvServices')
             }
 
             // set the count to use
-            countsToUse = countsToUse || cttvConsts.UNIQUE_TARGET_COUNT; // "unique_target_count";
+            countsToUse = countsToUse || otConsts.UNIQUE_TARGET_COUNT; // "unique_target_count";
 
             // reset the filters
             for (var key in filtersData) {

@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
 /**
 * Matrix (heatmap) view for target associations
 */
-    .directive('cttvTargetAssociationsTable', ['otAPIservice', 'otUtils', 'otDictionary', 'cttvConsts', '$q', '$analytics', function (otAPIservice, otUtils, otDictionary, cttvConsts, $q, $analytics) {
+    .directive('cttvTargetAssociationsTable', ['otAPIservice', 'otUtils', 'otDictionary', 'otConsts', '$q', '$analytics', function (otAPIservice, otUtils, otDictionary, otConsts, $q, $analytics) {
         'use strict';
 
         var whoiam = 'table';
@@ -50,13 +50,13 @@ angular.module('cttvDirectives')
             {name: '', title: 'TherapeuticArea EFO'},
             {name: '', title: otDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
-            {name: cttvConsts.datatypes.GENETIC_ASSOCIATION, title: otDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
-            {name: cttvConsts.datatypes.SOMATIC_MUTATION, title: otDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
-            {name: cttvConsts.datatypes.KNOWN_DRUG, title: otDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
-            {name: cttvConsts.datatypes.AFFECTED_PATHWAY, title: otDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
-            {name: cttvConsts.datatypes.RNA_EXPRESSION, title: otDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
-            {name: cttvConsts.datatypes.LITERATURE, title: otDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
-            {name: cttvConsts.datatypes.ANIMAL_MODEL, title: otDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
+            {name: otConsts.datatypes.GENETIC_ASSOCIATION, title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
+            {name: otConsts.datatypes.SOMATIC_MUTATION, title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
+            {name: otConsts.datatypes.KNOWN_DRUG, title: otDictionary[otConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
+            {name: otConsts.datatypes.AFFECTED_PATHWAY, title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
+            {name: otConsts.datatypes.RNA_EXPRESSION, title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
+            {name: otConsts.datatypes.LITERATURE, title: otDictionary[otConsts.datatypes.LITERATURE.toUpperCase()]},
+            {name: otConsts.datatypes.ANIMAL_MODEL, title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
             {name: '', title: otDictionary.THERAPEUTIC_AREA}
         ];
 
@@ -95,13 +95,13 @@ angular.module('cttvDirectives')
                     var mappings = {
                         0: 'disease.efo_info.label',
                         3: 'association_score.overall',
-                        4: 'association_score.datatypes.' + cttvConsts.datatypes.GENETIC_ASSOCIATION,
-                        5: 'association_score.datatypes.' + cttvConsts.datatypes.SOMATIC_MUTATION,
-                        6: 'association_score.datatypes.' + cttvConsts.datatypes.KNOWN_DRUG,
-                        7: 'association_score.datatypes.' + cttvConsts.datatypes.AFFECTED_PATHWAY,
-                        8: 'association_score.datatypes.' + cttvConsts.datatypes.RNA_EXPRESSION,
-                        9: 'association_score.datatypes.' + cttvConsts.datatypes.LITERATURE,
-                        10: 'association_score.datatypes.' + cttvConsts.datatypes.ANIMAL_MODEL,
+                        4: 'association_score.datatypes.' + otConsts.datatypes.GENETIC_ASSOCIATION,
+                        5: 'association_score.datatypes.' + otConsts.datatypes.SOMATIC_MUTATION,
+                        6: 'association_score.datatypes.' + otConsts.datatypes.KNOWN_DRUG,
+                        7: 'association_score.datatypes.' + otConsts.datatypes.AFFECTED_PATHWAY,
+                        8: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION,
+                        9: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE,
+                        10: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL,
                         11: 'association_score.overall'
                     };
                     var order = [];

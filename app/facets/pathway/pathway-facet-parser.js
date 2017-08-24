@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('pathwayFacetParser', ['$log', 'otDictionary', 'cttvConsts', function ($log, otDictionary, cttvConsts) {
+    .factory('pathwayFacetParser', ['$log', 'otDictionary', 'otConsts', function ($log, otDictionary, otConsts) {
         'use strict';
 
 
@@ -32,7 +32,7 @@ angular.module('facets')
                 conf.collection = null;
                 if (obj.pathway) {
                     conf.collection = {
-                        filters: parser.parse(/* cttvConsts.PATHWAY*/ {key: 'pathway'}, obj.pathway, countsToUse, isSelected).filters
+                        filters: parser.parse(/* otConsts.PATHWAY*/ {key: 'pathway'}, obj.pathway, countsToUse, isSelected).filters
                     };
                 }
                 return conf;

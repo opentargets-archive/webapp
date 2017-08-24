@@ -7,7 +7,7 @@ angular.module('cttvServices')
     /**
      * The API services, with methods to call the ElasticSearch API
      */
-    .factory('cttvConsts', [function () {
+    .factory('otConsts', [function () {
         'use strict';
         var consts = {
             datatypes: {

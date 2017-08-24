@@ -4,7 +4,7 @@
 angular.module('cttvServices')
 
 
-    .factory('otLocationState', ['$log', '$location', '$rootScope', 'cttvConsts', function ($log, $location, $rootScope, cttvConsts) {
+    .factory('otLocationState', ['$log', '$location', '$rootScope', 'otConsts', function ($log, $location, $rootScope, otConsts) {
         'use strict';
 
         var otLocationStateService = {};
@@ -111,13 +111,13 @@ angular.module('cttvServices')
             var raw = {};
             // array containing the type of old facets -- TODO: can remove in future when we get rid of backward compatibilty (see comment below)
             var fc = [
-                cttvConsts.DATATYPES,
-                cttvConsts.PATHWAY,
-                cttvConsts.DATASOURCES,
-                cttvConsts.THERAPEUTIC_AREAS,
-                cttvConsts.DATA_DISTRIBUTION,
-                cttvConsts.TARGET,
-                cttvConsts.TARGET_CLASS
+                otConsts.DATATYPES,
+                otConsts.PATHWAY,
+                otConsts.DATASOURCES,
+                otConsts.THERAPEUTIC_AREAS,
+                otConsts.DATA_DISTRIBUTION,
+                otConsts.TARGET,
+                otConsts.TARGET_CLASS
             ];
 
             for (var i in search) {

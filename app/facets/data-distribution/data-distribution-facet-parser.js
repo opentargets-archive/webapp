@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('dataDistributionFacetParser', ['$log', 'otDictionary', 'cttvConsts', function ($log, otDictionary, cttvConsts) {
+    .factory('dataDistributionFacetParser', ['$log', 'otDictionary', 'otConsts', function ($log, otDictionary, otConsts) {
         'use strict';
 
 
@@ -33,7 +33,7 @@ angular.module('facets')
                     conf.collection = null;
                     if (obj.target_class) {
                         conf.collection = {
-                            filters: parser.parse(cttvConsts.TARGET_CLASS, obj.target_class, countsToUse, undefined, isSelected)
+                            filters: parser.parse(otConsts.TARGET_CLASS, obj.target_class, countsToUse, undefined, isSelected)
                         }
                     }
                     return conf;
@@ -45,9 +45,9 @@ angular.module('facets')
             // this is not gonna work now!
             // NEED TO CHANGE all facets to return a config object rathen than just the list of filters...
             var search = cttvFiltersService.parseURL();
-            search.score_min = search.score_min || [cttvConsts.defaults.SCORE_MIN.toFixed(2)];
-            search.score_max = search.score_max || [cttvConsts.defaults.SCORE_MAX.toFixed(2)];
-            search.score_str = search.score_str || [cttvConsts.defaults.STRINGENCY];
+            search.score_min = search.score_min || [otConsts.defaults.SCORE_MIN.toFixed(2)];
+            search.score_max = search.score_max || [otConsts.defaults.SCORE_MAX.toFixed(2)];
+            search.score_str = search.score_str || [otConsts.defaults.STRINGENCY];
 
             // set the 3 filters for the score: min, max, stringency
             config.filters = [
