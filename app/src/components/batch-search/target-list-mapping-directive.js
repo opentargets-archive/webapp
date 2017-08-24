@@ -1,7 +1,7 @@
 angular.module('cttvDirectives')
 
 
-    .directive('targetListMapping', ['otAPIservice', 'otUtils', 'otLoadedLists', 'otConfig', function (otAPIservice, otUtils, otLoadedLists, otConfig) {
+    .directive('otTargetListMapping', ['otAPIservice', 'otUtils', 'otLoadedLists', 'otConfig', function (otAPIservice, otUtils, otLoadedLists, otConfig) {
         'use strict';
 
         return {
