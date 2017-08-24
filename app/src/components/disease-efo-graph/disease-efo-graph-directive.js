@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('cttvEfoGraph', ['otAPIservice', function (otAPIservice) {
+    .directive('otEfoGraph', ['otAPIservice', function (otAPIservice) {
         'use strict';
         return {
             restrict: 'E',
