@@ -6,7 +6,7 @@ angular.module('cttvServices')
     /**
      * The API services, with methods to call the ElasticSearch API
      */
-    .factory('cttvDictionary', ['$log', function ($log) {
+    .factory('cttvDictionary', [function () {
         'use strict';
 
         var dictionary = {
@@ -103,10 +103,6 @@ angular.module('cttvServices')
         };
 
 
-        dictionary.get = function (w) {
-            // return en[w] || undefined;
-        };
-
         dictionary.invert = function (val) {
             var a = invLookup(dictionary, val);
             return a;
@@ -116,15 +112,13 @@ angular.module('cttvServices')
             var k = undefined;
             for (var i in o) {
                 if (o.hasOwnProperty(i)) {
-                    // $log.log(v+") "+i+" = "+o[i]);
-                    if (o[i] == v) {
+                    if (o[i] === v) {
                         k = i;
-                        // $log.log("   "+k);
                         return k;
                     }
                     if (typeof o[i] === 'object') {
                         k = invLookup(o[i], v);
-                        if (k) {return k;}
+                        if (k) { return k; }
                     }
                 }
             }
