@@ -32,7 +32,8 @@ module.exports = {
         "tnt": true,
         "geneAssociationsTree": true,
         "targetGenomeBrowser": true,
-        'cttvApi': true
+        'cttvApi': true,
+        "System": true
     },
     "rules": {
         "curly": 2,
@@ -54,7 +55,7 @@ module.exports = {
         ],
         "no-multiple-empty-lines": [2, {
             "max": 2,
-            "maxBOF": 1,
+            "maxBOF": 0,
             "maxEOF": 1
         }],
         "no-trailing-spaces": 2,
@@ -85,7 +86,10 @@ module.exports = {
         "eol-last": 2,
         "array-bracket-spacing": 2,
         "block-spacing": 2,
-        "no-warning-comments": 2,
+        // "no-warning-comments": 2,
+        // "no-use-before-define": 2,
+        "no-return-assign": 2,
+        "no-sequences": 2,
         /**
          * Angular rules
          * By default, this uses 
@@ -113,20 +117,21 @@ module.exports = {
         "angular/watchers-execution": [2, "$apply"],
         "angular/angularelement": 1,
         "angular/controller-name": [2, "/[A-Z].*Ctrl/"],
-        // "angular/directive-name": [2, "ot"],
-        // "angular/factory-name": [2, "ot"],
+        "angular/directive-name": [2, "ot"],
+        "angular/factory-name": [2, "ot"],
         "angular/filter-name": [2, "ot"],
         "angular/module-name": [2, "ot"],
-        // "angular/file-name": [2, {
-        //     "typeSeparator": "dash",
-        //     "nameStyle": "dash",
-        //     "ignorePrefix": "ot",
-        //     "componentTypeMappings": {
-        //         "controller": "controller"
-        //     }
-        // }],
-        "angular/file-name": 0,
+        "angular/file-name": [2, {
+            "typeSeparator": "dash",
+            "nameStyle": "dash",
+            "ignorePrefix": "ot",
+            "componentTypeMappings": {
+                "controller": "controller"
+            }
+        }],
+        // "angular/file-name": 0,
         "angular/controller-as": 0,
+        "angular/controller-as-route": 0,
         /**
          * Compatibility rules
          */
@@ -136,17 +141,17 @@ module.exports = {
          * For further info, see https://github.com/gajus/eslint-plugin-jsdoc
          * (currently set as warnings only)
          */
-        "jsdoc/check-param-names": 1,
-        "jsdoc/check-tag-names": 1,
-        "jsdoc/check-types": 1,
-        "jsdoc/newline-after-description": 1,
-        "jsdoc/require-description-complete-sentence": 1,
-        "jsdoc/require-example": 1,
-        "jsdoc/require-hyphen-before-param-description": 1,
-        "jsdoc/require-param": 1,
-        "jsdoc/require-param-description": 1,
-        "jsdoc/require-param-type": 1,
-        "jsdoc/require-returns-description": 1,
-        "jsdoc/require-returns-type": 1
+        // "jsdoc/check-param-names": 1,
+        // "jsdoc/check-tag-names": 1,
+        // "jsdoc/check-types": 1,
+        // "jsdoc/newline-after-description": 1,
+        // "jsdoc/require-description-complete-sentence": 1,
+        // "jsdoc/require-example": 1,
+        // "jsdoc/require-hyphen-before-param-description": 1,
+        // "jsdoc/require-param": 1,
+        // "jsdoc/require-param-description": 1,
+        // "jsdoc/require-param-type": 1,
+        // "jsdoc/require-returns-description": 1,
+        // "jsdoc/require-returns-type": 1
     }
 };
