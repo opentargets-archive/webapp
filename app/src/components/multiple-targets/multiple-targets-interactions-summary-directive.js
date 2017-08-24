@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsInteractionsSummary', ['$log', 'cttvAPIservice', '$http', '$q', '$timeout', 'cttvUtils', 'omnipathdbSources', function ($log, cttvAPIservice, $http, $q, $timeout, cttvUtils, omnipathdbSources) {
+    .directive('multipleTargetsInteractionsSummary', ['$log', '$http', '$q', 'omnipathdbSources', function ($log, $http, $q, omnipathdbSources) {
         'use strict';
 
         return {
@@ -14,7 +14,7 @@ angular.module('cttvDirectives')
                 target: '=',
                 width: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope) {
             // var ivTooltip; // the tooltip for the interaction viewer.
 
                 scope.$watchGroup(['target', 'associations'], function () {

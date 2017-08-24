@@ -17,7 +17,14 @@ module.exports = {
         "d3": true,
         '_': true,
         'moment': true,
-        '$': true
+        '$': true,
+        'ghost': true,
+        'FB': true,
+        'twttr': true,
+        "diseaseGraph": true,
+        "flowerView": true,
+        "spinner": true,
+        "Reactome": true
     },
     "rules": {
         "curly": 2,

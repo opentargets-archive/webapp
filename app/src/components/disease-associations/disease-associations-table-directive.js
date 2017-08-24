@@ -14,7 +14,7 @@ angular.module('cttvDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('cttvDiseaseAssociations', ['$log', 'cttvUtils', 'cttvDictionary', 'cttvFiltersService', 'cttvConsts', 'cttvAPIservice', '$q', 'cttvLocationState', function ($log, cttvUtils, cttvDictionary, cttvFiltersService, cttvConsts, cttvAPIservice, $q, cttvLocationState) {
+    .directive('cttvDiseaseAssociations', ['cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', '$q', 'cttvLocationState', function (cttvUtils, cttvDictionary, cttvConsts, cttvAPIservice, $q, cttvLocationState) {
 
         'use strict';
 
@@ -98,7 +98,7 @@ angular.module('cttvDirectives')
                 'title': '<div><span title=\'' + cols[i].title + '\'>' + cols[i].title + '</span></div>',
                 'name': cols[i].name
             };
-            if (i == 9) {
+            if (i === 9) {
                 columnData = {
                     'title': '<div><span title=\'' + cols[i].title + '\'>' + cols[i].title + '</span></div>',
                     'name': cols[i].name,

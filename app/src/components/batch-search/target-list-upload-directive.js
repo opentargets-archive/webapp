@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('targetListUpload', ['$log', 'cttvAPIservice', 'cttvLoadedLists', 'cttvConfig', function ($log, cttvAPIservice, cttvLoadedLists, cttvConfig) {
+    .directive('targetListUpload', ['cttvAPIservice', 'cttvLoadedLists', 'cttvConfig', function (cttvAPIservice, cttvLoadedLists, cttvConfig) {
         'use strict';
 
         return {
@@ -8,7 +8,7 @@ angular.module('cttvDirectives')
                 list: '='
             },
             templateUrl: 'src/components/batch-search/target-list-upload.html',
-            link: function (scope, elem, attrs) {
+            link: function (scope, elem) {
 
             // Current limit of targets (just to show the limit in the sub header)
                 scope.targetListLimit = cttvConfig.targetListLimit;
@@ -60,6 +60,7 @@ angular.module('cttvDirectives')
                         var targets = fileContent.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
                         targets = targets.filter(function (t) {
                             if (t) {return true;}
+                            else {return false;}
                         });
                         searchTargets(file.name, targets);
                     };

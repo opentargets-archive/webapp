@@ -7,10 +7,11 @@ angular.module('cttvDirectives')
  *   <cttv-filter-by-file-targets> </cttv-filter-by-file-targets>
  *
  */
-    .directive('cttvFilterByFileTargets', ['$log', 'cttvAPIservice', 'cttvFiltersService', '$q', '$analytics', 'cttvLoadedLists', '$location', 'cttvUtils', function ($log, cttvAPIservice, cttvFiltersService, $q, $analytics, cttvLoadedLists, $location, cttvUtils) {
+    .directive('cttvFilterByFileTargets', ['$log', 'cttvAPIservice', '$q', '$analytics', 'cttvLoadedLists', '$location', 'cttvUtils', function ($log, cttvAPIservice, $q, $analytics, cttvLoadedLists, $location, cttvUtils) {
         'use strict';
 
         return {
+            restrict: 'AE',
             scope: {
                 diseaseName: '=',
                 targets: '=',
@@ -20,7 +21,7 @@ angular.module('cttvDirectives')
             },
 
             templateUrl: 'src/components/filter-by-file-targets/filter-by-file-targets.html',
-            link: function (scope, elem, attrs) {
+            link: function (scope) {
                 // $log.log("cttvFilterByFileTargets:linkFunction: scope", scope);
                 // $log.log("cttvFilterByFileTargets:linkFunction: elem", elem);
 

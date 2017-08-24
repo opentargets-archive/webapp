@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('pathwaySummary', ['$log', 'cttvAPIservice', '$timeout', '$http', function ($log, cttvAPIservice, $timeout, $http) {
+    .directive('pathwaySummary', ['$timeout', '$http', function ($timeout, $http) {
         'use strict';
 
         return {
@@ -10,7 +10,7 @@ angular.module('cttvDirectives')
                 pathway: '=',
                 targets: '='
             },
-            link: function (scope, el, attrs) {
+            link: function (scope) {
                 scope.$watch('pathway', function () {
                     if (!scope.pathway) {
                         return;

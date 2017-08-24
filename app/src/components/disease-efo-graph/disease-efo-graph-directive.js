@@ -1,7 +1,7 @@
 
 angular.module('cttvDirectives')
 
-    .directive('cttvEfoGraph', ['$log', 'cttvAPIservice', function ($log, cttvAPIservice) {
+    .directive('cttvEfoGraph', ['cttvAPIservice', function (cttvAPIservice) {
         'use strict';
         return {
             restrict: 'E',

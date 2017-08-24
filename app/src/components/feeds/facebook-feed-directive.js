@@ -16,7 +16,7 @@ angular.module('cttvDirectives')
                         + '    height="400">'
                         + '    <blockquote cite="https://www.facebook.com/OpenTargets/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/OpenTargets/">Open Targets</a></blockquote>'
                         + '</div>',
-            link: function (scope, element, attrs) {
+            link: function () {
                 try {
                     FB.XFBML.parse();
                 } catch (e) {

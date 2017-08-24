@@ -1,7 +1,7 @@
 angular.module('cttvDirectives')
 
 
-    .directive('targetListMapping', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvLoadedLists', 'cttvConfig', function ($log, cttvAPIservice, cttvUtils, cttvLoadedLists, cttvConfig) {
+    .directive('targetListMapping', ['cttvAPIservice', 'cttvUtils', 'cttvLoadedLists', 'cttvConfig', function (cttvAPIservice, cttvUtils, cttvLoadedLists, cttvConfig) {
         'use strict';
 
         return {
@@ -10,7 +10,7 @@ angular.module('cttvDirectives')
                 list: '='
             },
             templateUrl: 'src/components/batch-search/target-list-mapping.html',
-            link: function (scope, el, attrs) {
+            link: function (scope) {
 
             // Setting the limit for the list:
                 scope.listLengthLimit = cttvConfig.targetListLimit;
@@ -258,7 +258,7 @@ angular.module('cttvDirectives')
                         var compressedUrl = cttvUtils.compressTargetIds(scope.targetIds).join(',');
                         scope.summaryLink = '/summary?targets=' + compressedUrl;
                     // scope.summaryLink = "/summary?target-list=" + l.id;
-                    // scope.summaryLink = "/summary?" + (scope.targetIds.map(function (t) {return "target=" + t;}).join("&"));
+                    // scope.summaryLink = "/summary?" + (scope.targetIds.map(function (t) {return "target=" + t;}).join("&"));
                     }
                 }, true); // Deep watching the list
             }

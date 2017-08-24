@@ -13,7 +13,7 @@ angular.module('cttvDirectives')
                         + 'data-height="400px"'
                         + 'data-chrome="noborders noheader nofooter"'
                         + '>Tweets by targetvalidate</a>',
-            link: function (scope, element, attrs) {
+            link: function () {
                 try {
                     twttr.widgets.load();
                 } catch (e) {

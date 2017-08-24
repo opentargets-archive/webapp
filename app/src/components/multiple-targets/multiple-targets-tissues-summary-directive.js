@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'cttvConfig', 'cttvUtils', 'cttvAPIservice', function ($log, $http, $q, cttvConfig, cttvUtils, cttvAPIservice) {
+    .directive('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'cttvUtils', 'cttvAPIservice', function ($log, $http, $q, cttvUtils, cttvAPIservice) {
         'use strict';
 
         var tissuesOrdered = [
@@ -136,7 +136,7 @@ angular.module('cttvDirectives')
             scope: {
                 targets: '='
             },
-            link: function (scope, el, attrs) {
+            link: function (scope) {
                 scope.$watch('targets', function () {
                     if (!scope.targets) {
                         return;
@@ -160,7 +160,7 @@ angular.module('cttvDirectives')
                                 return $http.get(url)
                                     .then(function (resp) {
                                         return resp;
-                                    }, function (err) {
+                                    }, function () {
                                         $log.warn('error... but does not matter');
                                         return;
                                     });

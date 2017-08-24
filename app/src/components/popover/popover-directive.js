@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('otPopover', ['$log', 'otDefinitions', function ($log, otDefinitions) {
+    .directive('otPopover', ['otDefinitions', function (otDefinitions) {
         'use strict';
 
         return {
@@ -10,7 +10,7 @@ angular.module('cttvDirectives')
             template: '<span ng-if="link" uib-popover-template="\'src/components/popover/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'"><a target=_blank ng-click="$event.stopPropagation()" href="{{link}}"><i class="fa fa-info-circle"></i></a></span>' +
         '<span ng-if="!link" uib-popover-template="\'src/components/popover/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'" ng-click="$event.stopPropagation()" style="margin-left:8px;"><i class="fa fa-info-circle"></i></span>',
 
-            link: function (scope, el, attrs) {
+            link: function (scope) {
                 var def = otDefinitions[scope.key];
                 if (def) {
                     scope.content = def.description;
