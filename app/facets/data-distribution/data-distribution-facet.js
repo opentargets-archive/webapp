@@ -21,8 +21,6 @@ angular.module('facets')
             },
 
             templateUrl: 'directives/generic-nested-facetcollection.html',
-
-            link: function (scope, elem, attrs) {}
         };
     }])
 
@@ -50,9 +48,6 @@ angular.module('facets')
                     + '        <div class="col-sm-3" style="text-align: center"><input type="radio" ng-model="preset" value="3"><span class="label">high<span></div>'
                     + '    </div>'
                     + '</div>',
-
-
-            link: function (scope, elem, attrs) {}
         };
     }])
 
@@ -96,11 +91,11 @@ angular.module('facets')
                      + '</div>',
 
 
-            link: function (scope, elem, attrs) {
+            link: function (scope) {
                 // work out the preset to use and pass that to the slider
                 // TODO: work out a custom option if the user messes up with the URL directly...
                 scope.preset = -1; // set to -1 (custom) to start with...
-                var init = scope.$watch('facet.filters', function (val, old) {
+                var init = scope.$watch('facet.filters', function () {
                     if (scope.facet.filters[0] && scope.facet.filters[1] && scope.facet.filters[2]) {
                         score_presets.forEach(function (item, i) {
                             if (item.min === scope.facet.filters[0].key &&
@@ -153,7 +148,7 @@ angular.module('facets')
                      + '</div>',
 
 
-            link: function (scope, elem, attrs) {
+            link: function (scope, elem) {
                 // $log.log(scope.data);
                 // $log.log(scope.min);
                 // $log.log(scope.max);

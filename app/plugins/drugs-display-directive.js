@@ -16,7 +16,7 @@ angular.module('plugins')
                 target: '=',
                 disease: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope) {
                 scope.sources = otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; });
             }
         };

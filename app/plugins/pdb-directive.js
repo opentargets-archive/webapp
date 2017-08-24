@@ -20,7 +20,7 @@ angular.module('plugins')
                 target: '=',
                 width: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope, element) {
                 var uniprotId = scope.target.uniprot_id;
 
                 // burger menu
@@ -89,7 +89,7 @@ angular.module('plugins')
                         .append('text')
                         .text(' Structure');
 
-                    var burger = burgerContainer
+                    burgerContainer
                         .append('div')
                         .attr('class', 'hamburger-menu');
                 }, 0);
@@ -197,7 +197,7 @@ angular.module('plugins')
                                 return canvas[0];
                             };
                         }, 0);
-                    }, function (resp) { // error
+                    }, function () { // error
                         scope.noPdb = true;
                         // var template = "<div>No structure found for {{target.approved_symbol}}</div>";
                         // var compiled = $compile(template)(scope);

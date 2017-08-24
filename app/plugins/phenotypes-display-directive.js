@@ -9,7 +9,7 @@ angular.module('plugins')
                 disease: '=',
                 width: '='
             },
-            link: function (scope, elem, attrs) {
+            link: function (scope) {
                 var uniquePhenotypes = {};
                 for (var i = 0; i < scope.disease.phenotypes.length; i++) {
                     uniquePhenotypes[scope.disease.phenotypes[i].label] = true;

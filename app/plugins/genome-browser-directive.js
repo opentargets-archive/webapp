@@ -91,7 +91,7 @@ angular.module('plugins')
                 width: '='
             },
 
-            link: function (scope, element, attrs) {
+            link: function (scope, element) {
                 var efo = scope.disease ? scope.disease.id : undefined;
                 var w = scope.width - 40;
                 var newDiv = document.createElement('div');

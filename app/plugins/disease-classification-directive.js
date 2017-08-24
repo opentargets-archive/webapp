@@ -9,7 +9,7 @@ angular.module('plugins')
                 disease: '=',
                 width: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope) {
                 // $log.log(scope.disease);
                 $timeout(function () {
                     var container = document.getElementById('ot-efo-graph');

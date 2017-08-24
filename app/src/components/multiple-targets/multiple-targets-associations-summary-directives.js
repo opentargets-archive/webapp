@@ -457,7 +457,7 @@ angular.module('cttvDirectives')
             scope: {
                 score: '=' // [0,1]
             },
-            link: function (scope, el, attrs) {
+            link: function (scope, el) {
                 scope.radius = 50;
 
                 scope.$watch('score', function () {

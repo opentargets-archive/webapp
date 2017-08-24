@@ -10,7 +10,7 @@ angular.module('plugins')
                 target: '=',
                 width: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope) {
                 var width = scope.width - 40;
 
                 // Gene tree

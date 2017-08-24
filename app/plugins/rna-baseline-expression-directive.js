@@ -9,7 +9,7 @@ angular.module('plugins')
                 target: '=',
                 width: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope) {
                 var w = scope.width - 40;
                 var target = scope.target.symbol;
 
@@ -169,12 +169,8 @@ angular.module('plugins')
                         .attr('x2', function (d) {
                             return valScale(d.median);
                         })
-                        .attr('y1', function (d) {
-                            return 0;
-                        })
-                        .attr('y2', function (d) {
-                            return 10;
-                        })
+                        .attr('y1', 0)
+                        .attr('y2', 10)
                         .attr('class', 'median')
                         .attr('stroke-width', 2)
                         .attr('stroke', 'black');

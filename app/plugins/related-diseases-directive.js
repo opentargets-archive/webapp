@@ -233,7 +233,7 @@ angular.module('plugins')
                 disease: '=',
                 width: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope, element) {
                 // scope.changedScore = function (newScore) {
                 // };
 
