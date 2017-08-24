@@ -22,9 +22,6 @@ angular.module('cttvDirectives')
 
             templateUrl: 'src/components/filter-by-file-targets/filter-by-file-targets.html',
             link: function (scope) {
-                // $log.log("cttvFilterByFileTargets:linkFunction: scope", scope);
-                // $log.log("cttvFilterByFileTargets:linkFunction: elem", elem);
-
                 scope.maxFileSize = 20000;
 
                 var multiSearchChunkSize = 200;
@@ -35,7 +32,6 @@ angular.module('cttvDirectives')
                     scope.targetNameIdDict = [];
                     scope.targetIdArray = [];
                     scope.targetNameArray = [];
-
 
                     for (var i = 0; i < list.list.length; i++) {
                         $log.log(list.list[i]);
@@ -50,34 +46,12 @@ angular.module('cttvDirectives')
                         }
                     }
 
-                    // for (var i = 0; i < list.list.length; i++) {
-                    //     if (list.list[i].result.selected) {
-                    //         scope.targetIdArray[i] = list.list[i].result.id;
-                    //         scope.targetNameIdDict[i] = {
-                    //             id: list.list[i].result.id,
-                    //             label: list.list[i].result.data.approved_symbol,
-                    //             name: list.list[i].query
-                    //         };
-                    //     }
-                    //     else {
-                    //         scope.targetNameIdDict[i] = {
-                    //             id: '',
-                    //             label: list.list[i].q,
-                    //             name: list.list[i].q
-                    //         };
-                    //     }
-                    // }
-
                     updateAllArrays();
                 };
 
                 scope.initFilterByFile = function () {
                     scope.fileName = '';
-
-                    // $log.log("scope targets is...");
-                    // $log.log(scope.targets);
                     scope.targetNameArray = scope.targets;
-                    // scope.targetNameArray = [];//this one holds targetnames as they are read from the file
                     scope.targetIdArray = [];
                     scope.targetNameIdDict = [];// this has all the targetNames, id-s that were found or "", and labels tht were found for these ids
 
@@ -96,30 +70,21 @@ angular.module('cttvDirectives')
                 scope.initFilterByFile();
 
                 scope.uploadedFile = function (element) {
-                    scope.$apply(function ($scope) {
+                    scope.$apply(function () {
                         scope.files = element.files;
                         scope.addFile();
                     });
                 };
 
                 scope.removeTargets = function () {
-                    var theElement = document.getElementById('myFileInput');
-
                     $location.search('targets', null);
                     scope.targets = [];
                     scope.initFilterByFile();
-                    //
-                    //
-                    // theElement.value = null;
-                    // scope.targets = [];
-                    // scope.initFilterByFile();
-                    // scope.getfacets(scope.filters, scope.targets);
                 };
 
                 scope.addFile = function () {
                     scope.validateFile(scope.files[0]);
                 };
-
 
                 scope.validateFile = function (file) {
                     scope.fileTooBig = false;
@@ -152,9 +117,7 @@ angular.module('cttvDirectives')
                         // analytics event
                         $analytics.eventTrack('filterByTargetList', {'category': 'filterByTargetList', 'label': ('loaded ' + scope.targetNameArray.length + ' targets')});
 
-                        // $log.log("UNIQUE NAMES:" + scope.targetNameArray );
                         // Choose either Async or Consecutive version for testing
-                        // getBestHitTargetsIdsAsync(scope.targetNameArray);
                         getBestHitTargetsIdsConsecutive(scope.targetNameArray);
                     };
                     reader.readAsText(file);
@@ -176,16 +139,8 @@ angular.module('cttvDirectives')
                     }
                 };
 
-                // var getBestHitTargetsIdsAsync = function(targetNameArray){
-                //     var promisesArray = [];
-                //     for (var i = 0; i < targetNameArray.length; i += multiSearchChunkSize) {
-                //         promisesArray.push(getBestHitTargetsIdsChunk(targetNameArray.slice(i, i + multiSearchChunkSize), i))
-                //     }
-                //     $q.all(promisesArray).then(updateAllArrays);
-                // };
-
                 var getBestHitTargetsIdsConsecutive = function (targetNameArray) {
-                    var promise = $q(function (resolve, reject) {
+                    var promise = $q(function (resolve) {
                         resolve('');
                     });
 
@@ -204,11 +159,10 @@ angular.module('cttvDirectives')
                     });
 
                     // got all pieces - glue it all together
-                    promise.then(function (res) {
+                    promise.then(function () {
                         updateAllArrays();
                     });
                 };
-
 
                 // this is a 200 long slice of the original targetNameArray
                 var getBestHitTargetsIdsChunk = function (targetNameArray, from) {
@@ -222,9 +176,6 @@ angular.module('cttvDirectives')
                         method: 'POST',
                         params: opts
                     };
-
-                    // $log.log("getBestHitTargetsIdsChunk:targetNameArray[0]",targetNameArray[0]);
-                    // $log.log("getBestHitTargetsIdsChunk:from",from);
 
                     return cttvAPIservice.getBestHitSearch(queryObject)
                         .then(function (resp) {
@@ -266,19 +217,20 @@ angular.module('cttvDirectives')
                     scope.targetIdArrayWithoutFuzzies = scope.targetNameIdDict.map(function (e) {
                         if (e.id && (e.name.toLowerCase().localeCompare(e.label.toLowerCase()) === 0 || e.id.toLowerCase().localeCompare(e.name.toLowerCase()) === 0)) { // has label and not fuzzy or has name and id and they are the same (for case when name is ENS code already)
                             return e.id;
+                        } else {
+                            return null;
                         }
                     });
+
+                    // this step will filter out undefined
                     scope.targetIdArrayWithoutFuzzies = scope.targetIdArrayWithoutFuzzies.filter(function (e) {
                         return e;
-                    });// this step will filter out undefined
+                    });
 
                     // Update the url with the targets in the list
                     var compressedTargets = cttvUtils.compressTargetIds(scope.targets);
                     $location.search('targets=' + compressedTargets.join(','));
-
-                    // scope.getfacets(scope.filters, scope.targets);
                 };
             }
-
         };
     }]);
