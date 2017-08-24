@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('cttvTargetGenomeBrowser', ['cttvAPIservice', function (cttvAPIservice) {
+    .directive('cttvTargetGenomeBrowser', ['otAPIservice', function (otAPIservice) {
         'use strict';
 
         return {
@@ -24,7 +24,7 @@ angular.module('cttvDirectives')
                     gB.rest().prefix('/proxy/rest.ensembl.org').protocol('').domain('');
                     var theme = targetGenomeBrowser()
                         .efo(efo)
-                        .cttvRestApi(cttvAPIservice.getSelf());
+                        .cttvRestApi(otAPIservice.getSelf());
                     theme(gB, document.getElementById('cttvTargetGenomeBrowser'));
                 });
             }

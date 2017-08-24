@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('cttvEfoGraph', ['cttvAPIservice', function (cttvAPIservice) {
+    .directive('cttvEfoGraph', ['otAPIservice', function (otAPIservice) {
         'use strict';
         return {
             restrict: 'E',
@@ -11,7 +11,7 @@ angular.module('cttvDirectives')
                 var efoGraph = diseaseGraph()
                     .width(w)
                     .height(700)
-                    .cttvApi(cttvAPIservice.getSelf());
+                    .cttvApi(otAPIservice.getSelf());
 
                 scope.$watch(function () { return attrs.efo; }, function (efo_str) {
                     if (!efo_str) {

@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
     * Options:
     * size: as per cttvProgressSpinner; Default is 3.
     */
-    .directive('cttvPageProgressSpinner', ['cttvAPIservice', function (cttvAPIservice) {
+    .directive('cttvPageProgressSpinner', ['otAPIservice', function (otAPIservice) {
         'use strict';
 
         return {
@@ -16,7 +16,7 @@ angular.module('cttvDirectives')
                 size: '@'
             },
             link: function (scope) {
-                scope.$watch(function () { return cttvAPIservice.activeRequests; }, function (newValue) {
+                scope.$watch(function () { return otAPIservice.activeRequests; }, function (newValue) {
                     scope.isloading = newValue > 0;
                 });
             }

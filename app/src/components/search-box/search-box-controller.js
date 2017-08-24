@@ -6,7 +6,7 @@
  */
 angular.module('cttvControllers')
 
-    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'cttvAPIservice', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, $window, $document, $element, cttvAPIservice, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
+    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otAPIservice', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, $window, $document, $element, otAPIservice, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
         var APP_SEARCH_URL = 'search';
         var APP_EVIDENCE_URL = 'evidence';
         var APP_AUTOCOMPLETE_URL = 'autocomplete';
@@ -79,7 +79,7 @@ angular.module('cttvControllers')
 
                 // fire the typeahead search
                 return searchPromise.then(function () {
-                    return cttvAPIservice.getQuickSearch(
+                    return otAPIservice.getQuickSearch(
                         {
                             params: {
                                 q: $scope.search.query.text,
@@ -96,7 +96,7 @@ angular.module('cttvControllers')
                                 if (besthit) {
                                     cttvUtils.addMatchedBy(besthit);
                                 }
-                            }, cttvAPIservice.defaultErrorHandler
+                            }, otAPIservice.defaultErrorHandler
                         )
                         .finally(function () {
                             $scope.search.progress = false;

@@ -6,14 +6,14 @@ angular.module('cttvControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-    .controller('TargetCtrl', ['$scope', '$location', 'cttvAPIservice', 'cttvUtils', 'cttvConfig', 'otTEPs', function ($scope, $location, cttvAPIservice, cttvUtils, cttvConfig, otTEPs) {
+    .controller('TargetCtrl', ['$scope', '$location', 'otAPIservice', 'cttvUtils', 'cttvConfig', 'otTEPs', function ($scope, $location, otAPIservice, cttvUtils, cttvConfig, otTEPs) {
         'use strict';
 
         cttvUtils.clearErrors();
 
         $scope.targetId = $location.url().split('/')[2];
 
-        cttvAPIservice.getTarget({
+        otAPIservice.getTarget({
             method: 'GET',
             params: {
                 target_id: $scope.targetId
@@ -79,6 +79,6 @@ angular.module('cttvControllers')
 
                 },
                 // error handler
-                cttvAPIservice.defaultErrorHandler
+                otAPIservice.defaultErrorHandler
             );
     }]);

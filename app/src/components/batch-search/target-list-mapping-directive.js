@@ -1,7 +1,7 @@
 angular.module('cttvDirectives')
 
 
-    .directive('targetListMapping', ['cttvAPIservice', 'cttvUtils', 'cttvLoadedLists', 'cttvConfig', function (cttvAPIservice, cttvUtils, cttvLoadedLists, cttvConfig) {
+    .directive('targetListMapping', ['otAPIservice', 'cttvUtils', 'cttvLoadedLists', 'cttvConfig', function (otAPIservice, cttvUtils, cttvLoadedLists, cttvConfig) {
         'use strict';
 
         return {
@@ -27,7 +27,7 @@ angular.module('cttvDirectives')
                         }
                     };
 
-                    return cttvAPIservice.getSearch(queryObject);
+                    return otAPIservice.getSearch(queryObject);
                 }
 
                 // scope.setNewItem = function (oldQuery, res) {

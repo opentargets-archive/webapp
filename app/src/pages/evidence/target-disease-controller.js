@@ -8,7 +8,7 @@ angular.module('cttvControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'otClearUnderscoresFilter', '$analytics', 'cttvLocationState', '$anchorScroll', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, otClearUnderscoresFilter, $analytics, cttvLocationState, $anchorScroll) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'otClearUnderscoresFilter', '$analytics', 'cttvLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, otClearUnderscoresFilter, $analytics, cttvLocationState, $anchorScroll) {
 
         'use strict';
 
@@ -148,11 +148,11 @@ angular.module('cttvControllers')
                     target_id: $scope.search.target
                 }
             };
-            targetPromise = cttvAPIservice.getTarget(queryObject)
+            targetPromise = otAPIservice.getTarget(queryObject)
                 .then(function (resp) {
                     $scope.search.info.gene = resp.body;
                     return resp;
-                }, cttvAPIservice.defaultErrorHandler);
+                }, otAPIservice.defaultErrorHandler);
 
             // get disease specific info with the efo() method
             queryObject = {
@@ -161,14 +161,14 @@ angular.module('cttvControllers')
                     code: $scope.search.disease
                 }
             };
-            cttvAPIservice.getDisease(queryObject)
+            otAPIservice.getDisease(queryObject)
                 .then(
                     function (resp) {
                         $scope.search.info.efo = resp.body;
                         // TODO: This is not returned by the api yet. Maybe we need to remove it later
                         $scope.search.info.efo.efo_code = $scope.search.disease;
                     },
-                    cttvAPIservice.defaultErrorHandler
+                    otAPIservice.defaultErrorHandler
                 );
 
         };
@@ -217,7 +217,7 @@ angular.module('cttvControllers')
                 params: opts
             };
 
-            return cttvAPIservice.getAssociations(queryObject)
+            return otAPIservice.getAssociations(queryObject)
                 .then(function (resp) {
                     if (!resp.body.data.length) {
                         $scope.search.flower_data = processFlowerData();
@@ -225,7 +225,7 @@ angular.module('cttvControllers')
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
                         updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
                     }
-                }, cttvAPIservice.defaultErrorHandler);
+                }, otAPIservice.defaultErrorHandler);
         };
 
 
@@ -292,7 +292,7 @@ angular.module('cttvControllers')
 
             return targetPromise
                 .then(function () {
-                    cttvAPIservice.getFilterBy(queryObject)
+                    otAPIservice.getFilterBy(queryObject)
                         .then(function (resp) {
                             if (resp.body.data) {
                                 var data = resp.body.data;
@@ -302,7 +302,7 @@ angular.module('cttvControllers')
                                 $log.warn('Empty response: common disease');
                             }
                         });
-                }, cttvAPIservice.defaultErrorHandler)
+                }, otAPIservice.defaultErrorHandler)
                 .finally(function () {
                     // $scope.search.tables.genetic_associations.common_diseases.is_open = $scope.search.tables.genetic_associations.common_diseases.data.length>0 || false;
                     $scope.search.tables.genetic_associations.common_diseases.is_loading = false;
@@ -467,7 +467,7 @@ angular.module('cttvControllers')
 
             return targetPromise
                 .then(function () {
-                    cttvAPIservice.getFilterBy(queryObject)
+                    otAPIservice.getFilterBy(queryObject)
                         .then(function (resp) {
                             if (resp.body.data) {
                                 var data = resp.body.data;
@@ -476,7 +476,7 @@ angular.module('cttvControllers')
                             } else {
                                 $log.warn('Empty response: rare disease');
                             }
-                        }, cttvAPIservice.defaultErrorHandler)
+                        }, otAPIservice.defaultErrorHandler)
                         .finally(function () {
                             $scope.search.tables.genetic_associations.rare_diseases.is_loading = false;
                             updateGeneticAssociationsSetting();
@@ -675,7 +675,7 @@ angular.module('cttvControllers')
                 method: 'GET',
                 params: opts
             };
-            return cttvAPIservice.getFilterBy(queryObject)
+            return otAPIservice.getFilterBy(queryObject)
                 .then(
                     function (resp) {
                         if (resp.body.data) {
@@ -685,7 +685,7 @@ angular.module('cttvControllers')
                             $log.warn('Empty response : pathway data');
                         }
                     },
-                    cttvAPIservice.defaultErrorHandler
+                    otAPIservice.defaultErrorHandler
                 )
                 .finally(function () {
                     $scope.search.tables.affected_pathways.is_loading = false;
@@ -805,7 +805,7 @@ angular.module('cttvControllers')
                 method: 'GET',
                 params: opts
             };
-            return cttvAPIservice.getFilterBy(queryObject)
+            return otAPIservice.getFilterBy(queryObject)
                 .then(
                     function (resp) {
                         if (resp.body.data) {
@@ -815,7 +815,7 @@ angular.module('cttvControllers')
                             $log.warn('Empty response : RNA expression');
                         }
                     },
-                    cttvAPIservice.defaultErrorHandler
+                    otAPIservice.defaultErrorHandler
                 )
                 .finally(function () {
                     $scope.search.tables.rna_expression.is_loading = false;
@@ -963,7 +963,7 @@ angular.module('cttvControllers')
                 method: 'GET',
                 params: opts
             };
-            return cttvAPIservice.getFilterBy(queryObject)
+            return otAPIservice.getFilterBy(queryObject)
                 .then(
                     function (resp) {
                         if (resp.body.data) {
@@ -973,7 +973,7 @@ angular.module('cttvControllers')
                             $log.warn('Empty response : somatic mutations');
                         }
                     },
-                    cttvAPIservice.defaultErrorHandler
+                    otAPIservice.defaultErrorHandler
                 )
                 .finally(function () {
                     // $scope.search.tables.somatic_mutations.is_open = $scope.search.tables.somatic_mutations.data.length>0 || false;
@@ -1129,7 +1129,7 @@ angular.module('cttvControllers')
                 method: 'GET',
                 params: opts
             };
-            return cttvAPIservice.getFilterBy(queryObject)
+            return otAPIservice.getFilterBy(queryObject)
                 .then(
                     function (resp) {
                         if (resp.body.data) {
@@ -1139,7 +1139,7 @@ angular.module('cttvControllers')
                             $log.warn('Empty response : animal models data');
                         }
                     },
-                    cttvAPIservice.defaultErrorHandler
+                    otAPIservice.defaultErrorHandler
                 )
                 .finally(function () {
                     $scope.search.tables.animal_models.is_loading = false;
@@ -1275,7 +1275,7 @@ angular.module('cttvControllers')
                 method: 'GET',
                 params: opts
             };
-            return cttvAPIservice.getFilterBy(queryObject)
+            return otAPIservice.getFilterBy(queryObject)
                 .then(function (resp) {
                     $scope.search.tables.literature.total = resp.body.total;
                     $scope.search.tables.literature.is_loading = false;

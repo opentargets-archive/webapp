@@ -1,13 +1,13 @@
 angular.module('cttvDirectives')
 
 
-    .directive('logSession', ['cttvAPIservice', function (cttvAPIservice) {
+    .directive('logSession', ['otAPIservice', function (otAPIservice) {
         'use strict';
 
         return {
             restrict: 'E',
             link: function () {
-                cttvAPIservice.logSession();
+                otAPIservice.logSession();
             }
         };
     }]);

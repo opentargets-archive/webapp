@@ -7,7 +7,7 @@ angular.module('cttvDirectives')
  *   <cttv-filter-by-file-targets> </cttv-filter-by-file-targets>
  *
  */
-    .directive('cttvFilterByFileTargets', ['$log', 'cttvAPIservice', '$q', '$analytics', 'cttvLoadedLists', '$location', 'cttvUtils', function ($log, cttvAPIservice, $q, $analytics, cttvLoadedLists, $location, cttvUtils) {
+    .directive('cttvFilterByFileTargets', ['$log', 'otAPIservice', '$q', '$analytics', 'cttvLoadedLists', '$location', 'cttvUtils', function ($log, otAPIservice, $q, $analytics, cttvLoadedLists, $location, cttvUtils) {
         'use strict';
 
         return {
@@ -177,7 +177,7 @@ angular.module('cttvDirectives')
                         params: opts
                     };
 
-                    return cttvAPIservice.getBestHitSearch(queryObject)
+                    return otAPIservice.getBestHitSearch(queryObject)
                         .then(function (resp) {
                             if (resp.body.data.length) {
                                 var listName = cttvLoadedLists.parseBestHitSearch(scope.fileName, resp.body);

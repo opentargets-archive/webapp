@@ -14,7 +14,7 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $q, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvConfig) {
+    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'otAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $q, otAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvConfig) {
 
         'use strict';
 
@@ -124,13 +124,13 @@ angular.module('cttvControllers')
                 opts.target = targetArray;
             }
 
-            opts = cttvAPIservice.addFacetsOptions(filters, opts);
+            opts = otAPIservice.addFacetsOptions(filters, opts);
             var queryObject = {
                 method: 'POST',
                 params: opts
             };
 
-            return cttvAPIservice.getAssociations(queryObject)
+            return otAPIservice.getAssociations(queryObject)
                 .then(function (resp) {
                     // set the total?
                     $scope.search.total = resp.body.total;
@@ -153,12 +153,12 @@ angular.module('cttvControllers')
                                 // TODO: include fields here once they are available in the profile endpoint
                             }
                         };
-                        cttvAPIservice.getDisease(profileOpts)
+                        otAPIservice.getDisease(profileOpts)
                             .then(function (profileResp) {
                                 $scope.search.label = profileResp.body.label;
                             });
                     }
-                }, cttvAPIservice.defaultErrorHandler);
+                }, otAPIservice.defaultErrorHandler);
 
         };
 

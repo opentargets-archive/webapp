@@ -1,7 +1,7 @@
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
 
-    .controller('SummaryCtrl', ['$scope', '$location', 'cttvAPIservice', '$q', 'cttvConfig', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, cttvAPIservice, $q, cttvConfig, cttvUtils, cttvLoadedLists) {
+    .controller('SummaryCtrl', ['$scope', '$location', 'otAPIservice', '$q', 'cttvConfig', 'cttvUtils', 'cttvLoadedLists', function ($scope, $location, otAPIservice, $q, cttvConfig, cttvUtils, cttvLoadedLists) {
         'use strict';
 
         // Parse the $location search object to determine which entities we have.
@@ -18,7 +18,7 @@ angular.module('cttvControllers')
                     'fields': ['ensembl_gene_id', 'drugs', 'approved_symbol', 'reactome', 'uniprot_id']
                 }
             };
-            return cttvAPIservice.getTarget(queryObject)
+            return otAPIservice.getTarget(queryObject)
                 .then(function (r) {
                     return r.body.data;
                 });
@@ -35,7 +35,7 @@ angular.module('cttvControllers')
                     'size': 10000
                 }
             };
-            return cttvAPIservice.getTargetsEnrichment(queryObject)
+            return otAPIservice.getTargetsEnrichment(queryObject)
                 .then(function (resp) {
                     return resp.body.data;
                 });
@@ -59,7 +59,7 @@ angular.module('cttvControllers')
                 }
             };
 
-            return cttvAPIservice.getAssociations(queryObjectForSize)
+            return otAPIservice.getAssociations(queryObjectForSize)
                 .then(function (resp) {
                     for (var i = 0; i < resp.body.total; i += step) {
                         // Call to the api with the targets
@@ -76,7 +76,7 @@ angular.module('cttvControllers')
                         if (!i) {
                             queryObject.params.targets_enrichment = 'simple';
                         }
-                        associationsPromises.push(cttvAPIservice.getAssociations(queryObject));
+                        associationsPromises.push(otAPIservice.getAssociations(queryObject));
                     }
 
                     return $q.all(associationsPromises)

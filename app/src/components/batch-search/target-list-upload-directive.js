@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('targetListUpload', ['cttvAPIservice', 'cttvLoadedLists', 'cttvConfig', function (cttvAPIservice, cttvLoadedLists, cttvConfig) {
+    .directive('targetListUpload', ['otAPIservice', 'cttvLoadedLists', 'cttvConfig', function (otAPIservice, cttvLoadedLists, cttvConfig) {
         'use strict';
 
         return {
@@ -76,7 +76,7 @@ angular.module('cttvDirectives')
                         params: opts
                     };
 
-                    return cttvAPIservice.getBestHitSearch(queryObject)
+                    return otAPIservice.getBestHitSearch(queryObject)
                         .then(function (resp) {
                             var listName = cttvLoadedLists.parseBestHitSearch(name, resp.body);
 

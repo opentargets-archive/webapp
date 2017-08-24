@@ -5,9 +5,9 @@ angular.module('cttvServices')
 
 
 /**
-* The API services, with methods to call the ElasticSearch API
-*/
-    .factory('cttvAPIservice', ['$http', '$log', '$location', '$rootScope', '$q', '$timeout', 'cttvConfig', function ($http, $log, $location, $rootScope, $q, $timeout, cttvConfig) {
+ * The API services, with methods to call the ElasticSearch API
+ */
+    .factory('otAPIservice', ['$log', '$rootScope', '$q', 'cttvConfig', function ($log, $rootScope, $q, cttvConfig) {
         'use strict';
 
 
@@ -87,22 +87,20 @@ angular.module('cttvServices')
         // });
 
         /*
-        * Private function to actually call the API
-        * queryObject:
-        *  - method: ['GET' | 'POST']
-        *  - operation: 'search' | 'evidence' | ...
-        *  - trackCall: true | false
-        *  - params: Object with:
-        *              - q: query string
-        *              - from: number to start from
-        *              - size: number of results
-        *
-        */
+         * Private function to actually call the API
+         * queryObject:
+         *  - method: ['GET' | 'POST']
+         *  - operation: 'search' | 'evidence' | ...
+         *  - trackCall: true | false
+         *  - params: Object with:
+         *              - q: query string
+         *              - from: number to start from
+         *              - size: number of results
+         *
+         */
         var callAPI = function (queryObject) {
 
             var params = queryObject.params;
-            // $log.log("callAPI:queryObject=", queryObject);
-
 
             countRequest(queryObject.trackCall === false ? undefined : true);
 
@@ -120,7 +118,7 @@ angular.module('cttvServices')
                 url = theUrl.substring(0, theUrl.length - 1);
             }
             // $log.warn("URL : " + url);
-            api.call(url, (queryObject.method == 'POST' ? params : undefined), (params.format || 'json'))
+            api.call(url, (queryObject.method === 'POST' ? params : undefined), (params.format || 'json'))
                 .then(done)
                 .catch(function (err) {
                     $log.warn('GOT ERROR:', err);
@@ -164,6 +162,17 @@ angular.module('cttvServices')
         /**
          * Default error handler function.
          * It simply logs the error to the console. Can be used in then(succ, err) calls.
+         * In the most common use, only the error parameter is needed (it's passed automatically).
+         * It's mostly to have a quick and consistent handling of errors.
+         * 
+         * @param {Error} error - The error object.
+         * @param {boolean} trackCall - If true, count this request anyway; Defaults to FALSE.
+         * @example
+         *  otAPIservice.getSearch(queryObject)
+         *      .then(
+         *          function(response){}, // success
+         *          otAPIservice.defaultErrorHandler // error
+         *      )
          */
         cttvAPI.defaultErrorHandler = function (error, trackCall) {
             $log.warn('CTTV API ERROR:', error);
@@ -177,47 +186,46 @@ angular.module('cttvServices')
             if (!$rootScope.$$phase) {$rootScope.$apply();}
         };
 
-        var optionsToString = function (obj) {
-            var s = '';
-            for (var i in obj) {
-                s += '&' + i + '=' + obj[i];
-            }
-            // remove the leading '&' and returns
-            return s.substring(1);
-        };
+        // var optionsToString = function (obj) {
+        //     var s = '';
+        //     for (var i in obj) {
+        //         s += '&' + i + '=' + obj[i];
+        //     }
+        //     // remove the leading '&' and returns
+        //     return s.substring(1);
+        // };
 
 
         /*
-        *
-        * All the get* methods accept an object with the following parameters:
-        *  - params: object containing the parameters to pass to the API
-        *  - trackCall: true | false (true by default)
-        *  - method: GET | POST (GET by default)
-        *
-        * Each method injects its own operation to this queryObject
-        * This is then passed to the callAPI function
-        *
-        */
+         *
+         * All the get* methods accept an object with the following parameters:
+         *  - params: object containing the parameters to pass to the API
+         *  - trackCall: true | false (true by default)
+         *  - method: GET | POST (GET by default)
+         *
+         * Each method injects its own operation to this queryObject
+         * This is then passed to the callAPI function
+         *
+         */
 
         /**
-        * Get a full search.
-        * Returns a promise object with methods then(), success(), error()
-        *
-        * Examples:
-        *
-        * cttvAPI.getSearch({params:{q:'braf'}}).success(function(data) {
-        *      $scope.search.results = data;
-        *      $log.log(data);
-        *  });
-        *
-        *
-        * cttvAPIservice.getSearch({params:{q:val}}).then(function(response){
-        *      return response.data.data;
-        *  });
-        *
-        */
+         * Get a full search.
+         * Returns a promise object with methods then(), success(), error().
+         * 
+         * @param {Object} queryObject - Object containing search parameters.
+         *
+         * @example
+         * cttvAPI.getSearch({params:{q:'braf'}}).success(function(data) {
+         *      $scope.search.results = data;
+         *      $log.log(data);
+         *  });
+         *
+         * @example
+         * otAPIservice.getSearch({params:{q:val}}).then(function(response){
+         *      return response.data.data;
+         *  });
+         */
         cttvAPI.getSearch = function (queryObject) {
-            // $log.log("cttvAPI.getSearch()");
             queryObject.operation = cttvAPI.API_SEARCH_URL;
             return callAPI(queryObject);
         };
@@ -235,39 +243,51 @@ angular.module('cttvServices')
 
 
         /**
-        * Get the api object to be used outside of angular
-        */
+         * Get the api object to be used outside of angular.
+         * 
+         * @example 
+         * var api = otAPIservice.getSelf();
+         * console.log(api);
+         */
         cttvAPI.getSelf = function () {
             return api;
         };
 
 
         /**
-        * Search for evidence using the evidence() API function.
-        * Returns a promise object with methods then(), success(), error()
-        */
+         * Search for evidence using the evidence() API function.
+         * Returns a promise object with methods then(), success(), error().
+         * 
+         * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
+         * @example
+         *      otAPIservice.getEvidence(params);
+         */
         cttvAPI.getEvidence = function (queryObject) {
-            // $log.log("cttvAPI.getEvidence()");
-
-            $queryObject.operation = cttvAPI.API_EVIDENCE_URL;
+            queryObject.operation = cttvAPI.API_EVIDENCE_URL;
             return callAPI(queryObject);
         };
 
 
         /**
-        *
-        */
+         * Short description.
+         * 
+         * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
+         * @example
+         *      otAPIservice.getAssociations(params);
+         */
         cttvAPI.getAssociations = function (queryObject) {
             queryObject.operation = cttvAPI.API_ASSOCIATION_URL;
-            // $log.log("cttvAPI.getAssociations():queryObject=",queryObject);
             return callAPI(queryObject);
         };
 
 
         /**
-        * Gets the info to be displayed in the serach suggestions box
-        * via call to the autocomplete() API method
-        */
+         * Gets the info to be displayed in the serach suggestions box via call to the autocomplete() API method.
+         * 
+         * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
+         * @example
+         *      otAPIservice.getAutocomplete(params);
+         */
         cttvAPI.getAutocomplete = function (queryObject) {
             // $log.log("cttvAPI.getAutocomplete()");
             queryObject.operation = cttvAPI.API_AUTOCOMPLETE_URL;
@@ -276,54 +296,55 @@ angular.module('cttvServices')
 
 
         /**
-        * Get disease details via API efo() method based on EFO code
-        * queryObject params:
-        *  - efo: the EFO code in format "EFO_xxxxxxx"
-        */
+         * Get disease details via API efo() method based on EFO code.
+         * 
+         * @param {Object} queryObject - Simple Object containing the EFO code passed to the API call.
+         * @example
+         *      otAPIservice.getEfo({efo:'EFO_1234567'});
+         */
         cttvAPI.getEfo = function (queryObject) {
-            // $log.log("cttvAPI.getEfo");
             queryObject.operation = cttvAPI.API_EFO_URL;
             return callAPI(queryObject);
         };
 
 
         /**
-        * Get gene details via API gene() method based on ENSG code
-        * queryObject params:
-        *  - target_id: the ENSG code, e.g. "ENSG00000005339"
-        */
+         * Get gene details via API gene() method based on ENSG code.
+         * 
+         * @param {Object} queryObject - Simple Object containing the ENSG passed to the API call.
+         * @example
+         *      otAPIservice.getTarget({target_id:"ENSG00000005339"});
+         */
         cttvAPI.getTarget = function (queryObject) {
-            // $log.log("cttvAPI.getTarget "+queryObject.target_id);
             queryObject.operation = cttvAPI.API_TARGET_URL;
             return callAPI(queryObject);
         };
 
+
         /**
-        * Get disease details via API disease() method based on EFO ids
-        * queryObject params:
-        *  - code: the (EFO) code
-        */
+         * Get disease details via API disease() method based on EFO ids.
+         * 
+         * @param {Object} queryObject - Simple Object containing the EFO code passed to the API call.
+         * @example
+         *      otAPIservice.getDisease(params);
+         */
         cttvAPI.getDisease = function (queryObject) {
-            // $log.log ("cttvAPI.getDisease "+queryObject.code);
             queryObject.operation = cttvAPI.API_DISEASE_URL;
             return callAPI(queryObject);
         };
 
         cttvAPI.getFilterBy = function (queryObject) {
-            // $log.log("cttvAPI.getFilterBy");
             queryObject.params.expandefo = queryObject.params.expandefo || true;
             queryObject.operation = cttvAPI.API_FILTERBY_URL;
             return callAPI(queryObject);
         };
 
         cttvAPI.getQuickSearch = function (queryObject) {
-            // $log.log("cttvAPI.getQuickSearch()");
             queryObject.operation = cttvAPI.API_QUICK_SEARCH_URL;
             return callAPI(queryObject);
         };
 
         cttvAPI.getExpression = function (queryObject) {
-            // $log.log("cttvAPI.getExpression()");
             queryObject.operation = cttvAPI.API_EXPRESSION_URL;
             return callAPI(queryObject);
         };
@@ -338,10 +359,16 @@ angular.module('cttvServices')
             return callAPI(queryObject);
         };
 
+
         /**
          * Decorates a given object with the API options for the given facets and returns the original object.
          * This can then be used to configure an API call.
          * If no object is supplied to the function, a new object is created and returned.
+         * 
+         * @param {Object} facets - Simple Object containing the parameters passed to the API call.
+         * @param {Object} obj - Something else.
+         * @example
+         *      otAPIservice.addFacetsOptions(facets, obj);
          */
         cttvAPI.addFacetsOptions = function (facets, obj) {
             obj = obj || {};
@@ -355,7 +382,11 @@ angular.module('cttvServices')
 
 
         /**
-         * Get relations for specified gene or targer
+         * Get relations for specified gene or target.
+         * 
+         * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
+         * @example
+         *      otAPIservice.getTargetRelation(params);
          */
         cttvAPI.getTargetRelation = function (queryObject) {
             // $log.log("cttvAPI.getTargetRelation");
@@ -365,7 +396,11 @@ angular.module('cttvServices')
 
 
         /**
-         * Get relations for specified gene or targer
+         * Get relations for specified gene or target.
+         * 
+         * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
+         * @example
+         *      otAPIservice.getDiseaseRelation(params);
          */
         cttvAPI.getDiseaseRelation = function (queryObject) {
             // $log.log("cttvAPI.getTargetRelation");
@@ -375,11 +410,13 @@ angular.module('cttvServices')
 
 
         /**
-        * Logs a session event in the API
-        * This call is 1-off and it doesn't
-        */
+         * Logs a session event in the API.
+         * This call is 1-off and it doesn't.
+         * 
+         * @example
+         *      otAPIservice.logSession();
+         */
         cttvAPI.logSession = function () {
-            // $log.log("cttvAPI.logSession");
             var queryObject = {
                 operation: cttvAPI.API_LOG_SESSION_URL,
                 trackCall: false,
@@ -392,7 +429,10 @@ angular.module('cttvServices')
 
 
         /**
-         * Get the API stats
+         * Get the API stats.
+         * 
+         * @example
+         *      otAPIservice.getStats(params);
          */
         cttvAPI.getStats = function () {
             var queryObject = {
@@ -405,98 +445,4 @@ angular.module('cttvServices')
 
 
         return cttvAPI;
-    }])
-
-
-    /**
-    * A service to handle search in the app.
-    * This talks to the API service
-    */
-    .factory('cttvAppToAPIService', ['$http', '$log', function ($http, $log) {
-        'use strict';
-
-        var APP_QUERY_Q = '',
-            APP_QUERY_PAGE = 1,
-            APP_QUERY_SIZE = 10;
-
-
-        var cttvSearchService = {
-            SEARCH: 'search',
-            EVIDENCE: 'evidence'
-        };
-
-
-        cttvSearchService.createSearchInitObject = function () {
-            return {
-                query: {
-                    q: APP_QUERY_Q,
-                    page: APP_QUERY_PAGE,
-                    size: APP_QUERY_SIZE
-                },
-
-                results: {}
-            };
-        };
-
-
-        cttvSearchService.getApiQueryObject = function (type, queryObject) {
-            var qo = {
-                size: queryObject.size,
-                from: (queryObject.page - 1) * queryObject.size
-            };
-
-            switch (type) {
-            case this.SEARCH:
-                qo.q = queryObject.q.title || queryObject.q;
-                break;
-
-            case this.EVIDENCE:
-                qo.gene = queryObject.q.title || queryObject.q;
-                qo.datastructure = 'simple';
-                break;
-
-
-            }
-
-            return qo;
-        };
-
-
-        cttvSearchService.getSearch = function () {
-
-        };
-
-
-        /*
-        var parseQueryParameters = function(qry){
-        // set the query text
-        $scope.search.query.q = qry.q || "";
-
-        // set the query size (i.e. results per page)
-        //$scope.search.query.size = APP_QUERY_SIZE;
-        //if(qry.size){
-        //    $scope.search.query.size = parseInt(qry.size);
-        //}
-
-        // set the query page
-        //$scope.search.query.page = APP_QUERY_PAGE;
-        //if(qry.page){
-        //    $scope.search.query.page = parseInt(qry.page);
-        //}
-    }
-    */
-
-
-        /*
-        var queryToUrlString = function(){
-        return 'q=' + ($scope.search.query.q.title || $scope.search.query.q);
-        // for now we don't want to set pagination via full URL
-        // as this is causing some scope problems. If needed, we'll think about it
-        //+ '&size=' + $scope.search.query.size
-        //+ '&page=' + $scope.search.query.page;
-        }
-        */
-
-
-        return cttvSearchService;
     }]);

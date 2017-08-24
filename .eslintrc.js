@@ -31,7 +31,8 @@ module.exports = {
         "interactionsViewer": true,
         "tnt": true,
         "geneAssociationsTree": true,
-        "targetGenomeBrowser": true
+        "targetGenomeBrowser": true,
+        'cttvApi': true
     },
     "rules": {
         "curly": 2,

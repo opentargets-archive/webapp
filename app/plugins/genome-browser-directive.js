@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('genomeBrowser', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
+    .directive('genomeBrowser', ['$log', 'otAPIservice', 'cttvUtils', function ($log, otAPIservice, cttvUtils) {
         'use strict';
 
         // Decorate the svg for exporting
@@ -108,7 +108,7 @@ angular.module('plugins')
                 gB.rest().prefix('/proxy/rest.ensembl.org').protocol('').domain('');
                 var theme = targetGenomeBrowser()
                     .efo(efo)
-                    .cttvRestApi(cttvAPIservice.getSelf());
+                    .cttvRestApi(otAPIservice.getSelf());
                 theme(gB, newDiv);
 
                 if (cttvUtils.browser.name !== 'IE') {

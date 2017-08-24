@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('diseaseClassification', ['$log', 'cttvAPIservice', '$timeout', 'cttvUtils', function ($log, cttvAPIservice, $timeout, cttvUtils) {
+    .directive('diseaseClassification', ['$log', 'otAPIservice', '$timeout', 'cttvUtils', function ($log, otAPIservice, $timeout, cttvUtils) {
         'use strict';
 
         return {
@@ -18,7 +18,7 @@ angular.module('plugins')
                         .width(scope.width - 40) // 40 for margins
                         .height(700)
                         .data(scope.disease)
-                        .cttvApi(cttvAPIservice.getSelf());
+                        .cttvApi(otAPIservice.getSelf());
 
                     efoGraph(container);
 

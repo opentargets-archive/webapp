@@ -11,7 +11,7 @@ angular.module('cttvDirectives')
     *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
     *   This is useful in conjunction with a spinner where you can have ng-show="loading"
     */
-    .directive('cttvHpaTissueExpression', ['cttvAPIservice', 'cttvUtils', function (cttvAPIservice, cttvUtils) {
+    .directive('cttvHpaTissueExpression', ['otAPIservice', 'cttvUtils', function (otAPIservice, cttvUtils) {
         'use strict';
 
         var colorScale = cttvUtils.colorScales.BLUE_1_3; // blue orig
@@ -77,11 +77,11 @@ angular.module('cttvDirectives')
                 scope.$watch(
                     'target',
                     function () {
-                        // move cttvAPIservice.getExpression ({ in here
+                        // move otAPIservice.getExpression ({ in here
                         // ......
 
                         if (scope.target) {
-                            cttvAPIservice.getExpression({
+                            otAPIservice.getExpression({
                                 'method': 'GET',
                                 'params': {
                                     gene: scope.target  // TODO: should be TARGET in API!!!
@@ -146,7 +146,7 @@ angular.module('cttvDirectives')
                                     },
 
                                     // error
-                                    cttvAPIservice.defaultErrorHandler
+                                    otAPIservice.defaultErrorHandler
                                 );
                         }
                     }

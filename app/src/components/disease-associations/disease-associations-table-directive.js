@@ -14,7 +14,7 @@ angular.module('cttvDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('cttvDiseaseAssociations', ['cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvAPIservice', '$q', function (cttvUtils, cttvDictionary, cttvConsts, cttvAPIservice, $q) {
+    .directive('cttvDiseaseAssociations', ['cttvUtils', 'cttvDictionary', 'cttvConsts', 'otAPIservice', '$q', function (cttvUtils, cttvDictionary, cttvConsts, otAPIservice, $q) {
         'use strict';
 
         var draw = 1;
@@ -196,13 +196,13 @@ angular.module('cttvDirectives')
                         opts.target = target;
                     }
 
-                    opts = cttvAPIservice.addFacetsOptions(filters, opts);
+                    opts = otAPIservice.addFacetsOptions(filters, opts);
                     var queryObject = {
                         method: 'POST',
                         params: opts
                     };
 
-                    cttvAPIservice.getAssociations(queryObject)
+                    otAPIservice.getAssociations(queryObject)
                         .then(function (resp) {
                             var dtData = parseServerResponse(resp.body.data);
                             var o = {
@@ -376,13 +376,13 @@ angular.module('cttvDirectives')
                     if (scope.targets && scope.targets.length) {
                         optsPreFlight.target = scope.targets;
                     }
-                    optsPreFlight = cttvAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
+                    optsPreFlight = otAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
 
                     var queryObject = {
                         method: 'POST',
                         params: optsPreFlight
                     };
-                    cttvAPIservice.getAssociations(queryObject)
+                    otAPIservice.getAssociations(queryObject)
                         .then(function (resp) {
                             var total = resp.body.total;
 
@@ -416,14 +416,14 @@ angular.module('cttvDirectives')
                                     opts.target = scope.targets;
                                 }
 
-                                opts = cttvAPIservice.addFacetsOptions(scope.filters, opts);
+                                opts = otAPIservice.addFacetsOptions(scope.filters, opts);
 
                                 var queryObject = {
                                     method: 'POST',
                                     params: opts
                                 };
 
-                                return cttvAPIservice.getAssociations(queryObject)
+                                return otAPIservice.getAssociations(queryObject)
                                     .then(function (resp) {
                                         var moreText = resp.body;
 
@@ -466,7 +466,7 @@ angular.module('cttvDirectives')
                                 // hiddenElement.download = scope.filename + ".csv";
                                 // hiddenElement.click();
                             });
-                        }, cttvAPIservice.defaultErrorHandler);
+                        }, otAPIservice.defaultErrorHandler);
                 };
 
 

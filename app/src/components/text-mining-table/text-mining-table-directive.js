@@ -1,13 +1,13 @@
 angular.module('cttvDirectives')
     .directive('textMiningTable', [
-        'cttvAPIservice',
+        'otAPIservice',
         '$timeout',
         'cttvConfig',
         'cttvConsts',
         'otUpperCaseFirstFilter',
         'otClearUnderscoresFilter',
         function (
-            cttvAPIservice,
+            otAPIservice,
             $timeout,
             cttvConfig,
             cttvConsts,
@@ -386,7 +386,7 @@ angular.module('cttvDirectives')
                             method: 'GET',
                             params: opts
                         };
-                        cttvAPIservice.getFilterBy(queryObject)
+                        otAPIservice.getFilterBy(queryObject)
                             .then(function (resp) {
                                 var dtData = parseServerResponse(resp.body.data);
                                 var o = {
@@ -483,7 +483,7 @@ angular.module('cttvDirectives')
                             params: opts
                         };
 
-                        cttvAPIservice.getFilterBy(queryObject)
+                        otAPIservice.getFilterBy(queryObject)
                             .then(function (resp) {
                                 var totalText = 'disease,publication id,title,authors\n';
                                 var data = resp.body.data;
@@ -525,7 +525,7 @@ angular.module('cttvDirectives')
                         //     method: 'GET',
                         //     params: optsPreFlight
                         // };
-                        // cttvAPIservice.getFilterBy(queryObject)
+                        // otAPIservice.getFilterBy(queryObject)
                         //     .then (function (resp) {
                         //         var total = resp.body.total;
                         //
@@ -565,7 +565,7 @@ angular.module('cttvDirectives')
                         //                 params: opts
                         //             };
                         //
-                        //             return cttvAPIservice.getFilterBy(queryObject)
+                        //             return otAPIservice.getFilterBy(queryObject)
                         //                 .then(function (resp) {
                         //                     var moreText = resp.body;
                         //                     if (from > 0) {
