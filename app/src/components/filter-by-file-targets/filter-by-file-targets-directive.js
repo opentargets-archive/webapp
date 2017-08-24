@@ -7,10 +7,11 @@ angular.module('cttvDirectives')
  *   <cttv-filter-by-file-targets> </cttv-filter-by-file-targets>
  *
  */
-    .directive('cttvFilterByFileTargets', ['$log', 'otAPIservice', 'cttvFiltersService', '$q', '$analytics', 'cttvLoadedLists', '$location', 'cttvUtils', function ($log, otAPIservice, cttvFiltersService, $q, $analytics, cttvLoadedLists, $location, cttvUtils) {
+    .directive('cttvFilterByFileTargets', ['$log', 'otAPIservice', '$q', '$analytics', 'cttvLoadedLists', '$location', 'cttvUtils', function ($log, otAPIservice, $q, $analytics, cttvLoadedLists, $location, cttvUtils) {
         'use strict';
 
         return {
+            restrict: 'AE',
             scope: {
                 diseaseName: '=',
                 targets: '=',
@@ -20,7 +21,7 @@ angular.module('cttvDirectives')
             },
 
             templateUrl: 'src/components/filter-by-file-targets/filter-by-file-targets.html',
-            link: function (scope, elem, attrs) {
+            link: function (scope) {
                 // $log.log("cttvFilterByFileTargets:linkFunction: scope", scope);
                 // $log.log("cttvFilterByFileTargets:linkFunction: elem", elem);
 
@@ -31,7 +32,6 @@ angular.module('cttvDirectives')
                 scope.lists = cttvLoadedLists.getAll();
 
                 scope.useList = function (list) {
-
                     scope.targetNameIdDict = [];
                     scope.targetIdArray = [];
                     scope.targetNameArray = [];
@@ -69,7 +69,6 @@ angular.module('cttvDirectives')
                     // }
 
                     updateAllArrays();
-
                 };
 
                 scope.initFilterByFile = function () {
@@ -101,7 +100,6 @@ angular.module('cttvDirectives')
                         scope.files = element.files;
                         scope.addFile();
                     });
-
                 };
 
                 scope.removeTargets = function () {
@@ -144,8 +142,8 @@ angular.module('cttvDirectives')
                         // do something with file content here
                         var myFileContent = evt.target.result;
                         targetNameArrayTemp = myFileContent.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
-                        targetNameArrayTemp = targetNameArrayTemp.filter(function (e) { return e.trim();}); // get rid of empty strings
-                        targetNameArrayTemp = targetNameArrayTemp.map(function (value) {return value.toLowerCase();});
+                        targetNameArrayTemp = targetNameArrayTemp.filter(function (e) { return e.trim(); }); // get rid of empty strings
+                        targetNameArrayTemp = targetNameArrayTemp.map(function (value) { return value.toLowerCase(); });
 
                         scope.targetNameArray = uniqueArrayFast(targetNameArrayTemp);
                         scope.targetIdArray = new Array(scope.targetNameArray.length);
@@ -164,8 +162,8 @@ angular.module('cttvDirectives')
 
                 var uniqueArrayFast = function (a) {
                     var o = {}, i, l = a.length, r = [];
-                    for (i = 0; i < l; i += 1) {o[a[i]] = a[i];}
-                    for (i in o) {r.push(o[i]);}
+                    for (i = 0; i < l; i += 1) { o[a[i]] = a[i]; }
+                    for (i in o) { r.push(o[i]); }
                     return r;
                 };
 
@@ -173,8 +171,7 @@ angular.module('cttvDirectives')
                     scope.fuzziesIncludedInSearch = !scope.fuzziesIncludedInSearch;
                     if (scope.fuzziesIncludedInSearch) {
                         scope.targets = uniqueArrayFast(scope.targetIdArray);
-                    }
-                    else {
+                    } else {
                         scope.targets = uniqueArrayFast(scope.targetIdArrayWithoutFuzzies);
                     }
                 };
@@ -188,7 +185,6 @@ angular.module('cttvDirectives')
                 // };
 
                 var getBestHitTargetsIdsConsecutive = function (targetNameArray) {
-
                     var promise = $q(function (resolve, reject) {
                         resolve('');
                     });
@@ -233,7 +229,6 @@ angular.module('cttvDirectives')
                     return otAPIservice.getBestHitSearch(queryObject)
                         .then(function (resp) {
                             if (resp.body.data.length) {
-
                                 var listName = cttvLoadedLists.parseBestHitSearch(scope.fileName, resp.body);
                                 scope.list = cttvLoadedLists.get(listName);
 
@@ -245,8 +240,7 @@ angular.module('cttvDirectives')
                                             label: resp.body.data[i].data.approved_symbol,
                                             name: resp.body.data[i].q
                                         };
-                                    }
-                                    else {
+                                    } else {
                                         scope.targetNameIdDict[i + from] = {
                                             id: '',
                                             label: resp.body.data[i].q,
@@ -284,7 +278,6 @@ angular.module('cttvDirectives')
 
                     // scope.getfacets(scope.filters, scope.targets);
                 };
-
             }
 
         };

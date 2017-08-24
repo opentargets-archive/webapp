@@ -12,7 +12,7 @@ angular.module('cttvDirectives')
             scope: {
                 associationData: '='
             },
-            link: function (scope, elem, attrs) {
+            link: function (scope, elem) {
                 // var flower = flowerView().values(scope.associationData);
                 // flower(elem[0]);
 

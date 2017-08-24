@@ -27,14 +27,13 @@ angular.module('cttvDirectives')
                 init();
             }],
             link: function (scope, elem, attrs) {
-
             // this probably shouldn't live here, so we'll see later on...
                 var accessLevelPrivate = '<span class=\'cttv-access-private\' title=\'private data\'></span>';
                 var accessLevelPublic = '<span class=\'cttv-access-public\' title=\'public data\'></span>';
 
                 scope.errorFlag = false;
 
-                scope.$watchGroup([function () {return attrs.target;}, function () {return attrs.disease;}], function () {
+                scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }], function () {
                 // if (!attrs.target && !attrs.disease) {
                 // Wa want to get data when we have both target and disease
                 // so it should return here if one or the other are undefined
@@ -120,7 +119,6 @@ angular.module('cttvDirectives')
                             var row = [];
 
                             try {
-
                             // Fill the unique drugs
                                 all_drugs.push({
                                     id: item.drug.molecule_name,
@@ -284,7 +282,6 @@ angular.module('cttvDirectives')
                         // }, $scope.search.info.title+"-known_drugs") );
                         }, (scope.title ? scope.title + '-' : '') + 'known_drugs'));
                     }
-
                 });
             }
         };

@@ -33,7 +33,6 @@ angular.module('cttvDirectives')
                         a.href = img;
                         document.body.appendChild(a);
                         a.click();
-
                     } else {
                         // We assume it is an SVG
                         var svg = container;

@@ -1,7 +1,7 @@
 angular.module('cttvDirectives')
 
 
-    .directive('targetListMapping', ['$log', 'otAPIservice', 'cttvUtils', 'cttvLoadedLists', 'cttvConfig', function ($log, otAPIservice, cttvUtils, cttvLoadedLists, cttvConfig) {
+    .directive('targetListMapping', ['otAPIservice', 'cttvUtils', 'cttvLoadedLists', 'cttvConfig', function (otAPIservice, cttvUtils, cttvLoadedLists, cttvConfig) {
         'use strict';
 
         return {
@@ -10,8 +10,7 @@ angular.module('cttvDirectives')
                 list: '='
             },
             templateUrl: 'src/components/batch-search/target-list-mapping.html',
-            link: function (scope, el, attrs) {
-
+            link: function (scope) {
             // Setting the limit for the list:
                 scope.listLengthLimit = cttvConfig.targetListLimit;
 
@@ -210,7 +209,6 @@ angular.module('cttvDirectives')
                     scope.targetIds = [];
 
                     for (var i = 0; i < thisList.length; i++) {
-
                         var thisSearch = thisList[i];
 
                         if (thisSearch.result && thisSearch.result.approved_symbol) {
@@ -245,7 +243,6 @@ angular.module('cttvDirectives')
                                     scope.targetIds.push(thisSearch.result.id);
                                 }
                             }
-
                         } else {
                             scope.notFound.push({
                                 query: thisSearch.query,
@@ -258,7 +255,7 @@ angular.module('cttvDirectives')
                         var compressedUrl = cttvUtils.compressTargetIds(scope.targetIds).join(',');
                         scope.summaryLink = '/summary?targets=' + compressedUrl;
                     // scope.summaryLink = "/summary?target-list=" + l.id;
-                    // scope.summaryLink = "/summary?" + (scope.targetIds.map(function (t) {return "target=" + t;}).join("&"));
+                    // scope.summaryLink = "/summary?" + (scope.targetIds.map(function (t) {return "target=" + t;}).join("&"));
                     }
                 }, true); // Deep watching the list
             }

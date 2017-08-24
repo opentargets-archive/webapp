@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsPathwaysSummary', ['$log', 'otAPIservice', '$http', '$q', 'cttvUtils', function ($log, otAPIservice, $http, $q, cttvUtils) {
+    .directive('multipleTargetsPathwaysSummary', ['$http', 'cttvUtils', function ($http, cttvUtils) {
         'use strict';
 
         function formatPathwayDataToArray (pathways, targets4pathways, symbol2id, bg) {
@@ -63,7 +63,7 @@ angular.module('cttvDirectives')
             scope: {
                 target: '='
             },
-            link: function (scope, el, attrs) {
+            link: function (scope) {
                 scope.$watch('target', function () {
                     if (!scope.target) {
                         return;

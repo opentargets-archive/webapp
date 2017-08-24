@@ -45,7 +45,7 @@ angular.module('cttvDirectives')
                         method: 'POST',
                         trackCall: false,
                         params: {
-                            target: scope.target.map(function (d) {return d.ensembl_gene_id;}),
+                            target: scope.target.map(function (d) { return d.ensembl_gene_id; }),
                             size: 10000,
                             datasource: cttvConfig.evidence_sources.known_drug,
                             fields: [
@@ -102,10 +102,7 @@ angular.module('cttvDirectives')
                                 'columnDefs': []
 
                             }, scope.target.length + '-targets-drugs'));
-
-
                         });
-
                 });
             }
         };

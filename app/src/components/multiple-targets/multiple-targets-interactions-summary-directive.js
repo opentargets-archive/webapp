@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsInteractionsSummary', ['$log', 'otAPIservice', '$http', '$q', '$timeout', 'cttvUtils', 'omnipathdbSources', function ($log, otAPIservice, $http, $q, $timeout, cttvUtils, omnipathdbSources) {
+    .directive('multipleTargetsInteractionsSummary', ['$log', '$http', '$q', 'omnipathdbSources', function ($log, $http, $q, omnipathdbSources) {
         'use strict';
 
         return {
@@ -14,7 +14,7 @@ angular.module('cttvDirectives')
                 target: '=',
                 width: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope) {
             // var ivTooltip; // the tooltip for the interaction viewer.
 
                 scope.$watchGroup(['target', 'associations'], function () {
@@ -91,7 +91,6 @@ angular.module('cttvDirectives')
 
                     $q.all([p1, p2])
                         .then(function (resps) {
-
                         // Parse the pathways (reactome) data
                             var targetPathways = resps[0];
                             var targets4pathways = {};
@@ -232,10 +231,8 @@ angular.module('cttvDirectives')
                             }
                             scope.categories = sourceCategories;
                             scope.interactors = interactors;
-
                         });
                 });
             }
         };
-
     }]);

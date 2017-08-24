@@ -11,28 +11,25 @@ angular.module('facets', [])
     * Top level container for all the facets.
     * This contains accordion etc
     */
-    .directive('facetLoader', ['$log', '$compile', '$timeout', function ($log, $compile, $timeout) {
+    .directive('facetLoader', ['$compile', function ($compile) {
         'use strict';
 
         return {
 
-            restrict: 'EA',
+            restrict: 'AE',
 
             scope: {
                 'plugin': '@',
                 'facet': '='
             },
 
-            link: function (scope, elem, attrs) {
-                // $timeout (function () {
+            link: function (scope, elem) {
                 var template = '<' + scope.plugin + ' facet=facet></' + scope.plugin + '>';
                 var compiled = $compile(template)(scope);
                 elem.append(compiled);
-                // }, 0);
             }
 
         };
-
     }])
 
 
@@ -40,18 +37,18 @@ angular.module('facets', [])
     * Top level container for all the facets.
     * This contains accordion etc
     */
-    .directive('cttvFacets', ['$log', 'otAPIservice', 'cttvFiltersService', function ($log, otAPIservice, cttvFiltersService) {
+    .directive('cttvFacets', ['cttvFiltersService', function (cttvFiltersService) {
         'use strict';
 
         return {
 
-            restrict: 'EA',
+            restrict: 'AE',
 
             scope: {},
 
             templateUrl: 'src/components/facets/facets.html',
 
-            link: function (scope, elem, attrs) {
+            link: function (scope) {
                 // scope.dataDistribution =
                 scope.filters = cttvFiltersService.getFilters();
                 scope.selectedFilters = cttvFiltersService.getSelectedFilters();
@@ -64,7 +61,6 @@ angular.module('facets', [])
             }
 
         };
-
     }])
 
 
@@ -72,12 +68,12 @@ angular.module('facets', [])
      * The default "select all / clear all" controls for facets
      * @param facet the facet (i.e. instance of FilterCollection from the FilterService) we are rendering, e.g. datatypes, pathways, score , etc...
      */
-    .directive('cttvDefaultFacetControls', ['$log', function ($log) {
+    .directive('cttvDefaultFacetControls', [function () {
         'use strict';
 
         return {
 
-            restrict: 'EA',
+            restrict: 'AE',
 
             scope: {
                 facet: '='
@@ -86,9 +82,7 @@ angular.module('facets', [])
             template: '<div class="cttv-facets-controls">'
                       + '    <span ng-click="facet.selectAll(false)">Clear all <i class="fa fa-times"></i></span>'
                       + '    <span ng-click="facet.selectAll(true)">Select all <i class="fa fa-check"></i></span>'
-                      + '</div>',
-
-            link: function (scope, elem, attrs) {}
+                      + '</div>'
         };
     }])
 
@@ -97,12 +91,12 @@ angular.module('facets', [])
      * A directive for plain Checkbox facets.
      * @param bucket the instance of Filter object from the FilterService; this is likely in an ng-repeat thing like ng-repeat="bucket in filters"
      */
-    .directive('cttvCheckboxFacet', ['$log', function ($log) {
+    .directive('cttvCheckboxFacet', [function () {
         'use strict';
 
         return {
 
-            restrict: 'EA',
+            restrict: 'AE',
 
             scope: {
                 bucket: '=',
@@ -111,9 +105,7 @@ angular.module('facets', [])
             },
 
             // playing with new templates that uses icons instead of inputs...
-            templateUrl: 'directives/checkbox-facet.html',
-
-            link: function (scope, elem, attrs) {}
+            templateUrl: 'directives/checkbox-facet.html'
         };
     }])
 
@@ -122,12 +114,12 @@ angular.module('facets', [])
      * A directive for plain Checkbox facets.
      * @param bucket the instance of Filter object from the FilterService; this is likely in an ng-repeat thing like ng-repeat="bucket in filters"
      */
-    .directive('cttvParentCheckboxFacet', ['$log', function ($log) {
+    .directive('cttvParentCheckboxFacet', [function () {
         'use strict';
 
         return {
 
-            restrict: 'EA',
+            restrict: 'AE',
 
             scope: {
                 bucket: '=',
@@ -144,12 +136,12 @@ angular.module('facets', [])
     /**
     * A directive for Checkbox facet with nested facets.
     */
-    .directive('cttvUiIndeterminate', ['$log', function ($log) {
+    .directive('cttvUiIndeterminate', [function () {
         'use strict';
 
         return {
 
-            restrict: 'EA',
+            restrict: 'AE',
 
             link: function (scope, elem, attrs) {
                 if (!attrs.type || attrs.type.toLowerCase() !== 'checkbox') {

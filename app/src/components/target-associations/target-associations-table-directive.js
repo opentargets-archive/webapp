@@ -155,7 +155,7 @@ angular.module('cttvDirectives')
                     },
                     {
                         'targets': [3, 4, 5, 6, 7, 8, 9],
-                        'asSorting': [ 'desc', 'asc']
+                        'asSorting': ['desc', 'asc']
                     },
                     {
                         'orderable': false,
@@ -220,7 +220,6 @@ angular.module('cttvDirectives')
                     str += ',' + ta;
                 }
                 return str;
-
             };
 
             var iterateeLabel = function (str, ta) {
@@ -349,7 +348,6 @@ angular.module('cttvDirectives')
 
 
             link: function (scope, elem, attrs) {
-
             // Making the scope accessible in the table processing
                 myscope = scope;
 
@@ -378,7 +376,6 @@ angular.module('cttvDirectives')
 
                 // Download the whole table
                 scope.downloadTable = function () {
-
                     var size = 10000;
                     // First make a call to know how many rows there are:
                     var optsPreFlight = {
@@ -461,6 +458,7 @@ angular.module('cttvDirectives')
                             });
 
                         }, otAPIservice.defaultErrorHandler);
+
                 };
 
                 scope.$watchGroup(['facets', 'target', 'active'], function (attrs) {
@@ -478,9 +476,7 @@ angular.module('cttvDirectives')
                         dtable = setupTable(table, scope.target, scope.filename, scope.downloadTable);
                     }
                 });
-
             } // end link
 
         }; // end return
-
     }]);    // end directive cttvTargetAssociationsTable

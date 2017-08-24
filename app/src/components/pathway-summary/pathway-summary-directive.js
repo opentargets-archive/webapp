@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('pathwaySummary', ['$log', 'otAPIservice', '$timeout', '$http', function ($log, otAPIservice, $timeout, $http) {
+    .directive('pathwaySummary', ['$timeout', '$http', function ($timeout, $http) {
         'use strict';
 
         return {
@@ -10,7 +10,7 @@ angular.module('cttvDirectives')
                 pathway: '=',
                 targets: '='
             },
-            link: function (scope, el, attrs) {
+            link: function (scope) {
                 scope.$watch('pathway', function () {
                     if (!scope.pathway) {
                         return;
@@ -75,7 +75,6 @@ angular.module('cttvDirectives')
                         }, 500); // Check reactome is loaded every 500 ms
                     }, 0);
                 });
-
             }
         };
     }]);

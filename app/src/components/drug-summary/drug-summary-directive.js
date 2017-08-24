@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('myDrugSummary', ['$log', '$http', '$q', function ($log, $http, $q) {
+    .directive('myDrugSummary', ['$http', '$q', function ($http, $q) {
         'use strict';
 
         function pngToDataUrl (url, callback, outputFormat) {
@@ -25,7 +25,7 @@ angular.module('cttvDirectives')
             scope: {
                 drug: '='
             },
-            link: function (scope, el, attrs) {
+            link: function (scope) {
                 scope.$watch('drug', function () {
                     if (!scope.drug) {
                         return;

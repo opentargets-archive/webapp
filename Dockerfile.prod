@@ -1,9 +1,0 @@
-FROM: nginx-alpine
-
-COPY ./app /var/www/
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
-
-EXPOSE 80 443
-
-CMD ["nginx", "-g", "daemon off;"]

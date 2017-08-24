@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('targetListUpload', ['$log', 'otAPIservice', 'cttvLoadedLists', 'cttvConfig', function ($log, otAPIservice, cttvLoadedLists, cttvConfig) {
+    .directive('targetListUpload', ['otAPIservice', 'cttvLoadedLists', 'cttvConfig', function (otAPIservice, cttvLoadedLists, cttvConfig) {
         'use strict';
 
         return {
@@ -8,8 +8,7 @@ angular.module('cttvDirectives')
                 list: '='
             },
             templateUrl: 'src/components/batch-search/target-list-upload.html',
-            link: function (scope, elem, attrs) {
-
+            link: function (scope, elem) {
             // Current limit of targets (just to show the limit in the sub header)
                 scope.targetListLimit = cttvConfig.targetListLimit;
 
@@ -48,7 +47,6 @@ angular.module('cttvDirectives')
                             searchTargets(scope.pastedListName, targets);
                         }
                     }
-
                 };
 
                 // In searches we store the searched term (target in the list) with its search promise
@@ -59,7 +57,7 @@ angular.module('cttvDirectives')
                         var fileContent = e.target.result;
                         var targets = fileContent.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
                         targets = targets.filter(function (t) {
-                            if (t) {return true;}
+                            if (t) { return true; } else { return false; }
                         });
                         searchTargets(file.name, targets);
                     };
@@ -89,7 +87,6 @@ angular.module('cttvDirectives')
                         //     cttvLoadedLists.remove(listName);
                         // }
                         });
-
                 }
             }
         };
