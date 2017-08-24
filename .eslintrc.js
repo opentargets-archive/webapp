@@ -37,6 +37,34 @@ module.exports = {
             "error",
             "always"
         ],
+        "no-multiple-empty-lines": [2, {
+            "max": 2,
+            "maxBOF": 1,
+            "maxEOF": 1
+        }],
+        "no-trailing-spaces": 2,
+        "semi-spacing": 2,
+        "semi-style": 2,
+        "space-infix-ops": 2,
+        "func-call-spacing": 2,
+        "space-in-parens": 2,
+        "comma-spacing": 2,
+        "keyword-spacing": 2,
+        "key-spacing": 2,
+        "space-before-function-paren": 2,
+        "consistent-return": 2,
+        "eqeqeq": 2,
+        "space-before-blocks": 2,
+        "spaced-comment": 2,
+        // "padded-blocks": [2, "never"],
+        "comma-dangle": 2,
+        // "brace-style": 2,
+        // "no-magic-numbers": 2,
+        "no-loop-func": 2,
+        "dot-location": [2, "property"],
+        "dot-notation": 2,
+        "object-curly-spacing": 2,
+        "computed-property-spacing": 2,
         /**
          * Angular rules
          * By default, this uses 
