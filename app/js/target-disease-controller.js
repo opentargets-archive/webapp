@@ -443,7 +443,7 @@
 
                     // evidence source
                     if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
-                        row.push("<a class='cttv-external-link' href='https://test-rvizapps.biogen.com/23andmeDev/' target='_blank'>"
+                        row.push("<a class='cttv-external-link' href='https://rvizapps.biogen.com/23andme/' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
                     }
@@ -478,7 +478,13 @@
                         refs = item.evidence.variant2disease.provenance_type.literature.references;
                     }
 
-                    var pmidsList = cttvUtils.getPmidsList( refs );
+                    if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
+                        var pmidsList = []
+                    }
+                    else{
+                        var pmidsList = cttvUtils.getPmidsList( refs );
+                    }
+
                     row.push( pmidsList.length ? cttvUtils.getPublicationsString( pmidsList ) : 'N/A' );
 
                     // Publication ids (hidden)
@@ -1474,7 +1480,6 @@
                     $scope.search.tables.literature.nferx.is_loading = false;
                 });
         };
-
 
         // =================================================
         //  H E L P E R   M E T H O D S

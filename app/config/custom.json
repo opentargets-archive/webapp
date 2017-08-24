@@ -2,7 +2,6 @@
 Custom config options
 */
 {
-
   "evidence_sources" : {
         "genetic_association" : {
             "common" : ["GWAS", "PHEWAS", "PHEWAS_23andme"],

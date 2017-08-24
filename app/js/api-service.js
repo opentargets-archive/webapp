@@ -112,11 +112,12 @@ angular.module('cttvServices')
 
             var deferred = $q.defer();
             var promise = deferred.promise;
-
+            
             // Params for api.call are: url, data (for POST) and return format
 
             // liveConfig.then (function (config) {
             var url;
+
             if( queryObject.method === undefined || queryObject.method === 'GET') {
                 url = api.url[queryObject.operation](params);
             } else {

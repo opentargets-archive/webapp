@@ -28,7 +28,7 @@ angular.module('cttvServices').
                 EVA :                 "eva",
                 PHENODIGM :           "phenodigm",
                 GWAS :                "gwas_catalog",
-                PHEWAS :              "phewas_catalog",
+                PHEWAS :              "phewascatalog",
                 PHEWAS_23andme :      "23andme",
                 GENOMICS_ENGLAND:     "genomics_england",
                 CANCER_GENE_CENSUS :  "cancer_gene_census",
