@@ -1,7 +1,7 @@
 /* Bubbles directive for associations */
 angular.module('cttvDirectives')
 
-    .directive('cttvTargetAssociationsBubbles', ['otAPIservice', 'otUtils', '$analytics', function (otAPIservice, otUtils, $analytics) {
+    .directive('otTargetAssociationsBubbles', ['otAPIservice', 'otUtils', '$analytics', function (otAPIservice, otUtils, $analytics) {
         'use strict';
 
         var whoiam = 'bubbles';
