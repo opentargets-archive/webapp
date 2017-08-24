@@ -1,10 +1,10 @@
 angular.module('cttvDirectives')
-    .directive('cttvBetaRibbon', ['$location', function ($location) {
+    .directive('otBetaRibbon', ['$location', function ($location) {
         'use strict';
         return {
             restrict: 'E',
             scope: {},
-            template: '<div ng-show="display" id="cttv-beta-ribbon" class="cttv-beta-ribbon">{{host}}</div>',
+            template: '<div ng-show="display" id="ot-beta-ribbon" class="ot-beta-ribbon">{{host}}</div>',
             link: function (scope) {
                 var host = $location.host();
                 scope.host = host.split('.')[0];
