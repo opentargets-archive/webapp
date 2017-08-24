@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('cttvTargetGenomeBrowser', ['$document', 'cttvAPIservice', function ($document, cttvAPIservice) {
+    .directive('cttvTargetGenomeBrowser', ['cttvAPIservice', function (cttvAPIservice) {
         'use strict';
 
         return {
@@ -11,7 +11,7 @@ angular.module('cttvDirectives')
                     if (target === '') {
                         return;
                     }
-                    var newDiv = $document.createElement('div');
+                    var newDiv = document.createElement('div');
                     newDiv.id = 'cttvTargetGenomeBrowser';
                     elem[0].appendChild(newDiv);
 
@@ -25,7 +25,7 @@ angular.module('cttvDirectives')
                     var theme = targetGenomeBrowser()
                         .efo(efo)
                         .cttvRestApi(cttvAPIservice.getSelf());
-                    theme(gB, $document.getElementById('cttvTargetGenomeBrowser'));
+                    theme(gB, document.getElementById('cttvTargetGenomeBrowser'));
                 });
             }
         };
