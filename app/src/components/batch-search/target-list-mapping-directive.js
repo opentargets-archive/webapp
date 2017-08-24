@@ -1,7 +1,7 @@
 angular.module('cttvDirectives')
 
 
-    .directive('targetListMapping', ['otAPIservice', 'otUtils', 'cttvLoadedLists', 'cttvConfig', function (otAPIservice, otUtils, cttvLoadedLists, cttvConfig) {
+    .directive('targetListMapping', ['otAPIservice', 'otUtils', 'otLoadedLists', 'cttvConfig', function (otAPIservice, otUtils, otLoadedLists, cttvConfig) {
         'use strict';
 
         return {
@@ -91,7 +91,7 @@ angular.module('cttvDirectives')
                             break;
                         }
                     }
-                    cttvLoadedLists.save();
+                    otLoadedLists.save();
                 };
 
                 scope.toAddFromSearch = {};
@@ -131,7 +131,7 @@ angular.module('cttvDirectives')
                             delete scope.toAddFromSearch[res];
                         }
                     }
-                    cttvLoadedLists.save();
+                    otLoadedLists.save();
                 };
 
 
@@ -157,7 +157,7 @@ angular.module('cttvDirectives')
                         }
                     }
                     delete(scope.searchQuery);
-                    cttvLoadedLists.save();
+                    otLoadedLists.save();
                 };
 
                 // scope.restoreThis = function (query) {

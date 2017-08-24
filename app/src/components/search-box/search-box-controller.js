@@ -6,7 +6,7 @@
  */
 angular.module('cttvControllers')
 
-    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otAPIservice', 'cttvConsts', '$q', 'otUtils', 'cttvLoadedLists', function ($scope, $location, $window, $document, $element, otAPIservice, cttvConsts, $q, otUtils, cttvLoadedLists) {
+    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otAPIservice', 'cttvConsts', '$q', 'otUtils', 'otLoadedLists', function ($scope, $location, $window, $document, $element, otAPIservice, cttvConsts, $q, otUtils, otLoadedLists) {
         var APP_SEARCH_URL = 'search';
         var APP_EVIDENCE_URL = 'evidence';
         var APP_AUTOCOMPLETE_URL = 'autocomplete';
@@ -213,7 +213,7 @@ angular.module('cttvControllers')
         };
 
         // See if there is any loaded list
-        $scope.loadedLists = cttvLoadedLists.getAll().length;
+        $scope.loadedLists = otLoadedLists.getAll().length;
 
         /**
          * NOTE: This is only to be called by the homepage only

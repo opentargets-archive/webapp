@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('targetListUpload', ['otAPIservice', 'cttvLoadedLists', 'cttvConfig', function (otAPIservice, cttvLoadedLists, cttvConfig) {
+    .directive('targetListUpload', ['otAPIservice', 'otLoadedLists', 'cttvConfig', function (otAPIservice, otLoadedLists, cttvConfig) {
         'use strict';
 
         return {
@@ -13,13 +13,13 @@ angular.module('cttvDirectives')
                 scope.targetListLimit = cttvConfig.targetListLimit;
 
                 // Show all previous lists
-                scope.lists = cttvLoadedLists.getAll();
+                scope.lists = otLoadedLists.getAll();
 
                 scope.useThisList = function (listId) {
-                    scope.list = cttvLoadedLists.get(listId);
+                    scope.list = otLoadedLists.get(listId);
                 };
                 scope.removeThisList = function (listId) {
-                    scope.lists = cttvLoadedLists.remove(listId);
+                    scope.lists = otLoadedLists.remove(listId);
                 };
 
                 // Show the latest loaded list by default:
@@ -78,13 +78,13 @@ angular.module('cttvDirectives')
 
                     return otAPIservice.getBestHitSearch(queryObject)
                         .then(function (resp) {
-                            var listName = cttvLoadedLists.parseBestHitSearch(name, resp.body);
+                            var listName = otLoadedLists.parseBestHitSearch(name, resp.body);
 
                             // Show all previous lists
-                            scope.lists = cttvLoadedLists.getAll();
-                            scope.list = cttvLoadedLists.get(listName);
+                            scope.lists = otLoadedLists.getAll();
+                            scope.list = otLoadedLists.get(listName);
                         // if (!scope.storeList) {
-                        //     cttvLoadedLists.remove(listName);
+                        //     otLoadedLists.remove(listName);
                         // }
                         });
                 }

@@ -1,7 +1,7 @@
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
 
-    .controller('SummaryCtrl', ['$scope', '$location', 'otAPIservice', '$q', 'cttvConfig', 'otUtils', 'cttvLoadedLists', function ($scope, $location, otAPIservice, $q, cttvConfig, otUtils, cttvLoadedLists) {
+    .controller('SummaryCtrl', ['$scope', '$location', 'otAPIservice', '$q', 'cttvConfig', 'otUtils', 'otLoadedLists', function ($scope, $location, otAPIservice, $q, cttvConfig, otUtils, otLoadedLists) {
         'use strict';
 
         // Parse the $location search object to determine which entities we have.
@@ -102,7 +102,7 @@ angular.module('cttvControllers')
 
         // target-list (=> expand to targets)
         if (search['target-list']) {
-            var targetList = cttvLoadedLists.get(search['target-list']);
+            var targetList = otLoadedLists.get(search['target-list']);
             var targets = [];
             for (var i = 0; i < targetList.list.length; i++) {
                 var target = targetList.list[i];

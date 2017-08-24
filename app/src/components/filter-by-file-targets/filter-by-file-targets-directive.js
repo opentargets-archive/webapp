@@ -7,7 +7,7 @@ angular.module('cttvDirectives')
  *   <cttv-filter-by-file-targets> </cttv-filter-by-file-targets>
  *
  */
-    .directive('cttvFilterByFileTargets', ['$log', 'otAPIservice', '$q', '$analytics', 'cttvLoadedLists', '$location', 'otUtils', function ($log, otAPIservice, $q, $analytics, cttvLoadedLists, $location, otUtils) {
+    .directive('cttvFilterByFileTargets', ['$log', 'otAPIservice', '$q', '$analytics', 'otLoadedLists', '$location', 'otUtils', function ($log, otAPIservice, $q, $analytics, otLoadedLists, $location, otUtils) {
         'use strict';
 
         return {
@@ -26,7 +26,7 @@ angular.module('cttvDirectives')
 
                 var multiSearchChunkSize = 200;
 
-                scope.lists = cttvLoadedLists.getAll();
+                scope.lists = otLoadedLists.getAll();
 
                 scope.useList = function (list) {
                     scope.targetNameIdDict = [];
@@ -180,8 +180,8 @@ angular.module('cttvDirectives')
                     return otAPIservice.getBestHitSearch(queryObject)
                         .then(function (resp) {
                             if (resp.body.data.length) {
-                                var listName = cttvLoadedLists.parseBestHitSearch(scope.fileName, resp.body);
-                                scope.list = cttvLoadedLists.get(listName);
+                                var listName = otLoadedLists.parseBestHitSearch(scope.fileName, resp.body);
+                                scope.list = otLoadedLists.get(listName);
 
                                 for (var i = 0; i < resp.body.data.length; i++) {
                                     if (resp.body.data[i].data) {
