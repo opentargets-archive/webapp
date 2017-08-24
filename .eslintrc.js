@@ -30,7 +30,8 @@ module.exports = {
         "tooltip": true,
         "interactionsViewer": true,
         "tnt": true,
-        "geneAssociationsTree": true
+        "geneAssociationsTree": true,
+        "targetGenomeBrowser": true
     },
     "rules": {
         "curly": 2,

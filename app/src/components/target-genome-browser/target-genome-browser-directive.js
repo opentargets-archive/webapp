@@ -1,9 +1,5 @@
 angular.module('cttvDirectives')
-
-    /*
-    *
-    */
-    .directive('cttvTargetGenomeBrowser', ['cttvAPIservice', function (cttvAPIservice) {
+    .directive('cttvTargetGenomeBrowser', ['$document', 'cttvAPIservice', function ($document, cttvAPIservice) {
         'use strict';
 
         return {
@@ -15,9 +11,8 @@ angular.module('cttvDirectives')
                     if (target === '') {
                         return;
                     }
-                    var newDiv = document.createElement('div');
+                    var newDiv = $document.createElement('div');
                     newDiv.id = 'cttvTargetGenomeBrowser';
-                    // newDiv.className = "accordionCell";
                     elem[0].appendChild(newDiv);
 
                     var gB = tnt.board.genome()
@@ -26,13 +21,11 @@ angular.module('cttvDirectives')
                         .context(20)
                         .width(w);
 
-                    // gB.rest().proxyUrl("/ensembl");
-                    // gB.rest().proxyUrl("/api/latest/ensembl")
                     gB.rest().prefix('/proxy/rest.ensembl.org').protocol('').domain('');
                     var theme = targetGenomeBrowser()
                         .efo(efo)
                         .cttvRestApi(cttvAPIservice.getSelf());
-                    theme(gB, document.getElementById('cttvTargetGenomeBrowser'));
+                    theme(gB, $document.getElementById('cttvTargetGenomeBrowser'));
                 });
             }
         };
