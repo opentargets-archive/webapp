@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('myDrugSummary', ['$http', '$q', function ($http, $q) {
+    .directive('otDrugSummary', ['$http', '$q', function ($http, $q) {
         'use strict';
 
         function pngToDataUrl (url, callback, outputFormat) {
