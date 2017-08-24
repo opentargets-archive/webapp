@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('cttvTargetGenomeBrowser', ['otAPIservice', function (otAPIservice) {
+    .directive('otTargetGenomeBrowser', ['otAPIservice', function (otAPIservice) {
         'use strict';
 
         return {
@@ -12,7 +12,7 @@ angular.module('cttvDirectives')
                         return;
                     }
                     var newDiv = document.createElement('div');
-                    newDiv.id = 'cttvTargetGenomeBrowser';
+                    newDiv.id = 'otTargetGenomeBrowser';
                     elem[0].appendChild(newDiv);
 
                     var gB = tnt.board.genome()
@@ -25,7 +25,7 @@ angular.module('cttvDirectives')
                     var theme = targetGenomeBrowser()
                         .efo(efo)
                         .cttvRestApi(otAPIservice.getSelf());
-                    theme(gB, document.getElementById('cttvTargetGenomeBrowser'));
+                    theme(gB, document.getElementById('otTargetGenomeBrowser'));
                 });
             }
         };
