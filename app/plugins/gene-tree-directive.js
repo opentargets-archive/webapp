@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('geneTree', ['$log', 'otUtils', '$timeout', function ($log, otUtils, $timeout, $http) {
+    .directive('geneTree', ['otUtils', '$timeout', function (otUtils, $timeout) {
         'use strict';
 
         return {

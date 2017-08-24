@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('dataDistributionFacetParser', ['$log', 'otDictionary', 'otConsts', function ($log, otDictionary, otConsts) {
+    .factory('dataDistributionFacetParser', ['otConsts', function (otConsts) {
         'use strict';
 
 

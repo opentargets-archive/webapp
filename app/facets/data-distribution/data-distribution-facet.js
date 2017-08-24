@@ -8,7 +8,7 @@ angular.module('facets')
      * The Data Distribution facets, aka the HISTOGRAM
      * TODO: this will have to be revisited at some point
      */
-    .directive('dataDistributionFacet', ['$log', function ($log) {
+    .directive('dataDistributionFacet', [function () {
         'use strict';
 
         return {
@@ -27,7 +27,7 @@ angular.module('facets')
     }])
 
 
-    .directive('cttvScorePresets', ['$log', function ($log) {
+    .directive('cttvScorePresets', [function () {
         'use strict';
 
         return {
@@ -60,7 +60,7 @@ angular.module('facets')
     /**
      * The Score facet
      */
-    .directive('cttvScoreFacet', ['$log', function ($log) {
+    .directive('cttvScoreFacet', [function () {
         'use strict';
 
         var score_presets = [
@@ -140,7 +140,7 @@ angular.module('facets')
     /**
      * The score histogram
      */
-    .directive('cttvScoreHistogram', ['$log', 'otUtils', function ($log, otUtils) {
+    .directive('cttvScoreHistogram', ['otUtils', function (otUtils) {
         'use strict';
 
         return {

@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('drugsDisplay', ['$log', 'otConfig', 'otConsts', 'otDictionary', function ($log, otConfig, otConsts, otDictionary) {
+    .directive('drugsDisplay', ['otConfig', 'otConsts', 'otDictionary', function (otConfig, otConsts, otDictionary) {
         'use strict';
 
         return {

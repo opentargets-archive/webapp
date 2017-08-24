@@ -1,7 +1,7 @@
 /* Controllers */
 
 angular.module('cttvControllers')
-    .run(['$rootScope', '$window', '$uibModalStack', '$log', function ($rootScope, $window, $uibModalStack, $log) {
+    .run(['$rootScope', '$window', '$uibModalStack', function ($rootScope, $window, $uibModalStack) {
         'use strict';
 
         // Close all the modal windows when the route changes
@@ -44,7 +44,7 @@ angular.module('cttvControllers')
      * Controller for the masthead navigations
      * Simply exposes the location service
      */
-    .controller('MastheadCtrl', ['$scope', '$location', '$log', 'otLocationState', function ($scope, $location, $log, otLocationState) {
+    .controller('MastheadCtrl', ['$scope', '$location', function ($scope, $location) {
         'use strict';
 
         $scope.location = $location;
@@ -125,7 +125,7 @@ angular.module('cttvControllers')
     /**
      * Simple controller to expose the current page to the feedback button controller
      */
-    .controller('FeedbackCtrl', ['$scope', '$location', '$log', 'otLocationState', function ($scope, $location, $log, otLocationState) {
+    .controller('FeedbackCtrl', ['$scope', '$location', function ($scope, $location) {
         'use strict';
         // expose the location;
         // note that exposing the page as $location.absUrl() does not work as that would not update when URL changes
@@ -145,7 +145,7 @@ angular.module('cttvControllers')
     /**
      * Simple controller to expose the current page to the feedback button controller
      */
-    .controller('StatsCtrl', ['$scope', 'otAPIservice', '$log', function ($scope, otAPIservice, $log) {
+    .controller('StatsCtrl', ['$scope', 'otAPIservice', function ($scope, otAPIservice) {
         'use strict';
         // expose the location;
         // note that exposing the page as $location.absUrl() does not work as that would not update when URL changes

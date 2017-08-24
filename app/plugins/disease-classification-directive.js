@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('diseaseClassification', ['$log', 'otAPIservice', '$timeout', 'otUtils', function ($log, otAPIservice, $timeout, otUtils) {
+    .directive('diseaseClassification', ['otAPIservice', '$timeout', 'otUtils', function (otAPIservice, $timeout, otUtils) {
         'use strict';
 
         return {

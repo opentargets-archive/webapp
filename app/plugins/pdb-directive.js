@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('pdbTarget', ['$log', '$http', '$compile', 'otUtils', '$timeout', function ($log, $http, $compile, otUtils, $timeout) {
+    .directive('pdbTarget', ['$http', 'otUtils', '$timeout', function ($http, otUtils, $timeout) {
         'use strict';
 
         return {

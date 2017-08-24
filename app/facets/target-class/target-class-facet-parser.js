@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('targetClassFacetParser', ['$log', 'otDictionary', 'otConsts', function ($log, otDictionary, otConsts) {
+    .factory('targetClassFacetParser', ['otConsts', function (otConsts) {
         'use strict';
 
 

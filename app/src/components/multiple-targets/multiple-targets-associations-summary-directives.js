@@ -85,7 +85,7 @@ angular.module('cttvDirectives')
 //     };
 // }])
 
-    .directive('multipleTargetsTable', ['$log', 'otUtils', 'otConsts', 'otDictionary', function ($log, otUtils, otConsts, otDictionary) {
+    .directive('multipleTargetsTable', ['otUtils', 'otConsts', 'otDictionary', function (otUtils, otConsts, otDictionary) {
         'use strict';
 
         function resolveTies (input, pvalPos, sortedTAs) {
@@ -449,7 +449,7 @@ angular.module('cttvDirectives')
 //     };
 // }])
 
-    .directive('percPiechart', ['$log', '$timeout', function ($log, $timeout) {
+    .directive('percPiechart', ['$timeout', function ($timeout) {
         'use strict';
         return {
             restrict: 'E',
