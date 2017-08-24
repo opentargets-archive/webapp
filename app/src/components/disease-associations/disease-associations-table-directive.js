@@ -9,12 +9,12 @@ angular.module('cttvDirectives')
 *   loadprogress: the name of the var in parent scope to be used as flag for API call progress update. E.g. laodprogress="loading"
 *
 * Example:
-*   <cttv-disease-associations target="{{search.query}}" filename="targets_associated_with_BRAF" loadprogress="loading"></cttv-disease-associations>
+*   <ot-disease-associations target="{{search.query}}" filename="targets_associated_with_BRAF" loadprogress="loading"></ot-disease-associations>
 *
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('cttvDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otAPIservice', '$q', function (otUtils, otDictionary, otConsts, otAPIservice, $q) {
+    .directive('otDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otAPIservice', '$q', function (otUtils, otDictionary, otConsts, otAPIservice, $q) {
         'use strict';
 
         var draw = 1;
