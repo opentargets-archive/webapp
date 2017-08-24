@@ -87,9 +87,9 @@ angular.module('facets')
             // +'    <div class="clearfix"><span class="pull-left small">Min: {{facet.filters[0].key}}</span><span class="pull-right small">Max: {{facet.filters[1].key}}</span></div>'
             // +'    <div>'
             // +'        <span class="small">Stringency:</span>'
-                     // +'        <cttv-slider min=1 max=10 config="{snap:true, values:[0.5, 1, 3, 5], labels:[\'min\', \'default\',\'high\',\'max\']}" value="facet.filters[2].key" ></cttv-slider>'
-            // +'        <cttv-slider config="{snap:true, values:[0.5, 1, 3, 5], labels:[\'min\', \'|\',\'|\',\'max\']}" value="facet.filters[2].key" ></cttv-slider>'
-            // +'    <cttv-slider config="{snap:true, values:[0,1,2,3], labels:[\'min\', \'|\',\'|\',\'max\']}" value="preset" ></cttv-slider>'
+                     // +'        <ot-slider min=1 max=10 config="{snap:true, values:[0.5, 1, 3, 5], labels:[\'min\', \'default\',\'high\',\'max\']}" value="facet.filters[2].key" ></ot-slider>'
+            // +'        <ot-slider config="{snap:true, values:[0.5, 1, 3, 5], labels:[\'min\', \'|\',\'|\',\'max\']}" value="facet.filters[2].key" ></ot-slider>'
+            // +'    <ot-slider config="{snap:true, values:[0,1,2,3], labels:[\'min\', \'|\',\'|\',\'max\']}" value="preset" ></ot-slider>'
 
             // +'    </div>'
             // +'    <div><button type="button" class="btn btn-primary btn-xs" ng-click="facet.update()">Apply</button></div>'

@@ -2,7 +2,7 @@ angular.module('cttvDirectives')
     /**
      * A generic slider
      */
-    .directive('cttvSlider', ['otUtils', function (otUtils) {
+    .directive('otSlider', ['otUtils', function (otUtils) {
         // 'use strict';
 
         return {
