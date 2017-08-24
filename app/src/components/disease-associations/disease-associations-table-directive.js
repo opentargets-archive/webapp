@@ -143,7 +143,7 @@ angular.module('cttvDirectives')
                 ],
                 'processing': false,
                 'serverSide': true,
-                'ajax': function (data, cbak, params) {
+                'ajax': function (data, cbak) {
                 // Order options
                 // mappings:
                 // 0 => gene name alphabetically -- not supported in the api
@@ -258,7 +258,6 @@ angular.module('cttvDirectives')
             // var dts = data[i].association_score.datatypes;
             // var ec = data[i].evidence_count.datatypes;
                 var row = [];
-                var geneLoc = '';
                 var geneDiseaseLoc = '/evidence/' + data[i].target.id + '/' + data[i].disease.id;
                 row.push('<a href=\'' + geneDiseaseLoc + '\' title=\'' + data[i].target.gene_info.symbol + '\'>' + data[i].target.gene_info.symbol + '</a>');
                 // Ensembl ID
@@ -266,19 +265,19 @@ angular.module('cttvDirectives')
                 // The association score
                 row.push(getColorStyleString(data[i].association_score.overall, geneDiseaseLoc));
                 // Genetic association
-                row.push(getColorStyleString(getScore(i, 'genetic_association'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:genetic_associations'));
+                row.push(getColorStyleString(getScore(i, 'genetic_association'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:genetic_associations'));
                 // Somatic mutation
-                row.push(getColorStyleString(getScore(i, 'somatic_mutation'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:somatic_mutations'));
+                row.push(getColorStyleString(getScore(i, 'somatic_mutation'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:somatic_mutations'));
                 // Known drug
-                row.push(getColorStyleString(getScore(i, 'known_drug'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:known_drugs'));
+                row.push(getColorStyleString(getScore(i, 'known_drug'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:known_drugs'));
                 // Affected pathway
-                row.push(getColorStyleString(getScore(i, 'affected_pathway'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:affected_pathways'));
+                row.push(getColorStyleString(getScore(i, 'affected_pathway'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:affected_pathways'));
                 // Expression atlas
-                row.push(getColorStyleString(getScore(i, 'rna_expression'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:rna_expression'));
+                row.push(getColorStyleString(getScore(i, 'rna_expression'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:rna_expression'));
                 // Literature
-                row.push(getColorStyleString(getScore(i, 'literature'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:literature'));
+                row.push(getColorStyleString(getScore(i, 'literature'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:literature'));
                 // Animal model
-                row.push(getColorStyleString(getScore(i, 'animal_model'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:animal_models'));
+                row.push(getColorStyleString(getScore(i, 'animal_model'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:animal_models'));
 
                 // Total score
                 row.push(data[i].association_score.datatypes.genetic_association +

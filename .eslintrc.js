@@ -24,7 +24,8 @@ module.exports = {
         "diseaseGraph": true,
         "flowerView": true,
         "spinner": true,
-        "Reactome": true
+        "Reactome": true,
+        "targetAssociations": true
     },
     "rules": {
         "curly": 2,

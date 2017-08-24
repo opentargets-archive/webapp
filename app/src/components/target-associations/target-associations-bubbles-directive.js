@@ -1,13 +1,13 @@
 /* Bubbles directive for associations */
 angular.module('cttvDirectives')
 
-    .directive('cttvTargetAssociationsBubbles', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvConsts', '$analytics', function ($log, cttvAPIservice, cttvUtils, cttvConsts, $analytics) {
+    .directive('cttvTargetAssociationsBubbles', ['cttvAPIservice', 'cttvUtils', '$analytics', function (cttvAPIservice, cttvUtils, $analytics) {
         'use strict';
 
         var whoiam = 'bubbles';
         var bottomMargin = 220;
         var bView;
-        var offset = 300;
+        // var offset = 300;
 
         function decorateSVG (from_svg) {
             var clone = from_svg.cloneNode(true);
@@ -160,7 +160,6 @@ angular.module('cttvDirectives')
                 // scope.element = "cttvBubblesView";
 
                 var bView;
-                var nav;
 
                 // Change of dims
                 scope.$watch(function () { if (resizeCtrl) { return resizeCtrl.dims(); } }, function (val) {
@@ -173,7 +172,6 @@ angular.module('cttvDirectives')
                 scope.$watchGroup(['target', 'facets', 'active'], function (vals) {
                     var target = vals[0];
                     var facets = vals[1];
-                    var act = vals[2];
 
                     if (scope.active !== whoiam) {
                         return;
@@ -249,11 +247,11 @@ angular.module('cttvDirectives')
                     // Fire a target associations tree event for piwik to track
                     $analytics.eventTrack('targetAssociationsBubbles', {'category': 'association', 'label': 'bubbles'});
 
-                    var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                    // var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
                     var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
                     // Element Coord
-        		    var elemOffsetTop = elem[0].parentNode.offsetTop;
+                    var elemOffsetTop = elem[0].parentNode.offsetTop;
 
                     var diameter = viewportH - elemOffsetTop - bottomMargin;
 

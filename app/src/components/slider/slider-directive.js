@@ -136,9 +136,9 @@ angular.module('cttvDirectives')
 
             },*/
 
-            link: function (scope, elem, attrs) {
+            link: function (scope, elem) {
                 scope.$watch('value', function (n, o) {
-                    if (n != undefined && o == undefined) {
+                    if (n !== undefined && o === undefined) {
                         // set up dimentions
                         var margin = {top: 0, right: 10, bottom: 10, left: 10},
                             width = (scope.config.width || elem[0].offsetWidth) - margin.left - margin.right,   // initialize width to the div width
@@ -147,7 +147,6 @@ angular.module('cttvDirectives')
                         // check the configuration
                         var config = scope.config || {};
 
-                        var mode = config.mode || 'linear';
                         var ticks = config.ticks || config.values.length || 10;
                         var tick = config.tick || 1;
                         var snap = config.snap || false;
