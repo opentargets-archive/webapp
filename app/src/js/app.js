@@ -1,4 +1,3 @@
-
 function initApp (deps) {
     var app = angular.module('cttvApp', deps);
 

@@ -1,4 +1,3 @@
-
 angular.module('cttvDirectives')
     /*
      * The notifications bell thingy in the navigation bar

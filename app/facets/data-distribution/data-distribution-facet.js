@@ -20,7 +20,7 @@ angular.module('facets')
                 partial: '@'
             },
 
-            templateUrl: 'directives/generic-nested-facetcollection.html',
+            templateUrl: 'directives/generic-nested-facetcollection.html'
         };
     }])
 
@@ -47,7 +47,7 @@ angular.module('facets')
                     + '        <div class="col-sm-3" style="text-align: center"><input type="radio" ng-model="preset" value="2"><span class="label">mid<span></div>'
                     + '        <div class="col-sm-3" style="text-align: center"><input type="radio" ng-model="preset" value="3"><span class="label">high<span></div>'
                     + '    </div>'
-                    + '</div>',
+                    + '</div>'
         };
     }])
 

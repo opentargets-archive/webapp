@@ -1,4 +1,3 @@
-
 angular.module('cttvDirectives')
     .directive('otFacebookFeed', ['$log', function ($log) {
         'use strict';

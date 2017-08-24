@@ -1,4 +1,3 @@
-
 /* Add to the cttv controllers module */
 angular.module('cttvControllers')
 

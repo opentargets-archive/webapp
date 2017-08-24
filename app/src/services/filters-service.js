@@ -1,4 +1,3 @@
-
 /* Filters services */
 
 angular.module('cttvServices')

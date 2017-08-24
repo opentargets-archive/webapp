@@ -1,4 +1,3 @@
-
 angular.module('cttvDirectives')
     .directive('png', ['$timeout', '$uibModal', '$analytics', function ($timeout, $uibModal, $analytics) {
         'use strict';

@@ -1,4 +1,3 @@
-
 /**
  * Module for all general/common facets directives
  */

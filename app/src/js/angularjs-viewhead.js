@@ -1,4 +1,3 @@
-
 (function (angular, document) {
     var mod = angular.module('viewhead', []);
 
