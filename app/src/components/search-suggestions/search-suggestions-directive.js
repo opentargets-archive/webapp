@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('cttvSearchSuggestions', [function () {
+    .directive('otSearchSuggestions', [function () {
         'use strict';
 
         return {
