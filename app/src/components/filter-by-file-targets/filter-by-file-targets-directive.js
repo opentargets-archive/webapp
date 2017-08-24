@@ -4,10 +4,10 @@ angular.module('cttvDirectives')
 /**
  * Options for configuration are:
  * Example:
- *   <cttv-filter-by-file-targets> </cttv-filter-by-file-targets>
+ *   <ot-filter-by-file-targets> </ot-filter-by-file-targets>
  *
  */
-    .directive('cttvFilterByFileTargets', ['$log', 'otAPIservice', '$q', '$analytics', 'otLoadedLists', '$location', 'otUtils', function ($log, otAPIservice, $q, $analytics, otLoadedLists, $location, otUtils) {
+    .directive('otFilterByFileTargets', ['$log', 'otAPIservice', '$q', '$analytics', 'otLoadedLists', '$location', 'otUtils', function ($log, otAPIservice, $q, $analytics, otLoadedLists, $location, otUtils) {
         'use strict';
 
         return {
