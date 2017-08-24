@@ -52,7 +52,7 @@
                                 <span>
                                     <span class="panel-icon-sm hidden-xs hidden-sm hidden-md panel-inline fa fa-clock-o fa-2x"></span>
                                     <span class="panel-inline">Data last updated</span>
-                                    <span cttv-progress-spinner size="24" ng-show="!stats.date"></span>
+                                    <span ot-progress-spinner size="24" ng-show="!stats.date"></span>
                                     <span class="panel-inline" ng-show="stats.date">{{stats.date | date:'MMMM yyyy'}}</span>
                                 </span>
                             </div>
@@ -67,19 +67,19 @@
         <div class="row">
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <h3 class="intro-section-heading intro-section-stats-panel"><span cttv-progress-spinner size="24" ng-show="!stats.targets.total"></span><span class="intro-section-stats-figure" ng-show="stats.targets.total">{{stats.targets.total | number}}</span> targets</h3>
+                <h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!stats.targets.total"></span><span class="intro-section-stats-figure" ng-show="stats.targets.total">{{stats.targets.total | number}}</span> targets</h3>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <h3 class="intro-section-heading intro-section-stats-panel"><span cttv-progress-spinner size="24" ng-show="!stats.associations.total"></span><span class="intro-section-stats-figure" ng-show="stats.associations.total">{{stats.associations.total | number}}</span> associations</h3>
+                <h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!stats.associations.total"></span><span class="intro-section-stats-figure" ng-show="stats.associations.total">{{stats.associations.total | number}}</span> associations</h3>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <h3 class="intro-section-heading intro-section-stats-panel"><span cttv-progress-spinner size="24" ng-show="!stats.diseases.total"></span><span class="intro-section-stats-figure" ng-show="stats.diseases.total">{{stats.diseases.total | number}}</span> diseases</h3>
+                <h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!stats.diseases.total"></span><span class="intro-section-stats-figure" ng-show="stats.diseases.total">{{stats.diseases.total | number}}</span> diseases</h3>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <a href="data_sources"><h3 class="intro-section-heading intro-section-stats-panel"><span cttv-progress-spinner size="24" ng-show="!stats.datasources.total"></span><span class="intro-section-stats-figure" ng-show="stats.datasources.total">{{stats.datasources.total | number}}</span> data sources</h3></a>
+                <a href="data_sources"><h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!stats.datasources.total"></span><span class="intro-section-stats-figure" ng-show="stats.datasources.total">{{stats.datasources.total | number}}</span> data sources</h3></a>
             </div>
 
         </div>
@@ -88,7 +88,7 @@
             <!--<div class="col-xs-12 intro-section-panel">-->
 
                     <!--<div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-clock-o fa-5x"></span></div>-->
-                    <!--<h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-clock-o"></span> Last updated <span cttv-progress-spinner size="24" ng-show="!stats.date"></span><span ng-show="stats.date">{{stats.date | date:'MMMM yyyy'}}</span></h3>-->
+                    <!--<h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-clock-o"></span> Last updated <span ot-progress-spinner size="24" ng-show="!stats.date"></span><span ng-show="stats.date">{{stats.date | date:'MMMM yyyy'}}</span></h3>-->
 
             <!--</div>-->
         <!--</div>-->

@@ -26,11 +26,11 @@
                     <h4>Refine by:</h4>
                     <div class="checkbox">
                         <label ng-class="(filters.target.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.target.selected" ng-change="update()" ng-disabled="filters.target.total==0">Target <span class='badge badge-primary'>{{filters.target.total}}</span></label>
-                        <span cttv-progress-spinner class="text-lowlight" ng-show="filters.target.loading"></span>
+                        <span ot-progress-spinner class="text-lowlight" ng-show="filters.target.loading"></span>
                     </div>
                     <div class="checkbox">
                         <label ng-class="(filters.disease.total==0) ? 'text-lowlight' : ''"><input type="checkbox" ng-model="filters.disease.selected" ng-change="update()" ng-disabled="filters.disease.total==0">Disease <span class='badge badge-warning'>{{filters.disease.total}}</span></label>
-                        <span cttv-progress-spinner class="text-lowlight" ng-show="filters.disease.loading"></span>
+                        <span ot-progress-spinner class="text-lowlight" ng-show="filters.disease.loading"></span>
                     </div>
                 </div>
             </div>

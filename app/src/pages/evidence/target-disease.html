@@ -85,7 +85,7 @@
                                 <!-- Score pill -->
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.GENETIC_ASSOCIATION]" title="Association score">{{search.association_scores[datatypes.GENETIC_ASSOCIATION] | currency : "" : 2}}</span> -->
                                 <!-- <span class='badge' ng-show="search.tables.genetic_associations.rare_diseases.data.length" style="background:#3E8BAD">{{search.tables.genetic_associations.rare_diseases.data.length}}</span> -->
-                                <span cttv-progress-spinner class="pull-right" ng-show="search.tables.genetic_associations.is_loading"></span>
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.genetic_associations.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
                         <uib-tabset>
@@ -203,7 +203,7 @@
                                 <!--<span class='badge' ng-show="search.tables.somatic_mutations.data.length>0">{{search.tables.somatic_mutations.data.length}}</span>-->
                                 <!-- Score pill -->
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.SOMATIC_MUTATION]" title="Association score">{{search.association_scores[datatypes.SOMATIC_MUTATION] | currency : "" : 2}}</span> -->
-                                <span cttv-progress-spinner class="pull-right" ng-show="search.tables.somatic_mutations.is_loading"></span>
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.somatic_mutations.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
                         <div ng-show="search.tables.somatic_mutations.data.length>0 && !search.tables.somatic_mutations.has_errors">
@@ -251,7 +251,7 @@
                                 <span ng-class="{ 'text-disabled': search.tables.known_drugs.data.length==0 }">{{search.tables.known_drugs.heading}}</span>
                                 <!-- Score pill -->
                                 <!-- <span class="badge flower-petal" ng-show="search.association_scores[datatypes.KNOWN_DRUG]" title="Association score">{{search.association_scores[datatypes.KNOWN_DRUG] | currency: "" : 2}}</span> -->
-                                <span cttv-progress-spinner class="pull-right" ng-show="search.tables.known_drugs.is_loading"></span>
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.known_drugs.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
 
@@ -283,7 +283,7 @@
                                 <!-- <span class='badge' ng-show="search.tables.affected_pathways.data.length>0">{{search.tables.affected_pathways.data.length}}</span> -->
                                 <!-- Score pill -->
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.AFFECTED_PATHWAY]" title="Association score">{{search.association_scores[datatypes.AFFECTED_PATHWAY] | currency : "" : 2}}</span> -->
-                                <span cttv-progress-spinner class="pull-right" ng-show="search.tables.affected_pathways.is_loading"></span>
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.affected_pathways.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
                         <div ng-show="search.tables.affected_pathways.data.length>0 && !search.tables.affected_pathways.has_errors">
@@ -334,7 +334,7 @@
                                 <!-- <span class='badge' ng-show="search.tables.rna_expression.data.length>0">{{search.tables.rna_expression.data.length}}</span> -->
                                 <!-- Score pill -->
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.RNA_EXPRESSION]" title="Association score">{{search.association_scores[datatypes.RNA_EXPRESSION] | currency : "" : 2}}</span> -->
-                                <span cttv-progress-spinner class="pull-right" ng-show="search.tables.rna_expression.is_loading"></span>
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.rna_expression.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
                         <div ng-show="search.tables.rna_expression.data.length>0 && !search.tables.rna_expression.has_errors">
@@ -389,7 +389,7 @@
                                 <span ng-class="{ 'text-disabled': search.tables.literature.total==0 }">{{search.tables.literature.heading}}</span>
                                 <!-- Score pill -->
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.LITERATURE]" title="Association score">{{search.association_scores[datatypes.LITERATURE] | currency : "" : 2}}</span> -->
-                                <span cttv-progress-spinner class="pull-right"
+                                <span ot-progress-spinner class="pull-right"
                                       ng-show="search.tables.literature.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
@@ -429,7 +429,7 @@
                                 <!-- <span class='badge' ng-show="search.tables.animal_models.data.length>0">{{search.tables.animal_models.data.length}}</span> -->
                                 <!-- Score pill -->
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.ANIMAL_MODEL]" title="Association score">{{search.association_scores[datatypes.ANIMAL_MODEL] | currency : "" : 2}}</span> -->
-                                <span cttv-progress-spinner class="pull-right" ng-show="search.tables.animal_models.is_loading"></span>
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.animal_models.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
 

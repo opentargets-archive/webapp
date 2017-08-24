@@ -103,7 +103,7 @@
                         </span>
                     </div>
                     <div class="batch-search-results-container">
-                        <span cttv-progress-spinner size="24" ng-show="!searchResults.length"></span>
+                        <span ot-progress-spinner size="24" ng-show="!searchResults.length"></span>
                         <div ng-repeat="target in searchResults" ng-click="selectThis(searchQuery, target)">
                             <span class="search-item select-item">{{target.data.approved_symbol}}</span>
                             <span ng-class="hover ? 'search-options highlight' : 'search-options down'" ng-mouseenter="hover=true" ng-mouseleave="hover=false">
@@ -129,7 +129,7 @@
                            tabindex="1" ng-model="searchQueryText" ng-model-options="{debounce:500}" autocomplete="off"
                            ng-change="getSearch(searchQueryText)">
                     <!--<i ng-click="discardSearch()" class="fa fa-times search-options"></i>-->
-                    <span cttv-progress-spinner size="24" ng-show="searchInProgress"
+                    <span ot-progress-spinner size="24" ng-show="searchInProgress"
                           style="right:4.5em; top:3em; position:absolute"></span>
 
                 </div>
@@ -199,7 +199,7 @@
                     <!--<div class="choose-header search-header">-->
                         <!--<input class="batch-search-box" type="text" placeholder="{{newSearchQuery}}" class="form-control input-search ng-pristine ng-untouched ng-valid ng-empty" name="text" tabindex="1" ng-model="searchQueryText" ng-model-options="{debounce:500}" autocomplete="off" ng-change="getSearch(searchQueryText)">-->
                         <!--<i ng-click="newSearchQuery=''" class="fa fa-times search-options"></i>-->
-                        <!--<span cttv-progress-spinner size="24" ng-show="searchInProgress"-->
+                        <!--<span ot-progress-spinner size="24" ng-show="searchInProgress"-->
                               <!--style="right:4.5em; top:3em; position:absolute"></span>-->
 
                     <!--</div>-->

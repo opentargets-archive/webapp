@@ -5,7 +5,7 @@ angular.module('cttvDirectives')
     * size: size of the spinner icon; 18 is default
     * stroke: thickness of the "ring" default is 2
     */
-    .directive('cttvProgressSpinner', [function () {
+    .directive('otProgressSpinner', [function () {
         'use strict';
 
         return {
