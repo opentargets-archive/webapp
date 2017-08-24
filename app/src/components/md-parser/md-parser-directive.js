@@ -2,7 +2,7 @@ angular.module('cttvDirectives')
     /**
      * Directive to parse Markdown documents
      */
-    .directive('mdParser', ['$log','$http', '$sce', function ($log, $http, $sce) {
+    .directive('mdParser', ['$log', '$http', '$sce', function ($log, $http, $sce) {
         'use strict';
 
         return {
@@ -10,14 +10,14 @@ angular.module('cttvDirectives')
             scope: {
                 url: '@'     // the url of the resource
             },
-            template : '<div ng-bind-html="md"></div>',
-            link: function(scope) {
+            template: '<div ng-bind-html="md"></div>',
+            link: function (scope) {
                 $http.get(scope.url)
-                    .then(function successCallback(response) {
+                    .then(function successCallback (response) {
                     // this callback will be called asynchronously
                     // when the response is available
-                        scope.md = $sce.trustAsHtml( marked(response.data) );
-                    }, function errorCallback(response) {
+                        scope.md = $sce.trustAsHtml(marked(response.data));
+                    }, function errorCallback (response) {
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
                         $log.log(response);

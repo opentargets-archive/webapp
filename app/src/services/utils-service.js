@@ -3,7 +3,7 @@ angular.module('cttvServices')
 /**
  * Some utility services.
  */
-    .factory('cttvUtils', ['$log', '$window', '$rootScope', function($log, $window, $rootScope) {
+    .factory('cttvUtils', ['$log', '$window', '$rootScope', function ($log, $window, $rootScope) {
         'use strict';
 
         var cttvUtilsService = {};
@@ -61,10 +61,10 @@ angular.module('cttvServices')
      *               E.g. "bob" will produce bob.pdf and bob.csv when exporting in those formats.
      *
      */
-        cttvUtilsService.setTableToolsParams = function(obj, title){
+        cttvUtilsService.setTableToolsParams = function (obj, title) {
 
-        //obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
-        //obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
+        // obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
+        // obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
 
             obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>rt<"pull-left small" l><"pull-right small" p>>';
             obj.buttons = [
@@ -73,28 +73,28 @@ angular.module('cttvServices')
             //     text: "<span class='fa fa-files-o' title='Copy to clipboard'><span>",
             // },
                 {
-                    extend: 'csv', //extend: 'csvHtml5',
+                    extend: 'csv', // extend: 'csvHtml5',
                     text: '<span class=\'fa fa-download\' title=\'Download as .csv\'><span>',
-                    title: title//,
-                //exportOptions: {
+                    title: title// ,
+                // exportOptions: {
                 //    columns: ':visible'
-                //}
+                // }
                 }
             ];
 
             return obj;
         };
 
-        cttvUtilsService.setTableToolsParamsExportColumns = function(obj, title){
+        cttvUtilsService.setTableToolsParamsExportColumns = function (obj, title) {
 
             obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>rt<"pull-left small" l><"pull-right small" p>>';
             obj.buttons = [
                 {
-                    extend: 'csv', //extend: 'csvHtml5',
+                    extend: 'csv', // extend: 'csvHtml5',
                     text: '<span class=\'fa fa-download\' title=\'Download as .csv\'><span>',
                     title: title,
                     exportOptions: {
-                        columns: [1,2,4,6,7,8,9,10,11,12,13]
+                        columns: [1, 2, 4, 6, 7, 8, 9, 10, 11, 12, 13]
                     }
                 }
             ];
@@ -103,14 +103,12 @@ angular.module('cttvServices')
         };
 
 
-
-
         cttvUtilsService.colorScales = {
-            BLUE_0_1 : d3.scale.linear()
-                .domain([0,1])
+            BLUE_0_1: d3.scale.linear()
+                .domain([0, 1])
                 .range(['#CBDCEA', '#005299']), // blue orig
-            //.range(["#AEDEF7", "#0091EB"]),
-            //.range(["#97D5F5", "#0081D2"]),
+            // .range(["#AEDEF7", "#0091EB"]),
+            // .range(["#97D5F5", "#0081D2"]),
             // .range(["#B6DDFC", "#0052A3"]), // extra brand blue
             // .range(["#FFFF00", '#007AFF']), // yellow - blue
             // .range(["#feffd8", '#2354a3']), // yellow - blue (shorter range)
@@ -119,24 +117,24 @@ angular.module('cttvServices')
             // .range(["#fbf583", '#375E97']), // sky - sunflower (custom)
             // .range(['#FED69C', "#2A4E6E"]), // yellow - blue (custom made)
             // .range(["#FFFFd8", '#007AFF']), // toned down yellow - blue
-            //.range(["#FFD0CB", "#FF6350"]), // brand red
+            // .range(["#FFD0CB", "#FF6350"]), // brand red
 
-            BLUE_1_10 : d3.scale.linear()
-                .domain([1,10])
+            BLUE_1_10: d3.scale.linear()
+                .domain([1, 10])
                 .range(['#CBDCEA', '#005299']),
 
-            BLUE_1_3 : d3.scale.linear()
-                .domain([1,3])
+            BLUE_1_3: d3.scale.linear()
+                .domain([1, 3])
                 .range(['#B6DDFC', '#0052A3']),
 
-            BLUE_RED : d3.scale.linear()
-                .domain([-1,1])
+            BLUE_RED: d3.scale.linear()
+                .domain([-1, 1])
                 .range(['#582A72', '#AAAA39'])
 
         };
 
         cttvUtilsService.search = {
-            translateKeys : function (searchObj) {
+            translateKeys: function (searchObj) {
                 for (var key in searchObj) {
                     switch (key) {
                     case 'score_min':
@@ -156,7 +154,7 @@ angular.module('cttvServices')
                 return searchObj;
             },
 
-            format : function (searchObj) {
+            format: function (searchObj) {
                 var opts = [];
                 for (var key in searchObj) {
                     opts.push(key + '=' + searchObj[key]);
@@ -165,13 +163,13 @@ angular.module('cttvServices')
                 return '?' + searchStr;
             },
 
-            searchString : function(key, value){
+            searchString: function (key, value) {
                 var url = $window.location.href.split('?');
                 // var search = window.location.href.split('?')[1] || "";
                 url[1] = url[1] || '';
 
                 // in no args supplied, return the query string
-                if(arguments.length === 0){
+                if (arguments.length === 0) {
                     return url[1];
                 }
 
@@ -182,8 +180,8 @@ angular.module('cttvServices')
                 // and if the same value is already set in the string, we need to remove it first
 
                 var search = url[1].split('&');
-                search = _.without(search, key+'='+value);
-                search.push(key+'='+value);
+                search = _.without(search, key + '=' + value);
+                search.push(key + '=' + value);
                 // $log.log(search);
                 url[1] = search.join('&');
                 $window.location.href = url.join('?');
@@ -191,12 +189,12 @@ angular.module('cttvServices')
 
         };
 
-        cttvUtilsService.checkPath = function (obj, path){
+        cttvUtilsService.checkPath = function (obj, path) {
             var prop;
             var props = path.split('.');
 
-            while( prop = props.shift() ){
-                if(!obj.hasOwnProperty(prop)){
+            while (prop = props.shift()) {
+                if (!obj.hasOwnProperty(prop)) {
                     return false;
                 }
                 obj = obj[prop];
@@ -206,8 +204,8 @@ angular.module('cttvServices')
 
         // n: number
         // t: tick
-        cttvUtilsService.roundToNearest = function(n,t){
-            return (Math.round(n/t)*t);
+        cttvUtilsService.roundToNearest = function (n, t) {
+            return (Math.round(n / t) * t);
         };
 
         cttvUtilsService.floatPrettyPrint = function (x) {
@@ -220,27 +218,27 @@ angular.module('cttvServices')
             return value;
         };
 
-        cttvUtilsService.getPmidsList = function(refs){
+        cttvUtilsService.getPmidsList = function (refs) {
             refs = refs || [];  // to avoid undefined errors
             return refs.map(function (ref) {
                 return ref.lit_id.split('/').pop();
             });
         };
 
-        cttvUtilsService.getPublicationsString = function(pmidsList){
+        cttvUtilsService.getPublicationsString = function (pmidsList) {
             pmidsList = pmidsList || [];  // to avoid undefined errors
             var pub = '';
-            if (pmidsList.length>0){
+            if (pmidsList.length > 0) {
                 pub = '<span class=\'cttv-publications-string\'>';
-                pub += '<span class=\'badge\'>'+pmidsList.length+'</span>';
-                pub += ( pmidsList.length===1 ? ' publication' : ' publications' );
-                if (pmidsList.length===1) {
-                    pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/abstract/MED/' + pmidsList[0] + '">'+pub+'</a>';
+                pub += '<span class=\'badge\'>' + pmidsList.length + '</span>';
+                pub += (pmidsList.length === 1 ? ' publication' : ' publications');
+                if (pmidsList.length === 1) {
+                    pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/abstract/MED/' + pmidsList[0] + '">' + pub + '</a>';
                 } else {
                     var pmids = pmidsList.map(function (ref) {
                         return 'EXT_ID:' + ref;
-                    }).join (' OR ');
-                    pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">'+pub+'</a>';
+                    }).join(' OR ');
+                    pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
                 }
                 pub += '</span>';
             }
@@ -274,7 +272,7 @@ angular.module('cttvServices')
         cttvUtilsService.expandTargetIds = function (compressedIds) {
             var targets = [];
 
-            for (var i=0; i<compressedIds.length; i++) {
+            for (var i = 0; i < compressedIds.length; i++) {
                 var compT = compressedIds[i];
                 var expanded = 'ENSG' + (Array(12 - compT.length).join('0') + compT);
                 targets.push(expanded);

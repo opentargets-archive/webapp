@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive ('multipleTargetsInteractionsSummary', ['$log', 'cttvAPIservice', '$http', '$q', '$timeout', 'cttvUtils', 'omnipathdbSources', function ($log, cttvAPIservice, $http, $q, $timeout, cttvUtils, omnipathdbSources) {
+    .directive('multipleTargetsInteractionsSummary', ['$log', 'cttvAPIservice', '$http', '$q', '$timeout', 'cttvUtils', 'omnipathdbSources', function ($log, cttvAPIservice, $http, $q, $timeout, cttvUtils, omnipathdbSources) {
         'use strict';
 
         return {
@@ -22,7 +22,7 @@ angular.module('cttvDirectives')
                         return;
                     }
 
-                    scope.showSpinner=true;
+                    scope.showSpinner = true;
 
                     var mapNames = {};
                     var uniprotIds = [];
@@ -48,7 +48,7 @@ angular.module('cttvDirectives')
                     // http://www.reactome.org/AnalysisService/identifiers/projection/\?pageSize\=1\&page\=1 POST
                     // var preFlightUrl = '/proxy/www.reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
                     // var postData = uniprotIds.join('\n');
-                    var p1 = $q(function(resolve, reject) {
+                    var p1 = $q(function (resolve, reject) {
                         resolve({data: []});
                     });
                     // var p1 = $http.post(preFlightUrl, postData)
@@ -201,7 +201,7 @@ angular.module('cttvDirectives')
                                     //     label: "PPI",
                                     //     source: 'IntAct'
                                     // });
-                                    for (var f=0; f<provenance.length; f++) {
+                                    for (var f = 0; f < provenance.length; f++) {
                                         var prov = provenance[f];
                                         var sourceCat = omnipathdbSources[prov];
                                         if (!sourceCat) {

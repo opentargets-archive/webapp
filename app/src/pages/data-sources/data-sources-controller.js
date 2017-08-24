@@ -14,7 +14,7 @@ angular.module('cttvControllers')
                     if (angular.isObject(obj[prop]) && !angular.isArray(obj[prop])) {
                         applyDataSources(obj[prop]);
                     } else {
-                        for (var i=0; i<obj[prop].length; i++) {
+                        for (var i = 0; i < obj[prop].length; i++) {
                             $scope[obj[prop][i]] = true;
                         }
                     }

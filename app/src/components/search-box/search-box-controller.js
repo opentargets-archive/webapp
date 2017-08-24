@@ -1,13 +1,12 @@
 'use strict';
 
 
-
 /**
  * Controller for the little search box
  */
-angular.module('cttvControllers').
+angular.module('cttvControllers')
 
-    controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
+    .controller('SearchBoxCtrl', ['$scope', '$log', '$location', '$window', '$document', '$element', 'cttvAPIservice', '$timeout', 'cttvConsts', '$q', 'cttvUtils', 'cttvLoadedLists', function ($scope, $log, $location, $window, $document, $element, cttvAPIservice, $timeout, cttvConsts, $q, cttvUtils, cttvLoadedLists) {
 
         var APP_SEARCH_URL = 'search';
         var APP_EVIDENCE_URL = 'evidence';
@@ -17,7 +16,7 @@ angular.module('cttvControllers').
             query: {
                 text: ''
             },
-            results:{
+            results: {
 
             },
             progress: false
@@ -47,17 +46,16 @@ angular.module('cttvControllers').
 
         // remove the click handler when the contrller/scope is destroyed
         // (this won't happen since the search box is there on every page)
-        $scope.$on('$destroy', function(){
+        $scope.$on('$destroy', function () {
             $document.unbind('click', dismissClickHandler);
         });
 
         // We want clicks on the actual panel to, say, click thrugh,
         // and not bubble up to the document and close the panel,
         // so we stop propagation
-        $element.bind('click', function(evt){
+        $element.bind('click', function (evt) {
             evt.stopPropagation();
         });
-
 
 
         /**
@@ -72,12 +70,12 @@ angular.module('cttvControllers').
         var searchPromise = $q(function (res, rej) {
             res();
         });
-        $scope.getSuggestions = function(query){
+        $scope.getSuggestions = function (query) {
 
-            //clear the data here, so the box disappears or the content is cleared...
+            // clear the data here, so the box disappears or the content is cleared...
             $scope.search.results = {};
 
-            if(query.length>1){
+            if (query.length > 1) {
                 $scope.search.progress = true;  // flag for search in progress
                 $document.bind('click', dismissClickHandler);
 
@@ -93,7 +91,7 @@ angular.module('cttvControllers').
                             method: 'GET'
                         })
                         .then(
-                            function(resp){
+                            function (resp) {
                                 // $log.info(resp);
                                 $scope.search.results = parseResponseData(resp.body.data);  // store the results
                                 var besthit = $scope.search.results.besthit;
@@ -101,12 +99,12 @@ angular.module('cttvControllers').
                                     cttvUtils.addMatchedBy(besthit);
                                 }
                             }, cttvAPIservice.defaultErrorHandler
-                        ).
-                        finally(function(){
+                        )
+                        .finally(function () {
                             $scope.search.progress = false;
                         });
                 });
-            }else{
+            } else {
                 $scope.search.progress = false;
             }
 
@@ -114,26 +112,23 @@ angular.module('cttvControllers').
         };
 
 
-
         /**
          * Checks if the current search has got any results.
          * @returns {boolean} true if the panel currently has results.
          */
-        $scope.hasResults=function(){
-            return Object.keys($scope.search.results).length>0;
+        $scope.hasResults = function () {
+            return Object.keys($scope.search.results).length > 0;
         };
-
 
 
         /**
          * Checks if the suggestions panel should be visible based on focus, number of results and length of the query;
          * @returns {boolean} true if the panel is (supposed to) be visible
          */
-        $scope.isVisible = function(){
-            var v = $scope.hasFocus && $scope.hasResults() && $scope.search.query.text.length>1;
+        $scope.isVisible = function () {
+            var v = $scope.hasFocus && $scope.hasResults() && $scope.search.query.text.length > 1;
             return v;
         };
-
 
 
         /*
@@ -141,18 +136,17 @@ angular.module('cttvControllers').
          * This is used internally to implement a href (link)
          * @param {String} url
          */
-        var setLocation=function(url){
-            if($location.url() != url){
+        var setLocation = function (url) {
+            if ($location.url() != url) {
                 $location.url(url);
             }
         };
 
 
-
         /*
          * Execute some pre-processing of the data
          */
-        var parseResponseData = function(data){
+        var parseResponseData = function (data) {
             if (!data.disease) {
                 data.disease = [];
             }
@@ -163,24 +157,23 @@ angular.module('cttvControllers').
                 data.besthit = null;
             }
             // check the EFOs path and remove excess data
-            data.disease.forEach(function(efo){
+            data.disease.forEach(function (efo) {
 
                 // first we don't want that "CTTV Root" thingy at the beginning, if it's there
-                if( efo.data.efo_path_labels[0][0]==cttvConsts.CTTV_ROOT_NAME && efo.data.efo_path_labels[0].length==efo.data.efo_path_codes[0].length ){
+                if (efo.data.efo_path_labels[0][0] == cttvConsts.CTTV_ROOT_NAME && efo.data.efo_path_labels[0].length == efo.data.efo_path_codes[0].length) {
                     efo.data.efo_path_labels[0] = efo.data.efo_path_labels[0].slice(1);
                     efo.data.efo_path_codes[0] = efo.data.efo_path_codes[0].slice(1);
                 }
 
                 // then we only want to show the last 3 elements (labels and codes)
                 // we store it as a new array
-                efo.data.efo_path = efo.data.efo_path_labels[0].map(function(v, i){
+                efo.data.efo_path = efo.data.efo_path_labels[0].map(function (v, i) {
                     return {label: v, code: efo.data.efo_path_codes[0][i]};
                 }).slice(-3); // the slicing at the end is not optimal, but safe :P
             });
 
             return data;
         };
-
 
 
         /**
@@ -192,11 +185,11 @@ angular.module('cttvControllers').
          *                     it sets the query label for the landing page, but it will be no longer needed
          *                     since that is now returned by the API.
          */
-        $scope.linkTo =function(s){
+        $scope.linkTo = function (s) {
             // parse the options:
-            if( s.type.toLowerCase()=='target' ){
+            if (s.type.toLowerCase() == 'target') {
                 $location.url('/target/' + s.q + '/associations');
-            } else if ( s.type.toLowerCase()=='disease' ){
+            } else if (s.type.toLowerCase() == 'disease') {
                 $location.url('/disease/' + s.q + '/associations');
             }
 
@@ -204,17 +197,16 @@ angular.module('cttvControllers').
         };
 
 
-
         /**
          * Sets a new search via the URL
          */
-        $scope.setSearch = function(){
+        $scope.setSearch = function () {
 
             // show search results page, nice and easy...
-            if($location.url() != APP_SEARCH_URL){
+            if ($location.url() != APP_SEARCH_URL) {
                 $location.url(APP_SEARCH_URL);
             }
-            $location.search( 'src=q:' + $scope.search.query.text);
+            $location.search('src=q:' + $scope.search.query.text);
 
 
             // reset the query field:
@@ -232,14 +224,14 @@ angular.module('cttvControllers').
          * @params id: the id of the element to scroll to (remember to add hash #)
          * @params p: extra padding to be added
          */
-        $scope.onFocusHandler = function(id, p, mobileonly){
-            //$log.log("hello");
-            if(mobileonly && $window.innerWidth>768){
+        $scope.onFocusHandler = function (id, p, mobileonly) {
+            // $log.log("hello");
+            if (mobileonly && $window.innerWidth > 768) {
                 return;
             }
             var sb = $(id);
-            if(sb){
-                $window.scrollTo( 0, sb.offset().top - p );
+            if (sb) {
+                $window.scrollTo(0, sb.offset().top - p);
             }
         };
 

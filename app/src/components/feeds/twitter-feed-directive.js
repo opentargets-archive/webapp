@@ -5,18 +5,18 @@ angular.module('cttvDirectives')
         return {
             restrict: 'AE',
             scope: {},
-            template : '<a class="twitter-timeline"'
-                        +'data-lang="en"'
-                        +'data-theme="light"'
-                        +'href="https://twitter.com/targetvalidate"'
-                        //+'data-tweet-limit="3"'
-                        +'data-height="400px"'
-                        +'data-chrome="noborders noheader nofooter"'
-                        +'>Tweets by targetvalidate</a>',
-            link: function(scope, element, attrs) {
-                try{
+            template: '<a class="twitter-timeline"'
+                        + 'data-lang="en"'
+                        + 'data-theme="light"'
+                        + 'href="https://twitter.com/targetvalidate"'
+                        // +'data-tweet-limit="3"'
+                        + 'data-height="400px"'
+                        + 'data-chrome="noborders noheader nofooter"'
+                        + '>Tweets by targetvalidate</a>',
+            link: function (scope, element, attrs) {
+                try {
                     twttr.widgets.load();
-                }catch(e){
+                } catch (e) {
                     $log.warn('Cannot load Twitter feed - possibly missing twttr.widgets script');
                 }
             }

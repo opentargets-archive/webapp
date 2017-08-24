@@ -10,11 +10,11 @@ angular.module('cttvDirectives')
             restrict: 'AE',
             scope: {},
 
-            template : ''
+            template: ''
                         + '<div ng-cloak class="notification" ng-show="notificationsLeft" ng-controller="NotifyCtrl">'
                         + '     <div class="counter" ng-bind-html="notificationsLeft"></div>'
                         + '     <i ng-click="notify()" class="fa fa-bell" aria-hidden="true"></i>'
-                        + '</div>',
+                        + '</div>'
         };
     }]);
 

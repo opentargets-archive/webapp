@@ -8,10 +8,10 @@ angular.module('cttvDirectives')
         'use strict';
 
         var whoiam = 'tree';
-        var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+        var colorScale = cttvUtils.colorScales.BLUE_0_1; // blue orig
 
         var gat;
-        //var currTarget;
+        // var currTarget;
 
         return {
 
@@ -19,13 +19,13 @@ angular.module('cttvDirectives')
 
             scope: {
                 // nocancers : '@',
-                facets : '=',
-                target : '@',
-                active : '@'
+                facets: '=',
+                target: '@',
+                active: '@'
             },
 
             template: '<png filename="{{target}}-AssociationsTreeView.png" track="associationsTree"></png><div style="float:left"><div id=cttvTreeView></div>'
-            +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend></div>',
+            + '<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend></div>',
 
 
             link: function (scope, elem, attrs) {
@@ -35,9 +35,9 @@ angular.module('cttvDirectives')
                 // legend stuff
                 scope.legendText = 'Score';
                 scope.colors = [];
-                for(var i=0; i<=100; i+=25){
-                    var j=i/100;
-                    scope.colors.push( {color:colorScale(j), label:j} );
+                for (var i = 0; i <= 100; i += 25) {
+                    var j = i / 100;
+                    scope.colors.push({color: colorScale(j), label: j});
                 }
 
 
@@ -49,7 +49,7 @@ angular.module('cttvDirectives')
 
                     // $log.log(scope.active +" !== " +whoiam);
 
-                    if ( scope.active !== whoiam ) {
+                    if (scope.active !== whoiam) {
                         return;
                     }
 
@@ -77,8 +77,8 @@ angular.module('cttvDirectives')
                     if (!gat) {
                         setTreeView(opts.therapeutic_area);
                     } else {
-                        cttvAPIservice.getAssociations (queryObject)
-                            .then (function (resp) {
+                        cttvAPIservice.getAssociations(queryObject)
+                            .then(function (resp) {
                                 // var data = resp.body.data;
 
                                 // if (scope.nocancers === "true") {
@@ -90,7 +90,7 @@ angular.module('cttvDirectives')
                                     gat
                                         .data(data)
                                         .therapeuticAreas(opts.therapeutic_area)
-                                        //.datatypes(dts)
+                                        // .datatypes(dts)
                                         .update();
                                 }
                             },
@@ -137,12 +137,12 @@ angular.module('cttvDirectives')
                 //         }
                 //     }
                 // };
-                
+
                 var setTreeView = function (tas) {
                     // Fire a target associations tree event for piwik to track
                     $analytics.eventTrack('targetAssociationsTree', {'category': 'association', 'label': 'tree'});
 
-                    ////// Tree view
+                    // //// Tree view
                     // viewport Size
                     var viewportW = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
                     var viewportH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
@@ -156,7 +156,7 @@ angular.module('cttvDirectives')
                     // TODO: This is not being used at the moment. We are fixing the size of the tree to 900px (see below)
                     var diameter = viewportH - elemOffsetTop - bottomMargin;
 
-                    //var dts = JSON.parse(attrs.datatypes);
+                    // var dts = JSON.parse(attrs.datatypes);
                     // var opts = {
                     //     target: attrs.target,
                     //     datastructure: "tree"
@@ -178,8 +178,8 @@ angular.module('cttvDirectives')
                         params: opts
                     };
 
-                    cttvAPIservice.getAssociations (queryObject)
-                        .then (
+                    cttvAPIservice.getAssociations(queryObject)
+                        .then(
                             function (resp) {
 
                                 // if (scope.nocancers === "true") {
@@ -196,7 +196,7 @@ angular.module('cttvDirectives')
                                     .diagonal(100);
                                 gat = geneAssociationsTree()
                                     .data(data)
-                                    //.datatypes(dts)
+                                    // .datatypes(dts)
                                     .names(cttvConsts)
                                     .filters(scope.facets)
                                     .diameter(900)

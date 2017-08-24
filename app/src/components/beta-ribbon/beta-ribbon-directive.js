@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive ('cttvBetaRibbon', ['$location', function ($location) {
+    .directive('cttvBetaRibbon', ['$location', function ($location) {
         'use strict';
         return {
             restrict: 'E',

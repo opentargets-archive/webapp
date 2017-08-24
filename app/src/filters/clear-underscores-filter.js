@@ -3,6 +3,6 @@ angular.module('cttvFilters')
         'use strict';
 
         return function (input) {
-            return input.replace(/_/g,' ');
+            return input.replace(/_/g, ' ');
         };
     });

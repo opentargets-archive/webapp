@@ -16,11 +16,11 @@ angular.module('cttvDirectives')
         return {
             restrict: 'AE',
             scope: {
-                scroll: '=scrollPosition',
+                scroll: '=scrollPosition'
             },
-            link: function(scope) {
+            link: function (scope) {
                 var windowEl = angular.element($window);
-                var handler = function() {
+                var handler = function () {
                     scope.scroll = windowEl[0].scrollY;
                 };
                 windowEl.on('scroll', scope.$apply.bind(scope, handler));

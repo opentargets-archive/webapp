@@ -10,14 +10,14 @@ angular.module('cttvDirectives')
 
         return {
             restrict: 'AE',
-            //template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner class="text-lowlight fa-{{size}}x"></span></div>',
+            // template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner class="text-lowlight fa-{{size}}x"></span></div>',
             template: '<div class="page-progress-spinner" ng-show="isloading"><span cttv-progress-spinner size="50" stroke="3" class="text-lowlight"></span></div>',
             scope: {
                 size: '@'
             },
-            link: function(scope, elem, attrs){
-                scope.$watch(function(){return cttvAPIservice.activeRequests;}, function(newValue,oldValue){
-                    scope.isloading = newValue>0;
+            link: function (scope, elem, attrs) {
+                scope.$watch(function () {return cttvAPIservice.activeRequests;}, function (newValue, oldValue) {
+                    scope.isloading = newValue > 0;
                 });
             }
         };

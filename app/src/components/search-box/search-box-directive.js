@@ -8,8 +8,8 @@ angular.module('cttvDirectives')
         return {
             restrict: 'AE',
             scope: {},
-            templateUrl : 'src/components/search-box/search-box.html',
-            link: function(scope, element, attrs) {
+            templateUrl: 'src/components/search-box/search-box.html',
+            link: function (scope, element, attrs) {
 
             }
         };

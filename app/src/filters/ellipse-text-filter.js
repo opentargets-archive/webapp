@@ -1,8 +1,8 @@
 angular.module('cttvFilters')
-    .filter('otEllipseText', function() {
+    .filter('otEllipseText', function () {
         'use strict';
 
-        return function(text, length) {
-            return  text.length>length ? text.substring(0,length)+'&hellip;' : text;
+        return function (text, length) {
+            return  text.length > length ? text.substring(0, length) + '&hellip;' : text;
         };
     });

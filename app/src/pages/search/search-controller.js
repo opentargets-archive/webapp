@@ -4,7 +4,6 @@
 angular.module('cttvControllers')
 
 
-
     /**
      * SearchAppCtrl
      * Controller for the search/results page
@@ -32,15 +31,15 @@ angular.module('cttvControllers')
 
         // filters object used to render the fake facets
         $scope.filters = {
-            target : {},
-            disease : {}
+            target: {},
+            disease: {}
         };
 
-        var initScopeFilters = function(){
-            Object.keys($scope.filters).forEach(function(k){
-                $scope.filters[k].total= 0;
-                $scope.filters[k].selected= false;
-                $scope.filters[k].loading= false;
+        var initScopeFilters = function () {
+            Object.keys($scope.filters).forEach(function (k) {
+                $scope.filters[k].total = 0;
+                $scope.filters[k].selected = false;
+                $scope.filters[k].loading = false;
             });
         };
 
@@ -61,40 +60,38 @@ angular.module('cttvControllers')
          * Check config and initialize from given object or default values
          * Note properties from the state service object are always arrays
          */
-        var initState = function(obj){
-            state.q = ( obj.q || [] )[0] ? obj.q : [''];
-            state.p = ( obj.p || [] )[0] ? obj.p : [1];
-            state.f = ( obj.f || [] )[0] ? obj.f : [];
+        var initState = function (obj) {
+            state.q = (obj.q || [])[0] ? obj.q : [''];
+            state.p = (obj.p || [])[0] ? obj.p : [1];
+            state.f = (obj.f || [])[0] ? obj.f : [];
 
             // ensure filters are only allowed terms
-            state.f = state.f.filter(function(filter){return filter=='target' || filter=='disease';});
+            state.f = state.f.filter(function (filter) {return filter == 'target' || filter == 'disease';});
             return state;
         };
-
 
 
         /*
          * Takes object from locationStateService, initialize the page/component state and fire a query
          */
-        var setStateFromURL = function(obj){
+        var setStateFromURL = function (obj) {
             initState(obj);
             updateQueryFromState();
         };
-
 
 
         /*
          * Update the query object based on state:
          * that is the object with the parameters for the API call
          */
-        var updateQueryFromState = function(){
+        var updateQueryFromState = function () {
             // update query
             $scope.search.query.q = state.q[0];
             // update page
             $scope.search.query.page = state.p[0];
             // update filters
             initScopeFilters(); // reset the filters (or might carry previous settings)
-            state.f.forEach(function(f){
+            state.f.forEach(function (f) {
                 $scope.filters[f].selected = true;
             });
             // get the data
@@ -103,22 +100,20 @@ angular.module('cttvControllers')
         };
 
 
-
         $scope.state = state; // expose the state object
 
 
-
-        $scope.update = function(){
+        $scope.update = function () {
 
             // query and page are taken care of directly via the model
             // so here just update the filters
-            var f = Object.keys($scope.filters).filter(function(k){
+            var f = Object.keys($scope.filters).filter(function (k) {
                 return $scope.filters[k].selected;
             });
 
             // if some filter changed, so reset the page number:
-            if( state.f.length != f.length ){
-                state.p[0]=1;
+            if (state.f.length != f.length) {
+                state.p[0] = 1;
             }
 
             state.f = f;
@@ -126,31 +121,30 @@ angular.module('cttvControllers')
         };
 
 
-
         /*
          get the count for targets and disease to mimic facets
          when we'll have real facets we'll remove this
          */
-        var getFiltersData = function(){
-            if( $scope.search.query.q.length > 0 ) {
+        var getFiltersData = function () {
+            if ($scope.search.query.q.length > 0) {
 
-                Object.keys($scope.filters).forEach(function(k){
+                Object.keys($scope.filters).forEach(function (k) {
                     $scope.filters[k].loading = true;
                     cttvAPIservice.getSearch({
                         method: 'GET',
                         params: {
                             q: $scope.search.query.q,
-                            size : 0,
-                            filter : k
+                            size: 0,
+                            filter: k
                         }
-                    }).
-                        then(
-                            function(resp) {
+                    })
+                        .then(
+                            function (resp) {
                                 $scope.filters[k].total = resp.body.total;
                             },
                             cttvAPIservice.defaultErrorHandler
-                        ).
-                        finally(function(){
+                        )
+                        .finally(function () {
                             $scope.filters[k].loading = false;
                         });
                 });
@@ -159,8 +153,7 @@ angular.module('cttvControllers')
         };
 
 
-
-        var getTargetInfo = function(id){
+        var getTargetInfo = function (id) {
             var queryObject = {
                 method: 'GET',
                 params: {
@@ -169,20 +162,19 @@ angular.module('cttvControllers')
                 }
             };
             return cttvAPIservice.getTarget(queryObject)
-                .then(function(resp) {
-                    try{
-                        $scope.search.results.data[0].data.top_associations.parsed.find(function(p){
-                            return p.id===id;
+                .then(function (resp) {
+                    try {
+                        $scope.search.results.data[0].data.top_associations.parsed.find(function (p) {
+                            return p.id === id;
                         }).label = resp.body.approved_symbol;
-                    }catch(e){
+                    } catch (e) {
                         $log.log('Error getting Target information');
                     }
-                },cttvAPIservice.defaultErrorHandler);
+                }, cttvAPIservice.defaultErrorHandler);
         };
 
 
-
-        var getDiseaseInfo = function(id){
+        var getDiseaseInfo = function (id) {
             var queryObject = {
                 method: 'GET',
                 params: {
@@ -191,27 +183,26 @@ angular.module('cttvControllers')
                 }
             };
             return cttvAPIservice.getDisease(queryObject)
-                .then( function(resp) {
-                    try{
-                        $scope.search.results.data[0].data.top_associations.parsed.find(function(p){
-                            return p.id===id;
+                .then(function (resp) {
+                    try {
+                        $scope.search.results.data[0].data.top_associations.parsed.find(function (p) {
+                            return p.id === id;
                         }).label = resp.body.label;
-                    }catch(e){
+                    } catch (e) {
                         $log.log('Error getting disease information');
                     }
-                }, cttvAPIservice.defaultErrorHandler );
+                }, cttvAPIservice.defaultErrorHandler);
         };
 
 
-
-        var getDrugInfo = function(id, type){
+        var getDrugInfo = function (id, type) {
             var queryObject = {
                 method: 'GET',
                 params: {
-                    //target: id,
+                    // target: id,
                     datasource: 'chembl',
                     size: 1000,
-                    fields:[
+                    fields: [
                         'drug.max_phase_for_all_diseases.numeric_index',
                         'drug.molecule_name'
                     ]
@@ -222,7 +213,7 @@ angular.module('cttvControllers')
 
 
             return cttvAPIservice.getFilterBy(queryObject).then(function (resp) {
-                var d = resp.body.data.filter(function(i){
+                var d = resp.body.data.filter(function (i) {
                     return i.drug.max_phase_for_all_diseases.numeric_index == 4;
                 });
                 d = _.uniqBy(d, 'drug.molecule_name');
@@ -232,14 +223,13 @@ angular.module('cttvControllers')
         };
 
 
-
-        var getResults = function(){
+        var getResults = function () {
 
             // before getting new results,
             // we make sure we clear any current results (like in the case
             // of applying a filter), which also causes the spinner to show...
 
-            if( $scope.search.query.q.length > 0 ) {
+            if ($scope.search.query.q.length > 0) {
                 $scope.search.loading = true;
 
                 var queryObject = {
@@ -248,32 +238,32 @@ angular.module('cttvControllers')
                 queryObject.params = cttvAppToAPIService.getApiQueryObject(cttvAppToAPIService.SEARCH, $scope.search.query);
                 // if one and only one of the filters is selected, apply the corresponding filter
                 // cool way of mimicking a XOR operator ;)
-                if( $scope.filters.target.selected != $scope.filters.disease.selected ){
+                if ($scope.filters.target.selected != $scope.filters.disease.selected) {
                     queryObject.params.filter = $scope.filters.target.selected ? 'target' : 'disease';
                 }
 
-                cttvAPIservice.getSearch( queryObject )
+                cttvAPIservice.getSearch(queryObject)
                     .then(
-                        function(resp) {
+                        function (resp) {
 
                             $scope.search.results = resp.body;
 
-                            $scope.search.results.data.forEach(function(result){
+                            $scope.search.results.data.forEach(function (result) {
                                 cttvUtils.addMatchedBy(result);
                             });
 
-                            //$log.log($scope.search.results.data[0]);
+                            // $log.log($scope.search.results.data[0]);
                             return resp;
                         },
                         cttvAPIservice.defaultErrorHandler
                     )
 
                     .then(
-                        function(resp) {
+                        function (resp) {
 
                             // Picasso panel:
                             // for the first result, parse a few info:
-                            if( resp.body.from==0 ){
+                            if (resp.body.from == 0) {
 
                                 var result = $scope.search.results.data[0];
 
@@ -283,13 +273,13 @@ angular.module('cttvControllers')
                                 // If a target we get the best 5 *direct*ly associated diseases
                                 // If a disease we get the best 5 associated targets
                                 var associationsField = result.data.type === 'target' ? 'direct' : 'total';
-                                result.data.top_associations.parsed = result.data.top_associations[associationsField].slice(0,5);
-                                result.data.top_associations.parsed = result.data.top_associations.parsed.map(function(p){
+                                result.data.top_associations.parsed = result.data.top_associations[associationsField].slice(0, 5);
+                                result.data.top_associations.parsed = result.data.top_associations.parsed.map(function (p) {
                                     // split ID "ENSG00000073756-EFO_0007214"
-                                    var id = p.id.split('-')[ +(result.data.type==='target') ];
+                                    var id = p.id.split('-')[+(result.data.type === 'target')];
                                     return {
-                                        id : id,
-                                        label: result.data.type==='target' ? getDiseaseInfo(id) : getTargetInfo(id)
+                                        id: id,
+                                        label: result.data.type === 'target' ? getDiseaseInfo(id) : getTargetInfo(id)
                                     };
                                 });
 
@@ -298,11 +288,11 @@ angular.module('cttvControllers')
                                 // phase IV drugs
                                 //
                                 result.data.drug_summary = {
-                                    total : '...'
+                                    total: '...'
                                 };
                                 getDrugInfo(result.data.id, result.data.type)
                                     .then(
-                                        function(d){
+                                        function (d) {
                                             result.data.drug_summary.total = d;
                                         }
                                     );
@@ -311,13 +301,13 @@ angular.module('cttvControllers')
                                 //
                                 // DISEASE specific
                                 //
-                                if( result.data.type === 'disease' ){
+                                if (result.data.type === 'disease') {
                                     // parse therapeutic areas to unique entries
                                     var utas = {};
                                     result.data.unique_ta = [];
-                                    result.data.efo_path_labels.forEach(function(ta, i){
-                                        if(!utas[ta[0]]){
-                                            utas[ta[0]]=true; // just to use has hashmap
+                                    result.data.efo_path_labels.forEach(function (ta, i) {
+                                        if (!utas[ta[0]]) {
+                                            utas[ta[0]] = true; // just to use has hashmap
                                             result.data.unique_ta.push({
                                                 label: ta[0],
                                                 efo: result.data.efo_path_codes[i][0]
@@ -331,7 +321,7 @@ angular.module('cttvControllers')
                                 //
                                 // TARGETS specific
                                 //
-                                if( result.data.type === 'target' ){
+                                if (result.data.type === 'target') {
                                     // get drugs phase 4 count
 
                                 }
@@ -340,12 +330,11 @@ angular.module('cttvControllers')
                         },
                         cttvAPIservice.defaultErrorHandler
                     )
-                    .finally(function(){
+                    .finally(function () {
                         $scope.search.loading = false;
                     });
             }
         };
-
 
 
         // on search change
@@ -358,10 +347,10 @@ angular.module('cttvControllers')
         // on page load
 
         // if old style query, do a rerouting to new style query
-        if( !cttvLocationState.parseLocationSearch()[stateId] && cttvLocationState.parseLocationSearch()[stateIdLegacy] ){
-            $location.search( 'src=q:' + cttvLocationState.parseLocationSearch()[stateIdLegacy]);
+        if (!cttvLocationState.parseLocationSearch()[stateId] && cttvLocationState.parseLocationSearch()[stateIdLegacy]) {
+            $location.search('src=q:' + cttvLocationState.parseLocationSearch()[stateIdLegacy]);
         }
 
-        setStateFromURL( cttvLocationState.parseLocationSearch()[stateId] || {q:[cttvLocationState.parseLocationSearch()[stateIdLegacy]]} );
+        setStateFromURL(cttvLocationState.parseLocationSearch()[stateId] || {q: [cttvLocationState.parseLocationSearch()[stateIdLegacy]]});
 
     }]);

@@ -1,12 +1,10 @@
 
-
 /* Services */
 
-angular.module('cttvServices').
+angular.module('cttvServices')
 
 
-
-    factory('cttvLocationState', ['$log', '$location', '$rootScope', 'cttvConsts', function($log, $location, $rootScope, cttvConsts) {
+    .factory('cttvLocationState', ['$log', '$location', '$rootScope', 'cttvConsts', function ($log, $location, $rootScope, cttvConsts) {
 
         'use strict';
 
@@ -23,16 +21,15 @@ angular.module('cttvServices').
         tmp_state._path = '';
 
 
-
         /*
          * Updates state and old_state and broadcast a message to the app
          */
-        var updateState = function(new_state){
+        var updateState = function (new_state) {
             // update the state and
             old_state = state;
-            state = _.cloneDeep( new_state );
+            state = _.cloneDeep(new_state);
             state._path = $location.path();
-            tmp_state = _.cloneDeep( new_state );
+            tmp_state = _.cloneDeep(new_state);
             tmp_state._path = $location.path();
 
 
@@ -42,12 +39,11 @@ angular.module('cttvServices').
             //     and therefore cannot respond to it (need to manually set on load actions)
             //  2. the page we're leaving is still listening and we don't want to respond to
             //     state chagnes there... it's a location change rather than a state change
-            if( state._path === old_state._path ){
+            if (state._path === old_state._path) {
                 // broadcast state update event if we're on the same page
                 $rootScope.$broadcast(cttvLocationStateService.STATECHANGED, _.cloneDeep(state), _.cloneDeep(old_state));
             }
         };
-
 
 
         /*
@@ -56,9 +52,9 @@ angular.module('cttvServices').
          * var bob = parseSearchItem("datatype:genetic_association,datatype:drugs")
          * // bob = {datatype:["genetic_association","drugs"]}
          */
-        var parseSearchItem = function(item_string){
+        var parseSearchItem = function (item_string) {
             var obj = {};
-            item_string.split(',').forEach(function(itm){
+            item_string.split(',').forEach(function (itm) {
                 var tmp = itm.split(':');
                 obj[tmp[0]] = obj[tmp[0]] || []; // make sure the returned value is always an array so we don't have to check every time
                 obj[tmp[0]].push(tmp[1]);
@@ -67,21 +63,20 @@ angular.module('cttvServices').
         };
 
 
-
         /**
          * Returns a string representation of the specified object, in a format matching the syntax:
          * Example:
          * var obj = {datatype:["drugs","literature","animals"], pathways:"sdfs"}
          * param(obj); // returns "datatype:drugs,datatype:literature,datatype:animals,pathways:sdfs"
          */
-        cttvLocationStateService.param = function(obj){
+        cttvLocationStateService.param = function (obj) {
             // $log.log("cttvLocationStateService.param:");
             // $log.log(obj);
 
             // uses jQuery.param() method
             // $httpParamSerializerJQLike should work the same... but it doesn't and returns parentheses around arrays etc
             // so we stick with jQuery for now
-            if( typeof obj === 'string' ) {
+            if (typeof obj === 'string') {
                 // this is to handle simple cases where obj is a simple string,
                 // say like in the case of &version=latest
                 // it returns "latest";
@@ -89,21 +84,20 @@ angular.module('cttvServices').
                 return obj;
             }
             var s = [];
-            for(var i in obj){
-                if(Array.isArray(obj[i])){
-                    obj[i].forEach(function(a){
-                        s.push(i+':'+a);
+            for (var i in obj) {
+                if (Array.isArray(obj[i])) {
+                    obj[i].forEach(function (a) {
+                        s.push(i + ':' + a);
                     });
                 }
-                if( typeof obj[i] === 'string' ) {
-                    s.push(i+':'+obj[i]);
+                if (typeof obj[i] === 'string') {
+                    s.push(i + ':' + obj[i]);
                 }
             }
 
             return s.join(',');
-            //return $.param(obj,true).replace(/=/g,":").replace(/&/g,",").replace(/\+/g," ");
+            // return $.param(obj,true).replace(/=/g,":").replace(/&/g,",").replace(/\+/g," ");
         };
-
 
 
         /**
@@ -112,8 +106,8 @@ angular.module('cttvServices').
          * var search={ ftcs:"datatype:drugs,datatype:literature,datatype:animals,pathways:sdfs" }
          * parseLocationSearch(search) // returns {ftcs:{datatype:["drugs","literature","animals"], pathways:"sdfs"}}
          */
-        cttvLocationStateService.parseLocationSearch = function(search){
-            //$log.log("parseLocationSearch");
+        cttvLocationStateService.parseLocationSearch = function (search) {
+            // $log.log("parseLocationSearch");
             search = search || $location.search();
             var raw = {};
             // array containing the type of old facets -- TODO: can remove in future when we get rid of backward compatibilty (see comment below)
@@ -127,8 +121,8 @@ angular.module('cttvServices').
                 cttvConsts.TARGET_CLASS
             ];
 
-            for(var i in search){
-                if(search.hasOwnProperty(i)){
+            for (var i in search) {
+                if (search.hasOwnProperty(i)) {
 
                     raw[i] = search[i];
 
@@ -143,9 +137,9 @@ angular.module('cttvServices').
                     // If any, try and convert old style facets URLs, but only if there are no new style facets
                     if (_.indexOf(fc, i) > -1) {
                         // so if this is an old style facet, check if there are any new style ones, and if not, let's try parse the old facet into new syntax
-                        if(!search.fcts){
+                        if (!search.fcts) {
                             raw.fcts = raw.fcts || {};    // create a "fcts" objects if needed
-                            raw.fcts[i] = ( typeof search[ i ] === 'string' ) ? [search[i]] : search[i];    // add facets to "fcts"
+                            raw.fcts[i] = (typeof search[i] === 'string') ? [search[i]] : search[i];    // add facets to "fcts"
                         }
                         delete raw[i];  // in any case, now delete the old style facet
                     }
@@ -156,59 +150,55 @@ angular.module('cttvServices').
         };
 
 
+        /**
+         * get the state object
+         */
+        cttvLocationStateService.getState = function () {
+            // $log.log("!!!! getState()");
+            return _.cloneDeep(state);
+        };
+
 
         /**
          * get the state object
          */
-        cttvLocationStateService.getState = function(){
-            //$log.log("!!!! getState()");
-            return _.cloneDeep( state );
+        cttvLocationStateService.getOldState = function () {
+            // $log.log("!!!! getOldState()");
+            return _.cloneDeep(old_state);
         };
-
-
-
-        /**
-         * get the state object
-         */
-        cttvLocationStateService.getOldState = function(){
-            //$log.log("!!!! getOldState()");
-            return _.cloneDeep( old_state );
-        };
-
 
 
         /**
          * Set the temp state object to the given one (full override)
          */
-        cttvLocationStateService.setState = function(so){
+        cttvLocationStateService.setState = function (so) {
             // $log.log("setState()");
             tmp_state = so;
             cttvLocationStateService.updateStateURL();
         };
 
 
-
         /**
          * Update the state object only for the specific sub-object
          */
-        cttvLocationStateService.setStateFor = function(k, so, track){
+        cttvLocationStateService.setStateFor = function (k, so, track) {
             // $log.log("setStateFor ");
 
-            if(track==undefined){track=true;}   // track = (track || track==undefined)
+            if (track == undefined) {track = true;}   // track = (track || track==undefined)
             tmp_state[k] = so;
 
-            if( !tmp_state[k] || Object.keys(tmp_state[k]).length==0 ){
+            if (!tmp_state[k] || Object.keys(tmp_state[k]).length == 0) {
                 delete tmp_state[k];
             }
 
-            if(track){
+            if (track) {
                 cttvLocationStateService.updateStateURL();
             }
 
         };
 
 
-        cttvLocationStateService.resetStateFor = function(k){
+        cttvLocationStateService.resetStateFor = function (k) {
             // $log.log("resetStateFor()");
             cttvLocationStateService.setStateFor(k, {}, false);
         };
@@ -217,13 +207,13 @@ angular.module('cttvServices').
         /**
          * Updates the URL search with the current state object
          */
-        cttvLocationStateService.updateStateURL = function(){
+        cttvLocationStateService.updateStateURL = function () {
             // $log.log("updateStateURL");
 
             var stt = {};
-            for(var i in tmp_state){
+            for (var i in tmp_state) {
                 // translate the state to the URL, but we don't want to include the _path property
-                if(tmp_state.hasOwnProperty(i) && i!=='_path' ){
+                if (tmp_state.hasOwnProperty(i) && i !== '_path') {
                     stt[i] = cttvLocationStateService.param(tmp_state[i]);
                 }
             }
@@ -232,34 +222,30 @@ angular.module('cttvServices').
         };
 
 
-
         /**
          * This does absolutely nothing.
          * But call it at the beginning of your controller to sort of wake up / instantiate the service,
          * ensuring it's ready and available in your controller
          */
-        cttvLocationStateService.init = function(){
+        cttvLocationStateService.init = function () {
             // do nothing!
         };
-
 
 
         // event constants: STATECHANGED to register listeners for when the state changes
         cttvLocationStateService.STATECHANGED = 'cttv_app_state_change';
 
 
-
         // This is the main part of the service:
         // it watches for changes in the URL search, then process the search and fire an event
         // all components that need to update their state based on this will be listening
         // $rootScope.$on('$locationChangeSuccess', function(){
-        $rootScope.$on('$locationChangeSuccess', function(){
-            updateState( cttvLocationStateService.parseLocationSearch( $location.search() ) );
+        $rootScope.$on('$locationChangeSuccess', function () {
+            updateState(cttvLocationStateService.parseLocationSearch($location.search()));
         });
 
 
         return cttvLocationStateService;
-
 
 
     }]);

@@ -7,6 +7,6 @@ angular.module('cttvDirectives')
             scope: {
                 href: '@'
             },
-            template : '<a href="{{href}}"><span class="fa fa-question-circle"></span></a>'
+            template: '<a href="{{href}}"><span class="fa fa-question-circle"></span></a>'
         };
     }]);

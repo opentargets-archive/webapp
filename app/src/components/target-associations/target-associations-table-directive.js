@@ -14,17 +14,17 @@ angular.module('cttvDirectives')
         // var nocancers;
         var myscope;
 
-        var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+        var colorScale = cttvUtils.colorScales.BLUE_0_1; // blue orig
 
         /*
     * Generates and returns the string representation of the span element
     * with color information for each cell
     */
-        var getColorStyleString = function(value, href){
-            var str='';
-            if( value<0 ){
+        var getColorStyleString = function (value, href) {
+            var str = '';
+            if (value < 0) {
                 str = '<span class=\'no-data\' title=\'No data\'></span>'; // quick hack: where there's no data, don't put anything so the sorting works better
-            /*if(value<0){
+            /* if(value<0){
                 // when there's no data, it should be -1
                 str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, don't put anything so the sorting works better
             } else {
@@ -32,11 +32,11 @@ angular.module('cttvDirectives')
             }*/
             } else {
                 var col = colorScale(value);
-                var val = (value==0) ? '0' : cttvUtils.floatPrettyPrint(value);
-                str = '<span style=\'color: '+col+'; background: '+col+';\' title=\'Score: '+val+'\'>'+val+'</span>';
+                var val = (value == 0) ? '0' : cttvUtils.floatPrettyPrint(value);
+                str = '<span style=\'color: ' + col + '; background: ' + col + ';\' title=\'Score: ' + val + '\'>' + val + '</span>';
             }
 
-            if( href && value>=0 ){
+            if (href && value >= 0) {
                 str = '<a href=' + href + '>' + str + '</a>';
             }
 
@@ -48,26 +48,26 @@ angular.module('cttvDirectives')
             {name: '', title: cttvDictionary.DISEASE},
             {name: '', title: 'EFO'},
             {name: '', title: 'TherapeuticArea EFO'},
-            {name: '', title:cttvDictionary.ASSOCIATION_SCORE},
+            {name: '', title: cttvDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
-            {name:cttvConsts.datatypes.GENETIC_ASSOCIATION, title:cttvDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
-            {name:cttvConsts.datatypes.SOMATIC_MUTATION, title:cttvDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
-            {name:cttvConsts.datatypes.KNOWN_DRUG, title:cttvDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
-            {name:cttvConsts.datatypes.AFFECTED_PATHWAY, title:cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
-            {name:cttvConsts.datatypes.RNA_EXPRESSION, title:cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
-            {name:cttvConsts.datatypes.LITERATURE, title:cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
-            {name:cttvConsts.datatypes.ANIMAL_MODEL, title:cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
-            {name:'', title: cttvDictionary.THERAPEUTIC_AREA}
+            {name: cttvConsts.datatypes.GENETIC_ASSOCIATION, title: cttvDictionary[cttvConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
+            {name: cttvConsts.datatypes.SOMATIC_MUTATION, title: cttvDictionary[cttvConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
+            {name: cttvConsts.datatypes.KNOWN_DRUG, title: cttvDictionary[cttvConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
+            {name: cttvConsts.datatypes.AFFECTED_PATHWAY, title: cttvDictionary[cttvConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
+            {name: cttvConsts.datatypes.RNA_EXPRESSION, title: cttvDictionary[cttvConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
+            {name: cttvConsts.datatypes.LITERATURE, title: cttvDictionary[cttvConsts.datatypes.LITERATURE.toUpperCase()]},
+            {name: cttvConsts.datatypes.ANIMAL_MODEL, title: cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
+            {name: '', title: cttvDictionary.THERAPEUTIC_AREA}
         ];
 
         /*
     Setup the table cols and return the DT object
     */
-        var setupTable = function(table, target, filename, download){
+        var setupTable = function (table, target, filename, download) {
         // $log.log("setupTable()");
         // return $(table).DataTable( cttvUtils.setTableToolsParams({
-            return $(table).DataTable ({
-            //"dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
+            return $(table).DataTable({
+            // "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
                 'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
                 'buttons': [
                     {
@@ -105,7 +105,7 @@ angular.module('cttvDirectives')
                         11: 'association_score.overall'
                     };
                     var order = [];
-                    for (var i=0; i<data.order.length; i++) {
+                    for (var i = 0; i < data.order.length; i++) {
                         var prefix = data.order[i].dir === 'asc' ? '~' : '';
                         order.push(prefix + mappings[data.order[i].column]);
                     }
@@ -129,7 +129,7 @@ angular.module('cttvDirectives')
                     };
 
                     cttvAPIservice.getAssociations(queryObject)
-                        .then (function (resp) {
+                        .then(function (resp) {
                             var dtData = parseServerResponse(resp.body.data);
                             var o = {
                                 recordsTotal: resp.body.total,
@@ -141,37 +141,37 @@ angular.module('cttvDirectives')
                             cbak(o);
                         });
                 },
-                'columns': (function(){
-                    var a=[];
-                    for(var i=0; i<cols.length; i++){
-                        a.push({ 'title': '<div><span title=\''+cols[i].title+'\'>'+cols[i].title+'</span></div>', name: cols[i].name });
+                'columns': (function () {
+                    var a = [];
+                    for (var i = 0; i < cols.length; i++) {
+                        a.push({'title': '<div><span title=\'' + cols[i].title + '\'>' + cols[i].title + '</span></div>', name: cols[i].name});
                     }
                     return a;
                 })(),
-                'columnDefs' : [
+                'columnDefs': [
                     {
-                        'targets' : [1,2],
-                        'visible' : false,
+                        'targets': [1, 2],
+                        'visible': false
                     },
                     {
-                        'targets': [3,4,5,6,7,8,9],
-                        'asSorting': [ 'desc', 'asc'],
+                        'targets': [3, 4, 5, 6, 7, 8, 9],
+                        'asSorting': [ 'desc', 'asc']
                     },
                     {
                         'orderable': false,
                         'targets': 11
                     },
-                    { 'orderSequence': ['desc', 'asc'], 'targets': [3,4,5,6,7,8,9,10,11] },
-                    { 'orderSequence': ['asc', 'desc'], 'targets': [0]}
+                    {'orderSequence': ['desc', 'asc'], 'targets': [3, 4, 5, 6, 7, 8, 9, 10, 11]},
+                    {'orderSequence': ['asc', 'desc'], 'targets': [0]}
                 ],
-                'order' : [[3, 'desc']],
+                'order': [[3, 'desc']],
                 'orderMulti': false,
                 'autoWidth': false,
                 'ordering': true,
                 'lengthMenu': [[10, 50, 200, 500], [10, 50, 200, 500]],
                 'pageLength': 50
             },
-            filename );
+            filename);
         };
 
         // function excludeCancersFromOtherTAs (dis) {
@@ -232,13 +232,13 @@ angular.module('cttvDirectives')
                 return str;
             };
 
-            var getScore = function(i, dt){
-                return ( !d[i].association_score.datatypes[dt] && !d[i].evidence_count.datatypes[dt] ) ? -1 : d[i].association_score.datatypes[dt] ;
+            var getScore = function (i, dt) {
+                return (!d[i].association_score.datatypes[dt] && !d[i].evidence_count.datatypes[dt]) ? -1 : d[i].association_score.datatypes[dt];
             };
 
             myscope.filteredOutByExcNeoplasm = 0;
-        
-            for (var i=0; i<d.length; i++) {
+
+            for (var i = 0; i < d.length; i++) {
                 var data = d[i];
 
                 // If the nocancers option is true:
@@ -288,7 +288,7 @@ angular.module('cttvDirectives')
                 // Disease name
                 var geneDiseaseLoc = '/evidence/' + data.target.id + '/' + data.disease.id;
 
-                row.push('<a href=\'' + geneDiseaseLoc + '\' title=\''+data.disease.efo_info.label+'\'>' + data.disease.efo_info.label + '</a>');
+                row.push('<a href=\'' + geneDiseaseLoc + '\' title=\'' + data.disease.efo_info.label + '\'>' + data.disease.efo_info.label + '</a>');
 
                 // EFO (hidden)
                 row.push(data.disease.id);
@@ -298,25 +298,25 @@ angular.module('cttvDirectives')
                 row.push(taStr); // Neoplasm
 
                 // Association score
-                row.push( getColorStyleString( data.association_score.overall, geneDiseaseLoc ) );
+                row.push(getColorStyleString(data.association_score.overall, geneDiseaseLoc));
 
                 // Genetic association
-                row.push( getColorStyleString( getScore(i, 'genetic_association') , geneDiseaseLoc + (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + 'view=sec:genetic_associations') );
+                row.push(getColorStyleString(getScore(i, 'genetic_association'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:genetic_associations'));
                 // Somatic mutation
-                row.push( getColorStyleString( getScore(i, 'somatic_mutation') , geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + 'view=sec:somatic_mutations') );
+                row.push(getColorStyleString(getScore(i, 'somatic_mutation'), geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:somatic_mutations'));
                 // Known drug
-                row.push( getColorStyleString( getScore(i, 'known_drug') , geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + 'view=sec:known_drugs') );
+                row.push(getColorStyleString(getScore(i, 'known_drug'), geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:known_drugs'));
                 // Affected pathway
-                row.push( getColorStyleString( getScore(i, 'affected_pathway') , geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + 'view=sec:affected_pathways') );
+                row.push(getColorStyleString(getScore(i, 'affected_pathway'), geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:affected_pathways'));
                 // Expression atlas
-                row.push( getColorStyleString( getScore(i, 'rna_expression') , geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + 'view=sec:rna_expression') );
+                row.push(getColorStyleString(getScore(i, 'rna_expression'), geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:rna_expression'));
                 // Literature
-                row.push( getColorStyleString( getScore(i, 'literature') , geneDiseaseLoc +            (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + 'view=sec:literature'));
+                row.push(getColorStyleString(getScore(i, 'literature'), geneDiseaseLoc +            (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:literature'));
                 // Animal model
-                row.push( getColorStyleString( getScore(i, 'animal_model') , geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?')==-1 ? '?' : '&') + 'view=sec:animal_models') );
+                row.push(getColorStyleString(getScore(i, 'animal_model'), geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?') == -1 ? '?' : '&') + 'view=sec:animal_models'));
                 // Therapeutic area
                 var area = _.reduce(data.disease.efo_info.therapeutic_area.labels, iterateeLabel, '');
-                row.push('<span title=\''+area+'\'>'+area+'</span>');
+                row.push('<span title=\'' + area + '\'>' + area + '</span>');
 
                 newData.push(row);
             }
@@ -329,22 +329,22 @@ angular.module('cttvDirectives')
             restrict: 'E',
 
             scope: {
-                target : '=',
+                target: '=',
                 // nocancers: '@',
-                loadprogress : '=',
-                filename : '=',
-                facets : '=',
+                loadprogress: '=',
+                filename: '=',
+                facets: '=',
                 active: '@'
             },
 
 
             template: '<div>'
-        //+ ' <div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
+        // + ' <div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
         // +'<h5 ng-show="filteredOutByExcNeoplasm>0">Filtered out {{filteredOutByExcNeoplasm}} neoplasm diseases from other therapeutic areas</h5>'
-        +'<div></div>'
-        +'<cttv-matrix-table></cttv-matrix-table>'
-        +'<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
-        +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
+        + '<div></div>'
+        + '<cttv-matrix-table></cttv-matrix-table>'
+        + '<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
+        + '<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
         + '</div>',
 
 
@@ -364,16 +364,16 @@ angular.module('cttvDirectives')
                 // var dtable = setupTable(table, scope.filename);
 
                 // legend stuff
-                //scope.labs = ["a","z"];
+                // scope.labs = ["a","z"];
                 scope.legendText = 'Score';
                 scope.colors = [];
-                for(var i=0; i<=100; i+=25){
-                    var j=i/100;
-                    //scope.labs.push(j);
-                    scope.colors.push( {color:colorScale(j), label:j} );
+                for (var i = 0; i <= 100; i += 25) {
+                    var j = i / 100;
+                    // scope.labs.push(j);
+                    scope.colors.push({color: colorScale(j), label: j});
                 }
                 scope.legendData = [
-                    {label:'No data', class:'no-data'}
+                    {label: 'No data', class: 'no-data'}
                 ];
 
                 // Download the whole table
@@ -393,7 +393,7 @@ angular.module('cttvDirectives')
                         params: optsPreFlight
                     };
                     cttvAPIservice.getAssociations(queryObject)
-                        .then (function (resp) {
+                        .then(function (resp) {
                             var total = resp.body.total;
 
                             function columnsNumberOk (csv, n) {
@@ -420,10 +420,10 @@ angular.module('cttvDirectives')
                                     params: opts
                                 };
                                 return cttvAPIservice.getAssociations(queryObject)
-                                    .then (function (resp) {
+                                    .then(function (resp) {
                                         var moreText = resp.body;
                                         if (columnsNumberOk(moreText, opts.fields.length)) {
-                                            if (from>0) {
+                                            if (from > 0) {
                                             // Not in the first page, so remove the header row
                                                 moreText = moreText.split('\n').slice(1).join('\n');
                                             }
@@ -434,23 +434,23 @@ angular.module('cttvDirectives')
                             }
 
                             var promise = $q(function (resolve, reject) {
-                                resolve ('');
+                                resolve('');
                             });
                             var totalText = '';
                             var promises = [];
-                            for (var i=0; i<total; i+=size) {
-                                promises.push ({
+                            for (var i = 0; i < total; i += size) {
+                                promises.push({
                                     from: i,
                                     total: size
                                 });
                             // promises.push(getNextChunk(size, i));
                             }
                             promises.forEach(function (p) {
-                                promise = promise.then (function () {
+                                promise = promise.then(function () {
                                     return getNextChunk(p.total, p.from);
                                 });
                             });
-                            promise.then (function (res) {
+                            promise.then(function (res) {
                                 var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
                                 saveAs(b, scope.filename + '.csv');
                             // var hiddenElement = document.createElement('a');
@@ -463,7 +463,7 @@ angular.module('cttvDirectives')
                         }, cttvAPIservice.defaultErrorHandler);
                 };
 
-                scope.$watchGroup(['facets', 'target', 'active'], function(attrs) {
+                scope.$watchGroup(['facets', 'target', 'active'], function (attrs) {
                 // nocancers = scope.nocancers;
                     filters = scope.facets;
                     if (scope.active !== whoiam) {

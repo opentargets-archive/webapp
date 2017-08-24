@@ -3,7 +3,7 @@ angular.module('facets')
     /**
      * The Pathway facet
      */
-    .directive('pathwayFacet', ['$log' , function ($log) {
+    .directive('pathwayFacet', ['$log', function ($log) {
         'use strict';
 
         return {
@@ -18,5 +18,4 @@ angular.module('facets')
 
             link: function (scope, elem, attrs) {}
         };
-    }])
-;
+    }]);

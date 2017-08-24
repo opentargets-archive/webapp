@@ -11,7 +11,7 @@ angular.module('cttvDirectives')
                 isHamburger: '=?'     // show as hamburger [true | false]
             },
 
-            template : ''
+            template: ''
                         + '<ul class="masthead-navigation">'
 
                         + '    <!-- regular inline menu -->'
@@ -39,22 +39,21 @@ angular.module('cttvDirectives')
                         + '        </div>'
                         + '    </li>'
 
-                        +'</ul>',
+                        + '</ul>',
 
 
-
-            link: function(scope, element, attrs) {
+            link: function (scope, element, attrs) {
                 scope.dumps_link = cttvConfig.dumps_link;
                 scope.nav = cttvConfig.mastheadNavigationMenu;
                 scope.navhmb = [];
 
                 // if the menu is a hamburger, we flatten the tree to display all in one list
-                if(scope.isHamburger){
+                if (scope.isHamburger) {
 
-                    cttvConfig.mastheadNavigationMenu.forEach(function(i){
-                        if(i.menu){
-                            i.menu.forEach(function(j){
-                                scope.navhmb.push( {label: i.label+': '+j.label, href: j.href} );
+                    cttvConfig.mastheadNavigationMenu.forEach(function (i) {
+                        if (i.menu) {
+                            i.menu.forEach(function (j) {
+                                scope.navhmb.push({label: i.label + ': ' + j.label, href: j.href});
                             });
                         } else {
                             scope.navhmb.push(i);
@@ -63,13 +62,13 @@ angular.module('cttvDirectives')
                 }
 
                 // this can be triggered when toggling a dropdown
-                /*scope.toggled = function(open) {
+                /* scope.toggled = function(open) {
                     //$log.log('Dropdown is now: ', open);
                 };*/
 
                 // this must be defined here I suppose? some bootstrap thingy that's called automatically...
                 // UPDATE: actually, it seems to work even without, so commenting out for now
-                /*scope.toggleDropdown = function($event) {
+                /* scope.toggleDropdown = function($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                     //scope.status.isopen = !scope.status.isopen;

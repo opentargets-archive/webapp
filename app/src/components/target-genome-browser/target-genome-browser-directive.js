@@ -26,8 +26,8 @@ angular.module('cttvDirectives')
                         .context(20)
                         .width(w);
 
-                    //gB.rest().proxyUrl("/ensembl");
-                    //gB.rest().proxyUrl("/api/latest/ensembl")
+                    // gB.rest().proxyUrl("/ensembl");
+                    // gB.rest().proxyUrl("/api/latest/ensembl")
                     gB.rest().prefix('/proxy/rest.ensembl.org').protocol('').domain('');
                     var theme = targetGenomeBrowser()
                         .efo(efo)
@@ -37,4 +37,3 @@ angular.module('cttvDirectives')
             }
         };
     }]);
-    

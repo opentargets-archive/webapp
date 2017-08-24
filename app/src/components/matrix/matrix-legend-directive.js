@@ -2,7 +2,7 @@ angular.module('cttvDirectives')
     /*
     *
     */
-    .directive ('cttvMatrixLegend', [function () {
+    .directive('cttvMatrixLegend', [function () {
         'use strict';
         var template = '<div class="matrix-legend matrix-legend-layout-{{layout}} clearfix">'
 
@@ -20,8 +20,7 @@ angular.module('cttvDirectives')
         + '</div>'
 
         // extra info
-        + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="/faq#score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>'
-        ;
+        + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="/faq#score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>';
         return {
             restrict: 'AE',
             template: template,
@@ -32,7 +31,7 @@ angular.module('cttvDirectives')
                 layout: '@'
             },
 
-            controller: ['$scope', function($scope){
+            controller: ['$scope', function ($scope) {
                 // set the default layout
                 $scope.layout = $scope.layout ? $scope.layout : 'v';
             }]

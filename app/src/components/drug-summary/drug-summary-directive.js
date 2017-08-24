@@ -2,7 +2,7 @@ angular.module('cttvDirectives')
     .directive('myDrugSummary', ['$log', '$http', '$q', function ($log, $http, $q) {
         'use strict';
 
-        function pngToDataUrl(url, callback, outputFormat) {
+        function pngToDataUrl (url, callback, outputFormat) {
             var img = new Image();
             img.crossOrigin = 'Anonymous';
             img.onload = function () {
@@ -71,21 +71,21 @@ angular.module('cttvDirectives')
                                 .then(function (resps) {
                                     var allMecs = [];
                                     scope.mechanisms = allMecs;
-                                    for (var i=0; i<resps.length; i++) {
+                                    for (var i = 0; i < resps.length; i++) {
                                         var mecs = resps[i].data.mechanisms;
-                                        for (var j=0; j<mecs.length; j++) {
+                                        for (var j = 0; j < mecs.length; j++) {
                                             var mec = mecs[j].mechanism_of_action;
                                             var target = mecs[j].target_chembl_id;
                                             var refs = mecs[j].mechanism_refs;
                                             $http.get('https://www.ebi.ac.uk/chembl/api/data/target?target_chembl_id=' + target)
-                                                .then (function (resp) {
+                                                .then(function (resp) {
                                                     var targetNames = [];
-                                                    for (var i=0; i<resp.data.targets.length; i++) {
+                                                    for (var i = 0; i < resp.data.targets.length; i++) {
                                                         var target = resp.data.targets[i];
                                                         var uniqSyns = {};
-                                                        for (var j=0; j<target.target_components.length; j++) {
+                                                        for (var j = 0; j < target.target_components.length; j++) {
                                                             var component = target.target_components[j];
-                                                            for (var k=0; k<component.target_component_synonyms.length; k++) {
+                                                            for (var k = 0; k < component.target_component_synonyms.length; k++) {
                                                                 var synonym = component.target_component_synonyms[k];
                                                                 if (synonym.syn_type === 'GENE_SYMBOL') {
                                                                     uniqSyns[synonym.component_synonym] = true;

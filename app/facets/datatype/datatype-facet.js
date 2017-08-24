@@ -14,11 +14,9 @@ angular.module('facets')
                 facet: '='
             },
 
-            //templateUrl: 'facets/datatype/datatype-facet.html',
+            // templateUrl: 'facets/datatype/datatype-facet.html',
             templateUrl: 'directives/generic-nested-facetcollection.html',
 
-            link: function (scope, elem, attrs) {},
+            link: function (scope, elem, attrs) {}
         };
-    }])
-
-;
+    }]);

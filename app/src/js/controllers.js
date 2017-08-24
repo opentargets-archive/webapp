@@ -1,7 +1,7 @@
 /* Controllers */
 
 angular.module('cttvControllers')
-    .run (['$rootScope', '$window', '$uibModalStack', '$log', function ($rootScope, $window, $uibModalStack, $log) {
+    .run(['$rootScope', '$window', '$uibModalStack', '$log', function ($rootScope, $window, $uibModalStack, $log) {
         'use strict';
 
         // Close all the modal windows when the route changes
@@ -40,7 +40,6 @@ angular.module('cttvControllers')
     }])
 
 
-
     /**
      * Controller for the masthead navigations
      * Simply exposes the location service
@@ -52,16 +51,15 @@ angular.module('cttvControllers')
 
         // options must be exposed as an object, or else Angular doesn't update the view
         $scope.opts = {
-            showResponsiveSearch : false
+            showResponsiveSearch: false
         };
 
-        $scope.$on('$locationChangeSuccess', function(){
+        $scope.$on('$locationChangeSuccess', function () {
             // when we change page, close the search in case it's visible
             $scope.opts.showResponsiveSearch = false;
         });
 
     }])
-
 
 
     /**
@@ -71,7 +69,7 @@ angular.module('cttvControllers')
         'use strict';
         // $log.log(" NotifyCtrl ");
         // Default behaviour on icon click
-        $scope.notify = function(){};
+        $scope.notify = function () {};
         $scope.addCookie = function (cookieId) {
             var currMs = Date.now();
             $cookies.put(cookieId, 1, {
@@ -82,16 +80,16 @@ angular.module('cttvControllers')
         function polling () {
             // $http.get("/notifications.json")
             $http.get('https://opentargets.github.io/live-files/notifications.json')
-                .then (function(partial) {
+                .then(function (partial) {
                     // We compare the expiry date with today
                     if (angular.isArray(partial.data)) { // There are notifications
                         var newNotifications = [];
-                        for (var i=0; i<partial.data.length; i++) {
+                        for (var i = 0; i < partial.data.length; i++) {
                             var thisNotification = partial.data[i];
                             var thisCookie = $cookies.get(thisNotification.id);
                             // Check it has not expired
                             var t = moment(thisNotification.expiry).fromNow();
-                            if (!thisCookie && (t.indexOf('ago')===-1) && (t.indexOf('in') === 0)) {
+                            if (!thisCookie && (t.indexOf('ago') === -1) && (t.indexOf('in') === 0)) {
                                 newNotifications.push(thisNotification);
                             }
                         }
@@ -125,7 +123,6 @@ angular.module('cttvControllers')
     }])
 
 
-
     /**
      * Simple controller to expose the current page to the feedback button controller
      */
@@ -137,20 +134,19 @@ angular.module('cttvControllers')
         $scope.showSocialMedia = false;
 
         // perhaps we should use our locationstate service instead?
-        $scope.$on('$locationChangeSuccess', function(){
+        $scope.$on('$locationChangeSuccess', function () {
             // when the location is back to the homepage, we hide the social media icons and show the "follow us" instead...
-            if( $location.path()=='/' ){
+            if ($location.path() == '/') {
                 $scope.showSocialMedia = false;
             }
         });
     }])
 
 
-
     /**
      * Simple controller to expose the current page to the feedback button controller
      */
-    .controller('StatsCtrl', ['$scope', 'cttvAPIservice', '$log', function ($scope, cttvAPIservice, $log) { 
+    .controller('StatsCtrl', ['$scope', 'cttvAPIservice', '$log', function ($scope, cttvAPIservice, $log) {
         'use strict';
         // expose the location;
         // note that exposing the page as $location.absUrl() does not work as that would not update when URL changes
@@ -158,18 +154,18 @@ angular.module('cttvControllers')
 
         cttvAPIservice.getStats()
             .then(
-                function(resp) {
+                function (resp) {
 
                     // copy/expose repsonse to scope
-                    _.forOwn(resp.body, function(value, key) {
+                    _.forOwn(resp.body, function (value, key) {
                         $scope.stats[key] = value;
                     });
 
                     // count the datasources
                     var dbsctn = 0;
 
-                    _.forOwn(resp.body.associations.datatypes, function(value, key) {
-                        _.forOwn(value.datasources, function(v,k){
+                    _.forOwn(resp.body.associations.datatypes, function (value, key) {
+                        _.forOwn(value.datasources, function (v, k) {
                             dbsctn++;
                         });
 
@@ -181,8 +177,8 @@ angular.module('cttvControllers')
 
                     // how about release date?
                     var d = resp.body.data_version.split('.');
-                    d[0] = '20'+d[0];   // format as "20xx"
-                    d[1] = parseInt(d[1])-1; // month starts at 0
+                    d[0] = '20' + d[0];   // format as "20xx"
+                    d[1] = parseInt(d[1]) - 1; // month starts at 0
                     $scope.stats.date = new Date(d[0], d[1]); // expose as a Date object
                 },
                 cttvAPIservice.defaultErrorHandler
@@ -194,7 +190,6 @@ angular.module('cttvControllers')
     }])
 
 
-
     /**
      * A generic page controller;
      * Can be used to pass common variables, constants or services to all pages
@@ -203,6 +198,4 @@ angular.module('cttvControllers')
         'use strict';
         $scope.cttvConfig = cttvConfig;
     }]);
-
-
 

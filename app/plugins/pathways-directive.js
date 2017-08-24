@@ -40,7 +40,7 @@ angular.module('plugins')
                         scope.noPathways = true;
                     }
 
-                    for (var i=0; i<pathways.length; i++) {
+                    for (var i = 0; i < pathways.length; i++) {
                     // for (var pathway in pathways) {
                         var pathway = pathways[i].id;
                         var p = $http.get('/proxy/www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/' + pathway + '/stableIdentifier');
@@ -51,20 +51,20 @@ angular.module('plugins')
                     $q
                         .all(promises)
                         .then(function (vals) {
-                            for (var i=0; i<vals.length; i++) {
+                            for (var i = 0; i < vals.length; i++) {
                                 var val = vals[i].data;
                                 if (val) {
                                     var idRaw = val.split('\t')[1];
                                     var id = idRaw.split('.')[0];
                                     reactomePathways.push({
                                         'id': id,
-                                        'name' : pathwayArr[i]
+                                        'name': pathwayArr[i]
                                     });
                                 }
                             }
                             // Remove the spinner
                             spDiv.parentNode.removeChild(spDiv);
-                            
+
                             scope.pathways = reactomePathways;
                             if (scope.pathways[0]) {
                                 scope.setPathwayViewer(scope.pathways[0]);
@@ -75,11 +75,11 @@ angular.module('plugins')
                 scope.setPathwayViewer = function (pathway) {
                     var pId = pathway.id;
                     if (!pathwayDiagram) {
-                        pathwayDiagram = Reactome.Diagram.create ({
-                            'proxyPrefix' : '/proxy/www.reactome.org',
+                        pathwayDiagram = Reactome.Diagram.create({
+                            'proxyPrefix': '/proxy/www.reactome.org',
                             'placeHolder': 'pathwayDiagramContainer',
                             'width': w,
-                            'height': h,
+                            'height': h
                         });
                         pathwayDiagram.onDiagramLoaded(function (pathwayId) {
                             pathwayDiagram.flagItems(scope.target.symbol);
@@ -95,7 +95,7 @@ angular.module('plugins')
 
                 var count = 0;
                 // Wait until the reactome seed loads the library
-                var centinel = setInterval (function () {
+                var centinel = setInterval(function () {
                     count++;
                     if (count > 10) {
                         clearInterval(centinel);

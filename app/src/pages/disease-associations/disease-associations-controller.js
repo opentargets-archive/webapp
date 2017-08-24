@@ -14,12 +14,11 @@ angular.module('cttvControllers')
  * Then when we get the data, we update content and facets
  */
 
-    .controller ('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $q, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvConfig) {
+    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'cttvAPIservice', 'cttvFiltersService', 'cttvDictionary', 'cttvUtils', 'cttvLocationState', 'cttvConfig', function ($scope, $location, $q, cttvAPIservice, cttvFiltersService, cttvDictionary, cttvUtils, cttvLocationState, cttvConfig) {
 
         'use strict';
 
         cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
-
 
 
         // ---------------------------
@@ -58,11 +57,10 @@ angular.module('cttvControllers')
         cttvFiltersService.pageFacetsStack(cttvConfig.diseaseAssociationsFacets.facets);
 
 
-
         // state we want to export to/from the URL
         // var stateId = "view";
         var facetsId = cttvFiltersService.stateId;
-        
+
         /*
          * Renders page elements based on state from locationStateService
          */
@@ -100,7 +98,6 @@ angular.module('cttvControllers')
         };
 
 
-
         /*
          * Get data to populate the table.
          *
@@ -120,7 +117,7 @@ angular.module('cttvControllers')
                 disease: [$scope.search.query],
                 outputstructure: 'flat',
                 facets: 'true',
-                size:1
+                size: 1
             };
 
             if (targetArray && targetArray.length) {
@@ -134,12 +131,12 @@ angular.module('cttvControllers')
             };
 
             return cttvAPIservice.getAssociations(queryObject)
-                .then(function(resp) {
+                .then(function (resp) {
                     // set the total?
                     $scope.search.total = resp.body.total;
 
                     if (resp.body.total) {
-                        //TODO Change this to POST request
+                        // TODO Change this to POST request
                         cttvFiltersService.updateFacets(resp.body.facets, cttvConfig.diseaseAssociationsFacets.count);
 
                         // The label of the diseases in the header
@@ -157,7 +154,7 @@ angular.module('cttvControllers')
                             }
                         };
                         cttvAPIservice.getDisease(profileOpts)
-                            .then (function (profileResp) {
+                            .then(function (profileResp) {
                                 $scope.search.label = profileResp.body.label;
                             });
                     }
@@ -173,7 +170,6 @@ angular.module('cttvControllers')
         $scope.$on(cttvLocationState.STATECHANGED, function (evt, new_state, old_state) {
             render(new_state, old_state); // if there are no facets, no worries, the API service will handle undefined
         });
-
 
 
         //

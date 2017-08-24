@@ -2,7 +2,7 @@
 
 angular.module('cttvServices')
 
-    .factory('cttvLoadedLists', ['$log', 'localStorageService', function($log, localStorageService) {
+    .factory('cttvLoadedLists', ['$log', 'localStorageService', function ($log, localStorageService) {
         var lists = {};
         // lists.all = [];
         var key = 'targetLists';
@@ -39,7 +39,7 @@ angular.module('cttvServices')
         lists.add = function (id, list, duplications, keys) {
             // Is there a list with the same id already? if yes, overwrite it, if not push the new list
             var index;
-            for (var i=0; i<lists.all.length; i++) {
+            for (var i = 0; i < lists.all.length; i++) {
                 var l = lists.all[i];
                 if (l.id === id) {
                     index = i;
@@ -73,11 +73,11 @@ angular.module('cttvServices')
         // but also moves this list in the last position (if it is not there)
         lists.get = function (id) {
             lists.all = getFromLS();
-            for (var i=0; i<lists.all.length; i++) {
+            for (var i = 0; i < lists.all.length; i++) {
                 var item = lists.all[i];
                 if (item.id === id) {
                     // If this is not the last list, move to last
-                    if (i !== lists.all.length-1) {
+                    if (i !== lists.all.length - 1) {
                         lists.all.splice(i, 1);
                         lists.all.push(item);
                         storeInLS(lists.all);
@@ -94,7 +94,7 @@ angular.module('cttvServices')
         lists.remove = function (id) {
             lists.all = getFromLS();
             var index;
-            for (var i=0; i<lists.all.length; i++) {
+            for (var i = 0; i < lists.all.length; i++) {
                 var list = lists.all[i];
                 if (list.id === id) {
                     index = i;

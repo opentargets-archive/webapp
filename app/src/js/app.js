@@ -1,5 +1,4 @@
 
-
 function initApp (deps) {
 
     var app = angular.module('cttvApp', deps);
@@ -10,88 +9,88 @@ function initApp (deps) {
     // }]);
 
     app.config(['$routeProvider', '$locationProvider',
-        function($routeProvider, $locationProvider) {
+        function ($routeProvider, $locationProvider) {
             'use strict';
 
-            $routeProvider.
-                when('/', {
+            $routeProvider
+                .when('/', {
                     templateUrl: 'src/pages/static/intro.html'
-                }).
-                when('/search', {
+                })
+                .when('/search', {
                     templateUrl: 'src/pages/search/search.html',
                     controller: 'SearchAppCtrl'
-                }).
-        	    when('/target/:id/associations', {
+                })
+        	    .when('/target/:id/associations', {
                     templateUrl: 'src/pages/target-associations/target-associations.html',
                     controller: 'targetAssociationsCtrl',
                     reloadOnSearch: false
-        	    }).
-        	    when('/disease/:id/associations', {
+        	    })
+        	    .when('/disease/:id/associations', {
                     templateUrl: 'src/pages/disease-associations/disease-associations.html',
                     controller: 'diseaseAssociationsCtrl',
                     reloadOnSearch: false
-        	    }).
-        	    when('/evidence/:id/:id', {
+        	    })
+        	    .when('/evidence/:id/:id', {
                     templateUrl: 'src/pages/evidence/target-disease.html',
                     controller: 'TargetDiseaseCtrl'
-        	    }).
-        	    when('/target/:id', {
+        	    })
+        	    .when('/target/:id', {
             		templateUrl: 'src/pages/target-profile/target.html',
             		controller: 'TargetCtrl'
-        	    }).
-        	    when('/disease/:id', {
+        	    })
+        	    .when('/disease/:id', {
             		templateUrl: 'src/pages/disease-profile/disease.html',
             		controller: 'DiseaseCtrl'
-        	    }).
-                when('/batch-search', {
+        	    })
+                .when('/batch-search', {
                     templateUrl: 'src/pages/batch-search/batch-search.html',
                     controller: 'BatchSearchCtrl'
-                }).
-                when ('/summary', {
+                })
+                .when('/summary', {
                     templateUrl: 'src/pages/summary/summary.html',
                     controller: 'SummaryCtrl'
-                }).
+                })
 
                 // Docs
-                when('/faq', {
+                .when('/faq', {
                     templateUrl: 'src/pages/static/faq.html'
-                }).
-                when('/data_sources', {
+                })
+                .when('/data_sources', {
                     controller: 'DataSourcesCtrl',
                     templateUrl: 'src/pages/data-sources/data_sources.html'
-                }).
-                when('/terms_of_use', {
+                })
+                .when('/terms_of_use', {
                     templateUrl: 'src/pages/static/terms_of_use.html'
-                }).
-                when('/release-notes', {
+                })
+                .when('/release-notes', {
                     templateUrl: 'src/pages/static/release-notes.html'
-                }).
-                when('/scoring', {
+                })
+                .when('/scoring', {
                     templateUrl: 'src/pages/static/scoring.html'
-                }).
-                when('/about', {
+                })
+                .when('/about', {
                     templateUrl: 'src/pages/static/about.html'
-                }).
-                when('/personal-data-collected-examples', {
+                })
+                .when('/personal-data-collected-examples', {
                     templateUrl: 'src/pages/static/personal-data-collected-examples.html'
-                }).
-                when('/variants', {
+                })
+                .when('/variants', {
                     templateUrl: 'src/pages/static/variants.html'
-                }).
-                when('/documentation/components', {
+                })
+                .when('/documentation/components', {
                     templateUrl: 'src/pages/static/docs.html'
-                }).
-                when('/downloads/data', {
+                })
+                .when('/downloads/data', {
                     templateUrl: 'src/pages/static/dumps.html'
-                }).
-                when('/documentation/api', {
+                })
+                .when('/documentation/api', {
                     templateUrl: 'src/pages/static/api-docs.html'
-                }).
-                when('/outreach', {
+                })
+                .when('/outreach', {
                     templateUrl: 'src/pages/outreach/outreach.html',
                     controller: 'OutreachCtrl'
-                }).
-                otherwise({
+                })
+                .otherwise({
                     redirectTo: '/'
                 });
 
@@ -105,7 +104,6 @@ function initApp (deps) {
 
     return app;
 }
-
 
 
 var deps = [
@@ -133,13 +131,13 @@ var deps = [
  */
 
 angular.element(document).ready(
-    function() {
+    function () {
         var initInjector = angular.injector(['ng']);
         var $http = initInjector.get('$http');
         var $q = initInjector.get('$q');
         // First get the config file
         $http.get('build/config.json').then(
-            function(response) {
+            function (response) {
                 deps = _.concat(deps, getComponents(response.data));
                 configSystemjs(response.data, $q).then(function () {
                     var app = initApp(deps);
@@ -154,7 +152,7 @@ angular.element(document).ready(
 function getComponents (config) {
     var modules = [];
     var targetSections = config.targetSections;
-    for (var i=0; i<targetSections.length; i++) {
+    for (var i = 0; i < targetSections.length; i++) {
         section = targetSections[i];
         if (section.modules) {
             modules = _.concat(modules, section.modules);
@@ -168,7 +166,7 @@ function configSystemjs (config, $q) {
     var preloads = {};
     var targetSections = config.targetSections;
     var meta = {};
-    for (var i=0; i<targetSections.length; i++) {
+    for (var i = 0; i < targetSections.length; i++) {
         if (targetSections[i].dependencies) {
             meta = _.extend(meta, targetSections[i].dependencies);
         }
@@ -188,14 +186,14 @@ function configSystemjs (config, $q) {
         },
 
         'map': {
-            'css': 'github:/systemjs/plugin-css@0.1.21/css.js',
+            'css': 'github:/systemjs/plugin-css@0.1.21/css.js'
         },
         'meta': meta
     });
 
     var depsToLoad = Object.keys(preloads);
     var deps = [];
-    for (var j=0; j<depsToLoad.length; j++) {
+    for (var j = 0; j < depsToLoad.length; j++) {
         deps.push(System.import(depsToLoad[j]));
     }
     return $q.all(deps);

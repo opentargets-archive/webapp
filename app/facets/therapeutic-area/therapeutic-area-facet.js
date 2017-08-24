@@ -13,11 +13,7 @@ angular.module('facets')
             },
             templateUrl: 'directives/generic-facetcollection.html',
 
-            link: function (scope, elem, attrs) {},
+            link: function (scope, elem, attrs) {}
         };
-    }])
-
-;
-
-
+    }]);
 

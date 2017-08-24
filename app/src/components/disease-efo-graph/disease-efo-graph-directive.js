@@ -7,19 +7,19 @@ angular.module('cttvDirectives')
             restrict: 'E',
 
             scope: {
-                efo : '&disease'
+                efo: '&disease'
             },
 
             link: function (scope, elem, attrs) {
-                //console.warn (efo);
+                // console.warn (efo);
                 var w = (attrs.width || elem[0].parentNode.offsetWidth) - 40;
                 var efoGraph = diseaseGraph()
                     .width(w)
                     .height(700)
                     .cttvApi(cttvAPIservice.getSelf());
 
-                scope.$watch (function () {return attrs.efo;}, function (efo_str) {
-                    //console.warn (efo);
+                scope.$watch(function () {return attrs.efo;}, function (efo_str) {
+                    // console.warn (efo);
                     if (!efo_str) {
                         return;
                     }

@@ -1,8 +1,7 @@
 angular.module('facets')
 
-    .factory('dataDistributionFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', function($log, cttvDictionary, cttvConsts) {
+    .factory('dataDistributionFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', function ($log, cttvDictionary, cttvConsts) {
         'use strict';
-
 
 
         var parser = {};
@@ -22,10 +21,10 @@ angular.module('facets')
          *
          * It returns an Array of filters.
          */
-        parser.parse = function(config, data, countsToUse, options, isSelected){
+        parser.parse = function (config, data, countsToUse, options, isSelected) {
 
             // array of filters
-            /*config.filters = data.buckets.map(function (obj) {
+            /* config.filters = data.buckets.map(function (obj) {
                     var conf = {};
                     conf.key = obj.key;
                     conf.label = obj.label;
@@ -54,42 +53,42 @@ angular.module('facets')
             // set the 3 filters for the score: min, max, stringency
             config.filters = [
                 {
-                    facet : 'score_min',
-                    label : 'min',
-                    key : search.score_min[0],
-                    selected : true
+                    facet: 'score_min',
+                    label: 'min',
+                    key: search.score_min[0],
+                    selected: true
                 },
                 {
-                    facet : 'score_max',
-                    label : 'max',
-                    key : search.score_max[0],
-                    selected : true
+                    facet: 'score_max',
+                    label: 'max',
+                    key: search.score_max[0],
+                    selected: true
                 },
                 {
-                    facet : 'score_str',
-                    label : 'stringency',
-                    key : search.score_str[0],
-                    selected : true
+                    facet: 'score_str',
+                    label: 'stringency',
+                    key: search.score_str[0],
+                    selected: true
                 }
             ];
 
 
             // score facet is different than the default checkbox lists
             // so we need to overwrite the getSelected method
-            config.getSelectedFilters = function(){
+            config.getSelectedFilters = function () {
                 // at the moment just return all these as selected, later on we might want to flag it after user changes default value perhaps?
                 return this.filters;
             };
 
             config.data = {
-                buckets : (function(){var a=[]; for(var i in data.buckets){a.push({label:Number(i), value:data.buckets[i].value});} return a;})()
-                    .sort(function(a,b){
-                        if(a.label<b.label){return -1;}
-                        if(a.label>b.label){return 1;}
+                buckets: (function () {var a = []; for (var i in data.buckets) {a.push({label: Number(i), value: data.buckets[i].value});} return a;})()
+                    .sort(function (a, b) {
+                        if (a.label < b.label) {return -1;}
+                        if (a.label > b.label) {return 1;}
                         return 0;
                     })
-                    //min : 0,
-                    //max : 1
+                    // min : 0,
+                    // max : 1
             };
 
             return config;
@@ -98,5 +97,4 @@ angular.module('facets')
 
         return parser;
     }]);
-
 

@@ -12,30 +12,28 @@ angular.module('cttvControllers')
         cttvLocationState.init();   // does nothing, but ensures the cttvLocationState service is instantiated and ready
 
 
-
         // Initial setup
 
 
         // scope vars
         $scope.search = {
-            query : ''
+            query: ''
         };
 
         $scope.labels = {
-            therapeutic_areas : cttvDictionary.THERAPEUTIC_AREAS
+            therapeutic_areas: cttvDictionary.THERAPEUTIC_AREAS
         };
 
         $scope.n = {
-            diseases : '...', // this should be a number, but initialize to "..." for better user feedback
+            diseases: '...' // this should be a number, but initialize to "..." for better user feedback
         };
 
         // the scope view is essentially the state
         $scope.view = {
-            t : ['bubbles']    // t = the selected tab
+            t: ['bubbles']    // t = the selected tab
         };
 
         $scope.loading = false;
-
 
 
         // filters
@@ -53,12 +51,11 @@ angular.module('cttvControllers')
         var facetsId = cttvFiltersService.stateId;
 
 
-
         /*
          * The view is essentially the state for the page;
          * filters are autonomous and do their own business
          */
-        var setView = function(obj){
+        var setView = function (obj) {
 
         // should work also for obj==undefined at page load
         // or if navigating back through browser history
@@ -74,17 +71,16 @@ angular.module('cttvControllers')
 
         var setCancersExclusion = function (obj) {
             obj = obj || {};
-            obj.exc = obj.exc ? [(obj.exc[0]==='true')] : [false];
+            obj.exc = obj.exc ? [(obj.exc[0] === 'true')] : [false];
 
             $scope.cancersExcluded = obj.exc[0];
         };
 
 
-
         /*
          * Takes object from locationStateService, initialize the page/component state and fire a query which then updates the screen
          */
-        var render = function(new_state, old_state){
+        var render = function (new_state, old_state) {
 
         // here we want to update facets, tabs, etc:
         // 1. first we check if the state of a particular element has changed;
@@ -92,17 +88,17 @@ angular.module('cttvControllers')
         // then it's a page load with no state specified, so we update that element anyway with default values
 
         // facets changed?
-            if( ! _.isEqual( new_state[facetsId], old_state[facetsId] ) || !new_state[facetsId] ){
-                getFacets( new_state[facetsId] );
+            if (! _.isEqual(new_state[facetsId], old_state[facetsId]) || !new_state[facetsId]) {
+                getFacets(new_state[facetsId]);
             }
 
             // view changed?
-            if( ! _.isEqual( new_state[stateId], old_state[stateId] ) || !new_state[stateId] ){
-                setView( new_state[stateId] );
+            if (! _.isEqual(new_state[stateId], old_state[stateId]) || !new_state[stateId]) {
+                setView(new_state[stateId]);
             }
 
             // exclude cancers changed?
-            if( ! _.isEqual( new_state[cancersExcId], old_state[cancersExcId] ) || !new_state[cancersExcId] ){
+            if (! _.isEqual(new_state[cancersExcId], old_state[cancersExcId]) || !new_state[cancersExcId]) {
                 setCancersExclusion(new_state[cancersExcId]);
             }
 
@@ -130,7 +126,7 @@ angular.module('cttvControllers')
             };
 
             cttvAPIservice.getAssociations(queryObject)
-                .then (function (resp) {
+                .then(function (resp) {
                     $scope.search.total = resp.body.total;
                     if (resp.body.total) {
                         $scope.search.label = resp.body.data[0].target.gene_info.symbol;
@@ -142,7 +138,7 @@ angular.module('cttvControllers')
                         $scope.n.diseases = resp.body.total;
 
                         // Update the facets
-                        cttvFiltersService.updateFacets(resp.body.facets, cttvConfig.targetAssociationsFacets.count );
+                        cttvFiltersService.updateFacets(resp.body.facets, cttvConfig.targetAssociationsFacets.count);
                     } else {
                         // Check if there is a profile page
                         var profileOpts = {
@@ -152,7 +148,7 @@ angular.module('cttvControllers')
                             }
                         };
                         cttvAPIservice.getTarget(profileOpts)
-                            .then (function (profileResp) {
+                            .then(function (profileResp) {
                                 $scope.search.label = profileResp.body.approved_symbol;
                             });
                     }
@@ -161,16 +157,14 @@ angular.module('cttvControllers')
         }
 
 
-
         /*
          * Update function passes the current view (state) to the URL
          * Also the current status for excluding cancers is updated
          */
-        function update(){
+        function update () {
             cttvLocationState.setStateFor(stateId, $scope.view);
             cttvLocationState.setStateFor(cancersExcId, $scope.cancers);
         }
-
 
 
         /*
@@ -183,16 +177,14 @@ angular.module('cttvControllers')
         };
 
 
-
         //
         // on STATECHANGED
         // Set up a listener for the URL changes and when the search change, get new data
         //
 
 
-
         $scope.$on(cttvLocationState.STATECHANGED, function (evt, new_state, old_state) {
-            render( new_state, old_state ); // args is the same as getState()
+            render(new_state, old_state); // args is the same as getState()
         });
 
 
@@ -225,10 +217,9 @@ angular.module('cttvControllers')
 
         cttvUtils.clearErrors();
         $scope.search.query = $location.path().split('/')[2];
-        $scope.filters = cttvLocationState.getState()[facetsId] || {} ;
+        $scope.filters = cttvLocationState.getState()[facetsId] || {};
 
-        render( cttvLocationState.getState(), cttvLocationState.getOldState() );
-
+        render(cttvLocationState.getState(), cttvLocationState.getOldState());
 
 
     }]);

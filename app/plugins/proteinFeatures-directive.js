@@ -10,11 +10,11 @@ angular.module('plugins')
             },
             link: function (scope, element, attrs) {
                 scope.uniprot = {
-                    id : scope.target.uniprot_id,
-                    subunits : scope.target.uniprot_subunit,
-                    locations : scope.target.uniprot_subcellular_location,
-                    accessions : scope.target.uniprot_accessions,
-                    keywords : scope.target.uniprot_keywords
+                    id: scope.target.uniprot_id,
+                    subunits: scope.target.uniprot_subunit,
+                    locations: scope.target.uniprot_subcellular_location,
+                    accessions: scope.target.uniprot_accessions,
+                    keywords: scope.target.uniprot_keywords
                 };
 
                 $timeout(function () {

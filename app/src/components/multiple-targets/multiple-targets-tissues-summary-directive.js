@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive ('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'cttvConfig', 'cttvUtils', 'cttvAPIservice', function ($log, $http, $q, cttvConfig, cttvUtils, cttvAPIservice) {
+    .directive('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'cttvConfig', 'cttvUtils', 'cttvAPIservice', function ($log, $http, $q, cttvConfig, cttvUtils, cttvAPIservice) {
         'use strict';
 
         var tissuesOrdered = [
@@ -37,17 +37,17 @@ angular.module('cttvDirectives')
         ];
 
         var tissuesTableCols = [
-            {name:'', title:''}, // first one empty
-            {name:'', title:'Target'}
+            {name: '', title: ''}, // first one empty
+            {name: '', title: 'Target'}
         ];
 
-        for (var z=0; z<tissuesOrdered.length; z++) {
+        for (var z = 0; z < tissuesOrdered.length; z++) {
             tissuesTableCols.push({
                 name: tissuesOrdered[z],
                 title: tissuesOrdered[z]
             });
         }
-        tissuesTableCols.push({name:'',title:''}); // last one empty
+        tissuesTableCols.push({name: '', title: ''}); // last one empty
 
         var getColorStyleString = function (value, colorScale) {
             var str = '';
@@ -62,26 +62,26 @@ angular.module('cttvDirectives')
             return str;
         };
 
-        //setup the table
+        // setup the table
         var setupTissuesTable = function (table, data, filename) {
             $(table).DataTable({
                 'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
                 'data': data,
-                'columns': (function(){
-                    var a=[];
-                    for(var i=0; i<tissuesTableCols.length; i++){
-                        a.push({ 'title': '<div><span title=\''+tissuesTableCols[i].title+'\'>'+tissuesTableCols[i].title+'</span></div>', 'name':tissuesTableCols[i].name });
+                'columns': (function () {
+                    var a = [];
+                    for (var i = 0; i < tissuesTableCols.length; i++) {
+                        a.push({'title': '<div><span title=\'' + tissuesTableCols[i].title + '\'>' + tissuesTableCols[i].title + '</span></div>', 'name': tissuesTableCols[i].name});
                     }
                     return a;
                 })(),
                 'order': [],
                 'orderMulti': true,
                 'autoWidth': false,
-                'columnDefs' : [
+                'columnDefs': [
                     {
-                        'targets' : [0,32],
+                        'targets': [0, 32],
                         'orderable': false
-                    },
+                    }
                 ],
                 'ordering': true,
                 'lengthMenu': [[20, 100, 500], [20, 100, 500]],
@@ -89,7 +89,7 @@ angular.module('cttvDirectives')
                 'language': {
                 // "lengthMenu": "Display _MENU_ records per page",
                 // "zeroRecords": "Nothing found - sorry",
-                    'info': 'Showing _START_ to _END_ of _TOTAL_ shared targets',
+                    'info': 'Showing _START_ to _END_ of _TOTAL_ shared targets'
                 // "infoEmpty": "No records available",
                 // "infoFiltered": "(filtered from _MAX_ total records)"
                 }
@@ -109,15 +109,15 @@ angular.module('cttvDirectives')
 
                 var colorScaleOrig = cttvUtils.colorScales.BLUE_0_1;
                 var colorScale = d3.scale.linear()
-                    .range (colorScaleOrig.range())
-                    .domain ([0, maxMedianForTarget]);
+                    .range(colorScaleOrig.range())
+                    .domain([0, maxMedianForTarget]);
                 // colorScale.domain([0, maxMedianForTarget]);
 
                 // var row = [];
                 var row = ['']; // First one empty
                 // Target
                 row.push(target);
-                for (var i=0; i<tissuesOrdered.length; i++) {
+                for (var i = 0; i < tissuesOrdered.length; i++) {
                     var tissue = tissuesOrdered[i];
                     // Each Tissue
                     // row.push(tissuesData[target][tissue].maxMedian);
@@ -137,7 +137,7 @@ angular.module('cttvDirectives')
                 targets: '='
             },
             link: function (scope, el, attrs) {
-                scope.$watch ('targets', function () {
+                scope.$watch('targets', function () {
                     if (!scope.targets) {
                         return;
                     }
@@ -145,7 +145,7 @@ angular.module('cttvDirectives')
                     var gtexPromises = [];
                     var baseGtexUrlPrefix = '/proxy/www.gtexportal.org/api/v6p/expression/';
                     var baseGtexUrlSufix = '?boxplot=true';
-                    for (var i=0; i<scope.targets.length; i++) {
+                    for (var i = 0; i < scope.targets.length; i++) {
                         var target = scope.targets[i];
                         var targetPromise = cttvAPIservice.getTarget({
                             method: 'GET',
@@ -154,11 +154,11 @@ angular.module('cttvDirectives')
                                 target_id: target
                             }
                         })
-                            .then (function (targetResp) {
+                            .then(function (targetResp) {
                                 var symbol = targetResp.body.approved_symbol;
                                 var url = baseGtexUrlPrefix + symbol + baseGtexUrlSufix;
                                 return $http.get(url)
-                                    .then (function (resp) {
+                                    .then(function (resp) {
                                         return resp;
                                     }, function (err) {
                                         $log.warn('error... but does not matter');
@@ -168,13 +168,13 @@ angular.module('cttvDirectives')
                         gtexPromises.push(targetPromise);
                     }
                     $q.all(gtexPromises)
-                        .then (function (resps) {
+                        .then(function (resps) {
                             var tissuesData = {};
-                            for (var i=0; i<resps.length; i++) {
+                            for (var i = 0; i < resps.length; i++) {
                                 var tissues = {};
                                 if (resps[i]) {
                                     var parts = resps[i].config.url.split('/');
-                                    var target = parts[parts.length-1].split('?')[0];
+                                    var target = parts[parts.length - 1].split('?')[0];
                                     for (var fullTissue in resps[i].data.generpkm) {
                                         var d = resps[i].data.generpkm[fullTissue];
                                         var median = d.median;
@@ -183,7 +183,7 @@ angular.module('cttvDirectives')
                                             tissues[tissue] = {
                                                 target: target,
                                                 tissue: tissue,
-                                                maxMedian: 0,
+                                                maxMedian: 0
                                             };
                                         }
                                         if (median > tissues[tissue].maxMedian) {

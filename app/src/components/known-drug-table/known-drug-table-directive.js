@@ -14,13 +14,13 @@ angular.module('cttvDirectives')
             restrict: 'EA',
             templateUrl: 'src/components/known-drug-table/known-drug-table.html',
             scope: {
-                loadFlag : '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
-                data : '=?',        // optional data link to pass the data out of the directive
-                title : '=?',       // optional title for filename export
-                errorFlag : '=?'    // optional error-flag: pass a var to hold parsing-related errors
+                loadFlag: '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
+                data: '=?',        // optional data link to pass the data out of the directive
+                title: '=?',       // optional title for filename export
+                errorFlag: '=?'    // optional error-flag: pass a var to hold parsing-related errors
             },
             controller: ['$scope', function ($scope) {
-                function init() {
+                function init () {
                     $scope.drugs = [];
                 }
 
@@ -35,10 +35,10 @@ angular.module('cttvDirectives')
                 scope.errorFlag = false;
 
                 scope.$watchGroup([function () {return attrs.target;}, function () {return attrs.disease;}], function () {
-                //if (!attrs.target && !attrs.disease) {
+                // if (!attrs.target && !attrs.disease) {
                 // Wa want to get data when we have both target and disease
                 // so it should return here if one or the other are undefined
-                    if(!attrs.target && !attrs.disease){ /* TODO */
+                    if (!attrs.target && !attrs.disease) { /* TODO */
                         return;
                     }
                     getDrugData();
@@ -67,7 +67,7 @@ angular.module('cttvDirectives')
                 Drug    Phase   Type    Mechanism of Action Activity    Clinical Trials Target name Target class    Target context  Protein complex members Evidence type
                 */
 
-                    function getDrugData (){
+                    function getDrugData () {
                     // $scope.search.drugs.is_loading = true;
                         scope.loadFlag = true;
                         var opts = {
@@ -94,10 +94,10 @@ angular.module('cttvDirectives')
                             method: 'GET',
                             params: opts
                         };
-                        return cttvAPIservice.getFilterBy (queryObject).
-                            then(
-                                function(resp) {
-                                    if( resp.body.data ){
+                        return cttvAPIservice.getFilterBy(queryObject)
+                            .then(
+                                function (resp) {
+                                    if (resp.body.data) {
                                         scope.data = resp.body.data;
                                         initTableDrugs();
                                     } else {
@@ -105,21 +105,21 @@ angular.module('cttvDirectives')
                                     }
                                 },
                                 cttvAPIservice.defaultErrorHandler
-                            ).
-                            finally(function(){
+                            )
+                            .finally(function () {
                                 scope.loadFlag = false;
                             });
                     }
 
 
-                    function formatDrugsDataToArray (data){
+                    function formatDrugsDataToArray (data) {
                         var newdata = [];
                         var all_drugs = [];
-                        data.forEach(function(item){
+                        data.forEach(function (item) {
                         // create rows:
                             var row = [];
 
-                            try{
+                            try {
 
                             // Fill the unique drugs
                                 all_drugs.push({
@@ -128,18 +128,18 @@ angular.module('cttvDirectives')
                                 });
 
                                 // 0: data origin: public / private
-                                row.push( (item.access_level==cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate );
+                                row.push((item.access_level == cttvConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
 
                                 // 1: disease
-                                row.push( '<a href=\'/disease/'+ item.disease.efo_info.efo_id.split('/').pop() +'\'>'+item.disease.efo_info.label+'</a>');
+                                row.push('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');
 
                                 // 2: drug
-                                row.push( '<a class=\'cttv-external-link\' href=\''+item.evidence.target2drug.urls[0].url+'\' target=\'_blank\'>' +
+                                row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.target2drug.urls[0].url + '\' target=\'_blank\'>' +
                             item.drug.molecule_name +
                             '</a>');
 
                                 // 3: phase
-                                //row.push(item.drug.max_phase_for_all_diseases.label);
+                                // row.push(item.drug.max_phase_for_all_diseases.label);
                                 row.push(item.evidence.drug2clinic.max_phase_for_disease.label);
 
                                 // 4: phase numeric (hidden)
@@ -147,7 +147,7 @@ angular.module('cttvDirectives')
 
                                 // 5: status
                                 var sts = cttvDictionary.NA;
-                                if ( cttvUtils.checkPath(item, 'evidence.drug2clinic.status') ) {
+                                if (cttvUtils.checkPath(item, 'evidence.drug2clinic.status')) {
                                     sts = item.evidence.drug2clinic.status;
                                 }
                                 row.push(sts);
@@ -160,23 +160,23 @@ angular.module('cttvDirectives')
 
                                 // publications
                                 var refs = [];
-                                if( checkPath(item, 'evidence.target2drug.provenance_type.literature.references') ){
+                                if (checkPath(item, 'evidence.target2drug.provenance_type.literature.references')) {
                                     refs = item.evidence.target2drug.provenance_type.literature.references;
                                 }
 
-                                if( refs.length>0){
-                                    action += '<br />'+cttvUtils.getPublicationsString( cttvUtils.getPmidsList( refs ) );
+                                if (refs.length > 0) {
+                                    action += '<br />' + cttvUtils.getPublicationsString(cttvUtils.getPmidsList(refs));
                                 }
 
-                                if ( item.evidence.target2drug.urls && item.evidence.target2drug.urls[2] ) {
+                                if (item.evidence.target2drug.urls && item.evidence.target2drug.urls[2]) {
                                     var extLink = item.evidence.target2drug.urls[2];
                                     action += '<br /><span><a class=\'cttv-external-link\' target=_blank href=' + extLink.url + '>' + extLink.nice_name  + '</a></span>';
                                 }
 
-                                row.push( action );
+                                row.push(action);
 
                                 // col 5: pub ids (hidden)
-                                //row.push(pmidsList.join(", "));
+                                // row.push(pmidsList.join(", "));
 
 
                                 // 8: Activity
@@ -198,7 +198,7 @@ angular.module('cttvDirectives')
 
                                 // 9: target class
                                 var trgc = cttvDictionary.NA;
-                                if ( cttvUtils.checkPath(item, 'target.target_class') ) {
+                                if (cttvUtils.checkPath(item, 'target.target_class')) {
                                     trgc = item.target.target_class[0] || cttvDictionary.NA;
                                 }
                                 row.push(trgc);
@@ -207,15 +207,15 @@ angular.module('cttvDirectives')
                                 // 8: target context / protein complex members
 
                                 // 10: evidence source
-                                row.push( 'Curated from <br /><a class=\'cttv-external-link\' href=\'' +
+                                row.push('Curated from <br /><a class=\'cttv-external-link\' href=\'' +
                             item.evidence.drug2clinic.urls[0].url +
                             '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
 
-                                //row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
+                                // row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
 
 
                                 newdata.push(row); // use push() so we don't end up with empty rows
-                            }catch(e){
+                            } catch (e) {
                                 scope.errorFlag = true;
                             // $log.log("Error parsing drugs data:");
                             // $log.log(e);
@@ -251,38 +251,38 @@ angular.module('cttvDirectives')
                 * This is the hardcoded data for the Known Drugs table and
                 * will obviously need to change and pull live data when available
                 */
-                    function initTableDrugs (){
-                    //$('#drugs-table') // Not anymore
+                    function initTableDrugs () {
+                    // $('#drugs-table') // Not anymore
                         var table = elem[0].getElementsByTagName('table');
-                        $(table).dataTable( cttvUtils.setTableToolsParams({
+                        $(table).dataTable(cttvUtils.setTableToolsParams({
                             'data': formatDrugsDataToArray(scope.data),
                             'autoWidth': false,
                             'paging': true,
-                            'order' : [[3, 'desc']],
-                            //"aoColumnDefs" : [
-                            'columnDefs' : [
-                                {'targets': [4], 'visible':false},
-                                {'iDataSort' : 3, 'aTargets' : [4]},
+                            'order': [[3, 'desc']],
+                            // "aoColumnDefs" : [
+                            'columnDefs': [
+                                {'targets': [4], 'visible': false},
+                                {'iDataSort': 3, 'aTargets': [4]},
                                 {
-                                    'targets' : [0],    // the access-level (public/private icon)
-                                    'visible' : cttvConfig.show_access_level,
-                                    'width' : '3%'
+                                    'targets': [0],    // the access-level (public/private icon)
+                                    'visible': cttvConfig.show_access_level,
+                                    'width': '3%'
                                 },
                                 {
                                     'targets': [3],
                                     'width': '5.6%'
                                 },
                                 {
-                                    'targets': [2,5,6,7,8,9,10],
+                                    'targets': [2, 5, 6, 7, 8, 9, 10],
                                     'width': '11.2%'
                                 }
-                            ],
+                            ]
                         // "aoColumnDefs" : [
                         //     {"iDataSort" : 2, "aTargets" : [3]},
                         // ]
-                        //"ordering": false
-                        //}, $scope.search.info.title+"-known_drugs") );
-                        }, (scope.title ? scope.title+'-' : '')+'known_drugs'));
+                        // "ordering": false
+                        // }, $scope.search.info.title+"-known_drugs") );
+                        }, (scope.title ? scope.title + '-' : '') + 'known_drugs'));
                     }
 
                 });

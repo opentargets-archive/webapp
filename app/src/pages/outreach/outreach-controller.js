@@ -6,7 +6,7 @@ angular.module('cttvControllers')
         $scope.day = moment();
 
         $http.get('https://opentargets.github.io/live-files/outreach.json')
-            .then (function (resp) {
+            .then(function (resp) {
                 if (angular.isObject(resp.data)) {
                     if (angular.isArray(resp.data.sessions)) {
                         $scope.sessions = resp.data.sessions;
@@ -16,7 +16,7 @@ angular.module('cttvControllers')
 
                     var upcoming = [];
                     var past = [];
-                    for (var i=0; i<resp.data.sessions.length; i++) {
+                    for (var i = 0; i < resp.data.sessions.length; i++) {
                         var session = resp.data.sessions[i];
                         if ($scope.day.isBefore(session.date)) {
                             upcoming.push(session);

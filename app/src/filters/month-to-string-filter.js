@@ -1,8 +1,8 @@
 angular.module('cttvFilters')
-    .filter('otMonthToString', function() {
+    .filter('otMonthToString', function () {
         'use strict';
 
-        return function(mi) {
+        return function (mi) {
             var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             return  months[mi] || '';
         };

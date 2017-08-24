@@ -20,7 +20,7 @@ angular.module('plugins')
             // Legend SVG
             var legend = d3.select(clone)
                 .append('g')
-                .attr('transform', 'translate(0,' + (currHeight+10) + ')');
+                .attr('transform', 'translate(0,' + (currHeight + 10) + ')');
 
             var geneLegendEntries = legend.selectAll('.geneLegendEntry')
                 .data(biotypes)
@@ -28,7 +28,7 @@ angular.module('plugins')
                 .append('g')
                 .attr('class', 'geneLegendEntry')
                 .attr('transform', function (d, i) {
-                    return 'translate(0,' + (i*15) + ')';
+                    return 'translate(0,' + (i * 15) + ')';
                 });
 
             geneLegendEntries
@@ -42,7 +42,7 @@ angular.module('plugins')
                 });
             geneLegendEntries
                 .append('text')
-                .attr('x',50)
+                .attr('x', 50)
                 .attr('y', 10)
                 .attr('fill', 'black')
                 .style('font-size', '10px')

@@ -22,7 +22,7 @@ angular.module('cttvDirectives')
         var filters = {};
         var targets;
 
-        var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+        var colorScale = cttvUtils.colorScales.BLUE_0_1; // blue orig
         // var colorScale = d3.interpolateYlGnBu;
 
         var state = {};
@@ -55,7 +55,7 @@ angular.module('cttvDirectives')
         var cols = [
         // empty col for the gene symbol
             {name: '', title: cttvDictionary.TARGET_SYMBOL},
-            //{name: "", title: cttvDictionary.ENSEMBL_ID},
+            // {name: "", title: cttvDictionary.ENSEMBL_ID},
             {name: '', title: cttvDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
             {
@@ -87,7 +87,7 @@ angular.module('cttvDirectives')
                 title: cttvDictionary[cttvConsts.datatypes.ANIMAL_MODEL.toUpperCase()]
             },
             // empty col for sorting by total score (sum)
-            {name: '', title: 'total score', visible:false, className:'never'},
+            {name: '', title: 'total score', visible: false, className: 'never'},
             // empty col for the gene name
             {name: '', title: cttvDictionary.TARGET_NAME}
         ];
@@ -98,19 +98,16 @@ angular.module('cttvDirectives')
                 'title': '<div><span title=\'' + cols[i].title + '\'>' + cols[i].title + '</span></div>',
                 'name': cols[i].name
             };
-            if (i == 9){
+            if (i == 9) {
                 columnData = {
                     'title': '<div><span title=\'' + cols[i].title + '\'>' + cols[i].title + '</span></div>',
                     'name': cols[i].name,
-                    'visible' : false,
-                    'className':'never'
+                    'visible': false,
+                    'className': 'never'
                 };
             }
             a.push(columnData);
         }
-
-
-
 
 
         /*
@@ -131,8 +128,8 @@ angular.module('cttvDirectives')
                 'columns': a,
                 'columnDefs': [
                     {
-                        'targets':[9],
-                        'className':'never'
+                        'targets': [9],
+                        'className': 'never'
                     },
                     {
                         'targets': 9,
@@ -176,13 +173,13 @@ angular.module('cttvDirectives')
                         9: 'association_score.overall'
                     };
                     var order = [];
-                    for (var i=0; i<data.order.length; i++) {
+                    for (var i = 0; i < data.order.length; i++) {
                         var prefix = data.order[i].dir === 'asc' ? '~' : '';
                         order.push(prefix + mappings[data.order[i].column]);
                     }
 
                     // TODO: put this back if we put the state back
-                    //data.start = stt.p*data.length || data.start;   // NaN || data.start in case it's not defined
+                    // data.start = stt.p*data.length || data.start;   // NaN || data.start in case it's not defined
                     var searchValue = (data.search.value).toLowerCase();
                     var opts = {
                         disease: [disease],
@@ -231,23 +228,23 @@ angular.module('cttvDirectives')
                 'language': {
                 // "lengthMenu": "Display _MENU_ records per page",
                 // "zeroRecords": "Nothing found - sorry",
-                    'info': 'Showing _START_ to _END_ of _TOTAL_ targets',
+                    'info': 'Showing _START_ to _END_ of _TOTAL_ targets'
                 // "infoEmpty": "No records available",
                 // "infoFiltered": "(filtered from _MAX_ total records)"
-                },
-            //"aoColumns": [
+                }
+            // "aoColumns": [
             //    { "asSorting": [ "desc", "asc" ] }, //first sort desc, then asc
-            //]
+            // ]
             }, filename);
 
             return t;
         };
 
-        function parseServerResponse(data) {
+        function parseServerResponse (data) {
             var newData = new Array(data.length);
 
             var getScore = function (d, dt) {
-                return ( !data[d].association_score.datatypes[dt] && !data[d].evidence_count.datatypes[dt] ) ? -1 : data[d].association_score.datatypes[dt];
+                return (!data[d].association_score.datatypes[dt] && !data[d].evidence_count.datatypes[dt]) ? -1 : data[d].association_score.datatypes[dt];
             };
 
             for (var i = 0; i < data.length; i++) {
@@ -260,14 +257,14 @@ angular.module('cttvDirectives')
             // dts.literature = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "literature"; }), "association_score")||0;
             // dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
 
-            //var dts = data[i].association_score.datatypes;
+            // var dts = data[i].association_score.datatypes;
             // var ec = data[i].evidence_count.datatypes;
                 var row = [];
                 var geneLoc = '';
                 var geneDiseaseLoc = '/evidence/' + data[i].target.id + '/' + data[i].disease.id;
                 row.push('<a href=\'' + geneDiseaseLoc + '\' title=\'' + data[i].target.gene_info.symbol + '\'>' + data[i].target.gene_info.symbol + '</a>');
                 // Ensembl ID
-                //row.push(data[i].target.id);
+                // row.push(data[i].target.id);
                 // The association score
                 row.push(getColorStyleString(data[i].association_score.overall, geneDiseaseLoc));
                 // Genetic association
@@ -312,8 +309,8 @@ angular.module('cttvDirectives')
     * TODO: currently not being called - will check when we put this back
     * Update function passes the current view (state) to the URL
     */
-        function update(id, st) {
-        //$log.log("update:st =", st);
+        function update (id, st) {
+        // $log.log("update:st =", st);
             cttvLocationState.setStateFor(id, st);
         }
 
@@ -334,8 +331,8 @@ angular.module('cttvDirectives')
                 filename: '=',
                 targets: '=',
                 disease: '=',
-                filters : '=',
-                stateId : '@?'
+                filters: '=',
+                stateId: '@?'
             },
 
             template: '<div>'
@@ -360,7 +357,7 @@ angular.module('cttvDirectives')
 
                 for (var i = 0; i <= 100; i += 25) {
                     var j = i / 100;
-                    //scope.labs.push(j);
+                    // scope.labs.push(j);
                     scope.colors.push({color: colorScale(j), label: j});
                 }
                 scope.legendData = [
@@ -394,14 +391,14 @@ angular.module('cttvDirectives')
                         .then(function (resp) {
                             var total = resp.body.total;
 
-                            function columnsNumberOk(csv, n) {
+                            function columnsNumberOk (csv, n) {
                                 var firstRow = csv.split('\n')[0];
                                 var cols = firstRow.split(',');
 
                                 return cols.length === n;
                             }
 
-                            function getNextChunk(size, from) {
+                            function getNextChunk (size, from) {
                                 var opts = {
                                     disease: [scope.disease],
                                     outputstructure: 'flat',
@@ -478,7 +475,6 @@ angular.module('cttvDirectives')
                 };
 
 
-
                 // TODO: check this
                 // Do we want the directive to listen for changes in the URL?
                 // Probably so, but not with this implementation of DataTables...
@@ -494,19 +490,19 @@ angular.module('cttvDirectives')
                     var disease = attrs[1];
                     // scope.targets = attrs[2];
 
-                    //$log.log("diseaseAssociationsTableDirective:attrs:", attrs);
+                    // $log.log("diseaseAssociationsTableDirective:attrs:", attrs);
                     // actually, is disease going to change?
                     // I mean, if it changes, the page changes, right?
                     // if the table exists, we just force an upload (will take the filters into account)
-                    //if (dtable) {
+                    // if (dtable) {
                     //    $log.log("diseaseAssociationsTableDirective:not calling setupTable:");
                     //    dtable.ajax.reload();
-                    //} else {
-                    //state = cttvLocationState.getState()[scope.stateId];
+                    // } else {
+                    // state = cttvLocationState.getState()[scope.stateId];
                     // create a new table
-                    //dtable = setupTable(table, disease, scope.filename, scope.downloadTable);
-                    //dtable = undefined;
-                    //table.destroy();
+                    // dtable = setupTable(table, disease, scope.filename, scope.downloadTable);
+                    // dtable = undefined;
+                    // table.destroy();
                     dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
 
                     // listener for page changes
@@ -526,7 +522,7 @@ angular.module('cttvDirectives')
                     // state.o = order[0];
                     // update(scope.stateId, state);
                     });
-                //}
+                // }
                 });
 
             // Watch for filename changes

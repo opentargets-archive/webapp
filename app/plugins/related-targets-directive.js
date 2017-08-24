@@ -10,7 +10,7 @@ angular.module('plugins')
             },
             link: function (scope, element, attrs) {
                 cttvAPIservice.getTargetRelation({
-                    id: scope.target.id,
+                    id: scope.target.id
                 })
                     .then(
                     // success

@@ -1,11 +1,11 @@
 /* Services */
 
-angular.module('cttvServices').
+angular.module('cttvServices')
 
     /**
      * The API services, with methods to call the ElasticSearch API
      */
-    factory('otDefinitions', ['$log', function($log) {
+    .factory('otDefinitions', ['$log', function ($log) {
         'use strict';
 
         var definitions = {

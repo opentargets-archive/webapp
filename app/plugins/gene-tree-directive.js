@@ -18,11 +18,11 @@ angular.module('plugins')
                     .id(scope.target.id)
                     .width(width)
                     .proxy('/proxy/rest.ensembl.org')
-                    .on('notFound', function() {
+                    .on('notFound', function () {
                         scope.notFound = 1;
                     });
 
-                $timeout(function() {
+                $timeout(function () {
                     var el = document.getElementById('gene-tree');
                     gt(el);
                 }, 0);
@@ -36,24 +36,24 @@ angular.module('plugins')
 
                 // Orthology table
                 var homologyType = {
-                    'ortholog_one2one' : 'ortholog 1:1',
-                    'ortholog_one2many' : 'ortholog 1:many',
-                    'within_species_paralog' : 'paralog',
+                    'ortholog_one2one': 'ortholog 1:1',
+                    'ortholog_one2many': 'ortholog 1:many',
+                    'within_species_paralog': 'paralog'
                 };
 
                 var scientific2common = {
-                    'homo_sapiens' : 'Human',
-                    'mus_musculus_reference' : 'Mouse',
+                    'homo_sapiens': 'Human',
+                    'mus_musculus_reference': 'Mouse',
                     'mus_musculus': 'Mouse',
-                    'cavia_porcellus' : 'Guinea pig',
-                    'macaca_mulatta' : 'Macaque',
-                    'canis_lupus_familiaris' : 'Dog',
+                    'cavia_porcellus': 'Guinea pig',
+                    'macaca_mulatta': 'Macaque',
+                    'canis_lupus_familiaris': 'Dog',
                     'canis_familiaris': 'Dog',
-                    'oryctolagus_cuniculus' : 'Rabbit',
-                    'rattus_norvegicus' : 'Rat',
-                    'sus_scrofa' : 'Pig',
-                    'xenopus_tropicalis' : 'Frog',
-                    'danio_rerio' : 'Zebrafish',
+                    'oryctolagus_cuniculus': 'Rabbit',
+                    'rattus_norvegicus': 'Rat',
+                    'sus_scrofa': 'Pig',
+                    'xenopus_tropicalis': 'Frog',
+                    'danio_rerio': 'Zebrafish',
                     'drosophila_melanogaster': 'Fly',
                     'caenorhabditis_elegans': 'Worm',
                     'pan_troglodytes': 'Chimpanzee',
@@ -62,7 +62,7 @@ angular.module('plugins')
                 };
 
 
-                function formatHomologuesDataToArray(data, info) {
+                function formatHomologuesDataToArray (data, info) {
                     var tableData = [];
                     data.forEach(function (item) {
                         var row = [];
@@ -105,7 +105,7 @@ angular.module('plugins')
                 });
                 scope.showSpinner = true;
                 rest.call(homologsUrl)
-                    .then (function (resp) {
+                    .then(function (resp) {
                         var infoUrl = '/proxy/rest.ensembl.org/lookup/id/';
                         var infoTargets = [];
                         resp.body.data[0].homologies.forEach(function (h) {
@@ -115,16 +115,16 @@ angular.module('plugins')
                             ids: infoTargets
                         };
                         rest.call(infoUrl, post)
-                            .then (function (resp2) {
+                            .then(function (resp2) {
                                 scope.showSpinner = false;
                                 $timeout(function () {
-                                    $('#gene-homologues-table').DataTable( cttvUtils.setTableToolsParams({
+                                    $('#gene-homologues-table').DataTable(cttvUtils.setTableToolsParams({
                                         'data': formatHomologuesDataToArray(resp.body.data[0].homologies, resp2.body),
-                                        'ordering' : true,
+                                        'ordering': true,
                                         'order': [[4, 'desc']],
                                         'autoWidth': false,
-                                        'paging' : true
-                                    }, scope.target.id+'-homologies') );
+                                        'paging': true
+                                    }, scope.target.id + '-homologies'));
                                 }, 0);
                             });
 

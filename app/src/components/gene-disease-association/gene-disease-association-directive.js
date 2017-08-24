@@ -3,21 +3,21 @@ angular.module('cttvDirectives')
     /**
     * Flower graph
     */
-    .directive('cttvGeneDiseaseAssociation', [function(){
+    .directive('cttvGeneDiseaseAssociation', [function () {
         'use strict';
 
         return {
-            restrict:'AE',
-            //transclude: 'true',
+            restrict: 'AE',
+            // transclude: 'true',
             scope: {
                 associationData: '='
             },
-            link: function(scope, elem, attrs){
-                //var flower = flowerView().values(scope.associationData);
-                //flower(elem[0]);
+            link: function (scope, elem, attrs) {
+                // var flower = flowerView().values(scope.associationData);
+                // flower(elem[0]);
 
-                scope.render = function(data){
-                    if(data.length>0){
+                scope.render = function (data) {
+                    if (data.length > 0) {
                         var flower = flowerView()
                             .values(data)
                             .diagonal(200);
@@ -28,10 +28,10 @@ angular.module('cttvDirectives')
                 // Watch for data changes
                 scope.$watch(
                     'associationData',
-                    function() {
+                    function () {
                         scope.render(scope.associationData);
-                    }//,
-                    //true
+                    }// ,
+                    // true
                 );
             }
         };

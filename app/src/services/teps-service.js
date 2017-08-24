@@ -5,9 +5,9 @@
 *  More info of this packages: http://www.thesgc.org/tep
 *  This information is static and needs to be updated when new TEPs are made available
 * */
-angular.module('cttvServices').
+angular.module('cttvServices')
 
-    factory('otTEPs', [function() {
+    .factory('otTEPs', [function () {
         'use strict';
 
         return {

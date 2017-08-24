@@ -104,7 +104,7 @@ angular.module('plugins')
 
 
                 $http.get('/proxy/www.ebi.ac.uk/pdbe/api/mappings/best_structures/' + uniprotId)
-                    .then (function (resp) {
+                    .then(function (resp) {
                         var bestStructure = resp.data[uniprotId][0];
                         scope.pdbId = bestStructure.pdb_id;
 
@@ -116,10 +116,10 @@ angular.module('plugins')
                                 width: w,
                                 height: 600,
                                 antialias: true,
-                                quality : 'medium'
+                                quality: 'medium'
                             };
 
-                            function setColorForAtom(go, atom, color) {
+                            function setColorForAtom (go, atom, color) {
                                 var view = go.structure().createEmptyView();
                                 view.addAtom(atom);
                                 go.colorBy(pv.color.uniform(color), view);
@@ -129,10 +129,10 @@ angular.module('plugins')
                             $http.get('/proxy/files.rcsb.org/view/' + bestStructure.pdb_id + '.pdb')
                             // $http.get('https://files.rcsb.org/view/' + bestStructure.pdb_id + ".pdb")
                             // $http.get('/proxy/pdb.org/pdb/files/'+bestStructure.pdb_id+'.pdb')
-                                .then (function (data) {
+                                .then(function (data) {
                                     // Extract the title:
                                     var lines = data.data.split('\n');
-                                    for (var i=0; i<lines.length; i++) {
+                                    for (var i = 0; i < lines.length; i++) {
                                         if (lines[i].startsWith('TITLE')) {
                                             var titleCols = lines[i].split(/\s+/);
                                             titleCols.shift();
@@ -146,10 +146,10 @@ angular.module('plugins')
                                     var prevPicked = null;
                                     // add mouse move event listener to the div element containing the viewer. Whenever
                                     // the mouse moves, use viewer.pick() to get the current atom under the cursor.
-                                    parent.addEventListener('mousemove', function(event) {
+                                    parent.addEventListener('mousemove', function (event) {
                                         var rect = scope.viewer.boundingClientRect();
-                                        var picked = scope.viewer.pick({ x : event.clientX - rect.left,
-                                            y : event.clientY - rect.top
+                                        var picked = scope.viewer.pick({x: event.clientX - rect.left,
+                                            y: event.clientY - rect.top
                                         });
                                         if (prevPicked !== null && picked !== null && picked.target() === prevPicked.atom) {
                                             return;
@@ -163,9 +163,9 @@ angular.module('plugins')
                                             document.getElementById('picked-atom-name').innerHTML = atom.qualifiedName();
                                             // get RGBA color and store in the color array, so we know what it was
                                             // before changing it to the highlight color.
-                                            var color = [0,0,0,0];
+                                            var color = [0, 0, 0, 0];
                                             var currColor = picked.node().getColorForAtom(atom, color);
-                                            prevPicked = { atom : atom, color : color, node : picked.node() };
+                                            prevPicked = {atom: atom, color: color, node: picked.node()};
 
                                             if (currColor[0] === 1) {
                                             //   $log.log("setting atom to blue");
@@ -198,7 +198,7 @@ angular.module('plugins')
                                 return canvas[0];
                             };
 
-                        },0);
+                        }, 0);
                     }, function (resp) { // error
                         scope.noPdb = true;
                         // var template = "<div>No structure found for {{target.approved_symbol}}</div>";

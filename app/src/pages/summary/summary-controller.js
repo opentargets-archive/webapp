@@ -8,23 +8,23 @@ angular.module('cttvControllers')
         var search = $location.search();
 
         // Associations + profiles -- fetching general data (shows page spinner)
-        function getTargetsInfo(targets) {
+        function getTargetsInfo (targets) {
             var queryObject = {
                 method: 'POST',
                 trackCall: true,
                 params: {
                     'id': targets,
                     'size': targets.length,
-                    'fields': ['ensembl_gene_id', 'drugs', 'approved_symbol', 'reactome', 'uniprot_id'],
+                    'fields': ['ensembl_gene_id', 'drugs', 'approved_symbol', 'reactome', 'uniprot_id']
                 }
             };
             return cttvAPIservice.getTarget(queryObject)
-                .then (function (r) {
+                .then(function (r) {
                     return r.body.data;
                 });
         }
 
-        function getTargetsEnrichment(targets) {
+        function getTargetsEnrichment (targets) {
             var queryObject = {
                 method: 'POST',
                 trackCall: true,
@@ -104,7 +104,7 @@ angular.module('cttvControllers')
         if (search['target-list']) {
             var targetList = cttvLoadedLists.get(search['target-list']);
             var targets = [];
-            for (var i=0; i<targetList.list.length; i++) {
+            for (var i = 0; i < targetList.list.length; i++) {
                 var target = targetList.list[i];
                 if (target.selected) {
                     targets.push(target.result.id);

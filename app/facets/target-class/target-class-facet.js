@@ -3,7 +3,7 @@ angular.module('facets')
     /**
      * The Target class facet
      */
-    .directive('targetClassFacet', ['$log' , function ($log) {
+    .directive('targetClassFacet', ['$log', function ($log) {
         'use strict';
 
         return {
@@ -18,5 +18,4 @@ angular.module('facets')
 
             link: function (scope, elem, attrs) {}
         };
-    }])
-;
+    }]);

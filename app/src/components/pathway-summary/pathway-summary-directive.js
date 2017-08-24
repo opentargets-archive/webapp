@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive ('pathwaySummary', ['$log', 'cttvAPIservice', '$timeout', '$http', function ($log, cttvAPIservice, $timeout, $http) {
+    .directive('pathwaySummary', ['$log', 'cttvAPIservice', '$timeout', '$http', function ($log, cttvAPIservice, $timeout, $http) {
         'use strict';
 
         return {
@@ -11,26 +11,26 @@ angular.module('cttvDirectives')
                 targets: '='
             },
             link: function (scope, el, attrs) {
-                scope.$watch ('pathway', function () {
+                scope.$watch('pathway', function () {
                     if (!scope.pathway) {
                         return;
                     }
-                
+
                     // TODO: width should be dynamic
                     var w = 1140;
                     var h = 700;
 
                     // Ask for information of the pathway in reactome:
                     $http.get('/proxy/www.reactome.org/ContentService/data/query/' + scope.pathway + '/more')
-                        .then (function (resp) {
+                        .then(function (resp) {
                             scope.displayName = resp.data.displayName;
                             scope.description = resp.data.summation[0].text;
                         });
 
                     function loadPathway () {
                         var pId = scope.pathway;
-                        var pathwayDiagram = Reactome.Diagram.create ({
-                            'proxyPrefix' : '/proxy/www.reactome.org',
+                        var pathwayDiagram = Reactome.Diagram.create({
+                            'proxyPrefix': '/proxy/www.reactome.org',
                             'placeHolder': 'pathwayDiagramContainer',
                             'width': w,
                             'height': h
@@ -56,8 +56,8 @@ angular.module('cttvDirectives')
 
                     var count = 0;
                     // Wait until the reactome seed loads the library
-                    $timeout (function () {
-                        var centinel = setInterval (function () {
+                    $timeout(function () {
+                        var centinel = setInterval(function () {
                             count++;
                             if (count > 10) {
                                 clearInterval(centinel);

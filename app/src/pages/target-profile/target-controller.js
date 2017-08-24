@@ -6,7 +6,7 @@ angular.module('cttvControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-    .controller ('TargetCtrl', ['$scope', '$location', 'cttvAPIservice', 'cttvUtils', 'cttvConfig', 'otTEPs', function ($scope, $location, cttvAPIservice, cttvUtils, cttvConfig, otTEPs) {
+    .controller('TargetCtrl', ['$scope', '$location', 'cttvAPIservice', 'cttvUtils', 'cttvConfig', 'otTEPs', function ($scope, $location, cttvAPIservice, cttvUtils, cttvConfig, otTEPs) {
         'use strict';
 
         cttvUtils.clearErrors();
@@ -41,19 +41,19 @@ angular.module('cttvControllers')
                     var syns = {};
                     var synonyms = resp.symbol_synonyms;
                     if (synonyms !== undefined) {
-                        for (var i=0; i<synonyms.length; i++) {
+                        for (var i = 0; i < synonyms.length; i++) {
                             syns[synonyms[i]] = 1;
                         }
                     }
                     var prev_symbols = resp.previous_symbols;
                     if (prev_symbols !== undefined) {
-                        for (var j=0; j<prev_symbols.length; j++) {
+                        for (var j = 0; j < prev_symbols.length; j++) {
                             syns[prev_symbols[j]] = 1;
                         }
                     }
                     var name_synonyms = resp.name_synonyms;
                     if (name_synonyms !== undefined) {
-                        for (var k=0; k<name_synonyms.length; k++) {
+                        for (var k = 0; k < name_synonyms.length; k++) {
                             syns[name_synonyms[k]] = 1;
                         }
                     }
@@ -62,17 +62,17 @@ angular.module('cttvControllers')
                     // Uniprot
                     // TODO: Probably not being used... make sure & clean up
                     $scope.uniprot = {
-                        id : resp.uniprot_id,
-                        subunits : resp.uniprot_subunit,
-                        locations : resp.uniprot_subcellular_location,
-                        accessions : resp.uniprot_accessions,
-                        keywords : resp.uniprot_keywords
+                        id: resp.uniprot_id,
+                        subunits: resp.uniprot_subunit,
+                        locations: resp.uniprot_subcellular_location,
+                        accessions: resp.uniprot_accessions,
+                        keywords: resp.uniprot_keywords
                     };
 
                     // Extra sections -- plugins
                     $scope.sections = cttvConfig.targetSections;
                     // Set default visibility values
-                    for (var t=0; t<$scope.sections.length; t++) {
+                    for (var t = 0; t < $scope.sections.length; t++) {
                         $scope.sections[t].defaultVisibility = $scope.sections[t].visible || false;
                         $scope.sections[t].currentVisibility = $scope.sections[t].visible || false;
                     }

@@ -5,9 +5,9 @@ angular.module('cttvControllers')
      * Controller for the disease page
      * It loads general information about a given disease
      */
-    .controller ('DiseaseCtrl', ['$scope', '$location', 'cttvAPIservice', 'cttvUtils', 'cttvConfig', function ($scope, $location, cttvAPIservice, cttvUtils, cttvConfig) {
+    .controller('DiseaseCtrl', ['$scope', '$location', 'cttvAPIservice', 'cttvUtils', 'cttvConfig', function ($scope, $location, cttvAPIservice, cttvUtils, cttvConfig) {
         'use strict';
-        
+
         cttvUtils.clearErrors();
 
         var efo_code = $location.url().split('/')[2];
@@ -17,15 +17,15 @@ angular.module('cttvControllers')
                 code: efo_code
             }
         })
-            .then (function (resp) {
+            .then(function (resp) {
                 var data = resp.body;
                 var paths = [];
-                for (var i=0; i<data.path.length; i++) {
-                    var path=[];
-                    for(var j=0; j<data.path[i].length; j++){
+                for (var i = 0; i < data.path.length; i++) {
+                    var path = [];
+                    for (var j = 0; j < data.path[i].length; j++) {
                         path.push({
-                            'label' : data.path[i][j].label,
-                            'efo' : data.path[i][j].uri.split('/').pop()
+                            'label': data.path[i][j].label,
+                            'efo': data.path[i][j].uri.split('/').pop()
                         });
                     }
                     paths.push(path);
@@ -35,19 +35,19 @@ angular.module('cttvControllers')
                     data.efo_synonyms.push(resp.label);
                 }
                 $scope.disease = {
-                    'label' : data.label,
-                    'efo' : efo_code,
-                    'description' : data.definition || resp.label,
-                    'synonyms' : _.uniq(data.efo_synonyms),
-                    'paths' : paths,
-                    'children' : data.children,
-                    'title' : data.label.split(' ').join('_'),
-                    'phenotypes' : data.phenotypes
+                    'label': data.label,
+                    'efo': efo_code,
+                    'description': data.definition || resp.label,
+                    'synonyms': _.uniq(data.efo_synonyms),
+                    'paths': paths,
+                    'children': data.children,
+                    'title': data.label.split(' ').join('_'),
+                    'phenotypes': data.phenotypes
                 };
 
                 // Extra sections -- plugins
                 $scope.sections = cttvConfig.diseaseSections;
-                for (var t=0; t<$scope.sections.length; t++) {
+                for (var t = 0; t < $scope.sections.length; t++) {
                     $scope.sections[t].defaultVisibility = $scope.sections[t].visible;
                 }
             });

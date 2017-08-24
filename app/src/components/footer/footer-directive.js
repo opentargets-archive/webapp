@@ -9,8 +9,7 @@ angular.module('cttvDirectives')
         return {
             restrict: 'AE',
             scope: {},
-            templateUrl : 'src/components/footer/footer.html',
-            link: function(scope, element, attrs) {}
+            templateUrl: 'src/components/footer/footer.html',
+            link: function (scope, element, attrs) {}
         };
     }]);
-    

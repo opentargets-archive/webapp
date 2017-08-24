@@ -1,11 +1,11 @@
 angular.module('cttvDirectives')
 
-    .directive ('multipleTargetsDrugsSummary', ['$log', 'cttvAPIservice', 'cttvConfig', 'cttvUtils', function ($log, cttvAPIservice, cttvConfig, cttvUtils) {
+    .directive('multipleTargetsDrugsSummary', ['$log', 'cttvAPIservice', 'cttvConfig', 'cttvUtils', function ($log, cttvAPIservice, cttvConfig, cttvUtils) {
         'use strict';
 
         function formatDrugDataToArray (drugs) {
             var data = [];
-            for (var i=0; i<drugs.length; i++) {
+            for (var i = 0; i < drugs.length; i++) {
                 var drug = drugs[i];
                 var row = [];
 
@@ -58,9 +58,9 @@ angular.module('cttvDirectives')
                         }
                     };
                     cttvAPIservice.getFilterBy(queryObject)
-                        .then (function (resp) {
+                        .then(function (resp) {
                             var drugs = {};
-                            for (var i=0; i<resp.body.data.length; i++) {
+                            for (var i = 0; i < resp.body.data.length; i++) {
                                 var ev = resp.body.data[i];
                                 var target = ev.target.gene_info.symbol;
                                 var drug = ev.drug.molecule_name;

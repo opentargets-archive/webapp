@@ -1,8 +1,7 @@
 angular.module('facets')
 
-    .factory('therapeuticAreaFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', 'datasourceFacetParser', function($log, cttvDictionary, cttvConsts, datasourceFacetParser) {
+    .factory('therapeuticAreaFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', 'datasourceFacetParser', function ($log, cttvDictionary, cttvConsts, datasourceFacetParser) {
         'use strict';
-
 
 
         var parser = {};
@@ -21,10 +20,10 @@ angular.module('facets')
          *
          * It returns an Array of filters.
          */
-        parser.parse = function(config, data, countsToUse, isSelected){
+        parser.parse = function (config, data, countsToUse, isSelected) {
 
             // array of filters
-            config.filters = data.buckets.map( function(obj){
+            config.filters = data.buckets.map(function (obj) {
                 var conf = {};
                 conf.key = obj.key;
                 conf.label = obj.label;
@@ -40,5 +39,4 @@ angular.module('facets')
 
         return parser;
     }]);
-
 

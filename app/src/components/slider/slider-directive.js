@@ -3,7 +3,7 @@ angular.module('cttvDirectives')
      * A generic slider
      */
     .directive('cttvSlider', ['cttvUtils', function (cttvUtils) {
-        //'use strict';
+        // 'use strict';
 
         return {
 
@@ -22,7 +22,7 @@ angular.module('cttvDirectives')
                 // labels: Array
             },
 
-            //template: '<cttv-size-listener onresize="resize"></cttv-size-listener>',
+            // template: '<cttv-size-listener onresize="resize"></cttv-size-listener>',
 
             /*
             link: function (scope, elem, attrs) {
@@ -137,8 +137,8 @@ angular.module('cttvDirectives')
             },*/
 
             link: function (scope, elem, attrs) {
-                scope.$watch('value', function(n, o){
-                    if(n!=undefined && o==undefined){
+                scope.$watch('value', function (n, o) {
+                    if (n != undefined && o == undefined) {
 
                         // set up dimentions
                         var margin = {top: 0, right: 10, bottom: 10, left: 10},
@@ -159,13 +159,13 @@ angular.module('cttvDirectives')
 
                         // the scale/mapping of actual values that the slider is returning
                         var v = d3.scale.linear()
-                            .domain(values.map(function(item, i){ return i; }))
-                            .range(values.map(function(item){ return item; }))
+                            .domain(values.map(function (item, i) { return i; }))
+                            .range(values.map(function (item) { return item; }))
                             .clamp(true);
 
                         // the scale of the slider, 0 to 1 and 0 to width
                         var x = d3.scale.linear()
-                            .domain([0, (ticks-1)])
+                            .domain([0, (ticks - 1)])
                             .range([0, width])
                             .clamp(true);
 
@@ -179,8 +179,8 @@ angular.module('cttvDirectives')
                             .scale(x)
                             .orient('bottom')
                             .ticks(ticks)
-                            .tickFormat(function(d) {
-                                //return d+"\""; // config.labels[d] || ;
+                            .tickFormat(function (d) {
+                                // return d+"\""; // config.labels[d] || ;
                                 return labels[d];
                             })
                             .tickSize(0)
@@ -198,7 +198,7 @@ angular.module('cttvDirectives')
                             .attr('transform', 'translate(0,' + height / 2 + ')')
                             .call(xAxis)
                             .select('.domain')
-                            .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+                            .select(function () { return this.parentNode.appendChild(this.cloneNode(true)); })
                             .attr('class', 'halo');
 
                         var slider = svg.append('g')
@@ -220,15 +220,15 @@ angular.module('cttvDirectives')
                             .call(brush.event);
 
                         // attach event after initial animation is triggered (hack, I confess)
-                        brush.on('brushend', function(){ scope.$apply(onBrushEnd); });
+                        brush.on('brushend', function () { scope.$apply(onBrushEnd); });
 
-                        var onBrush = function() {
+                        var onBrush = function () {
                             var value = brush.extent()[0];
 
                             if (d3.event.sourceEvent) { // not a programmatic event
                                 value = x.invert(d3.mouse(this)[0]);
-                                if(snap){
-                                    value = cttvUtils.roundToNearest( value, tick );
+                                if (snap) {
+                                    value = cttvUtils.roundToNearest(value, tick);
                                 }
                                 brush.extent([value, value]);
                             }
@@ -237,10 +237,10 @@ angular.module('cttvDirectives')
                             handle.attr('cx', x(value));
                         };
 
-                        var onBrushEnd = function() {
+                        var onBrushEnd = function () {
                             // update the scope value when finishing brushing
                             if (d3.event.sourceEvent) { // not a programmatic event
-                                scope.value = v( brush.extent()[0] );
+                                scope.value = v(brush.extent()[0]);
                             }
                         };
 
@@ -248,8 +248,7 @@ angular.module('cttvDirectives')
                 });
 
 
-
-                /*scope.resize=function(dim){
+                /* scope.resize=function(dim){
                     width = dim.w - margin.left - margin.right,   // initialize width to the div width
 
                     x.domain([scope.min, scope.max])
@@ -259,6 +258,6 @@ angular.module('cttvDirectives')
 
                 }*/
 
-            },
+            }
         };
     }]);

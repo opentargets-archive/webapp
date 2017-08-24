@@ -1,11 +1,11 @@
 angular.module('cttvDirectives')
 
-    .directive ('multipleTargetsPathwaysSummary', ['$log', 'cttvAPIservice', '$http', '$q', 'cttvUtils', function ($log, cttvAPIservice, $http, $q, cttvUtils) {
+    .directive('multipleTargetsPathwaysSummary', ['$log', 'cttvAPIservice', '$http', '$q', 'cttvUtils', function ($log, cttvAPIservice, $http, $q, cttvUtils) {
         'use strict';
 
-        function formatPathwayDataToArray(pathways, targets4pathways, symbol2id, bg) {
+        function formatPathwayDataToArray (pathways, targets4pathways, symbol2id, bg) {
             var data = [];
-            for (var i=0; i<pathways.length; i++) {
+            for (var i = 0; i < pathways.length; i++) {
                 var p = pathways[i];
                 var row = [];
 
@@ -139,24 +139,24 @@ angular.module('cttvDirectives')
                     var preFlightUrl = '/proxy/www.reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
                     var postData = Object.keys(uniqueTargets).join('\n');
                     $http.post(preFlightUrl, postData)
-                        .then (function (resp) {
+                        .then(function (resp) {
                             return resp.data;
                         })
-                        .then (function (data) {
+                        .then(function (data) {
                             var token = data.summary.token;
                             var nPathways = data.pathwaysFound;
                             var url = '/proxy/www.reactome.org/AnalysisService/token/' + token + '?pageSize=' + nPathways + '&page=1&resource=UNIPROT';
                             $http.get(url)
-                                .then (function (resp) {
+                                .then(function (resp) {
                                     var token = resp.data.summary.token;
                                     var url2 = '/proxy/www.reactome.org/AnalysisService/token/' + token + '/found/all';
                                     var postData2 = resp.data.pathways.map(function (d) {
                                         return d.stId;
                                     }).join(',');
                                     $http.post(url2, postData2)
-                                        .then (function (targetPathways) {
+                                        .then(function (targetPathways) {
                                             var targets4pathways = {};
-                                            for (var i=0; i<targetPathways.data.length; i++) {
+                                            for (var i = 0; i < targetPathways.data.length; i++) {
                                                 var pId = targetPathways.data[i].pathway;
                                                 targets4pathways[pId] = targetPathways.data[i].entities;
                                             }

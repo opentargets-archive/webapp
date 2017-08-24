@@ -1,7 +1,7 @@
 angular.module('plugins')
     .directive('interactionsViewer', ['$log', '$timeout', '$http', '$q', 'cttvAPIservice', 'omnipathdbSources', function ($log, $timeout, $http, $q, cttvAPIservice, omnipathdbSources) {
 
-        function getNames(bestHits) {
+        function getNames (bestHits) {
             var mapNames = {};
             for (var i = 0; i < bestHits.length; i++) {
                 var bestHit = bestHits[i];

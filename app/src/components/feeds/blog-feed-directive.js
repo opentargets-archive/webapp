@@ -2,7 +2,6 @@
 angular.module('cttvDirectives')
 
 
-
     /**
      * Load and display blog posts.
      * @params limit : the max number of posts to fetch; defaults to "all"
@@ -15,22 +14,22 @@ angular.module('cttvDirectives')
             scope: {
                 limit: '@'
             },
-            template :   '<div class="hp-blog-feed">'
-                        +'    <div class="hp-blog-feed-post" ng-repeat="post in posts">'
-                        +'        <h5 class="hp-blog-feed-post-header"><a href="{{post.link}}">'
-                        +'            {{post.title}}'
-                        +'        </a></h5>'
-                        +'        <div class="clearfix text-lowlight">'
-                        +'            <p class="pull-left">By {{post.author.name}}</p>' // author
-                        +'            <p class="pull-right">{{post.pubDate.getDate()}} {{post.pubDate.getMonth() | otMonthToString}} {{post.pubDate.getFullYear()}}</p>' // date
-                        +'        </div>'
-                        +'        <div ng-bind-html="post.desc | otStripTags | otEllipseText:130"></div>' // long description
-                        +'        <div class="text-lowlight text-small" ng-if="post.tags.length>0">'
-                        +'            <span class="fa fa-tags"></span> <span ng-repeat="tag in post.tags">{{tag.name}}<span ng-if="!$last">, </span></span>'
-                        +'        </div>' // tags
-                        +'    </div>'
-                        +'</div>',
-            link: function(scope) {
+            template: '<div class="hp-blog-feed">'
+                        + '    <div class="hp-blog-feed-post" ng-repeat="post in posts">'
+                        + '        <h5 class="hp-blog-feed-post-header"><a href="{{post.link}}">'
+                        + '            {{post.title}}'
+                        + '        </a></h5>'
+                        + '        <div class="clearfix text-lowlight">'
+                        + '            <p class="pull-left">By {{post.author.name}}</p>' // author
+                        + '            <p class="pull-right">{{post.pubDate.getDate()}} {{post.pubDate.getMonth() | otMonthToString}} {{post.pubDate.getFullYear()}}</p>' // date
+                        + '        </div>'
+                        + '        <div ng-bind-html="post.desc | otStripTags | otEllipseText:130"></div>' // long description
+                        + '        <div class="text-lowlight text-small" ng-if="post.tags.length>0">'
+                        + '            <span class="fa fa-tags"></span> <span ng-repeat="tag in post.tags">{{tag.name}}<span ng-if="!$last">, </span></span>'
+                        + '        </div>' // tags
+                        + '    </div>'
+                        + '</div>',
+            link: function (scope) {
                 scope.limit = scope.limit || 'all';
                 var url = ghost.url.api('posts', {
                     limit: scope.limit,
@@ -42,18 +41,18 @@ angular.module('cttvDirectives')
                 var href_url = ghost.url.api().split('ghost')[0];
 
                 $http.get(proxy_url)
-                    .then(function successCallback(response) {
+                    .then(function successCallback (response) {
                         scope.posts = response.data.posts || [];
-                        scope.posts.forEach(function(i){
+                        scope.posts.forEach(function (i) {
                             i.pubDate = new Date(i.published_at);   // make published_at string into Date object for easier formating
                             i.desc = i.meta_description || i.html;  // authors don't always put a description, so let's use the full html as a backup plan
-                            i.link = href_url+i.slug;               // the url to the full post on the blog
+                            i.link = href_url + i.slug;               // the url to the full post on the blog
                         });
 
-                    }, function errorCallback(response) {
+                    }, function errorCallback (response) {
                         // called asynchronously if an error occurs
                         // or server returns response with an error status.
-                        $log.warn('Error fetching blog posts. ',response);
+                        $log.warn('Error fetching blog posts. ', response);
                     });
 
             }

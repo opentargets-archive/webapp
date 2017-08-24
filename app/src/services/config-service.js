@@ -1,15 +1,14 @@
 
 /* Services */
 
-angular.module('cttvServices').
+angular.module('cttvServices')
 
 
-
-    /**º
+    /** º
      * The Config service.
      * This stores global config variables for the font end
      */
-    factory('cttvConfig', ['cttvConsts', 'initConfig', function(cttvConsts, initConfig) {
+    .factory('cttvConfig', ['cttvConsts', 'initConfig', function (cttvConsts, initConfig) {
         'use strict';
 
         // local handle to the dbs list in the consts service
@@ -21,7 +20,7 @@ angular.module('cttvServices').
                     if (angular.isObject(obj[prop]) && !angular.isArray(obj[prop])) {
                         applyDb(obj[prop]);
                     } else {
-                        for (var i=0; i<obj[prop].length; i++) {
+                        for (var i = 0; i < obj[prop].length; i++) {
                             var item = obj[prop][i];
                             if (cttvConsts.dbs[item]) {
                                 obj[prop][i] = cttvConsts.dbs[item];
@@ -36,7 +35,7 @@ angular.module('cttvServices').
 
         // var config = {
         // flag to hide/show first column (with public/private styling) in evidence tables
-        //show_access_level : false,
+        // show_access_level : false,
 
         // evidence sources used in the evidence page tables:
         // if multiple sources are needed (e.g. for somatic mutation table), specify these in an array

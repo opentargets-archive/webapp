@@ -29,10 +29,10 @@ angular.module('cttvDirectives')
             var root = d3.select('.bubblesViewRoot')
                 .datum();
 
-            function okOverlaps(p, angle, others) {
+            function okOverlaps (p, angle, others) {
                 for (var o in others) {
                     // Overlap
-                    if ((Math.abs(others[o].y - p.y)<10) && (Math.abs(angle - others[o].angle)<0.2)) {
+                    if ((Math.abs(others[o].y - p.y) < 10) && (Math.abs(angle - others[o].angle) < 0.2)) {
                         return false;
                     }
                 }
@@ -55,13 +55,13 @@ angular.module('cttvDirectives')
                     // Calculate angle
                     var angleRadians = Math.atan2(d.y - root.y, d.x - root.x);
 
-                    //angleRadians = angleRadians < 0 ? angleRadians + 360 : angleRadians;
+                    // angleRadians = angleRadians < 0 ? angleRadians + 360 : angleRadians;
                     // Find the projection of the line in the root bubble
                     var ok = false;
                     var p1 = getPos(d, angleRadians);
                     var p2;
                     var ntries = 0;
-                    while (!ok && ntries<50) {
+                    while (!ok && ntries < 50) {
                         ntries++;
                         p2 = getPos(root, angleRadians);
                         ok = okOverlaps(p2, angleRadians, labelPositions);
@@ -76,15 +76,15 @@ angular.module('cttvDirectives')
                             } else {
                                 angleRadians = angleRadians - 0.02;
                             }
-                            //angleRadians = angleRadians + 0.02;
+                            // angleRadians = angleRadians + 0.02;
                         }
                     }
                     labelPositions[d.__id] = {
                         x: p2.x,
                         y: p2.y,
-                        angle : angleRadians
+                        angle: angleRadians
                     };
-                    //var p = getPos(d, angleRadians);
+                    // var p = getPos(d, angleRadians);
                     // var x1 = d.x + (d.r * Math.cos(angleRadians));
                     // var y1 = d.y + (d.r * Math.sin(angleRadians));
                     // var x2 = root.x + (root.r * Math.cos(angleRadians));
@@ -105,12 +105,12 @@ angular.module('cttvDirectives')
                         .style('font-size', '12px')
                         .style('text-anchor', function () {
                             var angle = (angleRadians * 180 / Math.PI);
-                            if ((angle < -90) || (angle>90)) {
+                            if ((angle < -90) || (angle > 90)) {
                                 return 'end';
                             }
                             return 'start';
                         })
-                        .text(function() {
+                        .text(function () {
                             return d.name;
                         });
                 });
@@ -127,7 +127,7 @@ angular.module('cttvDirectives')
             var currWidth = ~~d3.select(clone).attr('width');
             var currHeight = ~~d3.select(clone).attr('height');
             d3.select(clone)
-                .attr('width', currWidth + l*2)
+                .attr('width', currWidth + l * 2)
                 .attr('height', currHeight + 50);
             g.attr('transform', 'translate(' + l + ',' + '25)');
 
@@ -139,21 +139,21 @@ angular.module('cttvDirectives')
             require: '?^resize',
             scope: {
                 // nocancers: '@',
-                facets : '=',
-                target : '@',
-                active : '@'
+                facets: '=',
+                target: '@',
+                active: '@'
             },
 
             template: '<div style="float:left">'
-            +'<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend></div>'
-            +'<png filename="{{target}}-AssociationsBubblesView.png" track="associationsBubbles"></png>',
+            + '<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend></div>'
+            + '<png filename="{{target}}-AssociationsBubblesView.png" track="associationsBubbles"></png>',
 
 
             link: function (scope, elem, attrs, resizeCtrl) {
-                //var bubblesContainer = elem.children().eq(1).children().eq(0)[0];
+                // var bubblesContainer = elem.children().eq(1).children().eq(0)[0];
                 var legendDiv = elem.children().eq(0).children().eq(0)[0];
                 var bubblesContainer = document.createElement('div');
-                bubblesContainer.id='cttvBubblesView';
+                bubblesContainer.id = 'cttvBubblesView';
                 scope.element = 'cttvBubblesView';
                 elem.children().eq(0)[0].insertBefore(bubblesContainer, legendDiv);
                 // bubblesContainer.id = "cttvBubblesView";
@@ -233,7 +233,7 @@ angular.module('cttvDirectives')
                     //         });
                     //
                     // }
-                    
+
                     if (bView) {
                         bView.therapeuticAreas(opts.therapeutic_area);
                         bView.update(promise);
@@ -257,7 +257,7 @@ angular.module('cttvDirectives')
 
                     var diameter = viewportH - elemOffsetTop - bottomMargin;
 
-                    var colorScale = cttvUtils.colorScales.BLUE_0_1; //blue orig
+                    var colorScale = cttvUtils.colorScales.BLUE_0_1; // blue orig
 
                     bView = targetAssociations()
                         // .target("ENSG00000157764")
@@ -275,13 +275,13 @@ angular.module('cttvDirectives')
                     // Setting up legend
                     scope.legendText = 'Score';
                     scope.colors = [];
-                    for(var i=0; i<=100; i+=25){
-                        var j=i/100;
-                        //scope.labs.push(j);
-                        scope.colors.push( {color:colorScale(j), label:j} );
+                    for (var i = 0; i <= 100; i += 25) {
+                        var j = i / 100;
+                        // scope.labs.push(j);
+                        scope.colors.push({color: colorScale(j), label: j});
                     }
                     scope.legendData = [
-                        //{label:"Therapeutic Area", class:"no-data"}
+                        // {label:"Therapeutic Area", class:"no-data"}
                     ];
 
                 }

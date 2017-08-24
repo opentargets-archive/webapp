@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive ('targetListUpload', ['$log', 'cttvAPIservice', 'cttvLoadedLists', 'cttvConfig', function ($log, cttvAPIservice, cttvLoadedLists, cttvConfig) {
+    .directive('targetListUpload', ['$log', 'cttvAPIservice', 'cttvLoadedLists', 'cttvConfig', function ($log, cttvAPIservice, cttvLoadedLists, cttvConfig) {
         'use strict';
 
         return {
@@ -24,7 +24,7 @@ angular.module('cttvDirectives')
                 };
 
                 // Show the latest loaded list by default:
-                scope.list = scope.lists[scope.lists.length-1];
+                scope.list = scope.lists[scope.lists.length - 1];
 
                 // Loads the sample list
                 scope.loadExample = function () {
@@ -61,7 +61,7 @@ angular.module('cttvDirectives')
                         targets = targets.filter(function (t) {
                             if (t) {return true;}
                         });
-                        searchTargets (file.name, targets);
+                        searchTargets(file.name, targets);
                     };
                     reader.readAsText(file);
                 };

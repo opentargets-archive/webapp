@@ -34,11 +34,11 @@ angular.module('plugins')
                             var arr = obj2array(resp.data.generpkm);
                             var svg = d3.select('#gtexWidget')
                                 .append('svg')
-                                .attr('width', (w-150))
-                                .attr('height', (arr.length*20)+100)
+                                .attr('width', (w - 150))
+                                .attr('height', (arr.length * 20) + 100)
                                 .append('g')
                                 .attr('class', 'gtexView')
-                                .attr('transform', 'translate(' + ~~(w*0.4) + ',70)');
+                                .attr('transform', 'translate(' + ~~(w * 0.4) + ',70)');
 
                             plotGtex(svg, arr);
                         });
@@ -63,7 +63,7 @@ angular.module('plugins')
 
                     var valScale = d3.scale.linear()
                         .domain(valExtent)
-                        .range([0, ~~(w*0.6)]);
+                        .range([0, ~~(w * 0.6)]);
 
                     var colScale = d3.scale.category20();
 
@@ -73,7 +73,7 @@ angular.module('plugins')
                         .append('g')
                         .attr('class', 'tissue')
                         .attr('transform', function (d, i) {
-                            return 'translate(0,' + (i*20) + ')';
+                            return 'translate(0,' + (i * 20) + ')';
                         });
 
                     // box
@@ -83,12 +83,12 @@ angular.module('plugins')
                             return valScale(d.q1);
                         })
                         .attr('width', function (d) {
-                            return valScale((d.q3)-(d.q1));
+                            return valScale((d.q3) - (d.q1));
                         })
                         .attr('y', 0)
                         .attr('height', 10)
                         .attr('fill', function (d, i) {
-                            return colScale(i%20);
+                            return colScale(i % 20);
                         });
 
                     // high whisker
@@ -147,7 +147,7 @@ angular.module('plugins')
                     // outliers
                     tissues
                         .each(function (d) {
-                            for (var i=0; i<d.outliers.length; i++) {
+                            for (var i = 0; i < d.outliers.length; i++) {
                                 var o = d.outliers[i];
                                 d3.select(this)
                                     .append('circle')
@@ -194,7 +194,7 @@ angular.module('plugins')
                     });
                     var tissuesScale = d3.scale.ordinal()
                         .domain(tissueNames)
-                        .rangePoints([5, (tissueNames.length * 20)-15]);
+                        .rangePoints([5, (tissueNames.length * 20) - 15]);
 
                     var tissuesAxis = d3.svg.axis()
                         .scale(tissuesScale)
@@ -209,7 +209,7 @@ angular.module('plugins')
 
                 }
 
-                function obj2array(obj) {
+                function obj2array (obj) {
                     var arr = [];
                     for (var tissue in obj) {
                         obj[tissue].tissue = tissue;
@@ -218,9 +218,9 @@ angular.module('plugins')
                     return arr;
                 }
 
-                function getExtent(data) {
+                function getExtent (data) {
                     var max = -Infinity;
-                    for (var i=0; i<data.length; i++) {
+                    for (var i = 0; i < data.length; i++) {
                         var d = data[i];
                         if (d.high_wisker > max) {
                             max = d.high_wisker;
@@ -232,7 +232,7 @@ angular.module('plugins')
                             }
                         }
                     }
-                    return [0, (max+10)];
+                    return [0, (max + 10)];
                 }
 
                 if (cttvUtils.browser.name !== 'IE') {

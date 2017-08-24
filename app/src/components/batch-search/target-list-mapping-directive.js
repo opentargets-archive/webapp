@@ -1,7 +1,7 @@
 angular.module('cttvDirectives')
 
 
-    .directive ('targetListMapping', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvLoadedLists', 'cttvConfig', function ($log, cttvAPIservice, cttvUtils, cttvLoadedLists, cttvConfig) {
+    .directive('targetListMapping', ['$log', 'cttvAPIservice', 'cttvUtils', 'cttvLoadedLists', 'cttvConfig', function ($log, cttvAPIservice, cttvUtils, cttvLoadedLists, cttvConfig) {
         'use strict';
 
         return {
@@ -56,10 +56,10 @@ angular.module('cttvDirectives')
                     scope.duplicated = [];
                     if (queryTxt) {
                         scope.searchInProgress = true;
-                        search (queryTxt)
-                            .then (function (resp) {
+                        search(queryTxt)
+                            .then(function (resp) {
                             // We filter out search results that are already in the list
-                                for (var i=0; i<resp.body.data.length; i++) {
+                                for (var i = 0; i < resp.body.data.length; i++) {
                                     var thisSearch = resp.body.data[i];
                                     if (scope.list.keys[thisSearch.id]) {
                                         scope.duplicated.push(thisSearch.data.approved_symbol);
@@ -69,7 +69,7 @@ angular.module('cttvDirectives')
                                 }
                             // scope.newSearchResults = resp.body.data;
                             })
-                            .finally (function () {
+                            .finally(function () {
                                 scope.searchInProgress = false;
                             });
                     } else {
@@ -85,7 +85,7 @@ angular.module('cttvDirectives')
                 // };
 
                 scope.toggleThis = function (query) {
-                    for (var i=0; i<scope.list.list.length; i++) {
+                    for (var i = 0; i < scope.list.list.length; i++) {
                         var item = scope.list.list[i];
                         if (item.query === query.query) {
                             item.selected = !item.selected;
@@ -149,7 +149,7 @@ angular.module('cttvDirectives')
                 // };
                 //
                 scope.selectThis = function (query, match) {
-                    for (var i=0; i<scope.list.list.length; i++) {
+                    for (var i = 0; i < scope.list.list.length; i++) {
                         var item = scope.list.list[i];
                         if (item.query === query.query) {
                             item.result.id = match.id;
@@ -175,7 +175,7 @@ angular.module('cttvDirectives')
                     scope.searchQuery = who;
 
                     search(who.query)
-                        .then (function (resp) {
+                        .then(function (resp) {
                             scope.searchResults = resp.body.data;
                         });
                 };
@@ -183,7 +183,7 @@ angular.module('cttvDirectives')
                 // Downloads the list
                 scope.downloadList = function () {
                     var listText = '';
-                    for (var i=0; i<scope.list.list.length; i++) {
+                    for (var i = 0; i < scope.list.list.length; i++) {
                         var item = scope.list.list[i];
                         if (item.result) {
                             listText += item.result.approved_symbol + '\n';
@@ -209,7 +209,7 @@ angular.module('cttvDirectives')
 
                     scope.targetIds = [];
 
-                    for (var i=0; i<thisList.length; i++) {
+                    for (var i = 0; i < thisList.length; i++) {
 
                         var thisSearch = thisList[i];
 

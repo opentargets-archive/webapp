@@ -20,7 +20,7 @@ angular.module('cttvDirectives')
         // 'best' is based on the number of connected nodes
 
         // First store the number of interactors to facilitate sorting
-            interactors.map (function (d) {
+            interactors.map(function (d) {
                 d.nInteractors = Object.keys(d.interactsWith).length;
             });
 
@@ -33,10 +33,10 @@ angular.module('cttvDirectives')
             // interactors is now sorted, so we just have to take the slice [n,interactors.length]
             var interactorsDiscarded = interactors.slice(n, interactors.length);
             var discardedIndex = {};
-            for (var i=0; i<interactorsDiscarded.length; i++) {
+            for (var i = 0; i < interactorsDiscarded.length; i++) {
                 discardedIndex[interactorsDiscarded[i].label] = true;
             }
-            for (var j=0; j<interactorsSelected.length; j++) {
+            for (var j = 0; j < interactorsSelected.length; j++) {
                 var interactor = interactorsSelected[j];
                 for (var interacted in interactor.interactsWith) {
                     if (interactor.interactsWith.hasOwnProperty(interacted)) {
@@ -103,7 +103,7 @@ angular.module('cttvDirectives')
                     // Tooltips
                     var hover_tooltip;
 
-                    function mouseoverTooltip(d) {
+                    function mouseoverTooltip (d) {
                         var obj = {};
                         obj.header = '';
                         obj.body = d.label + ' (' + Object.keys(d.interactsWith).length + ' interactors)';
@@ -144,7 +144,7 @@ angular.module('cttvDirectives')
                         scope.filterOut = {};
 
                         // The filter can be in a category, so convert to individual sources
-                        for (var i=0; i<cats.length; i++) {
+                        for (var i = 0; i < cats.length; i++) {
                             var cat = cats[i];
                             var sourcesForCategory = omnipathdbCategories[cat];
                             if (sourcesForCategory) {
@@ -170,7 +170,7 @@ angular.module('cttvDirectives')
                     };
 
                     // Color scale for the nodes (using the BLUE_0_1 range)
-                    var range = cttvUtils.colorScales.BLUE_0_1.range(); //blue orig
+                    var range = cttvUtils.colorScales.BLUE_0_1.range(); // blue orig
                     var newColorScale = d3.scale.linear()
                         .domain([0, 1])
                         .range(range); // blue orig
@@ -289,7 +289,7 @@ angular.module('cttvDirectives')
                         //     .id(1)
                         //     .call(elem, obj);
                         })
-                        .on ('loaded', function () {
+                        .on('loaded', function () {
                         // If the "selected" attribute is passed, we select the node programmatically...
                         // We need to wait until the star has been loaded in the screen
                             if (scope.selected) {
@@ -308,7 +308,7 @@ angular.module('cttvDirectives')
                     scope.colors = [];
                     for (var i = 0; i <= 100; i += 25) {
                         var j = i / 100;
-                        //scope.labs.push(j);
+                        // scope.labs.push(j);
                         scope.colors.push({color: newColorScale(j), label: j});
                     }
 

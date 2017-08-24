@@ -2,14 +2,14 @@ angular.module('cttvDirectives')
     /*
     *  Esssentially just a wrapper for the table tag, defined in hte template
     */
-    .directive('cttvMatrixTable', [function(){
+    .directive('cttvMatrixTable', [function () {
         'use strict';
 
         return {
             restrict: 'AE',
             template: '<table class="table matrix-table"></table>',
             replace: true,
-            link: function(scope, elem, attrs){
+            link: function (scope, elem, attrs) {
                 /*
                 var colorScale = d3.scale.linear()
                 .domain([0,1])

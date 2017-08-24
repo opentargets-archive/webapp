@@ -29,7 +29,7 @@ angular.module('plugins')
                             return svg;
                         };
                     }
-                },0);
+                }, 0);
 
             }
         };

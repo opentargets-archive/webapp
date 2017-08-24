@@ -14,11 +14,11 @@ angular.module('cttvDirectives')
     .directive('cttvHpaTissueExpression', ['cttvAPIservice', 'cttvUtils', function (cttvAPIservice, cttvUtils) {
         'use strict';
 
-        var colorScale = cttvUtils.colorScales.BLUE_1_3; //blue orig
+        var colorScale = cttvUtils.colorScales.BLUE_1_3; // blue orig
         var colorScale10 = cttvUtils.colorScales.BLUE_1_10;
 
         var labelScale = d3.scale.ordinal()
-            .domain([1,2,3])
+            .domain([1, 2, 3])
             .range(['Low', 'Medium', 'High']);
 
         var labelScale10 = function (v) {
@@ -31,15 +31,15 @@ angular.module('cttvDirectives')
             return 'High';
         };
 
-        var getColorStyleString = function(value, scale, label){
-            var span='';
+        var getColorStyleString = function (value, scale, label) {
+            var span = '';
 
-            if(value===0){
-                span = '<span class=\'value-0\' title=\'Not expressed\'>'+value+'</span>';
-            } else if(value>0){
+            if (value === 0) {
+                span = '<span class=\'value-0\' title=\'Not expressed\'>' + value + '</span>';
+            } else if (value > 0) {
                 var c = scale(value);
                 var l = label(value);
-                span = '<span style=\'color: '+c+'; background: '+c+';\' title=\'Expression: '+l+'\'>'+value+'</span>';
+                span = '<span style=\'color: ' + c + '; background: ' + c + ';\' title=\'Expression: ' + l + '\'>' + value + '</span>';
             } else {
                 span = '<span class=\'no-data\' title=\'No data\'></span>'; // quick hack: where there's no data, don't put anything so the sorting works better
             }
@@ -60,33 +60,33 @@ angular.module('cttvDirectives')
             restrict: 'AE',
 
             scope: {
-                target : '=',
-                //loadprogress : '=',
-                filename : '@'
+                target: '=',
+                // loadprogress : '=',
+                filename: '@'
             },
 
             template: '<cttv-matrix-table></cttv-matrix-table>'
-            +'<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
-            +'<cttv-matrix-legend colors="colors" layout="h"></cttv-matrix-legend>',
+            + '<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
+            + '<cttv-matrix-legend colors="colors" layout="h"></cttv-matrix-legend>',
 
             link: function (scope, elem, attrs) {
 
                 // set the load progress flag to true before starting the API call
-                //scope.loadprogress = true;
+                // scope.loadprogress = true;
 
                 // Watch for data changes
                 scope.$watch(
                     'target',
-                    function() {
+                    function () {
 
                         // move cttvAPIservice.getExpression ({ in here
                         // ......
 
-                        if( scope.target ){
+                        if (scope.target) {
 
-                            cttvAPIservice.getExpression ({
+                            cttvAPIservice.getExpression({
                                 'method': 'GET',
-                                'params' : {
+                                'params': {
                                     gene: scope.target  // TODO: should be TARGET in API!!!
                                 }
                             })
@@ -95,16 +95,16 @@ angular.module('cttvDirectives')
                                 // success
                                     function (resp) {
                                     // set hte load progress flag to false once we get the results
-                                    //scope.loadprogress = false;
+                                    // scope.loadprogress = false;
 
                                         var data = resp.body.data[scope.target].tissues;
                                         var newData = [];
 
                                         for (var tissue in data) {
                                             var row = [];
-                                            row.push( tissue );
-                                            row.push( getColorStyleString(data[tissue].protein.level, colorScale, labelScale) );
-                                            row.push( getColorStyleString(data[tissue].rna.level, colorScale10, labelScale10) );
+                                            row.push(tissue);
+                                            row.push(getColorStyleString(data[tissue].protein.level, colorScale, labelScale));
+                                            row.push(getColorStyleString(data[tissue].rna.level, colorScale10, labelScale10));
                                             row.push('');
                                             newData.push(row);
 
@@ -117,35 +117,35 @@ angular.module('cttvDirectives')
                                         // table itself
                                         var table = elem.children().eq(0)[0];
                                         var dtable = $(table).dataTable(cttvUtils.setTableToolsParams({
-                                            'data' : newData,
-                                            'columns': (function(){
-                                                var a=[];
-                                                for(var i=0; i<cols.length; i++){
-                                                    a.push({ 'title': '<div><span title=\''+cols[i]+'\'>'+cols[i]+'</span></div>' });
+                                            'data': newData,
+                                            'columns': (function () {
+                                                var a = [];
+                                                for (var i = 0; i < cols.length; i++) {
+                                                    a.push({'title': '<div><span title=\'' + cols[i] + '\'>' + cols[i] + '</span></div>'});
                                                 }
                                                 return a;
                                             })(),
-                                            'columnDefs' : [
-                                                { 'orderSequence': [ 'desc', 'asc'], 'targets': '_all' }
+                                            'columnDefs': [
+                                                {'orderSequence': [ 'desc', 'asc'], 'targets': '_all'}
                                             ],
-                                            'order' : [[0, 'asc']],
+                                            'order': [[0, 'asc']],
                                             'autoWidth': false,
                                             'ordering': true,
                                             'lengthMenu': [[10, 25, 50, 100, -1], [10, 25, 50, 100, 'All']],
                                             'pageLength': 50
-                                        }, scope.filename ));
+                                        }, scope.filename));
 
 
                                         // legend stuff
                                         scope.colors = [];
-                                        for(var i=1; i<=3; i++){
-                                            scope.colors.push( {color:colorScale(i), label:labelScale(i)} );
+                                        for (var i = 1; i <= 3; i++) {
+                                            scope.colors.push({color: colorScale(i), label: labelScale(i)});
                                         // $log.log(i +" : "+ labelScale(i));
                                         }
 
                                         scope.legendData = [
-                                            {label:'No data', class:'no-data'},
-                                            {label:'Not expressed', class:'value-0'}
+                                            {label: 'No data', class: 'no-data'},
+                                            {label: 'Not expressed', class: 'value-0'}
                                         ];
 
 

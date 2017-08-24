@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive ('multipleTargetsAssociationsSummary', ['$log', 'cttvAPIservice', '$q', function ($log, cttvAPIservice, $q) {
+    .directive('multipleTargetsAssociationsSummary', ['$log', 'cttvAPIservice', '$q', function ($log, cttvAPIservice, $q) {
         'use strict';
 
         return {
@@ -93,7 +93,7 @@ angular.module('cttvDirectives')
         // if it is able to resolve the ties, push the ordered list to sortedTAs,
         // if not, calls itself recursively
 
-        //sort the array
+        // sort the array
             input.sort(function (a, b) {
                 return a.diseasePvals[pvalPos] - b.diseasePvals[pvalPos];
             });
@@ -101,9 +101,9 @@ angular.module('cttvDirectives')
             // look for ties
             // group ties in an array and call resolveTies recursively
             var nextGroup = [];
-            for (var i=0; i<input.length; i++) {
+            for (var i = 0; i < input.length; i++) {
                 nextGroup.push(input[i]);
-                for (var j=i+1; j<input.length; j++) {
+                for (var j = i + 1; j < input.length; j++) {
                 // same group
                     if (input[i].diseasePvals[pvalPos] === input[j].diseasePvals[pvalPos]) {
                         nextGroup.push(input[j]);
@@ -116,23 +116,23 @@ angular.module('cttvDirectives')
                 if (nextGroup.length > 1) {
                 // $log.log("this group will be placed at " + (inputPos) + " and expand " + (nextGroup.length) + " positions in the array");
                 // input.splice(inputPos, nextGroup.length, resolveTies(nextGroup, (pvalPos+1), (inputPos+i)));
-                    resolveTies(nextGroup, (pvalPos+1), sortedTAs);
+                    resolveTies(nextGroup, (pvalPos + 1), sortedTAs);
                 } else {
                 // Only 1 item in group, we have managed to resolve all the ties
                     sortedTAs.push(input[i]);
                 }
                 nextGroup = [];
-                i = j-1;
+                i = j - 1;
             }
         }
 
         function sortTAs (unsorted, sorted) {
         // 1st sort the disease pvalues of each TA
         // TODO: They should come sorted from the api (default sorting from enrichment endpoint). So this may not be needed
-            for (var i=0; i<unsorted.length; i++) {
+            for (var i = 0; i < unsorted.length; i++) {
                 var ta = unsorted[i];
-                ta.diseasePvals.sort(function (a,b) {
-                    return a-b;
+                ta.diseasePvals.sort(function (a, b) {
+                    return a - b;
                 });
             }
 
@@ -148,7 +148,7 @@ angular.module('cttvDirectives')
             });
             var compressedTargetIds = cttvUtils.compressTargetIds(targetIds);
 
-            for (var i=0; i<diseases.length; i++) {
+            for (var i = 0; i < diseases.length; i++) {
                 var row = [];
                 var d = diseases[i];
 
@@ -198,7 +198,7 @@ angular.module('cttvDirectives')
 
                 var targets10 = allTargets.slice(0, 10);
                 var url = '';
-                for (var j=0; j<10; j++) {
+                for (var j = 0; j < 10; j++) {
                     var t = targets10[j];
                     if (t) {
                         url += '<a title="View evidence" href=/evidence/' + t.id + '/' + d.enriched_entity.id + '>' + t.label + '</a> ';
@@ -257,14 +257,14 @@ angular.module('cttvDirectives')
 
                     // Filter out the data
                     var newData = [];
-                    for (var i=0; i<scope.associations.length; i++) {
+                    for (var i = 0; i < scope.associations.length; i++) {
                         var assoc = scope.associations[i];
                         var targets = assoc.targets;
                         var newTargets = [];
                         loop2:
-                        for (var j=0; j<targets.length; j++) {
+                        for (var j = 0; j < targets.length; j++) {
                             var t = targets[j];
-                            for (var k=0; k<scope.datatypes.length; k++) {
+                            for (var k = 0; k < scope.datatypes.length; k++) {
                                 var dt = scope.datatypes[k];
                                 if (dt.selected) {
                                     if (t.association_score.datatypes[dt.id] > 0) {
@@ -293,7 +293,7 @@ angular.module('cttvDirectives')
 
 
                 scope.selectedTA = '';
-                scope.selectTA = function(ta) {
+                scope.selectTA = function (ta) {
                     if (scope.selectedTA === ta.label) {
                     // scope.selectedTA = '';
                         scope.removeTaFilter();
@@ -323,7 +323,7 @@ angular.module('cttvDirectives')
                     // To improve the ranking of TAs we compile the pvalues of all the diseases under the TA and sort based on those (not the enrichment of the TA itself)
                     var tas = [];
                     var pvals4TAs = {}; // We store in an object the set of pvalues for any disease belonging to a TA
-                    for (var k=0; k<scope.associations.length; k++) {
+                    for (var k = 0; k < scope.associations.length; k++) {
                         var dis = scope.associations[k];
                         // If it is a TA
                         if (!dis.enriched_entity.properties.therapeutic_area.codes.length) {
@@ -349,7 +349,7 @@ angular.module('cttvDirectives')
                         else {
                             var pval = dis.enrichment.score;
                             var tas4disease = dis.enriched_entity.properties.therapeutic_area.codes;
-                            for (var i=0; i<tas4disease.length; i++) {
+                            for (var i = 0; i < tas4disease.length; i++) {
                                 var ta = tas4disease[i]; // TA is the code
                                 if (!pvals4TAs[ta]) {
                                     pvals4TAs[ta] = [];
@@ -360,7 +360,7 @@ angular.module('cttvDirectives')
                     }
 
                     // Enrich the TAs with the disease pvals
-                    for (var l=0; l<tas.length; l++) {
+                    for (var l = 0; l < tas.length; l++) {
                         var thisTA = tas[l];
                         thisTA.diseasePvals = pvals4TAs[thisTA.id];
                     }
@@ -391,20 +391,20 @@ angular.module('cttvDirectives')
                     } else {
                         order = [[3, 'desc']];
                     }
-                    table = $('#target-list-associated-diseases').DataTable (cttvUtils.setTableToolsParams({
+                    table = $('#target-list-associated-diseases').DataTable(cttvUtils.setTableToolsParams({
                         'data': formatDiseaseDataToArray(scope.associations, scope.targets),
-                        'ordering' : true,
+                        'ordering': true,
                         'order': order,
                         'autoWidth': false,
-                        'paging' : true,
+                        'paging': true,
                         'columnDefs': [
                             {
-                                targets: [1,4,6],
+                                targets: [1, 4, 6],
                                 visible: false
                             }
                         ]
 
-                    }, scope.targets.length + '-targets-associated_diseases') );
+                    }, scope.targets.length + '-targets-associated_diseases'));
                 });
             }
         };
@@ -449,7 +449,7 @@ angular.module('cttvDirectives')
 //     };
 // }])
 
-    .directive ('percPiechart', ['$log', '$timeout', function ($log, $timeout) {
+    .directive('percPiechart', ['$log', '$timeout', function ($log, $timeout) {
         'use strict';
         return {
             restrict: 'E',
@@ -465,23 +465,23 @@ angular.module('cttvDirectives')
                         return;
                     }
 
-                    $timeout (function () {
+                    $timeout(function () {
                         var svg_g = d3.select(el[0])
                             .append('svg')
                             .attr('width', scope.radius * 1.5)
                             .attr('height', scope.radius * 1.5)
                             .append('g')
-                            .attr('transform', 'translate(' + ~~scope.radius/2 + ',' + ~~scope.radius/2 + ')');
+                            .attr('transform', 'translate(' + ~~scope.radius / 2 + ',' + ~~scope.radius / 2 + ')');
 
                         var arc = d3.svg.arc()
-                            .outerRadius(scope.radius - ~~(scope.radius/2))
+                            .outerRadius(scope.radius - ~~(scope.radius / 2))
                             .innerRadius(0);
 
                         var pie = d3.layout.pie()
                             .sort(null);
 
                         var g = svg_g.selectAll('.arc')
-                            .data(pie([(1-scope.score), scope.score]))
+                            .data(pie([(1 - scope.score), scope.score]))
                             .enter().append('g')
                             .attr('class', 'arc');
 
