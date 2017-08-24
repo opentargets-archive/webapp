@@ -19,28 +19,28 @@ function initApp (deps) {
                     templateUrl: 'src/pages/search/search.html',
                     controller: 'SearchAppCtrl'
                 })
-        	    .when('/target/:id/associations', {
+                .when('/target/:id/associations', {
                     templateUrl: 'src/pages/target-associations/target-associations.html',
                     controller: 'targetAssociationsCtrl',
                     reloadOnSearch: false
-        	    })
-        	    .when('/disease/:id/associations', {
+                })
+                .when('/disease/:id/associations', {
                     templateUrl: 'src/pages/disease-associations/disease-associations.html',
                     controller: 'diseaseAssociationsCtrl',
                     reloadOnSearch: false
-        	    })
-        	    .when('/evidence/:id/:id', {
+                })
+                .when('/evidence/:id/:id', {
                     templateUrl: 'src/pages/evidence/target-disease.html',
                     controller: 'TargetDiseaseCtrl'
-        	    })
-        	    .when('/target/:id', {
-            		templateUrl: 'src/pages/target-profile/target.html',
-            		controller: 'TargetCtrl'
-        	    })
-        	    .when('/disease/:id', {
-            		templateUrl: 'src/pages/disease-profile/disease.html',
-            		controller: 'DiseaseCtrl'
-        	    })
+                })
+                .when('/target/:id', {
+                    templateUrl: 'src/pages/target-profile/target.html',
+                    controller: 'TargetCtrl'
+                })
+                .when('/disease/:id', {
+                    templateUrl: 'src/pages/disease-profile/disease.html',
+                    controller: 'DiseaseCtrl'
+                })
                 .when('/batch-search', {
                     templateUrl: 'src/pages/batch-search/batch-search.html',
                     controller: 'BatchSearchCtrl'
