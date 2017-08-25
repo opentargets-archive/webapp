@@ -333,7 +333,7 @@ angular.module('cttvDirectives')
             },
 
             template: '<div>'
-        + '  <cttv-matrix-table></cttv-matrix-table>'
+        + '  <ot-matrix-table></ot-matrix-table>'
         + '  <ot-matrix-legend colors="legendData"></ot-matrix-legend>'
         + '  <ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend>'
         + '</div>',

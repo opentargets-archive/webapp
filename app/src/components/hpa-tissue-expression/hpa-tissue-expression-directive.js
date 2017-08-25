@@ -65,7 +65,7 @@ angular.module('cttvDirectives')
                 filename: '@'
             },
 
-            template: '<cttv-matrix-table></cttv-matrix-table>'
+            template: '<ot-matrix-table></ot-matrix-table>'
             + '<ot-matrix-legend colors="legendData"></ot-matrix-legend>'
             + '<ot-matrix-legend colors="colors" layout="h"></ot-matrix-legend>',
 

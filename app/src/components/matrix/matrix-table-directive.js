@@ -2,7 +2,7 @@ angular.module('cttvDirectives')
     /*
     *  Esssentially just a wrapper for the table tag, defined in hte template
     */
-    .directive('cttvMatrixTable', [function () {
+    .directive('otMatrixTable', [function () {
         'use strict';
 
         return {

@@ -341,7 +341,7 @@ angular.module('cttvDirectives')
         // + ' <div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
         // +'<h5 ng-show="filteredOutByExcNeoplasm>0">Filtered out {{filteredOutByExcNeoplasm}} neoplasm diseases from other therapeutic areas</h5>'
         + '<div></div>'
-        + '<cttv-matrix-table></cttv-matrix-table>'
+        + '<ot-matrix-table></ot-matrix-table>'
         + '<ot-matrix-legend colors="legendData"></ot-matrix-legend>'
         + '<ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend>'
         + '</div>',
