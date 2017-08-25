@@ -85,6 +85,12 @@ angular.module('cttvServices')
                     return item;
                 }
             }
+
+            // Adding this to have consistent return (eslint rule).
+            // Returning undefined to avoid possible issues when invoking the code (explicits checks against undefined)
+            // TODO:
+            // make it return null and check invocation
+            return undefined;
         };
 
         lists.clear = function () {
