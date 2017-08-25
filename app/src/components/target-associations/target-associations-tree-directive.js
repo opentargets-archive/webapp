@@ -25,7 +25,7 @@ angular.module('cttvDirectives')
             },
 
             template: '<png filename="{{target}}-AssociationsTreeView.png" track="associationsTree"></png><div style="float:left"><div id=cttvTreeView></div>'
-            + '<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend></div>',
+            + '<ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend></div>',
 
 
             link: function (scope, elem) {

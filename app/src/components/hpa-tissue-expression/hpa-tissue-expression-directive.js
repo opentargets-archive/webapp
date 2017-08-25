@@ -66,8 +66,8 @@ angular.module('cttvDirectives')
             },
 
             template: '<cttv-matrix-table></cttv-matrix-table>'
-            + '<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
-            + '<cttv-matrix-legend colors="colors" layout="h"></cttv-matrix-legend>',
+            + '<ot-matrix-legend colors="legendData"></ot-matrix-legend>'
+            + '<ot-matrix-legend colors="colors" layout="h"></ot-matrix-legend>',
 
             link: function (scope, elem) {
                 // set the load progress flag to true before starting the API call

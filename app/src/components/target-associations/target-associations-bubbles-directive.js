@@ -145,7 +145,7 @@ angular.module('cttvDirectives')
             },
 
             template: '<div style="float:left">'
-            + '<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend></div>'
+            + '<ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend></div>'
             + '<png filename="{{target}}-AssociationsBubblesView.png" track="associationsBubbles"></png>',
 
 

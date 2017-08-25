@@ -342,8 +342,8 @@ angular.module('cttvDirectives')
         // +'<h5 ng-show="filteredOutByExcNeoplasm>0">Filtered out {{filteredOutByExcNeoplasm}} neoplasm diseases from other therapeutic areas</h5>'
         + '<div></div>'
         + '<cttv-matrix-table></cttv-matrix-table>'
-        + '<cttv-matrix-legend colors="legendData"></cttv-matrix-legend>'
-        + '<cttv-matrix-legend legend-text="legendText" colors="colors" layout="h"></cttv-matrix-legend>'
+        + '<ot-matrix-legend colors="legendData"></ot-matrix-legend>'
+        + '<ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend>'
         + '</div>',
 
 

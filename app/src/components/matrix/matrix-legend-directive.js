@@ -2,7 +2,7 @@ angular.module('cttvDirectives')
     /*
     *
     */
-    .directive('cttvMatrixLegend', [function () {
+    .directive('otMatrixLegend', [function () {
         'use strict';
         var template = '<div class="matrix-legend matrix-legend-layout-{{layout}} clearfix">'
 
