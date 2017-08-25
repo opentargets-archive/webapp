@@ -2,7 +2,7 @@ angular.module('cttvDirectives')
     /*
      * Navigation menu with hamburger option
      */
-    .directive('mastheadNavigationMenu', ['otConfig', function (otConfig) {
+    .directive('otMastheadNavigationMenu', ['otConfig', function (otConfig) {
         'use strict';
 
         return {
