@@ -34,7 +34,9 @@ module.exports = {
         "targetGenomeBrowser": true,
         'cttvApi': true,
         "System": true,
-        "marked": true
+        "marked": true,
+        "expressionAtlasHeatmapHighcharts": true,
+        "pv": true
     },
     "rules": {
         "curly": 2,
@@ -91,6 +93,8 @@ module.exports = {
         // "no-use-before-define": 2,
         "no-return-assign": 2,
         "no-sequences": 2,
+        // "no-undefined": 2,
+        // "complexity": [2, 10],
         /**
          * Angular rules
          * By default, this uses 
