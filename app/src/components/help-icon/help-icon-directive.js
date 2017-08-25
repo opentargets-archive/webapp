@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('cttvHelpIcon', [function () {
+    .directive('otHelpIcon', [function () {
         'use strict';
 
         return {

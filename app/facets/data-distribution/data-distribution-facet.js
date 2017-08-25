@@ -75,7 +75,7 @@ angular.module('facets')
 
 
             template: '<div>'
-                     + '    <div class="clearfix"><cttv-help-icon href="/faq#association-score" class="pull-right"/></div>'
+                     + '    <div class="clearfix"><ot-help-icon href="/faq#association-score" class="pull-right"/></div>'
                      + '    <cttv-score-presets preset="preset"></cttv-score-presets>'
                      + '    <h6>Data distribution</h6>'
                      + '    <cttv-score-histogram data="facet.data.buckets" min="facet.filters[0].key" max="facet.filters[1].key" controls="false"></cttv-score-histogram>'
