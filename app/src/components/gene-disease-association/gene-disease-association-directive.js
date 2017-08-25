@@ -3,7 +3,7 @@ angular.module('cttvDirectives')
     /**
     * Flower graph
     */
-    .directive('cttvGeneDiseaseAssociation', [function () {
+    .directive('otGeneDiseaseAssociation', [function () {
         'use strict';
 
         return {
