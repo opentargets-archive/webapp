@@ -22,7 +22,8 @@
                     <ul>
                         <li class="event" ng-repeat="event in upcoming">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} <span ng-if="event.external.link">(<a href="{{event.external.link}}">{{event.external.text}}</a>)</span><span ng-if="!event.external.link && event.external.text">({{event.external.text}})</span></li>
                     </ul>
-                    <p>If you can't attend any of the above, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> now to arrange training sessions at your institution.</p>
+                    <p ng-show="upcoming.length">If you can't attend any of the above, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> now to arrange training sessions at your institution.</p>
+                    <p ng-show="!upcoming.length">We are currently putting together our new series of training. Please check back again for future dates.</p>
                 </div>
 
                 <!-- past sessions -->
