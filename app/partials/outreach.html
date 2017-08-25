@@ -10,6 +10,7 @@
 
     <div class="container">
         <div class="row cttv-docs-section">
+
             <div class="col-sm-8">
                 <h4>Training sessions</h4>
                  <p>We offer hands-on workshop on the Open Targets initiative and on our Open Targets Platform. Check our <a href="https://blog.opentargets.org/outreach-in-open-targets-supercharge-your-target-id-skills/">blog post</a> for more details.</p>
@@ -37,6 +38,10 @@
                             )</span>
                         </li>
                     </ul>
+                    <div>
+                        <div ng-show="!showAll" ng-click="togglePast()"><a href="">Show more</a></div>
+                        <div ng-show="showAll" ng-click="togglePast()"><a href="">Show less</a></div>
+                    </div>
                 </div>
 
             </div>
@@ -44,7 +49,15 @@
             <div class="col-sm-4">
                 <calendar selected="day" marked="sessions"></calendar>
             </div>
+
+            <!-- Pdf viewer -->
+            <div style="margin-top:30px;" class="col-sm-6">
+                <h4>Getting started with the Open Targets Platform</h4>
+                <slides-share></slides-share>
+            </div>
+
         </div>
+
 
 <!--
         <div class="row cttv-docs-section">

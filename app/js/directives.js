@@ -1167,6 +1167,19 @@ angular.module('cttvDirectives', [])
     }])
 
 
+    .directive('slidesShare', ['$log', '$timeout', function ($log, $timeout) {
+       'use strict';
+       return {
+           restrict: 'EA',
+           scope: {},
+           template: '<div id="pdf-slides"></div>',
+           link: function(scope, element) {
+               $timeout(function() {
+                   PDFObject.embed("OpenTargets_Platform_Let.sGetStarted_DGH_ID_DCS.pdf", "#pdf-slides");
+               }, 0);
+           }
+       };
+    }])
 
     /**
      * Directive for the footer

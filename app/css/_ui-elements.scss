@@ -3,6 +3,13 @@
 
 #cttv-page-app {
 
+    .pdfobject-container {
+        height: 500px;
+    }
+    .pdfobject {
+        border: 1px solid #666;
+    }
+
     .popover {
         min-width: 378px;
         max-width: 100%;
