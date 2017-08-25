@@ -3,20 +3,15 @@ angular.module('facets')
     /**
      * The Datatypes facet
      */
-    .directive('datatypeFacet', ['$log', 'cttvFiltersService', function ($log, cttvFiltersService) {
+    .directive('datatypeFacet', [function () {
         'use strict';
 
         return {
-
-            restrict: 'EA',
-
+            restrict: 'AE',
             scope: {
                 facet: '='
             },
-
             // templateUrl: 'facets/datatype/datatype-facet.html',
-            templateUrl: 'directives/generic-nested-facetcollection.html',
-
-            link: function (scope, elem, attrs) {}
+            templateUrl: 'directives/generic-nested-facetcollection.html'
         };
     }]);

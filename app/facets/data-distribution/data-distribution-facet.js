@@ -13,7 +13,7 @@ angular.module('facets')
 
         return {
 
-            restrict: 'EA',
+            restrict: 'AE',
 
             scope: {
                 facet: '=',
@@ -30,7 +30,7 @@ angular.module('facets')
 
         return {
 
-            restrict: 'EA',
+            restrict: 'AE',
 
             scope: {
                 preset: '='
@@ -67,7 +67,7 @@ angular.module('facets')
 
         return {
 
-            restrict: 'EA',
+            restrict: 'AE',
 
             scope: {
                 facet: '='
@@ -134,7 +134,7 @@ angular.module('facets')
 
         return {
 
-            restrict: 'EA',
+            restrict: 'AE',
 
             scope: {
                 data: '=',

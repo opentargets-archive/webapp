@@ -3,19 +3,14 @@ angular.module('facets')
     /**
      * The Target class facet
      */
-    .directive('targetClassFacet', ['$log', function ($log) {
+    .directive('targetClassFacet', [function () {
         'use strict';
 
         return {
-
-            restrict: 'EA',
-
+            restrict: 'AE',
             scope: {
                 facet: '='
             },
-
-            templateUrl: 'directives/generic-nested-facetcollection.html',
-
-            link: function (scope, elem, attrs) {}
+            templateUrl: 'directives/generic-nested-facetcollection.html'
         };
     }]);
