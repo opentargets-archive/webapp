@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('bibliographyTarget', ['$log', '$http', function ($log, $http) {
+    .directive('bibliographyTarget', ['$http', function ($http) {
         'use strict';
 
         return {
@@ -8,7 +8,7 @@ angular.module('plugins')
             scope: {
                 target: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope) {
                 var bibliography = _.filter(scope.target.dbxrefs, function (t) {
                     return t.match(/^PubMed/);
                 });
