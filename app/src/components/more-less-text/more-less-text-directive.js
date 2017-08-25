@@ -3,7 +3,7 @@ angular.module('cttvDirectives')
      * Directive for the footer
      * This is mostly so the footer loads like the other page content and not before it.
      */
-    .directive('moreLessText', ['$log', function ($log) {
+    .directive('otMoreLessText', ['$log', function ($log) {
         'use strict';
 
         return {
