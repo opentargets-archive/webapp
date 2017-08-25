@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('resize', ['$window', function ($window) {
+    .directive('otResize', ['$window', function ($window) {
         'use strict';
 
         var w = angular.element($window);
