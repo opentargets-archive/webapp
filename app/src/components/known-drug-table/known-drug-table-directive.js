@@ -3,7 +3,7 @@
 angular.module('cttvDirectives')
 
 /* Directive to display the known drug evidence table */
-    .directive('knownDrugTable', ['otAPIservice', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otAPIservice, otConsts, otUtils, otConfig, $location, otDictionary) {
+    .directive('otKnownDrugTable', ['otAPIservice', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otAPIservice, otConsts, otUtils, otConfig, $location, otDictionary) {
         'use strict';
         // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
