@@ -2,7 +2,7 @@ angular.module('cttvDirectives')
     /**
      * Directive to parse Markdown documents
      */
-    .directive('mdParser', ['$log', '$http', '$sce', function ($log, $http, $sce) {
+    .directive('otMdParser', ['$log', '$http', '$sce', function ($log, $http, $sce) {
         'use strict';
 
         return {
