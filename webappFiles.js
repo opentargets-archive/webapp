@@ -131,6 +131,12 @@ var webappFiles = {
             'app/src/components/png/png-directive.js',
             'app/src/components/log-session/log-session-directive.js',
             'app/src/components/hpa-tissue-expression/hpa-tissue-expression-directive.js',
+            // Processed (controllers)
+            'app/src/js/feedback-controller.js',
+            'app/src/js/masthead-controller.js',
+            'app/src/js/notify-controller.js',
+            'app/src/js/page-controller.js',
+            'app/src/js/stats-controller.js',
             // Our angular stuff
             'app/src/js/app.js',
             'app/src/js/controllers.js',
