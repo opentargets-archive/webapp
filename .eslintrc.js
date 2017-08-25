@@ -33,7 +33,8 @@ module.exports = {
         "geneAssociationsTree": true,
         "targetGenomeBrowser": true,
         'cttvApi': true,
-        "System": true
+        "System": true,
+        "marked": true
     },
     "rules": {
         "curly": 2,
