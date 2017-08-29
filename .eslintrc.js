@@ -154,6 +154,7 @@ module.exports = {
         "angular/module-getter": 0,
         "angular/no-run-logic": 0,
         "angular/no-inline-template": 0,
+        "no-constant-condition": 0,
         // end TODO
         /**
          * Compatibility rules
