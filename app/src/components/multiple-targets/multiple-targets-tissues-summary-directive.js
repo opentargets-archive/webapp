@@ -1,6 +1,6 @@
 angular.module('otDirectives')
 
-    .directive('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'otUtils', 'otApi', function ($log, $http, $q, otUtils, otApi) {
+    .directive('otMultipleTargetsTissuesSummary', ['$log', '$http', '$q', 'otUtils', 'otApi', function ($log, $http, $q, otUtils, otApi) {
         'use strict';
 
         var tissuesOrdered = [
