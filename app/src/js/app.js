@@ -30,7 +30,7 @@ function initApp (deps) {
                 })
                 .when('/evidence/:id/:id', {
                     templateUrl: 'src/pages/evidence/target-disease.html',
-                    controller: 'TargetDiseaseCtrl'
+                    controller: 'TargetDiseaseController'
                 })
                 .when('/target/:id', {
                     templateUrl: 'src/pages/target-profile/target.html',

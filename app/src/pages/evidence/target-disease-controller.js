@@ -7,7 +7,7 @@ angular.module('otControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'otAPIservice', 'otUtils', 'otDictionary', 'otConsts', 'otConfig', 'otClearUnderscoresFilter', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, otUtils, otDictionary, otConsts, otConfig, otClearUnderscoresFilter, $analytics, otLocationState, $anchorScroll) {
+    .controller('TargetDiseaseController', ['$scope', '$location', '$log', 'otAPIservice', 'otUtils', 'otDictionary', 'otConsts', 'otConfig', 'otClearUnderscoresFilter', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, otUtils, otDictionary, otConsts, otConfig, otClearUnderscoresFilter, $analytics, otLocationState, $anchorScroll) {
         'use strict';
 
 
