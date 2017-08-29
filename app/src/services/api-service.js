@@ -79,7 +79,7 @@ angular.module('otServices')
         }
 
         // Set the version of the rest api if it is set in the live config file
-        // liveConfig.then (function (config) {
+        // otLiveConfig.then (function (config) {
         //     if (config.apiVersion) {
         //         api.version(config.apiVersion);
         //     }
@@ -107,7 +107,7 @@ angular.module('otServices')
 
             // Params for api.call are: url, data (for POST) and return format
 
-            // liveConfig.then (function (config) {
+            // otLiveConfig.then (function (config) {
             var url;
             if (queryObject.method === undefined || queryObject.method === 'GET') {
                 url = api.url[queryObject.operation](params);
