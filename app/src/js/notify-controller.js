@@ -3,9 +3,9 @@ angular.module('otControllers')
     /**
     * Controller to allow notifications to the user
     */
-    .controller('NotifyCtrl', ['$scope', '$log', '$http', '$uibModal', '$cookies', '$interval', function ($scope, $log, $http, $uibModal, $cookies, $interval) {
+    .controller('NotifyController', ['$scope', '$log', '$http', '$uibModal', '$cookies', '$interval', function ($scope, $log, $http, $uibModal, $cookies, $interval) {
         'use strict';
-        // $log.log(" NotifyCtrl ");
+        // $log.log(" NotifyController ");
         // Default behaviour on icon click
         $scope.notify = function () {};
         $scope.addCookie = function (cookieId) {

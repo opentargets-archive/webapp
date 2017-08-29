@@ -1,6 +1,6 @@
 angular.module('otControllers')
 
-    .controller('OutreachCtrl', ['$scope', '$http', function ($scope, $http) {
+    .controller('OutreachController', ['$scope', '$http', function ($scope, $http) {
         'use strict';
 
         $scope.day = moment();

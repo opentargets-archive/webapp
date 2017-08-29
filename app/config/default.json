@@ -282,15 +282,6 @@
                 "heading" : "Target class",
                 "open" : true
             }
-        },
-
-        "histogram" : {
-            "key": "data_distribution",
-            "element": "data-distribution-facet",
-            "options" : {
-                "heading" : "Data distribution",
-                "open" : true
-            }
         }
     },
 

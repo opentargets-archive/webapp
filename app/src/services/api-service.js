@@ -78,13 +78,6 @@ angular.module('otServices')
             return 200 <= status && status < 300;
         }
 
-        // Set the version of the rest api if it is set in the live config file
-        // otLiveConfig.then (function (config) {
-        //     if (config.apiVersion) {
-        //         api.version(config.apiVersion);
-        //     }
-        // });
-
         /*
          * Private function to actually call the API
          * queryObject:
@@ -107,7 +100,6 @@ angular.module('otServices')
 
             // Params for api.call are: url, data (for POST) and return format
 
-            // otLiveConfig.then (function (config) {
             var url;
             if (queryObject.method === undefined || queryObject.method === 'GET') {
                 url = api.url[queryObject.operation](params);
@@ -115,15 +107,13 @@ angular.module('otServices')
                 var theUrl = api.url[queryObject.operation]();
                 url = theUrl.substring(0, theUrl.length - 1);
             }
-            // $log.warn("URL : " + url);
+
             api.call(url, (queryObject.method === 'POST' ? params : undefined), (params.format || 'json'))
                 .then(done)
                 .catch(function (err) {
                     $log.warn('GOT ERROR:', err);
                     cttvAPI.defaultErrorHandler(err, queryObject.trackCall);
                 });
-            // });
-
 
             return promise;
 

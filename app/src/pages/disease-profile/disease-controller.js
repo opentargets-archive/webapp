@@ -1,11 +1,11 @@
 angular.module('otControllers')
 
     /*
-     * DiseaseCtrl
+     * DiseaseController
      * Controller for the disease page
      * It loads general information about a given disease
      */
-    .controller('DiseaseCtrl', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', function ($scope, $location, otApi, otUtils, otConfig) {
+    .controller('DiseaseController', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', function ($scope, $location, otApi, otUtils, otConfig) {
         'use strict';
 
         otUtils.clearErrors();

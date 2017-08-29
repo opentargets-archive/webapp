@@ -16,37 +16,37 @@ function initApp (deps) {
                 })
                 .when('/search', {
                     templateUrl: 'src/pages/search/search.html',
-                    controller: 'SearchAppCtrl'
+                    controller: 'SearchController'
                 })
                 .when('/target/:id/associations', {
                     templateUrl: 'src/pages/target-associations/target-associations.html',
-                    controller: 'targetAssociationsCtrl',
+                    controller: 'TargetAssociationsController',
                     reloadOnSearch: false
                 })
                 .when('/disease/:id/associations', {
                     templateUrl: 'src/pages/disease-associations/disease-associations.html',
-                    controller: 'diseaseAssociationsCtrl',
+                    controller: 'DiseaseAssociationsController',
                     reloadOnSearch: false
                 })
                 .when('/evidence/:id/:id', {
                     templateUrl: 'src/pages/evidence/target-disease.html',
-                    controller: 'TargetDiseaseCtrl'
+                    controller: 'TargetDiseaseController'
                 })
                 .when('/target/:id', {
                     templateUrl: 'src/pages/target-profile/target.html',
-                    controller: 'TargetCtrl'
+                    controller: 'TargetController'
                 })
                 .when('/disease/:id', {
                     templateUrl: 'src/pages/disease-profile/disease.html',
-                    controller: 'DiseaseCtrl'
+                    controller: 'DiseaseController'
                 })
                 .when('/batch-search', {
                     templateUrl: 'src/pages/batch-search/batch-search.html',
-                    controller: 'BatchSearchCtrl'
+                    controller: 'BatchSearchController'
                 })
                 .when('/summary', {
                     templateUrl: 'src/pages/summary/summary.html',
-                    controller: 'SummaryCtrl'
+                    controller: 'SummaryController'
                 })
 
                 // Docs
@@ -54,7 +54,7 @@ function initApp (deps) {
                     templateUrl: 'src/pages/static/faq.html'
                 })
                 .when('/data_sources', {
-                    controller: 'DataSourcesCtrl',
+                    controller: 'DataSourcesController',
                     templateUrl: 'src/pages/data-sources/data_sources.html'
                 })
                 .when('/terms_of_use', {
@@ -86,7 +86,7 @@ function initApp (deps) {
                 })
                 .when('/outreach', {
                     templateUrl: 'src/pages/outreach/outreach.html',
-                    controller: 'OutreachCtrl'
+                    controller: 'OutreachController'
                 })
                 .otherwise({
                     redirectTo: '/'

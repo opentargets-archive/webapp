@@ -4,7 +4,7 @@ angular.module('otControllers')
      * Controller for the masthead navigations
      * Simply exposes the location service
      */
-    .controller('MastheadCtrl', ['$scope', '$location', function ($scope, $location) {
+    .controller('MastheadController', ['$scope', '$location', function ($scope, $location) {
         'use strict';
 
         $scope.location = $location;

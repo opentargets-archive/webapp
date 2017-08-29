@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('interactionsViewer', ['$log', '$timeout', '$http', '$q', 'otApi', 'otOmnipathdbSources', function ($log, $timeout, $http, $q, otApi, otOmnipathdbSources) {
+    .directive('interactionsViewer', ['$log',  '$http', '$q', 'otApi', 'otOmnipathdbSources', function ($log, $http, $q, otApi, otOmnipathdbSources) {
         function getNames (bestHits) {
             var mapNames = {};
             for (var i = 0; i < bestHits.length; i++) {

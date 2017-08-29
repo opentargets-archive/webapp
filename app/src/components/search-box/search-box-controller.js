@@ -6,7 +6,7 @@
  */
 angular.module('otControllers')
 
-    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otApi', 'otConsts', '$q', 'otUtils', 'otLoadedLists', function ($scope, $location, $window, $document, $element, otApi, otConsts, $q, otUtils, otLoadedLists) {
+    .controller('SearchBoxController', ['$scope', '$location', '$window', '$document', '$element', 'otApi', 'otConsts', '$q', 'otUtils', 'otLoadedLists', function ($scope, $location, $window, $document, $element, otApi, otConsts, $q, otUtils, otLoadedLists) {
         var APP_SEARCH_URL = 'search';
         var APP_EVIDENCE_URL = 'evidence';
         var APP_AUTOCOMPLETE_URL = 'autocomplete';

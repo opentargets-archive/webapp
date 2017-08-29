@@ -14,7 +14,7 @@ angular.module('otControllers')
  * Then when we get the data, we update content and facets
  */
 
-    .controller('diseaseAssociationsCtrl', ['$scope', '$location', '$q', 'otApi', 'otFacetsFilters', 'otDictionary', 'otUtils', 'otLocationState', 'otConfig', function ($scope, $location, $q, otApi, otFacetsFilters, otDictionary, otUtils, otLocationState, otConfig) {
+    .controller('DiseaseAssociationsController', ['$scope', '$location', '$q', 'otApi', 'otFacetsFilters', 'otDictionary', 'otUtils', 'otLocationState', 'otConfig', function ($scope, $location, $q, otApi, otFacetsFilters, otDictionary, otUtils, otLocationState, otConfig) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready

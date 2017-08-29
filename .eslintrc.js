@@ -122,7 +122,7 @@ module.exports = {
         "angular/no-service-method": 2,
         "angular/watchers-execution": [2, "$apply"],
         "angular/angularelement": 1,
-        "angular/controller-name": [2, "/[A-Z].*Ctrl/"],
+        "angular/controller-name": [2, "/[A-Z].*Controller/"],
         "angular/directive-name": [2, "ot"],
         "angular/factory-name": [2, "ot"],
         "angular/filter-name": [2, "ot"],

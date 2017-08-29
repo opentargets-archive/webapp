@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('geneOntology', ['$log', function ($log) {
+    .directive('geneOntology', [function () {
         'use strict';
 
         return {
