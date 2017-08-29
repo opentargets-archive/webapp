@@ -325,8 +325,9 @@ angular.module('otDirectives')
                     var pvals4TAs = {}; // We store in an object the set of pvalues for any disease belonging to a TA
                     for (var k = 0; k < scope.associations.length; k++) {
                         var dis = scope.associations[k];
-                        // If it is a TA
+
                         if (!dis.enriched_entity.properties.therapeutic_area.codes.length) {
+                            // If it is a TA
                             var id = dis.enriched_entity.id;
                             var label = dis.enriched_entity.label;
                             var count = dis.enrichment.params.targets_in_set_in_disease;
@@ -344,9 +345,8 @@ angular.module('otDirectives')
                                 score: score,
                                 compressedTargetIds: compressedTargetIds
                             });
-                        }
-                        // If not, get the pvalue of the disease and put it under the TA(s)
-                        else {
+                        } else {
+                            // If not, get the pvalue of the disease and put it under the TA(s)
                             var pval = dis.enrichment.score;
                             var tas4disease = dis.enriched_entity.properties.therapeutic_area.codes;
                             for (var i = 0; i < tas4disease.length; i++) {
