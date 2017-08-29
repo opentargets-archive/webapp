@@ -61,7 +61,6 @@ var webappFiles = {
             // Processed (services)
             'app/src/services/utils-service.js',
             'app/src/services/modal-service.js',
-            'app/src/services/live-config-service.js',
             'app/src/services/api-service.js',
             'app/src/services/app-to-api-service.js',
             'app/src/services/dictionary-service.js',
