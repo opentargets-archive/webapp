@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     /*
     * This creates a light-box style div with a spinner.
     * The spinner is automatically visible when there are *any* pending requests

@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
     .directive('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'otUtils', 'otAPIservice', function ($log, $http, $q, otUtils, otAPIservice) {
         'use strict';

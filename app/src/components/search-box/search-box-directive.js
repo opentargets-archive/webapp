@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     /**
      * The searchbox with search suggestions
      */

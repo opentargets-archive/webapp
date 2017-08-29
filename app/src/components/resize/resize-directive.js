@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     .directive('otResize', ['$window', function ($window) {
         'use strict';
 

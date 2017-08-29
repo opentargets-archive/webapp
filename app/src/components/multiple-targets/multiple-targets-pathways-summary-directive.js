@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
     .directive('multipleTargetsPathwaysSummary', ['$http', 'otUtils', function ($http, otUtils) {
         'use strict';

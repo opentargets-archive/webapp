@@ -110,7 +110,7 @@ var deps = [
     'ui.bootstrap',
     'cttvFilters',
     'otControllers',
-    'cttvDirectives',
+    'otDirectives',
     'angulartics',
     'angulartics.piwik',
     'viewhead',

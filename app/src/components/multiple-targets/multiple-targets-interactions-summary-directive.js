@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
     .directive('multipleTargetsInteractionsSummary', ['$log', '$http', '$q', 'otOmnipathdbSources', function ($log, $http, $q, otOmnipathdbSources) {
         'use strict';

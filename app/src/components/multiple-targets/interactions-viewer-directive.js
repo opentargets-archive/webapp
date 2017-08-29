@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
     .directive('interactorsStarPlot', ['$log', '$timeout', 'otOmnipathdbCategories', 'otUtils', function ($log, $timeout, otOmnipathdbCategories, otUtils) {
         'use strict';

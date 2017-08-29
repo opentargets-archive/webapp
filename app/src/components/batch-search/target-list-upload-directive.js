@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     .directive('otTargetListUpload', ['otAPIservice', 'otLoadedLists', 'otConfig', function (otAPIservice, otLoadedLists, otConfig) {
         'use strict';
 

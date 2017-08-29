@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
     .directive('multipleTargetsDrugsSummary', ['otAPIservice', 'otConfig', 'otUtils', function (otAPIservice, otConfig, otUtils) {
         'use strict';

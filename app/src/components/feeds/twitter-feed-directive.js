@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     .directive('otTwitterFeed', ['$log', function ($log) {
         'use strict';
 

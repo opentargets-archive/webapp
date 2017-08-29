@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     /**
      * Directive to parse Markdown documents
      */

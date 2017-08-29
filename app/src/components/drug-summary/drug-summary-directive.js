@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     .directive('otDrugSummary', ['$http', '$q', function ($http, $q) {
         'use strict';
 

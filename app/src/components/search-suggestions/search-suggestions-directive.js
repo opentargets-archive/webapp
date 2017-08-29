@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     .directive('otSearchSuggestions', [function () {
         'use strict';
 

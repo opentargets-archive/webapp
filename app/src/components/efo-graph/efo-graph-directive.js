@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     .directive('otEfoGraph', ['otAPIservice', function (otAPIservice) {
         'use strict';
         return {

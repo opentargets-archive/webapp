@@ -2,5 +2,5 @@
 angular.module('otControllers', []);
 angular.module('otServices', []);
 angular.module('plugins', []);
-angular.module('cttvDirectives', []);
+angular.module('otDirectives', []);
 angular.module('cttvFilters', []);

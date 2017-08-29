@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
 
     .directive('logSession', ['otAPIservice', function (otAPIservice) {

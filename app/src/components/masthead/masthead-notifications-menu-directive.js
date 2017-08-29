@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     /*
      * The notifications bell thingy in the navigation bar
      */

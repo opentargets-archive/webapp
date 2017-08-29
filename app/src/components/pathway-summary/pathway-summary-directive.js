@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
     .directive('pathwaySummary', ['$timeout', '$http', function ($timeout, $http) {
         'use strict';

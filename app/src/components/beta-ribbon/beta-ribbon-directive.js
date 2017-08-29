@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     .directive('otBetaRibbon', ['$location', function ($location) {
         'use strict';
         return {

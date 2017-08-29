@@ -1,5 +1,5 @@
 /* Bubbles directive for associations */
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
     .directive('otTargetAssociationsBubbles', ['otAPIservice', 'otUtils', '$analytics', function (otAPIservice, otUtils, $analytics) {
         'use strict';

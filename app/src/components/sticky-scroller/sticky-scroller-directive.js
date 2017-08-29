@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
     /**
      * This directive exposes the page scroll, so it can, for example,

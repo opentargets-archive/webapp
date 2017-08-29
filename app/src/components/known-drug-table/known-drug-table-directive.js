@@ -1,6 +1,6 @@
 /* Evidence tables Directives */
 
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
 /* Directive to display the known drug evidence table */
     .directive('otKnownDrugTable', ['otAPIservice', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otAPIservice, otConsts, otUtils, otConfig, $location, otDictionary) {

@@ -1,5 +1,5 @@
 /* Directives */
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
     /*
     *

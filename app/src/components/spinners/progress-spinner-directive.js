@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     /*
     * A simple progress spinner using a fontawesome icon
     * Options:

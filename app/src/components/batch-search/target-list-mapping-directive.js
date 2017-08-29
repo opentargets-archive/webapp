@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
 
 
     .directive('otTargetListMapping', ['otAPIservice', 'otUtils', 'otLoadedLists', 'otConfig', function (otAPIservice, otUtils, otLoadedLists, otConfig) {

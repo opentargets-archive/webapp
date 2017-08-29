@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     /*
     *  Esssentially just a wrapper for the table tag, defined in hte template
     */

@@ -1,4 +1,4 @@
-angular.module('cttvDirectives')
+angular.module('otDirectives')
     .directive('otPopover', ['otDefinitions', function (otDefinitions) {
         'use strict';
 
