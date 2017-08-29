@@ -1,4 +1,4 @@
-angular.module('cttvFilters')
+angular.module('otFilters')
     .filter('otUpperCaseFirst', function () {
         'use strict';
 

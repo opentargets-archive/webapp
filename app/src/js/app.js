@@ -108,7 +108,7 @@ var deps = [
     'ngCookies',
     'LocalStorageModule',
     'ui.bootstrap',
-    'cttvFilters',
+    'otFilters',
     'otControllers',
     'otDirectives',
     'angulartics',
