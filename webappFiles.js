@@ -101,7 +101,7 @@ var webappFiles = {
             'app/src/components/multiple-targets/multiple-targets-drugs-summary-directives.js',
             'app/src/components/multiple-targets/multiple-targets-tissues-summary-directive.js',
             'app/src/components/multiple-targets/multiple-targets-interactions-summary-directive.js',
-            'app/src/components/multiple-targets/interactions-viewer-directive.js',
+            'app/src/components/multiple-targets/interactors-star-plot-directive.js',
             'app/src/components/facets/facets.js',
             'app/src/components/search-suggestions/search-suggestions-directive.js',
             'app/src/components/popover/popover-directive.js',
