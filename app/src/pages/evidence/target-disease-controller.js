@@ -3,7 +3,7 @@
 angular.module('otControllers')
 
     /**
-     * GeneDiseaseCtrl
+     * TargetDiseaseController
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */

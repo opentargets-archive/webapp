@@ -38,7 +38,7 @@ function initApp (deps) {
                 })
                 .when('/disease/:id', {
                     templateUrl: 'src/pages/disease-profile/disease.html',
-                    controller: 'DiseaseCtrl'
+                    controller: 'DiseaseController'
                 })
                 .when('/batch-search', {
                     templateUrl: 'src/pages/batch-search/batch-search.html',
