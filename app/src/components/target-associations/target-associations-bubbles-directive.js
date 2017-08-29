@@ -143,12 +143,7 @@ angular.module('otDirectives')
                 target: '@',
                 active: '@'
             },
-
-            template: '<div style="float:left">'
-            + '<ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend></div>'
-            + '<ot-png filename="{{target}}-AssociationsBubblesView.png" track="associationsBubbles"></ot-png>',
-
-
+            templateUrl: 'src/components/target-associations/target-associations-bubbles.html',
             link: function (scope, elem, attrs, resizeCtrl) {
                 // var bubblesContainer = elem.children().eq(1).children().eq(0)[0];
                 var legendDiv = elem.children().eq(0).children().eq(0)[0];
