@@ -1,5 +1,6 @@
+// TODO: could not find any usage of this directive... can it go?
 angular.module('otFilters')
-    .filter('split', function () {
+    .filter('otSplit', function () {
         'use strict';
 
         return function (input, splitChar, splitIndex) {
