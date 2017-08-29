@@ -42,7 +42,7 @@ function initApp (deps) {
                 })
                 .when('/batch-search', {
                     templateUrl: 'src/pages/batch-search/batch-search.html',
-                    controller: 'BatchSearchCtrl'
+                    controller: 'BatchSearchController'
                 })
                 .when('/summary', {
                     templateUrl: 'src/pages/summary/summary.html',
