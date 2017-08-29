@@ -7,7 +7,7 @@ angular.module('otDirectives')
             restrict: 'E',
             template: '<!-- hint -->' +
             '<div>' +
-            '    <p class="cttv-section-intro">Summary of interactions for the set of targets based on <a target=_blank href="http://omnipathdb.org/">OmniPath DB</a> data. When 2 targets are selected details on the interaction are shown.</p>' +
+            '    <p class="ot-section-intro">Summary of interactions for the set of targets based on <a target=_blank href="http://omnipathdb.org/">OmniPath DB</a> data. When 2 targets are selected details on the interaction are shown.</p>' +
             '</div>' +
             '<ot-interactors-star-plot interactors="interactors" categories="categories"></ot-interactors-star-plot>',
             scope: {
