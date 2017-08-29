@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('targetFeatures', ['$log', '$timeout', function ($log, $timeout) {
+    .directive('targetFeatures', ['$timeout', function ($timeout) {
         'use strict';
 
         return {

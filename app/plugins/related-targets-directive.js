@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('relatedTargets', ['$log', 'otAPIservice', function ($log, otAPIservice) {
+    .directive('relatedTargets', ['otAPIservice', function (otAPIservice) {
         'use strict';
 
         return {
