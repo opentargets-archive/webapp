@@ -16,7 +16,7 @@ function initApp (deps) {
                 })
                 .when('/search', {
                     templateUrl: 'src/pages/search/search.html',
-                    controller: 'SearchAppCtrl'
+                    controller: 'SearchController'
                 })
                 .when('/target/:id/associations', {
                     templateUrl: 'src/pages/target-associations/target-associations.html',

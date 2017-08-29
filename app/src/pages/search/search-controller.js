@@ -5,10 +5,10 @@ angular.module('otControllers')
 
 
     /**
-     * SearchAppCtrl
+     * SearchController
      * Controller for the search/results page
      */
-    .controller('SearchAppCtrl', ['$scope', '$location', '$log', 'otAppToAPIService', 'otAPIservice', 'otUtils', 'otLocationState', function ($scope, $location, $log, otAppToAPIService, otAPIservice, otUtils, otLocationState) {
+    .controller('SearchController', ['$scope', '$location', '$log', 'otAppToAPIService', 'otAPIservice', 'otUtils', 'otLocationState', function ($scope, $location, $log, otAppToAPIService, otAPIservice, otUtils, otLocationState) {
         'use strict';
 
         otUtils.clearErrors();
