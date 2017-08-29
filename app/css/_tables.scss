@@ -382,14 +382,14 @@
      */
 
     /* Fix for the new DataTables styling */
-    cttv-hpa-tissue-expression table.matrix-table thead > tr > th:last-child,
-    cttv-hpa-tissue-expression table.matrix-table tbody > tr > td:last-child,
-    cttv-hpa-tissue-expression table.matrix-table tbody > tr > td:last-child:hover  {
+    ot-hpa-tissue-expression table.matrix-table thead > tr > th:last-child,
+    ot-hpa-tissue-expression table.matrix-table tbody > tr > td:last-child,
+    ot-hpa-tissue-expression table.matrix-table tbody > tr > td:last-child:hover  {
         /* display: none ; */
         visibility: hidden;
     }
 
-    cttv-hpa-tissue-expression table.matrix-table thead > tr > th:first-child{
+    ot-hpa-tissue-expression table.matrix-table thead > tr > th:first-child{
         > div {
             > span {
                 margin-left: 92.5%;
