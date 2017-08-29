@@ -27,8 +27,8 @@ angular.module('otDirectives')
             }],
             link: function (scope, elem, attrs) {
             // this probably shouldn't live here, so we'll see later on...
-                var accessLevelPrivate = '<span class=\'cttv-access-private\' title=\'private data\'></span>';
-                var accessLevelPublic = '<span class=\'cttv-access-public\' title=\'public data\'></span>';
+                var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>';
+                var accessLevelPublic = '<span class=\'ot-access-public\' title=\'public data\'></span>';
 
                 scope.errorFlag = false;
 

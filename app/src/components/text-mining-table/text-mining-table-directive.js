@@ -161,8 +161,8 @@ angular.module('otDirectives')
             function parseServerResponse (data) {
                 var newData = [];
 
-                var accessLevelPrivate = '<span class=\'cttv-access-private\' title=\'private data\'></span>'; // "<span class='fa fa-users' title='private data'>G</span>";
-                var accessLevelPublic = '<span class=\'cttv-access-public\' title=\'public data\'></span>'; // "<span class='fa fa-users' title='public data'>P</span>";
+                var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>'; // "<span class='fa fa-users' title='private data'>G</span>";
+                var accessLevelPublic = '<span class=\'ot-access-public\' title=\'public data\'></span>'; // "<span class='fa fa-users' title='public data'>P</span>";
                 var cat_list = ['title', 'intro', 'result', 'discussion', 'conclusion', 'other'];   // preferred sorting order
 
                 function formatAuthor (author) {

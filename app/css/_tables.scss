@@ -23,7 +23,7 @@
         background-position-y: bottom ;*/
     }
 
-    .cttv-access-public, .cttv-access-private {
+    .ot-access-public, .ot-access-private {
         display: block;
         width: 16px;
         height: 16px;
@@ -35,7 +35,7 @@
         color: #FFF;
     }
 
-    .cttv-access-private {
+    .ot-access-private {
         background-color: $clr-private-data;
 
         &:after {
@@ -43,7 +43,7 @@
         }
     }
 
-    .cttv-access-public:after {
+    .ot-access-public:after {
         content: "P";
         /*content: "\f023";
         font-family: FontAwesome;*/
