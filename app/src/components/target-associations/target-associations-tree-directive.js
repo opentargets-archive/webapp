@@ -10,20 +10,14 @@ angular.module('otDirectives')
         // var currTarget;
 
         return {
-
             restrict: 'E',
-
             scope: {
                 // nocancers : '@',
                 facets: '=',
                 target: '@',
                 active: '@'
             },
-
-            template: '<ot-png filename="{{target}}-AssociationsTreeView.png" track="associationsTree"></ot-png><div style="float:left"><div id=cttvTreeView></div>'
-            + '<ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend></div>',
-
-
+            templateUrl: 'src/components/target-associations/target-associations-tree.html',
             link: function (scope, elem) {
                 var currTarget;
                 // legend stuff
