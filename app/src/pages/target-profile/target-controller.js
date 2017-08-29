@@ -1,11 +1,11 @@
 angular.module('otControllers')
 
 /**
-* TargetCtrl
+* TargetController
 * Controller for the target page
 * It loads information about a given target
 */
-    .controller('TargetCtrl', ['$scope', '$location', 'otAPIservice', 'otUtils', 'otConfig', 'otTEPs', function ($scope, $location, otAPIservice, otUtils, otConfig, otTEPs) {
+    .controller('TargetController', ['$scope', '$location', 'otAPIservice', 'otUtils', 'otConfig', 'otTEPs', function ($scope, $location, otAPIservice, otUtils, otConfig, otTEPs) {
         'use strict';
 
         otUtils.clearErrors();
