@@ -1,6 +1,6 @@
 /* Directives */
 angular.module('otDirectives')
-    .directive('otTargetAssociationsTree', ['otAPIservice', 'otConsts', 'otUtils', '$analytics', function (otAPIservice, otConsts, otUtils, $analytics) {
+    .directive('otTargetAssociationsTree', ['otApi', 'otConsts', 'otUtils', '$analytics', function (otApi, otConsts, otUtils, $analytics) {
         'use strict';
 
         var whoiam = 'tree';
@@ -56,7 +56,7 @@ angular.module('otDirectives')
                         facets: false,
                         size: 1000
                     };
-                    opts = otAPIservice.addFacetsOptions(facets, opts);
+                    opts = otApi.addFacetsOptions(facets, opts);
                     var queryObject = {
                         method: 'GET',
                         params: opts
@@ -64,7 +64,7 @@ angular.module('otDirectives')
                     if (!gat) {
                         setTreeView(opts.therapeutic_area);
                     } else {
-                        otAPIservice.getAssociations(queryObject)
+                        otApi.getAssociations(queryObject)
                             .then(function (resp) {
                                 // var data = resp.body.data;
 
@@ -72,7 +72,7 @@ angular.module('otDirectives')
                                 //     excludeCancersFromOtherTAs(resp); // side effects on the resp
                                 // }
 
-                                var data = otAPIservice.flat2tree(resp.body);
+                                var data = otApi.flat2tree(resp.body);
                                 if (data) {
                                     gat
                                         .data(data)
@@ -81,7 +81,7 @@ angular.module('otDirectives')
                                         .update();
                                 }
                             },
-                            otAPIservice.defaultErrorHandler
+                            otApi.defaultErrorHandler
                             );
                     }
                 });
@@ -151,20 +151,20 @@ angular.module('otDirectives')
                         facets: false,
                         size: 1000
                     };
-                    opts = otAPIservice.addFacetsOptions(scope.facets, opts);
+                    opts = otApi.addFacetsOptions(scope.facets, opts);
                     var queryObject = {
                         method: 'GET',
                         params: opts
                     };
 
-                    otAPIservice.getAssociations(queryObject)
+                    otApi.getAssociations(queryObject)
                         .then(
                             function (resp) {
                                 // if (scope.nocancers === "true") {
                                 //     excludeCancersFromOtherTAs(resp); // side effect on resp
                                 // }
 
-                                var data = otAPIservice.flat2tree(resp.body);
+                                var data = otApi.flat2tree(resp.body);
                                 // var data = resp.body.data;
                                 if (_.isEmpty(data)) {
                                     return;
@@ -187,7 +187,7 @@ angular.module('otDirectives')
                                 // gat(fView, elem.children().eq(1)[0]);
                                 gat(fView, elem.children().eq(1).children().eq(0)[0]);
                             },
-                            otAPIservice.defaultErrorHandler
+                            otApi.defaultErrorHandler
                         );
                 };
 

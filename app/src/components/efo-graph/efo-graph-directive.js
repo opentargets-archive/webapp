@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('otEfoGraph', ['otAPIservice', function (otAPIservice) {
+    .directive('otEfoGraph', ['otApi', function (otApi) {
         'use strict';
         return {
             restrict: 'E',
@@ -11,7 +11,7 @@ angular.module('otDirectives')
                 var efoGraph = diseaseGraph()
                     .width(w)
                     .height(700)
-                    .cttvApi(otAPIservice.getSelf());
+                    .cttvApi(otApi.getSelf());
 
                 scope.$watch(function () { return attrs.efo; }, function (efo_str) {
                     if (!efo_str) {

@@ -5,7 +5,7 @@ angular.module('otControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('TargetAssociationsController', ['$scope', '$location', 'otUtils', 'otAPIservice', 'otFiltersService', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otAPIservice, otFiltersService, otDictionary, otLocationState, otConfig) {
+    .controller('TargetAssociationsController', ['$scope', '$location', 'otUtils', 'otApi', 'otFacetsFilters', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otApi, otFacetsFilters, otDictionary, otLocationState, otConfig) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -38,16 +38,16 @@ angular.module('otControllers')
         // filters
 
         // reset the filters when loading a new page so we don't see the filters from the previous page...
-        otFiltersService.reset();
+        otFacetsFilters.reset();
 
         // Set page filters: this defines the order in which the facets are going to be displayed
         // as per config JSON
-        otFiltersService.pageFacetsStack(otConfig.targetAssociationsFacets.facets);
+        otFacetsFilters.pageFacetsStack(otConfig.targetAssociationsFacets.facets);
 
         // state we want to export to/from the URL
         var stateId = 'view';
         var cancersExcId = 'cancers';
-        var facetsId = otFiltersService.stateId;
+        var facetsId = otFacetsFilters.stateId;
 
 
         /*
@@ -82,9 +82,6 @@ angular.module('otControllers')
         // 1. first we check if the state of a particular element has changed;
         // 2. if it hasn't changed, and it's undefined (new=undefined, old=undefined),
         // then it's a page load with no state specified, so we update that element anyway with default values
-        // console.log("render (new, old)");
-        // console.log(new_state);
-        // console.log(old_state);
         // facets changed?
             if (! _.isEqual(new_state[facetsId], old_state[facetsId]) || !new_state[facetsId]) {
                 getFacets(new_state[facetsId]);
@@ -116,13 +113,13 @@ angular.module('otControllers')
                 direct: true,
                 size: 1
             };
-            opts = otAPIservice.addFacetsOptions(filters, opts);
+            opts = otApi.addFacetsOptions(filters, opts);
             var queryObject = {
                 method: 'GET',
                 params: opts
             };
 
-            otAPIservice.getAssociations(queryObject)
+            otApi.getAssociations(queryObject)
                 .then(function (resp) {
                     $scope.search.total = resp.body.total;
                     if (resp.body.total) {
@@ -135,7 +132,7 @@ angular.module('otControllers')
                         $scope.n.diseases = resp.body.total;
 
                         // Update the facets
-                        otFiltersService.updateFacets(resp.body.facets, otConfig.targetAssociationsFacets.count);
+                        otFacetsFilters.updateFacets(resp.body.facets, otConfig.targetAssociationsFacets.count);
                     } else {
                         // Check if there is a profile page
                         var profileOpts = {
@@ -144,13 +141,13 @@ angular.module('otControllers')
                                 target_id: $scope.search.query
                             }
                         };
-                        otAPIservice.getTarget(profileOpts)
+                        otApi.getTarget(profileOpts)
                             .then(function (profileResp) {
                                 $scope.search.label = profileResp.body.approved_symbol;
                             });
                     }
                 },
-                otAPIservice.defaultErrorHandler);
+                otApi.defaultErrorHandler);
         }
 
 
@@ -181,7 +178,6 @@ angular.module('otControllers')
 
 
         $scope.$on(otLocationState.STATECHANGED, function (evt, new_state, old_state) {
-            // console.log("page.onLocationState");
             render(new_state, old_state); // args is the same as getState()
         });
 

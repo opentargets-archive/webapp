@@ -3,7 +3,7 @@
 angular.module('otDirectives')
 
 /* Directive to display the known drug evidence table */
-    .directive('otKnownDrugTable', ['otAPIservice', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otAPIservice, otConsts, otUtils, otConfig, $location, otDictionary) {
+    .directive('otKnownDrugTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
         'use strict';
         // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -92,7 +92,7 @@ angular.module('otDirectives')
                             method: 'GET',
                             params: opts
                         };
-                        return otAPIservice.getFilterBy(queryObject)
+                        return otApi.getFilterBy(queryObject)
                             .then(
                                 function (resp) {
                                     if (resp.body.data) {
@@ -102,7 +102,7 @@ angular.module('otDirectives')
                                         // $log.warn("Empty response : drug data");
                                     }
                                 },
-                                otAPIservice.defaultErrorHandler
+                                otApi.defaultErrorHandler
                             )
                             .finally(function () {
                                 scope.loadFlag = false;

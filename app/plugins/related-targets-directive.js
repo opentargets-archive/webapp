@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('relatedTargets', ['otAPIservice', function (otAPIservice) {
+    .directive('relatedTargets', ['otApi', function (otApi) {
         'use strict';
 
         return {
@@ -9,7 +9,7 @@ angular.module('plugins')
                 target: '='
             },
             link: function (scope, element, attrs) {
-                otAPIservice.getTargetRelation({
+                otApi.getTargetRelation({
                     id: scope.target.id
                 })
                     .then(
@@ -19,7 +19,7 @@ angular.module('plugins')
                         },
 
                         // error handler
-                        otAPIservice.defaultErrorHandler
+                        otApi.defaultErrorHandler
                     );
             }
         };

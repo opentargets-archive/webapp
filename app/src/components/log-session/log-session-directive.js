@@ -1,13 +1,13 @@
 angular.module('otDirectives')
 
 
-    .directive('logSession', ['otAPIservice', function (otAPIservice) {
+    .directive('logSession', ['otApi', function (otApi) {
         'use strict';
 
         return {
             restrict: 'E',
             link: function () {
-                otAPIservice.logSession();
+                otApi.logSession();
             }
         };
     }]);

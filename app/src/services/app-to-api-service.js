@@ -7,7 +7,7 @@ angular.module('otServices')
      * A service to handle search in the app.
      * This talks to the API service
      */
-    .factory('otAppToAPIService', [function () {
+    .factory('otAppToApi', [function () {
         'use strict';
 
         var APP_QUERY_Q = '',

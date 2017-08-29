@@ -1,7 +1,7 @@
 angular.module('otDirectives')
 
 
-    .directive('otTargetListMapping', ['otAPIservice', 'otUtils', 'otLoadedLists', 'otConfig', function (otAPIservice, otUtils, otLoadedLists, otConfig) {
+    .directive('otTargetListMapping', ['otApi', 'otUtils', 'otLoadedLists', 'otConfig', function (otApi, otUtils, otLoadedLists, otConfig) {
         'use strict';
 
         return {
@@ -27,7 +27,7 @@ angular.module('otDirectives')
                         }
                     };
 
-                    return otAPIservice.getSearch(queryObject);
+                    return otApi.getSearch(queryObject);
                 }
 
                 // scope.setNewItem = function (oldQuery, res) {

@@ -1,7 +1,7 @@
 /* Bubbles directive for associations */
 angular.module('otDirectives')
 
-    .directive('otTargetAssociationsBubbles', ['otAPIservice', 'otUtils', '$analytics', function (otAPIservice, otUtils, $analytics) {
+    .directive('otTargetAssociationsBubbles', ['otApi', 'otUtils', '$analytics', function (otApi, otUtils, $analytics) {
         'use strict';
 
         var whoiam = 'bubbles';
@@ -183,13 +183,13 @@ angular.module('otDirectives')
                         direct: true,
                         facets: false
                     };
-                    opts = otAPIservice.addFacetsOptions(facets, opts);
+                    opts = otApi.addFacetsOptions(facets, opts);
                     var queryObject = {
                         method: 'GET',
                         params: opts
                     };
 
-                    var promise = otAPIservice.getAssociations(queryObject);
+                    var promise = otApi.getAssociations(queryObject);
                     // if (scope.nocancers === "true") {
                     //     promise = promise
                     //         .then(function (resp) {

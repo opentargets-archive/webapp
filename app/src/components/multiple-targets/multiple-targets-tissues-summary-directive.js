@@ -1,6 +1,6 @@
 angular.module('otDirectives')
 
-    .directive('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'otUtils', 'otAPIservice', function ($log, $http, $q, otUtils, otAPIservice) {
+    .directive('multipleTargetsTissuesSummary', ['$log', '$http', '$q', 'otUtils', 'otApi', function ($log, $http, $q, otUtils, otApi) {
         'use strict';
 
         var tissuesOrdered = [
@@ -147,7 +147,7 @@ angular.module('otDirectives')
                     var baseGtexUrlSufix = '?boxplot=true';
                     for (var i = 0; i < scope.targets.length; i++) {
                         var target = scope.targets[i];
-                        var targetPromise = otAPIservice.getTarget({
+                        var targetPromise = otApi.getTarget({
                             method: 'GET',
                             trackCall: true,
                             params: {

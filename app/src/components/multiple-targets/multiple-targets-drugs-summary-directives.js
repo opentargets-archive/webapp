@@ -1,6 +1,6 @@
 angular.module('otDirectives')
 
-    .directive('multipleTargetsDrugsSummary', ['otAPIservice', 'otConfig', 'otUtils', function (otAPIservice, otConfig, otUtils) {
+    .directive('multipleTargetsDrugsSummary', ['otApi', 'otConfig', 'otUtils', function (otApi, otConfig, otUtils) {
         'use strict';
 
         function formatDrugDataToArray (drugs) {
@@ -57,7 +57,7 @@ angular.module('otDirectives')
                             ]
                         }
                     };
-                    otAPIservice.getFilterBy(queryObject)
+                    otApi.getFilterBy(queryObject)
                         .then(function (resp) {
                             var drugs = {};
                             for (var i = 0; i < resp.body.data.length; i++) {

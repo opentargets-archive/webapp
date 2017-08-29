@@ -6,7 +6,7 @@ angular.module('otServices')
 /**
  * The API services, with methods to call the ElasticSearch API
  */
-    .factory('otAPIservice', ['$log', '$rootScope', '$q', 'otConfig', function ($log, $rootScope, $q, otConfig) {
+    .factory('otApi', ['$log', '$rootScope', '$q', 'otConfig', function ($log, $rootScope, $q, otConfig) {
         'use strict';
 
 
@@ -156,10 +156,10 @@ angular.module('otServices')
          * @param {Error} error - The error object.
          * @param {boolean} trackCall - If true, count this request anyway; Defaults to FALSE.
          * @example
-         *  otAPIservice.getSearch(queryObject)
+         *  otApi.getSearch(queryObject)
          *      .then(
          *          function(response){}, // success
-         *          otAPIservice.defaultErrorHandler // error
+         *          otApi.defaultErrorHandler // error
          *      )
          */
         cttvAPI.defaultErrorHandler = function (error, trackCall) {
@@ -209,7 +209,7 @@ angular.module('otServices')
          *  });
          *
          * @example
-         * otAPIservice.getSearch({params:{q:val}}).then(function(response){
+         * otApi.getSearch({params:{q:val}}).then(function(response){
          *      return response.data.data;
          *  });
          */
@@ -234,7 +234,7 @@ angular.module('otServices')
          * Get the api object to be used outside of angular.
          * 
          * @example 
-         * var api = otAPIservice.getSelf();
+         * var api = otApi.getSelf();
          * console.log(api);
          */
         cttvAPI.getSelf = function () {
@@ -248,7 +248,7 @@ angular.module('otServices')
          * 
          * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
          * @example
-         *      otAPIservice.getEvidence(params);
+         *      otApi.getEvidence(params);
          */
         cttvAPI.getEvidence = function (queryObject) {
             queryObject.operation = cttvAPI.API_EVIDENCE_URL;
@@ -261,7 +261,7 @@ angular.module('otServices')
          * 
          * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
          * @example
-         *      otAPIservice.getAssociations(params);
+         *      otApi.getAssociations(params);
          */
         cttvAPI.getAssociations = function (queryObject) {
             queryObject.operation = cttvAPI.API_ASSOCIATION_URL;
@@ -274,7 +274,7 @@ angular.module('otServices')
          * 
          * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
          * @example
-         *      otAPIservice.getAutocomplete(params);
+         *      otApi.getAutocomplete(params);
          */
         cttvAPI.getAutocomplete = function (queryObject) {
             // $log.log("cttvAPI.getAutocomplete()");
@@ -288,7 +288,7 @@ angular.module('otServices')
          * 
          * @param {Object} queryObject - Simple Object containing the EFO code passed to the API call.
          * @example
-         *      otAPIservice.getEfo({efo:'EFO_1234567'});
+         *      otApi.getEfo({efo:'EFO_1234567'});
          */
         cttvAPI.getEfo = function (queryObject) {
             queryObject.operation = cttvAPI.API_EFO_URL;
@@ -301,7 +301,7 @@ angular.module('otServices')
          * 
          * @param {Object} queryObject - Simple Object containing the ENSG passed to the API call.
          * @example
-         *      otAPIservice.getTarget({target_id:"ENSG00000005339"});
+         *      otApi.getTarget({target_id:"ENSG00000005339"});
          */
         cttvAPI.getTarget = function (queryObject) {
             queryObject.operation = cttvAPI.API_TARGET_URL;
@@ -314,7 +314,7 @@ angular.module('otServices')
          * 
          * @param {Object} queryObject - Simple Object containing the EFO code passed to the API call.
          * @example
-         *      otAPIservice.getDisease(params);
+         *      otApi.getDisease(params);
          */
         cttvAPI.getDisease = function (queryObject) {
             queryObject.operation = cttvAPI.API_DISEASE_URL;
@@ -356,7 +356,7 @@ angular.module('otServices')
          * @param {Object} facets - Simple Object containing the parameters passed to the API call.
          * @param {Object} obj - Something else.
          * @example
-         *      otAPIservice.addFacetsOptions(facets, obj);
+         *      otApi.addFacetsOptions(facets, obj);
          */
         cttvAPI.addFacetsOptions = function (facets, obj) {
             obj = obj || {};
@@ -374,7 +374,7 @@ angular.module('otServices')
          * 
          * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
          * @example
-         *      otAPIservice.getTargetRelation(params);
+         *      otApi.getTargetRelation(params);
          */
         cttvAPI.getTargetRelation = function (queryObject) {
             // $log.log("cttvAPI.getTargetRelation");
@@ -388,7 +388,7 @@ angular.module('otServices')
          * 
          * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
          * @example
-         *      otAPIservice.getDiseaseRelation(params);
+         *      otApi.getDiseaseRelation(params);
          */
         cttvAPI.getDiseaseRelation = function (queryObject) {
             // $log.log("cttvAPI.getTargetRelation");
@@ -402,7 +402,7 @@ angular.module('otServices')
          * This call is 1-off and it doesn't.
          * 
          * @example
-         *      otAPIservice.logSession();
+         *      otApi.logSession();
          */
         cttvAPI.logSession = function () {
             var queryObject = {
@@ -420,7 +420,7 @@ angular.module('otServices')
          * Get the API stats.
          * 
          * @example
-         *      otAPIservice.getStats(params);
+         *      otApi.getStats(params);
          */
         cttvAPI.getStats = function () {
             var queryObject = {

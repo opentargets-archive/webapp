@@ -7,7 +7,7 @@ angular.module('otDirectives')
  *   <ot-filter-by-file-targets> </ot-filter-by-file-targets>
  *
  */
-    .directive('otFilterByFileTargets', ['$log', 'otAPIservice', '$q', '$analytics', 'otLoadedLists', '$location', 'otUtils', function ($log, otAPIservice, $q, $analytics, otLoadedLists, $location, otUtils) {
+    .directive('otFilterByFileTargets', ['$log', 'otApi', '$q', '$analytics', 'otLoadedLists', '$location', 'otUtils', function ($log, otApi, $q, $analytics, otLoadedLists, $location, otUtils) {
         'use strict';
 
         return {
@@ -177,7 +177,7 @@ angular.module('otDirectives')
                         params: opts
                     };
 
-                    return otAPIservice.getBestHitSearch(queryObject)
+                    return otApi.getBestHitSearch(queryObject)
                         .then(function (resp) {
                             if (resp.body.data.length) {
                                 var listName = otLoadedLists.parseBestHitSearch(scope.fileName, resp.body);

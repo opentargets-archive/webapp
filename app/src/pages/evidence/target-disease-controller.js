@@ -7,7 +7,7 @@ angular.module('otControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseController', ['$scope', '$location', '$log', 'otAPIservice', 'otUtils', 'otDictionary', 'otConsts', 'otConfig', 'otClearUnderscoresFilter', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, $log, otAPIservice, otUtils, otDictionary, otConsts, otConfig, otClearUnderscoresFilter, $analytics, otLocationState, $anchorScroll) {
+    .controller('TargetDiseaseController', ['$scope', '$location', '$log', 'otApi', 'otUtils', 'otDictionary', 'otConsts', 'otConfig', 'otClearUnderscoresFilter', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, $log, otApi, otUtils, otDictionary, otConsts, otConfig, otClearUnderscoresFilter, $analytics, otLocationState, $anchorScroll) {
         'use strict';
 
 
@@ -146,11 +146,11 @@ angular.module('otControllers')
                     target_id: $scope.search.target
                 }
             };
-            targetPromise = otAPIservice.getTarget(queryObject)
+            targetPromise = otApi.getTarget(queryObject)
                 .then(function (resp) {
                     $scope.search.info.gene = resp.body;
                     return resp;
-                }, otAPIservice.defaultErrorHandler);
+                }, otApi.defaultErrorHandler);
 
             // get disease specific info with the efo() method
             queryObject = {
@@ -159,14 +159,14 @@ angular.module('otControllers')
                     code: $scope.search.disease
                 }
             };
-            otAPIservice.getDisease(queryObject)
+            otApi.getDisease(queryObject)
                 .then(
                     function (resp) {
                         $scope.search.info.efo = resp.body;
                         // TODO: This is not returned by the api yet. Maybe we need to remove it later
                         $scope.search.info.efo.efo_code = $scope.search.disease;
                     },
-                    otAPIservice.defaultErrorHandler
+                    otApi.defaultErrorHandler
                 );
         };
 
@@ -214,7 +214,7 @@ angular.module('otControllers')
                 params: opts
             };
 
-            return otAPIservice.getAssociations(queryObject)
+            return otApi.getAssociations(queryObject)
                 .then(function (resp) {
                     if (!resp.body.data.length) {
                         $scope.search.flower_data = processFlowerData();
@@ -222,7 +222,7 @@ angular.module('otControllers')
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
                         updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
                     }
-                }, otAPIservice.defaultErrorHandler);
+                }, otApi.defaultErrorHandler);
         };
 
 
@@ -289,7 +289,7 @@ angular.module('otControllers')
 
             return targetPromise
                 .then(function () {
-                    otAPIservice.getFilterBy(queryObject)
+                    otApi.getFilterBy(queryObject)
                         .then(function (resp) {
                             if (resp.body.data) {
                                 var data = resp.body.data;
@@ -299,7 +299,7 @@ angular.module('otControllers')
                                 $log.warn('Empty response: common disease');
                             }
                         });
-                }, otAPIservice.defaultErrorHandler)
+                }, otApi.defaultErrorHandler)
                 .finally(function () {
                     // $scope.search.tables.genetic_associations.common_diseases.is_open = $scope.search.tables.genetic_associations.common_diseases.data.length>0 || false;
                     $scope.search.tables.genetic_associations.common_diseases.is_loading = false;
@@ -458,7 +458,7 @@ angular.module('otControllers')
 
             return targetPromise
                 .then(function () {
-                    otAPIservice.getFilterBy(queryObject)
+                    otApi.getFilterBy(queryObject)
                         .then(function (resp) {
                             if (resp.body.data) {
                                 var data = resp.body.data;
@@ -467,7 +467,7 @@ angular.module('otControllers')
                             } else {
                                 $log.warn('Empty response: rare disease');
                             }
-                        }, otAPIservice.defaultErrorHandler)
+                        }, otApi.defaultErrorHandler)
                         .finally(function () {
                             $scope.search.tables.genetic_associations.rare_diseases.is_loading = false;
                             updateGeneticAssociationsSetting();
@@ -661,7 +661,7 @@ angular.module('otControllers')
                 method: 'GET',
                 params: opts
             };
-            return otAPIservice.getFilterBy(queryObject)
+            return otApi.getFilterBy(queryObject)
                 .then(
                     function (resp) {
                         if (resp.body.data) {
@@ -671,7 +671,7 @@ angular.module('otControllers')
                             $log.warn('Empty response : pathway data');
                         }
                     },
-                    otAPIservice.defaultErrorHandler
+                    otApi.defaultErrorHandler
                 )
                 .finally(function () {
                     $scope.search.tables.affected_pathways.is_loading = false;
@@ -789,7 +789,7 @@ angular.module('otControllers')
                 method: 'GET',
                 params: opts
             };
-            return otAPIservice.getFilterBy(queryObject)
+            return otApi.getFilterBy(queryObject)
                 .then(
                     function (resp) {
                         if (resp.body.data) {
@@ -799,7 +799,7 @@ angular.module('otControllers')
                             $log.warn('Empty response : RNA expression');
                         }
                     },
-                    otAPIservice.defaultErrorHandler
+                    otApi.defaultErrorHandler
                 )
                 .finally(function () {
                     $scope.search.tables.rna_expression.is_loading = false;
@@ -944,7 +944,7 @@ angular.module('otControllers')
                 method: 'GET',
                 params: opts
             };
-            return otAPIservice.getFilterBy(queryObject)
+            return otApi.getFilterBy(queryObject)
                 .then(
                     function (resp) {
                         if (resp.body.data) {
@@ -954,7 +954,7 @@ angular.module('otControllers')
                             $log.warn('Empty response : somatic mutations');
                         }
                     },
-                    otAPIservice.defaultErrorHandler
+                    otApi.defaultErrorHandler
                 )
                 .finally(function () {
                     // $scope.search.tables.somatic_mutations.is_open = $scope.search.tables.somatic_mutations.data.length>0 || false;
@@ -1107,7 +1107,7 @@ angular.module('otControllers')
                 method: 'GET',
                 params: opts
             };
-            return otAPIservice.getFilterBy(queryObject)
+            return otApi.getFilterBy(queryObject)
                 .then(
                     function (resp) {
                         if (resp.body.data) {
@@ -1117,7 +1117,7 @@ angular.module('otControllers')
                             $log.warn('Empty response : animal models data');
                         }
                     },
-                    otAPIservice.defaultErrorHandler
+                    otApi.defaultErrorHandler
                 )
                 .finally(function () {
                     $scope.search.tables.animal_models.is_loading = false;
@@ -1251,7 +1251,7 @@ angular.module('otControllers')
                 method: 'GET',
                 params: opts
             };
-            return otAPIservice.getFilterBy(queryObject)
+            return otApi.getFilterBy(queryObject)
                 .then(function (resp) {
                     $scope.search.tables.literature.total = resp.body.total;
                     $scope.search.tables.literature.is_loading = false;

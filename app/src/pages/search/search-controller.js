@@ -8,7 +8,7 @@ angular.module('otControllers')
      * SearchController
      * Controller for the search/results page
      */
-    .controller('SearchController', ['$scope', '$location', '$log', 'otAppToAPIService', 'otAPIservice', 'otUtils', 'otLocationState', function ($scope, $location, $log, otAppToAPIService, otAPIservice, otUtils, otLocationState) {
+    .controller('SearchController', ['$scope', '$location', '$log', 'otAppToApi', 'otApi', 'otUtils', 'otLocationState', function ($scope, $location, $log, otAppToApi, otApi, otUtils, otLocationState) {
         'use strict';
 
         otUtils.clearErrors();
@@ -26,7 +26,7 @@ angular.module('otControllers')
                 results:{}
             }
         */
-        $scope.search = otAppToAPIService.createSearchInitObject();
+        $scope.search = otAppToApi.createSearchInitObject();
 
         // filters object used to render the fake facets
         $scope.filters = {
@@ -127,7 +127,7 @@ angular.module('otControllers')
             if ($scope.search.query.q.length > 0) {
                 Object.keys($scope.filters).forEach(function (k) {
                     $scope.filters[k].loading = true;
-                    otAPIservice.getSearch({
+                    otApi.getSearch({
                         method: 'GET',
                         params: {
                             q: $scope.search.query.q,
@@ -139,7 +139,7 @@ angular.module('otControllers')
                             function (resp) {
                                 $scope.filters[k].total = resp.body.total;
                             },
-                            otAPIservice.defaultErrorHandler
+                            otApi.defaultErrorHandler
                         )
                         .finally(function () {
                             $scope.filters[k].loading = false;
@@ -157,7 +157,7 @@ angular.module('otControllers')
                     fields: ['approved_symbol']
                 }
             };
-            return otAPIservice.getTarget(queryObject)
+            return otApi.getTarget(queryObject)
                 .then(function (resp) {
                     try {
                         $scope.search.results.data[0].data.top_associations.parsed.find(function (p) {
@@ -166,7 +166,7 @@ angular.module('otControllers')
                     } catch (e) {
                         $log.log('Error getting Target information');
                     }
-                }, otAPIservice.defaultErrorHandler);
+                }, otApi.defaultErrorHandler);
         };
 
 
@@ -178,7 +178,7 @@ angular.module('otControllers')
                     fields: ['label']
                 }
             };
-            return otAPIservice.getDisease(queryObject)
+            return otApi.getDisease(queryObject)
                 .then(function (resp) {
                     try {
                         $scope.search.results.data[0].data.top_associations.parsed.find(function (p) {
@@ -187,7 +187,7 @@ angular.module('otControllers')
                     } catch (e) {
                         $log.log('Error getting disease information');
                     }
-                }, otAPIservice.defaultErrorHandler);
+                }, otApi.defaultErrorHandler);
         };
 
 
@@ -208,7 +208,7 @@ angular.module('otControllers')
             queryObject.params[type] = id;
 
 
-            return otAPIservice.getFilterBy(queryObject).then(function (resp) {
+            return otApi.getFilterBy(queryObject).then(function (resp) {
                 var d = resp.body.data.filter(function (i) {
                     return i.drug.max_phase_for_all_diseases.numeric_index === 4;
                 });
@@ -229,14 +229,14 @@ angular.module('otControllers')
                 var queryObject = {
                     method: 'GET'
                 };
-                queryObject.params = otAppToAPIService.getApiQueryObject(otAppToAPIService.SEARCH, $scope.search.query);
+                queryObject.params = otAppToApi.getApiQueryObject(otAppToApi.SEARCH, $scope.search.query);
                 // if one and only one of the filters is selected, apply the corresponding filter
                 // cool way of mimicking a XOR operator ;)
                 if ($scope.filters.target.selected !== $scope.filters.disease.selected) {
                     queryObject.params.filter = $scope.filters.target.selected ? 'target' : 'disease';
                 }
 
-                otAPIservice.getSearch(queryObject)
+                otApi.getSearch(queryObject)
                     .then(
                         function (resp) {
                             $scope.search.results = resp.body;
@@ -248,7 +248,7 @@ angular.module('otControllers')
                             // $log.log($scope.search.results.data[0]);
                             return resp;
                         },
-                        otAPIservice.defaultErrorHandler
+                        otApi.defaultErrorHandler
                     )
 
                     .then(
@@ -317,7 +317,7 @@ angular.module('otControllers')
                                 }
                             }
                         },
-                        otAPIservice.defaultErrorHandler
+                        otApi.defaultErrorHandler
                     )
                     .finally(function () {
                         $scope.search.loading = false;

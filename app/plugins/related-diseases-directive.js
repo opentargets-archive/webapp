@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('relatedDiseases', ['otUtils', 'otConsts', 'otDictionary', 'otAPIservice', '$timeout', function (otUtils, otConsts, otDictionary, otAPIservice, $timeout) {
+    .directive('relatedDiseases', ['otUtils', 'otConsts', 'otDictionary', 'otApi', '$timeout', function (otUtils, otConsts, otDictionary, otApi, $timeout) {
         'use strict';
 
         // Details table --
@@ -148,8 +148,8 @@ angular.module('plugins')
             paramsObj.size = 200;
             paramsObj.direct = true;
             paramsObj.facets = false;
-            // TODO: Include POST in otAPIservice
-            var cttvApi = otAPIservice.getSelf(); // No POST in the service yet
+            // TODO: Include POST in otApi
+            var cttvApi = otApi.getSelf(); // No POST in the service yet
             var url = cttvApi.url.associations();
 
             cttvApi.call(url, paramsObj)
@@ -244,7 +244,7 @@ angular.module('plugins')
                         .skip(1)
                         .size(600)
                         .score('jackard_weighted')
-                        .cttvApi(otAPIservice.getSelf());
+                        .cttvApi(otApi.getSelf());
 
                     // v.on("load", function (d) {
                     //     $log.log("LOADED------------------------------------");
