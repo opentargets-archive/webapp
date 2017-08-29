@@ -1,6 +1,6 @@
 angular.module('otDirectives')
 
-    .directive('interactorsStarPlot', ['$log', '$timeout', 'otOmnipathdbCategories', 'otUtils', function ($log, $timeout, otOmnipathdbCategories, otUtils) {
+    .directive('otInteractorsStarPlot', ['$log', '$timeout', 'otOmnipathdbCategories', 'otUtils', function ($log, $timeout, otOmnipathdbCategories, otUtils) {
         'use strict';
 
         var selectedNodesColors = ['#ffe6e6', '#e6ecff'];

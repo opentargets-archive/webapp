@@ -9,7 +9,7 @@ angular.module('otDirectives')
             '<div>' +
             '    <p class="cttv-section-intro">Summary of interactions for the set of targets based on <a target=_blank href="http://omnipathdb.org/">OmniPath DB</a> data. When 2 targets are selected details on the interaction are shown.</p>' +
             '</div>' +
-            '<interactors-star-plot interactors="interactors" categories="categories"></interactors-star-plot>',
+            '<ot-interactors-star-plot interactors="interactors" categories="categories"></ot-interactors-star-plot>',
             scope: {
                 target: '=',
                 width: '='
