@@ -1,4 +1,4 @@
-angular.module('plugins')
+angular.module('otPlugins')
     .directive('targetPathways', ['$http', '$q', function ($http, $q) {
         'use strict';
 

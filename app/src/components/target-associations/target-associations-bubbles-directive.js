@@ -146,7 +146,7 @@ angular.module('otDirectives')
 
             template: '<div style="float:left">'
             + '<ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend></div>'
-            + '<png filename="{{target}}-AssociationsBubblesView.png" track="associationsBubbles"></png>',
+            + '<ot-png filename="{{target}}-AssociationsBubblesView.png" track="associationsBubbles"></ot-png>',
 
 
             link: function (scope, elem, attrs, resizeCtrl) {

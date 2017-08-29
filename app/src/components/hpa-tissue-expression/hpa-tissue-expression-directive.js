@@ -11,7 +11,7 @@ angular.module('otDirectives')
     *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
     *   This is useful in conjunction with a spinner where you can have ng-show="loading"
     */
-    .directive('cttvHpaTissueExpression', ['otApi', 'otUtils', function (otApi, otUtils) {
+    .directive('otHpaTissueExpression', ['otApi', 'otUtils', function (otApi, otUtils) {
         'use strict';
 
         var colorScale = otUtils.colorScales.BLUE_1_3; // blue orig

@@ -1,5 +1,6 @@
-angular.module('cttvFilters')
-    .filter('split', function () {
+// TODO: could not find any usage of this directive... can it go?
+angular.module('otFilters')
+    .filter('otSplit', function () {
         'use strict';
 
         return function (input, splitChar, splitIndex) {

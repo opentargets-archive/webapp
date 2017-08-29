@@ -1,4 +1,4 @@
-angular.module('plugins')
+angular.module('otPlugins')
     .directive('rnaBaselineExpression', ['$timeout', '$http', 'otUtils', function ($timeout, $http, otUtils) {
         'use strict';
 

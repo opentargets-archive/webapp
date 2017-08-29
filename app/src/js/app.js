@@ -1,3 +1,4 @@
+/* eslint-disable angular/file-name */
 function initApp (deps) {
     var app = angular.module('otApp', deps);
 
@@ -108,7 +109,7 @@ var deps = [
     'ngCookies',
     'LocalStorageModule',
     'ui.bootstrap',
-    'cttvFilters',
+    'otFilters',
     'otControllers',
     'otDirectives',
     'angulartics',
@@ -118,7 +119,7 @@ var deps = [
     'hm.readmore',
     'ngSanitize',
     'swaggerUi',
-    'plugins',
+    'otPlugins',
     'facets'
 ];
 

@@ -1,4 +1,4 @@
-angular.module('plugins')
+angular.module('otPlugins')
     .directive('targetFeatures', ['$timeout', function ($timeout) {
         'use strict';
 

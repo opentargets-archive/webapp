@@ -1,7 +1,7 @@
 angular.module('otDirectives')
 
 
-    .directive('logSession', ['otApi', function (otApi) {
+    .directive('otLogSession', ['otApi', function (otApi) {
         'use strict';
 
         return {

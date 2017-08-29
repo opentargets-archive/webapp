@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('png', ['$timeout', '$uibModal', '$analytics', function ($timeout, $uibModal, $analytics) {
+    .directive('otPng', ['$timeout', '$uibModal', '$analytics', function ($timeout, $uibModal, $analytics) {
         'use strict';
 
         return {
