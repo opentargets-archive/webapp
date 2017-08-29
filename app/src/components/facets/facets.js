@@ -36,7 +36,7 @@ angular.module('facets', [])
     * Top level container for all the facets.
     * This contains accordion etc
     */
-    .directive('cttvFacets', ['cttvFiltersService', function (cttvFiltersService) {
+    .directive('cttvFacets', ['otFiltersService', function (otFiltersService) {
         'use strict';
 
         return {
@@ -49,13 +49,13 @@ angular.module('facets', [])
 
             link: function (scope) {
                 // scope.dataDistribution =
-                scope.filters = cttvFiltersService.getFilters();
-                scope.selectedFilters = cttvFiltersService.getSelectedFilters();
-                scope.deselectAll = cttvFiltersService.deselectAll;
+                scope.filters = otFiltersService.getFilters();
+                scope.selectedFilters = otFiltersService.getSelectedFilters();
+                scope.deselectAll = otFiltersService.deselectAll;
 
-                // scope.respStatus = 1; //cttvFiltersService.status(); // TODO: handle response status
+                // scope.respStatus = 1; //otFiltersService.status(); // TODO: handle response status
                 // scope.updateFilter = function(id){
-                //    cttvFiltersService.getFilter(id).toggle();
+                //    otFiltersService.getFilter(id).toggle();
                 // }
             }
 

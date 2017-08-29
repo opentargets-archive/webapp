@@ -6,7 +6,7 @@ angular.module('otServices')
     /**
      *
      */
-    .factory('cttvFiltersService', ['$log', 'otDictionary', 'otConsts', 'otLocationState', '$analytics', '$injector', 'otConfig', function ($log, otDictionary, otConsts, otLocationState, $analytics, $injector, otConfig) {
+    .factory('otFiltersService', ['$log', 'otDictionary', 'otConsts', 'otLocationState', '$analytics', '$injector', 'otConfig', function ($log, otDictionary, otConsts, otLocationState, $analytics, $injector, otConfig) {
         'use strict';
 
 
@@ -128,7 +128,7 @@ angular.module('otServices')
          * Returns true if a filter with the given key is selected
          */
         var isSelected = function (collection, key) {
-            var fcts = otLocationState.getState()[cttvFiltersService.stateId];
+            var fcts = otLocationState.getState()[otFiltersService.stateId];
             key = '' + key; // target class is numerical key which confuses indexOf below.
             return (fcts && fcts[collection] && (fcts[collection] === key || fcts[collection].indexOf(key) >= 0)) || false;
         };
@@ -194,7 +194,7 @@ angular.module('otServices')
                     raw[obj.facet].push(obj.key);
                 });
             });
-            otLocationState.setStateFor(cttvFiltersService.stateId, raw);
+            otLocationState.setStateFor(otFiltersService.stateId, raw);
         };
 
 
@@ -361,7 +361,7 @@ angular.module('otServices')
         // ---------------------------------
 
 
-        var cttvFiltersService = {};
+        var otFiltersService = {};
 
 
         /**
@@ -371,9 +371,9 @@ angular.module('otServices')
          * @param {Array} facets - array of facets keys, e.g. ["datatypes","pathway_types"]
          * 
          * @example
-         *      cttvFiltersService.pageFacetsStack(["datatypes","pathway_types"])
+         *      otFiltersService.pageFacetsStack(["datatypes","pathway_types"])
          */
-        cttvFiltersService.pageFacetsStack = function (facets) {
+        otFiltersService.pageFacetsStack = function (facets) {
             if (facets) {
                 pageFacetsStack.length = 0;
                 facets.forEach(function (facet) {
@@ -387,7 +387,7 @@ angular.module('otServices')
         /**
          * Returns facetsdata object as an array to be used for display
          */
-        cttvFiltersService.getFilters = function () {
+        otFiltersService.getFilters = function () {
             return filters;
         };
 
@@ -395,7 +395,7 @@ angular.module('otServices')
         /**
          * Returns the user-selected options
          */
-        cttvFiltersService.getSelectedFilters = function () {
+        otFiltersService.getSelectedFilters = function () {
             return selected;
         };
 
@@ -403,17 +403,17 @@ angular.module('otServices')
         /**
          * Removes ALL selections
          */
-        cttvFiltersService.deselectAll = function () {
+        otFiltersService.deselectAll = function () {
             // TODO: this could be changed so that removeFilter() takes an array as first parameter
             // selected.forEach(function(collection){
-            //     cttvFiltersService.removeFilter(collection.key, null);
+            //     otFiltersService.removeFilter(collection.key, null);
             // });
             selected.length = 0;
             updateLocationSearch();
         };
 
 
-        cttvFiltersService.stateId = 'fcts';
+        otFiltersService.stateId = 'fcts';
 
 
         /**
@@ -422,7 +422,7 @@ angular.module('otServices')
          * @param countsToUse [String] the count to be used for display: "unique_target_count" or "unique_disease_count"
          * NOTE: i quite like passing the countsToUse directly here, so I'll leave it like this for now. This is however now set in the config file
          */
-        cttvFiltersService.updateFacets = function (facets, countsToUse) {
+        otFiltersService.updateFacets = function (facets, countsToUse) {
             $log.log('updateFacets');
             // if there are no facets, return
             if (!facets) {
@@ -491,7 +491,7 @@ angular.module('otServices')
         /**
          * Does exactly what it says on the tin.
          */
-        cttvFiltersService.getSelectedCount = function () {
+        otFiltersService.getSelectedCount = function () {
             return selectedCount;
         };
 
@@ -503,7 +503,7 @@ angular.module('otServices')
          * users wont' see facets from the previous page (remember, this is a service
          * and it maintains its state through pages)
          */
-        cttvFiltersService.reset = function () {
+        otFiltersService.reset = function () {
             for (var key in filtersData) {
                 if (filtersData.hasOwnProperty(key)) {
                     delete filtersData[key];
@@ -516,7 +516,7 @@ angular.module('otServices')
         };
 
 
-        cttvFiltersService.update = function () {
+        otFiltersService.update = function () {
             update();
         };
 
@@ -524,8 +524,8 @@ angular.module('otServices')
         /**
          * Export the isSelected function
          */
-        cttvFiltersService.isSelected = isSelected;
+        otFiltersService.isSelected = isSelected;
 
 
-        return cttvFiltersService;
+        return otFiltersService;
     }]);

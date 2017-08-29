@@ -5,7 +5,7 @@ angular.module('otControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', 'otUtils', 'otAPIservice', 'cttvFiltersService', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otAPIservice, cttvFiltersService, otDictionary, otLocationState, otConfig) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', 'otUtils', 'otAPIservice', 'otFiltersService', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otAPIservice, otFiltersService, otDictionary, otLocationState, otConfig) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -38,16 +38,16 @@ angular.module('otControllers')
         // filters
 
         // reset the filters when loading a new page so we don't see the filters from the previous page...
-        cttvFiltersService.reset();
+        otFiltersService.reset();
 
         // Set page filters: this defines the order in which the facets are going to be displayed
         // as per config JSON
-        cttvFiltersService.pageFacetsStack(otConfig.targetAssociationsFacets.facets);
+        otFiltersService.pageFacetsStack(otConfig.targetAssociationsFacets.facets);
 
         // state we want to export to/from the URL
         var stateId = 'view';
         var cancersExcId = 'cancers';
-        var facetsId = cttvFiltersService.stateId;
+        var facetsId = otFiltersService.stateId;
 
 
         /*
@@ -135,7 +135,7 @@ angular.module('otControllers')
                         $scope.n.diseases = resp.body.total;
 
                         // Update the facets
-                        cttvFiltersService.updateFacets(resp.body.facets, otConfig.targetAssociationsFacets.count);
+                        otFiltersService.updateFacets(resp.body.facets, otConfig.targetAssociationsFacets.count);
                     } else {
                         // Check if there is a profile page
                         var profileOpts = {
