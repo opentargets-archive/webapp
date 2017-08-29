@@ -3,7 +3,7 @@ angular.module('otControllers')
     /**
      * Simple controller to expose the current page to the feedback button controller
      */
-    .controller('FeedbackCtrl', ['$scope', '$location', function ($scope, $location) {
+    .controller('FeedbackController', ['$scope', '$location', function ($scope, $location) {
         'use strict';
         // expose the location;
         // note that exposing the page as $location.absUrl() does not work as that would not update when URL changes
