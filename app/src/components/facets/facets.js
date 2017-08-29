@@ -1,3 +1,11 @@
+// TODO: Note the following eslint rules are disabled for this file
+// temporarily, since the facets are being worked on in a separate branch
+/* eslint-disable angular/file-name */
+/* eslint-disable angular/directive-name */
+/* eslint-disable angular/directive-restrict */
+/* eslint-disable angular/component-limit */
+/* eslint-disable angular/module-name */
+
 /**
  * Module for all general/common facets directives
  */
