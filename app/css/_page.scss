@@ -465,7 +465,7 @@ body{
 /*
  * Container for the social media icons / follow us thingy
  */
-.cttv-social-panel {
+.ot-social-panel {
     position: fixed;
     top: 50%;
     border-top: 1px solid #fff;
@@ -481,7 +481,7 @@ body{
     cursor: pointer;
 
 
-    .cttv-social-panel-item {
+    .ot-social-panel-item {
         width: 30px;
         height: 30px;
         color: #FFF;
@@ -491,7 +491,7 @@ body{
         padding-top: 6px;
     }
 
-    .cttv-social-panel-follow {
+    .ot-social-panel-follow {
         background: $secondary-color;
         color: #FFF;
         min-width:90px;
@@ -510,21 +510,21 @@ body{
 /*
  * The linkedin icon block
  */
-.cttv-social-panel-linkedin{
+.ot-social-panel-linkedin{
     background: #0077B5;
     &:after {
         content: "\f0e1";
     };
 }
 
-.cttv-social-panel-twitter{
+.ot-social-panel-twitter{
     background: #00ACED;
     &:after {
         content: "\f099";
     };
 }
 
-.cttv-social-panel-facebook{
+.ot-social-panel-facebook{
     background: #4867AA;
     &:after {
         content: "\f09a";
