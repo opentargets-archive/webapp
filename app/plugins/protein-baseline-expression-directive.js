@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('proteinBaselineExpression', ['$log', function ($log) {
+    .directive('proteinBaselineExpression', [function () {
         'use strict';
 
         return {

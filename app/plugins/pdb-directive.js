@@ -79,7 +79,7 @@ angular.module('plugins')
                         .attr('type', 'radio')
                         .attr('name', 'colorBy')
                         .attr('value', 'Structure')
-                        .on('change', function (v) {
+                        .on('change', function () {
                             scope.viewer.clear();
                             scope.viewer.cartoon('protein', scope.structure, {
                                 color: pv.color.ssSuccession()

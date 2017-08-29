@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('targetPathways', ['$log', '$http', '$q', function ($log, $http, $q) {
+    .directive('targetPathways', ['$http', '$q', function ($http, $q) {
         'use strict';
 
         // Container for the spinner
@@ -12,7 +12,7 @@ angular.module('plugins')
                 target: '=',
                 width: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope, element) {
                 var w = scope.width - 30;
                 var h = 700;
                 var currentPathwayId;

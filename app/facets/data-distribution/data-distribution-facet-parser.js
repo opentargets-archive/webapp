@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('dataDistributionFacetParser', ['otConsts', function (otConsts) {
+    .factory('dataDistributionFacetParser', ['otConsts', 'cttvFiltersService', function (otConsts, cttvFiltersService) {
         'use strict';
 
 
@@ -21,25 +21,8 @@ angular.module('facets')
          *
          * It returns an Array of filters.
          */
-        parser.parse = function (config, data, countsToUse, options, isSelected) {
+        parser.parse = function (config, data) {
             // array of filters
-            /* config.filters = data.buckets.map(function (obj) {
-                    var conf = {};
-                    conf.key = obj.key;
-                    conf.label = obj.label;
-                    conf.count = obj[countsToUse].value;
-                    conf.selected = isSelected(collection, obj.key);
-                    conf.facet = collection;
-                    conf.collection = null;
-                    if (obj.target_class) {
-                        conf.collection = {
-                            filters: parser.parse(otConsts.TARGET_CLASS, obj.target_class, countsToUse, undefined, isSelected)
-                        }
-                    }
-                    return conf;
-                });
-
-            return config;*/
 
             // TODO:
             // this is not gonna work now!

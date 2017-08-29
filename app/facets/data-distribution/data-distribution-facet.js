@@ -159,9 +159,9 @@ angular.module('facets')
                 var init = function () {
                     data = scope.data;
 
-                    margin = {top: 20, right: 10, bottom: 20, left: 10},
-                    width = elem[0].childNodes[0].offsetWidth - margin.left - margin.right, // initialize to the full div width
-                    height = 80 - margin.top - margin.bottom,
+                    margin = {top: 20, right: 10, bottom: 20, left: 10};
+                    width = elem[0].childNodes[0].offsetWidth - margin.left - margin.right; // initialize to the full div width
+                    height = 80 - margin.top - margin.bottom;
                     barWidth = width / data.length;
 
                     tick = 1 / data.length;
