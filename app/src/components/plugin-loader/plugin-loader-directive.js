@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('pluginLoader', ['$compile', '$timeout', 'otLazy', '$q', '$analytics', function ($compile, $timeout, otLazy, $q, $analytics) {
+    .directive('otPluginLoader', ['$compile', '$timeout', 'otLazy', '$q', '$analytics', function ($compile, $timeout, otLazy, $q, $analytics) {
         return {
             restrict: 'E',
             scope: {

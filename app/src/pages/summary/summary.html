@@ -8,9 +8,9 @@
 
             <div ng-repeat="section in sections">
                 <h3 class="summary-section-header">{{section.heading}}</h3>
-                <plugin-loader target="targets" associations="associations" visible="true" plugin="section.element"
+                <ot-plugin-loader target="targets" associations="associations" visible="true" plugin="section.element"
                                dependencies="section.dependencies" page="summary" track="section.track"
-                               label="section.name"></plugin-loader>
+                               label="section.name"></ot-plugin-loader>
             </div>
 
             <!-- Associations section -->
@@ -28,9 +28,9 @@
             <!-- interactions section -->
             <!--<div>-->
                 <!--<h3>Interactions between {{targets.length}} targets</h3>-->
-                <!--<plugin-loader target="targets" associations="associations" plugin="interactionsViewerPlugin.element" visible="true"-->
+                <!--<ot-plugin-loader target="targets" associations="associations" plugin="interactionsViewerPlugin.element" visible="true"-->
                                <!--dependencies="interactionsViewerPlugin.dependencies" page="multiple-targets-summary" waitfor="interactionsViewerPlugin.waitfor"-->
-                               <!--track="false"></plugin-loader>-->
+                               <!--track="false"></ot-plugin-loader>-->
             <!--</div>-->
 
         </div>
