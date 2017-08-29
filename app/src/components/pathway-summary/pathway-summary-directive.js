@@ -1,6 +1,6 @@
 angular.module('otDirectives')
 
-    .directive('pathwaySummary', ['$timeout', '$http', function ($timeout, $http) {
+    .directive('otPathwaySummary', ['$timeout', '$http', function ($timeout, $http) {
         'use strict';
 
         return {
