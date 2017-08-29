@@ -328,7 +328,7 @@ angular.module('otControllers')
                     row.push(item.disease.efo_info.label);
 
                     // Variant
-                    var mut = '<a class=\'cttv-external-link\' href=\'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>' + item.variant.id.split('/').pop() + '</a>';
+                    var mut = '<a class=\'ot-external-link\' href=\'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>' + item.variant.id.split('/').pop() + '</a>';
                     row.push(mut);
 
                     // variant type
@@ -337,15 +337,15 @@ angular.module('otControllers')
 
                     // evidence source
                     if (item.sourceID === otConsts.dbs.PHEWAS_23andme) {
-                        row.push('<a class=\'cttv-external-link\' href=\'https://test-rvizapps.biogen.com/23andmeDev/\' target=\'_blank\'>'
+                        row.push('<a class=\'ot-external-link\' href=\'https://test-rvizapps.biogen.com/23andmeDev/\' target=\'_blank\'>'
                             + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
                     } else if (item.sourceID === otConsts.dbs.PHEWAS) {
-                        row.push('<a class=\'cttv-external-link\' href=\'https://phewascatalog.org/phewas\' target=\'_blank\'>'
+                        row.push('<a class=\'ot-external-link\' href=\'https://phewascatalog.org/phewas\' target=\'_blank\'>'
                             + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
                     } else {
-                        row.push('<a class=\'cttv-external-link\' href=\'https://www.ebi.ac.uk/gwas/search?query=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>'
+                        row.push('<a class=\'ot-external-link\' href=\'https://www.ebi.ac.uk/gwas/search?query=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>'
                             + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
                     }
@@ -498,9 +498,9 @@ angular.module('otControllers')
                     if (checkPath(item, 'variant.id') && item.variant.id) {
                         var rsId = item.variant.id.split('/').pop();
                         if (rsId.indexOf('rs') === 0) {
-                            mut = '<a class=\'cttv-external-link\' href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + rsId + ' target=_blank>' + rsId + '</a>';
+                            mut = '<a class=\'ot-external-link\' href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + rsId + ' target=_blank>' + rsId + '</a>';
                         } else if (rsId.indexOf('RCV') === 0) {
-                            mut = '<a class=\'cttv-external-link\' href=https://www.ncbi.nlm.nih.gov/clinvar/' + rsId + '/ target=_blank>' + rsId + '</a>';
+                            mut = '<a class=\'ot-external-link\' href=https://www.ncbi.nlm.nih.gov/clinvar/' + rsId + '/ target=_blank>' + rsId + '</a>';
                         } else {
                             mut = rsId;
                         }
@@ -533,7 +533,7 @@ angular.module('otControllers')
 
                     // evidence source
                     if (item.type === 'genetic_association' && checkPath(item, 'evidence.variant2disease')) {
-                        row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.variant2disease.urls[0].url + '\' target=_blank>' + item.evidence.variant2disease.urls[0].nice_name + '</a>');
+                        row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.variant2disease.urls[0].url + '\' target=_blank>' + item.evidence.variant2disease.urls[0].nice_name + '</a>');
                     } else {
                         // TODO: Genomics England URLs are wrong, so (hopefully temporarily) we need to hack them in the UI
                         // TODO: We can't use otConsts.dbs.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
@@ -541,9 +541,9 @@ angular.module('otControllers')
                             item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
                         }
                         if (db === otConsts.dbs.GENE_2_PHENOTYPE) {
-                            row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>Further details in Gene2Phenotype database</a>');
+                            row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>Further details in Gene2Phenotype database</a>');
                         } else {
-                            row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>' + item.evidence.urls[0].nice_name + '</a>');
+                            row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>' + item.evidence.urls[0].nice_name + '</a>');
                         }
                     }
 
@@ -696,7 +696,7 @@ angular.module('otControllers')
                     row.push(item.disease.efo_info.label);
 
                     // overview
-                    row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=\'_blank\'>' + item.evidence.urls[0].nice_name + '</a>');
+                    row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=\'_blank\'>' + item.evidence.urls[0].nice_name + '</a>');
 
                     // activity
                     row.push(otDictionary[item.target.activity.toUpperCase()] || otClearUnderscoresFilter(item.target.activity)); // "up_or_down"->"unclassified" via dictionary
@@ -830,7 +830,7 @@ angular.module('otControllers')
                     // activity
                     var activityUrl = item.evidence.urls[0].url;
                     var activity = item.target.activity.split('_').shift();
-                    row.push('<a class=\'cttv-external-link\' href=\'' + activityUrl + '\' target=\'_blank\'>' + activity + '</a>');
+                    row.push('<a class=\'ot-external-link\' href=\'' + activityUrl + '\' target=\'_blank\'>' + activity + '</a>');
 
                     // tissue / cell
                     row.push(item.disease.biosample.name);
@@ -849,7 +849,7 @@ angular.module('otControllers')
 
                     // experiment overview
                     var expOverview = (item.evidence.urls[2] || item.evidence.urls[0]).url || otDictionary.NA;
-                    row.push('<a class=\'cttv-external-link\' href=\'' + expOverview + '\' target=\'_blank\'>' + (item.evidence.experiment_overview || 'Experiment overview and raw data') + '</a>');
+                    row.push('<a class=\'ot-external-link\' href=\'' + expOverview + '\' target=\'_blank\'>' + (item.evidence.experiment_overview || 'Experiment overview and raw data') + '</a>');
 
 
                     // publications
@@ -1013,7 +1013,7 @@ angular.module('otControllers')
                     }
 
                     // col 5: evidence source
-                    row.push('<a href=\'' + item.evidence.urls[0].url + '\' target=\'_blank\' class=\'cttv-external-link\'>' + item.evidence.urls[0].nice_name + '</a>');
+                    row.push('<a href=\'' + item.evidence.urls[0].url + '\' target=\'_blank\' class=\'ot-external-link\'>' + item.evidence.urls[0].nice_name + '</a>');
 
                     // cols 6: publications
                     var refs = [];

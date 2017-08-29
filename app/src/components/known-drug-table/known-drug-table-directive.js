@@ -131,7 +131,7 @@ angular.module('otDirectives')
                                 row.push('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');
 
                                 // 2: drug
-                                row.push('<a class=\'cttv-external-link\' href=\'' + item.evidence.target2drug.urls[0].url + '\' target=\'_blank\'>' +
+                                row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.target2drug.urls[0].url + '\' target=\'_blank\'>' +
                             item.drug.molecule_name +
                             '</a>');
 
@@ -167,7 +167,7 @@ angular.module('otDirectives')
 
                                 if (item.evidence.target2drug.urls && item.evidence.target2drug.urls[2]) {
                                     var extLink = item.evidence.target2drug.urls[2];
-                                    action += '<br /><span><a class=\'cttv-external-link\' target=_blank href=' + extLink.url + '>' + extLink.nice_name  + '</a></span>';
+                                    action += '<br /><span><a class=\'ot-external-link\' target=_blank href=' + extLink.url + '>' + extLink.nice_name  + '</a></span>';
                                 }
 
                                 row.push(action);
@@ -204,7 +204,7 @@ angular.module('otDirectives')
                                 // 8: target context / protein complex members
 
                                 // 10: evidence source
-                                row.push('Curated from <br /><a class=\'cttv-external-link\' href=\'' +
+                                row.push('Curated from <br /><a class=\'ot-external-link\' href=\'' +
                             item.evidence.drug2clinic.urls[0].url +
                             '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
 

@@ -231,12 +231,12 @@ angular.module('otServices')
                 pub += '<span class=\'badge\'>' + pmidsList.length + '</span>';
                 pub += (pmidsList.length === 1 ? ' publication' : ' publications');
                 if (pmidsList.length === 1) {
-                    pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/abstract/MED/' + pmidsList[0] + '">' + pub + '</a>';
+                    pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/abstract/MED/' + pmidsList[0] + '">' + pub + '</a>';
                 } else {
                     var pmids = pmidsList.map(function (ref) {
                         return 'EXT_ID:' + ref;
                     }).join(' OR ');
-                    pub = '<a class="cttv-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
+                    pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
                 }
                 pub += '</span>';
             }
