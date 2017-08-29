@@ -2,7 +2,7 @@
 
 angular.module('otServices')
 
-    .factory('lazy', [function () {
+    .factory('otLazy', [function () {
         'use strict';
 
         var ll = {

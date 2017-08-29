@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('pluginLoader', ['$compile', '$timeout', 'lazy', '$q', '$analytics', function ($compile, $timeout, lazy, $q, $analytics) {
+    .directive('pluginLoader', ['$compile', '$timeout', 'otLazy', '$q', '$analytics', function ($compile, $timeout, otLazy, $q, $analytics) {
         return {
             restrict: 'E',
             scope: {
@@ -57,7 +57,7 @@ angular.module('plugins')
                         var deps = scope.dependencies;
                         var loadedDeps = [];
                         for (var dep in deps) {
-                            loadedDeps.push(lazy.import(dep));
+                            loadedDeps.push(otLazy.import(dep));
                         }
 
                         // The component may not be able to display when the container is not visible, so we wait until it is
