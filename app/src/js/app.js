@@ -1,5 +1,5 @@
 function initApp (deps) {
-    var app = angular.module('cttvApp', deps);
+    var app = angular.module('otApp', deps);
 
     // app.config([localStorageServiceProvider, function (localStorageServiceProvider) {
     //   localStorageServiceProvider
@@ -139,7 +139,7 @@ angular.element(document).ready(
                 configSystemjs(response.data, $q).then(function () {
                     var app = initApp(deps);
                     app.constant('initConfig', response.data);
-                    angular.bootstrap(document, ['cttvApp']);
+                    angular.bootstrap(document, ['otApp']);
                 });
             }
         );
