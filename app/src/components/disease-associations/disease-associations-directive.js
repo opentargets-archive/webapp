@@ -321,9 +321,7 @@ angular.module('otDirectives')
         // }
 
         return {
-
             restrict: 'E',
-
             scope: {
                 filename: '=',
                 targets: '=',
@@ -331,13 +329,7 @@ angular.module('otDirectives')
                 filters: '=',
                 stateId: '@?'
             },
-
-            template: '<div>'
-        + '  <ot-matrix-table></ot-matrix-table>'
-        + '  <ot-matrix-legend colors="legendData"></ot-matrix-legend>'
-        + '  <ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend>'
-        + '</div>',
-
+            templateUrl: 'src/components/disease-associations/disease-associations.html',
             link: function (scope, elem) {
             // TODO: initialize the state if we enable this feature
             // otLocationState.init();
