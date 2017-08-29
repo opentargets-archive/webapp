@@ -154,10 +154,9 @@ var webappFiles = {
             // 'app/bower_components/bootstrap/dist/css/bootstrap.css',
             // 'app/bower_components/components-font-awesome/css/font-awesome.css',
             // 'app/css/app.css',
-            'app/css/index.scss',
+            'app/css/index.scss'
             // 'app/vendor/datatables/buttons.dataTables.min.css'
         ]
-    },
-
+    }
 };
 module.exports = exports = webappFiles;
