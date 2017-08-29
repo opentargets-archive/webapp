@@ -86,7 +86,7 @@ function initApp (deps) {
                 })
                 .when('/outreach', {
                     templateUrl: 'src/pages/outreach/outreach.html',
-                    controller: 'OutreachCtrl'
+                    controller: 'OutreachController'
                 })
                 .otherwise({
                     redirectTo: '/'
