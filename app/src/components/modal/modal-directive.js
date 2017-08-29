@@ -3,7 +3,6 @@ angular.module('otDirectives')
         'use strict';
 
         return {
-
             restrict: 'AE',
             transclude: true,
             scope: {
@@ -16,21 +15,7 @@ angular.module('otDirectives')
                 onOk: '&',          // OK callback [ function ]
                 onCancel: '&'       // cancel callback [function ]
             },
-            template: // the close button
-                      '<div class="modal-close-btn" ng-if="hasClose" ng-click="dismiss()">'
-                     + '    <span class="fa fa-circle"></span><span class="fa fa-times"></span>'
-                     + '</div>'
-                     // the header
-                     + '<div ng-if="header" class="modal-header"><h4>{{header}}</h4></div>'
-                     // the body:
-                     // the modal-body-content tag is only so it can be selected and replaced easily
-                     + '<div class="modal-body"><modal-body-content></modal-body-content></div>'
-                     // the footer
-                     + '<div ng-if="hasOk || hasCancel" class="modal-footer">'
-                     + '    <button ng-if="hasCancel" class="btn btn-warning" type=button ng-click="dismiss()">{{cancelLabel}}</button>'
-                     + '    <button ng-if="hasOk" class="btn btn-primary" type=button ng-click="ok()">{{okLabel}}</button>'
-                     + '</div>',
-
+            templateUrl: 'src/components/modal/modal.html',
             link: function (scope, elem, attrs, ctrl, transclude) {
                 transclude(scope.$parent, function (clone) {
                     elem.find('modal-body-content').replaceWith(clone);
