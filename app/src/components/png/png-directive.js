@@ -40,14 +40,14 @@ angular.module('cttvDirectives')
                         $uibModal.open({
                             animation: true,
                             // template: "<div class=modal-header>PNG scale factor</div><div class='modal-body modal-body-center'><span class=png-scale-factor-selection><input type=radio name=pngScale value=1 checked ng-model='$parent.currScale'> 1x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=2 ng-model='$parent.currScale'> 2x</span><span class=png-scale-factor-selection><input type=radio name=pngScale value=3 ng-model='$parent.currScale'> 3x</span></div><div class=modal-footer><button class='btn btn-primary' type=button ng-click='export(this)' onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
-                            template: '<cttv-modal header="Download as PNG" on-ok="export()" has-ok="true" ok-label="Download" has-cancel="true">'
+                            template: '<ot-modal header="Download as PNG" on-ok="export()" has-ok="true" ok-label="Download" has-cancel="true">'
                                           + '<div class="modal-body-center">'
                                               + '<p>Select scale factor for the image</p>'
                                               + '<span class="png-scale-factor-selection"><input type="radio" name="pngScale" value="1" ng-model="$parent.currScale"> 1x</span>'
                                               + '<span class="png-scale-factor-selection"><input type="radio" name="pngScale" value="2" ng-model="$parent.currScale"> 2x</span>'
                                               + '<span class="png-scale-factor-selection"><input type="radio" name="pngScale" value="3" ng-model="$parent.currScale"> 3x</span>'
                                           + '</div>'
-                                      + '</cttv-modal>',
+                                      + '</ot-modal>',
                             size: 'sm',
                             scope: scope
                         });
@@ -68,7 +68,7 @@ angular.module('cttvDirectives')
                                         $uibModal.open({
                                             animation: true,
                                             // template: "<div class='modal-header'>Image too large</div><div class=modal-body>The image you are trying to export is too large. Reduce the number of elements and try again.</div><div class=modal-footer><button class='btn btn-primary' type=button onclick='angular.element(this).scope().$dismiss()'>OK</button></div>",
-                                            template: '<cttv-modal header=\'Image too large\' has-ok=\'true\'>The image you are trying to export is too large. Reduce the number of elements or scale factor and try again.</cttv-modal>',
+                                            template: '<ot-modal header=\'Image too large\' has-ok=\'true\'>The image you are trying to export is too large. Reduce the number of elements or scale factor and try again.</ot-modal>',
                                             size: 'sm'
                                         });
                                     }

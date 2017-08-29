@@ -1,7 +1,7 @@
 /* Services */
 
 angular.module('cttvServices')
-    .factory('cttvModal', [function () {
+    .factory('otModal', [function () {
         var modalService = {};
 
         /* modalService.modalInstance; // the single modal instance?
@@ -9,9 +9,9 @@ angular.module('cttvServices')
     modalService.test = function(){
         $log.log("modal test!");
         $uibModal.open({
-            template: '<cttv-modal header="I am a test modal" on-ok="$uibModalInstance.sayHello()" hasok="true">'
+            template: '<ot-modal header="I am a test modal" on-ok="$uibModalInstance.sayHello()" hasok="true">'
                             +'<p>And this is the content</p>'
-                        +'</cttv-modal>',
+                        +'</ot-modal>',
             size: "sm",
             // controller: ['$uibModalInstance',
             //                 function($uibModalInstance){

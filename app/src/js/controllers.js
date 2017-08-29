@@ -26,11 +26,11 @@ angular.module('cttvControllers')
             // Putting this here just as an example/placeholder for now
             $uibModal.open({
                 animation: true,
-                template: '<cttv-modal header="API error" has-close="true">'
+                template: '<ot-modal header="API error" has-close="true">'
                                 +'<p>A problem retrieving data has occurred. Please try to reload the page.<br />'
                                 +'If the problem persists please contact our <a target=_blank href="mailto:support@targetvalidation.org?Subject=Open Targets Platform - help request">support team</a></p>'
                                 +'<div><button class="btn btn-default btn-sm" ng-click="reloadPage()">Reload</button></div>'
-                          +'</cttv-modal>',
+                          +'</ot-modal>',
             });
             */
         });

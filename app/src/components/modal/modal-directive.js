@@ -1,5 +1,5 @@
 angular.module('cttvDirectives')
-    .directive('cttvModal', [function () {
+    .directive('otModal', [function () {
         'use strict';
 
         return {
