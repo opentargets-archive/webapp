@@ -36,7 +36,8 @@ module.exports = {
         "System": true,
         "marked": true,
         "expressionAtlasHeatmapHighcharts": true,
-        "pv": true
+        "pv": true,
+        "targetGeneTree": true
     },
     "rules": {
         "curly": 2,
