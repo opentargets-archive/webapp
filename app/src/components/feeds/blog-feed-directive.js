@@ -13,21 +13,7 @@ angular.module('otDirectives')
             scope: {
                 limit: '@'
             },
-            template: '<div class="hp-blog-feed">'
-                        + '    <div class="hp-blog-feed-post" ng-repeat="post in posts">'
-                        + '        <h5 class="hp-blog-feed-post-header"><a href="{{post.link}}">'
-                        + '            {{post.title}}'
-                        + '        </a></h5>'
-                        + '        <div class="clearfix text-lowlight">'
-                        + '            <p class="pull-left">By {{post.author.name}}</p>' // author
-                        + '            <p class="pull-right">{{post.pubDate.getDate()}} {{post.pubDate.getMonth() | otMonthToString}} {{post.pubDate.getFullYear()}}</p>' // date
-                        + '        </div>'
-                        + '        <div ng-bind-html="post.desc | otStripTags | otEllipseText:130"></div>' // long description
-                        + '        <div class="text-lowlight text-small" ng-if="post.tags.length>0">'
-                        + '            <span class="fa fa-tags"></span> <span ng-repeat="tag in post.tags">{{tag.name}}<span ng-if="!$last">, </span></span>'
-                        + '        </div>' // tags
-                        + '    </div>'
-                        + '</div>',
+            templateUrl: 'src/components/feeds/blog-feed.html',
             link: function (scope) {
                 scope.limit = scope.limit || 'all';
                 var url = ghost.url.api('posts', {
