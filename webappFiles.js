@@ -119,7 +119,6 @@ var webappFiles = {
             'app/src/components/masthead/masthead-notifications-menu-directive.js',
             'app/src/components/sticky-scroller/sticky-scroller-directive.js',
             'app/src/components/modal/modal-directive.js',
-            'app/src/components/slider/slider-directive.js',
             'app/src/components/matrix/matrix-table-directive.js',
             'app/src/components/matrix/matrix-legend-directive.js',
             'app/src/components/md-parser/md-parser-directive.js',
