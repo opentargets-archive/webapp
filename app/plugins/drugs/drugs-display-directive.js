@@ -4,11 +4,6 @@ angular.module('otPlugins')
 
         return {
             restrict: 'E',
-            // template: '<div ng-show="data.length>0">'
-            //         + '    <p>Source: <span ng-repeat="source in sources"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>'
-            //         + '    <ot-known-drug-table target="{{target.id}}" disease="{{disease.efo}}" title="drug" data="data"></ot-known-drug-table>'
-            //         + '</div>'
-            //         + '<div ng-show="data.length==0"><p>No data available</p></div>',
             templateUrl: 'plugins/drugs/drugs-display.html',
             scope: {
                 target: '=',
