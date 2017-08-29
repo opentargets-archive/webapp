@@ -8,9 +8,9 @@ var webappFiles = {
             'bower_components/angulartics/dist/angulartics.min.js',
             'bower_components/angulartics/dist/angulartics-piwik.min.js',
             'bower_components/d3/d3.min.js',
-//            'node_modules/d3-color/build/d3-color.min.js',
-//            'node_modules/d3-interpolate/build/d3-interpolate.min.js',
-//            'node_modules/d3-scale-chromatic/build/d3-scale-chromatic.min.js',
+            // 'node_modules/d3-color/build/d3-color.min.js',
+            // 'node_modules/d3-interpolate/build/d3-interpolate.min.js',
+            // 'node_modules/d3-scale-chromatic/build/d3-scale-chromatic.min.js',
             'bower_components/jquery/dist/jquery.min.js',
             'app/vendor/cola/cola.min.js',
             'app/src/js/angularjs-viewhead.js',
@@ -143,7 +143,7 @@ var webappFiles = {
             // 'app/plugins/proteinFeatures-directive.js',
             // 'app/plugins/protein-baseline-expression-directive.js',
             // 'app/plugins/test-directive.js',
-            'app/plugins/*.js',
+            'app/plugins/*/*.js',
             'app/facets/*/*.js'
         ],
 

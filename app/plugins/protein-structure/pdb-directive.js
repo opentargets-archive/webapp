@@ -15,7 +15,7 @@ angular.module('otPlugins')
             '          <div id="pdb-hamburger-menu"></div>' +
             '     </div>' +
             '</div>',
-            // templateUrl: "plugins/pdb.html",
+            // templateUrl: "plugins/protein-structure/pdb.html",
             scope: {
                 target: '=',
                 width: '='

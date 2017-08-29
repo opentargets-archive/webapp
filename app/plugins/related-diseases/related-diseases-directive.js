@@ -228,7 +228,7 @@ angular.module('otPlugins')
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/related-diseases.html',
+            templateUrl: 'plugins/related-diseases/related-diseases.html',
             scope: {
                 disease: '=',
                 width: '='

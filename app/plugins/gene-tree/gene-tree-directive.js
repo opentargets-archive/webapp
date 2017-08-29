@@ -4,7 +4,7 @@ angular.module('otPlugins')
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/gene-tree.html',
+            templateUrl: 'plugins/gene-tree/gene-tree.html',
 
             scope: {
                 target: '=',

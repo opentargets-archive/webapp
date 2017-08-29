@@ -4,7 +4,7 @@ angular.module('otPlugins')
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/target-features.html',
+            templateUrl: 'plugins/target-features/target-features.html',
             scope: {
                 target: '='
             },

@@ -4,7 +4,7 @@ angular.module('otPlugins')
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/protein-baseline-expression.html',
+            templateUrl: 'plugins/protein-expression/protein-baseline-expression.html',
             scope: {
                 target: '='
             }
