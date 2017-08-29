@@ -72,9 +72,6 @@ angular.module('otServices')
          * param(obj); // returns "datatype:drugs,datatype:literature,datatype:animals,pathways:sdfs"
          */
         otLocationStateService.param = function (obj) {
-            // $log.log("otLocationStateService.param:");
-            // $log.log(obj);
-
             // uses jQuery.param() method
             // $httpParamSerializerJQLike should work the same... but it doesn't and returns parentheses around arrays etc
             // so we stick with jQuery for now
@@ -122,7 +119,6 @@ angular.module('otServices')
          * parseLocationSearch(search) // returns {ftcs:{datatype:["drugs","literature","animals"], pathways:"sdfs"}}
          */
         otLocationStateService.parseLocationSearch = function (search) {
-            // $log.log("parseLocationSearch");
             search = search || $location.search();
             var raw = {};
             // array containing the type of old facets -- TODO: can remove in future when we get rid of backward compatibilty (see comment below)

@@ -101,7 +101,6 @@ angular.module('plugins')
                     }
                     if (Reactome) {
                         clearInterval(centinel);
-                        // $log.log(Reactome);
 
                         var newDiv = document.createElement('div');
                         newDiv.id = 'pathwayDiagramContainer';

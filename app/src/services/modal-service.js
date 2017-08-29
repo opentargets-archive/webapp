@@ -7,7 +7,6 @@ angular.module('otServices')
         /* modalService.modalInstance; // the single modal instance?
     modalService.sayHello  = function(){$log.log("hello world")};
     modalService.test = function(){
-        $log.log("modal test!");
         $uibModal.open({
             template: '<ot-modal header="I am a test modal" on-ok="$uibModalInstance.sayHello()" hasok="true">'
                             +'<p>And this is the content</p>'
@@ -15,7 +14,6 @@ angular.module('otServices')
             size: "sm",
             // controller: ['$uibModalInstance',
             //                 function($uibModalInstance){
-            //                     $log.log($uibModalInstance);
             //                     return $uibModalInstance.dismiss(bob);
             //             }]
         });

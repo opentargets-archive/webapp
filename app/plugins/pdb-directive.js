@@ -167,7 +167,6 @@ angular.module('plugins')
                                             prevPicked = {atom: atom, color: color, node: picked.node()};
 
                                             if (currColor[0] === 1) {
-                                            //   $log.log("setting atom to blue");
                                                 setColorForAtom(picked.node(), atom, 'blue');
                                             } else {
                                                 setColorForAtom(picked.node(), atom, 'red');

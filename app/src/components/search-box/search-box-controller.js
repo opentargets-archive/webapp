@@ -221,7 +221,6 @@ angular.module('otControllers')
          * @params p: extra padding to be added
          */
         $scope.onFocusHandler = function (id, p, mobileonly) {
-            // $log.log("hello");
             if (mobileonly && $window.innerWidth > 768) {
                 return;
             }

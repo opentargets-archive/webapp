@@ -1,9 +1,5 @@
 /* Directives */
 angular.module('otDirectives')
-
-    /*
-    *
-    */
     .directive('otTargetAssociationsTree', ['otAPIservice', 'otConsts', 'otUtils', '$analytics', function (otAPIservice, otConsts, otUtils, $analytics) {
         'use strict';
 
@@ -29,8 +25,6 @@ angular.module('otDirectives')
 
 
             link: function (scope, elem) {
-                // $log.log("tree.link()");
-
                 var currTarget;
                 // legend stuff
                 scope.legendText = 'Score';
@@ -67,7 +61,6 @@ angular.module('otDirectives')
                         method: 'GET',
                         params: opts
                     };
-                    // $log.log(gat);
                     if (!gat) {
                         setTreeView(opts.therapeutic_area);
                     } else {

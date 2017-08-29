@@ -64,7 +64,6 @@ angular.module('otDirectives')
                             }
                             if (Reactome) {
                                 clearInterval(centinel);
-                                // $log.log(Reactome);
 
                                 // var newDiv = document.getElementById("pathwayDiagramContainer");
                                 // newDiv.id = "pathwayDiagramContainer";

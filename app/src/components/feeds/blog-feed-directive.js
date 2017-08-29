@@ -87,7 +87,6 @@ angular.module('otDirectives')
 
 //                     var x2js = new X2JS();
 //                     var feed = x2js.xml_str2json(response.data);
-//                     // $log.log(feed);
 
 //                     // The feed should be already ordered by date, but it seems sometimes it isn't,
 //                     // so for now we sort it; maybe in the future we won't need to... will ask Eliseo about blog pub dates
@@ -106,7 +105,6 @@ angular.module('otDirectives')
 //                 }, function errorCallback(response) {
 //                     // called asynchronously if an error occurs
 //                     // or server returns response with an error status.
-//                     $log.log(response);
 //                 });
 
 //         }

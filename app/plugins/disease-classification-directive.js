@@ -10,7 +10,6 @@ angular.module('plugins')
                 width: '='
             },
             link: function (scope) {
-                // $log.log(scope.disease);
                 $timeout(function () {
                     var container = document.getElementById('ot-efo-graph');
 
