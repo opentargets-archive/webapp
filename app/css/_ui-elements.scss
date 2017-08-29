@@ -206,24 +206,6 @@
     }
 
 
-    cttv-score-presets{
-        .label {
-            font-size: 10px;
-            color: inherit;
-            display:block;
-            font-weight: normal;
-            padding: 0px;
-        }
-
-        .well-sm{
-            padding: 5px 0px;
-            border: none;
-            @include box-shadow( none );
-        }
-    }
-
-
-
     /*
      * Probably deprecated ?
      */
