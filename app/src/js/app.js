@@ -46,7 +46,7 @@ function initApp (deps) {
                 })
                 .when('/summary', {
                     templateUrl: 'src/pages/summary/summary.html',
-                    controller: 'SummaryCtrl'
+                    controller: 'SummaryController'
                 })
 
                 // Docs

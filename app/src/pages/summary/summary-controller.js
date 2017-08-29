@@ -1,7 +1,7 @@
 /* Add to the cttv controllers module */
 angular.module('otControllers')
 
-    .controller('SummaryCtrl', ['$scope', '$location', 'otAPIservice', '$q', 'otConfig', 'otUtils', 'otLoadedLists', function ($scope, $location, otAPIservice, $q, otConfig, otUtils, otLoadedLists) {
+    .controller('SummaryController', ['$scope', '$location', 'otAPIservice', '$q', 'otConfig', 'otUtils', 'otLoadedLists', function ($scope, $location, otAPIservice, $q, otConfig, otUtils, otLoadedLists) {
         'use strict';
 
         // Parse the $location search object to determine which entities we have.
