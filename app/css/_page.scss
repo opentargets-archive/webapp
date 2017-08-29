@@ -425,7 +425,7 @@ body{
 /*
  * Feedback side panel
  */
-.cttv-feedback-button {
+.ot-feedback-button {
 
     position: fixed;
     top: 50%;
@@ -456,7 +456,7 @@ body{
 /*
  * Add the full round corners to the feedback panel when shown on its own
  */
-.cttv-feedback-button-round {
+.ot-feedback-button-round {
     @include border-top-left-radius( 5px );
 }
 
