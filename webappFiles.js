@@ -88,7 +88,7 @@ var webappFiles = {
             'app/src/components/target-associations/target-associations-table-directive.js',
             'app/src/components/target-associations/target-associations-tree-directive.js',
             'app/src/components/target-associations/target-associations-bubbles-directive.js',
-            'app/src/components/disease-associations/disease-associations-table-directive.js',
+            'app/src/components/disease-associations/disease-associations-directive.js',
             'app/src/components/filter-by-file-targets/filter-by-file-targets-directive.js',
             'app/src/components/efo-graph/efo-graph-directive.js',
             'app/src/components/drug-summary/drug-summary-directive.js',
