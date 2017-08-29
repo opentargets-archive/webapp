@@ -141,6 +141,7 @@ module.exports = {
         "angular/controller-as-route": 0,
         // TODO: the following should be reenabled when refactor complete
         "angular/timeout-service": 0,
+        "angular/interval-service": 0,
         "angular/document-service": 0,
         "angular/window-service": 0,
         "angular/angularelement": 0,
