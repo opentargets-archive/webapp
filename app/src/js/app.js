@@ -20,7 +20,7 @@ function initApp (deps) {
                 })
                 .when('/target/:id/associations', {
                     templateUrl: 'src/pages/target-associations/target-associations.html',
-                    controller: 'targetAssociationsCtrl',
+                    controller: 'TargetAssociationsController',
                     reloadOnSearch: false
                 })
                 .when('/disease/:id/associations', {

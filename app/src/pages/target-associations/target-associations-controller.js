@@ -5,7 +5,7 @@ angular.module('otControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', 'otUtils', 'otAPIservice', 'otFiltersService', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otAPIservice, otFiltersService, otDictionary, otLocationState, otConfig) {
+    .controller('TargetAssociationsController', ['$scope', '$location', 'otUtils', 'otAPIservice', 'otFiltersService', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otAPIservice, otFiltersService, otDictionary, otLocationState, otConfig) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
