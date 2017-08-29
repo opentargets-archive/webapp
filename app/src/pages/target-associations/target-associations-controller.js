@@ -5,7 +5,7 @@ angular.module('otControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('targetAssociationsCtrl', ['$scope', '$location', 'otUtils', 'otAPIservice', 'otFiltersService', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otAPIservice, otFiltersService, otDictionary, otLocationState, otConfig) {
+    .controller('targetAssociationsCtrl', ['$scope', '$location', 'otUtils', 'otApi', 'otFacetsFilters', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otApi, otFacetsFilters, otDictionary, otLocationState, otConfig) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -38,16 +38,16 @@ angular.module('otControllers')
         // filters
 
         // reset the filters when loading a new page so we don't see the filters from the previous page...
-        otFiltersService.reset();
+        otFacetsFilters.reset();
 
         // Set page filters: this defines the order in which the facets are going to be displayed
         // as per config JSON
-        otFiltersService.pageFacetsStack(otConfig.targetAssociationsFacets.facets);
+        otFacetsFilters.pageFacetsStack(otConfig.targetAssociationsFacets.facets);
 
         // state we want to export to/from the URL
         var stateId = 'view';
         var cancersExcId = 'cancers';
-        var facetsId = otFiltersService.stateId;
+        var facetsId = otFacetsFilters.stateId;
 
 
         /*
@@ -113,13 +113,13 @@ angular.module('otControllers')
                 direct: true,
                 size: 1
             };
-            opts = otAPIservice.addFacetsOptions(filters, opts);
+            opts = otApi.addFacetsOptions(filters, opts);
             var queryObject = {
                 method: 'GET',
                 params: opts
             };
 
-            otAPIservice.getAssociations(queryObject)
+            otApi.getAssociations(queryObject)
                 .then(function (resp) {
                     $scope.search.total = resp.body.total;
                     if (resp.body.total) {
@@ -132,7 +132,7 @@ angular.module('otControllers')
                         $scope.n.diseases = resp.body.total;
 
                         // Update the facets
-                        otFiltersService.updateFacets(resp.body.facets, otConfig.targetAssociationsFacets.count);
+                        otFacetsFilters.updateFacets(resp.body.facets, otConfig.targetAssociationsFacets.count);
                     } else {
                         // Check if there is a profile page
                         var profileOpts = {
@@ -141,13 +141,13 @@ angular.module('otControllers')
                                 target_id: $scope.search.query
                             }
                         };
-                        otAPIservice.getTarget(profileOpts)
+                        otApi.getTarget(profileOpts)
                             .then(function (profileResp) {
                                 $scope.search.label = profileResp.body.approved_symbol;
                             });
                     }
                 },
-                otAPIservice.defaultErrorHandler);
+                otApi.defaultErrorHandler);
         }
 
 

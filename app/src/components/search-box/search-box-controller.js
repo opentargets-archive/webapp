@@ -6,7 +6,7 @@
  */
 angular.module('otControllers')
 
-    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otAPIservice', 'otConsts', '$q', 'otUtils', 'otLoadedLists', function ($scope, $location, $window, $document, $element, otAPIservice, otConsts, $q, otUtils, otLoadedLists) {
+    .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otApi', 'otConsts', '$q', 'otUtils', 'otLoadedLists', function ($scope, $location, $window, $document, $element, otApi, otConsts, $q, otUtils, otLoadedLists) {
         var APP_SEARCH_URL = 'search';
         var APP_EVIDENCE_URL = 'evidence';
         var APP_AUTOCOMPLETE_URL = 'autocomplete';
@@ -79,7 +79,7 @@ angular.module('otControllers')
 
                 // fire the typeahead search
                 return searchPromise.then(function () {
-                    return otAPIservice.getQuickSearch(
+                    return otApi.getQuickSearch(
                         {
                             params: {
                                 q: $scope.search.query.text,
@@ -96,7 +96,7 @@ angular.module('otControllers')
                                 if (besthit) {
                                     otUtils.addMatchedBy(besthit);
                                 }
-                            }, otAPIservice.defaultErrorHandler
+                            }, otApi.defaultErrorHandler
                         )
                         .finally(function () {
                             $scope.search.progress = false;

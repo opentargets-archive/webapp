@@ -1,6 +1,6 @@
 angular.module('facets')
 
-    .factory('dataDistributionFacetParser', ['otConsts', 'otFiltersService', function (otConsts, otFiltersService) {
+    .factory('dataDistributionFacetParser', ['otConsts', 'otFacetsFilters', function (otConsts, otFacetsFilters) {
         'use strict';
 
 
@@ -27,7 +27,7 @@ angular.module('facets')
             // TODO:
             // this is not gonna work now!
             // NEED TO CHANGE all facets to return a config object rathen than just the list of filters...
-            var search = otFiltersService.parseURL();
+            var search = otFacetsFilters.parseURL();
             search.score_min = search.score_min || [otConsts.defaults.SCORE_MIN.toFixed(2)];
             search.score_max = search.score_max || [otConsts.defaults.SCORE_MAX.toFixed(2)];
             search.score_str = search.score_str || [otConsts.defaults.STRINGENCY];

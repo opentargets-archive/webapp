@@ -5,7 +5,7 @@ angular.module('otDirectives')
 /**
 * Matrix (heatmap) view for target associations
 */
-    .directive('otTargetAssociationsTable', ['otAPIservice', 'otUtils', 'otDictionary', 'otConsts', '$q', '$analytics', function (otAPIservice, otUtils, otDictionary, otConsts, $q, $analytics) {
+    .directive('otTargetAssociationsTable', ['otApi', 'otUtils', 'otDictionary', 'otConsts', '$q', '$analytics', function (otApi, otUtils, otDictionary, otConsts, $q, $analytics) {
         'use strict';
 
         var whoiam = 'table';
@@ -122,13 +122,13 @@ angular.module('otDirectives')
                         draw: draw
                     };
 
-                    opts = otAPIservice.addFacetsOptions(filters, opts);
+                    opts = otApi.addFacetsOptions(filters, opts);
                     var queryObject = {
                         method: 'GET',
                         params: opts
                     };
 
-                    otAPIservice.getAssociations(queryObject)
+                    otApi.getAssociations(queryObject)
                         .then(function (resp) {
                             var dtData = parseServerResponse(resp.body.data);
                             var o = {
@@ -384,12 +384,12 @@ angular.module('otDirectives')
                         facets: false,
                         size: 1
                     };
-                    optsPreFlight = otAPIservice.addFacetsOptions(scope.facets, optsPreFlight);
+                    optsPreFlight = otApi.addFacetsOptions(scope.facets, optsPreFlight);
                     var queryObject = {
                         method: 'GET',
                         params: optsPreFlight
                     };
-                    otAPIservice.getAssociations(queryObject)
+                    otApi.getAssociations(queryObject)
                         .then(function (resp) {
                             var total = resp.body.total;
 
@@ -410,13 +410,13 @@ angular.module('otDirectives')
                                     fields: ['disease.efo_info.label', 'association_score.overall', 'association_score.datatypes.genetic_association', 'association_score.datatypes.somatic_mutation', 'association_score.datatypes.known_drug', 'association_score.datatypes.affected_pathway', 'association_score.datatypes.rna_expression', 'association_score.datatypes.literature', 'association_score.datatypes.animal_model', 'disease.efo_info.therapeutic_area.labels'],
                                     from: from
                                 };
-                                opts = otAPIservice.addFacetsOptions(scope.facets, opts);
+                                opts = otApi.addFacetsOptions(scope.facets, opts);
 
                                 var queryObject = {
                                     method: 'GET',
                                     params: opts
                                 };
-                                return otAPIservice.getAssociations(queryObject)
+                                return otApi.getAssociations(queryObject)
                                     .then(function (resp) {
                                         var moreText = resp.body;
                                         if (columnsNumberOk(moreText, opts.fields.length)) {
@@ -456,7 +456,7 @@ angular.module('otDirectives')
                             // hiddenElement.download = scope.filename + ".csv";
                             // hiddenElement.click();
                             });
-                        }, otAPIservice.defaultErrorHandler);
+                        }, otApi.defaultErrorHandler);
                 };
 
                 scope.$watchGroup(['facets', 'target', 'active'], function () {

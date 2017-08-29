@@ -7,7 +7,7 @@
 * */
 angular.module('otServices')
 
-    .factory('otTEPs', [function () {
+    .factory('otTeps', [function () {
         'use strict';
 
         return {

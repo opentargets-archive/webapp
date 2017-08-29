@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('otTargetListUpload', ['otAPIservice', 'otLoadedLists', 'otConfig', function (otAPIservice, otLoadedLists, otConfig) {
+    .directive('otTargetListUpload', ['otApi', 'otLoadedLists', 'otConfig', function (otApi, otLoadedLists, otConfig) {
         'use strict';
 
         return {
@@ -76,7 +76,7 @@ angular.module('otDirectives')
                         params: opts
                     };
 
-                    return otAPIservice.getBestHitSearch(queryObject)
+                    return otApi.getBestHitSearch(queryObject)
                         .then(function (resp) {
                             var listName = otLoadedLists.parseBestHitSearch(name, resp.body);
 

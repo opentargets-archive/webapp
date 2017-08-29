@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('genomeBrowser', ['otAPIservice', 'otUtils', function (otAPIservice, otUtils) {
+    .directive('genomeBrowser', ['otApi', 'otUtils', function (otApi, otUtils) {
         'use strict';
 
         // Decorate the svg for exporting
@@ -108,7 +108,7 @@ angular.module('plugins')
                 gB.rest().prefix('/proxy/rest.ensembl.org').protocol('').domain('');
                 var theme = targetGenomeBrowser()
                     .efo(efo)
-                    .cttvRestApi(otAPIservice.getSelf());
+                    .cttvRestApi(otApi.getSelf());
                 theme(gB, newDiv);
 
                 if (otUtils.browser.name !== 'IE') {

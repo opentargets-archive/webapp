@@ -1,13 +1,13 @@
 angular.module('otDirectives')
     .directive('otTextMiningTable', [
-        'otAPIservice',
+        'otApi',
         '$timeout',
         'otConfig',
         'otConsts',
         'otUpperCaseFirstFilter',
         'otClearUnderscoresFilter',
         function (
-            otAPIservice,
+            otApi,
             $timeout,
             otConfig,
             otConsts,
@@ -386,7 +386,7 @@ angular.module('otDirectives')
                             method: 'GET',
                             params: opts
                         };
-                        otAPIservice.getFilterBy(queryObject)
+                        otApi.getFilterBy(queryObject)
                             .then(function (resp) {
                                 var dtData = parseServerResponse(resp.body.data);
                                 var o = {
@@ -483,7 +483,7 @@ angular.module('otDirectives')
                             params: opts
                         };
 
-                        otAPIservice.getFilterBy(queryObject)
+                        otApi.getFilterBy(queryObject)
                             .then(function (resp) {
                                 var totalText = 'disease,publication id,title,authors\n';
                                 var data = resp.body.data;
@@ -525,7 +525,7 @@ angular.module('otDirectives')
                         //     method: 'GET',
                         //     params: optsPreFlight
                         // };
-                        // otAPIservice.getFilterBy(queryObject)
+                        // otApi.getFilterBy(queryObject)
                         //     .then (function (resp) {
                         //         var total = resp.body.total;
                         //
@@ -565,7 +565,7 @@ angular.module('otDirectives')
                         //                 params: opts
                         //             };
                         //
-                        //             return otAPIservice.getFilterBy(queryObject)
+                        //             return otApi.getFilterBy(queryObject)
                         //                 .then(function (resp) {
                         //                     var moreText = resp.body;
                         //                     if (from > 0) {

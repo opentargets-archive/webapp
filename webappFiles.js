@@ -72,7 +72,7 @@ var webappFiles = {
             'app/src/services/consts-service.js',
             'app/src/services/config-service.js',
             'app/src/services/location-state-service.js',
-            'app/src/services/filters-service.js',
+            'app/src/services/facets-filters-service.js',
             'app/src/services/loaded-lists-service.js',
             'app/src/services/lazy-service.js',
             // Processed (filters)

@@ -1,7 +1,7 @@
 /* Add to the cttv controllers module */
 angular.module('otControllers')
 
-    .controller('SummaryCtrl', ['$scope', '$location', 'otAPIservice', '$q', 'otConfig', 'otUtils', 'otLoadedLists', function ($scope, $location, otAPIservice, $q, otConfig, otUtils, otLoadedLists) {
+    .controller('SummaryCtrl', ['$scope', '$location', 'otApi', '$q', 'otConfig', 'otUtils', 'otLoadedLists', function ($scope, $location, otApi, $q, otConfig, otUtils, otLoadedLists) {
         'use strict';
 
         // Parse the $location search object to determine which entities we have.
@@ -18,7 +18,7 @@ angular.module('otControllers')
                     'fields': ['ensembl_gene_id', 'drugs', 'approved_symbol', 'reactome', 'uniprot_id']
                 }
             };
-            return otAPIservice.getTarget(queryObject)
+            return otApi.getTarget(queryObject)
                 .then(function (r) {
                     return r.body.data;
                 });
@@ -35,7 +35,7 @@ angular.module('otControllers')
                     'size': 10000
                 }
             };
-            return otAPIservice.getTargetsEnrichment(queryObject)
+            return otApi.getTargetsEnrichment(queryObject)
                 .then(function (resp) {
                     return resp.body.data;
                 });
@@ -59,7 +59,7 @@ angular.module('otControllers')
                 }
             };
 
-            return otAPIservice.getAssociations(queryObjectForSize)
+            return otApi.getAssociations(queryObjectForSize)
                 .then(function (resp) {
                     for (var i = 0; i < resp.body.total; i += step) {
                         // Call to the api with the targets
@@ -76,7 +76,7 @@ angular.module('otControllers')
                         if (!i) {
                             queryObject.params.targets_enrichment = 'simple';
                         }
-                        associationsPromises.push(otAPIservice.getAssociations(queryObject));
+                        associationsPromises.push(otApi.getAssociations(queryObject));
                     }
 
                     return $q.all(associationsPromises)

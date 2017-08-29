@@ -5,7 +5,7 @@ angular.module('otDirectives')
     * Options:
     * size: as per cttvProgressSpinner; Default is 3.
     */
-    .directive('otPageProgressSpinner', ['otAPIservice', function (otAPIservice) {
+    .directive('otPageProgressSpinner', ['otApi', function (otApi) {
         'use strict';
 
         return {
@@ -16,7 +16,7 @@ angular.module('otDirectives')
                 size: '@'
             },
             link: function (scope) {
-                scope.$watch(function () { return otAPIservice.activeRequests; }, function (newValue) {
+                scope.$watch(function () { return otApi.activeRequests; }, function (newValue) {
                     scope.isloading = newValue > 0;
                 });
             }

@@ -5,14 +5,14 @@ angular.module('otControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-    .controller('TargetCtrl', ['$scope', '$location', 'otAPIservice', 'otUtils', 'otConfig', 'otTEPs', function ($scope, $location, otAPIservice, otUtils, otConfig, otTEPs) {
+    .controller('TargetCtrl', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', 'otTeps', function ($scope, $location, otApi, otUtils, otConfig, otTeps) {
         'use strict';
 
         otUtils.clearErrors();
 
         $scope.targetId = $location.url().split('/')[2];
 
-        otAPIservice.getTarget({
+        otApi.getTarget({
             method: 'GET',
             params: {
                 target_id: $scope.targetId
@@ -31,8 +31,8 @@ angular.module('otControllers')
                     $scope.target.description = resp.uniprot_function[0];
 
                     // Check if the target is a TEP (Target Enabling Package)
-                    if (otTEPs[$scope.targetId]) {
-                        $scope.target.tep = otTEPs[$scope.targetId].symbol;
+                    if (otTeps[$scope.targetId]) {
+                        $scope.target.tep = otTeps[$scope.targetId].symbol;
                     }
 
                     // Synonyms
@@ -76,6 +76,6 @@ angular.module('otControllers')
                     }
                 },
                 // error handler
-                otAPIservice.defaultErrorHandler
+                otApi.defaultErrorHandler
             );
     }]);

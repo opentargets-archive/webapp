@@ -5,13 +5,13 @@ angular.module('otControllers')
      * Controller for the disease page
      * It loads general information about a given disease
      */
-    .controller('DiseaseCtrl', ['$scope', '$location', 'otAPIservice', 'otUtils', 'otConfig', function ($scope, $location, otAPIservice, otUtils, otConfig) {
+    .controller('DiseaseCtrl', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', function ($scope, $location, otApi, otUtils, otConfig) {
         'use strict';
 
         otUtils.clearErrors();
 
         var efo_code = $location.url().split('/')[2];
-        otAPIservice.getDisease({
+        otApi.getDisease({
             method: 'GET',
             params: {
                 code: efo_code

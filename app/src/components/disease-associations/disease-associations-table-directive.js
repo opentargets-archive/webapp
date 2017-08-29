@@ -14,7 +14,7 @@ angular.module('otDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('otDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otAPIservice', '$q', function (otUtils, otDictionary, otConsts, otAPIservice, $q) {
+    .directive('otDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otApi', '$q', function (otUtils, otDictionary, otConsts, otApi, $q) {
         'use strict';
 
         var draw = 1;
@@ -196,13 +196,13 @@ angular.module('otDirectives')
                         opts.target = target;
                     }
 
-                    opts = otAPIservice.addFacetsOptions(filters, opts);
+                    opts = otApi.addFacetsOptions(filters, opts);
                     var queryObject = {
                         method: 'POST',
                         params: opts
                     };
 
-                    otAPIservice.getAssociations(queryObject)
+                    otApi.getAssociations(queryObject)
                         .then(function (resp) {
                             var dtData = parseServerResponse(resp.body.data);
                             var o = {
@@ -376,13 +376,13 @@ angular.module('otDirectives')
                     if (scope.targets && scope.targets.length) {
                         optsPreFlight.target = scope.targets;
                     }
-                    optsPreFlight = otAPIservice.addFacetsOptions(scope.filters, optsPreFlight);
+                    optsPreFlight = otApi.addFacetsOptions(scope.filters, optsPreFlight);
 
                     var queryObject = {
                         method: 'POST',
                         params: optsPreFlight
                     };
-                    otAPIservice.getAssociations(queryObject)
+                    otApi.getAssociations(queryObject)
                         .then(function (resp) {
                             var total = resp.body.total;
 
@@ -416,14 +416,14 @@ angular.module('otDirectives')
                                     opts.target = scope.targets;
                                 }
 
-                                opts = otAPIservice.addFacetsOptions(scope.filters, opts);
+                                opts = otApi.addFacetsOptions(scope.filters, opts);
 
                                 var queryObject = {
                                     method: 'POST',
                                     params: opts
                                 };
 
-                                return otAPIservice.getAssociations(queryObject)
+                                return otApi.getAssociations(queryObject)
                                     .then(function (resp) {
                                         var moreText = resp.body;
 
@@ -466,7 +466,7 @@ angular.module('otDirectives')
                                 // hiddenElement.download = scope.filename + ".csv";
                                 // hiddenElement.click();
                             });
-                        }, otAPIservice.defaultErrorHandler);
+                        }, otApi.defaultErrorHandler);
                 };
 
 

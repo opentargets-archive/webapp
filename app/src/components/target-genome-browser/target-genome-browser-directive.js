@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('otTargetGenomeBrowser', ['otAPIservice', function (otAPIservice) {
+    .directive('otTargetGenomeBrowser', ['otApi', function (otApi) {
         'use strict';
 
         return {
@@ -24,7 +24,7 @@ angular.module('otDirectives')
                     gB.rest().prefix('/proxy/rest.ensembl.org').protocol('').domain('');
                     var theme = targetGenomeBrowser()
                         .efo(efo)
-                        .cttvRestApi(otAPIservice.getSelf());
+                        .cttvRestApi(otApi.getSelf());
                     theme(gB, document.getElementById('otTargetGenomeBrowser'));
                 });
             }

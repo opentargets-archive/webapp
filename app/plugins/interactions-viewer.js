@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('interactionsViewer', ['$log', '$timeout', '$http', '$q', 'otAPIservice', 'otOmnipathdbSources', function ($log, $timeout, $http, $q, otAPIservice, otOmnipathdbSources) {
+    .directive('interactionsViewer', ['$log', '$timeout', '$http', '$q', 'otApi', 'otOmnipathdbSources', function ($log, $timeout, $http, $q, otApi, otOmnipathdbSources) {
         function getNames (bestHits) {
             var mapNames = {};
             for (var i = 0; i < bestHits.length; i++) {
@@ -75,7 +75,7 @@ angular.module('plugins')
                             trackCall: false
                         };
 
-                        promises.push(otAPIservice.getBestHitSearch(queryObject));
+                        promises.push(otApi.getBestHitSearch(queryObject));
 
                         // Both promises run in parallel
                         $q.all(promises)
