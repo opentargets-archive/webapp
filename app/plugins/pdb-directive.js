@@ -9,7 +9,7 @@ angular.module('otPlugins')
             '<div ng-show="pdbId">' +
             '     <p class=cttv-section-intro>Below is shown the best structure found in PDBe for {{target.approved_symbol}}. It corresponds to PDBe entry {{pdbId}} based on coverage and structure quality. To get more information about this structure visit the <a target=_blank href="http://www.ebi.ac.uk/pdbe/entry/pdb/{{pdbId}}">PDBe entry for {{pdbId}}</a></p>' +
             '     <p>Structure for <b>{{pdbId}}</b> ({{title | lowercase}})</p>' +
-            '     <png style="float:right" filename="{{target.approved_symbol}}-structure.png" track="targetStructure"></png>' +
+            '     <ot-png style="float:right" filename="{{target.approved_symbol}}-structure.png" track="targetStructure"></ot-png>' +
             '     <div style="position:relative">' +
             '          <div id=picked-atom-name style="text-align:center;"">&nbsp;</div>' +
             '          <div id="pdb-hamburger-menu"></div>' +

@@ -20,7 +20,7 @@ angular.module('otDirectives')
                 active: '@'
             },
 
-            template: '<png filename="{{target}}-AssociationsTreeView.png" track="associationsTree"></png><div style="float:left"><div id=cttvTreeView></div>'
+            template: '<ot-png filename="{{target}}-AssociationsTreeView.png" track="associationsTree"></ot-png><div style="float:left"><div id=cttvTreeView></div>'
             + '<ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend></div>',
 
 
