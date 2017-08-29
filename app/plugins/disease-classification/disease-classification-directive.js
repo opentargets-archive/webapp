@@ -4,7 +4,7 @@ angular.module('otPlugins')
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/disease-classification.html',
+            templateUrl: 'plugins/disease-classification/disease-classification.html',
             scope: {
                 disease: '=',
                 width: '='

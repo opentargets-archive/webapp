@@ -4,7 +4,7 @@ angular.module('otPlugins')
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/rna-baseline-expression.html',
+            templateUrl: 'plugins/rna-expression/rna-baseline-expression.html',
             scope: {
                 target: '=',
                 width: '='

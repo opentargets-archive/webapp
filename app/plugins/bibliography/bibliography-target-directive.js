@@ -4,7 +4,7 @@ angular.module('otPlugins')
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/bibliography-target.html',
+            templateUrl: 'plugins/bibliography/bibliography-target.html',
             scope: {
                 target: '='
             },
