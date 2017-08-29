@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('interactorsStarPlot', ['$log', '$timeout', 'omnipathdbCategories', 'otUtils', function ($log, $timeout, omnipathdbCategories, otUtils) {
+    .directive('interactorsStarPlot', ['$log', '$timeout', 'otOmnipathdbCategories', 'otUtils', function ($log, $timeout, otOmnipathdbCategories, otUtils) {
         'use strict';
 
         var selectedNodesColors = ['#ffe6e6', '#e6ecff'];
@@ -145,7 +145,7 @@ angular.module('cttvDirectives')
                         // The filter can be in a category, so convert to individual sources
                         for (var i = 0; i < cats.length; i++) {
                             var cat = cats[i];
-                            var sourcesForCategory = omnipathdbCategories[cat];
+                            var sourcesForCategory = otOmnipathdbCategories[cat];
                             if (sourcesForCategory) {
                                 for (var s in sourcesForCategory) {
                                     scope.filterOut[s] = true;

@@ -1,5 +1,5 @@
 angular.module('cttvServices')
-.factory('omnipathdbCategories', [function () {
+.factory('otOmnipathdbCategories', [function () {
   return {
       'Pathways': {
           'SignaLink3': true,

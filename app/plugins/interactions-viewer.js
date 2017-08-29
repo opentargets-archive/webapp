@@ -170,7 +170,7 @@ angular.module('plugins')
                                     }
                                 }
 
-                                // Reporting in the console the omnipath sources that haven't been assigned a category yet. See otOmnipathdbSources and omnipathdbCategories
+                                // Reporting in the console the omnipath sources that haven't been assigned a category yet. See otOmnipathdbSources and otOmnipathdbCategories
                                 if (Object.keys(missingSources).length) {
                                     $log.warn('These omnipath sources does not have a category described and have been skipped');
                                     $log.warn(missingSources);
