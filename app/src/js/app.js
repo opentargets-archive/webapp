@@ -54,7 +54,7 @@ function initApp (deps) {
                     templateUrl: 'src/pages/static/faq.html'
                 })
                 .when('/data_sources', {
-                    controller: 'DataSourcesCtrl',
+                    controller: 'DataSourcesController',
                     templateUrl: 'src/pages/data-sources/data_sources.html'
                 })
                 .when('/terms_of_use', {
