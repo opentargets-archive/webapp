@@ -67,6 +67,7 @@ var webappFiles = {
             'app/src/services/dictionary-service.js',
             'app/src/services/definitions-service.js',
             'app/src/services/omnipathdb-sources-service.js',
+            'app/src/services/omnipathdb-categories-service.js',
             'app/src/services/teps-service.js',
             'app/src/services/consts-service.js',
             'app/src/services/config-service.js',
