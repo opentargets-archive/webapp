@@ -117,7 +117,6 @@ var webappFiles = {
             'app/src/components/feeds/twitter-feed-directive.js',
             'app/src/components/masthead/masthead-navigation-menu-directive.js',
             'app/src/components/masthead/masthead-notifications-menu-directive.js',
-            'app/src/components/sticky-scroller/sticky-scroller-directive.js',
             'app/src/components/modal/modal-directive.js',
             'app/src/components/matrix/matrix-table-directive.js',
             'app/src/components/matrix/matrix-legend-directive.js',
