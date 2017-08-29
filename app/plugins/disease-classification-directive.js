@@ -1,4 +1,4 @@
-angular.module('plugins')
+angular.module('otPlugins')
     .directive('diseaseClassification', ['otApi', '$timeout', 'otUtils', function (otApi, $timeout, otUtils) {
         'use strict';
 

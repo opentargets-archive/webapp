@@ -1,4 +1,4 @@
-angular.module('plugins')
+angular.module('otPlugins')
     .directive('otPluginLoader', ['$compile', '$timeout', 'otLazy', '$q', '$analytics', function ($compile, $timeout, otLazy, $q, $analytics) {
         return {
             restrict: 'E',

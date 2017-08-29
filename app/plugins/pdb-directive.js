@@ -1,4 +1,4 @@
-angular.module('plugins')
+angular.module('otPlugins')
     .directive('pdbTarget', ['$http', 'otUtils', '$timeout', function ($http, otUtils, $timeout) {
         'use strict';
 

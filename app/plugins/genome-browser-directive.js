@@ -1,4 +1,4 @@
-angular.module('plugins')
+angular.module('otPlugins')
     .directive('genomeBrowser', ['otApi', 'otUtils', function (otApi, otUtils) {
         'use strict';
 

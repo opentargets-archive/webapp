@@ -1,4 +1,4 @@
-angular.module('plugins')
+angular.module('otPlugins')
     .directive('geneTree', ['otUtils', '$timeout', function (otUtils, $timeout) {
         'use strict';
 

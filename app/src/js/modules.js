@@ -2,6 +2,6 @@
 /* eslint-disable angular/file-name */
 angular.module('otControllers', []);
 angular.module('otServices', []);
-angular.module('plugins', []);
+angular.module('otPlugins', []);
 angular.module('otDirectives', []);
 angular.module('otFilters', []);
