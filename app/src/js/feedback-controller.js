@@ -1,4 +1,4 @@
-angular.module('cttvControllers')
+angular.module('otControllers')
 
     /**
      * Simple controller to expose the current page to the feedback button controller

@@ -1,6 +1,6 @@
 /* Controllers */
 
-angular.module('cttvControllers')
+angular.module('otControllers')
 
     /**
      * GeneDiseaseCtrl

@@ -109,7 +109,7 @@ var deps = [
     'LocalStorageModule',
     'ui.bootstrap',
     'cttvFilters',
-    'cttvControllers',
+    'otControllers',
     'cttvDirectives',
     'angulartics',
     'angulartics.piwik',

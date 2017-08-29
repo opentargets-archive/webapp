@@ -1,4 +1,4 @@
-angular.module('cttvControllers')
+angular.module('otControllers')
 
     /**
     * Controller to allow notifications to the user

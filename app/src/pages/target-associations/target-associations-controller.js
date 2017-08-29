@@ -1,5 +1,5 @@
 /* Add to the cttv controllers module */
-angular.module('cttvControllers')
+angular.module('otControllers')
 
     /**
      * AssociationsCtrl

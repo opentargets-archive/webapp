@@ -1,7 +1,7 @@
 /*
  * Controller for the little search box.
  */
-angular.module('cttvControllers')
+angular.module('otControllers')
 
 
     /**

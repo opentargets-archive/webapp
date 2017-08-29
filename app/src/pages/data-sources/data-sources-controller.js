@@ -1,4 +1,4 @@
-angular.module('cttvControllers')
+angular.module('otControllers')
 
 /**
  * data-sources controller

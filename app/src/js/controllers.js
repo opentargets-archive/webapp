@@ -1,6 +1,6 @@
 /* Controllers */
 
-angular.module('cttvControllers')
+angular.module('otControllers')
     .run(['$rootScope', '$window', '$uibModalStack', function ($rootScope, $window, $uibModalStack) {
         'use strict';
 

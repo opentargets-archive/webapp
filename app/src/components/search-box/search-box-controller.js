@@ -4,7 +4,7 @@
 /**
  * Controller for the little search box
  */
-angular.module('cttvControllers')
+angular.module('otControllers')
 
     .controller('SearchBoxCtrl', ['$scope', '$location', '$window', '$document', '$element', 'otAPIservice', 'otConsts', '$q', 'otUtils', 'otLoadedLists', function ($scope, $location, $window, $document, $element, otAPIservice, otConsts, $q, otUtils, otLoadedLists) {
         var APP_SEARCH_URL = 'search';

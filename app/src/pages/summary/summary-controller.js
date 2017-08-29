@@ -1,5 +1,5 @@
 /* Add to the cttv controllers module */
-angular.module('cttvControllers')
+angular.module('otControllers')
 
     .controller('SummaryCtrl', ['$scope', '$location', 'otAPIservice', '$q', 'otConfig', 'otUtils', 'otLoadedLists', function ($scope, $location, otAPIservice, $q, otConfig, otUtils, otLoadedLists) {
         'use strict';

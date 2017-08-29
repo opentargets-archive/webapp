@@ -1,4 +1,4 @@
-angular.module('cttvControllers')
+angular.module('otControllers')
     /**
      * A generic page controller;
      * Can be used to pass common variables, constants or services to all pages

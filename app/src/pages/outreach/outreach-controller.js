@@ -1,4 +1,4 @@
-angular.module('cttvControllers')
+angular.module('otControllers')
 
     .controller('OutreachCtrl', ['$scope', '$http', function ($scope, $http) {
         'use strict';

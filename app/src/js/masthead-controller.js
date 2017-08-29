@@ -1,4 +1,4 @@
-angular.module('cttvControllers')
+angular.module('otControllers')
 
     /**
      * Controller for the masthead navigations
