@@ -324,9 +324,7 @@ angular.module('otDirectives')
         }
 
         return {
-
             restrict: 'E',
-
             scope: {
                 target: '=',
                 // nocancers: '@',
@@ -335,18 +333,7 @@ angular.module('otDirectives')
                 facets: '=',
                 active: '@'
             },
-
-
-            template: '<div>'
-        // + ' <div class="clearfix"><div class="pull-right"><a class="btn btn-default buttons-csv buttons-html5" ng-click="downloadTable()"><span class="fa fa-download" title="Download as CSV"></span></a></div></div>'
-        // +'<h5 ng-show="filteredOutByExcNeoplasm>0">Filtered out {{filteredOutByExcNeoplasm}} neoplasm diseases from other therapeutic areas</h5>'
-        + '<div></div>'
-        + '<ot-matrix-table></ot-matrix-table>'
-        + '<ot-matrix-legend colors="legendData"></ot-matrix-legend>'
-        + '<ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend>'
-        + '</div>',
-
-
+            templateUrl: 'src/components/target-associations/target-associations-table.html',
             link: function (scope, elem) {
             // Making the scope accessible in the table processing
                 myscope = scope;
