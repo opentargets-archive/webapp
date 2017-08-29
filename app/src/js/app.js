@@ -1,3 +1,4 @@
+/* eslint-disable angular/file-name */
 function initApp (deps) {
     var app = angular.module('otApp', deps);
 
