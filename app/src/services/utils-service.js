@@ -227,7 +227,7 @@ angular.module('otServices')
             pmidsList = pmidsList || [];  // to avoid undefined errors
             var pub = '';
             if (pmidsList.length > 0) {
-                pub = '<span class=\'cttv-publications-string\'>';
+                pub = '<span class=\'ot-publications-string\'>';
                 pub += '<span class=\'badge\'>' + pmidsList.length + '</span>';
                 pub += (pmidsList.length === 1 ? ' publication' : ' publications');
                 if (pmidsList.length === 1) {
