@@ -1,6 +1,6 @@
 angular.module('cttvDirectives')
 
-    .directive('multipleTargetsInteractionsSummary', ['$log', '$http', '$q', 'omnipathdbSources', function ($log, $http, $q, omnipathdbSources) {
+    .directive('multipleTargetsInteractionsSummary', ['$log', '$http', '$q', 'otOmnipathdbSources', function ($log, $http, $q, otOmnipathdbSources) {
         'use strict';
 
         return {
@@ -202,7 +202,7 @@ angular.module('cttvDirectives')
                                     // });
                                     for (var f = 0; f < provenance.length; f++) {
                                         var prov = provenance[f];
-                                        var sourceCat = omnipathdbSources[prov];
+                                        var sourceCat = otOmnipathdbSources[prov];
                                         if (!sourceCat) {
                                             $log.warn('omnipath source ' + prov + ' does not have a category -- skipping source');
                                             continue;

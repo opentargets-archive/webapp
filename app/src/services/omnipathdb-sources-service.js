@@ -5,7 +5,7 @@ angular.module('cttvServices')
 /**
  * The API services, with methods to call the ElasticSearch API
  */
-    .factory('omnipathdbSources', [function () {
+    .factory('otOmnipathdbSources', [function () {
         'use strict';
         // Map between omnipathdb sources and type of interactions
         // Not considered:

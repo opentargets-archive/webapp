@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('interactionsViewer', ['$log', '$timeout', '$http', '$q', 'otAPIservice', 'omnipathdbSources', function ($log, $timeout, $http, $q, otAPIservice, omnipathdbSources) {
+    .directive('interactionsViewer', ['$log', '$timeout', '$http', '$q', 'otAPIservice', 'otOmnipathdbSources', function ($log, $timeout, $http, $q, otAPIservice, otOmnipathdbSources) {
         function getNames (bestHits) {
             var mapNames = {};
             for (var i = 0; i < bestHits.length; i++) {
@@ -138,7 +138,7 @@ angular.module('plugins')
                                         // });
                                         for (var f = 0; f < provenance.length; f++) {
                                             var prov = provenance[f];
-                                            var sourceCat = omnipathdbSources[prov];
+                                            var sourceCat = otOmnipathdbSources[prov];
                                             if (!sourceCat) {
                                                 if (!missingSources[prov]) {
                                                     missingSources[prov] = 0;
@@ -170,7 +170,7 @@ angular.module('plugins')
                                     }
                                 }
 
-                                // Reporting in the console the omnipath sources that haven't been assigned a category yet. See omnipathdbSources and omnipathdbCategories
+                                // Reporting in the console the omnipath sources that haven't been assigned a category yet. See otOmnipathdbSources and omnipathdbCategories
                                 if (Object.keys(missingSources).length) {
                                     $log.warn('These omnipath sources does not have a category described and have been skipped');
                                     $log.warn(missingSources);
