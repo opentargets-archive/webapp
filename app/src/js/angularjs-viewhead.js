@@ -1,3 +1,5 @@
+// TODO: If this is 3rd party, should it go in the vendor directory?
+/* eslint-disable */
 (function (angular, document) {
     var mod = angular.module('viewhead', []);
 
