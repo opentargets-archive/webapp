@@ -39,9 +39,6 @@ angular.module('cttvServices')
         var filtersData = {};
 
 
-        var status = []; // 1 == OK, 0 == not ok
-
-
         var lastClicked;
 
 
@@ -134,20 +131,6 @@ angular.module('cttvServices')
             var fcts = otLocationState.getState()[cttvFiltersService.stateId];
             key = '' + key; // target class is numerical key which confuses indexOf below.
             return (fcts && fcts[collection] && (fcts[collection] === key || fcts[collection].indexOf(key) >= 0)) || false;
-        };
-
-
-        /*
-         * Returns an array of the selcted filters for the specified facet (key)
-         */
-        var getSelectedFilters = function (facetKey) {
-            var f = selected.filter(function (obj) {
-                return obj.key === facetKey;
-            })[0] || {filters: []};
-
-            return f.filters.map(function (obj) {
-                return obj.key;
-            });
         };
 
 
@@ -323,8 +306,8 @@ angular.module('cttvServices')
         }
 
         /**
-             * Add the specified filter (instance of Filter class) to this collection
-             */
+         * Add the specified filter (instance of Filter class) to this collection
+         */
         FilterCollection.prototype.addFilter = function (filter) {
             // we should check the filter doesn't already exist...
             if (this.filters.filter(function (f) { return f.key === filter.key; }).length === 0) {
@@ -333,8 +316,8 @@ angular.module('cttvServices')
         };
 
         /**
-             * Function to select and clear all the filters in the collection
-             */
+         * Function to select and clear all the filters in the collection
+         */
         FilterCollection.prototype.selectAll = function (b) {
             this.filters.forEach(function (f) {
                 f.setSelected(b);
@@ -383,19 +366,21 @@ angular.module('cttvServices')
 
         /**
          * Set the facets to be shown on the current page.
-         * The order in which they're added is also the order
-         * in which they'll appear in the UI.
+         * The order in which they're added is also the order in which they'll appear in the UI.
          *
-         * @param facets - array of facets keys, e.g. ["datatypes","pathway_types"]
+         * @param {Array} facets - array of facets keys, e.g. ["datatypes","pathway_types"]
+         * 
+         * @example
+         *      cttvFiltersService.pageFacetsStack(["datatypes","pathway_types"])
          */
         cttvFiltersService.pageFacetsStack = function (facets) {
-            if (!facets) {
-                return pageFacetsStack;
+            if (facets) {
+                pageFacetsStack.length = 0;
+                facets.forEach(function (facet) {
+                    pageFacetsStack.push(facet);
+                });
             }
-            pageFacetsStack.length = 0;
-            facets.forEach(function (facet) {
-                pageFacetsStack.push(facet);
-            });
+            return pageFacetsStack;
         };
 
 
@@ -465,7 +450,6 @@ angular.module('cttvServices')
 
 
             orderedFacets.forEach(function (collection) {
-                // if (facets.hasOwnProperty(collection.type)) {
                 if (facets.hasOwnProperty(otConfig.facets[collection.type].key)) {
                     try {
                         // default options from facet definition can be overriden with info in pageFacetStack for the page
@@ -496,10 +480,8 @@ angular.module('cttvServices')
             // Track events in piwik
             for (var i = 0; i < selected.length; i++) {
                 var facetCollection = selected[i];
-                var collectionLabel = facetCollection.key;
                 for (var j = 0; j < facetCollection.filters.length; j++) {
                     var facetLabel = facetCollection.filters[j].key;
-                    // $log.log(" -- tracking: " + collectionLabel + " - " + facetLabel);
                     $analytics.eventTrack('collectionLabel', {'category': 'associationFacet', 'label': facetLabel});
                 }
             }

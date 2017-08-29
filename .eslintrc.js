@@ -122,10 +122,10 @@ module.exports = {
         "angular/watchers-execution": [2, "$apply"],
         "angular/angularelement": 1,
         "angular/controller-name": [2, "/[A-Z].*Ctrl/"],
-        "angular/directive-name": [2, "ot"],
-        "angular/factory-name": [2, "ot"],
-        "angular/filter-name": [2, "ot"],
-        "angular/module-name": [2, "ot"],
+        // "angular/directive-name": [2, "ot"],
+        // "angular/factory-name": [2, "ot"],
+        // "angular/filter-name": [2, "ot"],
+        // "angular/module-name": [2, "ot"],
         "angular/file-name": [2, {
             "typeSeparator": "dash",
             "nameStyle": "dash",
@@ -134,7 +134,7 @@ module.exports = {
                 "controller": "controller"
             }
         }],
-        // "angular/file-name": 0,
+        "angular/file-name": 0,
         "angular/controller-as": 0,
         "angular/controller-as-route": 0,
         /**

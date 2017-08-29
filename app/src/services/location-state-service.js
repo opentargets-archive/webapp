@@ -23,6 +23,10 @@ angular.module('cttvServices')
          * Updates state and old_state and broadcast a message to the app
          */
         var updateState = function (new_state) {
+            //console.log("updateState");
+            //console.log(old_state);
+            //console.log(new_state);
+            
             // update the state and
             old_state = state;
             state = _.cloneDeep(new_state);
@@ -82,7 +86,9 @@ angular.module('cttvServices')
                 return obj;
             }
             var s = [];
-            for (var i in obj) {
+
+            for(var i in obj){
+                //console.log("for: ", i, obj[i]);
                 if (Array.isArray(obj[i])) {
                     obj[i].forEach(function (a) {
                         s.push(i + ':' + a);
@@ -93,8 +99,19 @@ angular.module('cttvServices')
                 }
             }
 
+            // Object.keys(obj).forEach(function (i) {
+            //     //console.log("Obj: ", i, obj[i]);
+            //     if (Array.isArray(obj[i])) {
+            //         obj[i].forEach(function (a) {
+            //             s.push(i + ':' + a);
+            //         });
+            //     }
+            //     if (typeof obj[i] === 'string') {
+            //         s.push(i + ':' + obj[i]);
+            //     }
+            // });
+
             return s.join(',');
-            // return $.param(obj,true).replace(/=/g,":").replace(/&/g,",").replace(/\+/g," ");
         };
 
 
@@ -151,7 +168,7 @@ angular.module('cttvServices')
          * get the state object
          */
         otLocationStateService.getState = function () {
-            // $log.log("!!!! getState()");
+            // //console.log("!!!! getState()", state);
             return _.cloneDeep(state);
         };
 
@@ -160,7 +177,7 @@ angular.module('cttvServices')
          * get the state object
          */
         otLocationStateService.getOldState = function () {
-            // $log.log("!!!! getOldState()");
+            // //console.log("!!!! getOldState()", old_state);
             return _.cloneDeep(old_state);
         };
 
@@ -179,7 +196,7 @@ angular.module('cttvServices')
          * Update the state object only for the specific sub-object
          */
         otLocationStateService.setStateFor = function (k, so, track) {
-            // $log.log("setStateFor ");
+            //console.log("setStateFor ", k , so);
 
             if (track === undefined) { track = true; }   // track = (track || track==undefined)
             tmp_state[k] = so;
@@ -237,6 +254,7 @@ angular.module('cttvServices')
         // all components that need to update their state based on this will be listening
         // $rootScope.$on('$locationChangeSuccess', function(){
         $rootScope.$on('$locationChangeSuccess', function () {
+            //console.log("$locationChangeSuccess!!!");
             updateState(otLocationStateService.parseLocationSearch($location.search()));
         });
 
