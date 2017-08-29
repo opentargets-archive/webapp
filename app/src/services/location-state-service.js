@@ -23,10 +23,10 @@ angular.module('cttvServices')
          * Updates state and old_state and broadcast a message to the app
          */
         var updateState = function (new_state) {
-            //console.log("updateState");
-            //console.log(old_state);
-            //console.log(new_state);
-            
+            // console.log("updateState");
+            // console.log(old_state);
+            // console.log(new_state);
+
             // update the state and
             old_state = state;
             state = _.cloneDeep(new_state);
@@ -87,8 +87,8 @@ angular.module('cttvServices')
             }
             var s = [];
 
-            for(var i in obj){
-                //console.log("for: ", i, obj[i]);
+            for (var i in obj) {
+                // console.log("for: ", i, obj[i]);
                 if (Array.isArray(obj[i])) {
                     obj[i].forEach(function (a) {
                         s.push(i + ':' + a);
@@ -196,7 +196,7 @@ angular.module('cttvServices')
          * Update the state object only for the specific sub-object
          */
         otLocationStateService.setStateFor = function (k, so, track) {
-            //console.log("setStateFor ", k , so);
+            // console.log("setStateFor ", k , so);
 
             if (track === undefined) { track = true; }   // track = (track || track==undefined)
             tmp_state[k] = so;
@@ -254,7 +254,7 @@ angular.module('cttvServices')
         // all components that need to update their state based on this will be listening
         // $rootScope.$on('$locationChangeSuccess', function(){
         $rootScope.$on('$locationChangeSuccess', function () {
-            //console.log("$locationChangeSuccess!!!");
+            // console.log("$locationChangeSuccess!!!");
             updateState(otLocationStateService.parseLocationSearch($location.search()));
         });
 

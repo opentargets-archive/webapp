@@ -82,9 +82,9 @@ angular.module('cttvControllers')
         // 1. first we check if the state of a particular element has changed;
         // 2. if it hasn't changed, and it's undefined (new=undefined, old=undefined),
         // then it's a page load with no state specified, so we update that element anyway with default values
-        //console.log("render (new, old)");
-        //console.log(new_state);
-        //console.log(old_state);
+        // console.log("render (new, old)");
+        // console.log(new_state);
+        // console.log(old_state);
         // facets changed?
             if (! _.isEqual(new_state[facetsId], old_state[facetsId]) || !new_state[facetsId]) {
                 getFacets(new_state[facetsId]);
@@ -181,7 +181,7 @@ angular.module('cttvControllers')
 
 
         $scope.$on(otLocationState.STATECHANGED, function (evt, new_state, old_state) {
-            //console.log("page.onLocationState");
+            // console.log("page.onLocationState");
             render(new_state, old_state); // args is the same as getState()
         });
 
