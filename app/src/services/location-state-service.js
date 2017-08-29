@@ -1,6 +1,6 @@
 /* Services */
 
-angular.module('cttvServices')
+angular.module('otServices')
 
 
     .factory('otLocationState', ['$location', '$rootScope', 'otConsts', function ($location, $rootScope, otConsts) {

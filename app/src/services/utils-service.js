@@ -1,4 +1,4 @@
-angular.module('cttvServices')
+angular.module('otServices')
 /**
  * Some utility services.
  */

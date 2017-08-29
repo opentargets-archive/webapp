@@ -1,6 +1,6 @@
 /* Filters services */
 
-angular.module('cttvServices')
+angular.module('otServices')
 
 
     /**

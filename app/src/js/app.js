@@ -114,7 +114,7 @@ var deps = [
     'angulartics',
     'angulartics.piwik',
     'viewhead',
-    'cttvServices',
+    'otServices',
     'hm.readmore',
     'ngSanitize',
     'swaggerUi',

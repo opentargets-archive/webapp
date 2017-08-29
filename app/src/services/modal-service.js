@@ -1,6 +1,6 @@
 /* Services */
 
-angular.module('cttvServices')
+angular.module('otServices')
     .factory('otModal', [function () {
         var modalService = {};
 

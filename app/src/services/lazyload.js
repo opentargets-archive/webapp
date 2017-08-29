@@ -1,6 +1,6 @@
 /*  Service to keep track of lazy loaded resources  */
 
-angular.module('cttvServices')
+angular.module('otServices')
 
     .factory('lazy', [function () {
         'use strict';

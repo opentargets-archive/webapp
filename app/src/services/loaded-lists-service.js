@@ -1,6 +1,6 @@
 /* Services */
 
-angular.module('cttvServices')
+angular.module('otServices')
 
     .factory('otLoadedLists', ['localStorageService', function (localStorageService) {
         var lists = {};

@@ -1,4 +1,4 @@
-angular.module('cttvServices')
+angular.module('otServices')
     .factory('otOmnipathdbCategories', [function () {
         return {
             'Pathways': {
