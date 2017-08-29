@@ -25,7 +25,7 @@ function initApp (deps) {
                 })
                 .when('/disease/:id/associations', {
                     templateUrl: 'src/pages/disease-associations/disease-associations.html',
-                    controller: 'diseaseAssociationsCtrl',
+                    controller: 'DiseaseAssociationsController',
                     reloadOnSearch: false
                 })
                 .when('/evidence/:id/:id', {
