@@ -74,7 +74,7 @@ var webappFiles = {
             'app/src/services/location-state-service.js',
             'app/src/services/filters-service.js',
             'app/src/services/loaded-lists-service.js',
-            'app/src/services/lazyload.js',
+            'app/src/services/lazy-service.js',
             // Processed (filters)
             'app/src/filters/clear-underscores-filter.js',
             'app/src/filters/ellipse-text-filter.js',
