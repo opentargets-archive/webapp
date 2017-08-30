@@ -94,8 +94,14 @@ module.exports = {
         // "no-use-before-define": 2,
         "no-return-assign": 2,
         "no-sequences": 2,
+        "max-statements": [1, 15],
+        "max-params": [1, 4],
         // "no-undefined": 2,
         // "complexity": [2, 10],
+        "newline-per-chained-call": 1,
+        // "no-plusplus": 2,
+        // "nonblock-statement-body-position": 2,
+        // "max-len": 2,
         /**
          * Angular rules
          * By default, this uses 
@@ -155,6 +161,9 @@ module.exports = {
         "angular/no-run-logic": 0,
         "angular/no-inline-template": 0,
         "no-constant-condition": 0,
+        "max-statements": 0,
+        "max-params": 0,
+        "newline-per-chained-call": 0,
         // end TODO
         /**
          * Compatibility rules
