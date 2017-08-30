@@ -13,7 +13,7 @@ angular.module('otServices')
         /*
         * Initial configuration of the service, with API's URLs
         */
-        var cttvAPI = {
+        var otApiService = {
             LIMITS: {
                 ASSOCIATIONS: 10000,
                 EVIDENCE: 10000
@@ -60,17 +60,17 @@ angular.module('otServices')
             .verbose(false);
 
         /**/
-        cttvAPI.activeRequests = 0;
+        otApiService.activeRequests = 0;
         function countRequest (b) {
             // $log.log("countRequest:b=", b);
             if (b === false) {
-                cttvAPI.activeRequests--;
+                otApiService.activeRequests--;
             } else if (b === true) {
-                cttvAPI.activeRequests++;
+                otApiService.activeRequests++;
             }
         }
 
-        // cttvAPI.activeRequests = function(){
+        // otApiService.activeRequests = function(){
         //    return activeRequests;
         // }
 
@@ -112,7 +112,7 @@ angular.module('otServices')
                 .then(done)
                 .catch(function (err) {
                     $log.warn('GOT ERROR:', err);
-                    cttvAPI.defaultErrorHandler(err, queryObject.trackCall);
+                    otApiService.defaultErrorHandler(err, queryObject.trackCall);
                 });
 
             return promise;
@@ -162,7 +162,7 @@ angular.module('otServices')
          *          otApi.defaultErrorHandler // error
          *      )
          */
-        cttvAPI.defaultErrorHandler = function (error, trackCall) {
+        otApiService.defaultErrorHandler = function (error, trackCall) {
             $log.warn('CTTV API ERROR:', error);
             countRequest(trackCall === false ? undefined : false);
             if (error.status === 403) {
@@ -203,7 +203,7 @@ angular.module('otServices')
          * @param {Object} queryObject - Object containing search parameters.
          *
          * @example
-         * cttvAPI.getSearch({params:{q:'braf'}}).success(function(data) {
+         * otApiService.getSearch({params:{q:'braf'}}).success(function(data) {
          *      $scope.search.results = data;
          *      $log.log(data);
          *  });
@@ -213,19 +213,19 @@ angular.module('otServices')
          *      return response.data.data;
          *  });
          */
-        cttvAPI.getSearch = function (queryObject) {
-            queryObject.operation = cttvAPI.API_SEARCH_URL;
+        otApiService.getSearch = function (queryObject) {
+            queryObject.operation = otApiService.API_SEARCH_URL;
             return callAPI(queryObject);
         };
 
-        cttvAPI.getBestHitSearch = function (queryObject) {
-            // $log.log("cttvAPI.getBestHitSearch()");
-            queryObject.operation = cttvAPI.API_BEST_HIT_SEARCH_URL;
+        otApiService.getBestHitSearch = function (queryObject) {
+            // $log.log("otApiService.getBestHitSearch()");
+            queryObject.operation = otApiService.API_BEST_HIT_SEARCH_URL;
             return callAPI(queryObject);
         };
 
 
-        cttvAPI.flat2tree = function (flat) {
+        otApiService.flat2tree = function (flat) {
             return api.utils.flat2tree(flat);
         };
 
@@ -237,7 +237,7 @@ angular.module('otServices')
          * var api = otApi.getSelf();
          * console.log(api);
          */
-        cttvAPI.getSelf = function () {
+        otApiService.getSelf = function () {
             return api;
         };
 
@@ -250,8 +250,8 @@ angular.module('otServices')
          * @example
          *      otApi.getEvidence(params);
          */
-        cttvAPI.getEvidence = function (queryObject) {
-            queryObject.operation = cttvAPI.API_EVIDENCE_URL;
+        otApiService.getEvidence = function (queryObject) {
+            queryObject.operation = otApiService.API_EVIDENCE_URL;
             return callAPI(queryObject);
         };
 
@@ -263,8 +263,8 @@ angular.module('otServices')
          * @example
          *      otApi.getAssociations(params);
          */
-        cttvAPI.getAssociations = function (queryObject) {
-            queryObject.operation = cttvAPI.API_ASSOCIATION_URL;
+        otApiService.getAssociations = function (queryObject) {
+            queryObject.operation = otApiService.API_ASSOCIATION_URL;
             return callAPI(queryObject);
         };
 
@@ -276,9 +276,9 @@ angular.module('otServices')
          * @example
          *      otApi.getAutocomplete(params);
          */
-        cttvAPI.getAutocomplete = function (queryObject) {
-            // $log.log("cttvAPI.getAutocomplete()");
-            queryObject.operation = cttvAPI.API_AUTOCOMPLETE_URL;
+        otApiService.getAutocomplete = function (queryObject) {
+            // $log.log("otApiService.getAutocomplete()");
+            queryObject.operation = otApiService.API_AUTOCOMPLETE_URL;
             return callAPI(queryObject);
         };
 
@@ -290,8 +290,8 @@ angular.module('otServices')
          * @example
          *      otApi.getEfo({efo:'EFO_1234567'});
          */
-        cttvAPI.getEfo = function (queryObject) {
-            queryObject.operation = cttvAPI.API_EFO_URL;
+        otApiService.getEfo = function (queryObject) {
+            queryObject.operation = otApiService.API_EFO_URL;
             return callAPI(queryObject);
         };
 
@@ -303,8 +303,8 @@ angular.module('otServices')
          * @example
          *      otApi.getTarget({target_id:"ENSG00000005339"});
          */
-        cttvAPI.getTarget = function (queryObject) {
-            queryObject.operation = cttvAPI.API_TARGET_URL;
+        otApiService.getTarget = function (queryObject) {
+            queryObject.operation = otApiService.API_TARGET_URL;
             return callAPI(queryObject);
         };
 
@@ -316,34 +316,34 @@ angular.module('otServices')
          * @example
          *      otApi.getDisease(params);
          */
-        cttvAPI.getDisease = function (queryObject) {
-            queryObject.operation = cttvAPI.API_DISEASE_URL;
+        otApiService.getDisease = function (queryObject) {
+            queryObject.operation = otApiService.API_DISEASE_URL;
             return callAPI(queryObject);
         };
 
-        cttvAPI.getFilterBy = function (queryObject) {
+        otApiService.getFilterBy = function (queryObject) {
             queryObject.params.expandefo = queryObject.params.expandefo || true;
-            queryObject.operation = cttvAPI.API_FILTERBY_URL;
+            queryObject.operation = otApiService.API_FILTERBY_URL;
             return callAPI(queryObject);
         };
 
-        cttvAPI.getQuickSearch = function (queryObject) {
-            queryObject.operation = cttvAPI.API_QUICK_SEARCH_URL;
+        otApiService.getQuickSearch = function (queryObject) {
+            queryObject.operation = otApiService.API_QUICK_SEARCH_URL;
             return callAPI(queryObject);
         };
 
-        cttvAPI.getExpression = function (queryObject) {
-            queryObject.operation = cttvAPI.API_EXPRESSION_URL;
+        otApiService.getExpression = function (queryObject) {
+            queryObject.operation = otApiService.API_EXPRESSION_URL;
             return callAPI(queryObject);
         };
 
-        cttvAPI.getMultiSearch = function (queryObject) {
-            queryObject.operation = cttvAPI.API_MULTISEARCH_URL;
+        otApiService.getMultiSearch = function (queryObject) {
+            queryObject.operation = otApiService.API_MULTISEARCH_URL;
             return callAPI(queryObject);
         };
 
-        cttvAPI.getTargetsEnrichment = function (queryObject) {
-            queryObject.operation = cttvAPI.API_TARGETS_ENRICHMENT_URL;
+        otApiService.getTargetsEnrichment = function (queryObject) {
+            queryObject.operation = otApiService.API_TARGETS_ENRICHMENT_URL;
             return callAPI(queryObject);
         };
 
@@ -358,11 +358,11 @@ angular.module('otServices')
          * @example
          *      otApi.addFacetsOptions(facets, obj);
          */
-        cttvAPI.addFacetsOptions = function (facets, obj) {
+        otApiService.addFacetsOptions = function (facets, obj) {
             obj = obj || {};
             for (var i in facets) {
                 if (facets.hasOwnProperty(i)) {
-                    obj[cttvAPI.facets[i.toUpperCase()]] = facets[i];
+                    obj[otApiService.facets[i.toUpperCase()]] = facets[i];
                 }
             }
             return obj;
@@ -376,9 +376,9 @@ angular.module('otServices')
          * @example
          *      otApi.getTargetRelation(params);
          */
-        cttvAPI.getTargetRelation = function (queryObject) {
-            // $log.log("cttvAPI.getTargetRelation");
-            queryObject.operation = cttvAPI.API_TARGET_RELATION_URL;
+        otApiService.getTargetRelation = function (queryObject) {
+            // $log.log("otApiService.getTargetRelation");
+            queryObject.operation = otApiService.API_TARGET_RELATION_URL;
             return callAPI(queryObject);
         };
 
@@ -390,9 +390,9 @@ angular.module('otServices')
          * @example
          *      otApi.getDiseaseRelation(params);
          */
-        cttvAPI.getDiseaseRelation = function (queryObject) {
-            // $log.log("cttvAPI.getTargetRelation");
-            queryObject.operation = cttvAPI.API_DISEASE_RELATION_URL;
+        otApiService.getDiseaseRelation = function (queryObject) {
+            // $log.log("otApiService.getTargetRelation");
+            queryObject.operation = otApiService.API_DISEASE_RELATION_URL;
             return callAPI(queryObject);
         };
 
@@ -404,9 +404,9 @@ angular.module('otServices')
          * @example
          *      otApi.logSession();
          */
-        cttvAPI.logSession = function () {
+        otApiService.logSession = function () {
             var queryObject = {
-                operation: cttvAPI.API_LOG_SESSION_URL,
+                operation: otApiService.API_LOG_SESSION_URL,
                 trackCall: false,
                 params: {
                     event: 'appload'
@@ -422,9 +422,9 @@ angular.module('otServices')
          * @example
          *      otApi.getStats(params);
          */
-        cttvAPI.getStats = function () {
+        otApiService.getStats = function () {
             var queryObject = {
-                operation: cttvAPI.API_STATS_URL,
+                operation: otApiService.API_STATS_URL,
                 method: 'GET',
                 params: {}
             };
@@ -432,5 +432,5 @@ angular.module('otServices')
         };
 
 
-        return cttvAPI;
+        return otApiService;
     }]);
