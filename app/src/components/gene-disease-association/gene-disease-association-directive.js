@@ -8,14 +8,10 @@ angular.module('otDirectives')
 
         return {
             restrict: 'AE',
-            // transclude: 'true',
             scope: {
                 associationData: '='
             },
             link: function (scope, elem) {
-                // var flower = flowerView().values(scope.associationData);
-                // flower(elem[0]);
-
                 scope.render = function (data) {
                     if (data.length > 0) {
                         var flower = flowerView()
@@ -30,8 +26,7 @@ angular.module('otDirectives')
                     'associationData',
                     function () {
                         scope.render(scope.associationData);
-                    }// ,
-                    // true
+                    }
                 );
             }
         };

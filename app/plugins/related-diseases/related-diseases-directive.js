@@ -176,7 +176,6 @@ angular.module('otPlugins')
         function parseData (data, object, subject, targets) {
             var newData = new Array(data.length);
             for (var i = 0; i < targets.length; i++) {
-            // for (var i=0; i<data[object].length; i++) {
                 var target = targets[i];
                 var objAssoc = data[object][target];
                 var sbjAssoc = data[subject][target];
@@ -234,9 +233,6 @@ angular.module('otPlugins')
                 width: '='
             },
             link: function (scope, element) {
-                // scope.changedScore = function (newScore) {
-                // };
-
                 // Populate overview
                 $timeout(function () {
                     var v = vis()
@@ -245,12 +241,6 @@ angular.module('otPlugins')
                         .size(600)
                         .score('jackard_weighted')
                         .cttvApi(otApi.getSelf());
-
-                    // v.on("load", function (d) {
-                    //     $log.log("LOADED------------------------------------");
-                    //     $log.log(Object.keys(d[0].scores));
-                    //     scope.scores = Object.keys(d[0].scores);
-                    // });
 
                     // Populate details on node click:
                     v.on('click', function (d) {

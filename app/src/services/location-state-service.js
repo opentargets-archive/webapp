@@ -23,10 +23,6 @@ angular.module('otServices')
          * Updates state and old_state and broadcast a message to the app
          */
         var updateState = function (new_state) {
-            // console.log("updateState");
-            // console.log(old_state);
-            // console.log(new_state);
-
             // update the state and
             old_state = state;
             state = _.cloneDeep(new_state);
@@ -85,7 +81,6 @@ angular.module('otServices')
             var s = [];
 
             for (var i in obj) {
-                // console.log("for: ", i, obj[i]);
                 if (Array.isArray(obj[i])) {
                     obj[i].forEach(function (a) {
                         s.push(i + ':' + a);
@@ -97,7 +92,6 @@ angular.module('otServices')
             }
 
             // Object.keys(obj).forEach(function (i) {
-            //     //console.log("Obj: ", i, obj[i]);
             //     if (Array.isArray(obj[i])) {
             //         obj[i].forEach(function (a) {
             //             s.push(i + ':' + a);
@@ -164,7 +158,6 @@ angular.module('otServices')
          * get the state object
          */
         otLocationStateService.getState = function () {
-            // //console.log("!!!! getState()", state);
             return _.cloneDeep(state);
         };
 
@@ -173,7 +166,6 @@ angular.module('otServices')
          * get the state object
          */
         otLocationStateService.getOldState = function () {
-            // //console.log("!!!! getOldState()", old_state);
             return _.cloneDeep(old_state);
         };
 
@@ -182,7 +174,6 @@ angular.module('otServices')
          * Set the temp state object to the given one (full override)
          */
         otLocationStateService.setState = function (so) {
-            // $log.log("setState()");
             tmp_state = so;
             otLocationStateService.updateStateURL();
         };
@@ -192,8 +183,6 @@ angular.module('otServices')
          * Update the state object only for the specific sub-object
          */
         otLocationStateService.setStateFor = function (k, so, track) {
-            // console.log("setStateFor ", k , so);
-
             if (track === undefined) { track = true; }   // track = (track || track==undefined)
             tmp_state[k] = so;
 
@@ -208,7 +197,6 @@ angular.module('otServices')
 
 
         otLocationStateService.resetStateFor = function (k) {
-            // $log.log("resetStateFor()");
             otLocationStateService.setStateFor(k, {}, false);
         };
 
@@ -217,8 +205,6 @@ angular.module('otServices')
          * Updates the URL search with the current state object
          */
         otLocationStateService.updateStateURL = function () {
-            // $log.log("updateStateURL");
-
             var stt = {};
             for (var i in tmp_state) {
                 // translate the state to the URL, but we don't want to include the _path property
@@ -250,7 +236,6 @@ angular.module('otServices')
         // all components that need to update their state based on this will be listening
         // $rootScope.$on('$locationChangeSuccess', function(){
         $rootScope.$on('$locationChangeSuccess', function () {
-            // console.log("$locationChangeSuccess!!!");
             updateState(otLocationStateService.parseLocationSearch($location.search()));
         });
 
