@@ -191,7 +191,6 @@ angular.module('otPlugins')
                 width: '='
             },
             link: function (scope, element) {
-
                 // Populate overview
                 $timeout(function () {
                     var v = vis()

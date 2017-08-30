@@ -136,7 +136,6 @@ angular.module('otDirectives')
                                         scope.colors = [];
                                         for (var i = 1; i <= 3; i++) {
                                             scope.colors.push({color: colorScale(i), label: labelScale(i)});
-                                        // $log.log(i +" : "+ labelScale(i));
                                         }
 
                                         scope.legendData = [

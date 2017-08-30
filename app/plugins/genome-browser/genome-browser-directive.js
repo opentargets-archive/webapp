@@ -102,7 +102,10 @@ angular.module('otPlugins')
                     .context(20)
                     .width(w);
 
-                gB.rest().prefix('/proxy/rest.ensembl.org').protocol('').domain('');
+                gB.rest()
+                    .prefix('/proxy/rest.ensembl.org')
+                    .protocol('')
+                    .domain('');
                 var theme = targetGenomeBrowser()
                     .efo(efo)
                     .cttvRestApi(otApi.getSelf());

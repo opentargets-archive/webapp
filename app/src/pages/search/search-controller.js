@@ -328,7 +328,6 @@ angular.module('otControllers')
 
         // on search change
         // $scope.$on(otLocationState.STATECHANGED, function (e, args) {
-            // $log.log("[handler] onStateChanged");
             // setStateFromURL( (args[stateId] || {}) );
         // });
 

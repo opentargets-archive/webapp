@@ -15,13 +15,13 @@ angular.module('otServices')
             APP_QUERY_SIZE = 10;
 
 
-        var cttvSearchService = {
+        var otSearchService = {
             SEARCH: 'search',
             EVIDENCE: 'evidence'
         };
 
 
-        cttvSearchService.createSearchInitObject = function () {
+        otSearchService.createSearchInitObject = function () {
             return {
                 query: {
                     q: APP_QUERY_Q,
@@ -34,7 +34,7 @@ angular.module('otServices')
         };
 
 
-        cttvSearchService.getApiQueryObject = function (type, queryObject) {
+        otSearchService.getApiQueryObject = function (type, queryObject) {
             var qo = {
                 size: queryObject.size,
                 from: (queryObject.page - 1) * queryObject.size
@@ -55,10 +55,10 @@ angular.module('otServices')
         };
 
 
-        cttvSearchService.getSearch = function () {
+        otSearchService.getSearch = function () {
 
         };
 
 
-        return cttvSearchService;
+        return otSearchService;
     }]);
