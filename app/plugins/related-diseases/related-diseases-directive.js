@@ -9,36 +9,6 @@ angular.module('otPlugins')
         var currTable;
         var spDiv;
 
-        /*
-        * Generates and returns the string representation of the span element
-        * with color information for each cell
-        */
-        // var getColorStyleString = function(value, href){
-        //     var str="";
-        //     if( value<=0 ){
-        //         str = "<span class='no-data' title='No data'></span>"; // quick hack: where there's no data, we don't put anything, so the sorting works better
-        //     } else {
-        //         str = "<span style='color: "+colorScale(value)+"; background: "+colorScale(value)+";' title='Score: "+otUtils.floatPrettyPrint(value)+"'>"+otUtils.floatPrettyPrint(value)+"</span>";
-        //         if( href ){
-        //             str = "<a href=" + href + ">" + str + "</a>";
-        //         }
-        //     }
-        //     return str;
-        // };
-
-        // var getColorStyleString = function (value1, value2, href) {
-        //     var str = "";
-        //     var delta = value1-value2;
-        //     var opacity = (value1 + value2) / 2;
-        //     str = "<span style='color:" + colorScale(delta) + "; background:" + colorScale(delta) + "; opacity:" + opacity + "' title= Score: "+otUtils.floatPrettyPrint(delta)+"'>"+otUtils.floatPrettyPrint(delta)+"</span>";
-        //
-        //     if (href){
-        //         str = "<a href=" + href + ">" + str + "</a>";
-        //     }
-        //
-        //     return str;
-        // };
-
         var getColorStyleString = function (value1, value2, hrefObj, hrefSbj) {
             var str = '';
             var width = 28;
