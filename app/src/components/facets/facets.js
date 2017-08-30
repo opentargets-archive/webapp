@@ -44,7 +44,7 @@ angular.module('facets', [])
     * Top level container for all the facets.
     * This contains accordion etc
     */
-    .directive('cttvFacets', ['otFacetsFilters', function (otFacetsFilters) {
+    .directive('otFacets', ['otFacetsFilters', function (otFacetsFilters) {
         'use strict';
 
         return {
@@ -86,7 +86,7 @@ angular.module('facets', [])
                 facet: '='
             },
 
-            template: '<div class="cttv-facets-controls">'
+            template: '<div class="ot-facets-controls">'
                       + '    <span ng-click="facet.selectAll(false)">Clear all <i class="fa fa-times"></i></span>'
                       + '    <span ng-click="facet.selectAll(true)">Select all <i class="fa fa-check"></i></span>'
                       + '</div>'

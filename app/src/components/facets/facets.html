@@ -1,10 +1,10 @@
-<div class="cttv-facets" ng-show="true">
+<div class="ot-facets" ng-show="true">
 
     <!-- User selections -->
-    <!-- <div ng-show="selectedFilters.length>0" class="cttv-facets-selected-summary"> -->
-    <div ng-show="false" class="cttv-facets-selected-summary">
+    <!-- <div ng-show="selectedFilters.length>0" class="ot-facets-selected-summary"> -->
+    <div ng-show="false" class="ot-facets-selected-summary">
         <h4>Your filters</h4>
-        <div class="cttv-facets-controls">
+        <div class="ot-facets-controls">
             <span ng-click="deselectAll()">Clear all <i class="fa fa-times"></i></span>
         </div>
         <div ng-repeat="collection in selectedFilters">
@@ -22,7 +22,7 @@
     <h4>Filter by</h4>
     <uib-accordion close-others=false>
         <div uib-accordion-group ng-init="status = {isOpen: facet.options.open}" is-open="status.isOpen" ng-repeat="facet in filters track by facet.key" ng-if="facet.filters.length>0" class="panel-default">
-            <uib-accordion-heading class="cttv-facets-headers">
+            <uib-accordion-heading class="ot-facets-headers">
                 {{facet.options.heading | otClearUnderscores | otUpperCaseFirst}}<i class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !status.isOpen, 'fa-caret-down': status.isOpen}"></i>
             </uib-accordion-heading>
 

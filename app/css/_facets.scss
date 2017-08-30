@@ -25,15 +25,15 @@
         color: $bodytext-color;
     }*/
 
-.cttv-facets{
+.ot-facets{
     font-size: 12px;
 }
 
-.cttv-facets-headers{
+.ot-facets-headers{
     font-size: 16px;
 }
 
-.cttv-facets-controls {
+.ot-facets-controls {
     font-size: 11px;
     background-color: $clr-ui-background;
     @include border-radius( 3px );
@@ -51,20 +51,20 @@
         color: $clr-text-em;
     }
 }
-.cttv-facets-selected-summary{
+.ot-facets-selected-summary{
     border-bottom:1px solid $clr-ui-border; // was #CCC
     margin-bottom:25px;
     padding-bottom:10px;
 }
 
-.cttv-facets-small-arrow{
+.ot-facets-small-arrow{
     width: 12px;
     cursor: pointer;
 
     padding: 0px 4px;
 }
 
-.cttv-facets-child-label-no-checkbox{
+.ot-facets-child-label-no-checkbox{
     width:auto;
     padding-left: 20px
 }
@@ -77,7 +77,7 @@
 
 
 
-.cttv-facets {
+.ot-facets {
     .panel{
         @include border-radius( 0px );
         border: none;

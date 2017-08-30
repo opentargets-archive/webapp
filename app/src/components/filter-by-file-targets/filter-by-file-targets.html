@@ -1,8 +1,8 @@
 <!-- FILTER BY TARGETS FROM FILE -->
-<div class="cttv-facets" ng-show="true">
+<div class="ot-facets" ng-show="true">
     <uib-accordion close-others=false>
         <div uib-accordion-group  is-open="true" class="panel-default">
-            <uib-accordion-heading class="cttv-facets-headers">
+            <uib-accordion-heading class="ot-facets-headers">
                 Your target list<i
                 class="pull-right text-lowlight fa"
                 ng-class="{'fa-caret-right': filterByFileCollapsed, 'fa-caret-down': !filterByFileCollapsed}"
@@ -10,7 +10,7 @@
             </uib-accordion-heading>
 
             <div ng-if="!filterByFileCollapsed">
-                <div class="cttv-facets-controls">
+                <div class="ot-facets-controls">
                     <!--Choose a file with list of targets-->
                     <form ng-show="targets.length==0" name="upload">
                         <input id="myFileInput" type="file" name="file"
@@ -52,7 +52,7 @@
 
                     <!--FOUND IN FILE-->
                     <div class="checkbox cttv-facet-checkbox clearfix">
-                                        <span class="cttv-facets">
+                                        <span class="ot-facets">
                                             <span class="cttv-facet-checkbox-label ng-binding"
                                                   ng-click="totalNamesCollapsed = !totalNamesCollapsed"
                                                   title="These are all the names found in your list" data-toggle="tooltip">
@@ -61,13 +61,13 @@
                                             <span class="text-lowlight cttv-facet-count pull-left ng-binding" >({{targetNameArray.length}})</span>
                                         </span>
                                         <span  class="text-lowlight pull-right">
-                                            <i class="fa fa-caret-right cttv-facets-small-arrow"
+                                            <i class="fa fa-caret-right ot-facets-small-arrow"
                                                ng-class="{'fa-caret-right': totalNamesCollapsed, 'fa-caret-down': !totalNamesCollapsed}"
                                                ng-click="totalNamesCollapsed = !totalNamesCollapsed"></i>
                                         </span>
                     </div>
                     <div ng-class="{'boxed-scrollable' : !totalNamesCollapsed}">
-                                        <span  class="cttv-facets cttv-facets-child-label-no-checkbox"
+                                        <span  class="ot-facets ot-facets-child-label-no-checkbox"
                                                ng-if="!totalNamesCollapsed"
                                                ng-repeat="item in targetNameArray">{{item}}<br></span>
                     </div>
@@ -75,7 +75,7 @@
                     <!--EXCLUDED FROM SEARCH-->
                     <div ng-if="excludedTargetArray.length > 0">
                         <div   class="checkbox cttv-facet-checkbox clearfix">
-                                        <span class="cttv-facets">
+                                        <span class="ot-facets">
                                             <span class="cttv-facet-checkbox-label ng-binding"
                                                   ng-click="excludedTargetsCollapsed = !excludedTargetsCollapsed"
                                                   title="These are the target names from the uploaded file, for which no Ensembl ID was found - thus excluding them from the association search.">
@@ -84,13 +84,13 @@
                                             <span class="text-lowlight cttv-facet-count pull-left ng-binding" title="15">({{excludedTargetArray.length}})</span>
                                         </span>
                                         <span class="text-lowlight pull-right">
-                                            <i class="fa fa-caret-right cttv-facets-small-arrow"
+                                            <i class="fa fa-caret-right ot-facets-small-arrow"
                                                ng-class="{'fa-caret-right': excludedTargetsCollapsed, 'fa-caret-down': !excludedTargetsCollapsed}"
                                                ng-click="excludedTargetsCollapsed = !excludedTargetsCollapsed"></i>
                                         </span>
                         </div>
                         <div ng-class="{'boxed-scrollable' : !excludedTargetsCollapsed}">
-                                        <span  class="cttv-facets cttv-facets-child-label-no-checkbox"
+                                        <span  class="ot-facets ot-facets-child-label-no-checkbox"
                                                ng-if="!excludedTargetsCollapsed"
                                                ng-repeat="item in excludedTargetArray">{{item.name}}<br></span>
                         </div>
@@ -109,7 +109,7 @@
                                                     <span class="text-lowlight cttv-facet-count" >({{fuzzyTargetArray.length}})</span>
                                                 </span>
                                                 <span class="text-lowlight pull-right">
-                                                        <i class="fa cttv-facets-small-arrow"
+                                                        <i class="fa ot-facets-small-arrow"
                                                            ng-class="{'fa-caret-right': fuzzyTargetsCollapsed, 'fa-caret-down': !fuzzyTargetsCollapsed}"
                                                            ng-click="fuzzyTargetsCollapsed = !fuzzyTargetsCollapsed"></i>
                                                 </span>
@@ -117,7 +117,7 @@
                         </div>
 
                         <div ng-class="{'boxed-scrollable' : !fuzzyTargetsCollapsed}">
-                                            <span  class="cttv-facets cttv-facets-child-label-no-checkbox"
+                                            <span  class="ot-facets ot-facets-child-label-no-checkbox"
                                                    ng-if="!fuzzyTargetsCollapsed"
                                                    ng-repeat="item in fuzzyTargetArray">For <span class="suggestion query">{{item.name}}</span> found <span class="suggestion result">{{item.label}}</span><br></span>
                         </div>
@@ -126,7 +126,7 @@
                     <!--FUZZY - END-->
                     <br>
 
-                    <div class="cttv-facets">
+                    <div class="ot-facets">
                                         <span class="cttv-facet-checkbox-label ng-binding">
                                             Have associations with {{diseaseName}}<br>
                                         </span>
@@ -135,7 +135,7 @@
                                         </span>
                     </div>
 
-                    <div class="cttv-facets">
+                    <div class="ot-facets">
                                         <span class="cttv-facet-checkbox-label ng-binding">
                                             No associations found for {{diseaseName}}<br>
                                         </span>
