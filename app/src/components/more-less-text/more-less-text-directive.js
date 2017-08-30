@@ -12,10 +12,6 @@ angular.module('otDirectives')
                 data: '=',
                 limit: '@'
             },
-            template: '<span>{{data | limitTo: limit }}</span>'
-                      + '<span ng-if="data.length>limit" ng-init="expd=false">'
-                      +     '<span ng-show="!expd" ng-click="expd=!expd"> &hellip; <a>[show more]</a></span>'
-                      +     '<span ng-show="expd">{{data | limitTo: data.length:limit }}<span ng-click="expd=!expd"> <a>[show less]</a></span></span>'
-                      + '</span>'
+            templateUrl: 'src/components/more-less-text/more-less-text.html'
         };
     }]);
