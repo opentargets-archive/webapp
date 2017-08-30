@@ -1,4 +1,4 @@
-/* Add to the cttv controllers module */
+/* Add to the ot controllers module */
 angular.module('otControllers')
 
 /**
