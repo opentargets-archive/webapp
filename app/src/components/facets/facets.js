@@ -98,7 +98,7 @@ angular.module('facets', [])
      * A directive for plain Checkbox facets.
      * @param bucket the instance of Filter object from the FilterService; this is likely in an ng-repeat thing like ng-repeat="bucket in filters"
      */
-    .directive('cttvCheckboxFacet', [function () {
+    .directive('otCheckboxFacet', [function () {
         'use strict';
 
         return {
