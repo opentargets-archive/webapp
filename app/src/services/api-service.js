@@ -62,7 +62,6 @@ angular.module('otServices')
         /**/
         otApiService.activeRequests = 0;
         function countRequest (b) {
-            // $log.log("countRequest:b=", b);
             if (b === false) {
                 otApiService.activeRequests--;
             } else if (b === true) {
@@ -205,7 +204,6 @@ angular.module('otServices')
          * @example
          * otApiService.getSearch({params:{q:'braf'}}).success(function(data) {
          *      $scope.search.results = data;
-         *      $log.log(data);
          *  });
          *
          * @example
@@ -219,7 +217,6 @@ angular.module('otServices')
         };
 
         otApiService.getBestHitSearch = function (queryObject) {
-            // $log.log("otApiService.getBestHitSearch()");
             queryObject.operation = otApiService.API_BEST_HIT_SEARCH_URL;
             return callAPI(queryObject);
         };
@@ -235,7 +232,6 @@ angular.module('otServices')
          * 
          * @example 
          * var api = otApi.getSelf();
-         * console.log(api);
          */
         otApiService.getSelf = function () {
             return api;
@@ -277,7 +273,6 @@ angular.module('otServices')
          *      otApi.getAutocomplete(params);
          */
         otApiService.getAutocomplete = function (queryObject) {
-            // $log.log("otApiService.getAutocomplete()");
             queryObject.operation = otApiService.API_AUTOCOMPLETE_URL;
             return callAPI(queryObject);
         };
@@ -377,7 +372,6 @@ angular.module('otServices')
          *      otApi.getTargetRelation(params);
          */
         otApiService.getTargetRelation = function (queryObject) {
-            // $log.log("otApiService.getTargetRelation");
             queryObject.operation = otApiService.API_TARGET_RELATION_URL;
             return callAPI(queryObject);
         };
@@ -391,7 +385,6 @@ angular.module('otServices')
          *      otApi.getDiseaseRelation(params);
          */
         otApiService.getDiseaseRelation = function (queryObject) {
-            // $log.log("otApiService.getTargetRelation");
             queryObject.operation = otApiService.API_DISEASE_RELATION_URL;
             return callAPI(queryObject);
         };
