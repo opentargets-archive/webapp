@@ -143,7 +143,7 @@ angular.module('facets', [])
     /**
     * A directive for Checkbox facet with nested facets.
     */
-    .directive('cttvUiIndeterminate', [function () {
+    .directive('otUiIndeterminate', [function () {
         'use strict';
 
         return {
@@ -155,7 +155,7 @@ angular.module('facets', [])
                     return angular.noop;
                 }
 
-                scope.$watch(attrs.cttvUiIndeterminate, function (newVal) {
+                scope.$watch(attrs.otUiIndeterminate, function (newVal) {
                     elem[0].indeterminate = !!newVal;
                 });
             }

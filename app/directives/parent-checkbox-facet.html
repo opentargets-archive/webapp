@@ -3,7 +3,7 @@
         <span style="width:auto">
             <label ng-class="(!bucket.enabled) ? 'disabled' : ''" class="cttv-facet-checkbox-label" title="{{bucket.label}}">
                 <input type="checkbox"
-                    cttv-ui-indeterminate="{{bucket.collection.getSelectedFilters().length>0 && (bucket.collection.filters.length > bucket.collection.getSelectedFilters().length)}}"
+                    ot-ui-indeterminate="{{bucket.collection.getSelectedFilters().length>0 && (bucket.collection.filters.length > bucket.collection.getSelectedFilters().length)}}"
                     value="{{bucket.id}}"
                     ng-checked="bucket.selected || (bucket.collection.filters.length>0 && bucket.collection.filters.length == bucket.collection.getSelectedFilters().length)"
                     ng-disabled="!bucket.enabled || bucket.collection.getSelectedFilters().length>0"
