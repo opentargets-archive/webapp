@@ -4,7 +4,7 @@ angular.module('otPlugins')
 
         return {
             restrict: 'E',
-            template: '<div><div ng-show="uniquePhenotypes.length==0">No phenotypes available</div><ul><li ng-repeat="phenotype in uniquePhenotypes">{{phenotype | otUpperCaseFirst}}</li></ul></div>',
+            templateUrl: 'plugins/phenotypes/phenotypes-display.html',
             scope: {
                 disease: '=',
                 width: '='

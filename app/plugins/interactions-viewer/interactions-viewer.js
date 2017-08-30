@@ -20,11 +20,6 @@ angular.module('otPlugins')
 
         return {
             restrict: 'E',
-            // template: '<!-- hint -->' +
-            // '<div>' +
-            // '    <p class="ot-section-intro">Summary of interactions for {{target.approved_symbol}} based on <a target=_blank href="http://omnipathdb.org/">OmniPath DB</a> data. When 2 targets are selected details on the interaction are shown.</p>' +
-            // '</div>' +
-            // '<ot-interactors-star-plot interactors="interactors" categories="categories" selected="target.approved_symbol"></ot-interactors-star-plot>',
             templateUrl: 'plugins/interactions-viewer/interactions-viewer.html',
             scope: {
                 target: '=',
