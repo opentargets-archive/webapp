@@ -153,7 +153,19 @@ angular.module('cttvDirectives')
 
             return {
                 restrict: 'EA',
-                templateUrl: 'partials/nferx-table.html',
+                //templateUrl: 'partials/nferx-table.html',
+                template : '<div class="table-panel"> <table class="table cttv-evidence-table" id="literature3-table">
+                + '<thead>'+ '<tr>' + '<th>Access level</th>'
+            +'<th>Disease</th>'
+            +'<th>Cosine Distance</th>'
+            +'<th>Nferx URL</th>'
+        +'</tr>'
+        +'</thead>'
+
+        +'<tbody>'
+        +'</tbody>'
+    +'</table>'
++'</div>'
                 scope: {
                     target: '=',
                     disease: '=',
