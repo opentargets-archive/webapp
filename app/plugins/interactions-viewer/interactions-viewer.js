@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('interactionsViewer', ['$log',  '$http', '$q', 'otApi', 'otOmnipathdbSources', function ($log, $http, $q, otApi, otOmnipathdbSources) {
+    .directive('otInteractionsViewer', ['$log',  '$http', '$q', 'otApi', 'otOmnipathdbSources', function ($log, $http, $q, otApi, otOmnipathdbSources) {
         function getNames (bestHits) {
             var mapNames = {};
             for (var i = 0; i < bestHits.length; i++) {
@@ -140,7 +140,6 @@ angular.module('otPlugins')
                                                     missingSources[prov] = 0;
                                                 }
                                                 missingSources[prov]++;
-                                                // $log.warn('omnipath source ' + prov + ' does not have a category -- skipping source');
                                                 continue;
                                             }
 

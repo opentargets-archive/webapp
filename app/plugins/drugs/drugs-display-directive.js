@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('drugsDisplay', ['otConfig', 'otConsts', 'otDictionary', function (otConfig, otConsts, otDictionary) {
+    .directive('otDrugsDisplay', ['otConfig', 'otConsts', 'otDictionary', function (otConfig, otConsts, otDictionary) {
         'use strict';
 
         return {

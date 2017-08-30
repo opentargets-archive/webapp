@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('relatedTargets', ['otApi', function (otApi) {
+    .directive('otRelatedTargets', ['otApi', function (otApi) {
         'use strict';
 
         return {

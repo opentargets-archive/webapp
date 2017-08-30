@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('relatedDiseases', ['otUtils', 'otConsts', 'otDictionary', 'otApi', '$timeout', function (otUtils, otConsts, otDictionary, otApi, $timeout) {
+    .directive('otRelatedDiseases', ['otUtils', 'otConsts', 'otDictionary', 'otApi', '$timeout', function (otUtils, otConsts, otDictionary, otApi, $timeout) {
         'use strict';
 
         // Details table --
@@ -153,18 +153,6 @@ angular.module('otPlugins')
             var url = cttvApi.url.associations();
 
             cttvApi.call(url, paramsObj)
-                // .then (function (resp) {
-                //     var bestTargets = getBestSharedTargets(resp.body.data, 100);
-                //     var url = cttvApi.url.associations();
-                //     var opts = {
-                //         disease: [object, subject],
-                //         target: bestTargets,
-                //         size: 200,
-                //         direct: true,
-                //         facets: false,
-                //     };
-                //     return cttvApi.call(url, opts);
-                // })
                 .then(function (resp) {
                     var splitData = splitDataIntoDiseases(resp.body.data);
                     var dtData = parseData(splitData, object, subject, targets.slice(0, 100));

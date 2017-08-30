@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('targetPathways', ['$http', '$q', function ($http, $q) {
+    .directive('otTargetPathways', ['$http', '$q', function ($http, $q) {
         'use strict';
 
         // Container for the spinner

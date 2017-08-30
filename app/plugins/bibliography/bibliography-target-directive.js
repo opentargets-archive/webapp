@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('bibliographyTarget', ['$http', function ($http) {
+    .directive('otBibliographyTarget', ['$http', function ($http) {
         'use strict';
 
         return {

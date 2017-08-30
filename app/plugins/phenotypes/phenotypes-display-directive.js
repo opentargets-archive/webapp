@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('phenotypesDisplay', [function () {
+    .directive('otPhenotypesDisplay', [function () {
         'use strict';
 
         return {
