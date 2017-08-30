@@ -75,7 +75,7 @@ angular.module('facets', [])
      * The default "select all / clear all" controls for facets
      * @param facet the facet (i.e. instance of FilterCollection from the FilterService) we are rendering, e.g. datatypes, pathways, score , etc...
      */
-    .directive('cttvDefaultFacetControls', [function () {
+    .directive('otDefaultFacetControls', [function () {
         'use strict';
 
         return {
