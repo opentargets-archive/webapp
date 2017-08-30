@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('relatedDiseases', ['otUtils', 'otConsts', 'otDictionary', 'otApi', '$timeout', function (otUtils, otConsts, otDictionary, otApi, $timeout) {
+    .directive('otRelatedDiseases', ['otUtils', 'otConsts', 'otDictionary', 'otApi', '$timeout', function (otUtils, otConsts, otDictionary, otApi, $timeout) {
         'use strict';
 
         // Details table --
@@ -153,18 +153,6 @@ angular.module('otPlugins')
             var url = cttvApi.url.associations();
 
             cttvApi.call(url, paramsObj)
-                // .then (function (resp) {
-                //     var bestTargets = getBestSharedTargets(resp.body.data, 100);
-                //     var url = cttvApi.url.associations();
-                //     var opts = {
-                //         disease: [object, subject],
-                //         target: bestTargets,
-                //         size: 200,
-                //         direct: true,
-                //         facets: false,
-                //     };
-                //     return cttvApi.call(url, opts);
-                // })
                 .then(function (resp) {
                     var splitData = splitDataIntoDiseases(resp.body.data);
                     var dtData = parseData(splitData, object, subject, targets.slice(0, 100));
@@ -176,7 +164,6 @@ angular.module('otPlugins')
         function parseData (data, object, subject, targets) {
             var newData = new Array(data.length);
             for (var i = 0; i < targets.length; i++) {
-            // for (var i=0; i<data[object].length; i++) {
                 var target = targets[i];
                 var objAssoc = data[object][target];
                 var sbjAssoc = data[subject][target];
@@ -234,8 +221,6 @@ angular.module('otPlugins')
                 width: '='
             },
             link: function (scope, element) {
-                // scope.changedScore = function (newScore) {
-                // };
 
                 // Populate overview
                 $timeout(function () {
@@ -245,12 +230,6 @@ angular.module('otPlugins')
                         .size(600)
                         .score('jackard_weighted')
                         .cttvApi(otApi.getSelf());
-
-                    // v.on("load", function (d) {
-                    //     $log.log("LOADED------------------------------------");
-                    //     $log.log(Object.keys(d[0].scores));
-                    //     scope.scores = Object.keys(d[0].scores);
-                    // });
 
                     // Populate details on node click:
                     v.on('click', function (d) {

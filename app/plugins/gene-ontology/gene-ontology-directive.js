@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('geneOntology', [function () {
+    .directive('otGeneOntology', [function () {
         'use strict';
 
         return {

@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('genomeBrowser', ['otApi', 'otUtils', function (otApi, otUtils) {
+    .directive('otGenomeBrowser', ['otApi', 'otUtils', function (otApi, otUtils) {
         'use strict';
 
         // Decorate the svg for exporting

@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('proteinBaselineExpression', [function () {
+    .directive('otProteinBaselineExpression', [function () {
         'use strict';
 
         return {
