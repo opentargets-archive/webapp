@@ -21,7 +21,7 @@ angular.module('otServices')
             CANCER_GENE_CENSUS: 'Cancer Gene Census',
             CHEMBL: 'CHEMBL',
             COMMON_DISEASES: 'Common diseases',
-            CTTV_PIPELINE: 'Open Targets pipeline',
+            CTTV_PIPELINE: 'Open Targets pipeline', // TODO: appears unused?
 
             // D
             DATA_DISTRIBUTION: 'Data distribution',

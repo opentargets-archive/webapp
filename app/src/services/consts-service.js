@@ -90,7 +90,7 @@ angular.module('otServices')
             ACCESS_LEVEL_PRIVATE: 'private',
             CTTV_ROOT_URI: 'http://www.targetvalidation.org/cttv_root',
             CTTV_ROOT_NAME: 'CTTV Root',
-            CTTV_ROOT_CODE: 'cttv_root'
+            CTTV_ROOT_CODE: 'cttv_root' // TODO: CTTV_ROOT_URI and CTTV_ROOT_CODE appear unused?
         };
 
 
