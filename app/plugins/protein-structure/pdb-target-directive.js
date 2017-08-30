@@ -16,7 +16,7 @@ angular.module('otPlugins')
             // '     </div>' +
             // '</div>',
             // TODO: external template seems to work fine, but please doublecheck and then delete commented inline template code above
-            templateUrl: 'plugins/protein-structure/pdb.html',
+            templateUrl: 'plugins/protein-structure/pdb-target.html',
             scope: {
                 target: '=',
                 width: '='
