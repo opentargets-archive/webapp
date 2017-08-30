@@ -1,6 +1,6 @@
 <div ot-default-facet-controls facet="facet"></div>
 <div ng-init="isCollapsed=true&&(!filter.collection.isLastClicked())" ng-repeat="filter in facet.filters" >
-    <cttv-parent-checkbox-facet bucket="filter" collapsed="isCollapsed"></cttv-parent-checkbox-facet>
+    <ot-parent-checkbox-facet bucket="filter" collapsed="isCollapsed"></ot-parent-checkbox-facet>
     <div uib-collapse="isCollapsed" style="padding-left:20px">
         <div ot-checkbox-facet multiline="true" bucket="bucket" ng-repeat="bucket in filter.collection.filters"></div>
     </div>

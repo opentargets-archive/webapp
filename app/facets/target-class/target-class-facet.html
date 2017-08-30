@@ -3,7 +3,7 @@
 <!--
 <div ot-default-facet-controls facet="facet"></div>
 <div ng-init="isCollapsed=true&&(!datatype.collection.isLastClicked())" ng-repeat="datatype in facet.filters" >
-    <cttv-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed" partial="{{partial}}"></cttv-parent-checkbox-facet>
+    <ot-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed" partial="{{partial}}"></ot-parent-checkbox-facet>
     <div uib-collapse="isCollapsed" style="padding-left:20px">
         <div ot-checkbox-facet bucket="bucket" ng-repeat="bucket in datatype.collection.filters" partial="{{partial}}"></div>
     </div>
