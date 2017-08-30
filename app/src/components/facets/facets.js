@@ -44,7 +44,7 @@ angular.module('facets', [])
     * Top level container for all the facets.
     * This contains accordion etc
     */
-    .directive('cttvFacets', ['otFacetsFilters', function (otFacetsFilters) {
+    .directive('otFacets', ['otFacetsFilters', function (otFacetsFilters) {
         'use strict';
 
         return {
@@ -75,7 +75,7 @@ angular.module('facets', [])
      * The default "select all / clear all" controls for facets
      * @param facet the facet (i.e. instance of FilterCollection from the FilterService) we are rendering, e.g. datatypes, pathways, score , etc...
      */
-    .directive('cttvDefaultFacetControls', [function () {
+    .directive('otDefaultFacetControls', [function () {
         'use strict';
 
         return {
@@ -86,7 +86,7 @@ angular.module('facets', [])
                 facet: '='
             },
 
-            template: '<div class="cttv-facets-controls">'
+            template: '<div class="ot-facets-controls">'
                       + '    <span ng-click="facet.selectAll(false)">Clear all <i class="fa fa-times"></i></span>'
                       + '    <span ng-click="facet.selectAll(true)">Select all <i class="fa fa-check"></i></span>'
                       + '</div>'
@@ -98,7 +98,7 @@ angular.module('facets', [])
      * A directive for plain Checkbox facets.
      * @param bucket the instance of Filter object from the FilterService; this is likely in an ng-repeat thing like ng-repeat="bucket in filters"
      */
-    .directive('cttvCheckboxFacet', [function () {
+    .directive('otCheckboxFacet', [function () {
         'use strict';
 
         return {
@@ -121,7 +121,7 @@ angular.module('facets', [])
      * A directive for plain Checkbox facets.
      * @param bucket the instance of Filter object from the FilterService; this is likely in an ng-repeat thing like ng-repeat="bucket in filters"
      */
-    .directive('cttvParentCheckboxFacet', [function () {
+    .directive('otParentCheckboxFacet', [function () {
         'use strict';
 
         return {
@@ -143,7 +143,7 @@ angular.module('facets', [])
     /**
     * A directive for Checkbox facet with nested facets.
     */
-    .directive('cttvUiIndeterminate', [function () {
+    .directive('otUiIndeterminate', [function () {
         'use strict';
 
         return {
@@ -155,7 +155,7 @@ angular.module('facets', [])
                     return angular.noop;
                 }
 
-                scope.$watch(attrs.cttvUiIndeterminate, function (newVal) {
+                scope.$watch(attrs.otUiIndeterminate, function (newVal) {
                     elem[0].indeterminate = !!newVal;
                 });
             }

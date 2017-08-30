@@ -119,7 +119,7 @@ angular.module('otDirectives')
 //         '<div ng-show=showDrugs>' +
 //         '     <span ng-repeat="drug in target.drugs">' +
 //         '        <a target=_blank href="{{drug.id}}">' +
-//         '           <i class="cttv-drug">{{drug.name}}</i>' +
+//         '           <i class="ot-drug">{{drug.name}}</i>' +
 //         '        </a>' +
 //         '     </span>' +
 //         '</div>',
