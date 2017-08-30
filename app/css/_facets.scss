@@ -2,25 +2,25 @@
  * F A C E T S
  */
 
-.cttv-facet .therapeuticArea .panel-heading {
+.ot-facet .therapeuticArea .panel-heading {
     /*background-color: #c6dcec;*/
 }
 
-.cttv-facet .cttv-accordion-leaf .panel-heading {
+.ot-facet .cttv-accordion-leaf .panel-heading {
     /*background-color: #f5f5f5;*/
 }
 
-/* .cttv-facet .cttv-accordion-leaf .panel-body { */
+/* .ot-facet .cttv-accordion-leaf .panel-body { */
     /*     padding : 0px; */
     /* } */
 
-    /*.cttv-facet .panel-heading {
+    /*.ot-facet .panel-heading {
         padding : 5px;
     }
-    .cttv-facet .panel-body {
+    .ot-facet .panel-body {
         padding : 5px;
     }
-    .cttv-facet .panel-title {
+    .ot-facet .panel-title {
         font-size: 10px;
         color: $bodytext-color;
     }*/
@@ -138,7 +138,7 @@
 
 
 
-.cttv-facet-checkbox {
+.ot-facet-checkbox {
     /* overrides bootstrap values */
     margin-top: 0px;
     margin-bottom: 0px;
@@ -147,7 +147,7 @@
     cursor:pointer;
 }
 
-.cttv-facet-checkbox-label{
+.ot-facet-checkbox-label{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -158,8 +158,8 @@
     display: inline;
 }
 
-.cttv-facet-checkbox-label > input,
-.cttv-facet-checkbox-label-multiline > input{
+.ot-facet-checkbox-label > input,
+.ot-facet-checkbox-label-multiline > input{
     /* overrides bootstrap values */
     margin: 0px;
     margin-top: 2px;
@@ -219,16 +219,16 @@
 }
 
 
-.cttv-facet-count {
+.ot-facet-count {
     font-size:11px;
     margin-left:3px;
 }
 
-.cttv-facet-checkbox-label-multiline{
+.ot-facet-checkbox-label-multiline{
     display: inline;
     float:left;
 
-    > .cttv-facet-count{
+    > .ot-facet-count{
         float:none;
         display: inline;
     }

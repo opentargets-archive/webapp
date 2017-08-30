@@ -51,14 +51,14 @@
                 <div ng-show = "targets.length > 0">
 
                     <!--FOUND IN FILE-->
-                    <div class="checkbox cttv-facet-checkbox clearfix">
+                    <div class="checkbox ot-facet-checkbox clearfix">
                                         <span class="ot-facets">
-                                            <span class="cttv-facet-checkbox-label ng-binding"
+                                            <span class="ot-facet-checkbox-label ng-binding"
                                                   ng-click="totalNamesCollapsed = !totalNamesCollapsed"
                                                   title="These are all the names found in your list" data-toggle="tooltip">
                                                 Target names in list<br>
                                             </span>
-                                            <span class="text-lowlight cttv-facet-count pull-left ng-binding" >({{targetNameArray.length}})</span>
+                                            <span class="text-lowlight ot-facet-count pull-left ng-binding" >({{targetNameArray.length}})</span>
                                         </span>
                                         <span  class="text-lowlight pull-right">
                                             <i class="fa fa-caret-right ot-facets-small-arrow"
@@ -74,14 +74,14 @@
 
                     <!--EXCLUDED FROM SEARCH-->
                     <div ng-if="excludedTargetArray.length > 0">
-                        <div   class="checkbox cttv-facet-checkbox clearfix">
+                        <div   class="checkbox ot-facet-checkbox clearfix">
                                         <span class="ot-facets">
-                                            <span class="cttv-facet-checkbox-label ng-binding"
+                                            <span class="ot-facet-checkbox-label ng-binding"
                                                   ng-click="excludedTargetsCollapsed = !excludedTargetsCollapsed"
                                                   title="These are the target names from the uploaded file, for which no Ensembl ID was found - thus excluding them from the association search.">
                                                 Names not found in Ensembl<br>
                                             </span>
-                                            <span class="text-lowlight cttv-facet-count pull-left ng-binding" title="15">({{excludedTargetArray.length}})</span>
+                                            <span class="text-lowlight ot-facet-count pull-left ng-binding" title="15">({{excludedTargetArray.length}})</span>
                                         </span>
                                         <span class="text-lowlight pull-right">
                                             <i class="fa fa-caret-right ot-facets-small-arrow"
@@ -99,14 +99,14 @@
                     <!--FUZZY - NEED TO EXPLAIN - these are the ones that name did not match exactly-->
                     <div ng-if="fuzzyTargetArray.length > 0">
                         <div >
-                            <div  class="checkbox cttv-facet-checkbox clearfix"
+                            <div  class="checkbox ot-facet-checkbox clearfix"
                                   title="These are the target names from the file for which exact match was not found but similar name was found. By default they are included in association search. Clicking on the checkbox will exclude suggested target names from the search. ">
                                                 <span style="width:auto">
-                                                    <label class="cttv-facet-checkbox-label">
+                                                    <label class="ot-facet-checkbox-label">
                                                         <input type="checkbox" ng-click="fuzzyToggle()" ng-checked="fuzziesIncludedInSearch" ot-ui-indeterminate="false"/>
                                                         Suggested names found
                                                     </label>
-                                                    <span class="text-lowlight cttv-facet-count" >({{fuzzyTargetArray.length}})</span>
+                                                    <span class="text-lowlight ot-facet-count" >({{fuzzyTargetArray.length}})</span>
                                                 </span>
                                                 <span class="text-lowlight pull-right">
                                                         <i class="fa ot-facets-small-arrow"
@@ -127,19 +127,19 @@
                     <br>
 
                     <div class="ot-facets">
-                                        <span class="cttv-facet-checkbox-label ng-binding">
+                                        <span class="ot-facet-checkbox-label ng-binding">
                                             Have associations with {{diseaseName}}<br>
                                         </span>
-                                        <span class="text-lowlight cttv-facet-count pull-left ng-binding" >
+                                        <span class="text-lowlight ot-facet-count pull-left ng-binding" >
                                             ({{search.total}})
                                         </span>
                     </div>
 
                     <div class="ot-facets">
-                                        <span class="cttv-facet-checkbox-label ng-binding">
+                                        <span class="ot-facet-checkbox-label ng-binding">
                                             No associations found for {{diseaseName}}<br>
                                         </span>
-                                        <span class="text-lowlight cttv-facet-count pull-left ng-binding" >
+                                        <span class="text-lowlight ot-facet-count pull-left ng-binding" >
                                             ({{targetNameArray.length - search.total - excludedTargetArray.lengh }})
                                         </span>
                     </div>
