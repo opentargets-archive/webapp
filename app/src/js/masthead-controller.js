@@ -1,10 +1,14 @@
+// TODO: otLocationState is needed here to ensure it picks up the initial page load's
+// $locationChangeSuccess event, so that the facets respond to url changes.
+// It would be better to clearly specify otLocationState's init code and trigger on app load.
+/* eslint-disable angular/di-unused */
 angular.module('otControllers')
 
     /**
      * Controller for the masthead navigations
      * Simply exposes the location service
      */
-    .controller('MastheadController', ['$scope', '$location', function ($scope, $location) {
+    .controller('MastheadController', ['$scope', '$location', 'otLocationState', function ($scope, $location, otLocationState) {
         'use strict';
 
         $scope.location = $location;
