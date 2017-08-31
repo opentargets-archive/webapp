@@ -1,6 +1,6 @@
 angular.module('otDirectives')
 
-    .directive('calendar', ['$uibModal', '$log', function($uibModal, $log) {
+    .directive('otCalendar', ['$uibModal', '$log', function($uibModal, $log) {
         var marked = [];
         return {
             restrict: 'E',
