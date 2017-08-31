@@ -4,7 +4,7 @@ FROM nginx:alpine
 RUN apk update && apk add jq
 
 # copy built app - npm install && npm run setup need to have happened
-COPY ./app /var/www/
+COPY ./app /var/www/app/
 
 #move self-signed certificates in the right place
 COPY ./nginx_conf/server.crt /usr/share/nginx/
