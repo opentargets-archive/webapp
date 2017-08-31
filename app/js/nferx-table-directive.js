@@ -154,8 +154,8 @@ angular.module('cttvDirectives')
             return {
                 restrict: 'EA',
                 //templateUrl: 'partials/nferx-table.html',
-                template : ' <div ng-show="{{total}}>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>'
-                +'<div class="table-panel"> <table class="table cttv-evidence-table" id="literature3-table">
+                //template : ' <div ng-show="{{total}}>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>'
+                template: '<div class="table-panel"> <table class="table cttv-evidence-table" id="literature3-table">
                 + '<thead>'+ '<tr>' + '<th>Access level</th>'
             +'<th>Disease</th>'
             +'<th>Cosine Distance</th>'
