@@ -7,6 +7,7 @@ function initApp (deps) {
     //     .setPrefix('openTargets');
     // }]);
 
+
     app.config(['$routeProvider', '$locationProvider',
         function ($routeProvider, $locationProvider) {
             'use strict';
