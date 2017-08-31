@@ -54,13 +54,24 @@ function initApp (deps) {
                 .when('/faq', {
                     templateUrl: 'src/pages/static/faq.html'
                 })
-                .when('/data_sources', {
+                .when('/data-sources', {
                     controller: 'DataSourcesController',
-                    templateUrl: 'src/pages/data-sources/data_sources.html'
+                    templateUrl: 'src/pages/data-sources/data-sources.html'
+                })
+                .when('/terms-of-use', {
+                    templateUrl: 'src/pages/static/terms-of-use.html'
+                })
+                // 31-08-2017 (Luca):
+                // Since we changed the route URL, the following is for backward compatibility only
+                // TODO:
+                // a few months after release delete the following 2 blocks FROM HERE
+                .when('/data_sources', {
+                    redirectTo: '/data-sources'
                 })
                 .when('/terms_of_use', {
-                    templateUrl: 'src/pages/static/terms_of_use.html'
+                    redirectTo: '/terms-of-use'
                 })
+                // TODO: delete TO HERE
                 .when('/release-notes', {
                     templateUrl: 'src/pages/static/release-notes.html'
                 })

@@ -38,23 +38,23 @@ angular.module('otServices')
                 GENE_2_PHENOTYPE: 'gene2phenotype'
             },
             dbs_info_url: {
-                EXPRESSION_ATLAS: '/data_sources#atlas',
-                UNIPROT: '/data_sources#uniprot',
-                UNIPROT_LITERATURE: '/data_sources#uniprot_lit',
-                REACTOME: '/data_sources#reactome',
-                EVA: '/data_sources#eva',
-                PHENODIGM: '/data_sources#mouse',
-                GWAS: '/data_sources#gwas',
-                PHEWAS: '/data_sources#phewas',
-                PHEWAS_23andme: '/data_sources#phewas_23andme',
-                GENOMICS_ENGLAND: '/data_sources#genomics_england',
-                CANCER_GENE_CENSUS: '/data_sources#census',
-                CHEMBL: '/data_sources#chembl',
-                DISGENET: '/data_sources',  // no longer used
-                EPMC: '/data_sources#text_mining',
-                EVA_SOMATIC: '/data_sources#eva',
-                INTOGEN: '/data_sources#intogen',
-                GENE_2_PHENOTYPE: '/data_sources#gene2phenotype'
+                EXPRESSION_ATLAS: '/data-sources#atlas',
+                UNIPROT: '/data-sources#uniprot',
+                UNIPROT_LITERATURE: '/data-sources#uniprot_lit',
+                REACTOME: '/data-sources#reactome',
+                EVA: '/data-sources#eva',
+                PHENODIGM: '/data-sources#mouse',
+                GWAS: '/data-sources#gwas',
+                PHEWAS: '/data-sources#phewas',
+                PHEWAS_23andme: '/data-sources#phewas_23andme',
+                GENOMICS_ENGLAND: '/data-sources#genomics_england',
+                CANCER_GENE_CENSUS: '/data-sources#census',
+                CHEMBL: '/data-sources#chembl',
+                DISGENET: '/data-sources',  // no longer used
+                EPMC: '/data-sources#text_mining',
+                EVA_SOMATIC: '/data-sources#eva',
+                INTOGEN: '/data-sources#intogen',
+                GENE_2_PHENOTYPE: '/data-sources#gene2phenotype'
             },
             datatypesOrder: [
                 'GENETIC_ASSOCIATION', 'SOMATIC_MUTATION', 'KNOWN_DRUG', 'AFFECTED_PATHWAY', 'RNA_EXPRESSION', 'LITERATURE', 'ANIMAL_MODEL'
