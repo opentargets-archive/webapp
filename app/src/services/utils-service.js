@@ -190,7 +190,7 @@ angular.module('otServices')
             var props = path.split('.');
 
             // while (prop = props.shift()) {
-            while (prop.length > 0) {
+            while (props.length > 0) {
                 prop = props.shift();
                 if (!obj.hasOwnProperty(prop)) {
                     return false;
