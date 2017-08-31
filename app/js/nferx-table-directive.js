@@ -153,8 +153,22 @@ angular.module('cttvDirectives')
 
             return {
                 restrict: 'EA',
-                templateUrl: 'partials/nferx-table.html',
+                //templateUrl: 'partials/nferx-table.html',
+                template : ' <div ng-show="{{total}}>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>'
+                +'<div class="table-panel"> <table class="table cttv-evidence-table" id="literature3-table">
+                + '<thead>'+ '<tr>' + '<th>Access level</th>'
+            +'<th>Disease</th>'
+            +'<th>Cosine Distance</th>'
+            +'<th>Nferx URL</th>'
+        +'</tr>'
+        +'</thead>'
+
+        +'<tbody>'
+        +'</tbody>'
+    +'</table>'
++'</div>',
                 scope: {
+                    total: '='
                     target: '=',
                     disease: '=',
                     filename: '='
@@ -162,7 +176,7 @@ angular.module('cttvDirectives')
                 link: function (scope, elem, attrs) {
                     dirScope = scope;
 
-                    scope.$watchGroup(['target', 'disease','filename'], function (vals) {
+                    scope.$watchGroup(['total','target', 'disease','filename'], function (vals) {
                         if (!scope.target || !scope.disease ) {
                             return;
                         }
