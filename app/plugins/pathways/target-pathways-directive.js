@@ -7,7 +7,7 @@ angular.module('otPlugins')
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/pathways/pathways.html',
+            templateUrl: 'plugins/pathways/target-pathways.html',
             scope: {
                 target: '=',
                 width: '='
