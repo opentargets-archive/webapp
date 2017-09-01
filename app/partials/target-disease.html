@@ -415,7 +415,7 @@
                         </div>
 
                           <!-- text-mining / nferx evidences table divider -->
-                        <!--<div ng-show="search.tables.literature.total>0 && search.tables.literature.nferx.total>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>-->
+                        <div ng-show="search.tables.literature.total>0 && search.tables.literature.nferx.total>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
 
                         <div ng-show="search.tables.literature.nferx.total>0">
 
@@ -426,7 +426,7 @@
                                         ng-if="!$last">, </span></span></p>
                             </div>
 
-                            <nferx-table total= "search.tables.literature.total" target="search.target" disease="search.disease" filename="search.info.title"></nferx-table>
+                            <nferx-table target="search.target" disease="search.disease" filename="search.info.title"></nferx-table>
 
                         </div>
 

@@ -153,50 +153,14 @@ angular.module('cttvDirectives')
 
             return {
                 restrict: 'EA',
-                //templateUrl: 'partials/nferx-table.html',
-                templateUrl:'<ng-include src="getTemplateUrl()"/>',
+                templateUrl: 'partials/nferx-table.html',
+
                 scope: {
-                    total: '=',
+
                     target: '=',
                     disease: '=',
                     filename: '='
                 },
-                controller: ['$scope', function ($scope) {
-
-                function init() {
-
-                    var opts = {
-                                target: $scope.target,
-                                disease: $scope.disease,
-                                size: 0,
-                                datasource: cttvConfig.evidence_sources.literature[1]
-                            };
-
-                     var queryObject = {
-                                method: 'GET',
-                                params: opts
-                            };
-                     return cttvAPIservice.getFilterBy (queryObject)
-                                .then (function (resp) {
-                                    $nferx.total = resp.body.total;
-                                    $scope.search.tables.literature.nferx.is_loading = false;
-                                });
-                     }
-
-                    init();
-
-
-                       //function used on the ng-include to resolve the template
-                      $scope.getTemplateUrl = function() {
-                        //basic handling
-                        if ($scope.total == 0 && $scope.nferx.total == 0)
-                          return " <p>No data available</p> ";
-                        if ($scope.total > 0 && $scope.nferx.total > 0 )
-                          return "partials/nferx-table.html";
-                      }
-
-
-                }],
                 link: function (scope, elem, attrs) {
                     dirScope = scope;
 
