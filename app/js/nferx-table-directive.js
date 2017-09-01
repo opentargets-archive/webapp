@@ -196,7 +196,7 @@ angular.module('cttvDirectives')
                       }
 
 
-                },
+                }],
                 link: function (scope, elem, attrs) {
                     dirScope = scope;
 
