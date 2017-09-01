@@ -168,7 +168,7 @@ angular.module('cttvDirectives')
 //    +'</table>'
 //+'</div>',
                 scope: {
-                    total: '='
+                    total: '=',
                     target: '=',
                     disease: '=',
                     filename: '='
