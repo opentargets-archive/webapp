@@ -156,11 +156,12 @@ angular.module('cttvDirectives')
                 //templateUrl: 'partials/nferx-table.html',
                 templateUrl:'<ng-include src="getTemplateUrl()"/>',
                 scope: {
+                    total: '=',
                     target: '=',
                     disease: '=',
                     filename: '='
                 },
-                controller: function($scope) {
+                controller: ['$scope', function ($scope) {
 
                 function init() {
 
