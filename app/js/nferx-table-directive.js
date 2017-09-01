@@ -171,7 +171,7 @@ angular.module('cttvDirectives')
                                 size: 0,
                                 datasource: cttvConfig.evidence_sources.literature[1]
                             };
-                            _.extend(opts, searchObj);
+
                      var queryObject = {
                                 method: 'GET',
                                 params: opts
