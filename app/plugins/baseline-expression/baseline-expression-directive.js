@@ -1,4 +1,4 @@
-angular.module('plugins')
+angular.module('otPlugins')
     .directive('otBaselineExpression', ['$timeout', '$http', 'cttvUtils', function ($timeout, $http, cttvUtils) {
         'use strict';
 
