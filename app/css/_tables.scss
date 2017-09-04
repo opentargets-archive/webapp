@@ -389,15 +389,41 @@
         visibility: hidden;
     }
 
-    ot-hpa-tissue-expression table.matrix-table thead > tr > th:first-child{
-        > div {
-            > span {
-                margin-left: 92.5%;
+    // ot-hpa-tissue-expression table.matrix-table thead > tr > th:first-child{
+    //     > div {
+    //         > span {
+    //             margin-left: 92.5%;
+    //         }
+    //     }
+
+    //     &:after {
+    //         right: 8%;
+    //     }
+    // }
+    ot-tissue-expression {
+        table {
+            tr {
+                td {
+                    padding: 0px 8px;
+                }
+            }		             
+        }		         
+        .expression-cell-rna, .expression-cell-protein {
+            // background: #E0EBEB;
+            background: #EEEEEE;
+            padding: 2px 0px;
+            div {
+                // background: #9B9B9B;
+                background: #226D90;
+                height: 16px;
             }
         }
-
-        &:after {
-            right: 8%;
+        tr.expression-row-tissue {
+            // border: 1px solid black;
+            padding: 0px 2px;
+        }
+        tr.expression-row-parent {
+            background: gold;
         }
     }
 
