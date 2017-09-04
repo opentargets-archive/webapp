@@ -56,7 +56,8 @@ var webappFiles = {
             'app/plugins/*/*.js',
 
             // Facets
-            'app/facets/*/*.js'
+            'app/facets/*/*.js',
+            'app/facets/*.js'
         ],
 
         css: [
