@@ -1,17 +1,5 @@
-/**
-    *
-    * Options for configuration are:
-    *   filename: the string to be used as filename when exporting the directive table to excel or pdf; E.g. "targets_associated_with_BRAF"
-    *   loadprogress: the name of the var in parent scope to be used as flag for API call progress update. E.g. laodprogress="loading"
-    *
-    * Example:
-    *   <cttv-disease-associations target="{{search.query}}" filename="targets_associated_with_BRAF" loadprogress="loading"></cttv-disease-associations>
-    *
-    *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
-    *   This is useful in conjunction with a spinner where you can have ng-show="loading"
-    */
-    angular.module('cttvDirectives')
-    .directive('cttvHpaTissueExpression', ['$log', 'cttvAPIservice', 'cttvUtils', function ($log, cttvAPIservice, cttvUtils) {
+angular.module('otDirectives')
+    .directive('otHpaTissueExpression', ['$log', 'otApi', 'otUtils', function ($log, otApi, otUtils) {
         'use strict';
 
         return {
@@ -24,7 +12,7 @@
                 filename : '@'
             },
 
-            templateUrl: 'partials/tissue-expression.html',
+            templateUrl: 'src/components/tissue-expression/tissue-expression.html',
 
             link: function (scope, elem, attrs) {
                 scope.$watch('hierarchy', function(value) {$log.log(value);});
@@ -36,12 +24,12 @@
                     'target',
                     function() {
 
-                        // move cttvAPIservice.getExpression ({ in here
+                        // move otApi.getExpression ({ in here
                         // ......
 
                         if( scope.target ){
 
-                            cttvAPIservice.getExpression ({
+                            otApi.getExpression ({
                                 "method": "GET",
                                 "params" : {
                                     gene: scope.target  // TODO: should be TARGET in API!!!
@@ -168,7 +156,7 @@
                                 },
 
                                 // error
-                                cttvAPIservice.defaultErrorHandler
+                                otApi.defaultErrorHandler
                             );
                         }
                     }
