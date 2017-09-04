@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otBaselineExpression', ['$timeout', '$http', 'cttvUtils', function ($timeout, $http, cttvUtils) {
+    .directive('otBaselineExpression', ['$timeout', '$http', 'otUtils', function ($timeout, $http, otUtils) {
         'use strict';
 
         return {
@@ -232,7 +232,7 @@ angular.module('otPlugins')
                     return [0, (max + 10)];
                 }
 
-                if (cttvUtils.browser.name !== 'IE') {
+                if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
                         var svg = d3.select('#gtexWidget').select('svg').node();
                         return svg;
