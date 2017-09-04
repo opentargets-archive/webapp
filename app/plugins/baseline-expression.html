@@ -1,0 +1,24 @@
+<uib-tabset>
+    <uib-tab heading="Summary">
+      <p class="cttv-section-intro">
+        Summary of {{target.symbol}} RNA and protein expression in normal human tissue, based on 
+        <a href="http://www.proteinatlas.org/{{target.id}}/tissue" target="blank">Human Protein Atlas <span class="fa fa-external-link"></span></a> normal tissue immunohistochemistry, RNA-seq expression data and
+        <a href="https://www.ebi.ac.uk/gxa/genes/{{target.id}}" target="blank">Expression Atlas <span class="fa fa-external-link"></span></a> data.
+        </p>
+      <div class="row">
+          <div class="col-sm-12">
+              <cttv-hpa-tissue-expression target="target.id" filename="{{target.symbol}}"></cttv-hpa-tissue-expression>
+          </div>
+      </div>
+    </uib-tab>
+
+    <uib-tab heading="Expression Atlas">
+        <div id="gxaWidget"></div>
+    </uib-tab>
+
+    <uib-tab heading="GTEx variability">
+        <p class="cttv-section-intro ng-binding">Baseline expression variation based on GTEx experiments. Further details can be found in the <a href="http://www.gtexportal.org/home/documentationPage">GTEx</a> project site</p>
+        <png filename="{{target.approved_symbol}}-gtex.png" track="gtex"></png>
+        <div id="gtexWidget"></div>
+    </uib-tab>
+</uib-tabset>
