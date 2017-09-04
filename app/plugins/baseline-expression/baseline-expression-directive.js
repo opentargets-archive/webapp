@@ -1,5 +1,5 @@
 angular.module('plugins')
-    .directive('baselineExpression', ['$log', '$timeout', '$http', 'cttvUtils', function ($log, $timeout, $http, cttvUtils) {
+    .directive('otBaselineExpression', ['$timeout', '$http', 'cttvUtils', function ($timeout, $http, cttvUtils) {
         'use strict';
 
         return {
