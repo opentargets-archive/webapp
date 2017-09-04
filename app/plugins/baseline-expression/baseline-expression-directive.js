@@ -4,7 +4,7 @@ angular.module('plugins')
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/baseline-expression.html',
+            templateUrl: 'plugins/baseline-expression/baseline-expression.html',
             scope: {
                 target: "=",
                 width: '='
