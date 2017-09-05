@@ -15,7 +15,7 @@ angular.module('cttvServices')
 
         awsS3.downloadobj = function(){
 
-            var AWS = require('aws-sdk');
+            
              AWS.config.update(
               {
                 accessKeyId: cttvConfig.AWS_ACCESS_KEY_ID,

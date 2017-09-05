@@ -31,8 +31,7 @@
     "mkdirp": "0.5.1",
     "through2": "^2.0.3",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "aws-sdk": "*"
+    "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
     "setup": "./node_modules/.bin/bower install --allow-root && ./node_modules/.bin/jspm install && ./node_modules/.bin/gulp build-all",
