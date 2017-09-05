@@ -40,7 +40,8 @@
     "abdmob/x2js": "^1.2.0",
     "bio-pv": "~1.8.1",
     "moment": "~2.14.1",
-    "angular-local-storage": "~0.5.2"
+    "angular-local-storage": "~0.5.2",
+    "aws-sdk": "*"
   },
   "resolutions": {
     "angular": "1.5.1"
