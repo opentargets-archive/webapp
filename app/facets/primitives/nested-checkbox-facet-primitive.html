@@ -1,0 +1,38 @@
+<div ng-init="collapsed=true&&(!filter.isLastClicked())">
+  <!--Parent-->
+  <div class="checkbox cttv-facet-checkbox clearfix">
+    <span style="width:auto">
+      <label ng-class="(!filter.enabled) ? 'disabled' : ''"
+              class="cttv-facet-checkbox-label"
+              title="{{ filter.label }}">
+          <input type="checkbox"
+              cttv-ui-indeterminate="{{ filter.someChildrenChecked() }}"
+              value="{{ filter.id }}"
+              ng-checked="filter.checked || filter.allChildrenChecked()"
+              ng-disabled="!filter.enabled || (!filter.shouldToggleChildren && filter.getCheckedChildren().length > 0)"
+              ng-click="filter.toggle()" >
+          {{ filter.label | upperCaseFirst | clearUnderscores }}
+      </label>
+        <span ng-show="!filter.hideCount"
+              class="text-lowlight cttv-facet-count pull-left"
+              title="{{ filter.count | metricPrefix:0}}}">({{ filter.count | metricPrefix:0 }})</span>
+    </span>
+    <span ng-show="filter.someChildren()"
+          class="text-lowlight pull-right">
+        <i class="fa cttv-facets-small-arrow"
+           ng-class="{'fa-caret-right': collapsed, 'fa-caret-down': !collapsed}"
+           ng-click="collapsed = !collapsed" 
+           ng-show="filter.enabled"></i>
+    </span>
+    <!--<div class="checkbox-percentage-bar fg"></div>
+    <div class="checkbox-percentage-bar bg"></div>-->
+  </div>
+  <!--Children-->
+  <div uib-collapse="collapsed"
+       style="padding-left:20px"
+       ng-if="filter.children && filter.children.length > 0">
+    <cttv-nested-checkbox-facet-primitive ng-repeat="childFilter in filter.children"
+                                          filter="childFilter">
+    </cttv-nested-checkbox-facet-primitive>
+  </div>
+</div>

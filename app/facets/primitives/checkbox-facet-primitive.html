@@ -1,0 +1,21 @@
+<div class="checkbox cttv-facet-checkbox clearfix">
+  <label ng-class="(!filter.enabled ? 'disabled' : '') +' '+ (multiline?'cttv-facet-checkbox-label-multiline':'cttv-facet-checkbox-label')"
+         title="{{ filter.label }}">
+    <input type="checkbox"
+           ng-value="{{ filter.id }}"
+           ng-checked="filter.checked"
+           ng-disabled="!filter.enabled"
+           ng-click="filter.toggle()" >
+    <span>{{ filter.label | upperCaseFirst | clearUnderscores }}</span>
+    <span ng-if="multiline"
+          class="text-lowlight cttv-facet-count"
+          title="{{ filter.count | metricPrefix:0 }}">
+      ({{ filter.count | metricPrefix:0 }})
+    </span>
+  </label>
+  <span ng-if="!multiline"
+        class="text-lowlight cttv-facet-count"
+        title="{{ filter.count | metricPrefix:0 }}">
+    ({{ filter.count | metricPrefix:0 }})
+  </span>
+</div>
