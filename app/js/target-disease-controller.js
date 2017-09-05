@@ -8,7 +8,7 @@
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'awsS3service','cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
         'use strict';
         // $log.log('TargetDiseaseCtrl()');
 
@@ -134,6 +134,11 @@
         };
 
         $scope.datatypes = datatypes;
+
+        $scope.downloadFile = function(){
+
+            awsS3service.downloadobj();
+        };
 
         var arrayToList = function(arr, oneToString){
             if(oneToString && arr.length==1){
@@ -443,9 +448,14 @@
 
                     // evidence source
                     if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
-                        row.push("<a class='cttv-external-link' href='https://rvizapps.biogen.com/23andme/' target='_blank'>"
+
+
+                        row.push("<div ng-click='downloadFile()'>"
                             + clearUnderscores(item.sourceID)
-                            + "</a>");
+                            + "</div>");
+//                        row.push("<a class='cttv-external-link' href='https://rvizapps.biogen.com/23andme/' target='_blank'>"
+//                            + clearUnderscores(item.sourceID)
+//                            + "</a>");
                     }
                     else if (item.sourceID === cttvConsts.dbs.PHEWAS) {
                         row.push("<a class='cttv-external-link' href='https://phewascatalog.org/phewas' target='_blank'>"
