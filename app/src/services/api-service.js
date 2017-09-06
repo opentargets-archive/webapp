@@ -356,8 +356,14 @@ angular.module('otServices')
         otApiService.addFacetsOptions = function (facets, obj) {
             obj = obj || {};
             for (var i in facets) {
+                // TODO: rna_expression_level should not need to be handled here...
+                // it would be better to have facet-specific serializers for the POST object
                 if (facets.hasOwnProperty(i)) {
-                    obj[otApiService.facets[i.toUpperCase()]] = facets[i];
+                    if (i === 'rna_expression_level') {
+                        obj.rna_expression_level = +facets.rna_expression_level[0];
+                    } else {
+                        obj[otApiService.facets[i.toUpperCase()]] = facets[i];
+                    }
                 }
             }
             return obj;
