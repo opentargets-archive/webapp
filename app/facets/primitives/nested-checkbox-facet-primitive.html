@@ -14,7 +14,7 @@
           {{ filter.label | otUpperCaseFirst | otClearUnderscores }}
       </label>
         <span ng-show="!filter.hideCount"
-              class="text-lowlight cttv-facet-count pull-left"
+              class="text-lowlight ot-facet-count pull-left"
               title="{{ filter.count | otMetricPrefix:0}}}">({{ filter.count | otMetricPrefix:0 }})</span>
     </span>
     <span ng-show="filter.someChildren()"

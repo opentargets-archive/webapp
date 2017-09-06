@@ -8,13 +8,13 @@
            ng-click="filter.toggle()" >
     <span>{{ filter.label | otUpperCaseFirst | otClearUnderscores }}</span>
     <span ng-if="multiline"
-          class="text-lowlight cttv-facet-count"
+          class="text-lowlight ot-facet-count"
           title="{{ filter.count | otMetricPrefix:0 }}">
       ({{ filter.count | otMetricPrefix:0 }})
     </span>
   </label>
   <span ng-if="!multiline"
-        class="text-lowlight cttv-facet-count"
+        class="text-lowlight ot-facet-count"
         title="{{ filter.count | otMetricPrefix:0 }}">
     ({{ filter.count | otMetricPrefix:0 }})
   </span>
