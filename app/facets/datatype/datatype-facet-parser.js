@@ -1,17 +1,17 @@
 angular.module('otFacets')
-    .factory('datatypeFacetParser', ['otFilterTypes', 'otDictionary', 'cttvConsts', function (otFilterTypes, otDictionary, cttvConsts) {
+    .factory('datatypeFacetParser', ['otFilterTypes', 'otDictionary', 'otConsts', function (otFilterTypes, otDictionary, otConsts) {
         var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
             var datatypeFilters = [];
             var datasourceFilters = [];
             var nestedFilters;
             var allDatatypes = [
-                cttvConsts.datatypes.GENETIC_ASSOCIATION,
-                cttvConsts.datatypes.SOMATIC_MUTATION,
-                cttvConsts.datatypes.KNOWN_DRUG,
-                cttvConsts.datatypes.AFFECTED_PATHWAY,
-                cttvConsts.datatypes.RNA_EXPRESSION,
-                cttvConsts.datatypes.LITERATURE,
-                cttvConsts.datatypes.ANIMAL_MODEL
+                otConsts.datatypes.GENETIC_ASSOCIATION,
+                otConsts.datatypes.SOMATIC_MUTATION,
+                otConsts.datatypes.KNOWN_DRUG,
+                otConsts.datatypes.AFFECTED_PATHWAY,
+                otConsts.datatypes.RNA_EXPRESSION,
+                otConsts.datatypes.LITERATURE,
+                otConsts.datatypes.ANIMAL_MODEL
             ];
 
             /**
@@ -56,7 +56,7 @@ angular.module('otFacets')
                 return data.buckets.map(function (bucket) {
                     var filter = new otFilterTypes.NestedBooleanFilter({
                         key: bucket.key,
-                        label: otDictionary[cttvConsts.invert(bucket.key)] || bucket.key,
+                        label: otDictionary[otConsts.invert(bucket.key)] || bucket.key,
                         count: bucket[countsKey].value,
                         enabled: (bucket !== null),
                         checked: false,
