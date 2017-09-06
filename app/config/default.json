@@ -251,8 +251,8 @@
     "facets" : {
         "datatype" : {
             "key": "datatype",
-            "element": "datatype-facet",
             "options" : {
+                "element": "datatype-facet",
                 "heading" : "Data type",
                 "open" : true
             }
@@ -260,8 +260,8 @@
 
         "therapeuticArea" : {
             "key": "therapeutic_area",
-            "element": "therapeutic-area-facet",
             "options" : {
+                "element": "therapeutic-area-facet",
                 "heading" : "Therapeutic area",
                 "open" : true
             }
@@ -269,8 +269,8 @@
 
         "pathway" : {
             "key": "pathway",
-            "element": "pathway-facet",
             "options" : {
+                "element": "pathway-facet",
                 "heading" : "Pathway types",
                 "open" : true
             }
@@ -278,10 +278,19 @@
 
         "targetClass" : {
             "key": "target_class",
-            "element": "target-class-facet",
             "options" : {
+                "element": "target-class-facet",
                 "heading" : "Target class",
                 "open" : true
+            }
+        },
+        
+        "rnaExpression": {
+            "key": "rna_expression",
+            "options": {
+                "element": "rna-expression-facet",
+                "heading": "RNA expression",
+                "open": true
             }
         }
     },
@@ -318,8 +327,11 @@
 
             {
                 "type":"targetClass"
-            }
+            },
 
+            {
+                "type":"rnaExpression"
+            }
         ]
     }
 
