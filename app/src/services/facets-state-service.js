@@ -5,6 +5,7 @@ angular.module('otServices')
             var pageFacets = [];
             var facetParsers = {};
             var facetsGlobal;
+            var stateId = 'fcts';
 
             function init () {
                 // load the parsers once
@@ -23,12 +24,12 @@ angular.module('otServices')
             }
 
             /**
-     * Set the facets to be shown on the current page.
-     * The order in which they're added is also the order
-     * in which they'll appear in the UI.
-     *
-     * @param facetConfig - array of objects containing facet keys
-     */
+             * Set the facets to be shown on the current page.
+             * The order in which they're added is also the order
+             * in which they'll appear in the UI.
+             *
+             * @param facetConfig - array of objects containing facet keys
+             */
             var setPageFacetNamesFromConfig = function (facetConfig) {
                 // note this is a modified version of "pageFacetsStack"" that
                 // does "reset" first as well, since the two are always consecutive
@@ -68,7 +69,7 @@ angular.module('otServices')
                 pageFacets.forEach(function (facet) {
                     urlObj = facet.serialize(urlObj);
                 });
-                otLocationState.setStateFor('fcts', urlObj);
+                otLocationState.setStateFor(stateId, urlObj);
             };
 
             var getUrlObject = function () {
@@ -100,6 +101,7 @@ angular.module('otServices')
                 setPageFacetNamesFromConfig: setPageFacetNamesFromConfig,
                 updatePageFacetsFromApiData: updatePageFacetsFromApiData,
                 getPageFacets: getPageFacets,
-                update: update
+                update: update,
+                stateId: stateid
             };
         }]);

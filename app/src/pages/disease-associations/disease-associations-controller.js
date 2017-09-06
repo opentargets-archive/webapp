@@ -14,7 +14,7 @@ angular.module('otControllers')
  * Then when we get the data, we update content and facets
  */
 
-    .controller('DiseaseAssociationsController', ['$scope', '$location', '$q', 'otApi', 'otFacetsFilters', 'otDictionary', 'otUtils', 'otLocationState', 'otConfig', function ($scope, $location, $q, otApi, otFacetsFilters, otDictionary, otUtils, otLocationState, otConfig) {
+    .controller('DiseaseAssociationsController', ['$scope', '$location', '$q', 'otApi', 'otFacetsState', 'otDictionary', 'otUtils', 'otLocationState', 'otConfig', function ($scope, $location, $q, otApi, otFacetsState, otDictionary, otUtils, otLocationState, otConfig) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -47,18 +47,14 @@ angular.module('otControllers')
             // $window.location.reload();
         };
 
-        // reset the filters when loading a new page
-        // so we don't see the filters from the previous page...
-        otFacetsFilters.reset();
-
-        // Set page filters: this defines the order in which the facets are going to be displayed
-        // as per config JSON
-        otFacetsFilters.pageFacetsStack(otConfig.diseaseAssociationsFacets.facets);
+        // set page facets (from config)
+        var facetNames = otConfig.diseaseAssociationsFacets.facets;
+        otFacetsState.setPageFacetNamesFromConfig(facetNames);
 
 
         // state we want to export to/from the URL
         // var stateId = "view";
-        var facetsId = otFacetsFilters.stateId;
+        var facetsId = otFacetsState.stateId;
 
         /*
          * Renders page elements based on state from locationStateService
@@ -134,7 +130,7 @@ angular.module('otControllers')
 
                     if (resp.body.total) {
                         // TODO Change this to POST request
-                        otFacetsFilters.updateFacets(resp.body.facets, otConfig.diseaseAssociationsFacets.count);
+                        otFacetsState.updatePageFacetsFromApiData(resp.body.facets, otConfig.diseaseAssociationsFacets.count);
 
                         // The label of the diseases in the header
                         $scope.search.label = resp.body.data[0].disease.efo_info.label;
