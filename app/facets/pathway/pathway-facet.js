@@ -1,16 +1,10 @@
 angular.module('facets')
-
-    /**
-     * The Pathway facet
-     */
-    .directive('pathwayFacet', [function () {
-        'use strict';
-
-        return {
-            restrict: 'AE',
-            scope: {
-                facet: '='
-            },
-            templateUrl: 'directives/generic-nested-facetcollection.html'
-        };
-    }]);
+.directive('pathwayFacet', ['$log' , function ($log) {
+    return {
+        restrict: 'E',
+        scope: {
+            facet: '='
+        },
+        templateUrl: 'facets/pathway/pathway-facet.html'
+    };
+}]);
