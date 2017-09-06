@@ -473,7 +473,7 @@
                     // evidence source
                     if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
 
-                        row.push("<a class='cttv-external-link' href='' ng-click='downloadFile()' target='_blank'>"
+                        row.push("<a class='cttv-external-link' href='' ng-click='downloadFile()' >"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
 //                        row.push("<a class='cttv-external-link' href='https://rvizapps.biogen.com/23andme/' target='_blank'>"
