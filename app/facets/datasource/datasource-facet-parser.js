@@ -1,3 +1,5 @@
+// TODO: Is it necessary to keep this? It is unused and a remnent of the old facetting system.
+//       (Datasource is now handled entirely within the datatype facet)
 angular.module('otFacets')
 
     .factory('datasourceFacetParser', ['otDictionary', 'otConsts', function (otDictionary, otConsts) {
