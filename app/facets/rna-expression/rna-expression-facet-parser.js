@@ -1,5 +1,5 @@
 angular.module('facets')
-    .factory('rnaExpressionFacetParser', ['$log', 'cttvFilterTypesService', function ($log, cttvFilterTypesService) {
+    .factory('rnaExpressionFacetParser', ['cttvFilterTypesService', function (cttvFilterTypesService) {
         var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
             /**
      * Create an array of boolean filters (each of which provides the needed

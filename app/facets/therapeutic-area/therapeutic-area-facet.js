@@ -1,5 +1,5 @@
 angular.module('facets')
-    .directive('therapeuticAreaFacet', ['$log', function ($log) {
+    .directive('therapeuticAreaFacet', [function () {
         return {
             restrict: 'E',
             scope: {

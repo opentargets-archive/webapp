@@ -1,5 +1,5 @@
 angular.module('facets')
-    .factory('cttvFilterTypesService', ['$log', '$analytics', function ($log, $analytics) {
+    .factory('cttvFilterTypesService', ['$analytics', function ($analytics) {
         function trackWithAnalytics (label) {
             $analytics.eventTrack('collectionLabel', {
                 'category': 'associationFacet',

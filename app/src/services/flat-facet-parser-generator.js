@@ -1,5 +1,5 @@
 angular.module('facets')
-    .factory('flatFacetParserGenerator', ['$log', 'cttvFilterTypesService', function ($log, cttvFilterTypesService) {
+    .factory('flatFacetParserGenerator', ['cttvFilterTypesService', function (cttvFilterTypesService) {
         var generate = function (useKeyAsLabel) {
             /**
      * Parse function.

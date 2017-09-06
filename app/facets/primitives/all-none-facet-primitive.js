@@ -3,7 +3,7 @@ angular.module('facets')
  * "Select all / Clear all" controls for BooleanFilter facets
  * @param facet - The facet object
  */
-    .directive('cttvAllNoneFacetPrimitive', ['$log', function ($log) {
+    .directive('cttvAllNoneFacetPrimitive', [function () {
         return {
             restrict: 'E',
             scope: {

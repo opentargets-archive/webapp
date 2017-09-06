@@ -1,4 +1,4 @@
 angular.module('facets')
-    .factory('targetClassFacetParser', ['$log', 'nestedFacetParserGenerator', function ($log, nestedFacetParserGenerator) {
+    .factory('targetClassFacetParser', ['nestedFacetParserGenerator', function (nestedFacetParserGenerator) {
         return nestedFacetParserGenerator.generate('target_class');
     }]);

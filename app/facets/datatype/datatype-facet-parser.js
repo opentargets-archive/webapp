@@ -1,5 +1,5 @@
 angular.module('facets')
-    .factory('datatypeFacetParser', ['$log', 'cttvFilterTypesService', 'cttvDictionary', 'cttvConsts', function ($log, cttvFilterTypesService, cttvDictionary, cttvConsts) {
+    .factory('datatypeFacetParser', ['cttvFilterTypesService', 'cttvDictionary', 'cttvConsts', function (cttvFilterTypesService, cttvDictionary, cttvConsts) {
         var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
             var datatypeFilters = [];
             var datasourceFilters = [];

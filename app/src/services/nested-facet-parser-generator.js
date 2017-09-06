@@ -1,5 +1,5 @@
 angular.module('facets')
-    .factory('nestedFacetParserGenerator', ['$log', 'cttvFilterTypesService', function ($log, cttvFilterTypesService) {
+    .factory('nestedFacetParserGenerator', ['cttvFilterTypesService', function (cttvFilterTypesService) {
         var generate = function (accessor) {
             var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
                 var flatFilters = [];

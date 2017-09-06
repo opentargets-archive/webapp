@@ -1,4 +1,4 @@
 angular.module('facets')
-    .factory('pathwayFacetParser', ['$log', 'nestedFacetParserGenerator', function ($log, nestedFacetParserGenerator) {
+    .factory('pathwayFacetParser', ['nestedFacetParserGenerator', function (nestedFacetParserGenerator) {
         return nestedFacetParserGenerator.generate('pathway');
     }]);

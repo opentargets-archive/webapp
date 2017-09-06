@@ -1,5 +1,5 @@
 angular.module('facets')
-    .directive('cttvHistogramSliderFacetPrimitive', ['$log', 'cttvUtils', function ($log, cttvUtils) {
+    .directive('cttvHistogramSliderFacetPrimitive', [function () {
         /**
    * Render the histogram
    * @param {*} histogramData 
