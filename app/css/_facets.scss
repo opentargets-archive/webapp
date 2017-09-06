@@ -51,6 +51,14 @@
         color: $clr-text-em;
     }
 }
+.btn-group.ot-facets-buttons {
+    padding: 2px;
+    margin-bottom: 2px;
+    label.btn {
+        padding: 2px;
+        font-size: 11px;
+    }
+}
 .ot-facets-selected-summary{
     border-bottom:1px solid $clr-ui-border; // was #CCC
     margin-bottom:25px;
@@ -277,3 +285,38 @@
     content: "Profile";
 }
  */
+
+ot-histogram-slider-facet-primitive {
+    .histogram-container {
+        rect {
+            shape-rendering: crispEdges;
+            &.selected {
+                fill: $clr-ui-foreground;
+            }
+
+            &.deselected {
+                fill: $clr-ui-border;
+            }
+        }
+    }
+    .x-axis {
+        path, line {
+          display: none;
+        }
+
+        text{
+          fill: $clr-text-dim;
+        }
+    }
+}
+
+.checkbox-percentage-bar {
+    height: 2px;
+    margin: 0px 20px;
+    &.fg {
+        background-color: $clr-ui-foreground
+    }
+    &.bg {
+        background-color: $clr-ui-background;
+    }
+}
