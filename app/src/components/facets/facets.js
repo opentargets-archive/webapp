@@ -3,8 +3,6 @@
 /* eslint-disable angular/file-name */
 /* eslint-disable angular/directive-name */
 /* eslint-disable angular/directive-restrict */
-/* eslint-disable angular/component-limit */
-/* eslint-disable angular/module-name */
 
 /**
  * Module for all general/common facets directives
@@ -66,75 +64,6 @@ angular.module('otFacets')
                 //    otFacetsFilters.getFilter(id).toggle();
                 // }
             }
-
-        };
-    }])
-
-
-    /**
-     * The default "select all / clear all" controls for facets
-     * @param facet the facet (i.e. instance of FilterCollection from the FilterService) we are rendering, e.g. datatypes, pathways, score , etc...
-     */
-    .directive('otDefaultFacetControls', [function () {
-        'use strict';
-
-        return {
-
-            restrict: 'AE',
-
-            scope: {
-                facet: '='
-            },
-
-            template: '<div class="ot-facets-controls">'
-                      + '    <span ng-click="facet.selectAll(false)">Clear all <i class="fa fa-times"></i></span>'
-                      + '    <span ng-click="facet.selectAll(true)">Select all <i class="fa fa-check"></i></span>'
-                      + '</div>'
-        };
-    }])
-
-
-    /**
-     * A directive for plain Checkbox facets.
-     * @param bucket the instance of Filter object from the FilterService; this is likely in an ng-repeat thing like ng-repeat="bucket in filters"
-     */
-    .directive('otCheckboxFacet', [function () {
-        'use strict';
-
-        return {
-
-            restrict: 'AE',
-
-            scope: {
-                bucket: '=',
-                // partial: '@',    // optional 'OK' status -- TODO: remove deprecated param
-                multiline: '@?'  // optional multiline option
-            },
-
-            // playing with new templates that uses icons instead of inputs...
-            templateUrl: 'directives/checkbox-facet.html'
-        };
-    }])
-
-
-    /**
-     * A directive for plain Checkbox facets.
-     * @param bucket the instance of Filter object from the FilterService; this is likely in an ng-repeat thing like ng-repeat="bucket in filters"
-     */
-    .directive('otParentCheckboxFacet', [function () {
-        'use strict';
-
-        return {
-
-            restrict: 'AE',
-
-            scope: {
-                bucket: '=',
-                collapsed: '='// ,
-                // partial: '@'
-            },
-
-            templateUrl: 'directives/parent-checkbox-facet.html'
 
         };
     }])
