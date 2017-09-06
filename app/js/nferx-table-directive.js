@@ -46,10 +46,10 @@ angular.module('cttvDirectives')
                     // 2 - Cosine Distance
                     row.push(d.evidence.resource_score.value.toPrecision(2));
 
+                    // 3 - Document count
+                    row.push(d.unique_association_fields.document_count);
 
-                    // 3 - Nferx Url
-
-
+                    // 4 - Nferx Url
                     row.push( "<a class='cttv-external-link' href='" + d.unique_association_fields.link_url + "' target='_blank'>"
                         + clearUnderscores(d.sourceID)
                         + "</a>");
@@ -77,7 +77,8 @@ angular.module('cttvDirectives')
                         // 1 => Disease
                         // 2 => Serial Id
                         // 3 => Pvalue
-                        // 4 => URL
+                        // 4 => Document count
+                        // 5 => URL
                         var mappings = {
                             1: "disease.efo_info.label",
                             // 2: "unique_association_fields.serial_id",
@@ -142,8 +143,8 @@ angular.module('cttvDirectives')
                            "width": "3%"
                        },
                        {
-                           "targets": [1], //disease?
-                           "width": "12%"
+                           "targets": [4],
+                           "orderable": false
                        }
                      ]
                 }, ( filename + "_nferx"));
