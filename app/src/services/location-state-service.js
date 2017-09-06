@@ -78,6 +78,9 @@ angular.module('otServices')
                 // otherwise jQuery would convert it to something like "0=l&1=a&2=t&3=e&4=s&5=t" which turns the URL into an ugly mess
                 return obj;
             }
+            if (typeof obj === 'number') {
+                return obj;
+            }
             var s = [];
 
             for (var i in obj) {
@@ -87,6 +90,9 @@ angular.module('otServices')
                     });
                 }
                 if (typeof obj[i] === 'string') {
+                    s.push(i + ':' + obj[i]);
+                }
+                if (typeof obj[i] === 'number') {
                     s.push(i + ':' + obj[i]);
                 }
             }
