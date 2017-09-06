@@ -37,28 +37,14 @@ angular.module('otFacets')
                         facetName: rnaTissueKey
                     }, facetsGlobal);
 
-                    // TODO: attach parents in anatomical systems and organs
-                    var tissue;
-                    // Note: Backend currently serving a mix of tissue labels and UBERON codes (!)
-                    if (bucket.key in Object.keys(tissueMap.tissues)) {
-                        // appears as label
-                        tissue = tissueMap.tissues[bucket.key];
-                    } else {
-                        // appears as uberon
-                        tissue = Object.values(tissueMap.tissues).filter(function (t) {
-                            return t.efo_code === bucket.key;
-                        })[0] || null;
-                    }
 
-                    if (!tissue) {
-                        $log.log('no tissue found in hierarchy for ' + bucket.key);
-                    }
+                    var tissue = bucket.data;
 
                     if (tissue) {
                         // Fix label
                         filter.label = tissue.label;
 
-                        // TODO: use tissue.organs and tissue.anatomical_systems to build hierarchy
+                        // Update anatomical systems
                         tissue.anatomical_systems.forEach(function (anatomical_system) {
                             // get (and create if necessary)
                             var as_filter = getExistingFilter(anatomical_system, anatomicalSystemFilters);
@@ -73,6 +59,7 @@ angular.module('otFacets')
                             as_filter.children.push(filter);
                         });
 
+                        // Update organs
                         tissue.organs.forEach(function (organ) {
                             // get (and create if necessary)
                             var organ_filter = getExistingFilter(organ, organFilters);
