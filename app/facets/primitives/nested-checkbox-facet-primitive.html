@@ -15,7 +15,7 @@
       </label>
         <span ng-show="!filter.hideCount"
               class="text-lowlight cttv-facet-count pull-left"
-              title="{{ filter.count | metricPrefix:0}}}">({{ filter.count | metricPrefix:0 }})</span>
+              title="{{ filter.count | otMetricPrefix:0}}}">({{ filter.count | otMetricPrefix:0 }})</span>
     </span>
     <span ng-show="filter.someChildren()"
           class="text-lowlight pull-right">

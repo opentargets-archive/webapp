@@ -9,13 +9,13 @@
     <span>{{ filter.label | otUpperCaseFirst | otClearUnderscores }}</span>
     <span ng-if="multiline"
           class="text-lowlight cttv-facet-count"
-          title="{{ filter.count | metricPrefix:0 }}">
-      ({{ filter.count | metricPrefix:0 }})
+          title="{{ filter.count | otMetricPrefix:0 }}">
+      ({{ filter.count | otMetricPrefix:0 }})
     </span>
   </label>
   <span ng-if="!multiline"
         class="text-lowlight cttv-facet-count"
-        title="{{ filter.count | metricPrefix:0 }}">
-    ({{ filter.count | metricPrefix:0 }})
+        title="{{ filter.count | otMetricPrefix:0 }}">
+    ({{ filter.count | otMetricPrefix:0 }})
   </span>
 </div>
