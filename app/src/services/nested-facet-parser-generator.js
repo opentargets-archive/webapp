@@ -1,5 +1,5 @@
 angular.module('facets')
-    .factory('nestedFacetParserGenerator', ['otFilterTypes', function (otFilterTypes) {
+    .factory('otNestedFacetParserGenerator', ['otFilterTypes', function (otFilterTypes) {
         var generate = function (accessor) {
             var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
                 var flatFilters = [];

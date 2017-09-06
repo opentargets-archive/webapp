@@ -1,4 +1,4 @@
 angular.module('facets')
-    .factory('therapeuticAreaFacetParser', ['flatFacetParserGenerator', function (flatFacetParserGenerator) {
-        return flatFacetParserGenerator.generate(false);
+    .factory('therapeuticAreaFacetParser', ['otFlatFacetParserGenerator', function (otFlatFacetParserGenerator) {
+        return otFlatFacetParserGenerator.generate(false);
     }]);

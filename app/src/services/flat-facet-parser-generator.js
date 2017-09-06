@@ -1,5 +1,5 @@
 angular.module('facets')
-    .factory('flatFacetParserGenerator', ['otFilterTypes', function (otFilterTypes) {
+    .factory('otFlatFacetParserGenerator', ['otFilterTypes', function (otFilterTypes) {
         var generate = function (useKeyAsLabel) {
             /**
      * Parse function.
