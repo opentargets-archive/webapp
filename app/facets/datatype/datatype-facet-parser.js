@@ -1,5 +1,5 @@
 angular.module('facets')
-    .factory('datatypeFacetParser', ['cttvFilterTypesService', 'cttvDictionary', 'cttvConsts', function (cttvFilterTypesService, cttvDictionary, cttvConsts) {
+    .factory('datatypeFacetParser', ['otFilterTypes', 'cttvDictionary', 'cttvConsts', function (otFilterTypes, cttvDictionary, cttvConsts) {
         var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
             var datatypeFilters = [];
             var datasourceFilters = [];
@@ -28,7 +28,7 @@ angular.module('facets')
                     })[0] || null;
 
                     // create a new filter (based on the data)
-                    var filter = new cttvFilterTypesService.NestedBooleanFilter({
+                    var filter = new otFilterTypes.NestedBooleanFilter({
                         key: datatypeKey,
                         label: cttvDictionary[datatypeKey.toUpperCase()] || '',
                         count: (bucket) ? bucket[countsKey].value : 0,
@@ -54,7 +54,7 @@ angular.module('facets')
 
             var constructDatasourceFilters = function (datatypeKey, data, parent, datasourceFilters) {
                 return data.buckets.map(function (bucket) {
-                    var filter = new cttvFilterTypesService.NestedBooleanFilter({
+                    var filter = new otFilterTypes.NestedBooleanFilter({
                         key: bucket.key,
                         label: cttvDictionary[cttvConsts.invert(bucket.key)] || bucket.key,
                         count: bucket[countsKey].value,

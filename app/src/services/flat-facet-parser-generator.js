@@ -1,5 +1,5 @@
 angular.module('facets')
-    .factory('flatFacetParserGenerator', ['cttvFilterTypesService', function (cttvFilterTypesService) {
+    .factory('flatFacetParserGenerator', ['otFilterTypes', function (otFilterTypes) {
         var generate = function (useKeyAsLabel) {
             /**
      * Parse function.
@@ -24,7 +24,7 @@ angular.module('facets')
        * state and methods for a checkbox)
        */
                 var filters = apiData[facetName].buckets.map(function (bucket) {
-                    return new cttvFilterTypesService.BooleanFilter({
+                    return new otFilterTypes.BooleanFilter({
                         key: bucket.key,
                         label: useKeyAsLabel ? bucket.key : bucket.label,
                         count: bucket[countsKey].value,

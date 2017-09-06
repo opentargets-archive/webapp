@@ -1,5 +1,5 @@
 angular.module('facets')
-    .factory('rnaExpressionFacetParser', ['cttvFilterTypesService', function (cttvFilterTypesService) {
+    .factory('rnaExpressionFacetParser', ['otFilterTypes', function (otFilterTypes) {
         var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
             /**
      * Create an array of boolean filters (each of which provides the needed
@@ -27,7 +27,7 @@ angular.module('facets')
      */
             var constructTissueFilters = function () {
                 tissueFilters = apiData[rnaTissueKey].buckets.map(function (bucket) {
-                    var filter = new cttvFilterTypesService.NestedBooleanFilter({
+                    var filter = new otFilterTypes.NestedBooleanFilter({
                         key: bucket.key,
                         label: bucket.key,
                         count: bucket[countsKey].value,
@@ -104,7 +104,7 @@ angular.module('facets')
 
             var constructAnatomicalSystemFilter = function (anatomicalSystem) {
                 // create
-                var filter = new cttvFilterTypesService.NestedBooleanFilter({
+                var filter = new otFilterTypes.NestedBooleanFilter({
                     key: anatomicalSystem,
                     label: anatomicalSystem,
                     count: 1,
@@ -124,7 +124,7 @@ angular.module('facets')
 
             var constructOrganFilter = function (organ) {
                 // create
-                var filter = new cttvFilterTypesService.NestedBooleanFilter({
+                var filter = new otFilterTypes.NestedBooleanFilter({
                     key: organ,
                     label: organ,
                     count: 1,

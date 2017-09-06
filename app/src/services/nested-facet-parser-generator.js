@@ -1,5 +1,5 @@
 angular.module('facets')
-    .factory('nestedFacetParserGenerator', ['cttvFilterTypesService', function (cttvFilterTypesService) {
+    .factory('nestedFacetParserGenerator', ['otFilterTypes', function (otFilterTypes) {
         var generate = function (accessor) {
             var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
                 var flatFilters = [];
@@ -40,7 +40,7 @@ angular.module('facets')
                         var filter = getExistingFilter(bucket.key, flatFilters);
                         // if there is no existing filter, create one
                         if (!filter) {
-                            filter = new cttvFilterTypesService.NestedBooleanFilter({
+                            filter = new otFilterTypes.NestedBooleanFilter({
                                 key: bucket.key,
                                 label: bucket.label,
                                 count: bucket[countsKey].value,
