@@ -1,6 +1,6 @@
 angular.module('cttvServices')
-    .factory('cttvFiltersService2', ['cttvAPIservice', 'cttvUtils', 'cttvLocationState', '$injector', 'cttvConfig',
-        function (cttvAPIservice, cttvUtils, cttvLocationState, $injector, cttvConfig) {
+    .factory('cttvFiltersService2', ['cttvAPIservice', 'otUtils', 'cttvLocationState', '$injector', 'cttvConfig',
+        function (cttvAPIservice, otUtils, cttvLocationState, $injector, cttvConfig) {
             var pageFacetNames = [];
             var pageFacets = [];
             var facetParsers = {};

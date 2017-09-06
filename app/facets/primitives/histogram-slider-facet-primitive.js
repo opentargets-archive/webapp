@@ -219,8 +219,8 @@ angular.module('facets')
 //             var onBrush = function(){
 //                 var extent0 = mybrush.extent();
 //                 update( {
-//                     min: cttvUtils.roundToNearest(extent0[0], tick).toFixed(2), // extent0[0].toFixed(2),
-//                     max: cttvUtils.roundToNearest(extent0[1], tick).toFixed(2),// extent0[1].toFixed(2)
+//                     min: otUtils.roundToNearest(extent0[0], tick).toFixed(2), // extent0[0].toFixed(2),
+//                     max: otUtils.roundToNearest(extent0[1], tick).toFixed(2),// extent0[1].toFixed(2)
 //                 } );
 //                 //mybrush.extent(scope.min, scope.max);
 //             }
