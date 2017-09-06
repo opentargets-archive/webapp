@@ -102,6 +102,6 @@ angular.module('otServices')
                 updatePageFacetsFromApiData: updatePageFacetsFromApiData,
                 getPageFacets: getPageFacets,
                 update: update,
-                stateId: stateid
+                stateId: stateId
             };
         }]);
