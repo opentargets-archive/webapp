@@ -1,6 +1,6 @@
 angular.module('cttvServices')
-    .factory('cttvFiltersService2', ['cttvAPIservice', 'otUtils', 'otLocationState', '$injector', 'cttvConfig',
-        function (cttvAPIservice, otUtils, otLocationState, $injector, cttvConfig) {
+    .factory('cttvFiltersService2', ['otLocationState', '$injector', 'otConfig',
+        function (otLocationState, $injector, otConfig) {
             var pageFacetNames = [];
             var pageFacets = [];
             var facetParsers = {};
@@ -8,8 +8,8 @@ angular.module('cttvServices')
 
             function init () {
                 // load the parsers once
-                for (var i in cttvConfig.facets) {
-                    var facet = cttvConfig.facets[i];
+                for (var i in otConfig.facets) {
+                    var facet = otConfig.facets[i];
                     var parser = _.camelCase(facet.options.element) + 'Parser';
                     facetParsers[facet.key] = $injector.get(_.camelCase(parser));
                 }
@@ -47,7 +47,7 @@ angular.module('cttvServices')
                 // is in the api data
                 pageFacetNames.map(function (facetName) {
                     // get further facet info from non-page-specific facet config
-                    var facetConfig = cttvConfig.facets[facetName];
+                    var facetConfig = otConfig.facets[facetName];
 
                     // parse the api data and construct the facet object
                     var facet = facetParsers[facetConfig.key].parse(facetConfig.key, apiData, facetsGlobal, countsKey, facetConfig.options);
