@@ -1,3 +1,4 @@
+/* eslint-disable angular/factory-name */
 /**
  * Angular can't handle directives that reference themselves,
  * which would be ideal for nested checkboxes, for example.
