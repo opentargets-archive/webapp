@@ -927,7 +927,10 @@ angular.module('cttvDirectives', [])
                 if (host === 'www.targetvalidation.org' || host === 'targetvalidation.org') {
                     scope.display = false;
                 } else {
-                    scope.display = true;
+                     if (host === 'opentargets.biogen.com'){
+                        scope.host = host.split('.')[1];
+                     }
+                     scope.display = true;
                 }
             }
         }

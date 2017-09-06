@@ -35,6 +35,7 @@ angular.module('cttvServices').
                 CHEMBL :              "chembl",
                 DISGENET :            "disgenet",
                 EPMC :                "europepmc",
+                NFERX :               "nferx",
                 EVA_SOMATIC :         "eva_somatic",
                 INTOGEN :             "intogen",
                 GENE_2_PHENOTYPE :    "gene2phenotype"
@@ -54,12 +55,13 @@ angular.module('cttvServices').
                 CHEMBL :              "/data_sources#chembl",
                 DISGENET :            "/data_sources",  // no longer used
                 EPMC :                "/data_sources#text_mining",
+                NFERX :                "/data_sources#nferx",
                 EVA_SOMATIC :         "/data_sources#eva",
                 INTOGEN :             "/data_sources#intogen",
                 GENE_2_PHENOTYPE :    "/data_sources#gene2phenotype"
             },
             datatypesOrder: [
-                "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "ANIMAL_MODEL"
+                "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE","ANIMAL_MODEL"
             ],
             datatypesLabels: {
                 GENETIC_ASSOCIATION: "Genetics",

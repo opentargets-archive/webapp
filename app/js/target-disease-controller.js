@@ -110,6 +110,15 @@
                     source : cttvConfig.evidence_sources.literature,
                     source_label : cttvConfig.evidence_sources.literature.map(function(s){return {label:cttvDictionary[ cttvConsts.invert(s) ], url:cttvConsts.dbs_info_url[cttvConsts.invert(s)]}; }),
                     has_errors: false,
+                    nferx : {
+                        data : [],
+                        is_open : false,
+                        is_loading: false,
+                        heading : cttvDictionary.NFERX,
+                        source : cttvConfig.evidence_sources.literature[1],
+                        source_label : [{label:cttvDictionary.NFERX, url:cttvConsts.dbs_info_url.NFERX}],
+                        has_errors: false,
+                    }
                 },
                 animal_models : {
                     data : [],
@@ -433,7 +442,7 @@
 
                     // evidence source
                     if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
-                        row.push("<a class='cttv-external-link' href='https://test-rvizapps.biogen.com/23andmeDev/' target='_blank'>"
+                        row.push("<a class='cttv-external-link' href='https://rvizapps.biogen.com/23andme/' target='_blank'>"
                             + clearUnderscores(item.sourceID)
                             + "</a>");
                     }
@@ -468,7 +477,13 @@
                         refs = item.evidence.variant2disease.provenance_type.literature.references;
                     }
 
-                    var pmidsList = cttvUtils.getPmidsList( refs );
+                    if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
+                        var pmidsList = []
+                    }
+                    else{
+                        var pmidsList = cttvUtils.getPmidsList( refs );
+                    }
+
                     row.push( pmidsList.length ? cttvUtils.getPublicationsString( pmidsList ) : 'N/A' );
 
                     // Publication ids (hidden)
@@ -1445,6 +1460,25 @@
                 });
         };
 
+        var getNferxTotal = function () {
+            $scope.search.tables.literature.nferx.is_loading = true;
+            var opts = {
+                target: $scope.search.target,
+                disease: $scope.search.disease,
+                size: 0,
+                datasource: $scope.search.tables.literature.nferx.source
+            };
+            _.extend(opts, searchObj);
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject)
+                .then (function (resp) {
+                    $scope.search.tables.literature.nferx.total = resp.body.total;
+                    $scope.search.tables.literature.nferx.is_loading = false;
+                });
+        };
 
         // =================================================
         //  H E L P E R   M E T H O D S
@@ -1486,6 +1520,7 @@
                 getRnaExpressionData();
                 getPathwaysData();
                 getLiteratureTotal();
+                getNferxTotal();
                 getMouseData();
             });
 
