@@ -1,5 +1,5 @@
 angular.module('otFacets')
-    .directive('cttvHistogramSliderFacetPrimitive', [function () {
+    .directive('otHistogramSliderFacetPrimitive', [function () {
         /**
    * Render the histogram
    * @param {*} histogramData 

@@ -1,5 +1,5 @@
 angular.module('otFacets')
-    .directive('cttvCheckboxFacetPrimitive', [function () {
+    .directive('otCheckboxFacetPrimitive', [function () {
         return {
             restrict: 'E',
             scope: {

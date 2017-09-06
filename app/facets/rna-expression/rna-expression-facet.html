@@ -2,12 +2,12 @@
   <span ng-click="facet.setLevel(0)">Clear <i class="fa fa-times"></i></span>
 </div>
 <div>
-  <cttv-histogram-slider-facet-primitive data="facet.histogramData"
+  <ot-histogram-slider-facet-primitive data="facet.histogramData"
                                          min="facet.min"
                                          max="facet.max"
                                          level="facet.level"
                                          set-level="facet.setLevel">
-  </cttv-histogram-slider-facet-primitive>
+  </ot-histogram-slider-facet-primitive>
 </div>
 
 <div>
@@ -22,7 +22,7 @@
   </div>
 </div>
 <div>
-  <cttv-nested-checkbox-facet-primitive ng-repeat="filter in facet.hierarchy"
+  <ot-nested-checkbox-facet-primitive ng-repeat="filter in facet.hierarchy"
                                         filter="filter">
-  </cttv-nested-checkbox-facet-primitive>
+  </ot-nested-checkbox-facet-primitive>
 </div>

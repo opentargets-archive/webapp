@@ -1,5 +1,5 @@
 angular.module('otFacets')
-    .directive('cttvNestedCheckboxFacetPrimitive', ['RecursionHelper', function (RecursionHelper) {
+    .directive('otNestedCheckboxFacetPrimitive', ['RecursionHelper', function (RecursionHelper) {
         return {
             restrict: 'E',
             scope: {
