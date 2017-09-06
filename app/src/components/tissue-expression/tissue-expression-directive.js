@@ -117,9 +117,19 @@ angular.module('otDirectives')
                                             });
 
                                         scope.proteinLevelToPercent = function (level) {
+                                            if (level <= 0) {
+                                                // level 0 => not expressed
+                                                // level -1 => no data
+                                                return 0;
+                                            }
                                             return level * 100 / 3;
                                         };
                                         scope.rnaLevelToPercent = function (level) {
+                                            if (level <= 0) {
+                                                // level 0 => not expressed
+                                                // level -1 => no data
+                                                return 0;
+                                            }
                                             return level * 10;
                                         };
                                         // default

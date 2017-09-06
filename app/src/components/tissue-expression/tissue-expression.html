@@ -33,24 +33,28 @@
     <tbody ng-repeat-start="parent in parents" class="expression-row-group-parent">
       <tr class="expression-row-parent">
         <td class="expression-cell-rna">
-          <div class="pull-right" style="width:{{ rnaLevelToPercent(parent.rna.level) }}%;"></div>
+          <div ng-if="parent.rna.level >= 0" class="expression-bar pull-right" style="width:{{ rnaLevelToPercent(parent.rna.level) }}%;"></div>
+          <div ng-if="parent.rna.level === -1" class="text-center">NA</div>
         </td>
         <td class="text-center" style="cursor: pointer;" ng-click="parent.expanded = !parent.expanded">
           <span class="bold">{{ parent.label }}</span>
         </td>
         <td class="expression-cell-protein">
-          <div style="width:{{ proteinLevelToPercent(parent.protein.level) }}%;"></div>
+          <div ng-if="parent.protein.level >= 0" class="expression-bar" style="width:{{ proteinLevelToPercent(parent.protein.level) }}%;"></div>
+          <div ng-if="parent.protein.level === -1" class="text-center">NA</div>
         </td>
       </tr>
     </tbody>
     <tbody class="expression-row-group-tissues" ng-show="parent.expanded">
       <tr ng-repeat="tissue in parent.children track by $index" class="expression-row-tissue">
         <td class="expression-cell-rna">
-          <div class="pull-right" style="width:{{ rnaLevelToPercent(tissue.rna.level) }}%;"></div>
+          <div ng-if="tissue.rna.level >= 0" class="expression-bar pull-right" style="width:{{ rnaLevelToPercent(tissue.rna.level) }}%;"></div>
+          <div ng-if="tissue.rna.level === -1" class="text-center">NA</div>
         </td>
         <td class="text-center">{{ tissue.label }}</td>
         <td class="expression-cell-protein">
-          <div style="width:{{ proteinLevelToPercent(tissue.protein.level) }}%;"></div>
+          <div ng-if="tissue.protein.level >= 0" class="expression-bar" style="width:{{ proteinLevelToPercent(tissue.protein.level) }}%;"></div>
+          <div ng-if="tissue.protein.level === -1" class="text-center">NA</div>
         </td>
       </tr>
     </tbody>
