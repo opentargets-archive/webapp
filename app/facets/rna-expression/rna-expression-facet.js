@@ -1,5 +1,5 @@
 angular.module('facets')
-    .directive('rnaExpressionFacet', ['$log', function ($log) {
+    .directive('rnaExpressionFacet', [function () {
         return {
             restrict: 'E',
             scope: {

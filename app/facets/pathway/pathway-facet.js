@@ -1,5 +1,5 @@
 angular.module('facets')
-    .directive('pathwayFacet', ['$log', function ($log) {
+    .directive('pathwayFacet', [function () {
         return {
             restrict: 'E',
             scope: {
