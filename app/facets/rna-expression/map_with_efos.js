@@ -1,3 +1,4 @@
+/* eslint-disable */
 var tissueMap = {
   "tissues": {
     "Brodmann (1909) area 24": {
