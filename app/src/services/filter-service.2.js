@@ -1,6 +1,6 @@
 angular.module('cttvServices')
-    .factory('cttvFiltersService2', ['cttvAPIservice', 'otUtils', 'cttvLocationState', '$injector', 'cttvConfig',
-        function (cttvAPIservice, otUtils, cttvLocationState, $injector, cttvConfig) {
+    .factory('cttvFiltersService2', ['cttvAPIservice', 'otUtils', 'otLocationState', '$injector', 'cttvConfig',
+        function (cttvAPIservice, otUtils, otLocationState, $injector, cttvConfig) {
             var pageFacetNames = [];
             var pageFacets = [];
             var facetParsers = {};
@@ -68,11 +68,11 @@ angular.module('cttvServices')
                 pageFacets.forEach(function (facet) {
                     urlObj = facet.serialize(urlObj);
                 });
-                cttvLocationState.setStateFor('fcts', urlObj);
+                otLocationState.setStateFor('fcts', urlObj);
             };
 
             var getUrlObject = function () {
-                return cttvLocationState.getState().fcts;
+                return otLocationState.getState().fcts;
             };
 
             var refreshFromFacetsUrlObject = function () {
