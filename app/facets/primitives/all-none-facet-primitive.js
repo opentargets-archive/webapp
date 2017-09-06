@@ -1,4 +1,4 @@
-angular.module('facets')
+angular.module('otFacets')
 /**
  * "Select all / Clear all" controls for BooleanFilter facets
  * @param facet - The facet object

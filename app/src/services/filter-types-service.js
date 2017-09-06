@@ -1,4 +1,4 @@
-angular.module('facets')
+angular.module('otFacets')
     .factory('otFilterTypes', ['$analytics', function ($analytics) {
         function trackWithAnalytics (label) {
             $analytics.eventTrack('collectionLabel', {

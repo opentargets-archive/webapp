@@ -4,7 +4,7 @@
  * This is a utility service to get around this constraint.
  * Attribution: https://stackoverflow.com/questions/14430655/recursion-in-angular-directives
  */
-angular.module('facets')
+angular.module('otFacets')
     .factory('RecursionHelper', ['$compile', function ($compile) {
         return {
             /**

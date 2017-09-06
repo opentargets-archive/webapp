@@ -1,4 +1,4 @@
-angular.module('facets')
+angular.module('otFacets')
 
     .factory('datasourceFacetParser', ['otDictionary', 'otConsts', function (otDictionary, otConsts) {
         'use strict';

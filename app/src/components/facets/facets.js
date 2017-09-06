@@ -11,7 +11,7 @@
  */
 
 
-angular.module('facets', [])
+angular.module('otFacets')
 
 
     /**

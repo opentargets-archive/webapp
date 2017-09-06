@@ -1,4 +1,4 @@
-angular.module('facets')
+angular.module('otFacets')
     .factory('datatypeFacetParser', ['otFilterTypes', 'cttvDictionary', 'cttvConsts', function (otFilterTypes, cttvDictionary, cttvConsts) {
         var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
             var datatypeFilters = [];

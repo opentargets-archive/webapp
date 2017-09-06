@@ -1,4 +1,4 @@
-angular.module('facets')
+angular.module('otFacets')
     .directive('cttvNestedCheckboxFacetPrimitive', ['RecursionHelper', function (RecursionHelper) {
         return {
             restrict: 'E',

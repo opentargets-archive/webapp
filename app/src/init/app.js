@@ -132,7 +132,7 @@ var deps = [
     'ngSanitize',
     'swaggerUi',
     'otPlugins',
-    'facets'
+    'otFacets'
 ];
 
 /*

@@ -1,4 +1,4 @@
-angular.module('facets')
+angular.module('otFacets')
     .factory('rnaExpressionFacetParser', ['otFilterTypes', function (otFilterTypes) {
         var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
             /**

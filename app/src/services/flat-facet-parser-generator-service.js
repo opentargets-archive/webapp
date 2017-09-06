@@ -1,4 +1,4 @@
-angular.module('facets')
+angular.module('otFacets')
     .factory('otFlatFacetParserGenerator', ['otFilterTypes', function (otFilterTypes) {
         var generate = function (useKeyAsLabel) {
             /**

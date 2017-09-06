@@ -1,4 +1,4 @@
-angular.module('facets')
+angular.module('otFacets')
     .directive('pathwayFacet', [function () {
         return {
             restrict: 'E',
