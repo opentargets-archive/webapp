@@ -1,5 +1,5 @@
 angular.module('otServices')
-    .factory('cttvFiltersService2', ['otLocationState', '$injector', 'otConfig',
+    .factory('otFacetsState', ['otLocationState', '$injector', 'otConfig',
         function (otLocationState, $injector, otConfig) {
             var pageFacetNames = [];
             var pageFacets = [];
