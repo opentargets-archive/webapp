@@ -57,37 +57,31 @@ angular.module('otDirectives')
                                         var systemHierarchy = {};
                                         var organHierarchy = {};
                                         data.forEach(function (tissue) {
-                                            var hierarchyTissue = expressionHierarchy.tissues[tissue.label];
+                                            // create system hierarchy
+                                            tissue.anatomical_systems.forEach(function (system) {
+                                                // if the system hasn't yet been met, create it
+                                                if (!(system in systemHierarchy)) {
+                                                    systemHierarchy[system] = {
+                                                        'label': system,
+                                                        'children': []
+                                                    };
+                                                }
+                                                // add the tissue
+                                                systemHierarchy[system].children.push(tissue);
+                                            });
 
-                                            // transform anatomical systems
-                                            if (hierarchyTissue && hierarchyTissue.anatomical_systems) {
-                                                hierarchyTissue.anatomical_systems.forEach(function (system) {
-                                                    if (!(system in systemHierarchy)) {
-                                                        var systemObj = expressionHierarchy.anatomical_systems[system];
-                                                        systemHierarchy[system] = {
-                                                            // "efo_code": systemObj.efo_code,
-                                                            'label': systemObj.label,
-                                                            'children': []
-                                                        };
-                                                    }
-                                                    systemHierarchy[system].children.push(tissue);
-                                                });
-                                            }
-
-                                            // transform organs
-                                            if (hierarchyTissue && hierarchyTissue.organs) {
-                                                hierarchyTissue.organs.forEach(function (organ) {
-                                                    if (!(organ in organHierarchy)) {
-                                                        var organObj = expressionHierarchy.organs[organ];
-                                                        organHierarchy[organ] = {
-                                                            // "efo_code": organObj.efo_code,
-                                                            'label': organObj.label,
-                                                            'children': []
-                                                        };
-                                                    }
-                                                    organHierarchy[organ].children.push(tissue);
-                                                });
-                                            }
+                                            // create organ hierarchy
+                                            tissue.organs.forEach(function (organ) {
+                                                // if the organ hasn't yet been met, create it
+                                                if (!(organ in organHierarchy)) {
+                                                    organHierarchy[organ] = {
+                                                        'label': organ,
+                                                        'children': []
+                                                    };
+                                                }
+                                                // add the tissue
+                                                organHierarchy[organ].children.push(tissue);
+                                            });
                                         });
 
                                         // convert to list
