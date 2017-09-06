@@ -6,7 +6,7 @@
            ng-checked="filter.checked"
            ng-disabled="!filter.enabled"
            ng-click="filter.toggle()" >
-    <span>{{ filter.label | upperCaseFirst | clearUnderscores }}</span>
+    <span>{{ filter.label | otUpperCaseFirst | otClearUnderscores }}</span>
     <span ng-if="multiline"
           class="text-lowlight cttv-facet-count"
           title="{{ filter.count | metricPrefix:0 }}">

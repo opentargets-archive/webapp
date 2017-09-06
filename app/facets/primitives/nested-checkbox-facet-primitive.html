@@ -11,7 +11,7 @@
               ng-checked="filter.checked || filter.allChildrenChecked()"
               ng-disabled="!filter.enabled || (!filter.shouldToggleChildren && filter.getCheckedChildren().length > 0)"
               ng-click="filter.toggle()" >
-          {{ filter.label | upperCaseFirst | clearUnderscores }}
+          {{ filter.label | otUpperCaseFirst | otClearUnderscores }}
       </label>
         <span ng-show="!filter.hideCount"
               class="text-lowlight cttv-facet-count pull-left"
