@@ -8,7 +8,7 @@
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils', 'awsS3service','cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils,awsS3service, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
+    .controller('TargetDiseaseCtrl', ['$scope', '$location', '$log', 'cttvAPIservice', 'cttvUtils','cttvDictionary', 'cttvConsts', 'cttvConfig', 'clearUnderscoresFilter', 'upperCaseFirstFilter', '$compile', '$http', '$q', '$timeout', '$analytics', 'cttvLocationState', '$anchorScroll', '$rootScope', function ($scope, $location, $log, cttvAPIservice, cttvUtils, cttvDictionary, cttvConsts, cttvConfig, clearUnderscores, upperCaseFirst, $compile, $http, $q, $timeout, $analytics, cttvLocationState, $anchorScroll, $rootScope) {
         'use strict';
         // $log.log('TargetDiseaseCtrl()');
 
@@ -137,7 +137,30 @@
 
         $scope.downloadFile = function(){
 
-            awsS3service.downloadobj();
+            //awsS3service.downloadobj();
+
+            AWS.config.update({ accessKeyId: cttvConfig.AWS_ACCESS_KEY_ID, secretAccessKey: cttvConfig.AWS_SECRET_KEY });
+            AWS.config.region = 'us-east-1';
+            var bucket = new AWS.S3({ params: { Bucket: 'aal-opentargets-data/23andme/summary/' } });
+
+            var params = {Key: 'PD-AAO_GBA-carriers_2016.html',
+                ContentType: 'text/html',
+                ServerSideEncryption: 'AES256'};
+
+            bucket.getObject(params, function(err, data) {
+                console.log(data);
+
+                console.log(err);
+//                if (err === null) {
+//                    res.attachment('summary.html');
+//                    res.send(data.Body);
+//                  } else {
+//                    console.log("Error downloading data from S3 bucket : ",err);
+//                    res.status(500).send(err);
+//                  }
+
+             });
+
         };
 
         var arrayToList = function(arr, oneToString){
@@ -449,10 +472,9 @@
                     // evidence source
                     if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
 
-
-                        row.push("<div ng-click='downloadFile()'>"
+                        row.push("<a class='cttv-external-link' href='' ng-click='downloadFile()' target='_blank'>"
                             + clearUnderscores(item.sourceID)
-                            + "</div>");
+                            + "</a>");
 //                        row.push("<a class='cttv-external-link' href='https://rvizapps.biogen.com/23andme/' target='_blank'>"
 //                            + clearUnderscores(item.sourceID)
 //                            + "</a>");
