@@ -52,11 +52,18 @@ angular.module('otDirectives')
                                             });
                                         }
 
-                                        // TRANSFORM USING HIERARCHY
-                                        // TODO: this should be done server side
                                         var systemHierarchy = {};
                                         var organHierarchy = {};
                                         data.forEach(function (tissue) {
+                                            // check each tissue has at least one parent anatomical system
+                                            // and at least one parent organ
+                                            if (!tissue.anatomical_systems || tissue.anatomical_systems.length < 1) {
+                                                $log.error(tissue.label + ' has no anatomical system');
+                                            }
+                                            if (!tissue.organs || tissue.organs.length < 1) {
+                                                $log.error(tissue.label + ' has no anatomical system');
+                                            }
+
                                             // create system hierarchy
                                             tissue.anatomical_systems.forEach(function (system) {
                                                 // if the system hasn't yet been met, create it
