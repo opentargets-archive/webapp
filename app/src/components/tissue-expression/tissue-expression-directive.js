@@ -146,12 +146,30 @@ angular.module('otDirectives')
                                                 anatomicalSystem.children.sort(comparator);
                                             });
                                         }
-                                        var rnaComparator = function (a, b) { return d3.descending(a.rna.level, b.rna.level); };
-                                        var proteinComparator = function (a, b) { return d3.descending(a.protein.level, b.protein.level); };
                                         var labelComparator = function (a, b) { return d3.ascending(a.label, b.label); };
-                                        scope.sortByRna = function () { sortBy(rnaComparator); };
-                                        scope.sortByProtein = function () { sortBy(proteinComparator); };
+                                        var rnaThenLabelComparator = function (a, b) {
+                                            // sort by rna (but if rna same, sort alphabetical)
+                                            var c = d3.descending(a.rna.level, b.rna.level);
+                                            if (c !== 0) {
+                                                return c;
+                                            } else {
+                                                return labelComparator(a, b);
+                                            }
+                                        };
+                                        var proteinThenLabelComparator = function (a, b) {
+                                            // sort by protein (but if protein same, sort alphabetical)
+                                            var c = d3.descending(a.protein.level, b.protein.level);
+                                            if (c !== 0) {
+                                                return c;
+                                            } else {
+                                                return labelComparator(a, b);
+                                            }
+                                        };
+                                        
+
                                         scope.sortByLabel = function () { sortBy(labelComparator); };
+                                        scope.sortByRna = function () { sortBy(rnaThenLabelComparator); };
+                                        scope.sortByProtein = function () { sortBy(proteinThenLabelComparator); };
 
                                         // default
                                         scope.sortByLabel();
