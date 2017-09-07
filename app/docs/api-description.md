@@ -105,7 +105,7 @@ print(response.json())
 Please refrain from requesting a new token for each request you make. This would both impact your usage limit and slow down the calls.
 
 We do not analyse the nature of any specific API queries except for the purposes of improving the performance of our API.
-Read more in our [privacy section](https://www.targetvalidation.org/terms_of_use#privacy).
+Read more in our [privacy section](https://www.targetvalidation.org/terms-of-use#privacy).
 
 
 How can we make the Open Targets Platform API more useful to you? Would you like additional methods to be implemented?

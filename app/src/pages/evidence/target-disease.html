@@ -1,0 +1,486 @@
+<!-- evidence page -->
+
+<div class="partial-page">
+
+    <div class="ot-content-header">
+        <div class="container">
+            <h3 view-title>Evidence for {{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}} in {{search.info.efo.label}}</h3>
+            <p></p><!-- bit of a hugly hack, I confess, just to get the spacing consistent with other pages; will adjust and remove in the future -->
+        </div>
+    </div>
+
+    <!-- page header with flower and overview -->
+    <div class="container">
+        <div class="row gene-disease-header">
+
+            <div class="col-sm-3">
+                <ot-gene-disease-association target="{{search.target}}" disease="{{search.disease}}" width="180" height="180" association-data="search.flower_data"></ot-gene-disease-association>
+            </div>
+
+            <div class="col-sm-9">
+
+                <div class="overview">
+
+                    <!-- Gene Info -->
+                    <div class="item">
+                        <a href="/target/{{search.info.gene.ensembl_gene_id}}">
+                            <div class="well well-lg">
+                                <h5>
+                                    {{search.info.gene.approved_symbol || search.info.gene.ensembl_external_name}}<br />
+                                    <span class="small">{{search.info.gene.approved_name || search.info.gene.ensembl_description}}
+                                        <!-- <br/ >({{search.info.gene.id || search.info.gene.ensembl_gene_id}}) -->
+                                        <span ng-show="search.info.gene.symbol_synonyms.length>0"><br />Synonyms: {{search.info.gene.symbol_synonyms.join(", ") | limitTo:100}}<span ng-show="search.info.gene.symbol_synonyms.join(', ').length>100">&hellip;</span></span>
+                                    </span>
+                                </h5>
+                                <!-- The actual content paragraph -->
+                                <p class="small">{{search.info.gene.uniprot_function[0] | limitTo: 200}}<span ng-show="search.info.gene.uniprot_function[0].length>200">&hellip;</span></p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="association">
+                        <div></div>
+                    </div>
+
+                    <!-- Disease Info -->
+                    <div class="item">
+                        <a href="/disease/{{search.info.efo.efo_code}}">
+                            <div class="well well-lg">
+                                <h5>
+                                    {{search.info.efo.label}}
+                                    <span class="small" ng-show="search.info.efo.efo_synonyms.length>0"><br />Synonyms: {{search.info.efo.efo_synonyms.join(", ") | limitTo:100}}<span ng-show="search.info.efo.efo_synonyms.join(', ').length>100">&hellip;</span></span>
+                                </h5>
+                                <p class="small">{{search.info.efo.definition | limitTo: 200}}<span ng-show="search.info.efo.definition.length>200">&hellip;</span></p>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Tabular data -->
+    <div class="container">
+
+        <!-- Tabular data -->
+        <!-- <div class="row gene-disease-content"> -->
+        <div class="row gene-disease-content scroll-table-panel">
+
+            <div class="col-sm-12">
+
+                <a id="tables"></a>
+
+                <!-- uib-accordion -->
+                <uib-accordion close-others="false">
+
+                    <!-- Genetic Associations table -->
+                    <div uib-accordion-group is-open="search.tables.genetic_associations.is_open" ng-click='sectionOpen("genetics")' class="panel-default">
+                        <uib-accordion-heading>
+                            <a id="genetic_associations"></a>
+                            <span class="text-nolight">
+                                <span ng-class="{ 'text-disabled': search.tables.genetic_associations.common_diseases.data.length==0 && search.tables.genetic_associations.rare_diseases.data.length==0 }">{{search.tables.genetic_associations.heading}}</span>
+                                <!-- Score pill -->
+                                <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.GENETIC_ASSOCIATION]" title="Association score">{{search.association_scores[datatypes.GENETIC_ASSOCIATION] | currency : "" : 2}}</span> -->
+                                <!-- <span class='badge' ng-show="search.tables.genetic_associations.rare_diseases.data.length" style="background:#3E8BAD">{{search.tables.genetic_associations.rare_diseases.data.length}}</span> -->
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.genetic_associations.is_loading"></span>
+                            </span>
+                        </uib-accordion-heading>
+                        <uib-tabset>
+                            <uib-tab heading="Table">
+                                <div ng-show="search.tables.genetic_associations.common_diseases.data.length>0 || search.tables.genetic_associations.rare_diseases.data.length>0">
+                                    <!-- <p><span class="small">Association score: {{search.association_scores[datatypes.GENETIC_ASSOCIATION] || 0}}</span></p> -->
+
+                                    <!-- Common disease table -->
+                                    <div ng-show="search.tables.genetic_associations.common_diseases.data.length>0 && !search.tables.genetic_associations.common_diseases.has_errors">
+                                        <h4>{{search.tables.genetic_associations.common_diseases.heading}}</h4>
+                                        <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">GWAS Catalog curated database</a></p> -->
+
+                                        <p>Source: <span ng-repeat="source in search.tables.genetic_associations.common_diseases.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
+
+                                        <div class="table-panel">
+                                            <table class='table ot-evidence-table' id="common-diseases-table">
+                                                <thead>
+                                                    <!--<tr>-->
+                                                        <!--<th rowspan="2"></th>  &lt;!&ndash; nameless col for access level &ndash;&gt;-->
+                                                        <!--<th rowspan="2">Disease</th>-->
+                                                        <!--<th rowspan="2">Variant</th>-->
+                                                        <!--<th colspan="2">Gene-Variant Evidence</th>-->
+                                                        <!--<th colspan="3">Variant-Disease Evidence</th>-->
+                                                    <!--</tr>-->
+
+                                                    <tr>
+                                                        <th></th> <!-- nameless col for access level -->
+                                                        <th>Disease</th>
+                                                        <th>Variant</th>
+                                                        <th>Variant type</th>
+                                                        <th>Evidence source</th>
+                                                        <th>P-Value</th>
+                                                        <!--<th>Details <span style="font-size:0.8em;float:right;"><ot-popover html='true' key="COMMONDISEASES.SCOREDETAILS"></ot-popover></th>-->
+                                                        <th>Publications</th>
+                                                        <th>Publications Ids</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <uib-alert type="danger" ng-show="search.tables.genetic_associations.common_diseases.has_errors" ng-cloak style="margin-top:15px">
+                                        <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving {{search.tables.genetic_associations.common_diseases.heading}} data. Please try again later.
+                                    </uib-alert>
+
+
+                                    <!-- common / rare disease table divider -->
+                                    <div ng-show="search.tables.genetic_associations.common_diseases.data.length>0 && search.tables.genetic_associations.rare_diseases.data.length>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
+
+
+                                    <!-- Related rare disease table -->
+                                    <div ng-show="search.tables.genetic_associations.rare_diseases.data.length>0 && !search.tables.genetic_associations.rare_diseases.has_errors">
+                                        <h4>{{search.tables.genetic_associations.rare_diseases.heading}}</h4>
+                                        <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">UniProt</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated databases</p> -->
+
+                                        <p>Source: <span ng-repeat="source in search.tables.genetic_associations.rare_diseases.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
+
+                                        <div class="table-panel">
+                                            <table class='table ot-evidence-table' id="rare-diseases-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th rowspan="2"></th>  <!-- nameless col for access level -->
+                                                        <th rowspan="2">Disease</th>
+                                                        <th rowspan="2">Mutation</th>
+                                                        <th colspan="4">Gene-Disease Evidence</th>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th>Mutation consequence</th>
+                                                        <th>Clinical significance</th>
+                                                        <th>Evidence source</th>
+                                                        <th>Publications</th>
+                                                        <th>Publications Ids</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <uib-alert type="danger" ng-show="search.tables.genetic_associations.rare_diseases.has_errors" ng-cloak style="margin-top:15px">
+                                        <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving {{search.tables.genetic_associations.rare_diseases.heading}} data. Please try again later.
+                                    </uib-alert>
+
+                                </div>
+
+                                <div ng-show="search.tables.genetic_associations.common_diseases.data.length==0 && search.tables.genetic_associations.rare_diseases.data.length==0 && !search.tables.genetic_associations.common_diseases.has_errors && !search.tables.genetic_associations.rare_diseases.has_errors">
+                                    <p>No data available</p>
+                                </div>
+
+                            </uib-tab>
+
+                            <uib-tab heading="Browser">
+                                <div style="overflow:hidden">
+                                    <ot-target-genome-browser width=1140 efo={{search.disease}} target="{{search.info.gene.ensembl_gene_id}}"></ot-target-genome-browser>
+                                </div>
+                            </uib-tab>
+                        </uib-tabset>
+
+                    </div uib-accordion-group>
+
+
+
+                    <!-- Somatic Mutations table -->
+                    <div uib-accordion-group is-open="search.tables.somatic_mutations.is_open" ng-click='sectionOpen("somatic")' class="panel-default">
+                        <uib-accordion-heading>
+                            <a id="somatic_mutations"></a>
+                            <span class="text-nolight">
+                                <span ng-class="{ 'text-disabled': search.tables.somatic_mutations.data.length==0 }">{{search.tables.somatic_mutations.heading}}</span>
+                                <!--<span class='badge' ng-show="search.tables.somatic_mutations.data.length>0">{{search.tables.somatic_mutations.data.length}}</span>-->
+                                <!-- Score pill -->
+                                <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.SOMATIC_MUTATION]" title="Association score">{{search.association_scores[datatypes.SOMATIC_MUTATION] | currency : "" : 2}}</span> -->
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.somatic_mutations.is_loading"></span>
+                            </span>
+                        </uib-accordion-heading>
+                        <div ng-show="search.tables.somatic_mutations.data.length>0 && !search.tables.somatic_mutations.has_errors">
+                            <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Cancer Gene Census</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated database</p> -->
+
+                            <p>Source: <span ng-repeat="source in search.tables.somatic_mutations.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
+
+                            <div class="table-panel">
+                                <table class='table ot-evidence-table' id="mutations-table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>  <!-- nameless col for access level -->
+                                            <th>Disease</th>
+                                            <th>Mutation type</th>
+                                            <th>Samples</th>
+                                            <th>Cellular mechanism</th>
+                                            <th>Evidence source</th>
+                                            <th>Publications</th>
+                                            <th>Publications IDs</th>  <!-- hidden -->
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div ng-show="search.tables.somatic_mutations.data.length==0 && !search.tables.somatic_mutations.has_errors">
+                            <p>No data available</p>
+                        </div>
+
+                        <uib-alert type="danger" ng-show="search.tables.somatic_mutations.has_errors" ng-cloak>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
+                        </uib-alert>
+                    </div uib-accordion-group>
+
+
+
+                    <!-- Known drugs (as a directive) -->
+
+                    <div uib-accordion-group is-open="search.tables.known_drugs.is_open" ng-click='sectionOpen("drugs")' class="panel-default">
+                        <uib-accordion-heading>
+                            <a id="known_drugs"></a>
+                            <span class="text-nolight">
+                                <span ng-class="{ 'text-disabled': search.tables.known_drugs.data.length==0 }">{{search.tables.known_drugs.heading}}</span>
+                                <!-- Score pill -->
+                                <!-- <span class="badge flower-petal" ng-show="search.association_scores[datatypes.KNOWN_DRUG]" title="Association score">{{search.association_scores[datatypes.KNOWN_DRUG] | currency: "" : 2}}</span> -->
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.known_drugs.is_loading"></span>
+                            </span>
+                        </uib-accordion-heading>
+
+                        <!-- <div ng-show="search.tables.known_drugs==true"> -->
+                        <div ng-show="search.tables.known_drugs.data.length>0 && !search.tables.known_drugs.has_errors">
+                            <p>Source: <span ng-repeat="source in search.tables.known_drugs.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
+
+                            <ot-known-drug-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.known_drugs.is_loading" data="search.tables.known_drugs.data" title="search.info.title" error-flag="search.tables.known_drugs.has_errors"></ot-known-drug-table>
+                        </div>
+
+                        <div ng-show="search.tables.known_drugs.data.length==0 && !search.tables.known_drugs.has_errors">
+                            <p>No data available</p>
+                        </div>
+
+                        <uib-alert type="danger" ng-show="search.tables.known_drugs.has_errors" ng-cloak>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
+                        </uib-alert>
+
+                    </div uib-accordion-group>
+
+
+
+                    <!-- Affected pathways -->
+                    <div uib-accordion-group is-open="search.tables.affected_pathways.is_open" ng-click='sectionOpen("pathways")' class="panel-default">
+                        <uib-accordion-heading>
+                            <a id="affected_pathways"></a>
+                            <span class="text-nolight">
+                                <span ng-class="{ 'text-disabled': search.tables.affected_pathways.data.length==0 }">{{search.tables.affected_pathways.heading}}</span>
+                                <!-- <span class='badge' ng-show="search.tables.affected_pathways.data.length>0">{{search.tables.affected_pathways.data.length}}</span> -->
+                                <!-- Score pill -->
+                                <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.AFFECTED_PATHWAY]" title="Association score">{{search.association_scores[datatypes.AFFECTED_PATHWAY] | currency : "" : 2}}</span> -->
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.affected_pathways.is_loading"></span>
+                            </span>
+                        </uib-accordion-heading>
+                        <div ng-show="search.tables.affected_pathways.data.length>0 && !search.tables.affected_pathways.has_errors">
+                            <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Reactome</a> curated database</p> -->
+                            <p>Source: <span ng-repeat="source in search.tables.affected_pathways.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
+
+                            <div class="table-panel">
+                                <table class='table ot-evidence-table' id="pathways-table">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2"></th>  <!-- nameless col for access level -->
+                                            <th rowspan="2" colspan="1">Disease</th>
+                                            <th rowspan="1" colspan="7">Gene-disease evidence</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Overview</th>
+                                            <th>Activity</th>
+                                            <th>Mutations</th>
+                                            <th>Evidence source</th>
+                                            <th>Publications</th>
+                                            <th>Publications IDs</th> <!-- hidden -->
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div ng-show="search.tables.affected_pathways.data.length==0 && !search.tables.affected_pathways.has_errors">
+                            <p>No data available</p>
+                        </div>
+
+                        <uib-alert type="danger" ng-show="search.tables.affected_pathways.has_errors" ng-cloak>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
+                        </uib-alert>
+                    </div uib-accordion-group>
+
+
+
+                    <!-- RNA Expression table -->
+                    <div uib-accordion-group is-open="search.tables.rna_expression.is_open" ng-click='sectionOpen("rna")' class="panel-default">
+                        <uib-accordion-heading>
+                            <a id="rna_expression"></a>
+                            <span class="text-nolight">
+                                <span ng-class="{ 'text-disabled': search.tables.rna_expression.data.length==0 }">{{search.tables.rna_expression.heading}}</span>
+                                <!-- <span class='badge' ng-show="search.tables.rna_expression.data.length>0">{{search.tables.rna_expression.data.length}}</span> -->
+                                <!-- Score pill -->
+                                <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.RNA_EXPRESSION]" title="Association score">{{search.association_scores[datatypes.RNA_EXPRESSION] | currency : "" : 2}}</span> -->
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.rna_expression.is_loading"></span>
+                            </span>
+                        </uib-accordion-heading>
+                        <div ng-show="search.tables.rna_expression.data.length>0 && !search.tables.rna_expression.has_errors">
+                            <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Expression Atlas</a> curated database</p> -->
+                            <p>Source: <span ng-repeat="source in search.tables.rna_expression.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
+
+                            <div class="table-panel">
+                                <table class='table ot-evidence-table' id="rna-expression-table">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2"></th>  <!-- nameless col for access level -->
+                                            <th rowspan="2" colspan="1">Disease</th>
+                                            <th rowspan="1" colspan="7">Gene-disease evidence</th>
+                                            <th rowspan="2" colspan="1">Experiment overview and data</th>
+                                            <th rowspan="2" colspan="1">Publications</th>
+                                            <th rowspan="2" colspan="1">Publications Ids</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Comparison</th>
+                                            <th>Activity</th>
+                                            <th>Tissue/cell</th>
+                                            <th>Evidence source</th>
+                                            <th>Log<sub>2</sub> fold change</th>
+                                            <th>P-value</th>
+                                            <th class="no-last-el">Percentile rank</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div ng-show="search.tables.rna_expression.data.length==0 && !search.tables.rna_expression.has_errors">
+                            <p>No data available</p>
+                        </div>
+
+                        <uib-alert type="danger" ng-show="search.tables.rna_expression.has_errors" ng-cloak>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
+                        </uib-alert>
+                    </div uib-accordion-group>
+
+
+
+                    <!-- Text mining -->
+                    <div uib-accordion-group is-open="search.tables.literature.is_open"
+                         ng-click='sectionOpen("literature")' class="panel-default">
+                        <uib-accordion-heading>
+                            <a id="literature"></a>
+                            <span class="text-nolight">
+                                <span ng-class="{ 'text-disabled': search.tables.literature.total==0 }">{{search.tables.literature.heading}}</span>
+                                <!-- Score pill -->
+                                <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.LITERATURE]" title="Association score">{{search.association_scores[datatypes.LITERATURE] | currency : "" : 2}}</span> -->
+                                <span ot-progress-spinner class="pull-right"
+                                      ng-show="search.tables.literature.is_loading"></span>
+                            </span>
+                        </uib-accordion-heading>
+
+                        <div ng-show="search.tables.literature.total>0">
+
+
+                            <div class="clearfix">
+
+                                <p>Source: <span ng-repeat="source in search.tables.literature.source_label"><a
+                                        href="{{source.url}}" target="_blank">{{source.label}}</a><span
+                                        ng-if="!$last">, </span></span></p>
+                            </div>
+
+                            <p class=ot-section-intro>Shown are the {{search.tables.literature.total}}
+                                articles where <span class="highlight-primary text-content-highlight">target</span> and
+                                <span class="highlight-warning text-content-highlight">disease</span> are found in the
+                                same sentence. </p>
+
+                            <ot-text-mining-table target="search.target" disease="search.disease" filename="search.info.title"></ot-text-mining-table>
+
+                        </div>
+
+                        <div ng-show="search.tables.literature.total==0">
+                            <p>No data available</p>
+                        </div>
+
+                    </div uib-accordion-group>
+
+
+                    <!-- Mouse models -->
+                    <div uib-accordion-group is-open="search.tables.animal_models.is_open" ng-click='sectionOpen("mouse")' class="panel-default">
+                        <uib-accordion-heading>
+                            <a id="animal_models"></a>
+                            <span class="text-nolight">
+                                <span ng-class="{ 'text-disabled': search.tables.animal_models.data.length==0 }">{{search.tables.animal_models.heading}}</span>
+                                <!-- <span class='badge' ng-show="search.tables.animal_models.data.length>0">{{search.tables.animal_models.data.length}}</span> -->
+                                <!-- Score pill -->
+                                <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.ANIMAL_MODEL]" title="Association score">{{search.association_scores[datatypes.ANIMAL_MODEL] | currency : "" : 2}}</span> -->
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.animal_models.is_loading"></span>
+                            </span>
+                        </uib-accordion-heading>
+
+                        <div ng-show="search.tables.animal_models.data.length>0 && !search.tables.animal_models.has_errors">
+                            <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Phenodigm</a></p> -->
+                            <p>Source: <span ng-repeat="source in search.tables.animal_models.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a></a><span></p>
+
+                            <div class="table-panel">
+                                <table class='table ot-evidence-table' id="mouse-table">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2"></th>
+                                            <th rowspan="2" colspan="1">Disease</th>
+                                            <th rowspan="1" colspan="2">Phenotype - Phenotype Evidence</th>
+                                            <th rowspan="1" colspan="3">Model - Disease Evidence</th>
+                                        </tr>
+                                        <tr>
+                                            <!-- Drug information -->
+                                            <th>Human</th>
+                                            <th>Mouse</th>
+                                            <th>Mouse model</th>
+                                            <th><!--Evidence s-->Source</th>    <!-- TODO: check column title -->
+                                            <th>Score</th> <!-- hidden score -->
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div ng-show="search.tables.animal_models.data.length==0 && !search.tables.animal_models.has_errors">
+                            <p>No data available</p>
+                        </div>
+
+                        <uib-alert type="danger" ng-show="search.tables.animal_models.has_errors" ng-cloak>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
+                        </uib-alert>
+                    </div uib-accordion-group>
+
+
+                </uib-accordion>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- <cttv-associations-header data="{{search}}" width="500" height="120"></cttv-associations-header> -->
+    <!-- <cttv-associations-overview target="{{search.target}}" disease="{{search.disease}}" width="120" height="120"></cttv-associations-overview>-->
+</div>

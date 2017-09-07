@@ -3,20 +3,14 @@ angular.module('facets')
     /**
      * The Pathway facet
      */
-    .directive('pathwayFacet', ['$log' , function ($log) {
+    .directive('pathwayFacet', [function () {
         'use strict';
 
         return {
-
-            restrict: 'EA',
-
+            restrict: 'AE',
             scope: {
                 facet: '='
             },
-
-            templateUrl: 'directives/generic-nested-facetcollection.html',
-
-            link: function (scope, elem, attrs) {}
+            templateUrl: 'directives/generic-nested-facetcollection.html'
         };
-    }])
-;
+    }]);

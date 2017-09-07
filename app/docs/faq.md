@@ -42,7 +42,7 @@ and as the core ontology for the [Centre for Therapeutic Target Validation](http
 #### <a name="data"></a>Where does the data come from?
 
 The evidence in the CTTV platform comes from a number of public databases of biological data. These are
-described in detail on the [data sources](/data_sources) page.
+described in detail on the [data sources](/data-sources) page.
 
 #### <a name="score"></a>How is the association score calculated?
 
@@ -64,7 +64,7 @@ protein entry in [UniProt](http://www.uniprot.org).
 
 We do not analyse the nature of any specific queries (target or disease names) processed via the website except for the
 purposes of improving the site. We use standard encryption methods including https:// to maintain the security of the
-searches. For further details please see our [terms of use](/terms_of_use).
+searches. For further details please see our [terms of use](/terms-of-use).
 
 Some of the components of the site are provided by third parties (e.g. the UniProt protein viewer) or make use of services
 provided by third parties, mostly from other groups in the EMBL-EBI (e.g. the genome browser uses the Ensembl REST API). In addition we provide

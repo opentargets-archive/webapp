@@ -1,0 +1,27 @@
+<div class="hp-blog-feed">
+  <div class="hp-blog-feed-post" ng-repeat="post in posts">
+    <h5 class="hp-blog-feed-post-header">
+      <a href="{{post.link}}">
+        {{post.title}}
+      </a>
+    </h5>
+    <div class="clearfix text-lowlight">
+      <!-- author -->
+      <p class="pull-left">By {{post.author.name}}</p>
+
+      <!-- date -->
+      <p class="pull-right">{{post.pubDate.getDate()}} {{post.pubDate.getMonth() | otMonthToString}} {{post.pubDate.getFullYear()}}</p>
+    </div>
+
+    <!-- long description -->
+    <div ng-bind-html="post.desc | otStripTags | otEllipseText:130"></div>
+
+    <!-- tags -->
+    <div class="text-lowlight text-small" ng-if="post.tags.length>0">
+      <span class="fa fa-tags"></span>
+      <span ng-repeat="tag in post.tags">
+        {{tag.name}}<span ng-if="!$last">,</span>
+      </span>
+    </div>
+  </div>
+</div>

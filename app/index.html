@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html> <!-- ng-app="cttvApp"> -->
+<html> <!-- ng-app="otApp"> -->
     <head>
 
         <title ng-bind-template="{{viewTitle ? viewTitle+' - ' : ''}}Open Targets Platform"></title>
@@ -58,7 +58,7 @@
         <link rel="stylesheet" href="build/components-OpenTargetsWebapp.min.css?v=25072017" />
 
         <!-- IE(9) doesn't create console object if not in debug mode. This makes sure it doesn't throw an exception -->
-        <script type="text/javascript" src="js/ie_console_noop.js?v=25072017"></script>
+        <script type="text/javascript" src="src/js/ie_console_noop.js?v=25072017"></script>
 
         <!-- NEW datatable -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/bs/jq-2.1.4,dt-1.10.10,b-1.1.0,b-flash-1.1.0,b-html5-1.1.0/datatables.min.css"/>
@@ -95,20 +95,20 @@
 
     </head>
 
-    <body id="cttv-page-app">
+    <body id="ot-page-app">
         <!-- piwik opt out -->
         <!-- <iframe frameborder=no width=600px height=200px src=http://demo.piwik.org/index.php?module=CoreAdminHome&action=optOut&language=en></iframe> -->
 
 
-        <div class="cttv-page-wrapper" ng-controller="PageCtrl">
+        <div class="ot-page-wrapper" ng-controller="PageController">
 
             <!-- main page content -->
-            <div class="cttv-main-container">
+            <div class="ot-main-container">
 
                 <!-- Masthead and navigation -->
                 <!-- HP only has notifications -->
                 <!-- other pages have full masthead -->
-                <div ng-controller="MastheadCtrl">
+                <div ng-controller="MastheadController">
                 <div class="masthead ng-cloak" ng-class="location.path()!=='/' ? 'masthead-border' : ''">
                     <div ng-show="opts.showResponsiveSearch" class="masthead-dimmer"></div>
 
@@ -155,10 +155,10 @@
 
                                 <div class="pull-right" ng-class="{'invisible':opts.showResponsiveSearch}">
                                     <!-- navigation menu : hide on small screen-->
-                                    <masthead-navigation-menu class="hidden-xs hidden-sm"></masthead-navigation-menu>
+                                    <ot-masthead-navigation-menu class="hidden-xs hidden-sm"></ot-masthead-navigation-menu>
 
                                     <!-- here should have hamburger -->
-                                    <masthead-navigation-menu is-hamburger="true" class="hidden-md hidden-lg"></masthead-navigation-menu>
+                                    <ot-masthead-navigation-menu is-hamburger="true" class="hidden-md hidden-lg"></ot-masthead-navigation-menu>
                                 </div>
 
                             </div>
@@ -190,27 +190,27 @@
 
                 <!-- FEEDBACK BUTTON -->
                 <!-- Plese re-enable when we want (after integration day?) -->
-                <div ng-cloak class="cttv-feedback-button hidden-xs" ng-controller="FeedbackCtrl" ng-class="{'cttv-feedback-button-round': location.path()!='/' }">
+                <div ng-cloak class="ot-feedback-button hidden-xs" ng-controller="FeedbackController" ng-class="{'ot-feedback-button-round': location.path()!='/' }">
 
                     <a target=_blank href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&colon;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&commat;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&period;&#x6F;&#x72;&#x67;&quest;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&equals;&#x4F;&#x70;&#x65;&#x6E;&#x20;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x73;&#x20;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x20;&#x2D;&#x20;&#x66;&#x65;&#x65;&#x64;&#x62;&#x61;&#x63;&#x6B;&body=Page URL: {{location.absUrl()}}">
                     <div>Feedback</div></a>
                 </div>
 
-                <div ng-cloak class="cttv-social-panel hidden-xs" ng-controller="FeedbackCtrl" ng-show="location.path()=='/'" ng-click="showSocialMedia=!showSocialMedia">
+                <div ng-cloak class="ot-social-panel hidden-xs" ng-controller="FeedbackController" ng-show="location.path()=='/'" ng-click="showSocialMedia=!showSocialMedia">
 
                     <div ng-show="showSocialMedia">
-                        <a target=_blank href="https://www.linkedin.com/company/centre-for-therapeutic-target-validation"><div class="cttv-social-panel-item cttv-social-panel-linkedin"></div></a>
-                        <a target=_blank href="http://twitter.com/targetvalidate"><div class="cttv-social-panel-item cttv-social-panel-twitter"></div></a>
-                        <a target=_blank href="https://www.facebook.com/OpenTargets/"><div class="cttv-social-panel-item cttv-social-panel-facebook"></div></a>
+                        <a target=_blank href="https://www.linkedin.com/company/centre-for-therapeutic-target-validation"><div class="ot-social-panel-item ot-social-panel-linkedin"></div></a>
+                        <a target=_blank href="http://twitter.com/targetvalidate"><div class="ot-social-panel-item ot-social-panel-twitter"></div></a>
+                        <a target=_blank href="https://www.facebook.com/OpenTargets/"><div class="ot-social-panel-item ot-social-panel-facebook"></div></a>
                     </div>
-                    <div class="cttv-social-panel-follow" ng-show="!showSocialMedia">Follow us</div>
+                    <div class="ot-social-panel-follow" ng-show="!showSocialMedia">Follow us</div>
                 </div>
 
 
                 <!--<div class="container">-->
                 <div>
                     <!-- beta ribbon if not in www -->
-                    <cttv-beta-ribbon></cttv-beta-ribbon>
+                    <ot-beta-ribbon></ot-beta-ribbon>
 
                     <!-- ie < 9? -->
                     <!--[if lt IE 9]>
@@ -296,7 +296,7 @@
 
 
             <!-- Log page app session -->
-            <!--<log-session></log-session>-->
+            <!--<ot-log-session></ot-log-session>-->
 
         </div>
 

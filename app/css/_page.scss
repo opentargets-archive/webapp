@@ -26,12 +26,12 @@ body{
 */
 
 
-.cttv-centered-text {
+.ot-centered-text {
     display: table-cell;
     text-align: center;
 }
 
-.cttv-beta-ribbon {
+.ot-beta-ribbon {
     background-color: #a00;
     overflow: hidden;
     white-space: nowrap;
@@ -55,14 +55,14 @@ body{
 }
 
 
-.cttv-main-container {
+.ot-main-container {
     width:100%;
     background: $primary-background-color;
     padding-bottom:70px;
     padding-bottom:320px;
 }
 
-.cttv-page-wrapper {
+.ot-page-wrapper {
     min-height:100%;
     position:relative;
 }
@@ -130,7 +130,7 @@ body{
     }
 }
 
-.cttv-logotype {
+.ot-logotype {
     font-size: 24px;
     font-weight: 100;
     color: #888;
@@ -391,19 +391,19 @@ body{
 
 
 
-.cttv-section-intro {
+.ot-section-intro {
     font-style: italic;
     background-color: $clr-ui-background-secondary; // was #EEE
     padding: 10px;
 }
 
-.cttv-interpage-link {
+.ot-interpage-link {
     padding-left: 15px;
     margin-left: 15px;
     border-left: 1px solid $clr-ui-border; // was #CCC
 }
 
-.cttv-content-header {
+.ot-content-header {
     margin-bottom: 30px;
     //border-bottom: 1px solid $clr-ui-border;
     //box-shadow: 0 0 5px 0 $clr-ui-shadow;
@@ -425,7 +425,7 @@ body{
 /*
  * Feedback side panel
  */
-.cttv-feedback-button {
+.ot-feedback-button {
 
     position: fixed;
     top: 50%;
@@ -456,7 +456,7 @@ body{
 /*
  * Add the full round corners to the feedback panel when shown on its own
  */
-.cttv-feedback-button-round {
+.ot-feedback-button-round {
     @include border-top-left-radius( 5px );
 }
 
@@ -465,7 +465,7 @@ body{
 /*
  * Container for the social media icons / follow us thingy
  */
-.cttv-social-panel {
+.ot-social-panel {
     position: fixed;
     top: 50%;
     border-top: 1px solid #fff;
@@ -481,7 +481,7 @@ body{
     cursor: pointer;
 
 
-    .cttv-social-panel-item {
+    .ot-social-panel-item {
         width: 30px;
         height: 30px;
         color: #FFF;
@@ -491,7 +491,7 @@ body{
         padding-top: 6px;
     }
 
-    .cttv-social-panel-follow {
+    .ot-social-panel-follow {
         background: $secondary-color;
         color: #FFF;
         min-width:90px;
@@ -510,21 +510,21 @@ body{
 /*
  * The linkedin icon block
  */
-.cttv-social-panel-linkedin{
+.ot-social-panel-linkedin{
     background: #0077B5;
     &:after {
         content: "\f0e1";
     };
 }
 
-.cttv-social-panel-twitter{
+.ot-social-panel-twitter{
     background: #00ACED;
     &:after {
         content: "\f099";
     };
 }
 
-.cttv-social-panel-facebook{
+.ot-social-panel-facebook{
     background: #4867AA;
     &:after {
         content: "\f09a";

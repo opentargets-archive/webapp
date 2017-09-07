@@ -1,0 +1,62 @@
+<div class="partial-page">
+    <view-title>Training</view-title>
+    <div class="ot-content-header">
+        <div class="container">
+            <h3>Outreach and tutorials</h3>
+            <p></p>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="row ot-docs-section">
+            <div class="col-sm-8">
+                <h4>Training sessions</h4>
+                 <p>We offer hands-on workshop on the Open Targets initiative and on our Open Targets Platform. Check our <a href="https://blog.opentargets.org/outreach-in-open-targets-supercharge-your-target-id-skills/">blog post</a> for more details.</p>
+                <p ng-hide="sessions">There are no training sessions scheduled, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution</p>
+
+                <!-- upcoming sessions -->
+                <div ng-show="upcoming" class="training-sessions">
+                    <h5>Upcoming sessions:</h5>
+                    <ul>
+                        <li class="event" ng-repeat="event in upcoming">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} <span ng-if="event.external.link">(<a href="{{event.external.link}}">{{event.external.text}}</a>)</span><span ng-if="!event.external.link && event.external.text">({{event.external.text}})</span></li>
+                    </ul>
+                    <p>If you can't attend any of the above, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> now to arrange training sessions at your institution.</p>
+                </div>
+
+                <!-- past sessions -->
+                <div ng-show="past" class="training-sessions">
+                    <h5>Past sessions:</h5>
+                    <ul>
+                        <li class="event" ng-repeat="event in past">
+                            {{event.date | date:"fullDate"}}. {{event.event}} {{event.place}}
+                            <span ng-if="event.materials.length">(
+                                <span ng-repeat="material in event.materials">
+                                    <a target=_blank href="{{material.link}}">{{material.label}} {{$last ? '' : ' | '}}</a>
+                                </span>
+                            )</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="col-sm-4">
+                <ot-calendar selected="day" marked="sessions"></ot-calendar>
+            </div>
+        </div>
+
+<!--
+        <div class="row ot-docs-section">
+            <div class="col-sm-12">
+                <h4>Online resources</h4>
+                <ul>
+                    <li>Get started with our Open Targets Platform with <a target=_blank href="{{slidesUrl}}">these slides</a></li>
+                    <li>Have a tour on your platform with <a target=_blank href="{{videoUrl}}">this video</a></li>
+                </ul>
+            </div>
+        </div>
+-->
+
+    </div>
+</div>

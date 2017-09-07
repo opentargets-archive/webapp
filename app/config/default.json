@@ -115,19 +115,19 @@
     "diseaseSections": [
         {
             "name": "phenotypes",
-            "element": "phenotypes-display",
+            "element": "ot-phenotypes-display",
             "heading": "Phenotypes",
             "track": true
         },
         {
             "name": "drugs",
-            "element": "drugs-display",
+            "element": "ot-drugs-display",
             "heading": "Drugs",
             "track": true
         },
         {
             "name": "classification",
-            "element": "disease-classification",
+            "element": "ot-disease-classification",
             "heading": "Classification",
             "visible": "true",
             "track": true
@@ -137,7 +137,7 @@
     "targetSections": [
         {
             "name": "uniprot",
-            "element": "target-features",
+            "element": "ot-target-features",
             "heading": "Protein Information (from UniProt)",
             "dependencies": {
                 "https://ebi-uniprot.github.io/CDN/protvista/protvista.min.js": {
@@ -152,7 +152,7 @@
 
         {
             "name": "interactionsViewer",
-            "element": "interactions-viewer",
+            "element": "ot-interactions-viewer",
             "heading": "Protein interactions",
             "dependencies": {
                 "build/interactionsViewer.min.js": {
@@ -167,21 +167,21 @@
 
         {
             "name": "genomeBrowser",
-            "element": "genome-browser",
+            "element": "ot-genome-browser",
             "heading": "Variants, isoforms and genomic context",
             "track": true
         },
 
         {
             "name": "proteinExpression",
-            "element": "protein-baseline-expression",
+            "element": "ot-protein-baseline-expression",
             "heading": "Protein baseline expression",
             "track": true
         },
 
         {
             "name": "rnaExpression",
-            "element": "rna-baseline-expression",
+            "element": "ot-rna-baseline-expression",
             "heading": "RNA baseline expression",
             "dependencies": {
                 "https://www.ebi.ac.uk/gxa/resources/js/lib/fetch-polyfill.min.js" : {
@@ -200,16 +200,17 @@
              },
             "track": true
         },
+        
         {
             "name": "geneOntology",
-            "element": "gene-ontology",
+            "element": "ot-gene-ontology",
             "heading": "Gene Ontology",
             "track": true
         },
 
         {
             "name": "proteinStructure",
-            "element": "pdb-target",
+            "element": "ot-pdb-target",
             "heading": "Protein Structure",
             "dependencies": {
                 "vendor/bio-pv.min.js": {
@@ -220,27 +221,27 @@
         },
         {
             "name": "pathways",
-            "element": "target-pathways",
+            "element": "ot-target-pathways",
             "heading": "Pathways",
             "track": true
         },
 
         {
             "name": "drugs",
-            "element": "drugs-display",
+            "element": "ot-drugs-display",
             "heading": "Drugs",
             "track": true
         },
 
         {
             "name": "geneTree",
-            "element": "gene-tree",
+            "element": "ot-gene-tree",
             "heading": "Gene tree",
             "track": true
         },
         {
             "name": "bibliography",
-            "element": "bibliography-target",
+            "element": "ot-bibliography-target",
             "heading": "Bibliography",
             "track": true
         }
@@ -280,15 +281,6 @@
             "element": "target-class-facet",
             "options" : {
                 "heading" : "Target class",
-                "open" : true
-            }
-        },
-
-        "histogram" : {
-            "key": "data_distribution",
-            "element": "data-distribution-facet",
-            "options" : {
-                "heading" : "Data distribution",
                 "open" : true
             }
         }
