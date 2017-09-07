@@ -138,7 +138,7 @@
         $scope.downloadFile = function(){
 
             //awsS3service.downloadobj();
-            console.log('summary file!')
+            console.log('summary file!');
 //            AWS.config.update({ accessKeyId: cttvConfig.AWS_ACCESS_KEY_ID, secretAccessKey: cttvConfig.AWS_SECRET_KEY });
 //            AWS.config.region = 'us-east-1';
 //            var bucket = new AWS.S3({ params: { Bucket: 'aal-opentargets-data/23andme/summary/' } });
