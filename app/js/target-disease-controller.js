@@ -136,33 +136,9 @@
         $scope.datatypes = datatypes;
 
         $scope.downloadFile = function(){
-
-            //awsS3service.downloadobj();
-            console.log('summary file!');
-//            AWS.config.update({ accessKeyId: cttvConfig.AWS_ACCESS_KEY_ID, secretAccessKey: cttvConfig.AWS_SECRET_KEY });
-//            AWS.config.region = 'us-east-1';
-//            var bucket = new AWS.S3({ params: { Bucket: 'aal-opentargets-data/23andme/summary/' } });
-//             console.log('summary file 2!')
-//            var params = {Key: 'PD-AAO_GBA-carriers_2016.html',
-//                ContentType: 'text/html',
-//                ServerSideEncryption: 'AES256'};
-//             console.log('summary file 3!')
-//            bucket.getObject(params, function(err, data) {
-//             alert('summary file get!')
-//                console.log(data);
-//
-//                console.log(err);
-//                if (err === null) {
-//                    res.attachment('summary.html');
-//                    res.send(data.Body);
-//                  } else {
-//                    console.log("Error downloading data from S3 bucket : ",err);
-//                    res.status(500).send(err);
-//                  }
-
-//             });
-
-        };
+          var test = 'abc';
+          console.log("summary fi");
+          };
 
         var arrayToList = function(arr, oneToString){
             if(oneToString && arr.length==1){
@@ -472,9 +448,8 @@
 
                     // evidence source
                     if (item.sourceID === cttvConsts.dbs.PHEWAS_23andme) {
-                        <button ng-click="toggle()">Toggle</button>
 
-                        row.push("<button ng-click='downloadFile()' >"
+                        row.push("<button ng-click='$scope.downloadFile()' >"
                             + clearUnderscores(item.sourceID)
                             + "</button>");
 //                        row.push("<a class='cttv-external-link' href='' ng-click='downloadFile()' >"
