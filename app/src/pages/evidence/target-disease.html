@@ -200,37 +200,15 @@
                             <a id="somatic_mutations"></a>
                             <span class="text-nolight">
                                 <span ng-class="{ 'text-disabled': search.tables.somatic_mutations.data.length==0 }">{{search.tables.somatic_mutations.heading}}</span>
-                                <!--<span class='badge' ng-show="search.tables.somatic_mutations.data.length>0">{{search.tables.somatic_mutations.data.length}}</span>-->
-                                <!-- Score pill -->
-                                <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.SOMATIC_MUTATION]" title="Association score">{{search.association_scores[datatypes.SOMATIC_MUTATION] | currency : "" : 2}}</span> -->
                                 <span ot-progress-spinner class="pull-right" ng-show="search.tables.somatic_mutations.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
+                        
                         <div ng-show="search.tables.somatic_mutations.data.length>0 && !search.tables.somatic_mutations.has_errors">
-                            <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Cancer Gene Census</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated database</p> -->
-
                             <p>Source: <span ng-repeat="source in search.tables.somatic_mutations.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
-
-                            <div class="table-panel">
-                                <table class='table ot-evidence-table' id="mutations-table">
-                                    <thead>
-                                        <tr>
-                                            <th></th>  <!-- nameless col for access level -->
-                                            <th>Disease</th>
-                                            <th>Mutation type</th>
-                                            <th>Samples</th>
-                                            <th>Cellular mechanism</th>
-                                            <th>Evidence source</th>
-                                            <th>Publications</th>
-                                            <th>Publications IDs</th>  <!-- hidden -->
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <ot-somatic-mutation-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.somatic_mutation.is_loading" data="search.tables.somatic_mutations.data" title="search.info.title" error-flag="search.tables.somatic_mutations.has_errors"></ot-somatic-mutation-table>
                         </div>
+
                         <div ng-show="search.tables.somatic_mutations.data.length==0 && !search.tables.somatic_mutations.has_errors">
                             <p>No data available</p>
                         </div>
@@ -241,24 +219,19 @@
                     </div uib-accordion-group>
 
 
-
+                    
                     <!-- Known drugs (as a directive) -->
-
                     <div uib-accordion-group is-open="search.tables.known_drugs.is_open" ng-click='sectionOpen("drugs")' class="panel-default">
                         <uib-accordion-heading>
                             <a id="known_drugs"></a>
                             <span class="text-nolight">
                                 <span ng-class="{ 'text-disabled': search.tables.known_drugs.data.length==0 }">{{search.tables.known_drugs.heading}}</span>
-                                <!-- Score pill -->
-                                <!-- <span class="badge flower-petal" ng-show="search.association_scores[datatypes.KNOWN_DRUG]" title="Association score">{{search.association_scores[datatypes.KNOWN_DRUG] | currency: "" : 2}}</span> -->
                                 <span ot-progress-spinner class="pull-right" ng-show="search.tables.known_drugs.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
 
-                        <!-- <div ng-show="search.tables.known_drugs==true"> -->
                         <div ng-show="search.tables.known_drugs.data.length>0 && !search.tables.known_drugs.has_errors">
                             <p>Source: <span ng-repeat="source in search.tables.known_drugs.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
-
                             <ot-known-drug-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.known_drugs.is_loading" data="search.tables.known_drugs.data" title="search.info.title" error-flag="search.tables.known_drugs.has_errors"></ot-known-drug-table>
                         </div>
 
