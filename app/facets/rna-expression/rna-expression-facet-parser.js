@@ -142,12 +142,17 @@ angular.module('otFacets')
             };
 
             var constructHistogram = function () {
-                histogramData = apiData[rnaLevelKey].buckets.map(function (bucket) {
-                    return {
-                        key: bucket.key,
-                        value: bucket[countsKey].value
-                    };
-                });
+                // ignores -1, 0 buckets
+                histogramData = apiData[rnaLevelKey].buckets
+                    .filter(function (bucket) {
+                        return bucket.key > 0;
+                    })
+                    .map(function (bucket) {
+                        return {
+                            key: bucket.key,
+                            value: bucket[countsKey].value
+                        };
+                    });
             };
 
             /**
