@@ -133,8 +133,8 @@ angular.module('otDirectives')
                                             return level * 10;
                                         };
                                         // default
-                                        scope.parents = scope.anatomicalSystems;
-                                        scope.groupByRadioModel = 'anatomicalSystems';
+                                        scope.parents = scope.organs;
+                                        scope.groupByRadioModel = 'organs';
 
                                         function sortBy (comparator) {
                                             scope.organs.sort(comparator);
