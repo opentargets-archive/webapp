@@ -337,5 +337,22 @@ angular.module('otServices')
         //     return defer_cancel;
         // };
 
+
+        /*
+         * Search for given eco_code id in the specified evidence_codes_info array
+         * and returns corresponding label, or eco_code id if not found
+         */
+        otUtilsService.getEcoLabel = function (arr, eco) {
+            var label = eco;
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i][0].eco_id === eco) {
+                    label = arr[i][0].label;
+                    break;
+                }
+            }
+            return label;
+        };
+
+
         return otUtilsService;
     }]);

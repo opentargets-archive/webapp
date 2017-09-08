@@ -219,7 +219,7 @@
                     </div uib-accordion-group>
 
 
-                    
+
                     <!-- Known drugs (as a directive) -->
                     <div uib-accordion-group is-open="search.tables.known_drugs.is_open" ng-click='sectionOpen("drugs")' class="panel-default">
                         <uib-accordion-heading>
@@ -314,32 +314,7 @@
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Expression Atlas</a> curated database</p> -->
                             <p>Source: <span ng-repeat="source in search.tables.rna_expression.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
-                            <div class="table-panel">
-                                <table class='table ot-evidence-table' id="rna-expression-table">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2"></th>  <!-- nameless col for access level -->
-                                            <th rowspan="2" colspan="1">Disease</th>
-                                            <th rowspan="1" colspan="7">Gene-disease evidence</th>
-                                            <th rowspan="2" colspan="1">Experiment overview and data</th>
-                                            <th rowspan="2" colspan="1">Publications</th>
-                                            <th rowspan="2" colspan="1">Publications Ids</th>
-                                        </tr>
-                                        <tr>
-                                            <th>Comparison</th>
-                                            <th>Activity</th>
-                                            <th>Tissue/cell</th>
-                                            <th>Evidence source</th>
-                                            <th>Log<sub>2</sub> fold change</th>
-                                            <th>P-value</th>
-                                            <th class="no-last-el">Percentile rank</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <ot-rna-expression-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.rna_expression.is_loading" data="search.tables.rna_expression.data" title="search.info.title" error-flag="search.tables.rna_expression.has_errors"></ot-rna-expression-table>
                         </div>
 
                         <div ng-show="search.tables.rna_expression.data.length==0 && !search.tables.rna_expression.has_errors">
