@@ -132,6 +132,25 @@ angular.module('otDirectives')
                                             }
                                             return level * 10;
                                         };
+                                        scope.proteinLevelToHint = function (level) {
+                                            // if (level === 0) {
+                                            if (level === 0) {
+                                                return 'Under expressed';
+                                            } else if (level === 1) {
+                                                return 'Low';
+                                            } else if (level === 2) {
+                                                return 'Medium';
+                                            } else {
+                                                return 'High';
+                                            }
+                                        };
+                                        scope.rnaLevelToHint = function (level) {
+                                            if (level === 0) {
+                                                return 'Under expressed';
+                                            } else {
+                                                return 'Expressed in decile ' + level;
+                                            }
+                                        };
                                         // default
                                         scope.parents = scope.organs;
                                         scope.groupByRadioModel = 'organs';
@@ -165,7 +184,6 @@ angular.module('otDirectives')
                                                 return labelComparator(a, b);
                                             }
                                         };
-                                        
 
                                         scope.sortByLabel = function () { sortBy(labelComparator); };
                                         scope.sortByRna = function () { sortBy(rnaThenLabelComparator); };
