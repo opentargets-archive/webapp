@@ -3,16 +3,11 @@
 </div>
 <div>
   <ot-histogram-slider-facet-primitive data="facet.histogramData"
-                                         min="facet.min"
-                                         max="facet.max"
-                                         level="facet.level"
-                                         set-level="facet.setLevel">
+                                       min="facet.min"
+                                       max="facet.max"
+                                       level="facet.level"
+                                       set-level="facet.setLevel">
   </ot-histogram-slider-facet-primitive>
-</div>
-
-<div>
-  <ot-all-none-facet-primitive facet="facet">
-  </ot-all-none-facet-primitive>
 </div>
 <div class="col-sm-12 ot-facets-controls">
   <span>Group by</span>
@@ -22,7 +17,11 @@
   </div>
 </div>
 <div>
+  <ot-all-none-facet-primitive facet="facet">
+  </ot-all-none-facet-primitive>
+</div>
+<div>
   <ot-nested-checkbox-facet-primitive ng-repeat="filter in facet.hierarchy"
-                                        filter="filter">
+                                      filter="filter">
   </ot-nested-checkbox-facet-primitive>
 </div>
