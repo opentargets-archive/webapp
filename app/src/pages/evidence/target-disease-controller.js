@@ -73,7 +73,7 @@ angular.module('otControllers')
                     source_label: otConfig.evidence_sources.rna_expression.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                     has_errors: false
                 },
-                affected_pathways: {
+                pathways: {
                     data: [],
                     is_open: false,
                     is_loading: false,
@@ -123,12 +123,14 @@ angular.module('otControllers')
 
         $scope.datatypes = datatypes;
 
-        var arrayToList = function (arr, oneToString) {
-            if (oneToString && arr.length === 1) {
-                return arr[0];
-            }
-            return '<ul><li>' + arr.join('</li><li>') + '</li></ul>';
-        };
+        // var arrayToList = function (arr, oneToString) {
+        //     if (oneToString && arr.length === 1) {
+        //         return arr[0];
+        //     }
+        //     return '<ul><li>' + arr.join('</li><li>') + '</li></ul>';
+        // };
+
+
         // =================================================
         //  I N F O
         // =================================================
@@ -630,137 +632,10 @@ angular.module('otControllers')
         //  PATHWAYS
         // =================================================
 
-            /*
-            pathway 1   Target context  .biological_subject.properties.target_type
-            pathway 2   Protein complex members .biological_subject.about
-            pathway 3   Activity    .biological_subject.properties.activity
-            pathway 4   Additional context  .evidence.properties.experiment_specific.additional_properties
-            pathway 5   Provenance - SourceDB   .evidence.urls.linkouts
-            pathway 6   Provenance - References .evidence.provenance_type.literature.pubmed_refs
-            pathway 7   Date asserted   .evidence.date_asserted
-            pathway 8   Evidence codes  .evidence.evidence_codes
-            */
-
 
         var getPathwaysData = function () {
-            $scope.search.tables.affected_pathways.is_loading = true;
-            var opts = {
-                target: $scope.search.target,
-                disease: $scope.search.disease,
-                size: 1000,
-                datasource: $scope.search.tables.affected_pathways.source, // otConfig.evidence_sources.pathway,
-                fields: [
-                    'target',
-                    'disease',
-                    'evidence',
-                    'access_level'
-                ]
-            };
-            _.extend(opts, searchObj);
-            var queryObject = {
-                method: 'GET',
-                params: opts
-            };
-            return otApi.getFilterBy(queryObject)
-                .then(
-                    function (resp) {
-                        if (resp.body.data) {
-                            $scope.search.tables.affected_pathways.data = resp.body.data;
-                            initTablePathways();
-                        } else {
-                            $log.warn('Empty response : pathway data');
-                        }
-                    },
-                    otApi.defaultErrorHandler
-                )
-                .finally(function () {
-                    $scope.search.tables.affected_pathways.is_loading = false;
-                });
-        };
-
-
-        /*
-         *
-         */
-        var formatPathwaysDataToArray = function (data) {
-            var newdata = [];
-            data.forEach(function (item) {
-                // create rows:
-                var row = [];
-
-                try {
-                    // data origin: public / private
-                    row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
-
-                    // disease
-                    row.push(item.disease.efo_info.label);
-
-                    // overview
-                    row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=\'_blank\'>' + item.evidence.urls[0].nice_name + '</a>');
-
-                    // activity
-                    row.push(otDictionary[item.target.activity.toUpperCase()] || otClearUnderscoresFilter(item.target.activity)); // "up_or_down"->"unclassified" via dictionary
-
-                    // mutations
-                    var mut = otDictionary.NA;
-                    if (item.evidence.known_mutations && item.evidence.known_mutations.length > 0) {
-                        mut = arrayToList(item.evidence.known_mutations.map(function (i) { return i.preferred_name || otDictionary.NA; }), true);
-                    }
-                    row.push(mut);
-
-                    // evidence codes
-                    row.push('Curated in ' + item.evidence.provenance_type.database.id);
-
-                    // publications
-                    var refs = [];
-                    if (checkPath(item, 'evidence.provenance_type.literature.references')) {
-                        refs = item.evidence.provenance_type.literature.references;
-                    }
-                    var pmidsList = otUtils.getPmidsList(refs);
-                    row.push(otUtils.getPublicationsString(pmidsList));
-
-                    // Publication ids (hidden)
-                    row.push(pmidsList.join(', '));
-
-
-                    newdata.push(row); // use push() so we don't end up with empty rows
-                } catch (e) {
-                    $scope.search.tables.affected_pathways.has_errors = true;
-                    $log.error('Error parsing pathways data:');
-                    $log.error(e);
-                }
-            });
-            return newdata;
-        };
-
-
-        var initTablePathways = function () {
-            $('#pathways-table').DataTable(otUtils.setTableToolsParams({
-                'data': formatPathwaysDataToArray($scope.search.tables.affected_pathways.data),
-                'ordering': true,
-                'order': [[1, 'asc']],
-                'autoWidth': false,
-                'paging': true,
-                'columnDefs': [
-                    {
-                        'targets': [0],    // the access-level (public/private icon)
-                        'visible': otConfig.show_access_level,
-                        'width': '3%'
-                    },
-                    {
-                        'targets': [7],
-                        'visible': false
-                    },
-                    {
-                        'targets': [3, 4, 5, 6],
-                        'width': '14%'
-                    },
-                    {
-                        'targets': [1],
-                        'width': '18%'
-                    }
-                ]
-            }, $scope.search.info.title + '-disrupted_pathways'));
+            $scope.target = $scope.search.target;
+            $scope.disease = $scope.search.disease;
         };
 
 

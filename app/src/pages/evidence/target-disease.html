@@ -248,50 +248,28 @@
 
 
                     <!-- Affected pathways -->
-                    <div uib-accordion-group is-open="search.tables.affected_pathways.is_open" ng-click='sectionOpen("pathways")' class="panel-default">
+                    <div uib-accordion-group is-open="search.tables.pathways.is_open" ng-click='sectionOpen("pathways")' class="panel-default">
                         <uib-accordion-heading>
                             <a id="affected_pathways"></a>
                             <span class="text-nolight">
-                                <span ng-class="{ 'text-disabled': search.tables.affected_pathways.data.length==0 }">{{search.tables.affected_pathways.heading}}</span>
-                                <!-- <span class='badge' ng-show="search.tables.affected_pathways.data.length>0">{{search.tables.affected_pathways.data.length}}</span> -->
+                                <span ng-class="{ 'text-disabled': search.tables.pathways.data.length==0 }">{{search.tables.pathways.heading}}</span>
+                                <!-- <span class='badge' ng-show="search.tables.pathways.data.length>0">{{search.tables.pathways.data.length}}</span> -->
                                 <!-- Score pill -->
                                 <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.AFFECTED_PATHWAY]" title="Association score">{{search.association_scores[datatypes.AFFECTED_PATHWAY] | currency : "" : 2}}</span> -->
-                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.affected_pathways.is_loading"></span>
+                                <span ot-progress-spinner class="pull-right" ng-show="search.tables.pathways.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
-                        <div ng-show="search.tables.affected_pathways.data.length>0 && !search.tables.affected_pathways.has_errors">
+                        <div ng-show="search.tables.pathways.data.length>0 && !search.tables.pathways.has_errors">
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Reactome</a> curated database</p> -->
-                            <p>Source: <span ng-repeat="source in search.tables.affected_pathways.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
-
-                            <div class="table-panel">
-                                <table class='table ot-evidence-table' id="pathways-table">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2"></th>  <!-- nameless col for access level -->
-                                            <th rowspan="2" colspan="1">Disease</th>
-                                            <th rowspan="1" colspan="7">Gene-disease evidence</th>
-                                        </tr>
-                                        <tr>
-                                            <th>Overview</th>
-                                            <th>Activity</th>
-                                            <th>Mutations</th>
-                                            <th>Evidence source</th>
-                                            <th>Publications</th>
-                                            <th>Publications IDs</th> <!-- hidden -->
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <p>Source: <span ng-repeat="source in search.tables.pathways.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
+                            <ot-pathway-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.pathways.is_loading" data="search.tables.pathways.data" title="search.info.title" error-flag="search.tables.pathways.has_errors"></ot-pathway-table>
                         </div>
 
-                        <div ng-show="search.tables.affected_pathways.data.length==0 && !search.tables.affected_pathways.has_errors">
+                        <div ng-show="search.tables.pathways.data.length==0 && !search.tables.pathways.has_errors">
                             <p>No data available</p>
                         </div>
 
-                        <uib-alert type="danger" ng-show="search.tables.affected_pathways.has_errors" ng-cloak>
+                        <uib-alert type="danger" ng-show="search.tables.pathways.has_errors" ng-cloak>
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
                         </uib-alert>
                     </div uib-accordion-group>

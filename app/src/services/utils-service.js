@@ -354,5 +354,16 @@ angular.module('otServices')
         };
 
 
+        /**
+         * Takes an array and formats it to an HTML list (returns a string)
+         */
+        otUtilsService.arrayToList = function (arr, oneToString) {
+            if (oneToString && arr.length === 1) {
+                return arr[0];
+            }
+            return '<ul><li>' + arr.join('</li><li>') + '</li></ul>';
+        };
+
+
         return otUtilsService;
     }]);
