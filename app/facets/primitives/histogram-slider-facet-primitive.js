@@ -8,7 +8,7 @@ angular.module('otFacets')
    * @param {*} height 
    */
         var render = function (scope, svg, width, height) {
-            var margins = {top: 20, right: 10, bottom: 20, left: 10};
+            var margins = {top: 10, right: 10, bottom: 25, left: 10};
             var histogramWidth = width - margins.left - margins.right;
             var histogramHeight = height - margins.top - margins.bottom;
 
