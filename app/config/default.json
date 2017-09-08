@@ -263,7 +263,7 @@
             "options" : {
                 "element": "therapeutic-area-facet",
                 "heading" : "Therapeutic area",
-                "open" : true
+                "open" : false
             }
         },
 
@@ -272,7 +272,7 @@
             "options" : {
                 "element": "pathway-facet",
                 "heading" : "Pathway types",
-                "open" : true
+                "open" : false
             }
         },
 
@@ -281,7 +281,7 @@
             "options" : {
                 "element": "target-class-facet",
                 "heading" : "Target class",
-                "open" : true
+                "open" : false
             }
         },
         
@@ -290,7 +290,7 @@
             "options": {
                 "element": "rna-expression-facet",
                 "heading": "RNA expression",
-                "open": true
+                "open": false
             }
         }
     },
