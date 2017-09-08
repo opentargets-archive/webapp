@@ -25,8 +25,16 @@
         color: $bodytext-color;
     }*/
 
+ot-facets {
+    // affects .ot-facets, but needs to be on parent
+    @include scrollbar(4px);
+}
+
 .ot-facets{
     font-size: 12px;
+    max-height: 1000px;
+    overflow-y: auto;
+    padding-right: 5px;
 }
 
 .ot-facets-headers{
