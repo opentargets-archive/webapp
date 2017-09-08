@@ -363,29 +363,8 @@
                             <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Phenodigm</a></p> -->
                             <p>Source: <span ng-repeat="source in search.tables.animal_models.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a></a><span></p>
 
-                            <div class="table-panel">
-                                <table class='table ot-evidence-table' id="mouse-table">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2"></th>
-                                            <th rowspan="2" colspan="1">Disease</th>
-                                            <th rowspan="1" colspan="2">Phenotype - Phenotype Evidence</th>
-                                            <th rowspan="1" colspan="3">Model - Disease Evidence</th>
-                                        </tr>
-                                        <tr>
-                                            <!-- Drug information -->
-                                            <th>Human</th>
-                                            <th>Mouse</th>
-                                            <th>Mouse model</th>
-                                            <th><!--Evidence s-->Source</th>    <!-- TODO: check column title -->
-                                            <th>Score</th> <!-- hidden score -->
-                                        </tr>
-                                    </thead>
+                            <ot-mouse-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.animal_models.is_loading" data="search.tables.animal_models.data" title="search.info.title" error-flag="search.tables.animal_models.has_errors"></ot-mouse-table>
 
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
 
                         <div ng-show="search.tables.animal_models.data.length==0 && !search.tables.animal_models.has_errors">
