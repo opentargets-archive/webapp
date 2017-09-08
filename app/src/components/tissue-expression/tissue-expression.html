@@ -20,26 +20,26 @@
   <table class="table">
     <thead>
       <tr class="expression-row-header">
-        <th class="text-center col-xs-4">RNA</th>
         <th class="col-xs-4"></th>
+        <th class="text-center col-xs-4">RNA</th>
         <th class="text-center col-xs-4">Protein</th>
       </tr>
       <tr class="expression-row-low-high">
-        <td class="col-xs-4"><span>High</span><span class="pull-right">Low</span></td>
         <td class="col-xs-4"></td>
+        <td class="col-xs-4"><span>High</span><span class="pull-right">Low</span></td>
         <td class="col-xs-4"><span>Low</span><span class="pull-right">High</span></td>
       </tr>
     </thead>
     <tbody ng-repeat-start="parent in parents" class="expression-row-group-parent">
       <tr class="expression-row-parent" ng-class="{'expression-row-parent__expanded': parent.expanded}">
+        <td class="expression-cell-label" style="cursor: pointer;" ng-click="parent.expanded = !parent.expanded">
+          <span class="bold">{{ parent.label | otUpperCaseFirst }}</span>
+        </td>
         <td class="expression-cell-rna">
           <div class="expression-bar-container">
             <div ng-if="parent.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(parent.rna.level) }}" style="width:{{ rnaLevelToPercent(parent.rna.level) }}%;"></div>
             <div ng-if="parent.rna.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
           </div>
-        </td>
-        <td class="expression-cell-label text-center" style="cursor: pointer;" ng-click="parent.expanded = !parent.expanded">
-          <span class="bold">{{ parent.label }}</span>
         </td>
         <td class="expression-cell-protein">
           <div class="expression-bar-container">
@@ -51,13 +51,13 @@
     </tbody>
     <tbody class="expression-row-group-tissues" ng-show="parent.expanded">
       <tr ng-repeat="tissue in parent.children track by $index" class="expression-row-tissue">
+        <td class="expression-cell-label">{{ tissue.label | otUpperCaseFirst }}</td>
         <td class="expression-cell-rna">
           <div class="expression-bar-container">
             <div ng-if="tissue.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(tissue.rna.level) }}" style="width:{{ rnaLevelToPercent(tissue.rna.level) }}%;"></div>
             <div ng-if="tissue.rna.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
           </div>
         </td>
-        <td class="expression-cell-label text-center">{{ tissue.label }}</td>
         <td class="expression-cell-protein">
           <div class="expression-bar-container">
             <div ng-if="tissue.protein.level >= 0" class="expression-bar" title="{{ proteinLevelToHint(tissue.protein.level) }}" style="width:{{ proteinLevelToPercent(tissue.protein.level) }}%;"></div>
@@ -68,8 +68,8 @@
     </tbody>
     <tbody ng-repeat-end ng-show="false" class="expression-row-group-ignore">
       <tr>
-        <td></td>
         <td>IGNORE ME!</td>
+        <td></td>
         <td></td>
       </tr>
     </tbody>
