@@ -26,5 +26,8 @@
 [context.feature.environment]
   APIHOST = "https://api.targetvalidation.org/api/"
 
+[context."expression-facets-hierarchyless".environment]
+  APIHOST = "https://mk-assocfix-dot-open-targets-eu-dev.appspot.com/api/"
+
 [context.master.environment]
   APIHOST = "https://api.targetvalidation.org/api/"
