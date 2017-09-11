@@ -2,10 +2,10 @@ angular.module('otDirectives')
     .directive('nferxTable', [
         'otApi',
         'otConfig',
-        'clearUnderscoresFilter',
+        'otClearUnderscoresFilter',
         function (otApi,
                   otConfig,
-                  clearUnderscores) {
+                  otClearUnderscoresFilter) {
             'use strict';
 
             var draw = 1;
@@ -35,7 +35,7 @@ angular.module('otDirectives')
 
                     // 4 - Nferx Url
                     row.push( "<a class='ot-external-link' href='" + d.unique_association_fields.link_url + "' target='_blank'>"
-                        + clearUnderscores(d.sourceID)
+                        + otClearUnderscoresFilter(d.sourceID)
                         + "</a>");
 
 
