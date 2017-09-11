@@ -1280,7 +1280,7 @@ angular.module('otControllers')
                 method: 'GET',
                 params: opts
             };
-            return cttvAPIservice.getFilterBy (queryObject)
+            return otApi.getFilterBy (queryObject)
                 .then (function (resp) {
                     $scope.search.tables.literature.nferx.total = resp.body.total;
                     $scope.search.tables.literature.nferx.is_loading = false;
