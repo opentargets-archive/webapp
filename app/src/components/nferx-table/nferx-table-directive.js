@@ -1,9 +1,9 @@
 angular.module('otDirectives')
     .directive('nferxTable', [
-        'otAPI',
+        'otApi',
         'otConfig',
-        'clearUnderscoresFilter',,
-        function (otAPI,
+        'clearUnderscoresFilter',
+        function (otApi,
                   otConfig,
                   clearUnderscores) {
             'use strict';
@@ -91,7 +91,7 @@ angular.module('otDirectives')
                             method: 'GET',
                             params: opts
                         };
-                        otAPI.getFilterBy(queryObject)
+                        otApi.getFilterBy(queryObject)
                             .then(function (resp) {
                                 var dtData = parseServerResponse(resp.body.data);
                                 var o = {
