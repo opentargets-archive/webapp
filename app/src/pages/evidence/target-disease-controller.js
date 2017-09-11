@@ -113,7 +113,7 @@ angular.module('otControllers')
                         is_open : false,
                         is_loading: false,
                         heading : otDictionary.NFERX,
-                        source : cttvConfig.evidence_sources.literature[1],
+                        source : otConfig.evidence_sources.literature[1],
                         source_label : [{label:otDictionary.NFERX, url:otConsts.dbs_info_url.NFERX}],
                         has_errors: false
                     }
