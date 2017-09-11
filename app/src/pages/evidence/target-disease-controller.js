@@ -107,7 +107,16 @@ angular.module('otControllers')
                     heading: otDictionary.LITERATURE,
                     source: otConfig.evidence_sources.literature,
                     source_label: otConfig.evidence_sources.literature.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                    has_errors: false
+                    has_errors: false,
+                    nferx : {
+                        data : [],
+                        is_open : false,
+                        is_loading: false,
+                        heading : otDictionary.NFERX,
+                        source : cttvConfig.evidence_sources.literature[1],
+                        source_label : [{label:otDictionary.NFERX, url:otConsts.dbs_info_url.NFERX}],
+                        has_errors: false
+                    }
                 },
                 animal_models: {
                     data: [],
@@ -1258,6 +1267,25 @@ angular.module('otControllers')
                 });
         };
 
+         var getNferxTotal = function () {
+            $scope.search.tables.literature.nferx.is_loading = true;
+            var opts = {
+                target: $scope.search.target,
+                disease: $scope.search.disease,
+                size: 0,
+                datasource: $scope.search.tables.literature.nferx.source
+            };
+            _.extend(opts, searchObj);
+            var queryObject = {
+                method: 'GET',
+                params: opts
+            };
+            return cttvAPIservice.getFilterBy (queryObject)
+                .then (function (resp) {
+                    $scope.search.tables.literature.nferx.total = resp.body.total;
+                    $scope.search.tables.literature.nferx.is_loading = false;
+                });
+        };
 
         // =================================================
         //  H E L P E R   M E T H O D S
@@ -1296,6 +1324,7 @@ angular.module('otControllers')
                 getRnaExpressionData();
                 getPathwaysData();
                 getLiteratureTotal();
+                getNferxTotal();
                 getMouseData();
             });
 
