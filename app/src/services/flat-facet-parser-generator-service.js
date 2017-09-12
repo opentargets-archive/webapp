@@ -2,27 +2,27 @@ angular.module('otFacets')
     .factory('otFlatFacetParserGenerator', ['otFilterTypes', function (otFilterTypes) {
         var generate = function (useKeyAsLabel) {
             /**
-     * Parse function.
-     * 
-     * Each FacetParser service MUST expose a parse function. This function
-     * parses an apiData object (for the specific facetName), and should
-     * return a Facet object.
-     * 
-     * Facet objects contain the state and methods for the associated directive,
-     * and are therefore quite flexible (so that the directives can be flexible).
-     * However, the service responsible will expect all Facet objects to expose
-     * serialize and deserialize methods, which are used to map the state to or
-     * from the url object.
-     * 
-     * @param {string} facetName - The name of the facet (eg. rna_expression_level)
-     * @param {object} apiData - The data object for this facet (from the API)
-     * @param {object} facetsGlobal - A global object (exposing methods for eg. updating all facets)
-     */
+             * Parse function.
+             * 
+             * Each FacetParser service MUST expose a parse function. This function
+             * parses an apiData object (for the specific facetName), and should
+             * return a Facet object.
+             * 
+             * Facet objects contain the state and methods for the associated directive,
+             * and are therefore quite flexible (so that the directives can be flexible).
+             * However, the service responsible will expect all Facet objects to expose
+             * serialize and deserialize methods, which are used to map the state to or
+             * from the url object.
+             * 
+             * @param {string} facetName - The name of the facet (eg. rna_expression_level)
+             * @param {object} apiData - The data object for this facet (from the API)
+             * @param {object} facetsGlobal - A global object (exposing methods for eg. updating all facets)
+             */
             var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
                 /**
-       * Create an array of boolean filters (each of which provides the needed
-       * state and methods for a checkbox)
-       */
+                 * Create an array of boolean filters (each of which provides the needed
+                 * state and methods for a checkbox)
+                 */
                 var filters = apiData[facetName].buckets.map(function (bucket) {
                     return new otFilterTypes.BooleanFilter({
                         key: bucket.key,
@@ -35,8 +35,8 @@ angular.module('otFacets')
                 });
 
                 /**
-       * Toggle method for all filters
-       */
+                 * Toggle method for all filters
+                 */
                 var setAllChecked = function (value) {
                     // update state
                     filters.forEach(function (filter) {
@@ -47,10 +47,10 @@ angular.module('otFacets')
                 };
 
                 /**
-       * Serialize this facet for the url state.
-       * @param {object} urlObj - The URL object. This object can be mutated and must
-       *                          then be returned.
-       */
+                 * Serialize this facet for the url state.
+                 * @param {object} urlObj - The URL object. This object can be mutated and must
+                 *                          then be returned.
+                 */
                 var serialize = function (urlObj) {
                     urlObj[facetName] = filters.filter(function (filter) {
                         return filter.checked;
@@ -61,10 +61,10 @@ angular.module('otFacets')
                 };
 
                 /**
-       * Check if a boolean filter is checked according to the URL object.
-       * @param {object} urlObj - Object representation of the URL
-       * @param {string} key - Key of the filter to check
-       */
+                 * Check if a boolean filter is checked according to the URL object.
+                 * @param {object} urlObj - Object representation of the URL
+                 * @param {string} key - Key of the filter to check
+                 */
                 var filterIsChecked = function (urlObj, key) {
                     return (urlObj &&
                 urlObj[facetName] &&
@@ -73,9 +73,9 @@ angular.module('otFacets')
                 };
 
                 /**
-       * Deserialize the url state and update the facet state.
-       * @param {object} urlObj - The URL object
-       */
+                 * Deserialize the url state and update the facet state.
+                 * @param {object} urlObj - The URL object
+                 */
                 var deserialize = function (urlObj) {
                     filters.forEach(function (filter) {
                         filter.checked = filterIsChecked(urlObj, filter.key);
