@@ -146,29 +146,9 @@
 
                                         <p>Source: <span ng-repeat="source in search.tables.genetic_associations.rare_diseases.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
-                                        <div class="table-panel">
-                                            <table class='table ot-evidence-table' id="rare-diseases-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th rowspan="2"></th>  <!-- nameless col for access level -->
-                                                        <th rowspan="2">Disease</th>
-                                                        <th rowspan="2">Mutation</th>
-                                                        <th colspan="4">Gene-Disease Evidence</th>
-                                                    </tr>
+                                        <!-- TABLE -->
+                                        <ot-rare-disease-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.genetic_associations.rare_diseases.is_loading" data="search.tables.genetic_associations.rare_diseases.data" title="search.info.title" error-flag="search.tables.genetic_associations.rare_diseases.has_errors"></ot-rare-disease-table>
 
-                                                    <tr>
-                                                        <th>Mutation consequence</th>
-                                                        <th>Clinical significance</th>
-                                                        <th>Evidence source</th>
-                                                        <th>Publications</th>
-                                                        <th>Publications Ids</th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
                                     </div>
 
                                     <uib-alert type="danger" ng-show="search.tables.genetic_associations.rare_diseases.has_errors" ng-cloak style="margin-top:15px">
