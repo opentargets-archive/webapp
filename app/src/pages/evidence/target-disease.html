@@ -100,34 +100,8 @@
 
                                         <p>Source: <span ng-repeat="source in search.tables.genetic_associations.common_diseases.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
-                                        <div class="table-panel">
-                                            <table class='table ot-evidence-table' id="common-diseases-table">
-                                                <thead>
-                                                    <!--<tr>-->
-                                                        <!--<th rowspan="2"></th>  &lt;!&ndash; nameless col for access level &ndash;&gt;-->
-                                                        <!--<th rowspan="2">Disease</th>-->
-                                                        <!--<th rowspan="2">Variant</th>-->
-                                                        <!--<th colspan="2">Gene-Variant Evidence</th>-->
-                                                        <!--<th colspan="3">Variant-Disease Evidence</th>-->
-                                                    <!--</tr>-->
-
-                                                    <tr>
-                                                        <th></th> <!-- nameless col for access level -->
-                                                        <th>Disease</th>
-                                                        <th>Variant</th>
-                                                        <th>Variant type</th>
-                                                        <th>Evidence source</th>
-                                                        <th>P-Value</th>
-                                                        <!--<th>Details <span style="font-size:0.8em;float:right;"><ot-popover html='true' key="COMMONDISEASES.SCOREDETAILS"></ot-popover></th>-->
-                                                        <th>Publications</th>
-                                                        <th>Publications Ids</th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                        <!-- TABLE -->
+                                        <ot-common-disease-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.genetic_associations.common_diseases.is_loading" data="search.tables.genetic_associations.common_diseases.data" title="search.info.title" error-flag="search.tables.genetic_associations.common_diseases.has_errors"></ot-common-disease-table>
                                     </div>
 
                                     <uib-alert type="danger" ng-show="search.tables.genetic_associations.common_diseases.has_errors" ng-cloak style="margin-top:15px">
