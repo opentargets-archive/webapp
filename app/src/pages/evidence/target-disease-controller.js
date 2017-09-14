@@ -7,7 +7,7 @@ angular.module('otControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseController', ['$scope', '$location', '$log', 'otApi', 'otUtils', 'otDictionary', 'otConsts', 'otConfig', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, $log, otApi, otUtils, otDictionary, otConsts, otConfig, $analytics, otLocationState, $anchorScroll) {
+    .controller('TargetDiseaseController', ['$scope', '$location', 'otApi', 'otUtils', 'otDictionary', 'otConsts', 'otConfig', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, otApi, otUtils, otDictionary, otConsts, otConfig, $analytics, otLocationState, $anchorScroll) {
         'use strict';
 
 
@@ -107,7 +107,8 @@ angular.module('otControllers')
                     heading: otDictionary.LITERATURE,
                     source: otConfig.evidence_sources.literature,
                     source_label: otConfig.evidence_sources.literature.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                    has_errors: false
+                    has_errors: false,
+                    total: 0
                 },
                 animal_models: {
                     data: [],
@@ -229,110 +230,6 @@ angular.module('otControllers')
 
 
         // =================================================
-        //  G E N E T I C   A S S O C I A T I O N S
-        // =================================================
-
-
-        $log.log('test');
-
-        var getCommonDiseaseData = function () {
-            $scope.target = $scope.search.target;
-            $scope.disease = $scope.search.disease;
-        };
-
-        var getRareDiseaseData = function () {
-            $scope.target = $scope.search.target;
-            $scope.disease = $scope.search.disease;
-        };
-
-
-        // =================================================
-        //  D R U G S
-        // =================================================
-
-
-        // DRUGS
-        var getDrugData = function () {
-            $scope.target = $scope.search.target;
-            $scope.disease = $scope.search.disease;
-        };
-
-
-        // =================================================
-        //  PATHWAYS
-        // =================================================
-
-
-        var getPathwaysData = function () {
-            $scope.target = $scope.search.target;
-            $scope.disease = $scope.search.disease;
-        };
-
-
-        // =================================================
-        //  RNA expression
-        // =================================================
-
-
-        var getRnaExpressionData = function () {
-            $scope.target = $scope.search.target;
-            $scope.disease = $scope.search.disease;
-        };
-
-
-        // =================================================
-        //  S O M A T I C   M U T A T I O N S
-        // =================================================
-
-        var getMutationData = function () {
-            $scope.target = $scope.search.target;
-            $scope.disease = $scope.search.disease;
-        };
-
-
-        // =================================================
-        //  M O U S E   D A T A
-        // =================================================
-
-        var getMouseData = function () {
-            $scope.target = $scope.search.target;
-            $scope.disease = $scope.search.disease;
-        };
-
-
-        // =================================================
-        //  L I T E R A T U R E
-        // =================================================
-
-        /*
-        Literature data for the "Text mining" table. Table fields are:
-          - Disease: disease name (string)
-          - Publication: publication description (string, long text)
-          - Year: number
-        */
-
-        var getLiteratureTotal = function () {
-            $scope.search.tables.literature.is_loading = true;
-            var opts = {
-                target: $scope.search.target,
-                disease: $scope.search.disease,
-                size: 0,
-                datasource: $scope.search.tables.literature.source
-            };
-            _.extend(opts, searchObj);
-            var queryObject = {
-                method: 'GET',
-                params: opts
-            };
-            return otApi.getFilterBy(queryObject)
-                .then(function (resp) {
-                    $scope.search.tables.literature.total = resp.body.total;
-                    $scope.search.tables.literature.is_loading = false;
-                });
-        };
-
-
-        // =================================================
         //  H E L P E R   M E T H O D S
         // =================================================
 
@@ -361,15 +258,10 @@ angular.module('otControllers')
         // get the data for the flower graph
         getFlowerData()
             .then(function () {
-                // then get data for all then
-                getCommonDiseaseData();
-                getRareDiseaseData();
-                getMutationData();
-                getDrugData();
-                getRnaExpressionData();
-                getPathwaysData();
-                getLiteratureTotal();
-                getMouseData();
+                // table directives are listening for target and diesase changes
+                // so this will trigger data load in all tables
+                $scope.target = $scope.search.target;
+                $scope.disease = $scope.search.disease;
             });
 
         var render = function (new_state) {

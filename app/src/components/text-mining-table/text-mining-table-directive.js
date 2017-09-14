@@ -158,7 +158,12 @@ angular.module('otDirectives')
             };
 
 
-            function parseServerResponse (data) {
+            /*
+             * Takes the data object returned by the API and formats it 
+             * to an array of arrays to be displayed by the dataTable widget.
+             */
+            function formatDataToArray (data) {
+            // function parseServerResponse (data) {
                 var newData = [];
 
                 var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>'; // "<span class='fa fa-users' title='private data'>G</span>";
@@ -331,7 +336,8 @@ angular.module('otDirectives')
                 return newData;
             }
 
-            var setupTable = function (table, target, disease, filename, download) {
+
+            var initTable = function (table, target, disease, filename, download, scope) {
                 return $(table).DataTable({
                     'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
                     // TODO: We are disabling the download for now because there may be too many items
@@ -388,7 +394,9 @@ angular.module('otDirectives')
                         };
                         otApi.getFilterBy(queryObject)
                             .then(function (resp) {
-                                var dtData = parseServerResponse(resp.body.data);
+                                scope.total = resp.body.total;  // we need to have the scope object here (passed by reference) in order to update the total
+                                // var dtData = parseServerResponse(resp.body.data);
+                                var dtData = formatDataToArray(resp.body.data);
                                 var o = {
                                     recordsTotal: resp.body.total,
                                     recordsFiltered: resp.body.total,
@@ -440,9 +448,10 @@ angular.module('otDirectives')
                 scope: {
                     target: '=',
                     disease: '=',
-                    filename: '='
+                    filename: '=',
+                    total: '=?'
                 },
-                link: function (scope) {
+                link: function (scope, elem) {
                     dirScope = scope;
                     scope.openEuropePmc = function (pmid) {
                         var URL = 'http://europepmc.org/abstract/MED/' + pmid;
@@ -459,9 +468,11 @@ angular.module('otDirectives')
                             return;
                         }
                         $timeout(function () {
-                            setupTable(document.getElementById('literature2-table'), scope.target, scope.disease, scope.filename, scope.downloadTable);
+                            // initTable(document.getElementById('literature2-table'), scope.target, scope.disease, scope.filename, scope.downloadTable);
+                            scope.total = 100;
+                            initTable(elem[0].getElementsByTagName('table'), scope.target, scope.disease, scope.filename, scope.downloadTable, scope);
                         }, 0);
-                        // setupTable();
+                        // initTable();
                     });
 
                     // TODO: If we move all the evidence tables to server side, this should be abstracted out probably in a service
