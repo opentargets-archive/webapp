@@ -113,7 +113,7 @@ angular.module('otControllers')
                         is_open : false,
                         is_loading: false,
                         heading : otDictionary.NFERX,
-                        source : otConfig.evidence_sources.literature[1],
+
                         source_label : [{label:otDictionary.NFERX, url:otConsts.dbs_info_url.NFERX}],
                         has_errors: false
                     }
@@ -346,7 +346,7 @@ angular.module('otControllers')
 
                     // evidence source
                     if (item.sourceID === otConsts.dbs.PHEWAS_23andme) {
-                        row.push('<a class=\'ot-external-link\' href=\'https://test-rvizapps.biogen.com/23andmeDev/\' target=\'_blank\'>'
+                        row.push('<a class=\'ot-external-link\' href=\'https://rvizapps.biogen.com/23andme/\' target=\'_blank\'>'
                             + otClearUnderscoresFilter(item.sourceID)
                             + '</a>');
                     } else if (item.sourceID === otConsts.dbs.PHEWAS) {
@@ -1268,23 +1268,33 @@ angular.module('otControllers')
         };
 
          var getNferxTotal = function () {
-            $scope.search.tables.literature.nferx.is_loading = true;
-            var opts = {
-                target: $scope.search.target,
-                disease: $scope.search.disease,
-                size: 0,
-                datasource: $scope.search.tables.literature.nferx.source
-            };
-            _.extend(opts, searchObj);
-            var queryObject = {
-                method: 'GET',
-                params: opts
-            };
-            return otApi.getFilterBy (queryObject)
-                .then (function (resp) {
-                    $scope.search.tables.literature.nferx.total = resp.body.total;
-                    $scope.search.tables.literature.nferx.is_loading = false;
-                });
+
+            var literature_sources =  otConfig.evidence_sources.literature;
+            if (literature_sources.length > 1){
+                $scope.search.tables.literature.nferx.is_loading = true;
+                var opts = {
+                    target: $scope.search.target,
+                    disease: $scope.search.disease,
+                    size: 0,
+                    datasource: otConsts.dbs.NFERX
+                };
+                _.extend(opts, searchObj);
+                var queryObject = {
+                    method: 'GET',
+                    params: opts
+                };
+                return otApi.getFilterBy (queryObject)
+                    .then (function (resp) {
+                        $scope.search.tables.literature.nferx.total = resp.body.total;
+                        $scope.search.tables.literature.nferx.is_loading = false;
+                    });
+            }
+            else{
+
+              $scope.search.tables.literature.nferx.total = 0;
+              $scope.search.tables.literature.nferx.is_loading = false;
+            }
+
         };
 
         // =================================================

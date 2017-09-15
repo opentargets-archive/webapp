@@ -1,10 +1,10 @@
 angular.module('otDirectives')
     .directive('nferxTable', [
         'otApi',
-        'otConfig',
+        'otConsts',
         'otClearUnderscoresFilter',
         function (otApi,
-                  otConfig,
+                  otConsts,
                   otClearUnderscoresFilter) {
             'use strict';
 
@@ -80,7 +80,7 @@ angular.module('otDirectives')
                         var opts = {
                             target: target,
                             disease: disease,
-                            datasource: otConfig.evidence_sources.literature[1],
+                            datasource: otConsts.dbs.NFERX,
                             size: data.length,
                             from: data.start,
                             sort: dirScope.order,

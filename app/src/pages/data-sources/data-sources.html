@@ -19,7 +19,7 @@
                             <li><a href="#gwas">GWAS Catalog</a></li>
                             <li><a href="#genomics_england">Genomics England PanelApp</a></li>
                             <li><a href="#phewascatalog">PheWAS Catalog</a></li>
-                            <li ng-show="phewas_23andme"><a href="#phewas_23andme">23andMe</a></li>
+                            <li ng-show="23andme"><a href="#phewas_23andme">23andMe</a></li>
                             <li><a href="#uniprot">UniProt</a></li>
                             <li><a href="#uniprot_lit">UniProt literature</a></li>
                             <li><a href="#eva">European Variation Archive (EVA)</a></li>
@@ -56,6 +56,7 @@
                     <li><a href="#text_mining">Text mining</a>
                         <ul class="plain arrow-icon">
                             <li><a href="#epmc">Europe PMC</a></li>
+                            <li ng-show="nferx"><a href="#nferx">Nferx</a></li>
                         </ul>
                     </li>
 
@@ -85,12 +86,12 @@
                     <h5><a name="genomics_england"></a>Genomics England PanelApp</h5>
                     <p>The <a href="https://panelapp.extge.co.uk/crowdsourcing/PanelApp/">Genomics England PanelApp</a> is a knowledgebase that combines crowdsourcing of expertise with curation to provide gene-disease relationships to aid the clinical interpretation of genomes within the 100,000 Genomes Project. This information is curated initially from four sources: Radboud University Medical Center, Illumina TruGenome Predisposition Screen, Emory Genetic Laboratory, and the UK Genetic Testing Network. The genes curated from at least three of these sources are initially classified as ‘green genes’. Additional sources may be used for the curation of some of the phenotypes, genes or mode of inheritance (e.g. peer-reviewed published articles, OMIM, expert list). Expert review of the gene panels for a particular disease is then sought in PanelApp, and each panel is revised. Only green diagnostic-grade genes on version 1+ panels (which have the highest level of confidence) are utilised for genome analysis within the 100,000 Genomes Project. We include in our Open Targets Platform the ‘green genes’ from version 1+ panels along with their phenotypes, providing the latter can be mapped to a disease or phenotype ontology.</p>
 
-                    <div ng-show="phewascatalog">
-                        <h5><a name="phewascatalog"></a>PheWAS Catalog</h5>
-                        <p>Phenome-wide association studies <a href="https://phewascatalog.org">PheWAS</a> The PheWAS (phenome-wide association studies) resources provide associations between a genetic variant and multiple phenotypes. It contains clinical phenotypes derived from the electronic medical record (EMR)-linked DNA biobank BioVU by the Center for Precision Medicine at the Vanderbilt University Medical Center. The EMR-based PheWAS uses ICD9 (International Classification of Disease, 9th edition), which were mapped to EFO using <a href="https://www.ebi.ac.uk/ols/index"></a>OLS and <a href="http://www.ebi.ac.uk/spot/zooma/"></a>Zooma. The catalog contains all associations with p < 0.05 (uncorrected).</p>
-                    </div>
 
-                    <div ng-show="phewas_23andme">
+                    <h5><a name="phewascatalog"></a>PheWAS Catalog</h5>
+                    <p>Phenome-wide association studies <a href="https://phewascatalog.org">PheWAS</a> The PheWAS (phenome-wide association studies) resources provide associations between a genetic variant and multiple phenotypes. It contains clinical phenotypes derived from the electronic medical record (EMR)-linked DNA biobank BioVU by the Center for Precision Medicine at the Vanderbilt University Medical Center. The EMR-based PheWAS uses ICD9 (International Classification of Disease, 9th edition), which were mapped to EFO using <a href="https://www.ebi.ac.uk/ols/index"></a>OLS and <a href="http://www.ebi.ac.uk/spot/zooma/"></a>Zooma. The catalog contains all associations with p < 0.05 (uncorrected).</p>
+
+
+                    <div ng-show="23andme">
                         <h5><a name="phewas_23andme"></a>23andMe</h5>
                         <p> <a href="https://www.23andme.com/howitworks">23andMe</a> has collected a large cohort of self-reported phenotype data along with genetic data. Through a collaboration between Biogen and 23andMe, Biogen has acquired genome-wide association study (GWAS) summary statistics for over 100 phenotypes (PheWAS).</p>
                     </div>
@@ -163,6 +164,12 @@
 
                     <h5><a name="epmc"></a>Europe PMC</h5>
                     <p>The Europe PubMed Central (<a href="http://europepmc.org/">Europe PMC</a>) provides evidence of links between targets and diseases. They mine the titles, abstracts and full text research articles from both PubMed and PubMed Central, and use an entity-to-entity recognition approach to detect co-occurrences of target and disease entities.</p>
+
+                    <div ng-show="nferx">
+                        <h5><a name="nferx"></a>Nferx</h5>
+                        <p> The <a href="https://nferx.com/accounts/login/">Nferx</a> knowledge synthesis platform uses state-of-the-art Neural Networks (shallow and deep learning models) for real-time, automated extraction of knowledge from the commercial, scientific, and regulatory body of literature.</p>
+                    </div>
+
                 </div>
 
 

@@ -470,7 +470,7 @@ angular.module('otDirectives')
                         var opts = {
                             disease: scope.disease,
                             target: scope.target,
-                            datasource: otConfig.evidence_sources.literature,
+                            datasource: otConfig.evidence_sources.literature[0],
                             // format: 'csv',
                             size: size,
                             from: 0,
