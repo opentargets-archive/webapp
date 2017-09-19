@@ -9,12 +9,19 @@ angular.module('otPlugins')
                 target: '='
             },
             link: function (scope, element, attrs) {
-                otApi.getTargetRelation({
-                    id: scope.target.id
-                })
+                var id = scope.target.id;
+                var opts = {
+                    id: id
+                };
+                var queryObject = {
+                    method: 'GET',
+                    params: opts
+                };
+                otApi.getTargetRelation(queryObject)
                     .then(
-                    // success
+                        // success
                         function (resp) {
+                            console.log(resp.body.data);
                             scope.relations = resp.body.data.slice(1, 20);
                         },
 

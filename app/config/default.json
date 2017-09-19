@@ -244,6 +244,12 @@
             "element": "ot-bibliography-target",
             "heading": "Bibliography",
             "track": true
+        },
+        {
+            "name": "relatedTargets",
+            "element": "ot-related-targets",
+            "heading": "Related targets",
+            "track": true
         }
     ],
 
