@@ -73,6 +73,21 @@
 
                 <a id="tables"></a>
 
+                <!-- NEW PLUGINS -->
+                <uib-accordion close-others="false">
+                    <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
+                        <uib-accordion-heading>
+                            <span ng-click='section.currentVisibility = !section.currentVisibility' class="text-nolight">{{section.heading}}</span>
+                        </uib-accordion-heading>
+                        <ot-plugin-loader target="search.info.gene" disease="search.info.efo" plugin="section.element" visible="{{section.currentVisibility}}" dependencies="section.dependencies" page="evidence" track="section.track" label="section.name" class="scroll-table-panel"></ot-plugin-loader>
+                    </div>
+    
+                </uib-accordion>
+
+
+
+                <!-- OLD TABLES -->
+
                 <!-- uib-accordion -->
                 <uib-accordion close-others="false">
 

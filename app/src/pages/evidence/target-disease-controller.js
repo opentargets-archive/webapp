@@ -14,7 +14,7 @@ angular.module('otControllers')
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
         otUtils.clearErrors();
 
-        var checkPath = otUtils.checkPath;
+        // var checkPath = otUtils.checkPath;
 
         var searchObj = otUtils.search.translateKeys($location.search());
 
@@ -22,8 +22,8 @@ angular.module('otControllers')
         var datatypes = otConsts.datatypes;
 
         //
-        var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>'; // "<span class='fa fa-users' title='private data'>G</span>";
-        var accessLevelPublic = '<span class=\'ot-access-public\' title=\'public data\'></span>'; // "<span class='fa fa-users' title='public data'>P</span>";
+        // var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>'; // "<span class='fa fa-users' title='private data'>G</span>";
+        // var accessLevelPublic = '<span class=\'ot-access-public\' title=\'public data\'></span>'; // "<span class='fa fa-users' title='public data'>P</span>";
 
         $scope.search = {
             info: {
@@ -124,13 +124,6 @@ angular.module('otControllers')
 
         $scope.datatypes = datatypes;
 
-        // var arrayToList = function (arr, oneToString) {
-        //     if (oneToString && arr.length === 1) {
-        //         return arr[0];
-        //     }
-        //     return '<ul><li>' + arr.join('</li><li>') + '</li></ul>';
-        // };
-
 
         // =================================================
         //  I N F O
@@ -140,7 +133,7 @@ angular.module('otControllers')
          * Get the information for target and disease,
          * i.e. to fill the two boxes at the top of the page
          */
-        var targetPromise;
+        // var targetPromise;
         var getInfo = function () {
             // get gene specific info
             var queryObject = {
@@ -149,7 +142,8 @@ angular.module('otControllers')
                     target_id: $scope.search.target
                 }
             };
-            targetPromise = otApi.getTarget(queryObject)
+            // targetPromise = 
+            otApi.getTarget(queryObject)
                 .then(function (resp) {
                     $scope.search.info.gene = resp.body;
                     return resp;
@@ -168,6 +162,7 @@ angular.module('otControllers')
                         $scope.search.info.efo = resp.body;
                         // TODO: This is not returned by the api yet. Maybe we need to remove it later
                         $scope.search.info.efo.efo_code = $scope.search.disease;
+                        $scope.search.info.efo.efo = $scope.search.disease;
                     },
                     otApi.defaultErrorHandler
                 );
@@ -230,11 +225,6 @@ angular.module('otControllers')
 
 
         // =================================================
-        //  H E L P E R   M E T H O D S
-        // =================================================
-
-
-        // =================================================
         //  S C O P E   M E T H O D S
         // =================================================
 
@@ -286,6 +276,14 @@ angular.module('otControllers')
         // if old link, do a rerouting to new style links
         if (!otLocationState.getState().view && otLocationState.getState().sec) {
             $location.search('view=sec:' + otLocationState.getState().sec);
+        }
+
+        // Extra sections -- plugins
+        $scope.sections = otConfig.evidenceSections;
+        // Set default visibility values
+        for (var t = 0; t < $scope.sections.length; t++) {
+            $scope.sections[t].defaultVisibility = $scope.sections[t].visible || false;
+            $scope.sections[t].currentVisibility = $scope.sections[t].visible || false;
         }
 
         render(otLocationState.getState(), otLocationState.getOldState());

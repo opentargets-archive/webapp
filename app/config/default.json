@@ -248,6 +248,22 @@
     ],
 
 
+    "evidenceSections": [
+        {
+            "name": "drugs",
+            "element": "ot-drugs-display",
+            "heading": "Drugs",
+            "track": true
+        },
+        {
+            "name": "somatic",
+            "element": "ot-somatic-mutation",
+            "heading": "Somatic mutation",
+            "track": true
+        }
+    ],
+
+
     "facets" : {
         "datatype" : {
             "key": "datatype",
