@@ -31,7 +31,7 @@ angular.module('plugins')
                     // var url = '/proxy/www.gtexportal.org/api/v6p/expression/' + target + '?boxplot=true';
                     $http.get(url)
                         .then(function (resp) {
-                            var arr = obj2array(resp.data.generpkm);
+                            var arr = obj2array(resp.data.genetpm);
                             var svg = d3.select("#gtexWidget")
                                 .append("svg")
                                 .attr("width", (w-150))
