@@ -59,7 +59,7 @@ angular.module('plugins')
                             "font-size": '12px',
                             "fill": "#555"
                         })
-                        .text("Normalised expression (RPKM)");
+                        .text('Normalised expression (TPM)');
 
                     var valScale = d3.scale.linear()
                         .domain(valExtent)
