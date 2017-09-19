@@ -26,7 +26,7 @@ angular.module('otServices')
                 EVA: 'eva',
                 PHENODIGM: 'phenodigm',
                 GWAS: 'gwas_catalog',
-                PHEWAS: 'phewascatalog',
+                PHEWAS: 'phewas_catalog',
                 PHEWAS_23andme: '23andme',
                 GENOMICS_ENGLAND: 'genomics_england',
                 CANCER_GENE_CENSUS: 'cancer_gene_census',
