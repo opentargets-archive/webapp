@@ -19,6 +19,7 @@ angular.module('otControllers')
         // var dbs = otConsts.dbs;
         var datatypes = otConsts.datatypes;
 
+        // initialize object to communicate with tables based on config plugins
         $scope.tables = {};
         otConfig.evidenceSections.forEach(function (item) {
             $scope.tables[item.name] = {};
@@ -85,13 +86,13 @@ angular.module('otControllers')
                     has_errors: false
                 },
                 known_drugs: {
-                    data: [],
-                    is_open: false,
-                    is_loading: false,
-                    heading: otDictionary.KNOWN_DRUG,
-                    source: otConfig.evidence_sources.known_drug,
-                    source_label: otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                    has_errors: false
+                    // data: [],
+                    // is_open: false,
+                    // is_loading: false,
+                    // heading: otDictionary.KNOWN_DRUG,
+                    // source: otConfig.evidence_sources.known_drug,
+                    // source_label: otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
+                    // has_errors: false
                 },
                 somaticMutation: {
                     // data: [],

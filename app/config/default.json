@@ -260,6 +260,12 @@
             "element": "ot-drugs-display",
             "heading": "Drugs",
             "track": true
+        },
+        {
+            "name": "affectedPathway",
+            "element": "ot-affected-pathway",
+            "heading": "Affected pathways",
+            "track": true
         }
     ],
 

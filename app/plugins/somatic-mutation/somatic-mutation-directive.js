@@ -14,9 +14,6 @@ angular.module('otPlugins')
                 ext: '=?'       // optional external object for communication
             },
             link: function (scope) {
-                // scope.is_loading = true;
-                // scope.has_errors = false;
-                // scope.data = {};
                 scope.ext = scope.ext || {};    // object to communicate
                 scope.sources = otConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; });
             }

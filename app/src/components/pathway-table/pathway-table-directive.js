@@ -1,5 +1,9 @@
-/* Evidence tables Directives */
-
+/**
+ * PAthways table
+ * 
+ * ext object params:
+ *  isLoading, hasError, data
+ */
 angular.module('otDirectives')
 
     /*
@@ -15,7 +19,6 @@ angular.module('otDirectives')
      */
     .directive('otPathwayTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', 'otClearUnderscoresFilter', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log, otClearUnderscoresFilter) {
         'use strict';
-        // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
         var checkPath = otUtils.checkPath;
 
@@ -25,14 +28,12 @@ angular.module('otDirectives')
             templateUrl: 'src/components/pathway-table/pathway-table.html',
 
             scope: {
-                loadFlag: '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
-                data: '=?',        // optional data link to pass the data out of the directive
-                title: '=?',       // optional title for filename export
-                errorFlag: '=?'    // optional error-flag: pass a var to hold parsing-related errors
+                title: '@?',    // optional title for filename export
+                ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
 
             link: function (scope, elem, attrs) {
-                scope.errorFlag = false;
+                scope.ext.hasError = false;
                 scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }], function () {
                     if (attrs.target && attrs.disease) {
                         getData();
@@ -40,7 +41,7 @@ angular.module('otDirectives')
                 });
 
                 function getData () {
-                    scope.loadFlag = true;
+                    scope.ext.isLoading = true;
                     var opts = {
                         size: 1000,
                         datasource: otConfig.evidence_sources.pathway,
@@ -69,7 +70,7 @@ angular.module('otDirectives')
                         .then(
                             function (resp) {
                                 if (resp.body.data) {
-                                    scope.data = resp.body.data;
+                                    scope.ext.data = resp.body.data;
                                     initTable();
                                 } else {
                                     $log.warn('Empty response : pathway expression');
@@ -78,7 +79,7 @@ angular.module('otDirectives')
                             otApi.defaultErrorHandler
                         )
                         .finally(function () {
-                            scope.loadFlag = false;
+                            scope.ext.isLoading = false;
                         });
                 }
 
@@ -129,7 +130,7 @@ angular.module('otDirectives')
 
                             newdata.push(row); // use push() so we don't end up with empty rows
                         } catch (e) {
-                            scope.errorFlag = true;
+                            scope.ext.hasError = true;
                             $log.error('Error parsing pathways data:');
                             $log.error(e);
                         }
@@ -141,7 +142,7 @@ angular.module('otDirectives')
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
                     $(table).DataTable(otUtils.setTableToolsParams({
-                        'data': formatDataToArray(scope.data),
+                        'data': formatDataToArray(scope.ext.data),
                         'ordering': true,
                         'order': [[1, 'asc']],
                         'autoWidth': false,
