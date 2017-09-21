@@ -60,11 +60,12 @@
     "marked": "0.3.5",
     "ot.interactions_viewer": "0.0.9",
     "systemjs": "^0.19.27",
-    "tnt.genome": "0.1.7",
     "tnt.ensembl": "0.0.13",
+    "tnt.genome": "0.1.7",
     "tnt.rest": "0.1.1",
     "tnt.tooltip": "0.2.0",
     "tnt.utils": "0.1.3",
+    "tntvis": "^0.1.7",
     "viz_diseases": "0.0.14"
   },
   "jspm": {

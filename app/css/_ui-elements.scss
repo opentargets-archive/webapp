@@ -1,6 +1,19 @@
 @import "utils";
 @import "colors";
 
+/* Axis in d3 */
+#ot-relations-plot {
+    line,
+    path {
+        fill: none;
+        stroke: #aaaaaa;
+        shape-rendering: crispEdges;
+    }
+    .tnt_framed {
+        border: none;
+    }
+}
+
 #ot-page-app {
 
     .popover {

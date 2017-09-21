@@ -1,11 +1,15 @@
-if (typeof tnt === "undefined") {
-    module.exports = tnt = {};
-}
-tnt.board = require("tnt.genome");
+// if (typeof tnt === "undefined") {
+//     module.exports = tnt = {};
+// }
+
+tnt = require('tntvis');
+// tnt.board = require("tnt.genome");
 tnt.utils = require("tnt.utils");
 tnt.tooltip = require("tnt.tooltip");
 tnt.ensembl = require("tnt.ensembl");
 tnt.rest = require("tnt.rest");
+tnt.tree = require('tnt.tree');
+
 
 var targetGenomeBrowser = require("cttv.genome");
 // var bubblesView = require("cttv.bubblesView");
