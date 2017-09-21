@@ -1,27 +1,19 @@
-<!-- <div ng-show="search.tables.somatic_mutations.data.length>0 && !search.tables.somatic_mutations.has_errors"> -->
-<!-- <div ng-show="data.length>0"> -->
-    <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Cancer Gene Census</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated database</p> -->
+<div class="table-panel">
+    <table class='table ot-evidence-table' id="mutations-table">
+        <thead>
+            <tr>
+                <th></th>  <!-- nameless col for access level -->
+                <th>Disease</th>
+                <th>Mutation type</th>
+                <th>Samples</th>
+                <th>Cellular mechanism</th>
+                <th>Evidence source</th>
+                <th>Publications</th>
+                <th>Publications IDs</th>  <!-- hidden -->
+            </tr>
+        </thead>
 
-    <!-- <p>Source: <span ng-repeat="source in search.tables.somatic_mutations.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p> -->
-    
-    <div class="table-panel">
-        <table class='table ot-evidence-table' id="mutations-table">
-            <thead>
-                <tr>
-                    <th></th>  <!-- nameless col for access level -->
-                    <th>Disease</th>
-                    <th>Mutation type</th>
-                    <th>Samples</th>
-                    <th>Cellular mechanism</th>
-                    <th>Evidence source</th>
-                    <th>Publications</th>
-                    <th>Publications IDs</th>  <!-- hidden -->
-                </tr>
-            </thead>
-
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-<!-- </div> -->
-
+        <tbody>
+        </tbody>
+    </table>
+</div>

@@ -1,7 +1,13 @@
-<div ng-show="data.length>0">
-    <p>Source: <span ng-repeat="source in sources"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
-    <ot-known-drug-table target="{{target.id}}" disease="{{disease.efo}}" title="drug" data="data"></ot-known-drug-table>
+<!-- plugin template -->
+<div ng-show="ext.data.length>0">
+    <ot-source-list list="sources"></ot-source-list>
+    <ot-known-drug-table 
+        target="{{target.id}}" 
+        disease="{{disease.efo}}" 
+        title="{{target.approved_symbol}}-{{disease.label}}" 
+        ext="ext">
+    </ot-known-drug-table>
 </div>
 <!-- Redundant as it's also included in table directive
 pull out the data and check the length, so that we can show/hide also the source at the top for consistency with the evicence page -->
-<div ng-show="data.length==0"><p>No data available</p></div>
+<div ng-show="ext.data.length==0"><p>No data available</p></div>

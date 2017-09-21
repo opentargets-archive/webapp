@@ -1,5 +1,9 @@
-/* Evidence tables Directives */
-
+/**
+ * Somatic mutations table
+ * 
+ * ext object params:
+ *  isLoading, hasError, data
+ */
 angular.module('otDirectives')
 
     /* Directive to display the somatic mutation data table */
@@ -15,14 +19,14 @@ angular.module('otDirectives')
             templateUrl: 'src/components/somatic-mutation-table/somatic-mutation-table.html',
 
             scope: {
-                loadFlag: '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
-                data: '=?',        // optional data link to pass the data out of the directive
-                title: '=?',       // optional title for filename export
-                errorFlag: '=?'    // optional error-flag: pass a var to hold parsing-related errors
+                title: '@?',    // optional title for filename export
+                ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
 
             link: function (scope, elem, attrs) {
-                scope.errorFlag = false;
+                scope.ext.hasError = false;
+
+                var filename = '';
 
                 scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }], function () {
                     if (attrs.target && attrs.disease) {
@@ -32,8 +36,8 @@ angular.module('otDirectives')
 
 
                 function getMutationData () {
-                    scope.loadFlag = true;
-
+                    scope.ext.isLoading = true;
+                    filename = (scope.title || (attrs.target + '-' + attrs.disease)).replace(/ /g, '_') + '-somatic_mutations';
                     var opts = {
                         size: 1000,
                         datasource: otConfig.evidence_sources.somatic_mutation,
@@ -68,7 +72,7 @@ angular.module('otDirectives')
                         .then(
                             function (resp) {
                                 if (resp.body.data) {
-                                    scope.data = resp.body.data;
+                                    scope.ext.data = resp.body.data;
                                     initTableMutations();
                                 } else {
                                     $log.warn('Empty response : somatic mutations');
@@ -78,7 +82,7 @@ angular.module('otDirectives')
                         )
                         .finally(function () {
                             // $scope.search.tables.somatic_mutations.is_open = $scope.search.tables.somatic_mutations.data.length>0 || false;
-                            scope.loadFlag = false;
+                            scope.ext.isLoading = false;
                         });
                 }
 
@@ -154,7 +158,7 @@ angular.module('otDirectives')
                     var table = elem[0].getElementsByTagName('table');
                     $(table).DataTable(otUtils.setTableToolsParams({
                         // 'data': formatMutationsDataToArray($scope.search.tables.somatic_mutations.data),
-                        'data': formatMutationsDataToArray(scope.data),
+                        'data': formatMutationsDataToArray(scope.ext.data),
                         // "ordering" : true,
                         'order': [[1, 'asc']],
                         'autoWidth': false,
@@ -179,7 +183,7 @@ angular.module('otDirectives')
                                 'width': '9%'
                             }
                         ]
-                    }, (scope.title ? scope.title + '-' : '') + '-somatic_mutations'));
+                    }, filename));
                 }
             }
         };

@@ -14,16 +14,18 @@ angular.module('otControllers')
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
         otUtils.clearErrors();
 
-        // var checkPath = otUtils.checkPath;
-
         var searchObj = otUtils.search.translateKeys($location.search());
 
         // var dbs = otConsts.dbs;
         var datatypes = otConsts.datatypes;
 
-        //
-        // var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>'; // "<span class='fa fa-users' title='private data'>G</span>";
-        // var accessLevelPublic = '<span class=\'ot-access-public\' title=\'public data\'></span>'; // "<span class='fa fa-users' title='public data'>P</span>";
+        $scope.tables = {};
+        otConfig.evidenceSections.forEach(function (item) {
+            $scope.tables[item.name] = {};
+            Object.keys(item).forEach(function (key) {
+                $scope.tables[item.name][key] = item[key];
+            });
+        });
 
         $scope.search = {
             info: {
@@ -91,14 +93,14 @@ angular.module('otControllers')
                     source_label: otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                     has_errors: false
                 },
-                somatic_mutations: {
-                    data: [],
-                    is_open: false,
-                    is_loading: false,
-                    heading: otDictionary.SOMATIC_MUTATION,
-                    source: otConfig.evidence_sources.somatic_mutation,
-                    source_label: otConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                    has_errors: false
+                somaticMutation: {
+                    // data: [],
+                    // is_open: false,
+                    // is_loading: false,
+                    // heading: otDictionary.SOMATIC_MUTATION,
+                    // source: otConfig.evidence_sources.somatic_mutation,
+                    // source_label: otConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
+                    // has_errors: false
                 },
                 literature: {
                     data: [],

@@ -250,15 +250,15 @@
 
     "evidenceSections": [
         {
-            "name": "drugs",
-            "element": "ot-drugs-display",
-            "heading": "Drugs",
+            "name": "somaticMutation",
+            "element": "ot-somatic-mutation",
+            "heading": "Somatic mutation",
             "track": true
         },
         {
-            "name": "somatic",
-            "element": "ot-somatic-mutation",
-            "heading": "Somatic mutation",
+            "name": "drugs",
+            "element": "ot-drugs-display",
+            "heading": "Drugs",
             "track": true
         }
     ],

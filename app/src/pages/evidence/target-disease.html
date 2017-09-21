@@ -73,13 +73,41 @@
 
                 <a id="tables"></a>
 
+
                 <!-- NEW PLUGINS -->
+                <!-- The plugins are loaded into an accordion, but I guess we're not tied to that and could use any panel -->
                 <uib-accordion close-others="false">
                     <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
+                        
+                        <!-- accordion header -->
                         <uib-accordion-heading>
                             <span ng-click='section.currentVisibility = !section.currentVisibility' class="text-nolight">{{section.heading}}</span>
+                            <span ot-progress-spinner class="pull-right" ng-show="tables[section.name].isLoading"></span>
                         </uib-accordion-heading>
-                        <ot-plugin-loader target="search.info.gene" disease="search.info.efo" plugin="section.element" visible="{{section.currentVisibility}}" dependencies="section.dependencies" page="evidence" track="section.track" label="section.name" class="scroll-table-panel"></ot-plugin-loader>
+
+                        <!-- the main plugin -->
+                        <ot-plugin-loader 
+                            target="search.info.gene" 
+                            disease="search.info.efo" 
+                            plugin="section.element" 
+                            visible="{{section.currentVisibility}}" 
+                            dependencies="section.dependencies" 
+                            page="evidence" 
+                            track="section.track" 
+                            label="section.name"
+                            ext="tables[section.name]"
+                            class="scroll-table-panel"
+                            ng-show="tables[section.name].data.length>0">
+                        </ot-plugin-loader>
+
+                        <!-- no data -->
+                        <div ng-show="tables[section.name].data.length===0">No data from plugin</div>
+
+                        <!-- error -->
+                        <uib-alert type="danger" ng-show="tables[section.name].hasError" ng-cloak style="margin-top:15px">
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving {{tables[section.name].heading}} data. Please try again later.
+                        </uib-alert>
+
                     </div>
     
                 </uib-accordion>
@@ -164,7 +192,7 @@
 
 
                     <!-- Somatic Mutations table -->
-                    <div uib-accordion-group is-open="search.tables.somatic_mutations.is_open" ng-click='sectionOpen("somatic")' class="panel-default">
+                    <!-- <div uib-accordion-group is-open="search.tables.somatic_mutations.is_open" ng-click='sectionOpen("somatic")' class="panel-default">
                         <uib-accordion-heading>
                             <a id="somatic_mutations"></a>
                             <span class="text-nolight">
@@ -175,7 +203,7 @@
                         
                         <div ng-show="search.tables.somatic_mutations.data.length>0 && !search.tables.somatic_mutations.has_errors">
                             <p>Source: <span ng-repeat="source in search.tables.somatic_mutations.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
-                            <ot-somatic-mutation-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.somatic_mutation.is_loading" data="search.tables.somatic_mutations.data" title="search.info.title" error-flag="search.tables.somatic_mutations.has_errors"></ot-somatic-mutation-table>
+                            <ot-somatic-mutation-table disease="{{disease}}" target="{{target}}" ext="search.tables.somatic_mutations" title="bob"></ot-somatic-mutation-table>
                         </div>
 
                         <div ng-show="search.tables.somatic_mutations.data.length==0 && !search.tables.somatic_mutations.has_errors">
@@ -185,12 +213,12 @@
                         <uib-alert type="danger" ng-show="search.tables.somatic_mutations.has_errors" ng-cloak>
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
                         </uib-alert>
-                    </div uib-accordion-group>
+                    </div uib-accordion-group> -->
 
 
 
                     <!-- Known drugs (as a directive) -->
-                    <div uib-accordion-group is-open="search.tables.known_drugs.is_open" ng-click='sectionOpen("drugs")' class="panel-default">
+                    <!-- <div uib-accordion-group is-open="search.tables.known_drugs.is_open" ng-click='sectionOpen("drugs")' class="panel-default">
                         <uib-accordion-heading>
                             <a id="known_drugs"></a>
                             <span class="text-nolight">
@@ -212,7 +240,7 @@
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
                         </uib-alert>
 
-                    </div uib-accordion-group>
+                    </div uib-accordion-group> -->
 
 
 
