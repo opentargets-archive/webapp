@@ -266,6 +266,12 @@
             "element": "ot-affected-pathway",
             "heading": "Affected pathways",
             "track": true
+        },
+        {
+            "name": "rnaEvidence",
+            "element": "ot-rna-evidence",
+            "heading": "RNA expression",
+            "track": true
         }
     ],
 

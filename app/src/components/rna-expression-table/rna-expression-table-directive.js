@@ -1,8 +1,12 @@
-/* Evidence tables Directives */
-
+/**
+ * RNA expression table
+ * 
+ * ext object params:
+ *  isLoading, hasError, data
+ */
 angular.module('otDirectives')
 
-    /* Directive to display the somatic mutation data table */
+    /* Directive to display the rna expression data table */
     .directive('otRnaExpressionTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log) {
         'use strict';
         // var dbs = otConsts.dbs;
@@ -15,14 +19,16 @@ angular.module('otDirectives')
             templateUrl: 'src/components/rna-expression-table/rna-expression-table.html',
 
             scope: {
-                loadFlag: '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
-                data: '=?',        // optional data link to pass the data out of the directive
-                title: '=?',       // optional title for filename export
-                errorFlag: '=?'    // optional error-flag: pass a var to hold parsing-related errors
+                // ext.isLoading: '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
+                // data: '=?',        // optional data link to pass the data out of the directive
+                // title: '=?',       // optional title for filename export
+                // ext.hasError: '=?'    // optional error-flag: pass a var to hold parsing-related errors
+                title: '@?',    // optional title for filename export
+                ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
 
             link: function (scope, elem, attrs) {
-                scope.errorFlag = false;
+                scope.ext.hasError = false;
                 scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }], function () {
                     if (attrs.target && attrs.disease) {
                         getData();
@@ -31,7 +37,7 @@ angular.module('otDirectives')
 
                 function getData () {
                     // scope.search.tables.rna_expression.is_loading = true;
-                    scope.loadFlag = true;
+                    scope.ext.isLoading = true;
                     var opts = {
                         size: 1000,
                         datasource: otConfig.evidence_sources.rna_expression, // scope.search.tables.rna_expression.source,
@@ -60,7 +66,7 @@ angular.module('otDirectives')
                         .then(
                             function (resp) {
                                 if (resp.body.data) {
-                                    scope.data = resp.body.data;
+                                    scope.ext.data = resp.body.data;
                                     initTable();
                                 } else {
                                     $log.warn('Empty response : RNA expression');
@@ -69,7 +75,7 @@ angular.module('otDirectives')
                             otApi.defaultErrorHandler
                         )
                         .finally(function () {
-                            scope.loadFlag = false;
+                            scope.ext.isLoading = false;
                         });
                 }
 
@@ -132,7 +138,7 @@ angular.module('otDirectives')
 
                             newdata.push(row); // push, so we don't end up with empty rows
                         } catch (e) {
-                            scope.errorFlag = true;
+                            scope.ext.hasError = true;
                             $log.log('Error parsing RNA-expression data:');
                             $log.log(e);
                         }
@@ -145,7 +151,7 @@ angular.module('otDirectives')
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
                     $(table).DataTable(otUtils.setTableToolsParams({
-                        'data': formatDataToArray(scope.data),
+                        'data': formatDataToArray(scope.ext.data),
                         'order': [[1, 'asc']],
                         'autoWidth': false,
                         'paging': true,

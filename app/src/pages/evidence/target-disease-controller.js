@@ -67,42 +67,42 @@ angular.module('otControllers')
                         has_errors: false
                     }
                 },
-                rna_expression: {
-                    data: [],
-                    is_open: false,
-                    is_loading: false,
-                    heading: otDictionary.RNA_EXPRESSION,
-                    source: otConfig.evidence_sources.rna_expression,
-                    source_label: otConfig.evidence_sources.rna_expression.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                    has_errors: false
-                },
-                pathways: {
-                    data: [],
-                    is_open: false,
-                    is_loading: false,
-                    heading: otDictionary.AFFECTED_PATHWAY,
-                    source: otConfig.evidence_sources.pathway,
-                    source_label: otConfig.evidence_sources.pathway.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                    has_errors: false
-                },
-                known_drugs: {
-                    // data: [],
-                    // is_open: false,
-                    // is_loading: false,
-                    // heading: otDictionary.KNOWN_DRUG,
-                    // source: otConfig.evidence_sources.known_drug,
-                    // source_label: otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                    // has_errors: false
-                },
-                somaticMutation: {
-                    // data: [],
-                    // is_open: false,
-                    // is_loading: false,
-                    // heading: otDictionary.SOMATIC_MUTATION,
-                    // source: otConfig.evidence_sources.somatic_mutation,
-                    // source_label: otConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                    // has_errors: false
-                },
+                // rna_expression: {
+                //     data: [],
+                //     is_open: false,
+                //     is_loading: false,
+                //     heading: otDictionary.RNA_EXPRESSION,
+                //     source: otConfig.evidence_sources.rna_expression,
+                //     source_label: otConfig.evidence_sources.rna_expression.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
+                //     has_errors: false
+                // },
+                // pathways: {
+                //     data: [],
+                //     is_open: false,
+                //     is_loading: false,
+                //     heading: otDictionary.AFFECTED_PATHWAY,
+                //     source: otConfig.evidence_sources.pathway,
+                //     source_label: otConfig.evidence_sources.pathway.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
+                //     has_errors: false
+                // },
+                // known_drugs: {
+                //     data: [],
+                //     is_open: false,
+                //     is_loading: false,
+                //     heading: otDictionary.KNOWN_DRUG,
+                //     source: otConfig.evidence_sources.known_drug,
+                //     source_label: otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
+                //     has_errors: false
+                // },
+                // somaticMutation: {
+                //     data: [],
+                //     is_open: false,
+                //     is_loading: false,
+                //     heading: otDictionary.SOMATIC_MUTATION,
+                //     source: otConfig.evidence_sources.somatic_mutation,
+                //     source_label: otConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
+                //     has_errors: false
+                // },
                 literature: {
                     data: [],
                     is_open: false,
