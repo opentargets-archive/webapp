@@ -336,20 +336,16 @@
 
 
                     <!-- Mouse models -->
-                    <div uib-accordion-group is-open="search.tables.animal_models.is_open" ng-click='sectionOpen("mouse")' class="panel-default">
+                    <!-- <div uib-accordion-group is-open="search.tables.animal_models.is_open" ng-click='sectionOpen("mouse")' class="panel-default">
                         <uib-accordion-heading>
                             <a id="animal_models"></a>
                             <span class="text-nolight">
                                 <span ng-class="{ 'text-disabled': search.tables.animal_models.data.length==0 }">{{search.tables.animal_models.heading}}</span>
-                                <!-- <span class='badge' ng-show="search.tables.animal_models.data.length>0">{{search.tables.animal_models.data.length}}</span> -->
-                                <!-- Score pill -->
-                                <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.ANIMAL_MODEL]" title="Association score">{{search.association_scores[datatypes.ANIMAL_MODEL] | currency : "" : 2}}</span> -->
                                 <span ot-progress-spinner class="pull-right" ng-show="search.tables.animal_models.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
 
                         <div ng-show="search.tables.animal_models.data.length>0 && !search.tables.animal_models.has_errors">
-                            <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">Phenodigm</a></p> -->
                             <p>Source: <span ng-repeat="source in search.tables.animal_models.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a></a><span></p>
 
                             <ot-mouse-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.animal_models.is_loading" data="search.tables.animal_models.data" title="search.info.title" error-flag="search.tables.animal_models.has_errors"></ot-mouse-table>
@@ -363,7 +359,7 @@
                         <uib-alert type="danger" ng-show="search.tables.animal_models.has_errors" ng-cloak>
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving this data. Please try again later.
                         </uib-alert>
-                    </div uib-accordion-group>
+                    </div uib-accordion-group> -->
 
 
                 </uib-accordion>

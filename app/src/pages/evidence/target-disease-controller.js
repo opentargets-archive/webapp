@@ -112,16 +112,16 @@ angular.module('otControllers')
                     source_label: otConfig.evidence_sources.literature.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                     has_errors: false,
                     total: 0
-                },
-                animal_models: {
-                    data: [],
-                    is_open: false,
-                    is_loading: false,
-                    heading: otDictionary.ANIMAL_MODEL,
-                    source: otConfig.evidence_sources.animal_model,
-                    source_label: otConfig.evidence_sources.animal_model.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                    has_errors: false
-                }
+                }//,
+                // animal_models: {
+                //     data: [],
+                //     is_open: false,
+                //     is_loading: false,
+                //     heading: otDictionary.ANIMAL_MODEL,
+                //     source: otConfig.evidence_sources.animal_model,
+                //     source_label: otConfig.evidence_sources.animal_model.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
+                //     has_errors: false
+                // }
             }
         };
 

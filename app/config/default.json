@@ -272,6 +272,12 @@
             "element": "ot-rna-evidence",
             "heading": "RNA expression",
             "track": true
+        },
+        {
+            "name": "animalModel",
+            "element": "ot-animal-model",
+            "heading": "Animal models",
+            "track": true
         }
     ],
 
