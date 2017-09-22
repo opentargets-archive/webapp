@@ -1,25 +1,59 @@
 angular.module('otPlugins')
+    .directive('otRelatedDiseases', ['otApi', '$timeout', function (otApi, $timeout) {
+        'use strict';
+
+        return {
+            restrict: 'E',
+            templateUrl: 'plugins/related-entities/related-entities.html',
+            scope: {
+                width: '=',
+                disease: '='
+            },
+            link: function (scope) {
+                scope.entities = 'diseases';
+                scope.otherEntities = 'targets';
+                scope.entitySymbol = scope.disease.label;
+
+                var id = scope.disease.efo;
+                var opts = {
+                    id: id
+                };
+                var queryObject = {
+                    method: 'GET',
+                    params: opts
+                };
+                $timeout(function () {
+                    otApi.getDiseaseRelation(queryObject)
+                        .then(
+                            // success
+                            function (resp) {
+                                var container = document.getElementById('ot-relations-plot');
+                                createRelationsTree(container, resp.body.data, (scope.width / 2), scope.disease.label, scope.entities);
+                            },
+
+                            // error handler
+                            otApi.defaultErrorHandler
+                        );
+                }, 0);
+            }
+        };
+    }]);
+
+angular.module('otPlugins')
     .directive('otRelatedTargets', ['otApi', '$timeout', function (otApi, $timeout) {
         'use strict';
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/related-targets/related-targets.html',
+            templateUrl: 'plugins/related-entities/related-entities.html',
             scope: {
                 target: '=',
-                width: '=',
-                disease: '=',
+                width: '='
             },
             link: function (scope, element, attrs) {
-                if (scope.target) {
-                    scope.entities = 'targets';
-                    scope.otherEntities = 'diseases';
-                    scope.entitySymbol = scope.target.symbol;
-                } else if (scope.disease) {
-                    scope.entities = 'diseases';
-                    scope.otherEntities = 'targets';
-                    scope.entitySymbol = scope.disease.label;
-                }
+                scope.entities = 'targets';
+                scope.otherEntities = 'diseases';
+                scope.entitySymbol = scope.target.symbol;
 
                 var id = scope.target.id;
                 var opts = {
@@ -34,17 +68,8 @@ angular.module('otPlugins')
                         .then(
                             // success
                             function (resp) {
-                                // var container = document.createElement('div');
-                                // container.id = 'targetRelationsContainer';
                                 var container = document.getElementById('ot-relations-plot');
-                                // container.style.position = 'relative';
-                                // newDiv.className = "accordionCell";
-
-                                // createRelationsCircle(container, resp.body.data, (scope.width / 2));
-                                createRelationsTree(container, resp.body.data, (scope.width / 2), scope.target.approved_symbol);
-                                // element[0].appendChild(container);
-
-                                // scope.relations = resp.body.data;
+                                createRelationsTree(container, resp.body.data, (scope.width / 2), scope.target.approved_symbol, scope.entities);
                             },
 
                             // error handler
@@ -55,8 +80,8 @@ angular.module('otPlugins')
         };
     }]);
 
-function createRelationsTree(container, data, width, gene) {
-    var treeData = getTreeData(gene, data);
+function createRelationsTree(container, data, width, gene, entitiesType) {
+    var treeData = getTreeData(gene, data, entitiesType);
     var color = '#377bb5';
 
     // Widths
@@ -105,7 +130,7 @@ function createRelationsTree(container, data, width, gene) {
     function showBarHoverTooltip(data) {
         var obj = {};
         obj.header = '';
-        obj.body = data.val + ' diseases shared between ' + gene + ' and ' + data.name;
+        obj.body = data.val + ' ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' shared between ' + gene + ' and ' + data.name;
         barHoverTooltip = tooltip.plain()
             .width(180)
             .show_closer(false)
@@ -120,9 +145,9 @@ function createRelationsTree(container, data, width, gene) {
                 .retriever (function () {
                     return [{
                         id: data.id,
-                        val: data.shared_diseases_count,
+                        val: data.shared_count,
                         name: data.name,
-                        shared: data.shared_diseases
+                        shared: data.shared
                     }];
                 })
             )
@@ -137,7 +162,7 @@ function createRelationsTree(container, data, width, gene) {
                     barHoverTooltip.close();
                 })
                 .on('click', function (data) {
-                    showRelationDetails(data, gene)
+                    showRelationDetails(data, gene, entitiesType)
                 })
             );
     };
@@ -168,7 +193,7 @@ function createRelationsTree(container, data, width, gene) {
                     .style('font-size', '0.8em')
                     .style('font-weight', 200)
                     .style('cursor', 'pointer')
-                    .text(d.shared_diseases_count + ' diseases shared')
+                    .text(d.shared_count + ' ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' shared')
                     .on('mouseover', function (d) {
                         d3.select(this)
                             .style('font-weight', 'normal')
@@ -184,14 +209,15 @@ function createRelationsTree(container, data, width, gene) {
     }
 }
 
-function showRelationDetails(data, gene) {
+function showRelationDetails(data, gene, entitiesType) {
     var detailsContainer = d3.select('#ot-relation-details');
+    detailsContainer.selectAll('*').remove();
     detailsContainer
         .append('h3')
-        .text(gene + ' - ' + data.name + ' shared diseases');
+        .text(gene + ' - ' + data.name + ' shared ' + (entitiesType === 'targets' ? 'diseases' : 'targets'));
     detailsContainer
         .append('p')
-        .text('For now, the first 10 shared diseases are shown');
+        .text('For now, the first 10 shared ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' are shown');
     var ul = detailsContainer
         .append('ul');
     ul.selectAll('li')
@@ -200,13 +226,20 @@ function showRelationDetails(data, gene) {
         .append('li')
         .style('font-size', '0.8em')
         .text(function (d) {
-            console.log(d);
             return d;
         })
 }
 
+// ent1 is the id for entity1
+// ent2 is the id for entity2
+// shared is a list of ids of shared other entities between 1 and 2
+// entitiesType is the type of ent1 and ent2 !! (not the entity type of the shared entities)
+function getBestCommonEntities(ent1, ent2, shared, entitiesType) {
 
-function getTreeData(gene, data) {
+}
+
+
+function getTreeData(gene, data, entitiesType) {
     var tree = {};
     tree.name = gene;
     tree.children = [];
@@ -217,9 +250,9 @@ function getTreeData(gene, data) {
             id: d.id,
             geneId: d.object.id,
             value: d.value,
-            shared_diseases_count: d.counts.shared_count,
-            union_diseases_count: d.counts.union_count,
-            shared_diseases: d.shared_diseases,
+            shared_count: d.counts.shared_count,
+            union_count: d.counts.union_count,
+            shared: (entitiesType === 'targets' ? d.shared_diseases : d.shared_targets),
         })
     }
     return tree;

@@ -114,6 +114,12 @@
 
     "diseaseSections": [
         {
+            "name": "relatedTargets",
+            "element": "ot-related-diseases",
+            "heading": "Related diseases",
+            "track": true
+        },
+        {
             "name": "phenotypes",
             "element": "ot-phenotypes-display",
             "heading": "Phenotypes",
@@ -149,7 +155,12 @@
             },
             "track": true
         },
-
+        {
+            "name": "relatedTargets",
+            "element": "ot-related-targets",
+            "heading": "Related targets",
+            "track": true
+        },
         {
             "name": "interactionsViewer",
             "element": "ot-interactions-viewer",
@@ -243,12 +254,6 @@
             "name": "bibliography",
             "element": "ot-bibliography-target",
             "heading": "Bibliography",
-            "track": true
-        },
-        {
-            "name": "relatedTargets",
-            "element": "ot-related-targets",
-            "heading": "Related targets",
             "track": true
         }
     ],
