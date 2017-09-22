@@ -1,0 +1,81 @@
+<uib-tabset>
+    <uib-tab heading="Table">
+        <div ng-show="ext.common.data.length>0 || ext.rare.data.length>0">
+
+            <!-- Common disease table -->
+            <div ng-show="ext.common.data.length>0 && !ext.common.hasError">
+                <h4>Common diseases</h4>
+                <ot-source-list list="sources.common"></ot-source-list>
+
+                <ot-common-disease-table 
+                    target="{{target.id}}"
+                    disease="{{disease.efo}}"
+                    title="{{target.approved_symbol}}-{{disease.label}}"
+                    ext="ext.common">
+                </ot-common-disease-table>
+
+                <!-- Redundant as it's also included in table directive -->
+                <div ng-show="ext.common.data.length===0"><p>No data available</p></div>
+            </div>
+
+            <uib-alert type="danger" ng-show="ext.common.hasError" ng-cloak style="margin-top:15px">
+                <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving common diesease data. Please try again later.
+            </uib-alert>
+
+
+            <!-- common / rare disease table divider -->
+            <div ng-show="ext.common.data.length>0 && ext.rare.data.length>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
+
+
+            <!-- Related rare disease table -->
+            <div ng-show="ext.rare.data.length>0 && !ext.rare.hasError">
+                <h4>Rare diseases</h4>
+                <ot-source-list list="sources.rare"></ot-source-list>
+                
+                <ot-rare-disease-table 
+                    target="{{target.id}}"
+                    disease="{{disease.efo}}"
+                    title="{{target.approved_symbol}}-{{disease.label}}"
+                    ext="ext.rare">
+                </ot-rare-disease-table>
+            </div>
+
+            <uib-alert type="danger" ng-show="search.tables.genetic_associations.rare_diseases.has_errors" ng-cloak style="margin-top:15px">
+                <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving {{search.tables.genetic_associations.rare_diseases.heading}} data. Please try again later.
+            </uib-alert>
+
+        </div>
+
+        <div ng-show="ext.common.data.length===0 && ext.rare.data.length===0 && !ext.common.hasError && !ext.rare.hasError">
+            <p>No data available</p>
+        </div>
+
+    </uib-tab>
+
+    <uib-tab heading="Browser">
+        <div style="overflow:hidden">
+            <ot-target-genome-browser width=1140 efo={{disease.efo}} target="{{target.id}}"></ot-target-genome-browser>
+        </div>
+    </uib-tab>
+</uib-tabset>
+
+
+
+
+
+
+
+
+<!-- //////////////////////////////////////////////////////////////// -->
+
+<!-- <div ng-show="ext.data.length>0">
+    <ot-source-list list="sources"></ot-source-list>
+    <ot-somatic-mutation-table 
+        target="{{target.id}}"
+        disease="{{disease.efo}}"
+        title="{{target.approved_symbol}}-{{disease.label}}"
+        ext="ext">
+    </ot-somatic-mutation-table>
+</div> -->
+<!-- Redundant as it's also included in table directive -->
+<!-- <div ng-show="ext.data.length==0"><p>No data available</p></div> -->

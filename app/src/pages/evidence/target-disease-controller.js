@@ -44,29 +44,29 @@ angular.module('otControllers')
 
             // tables data:
             tables: {
-                genetic_associations: {
-                    is_open: false,
-                    is_loading: false,
-                    heading: otDictionary.GENETIC_ASSOCIATION,
-                    common_diseases: {
-                        data: [],
-                        is_open: false,
-                        is_loading: false,
-                        heading: otDictionary.COMMON_DISEASES,
-                        source: otConfig.evidence_sources.genetic_association.common,
-                        source_label: otConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                        has_errors: false
-                    },
-                    rare_diseases: {
-                        data: [],
-                        is_open: false,
-                        is_loading: false,
-                        heading: otDictionary.RARE_DISEASES,
-                        source: otConfig.evidence_sources.genetic_association.rare,
-                        source_label: otConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                        has_errors: false
-                    }
-                },
+                // genetic_associations: {
+                //     is_open: false,
+                //     is_loading: false,
+                //     heading: otDictionary.GENETIC_ASSOCIATION,
+                //     common_diseases: {
+                //         data: [],
+                //         is_open: false,
+                //         is_loading: false,
+                //         heading: otDictionary.COMMON_DISEASES,
+                //         source: otConfig.evidence_sources.genetic_association.common,
+                //         source_label: otConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
+                //         has_errors: false
+                //     },
+                //     rare_diseases: {
+                //         data: [],
+                //         is_open: false,
+                //         is_loading: false,
+                //         heading: otDictionary.RARE_DISEASES,
+                //         source: otConfig.evidence_sources.genetic_association.rare,
+                //         source_label: otConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
+                //         has_errors: false
+                //     }
+                // },
                 // rna_expression: {
                 //     data: [],
                 //     is_open: false,
@@ -112,7 +112,7 @@ angular.module('otControllers')
                     source_label: otConfig.evidence_sources.literature.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
                     has_errors: false,
                     total: 0
-                }//,
+                } // ,
                 // animal_models: {
                 //     data: [],
                 //     is_open: false,

@@ -81,7 +81,7 @@
                         
                         <!-- accordion header -->
                         <uib-accordion-heading>
-                            <span ng-click='section.currentVisibility = !section.currentVisibility' class="text-nolight">{{section.heading}}</span>
+                            <span ng-click='section.currentVisibility = !section.currentVisibility' class="text-nolight" ng-class="{ 'text-disabled': tables[section.name].data.length==0 }">{{section.heading}}</span>
                             <span ot-progress-spinner class="pull-right" ng-show="tables[section.name].isLoading"></span>
                         </uib-accordion-heading>
 
@@ -119,31 +119,23 @@
                 <!-- uib-accordion -->
                 <uib-accordion close-others="false">
 
-                    <!-- Genetic Associations table -->
-                    <div uib-accordion-group is-open="search.tables.genetic_associations.is_open" ng-click='sectionOpen("genetics")' class="panel-default">
+                    <!-- Genetic associations -->
+                    <!-- <div uib-accordion-group is-open="search.tables.genetic_associations.is_open" ng-click='sectionOpen("genetics")' class="panel-default">
                         <uib-accordion-heading>
                             <a id="genetic_associations"></a>
                             <span class="text-nolight">
                                 <span ng-class="{ 'text-disabled': search.tables.genetic_associations.common_diseases.data.length==0 && search.tables.genetic_associations.rare_diseases.data.length==0 }">{{search.tables.genetic_associations.heading}}</span>
-                                <!-- Score pill -->
-                                <!-- <span class='badge flower-petal' ng-show="search.association_scores[datatypes.GENETIC_ASSOCIATION]" title="Association score">{{search.association_scores[datatypes.GENETIC_ASSOCIATION] | currency : "" : 2}}</span> -->
-                                <!-- <span class='badge' ng-show="search.tables.genetic_associations.rare_diseases.data.length" style="background:#3E8BAD">{{search.tables.genetic_associations.rare_diseases.data.length}}</span> -->
                                 <span ot-progress-spinner class="pull-right" ng-show="search.tables.genetic_associations.is_loading"></span>
                             </span>
                         </uib-accordion-heading>
                         <uib-tabset>
                             <uib-tab heading="Table">
                                 <div ng-show="search.tables.genetic_associations.common_diseases.data.length>0 || search.tables.genetic_associations.rare_diseases.data.length>0">
-                                    <!-- <p><span class="small">Association score: {{search.association_scores[datatypes.GENETIC_ASSOCIATION] || 0}}</span></p> -->
-
-                                    <!-- Common disease table -->
+                                    
                                     <div ng-show="search.tables.genetic_associations.common_diseases.data.length>0 && !search.tables.genetic_associations.common_diseases.has_errors">
                                         <h4>{{search.tables.genetic_associations.common_diseases.heading}}</h4>
-                                        <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">GWAS Catalog curated database</a></p> -->
 
                                         <p>Source: <span ng-repeat="source in search.tables.genetic_associations.common_diseases.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
-
-                                        <!-- TABLE -->
                                         <ot-common-disease-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.genetic_associations.common_diseases.is_loading" data="search.tables.genetic_associations.common_diseases.data" title="search.info.title" error-flag="search.tables.genetic_associations.common_diseases.has_errors"></ot-common-disease-table>
                                     </div>
 
@@ -152,18 +144,14 @@
                                     </uib-alert>
 
 
-                                    <!-- common / rare disease table divider -->
                                     <div ng-show="search.tables.genetic_associations.common_diseases.data.length>0 && search.tables.genetic_associations.rare_diseases.data.length>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
 
 
-                                    <!-- Related rare disease table -->
                                     <div ng-show="search.tables.genetic_associations.rare_diseases.data.length>0 && !search.tables.genetic_associations.rare_diseases.has_errors">
                                         <h4>{{search.tables.genetic_associations.rare_diseases.heading}}</h4>
-                                        <!-- <p>Source: <a href="/faq#data-provenance" target="_blank">UniProt</a> and <a href="/faq#data-provenance" target="_blank">European Variation Archive (EVA)</a> curated databases</p> -->
-
+                                        
                                         <p>Source: <span ng-repeat="source in search.tables.genetic_associations.rare_diseases.source_label"><a href="{{source.url}}" target="_blank">{{source.label}}</a><span ng-if="!$last">, </span><span></p>
 
-                                        <!-- TABLE -->
                                         <ot-rare-disease-table disease="{{disease}}" target="{{target}}" load-flag="search.tables.genetic_associations.rare_diseases.is_loading" data="search.tables.genetic_associations.rare_diseases.data" title="search.info.title" error-flag="search.tables.genetic_associations.rare_diseases.has_errors"></ot-rare-disease-table>
 
                                     </div>
@@ -187,7 +175,7 @@
                             </uib-tab>
                         </uib-tabset>
 
-                    </div uib-accordion-group>
+                    </div uib-accordion-group> -->
 
 
 

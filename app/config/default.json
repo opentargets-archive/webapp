@@ -250,6 +250,12 @@
 
     "evidenceSections": [
         {
+            "name": "geneticAssociation",
+            "element": "ot-genetic-association",
+            "heading": "Genetic associations",
+            "track": true
+        },
+        {
             "name": "somaticMutation",
             "element": "ot-somatic-mutation",
             "heading": "Somatic mutation",
