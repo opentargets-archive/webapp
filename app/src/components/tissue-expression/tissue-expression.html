@@ -21,18 +21,18 @@
       <tr class="expression-row-header">
         <th class="text-center col-xs-4" ng-click="sortByLabel()" style="cursor: pointer;">
           Tissue
-          <i class="fa"
-             ng-class="{'fa-sort': (orderByRadioModel !== 'az'), 'fa-sort-desc': (orderByRadioModel === 'az')}"></i>
+          <i class="fa fa-sort-desc"
+             ng-class="{'ot-sort-active': (orderByRadioModel === 'az')}"></i>
         </th>
         <th class="text-center col-xs-4" ng-click="sortByRna()" style="cursor: pointer;">
           RNA
-          <i class="fa"
-             ng-class="{'fa-sort': (orderByRadioModel !== 'rna'), 'fa-sort-desc': (orderByRadioModel === 'rna')}"></i>
+          <i class="fa fa-sort-desc"
+             ng-class="{'ot-sort-active': (orderByRadioModel === 'rna')}"></i>
         </th>
         <th class="text-center col-xs-4" ng-click="sortByProtein()" style="cursor: pointer;">
           Protein
-          <i class="fa"
-             ng-class="{'fa-sort': (orderByRadioModel !== 'protein'), 'fa-sort-desc': (orderByRadioModel === 'protein')}"></i>
+          <i class="fa fa-sort-desc"
+             ng-class="{'ot-sort-active': (orderByRadioModel === 'protein')}"></i>
         </th>
       </tr>
       <tr class="expression-row-low-high">

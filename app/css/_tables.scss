@@ -434,6 +434,12 @@
             }
             tr.expression-row-header {
                 border-bottom: 1px solid #EEE;
+                i {
+                    color: #BBB;
+                }
+                i.ot-sort-active {
+                    color: #0091EA;
+                }
             }
             tr.expression-row-low-high {
                 font-size: 10px;
