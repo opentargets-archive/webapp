@@ -212,9 +212,9 @@ angular.module('otDirectives')
                                             }
                                         };
 
-                                        scope.sortByLabel = function () { sortBy(labelComparator); };
-                                        scope.sortByRna = function () { sortBy(rnaThenLabelComparator); };
-                                        scope.sortByProtein = function () { sortBy(proteinThenLabelComparator); };
+                                        scope.sortByLabel = function () { sortBy(labelComparator); scope.orderByRadioModel = 'az'; };
+                                        scope.sortByRna = function () { sortBy(rnaThenLabelComparator); scope.orderByRadioModel = 'rna'; };
+                                        scope.sortByProtein = function () { sortBy(proteinThenLabelComparator); scope.orderByRadioModel = 'protein'; };
 
                                         // default
                                         scope.sortByRna();

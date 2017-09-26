@@ -1,33 +1,39 @@
 <div class="col-sm-12 col-md-8 col-md-offset-2">
   <div class="col-sm-12 form-group">
-    <div class="col-sm-6">
+    <div class="col-sm-11">
       Group by 
       <div class="btn-group">
         <label class="btn btn-default btn-sm" ng-model="groupByRadioModel" uib-btn-radio="'organs'" ng-click="parents = organs">Organs</label>
         <label class="btn btn-default btn-sm" ng-model="groupByRadioModel" uib-btn-radio="'anatomicalSystems'" ng-click="parents = anatomicalSystems">Anatomical Systems</label>
       </div>
     </div>
-    <div class="col-sm-5">
-      Order by 
-      <div class="btn-group">
-        <label class="btn btn-default btn-sm" ng-model="orderByRadioModel" uib-btn-radio="'rna'" ng-click="sortByRna()">RNA</label>
-        <label class="btn btn-default btn-sm" ng-model="orderByRadioModel" uib-btn-radio="'protein'" ng-click="sortByProtein()">Protein</label>
-        <label class="btn btn-default btn-sm" ng-model="orderByRadioModel" uib-btn-radio="'az'" ng-click="sortByLabel()">A-Z</label>
-      </div>
-    </div>
     <div class="col-sm-1 pull-right">
+      <div class="btn-group">
         <button class="btn btn-default btn-sm" ng-click="download()">
           <span class="panel-icon-lg fa fa-download"></span>
         </button>
+      </div>
     </div>
   </div>
 <div class="col-sm-12">
   <table class="table">
     <thead>
       <tr class="expression-row-header">
-        <th class="col-xs-4"></th>
-        <th class="text-center col-xs-4">RNA</th>
-        <th class="text-center col-xs-4">Protein</th>
+        <th class="text-center col-xs-4" ng-click="sortByLabel()" style="cursor: pointer;">
+          Tissue
+          <i class="fa"
+             ng-class="{'fa-sort': (orderByRadioModel !== 'az'), 'fa-sort-desc': (orderByRadioModel === 'az')}"></i>
+        </th>
+        <th class="text-center col-xs-4" ng-click="sortByRna()" style="cursor: pointer;">
+          RNA
+          <i class="fa"
+             ng-class="{'fa-sort': (orderByRadioModel !== 'rna'), 'fa-sort-desc': (orderByRadioModel === 'rna')}"></i>
+        </th>
+        <th class="text-center col-xs-4" ng-click="sortByProtein()" style="cursor: pointer;">
+          Protein
+          <i class="fa"
+             ng-class="{'fa-sort': (orderByRadioModel !== 'protein'), 'fa-sort-desc': (orderByRadioModel === 'protein')}"></i>
+        </th>
       </tr>
       <tr class="expression-row-low-high">
         <td class="col-xs-4"></td>
