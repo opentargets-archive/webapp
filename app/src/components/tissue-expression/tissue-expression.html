@@ -36,8 +36,11 @@
       </tr>
     </thead>
     <tbody ng-repeat-start="parent in parents" class="expression-row-group-parent">
-      <tr class="expression-row-parent" ng-class="{'expression-row-parent__expanded': parent.expanded}">
-        <td class="expression-cell-label" style="cursor: pointer;" ng-click="parent.expanded = !parent.expanded">
+      <tr class="expression-row-parent"
+          ng-class="{'expression-row-parent__expanded': parent.expanded}"
+          style="cursor: pointer;"
+          ng-click="parent.expanded = !parent.expanded">
+        <td class="expression-cell-label">
           <span class="bold">{{ parent.label | otUpperCaseFirst }}</span>
         </td>
         <td class="expression-cell-rna">
