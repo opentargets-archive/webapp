@@ -19,6 +19,11 @@ angular.module('otDirectives')
                 // set the load progress flag to true before starting the API call
                 // scope.loadprogress = true;
 
+                scope.download = function () {
+                    var blob = new Blob([scope.downloadableData], {type: 'text/csv;charset=utf-8'});
+                    saveAs(blob, scope.downloadableFilename + '.csv');
+                };
+
                 // Watch for data changes
                 scope.$watch(
                     'target',
@@ -51,6 +56,27 @@ angular.module('otDirectives')
                                                 return tissue;
                                             });
                                         }
+
+                                        // prep for download
+                                        scope.downloadableFilename = 'baseline_expression_for_' + scope.target;
+                                        var headers = [
+                                            'Tissue',
+                                            'Organs',
+                                            'Anatomical Systems',
+                                            'RNA',
+                                            'Protein'
+                                        ].join(',');
+                                        var body = data.map(function (tissue) {
+                                            return [
+                                                '"' + tissue.label + '"',
+                                                '"' + tissue.organs.join(',') + '"',
+                                                '"' + tissue.anatomical_systems.join(',') + '"',
+                                                tissue.rna.value,
+                                                tissue.protein.level
+                                            ].join(',');
+                                        }).join('\n');
+                                        scope.downloadableData = [headers, body].join('\n');
+
 
                                         var systemHierarchy = {};
                                         var organHierarchy = {};

@@ -7,13 +7,18 @@
         <label class="btn btn-default btn-sm" ng-model="groupByRadioModel" uib-btn-radio="'organs'" ng-click="parents = organs">Organs</label>
       </div>
     </div>
-    <div class="col-sm-6 pull-right text-right">
+    <div class="col-sm-5">
       Order by 
       <div class="btn-group">
         <label class="btn btn-default btn-sm" ng-model="orderByRadioModel" uib-btn-radio="'az'" ng-click="sortByLabel()">A-Z</label>
         <label class="btn btn-default btn-sm" ng-model="orderByRadioModel" uib-btn-radio="'rna'" ng-click="sortByRna()">RNA</label>
         <label class="btn btn-default btn-sm" ng-model="orderByRadioModel" uib-btn-radio="'protein'" ng-click="sortByProtein()">Protein</label>
       </div>
+    </div>
+    <div class="col-sm-1 pull-right">
+        <button class="btn btn-default btn-sm" ng-click="download()">
+          <span class="panel-icon-lg fa fa-download"></span>
+        </button>
     </div>
   </div>
 <div class="col-sm-12">
