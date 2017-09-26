@@ -217,8 +217,8 @@ angular.module('otDirectives')
                                         scope.sortByProtein = function () { sortBy(proteinThenLabelComparator); };
 
                                         // default
-                                        scope.sortByLabel();
-                                        scope.orderByRadioModel = 'az';
+                                        scope.sortByRna();
+                                        scope.orderByRadioModel = 'rna';
 
                                         scope.radioClick = function (arg) {
                                             $log.log('clicked with argument: ');
