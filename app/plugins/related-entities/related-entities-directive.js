@@ -1,15 +1,49 @@
 angular.module('otPlugins')
-    .directive('otRelatedDiseases', ['otApi', '$timeout', function (otApi, $timeout) {
+    .directive('otRelatedTargets', [function () {
+        'use strict';
+        return {
+            restrict: 'E',
+            templateUrl: 'plugins/related-entities/related-targets.html',
+            scope: {
+                target: '=',
+                width: '='
+            },
+            link: function (scope) {
+                scope.entitySymbol = scope.target.symbol;
+            }
+        }
+    }]);
+
+angular.module('otPlugins')
+    .directive('otRelatedDiseases', [function () {
+        'use strict';
+        return {
+            restrict: 'E',
+            templateUrl: 'plugins/related-entities/related-diseases.html',
+            scope: {
+                disease: '=',
+                width: '='
+            },
+            link: function (scope) {
+                scope.entitySymbol = scope.disease.label;
+            }
+        }
+    }]);
+
+angular.module('otDirectives')
+    .directive('otRelatedDiseasesOverview', ['otApi', '$timeout', function (otApi, $timeout) {
         'use strict';
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/related-entities/related-entities.html',
+            // templateUrl: 'plugins/related-entities/related-entities.html',
+            template: '<div></div>',
             scope: {
                 width: '=',
+                related: '=',
                 disease: '='
             },
-            link: function (scope) {
+            link: function (scope, element) {
                 scope.entities = 'diseases';
                 scope.otherEntities = 'targets';
                 scope.entitySymbol = scope.disease.label;
@@ -27,7 +61,8 @@ angular.module('otPlugins')
                         .then(
                             // success
                             function (resp) {
-                                var container = document.getElementById('ot-relations-plot');
+                                // var container = document.getElementById('ot-relations-plot');
+                                var container = element[0];
                                 createRelationsTree(container, resp.body.data, (scope.width / 2), scope.disease.label, scope.entities);
                             },
 
@@ -39,18 +74,68 @@ angular.module('otPlugins')
         };
     }]);
 
-angular.module('otPlugins')
-    .directive('otRelatedTargets', ['otApi', '$timeout', function (otApi, $timeout) {
+angular.module('otDirectives')
+    .directive('otRelatedTargetDetails', ['otApi', function (otApi) {
         'use strict';
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/related-entities/related-entities.html',
+            template: '<div>Hello world</div>',
             scope: {
                 target: '=',
+                related: '=',
                 width: '='
             },
-            link: function (scope, element, attrs) {
+            link: function (scope) {
+                scope.$watch('related', function () {
+                    if (scope.related) {
+                        console.log('rendering details for ' + scope.related.name + ' and ' + scope.target.symbol + ' via...');
+                        console.log(scope.related.shared);
+
+                        console.log(scope.related);
+                        console.log(scope.target);
+                        
+                        // Get the best 10 diseases for target1 and any of the shared diseases...
+                        var opts = {
+                            target: [scope.target.ensembl_gene_id],
+                            disease: scope.related.shared,
+                            size: 10,
+                        };
+                        var queryObject = {
+                            method: 'POST',
+                            params: opts
+                        };
+                        otApi.getAssociations(queryObject)
+                            .then (function (resp) {
+                                console.log(resp);
+                            });
+
+                    }
+                });
+                // scope.$watch('target', function () {
+                //     console.log('new target object!!!');
+                //     console.log(scope.target);
+                // });
+            }
+        };
+    }]);
+
+angular.module('otDirectives')
+    .directive('otRelatedTargetsOverview', ['otApi', function (otApi) {
+        'use strict';
+
+        return {
+            restrict: 'E',
+            // templateUrl: 'plugins/related-entities/related-entities.html',
+            // template: '<ot-best-related-targets target="target" related="related" width="width">' +
+            //           '</ot-best-related-targets>',
+            template: '<div></div>',
+            scope: {
+                target: '=',
+                related: '=',
+                width: '='
+            },
+            link: function (scope, element) {
                 scope.entities = 'targets';
                 scope.otherEntities = 'diseases';
                 scope.entitySymbol = scope.target.symbol;
@@ -63,24 +148,28 @@ angular.module('otPlugins')
                     method: 'GET',
                     params: opts
                 };
-                $timeout(function () {
-                    otApi.getTargetRelation(queryObject)
-                        .then(
-                            // success
-                            function (resp) {
-                                var container = document.getElementById('ot-relations-plot');
-                                createRelationsTree(container, resp.body.data, (scope.width / 2), scope.target.approved_symbol, scope.entities);
-                            },
+                otApi.getTargetRelation(queryObject)
+                    .then(
+                        // success
+                        function (resp) {
+                            // var container = document.getElementById('ot-relations-plot');
+                            var container = element[0];
+                            createRelationsTree(container, resp.body.data, scope);
+                            // createRelationsTree(container, resp.body.data, (scope.width / 2), scope.target.approved_symbol, scope.entities);
+                        },
 
-                            // error handler
-                            otApi.defaultErrorHandler
-                        );
-                }, 0);
+                        // error handler
+                        otApi.defaultErrorHandler
+                    );
             }
         };
     }]);
 
-function createRelationsTree(container, data, width, gene, entitiesType) {
+function createRelationsTree(container, data, scope) {
+    var width = scope.width / 2;
+    var gene = scope.entitySymbol;
+    var entitiesType = scope.entities;
+
     var treeData = getTreeData(gene, data, entitiesType);
     var color = '#377bb5';
 
@@ -93,7 +182,6 @@ function createRelationsTree(container, data, width, gene, entitiesType) {
     var tree = tnt.tree()
         .data(treeData)
         .branch_color('#aaaaaa')
-        // .width(treeWidth)
         .layout(tnt.tree.layout.vertical()
             .width(treeWidth)
             .scale(false)
@@ -101,12 +189,6 @@ function createRelationsTree(container, data, width, gene, entitiesType) {
         .node_display (tnt.tree.node_display.circle()
             .size(5)
             .fill(color)
-            // .fill(function (node) {
-                // if (node.is_leaf()) {
-                //     return "blue";
-                // }
-                // return "green";
-            // })
         )
         .label (tnt.tree.label.text()
             .height(30)
@@ -147,6 +229,7 @@ function createRelationsTree(container, data, width, gene, entitiesType) {
                         id: data.id,
                         val: data.shared_count,
                         name: data.name,
+                        geneId: data.geneId,
                         shared: data.shared
                     }];
                 })
@@ -162,7 +245,10 @@ function createRelationsTree(container, data, width, gene, entitiesType) {
                     barHoverTooltip.close();
                 })
                 .on('click', function (data) {
-                    showRelationDetails(data, gene, entitiesType)
+                    // showRelationDetails(data, gene, entitiesType)
+                    scope.related = data;
+                    console.log(scope);
+                    scope.$apply();
                 })
             );
     };
@@ -229,15 +315,6 @@ function showRelationDetails(data, gene, entitiesType) {
             return d;
         })
 }
-
-// ent1 is the id for entity1
-// ent2 is the id for entity2
-// shared is a list of ids of shared other entities between 1 and 2
-// entitiesType is the type of ent1 and ent2 !! (not the entity type of the shared entities)
-function getBestCommonEntities(ent1, ent2, shared, entitiesType) {
-
-}
-
 
 function getTreeData(gene, data, entitiesType) {
     var tree = {};
