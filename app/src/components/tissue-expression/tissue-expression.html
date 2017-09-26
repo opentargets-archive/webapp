@@ -45,7 +45,7 @@
         </td>
         <td class="expression-cell-rna">
           <div class="expression-bar-container">
-            <div ng-if="parent.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(parent.rna.level) }}" style="width:{{ rnaLevelToPercent(parent.rna.level) }}%;"></div>
+            <div ng-if="parent.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(parent) }}" style="width:{{ rnaLevelToPercent(parent) }}%;"></div>
             <div ng-if="parent.rna.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
           </div>
         </td>
@@ -62,7 +62,7 @@
         <td class="expression-cell-label">{{ tissue.label | otUpperCaseFirst }}</td>
         <td class="expression-cell-rna">
           <div class="expression-bar-container">
-            <div ng-if="tissue.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(tissue.rna.level) }}" style="width:{{ rnaLevelToPercent(tissue.rna.level) }}%;"></div>
+            <div ng-if="tissue.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(tissue) }}" style="width:{{ rnaLevelToPercent(tissue) }}%;"></div>
             <div ng-if="tissue.rna.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
           </div>
         </td>

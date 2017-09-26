@@ -77,6 +77,10 @@ angular.module('otDirectives')
                                         }).join('\n');
                                         scope.downloadableData = [headers, body].join('\n');
 
+                                        // calculate the max rna value (for this gene)
+                                        var rnaMax = d3.max(data, function (tissue) {
+                                            return tissue.rna.value;
+                                        });
 
                                         var systemHierarchy = {};
                                         var organHierarchy = {};
@@ -122,7 +126,8 @@ angular.module('otDirectives')
                                             .map(function (key) {
                                                 var organ = organHierarchy[key];
                                                 organ.rna = {
-                                                    'level': d3.max(organ.children, function (d) { return d.rna.level; })
+                                                    'level': d3.max(organ.children, function (d) { return d.rna.level; }),
+                                                    'value': d3.max(organ.children, function (d) { return d.rna.value; })
                                                 };
                                                 organ.protein = {
                                                     'level': d3.max(organ.children, function (d) { return d.protein.level; })
@@ -134,7 +139,8 @@ angular.module('otDirectives')
                                             .map(function (key) {
                                                 var system = systemHierarchy[key];
                                                 system.rna = {
-                                                    'level': d3.max(system.children, function (d) { return d.rna.level; })
+                                                    'level': d3.max(system.children, function (d) { return d.rna.level; }),
+                                                    'value': d3.max(system.children, function (d) { return d.rna.value; })
                                                 };
                                                 system.protein = {
                                                     'level': d3.max(system.children, function (d) { return d.protein.level; })
@@ -150,13 +156,12 @@ angular.module('otDirectives')
                                             }
                                             return level * 100 / 3;
                                         };
-                                        scope.rnaLevelToPercent = function (level) {
-                                            if (level <= 0) {
-                                                // level 0 => not expressed
+                                        scope.rnaLevelToPercent = function (tissue) {
+                                            if (tissue.rna.level < 0) {
                                                 // level -1 => no data
                                                 return 0;
                                             }
-                                            return level * 10;
+                                            return tissue.rna.value * 100 / rnaMax;
                                         };
                                         scope.proteinLevelToHint = function (level) {
                                             // if (level === 0) {
@@ -170,12 +175,8 @@ angular.module('otDirectives')
                                                 return 'High';
                                             }
                                         };
-                                        scope.rnaLevelToHint = function (level) {
-                                            if (level === 0) {
-                                                return 'Under expressed';
-                                            } else {
-                                                return 'Expressed in decile ' + level;
-                                            }
+                                        scope.rnaLevelToHint = function (tissue) {
+                                            return '' + tissue.rna.value + ' (normalised count)';
                                         };
                                         // default
                                         scope.parents = scope.organs;
@@ -193,8 +194,8 @@ angular.module('otDirectives')
                                         }
                                         var labelComparator = function (a, b) { return d3.ascending(a.label, b.label); };
                                         var rnaThenLabelComparator = function (a, b) {
-                                            // sort by rna (but if rna same, sort alphabetical)
-                                            var c = d3.descending(a.rna.level, b.rna.level);
+                                            // sort by rna value (but if rna same, sort alphabetical)
+                                            var c = d3.descending(a.rna.value, b.rna.value);
                                             if (c !== 0) {
                                                 return c;
                                             } else {
