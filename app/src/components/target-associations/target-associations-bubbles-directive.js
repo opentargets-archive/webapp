@@ -1,7 +1,7 @@
 /* Bubbles directive for associations */
 angular.module('otDirectives')
 
-    .directive('otTargetAssociationsBubbles', ['otApi', 'otUtils', '$analytics', function (otApi, otUtils, $analytics) {
+    .directive('otTargetAssociationsBubbles2', ['otApi', 'otUtils', '$analytics', function (otApi, otUtils, $analytics) {
         'use strict';
 
         var whoiam = 'bubbles';

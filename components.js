@@ -10,7 +10,9 @@ tnt.rest = require("tnt.rest");
 var targetGenomeBrowser = require("cttv.genome");
 // var bubblesView = require("cttv.bubblesView");
 // var geneAssociations = require("cttv.targetAssociations");
-var targetAssociations = require("cttv.targetAssociationsBubbles"); // new bubbles view
+// var targetAssociations = require("cttv.targetAssociationsBubbles"); // new bubbles view
+var targetAssociationsBubbles = require('otAssociationsBubbles');
+
 var geneAssociationsTree = require("cttv.targetAssociationsTree");
 var flowerView = require("cttv.flowerView");
 
