@@ -25,6 +25,7 @@ var webappFiles = {
             'node_modules/js-yaml/dist/js-yaml.min.js',
             'app/vendor/foamtree/carrotsearch.foamtree.js',
             'node_modules/marked/marked.min.js',
+            'node_modules/venn.js/build/venn.min.js',
             'bower_components/FileSaver/FileSaver.min.js',
             'bower_components/moment/moment.js',
             'bower_components/abdmob/x2js/xml2json.min.js'

@@ -75,12 +75,270 @@ angular.module('otDirectives')
     }]);
 
 angular.module('otDirectives')
-    .directive('otRelatedTargetDetails', ['otApi', function (otApi) {
+    .directive('otTarget2TargetDiseases', ['otUtils', function (otUtils) {
+        'use strict';
+        var color = '#377bb5';
+
+        return {
+            restrict: 'E',
+            template: '<div ng-show="target.approved_symbol && related.name">Top diseases associated with {{target.approved_symbol}} and {{related.name}}</div>' +
+                      '<div></div>' +
+                      '<ot-matrix-legend style="float:right" legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend>',
+            scope: {
+                target: '=',
+                related: '=',
+                diseases: '=',
+                width: '='
+            },
+            link: function (scope, el) {
+                scope.$watchGroup(['target', 'related', 'diseases'], function() {
+                    if (!scope.target || !scope.diseases || !scope.related) {
+                        return;
+                    }
+
+                    var container = el[0].getElementsByTagName('div')[1];
+                    d3.select(container).selectAll('*').remove();
+
+                    var width = scope.width / 2;
+                    var topOffset = 30;
+                    var height = (scope.diseases.length * 30);
+                    var svg = d3.select(container)
+                        .append('svg')
+                        .attr('width', width)
+                        .attr('height', height + topOffset)
+                        .append('g')
+                        .attr('transform', 'translate(0, ' + topOffset + ')');
+
+                    // Dimensions of the plot...
+                    // <- 20% -> <- 5% -> <---- 50% ---> <- 5% -> <- 20% ->
+                    var labelPerc = 20;
+                    var bracesPerc = 5;
+                    var linksPerc = 50;
+
+                    var labelOffset = (labelPerc * width) / 100;
+                    var bracesOffset = (bracesPerc * width) / 100;
+                    var linksOffset = (linksPerc * width) / 100;
+
+                    // Links are plotted from 25% to 75%
+                    var linksG = svg
+                        .append('g')
+                        .attr('transform', 'translate(' + (labelOffset + bracesOffset + (linksOffset / 2)) + ', 0)');
+                    var linkNodes = linksG.selectAll('.linkNode')
+                        .data(scope.diseases)
+                        .enter()
+                        .append('g')
+                        .attr('class', 'linkNode')
+                        .attr('transform', function (d, i) {
+                            // initial positions
+                            // return 'translate(0,' + (i * 30) + ')';
+                            return 'translate(0,' + (height / 2) + ')';
+                        });
+
+                    var colorScale = otUtils.colorScales.BLUE_0_1; // blue orig
+
+                    // labels for links
+                    linkNodes
+                        .append('text')
+                        .attr('x', 0)
+                        .attr('y', -5)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', '#666666')
+                        .style('opacity', 0)
+                        .text(function (d) {
+                            return d.label;
+                        });
+                    // actual links
+                    // hover tooltip on object / subject links
+                    var linkTooltip;
+                    function showLinkTooltip(t, d, score) {
+                        var obj = {};
+                        obj.header = '';
+                        obj.body = t + ' - ' + d + ' (score: ' + otUtils.floatPrettyPrint(score) + ')';
+                        linkTooltip = tooltip.plain()
+                            .width(180)
+                            .show_closer(false)
+                            .call(this, obj);
+                    }
+
+                    // subject
+                    linkNodes
+                        .append('line')
+                        .attr('x1', -linksOffset / 2)
+                        .attr('x2', 0)
+                        .attr('y1', 0)
+                        .attr('y2', 0)
+                        .style('stroke-width', '2px')
+                        .style('stroke', function (d) {
+                            return colorScale(d[scope.target.approved_symbol].score);
+                        })
+                        .on('mouseover', function (d) {
+                            showLinkTooltip.call(this, scope.target.approved_symbol, d.label, d[scope.target.approved_symbol].score)
+                        })
+                        .on('mouseout', function () {
+                            linkTooltip.close();
+                        });
+
+                    // object
+                    linkNodes
+                        .append('line')
+                        .attr('x1', 0)
+                        .attr('x2', linksOffset / 2)
+                        .attr('y1', 0)
+                        .attr('y2', 0)
+                        .style('stroke-width', '2px')
+                        // .style('stroke', color);
+                        .style('stroke', function (d) {
+                            return colorScale(d[scope.related.name].score);
+                        })
+                        .on('mouseover', function (d) {
+                            showLinkTooltip.call(this, scope.related.name, d.label, d[scope.related.name].score)
+                        })
+                        .on('mouseout', function () {
+                            linkTooltip.close();
+                        });
+
+
+                    // nodes for links
+                    linkNodes
+                        .append('circle')
+                        .attr('cx', 0)
+                        .attr('cy', 0)
+                        .attr('r', 5)
+                        .attr('fill', color);
+
+
+                    var linksTransition = linkNodes
+                        .transition()
+                        .duration(1000)
+                        .delay(function (d, i) {
+                            return i*100;
+                        })
+                        .attr('transform', function (d, i) {
+                            return 'translate(0,' + (i * 30) + ')';
+                        });
+                    linksTransition.select('text')
+                        .style('opacity', 1);
+
+
+                    // braces1
+                    var braces1 = svg
+                        .append('g')
+                        .attr('transform', 'translate(' + (labelOffset) + ',0)');
+                    braces1.selectAll('.braces1')
+                        .data(scope.diseases)
+                        .enter()
+                        .append('path')
+                        .attr('d', function (d, i) {
+                            // return 'M0,' + (height / 2) + ' C' + (bracesOffset) + ',' + (height / 2) + ' 0,' + ((i * 30)) + ' ' + (bracesOffset) + ',' + ((i * 30));
+                            return 'M0,' + (height / 2) + ' C' + (bracesOffset) + ',' + (height / 2) + ' 0,' + (height / 2) + ' ' + (bracesOffset) + ',' + (height / 2);
+                        })
+                        .attr('fill', 'none')
+                        .style('stroke-width', '2px')
+                        .attr('stroke', function (d) {
+                            return colorScale(d[scope.target.approved_symbol].score);
+                        });
+                    braces1
+                        .selectAll('path')
+                        .transition()
+                        .duration(1000)
+                        .delay(function (d, i) {
+                            return i*100;
+                        })
+                        .attr('d', function (d, i) {
+                            return 'M0,' + (height / 2) + ' C' + (bracesOffset) + ',' + (height / 2) + ' 0,' + ((i * 30)) + ' ' + (bracesOffset) + ',' + ((i * 30));
+                        });
+
+                    // braces2
+                    var braces2 = svg
+                        .append('g')
+                        .attr('transform', 'translate(' + (labelOffset + (bracesOffset*2) + linksOffset) + ',0)');
+                    braces2.selectAll('.braces2')
+                        .data(scope.diseases)
+                        .enter()
+                        .append('path')
+                        .attr('d', function (d, i) {
+                            // return 'M0,' + (height / 2) + ' C' + (-bracesOffset) + ',' + (height / 2) + ' 0,' + ((i * 30)) + ' ' + (-bracesOffset) + ',' + ((i * 30));
+                            return 'M0,' + (height / 2) + ' C' + (-bracesOffset) + ',' + (height / 2) + ' 0,' + (height / 2) + ' ' + (-bracesOffset) + ',' + (height / 2);
+                        })
+                        .attr('fill', 'none')
+                        .style('stroke-width', '2px')
+                        .attr('stroke', function (d) {
+                            return colorScale(d[scope.related.name].score);
+                        });
+                    braces2
+                        .selectAll('path')
+                        .transition()
+                        .duration(1000)
+                        .delay(function (d, i) {
+                           return i*100;
+                        })
+                        .attr('d', function (d, i) {
+                            return 'M0,' + (height / 2) + ' C' + (-bracesOffset) + ',' + (height / 2) + ' 0,' + ((i * 30)) + ' ' + (-bracesOffset) + ',' + ((i * 30));
+                        });
+
+                    // Entity nodes
+                    var ent1G = svg
+                        .append('g')
+                        .attr('transform', 'translate(' + (labelOffset - 5) + ',' + (height / 2) + ')');
+                    ent1G
+                        .append('circle')
+                        .attr('cx', 0)
+                        .attr('cy', 0)
+                        .attr('r', 5)
+                        .attr('fill', color);
+                    ent1G
+                        .append('text')
+                        .attr('x', -5)
+                        .attr('y', 0)
+                        .attr('text-anchor', 'end')
+                        .attr('alignment-baseline', 'middle')
+                        .attr('fill', '#666666')
+                        .text(scope.target.approved_symbol);
+
+                    var ent2G = svg
+                        .append('g')
+                        .attr('transform', 'translate(' + (labelOffset + (bracesOffset*2) + linksOffset + 5) + ',' + (height / 2) + ')');
+                    ent2G
+                        .append('circle')
+                        .attr('cx', 0)
+                        .attr('cy', 0)
+                        .attr('r', 5)
+                        .attr('fill', color);
+                    ent2G
+                        .append('text')
+                        .attr('x', 5)
+                        .attr('y', 0)
+                        .attr('text-anchor', 'start')
+                        .attr('alignment-baseline', 'middle')
+                        .attr('fill', '#666666')
+                        .text(scope.related.name);
+
+                    scope.diseases = undefined;
+
+                    // legend
+                    scope.legendText = 'Score';
+                    scope.colors = [];
+                    for (var i = 0; i <= 100; i += 25) {
+                        var j = i / 100;
+                        // scope.labs.push(j);
+                        scope.colors.push({color: colorScale(j), label: j});
+                    }
+                    scope.legendData = [
+                        // {label:"Therapeutic Area", class:"no-data"}
+                    ];
+
+                })
+            }
+        };
+    }]);
+
+angular.module('otDirectives')
+    .directive('otRelatedTargetDetails', ['otApi', '$q', function (otApi, $q) {
         'use strict';
 
         return {
             restrict: 'E',
-            template: '<div>Hello world</div>',
+            template: '<ot-target-2-target-diseases target="target" related="related" diseases="diseases" width="width"></ot-target-2-target-diseases>',
             scope: {
                 target: '=',
                 related: '=',
@@ -89,27 +347,87 @@ angular.module('otDirectives')
             link: function (scope) {
                 scope.$watch('related', function () {
                     if (scope.related) {
-                        console.log('rendering details for ' + scope.related.name + ' and ' + scope.target.symbol + ' via...');
-                        console.log(scope.related.shared);
 
-                        console.log(scope.related);
-                        console.log(scope.target);
-                        
                         // Get the best 10 diseases for target1 and any of the shared diseases...
-                        var opts = {
+                        var optsTarget = {
                             target: [scope.target.ensembl_gene_id],
                             disease: scope.related.shared,
-                            size: 10,
+                            size: 10
                         };
-                        var queryObject = {
+                        var queryObjectTarget = {
                             method: 'POST',
-                            params: opts
+                            trackCall: false,
+                            params: optsTarget
                         };
-                        otApi.getAssociations(queryObject)
-                            .then (function (resp) {
-                                console.log(resp);
-                            });
 
+                        var optsRelated = {
+                            target: [scope.related.geneId],
+                            disease: scope.related.shared,
+                            size: 10
+                        };
+                        var queryObjectRelated = {
+                            method: 'POST',
+                            trackCall: false,
+                            params: optsRelated
+                        };
+
+                        var targetPromise = otApi.getAssociations(queryObjectTarget);
+                        var relatedPromise = otApi.getAssociations(queryObjectRelated);
+                        $q.all([targetPromise, relatedPromise])
+                            .then(function (resps) {
+                                var diseases = {};
+                                resps[0].body.data.map(function (d) {
+                                    var disLabel = d.disease.efo_info.label;
+                                    diseases[disLabel] = {
+                                        id: d.disease.id,
+                                        label: d.disease.efo_info.label
+                                    };
+                                    diseases[disLabel][d.target.gene_info.symbol] = {
+                                        id: d.target.id,
+                                        label: d.target.gene_info.symbol,
+                                        score: d.association_score.overall
+                                    };
+                                    diseases[disLabel][scope.related.name] = {
+                                        id: scope.related.geneId,
+                                        label: scope.related.name,
+                                        // score is set to 0 here and to the real score in the next map
+                                        score: 0
+                                    };
+                                });
+
+                                resps[1].body.data.map(function (d) {
+                                    var disLabel = d.disease.efo_info.label;
+                                    if (diseases[disLabel]) {
+                                        diseases[disLabel][scope.related.name].score = d.association_score.overall;
+                                    } else {
+                                        diseases[disLabel] = {
+                                            id: d.disease.id,
+                                            label: d.disease.efo_info.label
+                                        };
+                                        diseases[disLabel][d.target.gene_info.symbol] = {
+                                            id: d.target.id,
+                                            label: d.target.gene_info.symbol,
+                                            score: d.association_score.overall
+                                        };
+                                        diseases[disLabel][scope.target.approved_symbol] = {
+                                            id: scope.target.ensembl_gene_id,
+                                            label: scope.target.approved_symbol,
+                                            score: 0
+                                        };
+                                    }
+
+                                    // return d.disease.efo_info.label;
+                                });
+
+                                // convert diseases from object to array
+                                var diseasesArr = [];
+                                for (var disease in diseases) {
+                                    if (diseases.hasOwnProperty(disease)) {
+                                        diseasesArr.push(diseases[disease]);
+                                    }
+                                }
+                                scope.diseases = diseasesArr;
+                            });
                     }
                 });
                 // scope.$watch('target', function () {
@@ -191,7 +509,7 @@ function createRelationsTree(container, data, scope) {
             .fill(color)
         )
         .label (tnt.tree.label.text()
-            .height(30)
+            .height(40)
             .text (function (node) {
                 return node.property("name");
             })
@@ -212,12 +530,80 @@ function createRelationsTree(container, data, scope) {
     function showBarHoverTooltip(data) {
         var obj = {};
         obj.header = '';
-        obj.body = data.val + ' ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' shared between ' + gene + ' and ' + data.name;
+        obj.body = data.val + ' ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' shared between ' + gene + ' and ' + data.name + '<br />Click to get details';
         barHoverTooltip = tooltip.plain()
             .width(180)
             .show_closer(false)
             .call(this, obj)
     }
+
+    var sharedDiseasesHoverTooltip;
+    function showSharedDiseasesHoverTooltip(data) {
+
+        console.log(data);
+        var obj = {};
+        // obj.header = data.shared_count + ' ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' shared between ' + gene + ' and ' + data.name;
+        obj.header = '';
+        // obj.rows = [];
+        // obj.rows.push({
+        //     label: data.subject,
+        //     value: data.subject_counts + ' ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' associated'
+        // });
+        // obj.rows.push({
+        //     label: data.object,
+        //     value: data.object_counts + ' ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' associated'
+        // });
+        // obj.rows.push({
+        //     label: 'intersection',
+        //     value: data.shared_count
+        // });
+        // obj.rows.push({
+        //     label: 'union',
+        //     value: data.union_count
+        // });
+
+        var div = document.createElement('div');
+        d3.select(div)
+            .append('text')
+            .style('font-size', '0.9em')
+            .style('display', 'block')
+            .text(data.object + ' - ' + data.object_counts + ' associations');
+        d3.select(div)
+            .append('text')
+            .style('font-size', '0.9em')
+            .style('display', 'block')
+            .text(data.subject + ' - ' + data.subject_counts + ' associations');
+        d3.select(div)
+            .append('text')
+            .style('font-size', '0.9em')
+            .style('display', 'block')
+            .text('Intersection - ' + data.shared_count + ' associations');
+        d3.select(div)
+            .append('text')
+            .style('font-size', '0.9em')
+            .style('display', 'block')
+            .text('Union - ' + data.union_count + ' associations');
+
+        var container = d3.select(div)
+            .append('div');
+
+        var sets = [
+            {sets: [data.subject], size: data.subject_counts},
+            {sets: [data.object], size: data.object_counts},
+            {sets: [data.subject, data.object], size: data.shared_count}
+        ];
+
+        var chart = venn.VennDiagram()
+            .width(120)
+            .height(120);
+        container.datum(sets).call(chart);
+        obj.body = div.innerHTML;
+        sharedDiseasesHoverTooltip = tooltip.plain()
+            .width(180)
+            .show_closer(false)
+            .call(this, obj)
+    }
+
 
     var track = function (leaf) {
         var data = leaf.data();
@@ -247,7 +633,6 @@ function createRelationsTree(container, data, scope) {
                 .on('click', function (data) {
                     // showRelationDetails(data, gene, entitiesType)
                     scope.related = data;
-                    console.log(scope);
                     scope.$apply();
                 })
             );
@@ -263,8 +648,6 @@ function createRelationsTree(container, data, scope) {
 
     // Add extra label on the left of each node with the number of common diseases
     if (treeWidth >= 250) {
-        var leaves = tree.root().get_all_leaves();
-
         // The tree svg. We assume is the first svg in the container:
         var treeSvg = d3.select(container).select('svg');
         treeSvg.selectAll('.leaf')
@@ -281,14 +664,21 @@ function createRelationsTree(container, data, scope) {
                     .style('cursor', 'pointer')
                     .text(d.shared_count + ' ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' shared')
                     .on('mouseover', function (d) {
+                        showSharedDiseasesHoverTooltip.call(this, d);
                         d3.select(this)
                             .style('font-weight', 'normal')
                             .style('fill', 'black');
                     })
                     .on('mouseout', function (d) {
+                        sharedDiseasesHoverTooltip.close();
                         d3.select(this)
                             .style('font-weight', 200)
                             .style('fill', '#666666');
+                    })
+                    .on('click', function (data) {
+                        console.log(data);
+                        scope.related = data.shared;
+                        scope.$apply();
                     });
             });
 
@@ -330,6 +720,10 @@ function getTreeData(gene, data, entitiesType) {
             shared_count: d.counts.shared_count,
             union_count: d.counts.union_count,
             shared: (entitiesType === 'targets' ? d.shared_diseases : d.shared_targets),
+            subject: d.subject.label,
+            object: d.object.label,
+            subject_counts: (entitiesType === 'targets' ? d.subject.links.diseases_count : d.subject.links.targets_count),
+            object_counts: (entitiesType === 'targets' ? d.object.links.diseases_count : d.object.links.targets_count)
         })
     }
     return tree;
@@ -358,7 +752,7 @@ function barFeature () {
                 // .attr('fill', track.color())
                 .attr('fill', feature.color())
                 .transition()
-                .duration(2000)
+                .duration(1000)
                 .attr('width', function (d) {
                     return xScale(d.val);
                 });
@@ -416,5 +810,5 @@ function createRelationsCircle(container, data, width) {
         .attr('r', 30)
         .attr('cx', 0)
         .attr('cy', 0)
-        .attr('color', 'blue');
+        .attr('color', color);
 }
