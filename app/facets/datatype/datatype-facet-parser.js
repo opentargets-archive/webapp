@@ -15,10 +15,10 @@ angular.module('otFacets')
             ];
 
             /**
-     * constructFilters
-     * Parse the API data and recursively build a nested filter structure.
-     * @param {object} data - The API data
-     */
+             * constructFilters
+             * Parse the API data and recursively build a nested filter structure.
+             * @param {object} data - The API data
+             */
             var constructFilters = function (data, datatypeFilters, datasourceFilters) {
                 // iterate all the datatypes (regardless of whether in api response)
                 return allDatatypes.map(function (datatypeKey) {
@@ -110,7 +110,7 @@ angular.module('otFacets')
      */
             var init = function () {
                 // setup the nested filters from the api data (structure)
-                nestedFilters = constructFilters(apiData[facetName], datatypeFilters, datasourceFilters);
+                nestedFilters = constructFilters(apiData[facetName].data, datatypeFilters, datasourceFilters);
 
                 // load the url state (update checked statuses etc.)
                 deserialize(facetsGlobal.getUrlObject());
