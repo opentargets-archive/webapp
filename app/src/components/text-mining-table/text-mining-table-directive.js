@@ -1,3 +1,9 @@
+/**
+ * Text mining table
+ * 
+ * ext object params:
+ *  isLoading, hasError, data
+ */
 angular.module('otDirectives')
     .directive('otTextMiningTable', [
         'otApi',
@@ -394,8 +400,9 @@ angular.module('otDirectives')
                         };
                         otApi.getFilterBy(queryObject)
                             .then(function (resp) {
-                                scope.total = resp.body.total;  // we need to have the scope object here (passed by reference) in order to update the total
-                                // var dtData = parseServerResponse(resp.body.data);
+                                scope.ext.total = resp.body.total;  // we need to have the scope object here (passed by reference) in order to update the total
+                                scope.ext.data = resp.body.data;
+                                scope.ext.isLoading = true;
                                 var dtData = formatDataToArray(resp.body.data);
                                 var o = {
                                     recordsTotal: resp.body.total,
@@ -405,6 +412,9 @@ angular.module('otDirectives')
                                 };
                                 draw++;
                                 cbak(o);
+                            })
+                            .finally(function () {
+                                scope.ext.isLoading = false;
                             });
                     },
                     'ordering': true,
@@ -446,13 +456,17 @@ angular.module('otDirectives')
                 restrict: 'AE',
                 templateUrl: 'src/components/text-mining-table/text-mining-table.html',
                 scope: {
-                    target: '=',
-                    disease: '=',
-                    filename: '=',
-                    total: '=?'
+                    // target: '=',
+                    // disease: '=',
+                    // filename: '=',
+                    // total: '=?'
+                    title: '@?',    // optional title for filename export
+                    ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
                 },
-                link: function (scope, elem) {
+                link: function (scope, elem, attrs) {
+                    scope.ext.hasError = false;
                     dirScope = scope;
+                    var filename = scope.title;
                     scope.openEuropePmc = function (pmid) {
                         var URL = 'http://europepmc.org/abstract/MED/' + pmid;
                         window.open(URL);
@@ -463,14 +477,15 @@ angular.module('otDirectives')
                         $('#' + id).toggle('fast');
                     };
 
-                    scope.$watchGroup(['target', 'disease', 'filename'], function () {
-                        if (!scope.target || !scope.disease || !scope.filename) {
+                    scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }, function () { return scope.title; }], function () {
+                        if (!attrs.target || !attrs.disease || !scope.title) {
                             return;
                         }
                         $timeout(function () {
                             // initTable(document.getElementById('literature2-table'), scope.target, scope.disease, scope.filename, scope.downloadTable);
-                            scope.total = 100;
-                            initTable(elem[0].getElementsByTagName('table'), scope.target, scope.disease, scope.filename, scope.downloadTable, scope);
+                            // scope.ext.total = 100; // TODO: comment OUT!
+                            filename = (scope.title || (attrs.target + '-' + attrs.disease)).replace(/ /g, '_') + '-text-mining';
+                            initTable(elem[0].getElementsByTagName('table'), attrs.target, attrs.disease, filename, scope.downloadTable, scope);
                         }, 0);
                         // initTable();
                     });
@@ -479,8 +494,8 @@ angular.module('otDirectives')
                     scope.downloadTable = function () {
                         var size = 200;
                         var opts = {
-                            disease: scope.disease,
-                            target: scope.target,
+                            disease: attrs.disease, // scope.disease,
+                            target: attrs.target, // scope.target,
                             datasource: otConfig.evidence_sources.literature,
                             // format: 'csv',
                             size: size,
@@ -521,7 +536,7 @@ angular.module('otDirectives')
                                     totalText += '\n';
                                 }
                                 var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
-                                saveAs(b, scope.filename + '.csv');
+                                saveAs(b, filename + '.csv');
                             });
 
                         // First make a call to know how many rows there are:

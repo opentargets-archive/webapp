@@ -280,6 +280,12 @@
             "track": true
         },
         {
+            "name": "textMining",
+            "element": "ot-text-mining",
+            "heading": "Text mining",
+            "track": true
+        },
+        {
             "name": "animalModel",
             "element": "ot-animal-model",
             "heading": "Animal models",
