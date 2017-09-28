@@ -143,7 +143,7 @@ angular.module('otFacets')
 
             var constructHistogram = function () {
                 // ignores -1, 0 buckets
-                histogramData = apiData[rnaLevelKey].data.buckets
+                var cdfData = apiData[rnaLevelKey].data.buckets
                     .filter(function (bucket) {
                         return bucket.key > 0;
                     })
@@ -152,7 +152,33 @@ angular.module('otFacets')
                             key: bucket.key,
                             value: bucket[countsKey].value
                         };
+                    })
+                    .sort(function (a, b) {
+                        if (a.key < b.key) {
+                            return  -1;
+                        } else if (a.key > b.key) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
                     });
+
+                // the level data is cumulative, so pairwise subtract (ie. cdf => pdf)
+                var pdfData = [];
+                for (var i = 0; i < 10; i++) {
+                    var ith = cdfData[i];
+                    var val = ith.value;
+                    if (i < 9) {
+                        // skip last
+                        i1th = cdfData[i + 1];
+                        val -= i1th.value;
+                    }
+                    pdfData.push({
+                        key: ith.key,
+                        value: val
+                    });
+                }
+                histogramData = pdfData;
             };
 
             /**
