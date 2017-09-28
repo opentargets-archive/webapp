@@ -144,7 +144,6 @@ angular.module('otDirectives')
 
                             newdata.push(row); // push, so we don't end up with empty rows
                         } catch (e) {
-                            // scope.search.tables.somatic_mutations.has_errors = true;
                             $log.log('Error parsing somatic mutation data:');
                             $log.log(e);
                         }
@@ -157,7 +156,6 @@ angular.module('otDirectives')
                 function initTableMutations () {
                     var table = elem[0].getElementsByTagName('table');
                     $(table).DataTable(otUtils.setTableToolsParams({
-                        // 'data': formatMutationsDataToArray($scope.search.tables.somatic_mutations.data),
                         'data': formatMutationsDataToArray(scope.ext.data),
                         // "ordering" : true,
                         'order': [[1, 'asc']],

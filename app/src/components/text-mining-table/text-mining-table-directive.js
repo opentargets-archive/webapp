@@ -456,10 +456,6 @@ angular.module('otDirectives')
                 restrict: 'AE',
                 templateUrl: 'src/components/text-mining-table/text-mining-table.html',
                 scope: {
-                    // target: '=',
-                    // disease: '=',
-                    // filename: '=',
-                    // total: '=?'
                     title: '@?',    // optional title for filename export
                     ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
                 },
@@ -483,11 +479,9 @@ angular.module('otDirectives')
                         }
                         $timeout(function () {
                             // initTable(document.getElementById('literature2-table'), scope.target, scope.disease, scope.filename, scope.downloadTable);
-                            // scope.ext.total = 100; // TODO: comment OUT!
                             filename = (scope.title || (attrs.target + '-' + attrs.disease)).replace(/ /g, '_') + '-text-mining';
                             initTable(elem[0].getElementsByTagName('table'), attrs.target, attrs.disease, filename, scope.downloadTable, scope);
                         }, 0);
-                        // initTable();
                     });
 
                     // TODO: If we move all the evidence tables to server side, this should be abstracted out probably in a service
@@ -538,71 +532,6 @@ angular.module('otDirectives')
                                 var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
                                 saveAs(b, filename + '.csv');
                             });
-
-                        // First make a call to know how many rows there are:
-                        // var optsPreFlight = {
-                        //     disease: scope.disease,
-                        //     target: scope.target,
-                        //     size: 0,
-                        //     datasource: otConfig.evidence_sources.literature,
-                        //
-                        // };
-                        // var queryObject = {
-                        //     method: 'GET',
-                        //     params: optsPreFlight
-                        // };
-                        // otApi.getFilterBy(queryObject)
-                        //     .then (function (resp) {
-                        //         var total = resp.body.total;
-                        //
-                        //         var promise = $q(function (resolve) {
-                        //             resolve("");
-                        //         });
-                        //         var totalText = "";
-                        //         var promises = [];
-                        //         for (var i=0; i<total; i+=size) {
-                        //             promises.push({
-                        //                 from: i,
-                        //                 total: size
-                        //             });
-                        //         }
-                        //         promises.forEach (function (p) {
-                        //             promise = promise.then (function () {
-                        //                 return getNextChunk(p.total, p.from);
-                        //             })
-                        //         });
-                        //         promise.then (function (res) {
-                        //             var b = new Blob ([totalText], {type: "text/csv;charset=utf-8"});
-                        //             saveAs(b, scope.filename + ".csv");
-                        //         });
-                        //
-                        //         function getNextChunk(size, from) {
-                        //             var opts = {
-                        //                 disease: scope.disease,
-                        //                 target: scope.target,
-                        //                 datasource: otConfig.evidence_sources.literature,
-                        //                 format: "csv",
-                        //                 size: size,
-                        //                 from: from
-                        //             };
-                        //
-                        //             var queryObject = {
-                        //                 method: 'GET',
-                        //                 params: opts
-                        //             };
-                        //
-                        //             return otApi.getFilterBy(queryObject)
-                        //                 .then(function (resp) {
-                        //                     var moreText = resp.body;
-                        //                     if (from > 0) {
-                        //                         // Not in the first page, so remove the header row
-                        //                         moreText = moreText.split("\n").slice(1).join("\n");
-                        //                     }
-                        //                     totalText += moreText;
-                        //                 });
-                        //         }
-                        //
-                        //     });
                     };
                 }
             };

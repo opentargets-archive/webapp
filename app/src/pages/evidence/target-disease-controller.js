@@ -40,89 +40,7 @@ angular.module('otControllers')
             flower_data: [], // processFlowerData([]), // so we initialize the flower to something
             test: [],
             categories: [],   // use this for sections of the accordion and flower petals
-            association_scores: {} // ,
-
-            // tables data:
-            // tables: {
-            //     genetic_associations: {
-            //         is_open: false,
-            //         is_loading: false,
-            //         heading: otDictionary.GENETIC_ASSOCIATION,
-            //         common_diseases: {
-            //             data: [],
-            //             is_open: false,
-            //             is_loading: false,
-            //             heading: otDictionary.COMMON_DISEASES,
-            //             source: otConfig.evidence_sources.genetic_association.common,
-            //             source_label: otConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-            //             has_errors: false
-            //         },
-            //         rare_diseases: {
-            //             data: [],
-            //             is_open: false,
-            //             is_loading: false,
-            //             heading: otDictionary.RARE_DISEASES,
-            //             source: otConfig.evidence_sources.genetic_association.rare,
-            //             source_label: otConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-            //             has_errors: false
-            //         }
-            //     },
-            //     rna_expression: {
-            //         data: [],
-            //         is_open: false,
-            //         is_loading: false,
-            //         heading: otDictionary.RNA_EXPRESSION,
-            //         source: otConfig.evidence_sources.rna_expression,
-            //         source_label: otConfig.evidence_sources.rna_expression.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-            //         has_errors: false
-            //     },
-            //     pathways: {
-            //         data: [],
-            //         is_open: false,
-            //         is_loading: false,
-            //         heading: otDictionary.AFFECTED_PATHWAY,
-            //         source: otConfig.evidence_sources.pathway,
-            //         source_label: otConfig.evidence_sources.pathway.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-            //         has_errors: false
-            //     },
-            //     known_drugs: {
-            //         data: [],
-            //         is_open: false,
-            //         is_loading: false,
-            //         heading: otDictionary.KNOWN_DRUG,
-            //         source: otConfig.evidence_sources.known_drug,
-            //         source_label: otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-            //         has_errors: false
-            //     },
-            //     somaticMutation: {
-            //         data: [],
-            //         is_open: false,
-            //         is_loading: false,
-            //         heading: otDictionary.SOMATIC_MUTATION,
-            //         source: otConfig.evidence_sources.somatic_mutation,
-            //         source_label: otConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-            //         has_errors: false
-            //     },
-            //     literature: {
-            //         data: [],
-            //         is_open: false,
-            //         is_loading: false,
-            //         heading: otDictionary.LITERATURE,
-            //         source: otConfig.evidence_sources.literature,
-            //         source_label: otConfig.evidence_sources.literature.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-            //         has_errors: false,
-            //         total: 0
-            //     } ,
-            //     animal_models: {
-            //         data: [],
-            //         is_open: false,
-            //         is_loading: false,
-            //         heading: otDictionary.ANIMAL_MODEL,
-            //         source: otConfig.evidence_sources.animal_model,
-            //         source_label: otConfig.evidence_sources.animal_model.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-            //         has_errors: false
-            //     }
-            // }
+            association_scores: {}
         };
 
         $scope.datatypes = datatypes;
@@ -136,7 +54,6 @@ angular.module('otControllers')
          * Get the information for target and disease,
          * i.e. to fill the two boxes at the top of the page
          */
-        // var targetPromise;
         var getInfo = function () {
             // get gene specific info
             var queryObject = {
@@ -145,7 +62,7 @@ angular.module('otControllers')
                     target_id: $scope.search.target
                 }
             };
-            // targetPromise = 
+
             otApi.getTarget(queryObject)
                 .then(function (resp) {
                     $scope.search.info.gene = resp.body;
