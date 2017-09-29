@@ -37,12 +37,7 @@ angular.module('otControllers')
             },
 
             flower_data: [], // processFlowerData([]), // so we initialize the flower to something
-            association_score: {} // ,
-
-            // TODO: the following can be removed
-            // test: [],
-            // categories: [],   // use this for sections of the accordion and flower petals
-            // association_scores: {}
+            association_score: {}
         };
 
         $scope.datatypes = datatypes;
@@ -111,11 +106,9 @@ angular.module('otControllers')
                 var dkey = otConsts.datatypes[otConsts.datatypesOrder[i]];
                 var key = otConsts.datatypesOrder[i];
                 fd.push({
-                    // "value": lookDatasource(data, otConsts.datatypes[key]).score,
                     'value': data ? data[dkey] : 0,
                     'label': otConsts.datatypesLabels[key],
-                    'active': true // ,
-                    // 'datatype': dkey
+                    'active': true
                 });
             }
 
