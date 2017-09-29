@@ -73,15 +73,16 @@
 
                 <a id="tables"></a>
 
-
                 <!-- NEW PLUGINS -->
                 <!-- The plugins are loaded into an accordion, but I guess we're not tied to that and could use any panel -->
                 <uib-accordion close-others="false">
+                    <!-- standard default option: show ALL the section (heading reflects data) -->
                     <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
-                        
+                    <!-- alt option: only show sections with data (to combine with sections expanded) -->
+                    <!-- <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default" ng-if="search.association_score.datatypes[section.config.datatype]>0"></div>     -->
                         <!-- accordion header -->
                         <uib-accordion-heading>
-                            <span ng-click='section.currentVisibility = !section.currentVisibility' class="text-nolight" ng-class="{ 'text-disabled': tables[section.name].data.length==0 }">{{section.heading}}</span>
+                            <span ng-click='section.currentVisibility = !section.currentVisibility' class="text-nolight" ng-class="{ 'text-disabled': search.association_score.datatypes[section.config.datatype]==0 }">{{section.heading}}</span>
                             <span ot-progress-spinner class="pull-right" ng-show="tables[section.name].isLoading"></span>
                         </uib-accordion-heading>
 
@@ -90,10 +91,10 @@
                             target="search.info.gene" 
                             disease="search.info.efo" 
                             plugin="section.element" 
-                            visible="{{section.currentVisibility}}" 
+                            visible="{{section.currentVisibility}}"
                             dependencies="section.dependencies" 
                             page="evidence" 
-                            track="section.track" 
+                            track="section.track"
                             label="section.name"
                             ext="tables[section.name]"
                             class="scroll-table-panel"
@@ -101,7 +102,7 @@
                         </ot-plugin-loader>
 
                         <!-- no data -->
-                        <div ng-show="tables[section.name].data.length===0">No data from plugin</div>
+                        <div ng-show="tables[section.name].data.length===0">No data available</div>
 
                         <!-- error -->
                         <uib-alert type="danger" ng-show="tables[section.name].hasError" ng-cloak style="margin-top:15px">

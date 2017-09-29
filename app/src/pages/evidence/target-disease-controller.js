@@ -10,7 +10,6 @@ angular.module('otControllers')
     .controller('TargetDiseaseController', ['$scope', '$location', 'otApi', 'otUtils', 'otConsts', 'otConfig', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, otApi, otUtils, otConsts, otConfig, $analytics, otLocationState, $anchorScroll) {
         'use strict';
 
-
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
         otUtils.clearErrors();
 
@@ -38,9 +37,12 @@ angular.module('otControllers')
             },
 
             flower_data: [], // processFlowerData([]), // so we initialize the flower to something
-            test: [],
-            categories: [],   // use this for sections of the accordion and flower petals
-            association_scores: {}
+            association_score: {} // ,
+
+            // TODO: the following can be removed
+            // test: [],
+            // categories: [],   // use this for sections of the accordion and flower petals
+            // association_scores: {}
         };
 
         $scope.datatypes = datatypes;
@@ -49,6 +51,7 @@ angular.module('otControllers')
         // =================================================
         //  I N F O
         // =================================================
+
 
         /**
          * Get the information for target and disease,
@@ -111,7 +114,8 @@ angular.module('otControllers')
                     // "value": lookDatasource(data, otConsts.datatypes[key]).score,
                     'value': data ? data[dkey] : 0,
                     'label': otConsts.datatypesLabels[key],
-                    'active': true
+                    'active': true // ,
+                    // 'datatype': dkey
                 });
             }
 
@@ -134,6 +138,7 @@ angular.module('otControllers')
 
             return otApi.getAssociations(queryObject)
                 .then(function (resp) {
+                    $scope.search.association_score = resp.body.data[0].association_score;
                     if (!resp.body.data.length) {
                         $scope.search.flower_data = processFlowerData();
                     } else {
