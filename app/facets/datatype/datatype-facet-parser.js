@@ -110,7 +110,7 @@ angular.module('otFacets')
      */
             var init = function () {
                 // setup the nested filters from the api data (structure)
-                nestedFilters = constructFilters(apiData[facetName].data, datatypeFilters, datasourceFilters);
+                nestedFilters = constructFilters(apiData[facetName], datatypeFilters, datasourceFilters);
 
                 // load the url state (update checked statuses etc.)
                 deserialize(facetsGlobal.getUrlObject());

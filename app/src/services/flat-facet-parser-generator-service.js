@@ -23,7 +23,7 @@ angular.module('otFacets')
                  * Create an array of boolean filters (each of which provides the needed
                  * state and methods for a checkbox)
                  */
-                var filters = apiData[facetName].data.buckets.map(function (bucket) {
+                var filters = apiData[facetName].buckets.map(function (bucket) {
                     return new otFilterTypes.BooleanFilter({
                         key: bucket.key,
                         label: useKeyAsLabel ? bucket.key : bucket.label,

@@ -26,7 +26,7 @@ angular.module('otFacets')
      * Parse the API data and recursively build a nested filter structure.
      */
             var constructTissueFilters = function () {
-                tissueFilters = apiData[rnaTissueKey].data.buckets.map(function (bucket) {
+                tissueFilters = apiData[rnaTissueKey].buckets.map(function (bucket) {
                     var filter = new otFilterTypes.NestedBooleanFilter({
                         key: bucket.key,
                         label: bucket.key,
@@ -143,7 +143,7 @@ angular.module('otFacets')
 
             var constructHistogram = function () {
                 // ignores -1, 0 buckets
-                var cdfData = apiData[rnaLevelKey].data.buckets
+                var cdfData = apiData[rnaLevelKey].buckets
                     .filter(function (bucket) {
                         return bucket.key > 0;
                     })
