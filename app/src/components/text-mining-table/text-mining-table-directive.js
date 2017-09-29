@@ -377,6 +377,8 @@ angular.module('otDirectives')
                             4: 'literature.date'
                         };
 
+                        scope.ext.isLoading = true;
+
                         // We save the order condition for the server side rendering to use it for the download
                         dirScope.order = [];
                         for (var i = 0; i < data.order.length; i++) {
@@ -402,7 +404,6 @@ angular.module('otDirectives')
                             .then(function (resp) {
                                 scope.ext.total = resp.body.total;  // we need to have the scope object here (passed by reference) in order to update the total
                                 scope.ext.data = resp.body.data;
-                                scope.ext.isLoading = true;
                                 var dtData = formatDataToArray(resp.body.data);
                                 var o = {
                                     recordsTotal: resp.body.total,
@@ -486,6 +487,7 @@ angular.module('otDirectives')
 
                     // TODO: If we move all the evidence tables to server side, this should be abstracted out probably in a service
                     scope.downloadTable = function () {
+                        scope.ext.isLoading = true; // set the loading flag; to be honest this is so fast that one can't even see the spinner
                         var size = 200;
                         var opts = {
                             disease: attrs.disease, // scope.disease,
@@ -531,6 +533,9 @@ angular.module('otDirectives')
                                 }
                                 var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
                                 saveAs(b, filename + '.csv');
+                            })
+                            .finally(function () {
+                                scope.ext.isLoading = false;
                             });
                     };
                 }
