@@ -30,7 +30,7 @@ angular.module('otPlugins')
                     // var url = '/proxy/www.gtexportal.org/api/v6p/expression/' + target + '?boxplot=true';
                     $http.get(url)
                         .then(function (resp) {
-                            var arr = obj2array(resp.data.generpkm);
+                            var arr = obj2array(resp.data.genetpm);
                             var svg = d3.select('#gtexWidget')
                                 .append('svg')
                                 .attr('width', (w - 150))
@@ -57,7 +57,7 @@ angular.module('otPlugins')
                             'font-size': '12px',
                             'fill': '#555'
                         })
-                        .text('Normalised expression (RPKM)');
+                        .text('Normalised expression (TPM)');
 
                     var valScale = d3.scale.linear()
                         .domain(valExtent)
