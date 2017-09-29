@@ -222,6 +222,8 @@ angular.module('otControllers')
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
                         updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
                     }
+                    console.log('flower data...');
+                    console.log($scope.search.flower_data);
                 }, otApi.defaultErrorHandler);
         };
 

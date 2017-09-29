@@ -31,12 +31,11 @@ angular.module('otPlugins')
     }]);
 
 angular.module('otDirectives')
-    .directive('otRelatedDiseasesOverview', ['otApi', '$timeout', function (otApi, $timeout) {
+    .directive('otRelatedDiseasesOverview', ['otApi', function (otApi) {
         'use strict';
 
         return {
             restrict: 'E',
-            // templateUrl: 'plugins/related-entities/related-entities.html',
             template: '<div></div>',
             scope: {
                 width: '=',
@@ -56,26 +55,26 @@ angular.module('otDirectives')
                     method: 'GET',
                     params: opts
                 };
-                $timeout(function () {
-                    otApi.getDiseaseRelation(queryObject)
-                        .then(
-                            // success
-                            function (resp) {
-                                // var container = document.getElementById('ot-relations-plot');
-                                var container = element[0];
-                                createRelationsTree(container, resp.body.data, (scope.width / 2), scope.disease.label, scope.entities);
-                            },
+                otApi.getDiseaseRelation(queryObject)
+                    .then(
+                        // success
+                        function (resp) {
+                            // var container = document.getElementById('ot-relations-plot');
+                            var container = element[0];
+                            createRelationsTree(container, resp.body.data, scope);
+                            // createRelationsTree(container, resp.body.data, (scope.width / 2), scope.disease.label, scope.entities);
 
-                            // error handler
-                            otApi.defaultErrorHandler
-                        );
-                }, 0);
+                        },
+
+                        // error handler
+                        otApi.defaultErrorHandler
+                    );
             }
         };
     }]);
 
 angular.module('otDirectives')
-    .directive('otTarget2TargetDiseases', ['otUtils', function (otUtils) {
+    .directive('otTarget2TargetDiseases', ['otUtils', 'otConsts', function (otUtils, otConsts) {
         'use strict';
         var color = '#377bb5';
 
@@ -96,12 +95,17 @@ angular.module('otDirectives')
                         return;
                     }
 
+                    var diseases = scope.diseases.sort(function (a, b) {
+                       return (b[scope.target.approved_symbol].score + b[scope.related.name].score) -
+                              (a[scope.target.approved_symbol].score + a[scope.related.name].score)
+                    });
+
                     var container = el[0].getElementsByTagName('div')[1];
                     d3.select(container).selectAll('*').remove();
 
                     var width = scope.width / 2;
                     var topOffset = 30;
-                    var height = (scope.diseases.length * 30);
+                    var height = (diseases.length * 30);
                     var svg = d3.select(container)
                         .append('svg')
                         .attr('width', width)
@@ -124,7 +128,7 @@ angular.module('otDirectives')
                         .append('g')
                         .attr('transform', 'translate(' + (labelOffset + bracesOffset + (linksOffset / 2)) + ', 0)');
                     var linkNodes = linksG.selectAll('.linkNode')
-                        .data(scope.diseases)
+                        .data(diseases)
                         .enter()
                         .append('g')
                         .attr('class', 'linkNode')
@@ -136,27 +140,92 @@ angular.module('otDirectives')
 
                     var colorScale = otUtils.colorScales.BLUE_0_1; // blue orig
 
-                    // labels for links
-                    linkNodes
-                        .append('text')
-                        .attr('x', 0)
-                        .attr('y', -5)
-                        .attr('text-anchor', 'middle')
-                        .attr('fill', '#666666')
-                        .style('opacity', 0)
-                        .text(function (d) {
-                            return d.label;
-                        });
                     // actual links
                     // hover tooltip on object / subject links
-                    var linkTooltip;
-                    function showLinkTooltip(t, d, score) {
+                    // var linkTooltip;
+                    // function showLinkTooltip(t, d, score) {
+                    //     var obj = {};
+                    //     obj.header = '';
+                    //     obj.body = t + ' - ' + d + ' (score: ' + otUtils.floatPrettyPrint(score) + ')';
+                    //     linkTooltip = tooltip.plain()
+                    //         .width(180)
+                    //         .show_closer(false)
+                    //         .call(this, obj);
+                    // }
+
+                    function processFlowerData (data) {
+                        var fd = [];
+
+                        for (var i = 0; i < otConsts.datatypesOrder.length; i++) {
+                            var dkey = otConsts.datatypes[otConsts.datatypesOrder[i]];
+                            var key = otConsts.datatypesOrder[i];
+                            fd.push({
+                                // "value": lookDatasource(data, otConsts.datatypes[key]).score,
+                                'value': data ? data[dkey] : 0,
+                                'label': otConsts.datatypesLabels[key],
+                                'active': true
+                            });
+                        }
+                        return fd;
+                    }
+                    function showAssociationsTooltip(data) {
+                        console.log(data);
+                        var flowerDataTarget = processFlowerData(data[scope.target.approved_symbol].datatypes);
+                        var flowerDataRelated = processFlowerData(data[scope.related.name].datatypes);
+
+                        var div = document.createElement('div');
+                        var leftDiv = d3.select(div)
+                            .style('width', '80%')
+                            .style('margin', 'auto')
+                            .append('div')
+                            .style('width', '50%')
+                            .style('float', 'left');
+                        leftDiv.append('h5')
+                            .text(scope.target.approved_symbol);
+                        var flower1Div = leftDiv
+                            .append('a')
+                            .attr('href', '/evidence/' + scope.target.ensembl_gene_id + '/' + data.id)
+                            .append('div');
+                        leftDiv.append('a')
+                            .attr('class', 'cttv_flowerLink')
+                            .attr('href', '/evidence/' + scope.target.ensembl_gene_id + '/' + data.id)
+                            .append('div')
+                            .text('View evidence');
+
+
+                        var rightDiv = d3.select(div)
+                            .append('div')
+                            .style('margin-left', '50%');
+                        rightDiv.append('h5')
+                            .text(scope.related.name);
+                        var flower2Div = rightDiv.append('div')
+                            .append('a')
+                            .attr('href', '/evidence/' + scope.related.geneId + '/' + data.id)
+                            .append('div');
+                        rightDiv.append('a')
+                            .attr('class', 'cttv_flowerLink')
+                            .attr('href', '/evidence/' + scope.related.geneId + '/' + data.id)
+                            .append('div')
+                            .text('View evidence');
+
+                        var flower1 = flowerView()
+                            .values(flowerDataTarget)
+                            .diagonal(140)
+                            .fontsize(8);
+                        flower1(flower1Div.node());
+
+                        var flower2 = flowerView()
+                            .values(flowerDataRelated)
+                            .diagonal(140)
+                            .fontsize(8);
+                        flower2(flower2Div.node());
+
                         var obj = {};
-                        obj.header = '';
-                        obj.body = t + ' - ' + d + ' (score: ' + otUtils.floatPrettyPrint(score) + ')';
-                        linkTooltip = tooltip.plain()
-                            .width(180)
-                            .show_closer(false)
+                        obj.header = 'Associations with ' + data.label;
+                        obj.body = div.innerHTML;
+                        tooltip.plain()
+                            .id('flowersView')
+                            .width(300)
                             .call(this, obj);
                     }
 
@@ -170,12 +239,12 @@ angular.module('otDirectives')
                         .style('stroke-width', '2px')
                         .style('stroke', function (d) {
                             return colorScale(d[scope.target.approved_symbol].score);
-                        })
-                        .on('mouseover', function (d) {
-                            showLinkTooltip.call(this, scope.target.approved_symbol, d.label, d[scope.target.approved_symbol].score)
-                        })
-                        .on('mouseout', function () {
-                            linkTooltip.close();
+                        // })
+                        // .on('mouseover', function (d) {
+                        //     showLinkTooltip.call(this, scope.target.approved_symbol, d.label, d[scope.target.approved_symbol].score)
+                        // })
+                        // .on('mouseout', function () {
+                        //     linkTooltip.close();
                         });
 
                     // object
@@ -186,16 +255,30 @@ angular.module('otDirectives')
                         .attr('y1', 0)
                         .attr('y2', 0)
                         .style('stroke-width', '2px')
-                        // .style('stroke', color);
                         .style('stroke', function (d) {
                             return colorScale(d[scope.related.name].score);
-                        })
-                        .on('mouseover', function (d) {
-                            showLinkTooltip.call(this, scope.related.name, d.label, d[scope.related.name].score)
-                        })
-                        .on('mouseout', function () {
-                            linkTooltip.close();
+                        // })
+                        // .on('mouseover', function (d) {
+                        //     showLinkTooltip.call(this, scope.related.name, d.label, d[scope.related.name].score)
+                        // })
+                        // .on('mouseout', function () {
+                        //     linkTooltip.close();
                         });
+
+                    // labels for links
+                    linkNodes
+                        .append('text')
+                        .attr('x', 0)
+                        .attr('y', -8)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', '#666666')
+                        .style('opacity', 0)
+                        .style('cursor', 'pointer')
+                        .style('font-size', '0.9em')
+                        .text(function (d) {
+                            return d.label;
+                        })
+                        .on('click', showAssociationsTooltip);
 
 
                     // nodes for links
@@ -204,8 +287,9 @@ angular.module('otDirectives')
                         .attr('cx', 0)
                         .attr('cy', 0)
                         .attr('r', 5)
-                        .attr('fill', color);
-
+                        .attr('fill', color)
+                        .style('cursor', 'pointer')
+                        .on('click', showAssociationsTooltip);
 
                     var linksTransition = linkNodes
                         .transition()
@@ -225,7 +309,7 @@ angular.module('otDirectives')
                         .append('g')
                         .attr('transform', 'translate(' + (labelOffset) + ',0)');
                     braces1.selectAll('.braces1')
-                        .data(scope.diseases)
+                        .data(diseases)
                         .enter()
                         .append('path')
                         .attr('d', function (d, i) {
@@ -253,7 +337,7 @@ angular.module('otDirectives')
                         .append('g')
                         .attr('transform', 'translate(' + (labelOffset + (bracesOffset*2) + linksOffset) + ',0)');
                     braces2.selectAll('.braces2')
-                        .data(scope.diseases)
+                        .data(diseases)
                         .enter()
                         .append('path')
                         .attr('d', function (d, i) {
@@ -333,7 +417,7 @@ angular.module('otDirectives')
     }]);
 
 angular.module('otDirectives')
-    .directive('otRelatedTargetDetails', ['otApi', '$q', function (otApi, $q) {
+    .directive('otRelatedEntityDetails', ['otApi', '$q', function (otApi, $q) {
         'use strict';
 
         return {
@@ -360,6 +444,7 @@ angular.module('otDirectives')
                             params: optsTarget
                         };
 
+                        // Same for target 2
                         var optsRelated = {
                             target: [scope.related.geneId],
                             disease: scope.related.shared,
@@ -376,6 +461,10 @@ angular.module('otDirectives')
                         $q.all([targetPromise, relatedPromise])
                             .then(function (resps) {
                                 var diseases = {};
+                                var missingDiseases = {};
+                                missingDiseases[scope.target.ensembl_gene_id] = {};
+                                missingDiseases[scope.related.geneId] = {};
+
                                 resps[0].body.data.map(function (d) {
                                     var disLabel = d.disease.efo_info.label;
                                     diseases[disLabel] = {
@@ -385,8 +474,11 @@ angular.module('otDirectives')
                                     diseases[disLabel][d.target.gene_info.symbol] = {
                                         id: d.target.id,
                                         label: d.target.gene_info.symbol,
-                                        score: d.association_score.overall
+                                        score: d.association_score.overall,
+                                        datatypes: d.association_score.datatypes
                                     };
+                                    // record this disease as a possible missing disease for the related gene
+                                    missingDiseases[scope.related.geneId][d.disease.id] = true;
                                     diseases[disLabel][scope.related.name] = {
                                         id: scope.related.geneId,
                                         label: scope.related.name,
@@ -398,8 +490,11 @@ angular.module('otDirectives')
                                 resps[1].body.data.map(function (d) {
                                     var disLabel = d.disease.efo_info.label;
                                     if (diseases[disLabel]) {
+                                        delete missingDiseases[scope.related.geneId][d.disease.id];
                                         diseases[disLabel][scope.related.name].score = d.association_score.overall;
+                                        diseases[disLabel][scope.related.name].datatypes = d.association_score.datatypes;
                                     } else {
+                                        missingDiseases[scope.target.ensembl_gene_id][d.disease.id] = true;
                                         diseases[disLabel] = {
                                             id: d.disease.id,
                                             label: d.disease.efo_info.label
@@ -407,7 +502,8 @@ angular.module('otDirectives')
                                         diseases[disLabel][d.target.gene_info.symbol] = {
                                             id: d.target.id,
                                             label: d.target.gene_info.symbol,
-                                            score: d.association_score.overall
+                                            score: d.association_score.overall,
+                                            datatypes: d.association_score.datatypes
                                         };
                                         diseases[disLabel][scope.target.approved_symbol] = {
                                             id: scope.target.ensembl_gene_id,
@@ -415,18 +511,75 @@ angular.module('otDirectives')
                                             score: 0
                                         };
                                     }
-
                                     // return d.disease.efo_info.label;
                                 });
 
-                                // convert diseases from object to array
-                                var diseasesArr = [];
-                                for (var disease in diseases) {
-                                    if (diseases.hasOwnProperty(disease)) {
-                                        diseasesArr.push(diseases[disease]);
-                                    }
+                                // Search for the missing diseases in both targets...
+                                // create mock promises in case we don't have missing diseases for any of them
+                                var missingTargetPromise = $q(function (resolve) {
+                                   return {
+                                       body: {
+                                           data: []
+                                       }
+                                   };
+                                });
+                                var missingRelatedPromise = $q(function (resolve) {
+                                    return {
+                                        body: {
+                                            data: []
+                                        }
+                                    };
+                                });
+                                if (Object.keys(missingDiseases[scope.target.ensembl_gene_id])) {
+                                    var optsMissingTarget = {
+                                        target: [scope.target.ensembl_gene_id],
+                                        disease: Object.keys(missingDiseases[scope.target.ensembl_gene_id])
+                                    };
+                                    var queryObjectMissingTarget = {
+                                        method: 'POST',
+                                        trackCall: false,
+                                        params: optsMissingTarget
+                                    };
+                                    missingTargetPromise = otApi.getAssociations(queryObjectMissingTarget);
                                 }
-                                scope.diseases = diseasesArr;
+
+                                if (Object.keys(missingDiseases[scope.related.geneId])) {
+                                    var optsMissingRelated = {
+                                        target: [scope.related.geneId],
+                                        disease: Object.keys(missingDiseases[scope.related.geneId])
+                                    };
+                                    var queryObjectMissingRelated = {
+                                        method: 'POST',
+                                        trackCall: false,
+                                        params: optsMissingRelated
+                                    };
+                                    missingRelatedPromise = otApi.getAssociations(queryObjectMissingRelated);
+                                }
+
+                                $q.all([missingTargetPromise, missingRelatedPromise])
+                                    .then (function (resps) {
+                                        resps[0].body.data.map(function (d) {
+                                            var disLabel = d.disease.efo_info.label;
+                                            diseases[disLabel][d.target.gene_info.symbol].score = d.association_score.overall
+                                            diseases[disLabel][d.target.gene_info.symbol].datatypes = d.association_score.datatypes
+                                        });
+                                        resps[1].body.data.map(function (d) {
+                                            var disLabel = d.disease.efo_info.label;
+                                            diseases[disLabel][d.target.gene_info.symbol].score = d.association_score.overall
+                                            diseases[disLabel][d.target.gene_info.symbol].datatypes = d.association_score.datatypes
+                                        });
+
+                                        // convert diseases from object to array
+                                        var diseasesArr = [];
+                                        for (var disease in diseases) {
+                                            if (diseases.hasOwnProperty(disease)) {
+                                                diseasesArr.push(diseases[disease]);
+                                            }
+                                        }
+
+                                        scope.diseases = diseasesArr;
+                                    });
+
                             });
                     }
                 });
@@ -510,8 +663,16 @@ function createRelationsTree(container, data, scope) {
         )
         .label (tnt.tree.label.text()
             .height(40)
+            .fontsize(function () {
+                return 10;
+            })
             .text (function (node) {
-                return node.property("name");
+                var name = node.property('name') || '';
+                if (name.length > 30) {
+                    name = name.substring(0, 27) + '...';
+                }
+                return name;
+                // return node.property("name");
             })
         );
 
@@ -519,6 +680,7 @@ function createRelationsTree(container, data, scope) {
     var diseasesExtent = d3.extent(data, function (d) {
        return d.counts.shared_count;
     });
+
     var board = tnt.board()
         .width(boardWidth)
         .from(0)
@@ -540,27 +702,9 @@ function createRelationsTree(container, data, scope) {
     var sharedDiseasesHoverTooltip;
     function showSharedDiseasesHoverTooltip(data) {
 
-        console.log(data);
         var obj = {};
         // obj.header = data.shared_count + ' ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' shared between ' + gene + ' and ' + data.name;
         obj.header = '';
-        // obj.rows = [];
-        // obj.rows.push({
-        //     label: data.subject,
-        //     value: data.subject_counts + ' ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' associated'
-        // });
-        // obj.rows.push({
-        //     label: data.object,
-        //     value: data.object_counts + ' ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' associated'
-        // });
-        // obj.rows.push({
-        //     label: 'intersection',
-        //     value: data.shared_count
-        // });
-        // obj.rows.push({
-        //     label: 'union',
-        //     value: data.union_count
-        // });
 
         var div = document.createElement('div');
         d3.select(div)
@@ -676,7 +820,6 @@ function createRelationsTree(container, data, scope) {
                             .style('fill', '#666666');
                     })
                     .on('click', function (data) {
-                        console.log(data);
                         scope.related = data.shared;
                         scope.$apply();
                     });
@@ -685,26 +828,26 @@ function createRelationsTree(container, data, scope) {
     }
 }
 
-function showRelationDetails(data, gene, entitiesType) {
-    var detailsContainer = d3.select('#ot-relation-details');
-    detailsContainer.selectAll('*').remove();
-    detailsContainer
-        .append('h3')
-        .text(gene + ' - ' + data.name + ' shared ' + (entitiesType === 'targets' ? 'diseases' : 'targets'));
-    detailsContainer
-        .append('p')
-        .text('For now, the first 10 shared ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' are shown');
-    var ul = detailsContainer
-        .append('ul');
-    ul.selectAll('li')
-        .data(data.shared.slice(0, 10))
-        .enter()
-        .append('li')
-        .style('font-size', '0.8em')
-        .text(function (d) {
-            return d;
-        })
-}
+// function showRelationDetails(data, gene, entitiesType) {
+//     var detailsContainer = d3.select('#ot-relation-details');
+//     detailsContainer.selectAll('*').remove();
+//     detailsContainer
+//         .append('h3')
+//         .text(gene + ' - ' + data.name + ' shared ' + (entitiesType === 'targets' ? 'diseases' : 'targets'));
+//     detailsContainer
+//         .append('p')
+//         .text('For now, the first 10 shared ' + (entitiesType === 'targets' ? 'diseases' : 'targets') + ' are shown');
+//     var ul = detailsContainer
+//         .append('ul');
+//     ul.selectAll('li')
+//         .data(data.shared.slice(0, 10))
+//         .enter()
+//         .append('li')
+//         .style('font-size', '0.8em')
+//         .text(function (d) {
+//             return d;
+//         })
+// }
 
 function getTreeData(gene, data, entitiesType) {
     var tree = {};
@@ -737,7 +880,7 @@ function barFeature () {
             var xScale = feature.scale();
             var track = this;
             var y = track.height();
-            var yOffset = (y / 8);
+            var yOffset = (y / 4);
 
             const g = el
                 .append('g')
@@ -764,51 +907,51 @@ function barFeature () {
 }
 
 // Unused for now
-function createRelationsCircle(container, data, width) {
-    // Distribution of sizes in the plot:
-    // 1. Node circle (central node): diameter = 1/5
-    // 2. Links circle: diamter 2/5
-    // 3. Names circle: diamter 2/5
-    var w = width - (width / 5);
-    var r = w / 2;
-    var centralNodeRadius = r / 5;
-    var linksRadius = (r * (2 / 5)) + centralNodeRadius;
-    var namesRadius = (r * (2 / 5)) + linksRadius;
-
-    var svg = d3.select(container)
-        .append('svg')
-        .attr('width', w)
-        .attr('height', w)
-        .append('g')
-        .attr('transform', 'translate(' + (w/2) + ',' + (w/2) + ')');
-
-    // names circle
-    var namesCircle = svg
-        .append('circle')
-        .attr('cx', 0)
-        .attr('cy', 0)
-        .attr('r', namesRadius)
-        .style('stroke-width', '1px')
-        .style('stroke', 'black')
-        .style('fill', 'none');
-
-    // links circle
-    var linksCircle = svg
-        .append('circle')
-        .attr('cx', 0)
-        .attr('cy', 0)
-        .attr('r', linksRadius)
-        .style('stroke-width', '1px')
-        .style('stroke', 'black')
-        .style('fill', 'none');
-
-    // central node
-    var centralNode = svg
-        .append('g')
-    centralNode
-        .append('circle')
-        .attr('r', 30)
-        .attr('cx', 0)
-        .attr('cy', 0)
-        .attr('color', color);
-}
+// function createRelationsCircle(container, data, width) {
+//     // Distribution of sizes in the plot:
+//     // 1. Node circle (central node): diameter = 1/5
+//     // 2. Links circle: diamter 2/5
+//     // 3. Names circle: diamter 2/5
+//     var w = width - (width / 5);
+//     var r = w / 2;
+//     var centralNodeRadius = r / 5;
+//     var linksRadius = (r * (2 / 5)) + centralNodeRadius;
+//     var namesRadius = (r * (2 / 5)) + linksRadius;
+//
+//     var svg = d3.select(container)
+//         .append('svg')
+//         .attr('width', w)
+//         .attr('height', w)
+//         .append('g')
+//         .attr('transform', 'translate(' + (w/2) + ',' + (w/2) + ')');
+//
+//     // names circle
+//     var namesCircle = svg
+//         .append('circle')
+//         .attr('cx', 0)
+//         .attr('cy', 0)
+//         .attr('r', namesRadius)
+//         .style('stroke-width', '1px')
+//         .style('stroke', 'black')
+//         .style('fill', 'none');
+//
+//     // links circle
+//     var linksCircle = svg
+//         .append('circle')
+//         .attr('cx', 0)
+//         .attr('cy', 0)
+//         .attr('r', linksRadius)
+//         .style('stroke-width', '1px')
+//         .style('stroke', 'black')
+//         .style('fill', 'none');
+//
+//     // central node
+//     var centralNode = svg
+//         .append('g')
+//     centralNode
+//         .append('circle')
+//         .attr('r', 30)
+//         .attr('cx', 0)
+//         .attr('cy', 0)
+//         .attr('color', color);
+// }
