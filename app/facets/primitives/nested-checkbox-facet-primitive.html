@@ -6,7 +6,7 @@
               class="ot-facet-checkbox-label"
               title="{{ filter.label }}">
           <input type="checkbox"
-              cttv-ui-indeterminate="{{ filter.someChildrenChecked() }}"
+              ot-ui-indeterminate="{{ filter.someChildrenChecked() }}"
               value="{{ filter.id }}"
               ng-checked="filter.checked || filter.allChildrenChecked()"
               ng-disabled="!filter.enabled || (!filter.shouldToggleChildren && filter.getCheckedChildren().length > 0)"
