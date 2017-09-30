@@ -10,6 +10,7 @@ angular.module('otPlugins')
             },
             link: function (scope) {
                 scope.entitySymbol = scope.target.symbol;
+                scope.entity = 'target';
             }
         }
     }]);
@@ -26,6 +27,7 @@ angular.module('otPlugins')
             },
             link: function (scope) {
                 scope.entitySymbol = scope.disease.label;
+                scope.entity = 'disease';
             }
         }
     }]);
@@ -74,30 +76,41 @@ angular.module('otDirectives')
     }]);
 
 angular.module('otDirectives')
-    .directive('otTarget2TargetDiseases', ['otUtils', 'otConsts', function (otUtils, otConsts) {
+    .directive('otSubject2Object', ['otUtils', 'otConsts', function (otUtils, otConsts) {
         'use strict';
         var color = '#377bb5';
 
         return {
             restrict: 'E',
-            template: '<div ng-show="target.approved_symbol && related.name">Top diseases associated with {{target.approved_symbol}} and {{related.name}}</div>' +
+            template: '<div>Top diseases associated with blah, blah and blah, blah</div>' +
                       '<div></div>' +
                       '<ot-matrix-legend style="float:right" legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend>',
             scope: {
-                target: '=',
-                related: '=',
-                diseases: '=',
+                subject: '=',
+                object: '=',
+                shared: '=',
+                entity: '=',
                 width: '='
             },
             link: function (scope, el) {
-                scope.$watchGroup(['target', 'related', 'diseases'], function() {
-                    if (!scope.target || !scope.diseases || !scope.related) {
+                scope.$watchGroup(['subject', 'object', 'shared'], function() {
+                    if (!scope.subject || !scope.object || !scope.shared) {
                         return;
                     }
 
-                    var diseases = scope.diseases.sort(function (a, b) {
-                       return (b[scope.target.approved_symbol].score + b[scope.related.name].score) -
-                              (a[scope.target.approved_symbol].score + a[scope.related.name].score)
+                    console.log(scope.subject);
+                    console.log(scope.object);
+                    console.log(scope.shared);
+
+                    var shared = scope.shared.sort(function (a, b) {
+                        if (scope.entity === 'target') {
+                            return (b[scope.subject.approved_symbol].score + b[scope.object.name].score) -
+                                (a[scope.subject.approved_symbol].score + a[scope.object.name].score);
+                        } else {
+                            return (b[scope.subject.label].score + b[scope.object.label].score) -
+                                (a[scope.subject.label].score + a[scope.object.label].score)
+
+                        }
                     });
 
                     var container = el[0].getElementsByTagName('div')[1];
@@ -105,7 +118,7 @@ angular.module('otDirectives')
 
                     var width = scope.width / 2;
                     var topOffset = 30;
-                    var height = (diseases.length * 30);
+                    var height = (shared.length * 30);
                     var svg = d3.select(container)
                         .append('svg')
                         .attr('width', width)
@@ -113,11 +126,24 @@ angular.module('otDirectives')
                         .append('g')
                         .attr('transform', 'translate(0, ' + topOffset + ')');
 
+                    var subjSymbol = scope.entity === 'target' ? scope.subject.approved_symbol : scope.subject.label; // ???
+                    var subjId = scope.entity === 'target' ? scope.subject.ensembl_gene_id : scope.subject.efo; // ???
+                    var objSymbol = scope.entity === 'target' ? scope.object.name : scope.object.label; // ???
+                    var objId = scope.entity === 'target' ? scope.object.geneId : scope.object.efo; // ???
+
+
                     // Dimensions of the plot...
                     // <- 20% -> <- 5% -> <---- 50% ---> <- 5% -> <- 20% ->
-                    var labelPerc = 20;
-                    var bracesPerc = 5;
-                    var linksPerc = 50;
+                    var labelPerc, bracesPerc, linksPerc;
+                    if (scope.entity === 'target') {
+                        labelPerc = 20;
+                        bracesPerc = 5;
+                        linksPerc = 50;
+                    } else {
+                        labelPerc = 35;
+                        bracesPerc = 5;
+                        linksPerc = 20;
+                    }
 
                     var labelOffset = (labelPerc * width) / 100;
                     var bracesOffset = (bracesPerc * width) / 100;
@@ -128,7 +154,7 @@ angular.module('otDirectives')
                         .append('g')
                         .attr('transform', 'translate(' + (labelOffset + bracesOffset + (linksOffset / 2)) + ', 0)');
                     var linkNodes = linksG.selectAll('.linkNode')
-                        .data(diseases)
+                        .data(shared)
                         .enter()
                         .append('g')
                         .attr('class', 'linkNode')
@@ -170,8 +196,8 @@ angular.module('otDirectives')
                     }
                     function showAssociationsTooltip(data) {
                         console.log(data);
-                        var flowerDataTarget = processFlowerData(data[scope.target.approved_symbol].datatypes);
-                        var flowerDataRelated = processFlowerData(data[scope.related.name].datatypes);
+                        var flowerDataSubj = processFlowerData(data[subjSymbol].datatypes);
+                        var flowerDataObj = processFlowerData(data[objSymbol].datatypes);
 
                         var div = document.createElement('div');
                         var leftDiv = d3.select(div)
@@ -181,14 +207,14 @@ angular.module('otDirectives')
                             .style('width', '50%')
                             .style('float', 'left');
                         leftDiv.append('h5')
-                            .text(scope.target.approved_symbol);
+                            .text(subjSymbol);
                         var flower1Div = leftDiv
                             .append('a')
-                            .attr('href', '/evidence/' + scope.target.ensembl_gene_id + '/' + data.id)
+                            .attr('href', '/evidence/' + (scope.entity === 'target' ? subjId : data.id) + '/' + (scope.entity === 'target' ? data.id : subjId))
                             .append('div');
                         leftDiv.append('a')
                             .attr('class', 'cttv_flowerLink')
-                            .attr('href', '/evidence/' + scope.target.ensembl_gene_id + '/' + data.id)
+                            .attr('href', '/evidence/' + (scope.entity === 'target' ? subjId : data.id) + '/' + (scope.entity === 'target' ? data.id : subjId))
                             .append('div')
                             .text('View evidence');
 
@@ -197,25 +223,25 @@ angular.module('otDirectives')
                             .append('div')
                             .style('margin-left', '50%');
                         rightDiv.append('h5')
-                            .text(scope.related.name);
+                            .text(objSymbol);
                         var flower2Div = rightDiv.append('div')
                             .append('a')
-                            .attr('href', '/evidence/' + scope.related.geneId + '/' + data.id)
+                            .attr('href', '/evidence/' + (scope.entity === 'target' ? objId : data.id) + '/' + (scope.entity === 'target' ? data.id : objId))
                             .append('div');
                         rightDiv.append('a')
                             .attr('class', 'cttv_flowerLink')
-                            .attr('href', '/evidence/' + scope.related.geneId + '/' + data.id)
+                            .attr('href', '/evidence/' + (scope.entity === 'target' ? objId : data.id) + '/' + (scope.entity === 'target' ? data.id : objId))
                             .append('div')
                             .text('View evidence');
 
                         var flower1 = flowerView()
-                            .values(flowerDataTarget)
+                            .values(flowerDataSubj)
                             .diagonal(140)
                             .fontsize(8);
                         flower1(flower1Div.node());
 
                         var flower2 = flowerView()
-                            .values(flowerDataRelated)
+                            .values(flowerDataObj)
                             .diagonal(140)
                             .fontsize(8);
                         flower2(flower2Div.node());
@@ -238,7 +264,7 @@ angular.module('otDirectives')
                         .attr('y2', 0)
                         .style('stroke-width', '2px')
                         .style('stroke', function (d) {
-                            return colorScale(d[scope.target.approved_symbol].score);
+                            return colorScale(d[subjSymbol].score);
                         // })
                         // .on('mouseover', function (d) {
                         //     showLinkTooltip.call(this, scope.target.approved_symbol, d.label, d[scope.target.approved_symbol].score)
@@ -256,7 +282,7 @@ angular.module('otDirectives')
                         .attr('y2', 0)
                         .style('stroke-width', '2px')
                         .style('stroke', function (d) {
-                            return colorScale(d[scope.related.name].score);
+                            return colorScale(d[objSymbol].score);
                         // })
                         // .on('mouseover', function (d) {
                         //     showLinkTooltip.call(this, scope.related.name, d.label, d[scope.related.name].score)
@@ -309,7 +335,7 @@ angular.module('otDirectives')
                         .append('g')
                         .attr('transform', 'translate(' + (labelOffset) + ',0)');
                     braces1.selectAll('.braces1')
-                        .data(diseases)
+                        .data(shared)
                         .enter()
                         .append('path')
                         .attr('d', function (d, i) {
@@ -319,7 +345,7 @@ angular.module('otDirectives')
                         .attr('fill', 'none')
                         .style('stroke-width', '2px')
                         .attr('stroke', function (d) {
-                            return colorScale(d[scope.target.approved_symbol].score);
+                            return colorScale(d[subjSymbol].score);
                         });
                     braces1
                         .selectAll('path')
@@ -337,7 +363,7 @@ angular.module('otDirectives')
                         .append('g')
                         .attr('transform', 'translate(' + (labelOffset + (bracesOffset*2) + linksOffset) + ',0)');
                     braces2.selectAll('.braces2')
-                        .data(diseases)
+                        .data(shared)
                         .enter()
                         .append('path')
                         .attr('d', function (d, i) {
@@ -347,7 +373,7 @@ angular.module('otDirectives')
                         .attr('fill', 'none')
                         .style('stroke-width', '2px')
                         .attr('stroke', function (d) {
-                            return colorScale(d[scope.related.name].score);
+                            return colorScale(d[objSymbol].score);
                         });
                     braces2
                         .selectAll('path')
@@ -377,7 +403,7 @@ angular.module('otDirectives')
                         .attr('text-anchor', 'end')
                         .attr('alignment-baseline', 'middle')
                         .attr('fill', '#666666')
-                        .text(scope.target.approved_symbol);
+                        .text(subjSymbol);
 
                     var ent2G = svg
                         .append('g')
@@ -395,9 +421,9 @@ angular.module('otDirectives')
                         .attr('text-anchor', 'start')
                         .attr('alignment-baseline', 'middle')
                         .attr('fill', '#666666')
-                        .text(scope.related.name);
+                        .text(objSymbol);
 
-                    scope.diseases = undefined;
+                    scope.shared = undefined;
 
                     // legend
                     scope.legendText = 'Score';
@@ -422,92 +448,128 @@ angular.module('otDirectives')
 
         return {
             restrict: 'E',
-            template: '<ot-target-2-target-diseases target="target" related="related" diseases="diseases" width="width"></ot-target-2-target-diseases>',
+            template: '<ot-subject-2-object subject="subject" object="object" shared="shared" entity="entity" width="width"></ot-subject-2-object>',
             scope: {
-                target: '=',
-                related: '=',
-                width: '='
+                subject: '=',
+                object: '=',
+                width: '=',
+                entity: '='
             },
             link: function (scope) {
-                scope.$watch('related', function () {
-                    if (scope.related) {
+                scope.$watch('object', function () {
+                    if (scope.object) {
+                        console.log(scope.entity);
+                        console.log(scope.subject);
+                        console.log(scope.object);
 
-                        // Get the best 10 diseases for target1 and any of the shared diseases...
-                        var optsTarget = {
-                            target: [scope.target.ensembl_gene_id],
-                            disease: scope.related.shared,
-                            size: 10
-                        };
-                        var queryObjectTarget = {
+                        var subjId = (scope.entity === 'target' ? scope.subject.ensembl_gene_id : scope.subject.efo);
+                        var objId = (scope.entity === 'target' ? scope.object.geneId : scope.object.efo);
+                        var subjSymbol = (scope.entity === 'target' ? scope.subject.approved_symbol : scope.subject.label); // ??
+                        var objSymbol = (scope.entity === 'target' ? scope.object.name : scope.object.label); // ??
+
+                        console.log(subjId + ', ' + objId + ', ' + subjSymbol + ', ' + objSymbol);
+
+                        // Get the best 10 diseases|targets for target1|disease1 and any of the shared diseases|targets...
+                        var optsSubj;
+                        var optsObj;
+                        if (scope.entity === 'target') {
+                            optsSubj = {
+                                target: [subjId],
+                                disease: scope.object.shared,
+                                size: 10
+                            };
+                            optsObj = {
+                                target: [objId],
+                                disease: scope.object.shared,
+                                size: 10
+                            };
+                        } else {
+                            optsSubj = {
+                                target: scope.object.shared,
+                                disease: [scope.subject.efo], // ??
+                                size: 10
+                            };
+                            optsObj = {
+                                target: scope.object.shared,
+                                disease: [scope.object.efo], // ??
+                                size: 10
+                            };
+                        }
+
+                        var querySubj = {
                             method: 'POST',
                             trackCall: false,
-                            params: optsTarget
+                            params: optsSubj
                         };
 
-                        // Same for target 2
-                        var optsRelated = {
-                            target: [scope.related.geneId],
-                            disease: scope.related.shared,
-                            size: 10
-                        };
-                        var queryObjectRelated = {
+                        var queryObj = {
                             method: 'POST',
                             trackCall: false,
-                            params: optsRelated
+                            params: optsObj
                         };
 
-                        var targetPromise = otApi.getAssociations(queryObjectTarget);
-                        var relatedPromise = otApi.getAssociations(queryObjectRelated);
-                        $q.all([targetPromise, relatedPromise])
+
+                        var subjPromise = otApi.getAssociations(querySubj);
+                        var objPromise = otApi.getAssociations(queryObj);
+                        $q.all([subjPromise, objPromise])
                             .then(function (resps) {
-                                var diseases = {};
-                                var missingDiseases = {};
-                                missingDiseases[scope.target.ensembl_gene_id] = {};
-                                missingDiseases[scope.related.geneId] = {};
+                                var shared = {};
+                                // var diseases = {};
+                                var missingShared = {};
+                                // var missingDiseases = {};
 
+                                missingShared[subjId] = {};
+                                missingShared[objId] = {};
                                 resps[0].body.data.map(function (d) {
-                                    var disLabel = d.disease.efo_info.label;
-                                    diseases[disLabel] = {
-                                        id: d.disease.id,
-                                        label: d.disease.efo_info.label
+                                    var sharedLabel = (scope.entity === 'target' ? d.disease.efo_info.label : d.target.gene_info.symbol);
+                                    var sharedId = (scope.entity === 'target' ? d.disease.id : d.target.id);
+
+                                    // var disLabel = d.disease.efo_info.label;
+                                    shared[sharedLabel] = {
+                                        id: sharedId,
+                                        label: sharedLabel
                                     };
-                                    diseases[disLabel][d.target.gene_info.symbol] = {
-                                        id: d.target.id,
-                                        label: d.target.gene_info.symbol,
+                                    shared[sharedLabel][subjSymbol] = {
+                                        id: subjId,
+                                        label: subjSymbol,
                                         score: d.association_score.overall,
                                         datatypes: d.association_score.datatypes
                                     };
-                                    // record this disease as a possible missing disease for the related gene
-                                    missingDiseases[scope.related.geneId][d.disease.id] = true;
-                                    diseases[disLabel][scope.related.name] = {
-                                        id: scope.related.geneId,
-                                        label: scope.related.name,
+                                    // record this disease as a possible missing disease for the object
+                                    missingShared[objId][sharedId] = true;
+                                    shared[sharedLabel][objSymbol] = {
+                                        id: objId,
+                                        label: objSymbol,
                                         // score is set to 0 here and to the real score in the next map
                                         score: 0
                                     };
                                 });
 
                                 resps[1].body.data.map(function (d) {
-                                    var disLabel = d.disease.efo_info.label;
-                                    if (diseases[disLabel]) {
-                                        delete missingDiseases[scope.related.geneId][d.disease.id];
-                                        diseases[disLabel][scope.related.name].score = d.association_score.overall;
-                                        diseases[disLabel][scope.related.name].datatypes = d.association_score.datatypes;
+                                    var sharedLabel = (scope.entity === 'target' ? d.disease.efo_info.label : d.target.gene_info.symbol);
+                                    var sharedId = (scope.entity === 'target' ? d.disease.id : d.target.id);
+
+                                    // check if this shared entity has already been set in the prev map
+                                    if (shared[sharedLabel]) {
+                                        delete missingShared[objId][sharedId];
+                                        shared[sharedLabel][objSymbol].score = d.association_score.overall;
+                                        shared[sharedLabel][objSymbol].datatypes = d.association_score.datatypes;
                                     } else {
-                                        missingDiseases[scope.target.ensembl_gene_id][d.disease.id] = true;
-                                        diseases[disLabel] = {
-                                            id: d.disease.id,
-                                            label: d.disease.efo_info.label
+                                        // If not already in the shared object
+                                        missingShared[subjId][sharedId] = true;
+                                        shared[sharedLabel] = {
+                                            id: sharedId,
+                                            label: sharedLabel
                                         };
-                                        diseases[disLabel][d.target.gene_info.symbol] = {
-                                            id: d.target.id,
-                                            label: d.target.gene_info.symbol,
+                                        shared[sharedLabel][objSymbol] = {
+                                            id: objId,
+                                            label: objSymbol,
                                             score: d.association_score.overall,
                                             datatypes: d.association_score.datatypes
                                         };
-                                        diseases[disLabel][scope.target.approved_symbol] = {
-                                            id: scope.target.ensembl_gene_id,
-                                            label: scope.target.approved_symbol,
+                                        shared[sharedLabel][subjSymbol] = {
+                                            id: subjId,
+                                            label: subjSymbol,
                                             score: 0
                                         };
                                     }
@@ -516,77 +578,76 @@ angular.module('otDirectives')
 
                                 // Search for the missing diseases in both targets...
                                 // create mock promises in case we don't have missing diseases for any of them
-                                var missingTargetPromise = $q(function (resolve) {
-                                   return {
+                                var missingSubjPromise = $q(function (resolve) {
+                                   resolve ({
                                        body: {
                                            data: []
                                        }
-                                   };
+                                   });
                                 });
-                                var missingRelatedPromise = $q(function (resolve) {
-                                    return {
+                                var missingObjPromise = $q(function (resolve) {
+                                    resolve ({
                                         body: {
                                             data: []
                                         }
-                                    };
+                                    });
                                 });
-                                if (Object.keys(missingDiseases[scope.target.ensembl_gene_id])) {
-                                    var optsMissingTarget = {
-                                        target: [scope.target.ensembl_gene_id],
-                                        disease: Object.keys(missingDiseases[scope.target.ensembl_gene_id])
+                                if (Object.keys(missingShared[subjId])) {
+                                    var optsMissingSubj = {
+                                        target: (scope.entity === 'target' ? [subjId] : Object.keys(missingShared[subjId])),
+                                        disease: (scope.entity === 'target' ? (Object.keys(missingShared[subjId])) : [subjId])
                                     };
-                                    var queryObjectMissingTarget = {
+                                    var queryMissingSubj = {
                                         method: 'POST',
                                         trackCall: false,
-                                        params: optsMissingTarget
+                                        params: optsMissingSubj
                                     };
-                                    missingTargetPromise = otApi.getAssociations(queryObjectMissingTarget);
+                                    missingSubjPromise = otApi.getAssociations(queryMissingSubj);
                                 }
 
-                                if (Object.keys(missingDiseases[scope.related.geneId])) {
-                                    var optsMissingRelated = {
-                                        target: [scope.related.geneId],
-                                        disease: Object.keys(missingDiseases[scope.related.geneId])
+                                if (Object.keys(missingShared[objId])) {
+                                    var optsMissingObj = {
+                                        target: (scope.entity === 'target' ? [objId] : Object.keys(missingShared[objId])),
+                                        disease: (scope.entity === 'target' ? Object.keys(missingShared[objId]) : [objId])
                                     };
-                                    var queryObjectMissingRelated = {
+                                    var queryMissingObj = {
                                         method: 'POST',
                                         trackCall: false,
-                                        params: optsMissingRelated
+                                        params: optsMissingObj
                                     };
-                                    missingRelatedPromise = otApi.getAssociations(queryObjectMissingRelated);
+                                    missingObjPromise = otApi.getAssociations(queryMissingObj);
                                 }
 
-                                $q.all([missingTargetPromise, missingRelatedPromise])
+                                $q.all([missingSubjPromise, missingObjPromise])
                                     .then (function (resps) {
                                         resps[0].body.data.map(function (d) {
-                                            var disLabel = d.disease.efo_info.label;
-                                            diseases[disLabel][d.target.gene_info.symbol].score = d.association_score.overall
-                                            diseases[disLabel][d.target.gene_info.symbol].datatypes = d.association_score.datatypes
+                                            // var disLabel = d.disease.efo_info.label;
+                                            var sharedLabel = (scope.entity === 'target' ? d.disease.efo_info.label : d.target.gene_info.symbol);
+
+                                            shared[sharedLabel][subjSymbol].score = d.association_score.overall;
+                                            shared[sharedLabel][subjSymbol].datatypes = d.association_score.datatypes;
                                         });
                                         resps[1].body.data.map(function (d) {
-                                            var disLabel = d.disease.efo_info.label;
-                                            diseases[disLabel][d.target.gene_info.symbol].score = d.association_score.overall
-                                            diseases[disLabel][d.target.gene_info.symbol].datatypes = d.association_score.datatypes
+                                            // var disLabel = d.disease.efo_info.label;
+                                            var sharedLabel = (scope.entity === 'target' ? d.disease.efo_info.label : d.target.gene_info.symbol);
+                                            shared[sharedLabel][objSymbol].score = d.association_score.overall;
+                                            shared[sharedLabel][objSymbol].datatypes = d.association_score.datatypes
                                         });
 
                                         // convert diseases from object to array
-                                        var diseasesArr = [];
-                                        for (var disease in diseases) {
-                                            if (diseases.hasOwnProperty(disease)) {
-                                                diseasesArr.push(diseases[disease]);
+                                        var sharedArr = [];
+                                        for (var shared1 in shared) {
+                                            if (shared.hasOwnProperty(shared1)) {
+                                                sharedArr.push(shared[shared1]);
                                             }
                                         }
 
-                                        scope.diseases = diseasesArr;
+                                        scope.shared = sharedArr;
                                     });
 
                             });
                     }
                 });
-                // scope.$watch('target', function () {
-                //     console.log('new target object!!!');
-                //     console.log(scope.target);
-                // });
             }
         };
     }]);
@@ -597,9 +658,6 @@ angular.module('otDirectives')
 
         return {
             restrict: 'E',
-            // templateUrl: 'plugins/related-entities/related-entities.html',
-            // template: '<ot-best-related-targets target="target" related="related" width="width">' +
-            //           '</ot-best-related-targets>',
             template: '<div></div>',
             scope: {
                 target: '=',
@@ -755,13 +813,24 @@ function createRelationsTree(container, data, scope) {
             .color('white')
             .data(tnt.board.track.data.sync()
                 .retriever (function () {
-                    return [{
-                        id: data.id,
-                        val: data.shared_count,
-                        name: data.name,
-                        geneId: data.geneId,
-                        shared: data.shared
-                    }];
+                    console.log('scope.entities... ' + scope.entities);
+                    if (scope.entities === 'targets') {
+                        return [{
+                            id: data.id,
+                            val: data.shared_count,
+                            name: data.name,
+                            geneId: data.geneId,
+                            shared: data.shared
+                        }];
+                    } else {
+                        return [{
+                            id: data.id,
+                            val: data.shared_count,
+                            label: data.name,
+                            efo: data.geneId,
+                            shared: data.shared
+                        }];
+                    }
                 })
             )
             // .display(tnt.board.track.feature.block()
