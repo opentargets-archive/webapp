@@ -4,6 +4,7 @@ angular.module('otFacets')
             var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
                 var flatFilters = [];
                 var nestedFilters;
+                var summary = [''];
 
                 /**
                  * getExistingFilter
@@ -156,12 +157,22 @@ angular.module('otFacets')
                             });
                         }
                     });
+                    summary[0] = getSummary();
+                };
+
+                var getSummary = function () {
+                    // generate a summary string for the facet
+                    var count = flatFilters.filter(function (f) {
+                        return f.checked;
+                    }).length;
+                    return count ? count + ' checked' : '';
                 };
 
                 init();
 
                 // Return the Facet object
                 return {
+                    summary: summary,
                     filters: nestedFilters,
                     serialize: serialize,
                     deserialize: deserialize,

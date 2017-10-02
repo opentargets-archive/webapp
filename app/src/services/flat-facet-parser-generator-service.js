@@ -33,6 +33,7 @@ angular.module('otFacets')
                         checked: false
                     }, facetsGlobal);
                 });
+                var summary = [''];
 
                 /**
                  * Toggle method for all filters
@@ -80,6 +81,18 @@ angular.module('otFacets')
                     filters.forEach(function (filter) {
                         filter.checked = filterIsChecked(urlObj, filter.key);
                     });
+                    summary[0] = getSummary();
+                };
+
+                var getSummary = function () {
+                    // generate a summary string for the facet
+                    var count = 0;
+                    if (filters) {
+                        count = filters.filter(function (f) {
+                            return f.checked;
+                        }).length;
+                    }
+                    return count ? count + ' checked' : '';
                 };
 
                 // Load the url state to update checked status etc.
@@ -87,6 +100,7 @@ angular.module('otFacets')
 
                 // Return the Facet object
                 return {
+                    summary: summary,
                     filters: filters,
                     setAllChecked: setAllChecked,
                     serialize: serialize,

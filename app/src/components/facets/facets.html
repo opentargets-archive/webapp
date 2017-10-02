@@ -5,7 +5,10 @@
             
             <!-- facet heading -->
             <uib-accordion-heading class="ot-facets-headers">
-                {{facet.options.heading | otClearUnderscores | otUpperCaseFirst}}<i class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !status.isOpen, 'fa-caret-down': status.isOpen}"></i>
+                {{facet.options.heading | otClearUnderscores | otUpperCaseFirst}}
+                
+                <i class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !status.isOpen, 'fa-caret-down': status.isOpen}"></i>
+                <span class="pull-right ot-facet-summary" ng-if="facet.summary[0]">{{facet.summary[0]}}</span>
             </uib-accordion-heading>
 
             <!-- load the relevant acutal facet -->

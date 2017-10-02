@@ -13,6 +13,7 @@ angular.module('otFacets')
                 otConsts.datatypes.LITERATURE,
                 otConsts.datatypes.ANIMAL_MODEL
             ];
+            var summary = [''];
 
             /**
              * constructFilters
@@ -144,12 +145,26 @@ angular.module('otFacets')
                 datasourceFilters.forEach(function (filter) {
                     filter.setChecked(filterIsChecked(urlObj, 'datasources', filter.key));
                 });
+                summary[0] = getSummary();
+            };
+
+            var getSummary = function () {
+                // generate a summary string for the facet
+                var countDatatype = datatypeFilters.filter(function (f) {
+                    return f.checked;
+                }).length;
+                var countDatasource = datasourceFilters.filter(function (f) {
+                    return f.checked;
+                }).length;
+                var count = countDatatype + countDatasource;
+                return count ? count + ' checked' : '';
             };
 
             init();
 
             // Return the Facet object
             return {
+                summary: summary,
                 filters: nestedFilters,
                 serialize: serialize,
                 deserialize: deserialize,

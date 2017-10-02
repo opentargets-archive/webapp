@@ -16,6 +16,7 @@ angular.module('otFacets')
             var histogramData;
             var groupTissuesBy = ['organs'];
             var hierarchy;
+            var summary = [''];
 
             var getExistingFilter = function (key, flatFilters) {
                 var match = flatFilters.filter(function (filter) {
@@ -39,7 +40,6 @@ angular.module('otFacets')
                         children: null,
                         facetName: rnaTissueKey
                     }, facetsGlobal);
-
 
                     var tissue = bucket.data;
 
@@ -308,12 +308,23 @@ angular.module('otFacets')
                     groupTissuesBy[0] = isAnatomicalSystems ? 'anatomicalSystems' : 'organs';
                     hierarchy = isAnatomicalSystems ? anatomicalSystemFilters : organFilters;
                 }
+                // summary
+                summary[0] = getSummary();
+            };
+
+            var getSummary = function () {
+                // generate a summary string for the facet
+                var count = tissueFilters.filter(function (f) {
+                    return f.checked;
+                }).length;
+                return count ? count + ' checked' : '';
             };
 
             init();
 
             // Return the Facet object
             var state = {
+                summary: summary,
                 filters: tissueFilters,
                 anatomicalSystemFilters: anatomicalSystemFilters,
                 organFilters: organFilters,
