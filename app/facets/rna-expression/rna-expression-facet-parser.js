@@ -1,5 +1,5 @@
 angular.module('otFacets')
-    .factory('rnaExpressionFacetParser', ['$log', 'otFilterTypes', function ($log, otFilterTypes) {
+    .factory('rnaExpressionFacetParser', ['otFilterTypes', function (otFilterTypes) {
         var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
             /**
              * Create an array of boolean filters (each of which provides the needed
@@ -145,7 +145,6 @@ angular.module('otFacets')
             };
 
             var constructHistogram = function () {
-                $log.log('constructHistogram');
                 // ignores -1, 0 buckets
                 var cdfRaw = apiData[rnaLevelKey].buckets
                     .filter(function (bucket) {
@@ -235,7 +234,7 @@ angular.module('otFacets')
                 }
 
                 // switched to anatomical systems?
-                if (groupTissuesBy[0] === 'anatomicalSystems') {
+                if (groupTissuesBy === 'anatomicalSystems') {
                     urlObj[rnaHierarchyKey] = 'anatomicalSystems';
                 }
 
@@ -256,7 +255,7 @@ angular.module('otFacets')
                 constructHistogram();
 
                 // default
-                groupTissuesBy = ['organs'];
+                groupTissuesBy = 'organs';
                 hierarchy = organFilters;
 
                 // load the url state (update checked statuses etc.)
@@ -306,7 +305,7 @@ angular.module('otFacets')
                 // hierarchy
                 if (urlObj) {
                     var isAnatomicalSystems = (rnaHierarchyKey in urlObj);
-                    groupTissuesBy[0] = isAnatomicalSystems ? 'anatomicalSystems' : 'organs';
+                    groupTissuesBy = isAnatomicalSystems ? 'anatomicalSystems' : 'organs';
                     hierarchy = isAnatomicalSystems ? anatomicalSystemFilters : organFilters;
                 }
             };
@@ -330,7 +329,6 @@ angular.module('otFacets')
                 setLevel: setLevel,
                 options: options
             };
-            $log.log(state);
             return state;
         };
 
