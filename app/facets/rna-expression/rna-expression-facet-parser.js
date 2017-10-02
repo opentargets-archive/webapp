@@ -14,7 +14,7 @@ angular.module('otFacets')
             var rnaTissueKey = 'rna_expression_tissue';
             var rnaHierarchyKey = 'rna_expression_hierarchy';
             var histogramData;
-            var groupTissuesBy;
+            var groupTissuesBy = ['organs'];
             var hierarchy;
 
             var getExistingFilter = function (key, flatFilters) {
@@ -234,7 +234,7 @@ angular.module('otFacets')
                 }
 
                 // switched to anatomical systems?
-                if (groupTissuesBy === 'anatomicalSystems') {
+                if (groupTissuesBy[0] === 'anatomicalSystems') {
                     urlObj[rnaHierarchyKey] = 'anatomicalSystems';
                 }
 
@@ -255,7 +255,7 @@ angular.module('otFacets')
                 constructHistogram();
 
                 // default
-                groupTissuesBy = 'organs';
+                groupTissuesBy[0] = 'organs';
                 hierarchy = organFilters;
 
                 // load the url state (update checked statuses etc.)
@@ -305,7 +305,7 @@ angular.module('otFacets')
                 // hierarchy
                 if (urlObj) {
                     var isAnatomicalSystems = (rnaHierarchyKey in urlObj);
-                    groupTissuesBy = isAnatomicalSystems ? 'anatomicalSystems' : 'organs';
+                    groupTissuesBy[0] = isAnatomicalSystems ? 'anatomicalSystems' : 'organs';
                     hierarchy = isAnatomicalSystems ? anatomicalSystemFilters : organFilters;
                 }
             };
