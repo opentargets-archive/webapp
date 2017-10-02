@@ -14,7 +14,7 @@
 # Deploy Preview context: All Deploy Previews (ie.PRs)
 # will inherit these settings.
 [context.deploy-preview.environment]
-  APIHOST = "https://api.targetvalidation.org/api/"
+  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/api/"
 
 # Branch Deploy context: All deploys that are not in
 # an active Deploy Preview will inherit these settings.
