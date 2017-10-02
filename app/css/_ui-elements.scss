@@ -1,18 +1,40 @@
 @import "utils";
 @import "colors";
 
-/* Axis in d3 */
-ot-related-targets-overview, ot-related-diseases-overview {
-    line,
-    path {
-        fill: none;
-        stroke: #aaaaaa;
-        shape-rendering: crispEdges;
+ot-related-targets-vis, ot-related-diseases-vis {
+    #tnt_tooltip_1 {
+        pointer-events: none;
     }
-    .tnt_framed {
-        border: none;
+    .relatedBubble {
+        fill: $brand-light-blue;
+        stroke-width: 3px;
+        stroke: $clr-ui-foreground;
+        cursor: pointer;
+        >text {
+            text-anchor: middle;
+            alignment-baseline: middle;
+            stroke:none;
+            fill: $clr-ui-foreground;
+            pointer-events: none;
+        }
+    }
+    .rootRelatedBubble {
+        display: none;
     }
 }
+
+/* Axis in d3 */
+//ot-related-targets-overview, ot-related-diseases-overview {
+//    line,
+//    path {
+//        fill: none;
+//        stroke: #aaaaaa;
+//        shape-rendering: crispEdges;
+//    }
+//    .tnt_framed {
+//        border: none;
+//    }
+//}
 
 #ot-page-app {
 

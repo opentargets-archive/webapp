@@ -1,9 +1,8 @@
-// if (typeof tnt === "undefined") {
-//     module.exports = tnt = {};
-// }
+if (typeof tnt === "undefined") {
+    module.exports = tnt = {};
+}
 
-tnt = require('tntvis');
-// tnt.board = require("tnt.genome");
+tnt.board = require("tnt.genome");
 tnt.utils = require("tnt.utils");
 tnt.tooltip = require("tnt.tooltip");
 tnt.ensembl = require("tnt.ensembl");
@@ -12,9 +11,9 @@ tnt.tree = require('tnt.tree');
 
 
 var targetGenomeBrowser = require("cttv.genome");
-// var bubblesView = require("cttv.bubblesView");
-// var geneAssociations = require("cttv.targetAssociations");
-var targetAssociations = require("cttv.targetAssociationsBubbles"); // new bubbles view
+var bubblesView = require("cttv.bubblesView");
+var geneAssociations = require("cttv.targetAssociations");
+// var targetAssociations = require("cttv.targetAssociationsBubbles"); // new bubbles view
 var geneAssociationsTree = require("cttv.targetAssociationsTree");
 var flowerView = require("cttv.flowerView");
 
