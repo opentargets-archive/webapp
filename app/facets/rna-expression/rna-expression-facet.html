@@ -2,11 +2,7 @@
   <span ng-click="facet.setLevel(0)">Clear <i class="fa fa-times"></i></span>
 </div>
 <div>
-  <ot-histogram-slider-facet-primitive data="facet.histogramData"
-                                       min="facet.min"
-                                       max="facet.max"
-                                       level="facet.level"
-                                       set-level="facet.setLevel">
+  <ot-histogram-slider-facet-primitive facet="facet">
   </ot-histogram-slider-facet-primitive>
 </div>
 <div class="col-sm-12 ot-facets-controls">

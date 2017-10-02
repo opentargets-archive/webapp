@@ -7,7 +7,7 @@ angular.module('otFacets')
    * @param {*} width 
    * @param {*} height 
    */
-        var render = function (scope, svg, width, height) {
+        var render = function (scope, state, svg, width, height) {
             var margins = {top: 10, right: 10, bottom: 25, left: 10};
             var histogramWidth = width - margins.left - margins.right;
             var histogramHeight = height - margins.top - margins.bottom;
@@ -21,7 +21,7 @@ angular.module('otFacets')
                 .domain(_.range(1, 11))
                 .rangeBands([0, histogramWidth], 0.2);
             var y = d3.scale.linear()
-                .domain([0, d3.max(scope.data, function (d) { return d.value; })])
+                .domain([0, d3.max(state.histogramData, function (d) { return d.value; })])
                 .range([histogramHeight, 0]);
 
             // container group
@@ -59,16 +59,22 @@ angular.module('otFacets')
                 }
             };
 
-            // ensure histogram data is sorted by key
-            scope.data.sort(function (a, b) {
+            // // ensure histogram data is sorted by key
+            state.histogramData.sort(function (a, b) {
                 return d3.ascending(a.key, b.key);
             });
 
             // histogram rectangles
+            // JOIN
             var bar = g.selectAll('rect')
-                .data(scope.data);
+                .data(state.histogramData);
+
+            // ENTER
             bar.enter()
-                .append('rect')
+                .append('rect');
+
+            // ENTER + UPDATE
+            bar
                 .attr('x', function (d) { return x(d.key); })
                 .attr('y', function (d) { return y(d.value); })
                 .attr('width', x.rangeBand())
@@ -79,29 +85,28 @@ angular.module('otFacets')
                 })
                 .on('mouseout', function (d) {
                     // base colouring on level
-                    selectBasedOn(g, scope.level);
+                    selectBasedOn(g, state.level);
                 })
                 .on('click', function (d) {
-                    scope.setLevel(d.key);
+                    state.setLevel(d.key);
                     // Note: Need to trigger a digest cycle here
                     scope.$apply();
                     selectBasedOn(g, d.key);
                 });
 
+            // EXIT
+            bar.exit()
+                .remove();
+
             // set selection state
-            selectBasedOn(g, scope.level);
+            selectBasedOn(g, state.level);
         };
 
 
         return {
             restrict: 'E',
             scope: {
-                data: '=',
-                min: '=',
-                max: '=',
-                level: '=',
-                setLevel: '='
-                // controls: '@'
+                facet: '='
             },
             templateUrl: 'facets/primitives/histogram-slider-facet-primitive.html',
             link: function (scope, elem, attrs) {
@@ -110,133 +115,27 @@ angular.module('otFacets')
 
                 // TODO: set width based on parent width
                 var width = 200;
-                // var width = ngSvg.offsetWidth;
                 var height = 120;
 
-                render(scope, svg, width, height);
+                function scopeToState (scope) {
+                    return {
+                        histogramData: scope.facet.histogramData,
+                        min: scope.facet.min,
+                        max: scope.facet.max,
+                        level: scope.facet.level,
+                        setLevel: scope.facet.setLevel
+                    };
+                }
+
+                render(scope, scopeToState(scope), svg, width, height);
 
                 // ensure a re-render occurs on level/data change
-                scope.$watchGroup(['level', 'data'], function () {
-                    render(scope, svg, width, height);
+                scope.$watchCollection('facet.histogramData', function () {
+                    render(scope, scopeToState(scope), svg, width, height);
+                });
+                scope.$watch('facet.level', function () {
+                    render(scope, scopeToState(scope), svg, width, height);
                 });
             }
         };
     }]);
-
-
-//     // declare vars
-//     var data, margin, width, height, barWidth, tick;
-
-//     var init = function(){
-//         data = scope.data;
-
-//         margin = {top: 20, right: 10, bottom: 20, left: 10},
-//         width = elem[0].childNodes[0].offsetWidth - margin.left - margin.right, // initialize to the full div width
-//         height = 80 - margin.top - margin.bottom,
-//         barWidth = width / data.length;
-
-//         tick = 1/data.length;
-
-
-//         var x = d3.scale.linear()
-//             .domain([0, 1])
-//             .range([0, width]);
-//             //.ticks(data.length);
-
-//         var y = d3.scale.linear()
-//             .domain([0, d3.max( data, function(d){return d.value;} )])
-//             .range([height, 0]);
-
-//         var xAxis = d3.svg.axis()
-//             .scale(x)
-//             .orient("bottom")
-//             .tickSize(0)
-//             .tickPadding(8)
-//             .ticks(data.length);
-
-//         var svg = d3.select(elem.children().eq(0)[0]).append("svg")
-//             .attr("width", width + margin.left + margin.right)
-//             .attr("height", height + margin.top + margin.bottom)
-//             .append("g")
-//             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-//         var bar = svg.selectAll(".bar")
-//             .data(data)
-//             .enter().append("g")
-//             .attr("class", "bar")
-//             .attr("transform", function(d,i) { return "translate(" + x( i/data.length ) + "," + y(d.value) + ")"; });
-
-//         bar.append("rect")
-//             .attr("x", 1)
-//             .attr("width", barWidth - 1)
-//             .attr("class", function(d){ return (d.label>=scope.min && d.label<scope.max) ? "selected" : "deselected" })
-//             .attr("height", function(d) { return height - y(d.value); });
-
-//         bar.append("text")
-//             .attr("x", barWidth / 2)
-//             .attr("y", -13)
-//             .attr("dy", ".75em")
-//             .attr("text-anchor", "middle")
-//             .attr("class", function(d){ return (d.label>=scope.min && d.label<scope.max) ? "selected" : "deselected" })
-//             .text(function(d) { return d.value; });
-
-//         svg.append("g")
-//             .attr("class", "x axis")
-//             .attr("transform", "translate(0," + height + ")")
-//             .call(xAxis);
-
-//         var update = function(o){
-//             scope.min = o.min;
-//             scope.max = o.max;
-//         }
-
-
-//         if(scope.controls.toLowerCase()==="true"){
-
-//             var mybrush = d3.svg.brush()
-//                 .x(x)
-//                 .extent([scope.min, scope.max])
-//                 .on("brush", function(){ scope.$apply(onBrush) })
-//                 .on("brushend", onBrushEnd);
-
-//             // brush graphics
-//             var gBrush = svg.append("g")
-//                 .attr("class", "brush")
-//                 .call(mybrush);
-
-//             gBrush.selectAll(".resize").append("circle")
-//                 .attr("class", "handle")
-//                 .attr("transform", "translate(0," + height/2 + ")")
-//                 .attr("r", 4);
-
-//             gBrush.selectAll("rect")
-//                 .attr("height", height);
-
-//             var onBrushEnd = function(){
-//                 d3.select(this).call(mybrush.extent([scope.min, scope.max]));
-//             }
-
-//             var onBrush = function(){
-//                 var extent0 = mybrush.extent();
-//                 update( {
-//                     min: otUtils.roundToNearest(extent0[0], tick).toFixed(2), // extent0[0].toFixed(2),
-//                     max: otUtils.roundToNearest(extent0[1], tick).toFixed(2),// extent0[1].toFixed(2)
-//                 } );
-//                 //mybrush.extent(scope.min, scope.max);
-//             }
-
-//         }
-//     }
-
-//     scope.$watch('data',function(d){
-//         // $log.log("************");
-//         // $log.log(scope.data);
-//         // $log.log(scope.min);
-//         // $log.log(scope.max);
-//         if(d){
-//             init();
-//         }
-//         //     })
-//         }
-//     };
-// }])
