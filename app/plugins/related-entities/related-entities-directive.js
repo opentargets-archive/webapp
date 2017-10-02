@@ -1034,7 +1034,7 @@ function createVis(container, data, scope) {
                         }
                     });
                 });
-                if (Object.keys(missingShared[subjId])) {
+                if (Object.keys(missingShared[subjId]).length) {
                     var optsMissingSubj = {
                         target: (object.entities_type === 'target' ? [subjId] : Object.keys(missingShared[subjId])),
                         disease: (object.entities_type === 'target' ? (Object.keys(missingShared[subjId])) : [subjId])
@@ -1047,7 +1047,7 @@ function createVis(container, data, scope) {
                     missingSubjPromise = otApi.getAssociations(queryMissingSubj);
                 }
 
-                if (Object.keys(missingShared[objId])) {
+                if (Object.keys(missingShared[objId]).length) {
                     var optsMissingObj = {
                         target: (object.entities_type === 'target' ? [objId] : Object.keys(missingShared[objId])),
                         disease: (object.entities_type === 'target' ? Object.keys(missingShared[objId]) : [objId])
