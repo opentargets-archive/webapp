@@ -1,10 +1,10 @@
 angular.module('otFacets')
-    .factory('rnaExpressionFacetParser', ['otFilterTypes', function (otFilterTypes) {
+    .factory('rnaExpressionFacetParser', ['$log', 'otFilterTypes', function ($log, otFilterTypes) {
         var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
             /**
-     * Create an array of boolean filters (each of which provides the needed
-     * state and methods for a checkbox)
-     */
+             * Create an array of boolean filters (each of which provides the needed
+             * state and methods for a checkbox)
+             */
             var tissueFilters;
             var anatomicalSystemFilters = [];
             var organFilters = [];
@@ -12,7 +12,10 @@ angular.module('otFacets')
             var rnaLevelHasChanged = false;
             var rnaLevelKey = 'rna_expression_level';
             var rnaTissueKey = 'rna_expression_tissue';
+            var rnaHierarchyKey = 'rna_expression_hierarchy';
             var histogramData;
+            var groupTissuesBy;
+            var hierarchy;
 
             var getExistingFilter = function (key, flatFilters) {
                 var match = flatFilters.filter(function (filter) {
@@ -22,9 +25,9 @@ angular.module('otFacets')
             };
 
             /**
-     * constructFilters
-     * Parse the API data and recursively build a nested filter structure.
-     */
+             * constructFilters
+             * Parse the API data and recursively build a nested filter structure.
+             */
             var constructTissueFilters = function () {
                 tissueFilters = apiData[rnaTissueKey].buckets.map(function (bucket) {
                     var filter = new otFilterTypes.NestedBooleanFilter({
@@ -130,8 +133,8 @@ angular.module('otFacets')
             };
 
             /**
-     * Toggle method for all filters
-     */
+             * Toggle method for all filters
+             */
             var setAllChecked = function (value) {
                 // update state
                 tissueFilters.forEach(function (filter) {
@@ -142,8 +145,9 @@ angular.module('otFacets')
             };
 
             var constructHistogram = function () {
+                $log.log('constructHistogram');
                 // ignores -1, 0 buckets
-                var cdfData = apiData[rnaLevelKey].buckets
+                var cdfRaw = apiData[rnaLevelKey].buckets
                     .filter(function (bucket) {
                         return bucket.key > 0;
                     })
@@ -163,14 +167,25 @@ angular.module('otFacets')
                         }
                     });
 
+                // note: there may be missing bins at the end, which are
+                // absent because ES returns no documents (zeros)
+                var cdfTopUp = [];
+                for (var i = cdfRaw.length + 1; i <= 10; i++) {
+                    cdfTopUp.push({
+                        key: i,
+                        value: 0
+                    });
+                }
+                var cdfFull = cdfRaw.concat(cdfTopUp);
+
                 // the level data is cumulative, so pairwise subtract (ie. cdf => pdf)
                 var pdfData = [];
                 for (var i = 0; i < 10; i++) {
-                    var ith = cdfData[i];
+                    var ith = cdfFull[i];
                     var val = ith.value;
                     if (i < 9) {
                         // skip last
-                        i1th = cdfData[i + 1];
+                        i1th = cdfFull[i + 1];
                         val -= i1th.value;
                     }
                     pdfData.push({
@@ -182,10 +197,10 @@ angular.module('otFacets')
             };
 
             /**
-     * Serialize this facet for the url state.
-     * @param {object} urlObj - The URL object. This object can be mutated and must
-     *                          then be returned.
-     */
+             * Serialize this facet for the url state.
+             * @param {object} urlObj - The URL object. This object can be mutated and must
+             *                          then be returned.
+             */
             var serialize = function (urlObj) {
                 // tissues to serialize
                 var tissueList = tissueFilters.filter(function (filter) {
@@ -219,6 +234,11 @@ angular.module('otFacets')
                     }
                 }
 
+                // switched to anatomical systems?
+                if (groupTissuesBy[0] === 'anatomicalSystems') {
+                    urlObj[rnaHierarchyKey] = 'anatomicalSystems';
+                }
+
                 // reset
                 rnaLevelHasChanged = false;
 
@@ -226,8 +246,8 @@ angular.module('otFacets')
             };
 
             /**
-     * Initialize
-     */
+             * Initialize
+             */
             var init = function () {
                 // setup the tissue filters from the api data (structure)
                 constructTissueFilters();
@@ -235,17 +255,21 @@ angular.module('otFacets')
                 // build the structure required for the histogram rendering
                 constructHistogram();
 
+                // default
+                groupTissuesBy = ['organs'];
+                hierarchy = organFilters;
+
                 // load the url state (update checked statuses etc.)
                 deserialize(facetsGlobal.getUrlObject());
             };
 
             /**
-     * Check if a boolean filter is checked according to the URL object.
-     * Note that the key is an number, but the urlObj may be a string (
-     * ie. 6 vs '6')
-     * @param {object} urlObj - Object representation of the URL
-     * @param {string} key - Key of the filter to check
-     */
+             * Check if a boolean filter is checked according to the URL object.
+             * Note that the key is an number, but the urlObj may be a string (
+             * ie. 6 vs '6')
+             * @param {object} urlObj - Object representation of the URL
+             * @param {string} key - Key of the filter to check
+             */
             var filterIsChecked = function (urlObj, key) {
                 return (urlObj &&
                 urlObj[rnaTissueKey] &&
@@ -254,10 +278,10 @@ angular.module('otFacets')
             };
 
             /**
-     * setLevel
-     * Set the level of the RNA expression filter.
-     * @param {number} value
-     */
+             * setLevel
+             * Set the level of the RNA expression filter.
+             * @param {number} value
+             */
             var setLevel = function (value) {
                 rnaLevel = value;
                 rnaLevelHasChanged = true;
@@ -265,9 +289,9 @@ angular.module('otFacets')
             };
 
             /**
-     * Deserialize the url state and update the facet state.
-     * @param {object} urlObj - The URL object
-     */
+             * Deserialize the url state and update the facet state.
+             * @param {object} urlObj - The URL object
+             */
             var deserialize = function (urlObj) {
                 // tissues
                 tissueFilters.forEach(function (filter) {
@@ -279,17 +303,23 @@ angular.module('otFacets')
                 } else {
                     rnaLevel = 0;
                 }
+                // hierarchy
+                if (urlObj) {
+                    var isAnatomicalSystems = (rnaHierarchyKey in urlObj);
+                    groupTissuesBy[0] = isAnatomicalSystems ? 'anatomicalSystems' : 'organs';
+                    hierarchy = isAnatomicalSystems ? anatomicalSystemFilters : organFilters;
+                }
             };
 
             init();
 
             // Return the Facet object
-            return {
+            var state = {
                 filters: tissueFilters,
                 anatomicalSystemFilters: anatomicalSystemFilters,
                 organFilters: organFilters,
-                hierarchy: organFilters,
-                groupTissuesBy: 'organs',
+                hierarchy: hierarchy, // default
+                groupTissuesBy: groupTissuesBy, // default
                 level: rnaLevel,
                 histogramData: histogramData,
                 min: 1,
@@ -300,6 +330,8 @@ angular.module('otFacets')
                 setLevel: setLevel,
                 options: options
             };
+            $log.log(state);
+            return state;
         };
 
         return {
