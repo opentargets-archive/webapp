@@ -289,7 +289,7 @@
             "key": "rna_expression",
             "options": {
                 "element": "rna-expression-facet",
-                "heading": "RNA expression",
+                "heading": "RNA baseline expression",
                 "open": false
             }
         }
