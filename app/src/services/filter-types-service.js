@@ -76,9 +76,12 @@ angular.module('otFacets')
                 this.parents.forEach(function (parent) {
                     if (!parent.shouldToggleChildren) {
                         var checkedChildrenCount = 0;
-                        parent.children.forEach(function (child) {
-                            checkedChildrenCount += child.checked ? 1 : 0;
-                        });
+                        if (parent.children) {
+                            parent.children.forEach(function (child) {
+                                checkedChildrenCount += child.checked ? 1 : 0;
+                            });
+                        }
+
                         var someButNotAll = ((checkedChildrenCount > 0) &&
                               (checkedChildrenCount < parent.children.length));
                         parent.setChecked(parent.checked && !someButNotAll);
