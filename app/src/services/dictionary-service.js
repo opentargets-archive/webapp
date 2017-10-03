@@ -33,6 +33,7 @@ angular.module('otServices')
             // E
             ENSEMBL_ID: 'Ensembl ID',
             EPMC: 'Europe PMC',
+            NFERX :'Literature - NFERX',
             EVA: 'European Variation Archive (EVA)',
             EVA_SOMATIC: 'European Variation Archive (EVA)',
             EXP_DISEASE_ASSOC_LABEL: 'targets_associated_with_',

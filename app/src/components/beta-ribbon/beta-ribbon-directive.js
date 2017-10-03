@@ -11,6 +11,9 @@ angular.module('otDirectives')
                 if (host === 'www.targetvalidation.org' || host === 'targetvalidation.org') {
                     scope.display = false;
                 } else {
+                    if (host === 'opentargets.biogen.com'){
+                        scope.host = host.split('.')[1];
+                    }
                     scope.display = true;
                 }
             }
