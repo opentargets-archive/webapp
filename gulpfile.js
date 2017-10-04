@@ -23,6 +23,7 @@ var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var jsonminify = require('gulp-jsonminify');
 var extend = require('gulp-extend');
+var merge = require('gulp-merge-json');
 
 var through = require('through2');
 
@@ -34,8 +35,10 @@ var componentsName = 'components-' + packageConfig.name;
 var webappName = packageConfig.name;
 
 // app config / initialization
+var map = require('map-stream');
 var webappConfigDir = 'app/config';
 var webappConfigSources = [webappConfigDir + '/default.json', webappConfigDir + '/custom.json'];
+var webappConfigSourceFiles = ['default.json', 'custom.json'];
 var webappConfigFile = 'config.json';
 
 // path tools
@@ -274,6 +277,120 @@ gulp.task('build-config', ['init-config'], function () {
         .pipe(extend(webappConfigFile, false))  // merge files; no deep-checking, just first level, so careful to overwrite objects
         .pipe(gulp.dest(buildDir));
 });
+
+
+function getFolders (dir) {
+    return fs.readdirSync(dir)
+        .filter(function (file) {
+            return fs.statSync(path.join(dir, file)).isDirectory();
+        });
+}
+
+
+function parseConfigItem (dir) {
+
+}
+
+
+// gulp.task('task', function () {
+//     return Promise.all([
+//       new Promise(function(resolve, reject) {
+//         gulp.src(src + '/*.md')
+//           .pipe(plugin())
+//           .on('error', reject)
+//           .pipe(gulp.dest(dist))
+//           .on('end', resolve)
+//       }),
+//       new Promise(function(resolve, reject) {
+//         gulp.src(src + '/*.md')
+//           .pipe(plugin())
+//           .on('error', reject)
+//           .pipe(gulp.dest(dist))
+//           .on('end', resolve)
+//       })
+//     ]).then(function () {
+//       // Other actions
+//     });
+//   });
+
+
+gulp.task('parse-custom-configs', function (){
+    var scriptsPath = 'app/config/';
+    var folders = getFolders(scriptsPath);
+    var content = '';
+    return Promise.all( folders.map(
+        function (dir) {
+            return new Promise(function (resolve, reject){       
+                gulp.src(webappConfigSourceFiles.map(function (i) { return join(scriptsPath, dir, i); }))
+                    .pipe(setApi())
+                    .pipe(jsonminify())
+                    // .pipe(extend('bobo.json', false))
+                    .pipe(merge())
+                    .on('error', reject)
+                    // .pipe(map(function(file, done) {
+                    //     str += ': '+ file.contents.toString();
+                    //     //str = folder+': '+str;
+                    //     console.log(str);
+                    //     //file.contents = new Buffer(str);
+                    //     done(null, file);
+                    // }));
+                    .pipe(gulp.dest(join(scriptsPath, dir)))
+                    .on('end', resolve);
+            });
+        })
+    );
+});
+
+
+/**
+ * New config includes dictionary
+ */
+gulp.task('build-config-new', function () {
+    var scriptsPath = 'app/config/';
+    var folders = getFolders(scriptsPath);
+    var content = '';
+    var tasks = folders.map(function (folder) {
+        var str=folder;
+        gulp.src(webappConfigSourceFiles.map(function (i) { return join(scriptsPath, folder, i); }))
+            .pipe(setApi())
+            .pipe(jsonminify())
+            .pipe(extend('bobo.json', false))
+            .pipe(map(function(file, done) {
+                str += ': '+ file.contents.toString();
+                //str = folder+': '+str;
+                console.log(str);
+                //file.contents = new Buffer(str);
+                done(null, file);
+            }));
+            //.pipe(gulp.dest(join(scriptsPath, folder)));
+        return str;
+    });
+    console.log('tasks: ',tasks);
+    // content = folders.map(function (folder){
+    //     var s = '"' + folder + '": ' + fs.readFileSync(join(scriptsPath, folder, 'bobo.json'), 'utf8');
+    //     del(join(scriptsPath, folder, 'bobo.json'));  // doesn't work!
+    //     return s;
+    // }).join(',\n');
+
+    // content = '{\n' + content + '\n}';
+
+    // fs.writeFileSync(join(buildDir, webappConfigFile), content);
+});
+
+function bob () {
+    return through.obj(console.log);
+}
+
+gulp.task('build-config-1', ['parse-custom-configs'], function () {
+    var scriptsPath = 'app/config/';
+    gulp.src( 'app/config/*/bobo.json' )
+        .pipe(concat(webappConfigFile))
+        .pipe(gulp.dest(buildDir));
+    console.log('done');
+});
+
+
+// ----------------------------------------
 
 
 gulp.task('build-webapp', ['build-webapp-styles', 'build-config'], function () {
