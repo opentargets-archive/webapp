@@ -10,39 +10,40 @@
         </div>
     </div>
 
+
     <div class="container">
         <div class="row" style="padding-bottom:20px; margin-bottom:20px">
+            <div class="col-sm-12">
+                <p>
+                    <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
+                </p>
 
-            <p>
-                <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
-            </p>
+                <p ng-show="target.symbol">
+                    Synonyms: <span class="ot-profile-synonym-list" ng-repeat="syn in synonyms">{{syn}}</span>
+                </p>
 
-            <p ng-show="target.symbol">
-                Synonyms: <span class="ot-profile-synonym-list" ng-repeat="syn in synonyms">{{syn}}</span>
-            </p>
-
-            <!-- Show if there is a TEP for the target -->
-            <div ng-show="target.tep" style="margin-top:15px;margin-bottom:15px;">
-                <div style='width:60px;display:inline-block'>
-                <img src="imgs/partners/TEP.png">
+                <!-- Show if there is a TEP for the target -->
+                <div ng-show="target.tep" style="margin-top:15px;margin-bottom:15px;">
+                    <div style='width:60px;display:inline-block'>
+                    <img src="imgs/partners/TEP.png">
+                    </div>
+                    <div style="display:inline-block;vertical-align:middle;">
+                        A Target Enabling Package (TEP) <sup><ot-popover key="TEP"></ot-popover></sup> has been developed for this target. Get more details on <a target=_blank href="http://www.thesgc.org/tep/{{target.tep}}">{{target.symbol}} TEP</a>
+                        <br />
+                        TEPs are provided by the <a href="http://www.thesgc.org/">Structural Genomics Consortium</a>
+                    </div>
                 </div>
-                <div style="display:inline-block;vertical-align:middle;">
-                    A Target Enabling Package (TEP) <sup><ot-popover key="TEP"></ot-popover></sup> has been developed for this target. Get more details on <a target=_blank href="http://www.thesgc.org/tep/{{target.tep}}">{{target.symbol}} TEP</a>
-                    <br />
-                    TEPs are provided by the <a href="http://www.thesgc.org/">Structural Genomics Consortium</a>
-                </div>
+
+                <uib-accordion close-others="false">
+                    <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
+                        <uib-accordion-heading>
+                            <span ng-click='section.currentVisibility = !section.currentVisibility'>{{section.heading}}</span>
+                        </uib-accordion-heading>
+                        <ot-plugin-loader target="target" plugin="section.element" visible="{{section.currentVisibility}}" dependencies="section.dependencies" page="target" track="section.track" label="section.name" class="scroll-table-panel"></ot-plugin-loader>
+                    </div>
+
+                </uib-accordion>
             </div>
-
-            <uib-accordion close-others="false">
-                <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
-                    <uib-accordion-heading>
-                        <span ng-click='section.currentVisibility = !section.currentVisibility'>{{section.heading}}</span>
-                    </uib-accordion-heading>
-                    <ot-plugin-loader target="target" plugin="section.element" visible="{{section.currentVisibility}}" dependencies="section.dependencies" page="target" track="section.track" label="section.name" class="scroll-table-panel"></ot-plugin-loader>
-                </div>
-
-            </uib-accordion>
-
         </div>
 
     </div>
