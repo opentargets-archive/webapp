@@ -15,7 +15,7 @@
       </label>
         <span ng-show="!filter.hideCount"
               class="text-lowlight ot-facet-count pull-left"
-              title="{{ filter.count | otMetricPrefix:0}}}">({{ filter.count | otMetricPrefix:0 }})</span>
+              title="{{ filter.count | otMetricPrefix:0}}}">({{ filter.count | otMetricPrefix:0 }})</span>      
     </span>
     <span ng-show="filter.someChildren()"
           class="text-lowlight pull-right">
@@ -24,8 +24,11 @@
            ng-click="collapsed = !collapsed" 
            ng-show="filter.enabled"></i>
     </span>
-    <!--<div class="checkbox-percentage-bar fg"></div>
-    <div class="checkbox-percentage-bar bg"></div>-->
+    
+    <div ng-if="filter.count && !filter.hideCount" class="checkbox-percentage-bar">
+        <div class="fg" ng-style="{width: (filter.count * 100 / $root.total) + '%'}"></div>
+        <div class="bg"></div>
+    </div>  
   </div>
   <!--Children-->
   <div uib-collapse="collapsed"

@@ -5,7 +5,7 @@ angular.module('otControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('TargetAssociationsController', ['$scope', '$location', 'otUtils', 'otApi', 'otFacetsState', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otApi, otFacetsState, otDictionary, otLocationState, otConfig) {
+    .controller('TargetAssociationsController', ['$scope', '$rootScope', '$location', 'otUtils', 'otApi', 'otFacetsState', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $rootScope, $location, otUtils, otApi, otFacetsState, otDictionary, otLocationState, otConfig) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -104,6 +104,7 @@ angular.module('otControllers')
                 target: $scope.search.query,
                 outputstructure: 'flat',
                 facets: true,
+                // facets: facetNames.join(', '),
                 direct: true,
                 size: 1
             };
@@ -116,6 +117,7 @@ angular.module('otControllers')
             otApi.getAssociations(queryObject)
                 .then(function (resp) {
                     $scope.search.total = resp.body.total;
+                    $rootScope.total = resp.body.total;
                     if (resp.body.total) {
                         $scope.search.label = resp.body.data[0].target.gene_info.symbol;
 

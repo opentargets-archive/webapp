@@ -14,7 +14,7 @@ angular.module('otControllers')
  * Then when we get the data, we update content and facets
  */
 
-    .controller('DiseaseAssociationsController', ['$scope', '$location', '$q', 'otApi', 'otFacetsState', 'otDictionary', 'otUtils', 'otLocationState', 'otConfig', function ($scope, $location, $q, otApi, otFacetsState, otDictionary, otUtils, otLocationState, otConfig) {
+    .controller('DiseaseAssociationsController', ['$scope', '$rootScope', '$location', '$q', 'otApi', 'otFacetsState', 'otDictionary', 'otUtils', 'otLocationState', 'otConfig', function ($scope, $rootScope, $location, $q, otApi, otFacetsState, otDictionary, otUtils, otLocationState, otConfig) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -110,6 +110,7 @@ angular.module('otControllers')
                 disease: [$scope.search.query],
                 outputstructure: 'flat',
                 facets: 'true',
+                // facets: facetNames.join(', '),
                 size: 1
             };
 
@@ -127,6 +128,7 @@ angular.module('otControllers')
                 .then(function (resp) {
                     // set the total?
                     $scope.search.total = resp.body.total;
+                    $rootScope.total = resp.body.total;
 
                     if (resp.body.total) {
                         // TODO Change this to POST request
