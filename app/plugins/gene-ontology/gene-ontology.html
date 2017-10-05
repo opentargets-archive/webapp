@@ -1,0 +1,7 @@
+<p class="ot-section-intro"><span ng-show="!goterms.length">There are no </span>Gene Ontology terms associated with {{target.symbol}}</p>
+<div ng-repeat="go in goterms">
+    <h4>{{go.Ontology}}</h4>
+    <ul>
+        <li ng-repeat="goterm in go.terms"><a target="_blank" href="http://amigo.geneontology.org/amigo/term/{{goterm.goid}}">{{goterm.label}}</a></li>
+    </ul>
+</div>

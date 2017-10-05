@@ -1,8 +1,7 @@
 angular.module('facets')
 
-    .factory('datasourceFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', function($log, cttvDictionary, cttvConsts) {
+    .factory('datasourceFacetParser', ['otDictionary', 'otConsts', function (otDictionary, otConsts) {
         'use strict';
-
 
 
         var parser = {};
@@ -21,13 +20,12 @@ angular.module('facets')
          *
          * It returns an Array of filters.
          */
-        parser.parse = function(config, data, countsToUse, isSelected){
-
+        parser.parse = function (config, data, countsToUse, isSelected) {
             // array of filters
-            config.filters = data.buckets.map(function(obj){
+            config.filters = data.buckets.map(function (obj) {
                 var conf = {};
                 conf.key = obj.key;
-                conf.label = cttvDictionary[ cttvConsts.invert(obj.key) ] || obj.key;
+                conf.label = otDictionary[otConsts.invert(obj.key)] || obj.key;
                 conf.count = obj[countsToUse].value;
                 conf.selected = isSelected(config.key, obj.key);
                 conf.facet = config.key;
@@ -36,7 +34,7 @@ angular.module('facets')
             });
 
             return config;
-        }
+        };
 
         return parser;
-    }])
+    }]);

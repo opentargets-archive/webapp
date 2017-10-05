@@ -1,0 +1,21 @@
+<uib-tabset>
+    <uib-tab heading="Graph">
+        <p class="ot-section-intro">Graph showing the diseases related with {{disease.label}}. Click on any disease to get more information about it and its associated targets</p>
+        <ot-png filename="{{disease.title}}-graph.png" track="diseaseClassification"></ot-png>
+        <div id="ot-efo-graph"></div>
+    </uib-tab>
+    <uib-tab heading="Text">
+        <h4>Paths</h4>
+        <ul ng-repeat="path in disease.paths">
+            <b>Path {{$index+1}}</b>
+            <li ng-repeat="node in path" style="margin-left:{{$index*10}}px">
+                 {{node.label}} <small>(<a href="/disease/{{node.efo}}/associations">See target associations</a>), (<a href="/disease/{{node.efo}}">Go to disease page</a>)</small>
+            </li>
+        </ul>
+        <h4 ng-if="disease.children.length > 0">Children</h4>
+        <ul>
+            <li ng-repeat="child in disease.children">{{child.label}} <small>(<a href="/disease/{{child.code}}/associations">See target associations</a>), (<a href="/disease/{{child.code}}">Go to diseases page</a>)</small>
+            </li>
+        </ul>
+    </uib-tab>
+</uib-tabset>

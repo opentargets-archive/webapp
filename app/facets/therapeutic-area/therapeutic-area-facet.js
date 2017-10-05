@@ -3,21 +3,15 @@ angular.module('facets')
     /**
     * The therapeutic areas facet
     */
-    .directive('therapeuticAreaFacet', ['$log', function ($log) {
+    .directive('therapeuticAreaFacet', [function () {
         'use strict';
 
         return {
-            restrict: 'EA',
+            restrict: 'AE',
             scope: {
                 facet: '='
             },
-            templateUrl: 'directives/generic-facetcollection.html',
-
-            link: function (scope, elem, attrs) {},
+            templateUrl: 'directives/generic-facetcollection.html'
         };
-    }])
-
-;
-
-
+    }]);
 

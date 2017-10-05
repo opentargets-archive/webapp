@@ -1,0 +1,76 @@
+<!-- search app / results -->
+
+<div class="partial-page">
+    <ot-page-progress-spinner></ot-page-progress-spinner>
+
+    <div ng-show="search.total==0">
+        <div class="container">
+            <h3 view-title>No diseases found for {{search.label || search.query}}</h3>
+            <p ng-show="!search.label">
+                Try searching a different target or disease above
+            </p>
+            <p ng-show="search.label" style="margin-top:10px">
+                Find more information about <span style="font-weight:bold">{{search.label}}</span> in its <a href="/target/{{search.query}}">Profile page</a>
+            </p>
+        </div>
+    </div>
+
+    <div ng-show="search.total>0">
+
+        <div class="ot-content-header">
+            <div class="container">
+                <h3 view-title>{{search.total}} {{search.total===1 ? "disease" : "diseases"}} associated with {{search.label}}</h3>
+                <p><!-- Found {{n.diseases}} {{n.diseases===1 ? "disease" : "diseases"}} <span class="ot-interpage-link">--><a href="/target/{{search.query}}"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span> View {{search.label}} profile</a><!-- </span> -->
+                </p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row" ng-show="search.total>0">
+
+                <div class="col-md-3 ot-facet">
+                    <ot-facets></ot-facets>
+                    <!--<h4 class="ot-facets panel-title">-->
+                        <!--<input type="checkbox" ng-checked="cancersExcluded" ng-click="excludeCancers()"> Exclude neoplasm diseases from other Therapeutic Areas-->
+                    <!--</h4>-->
+                </div>
+
+                <div class="col-md-9">
+
+                    <!-- TABS views -->
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs">
+                        <li role="presentation" ng-class="(view.t[0]=='bubbles') ? 'active' : ''" ><a href="#" ng-click='setActiveTab("bubbles")'>Bubbles</a></li>
+                        <li role="presentation" ng-class="(view.t[0]=='table') ? 'active' : ''"><a href="#" ng-click='setActiveTab("table")'>Table</a></li>
+                        <li role="presentation" ng-class="(view.t[0]=='tree') ? 'active' : ''"><a href="#" ng-click='setActiveTab("tree")'>Tree</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <!-- <div ng-show="view.t[0]=='bubbles'"> -->
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='bubbles'}">
+                            <ot-resize>
+                                <ot-target-associations-bubbles target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></ot-target-associations-bubbles>
+                            </ot-resize>
+                        </div>
+
+                        <!-- <div ng-show="view.t[0]=='table'"> -->
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='table'}">
+                            <ot-target-associations-table target="search.query" filename="search.filename" loadprogress="loading" facets="filters" active="{{view.t[0]}}"></ot-target-associations-table>
+                        </div>
+
+                        <!-- <div ng-show="view.t[0]=='tree'"> -->
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='tree'}">
+                            <ot-target-associations-tree target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></ot-target-associations-tree>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- end search results-->

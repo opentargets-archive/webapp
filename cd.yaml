@@ -1,7 +1,0 @@
-# environment_name:
-#   vars:
-#     VAR_NAME: var_value
-
-staging:
-  vars:
-    API_VERSION: phewas-catalog

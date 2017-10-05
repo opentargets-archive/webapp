@@ -16,7 +16,7 @@ The overall association score between a target and a disease is a numerical valu
 with 1 indicating the strongest associations. Negative scores will correspond to negative evidence (although not implemented in the current version). A score of 0
 corresponds to no evidence.
 
-The overall association score is produced by combining the scores for the target and disease from the individual [data types](/data_sources) (genetic associations,
+The overall association score is produced by combining the scores for the target and disease from the individual [data types](/data-sources) (genetic associations,
 known drugs, etc.), and is represented as a flower where each petal represents a different data type. The amount of filled colour in each petal represents
 the relative score within each data type.
 

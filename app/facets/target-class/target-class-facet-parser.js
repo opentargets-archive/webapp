@@ -1,8 +1,7 @@
 angular.module('facets')
 
-    .factory('targetClassFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', function($log, cttvDictionary, cttvConsts) {
+    .factory('targetClassFacetParser', ['otConsts', function (otConsts) {
         'use strict';
-
 
 
         var parser = {};
@@ -21,29 +20,27 @@ angular.module('facets')
          *
          * It returns an Array of filters.
          */
-        parser.parse = function(config, data, countsToUse, isSelected){
-
+        parser.parse = function (config, data, countsToUse, isSelected) {
             // array of filters
             config.filters = data.buckets.map(function (obj) {
-                    var conf = {};
-                    conf.key = obj.key;
-                    conf.label = obj.label;
-                    conf.count = obj[countsToUse].value;
-                    conf.selected = isSelected(config.key, obj.key);
-                    conf.facet = config.key;
-                    conf.collection = null;
-                    if (obj.target_class) {
-                        conf.collection = {
-                            filters: parser.parse({key:cttvConsts.TARGET_CLASS}, obj.target_class, countsToUse, isSelected).filters
-                        }
-                    }
-                    return conf;
-                });
+                var conf = {};
+                conf.key = obj.key;
+                conf.label = obj.label;
+                conf.count = obj[countsToUse].value;
+                conf.selected = isSelected(config.key, obj.key);
+                conf.facet = config.key;
+                conf.collection = null;
+                if (obj.target_class) {
+                    conf.collection = {
+                        filters: parser.parse({key: otConsts.TARGET_CLASS}, obj.target_class, countsToUse, isSelected).filters
+                    };
+                }
+                return conf;
+            });
 
             return config;
-        }
+        };
 
         return parser;
-    }])
-
+    }]);
 

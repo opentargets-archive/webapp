@@ -1,0 +1,14 @@
+app/config/custom.json
+.vscode
+bower_components
+**/*~
+node_modules
+jspm_packages
+.sass-cache
+.DS_Store
+.idea
+npm-debug.log
+app/outreach.json
+app/notifications.json
+.circleci
+.git

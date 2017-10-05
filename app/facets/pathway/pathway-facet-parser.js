@@ -1,8 +1,7 @@
 angular.module('facets')
 
-    .factory('pathwayFacetParser', ['$log', 'cttvDictionary', 'cttvConsts', function($log, cttvDictionary, cttvConsts) {
+    .factory('pathwayFacetParser', [function () {
         'use strict';
-
 
 
         var parser = {};
@@ -21,8 +20,7 @@ angular.module('facets')
          *
          * It returns an Array of filters.
          */
-        parser.parse = function(config, data, countsToUse, isSelected){
-
+        parser.parse = function (config, data, countsToUse, isSelected) {
             // array of filters
             config.filters = data.buckets.map(function (obj) {
                 var conf = {};
@@ -34,16 +32,15 @@ angular.module('facets')
                 conf.collection = null;
                 if (obj.pathway) {
                     conf.collection = {
-                        filters: parser.parse(/*cttvConsts.PATHWAY*/ {key:"pathway"}, obj.pathway, countsToUse, isSelected).filters
-                    }
+                        filters: parser.parse(/* otConsts.PATHWAY*/ {key: 'pathway'}, obj.pathway, countsToUse, isSelected).filters
+                    };
                 }
                 return conf;
             });
 
             return config;
-        }
+        };
 
         return parser;
-    }])
-
+    }]);
 

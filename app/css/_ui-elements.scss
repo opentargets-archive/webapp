@@ -1,7 +1,7 @@
 @import "utils";
 @import "colors";
 
-#cttv-page-app {
+#ot-page-app {
 
     .pdfobject-container {
         height: 500px;
@@ -80,7 +80,7 @@
         left: 0px;
     }
 
-    .cttv-progress-spinner-svg-container {
+    .ot-progress-spinner-svg-container {
         display:inline-block;
         width: 18px;
         height: 18px;
@@ -167,70 +167,6 @@
         border-color: $clr-ui-background-secondary;
     }
 
-
-
-    cttv-slider {
-        width:100%;
-        display:block;
-
-        .axis {
-            /*font: 10px sans-serif;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;*/
-            stroke: #000;
-            fill-opacity: .125;
-            shape-rendering: crispEdges;
-
-            text{
-                font-size: 10px;
-                height: 20px;
-                line-height: normal;
-                fill:none;
-            }
-
-            .domain {
-                fill: none;
-                /*stroke: #000;
-                stroke-opacity: .3;
-                stroke-width: 10px;*/
-            }
-
-            .halo {
-                fill: none;
-                stroke: #ddd;
-                stroke-width: 6px;
-            }
-        }
-
-        .slider .handle {
-            fill: #fff;
-            stroke: #000;
-            stroke-opacity: .5;
-            stroke-width: 1.25px;
-            cursor: ew-resize;
-        }
-    }
-
-
-    cttv-score-presets{
-        .label {
-            font-size: 10px;
-            color: inherit;
-            display:block;
-            font-weight: normal;
-            padding: 0px;
-        }
-
-        .well-sm{
-            padding: 5px 0px;
-            border: none;
-            @include box-shadow( none );
-        }
-    }
-
-
-
     /*
      * Probably deprecated ?
      */
@@ -294,7 +230,7 @@
         color: darkgrey;
     }
 
-    .cttv-drug {
+    .ot-drug {
         background-color: #e0ebeb;
         display: inline;
         padding: .2em .6em .3em;
@@ -449,7 +385,7 @@
 
 
     // pill-like horizonal list in target and disease profile pages
-    .cttv-profile-synonym-list {
+    .ot-profile-synonym-list {
         /*padding-right: 10px;*/
         background-color: #e0ebeb;
         padding: .2em .6em .3em;
@@ -460,7 +396,7 @@
         margin-bottom: 3px;
     }
 
-    /*.cttv-profile-synonym-list:before {
+    /*.ot-profile-synonym-list:before {
         font-family: 'FontAwesome';
         padding-right: 3px;
         font-size: 0.8em;
@@ -632,8 +568,8 @@
      * PNG export button
      */
 
-    cttv-target-associations-bubbles, cttv-target-associations-tree{
-        png > div {
+    ot-target-associations-bubbles, ot-target-associations-tree{
+        ot-png > div {
             margin-top:24px;
             float: right;
         }
@@ -665,7 +601,7 @@
         }
     }
 
-    cttv-modal{
+    ot-modal{
         .modal-header{
             h1,h2,h3,h4,h5,h6{
                 margin-top: 0px;

@@ -1,19 +1,19 @@
 <div>
-    <div class="checkbox cttv-facet-checkbox clearfix">
+    <div class="checkbox ot-facet-checkbox clearfix">
         <span style="width:auto">
-            <label ng-class="(!bucket.enabled) ? 'disabled' : ''" class="cttv-facet-checkbox-label" title="{{bucket.label}}">
+            <label ng-class="(!bucket.enabled) ? 'disabled' : ''" class="ot-facet-checkbox-label" title="{{bucket.label}}">
                 <input type="checkbox"
-                    cttv-ui-indeterminate="{{bucket.collection.getSelectedFilters().length>0 && (bucket.collection.filters.length > bucket.collection.getSelectedFilters().length)}}"
+                    ot-ui-indeterminate="{{bucket.collection.getSelectedFilters().length>0 && (bucket.collection.filters.length > bucket.collection.getSelectedFilters().length)}}"
                     value="{{bucket.id}}"
                     ng-checked="bucket.selected || (bucket.collection.filters.length>0 && bucket.collection.filters.length == bucket.collection.getSelectedFilters().length)"
                     ng-disabled="!bucket.enabled || bucket.collection.getSelectedFilters().length>0"
                     ng-click="bucket.toggle()" >
                 {{bucket.label}}
             </label>
-            <span class="text-lowlight cttv-facet-count pull-left" title="{{bucket.count | metricPrefix:0}}}">({{bucket.count | metricPrefix:0}})</span>
+            <span class="text-lowlight ot-facet-count pull-left" title="{{bucket.count | otMetricPrefix:0}}}">({{bucket.count | otMetricPrefix:0}})</span>
         </span>
         <span ng-show="bucket.collection.filters.length" class="text-lowlight pull-right">
-            <i class="fa cttv-facets-small-arrow" ng-class="{'fa-caret-right': collapsed, 'fa-caret-down': !collapsed}" ng-click="collapsed = !collapsed"  ng-show="bucket.enabled"></i>
+            <i class="fa ot-facets-small-arrow" ng-class="{'fa-caret-right': collapsed, 'fa-caret-down': !collapsed}" ng-click="collapsed = !collapsed"  ng-show="bucket.enabled"></i>
         </span>
     </div>
 </div>

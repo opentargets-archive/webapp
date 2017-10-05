@@ -2,38 +2,38 @@
  * F A C E T S
  */
 
-.cttv-facet .therapeuticArea .panel-heading {
+.ot-facet .therapeuticArea .panel-heading {
     /*background-color: #c6dcec;*/
 }
 
-.cttv-facet .cttv-accordion-leaf .panel-heading {
+.ot-facet .cttv-accordion-leaf .panel-heading {
     /*background-color: #f5f5f5;*/
 }
 
-/* .cttv-facet .cttv-accordion-leaf .panel-body { */
+/* .ot-facet .cttv-accordion-leaf .panel-body { */
     /*     padding : 0px; */
     /* } */
 
-    /*.cttv-facet .panel-heading {
+    /*.ot-facet .panel-heading {
         padding : 5px;
     }
-    .cttv-facet .panel-body {
+    .ot-facet .panel-body {
         padding : 5px;
     }
-    .cttv-facet .panel-title {
+    .ot-facet .panel-title {
         font-size: 10px;
         color: $bodytext-color;
     }*/
 
-.cttv-facets{
+.ot-facets{
     font-size: 12px;
 }
 
-.cttv-facets-headers{
+.ot-facets-headers{
     font-size: 16px;
 }
 
-.cttv-facets-controls {
+.ot-facets-controls {
     font-size: 11px;
     background-color: $clr-ui-background;
     @include border-radius( 3px );
@@ -51,20 +51,20 @@
         color: $clr-text-em;
     }
 }
-.cttv-facets-selected-summary{
+.ot-facets-selected-summary{
     border-bottom:1px solid $clr-ui-border; // was #CCC
     margin-bottom:25px;
     padding-bottom:10px;
 }
 
-.cttv-facets-small-arrow{
+.ot-facets-small-arrow{
     width: 12px;
     cursor: pointer;
 
     padding: 0px 4px;
 }
 
-.cttv-facets-child-label-no-checkbox{
+.ot-facets-child-label-no-checkbox{
     width:auto;
     padding-left: 20px
 }
@@ -77,7 +77,7 @@
 
 
 
-.cttv-facets {
+.ot-facets {
     .panel{
         @include border-radius( 0px );
         border: none;
@@ -138,7 +138,7 @@
 
 
 
-.cttv-facet-checkbox {
+.ot-facet-checkbox {
     /* overrides bootstrap values */
     margin-top: 0px;
     margin-bottom: 0px;
@@ -147,7 +147,7 @@
     cursor:pointer;
 }
 
-.cttv-facet-checkbox-label{
+.ot-facet-checkbox-label{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -158,8 +158,8 @@
     display: inline;
 }
 
-.cttv-facet-checkbox-label > input,
-.cttv-facet-checkbox-label-multiline > input{
+.ot-facet-checkbox-label > input,
+.ot-facet-checkbox-label-multiline > input{
     /* overrides bootstrap values */
     margin: 0px;
     margin-top: 2px;
@@ -219,16 +219,16 @@
 }
 
 
-.cttv-facet-count {
+.ot-facet-count {
     font-size:11px;
     margin-left:3px;
 }
 
-.cttv-facet-checkbox-label-multiline{
+.ot-facet-checkbox-label-multiline{
     display: inline;
     float:left;
 
-    > .cttv-facet-count{
+    > .ot-facet-count{
         float:none;
         display: inline;
     }
@@ -277,55 +277,3 @@
     content: "Profile";
 }
  */
-
-
-
-cttv-score-histogram {
-    .bar {
-        rect {
-          /*fill: $clr-ui-foreground;*/
-          shape-rendering: crispEdges;
-        }
-
-        text {
-          /*fill: #fff;*/
-          font-size: 12px;
-        }
-
-        .selected {
-            fill: $clr-ui-foreground;
-        }
-
-        .deselected {
-            fill: $clr-ui-border;
-        }
-    }
-
-    .axis {
-        path, line {
-          /*fill: none;
-          stroke: #000;
-          shape-rendering: crispEdges;*/
-          display: none;
-        }
-
-        text{
-          fill: $clr-text-dim;
-        }
-    }
-
-    .brush .extent {
-      stroke: $clr-artboard-foregroud;
-      fill-opacity: .125;
-      shape-rendering: crispEdges;
-    }
-
-    .handle {
-      fill: $clr-artboard-backgroud;
-      stroke: $clr-artboard-foregroud;
-      /*stroke-opacity: .5;*/
-      stroke-width: 1px;
-      cursor: ew-resize;
-    }
-}
-
