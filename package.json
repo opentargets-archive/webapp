@@ -50,7 +50,7 @@
     "babel-polyfill": "6.23.0",
     "cttv.api": "0.0.15",
     "cttv.diseaseGraph": "0.0.3",
-    "cttv.flowerView": "0.0.0",
+    "cttv.flowerView": "0.0.2",
     "cttv.genome": "0.0.27",
     "cttv.spinner": "0.0.1",
     "cttv.targetAssociationsBubbles": "0.0.16",

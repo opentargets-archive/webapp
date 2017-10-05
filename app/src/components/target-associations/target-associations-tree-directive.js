@@ -165,6 +165,7 @@ angular.module('otDirectives')
                                 }
                                 var fView = flowerView()
                                     .fontsize(9)
+                                    .color('#0092e7')
                                     .diagonal(100);
                                 gat = geneAssociationsTree()
                                     .data(data)

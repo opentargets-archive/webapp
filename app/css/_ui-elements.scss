@@ -1,9 +1,28 @@
 @import "utils";
 @import "colors";
 
+//$subjColorFg: #5ba633;
+$subjColorFg: #006400;
+$subjColorBg: #c8ebc7;
+
 ot-related-targets-vis, ot-related-diseases-vis {
     #tnt_tooltip_1 {
         pointer-events: none;
+    }
+    .relatedSubjectLink {
+        stroke: $subjColorBg;
+    }
+    .relatedSubjectNode {
+        fill: $subjColorBg;
+        stroke-width: 3px;
+        stroke: $subjColorFg;
+        >text {
+            text-anchor: middle;
+            alignment-baseline: middle;
+            stroke:none;
+            fill: $subjColorFg;
+            pointer-events: none;
+        }
     }
     .relatedBubble {
         fill: $brand-light-blue;
@@ -489,11 +508,9 @@ ot-related-targets-vis, ot-related-diseases-vis {
      * Flower
      */
 
-
-    .petal {
-        fill: $secondary-color;
-    }
-
+    //.petal {
+    //    fill: $secondary-color;
+    //}
 
 
     /*
