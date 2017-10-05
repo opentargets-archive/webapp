@@ -116,7 +116,7 @@
         {
             "name": "relatedTargets",
             "element": "ot-related-diseases",
-            "heading": "Related diseases",
+            "heading": "Similar diseases (based on targets in common)",
             "track": true
         },
         {
@@ -158,7 +158,7 @@
         {
             "name": "relatedTargets",
             "element": "ot-related-targets",
-            "heading": "Related targets",
+            "heading": "Similar targets (based on diseases in common)",
             "track": true
         },
         {

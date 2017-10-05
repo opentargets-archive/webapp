@@ -96,7 +96,8 @@ angular.module('otDirectives')
 
                 var id = scope.disease.efo;
                 var opts = {
-                    id: id
+                    id: id,
+                    size: 20
                 };
                 var queryObject = {
                     method: 'GET',
@@ -214,7 +215,7 @@ function createVis(container, data, scope) {
     var sharedHoverTooltip;
     function showSharedHoverTooltip(data) {
         var obj = {};
-        obj.header = '';
+        obj.header = data.object;
 
         var div = document.createElement('div');
         d3.select(div)
@@ -445,21 +446,21 @@ function createVis(container, data, scope) {
 
                         ///////
                         // Show the shared entities
-                        function processFlowerData(data) {
-                            var fd = [];
-                            var otConsts = scope.consts;
-                            for (var i = 0; i < otConsts.datatypesOrder.length; i++) {
-                                var dkey = otConsts.datatypes[otConsts.datatypesOrder[i]];
-                                var key = otConsts.datatypesOrder[i];
-                                fd.push({
-                                    // "value": lookDatasource(data, otConsts.datatypes[key]).score,
-                                    'value': data ? data[dkey] : 0,
-                                    'label': otConsts.datatypesLabels[key],
-                                    'active': true
-                                });
-                            }
-                            return fd;
-                        }
+                        // function processFlowerData(data) {
+                        //     var fd = [];
+                        //     var otConsts = scope.consts;
+                        //     for (var i = 0; i < otConsts.datatypesOrder.length; i++) {
+                        //         var dkey = otConsts.datatypes[otConsts.datatypesOrder[i]];
+                        //         var key = otConsts.datatypesOrder[i];
+                        //         fd.push({
+                        //             // "value": lookDatasource(data, otConsts.datatypes[key]).score,
+                        //             'value': data ? data[dkey] : 0,
+                        //             'label': otConsts.datatypesLabels[key],
+                        //             'active': true
+                        //         });
+                        //     }
+                        //     return fd;
+                        // }
 
                         function showAssociationsTooltip(data) {
                             // Clone link to be moved to the middle
@@ -567,6 +568,15 @@ function createVis(container, data, scope) {
                                         });
                                     var crossSize = 4;
                                     crossG
+                                        .append('circle')
+                                        .attr('cx', 0)
+                                        .attr('cy', 0)
+                                        .attr('r', crossSize * 1.5)
+                                        .style('cursor', 'pointer')
+                                        .style('fill', 'none')
+                                        .style('pointer-events', 'all')
+                                        .style('stroke', 'none');
+                                    crossG
                                         .append('line')
                                         .attr('x1', -crossSize)
                                         .attr('y1', -crossSize)
@@ -629,7 +639,7 @@ function createVis(container, data, scope) {
                                     // View details links
                                     barChart
                                         .append('a')
-                                        .attr('href', '/evidence/' + (scope.entity === 'target' ? data.id : objId) + '/' + (scope.entity === 'target' ? objId : data.id))
+                                        .attr('href', '/evidence/' + (scope.entitiesType === 'target' ? subjId : data.id) + '/' + (scope.entitiesType === 'target' ? data.id : subjId))
                                         .append('rect')
                                         .attr('x', -barScale(1))
                                         .attr('y', -3)
@@ -639,14 +649,20 @@ function createVis(container, data, scope) {
                                         .style('stroke', '#dddddd')
                                         .style('fill', 'none')
                                         .style('pointer-events', 'all')
-                                        .on('mouseover', showSubjEvidenceTooltip)
+                                        .on('mouseover', function () {
+                                            showSubjEvidenceTooltip.call(this);
+                                            d3.select(this)
+                                                .style('fill', '#fff6ff');
+                                        })
                                         .on('mouseout', function () {
                                             subjEvidenceTooltip.close();
+                                            d3.select(this)
+                                                .style('fill', 'none');
                                         });
 
                                     barChart
                                         .append('a')
-                                        .attr('href', '/evidence/' + (scope.entity === 'target' ? data.id : subjId) + '/' + (scope.entity === 'target' ? subjId : data.id))
+                                        .attr('href', '/evidence/' + (scope.entitiesType === 'target' ? objId : data.id) + '/' + (scope.entitiesType === 'target' ? data.id : objId))
                                         .append('rect')
                                         .attr('x', 0)
                                         .attr('y', -3)
@@ -656,9 +672,15 @@ function createVis(container, data, scope) {
                                         .style('stroke', '#dddddd')
                                         .style('fill', 'none')
                                         .style('pointer-events', 'all')
-                                        .on('mouseover', showObjEvidenceTooltip)
+                                        .on('mouseover', function () {
+                                            showObjEvidenceTooltip.call(this);
+                                            d3.select(this)
+                                                .style('fill', '#fff6ff');
+                                        })
                                         .on('mouseout', function () {
                                             objEvidenceTooltip.close();
+                                            d3.select(this)
+                                                .style('fill', 'none');
                                         });
 
                                     var bars = barChart.selectAll('.bars')
@@ -678,13 +700,16 @@ function createVis(container, data, scope) {
                                         .attr('y', 0)
                                         .attr('width', 0)
                                         .attr('height', barHeight - (barHeight / 4))
-                                        .attr('fill', '#b2def9')
+                                        .attr('fill', '#c8ebc7')
                                         .attr('stroke-width', '1px')
-                                        // .attr('stroke', '#005299');
-                                        // .attr('stroke', '#b2def9');
-                                        .attr('stroke', d3.rgb('#b2def9').darker())
+                                        // .attr('stroke', '#006400');
+                                        // .attr('stroke', '#c8ebc7');
+                                        .attr('stroke', d3.rgb('#c8ebc7').darker())
                                         .transition()
                                         .duration(1000)
+                                        .attr('x', function (d) {
+                                            return -(barScale(data[subjSymbol].datatypes[scope.consts.datatypes[d]]));
+                                        })
                                         .attr('width', function (d) {
                                             return barScale(data[subjSymbol].datatypes[scope.consts.datatypes[d]]);
                                         });
@@ -696,19 +721,17 @@ function createVis(container, data, scope) {
                                         .attr('y', 0)
                                         .attr('width', 0)
                                         .attr('height', barHeight - (barHeight / 4))
-                                        .attr('fill', '#c8ebc7')
+                                        .attr('fill', '#b2def9')
                                         .attr('stroke-width', '1px')
-                                        // .attr('stroke', '#006400');
-                                        // .attr('stroke', '#c8ebc7');
-                                        .attr('stroke', d3.rgb('#c8ebc7').darker())
+                                        // .attr('stroke', '#005299');
+                                        // .attr('stroke', '#b2def9');
+                                        .attr('stroke', d3.rgb('#b2def9').darker())
                                         .transition()
                                         .duration(1000)
-                                        .attr('x', function (d) {
-                                            return -(barScale(data[objSymbol].datatypes[scope.consts.datatypes[d]]));
-                                        })
                                         .attr('width', function (d) {
                                             return barScale(data[objSymbol].datatypes[scope.consts.datatypes[d]]);
                                         });
+
 
                                     // Datatypes labels
                                     barG
@@ -918,8 +941,6 @@ function createVis(container, data, scope) {
                         var bracesOffset = width / 12;
                         var labelOffset = (2 * (width / 12));
                         var linksOffset = 6 * (width / 12);
-                        // var height = (sharedArr.length * 30);
-                        // var color = '#377bb5';
                         var vOffset = 20;
 
                         var otUtils = scope.utils;
@@ -1115,11 +1136,26 @@ function createVis(container, data, scope) {
                 d3.select(this).style('display', 'none');
             });
 
+        var subjLabelTooltip;
+        function showsubjLabelTooltip() {
+            var obj = {};
+            obj.header = '';
+            obj.body = subjLabel;
+            subjLabelTooltip = tooltip.plain()
+                .width(180)
+                .show_closer(false)
+                .call(this, obj);
+        }
+
         // Create a subject node
         var subjectNode = d3.select(topLevelElement)
             .append('g')
             // .attr('class', 'relatedBubble');
-            .attr('class', 'relatedSubjectNode');
+            .attr('class', 'relatedSubjectNode')
+            .on('mouseover', showsubjLabelTooltip)
+            .on('mouseout', function () {
+                subjLabelTooltip.close();
+            });
         var subjCircleNode = subjectNode
             .append('circle')
             .attr('cx', - labelOffset)
@@ -1147,9 +1183,25 @@ function createVis(container, data, scope) {
         var clickedNodeOrigY = clickedNode.attr('cy');
         var clickedNodeOrigR = clickedNode.attr('r');
 
+        var objLabelTooltip;
+        function showObjLabelTooltip() {
+            var obj = {};
+            obj.header = '';
+            obj.body = data.name;
+            objLabelTooltip = tooltip.plain()
+                .width(180)
+                .show_closer(false)
+                .call(this, obj);
+        }
+
+
         var objectNode = d3.select(topLevelElement)
             .append('g')
-            .attr('class', 'relatedBubble');
+            .attr('class', 'relatedBubble')
+            .on('mouseover', showObjLabelTooltip)
+            .on('mouseout', function () {
+                objLabelTooltip.close();
+            });
         var objCircleNode = objectNode
             .append('circle')
             .attr('cx', clickedNodeOrigX)
@@ -1233,6 +1285,15 @@ function createVis(container, data, scope) {
                 //     .attr('cy', 0)
                 //     .attr('r', 10);
                 var crossSize = 6;
+                crossG
+                    .append('circle')
+                    .attr('cx', 0)
+                    .attr('cy', 0)
+                    .attr('r', crossSize * 1.5)
+                    .style('cursor', 'pointer')
+                    .style('fill', 'none')
+                    .style('pointer-events', 'all')
+                    .style('stroke', 'none');
                 crossG
                     .append('line')
                     .attr('x1', -crossSize)
