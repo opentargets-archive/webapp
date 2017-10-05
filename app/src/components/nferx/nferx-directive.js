@@ -43,8 +43,10 @@ angular.module('otDirectives')
 
                         return otApi.getFilterBy(queryObject)
                             .then(function (resp) {
-                                scope.ext.data = resp.body.data;
-                                parseServerResponse( resp.body.data);
+                                if (resp.body.data) {
+                                    scope.ext.data = resp.body.data;
+                                    parseServerResponse(resp.body.data);
+                                }
                             });
                     }
 
