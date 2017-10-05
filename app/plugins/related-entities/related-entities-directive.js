@@ -218,26 +218,26 @@ function createVis(container, data, scope) {
         obj.header = data.object;
 
         var div = document.createElement('div');
+        // d3.select(div)
+        //     .append('text')
+        //     .style('font-size', '0.9em')
+        //     .style('display', 'block')
+        //     .text(data.object + ' - ' + data.object_counts + ' associated ' + (data.entities_type === 'target' ? 'diseases' : 'targets'));
+        // d3.select(div)
+        //     .append('text')
+        //     .style('font-size', '0.9em')
+        //     .style('display', 'block')
+        //     .text(data.subject + ' - ' + data.subject_counts + ' associated ' + (data.entities_type === 'target' ? 'diseases' : 'targets'));
         d3.select(div)
             .append('text')
             .style('font-size', '0.9em')
             .style('display', 'block')
-            .text(data.object + ' - ' + data.object_counts + ' associated ' + (data.entities_type === 'target' ? 'diseases' : 'targets'));
-        d3.select(div)
-            .append('text')
-            .style('font-size', '0.9em')
-            .style('display', 'block')
-            .text(data.subject + ' - ' + data.subject_counts + ' associated ' + (data.entities_type === 'target' ? 'diseases' : 'targets'));
-        d3.select(div)
-            .append('text')
-            .style('font-size', '0.9em')
-            .style('display', 'block')
-            .text('Intersection - ' + data.shared_count + ' associated ' + (data.entities_type === 'target' ? 'diseases' : 'targets'));
-        d3.select(div)
-            .append('text')
-            .style('font-size', '0.9em')
-            .style('display', 'block')
-            .text('Union - ' + data.union_count + ' associated ' + (data.entities_type === 'target' ? 'diseases' : 'targets'));
+            .text(data.shared_count + (data.entities_type === 'target' ? ' diseases' : ' targets') + ' shared with ' + data.subject);
+        // d3.select(div)
+        //     .append('text')
+        //     .style('font-size', '0.9em')
+        //     .style('display', 'block')
+        //     .text('Union - ' + data.union_count + ' associated ' + (data.entities_type === 'target' ? 'diseases' : 'targets'));
 
         var container = d3.select(div)
             .append('div');
