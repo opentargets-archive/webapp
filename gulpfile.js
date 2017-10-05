@@ -317,15 +317,17 @@ function parseConfigItem (dir) {
 gulp.task('parse-custom-configs', function (){
     var scriptsPath = 'app/config/';
     var folders = getFolders(scriptsPath);
-    var content = '';
+    // var content = '';
     return Promise.all( folders.map(
         function (dir) {
             return new Promise(function (resolve, reject){       
                 gulp.src(webappConfigSourceFiles.map(function (i) { return join(scriptsPath, dir, i); }))
                     .pipe(setApi())
-                    .pipe(jsonminify())
+                    .pipe(jsonminify()) // removes comments
                     // .pipe(extend('bobo.json', false))
-                    .pipe(merge())
+                    .pipe(merge({
+                        fileName: 'combined.json'
+                    }))
                     .on('error', reject)
                     // .pipe(map(function(file, done) {
                     //     str += ': '+ file.contents.toString();
@@ -383,10 +385,12 @@ function bob () {
 
 gulp.task('build-config-1', ['parse-custom-configs'], function () {
     var scriptsPath = 'app/config/';
-    gulp.src( 'app/config/*/bobo.json' )
+    gulp.src( 'app/config/*/combined.json' )
         .pipe(concat(webappConfigFile))
-        .pipe(gulp.dest(buildDir));
-    console.log('done');
+        .pipe(jsonminify())
+        .pipe(gulp.dest(buildDir))
+        .on('end', del(join(scriptsPath, '*', 'combined.json')));
+    // console.log('done');
 });
 
 
