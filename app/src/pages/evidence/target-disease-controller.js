@@ -175,8 +175,8 @@ angular.module('otControllers')
         var render = function (new_state) {
             var view = new_state.view || {};
             var sec = view.sec;
-            if (sec && sec[0] && $scope.search.tables[sec[0]]) {
-                $scope.search.tables[sec[0]].is_open = true;
+            if (sec && sec[0] && $scope.tables[sec[0]]) {
+                $scope.tables[sec[0]].is_open = true;
 
                 // scrolling before we have the data is unlikely to work:
                 // at best it will scroll a little bit, but not much, because there won't be any height to allow scolling
