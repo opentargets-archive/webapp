@@ -37,8 +37,9 @@ var webappName = packageConfig.name;
 // app config / initialization
 var map = require('map-stream');
 var webappConfigDir = 'app/config';
-var webappConfigSources = [webappConfigDir + '/default.json', webappConfigDir + '/custom.json'];
+var webappConfigSources = [webappConfigDir + '/default.json', webappConfigDir + '/custom.json'];    // TODO: can be removed once refactoring complete
 var webappConfigSourceFiles = ['default.json', 'custom.json'];
+var webappConfigMergedSources = 'combined.json';
 var webappConfigFile = 'config.json';
 
 // path tools
@@ -279,68 +280,72 @@ gulp.task('build-config', ['init-config'], function () {
 });
 
 
-function getFolders (dir) {
-    return fs.readdirSync(dir)
+// ----------------------------------------
+
+
+/**
+ * Gets and returns the list of directories at the specified location
+ * @param {string} path  
+ * @return {array} The list of directories (folders) as an array of strings
+ */
+function getFolders (path) {
+    return fs.readdirSync(path)
         .filter(function (file) {
-            return fs.statSync(path.join(dir, file)).isDirectory();
+            return fs.statSync(path.join(path, file)).isDirectory();
         });
 }
 
 
-function parseConfigItem (dir) {
-
+/**
+ * Parse a section (folder) in the config dir:
+ * the function merges default.json and the optional custom.json into combined.json
+ * @param {string} scriptsPath 
+ * @param {string} dir 
+ * @return {promise}
+ */
+function parseConfigDir (scriptsPath, dir) {
+    return new Promise(function (resolve, reject){       
+        gulp.src(webappConfigSourceFiles.map(function (i) { return join(scriptsPath, dir, i); }))
+            .pipe(jsonminify()) // remove any comments which would break the merging
+            .pipe(merge({
+                fileName: 'combined.json',
+                edit: function (parsedJson, file) {
+                    var editedJson = {};
+                    editedJson[dir] = parsedJson;
+                    return editedJson;
+                }
+            }))
+            .on('error', reject)
+            .pipe(gulp.dest(join(scriptsPath, dir)))
+            .on('end', resolve);
+    });
 }
 
 
-// gulp.task('task', function () {
-//     return Promise.all([
-//       new Promise(function(resolve, reject) {
-//         gulp.src(src + '/*.md')
-//           .pipe(plugin())
-//           .on('error', reject)
-//           .pipe(gulp.dest(dist))
-//           .on('end', resolve)
-//       }),
-//       new Promise(function(resolve, reject) {
-//         gulp.src(src + '/*.md')
-//           .pipe(plugin())
-//           .on('error', reject)
-//           .pipe(gulp.dest(dist))
-//           .on('end', resolve)
-//       })
-//     ]).then(function () {
-//       // Other actions
-//     });
-//   });
-
-
 gulp.task('parse-custom-configs', function (){
-    var scriptsPath = 'app/config/';
-    var folders = getFolders(scriptsPath);
-    // var content = '';
+    var folders = getFolders(webappConfigDir);
     return Promise.all( folders.map(
         function (dir) {
-            return new Promise(function (resolve, reject){       
-                gulp.src(webappConfigSourceFiles.map(function (i) { return join(scriptsPath, dir, i); }))
-                    .pipe(setApi())
-                    .pipe(jsonminify()) // removes comments
-                    // .pipe(extend('bobo.json', false))
-                    .pipe(merge({
-                        fileName: 'combined.json'
-                    }))
-                    .on('error', reject)
-                    // .pipe(map(function(file, done) {
-                    //     str += ': '+ file.contents.toString();
-                    //     //str = folder+': '+str;
-                    //     console.log(str);
-                    //     //file.contents = new Buffer(str);
-                    //     done(null, file);
-                    // }));
-                    .pipe(gulp.dest(join(scriptsPath, dir)))
-                    .on('end', resolve);
-            });
+            return parseConfigDir(webappConfigDir, dir);
         })
     );
+});
+
+
+gulp.task('build-config-1', ['parse-custom-configs'], function () {
+    // var scriptsPath = 'app/config/';
+    return gulp.src(join(webappConfigDir, '*', )) // 'app/config/*/combined.json' )
+        .pipe(merge({
+            fileName: webappConfigFile
+        }))
+        .pipe(setApi())
+        // .pipe(jsonminify())
+        .pipe(gulp.dest(buildDir));
+});
+
+gulp.task('build-config-0', ['build-config-1'], function () {
+    var scriptsPath = 'app/config/';
+    del(join(scriptsPath, '*', 'combined.json'));
 });
 
 
@@ -382,16 +387,6 @@ gulp.task('build-config-new', function () {
 function bob () {
     return through.obj(console.log);
 }
-
-gulp.task('build-config-1', ['parse-custom-configs'], function () {
-    var scriptsPath = 'app/config/';
-    gulp.src( 'app/config/*/combined.json' )
-        .pipe(concat(webappConfigFile))
-        .pipe(jsonminify())
-        .pipe(gulp.dest(buildDir))
-        .on('end', del(join(scriptsPath, '*', 'combined.json')));
-    // console.log('done');
-});
 
 
 // ----------------------------------------
