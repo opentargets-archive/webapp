@@ -471,7 +471,7 @@ function createVis(container, data, scope) {
                             var braces2G = d3.select(topLevelElement)
                                 .select('.braces2');
                             var linksGWidth = linksG.getBoundingClientRect().width;
-                            var bracesGWidth = braces1G.node().getBoundingClientRect().width;
+                            // var bracesGWidth = braces1G.node().getBoundingClientRect().width;
                             var currLink = this.parentNode;
                             var clonedLink = currLink.cloneNode(true);
                             var clonedLinkOrigTranslate = d3.select(clonedLink).attr('transform');
@@ -494,7 +494,7 @@ function createVis(container, data, scope) {
                             //     .select('text')
                             //     .transition()
                             //     .duration(1000)
-                            //     .style('font-size', '1.5em');
+                            //     .style('font-weight', '900');
 
                             d3.select(clonedLink)
                                 .transition()
@@ -951,7 +951,12 @@ function createVis(container, data, scope) {
                             // .range(['#c8ebc7', '#5ba633']);
                             .range(['#c8ebc7', '#006400']);
 
-                        // TODO: hange to d3.scaleLinear when using d3.v4
+                        // TODO: Change to d3.scaleLinear
+                        var xScale = d3.scale.linear()
+                            .domain([-1, 1])
+                            .range([-linksOffset / 2, linksOffset / 2]);
+
+                        // TODO: Change to d3.scaleLinear when using d3.v4
                         var yScale = d3.scale.linear()
                             .range([0, width - (vOffset * 2)])
                             .domain([0, sharedArr.length - 1]);
@@ -983,8 +988,12 @@ function createVis(container, data, scope) {
 
                         linkNodes
                             .append('line')
+                            // .attr('x1', -linksOffset / 2)
+                            // .attr('x2', 0)
                             .attr('x1', -linksOffset / 2)
-                            .attr('x2', 0)
+                            .attr('x2', function (d) {
+                                return xScale((d[objSymbol].score - d[subjSymbol].score))
+                            })
                             .attr('y1', 0)
                             .attr('y2', 0)
                             .style('stroke-width', '2px')
@@ -995,7 +1004,11 @@ function createVis(container, data, scope) {
                         // object
                         linkNodes
                             .append('line')
-                            .attr('x1', 0)
+                            // .attr('x1', 0)
+                            // .attr('x2', linksOffset / 2)
+                            .attr('x1', function (d) {
+                                return xScale((d[objSymbol].score - d[subjSymbol].score))
+                            })
                             .attr('x2', linksOffset / 2)
                             .attr('y1', 0)
                             .attr('y2', 0)
@@ -1020,18 +1033,32 @@ function createVis(container, data, scope) {
                             .on('click', showAssociationsTooltip);
 
 
-                        // nodes for links
+                        // scaled circle
                         linkNodes
                             .append('circle')
-                            .attr('cx', 0)
+                            .attr('cx', function (d) {
+                                return xScale((d[objSymbol].score - d[subjSymbol].score))
+                            })
                             .attr('cy', 0)
                             .attr('r', 5)
-                            // .attr('fill', color)
-                            .attr('fill', '#FFFFFF')
+                            .style('fill', '#FFFFFF')
                             .style('stroke', '#666666')
                             .style('stroke-width', '2px')
                             .style('cursor', 'pointer')
                             .on('click', showAssociationsTooltip);
+
+                        // nodes for links
+                        // linkNodes
+                        //     .append('circle')
+                        //     .attr('cx', 0)
+                        //     .attr('cy', 0)
+                        //     .attr('r', 5)
+                        //     // .attr('fill', color)
+                        //     .attr('fill', '#FFFFFF')
+                        //     .style('stroke', '#666666')
+                        //     .style('stroke-width', '2px')
+                        //     .style('cursor', 'pointer')
+                        //     .on('click', showAssociationsTooltip);
 
                         var linksTransition = linkNodes
                             .transition()
