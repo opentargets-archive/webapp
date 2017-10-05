@@ -1,13 +1,13 @@
 /**
- * Drugs plugin
+ * Animal model plugin
  */
 angular.module('otPlugins')
-    .directive('otDrugsDisplay', ['otConfig', 'otConsts', 'otDictionary', function (otConfig, otConsts, otDictionary) {
+    .directive('otAnimalModel', ['otConfig', 'otConsts', 'otDictionary', function (otConfig, otConsts, otDictionary) {
         'use strict';
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/drugs/drugs-display.html',
+            templateUrl: 'plugins/animal-model/animal-model.html',
             scope: {
                 target: '=',
                 disease: '=',
@@ -15,7 +15,7 @@ angular.module('otPlugins')
             },
             link: function (scope) {
                 scope.ext = scope.ext || {};    // object to communicate
-                scope.sources = otConfig.evidence_sources.known_drug.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; });
+                scope.sources = otConfig.evidence_sources.animal_model.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; });
             }
         };
     }]);

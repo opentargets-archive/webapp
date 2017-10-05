@@ -11,7 +11,8 @@ angular.module('otPlugins')
                 'dependencies': '=',
                 'page': '=',
                 'track': '=',
-                'label': '='
+                'label': '=',
+                'ext': '=?'     // optional object for external communication
             },
             link: function (scope, element, attrs) {
                 scope.alreadyLoaded = {};
@@ -69,7 +70,7 @@ angular.module('otPlugins')
                                 // spinner.parentNode.removeChild(spinner);
                                 $timeout(function () {
                                     // var template = '<' + scope.plugin + " associations=" + (scope.associations ? ("associations") : '""') + " target=" + (scope.target ? ("target") : '""') + " disease=" + (scope.disease ? ("disease") : '""') + " width=" + sectionWidth + "></" + scope.plugin + ">";
-                                    var template = '<' + scope.plugin + ' associations=associations target=target disease=disease width=' + sectionWidth + '></' + scope.plugin + '>';
+                                    var template = '<' + scope.plugin + ' associations=associations target=target disease=disease ' + (scope.ext ? 'ext=ext ' : '') + 'width=' + sectionWidth + '></' + scope.plugin + '>';
                                     var compiled = $compile(template)(scope);
                                     element.append(compiled);
                                 }, 0);

@@ -337,5 +337,33 @@ angular.module('otServices')
         //     return defer_cancel;
         // };
 
+
+        /*
+         * Search for given eco_code id in the specified evidence_codes_info array
+         * and returns corresponding label, or eco_code id if not found
+         */
+        otUtilsService.getEcoLabel = function (arr, eco) {
+            var label = eco;
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i][0].eco_id === eco) {
+                    label = arr[i][0].label;
+                    break;
+                }
+            }
+            return label;
+        };
+
+
+        /**
+         * Takes an array and formats it to an HTML list (returns a string)
+         */
+        otUtilsService.arrayToList = function (arr, oneToString) {
+            if (oneToString && arr.length === 1) {
+                return arr[0];
+            }
+            return '<ul><li>' + arr.join('</li><li>') + '</li></ul>';
+        };
+
+
         return otUtilsService;
     }]);

@@ -1,8 +1,12 @@
-/* Evidence tables Directives */
-
+/**
+ * Drugs table
+ * 
+ * ext object params:
+ *  isLoading, hasError, data
+ */
 angular.module('otDirectives')
 
-/* Directive to display the known drug evidence table */
+    /* Directive to display the known drug evidence table */
     .directive('otKnownDrugTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
         'use strict';
         // var dbs = otConsts.dbs;
@@ -13,10 +17,11 @@ angular.module('otDirectives')
             restrict: 'AE',
             templateUrl: 'src/components/known-drug-table/known-drug-table.html',
             scope: {
-                loadFlag: '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
-                data: '=?',        // optional data link to pass the data out of the directive
-                title: '=?',       // optional title for filename export
-                errorFlag: '=?'    // optional error-flag: pass a var to hold parsing-related errors
+                // loadFlag: '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
+                // data: '=?',        // optional data link to pass the data out of the directive
+                // errorFlag: '=?'    // optional error-flag: pass a var to hold parsing-related errors
+                title: '@?',       // optional title for filename export
+                ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
             controller: ['$scope', function ($scope) {
                 function init () {
@@ -26,11 +31,11 @@ angular.module('otDirectives')
                 init();
             }],
             link: function (scope, elem, attrs) {
-            // this probably shouldn't live here, so we'll see later on...
-                var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>';
-                var accessLevelPublic = '<span class=\'ot-access-public\' title=\'public data\'></span>';
+                // this probably shouldn't live here, so we'll see later on...
+                // var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>';
+                // var accessLevelPublic = '<span class=\'ot-access-public\' title=\'public data\'></span>';
 
-                scope.errorFlag = false;
+                scope.ext.hasError = false;
 
                 scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }], function () {
                 // if (!attrs.target && !attrs.disease) {
@@ -67,7 +72,7 @@ angular.module('otDirectives')
 
                     function getDrugData () {
                     // $scope.search.drugs.is_loading = true;
-                        scope.loadFlag = true;
+                        scope.ext.isLoading = true;
                         var opts = {
                         // target:attrs.target,
                         // disease:attrs.disease,
@@ -96,7 +101,7 @@ angular.module('otDirectives')
                             .then(
                                 function (resp) {
                                     if (resp.body.data) {
-                                        scope.data = resp.body.data;
+                                        scope.ext.data = resp.body.data;
                                         initTableDrugs();
                                     } else {
                                         // $log.warn("Empty response : drug data");
@@ -105,7 +110,7 @@ angular.module('otDirectives')
                                 otApi.defaultErrorHandler
                             )
                             .finally(function () {
-                                scope.loadFlag = false;
+                                scope.ext.isLoading = false;
                             });
                     }
 
@@ -125,7 +130,7 @@ angular.module('otDirectives')
                                 });
 
                                 // 0: data origin: public / private
-                                row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                                row.push((item.access_level !== otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
                                 // 1: disease
                                 row.push('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');
@@ -213,7 +218,7 @@ angular.module('otDirectives')
 
                                 newdata.push(row); // use push() so we don't end up with empty rows
                             } catch (e) {
-                                scope.errorFlag = true;
+                                scope.ext.hasError = true;
                             // $log.log("Error parsing drugs data:");
                             // $log.log(e);
                             }
@@ -252,7 +257,7 @@ angular.module('otDirectives')
                     // $('#drugs-table') // Not anymore
                         var table = elem[0].getElementsByTagName('table');
                         $(table).dataTable(otUtils.setTableToolsParams({
-                            'data': formatDrugsDataToArray(scope.data),
+                            'data': formatDrugsDataToArray(scope.ext.data),
                             'autoWidth': false,
                             'paging': true,
                             'order': [[3, 'desc']],

@@ -88,6 +88,8 @@ angular.module('otServices')
             OK: 'ok',
             ACCESS_LEVEL_PUBLIC: 'public',
             ACCESS_LEVEL_PRIVATE: 'private',
+            ACCESS_LEVEL_PUBLIC_DIR: '<span class=\'ot-access-public\' title=\'public data\'></span>',
+            ACCESS_LEVEL_PRIVATE_DIR: '<span class=\'ot-access-private\' title=\'private data\'></span>',
             CTTV_ROOT_URI: 'http://www.targetvalidation.org/cttv_root',
             CTTV_ROOT_NAME: 'CTTV Root',
             CTTV_ROOT_CODE: 'cttv_root' // TODO: CTTV_ROOT_URI and CTTV_ROOT_CODE appear unused?
