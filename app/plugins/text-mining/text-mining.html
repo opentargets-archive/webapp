@@ -1,5 +1,20 @@
 <!-- plugin template -->
 <div ng-show="ext.data.length>0">
+
+    <div ng-show="ext.nferx.data.length>0">
+
+        <div class="clearfix">
+
+            <p>Source: Nferx
+                <ot-nferx
+                        target="{{target.id}}"
+                        disease="{{disease.efo}}"
+                        ext="ext.nferx">
+                </ot-nferx>
+            </p>
+        </div>
+    </div>
+
     <ot-source-list list="sources"></ot-source-list>
     
     <p class=ot-section-intro>
@@ -14,4 +29,4 @@
     </ot-text-mining-table>
 </div>
 <!-- Redundant as it's also included in table directive -->
-<div ng-show="ext.data.length==0"><p>No data available</p></div>
+<div ng-show="ext.data.length==0 && ext.nferx.data.length==0"><p>No data available</p></div>

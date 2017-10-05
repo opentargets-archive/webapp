@@ -63,6 +63,7 @@ angular.module('otServices')
             // N
             NA: 'N/A',
             NO_DATA: 'No data',
+            NFERX :'Literature - NFERX',
 
             // O
             // P
