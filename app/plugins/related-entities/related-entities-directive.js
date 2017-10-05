@@ -443,6 +443,7 @@ function createVis(container, data, scope) {
                                 sharedArr.push(shared[shared1]);
                             }
                         }
+                        console.log(sharedArr);
 
                         ///////
                         // Show the shared entities
@@ -945,7 +946,7 @@ function createVis(container, data, scope) {
 
                         var otUtils = scope.utils;
                         var colorScaleObj = otUtils.colorScales.BLUE_0_1; // blue orig
-                        // TODO: hange to d3.scaleLinear when using d3.v4
+                        // TODO: Change to d3.scaleLinear when using d3.v4
                         var colorScaleSubj = d3.scale.linear()
                             .domain([0, 1])
                             // .range(['#c8ebc7', '#5ba633']);
@@ -955,6 +956,10 @@ function createVis(container, data, scope) {
                         var yScale = d3.scale.linear()
                             .range([0, width - (vOffset * 2)])
                             .domain([0, sharedArr.length - 1]);
+
+                        if (sharedArr.length === 1) {
+                            yScale.range([(width / 2) - vOffset, (width / 2) - vOffset]);
+                        }
                         var yMid = yScale((sharedArr.length / 2) - 0.5);
 
 
