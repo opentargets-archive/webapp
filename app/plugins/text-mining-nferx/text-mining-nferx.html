@@ -5,17 +5,22 @@
 
         <div class="clearfix">
 
-            <p>Source: Nferx
-                <ot-nferx
-                        target="{{target.id}}"
-                        disease="{{disease.efo}}"
-                        ext="ext.nferx">
-                </ot-nferx>
-            </p>
+            <ot-source-list list="sources.nferx"></ot-source-list>
+
+            <ot-nferx
+                    target="{{target.id}}"
+                    disease="{{disease.efo}}"
+                    ext="ext.nferx">
+            </ot-nferx>
+
         </div>
     </div>
 
-    <ot-source-list list="sources"></ot-source-list>
+    <!-- text-mining / nferx evidences table divider -->
+    <div ng-show="ext.data.length>0 && ext.nferx.data.length>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
+
+
+    <ot-source-list list="sources.literature"></ot-source-list>
     
     <p class=ot-section-intro>
         Shown are the {{ext.total}} articles where <span class="highlight-primary text-content-highlight">target</span> and <span class="highlight-warning text-content-highlight">disease</span> are found in the same sentence.
