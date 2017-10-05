@@ -7,7 +7,7 @@
                 <h4>Common diseases</h4>
                 <ot-source-list list="sources.common"></ot-source-list>
 
-                <ot-common-disease-table 
+                <ot-common-disease-table
                     target="{{target.id}}"
                     disease="{{disease.efo}}"
                     title="{{target.approved_symbol}}-{{disease.label}}"
@@ -31,8 +31,8 @@
             <div ng-show="ext.rare.data.length>0 && !ext.rare.hasError">
                 <h4>Rare diseases</h4>
                 <ot-source-list list="sources.rare"></ot-source-list>
-                
-                <ot-rare-disease-table 
+
+                <ot-rare-disease-table
                     target="{{target.id}}"
                     disease="{{disease.efo}}"
                     title="{{target.approved_symbol}}-{{disease.label}}"
@@ -40,8 +40,8 @@
                 </ot-rare-disease-table>
             </div>
 
-            <uib-alert type="danger" ng-show="search.tables.genetic_associations.rare_diseases.has_errors" ng-cloak style="margin-top:15px">
-                <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving {{search.tables.genetic_associations.rare_diseases.heading}} data. Please try again later.
+            <uib-alert type="danger" ng-show="ext.rare.hasError" ng-cloak style="margin-top:15px">
+                <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving rare diesease data. Please try again later.
             </uib-alert>
 
         </div>
@@ -70,7 +70,7 @@
 
 <!-- <div ng-show="ext.data.length>0">
     <ot-source-list list="sources"></ot-source-list>
-    <ot-somatic-mutation-table 
+    <ot-somatic-mutation-table
         target="{{target.id}}"
         disease="{{disease.efo}}"
         title="{{target.approved_symbol}}-{{disease.label}}"
