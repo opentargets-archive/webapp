@@ -443,7 +443,6 @@ function createVis(container, data, scope) {
                                 sharedArr.push(shared[shared1]);
                             }
                         }
-                        console.log(sharedArr);
 
                         ///////
                         // Show the shared entities
