@@ -7,7 +7,7 @@ angular.module('otDirectives')
             template: '<div id="pdf-slides"></div>',
             link: function () {
                 $timeout(function () {
-                    PDFObject.embed("OpenTargets_Platform_Let.sGetStarted_DGH_ID_DCS.pdf", "#pdf-slides");
+                    PDFObject.embed('imgs/OpenTargets_Platform_Let.sGetStarted_DGH_ID_DCS.pdf', '#pdf-slides');
                 }, 0);
             }
         };
