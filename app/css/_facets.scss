@@ -325,13 +325,24 @@ ot-histogram-slider-facet-primitive {
         }
     }
     .x-axis {
-        path, line {
+        // path,
+        line {
           display: none;
         }
 
         text{
           fill: $clr-text-dim;
         }
+    }
+
+    text.start,
+    text.end {
+        font-size: 10px;
+    }
+    g.count text {
+        font-size: 10px;
+        alignment-baseline: central;
+        fill: $clr-text-dim;
     }
 }
 

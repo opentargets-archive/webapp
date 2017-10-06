@@ -8,7 +8,7 @@ angular.module('otFacets')
    * @param {*} height 
    */
         var render = function (scope, state, svg, width, height) {
-            var margins = {top: 10, right: 10, bottom: 25, left: 10};
+            var margins = {top: 30, right: 10, bottom: 25, left: 10};
             var histogramWidth = width - margins.left - margins.right;
             var histogramHeight = height - margins.top - margins.bottom;
 
@@ -32,19 +32,32 @@ angular.module('otFacets')
             }
             g.attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
-            // x-axis
-            var xAxis = d3.svg.axis()
-                .scale(x)
-                .orient('bottom')
-                .tickSize(0)
-                .tickPadding(8);
+            // // x-axis
+            // var xAxis = d3.svg.axis()
+            //     .scale(x)
+            //     .orient('bottom')
+            //     .tickSize(0)
+            //     .tickPadding(8);
             var gAxis = svg.select('g.x-axis');
             if (gAxis.empty()) {
                 gAxis = svg.append('g')
                     .classed('x-axis', true);
+                gAxis.append('text')
+                    .classed('start', true);
+                gAxis.append('text')
+                    .classed('end', true);
             }
             gAxis.attr('transform', 'translate(' + margins.left + ',' + (margins.top + histogramHeight) + ')')
-                .call(xAxis);
+            //     .call(xAxis);
+            gAxis.select('text.start')
+                .attr('dy', 10)
+                .attr('text-anchor', 'start')
+                .text('Low');
+            gAxis.select('text.end')
+                .attr('dx', histogramWidth)
+                .attr('dy', 10)
+                .attr('text-anchor', 'end')
+                .text('High');
 
             // helper function
             var selectBasedOn = function (g, minValue) {
@@ -96,6 +109,31 @@ angular.module('otFacets')
 
             // EXIT
             bar.exit()
+                .remove();
+
+            // histogram count labels
+            // JOIN
+            var label = g.selectAll('g.count')
+                .data(state.histogramData);
+
+            // ENTER
+            label.enter()
+                .append('g')
+                .attr('transform', function (d) {
+                    return 'translate(' + x(d.key) + ',' + (-2) + ')';
+                })
+                .classed('count', true)
+                .append('text');
+
+            // ENTER + UPDATE
+            label
+                .select('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('dy', x.rangeBand() / 2)
+                .text(function (d) { return (d.value > 0) ? d.value : ''; });
+
+            // EXIT
+            label.exit()
                 .remove();
 
             // set selection state
