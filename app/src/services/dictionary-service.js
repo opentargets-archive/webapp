@@ -5,10 +5,10 @@ angular.module('otServices')
     /**
      * The API services, with methods to call the ElasticSearch API
      */
-    .factory('otDictionary', [function () {
+    .factory('otDictionary', ['initConfig', function (initConfig) {
         'use strict';
 
-        var dictionary = {};
+        var dictionary = initConfig.dictionary; //{};
 
         dictionary.invert = function (val) {
             var a = invLookup(dictionary, val);

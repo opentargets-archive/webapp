@@ -27,7 +27,7 @@ angular.module('otServices')
             }
         }
 
-        applyDb(initConfig.evidence_sources);
+        applyDb(initConfig.general.evidence_sources);
 
-        return initConfig;
+        return initConfig.general;
     }]);
