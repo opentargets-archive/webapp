@@ -136,7 +136,15 @@ angular.module('otDirectives')
                                 row.push('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');
 
                                 // 2: drug
-                                row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.target2drug.urls[0].url + '\' target=\'_blank\'>' +
+                                var link = item.evidence.target2drug.urls[0].url;
+                                var linkClass = 'class="ot-external-link"';
+                                var target = 'target=_blank';
+                                if (item.evidence.target2drug.provenance_type.database.id === 'ChEMBL') {
+                                    link = '/summary?drug=' + item.drug.id.split('/').pop();
+                                    linkClass = '';
+                                    target = '';
+                                }
+                                row.push('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' +
                             item.drug.molecule_name +
                             '</a>');
 
@@ -233,6 +241,12 @@ angular.module('otDirectives')
                         scope.show.limit = showLim;
                         scope.show.ellipsis = '[Show more]';
                         scope.drugs = _.uniqBy(all_drugs_sorted, 'id');
+                        scope.drugs.forEach(function (d) {
+                            var chemblId = d.url.split('/').pop();
+                            if (chemblId.indexOf('CHEMBL') > -1) {
+                                d.url = '/summary?drug=' + chemblId;
+                            }
+                        });
                         scope.show.moreOrLess = scope.drugs.length > showLim;
 
                         scope.showMoreOrLess = function () {
