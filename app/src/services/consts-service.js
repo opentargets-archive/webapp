@@ -33,6 +33,7 @@ angular.module('otServices')
                 CHEMBL: 'chembl',
                 DISGENET: 'disgenet',
                 EPMC: 'europepmc',
+                NFERX: 'nferx',
                 EVA_SOMATIC: 'eva_somatic',
                 INTOGEN: 'intogen',
                 GENE_2_PHENOTYPE: 'gene2phenotype'
@@ -52,6 +53,7 @@ angular.module('otServices')
                 CHEMBL: '/data-sources#chembl',
                 DISGENET: '/data-sources',  // no longer used
                 EPMC: '/data-sources#text_mining',
+                NFERX : '/data_sources#nferx',
                 EVA_SOMATIC: '/data-sources#eva',
                 INTOGEN: '/data-sources#intogen',
                 GENE_2_PHENOTYPE: '/data-sources#gene2phenotype'

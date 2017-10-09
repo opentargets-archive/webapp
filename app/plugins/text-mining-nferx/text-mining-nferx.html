@@ -1,0 +1,37 @@
+<!-- plugin template -->
+<div ng-show="ext.data.length>0">
+
+    <div ng-show="ext.nferx.data.length>0">
+
+        <div class="clearfix">
+
+            <ot-source-list list="sources.nferx"></ot-source-list>
+
+            <ot-nferx
+                    target="{{target.id}}"
+                    disease="{{disease.efo}}"
+                    ext="ext.nferx">
+            </ot-nferx>
+
+        </div>
+    </div>
+
+    <!-- text-mining / nferx evidences table divider -->
+    <div ng-show="ext.data.length>0 && ext.nferx.data.length>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
+
+
+    <ot-source-list list="sources.literature"></ot-source-list>
+    
+    <p class=ot-section-intro>
+        Shown are the {{ext.total}} articles where <span class="highlight-primary text-content-highlight">target</span> and <span class="highlight-warning text-content-highlight">disease</span> are found in the same sentence.
+    </p>
+    
+    <ot-text-mining-table
+        target="{{target.id}}"
+        disease="{{disease.efo}}"
+        title="{{target.approved_symbol}}-{{disease.label}}"
+        ext="ext">
+    </ot-text-mining-table>
+</div>
+<!-- Redundant as it's also included in table directive -->
+<div ng-show="ext.data.length==0 && ext.nferx.data.length==0"><p>No data available</p></div>

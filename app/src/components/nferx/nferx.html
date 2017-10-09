@@ -1,0 +1,16 @@
+<div ng-show="true">
+
+    <div class="clearfix">
+        There are {{nferx_document_count}} docs found in <a class='cttv-external-link' href=' {{link_url}} ' target='_blank'> nferx </a> that link {{target_label}} with {{disease_label}}.
+        <div style="float:right;position:relative;">Cosine Distance
+            <div style="float:right;position:relative;width:100px;height:20px">
+                <div style="width:100%;background:#eeeeee;height:100%;position:absolute;top:0px;left:0px"></div>
+                <div style="width:{{cosine_dist_perc}}%;background:#1e5799;height:100%;position:absolute;top:0px;left:0px;font-size:{{cosine_dist_perc}}%" title="Cosine Dist: {{cosine_dist}}" >
+                    {{cosine_dist}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
