@@ -22,7 +22,6 @@ var rename = require('gulp-rename');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var jsonminify = require('gulp-jsonminify');
-var extend = require('gulp-extend');
 var merge = require('gulp-merge-json');
 
 var through = require('through2');
@@ -331,6 +330,67 @@ gulp.task('build-config-merged', ['parse-custom-configs'], function () {
  */
 gulp.task('build-config', ['build-config-merged'], function () {
     del(join(configDir, '*', configMergedSources));
+});
+
+
+// PARSE IN MEMORY
+
+
+/* 
+ * Merge and parse json files in the specified directory and return the processed json (promise)
+ */
+function parseConfigDirJson (scriptsPath, dir) {
+    var editedJson;
+    return new Promise(function (resolve, reject){       
+        gulp.src(configSourceFiles.map(function (i) { return join(scriptsPath, dir, i); }))
+            .pipe(jsonminify()) // remove any comments which would break the merging
+            .pipe(merge({       // merge default and custom (if it exists) into combined.json
+                fileName: configMergedSources
+            }))
+            .pipe(merge({       // add filename as key for the whole json
+                fileName: configMergedSources,
+                edit: function (parsedJson, file) {
+                    editedJson = {};
+                    editedJson[dir] = parsedJson;
+                    return editedJson;
+                }
+            }))
+            .on('error', reject)
+            .on('end', function () {
+                resolve(editedJson);
+            });
+    });
+}
+
+
+/**
+ * Parse all config directories and build final config JSON file
+ */
+gulp.task('build-config-all', function () {
+    // loop through all config directories and get all combined (default+custom) jsons
+    var folders = getFolders(configDir);
+    Promise.all(folders.map(
+        function (dir) {
+            return parseConfigDirJson(configDir, dir);
+        })
+    )
+        .then(function (allcombined) {
+            // merge the combined jsons: here we can't just use merge(),
+            // so we have to build up the new object manually and populate it with the first key in each json
+            var obj = {};
+            allcombined.forEach(function (combined) {
+                var k0 = Object.keys(combined)[0];
+                obj[k0] = combined[k0];
+            });
+            // update the API URL if needed
+            if (process.env.APIHOST) {
+                obj.general.api = process.env.APIHOST; // APIHOST to define an API to point to
+            }
+            // manually write the file
+            fs.stat(join(buildDir, configFile), function (err, stat) {
+                fs.writeFileSync(join(buildDir, configFile), JSON.stringify(obj));
+            });
+        });
 });
 
 
