@@ -397,7 +397,7 @@ gulp.task('build-config-all', function () {
 // ----------------------------------------
 
 
-gulp.task('build-webapp', ['build-webapp-styles', 'build-config'], function () {
+gulp.task('build-webapp', ['build-webapp-styles', 'build-config-all'], function () {
     return gulp.src(webappFiles.cttv.js)
         .pipe(sourcemaps.init({
             debug: true
