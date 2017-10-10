@@ -8,7 +8,7 @@ angular.module('otServices')
     .factory('otDictionary', ['initConfig', function (initConfig) {
         'use strict';
 
-        var dictionary = initConfig.dictionary; //{};
+        var dictionary = initConfig.dictionary;
 
         dictionary.invert = function (val) {
             var a = invLookup(dictionary, val);
