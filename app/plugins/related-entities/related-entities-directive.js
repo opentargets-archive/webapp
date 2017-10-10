@@ -32,49 +32,6 @@ angular.module('otPlugins')
         }
     }]);
 
-// angular.module('otDirectives')
-//     .directive('otRelatedDiseasesOverview', ['otApi', function (otApi) {
-//         'use strict';
-//
-//         return {
-//             restrict: 'E',
-//             template: '<div></div>',
-//             scope: {
-//                 width: '=',
-//                 related: '=',
-//                 disease: '='
-//             },
-//             link: function (scope, element) {
-//                 scope.entities = 'diseases';
-//                 scope.otherEntities = 'targets';
-//                 scope.entitySymbol = scope.disease.label;
-//
-//                 var id = scope.disease.efo;
-//                 var opts = {
-//                     id: id
-//                 };
-//                 var queryObject = {
-//                     method: 'GET',
-//                     params: opts
-//                 };
-//                 otApi.getDiseaseRelation(queryObject)
-//                     .then(
-//                         // success
-//                         function (resp) {
-//                             // var container = document.getElementById('ot-relations-plot');
-//                             var container = element[0];
-//                             createRelationsTree(container, resp.body.data, scope);
-//                             // createRelationsTree(container, resp.body.data, (scope.width / 2), scope.disease.label, scope.entities);
-//
-//                         },
-//
-//                         // error handler
-//                         otApi.defaultErrorHandler
-//                     );
-//             }
-//         };
-//     }]);
-
 angular.module('otDirectives')
     .directive('otRelatedDiseasesVis', ['otApi', '$q', 'otUtils', 'otConsts', function (otApi, $q, otUtils, otConsts) {
         'use strict';
@@ -218,26 +175,11 @@ function createVis(container, data, scope) {
         obj.header = data.object;
 
         var div = document.createElement('div');
-        // d3.select(div)
-        //     .append('text')
-        //     .style('font-size', '0.9em')
-        //     .style('display', 'block')
-        //     .text(data.object + ' - ' + data.object_counts + ' associated ' + (data.entities_type === 'target' ? 'diseases' : 'targets'));
-        // d3.select(div)
-        //     .append('text')
-        //     .style('font-size', '0.9em')
-        //     .style('display', 'block')
-        //     .text(data.subject + ' - ' + data.subject_counts + ' associated ' + (data.entities_type === 'target' ? 'diseases' : 'targets'));
         d3.select(div)
             .append('text')
             .style('font-size', '0.9em')
             .style('display', 'block')
             .text(data.shared_count + (data.entities_type === 'target' ? ' diseases' : ' targets') + ' shared with ' + data.subject);
-        // d3.select(div)
-        //     .append('text')
-        //     .style('font-size', '0.9em')
-        //     .style('display', 'block')
-        //     .text('Union - ' + data.union_count + ' associated ' + (data.entities_type === 'target' ? 'diseases' : 'targets'));
 
         var container = d3.select(div)
             .append('div');
@@ -462,7 +404,7 @@ function createVis(container, data, scope) {
                         //     return fd;
                         // }
 
-                        function showAssociationsTooltip(data) {
+                        function showAssociationsDetails(data) {
                             // Clone link to be moved to the middle
                             var topLevelElement = this.parentNode.parentNode.parentElement;
                             var linksG =this.parentNode.parentNode;
@@ -488,13 +430,6 @@ function createVis(container, data, scope) {
 
                             // Move the cloned link to the middle
                             linksG.appendChild(clonedLink);
-
-                            // Grow the link
-                            // d3.select(clonedLink)
-                            //     .select('text')
-                            //     .transition()
-                            //     .duration(1000)
-                            //     .style('font-weight', '900');
 
                             d3.select(clonedLink)
                                 .transition()
@@ -605,14 +540,6 @@ function createVis(container, data, scope) {
                                     var barChart = d3.select(linksG)
                                         .append('g')
                                         .attr('transform', 'translate(0, ' + (yMid + 10) + ')');
-                                    // barChart
-                                    //     .append('line')
-                                    //     .attr('x1', 0)
-                                    //     .attr('x2', 0)
-                                    //     .attr('y1', 0)
-                                    //     .attr('y2', (yMid / 2))
-                                    //     .attr('stroke-width', '1px')
-                                    //     .attr('stroke', '#dddddd');
 
                                     // Tooltips
                                     var subjEvidenceTooltip;
@@ -706,7 +633,7 @@ function createVis(container, data, scope) {
                                         // .attr('stroke', '#c8ebc7');
                                         .attr('stroke', d3.rgb('#c8ebc7').darker())
                                         .transition()
-                                        .duration(1000)
+                                        .duration(500)
                                         .attr('x', function (d) {
                                             return -(barScale(data[subjSymbol].datatypes[scope.consts.datatypes[d]]));
                                         })
@@ -727,7 +654,7 @@ function createVis(container, data, scope) {
                                         // .attr('stroke', '#b2def9');
                                         .attr('stroke', d3.rgb('#b2def9').darker())
                                         .transition()
-                                        .duration(1000)
+                                        .duration(500)
                                         .attr('width', function (d) {
                                             return barScale(data[objSymbol].datatypes[scope.consts.datatypes[d]]);
                                         });
@@ -952,9 +879,9 @@ function createVis(container, data, scope) {
                             .range(['#c8ebc7', '#006400']);
 
                         // TODO: Change to d3.scaleLinear
-                        var xScale = d3.scale.linear()
-                            .domain([-1, 1])
-                            .range([-linksOffset / 2, linksOffset / 2]);
+                        // var xScale = d3.scale.linear()
+                        //     .domain([-1, 1])
+                        //     .range([-linksOffset / 2, linksOffset / 2]);
 
                         // TODO: Change to d3.scaleLinear when using d3.v4
                         var yScale = d3.scale.linear()
@@ -986,14 +913,14 @@ function createVis(container, data, scope) {
                             .attr('class', 'linkNode')
                             .attr('transform', 'translate(0,' + (yMid) + ')');
 
+                        // subject
                         linkNodes
                             .append('line')
-                            // .attr('x1', -linksOffset / 2)
-                            // .attr('x2', 0)
                             .attr('x1', -linksOffset / 2)
-                            .attr('x2', function (d) {
-                                return xScale((d[objSymbol].score - d[subjSymbol].score))
-                            })
+                            .attr('x2', 0)
+                            // .attr('x2', function (d) {
+                            //     return xScale((d[objSymbol].score - d[subjSymbol].score))
+                            // })
                             .attr('y1', 0)
                             .attr('y2', 0)
                             .style('stroke-width', '2px')
@@ -1004,11 +931,10 @@ function createVis(container, data, scope) {
                         // object
                         linkNodes
                             .append('line')
-                            // .attr('x1', 0)
-                            // .attr('x2', linksOffset / 2)
-                            .attr('x1', function (d) {
-                                return xScale((d[objSymbol].score - d[subjSymbol].score))
-                            })
+                            .attr('x1', 0)
+                            // .attr('x1', function (d) {
+                            //     return xScale((d[objSymbol].score - d[subjSymbol].score))
+                            // })
                             .attr('x2', linksOffset / 2)
                             .attr('y1', 0)
                             .attr('y2', 0)
@@ -1030,22 +956,23 @@ function createVis(container, data, scope) {
                             .text(function (d) {
                                 return d.label;
                             })
-                            .on('click', showAssociationsTooltip);
+                            .on('click', showAssociationsDetails);
 
 
                         // scaled circle
                         linkNodes
                             .append('circle')
-                            .attr('cx', function (d) {
-                                return xScale((d[objSymbol].score - d[subjSymbol].score))
-                            })
+                            .attr('cx', 0)
+                            // .attr('cx', function (d) {
+                            //     return xScale((d[objSymbol].score - d[subjSymbol].score))
+                            // })
                             .attr('cy', 0)
                             .attr('r', 5)
                             .style('fill', '#FFFFFF')
                             .style('stroke', '#666666')
                             .style('stroke-width', '2px')
                             .style('cursor', 'pointer')
-                            .on('click', showAssociationsTooltip);
+                            .on('click', showAssociationsDetails);
 
                         // nodes for links
                         // linkNodes
