@@ -75,7 +75,7 @@
         "somatic_mutation": ["CANCER_GENE_CENSUS", "EVA_SOMATIC", "INTOGEN"],
         "known_drug" : ["CHEMBL"],
         "rna_expression" : ["EXPRESSION_ATLAS"],
-        "pathway" : ["REACTOME"],
+        "pathway" : ["REACTOME", "SLAPENRICH"],
         "animal_model" : ["PHENODIGM"],
         "literature" : ["EPMC"]
     },

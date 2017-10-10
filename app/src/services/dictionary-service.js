@@ -79,6 +79,7 @@ angular.module('otServices')
 
             // S
             SCORE: 'Association strength', // confidence", // "Score",
+            SLAPENRICH: 'SLAPenrich',
             SOMATIC_MUTATION: 'Somatic mutations',
 
             // T

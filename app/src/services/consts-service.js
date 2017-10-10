@@ -35,7 +35,8 @@ angular.module('otServices')
                 EPMC: 'europepmc',
                 EVA_SOMATIC: 'eva_somatic',
                 INTOGEN: 'intogen',
-                GENE_2_PHENOTYPE: 'gene2phenotype'
+                GENE_2_PHENOTYPE: 'gene2phenotype',
+                SLAPENRICH: 'slapenrich'
             },
             dbs_info_url: {
                 EXPRESSION_ATLAS: '/data-sources#atlas',
@@ -54,7 +55,8 @@ angular.module('otServices')
                 EPMC: '/data-sources#text_mining',
                 EVA_SOMATIC: '/data-sources#eva',
                 INTOGEN: '/data-sources#intogen',
-                GENE_2_PHENOTYPE: '/data-sources#gene2phenotype'
+                GENE_2_PHENOTYPE: '/data-sources#gene2phenotype',
+                SLAPENRICH: '/data-sources#SLAPenrich'
             },
             datatypesOrder: [
                 'GENETIC_ASSOCIATION', 'SOMATIC_MUTATION', 'KNOWN_DRUG', 'AFFECTED_PATHWAY', 'RNA_EXPRESSION', 'LITERATURE', 'ANIMAL_MODEL'
