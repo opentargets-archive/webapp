@@ -8,7 +8,7 @@ angular.module('otFacets')
    * @param {*} height 
    */
         var render = function (scope, state, svg, width, height) {
-            var margins = {top: 30, right: 10, bottom: 25, left: 10};
+            var margins = {top: 15, right: 20, bottom: 25, left: 20};
             var histogramWidth = width - margins.left - margins.right;
             var histogramHeight = height - margins.top - margins.bottom;
 
@@ -22,7 +22,8 @@ angular.module('otFacets')
                 .rangeBands([0, histogramWidth], 0.2);
             var y = d3.scale.linear()
                 .domain([0, d3.max(state.histogramData, function (d) { return d.value; })])
-                .range([histogramHeight, 0]);
+                .range([histogramHeight, 0])
+                .nice(5);
 
             // container group
             var g = svg.select('g.histogram-container');
@@ -38,6 +39,24 @@ angular.module('otFacets')
             //     .orient('bottom')
             //     .tickSize(0)
             //     .tickPadding(8);
+
+            // y-axis
+            var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient('left')
+                .ticks(5)
+                .innerTickSize(3)
+                .outerTickSize(3)
+                .tickPadding(1);
+
+            var gYAxis = svg.select('g.y-axis');
+            if (gYAxis.empty()) {
+                gYAxis = svg.append('g')
+                    .classed('y-axis', true);
+            }
+            gYAxis.attr('transform', 'translate(' + margins.left + ',' + margins.top + ')')
+                .call(yAxis);
+
             var gAxis = svg.select('g.x-axis');
             if (gAxis.empty()) {
                 gAxis = svg.append('g')
@@ -111,30 +130,30 @@ angular.module('otFacets')
             bar.exit()
                 .remove();
 
-            // histogram count labels
-            // JOIN
-            var label = g.selectAll('g.count')
-                .data(state.histogramData);
+            // // histogram count labels
+            // // JOIN
+            // var label = g.selectAll('g.count')
+            //     .data(state.histogramData);
 
-            // ENTER
-            label.enter()
-                .append('g')
-                .attr('transform', function (d) {
-                    return 'translate(' + x(d.key) + ',' + (-2) + ')';
-                })
-                .classed('count', true)
-                .append('text');
+            // // ENTER
+            // label.enter()
+            //     .append('g')
+            //     .attr('transform', function (d) {
+            //         return 'translate(' + x(d.key) + ',' + (-2) + ')';
+            //     })
+            //     .classed('count', true)
+            //     .append('text');
 
-            // ENTER + UPDATE
-            label
-                .select('text')
-                .attr('transform', 'rotate(-90)')
-                .attr('dy', x.rangeBand() / 2)
-                .text(function (d) { return (d.value > 0) ? d.value : ''; });
+            // // ENTER + UPDATE
+            // label
+            //     .select('text')
+            //     .attr('transform', 'rotate(-90)')
+            //     .attr('dy', x.rangeBand() / 2)
+            //     .text(function (d) { return (d.value > 0) ? d.value : ''; });
 
-            // EXIT
-            label.exit()
-                .remove();
+            // // EXIT
+            // label.exit()
+            //     .remove();
 
             // set selection state
             selectBasedOn(g, state.level);
