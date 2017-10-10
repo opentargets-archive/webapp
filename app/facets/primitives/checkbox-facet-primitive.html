@@ -1,0 +1,21 @@
+<div class="checkbox ot-facet-checkbox clearfix">
+  <label ng-class="(!filter.enabled ? 'disabled' : '') +' '+ (multiline?'ot-facet-checkbox-label-multiline':'ot-facet-checkbox-label')"
+         title="{{ filter.label }}">
+    <input type="checkbox"
+           ng-value="{{ filter.id }}"
+           ng-checked="filter.checked"
+           ng-disabled="!filter.enabled"
+           ng-click="filter.toggle()" >
+    <span>{{ filter.label | otUpperCaseFirst | otClearUnderscores }}</span>
+    <span ng-if="multiline"
+          class="text-lowlight ot-facet-count"
+          title="{{ filter.count | otMetricPrefix:0 }}">
+      ({{ filter.count | otMetricPrefix:0 }})
+    </span>
+  </label>
+  <span ng-if="!multiline"
+        class="text-lowlight ot-facet-count"
+        title="{{ filter.count | otMetricPrefix:0 }}">
+    ({{ filter.count | otMetricPrefix:0 }})
+  </span>
+</div>

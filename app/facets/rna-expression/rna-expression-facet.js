@@ -1,10 +1,10 @@
 angular.module('otFacets')
-    .directive('datatypeFacet', [function () {
+    .directive('rnaExpressionFacet', [function () {
         return {
             restrict: 'E',
             scope: {
                 facet: '='
             },
-            templateUrl: 'facets/datatype/datatype-facet.html'
+            templateUrl: 'facets/rna-expression/rna-expression-facet.html'
         };
     }]);
