@@ -1,48 +1,43 @@
-<div ng-show="data.length>0">
-    <p>Found {{drugs.length}} unique drugs:
-        <span ng-repeat="drug in drugs | limitTo: show.limit">
-            <!-- <span style="padding-right:10px">[<a href={{drug.url}} target=_blank>{{drug.id}}</a>]</span> -->
-            <!-- <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="label label-primary">{{drug.id}}</i> -->
-            <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="ot-drug">{{drug.id}}</i>
-            </a></span>
-        </span>
-        <span ng-click="showMoreOrLess()" ng-show="show.moreOrLess"><span class="show-more-dots" ng-show="show.limit<drugs.length">...</span> <a class="ng-binding show-more-links">{{show.ellipsis}}</a></span>
-    </p>
-    <div class="table-panel">
-        <table class='table ot-evidence-table'>
-            <thead>
-                <tr>
-                    <th rowspan="2" colspan="1"></th>
-                    <th rowspan="2" colspan="1">Disease</th>
-                    <th rowspan="1" colspan="7">Drug Information</th>
-                    <th rowspan="1" colspan="2">Gene-Drug Evidence</th>
-                </tr>
-                <tr>
-                    <!-- Drug information -->
-                    <th>Drug</th>
-                    <th>Phase</th>
-                    <th>Phase (Numeric)</th>
-                    <th>Status</th>
-                    <th>Type</th>
-                    <th>Mechanism<br /> of action</th>
-                    <th>Activity</th>
-                    <!-- <th>Clinical Indications</th> -->
+<p>Found {{drugs.length}} unique drugs:
+    <span ng-repeat="drug in drugs | limitTo: show.limit">
+        <!-- <span style="padding-right:10px">[<a href={{drug.url}} target=_blank>{{drug.id}}</a>]</span> -->
+        <!-- <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="label label-primary">{{drug.id}}</i> -->
+        <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="ot-drug">{{drug.id}}</i>
+        </a></span>
+    </span>
+    <span ng-click="showMoreOrLess()" ng-show="show.moreOrLess"><span class="show-more-dots" ng-show="show.limit<drugs.length">...</span> <a class="ng-binding show-more-links">{{show.ellipsis}}</a></span>
+</p>
+<div class="table-panel">
+    <table class='table ot-evidence-table'>
+        <thead>
+            <tr>
+                <th rowspan="2" colspan="1"></th>
+                <th rowspan="2" colspan="1">Disease</th>
+                <th rowspan="1" colspan="7">Drug Information</th>
+                <th rowspan="1" colspan="2">Gene-Drug Evidence</th>
+            </tr>
+            <tr>
+                <!-- Drug information -->
+                <th>Drug</th>
+                <th>Phase</th>
+                <th>Phase (Numeric)</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Mechanism<br /> of action</th>
+                <th>Activity</th>
+                <!-- <th>Clinical Indications</th> -->
 
-                    <!-- Gene-Drug evidence -->
-                    <!-- <th>Target name</th> -->
-                    <th>Target class</th>
-                    <th>Evidence source</th>
-                    <!-- <th class="no-last-element">Target</th> --><!-- we have to manually set this border, otherwise datatables thinks it's the last element and removes the border-->
-                    <!-- <th class="no-last-element">Protein complex members</th> -->
+                <!-- Gene-Drug evidence -->
+                <!-- <th>Target name</th> -->
+                <th>Target class</th>
+                <th>Evidence source</th>
+                <!-- <th class="no-last-element">Target</th> --><!-- we have to manually set this border, otherwise datatables thinks it's the last element and removes the border-->
+                <!-- <th class="no-last-element">Protein complex members</th> -->
 
-                </tr>
-            </thead>
+            </tr>
+        </thead>
 
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-</div>
-<div ng-show="data.length==0">
-    <p>No data available</p>
+        <tbody>
+        </tbody>
+    </table>
 </div>

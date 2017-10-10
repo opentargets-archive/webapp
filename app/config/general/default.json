@@ -248,6 +248,73 @@
     ],
 
 
+    "evidenceSections": [
+        {
+            "name": "geneticAssociation",
+            "element": "ot-genetic-association",
+            "heading": "Genetic associations",
+            "track": true,
+            "config": {
+                "datatype": "genetic_association"
+            }
+        },
+        {
+            "name": "somaticMutation",
+            "element": "ot-somatic-mutation",
+            "heading": "Somatic mutation",
+            "track": true,
+            "config": {
+                "datatype": "somatic_mutation"
+            }
+        },
+        {
+            "name": "drugs",
+            "element": "ot-drugs-display",
+            "heading": "Drugs",
+            "track": true,
+            "config": {
+                "datatype": "known_drug"
+            }
+        },
+        {
+            "name": "affectedPathway",
+            "element": "ot-affected-pathway",
+            "heading": "Affected pathways",
+            "track": true,
+            "config": {
+                "datatype": "affected_pathway"
+            }
+        },
+        {
+            "name": "rnaEvidence",
+            "element": "ot-rna-evidence",
+            "heading": "RNA expression",
+            "track": true,
+            "config": {
+                "datatype": "rna_expression"
+            }
+        },
+        {
+            "name": "textMining",
+            "element": "ot-text-mining",
+            "heading": "Text mining",
+            "track": true,
+            "config": {
+                "datatype": "literature"
+            }
+        },
+        {
+            "name": "animalModel",
+            "element": "ot-animal-model",
+            "heading": "Animal models",
+            "track": true,
+            "config": {
+                "datatype": "animal_model"
+            }
+        }
+    ],
+
+
     "facets" : {
         "datatype" : {
             "key": "datatype",
