@@ -62,7 +62,6 @@ angular.module('otControllers')
                     }
                 })
                     .then(function (resp) {
-                        console.log("get target info");
                         $scope.search.info.gene = resp.body;
                         return resp;
                     }, otApi.defaultErrorHandler)
@@ -75,7 +74,6 @@ angular.module('otControllers')
                 })
                     .then(
                         function (resp) {
-                            console.log("get disease info....");
                             $scope.search.info.efo = resp.body;
                             // TODO: This is not returned by the api yet. Maybe we need to remove it later
                             $scope.search.info.efo.efo_code = $scope.search.disease;
@@ -164,7 +162,7 @@ angular.module('otControllers')
         var render = function (new_state) {
             var view = new_state.view || {};
             var sec = view.sec;
-            if (sec && sec[0]){
+            if (sec && sec[0]) {
                 var i = $scope.sections.findIndex(function (s) {
                     return s.config.datatype === sec[0];
                 });

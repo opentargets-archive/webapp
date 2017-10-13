@@ -267,27 +267,17 @@ angular.module('otDirectives')
                 // Genetic association
                 row.push(getColorStyleString(getScore(i, otConsts.datatypes.GENETIC_ASSOCIATION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.GENETIC_ASSOCIATION));
                 // Somatic mutation
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.SOMATIC_MUTATION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:'+otConsts.datatypes.SOMATIC_MUTATION));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.SOMATIC_MUTATION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.SOMATIC_MUTATION));
                 // Known drug
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.KNOWN_DRUG), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:'+otConsts.datatypes.KNOWN_DRUG));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.KNOWN_DRUG), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.KNOWN_DRUG));
                 // Affected pathway
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.AFFECTED_PATHWAY), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:'+otConsts.datatypes.AFFECTED_PATHWAY));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.AFFECTED_PATHWAY), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.AFFECTED_PATHWAY));
                 // Expression atlas
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.RNA_EXPRESSION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:'+otConsts.datatypes.RNA_EXPRESSION));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.RNA_EXPRESSION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.RNA_EXPRESSION));
                 // Literature
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.LITERATURE), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:'+otConsts.datatypes.LITERATURE));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.LITERATURE), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.LITERATURE));
                 // Animal model
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.ANIMAL_MODEL), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:'+otConsts.datatypes.ANIMAL_MODEL));
-
-                /*
-                    +otConsts.datatypes.GENETIC_ASSOCIATION
-                    +otConsts.datatypes.SOMATIC_MUTATION
-                    +otConsts.datatypes.KNOWN_DRUG
-                    +otConsts.datatypes.AFFECTED_PATHWAY
-                    +otConsts.datatypes.RNA_EXPRESSION
-                    +otConsts.datatypes.LITERATURE
-                    +otConsts.datatypes.ANIMAL_MODEL
-                 */
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.ANIMAL_MODEL), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.ANIMAL_MODEL));
 
                 // Total score
                 row.push(data[i].association_score.datatypes.genetic_association +
