@@ -256,7 +256,8 @@
             "track": true,
             "config": {
                 "datatype": "genetic_association"
-            }
+            } //,
+            // "visible": false // example to set plugin to be open by default
         },
         {
             "name": "somaticMutation",

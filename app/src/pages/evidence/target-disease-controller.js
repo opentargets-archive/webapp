@@ -7,7 +7,7 @@ angular.module('otControllers')
      * Controller for the Gene <-> Disease page
      * It loads the evidence for the given target <-> disease pair
      */
-    .controller('TargetDiseaseController', ['$scope', '$location', 'otApi', 'otUtils', 'otConsts', 'otConfig', '$analytics', 'otLocationState', '$anchorScroll', function ($scope, $location, otApi, otUtils, otConsts, otConfig, $analytics, otLocationState, $anchorScroll) {
+    .controller('TargetDiseaseController', ['$scope', '$location', 'otApi', 'otUtils', 'otConsts', 'otConfig', '$analytics', 'otLocationState', '$anchorScroll', '$q', function ($scope, $location, otApi, otUtils, otConsts, otConfig, $analytics, otLocationState, $anchorScroll, $q) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -53,37 +53,38 @@ angular.module('otControllers')
          * i.e. to fill the two boxes at the top of the page
          */
         var getInfo = function () {
-            // get gene specific info
-            var queryObject = {
-                method: 'GET',
-                params: {
-                    target_id: $scope.search.target
-                }
-            };
+            return $q.all([
+                // array of promises
+                otApi.getTarget({
+                    method: 'GET',
+                    params: {
+                        target_id: $scope.search.target
+                    }
+                })
+                    .then(function (resp) {
+                        console.log("get target info");
+                        $scope.search.info.gene = resp.body;
+                        return resp;
+                    }, otApi.defaultErrorHandler)
+                ,
+                otApi.getDisease({
+                    method: 'GET',
+                    params: {
+                        code: $scope.search.disease
+                    }
+                })
+                    .then(
+                        function (resp) {
+                            console.log("get disease info....");
+                            $scope.search.info.efo = resp.body;
+                            // TODO: This is not returned by the api yet. Maybe we need to remove it later
+                            $scope.search.info.efo.efo_code = $scope.search.disease;
+                            $scope.search.info.efo.efo = $scope.search.disease;
+                        },
+                        otApi.defaultErrorHandler
+                    )
 
-            otApi.getTarget(queryObject)
-                .then(function (resp) {
-                    $scope.search.info.gene = resp.body;
-                    return resp;
-                }, otApi.defaultErrorHandler);
-
-            // get disease specific info with the efo() method
-            queryObject = {
-                method: 'GET',
-                params: {
-                    code: $scope.search.disease
-                }
-            };
-            otApi.getDisease(queryObject)
-                .then(
-                    function (resp) {
-                        $scope.search.info.efo = resp.body;
-                        // TODO: This is not returned by the api yet. Maybe we need to remove it later
-                        $scope.search.info.efo.efo_code = $scope.search.disease;
-                        $scope.search.info.efo.efo = $scope.search.disease;
-                    },
-                    otApi.defaultErrorHandler
-                );
+            ]);
         };
 
 
@@ -160,29 +161,23 @@ angular.module('otControllers')
         $scope.search.target = path[2];
         $scope.search.disease = path[3];
 
-        // and fire the info search
-        getInfo();
-
-        // get the data for the flower graph
-        getFlowerData()
-            .then(function () {
-                // table directives are listening for target and diesase changes
-                // so this will trigger data load in all tables
-                $scope.target = $scope.search.target;
-                $scope.disease = $scope.search.disease;
-            });
-
         var render = function (new_state) {
             var view = new_state.view || {};
             var sec = view.sec;
-            if (sec && sec[0] && $scope.tables[sec[0]]) {
-                $scope.tables[sec[0]].is_open = true;
+            if (sec && sec[0]){
+                var i = $scope.sections.findIndex(function (s) {
+                    return s.config.datatype === sec[0];
+                });
+                if (i >= 0) {
+                    $scope.sections[i].defaultVisibility = true;
+                    $scope.sections[i].currentVisibility = true;
 
-                // scrolling before we have the data is unlikely to work:
-                // at best it will scroll a little bit, but not much, because there won't be any height to allow scolling
-                // leaving this here for now.
-                // TODO: will have to think of a more elegant way of managing this, for example load all data in sequence
-                $anchorScroll('tables');
+                    // scrolling before we have the data is unlikely to work:
+                    // at best it will scroll a little bit, but not much, because there won't be any height to allow scolling
+                    // leaving this here for now.
+                    // TODO: will have to think of a more elegant way of managing this, for example load all data in sequence
+                    $anchorScroll('tables');
+                }
             }
         };
 
@@ -196,13 +191,17 @@ angular.module('otControllers')
             $location.search('view=sec:' + otLocationState.getState().sec);
         }
 
-        // Extra sections -- plugins
-        $scope.sections = otConfig.evidenceSections;
-        // Set default visibility values
-        for (var t = 0; t < $scope.sections.length; t++) {
-            $scope.sections[t].defaultVisibility = $scope.sections[t].visible || false;
-            $scope.sections[t].currentVisibility = $scope.sections[t].visible || false;
-        }
-
-        render(otLocationState.getState(), otLocationState.getOldState());
+        // and fire the info search
+        getInfo()
+            .then(getFlowerData())
+            .then(function () {
+                // plugins
+                $scope.sections = otConfig.evidenceSections;
+                // Initialize visibility values
+                for (var t = 0; t < $scope.sections.length; t++) {
+                    $scope.sections[t].defaultVisibility = $scope.sections[t].visible || false;
+                    $scope.sections[t].currentVisibility = $scope.sections[t].visible || false;
+                }
+                render(otLocationState.getState(), otLocationState.getOldState());
+            });
     }]);
