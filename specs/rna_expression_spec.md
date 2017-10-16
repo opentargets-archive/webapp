@@ -35,20 +35,20 @@ The expression facets are relevant only to the disease associations page, so the
 
 Ideally, each spec in the following table should be testable.
 
-| API ID | UI ID | Level/Tissue? | Requirement |
-| -- | -- | -- | -- |
-| 1 | 1 | tissue | API supports payloads with tissue(s) field. |
-| 2 | 2 | level | API supports payloads with level field. |
-| 3 | 3 | tissue | API response contains target counts per level. Ideally PDF not CDF. |
-| 4 | 4 | level | API response contains target counts per tissue. |
-| 5 | 5 | level | API response should consider levels 1-n as meaning *expressed* (in raw terms or in terms of specificity). |
-| 6 | 6 | level | API response should consider level 0 to mean *below the cutoff threshold*. |
-| 7 | 7 | level | API response should consider level -1 to mean *no RNAseq data exists for this target*. |
-| 8 | 9 | level | Payload with absent `level` field should infer `level>=1` when aggregating tissue target counts. |
-| 9 | 9 | level | Payload with `level=k` field should infer `level>=k` when aggregating tissue target counts. |
-| 10 | 10 | level | Response can contain tissues with zero target counts, but it is not required (if they exist, front-end will filter them). |
-| 11 | 11 | level | Response should contain one or more organ label and one or more anatomical system label per tissue. |
-| 12 | 12 | level | Payload with array of tissues. Response levels' target counts should be count of targets at each specific level in any of the array of tissues. |
+| API ID | UI ID | Requirement |
+| -- | -- | -- |
+| 1 | 1 | API supports payloads with tissue(s) field. |
+| 2 | 2 | API supports payloads with level field. |
+| 3 | 3 | API response contains target counts per level. Ideally PDF not CDF. |
+| 4 | 4 | API response contains target counts per tissue. |
+| 5 | 5 | API response should consider levels 1-n as meaning *expressed* (in raw terms or in terms of specificity). |
+| 6 | 6 | API response should consider level 0 to mean *below the cutoff threshold*. |
+| 7 | 7 | API response should consider level -1 to mean *no RNAseq data exists for this target*. |
+| 8 | 9 | Payload with absent `level` field should infer `level>=1` when aggregating tissue target counts. |
+| 9 | 9 | Payload with `level=k` field should infer `level>=k` when aggregating tissue target counts. |
+| 10 | 10 | Response can contain tissues with zero target counts, but it is not required (if they exist, front-end will filter them). |
+| 11 | 11 | Response should contain one or more organ label and one or more anatomical system label per tissue. |
+| 12 | 12 | Payload with array of tissues. Response levels' target counts should be count of targets at each specific level in any of the array of tissues. |
 
 TODO: Finish the table...
 
