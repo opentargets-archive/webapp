@@ -26,9 +26,9 @@
 [context.feature.environment]
   APIHOST = "https://api.targetvalidation.org/api/"
 
-[context."expression-facets-hierarchyless".environment]
-  APIHOST = "https://mk-zscorefacet-dot-open-targets-eu-dev.appspot.com/api/"
-#  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/api/"
+[context."expression".environment]
+#  APIHOST = "https://mk-zscorefacet-dot-open-targets-eu-dev.appspot.com/api/"
+  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/api/"
 #  APIHOST = "https://mk-fixfacets-dot-open-targets-eu-dev.appspot.com/api/"
 
 [context.master.environment]
