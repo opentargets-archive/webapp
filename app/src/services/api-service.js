@@ -47,7 +47,9 @@ angular.module('otServices')
                 THERAPEUTIC_AREA: 'therapeutic_area', //
                 TARGET_CLASS: 'target_class',
                 RNA_EXPRESSION_TISSUE: 'rna_expression_tissue',
-                RNA_EXPRESSION_LEVEL: 'rna_expression_level'
+                RNA_EXPRESSION_LEVEL: 'rna_expression_level',
+                ZSCORE_EXPRESSION_TISSUE: 'zscore_expression_tissue',
+                ZSCORE_EXPRESSION_LEVEL: 'zscore_expression_level'
             }
         };
 
@@ -363,6 +365,8 @@ angular.module('otServices')
                 if (facets.hasOwnProperty(i)) {
                     if (i === 'rna_expression_level') {
                         obj.rna_expression_level = +facets.rna_expression_level[0];
+                    } else if (i === 'zscore_expression_level') {
+                        obj.zscore_expression_level = +facets.zscore_expression_level[0];
                     } else {
                         // TODO: can we remove dependency on otApiService.facets?
                         obj[otApiService.facets[i.toUpperCase()]] = facets[i];

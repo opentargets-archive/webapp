@@ -18,7 +18,7 @@ angular.module('otFacets')
 
             // scales
             var x = d3.scale.ordinal()
-                .domain(_.range(1, 11))
+                .domain(_.range(1, state.max + 1))
                 .rangeBands([0, histogramWidth], 0.2);
             var y = d3.scale.linear()
                 .domain([0, d3.max(state.histogramData, function (d) { return d.value; })])

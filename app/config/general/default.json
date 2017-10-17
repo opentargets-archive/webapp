@@ -378,7 +378,16 @@
             "key": "rna_expression",
             "options": {
                 "element": "rna-expression-facet",
-                "heading": "RNA baseline expression",
+                "heading": "RNA tissue expression",
+                "open": false
+            }
+        },
+
+        "rnaSpecificity": {
+            "key": "rna_specificity",
+            "options": {
+                "element": "rna-specificity-facet",
+                "heading": "RNA tissue specificity",
                 "open": false
             }
         }
@@ -420,6 +429,10 @@
 
             {
                 "type":"rnaExpression"
+            },
+
+            {
+                "type":"rnaSpecificity"
             }
         ]
     }
