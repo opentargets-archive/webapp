@@ -22,7 +22,7 @@ var rename = require('gulp-rename');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var jsonminify = require('gulp-jsonminify');
-var extend = require('gulp-extend');
+var merge = require('gulp-merge-json');
 
 var through = require('through2');
 
@@ -34,9 +34,10 @@ var componentsName = 'components-' + packageConfig.name;
 var webappName = packageConfig.name;
 
 // app config / initialization
-var webappConfigDir = 'app/config';
-var webappConfigSources = [webappConfigDir + '/default.json', webappConfigDir + '/custom.json'];
-var webappConfigFile = 'config.json';
+var configDir = 'app/config';
+var configSourceFiles = ['default.json', 'custom.json'];
+var configMergedSources = 'combined.json';
+var configFile = 'config.json';
 
 // path tools
 var path = require('path');
@@ -234,49 +235,169 @@ gulp.task('build-webapp-styles', function () {
 });
 
 
-/**
- * Check if custom config json exists and if not creates file with standard content
+// ----------------------------------------
+// Configuration JSON
+// ----------------------------------------
+
+
+/*
+ * Gets and returns the list of directories at the specified location
+ * @param {string} dir  
+ * @return {array} The list of directories (folders) as an array of strings
  */
-gulp.task('init-config', function () {
-    fs.stat(webappConfigSources[1], function (err, stat) {
-        if (!stat) {
-            var content = '{}';
-            fs.writeFileSync(webappConfigSources[1], content);
-        }
+function getFolders (dir) {
+    return fs.readdirSync(dir)
+        .filter(function (file) {
+            return fs.statSync(join(dir, file)).isDirectory();
+        });
+}
+
+
+/*
+ * Parse a section (folder) in the config dir:
+ * the function merges default.json and the optional custom.json into combined.json
+ * Under json root there is one element with the same name as the directory.
+ * @param {string} scriptsPath 
+ * @param {string} dir 
+ * @return {promise}
+ */
+function parseConfigDir (scriptsPath, dir) {
+    return new Promise(function (resolve, reject){       
+        gulp.src(configSourceFiles.map(function (i) { return join(scriptsPath, dir, i); }))
+            .pipe(jsonminify()) // remove any comments which would break the merging
+            .pipe(merge({
+                fileName: configMergedSources,  // combined.json
+                edit: function (parsedJson, file) {
+                    var editedJson = {};
+                    editedJson[dir] = parsedJson;
+                    return editedJson;
+                }
+            }))
+            .on('error', reject)
+            .pipe(gulp.dest(join(scriptsPath, dir)))
+            .on('end', resolve);
     });
+}
+
+
+/*
+ * Replace the API host in the config files based on the APIHOST env variable
+ * Note: this is structure sensitive. After merging, the api is under 'general'
+ */
+function updateAPI (parsedJson) {
+    if (process.env.APIHOST){
+        parsedJson.general.api = process.env.APIHOST; // APIHOST to define an API to point to
+    }
+    return parsedJson;
+}
+
+
+/**
+ * Loop through the directories in config/ and parse/merge default and custom jsons
+ */
+gulp.task('parse-custom-configs', function (){
+    var folders = getFolders(configDir);
+    return Promise.all(folders.map(
+        function (dir) {
+            return parseConfigDir(configDir, dir);
+        })
+    );
 });
 
 
-// replace the API host in the config files based on the APIHOST env variable
-function setApi () {
-    function substituteApi (file, enc, cb) {
-        var apiHost = process.env.APIHOST; // APIHOST to define an API to point to
-        if (apiHost) {
-            var search = /"api":\s?".*"\s?,/;
-            var replacement = '"api": "' + apiHost + '",';
-
-            file.contents = new Buffer(String(file.contents).replace(search, replacement));
-        }
-        return cb(null, file);
-    }
-
-    return through.obj(substituteApi);
-}
-
 /**
- * Merges default and custom config json files.
- * Custom overrides default values
+ * Merge the combined.json files for each section into final config JSON
  */
-gulp.task('build-config', ['init-config'], function () {
-    return gulp.src(webappConfigSources)
-        .pipe(setApi())
-        .pipe(jsonminify())                     // remove comments
-        .pipe(extend(webappConfigFile, false))  // merge files; no deep-checking, just first level, so careful to overwrite objects
+gulp.task('build-config-merged', ['parse-custom-configs'], function () {
+    return gulp.src(join(configDir, '*', configMergedSources))
+        // merge all the JSONs
+        .pipe(merge({
+            fileName: configFile
+        }))
+        // set API if needed - yes, this has to be in a separate .pipe() after all files are merged into one
+        .pipe(merge({
+            fileName: configFile,
+            edit: updateAPI
+        }))
+        .pipe(jsonminify())
         .pipe(gulp.dest(buildDir));
 });
 
 
-gulp.task('build-webapp', ['build-webapp-styles', 'build-config'], function () {
+/**
+ * New build-config main task
+ * Calls dependencies and remove temporary files
+ */
+gulp.task('build-config', ['build-config-merged'], function () {
+    del(join(configDir, '*', configMergedSources));
+});
+
+
+// PARSE IN MEMORY
+
+
+/* 
+ * Merge and parse json files in the specified directory and return the processed json (promise)
+ */
+function parseConfigDirJson (scriptsPath, dir) {
+    var editedJson;
+    return new Promise(function (resolve, reject){       
+        gulp.src(configSourceFiles.map(function (i) { return join(scriptsPath, dir, i); }))
+            .pipe(jsonminify()) // remove any comments which would break the merging
+            .pipe(merge({       // merge default and custom (if it exists) into combined.json
+                fileName: configMergedSources
+            }))
+            .pipe(merge({       // add filename as key for the whole json
+                fileName: configMergedSources,
+                edit: function (parsedJson, file) {
+                    editedJson = {};
+                    editedJson[dir] = parsedJson;
+                    return editedJson;
+                }
+            }))
+            .on('error', reject)
+            .on('end', function () {
+                resolve(editedJson);
+            });
+    });
+}
+
+
+/**
+ * Parse all config directories and build final config JSON file
+ */
+gulp.task('build-config-all', function () {
+    // loop through all config directories and get all combined (default+custom) jsons
+    var folders = getFolders(configDir);
+    Promise.all(folders.map(
+        function (dir) {
+            return parseConfigDirJson(configDir, dir);
+        })
+    )
+        .then(function (allcombined) {
+            // merge the combined jsons: here we can't just use merge(),
+            // so we have to build up the new object manually and populate it with the first key in each json
+            var obj = {};
+            allcombined.forEach(function (combined) {
+                var k0 = Object.keys(combined)[0];
+                obj[k0] = combined[k0];
+            });
+            // update the API URL if needed
+            if (process.env.APIHOST) {
+                obj.general.api = process.env.APIHOST; // APIHOST to define an API to point to
+            }
+            // manually write the file
+            fs.stat(join(buildDir, configFile), function (err, stat) {
+                fs.writeFileSync(join(buildDir, configFile), JSON.stringify(obj));
+            });
+        });
+});
+
+
+// ----------------------------------------
+
+
+gulp.task('build-webapp', ['build-webapp-styles', 'build-config-all'], function () {
     return gulp.src(webappFiles.cttv.js)
         .pipe(sourcemaps.init({
             debug: true

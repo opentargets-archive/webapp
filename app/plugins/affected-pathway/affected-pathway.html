@@ -1,0 +1,12 @@
+<!-- plugin template -->
+<div ng-show="ext.data.length>0">
+    <ot-source-list list="sources"></ot-source-list>
+    <ot-pathway-table 
+        target="{{target.id}}"
+        disease="{{disease.efo}}"
+        title="{{target.approved_symbol}}-{{disease.label}}"
+        ext="ext">
+    </ot-pathway-table>
+</div>
+<!-- Redundant as it's also included in table directive -->
+<div ng-show="ext.data.length==0"><p>No data available</p></div>
