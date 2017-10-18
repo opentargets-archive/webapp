@@ -322,6 +322,9 @@ ot-histogram-slider-facet-primitive {
             &.deselected {
                 fill: $clr-ui-border;
             }
+            &.backing-rectangle {
+                fill: #FFF;
+            }
         }
     }
     .x-axis,

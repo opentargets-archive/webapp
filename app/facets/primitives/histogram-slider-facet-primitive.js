@@ -81,11 +81,11 @@ angular.module('otFacets')
             // helper function
             var selectBasedOn = function (g, minValue) {
                 if (minValue === 0) {
-                    g.selectAll('rect')
+                    g.selectAll('rect.hist-bar')
                         .classed('selected', false)
                         .classed('deselected', true);
                 } else {
-                    g.selectAll('rect')
+                    g.selectAll('rect.hist-bar')
                         .classed('selected', function (d) { return d.key >= minValue; })
                         .classed('deselected', function (d) { return d.key < minValue; });
                 }
@@ -96,14 +96,51 @@ angular.module('otFacets')
                 return d3.ascending(a.key, b.key);
             });
 
+            // backing rectangles
+            // JOIN
+            var bar = g.selectAll('rect.backing-rectangle')
+                .data(state.histogramData.filter(function (d) { return d.value > 0; }));
+
+            // ENTER
+            bar.enter()
+                .append('rect')
+                .classed('backing-rectangle', true);
+
+            // ENTER + UPDATE
+            var fullHeight = Math.abs(y.range()[1] - y.range()[0]);
+            bar
+                .attr('x', function (d) { return x(d.key); })
+                .attr('y', 0)
+                .attr('width', x.rangeBand())
+                .attr('height', fullHeight)
+                .on('mouseover', function (d) {
+                    // base colouring on current element's key
+                    selectBasedOn(g, d.key);
+                })
+                .on('mouseout', function (d) {
+                    // base colouring on level
+                    selectBasedOn(g, state.level);
+                })
+                .on('click', function (d) {
+                    state.setLevel(d.key);
+                    // Note: Need to trigger a digest cycle here
+                    scope.$apply();
+                    selectBasedOn(g, d.key);
+                });
+
+            // EXIT
+            bar.exit()
+                .remove();
+
             // histogram rectangles
             // JOIN
-            var bar = g.selectAll('rect')
+            var bar = g.selectAll('rect.hist-bar')
                 .data(state.histogramData);
 
             // ENTER
             bar.enter()
-                .append('rect');
+                .append('rect')
+                .classed('hist-bar', true);
 
             // ENTER + UPDATE
             bar
