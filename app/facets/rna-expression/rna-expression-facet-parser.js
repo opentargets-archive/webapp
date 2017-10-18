@@ -334,6 +334,7 @@ angular.module('otFacets')
                 histogramData: histogramData,
                 min: 1,
                 max: 10,
+                helpKeyInOtDefinitions: 'FACET.BASELINE',
                 serialize: serialize,
                 deserialize: deserialize,
                 setAllChecked: setAllChecked,

@@ -334,7 +334,7 @@ angular.module('otFacets')
                 histogramData: histogramData,
                 min: 1,
                 max: 6,
-                levelHelp: 'We assign each gene a specificity level (1-6) per tissue using a z-score calculation.',
+                helpKeyInOtDefinitions: 'FACET.SPECIFICITY',
                 serialize: serialize,
                 deserialize: deserialize,
                 setAllChecked: setAllChecked,
