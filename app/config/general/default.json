@@ -427,9 +427,9 @@
                 "type":"targetClass"
             },
 
-            {
-                "type":"rnaExpression"
-            },
+            // {
+            //     "type":"rnaExpression"
+            // },
 
             {
                 "type":"rnaSpecificity"
