@@ -8,7 +8,7 @@ angular.module('otFacets')
    * @param {*} height 
    */
         var render = function (scope, state, svg, width, height) {
-            var margins = {top: 15, right: 20, bottom: 25, left: 40};
+            var margins = {top: 20, right: 20, bottom: 25, left: 40};
             var histogramWidth = width - margins.left - margins.right;
             var histogramHeight = height - margins.top - margins.bottom;
 
@@ -38,6 +38,10 @@ angular.module('otFacets')
             if (g.empty()) {
                 g = svg.append('g')
                     .classed('histogram-container', true);
+
+                g.append('text')
+                    .attr('dy', -3)
+                    .classed('message-label', true);
             }
             g.attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
@@ -100,7 +104,7 @@ angular.module('otFacets')
             }
             gYAxisLabel.attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
-            // helper function
+            // helper functions
             var selectBasedOn = function (g, minValue) {
                 if (minValue === 0) {
                     g.selectAll('rect.hist-bar')
@@ -111,6 +115,31 @@ angular.module('otFacets')
                         .classed('selected', function (d) { return d.key >= minValue; })
                         .classed('deselected', function (d) { return d.key < minValue; });
                 }
+            };
+            var mouseoverHandler = function (d, i, vals) {
+                // base colouring on current element's key
+                selectBasedOn(g, d.key);
+
+                // show message
+                // var total = state.histogramData.filter(function (b) {
+                //     return b.key >= d.key;
+                // }).reduce(function (a, b) {
+                //     return a + b.value;
+                // }, 0);
+                // g.select('.message-label').text('Filter level ' + d.key + ' (~' + total + ' targets)');
+                // g.select('.message-label').text('Show targets with tissue specificity ' + d.key + ' or above in any of the selected tissues');
+                g.select('.message-label').text('Tissue specificity ' + d.key + ' or above');
+            };
+            var mouseoutHandler = function () {
+                // base colouring on level
+                selectBasedOn(g, state.level);
+                g.select('.message-label').text('');
+            };
+            var clickHandler = function (d) {
+                state.setLevel(d.key);
+                // Note: Need to trigger a digest cycle here
+                scope.$apply();
+                selectBasedOn(g, d.key);
             };
 
             // // ensure histogram data is sorted by key
@@ -135,20 +164,9 @@ angular.module('otFacets')
                 .attr('y', 0)
                 .attr('width', x.rangeBand())
                 .attr('height', function (d) { return d.value > 0 ? fullHeight : 0; })
-                .on('mouseover', function (d) {
-                    // base colouring on current element's key
-                    selectBasedOn(g, d.key);
-                })
-                .on('mouseout', function (d) {
-                    // base colouring on level
-                    selectBasedOn(g, state.level);
-                })
-                .on('click', function (d) {
-                    state.setLevel(d.key);
-                    // Note: Need to trigger a digest cycle here
-                    scope.$apply();
-                    selectBasedOn(g, d.key);
-                });
+                .on('mouseover', mouseoverHandler)
+                .on('mouseout', mouseoutHandler)
+                .on('click', clickHandler);
 
             // EXIT
             barBacking.exit()
@@ -170,20 +188,9 @@ angular.module('otFacets')
                 .attr('y', function (d) { return y(d.value); })
                 .attr('width', x.rangeBand())
                 .attr('height', function (d) { return y(0) - y(d.value); })
-                .on('mouseover', function (d) {
-                    // base colouring on current element's key
-                    selectBasedOn(g, d.key);
-                })
-                .on('mouseout', function (d) {
-                    // base colouring on level
-                    selectBasedOn(g, state.level);
-                })
-                .on('click', function (d) {
-                    state.setLevel(d.key);
-                    // Note: Need to trigger a digest cycle here
-                    scope.$apply();
-                    selectBasedOn(g, d.key);
-                });
+                .on('mouseover', mouseoverHandler)
+                .on('mouseout', mouseoutHandler)
+                .on('click', clickHandler);
 
             // EXIT
             bar.exit()
@@ -230,7 +237,7 @@ angular.module('otFacets')
                 var svg = d3.select(ngSvg);
 
                 // TODO: set width based on parent width
-                var width = 200;
+                var width = 220;
                 var height = 120;
 
                 function scopeToState (scope) {

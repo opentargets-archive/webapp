@@ -329,8 +329,7 @@ ot-histogram-slider-facet-primitive {
         }
     }
     .x-axis,
-    .y-axis,
-    .y-axis-label {
+    .y-axis {
         // path,
         // line {
         //   display: none;
@@ -352,6 +351,12 @@ ot-histogram-slider-facet-primitive {
     g.count text {
         font-size: 10px;
         alignment-baseline: central;
+        fill: $clr-text-dim;
+    }
+
+    .message-label,
+    .y-axis-label {
+        font-size: 10px;
         fill: $clr-text-dim;
     }
 }
