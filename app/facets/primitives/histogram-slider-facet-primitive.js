@@ -8,7 +8,7 @@ angular.module('otFacets')
    * @param {*} height 
    */
         var render = function (scope, state, svg, width, height) {
-            var margins = {top: 15, right: 20, bottom: 25, left: 30};
+            var margins = {top: 15, right: 20, bottom: 25, left: 40};
             var histogramWidth = width - margins.left - margins.right;
             var histogramHeight = height - margins.top - margins.bottom;
 
@@ -77,6 +77,20 @@ angular.module('otFacets')
                 .attr('dy', 10)
                 .attr('text-anchor', 'end')
                 .text('High');
+
+            var gYAxisLabel = svg.select('g.y-axis-label');
+            if (gYAxisLabel.empty()) {
+                gYAxisLabel = svg.append('g')
+                    .classed('y-axis-label', true);
+
+                gYAxisLabel.append('text')
+                    .attr('transform', 'rotate(-90)')
+                    .attr('text-anchor', 'end')
+                    .attr('dy', -30)
+                    .classed('end', true)
+                    .text('Targets');
+            }
+            gYAxisLabel.attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
             // helper function
             var selectBasedOn = function (g, minValue) {
