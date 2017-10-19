@@ -26,7 +26,7 @@ angular.module('otServices')
                 'link': 'http://www.thesgc.org/tep'
             },
             'FACET.SPECIFICITY': {
-                'description': 'Each target has a specificity level per tissue based on a Z-score calculation. You can filter targets by a set of tissues and a specificity level.',
+                'description': 'Filter targets by how specific their expression is in a tissue of interest.',
                 'link': ''
             },
             'FACET.BASELINE': {
