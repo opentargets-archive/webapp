@@ -38,6 +38,7 @@ angular.module('otFacets')
                         enabled: true,
                         checked: false,
                         children: null,
+                        hideCount: true, // TODO: currently hide while numbers are wrong; when numbers fixed, remove
                         facetName: rnaTissueKey
                     }, facetsGlobal);
 
