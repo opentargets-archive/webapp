@@ -312,7 +312,8 @@ ot-facets {
  */
 
 ot-histogram-slider-facet-primitive {
-    .histogram-container {
+    .histogram-container,
+    .histogram-backing-container {
         rect {
             shape-rendering: crispEdges;
             &.selected {

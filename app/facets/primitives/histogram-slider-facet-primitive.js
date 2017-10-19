@@ -26,7 +26,15 @@ angular.module('otFacets')
                 .nice(5);
 
             // container group
+            var gBacking = svg.select('g.histogram-backing-container');
             var g = svg.select('g.histogram-container');
+
+            if (gBacking.empty()) {
+                gBacking = svg.append('g')
+                    .classed('histogram-backing-container', true);
+            }
+            gBacking.attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+
             if (g.empty()) {
                 g = svg.append('g')
                     .classed('histogram-container', true);
@@ -112,21 +120,21 @@ angular.module('otFacets')
 
             // backing rectangles
             // JOIN
-            var bar = g.selectAll('rect.backing-rectangle')
+            var barBacking = gBacking.selectAll('rect.backing-rectangle')
                 .data(state.histogramData.filter(function (d) { return d.value > 0; }));
 
             // ENTER
-            bar.enter()
+            barBacking.enter()
                 .append('rect')
                 .classed('backing-rectangle', true);
 
             // ENTER + UPDATE
             var fullHeight = Math.abs(y.range()[1] - y.range()[0]);
-            bar
+            barBacking
                 .attr('x', function (d) { return x(d.key); })
                 .attr('y', 0)
                 .attr('width', x.rangeBand())
-                .attr('height', fullHeight)
+                .attr('height', function (d) { return d.value > 0 ? fullHeight : 0; })
                 .on('mouseover', function (d) {
                     // base colouring on current element's key
                     selectBasedOn(g, d.key);
@@ -143,7 +151,7 @@ angular.module('otFacets')
                 });
 
             // EXIT
-            bar.exit()
+            barBacking.exit()
                 .remove();
 
             // histogram rectangles
