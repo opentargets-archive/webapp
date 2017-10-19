@@ -10,7 +10,7 @@ All these specs should be converted into both web and api tests to make sure the
 
 | Status | UI ID | Behaviour | Notes |
 | -- | -- | -- | -- |
-| [ ] | 1 | The facet shows all the tissues available. | Not only the ones for which the current set of targets are expressed. |
+| <ul><li>[]</li><li> | 1 | The facet shows all the tissues available. | Not only the ones for which the current set of targets are expressed. |
 | [ ] | 2 | Individual tissues can be organised into organ/anatomical systems. | |
 | [ ] | 3 | Users can select individual tissues to filter by. | Except tissues with target counts of 0 that should be disabled. |
 | [ ] | 4 | Each tissue displays a target count representing the number of targets *expressed* in that tissue. | If *only* one tissue is selected, its target counts should match the page target count. |
