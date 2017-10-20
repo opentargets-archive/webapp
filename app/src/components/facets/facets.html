@@ -9,7 +9,7 @@
                 <!-- <span class="facet-help" ng-if="facet.helpString"><i class="fa fa-question-circle" tooltip-trigger="mouseenter" uib-tooltip="{{facet.helpString}}" tooltip-placement="right"></i></span> -->
                 <ot-popover ng-if="facet.helpKeyInOtDefinitions" key="{{facet.helpKeyInOtDefinitions}}"></ot-popover>
                 <i class="pull-right text-lowlight fa" ng-class="{'fa-caret-right': !status.isOpen, 'fa-caret-down': status.isOpen}"></i>
-                <span class="pull-right ot-facet-summary" ng-if="facet.summary[0]">{{facet.summary[0]}}</span>
+                <span class="pull-right ot-facet-summary" ng-if="facet.summary[0]">selected</span>
             </uib-accordion-heading>
 
             <!-- load the relevant acutal facet -->
