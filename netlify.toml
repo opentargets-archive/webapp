@@ -27,8 +27,9 @@
   APIHOST = "https://api.targetvalidation.org/api/"
 
 [context."expression-simple".environment]
+  APIHOST = "https://mk-levelupdate-dot-open-targets-eu-dev.appspot.com/api/"
 #  APIHOST = "https://mk-zscorefacet-dot-open-targets-eu-dev.appspot.com/api/"
-  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/api/"
+#  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/api/"
 #  APIHOST = "https://mk-fixfacets-dot-open-targets-eu-dev.appspot.com/api/"
 
 [context.master.environment]
