@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "babel-polyfill": "6.23.0",
-    "cttv.api": "0.0.15",
+    "cttv.api": "0.0.17",
     "cttv.diseaseGraph": "0.0.3",
     "cttv.flowerView": "0.0.0",
     "cttv.genome": "0.0.27",
