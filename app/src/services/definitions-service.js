@@ -26,7 +26,8 @@ angular.module('otServices')
                 'link': 'http://www.thesgc.org/tep'
             },
             'FACET.SPECIFICITY': {
-                'description': 'Filter targets by how specific their expression is in a tissue of interest.',
+                // 'description': 'Filter targets by how specific their expression is in a tissue of interest.',
+                'description': 'Show only targets which are more expressed in the selected tissues than the rest of the tissues.',
                 'link': ''
             },
             'FACET.BASELINE': {
