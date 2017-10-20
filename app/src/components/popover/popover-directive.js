@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('otPopover', ['otDefinitions', function (otDefinitions) {
+    .directive('otPopover', ['otDefinitions', '$sce', function (otDefinitions, $sce) {
         'use strict';
 
         return {
@@ -13,7 +13,7 @@ angular.module('otDirectives')
             link: function (scope) {
                 var def = otDefinitions[scope.key];
                 if (def) {
-                    scope.content = def.description;
+                    scope.content = $sce.trustAsHtml(def.description);
                     scope.link = def.link;
                 } else {
                     scope.content = '';
