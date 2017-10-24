@@ -2,7 +2,7 @@
 
 angular.module('otDirectives')
 
-    .directive('otCommonDiseaseTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', '$log', 'otClearUnderscoresFilter', function (otApi, otConsts, otUtils, otConfig, $location, $log, otClearUnderscoresFilter) {
+    .directive('otCommonDiseaseTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', '$log', 'otClearUnderscoresFilter', 'otDictionary', function (otApi, otConsts, otUtils, otConfig, $location, $log, otClearUnderscoresFilter, otDictionary) {
         'use strict';
         var searchObj = otUtils.search.translateKeys($location.search());
         var checkPath = otUtils.checkPath;
@@ -18,6 +18,7 @@ angular.module('otDirectives')
             },
 
             link: function (scope, elem, attrs) {
+                scope.otDictionary = otDictionary;
                 scope.ext.hasError = false;
                 scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }], function () {
                     if (attrs.target && attrs.disease) {

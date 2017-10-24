@@ -28,6 +28,7 @@ angular.module('otDirectives')
             },
 
             link: function (scope, elem, attrs) {
+                scope.otDictionary = otDictionary;
                 scope.ext.hasError = false;
                 scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }], function () {
                     if (attrs.target && attrs.disease) {
