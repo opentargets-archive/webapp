@@ -27,7 +27,7 @@ angular.module('otServices')
             },
             'FACET.SPECIFICITY': {
                 'description': 'Show only targets which are expressed in the selected tissues <strong>more than</strong> the rest of the tissues.',
-                'link': ''
+                'link': '/faq#tissue-specificity'
             },
             'FACET.BASELINE': {
                 'description': 'Each target has an expression level per tissue based on normalised counts. You can filter targets by a set of tissues and an expression level.',
