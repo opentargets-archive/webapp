@@ -15,7 +15,11 @@ angular.module('otPlugins')
             },
             link: function (scope) {
                 scope.ext = scope.ext || {};    // object to communicate
-                scope.sources = otConfig.evidence_sources.somatic_mutation.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; });
+                scope.sources = otConfig.evidence_sources.somatic_mutation.map(function (s) {
+                    return {
+                        label: otDictionary[otConsts.invert(s)],
+                        url: otConsts.dbs_info_url[otConsts.invert(s)]};
+                });
             }
         };
     }]);

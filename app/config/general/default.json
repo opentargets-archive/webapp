@@ -72,7 +72,7 @@
             "common" : ["GWAS", "PHEWAS"],
             "rare" : ["UNIPROT", "EVA", "UNIPROT_LITERATURE", "GENE_2_PHENOTYPE", "GENOMICS_ENGLAND"]
         },
-        "somatic_mutation": ["CANCER_GENE_CENSUS", "EVA_SOMATIC", "INTOGEN"],
+        "somatic_mutation": ["CANCER_GENE_CENSUS", "EVA_SOMATIC", "INTOGEN", "UNIPROT_SOMATIC"],
         "known_drug" : ["CHEMBL"],
         "rna_expression" : ["EXPRESSION_ATLAS"],
         "pathway" : ["REACTOME", "SLAPENRICH"],
