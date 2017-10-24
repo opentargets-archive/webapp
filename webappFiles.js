@@ -15,12 +15,10 @@ var webappFiles = {
             'node_modules/jquery/dist/jquery.min.js',
             'app/vendor/cola/cola.min.js',
             'app/src/js/angularjs-viewhead.js',
-            // 'bower_components/angular-animate/angular-animate.min.js',
             'node_modules/angular-animate/angular-animate.min.js',
             'node_modules/angular-cookies/angular-cookies.min.js',
             'node_modules/angular-local-storage/dist/angular-local-storage.min.js',
             'node_modules/angular-read-more/dist/readmore.min.js',
-            
             'node_modules/angular-sanitize/angular-sanitize.min.js',
             'app/vendor/angular-swagger-ui/swagger-ui.min.js',
             'app/vendor/angular-swagger-ui/swagger-yaml-parser.min.js',
