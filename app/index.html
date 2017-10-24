@@ -128,7 +128,6 @@
 
 
                                 <!-- 1: search (on other pages only) -->
-
                                 <div ng-if="location.path()!=='/'" class="masthead-search-container pull-right" ng-class="{'invisible':opts.showResponsiveSearch}">
                                     <!-- full search box: hide on small screens -->
                                     <div ot-search-box class="hidden-xs hidden-sm masthead-search-menu"></div>
@@ -147,18 +146,25 @@
                                 </div>
 
                                 <!-- 2: notifications (as required) -->
-
                                 <div masthead-notifications-menu class="masthead-notifications-menu pull-right" ng-class="{'invisible':opts.showResponsiveSearch}"></div>
 
 
                                 <!-- 3: menu (on other pages only) -->
-
                                 <div class="pull-right" ng-class="{'invisible':opts.showResponsiveSearch}">
                                     <!-- navigation menu : hide on small screen-->
                                     <ot-masthead-navigation-menu class="hidden-xs hidden-sm"></ot-masthead-navigation-menu>
 
                                     <!-- here should have hamburger -->
                                     <ot-masthead-navigation-menu is-hamburger="true" class="hidden-md hidden-lg"></ot-masthead-navigation-menu>
+                                </div>
+
+                                <!-- 4: Batch search icon (on other pages only) -->
+                                <div ng-if="location.path()!=='/'" class="pull-right hidden-xs hidden-sm masthead-batch-search-icon" ng-class="{'invisible':opts.showResponsiveSearch}">
+                                    <span uib-popover="Search for several targets" popover-animation="true" popover-trigger="'mouseenter'" popover-placement="bottom-right" >
+                                        <a href="/batch-search">
+                                            <i class="fa fa-file-text-o fa-lg"></i>
+                                        </a>
+                                    </span>
                                 </div>
 
                             </div>
