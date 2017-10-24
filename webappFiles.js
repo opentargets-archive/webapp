@@ -2,42 +2,43 @@ var webappFiles = {
     // 3rd party libs
     thirdParty: {
         'js': [
-            'bower_components/angular/angular.min.js',
-            'bower_components/angular-route/angular-route.min.js',
-            'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-            'bower_components/angulartics/dist/angulartics.min.js',
-            'bower_components/angulartics/dist/angulartics-piwik.min.js',
-            'bower_components/d3/d3.min.js',
+            'node_modules/lodash/lodash.min.js',
+            'node_modules/angular/angular.min.js',
+            'node_modules/angular-route/angular-route.min.js',
+            'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
+            'node_modules/angulartics/dist/angulartics.min.js',
+            'node_modules/angulartics/dist/angulartics-piwik.min.js',
+            'node_modules/d3/d3.min.js',
             // 'node_modules/d3-color/build/d3-color.min.js',
             // 'node_modules/d3-interpolate/build/d3-interpolate.min.js',
             // 'node_modules/d3-scale-chromatic/build/d3-scale-chromatic.min.js',
-            'bower_components/jquery/dist/jquery.min.js',
+            'node_modules/jquery/dist/jquery.min.js',
             'app/vendor/cola/cola.min.js',
             'app/src/js/angularjs-viewhead.js',
-            'bower_components/angular-animate/angular-animate.min.js',
-            'bower_components/angular-cookies/angular-cookies.js',
-            'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
-            'bower_components/angular-read-more/dist/readmore.min.js',
-            'bower_components/lodash/dist/lodash.min.js',
-            'bower_components/angular-sanitize/angular-sanitize.min.js',
+            // 'bower_components/angular-animate/angular-animate.min.js',
+            'node_modules/angular-animate/angular-animate.min.js',
+            'node_modules/angular-cookies/angular-cookies.min.js',
+            'node_modules/angular-local-storage/dist/angular-local-storage.min.js',
+            'node_modules/angular-read-more/dist/readmore.min.js',
+            
+            'node_modules/angular-sanitize/angular-sanitize.min.js',
             'app/vendor/angular-swagger-ui/swagger-ui.min.js',
             'app/vendor/angular-swagger-ui/swagger-yaml-parser.min.js',
             'node_modules/js-yaml/dist/js-yaml.min.js',
             'app/vendor/foamtree/carrotsearch.foamtree.js',
             'node_modules/marked/marked.min.js',
-            'bower_components/FileSaver/FileSaver.min.js',
-            'bower_components/moment/moment.js',
-            'bower_components/abdmob/x2js/xml2json.min.js'
+            'node_modules/file-saver/FileSaver.min.js',
+            'node_modules/moment/moment.js'
         ],
         'css': [
-            'bower_components/bootstrap/dist/css/bootstrap.css',
+            'node_modules/bootstrap/dist/css/bootstrap.css',
             'app/vendor/angular-swagger-ui/swagger-ui.min.css'
         ],
         'cssCopyDir': [
-            'bower_components/components-font-awesome/**/*'
+            'node_modules/components-font-awesome/**/*'
         ],
         'copy': [
-            'bower_components/bio-pv/bio-pv.min.js'
+            'node_modules/bio-pv/bio-pv.min.js'
         ]
     },
 

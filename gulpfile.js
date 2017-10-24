@@ -188,7 +188,7 @@ gulp.task('copy-fontawesome', function () {
             console.error(err);
         }
     });
-    return gulp.src('bower_components/components-font-awesome/**/*')
+    return gulp.src('node_modules/components-font-awesome/**/*')
         .pipe(gulp.dest(fontawesomePath));
 });
 
@@ -199,7 +199,7 @@ gulp.task('copy-bootstrap', function () {
             console.error(err);
         }
     });
-    return gulp.src('bower_components/bootstrap/**/*')
+    return gulp.src('node_modules/bootstrap/**/*')
         .pipe(gulp.dest(bootstrapPath));
 });
 
