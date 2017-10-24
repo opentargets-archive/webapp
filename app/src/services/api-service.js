@@ -111,6 +111,9 @@ angular.module('otServices')
                 .then(done)
                 .catch(function (err) {
                     $log.warn('GOT ERROR:', err);
+                    if (queryObject.error) {
+                        queryObject.error.call(this, err);
+                    }
                     otApiService.defaultErrorHandler(err, queryObject.trackCall);
                 });
 
