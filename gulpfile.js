@@ -85,7 +85,6 @@ gulp.task('default', ['lint', 'test']);
 
 gulp.task('lint', function () {
     return gulp.src('app/js/**/*.js')
-        .pipe(ignore.exclude(/bower_components/))
         .pipe(ignore.exclude(/node_modules/))
         .pipe(ignore.exclude(/test/))
         .pipe(jshint())
