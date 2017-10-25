@@ -854,8 +854,6 @@ angular
 		 * parse tags
 		 */
 		function parseTags(swagger, resources, map) {
-            console.log("parseTags()");
-            console.log(swagger.tags);
 			var i, l, tag;
 			if (!swagger.tags) {
 				resources.push({
@@ -876,10 +874,6 @@ angular
 		 * parse operations
 		 */
 		function parseOperations(swagger, resources, form, map, defaultContentType, openPath) {
-
-            console.log("parseOperations()");
-            console.log(map);
-
 			var path,
 				pathObject,
 				pathParameters,
@@ -909,8 +903,6 @@ angular
 					// map operation to resource
 
                     for(var i=0; i<operation.tags.length; i++){
-                        console.log(operation.tags[i]);
-
     					tag = operation.tags[i];
     					if (typeof map[tag] === 'undefined') {
     						map[tag] = resources.length;
