@@ -7,7 +7,7 @@
 angular.module('otDirectives')
 
     /* Directive to display the known drug evidence table */
-    .directive('otKnownDrugTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
+    .directive('otKnownDrugTable', ['NgTableParams', '$log', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (NgTableParams, $log, otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
         'use strict';
         // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -116,6 +116,7 @@ angular.module('otDirectives')
 
 
                     function formatDrugsDataToArray (data) {
+                        // $log.log(data);
                         var newdata = [];
                         var all_drugs = [];
                         data.forEach(function (item) {
@@ -263,11 +264,176 @@ angular.module('otDirectives')
                         return newdata;
                     }
 
+                    function transformer (data) {
+                        // $log.log(data);
+                        var newdata = [];
+                        var all_drugs = [];
+                        data.forEach(function (item) {
+                        // create rows:
+                            var row = {};
+
+                            try {
+                            // Fill the unique drugs
+                                all_drugs.push({
+                                    id: item.drug.molecule_name,
+                                    url: item.evidence.target2drug.urls[0].url
+                                });
+
+                                // 0: data origin: public / private
+                                row.dataOrigin = ((item.access_level !== otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
+
+                                // 1: disease
+                                row.disease = ('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');
+
+                                // 2: drug
+                                var link = item.evidence.target2drug.urls[0].url;
+                                var linkClass = 'class="ot-external-link"';
+                                var target = 'target=_blank';
+                                if (item.evidence.target2drug.provenance_type.database.id === 'ChEMBL') {
+                                    link = '/summary?drug=' + item.drug.id.split('/').pop();
+                                    linkClass = '';
+                                    target = '';
+                                }
+                                row.drug = ('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' +
+                            item.drug.molecule_name +
+                            '</a>');
+
+                                // 3: phase
+                                // row.push(item.drug.max_phase_for_all_diseases.label);
+                                row.phase = (item.evidence.drug2clinic.max_phase_for_disease.label);
+
+                                // 4: phase numeric (hidden)
+                                row.phaseNumeric = (item.drug.max_phase_for_all_diseases.numeric_index);
+
+                                // 5: status
+                                var sts = otDictionary.NA;
+                                if (otUtils.checkPath(item, 'evidence.drug2clinic.status')) {
+                                    sts = item.evidence.drug2clinic.status;
+                                }
+                                row.status = (sts);
+
+                                // 6: type
+                                row.type = (item.drug.molecule_type);
+
+                                // 7: Mechanism of action
+                                var action = item.evidence.target2drug.mechanism_of_action;
+
+                                // publications
+                                var refs = [];
+                                if (checkPath(item, 'evidence.target2drug.provenance_type.literature.references')) {
+                                    refs = item.evidence.target2drug.provenance_type.literature.references;
+                                }
+
+                                if (refs.length > 0) {
+                                    action += '<br />' + otUtils.getPublicationsString(otUtils.getPmidsList(refs));
+                                }
+
+                                if (item.evidence.target2drug.urls && item.evidence.target2drug.urls[2]) {
+                                    var extLink = item.evidence.target2drug.urls[2];
+                                    action += '<br /><span><a class=\'ot-external-link\' target=_blank href=' + extLink.url + '>' + extLink.nice_name  + '</a></span>';
+                                }
+
+                                row.action = (action);
+
+                                // col 5: pub ids (hidden)
+                                // row.push(pmidsList.join(", "));
+
+
+                                // 8: Activity
+                                var activity = item.target.activity;
+                                switch (activity) {
+                                case 'drug_positive_modulator' :
+                                    activity = 'agonist';
+                                    break;
+                                case 'drug_negative_modulator' :
+                                    activity = 'antagonist';
+                                    break;
+                                }
+                                row.activity = (activity);
+
+                                // 6: Clinical indications -- REMOVED!
+                                // row.push( "<a href='"
+                                //             + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
+                                //             + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
+
+                                // 9: target class
+                                var trgc = otDictionary.NA;
+                                if (otUtils.checkPath(item, 'target.target_class')) {
+                                    trgc = item.target.target_class[0] || otDictionary.NA;
+                                }
+                                row.targetClass = (trgc);
+
+
+                                // 8: target context / protein complex members
+
+                                // 10: evidence source
+                                row.evidenceSource = ('Curated from <br /><a class=\'ot-external-link\' href=\'' +
+                            item.evidence.drug2clinic.urls[0].url +
+                            '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
+
+                                // row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
+
+
+                                newdata.push(row); // use push() so we don't end up with empty rows
+                            } catch (e) {
+                                scope.ext.hasError = true;
+                            // $log.log("Error parsing drugs data:");
+                            // $log.log(e);
+                            }
+                        });
+
+                        var all_drugs_sorted = _.sortBy(all_drugs, function (rec) {
+                            return rec.id;
+                        });
+
+                        var showLim = 50;
+                        scope.show = {};
+                        scope.show.limit = showLim;
+                        scope.show.ellipsis = '[Show more]';
+                        scope.drugs = _.uniqBy(all_drugs_sorted, 'id');
+                        scope.drugs.forEach(function (d) {
+                            var chemblId = d.url.split('/').pop();
+                            if (chemblId.indexOf('CHEMBL') > -1) {
+                                d.url = '/summary?drug=' + chemblId;
+                            }
+                        });
+                        scope.show.moreOrLess = scope.drugs.length > showLim;
+
+                        scope.showMoreOrLess = function () {
+                            scope.show.moreOrLess = true;
+                            if (scope.show.limit === scope.drugs.length) { // It is already open
+                                scope.show.limit = showLim;
+                                scope.show.ellipsis = '[Show more]';
+                            } else {  // It is closed
+                                scope.show.limit = scope.drugs.length;
+                                scope.show.ellipsis = '[Show less]';
+                            }
+                        };
+
+                        return newdata;
+                    }
+
+
+
                     /*
                 * This is the hardcoded data for the Known Drugs table and
                 * will obviously need to change and pull live data when available
                 */
                     function initTableDrugs () {
+                        // var processedData = formatDrugsDataToArray(scope.ext.data);
+                        // var processedData = [
+                        //     { name: 'christian', age: 21 },
+                        //     { name: 'anthony', age: 88 },
+                        //     { name: 'bob', age: 67 }
+                        // ];
+                        var processedData = transformer(scope.ext.data);
+                        $log.log(processedData);
+                        scope.tableParams = new NgTableParams({}, {dataset: processedData});
+                        $log.log(scope.tableParams);
+
+
+
+
                     // $('#drugs-table') // Not anymore
                         var table = elem[0].getElementsByTagName('table');
                         $(table).dataTable(otUtils.setTableToolsParams({

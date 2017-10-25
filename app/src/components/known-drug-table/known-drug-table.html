@@ -41,3 +41,14 @@
         </tbody>
     </table>
 </div>
+<div ng-if="tableParams" class="table-panel">
+    <table ng-table="tableParams" class='table ot-evidence-table'>
+        <tr ng-repeat="row in $data">
+            <!-- <td data-title="'Name'" filter="{name: 'text'}" sortable="'name'">{{row.name}}</td>
+            <td data-title="'Age'" filter="{age: 'number'}" sortable="'age'">{{row.age}}</td> -->
+
+            <td data-title="'Drug'" filter="{drug: 'text'}" sortable="'drug'">{{row.drug}}</td>
+            <td data-title="'Phase'" filter="{phase: 'text'}" sortable="'phase'">{{row.phase}}</td>
+        </tr>
+    </table>
+</div>

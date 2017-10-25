@@ -117,6 +117,7 @@ function initApp (deps) {
 
 
 var deps = [
+    'ngTable',
     'ngRoute',
     'ngCookies',
     'LocalStorageModule',

@@ -27,11 +27,13 @@ var webappFiles = {
             'node_modules/marked/marked.min.js',
             'bower_components/FileSaver/FileSaver.min.js',
             'bower_components/moment/moment.js',
-            'bower_components/abdmob/x2js/xml2json.min.js'
+            'bower_components/abdmob/x2js/xml2json.min.js',
+            'node_modules/ng-table/bundles/ng-table.min.js'
         ],
         'css': [
             'bower_components/bootstrap/dist/css/bootstrap.css',
-            'app/vendor/angular-swagger-ui/swagger-ui.min.css'
+            'app/vendor/angular-swagger-ui/swagger-ui.min.css',
+            'node_modules/ng-table/bundles/ng-table.min.css'
         ],
         'cssCopyDir': [
             'bower_components/components-font-awesome/**/*'
