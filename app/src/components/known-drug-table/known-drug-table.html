@@ -49,13 +49,23 @@
     <p>Selection: {{msSelection}}</p>
 </div> -->
 <div ng-if="tableParams" class="table-panel">
-    <table ng-table="tableParams" class='table ot-evidence-table'>
+    <table ng-table="tableParams" class='table ot-evidence-table ot-test-table'>
         <tr ng-repeat="row in $data">
             <!-- <td data-title="'Name'" filter="{name: 'text'}" sortable="'name'">{{row.name}}</td>
             <td data-title="'Age'" filter="{age: 'number'}" sortable="'age'">{{row.age}}</td> -->
 
+
+            <td data-title="'Disease'" filter="{disease: 'categorical'}" filter-data="uniqueDiseases" sortable="'disease'"><a href="{{row.diseaseUrl}}">{{row.disease}}</a></td>
             <td data-title="'Drug'" filter="{drug: 'text'}" sortable="'drug'">{{row.drug}}</td>
             <td data-title="'Phase'" filter="{phase: 'categorical'}" filter-data="uniquePhases" sortable="'phase'">{{row.phase}}</td>
+            <td data-title="'Status'" filter="{status: 'text'}" sortable="'status'">{{row.status}}</td>
+            <td data-title="'Type'" filter="{type: 'text'}" sortable="'type'">{{row.type}}</td>
+            <td data-title="'Mechanism of action'" filter="{action: 'text'}" sortable="'action'">{{row.action}}</td>
+            <td data-title="'Activity'" filter="{activity: 'text'}" sortable="'activity'">{{row.activity}}</td>
+            <td data-title="'Target class'" filter="{targetClass: 'categorical'}" filter-data="uniqueTargetClasses" sortable="'targetClass'">{{row.targetClass}}</td>
+            <td data-title="'Evidence source'" filter="{evidenceSource: 'text'}" sortable="'evidenceSource'">{{row.evidenceSource}}</td>
+
+
             <!-- <td data-title="'Phase'" filter="{phase: 'select-multiple'}" filter-data="uniquePhases" sortable="'phase'">{{row.phase}}</td> -->
         </tr>
     </table>

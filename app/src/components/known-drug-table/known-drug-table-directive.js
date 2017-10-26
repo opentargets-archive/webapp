@@ -305,7 +305,9 @@ angular.module('otDirectives')
                                 row.dataOrigin = ((item.access_level !== otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
                                 // 1: disease
-                                row.disease = ('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');
+                                row.diseaseUrl = '/disease/' + item.disease.efo_info.efo_id.split('/').pop();
+                                // row.disease = ('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');
+                                row.disease = item.disease.efo_info.label;
 
                                 // 2: drug
                                 var link = item.evidence.target2drug.urls[0].url;
@@ -316,6 +318,7 @@ angular.module('otDirectives')
                                     linkClass = '';
                                     target = '';
                                 }
+                                // row.drugUrl = 
                                 row.drug = ('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' +
                             item.drug.molecule_name +
                             '</a>');
@@ -458,7 +461,7 @@ angular.module('otDirectives')
                                     // $log.log('comparing ' + actual + ' against ' + expected);
                                     if (angular.isArray(expected)) {
                                         // multi-select: contains?
-                                        // $log.log('comparing ' + actual + ' against ' + expected + ' = ' + (expected.indexOf(actual) !== -1));
+                                        $log.log('comparing ' + actual + ' against ' + expected + ' = ' + (expected.indexOf(actual) !== -1));
                                         return expected.indexOf(actual) !== -1;
                                     } else {
                                         // default: equality
@@ -469,7 +472,10 @@ angular.module('otDirectives')
                         });
                         // $log.log(scope.tableParams);
 
-                        scope.uniquePhases = _.uniq(processedData.map(function (row) { return row.phase; }))
+                        scope.uniquePhases = _.uniq(processedData.map(function (row) { return row.phase; })).sort()
+                        scope.uniqueDiseases = _.uniq(processedData.map(function (row) { return row.disease; })).sort()
+                        scope.uniqueTargetClasses = _.uniq(processedData.map(function (row) { return row.targetClass; })).sort()
+                        scope.uniqueStatuses = _.uniq(processedData.map(function (row) { return row.status; })).sort()
                         // .map(function(phase) {
                         //     return {
                         //         id: phase,
