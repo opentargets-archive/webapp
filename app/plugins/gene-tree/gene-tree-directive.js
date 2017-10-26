@@ -29,8 +29,7 @@ angular.module('otPlugins')
 
                 if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
-                        var svg = newDiv.querySelector('svg');
-                        return svg;
+                        return document.getElementById('gene-tree').querySelector('svg');
                     };
                 }
 
