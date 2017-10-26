@@ -47,6 +47,8 @@
     "eslint": "./node_modules/.bin/eslint -f html -o eslint.html 'app/js/**.js'; exit 0"
   },
   "dependencies": {
+    "angular-bootstrap-multiselect": "^1.1.11",
+    "angular-filter": "^0.5.17",
     "babel-polyfill": "6.23.0",
     "cttv.api": "0.0.17",
     "cttv.diseaseGraph": "0.0.3",

@@ -8,8 +8,8 @@ function initApp (deps) {
     // }]);
 
 
-    app.config(['$routeProvider', '$locationProvider',
-        function ($routeProvider, $locationProvider) {
+    app.config(['$routeProvider', '$locationProvider', 'ngTableFilterConfigProvider',
+        function ($routeProvider, $locationProvider, ngTableFilterConfigProvider) {
             'use strict';
 
             $routeProvider
@@ -110,6 +110,13 @@ function initApp (deps) {
             // }
 
             $locationProvider.html5Mode(true).hashPrefix('!');
+
+            ngTableFilterConfigProvider.setConfig({
+                aliasUrls: {
+                    categorical: 'src/components/known-drug-table/categorical-table-filter.html'
+                }
+            });
+
         }]);
 
     return app;
@@ -117,6 +124,8 @@ function initApp (deps) {
 
 
 var deps = [
+    'angular.filter',
+    'btorfs.multiselect',
     'ngTable',
     'ngRoute',
     'ngCookies',

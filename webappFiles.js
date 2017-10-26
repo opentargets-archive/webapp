@@ -28,7 +28,10 @@ var webappFiles = {
             'bower_components/FileSaver/FileSaver.min.js',
             'bower_components/moment/moment.js',
             'bower_components/abdmob/x2js/xml2json.min.js',
-            'node_modules/ng-table/bundles/ng-table.min.js'
+            'node_modules/ng-table/bundles/ng-table.min.js',
+            'node_modules/angular-bootstrap-multiselect/dist/angular-bootstrap-multiselect.min.js',
+            // 'node_modules/angular-bootstrap-multiselect/dist/angular-bootstrap-multiselect-templates.js'
+            'node_modules/angular-filter/dist/angular-filter.min.js'
         ],
         'css': [
             'bower_components/bootstrap/dist/css/bootstrap.css',
