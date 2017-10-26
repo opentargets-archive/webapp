@@ -41,6 +41,13 @@
         </tbody>
     </table>
 </div>
+<!-- <div class="table-panel">
+    <multiselect ng-model="msSelection" options="msOptions">
+        </multiselect>
+
+    <p>Options: {{msOptions}}</p>
+    <p>Selection: {{msSelection}}</p>
+</div> -->
 <div ng-if="tableParams" class="table-panel">
     <table ng-table="tableParams" class='table ot-evidence-table'>
         <tr ng-repeat="row in $data">
@@ -48,7 +55,8 @@
             <td data-title="'Age'" filter="{age: 'number'}" sortable="'age'">{{row.age}}</td> -->
 
             <td data-title="'Drug'" filter="{drug: 'text'}" sortable="'drug'">{{row.drug}}</td>
-            <td data-title="'Phase'" filter="{phase: 'text'}" sortable="'phase'">{{row.phase}}</td>
+            <td data-title="'Phase'" filter="{phase: 'categorical'}" filter-data="uniquePhases" sortable="'phase'">{{row.phase}}</td>
+            <!-- <td data-title="'Phase'" filter="{phase: 'select-multiple'}" filter-data="uniquePhases" sortable="'phase'">{{row.phase}}</td> -->
         </tr>
     </table>
 </div>

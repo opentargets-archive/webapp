@@ -7,7 +7,7 @@
 angular.module('otDirectives')
 
     /* Directive to display the known drug evidence table */
-    .directive('otKnownDrugTable', ['NgTableParams', '$log', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (NgTableParams, $log, otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
+    .directive('otKnownDrugTable', ['NgTableParams', 'ngTableFilterConfig', '$log', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (NgTableParams, ngTableFilterConfig, $log, otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
         'use strict';
         // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -31,6 +31,28 @@ angular.module('otDirectives')
                 init();
             }],
             link: function (scope, elem, attrs) {
+                // scope.msOptions = [
+                //     "France",
+                //     "United Kingdom",
+                //     "Germany",
+                //     "Belgium",
+                //     "Netherlands",
+                //     "Spain",
+                //     "Italy",
+                //     "Poland",
+                //     "Austria"
+                // ];
+
+                // $log.log(ngTableFilterConfig);
+                // ngTableFilterConfigProvider.setConfig({
+                //     aliasUrls: {
+                //         categorical: 'categorical-table-filter.html'
+                //     }
+                // });
+                // ngTableFilterConfig.config.aliasUrls = {
+                //     categorical: 'categorical-table-filter.html'
+                // };
+
                 // this probably shouldn't live here, so we'll see later on...
                 // var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>';
                 // var accessLevelPublic = '<span class=\'ot-access-public\' title=\'public data\'></span>';
@@ -428,9 +450,40 @@ angular.module('otDirectives')
                         // ];
                         var processedData = transformer(scope.ext.data);
                         $log.log(processedData);
-                        scope.tableParams = new NgTableParams({}, {dataset: processedData});
-                        $log.log(scope.tableParams);
+                        scope.tableParams = new NgTableParams({}, {
+                            dataset: processedData,
+                            filterOptions: {
+                                // filterFilterName: 'otCategoricalTableFilter'
+                                filterComparator: function (actual, expected) {
+                                    // $log.log('comparing ' + actual + ' against ' + expected);
+                                    if (angular.isArray(expected)) {
+                                        // multi-select: contains?
+                                        // $log.log('comparing ' + actual + ' against ' + expected + ' = ' + (expected.indexOf(actual) !== -1));
+                                        return expected.indexOf(actual) !== -1;
+                                    } else {
+                                        // default: equality
+                                        return angular.equals(actual, expected);
+                                    }
+                                }
+                            }
+                        });
+                        // $log.log(scope.tableParams);
 
+                        scope.uniquePhases = _.uniq(processedData.map(function (row) { return row.phase; }))
+                        // .map(function(phase) {
+                        //     return {
+                        //         id: phase,
+                        //         title: phase,
+                        //         phase: phase
+                        //     }
+                        // })
+                        // scope.uniquePhasesPlusNull = scope.uniquePhases.push({
+                        //     id: '',
+                        //     title: '',
+                        //     phase: ''
+                        // });
+                        // $log.log(scope.uniquePhases);
+                        // $log.log(scope.uniquePhasesPlusNull);
 
 
 
