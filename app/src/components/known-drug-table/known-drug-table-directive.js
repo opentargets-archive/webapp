@@ -311,17 +311,20 @@ angular.module('otDirectives')
 
                                 // 2: drug
                                 var link = item.evidence.target2drug.urls[0].url;
-                                var linkClass = 'class="ot-external-link"';
+                                var linkClass = 'ot-external-link';
                                 var target = 'target=_blank';
                                 if (item.evidence.target2drug.provenance_type.database.id === 'ChEMBL') {
                                     link = '/summary?drug=' + item.drug.id.split('/').pop();
                                     linkClass = '';
                                     target = '';
                                 }
-                                // row.drugUrl = 
-                                row.drug = ('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' +
-                            item.drug.molecule_name +
-                            '</a>');
+                                row.drugUrl = link;
+                                row.drugClass = linkClass;
+                                row.drugTarget = target;
+                                row.drug = item.drug.molecule_name;
+                            //     row.drug = ('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' +
+                            // item.drug.molecule_name +
+                            // '</a>');
 
                                 // 3: phase
                                 // row.push(item.drug.max_phase_for_all_diseases.label);
@@ -474,6 +477,7 @@ angular.module('otDirectives')
 
                         scope.uniquePhases = _.uniq(processedData.map(function (row) { return row.phase; })).sort()
                         scope.uniqueDiseases = _.uniq(processedData.map(function (row) { return row.disease; })).sort()
+                        scope.uniqueDrugs = _.uniq(processedData.map(function (row) { return row.drug; })).sort()
                         scope.uniqueTargetClasses = _.uniq(processedData.map(function (row) { return row.targetClass; })).sort()
                         scope.uniqueStatuses = _.uniq(processedData.map(function (row) { return row.status; })).sort()
                         // .map(function(phase) {

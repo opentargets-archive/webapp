@@ -56,7 +56,7 @@
 
 
             <td data-title="'Disease'" filter="{disease: 'categorical'}" filter-data="uniqueDiseases" sortable="'disease'"><a href="{{row.diseaseUrl}}">{{row.disease}}</a></td>
-            <td data-title="'Drug'" filter="{drug: 'text'}" sortable="'drug'">{{row.drug}}</td>
+            <td data-title="'Drug'" filter="{drug: 'categorical'}" filter-data="uniqueDrugs" sortable="'drug'"><a href="{{row.drugUrl}}">{{row.drug}}</a></td>
             <td data-title="'Phase'" filter="{phase: 'categorical'}" filter-data="uniquePhases" sortable="'phase'">{{row.phase}}</td>
             <td data-title="'Status'" filter="{status: 'text'}" sortable="'status'">{{row.status}}</td>
             <td data-title="'Type'" filter="{type: 'text'}" sortable="'type'">{{row.type}}</td>
