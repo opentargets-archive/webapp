@@ -464,7 +464,7 @@ angular.module('otDirectives')
                                     if (angular.isArray(expected)) {
                                         // multi-select: contains?
                                         if (expected.length > 0) {
-                                            $log.log('comparing ' + actual + ' against ' + expected + ' = ' + (expected.indexOf(actual) !== -1));
+                                            // $log.log('comparing ' + actual + ' against ' + expected + ' = ' + (expected.indexOf(actual) !== -1));
                                             return expected.indexOf(actual) !== -1;
                                         } else {
                                             return true;
