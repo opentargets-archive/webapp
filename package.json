@@ -75,7 +75,6 @@
     "lodash": "^4.17.4",
     "marked": "^0.3.6",
     "moment": "^2.19.1",
-    "ng-infinite-scroll": "^1.3.0",
     "ot.interactions_viewer": "0.0.9",
     "systemjs": "^0.19.27",
     "tnt.ensembl": "0.0.13",
