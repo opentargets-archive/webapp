@@ -1,4 +1,4 @@
 <!-- <multiselect ng-model="params.filter()[name]" options="$column.data"></multiselect> -->
 <!-- <multiselect ng-model="params.filter()[name]" options="$column.data" display-prop="phase" id-prop="phase" ng-click="console.log($column.data)"></multiselect> -->
-<multiselect ng-model="params.filter()[name]" options="$column.filterData()" ng-click="$log.log($column.filterData())"></multiselect>
+<multiselect ng-model="params.filter()[name]" options="$column.filterData()" ng-click="$log.log($column.filterData())" show-search="(name === 'disease')"></multiselect>
 <!-- <multiselect ng-model="params.filter()[name]" options="$column.data | unique" ng-click="console.log($column.data)"></multiselect> -->
