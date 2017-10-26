@@ -55,8 +55,8 @@ angular.module('otServices')
             // .prefix('http://127.0.0.1:8123/api/')
             // .prefix("https://www.targetvalidation.org/api/")
             // .version('latest')
-            .appname('cttv-web-app')
-            .secret('2J23T20O31UyepRj7754pEA2osMOYfFK')
+            // .appname('cttv-web-app')
+            // .secret('2J23T20O31UyepRj7754pEA2osMOYfFK')
             .verbose(false);
 
         /**/

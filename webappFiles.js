@@ -26,7 +26,8 @@ var webappFiles = {
             'app/vendor/foamtree/carrotsearch.foamtree.js',
             'node_modules/marked/marked.min.js',
             'node_modules/file-saver/FileSaver.min.js',
-            'node_modules/moment/moment.js'
+            'node_modules/moment/moment.js',
+            'node_modules/ng-infinite-scroll/build/ng-infinite-scroll.min.js'
         ],
         'css': [
             'node_modules/bootstrap/dist/css/bootstrap.css',
