@@ -88,10 +88,10 @@ angular.module('otDirectives')
                                             // check each tissue has at least one parent anatomical system
                                             // and at least one parent organ
                                             if (!tissue.anatomical_systems || tissue.anatomical_systems.length < 1) {
-                                                $log.error(tissue.label + ' has no anatomical system');
+                                                $log.warn(tissue.label + ' has no anatomical system -- skipping from visualisation');
                                             }
                                             if (!tissue.organs || tissue.organs.length < 1) {
-                                                $log.error(tissue.label + ' has no anatomical system');
+                                                $log.warn(tissue.label + ' has no anatomical system -- skipping from visualisation');
                                             }
 
                                             // create system hierarchy
