@@ -7,7 +7,7 @@
 angular.module('otDirectives')
 
     /* Directive to display the known drug evidence table */
-    .directive('otKnownDrugTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
+    .directive('otKnownDrugTable', ['$log', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function ($log, otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
         'use strict';
         // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -263,10 +263,31 @@ angular.module('otDirectives')
                         return newdata;
                     }
 
+
+                    function addColumnFilterDropdown (column) {
+                        // see https://datatables.net/examples/api/multi_filter_select.html
+                        var select = $('<select><option value=""></option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+        
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    // .search(val ? val : '', true, false)
+                                    .draw();
+                            });
+        
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    }
+
                     /*
-                * This is the hardcoded data for the Known Drugs table and
-                * will obviously need to change and pull live data when available
-                */
+                     * This is the hardcoded data for the Known Drugs table and
+                     * will obviously need to change and pull live data when available
+                     */
                     function initTableDrugs () {
                     // $('#drugs-table') // Not anymore
                         var table = elem[0].getElementsByTagName('table');
@@ -292,12 +313,23 @@ angular.module('otDirectives')
                                     'targets': [2, 5, 6, 7, 8, 9, 10],
                                     'width': '11.2%'
                                 }
-                            ]
-                        // "aoColumnDefs" : [
-                        //     {"iDataSort" : 2, "aTargets" : [3]},
-                        // ]
-                        // "ordering": false
-                        // }, $scope.search.info.title+"-known_drugs") );
+                            ],
+                            // "aoColumnDefs" : [
+                            //     {"iDataSort" : 2, "aTargets" : [3]},
+                            // ]
+                            // "ordering": false
+                            // }, $scope.search.info.title+"-known_drugs") );
+                            initComplete: function () {
+                                var dropdownColumns = [1, 2, 3, 4, 5, 6, 8, 9];
+                                this.api().columns().every(function () {
+                                    var column = this;
+                                    $log.log(column);
+                                    if (dropdownColumns.indexOf(column[0][0]) !== -1) {
+                                        addColumnFilterDropdown(column);
+                                    }
+                                });
+                            }
+
                         }, (scope.title ? scope.title + '-' : '') + 'known_drugs'));
                     }
                 });
