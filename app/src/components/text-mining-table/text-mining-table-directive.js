@@ -177,7 +177,7 @@ angular.module('otDirectives')
                 var cat_list = ['title', 'intro', 'result', 'discussion', 'conclusion', 'other'];   // preferred sorting order
 
                 function formatAuthor (author) {
-                    return author.short_name;
+                    return author.LastName + ' ' + author.Initials;
                 }
 
                 for (var i = 0; i < data.length; i++) {
