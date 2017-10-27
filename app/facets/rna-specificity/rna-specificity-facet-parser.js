@@ -38,6 +38,7 @@ angular.module('otFacets')
                         enabled: true,
                         checked: false,
                         children: null,
+                        hideCount: true, // TODO: currently hide while numbers are wrong; when numbers fixed, remove
                         facetName: rnaTissueKey
                     }, facetsGlobal);
 
@@ -209,16 +210,13 @@ angular.module('otFacets')
                 });
 
                 // special cases
-                var shouldDeselectAllTissues = (tissueList.length > 0) &&
-                                    (rnaLevel === 0) && rnaLevelHasChanged;
                 var shouldSetLevelToOne = (tissueList.length > 0) &&
                                 (rnaLevel === 0) && !rnaLevelHasChanged;
-                if (shouldDeselectAllTissues) {
-                    // tissues - pass
-                    // level
-                    if (rnaLevel > 0) {
-                        urlObj[rnaLevelKey] = rnaLevel;
-                    }
+                var shouldSetLevelToNone = (tissueList.length === 0) &&
+                                (rnaLevel > 0) && !rnaLevelHasChanged;
+                if (shouldSetLevelToNone) {
+                    // tissues
+                    urlObj[rnaTissueKey] = tissueList;
                 } else if (shouldSetLevelToOne) {
                     // tissues
                     urlObj[rnaTissueKey] = tissueList;

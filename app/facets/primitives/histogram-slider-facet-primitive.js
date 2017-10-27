@@ -8,7 +8,7 @@ angular.module('otFacets')
    * @param {*} height 
    */
         var render = function (scope, state, svg, width, height) {
-            var margins = {top: 15, right: 20, bottom: 25, left: 40};
+            var margins = {top: 20, right: 20, bottom: 25, left: 40};
             var histogramWidth = width - margins.left - margins.right;
             var histogramHeight = height - margins.top - margins.bottom;
 
@@ -26,10 +26,22 @@ angular.module('otFacets')
                 .nice(5);
 
             // container group
+            var gBacking = svg.select('g.histogram-backing-container');
             var g = svg.select('g.histogram-container');
+
+            if (gBacking.empty()) {
+                gBacking = svg.append('g')
+                    .classed('histogram-backing-container', true);
+            }
+            gBacking.attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
+
             if (g.empty()) {
                 g = svg.append('g')
                     .classed('histogram-container', true);
+
+                g.append('text')
+                    .attr('dy', -3)
+                    .classed('message-label', true);
             }
             g.attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
@@ -92,7 +104,7 @@ angular.module('otFacets')
             }
             gYAxisLabel.attr('transform', 'translate(' + margins.left + ',' + margins.top + ')');
 
-            // helper function
+            // helper functions
             var selectBasedOn = function (g, minValue) {
                 if (minValue === 0) {
                     g.selectAll('rect.hist-bar')
@@ -104,6 +116,31 @@ angular.module('otFacets')
                         .classed('deselected', function (d) { return d.key < minValue; });
                 }
             };
+            var mouseoverHandler = function (d, i, vals) {
+                // base colouring on current element's key
+                selectBasedOn(g, d.key);
+
+                // show message
+                // var total = state.histogramData.filter(function (b) {
+                //     return b.key >= d.key;
+                // }).reduce(function (a, b) {
+                //     return a + b.value;
+                // }, 0);
+                // g.select('.message-label').text('Filter level ' + d.key + ' (~' + total + ' targets)');
+                // g.select('.message-label').text('Show targets with tissue specificity ' + d.key + ' or above in any of the selected tissues');
+                g.select('.message-label').text('Tissue specificity ' + d.key + ' or above');
+            };
+            var mouseoutHandler = function () {
+                // base colouring on level
+                selectBasedOn(g, state.level);
+                g.select('.message-label').text('');
+            };
+            var clickHandler = function (d) {
+                state.setLevel(d.key);
+                // Note: Need to trigger a digest cycle here
+                scope.$apply();
+                selectBasedOn(g, d.key);
+            };
 
             // // ensure histogram data is sorted by key
             state.histogramData.sort(function (a, b) {
@@ -112,38 +149,27 @@ angular.module('otFacets')
 
             // backing rectangles
             // JOIN
-            var bar = g.selectAll('rect.backing-rectangle')
+            var barBacking = gBacking.selectAll('rect.backing-rectangle')
                 .data(state.histogramData.filter(function (d) { return d.value > 0; }));
 
             // ENTER
-            bar.enter()
+            barBacking.enter()
                 .append('rect')
                 .classed('backing-rectangle', true);
 
             // ENTER + UPDATE
             var fullHeight = Math.abs(y.range()[1] - y.range()[0]);
-            bar
+            barBacking
                 .attr('x', function (d) { return x(d.key); })
                 .attr('y', 0)
                 .attr('width', x.rangeBand())
-                .attr('height', fullHeight)
-                .on('mouseover', function (d) {
-                    // base colouring on current element's key
-                    selectBasedOn(g, d.key);
-                })
-                .on('mouseout', function (d) {
-                    // base colouring on level
-                    selectBasedOn(g, state.level);
-                })
-                .on('click', function (d) {
-                    state.setLevel(d.key);
-                    // Note: Need to trigger a digest cycle here
-                    scope.$apply();
-                    selectBasedOn(g, d.key);
-                });
+                .attr('height', function (d) { return d.value > 0 ? fullHeight : 0; })
+                .on('mouseover', mouseoverHandler)
+                .on('mouseout', mouseoutHandler)
+                .on('click', clickHandler);
 
             // EXIT
-            bar.exit()
+            barBacking.exit()
                 .remove();
 
             // histogram rectangles
@@ -162,20 +188,9 @@ angular.module('otFacets')
                 .attr('y', function (d) { return y(d.value); })
                 .attr('width', x.rangeBand())
                 .attr('height', function (d) { return y(0) - y(d.value); })
-                .on('mouseover', function (d) {
-                    // base colouring on current element's key
-                    selectBasedOn(g, d.key);
-                })
-                .on('mouseout', function (d) {
-                    // base colouring on level
-                    selectBasedOn(g, state.level);
-                })
-                .on('click', function (d) {
-                    state.setLevel(d.key);
-                    // Note: Need to trigger a digest cycle here
-                    scope.$apply();
-                    selectBasedOn(g, d.key);
-                });
+                .on('mouseover', mouseoverHandler)
+                .on('mouseout', mouseoutHandler)
+                .on('click', clickHandler);
 
             // EXIT
             bar.exit()
@@ -222,7 +237,7 @@ angular.module('otFacets')
                 var svg = d3.select(ngSvg);
 
                 // TODO: set width based on parent width
-                var width = 200;
+                var width = 220;
                 var height = 120;
 
                 function scopeToState (scope) {

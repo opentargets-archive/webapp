@@ -193,6 +193,7 @@
             },
             "track": true
         },
+
         {
             "name": "geneOntology",
             "element": "ot-gene-ontology",
