@@ -10,10 +10,16 @@
         border: 1px solid #666;
     }
 
-    // .popover {
-        //min-width: 378px;
-        //max-width: 100%;
-    // }
+    ot-popover {
+        .popover {
+            min-width: 378px;
+            max-width: 100%;
+        }
+    }
+
+    .batch-search-popover {
+        font-size: 0.8em;
+    }
 
     /*
     * one line modals
