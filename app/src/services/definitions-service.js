@@ -24,6 +24,14 @@ angular.module('otServices')
             'TEP': {
                 'description': 'TEPs provide a critical mass of reagents and knowledge on a protein target to allow rapid biochemical and chemical exploration and characterisation of proteins with genetic linkage to key disease areas. Click on this icon to know more about TEPs',
                 'link': 'http://www.thesgc.org/tep'
+            },
+            'FACET.SPECIFICITY': {
+                'description': 'Show only targets which are expressed in the selected tissues <strong>more than</strong> the rest of the tissues.',
+                'link': '/faq#tissue-specificity'
+            },
+            'FACET.BASELINE': {
+                'description': 'Each target has an expression level per tissue based on normalised counts. You can filter targets by a set of tissues and an expression level.',
+                'link': ''
             }
         };
 

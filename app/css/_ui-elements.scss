@@ -57,9 +57,22 @@ ot-related-targets-vis, ot-related-diseases-vis {
 
 #ot-page-app {
 
-    .popover {
-        min-width: 378px;
-        max-width: 100%;
+    .pdfobject-container {
+        height: 500px;
+    }
+    .pdfobject {
+        border: 1px solid #666;
+    }
+
+    ot-popover {
+        .popover {
+            min-width: 378px;
+            max-width: 100%;
+        }
+    }
+
+    .batch-search-popover {
+        font-size: 0.8em;
     }
 
     /*
@@ -723,3 +736,12 @@ ot-related-targets-vis, ot-related-diseases-vis {
 }
 
 
+// .tooltip {
+//     width: 600px;
+//     min-width: 600px;
+//     max-width: 600px;
+// }
+
+// .facet-help {
+//     margin-left: 4px;
+// }

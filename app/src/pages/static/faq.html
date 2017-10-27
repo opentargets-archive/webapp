@@ -2,7 +2,7 @@
 
     <view-title>FAQs</view-title>
 
-    <div class="ot-content-header">
+    <div class="cttv-content-header">
         <div class="container">
             <h3 id="frequently-asked-questions">Frequently asked questions</h3>
             <p></p>
@@ -16,18 +16,20 @@
                     <ul class="plain arrow-icon">
                         <li><a href="#search">What can I search for?</a></li>
                         <li><a href="#target">What is a target?</a></li>
-                        <li><a href="#diseases">How are diseases described?</a></li>
+                        <li><a href="#diseases">How are diseases described Open Targets?</a></li>
                         <li><a href="#efo">What is the Experimental Factor Ontology?</a></li>
                         <li><a href="#why-efo">Why does Open Targets use EFO?</a></li>
                         <li><a href="#direct">What is the difference between direct and non-direct associations for targets and diseases?</a></li>
+                        <li><a href="#mutations">How does Open Targets distinguish variants from mutations?</a></li>
                         <li><a href="#data">Where does the data come from?</a></li>
-                        <li><a href="#assembly">What genome assembly is Open Targets using?</a></li>
+                        <li><a href="#assembly">What genome assembly does Open Targets use?</a></li>
                         <li><a href="#variants">How does Open Targets assign variants (e.g. SNPs) to genes?</a></li>
-                        <li><a href="#missing-data">The Platform does not report a known association between gene A and disease B. Why isn't this information in Open Targets?</a></li>
+                        <li><a href="#missing-data">The Open Targets Platform does not report a known association between gene A and disease Z. Why isn't this information in Open Targets?</a></li>
                         <li><a href="#clinical-trials">What are clinical trials?</a></li>
                         <li><a href="#score">How is the association score calculated?</a></li>
+                        <li><a href="#transgenic">Do you have any data on transgenic animal models?</a></li>
                         <li><a href="#biblio">I am looking at a target profile and found some articles linked to my target. Where does the bibliography come from?</a></li>
-                        <li><a href="#data_use">Do you use the information I have searched for in platform?</a></li>
+                        <li><a href="#data_use">Do you use the information I have searched for in Platform?</a></li>
                         <li><a href="#citation">How do I cite the Open Targets Platform?</a></li>
                         <li><a href="#download">Can I download data from the Open Targets Platform?</a></li>
                         <li><a href="#contact">How can I contact the team?</a></li>
@@ -48,7 +50,7 @@
                 </div>
 
                 <div class="ot-docs-section">
-                    <h4><a name="disease"></a>How are diseases described?</h4>
+                    <h4><a name="disease"></a>How are diseases described in Open Targets?</h4>
                     <p>We map diseases to ontology terms in the Experimental Factor Ontology (EFO). This enables us to integrate evidence from different sources and to describe relationships between diseases.</p>
                 </div>
 
@@ -70,17 +72,17 @@
 
                 <div class="ot-docs-section">
                     <h4><a name="direct"></a>What is the difference between direct and non-direct associations for targets and diseases?</h4>
-                    <p>We take into account the ontology of diseases from the Experimental Factor Ontology (EFO) to propagate evidence up to their parent terms. This allows us to compute new target-disease associations when there is no direct (known and observed) evidence for them.</p>
+                    <p>We take into account the ontology of diseases from the Experimental Factor Ontology (EFO) to propagate evidence up to their parent terms. This allows us to compute new target-disease associations when there is no direct (known and observed) evidence for them. Read our <a href="http://blog.opentargets.org/direct-versus-indirect-evidence-should-you-care/">Direct versus indirect evidence: should you care?</a> blog post for more details </p>
                 </div>
 
 
                 <div class="ot-docs-section">
                     <h4><a name="data"></a>Where does the data come from?</h4>
-                    <p>The data comes from a number of public databases, such as GWAS Catalog, EVA, UniProt, Expression Atlas, ChEMBL, DECIPHER, IntOGen, and others. These databases are the <a href="/data-sources">Open Targets Platform Data Sources</a>.</p>
+                    <p>The data comes from a number of public databases, such as GWAS Catalog, EVA, UniProt, Expression Atlas, ChEMBL, DECIPHER, IntOGen, and others. These databases are the <a href="/data_sources">Open Targets Platform Data Sources</a>.</p>
                 </div>
 
                 <div class="ot-docs-section">
-                    <h4><a name="assembly"></a>What genome assembly is Open Targets using?</h4>
+                    <h4><a name="assembly"></a>What genome assembly does Open Targets use?</h4>
                     <p>We use GRCh38 (sometimes referred to as hg38). This is the latest human genome provided by the <a href="https://www.ncbi.nlm.nih.gov/grc">Genome Reference Consortium</a>. This is relevant when we display SNPs and other features on the genome. It also affects the set of targets that we use, which is based on the latest Ensembl version at the time of our release. However, because our focus is on evidence associating targets and diseases, we support most evidence data irrespective of the genome assembly that may have been used for their original analysis.</p>
                 </div>
 
@@ -90,7 +92,7 @@
                 </div>
 
                 <div class="ot-docs-section">
-                    <h4><a name="missing-data"></a>The Platform does not report a known association between gene A and disease B. Why isn't this information in Open Targets?</h4>
+                    <h4><a name="missing-data"></a>The Platform does not report a known association between gene A and disease Z. Why isn't this information in Open Targets?</h4>
                     <p>If we miss known associations that are described elsewhere, please <a href="mailto:support@targetvalidation.org?">get in touch</a>. The reasons can be severalfold and we will look at the examples on a case-by-case basis. If the known association is described in a recent paper, it will not have made it through the curation process within our data sources yet. If the known association is based on a variant with an ID (e.g. rs123, His166Tyr), please include that information as well. We are revisiting our variant-to-gene assignment to assess if eQTLs could give a more likely assignment that the one we currently use, which is based on functional data only as described in <a href="#variants">"How does Open Target assign variants (e.g. SNPs) to genes?"</a>. By providing this information, you can help us improve our analyses for variant-to-gene assignment.</p>
                 </div>
 
@@ -109,8 +111,15 @@
 
                 <div class="ot-docs-section">
                     <h4><a name="score"></a>How is the association score calculated?</h4>
-                    <p>We calculate a score for each evidence from the different data sources (e.g. GWAS catalog, EVA) to summarise the strength of the evidence. The score will depend on factors that affect the relative strength of an evidence, for example p values and sample size for the GWAS data.</p>
-                    <p>Once we have the scores for each evidence, we calculate an overall score by taking into account the sum of the <a href="https://en.wikipedia.org/wiki/Harmonic_progression_(mathematics)">harmonic progression</a> of each score and adjusting the contribution of each of them using a heuristic weighting.</p>
+                    <p><a href="https://www.targetvalidation.org/scoring">Scoring target-disease associations</a> is done at four levels. Firstly, we summarise the strength of the evidence. This score depends on factors that affect the relative strength of the evidence (e.g. *p* values and sample size for SNPs from GWAS Catalog; or phase of the clinical trials for drugs from ChEBML).</p>
+                    <p>We then aggregate the scores from all evidence into the data source scores, followed by aggregating the data source scores into the data type scores (e.g. Genetic associations score). For the aggregation steps, we take into account the sum of the <a href="https://en.wikipedia.org/wiki/Harmonic_progression_(mathematics)">harmonic progression</a>, and adjust the contribution of each of them using a heuristic weighting.</p>
+                    <p>Finally, we sum the individual data source scores using the harmonic sum to give the overall association score.</p>
+                </div>
+
+                <div class="ot-docs-section">
+                    <h4><a name="tissue-specificity"></a>How do you calculate tissue specificity from RNA expression data?</h4>
+                    <p>We compute the tissue specificity of a target as the number of standard deviations from the mean of the log RNA expression of the target across the available tissues. This is a standard z-score calculation. 
+                            A target is considered to be tissue specific if the z-score is greater than 0.674 (or the 75th percentile of a perfect normal distribution). We remove data for under-expressed targets before the z-score calculation. Our RNA expression data comes from Expression Atlas.</p>
                 </div>
 
                 <div class="ot-docs-section">
@@ -119,8 +128,8 @@
                 </div>
 
                 <div class="ot-docs-section">
-                    <h4><a name="data_use"></a>Do you use the information I have searched for in platform?</h4>
-                    <p>We do not analyse the nature (e.g disease or target names) of any specific queries via the web application. We use standard encryption methods (e.g. https://) to maintain the security of the searches. For further details check the <a href="/terms-of-use">Terms of use for the Open Targets Platform</a>.</p>
+                    <h4><a name="data_use"></a>Do you use the information I have searched for in Platform?</h4>
+                    <p>We do not analyse the nature (e.g disease or target names) of any specific queries via the web interface. We use standard encryption methods (e.g. https://) to maintain the security of the searches. For further details check the <a href="/terms_of_use">Terms of use for the Open Targets Platform</a>.</p>
                     <p>Note that some of the components of the site are provided by third parties, or make use of services provided by third parties, mostly from EMBL-EBI resources. We provide links to these external resources, and the use of their services is covered by their own terms of use. We may however use some metrics on the usage of pages and icons on the platform to improve its visualisation aspects. If you any concerns, please contact our <a href="mailto:support@targetvalidation.org?Subject='Open Targets Platform feedback'">support</a> team</p>
                 </div>
 
@@ -135,14 +144,20 @@
                 </div>
 
                 <div class="ot-docs-section">
+                    <h4><a name="mutations"></a>How does Open Targets distinguish variants from mutations?</h4>
+                    <p>Variants are base differences observed in the human population (e.g. 1000 Genomes, ExAC data), whereas mutations are base changes that have been associated with a significant phenotypic change. Changes associated with a rare disease or cancer are referred as mutations.</p>
+                </div>
+
+<div class="ot-docs-section">
+                    <h4><a name=transgenic"></a>Do you have any data on transgenic animal models?</h4>
+                    <p>We have the knockout models from the <a href="http://www.informatics.jax.org/">Mouse Genome Informatics</a>., not the transgenic ones. If you want the transgenic data to be incorporated as well, please <a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;">email us</a>.</p>
+                </div>
+                
+                <div class="ot-docs-section">
                     <h4><a name="contact"></a>How can I contact the team?</h4>
                     <p>If you have questions or feedback, <a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&#x40;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&#x2E;&#x6F;&#x72;&#x67;">email us</a>. You can also follow the team and keep up with the latest news on Open Targets and its Open Targets Platform through our social media channels <a href="https://twitter.com/targetvalidate">Twitter</a>, <a href="https://www.facebook.com/OpenTargets">Facebook</a> and <a href="https://www.facebook.com/OpenTargets">LinkedIn</a>.</p>
                 </div>
-
-
             </div>
         </div>
-
     </div>
-
 </div>

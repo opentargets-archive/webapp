@@ -244,8 +244,6 @@ angular.module('otControllers')
                             $scope.search.results.data.forEach(function (result) {
                                 otUtils.addMatchedBy(result);
                             });
-
-                            // $log.log($scope.search.results.data[0]);
                             return resp;
                         },
                         otApi.defaultErrorHandler
@@ -255,7 +253,7 @@ angular.module('otControllers')
                         function (resp) {
                             // Picasso panel:
                             // for the first result, parse a few info:
-                            if (resp.body.from === 0) {
+                            if (resp.body.data && resp.body.data.length > 0 && resp.body.from === 0) {
                                 var result = $scope.search.results.data[0];
 
                                 //

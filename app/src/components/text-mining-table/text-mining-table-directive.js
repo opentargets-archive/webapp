@@ -1,3 +1,9 @@
+/**
+ * Text mining table
+ * 
+ * ext object params:
+ *  isLoading, hasError, data
+ */
 angular.module('otDirectives')
     .directive('otTextMiningTable', [
         'otApi',
@@ -158,7 +164,12 @@ angular.module('otDirectives')
             };
 
 
-            function parseServerResponse (data) {
+            /*
+             * Takes the data object returned by the API and formats it 
+             * to an array of arrays to be displayed by the dataTable widget.
+             */
+            function formatDataToArray (data) {
+            // function parseServerResponse (data) {
                 var newData = [];
 
                 var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>'; // "<span class='fa fa-users' title='private data'>G</span>";
@@ -331,7 +342,8 @@ angular.module('otDirectives')
                 return newData;
             }
 
-            var setupTable = function (table, target, disease, filename, download) {
+
+            var initTable = function (table, target, disease, filename, download, scope) {
                 return $(table).DataTable({
                     'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
                     // TODO: We are disabling the download for now because there may be too many items
@@ -365,6 +377,8 @@ angular.module('otDirectives')
                             4: 'literature.date'
                         };
 
+                        scope.ext.isLoading = true;
+
                         // We save the order condition for the server side rendering to use it for the download
                         dirScope.order = [];
                         for (var i = 0; i < data.order.length; i++) {
@@ -388,7 +402,9 @@ angular.module('otDirectives')
                         };
                         otApi.getFilterBy(queryObject)
                             .then(function (resp) {
-                                var dtData = parseServerResponse(resp.body.data);
+                                scope.ext.total = resp.body.total;  // we need to have the scope object here (passed by reference) in order to update the total
+                                scope.ext.data = resp.body.data;
+                                var dtData = formatDataToArray(resp.body.data);
                                 var o = {
                                     recordsTotal: resp.body.total,
                                     recordsFiltered: resp.body.total,
@@ -397,6 +413,9 @@ angular.module('otDirectives')
                                 };
                                 draw++;
                                 cbak(o);
+                            })
+                            .finally(function () {
+                                scope.ext.isLoading = false;
                             });
                     },
                     'ordering': true,
@@ -438,12 +457,13 @@ angular.module('otDirectives')
                 restrict: 'AE',
                 templateUrl: 'src/components/text-mining-table/text-mining-table.html',
                 scope: {
-                    target: '=',
-                    disease: '=',
-                    filename: '='
+                    title: '@?',    // optional title for filename export
+                    ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
                 },
-                link: function (scope) {
+                link: function (scope, elem, attrs) {
+                    scope.ext.hasError = false;
                     dirScope = scope;
+                    var filename = scope.title;
                     scope.openEuropePmc = function (pmid) {
                         var URL = 'http://europepmc.org/abstract/MED/' + pmid;
                         window.open(URL);
@@ -454,22 +474,24 @@ angular.module('otDirectives')
                         $('#' + id).toggle('fast');
                     };
 
-                    scope.$watchGroup(['target', 'disease', 'filename'], function () {
-                        if (!scope.target || !scope.disease || !scope.filename) {
+                    scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }, function () { return scope.title; }], function () {
+                        if (!attrs.target || !attrs.disease || !scope.title) {
                             return;
                         }
                         $timeout(function () {
-                            setupTable(document.getElementById('literature2-table'), scope.target, scope.disease, scope.filename, scope.downloadTable);
+                            // initTable(document.getElementById('literature2-table'), scope.target, scope.disease, scope.filename, scope.downloadTable);
+                            filename = (scope.title || (attrs.target + '-' + attrs.disease)).replace(/ /g, '_') + '-text-mining';
+                            initTable(elem[0].getElementsByTagName('table'), attrs.target, attrs.disease, filename, scope.downloadTable, scope);
                         }, 0);
-                        // setupTable();
                     });
 
                     // TODO: If we move all the evidence tables to server side, this should be abstracted out probably in a service
                     scope.downloadTable = function () {
+                        scope.ext.isLoading = true; // set the loading flag; to be honest this is so fast that one can't even see the spinner
                         var size = 200;
                         var opts = {
-                            disease: scope.disease,
-                            target: scope.target,
+                            disease: attrs.disease, // scope.disease,
+                            target: attrs.target, // scope.target,
                             datasource: otConfig.evidence_sources.literature,
                             // format: 'csv',
                             size: size,
@@ -510,73 +532,11 @@ angular.module('otDirectives')
                                     totalText += '\n';
                                 }
                                 var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
-                                saveAs(b, scope.filename + '.csv');
+                                saveAs(b, filename + '.csv');
+                            })
+                            .finally(function () {
+                                scope.ext.isLoading = false;
                             });
-
-                        // First make a call to know how many rows there are:
-                        // var optsPreFlight = {
-                        //     disease: scope.disease,
-                        //     target: scope.target,
-                        //     size: 0,
-                        //     datasource: otConfig.evidence_sources.literature,
-                        //
-                        // };
-                        // var queryObject = {
-                        //     method: 'GET',
-                        //     params: optsPreFlight
-                        // };
-                        // otApi.getFilterBy(queryObject)
-                        //     .then (function (resp) {
-                        //         var total = resp.body.total;
-                        //
-                        //         var promise = $q(function (resolve) {
-                        //             resolve("");
-                        //         });
-                        //         var totalText = "";
-                        //         var promises = [];
-                        //         for (var i=0; i<total; i+=size) {
-                        //             promises.push({
-                        //                 from: i,
-                        //                 total: size
-                        //             });
-                        //         }
-                        //         promises.forEach (function (p) {
-                        //             promise = promise.then (function () {
-                        //                 return getNextChunk(p.total, p.from);
-                        //             })
-                        //         });
-                        //         promise.then (function (res) {
-                        //             var b = new Blob ([totalText], {type: "text/csv;charset=utf-8"});
-                        //             saveAs(b, scope.filename + ".csv");
-                        //         });
-                        //
-                        //         function getNextChunk(size, from) {
-                        //             var opts = {
-                        //                 disease: scope.disease,
-                        //                 target: scope.target,
-                        //                 datasource: otConfig.evidence_sources.literature,
-                        //                 format: "csv",
-                        //                 size: size,
-                        //                 from: from
-                        //             };
-                        //
-                        //             var queryObject = {
-                        //                 method: 'GET',
-                        //                 params: opts
-                        //             };
-                        //
-                        //             return otApi.getFilterBy(queryObject)
-                        //                 .then(function (resp) {
-                        //                     var moreText = resp.body;
-                        //                     if (from > 0) {
-                        //                         // Not in the first page, so remove the header row
-                        //                         moreText = moreText.split("\n").slice(1).join("\n");
-                        //                     }
-                        //                     totalText += moreText;
-                        //                 });
-                        //         }
-                        //
-                        //     });
                     };
                 }
             };

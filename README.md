@@ -18,9 +18,8 @@ You'll obviously need `git` to clone the repository.
 Installation and tests need some node.js tools:
 you must have `node.js` and its package manager `npm` installed.  You can get them from [http://nodejs.org/](http://nodejs.org/)
 
-Installing bower and gulp globally also helps
+Installing gulp globally also helps
 ```
-npm install -g bower
 npm install -g gulp
 ```
 
@@ -31,10 +30,9 @@ npm install
 npm run setup
 ```
 
-This installs the required node modules and calls `bower install`  and `jspm install` which takes care of all Angular dependencies and 3rd party widgets.
+This installs the required node modules and calls `jspm install` which takes care of all Angular dependencies and 3rd party widgets.
 So these commands create three directories:
-* `node_modules` - npm packages for the needed tools (bower, http-server and modules for testing)
-* `app/bower_components` - all Angular code. Note that the `bower_components` folder would normally be installed in the root folder but we change this location through the `.bowerrc` for neater deployment.
+* `node_modules` - npm packages for the needed tools (http-server and modules for testing); also all Angular code.
 * `app/jspm_packages` - some of the packages needed for loading widgets on demand (deferred loading)
 
 Angular code is installed via Bower includes:

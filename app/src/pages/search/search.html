@@ -102,7 +102,7 @@
             <div class="col-md-4 hidden-sm">
 
 
-                <div ng-if="search.results.from==0" class="panel panel-default" ng-init="result = search.results.data[0]">
+                <div ng-if="search.results.from==0 && search.results.data.length>0" class="panel panel-default" ng-init="result = search.results.data[0]">
                     <div class="panel-body">
 
                         <h4><a ng-href="/{{result.data.type}}/{{result.data.id}}/associations">{{result.data.name}}</a><br />

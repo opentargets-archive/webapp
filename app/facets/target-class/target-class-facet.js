@@ -1,16 +1,10 @@
-angular.module('facets')
-
-    /**
-     * The Target class facet
-     */
+angular.module('otFacets')
     .directive('targetClassFacet', [function () {
-        'use strict';
-
         return {
-            restrict: 'AE',
+            restrict: 'E',
             scope: {
                 facet: '='
             },
-            templateUrl: 'directives/generic-nested-facetcollection.html'
+            templateUrl: 'facets/target-class/target-class-facet.html'
         };
     }]);

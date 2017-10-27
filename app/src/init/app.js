@@ -132,7 +132,7 @@ var deps = [
     'ngSanitize',
     'swaggerUi',
     'otPlugins',
-    'facets'
+    'otFacets'
 ];
 
 /*
@@ -148,8 +148,8 @@ angular.element(document).ready(
         // First get the config file
         $http.get('build/config.json').then(
             function (response) {
-                deps = _.concat(deps, getComponents(response.data));
-                configSystemjs(response.data, $q).then(function () {
+                deps = _.concat(deps, getComponents(response.data.general));
+                configSystemjs(response.data.general, $q).then(function () {
                     var app = initApp(deps);
                     app.constant('initConfig', response.data);
                     angular.bootstrap(document, ['otApp']);

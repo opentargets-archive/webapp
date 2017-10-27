@@ -17,12 +17,20 @@ angular.module('otDirectives')
     .directive('otDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otApi', '$q', function (otUtils, otDictionary, otConsts, otApi, $q) {
         'use strict';
 
-        var draw = 1;
         var filters = {};
         var targets;
 
         var colorScale = otUtils.colorScales.BLUE_0_1; // blue orig
         // var colorScale = d3.interpolateYlGnBu;
+
+        // Controls pagination in datatables [Prev | Next] with the Next index
+        // indexes contains an array of the indexes for all previous pages and the next one
+        // currStart is needed to know if we are going forward (next) or backwards (prev).
+        // currLength stores the current number of rows per page (this is needed because we revert to page 0 if this changes).
+        var draw = 1;
+        var indexes = [];
+        var currStart = 0;
+        var currLength;
 
         var state = {};
 
@@ -46,7 +54,6 @@ angular.module('otDirectives')
 
             return str;
         };
-
 
         /*
      * Columns definitions
@@ -113,10 +120,11 @@ angular.module('otDirectives')
     Setup the table cols and return the DT object
     */
         var setupTable = function (table, disease, target, filename, download, stt) {
-            stt = stt || {};
+            // stt = stt || {};
 
             var t = $(table).DataTable({
                 'destroy': true,
+                'pagingType': 'simple',
                 'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
                 'buttons': [
                     {
@@ -144,20 +152,29 @@ angular.module('otDirectives')
                 'processing': false,
                 'serverSide': true,
                 'ajax': function (data, cbak) {
-                // Order options
-                // mappings:
-                // 0 => gene name alphabetically -- not supported in the api
+                    if (!currLength) {
+                        currLength = data.length;
+                    }
+                    if (data.length !== currLength) {
+                        data.start = 0;
+                        currLength = data.length;
+                        indexes = [];
+                        t.page('first');
+                    }
+                    // Order options
+                    // mappings:
+                    // 0 => gene name alphabetically -- not supported in the api
 
-                // 1 => overall
-                // 2 => genetic_association
-                // 3 => somatic_mutation
-                // 4 => known_drug
-                // 5 => affected_pathway
-                // 6 => rna_expression
-                // 7 => text_mining
-                // 8 => animal_model
-                // 9 => overall -- hidden column
-                // 10 => gene description -- not supported in the api
+                    // 1 => overall
+                    // 2 => genetic_association
+                    // 3 => somatic_mutation
+                    // 4 => known_drug
+                    // 5 => affected_pathway
+                    // 6 => rna_expression
+                    // 7 => text_mining
+                    // 8 => animal_model
+                    // 9 => overall -- hidden column
+                    // 10 => gene description -- not supported in the api
                     var mappings = {
                         0: 'target.gene_info.symbol',
                         1: 'association_score.overall',
@@ -179,17 +196,27 @@ angular.module('otDirectives')
                     // TODO: put this back if we put the state back
                     // data.start = stt.p*data.length || data.start;   // NaN || data.start in case it's not defined
                     var searchValue = (data.search.value).toLowerCase();
+
                     var opts = {
                         disease: [disease],
-                        outputstructure: 'flat',
                         facets: false,
-                        // direct: false,
                         size: data.length,
-                        from: data.start,
+                        // from: data.start,
                         sort: order,
                         search: searchValue,
                         draw: draw
                     };
+
+                    var currPage = data.start / data.length;
+
+                    // Control pagination
+                    if (data.start > currStart) {
+                        // We are moving forward...
+                        opts.next = indexes[currPage];
+                    } else if (data.start < currStart) {
+                        // We are moving backwards...
+                        opts.next = indexes[currPage];
+                    }
 
                     // Restrict the associations to these targets
                     if (target && target.length) {
@@ -211,6 +238,12 @@ angular.module('otDirectives')
                                 data: dtData,
                                 draw: draw
                             };
+
+                            // To control pagination
+                            // indexes[currPage + 1] = resp.body.data[resp.body.data.length - 1].search_metadata.sort;
+                            indexes[currPage + 1] = resp.body.next;
+                            currStart = data.start;
+
                             draw++;
                             cbak(o);
                         });
@@ -265,19 +298,19 @@ angular.module('otDirectives')
                 // The association score
                 row.push(getColorStyleString(data[i].association_score.overall, geneDiseaseLoc));
                 // Genetic association
-                row.push(getColorStyleString(getScore(i, 'genetic_association'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:genetic_associations'));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.GENETIC_ASSOCIATION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.GENETIC_ASSOCIATION));
                 // Somatic mutation
-                row.push(getColorStyleString(getScore(i, 'somatic_mutation'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:somatic_mutations'));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.SOMATIC_MUTATION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.SOMATIC_MUTATION));
                 // Known drug
-                row.push(getColorStyleString(getScore(i, 'known_drug'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:known_drugs'));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.KNOWN_DRUG), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.KNOWN_DRUG));
                 // Affected pathway
-                row.push(getColorStyleString(getScore(i, 'affected_pathway'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:affected_pathways'));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.AFFECTED_PATHWAY), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.AFFECTED_PATHWAY));
                 // Expression atlas
-                row.push(getColorStyleString(getScore(i, 'rna_expression'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:rna_expression'));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.RNA_EXPRESSION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.RNA_EXPRESSION));
                 // Literature
-                row.push(getColorStyleString(getScore(i, 'literature'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:literature'));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.LITERATURE), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.LITERATURE));
                 // Animal model
-                row.push(getColorStyleString(getScore(i, 'animal_model'), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:animal_models'));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.ANIMAL_MODEL), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.ANIMAL_MODEL));
 
                 // Total score
                 row.push(data[i].association_score.datatypes.genetic_association +
@@ -331,11 +364,12 @@ angular.module('otDirectives')
             },
             templateUrl: 'src/components/disease-associations/disease-associations.html',
             link: function (scope, elem) {
-            // TODO: initialize the state if we enable this feature
-            // otLocationState.init();
-            // state = otLocationState.getState()[scope.stateId] || {};
 
-            // table itself
+                // TODO: initialize the state if we enable this feature
+                // otLocationState.init();
+                // state = otLocationState.getState()[scope.stateId] || {};
+
+                // table itself
                 var table = elem.children().eq(0).children().eq(0)[0];
                 var dtable;
 
@@ -357,108 +391,109 @@ angular.module('otDirectives')
                 // Download the whole table
                 scope.downloadTable = function () {
                     var size = 10000;
-                    // First make a call to know how many rows there are:
-                    var optsPreFlight = {
-                        disease: [scope.disease],
-                        outputstructure: 'flat',
-                        facets: false,
-                        size: 1
-                    };
-                    // Restrict the associations to a list of targets
-                    if (scope.targets && scope.targets.length) {
-                        optsPreFlight.target = scope.targets;
+                    var totalText = '';
+                    function columnsNumberOk (csv, n) {
+                        var firstRow = csv.split('\n')[0];
+                        var cols = firstRow.split(',');
+
+                        return cols.length === n;
                     }
-                    optsPreFlight = otApi.addFacetsOptions(scope.filters, optsPreFlight);
 
-                    var queryObject = {
-                        method: 'POST',
-                        params: optsPreFlight
-                    };
-                    otApi.getAssociations(queryObject)
-                        .then(function (resp) {
-                            var total = resp.body.total;
+                    function getNextChunk(nextIndex) {
+                        var opts = {
+                            disease: [scope.disease],
+                            facets: false,
+                            format: 'csv',
+                            size: size,
+                            fields: ['target.gene_info.symbol',
+                                'association_score.overall',
+                                'association_score.datatypes.genetic_association',
+                                'association_score.datatypes.somatic_mutation',
+                                'association_score.datatypes.known_drug',
+                                'association_score.datatypes.affected_pathway',
+                                'association_score.datatypes.rna_expression',
+                                'association_score.datatypes.literature',
+                                'association_score.datatypes.animal_model',
+                                'target.gene_info.name'
+                            ]
+                            // from: from
+                        };
+                        if (scope.targets && scope.targets.length) {
+                            opts.target = scope.targets;
+                        }
 
-                            function columnsNumberOk (csv, n) {
-                                var firstRow = csv.split('\n')[0];
-                                var cols = firstRow.split(',');
+                        if (nextIndex) {
+                            opts.next = nextIndex;
+                        }
 
-                                return cols.length === n;
-                            }
+                        opts = otApi.addFacetsOptions(scope.filters, opts);
 
-                            function getNextChunk (size, from) {
-                                var opts = {
-                                    disease: [scope.disease],
-                                    outputstructure: 'flat',
-                                    facets: false,
-                                    format: 'csv',
-                                    size: size,
-                                    fields: ['target.gene_info.symbol',
-                                        'association_score.overall',
-                                        'association_score.datatypes.genetic_association',
-                                        'association_score.datatypes.somatic_mutation',
-                                        'association_score.datatypes.known_drug',
-                                        'association_score.datatypes.affected_pathway',
-                                        'association_score.datatypes.rna_expression',
-                                        'association_score.datatypes.literature',
-                                        'association_score.datatypes.animal_model',
-                                        'target.gene_info.name'],
-                                    from: from
-                                };
-                                if (scope.targets && scope.targets.length) {
-                                    opts.target = scope.targets;
+                        var queryObject = {
+                            method: 'POST',
+                            params: opts
+                        };
+
+                        return otApi.getAssociations(queryObject)
+                            .then(function (resp) {
+                                var moreText = resp.body;
+
+                                if (columnsNumberOk(moreText, opts.fields.length)) {
+                                    if (nextIndex) {
+                                        // Not in the first page, so remove the header row
+                                        moreText = moreText.split('\n').slice(1).join('\n');
+                                    }
+                                    totalText += moreText;
                                 }
+                            });
+                    }
 
-                                opts = otApi.addFacetsOptions(scope.filters, opts);
+                    function getNextIndex(nextIndex) {
+                        var opts = {
+                            disease: [scope.disease],
+                            facets: false,
+                            size: size,
+                            fields: ['thisfielddoesnotexist'] // only interested in the next index
+                        };
 
-                                var queryObject = {
-                                    method: 'POST',
-                                    params: opts
-                                };
+                        if (nextIndex) {
+                            opts.next = nextIndex;
+                        }
 
-                                return otApi.getAssociations(queryObject)
-                                    .then(function (resp) {
-                                        var moreText = resp.body;
+                        opts = otApi.addFacetsOptions(scope.filters, opts);
 
-                                        if (columnsNumberOk(moreText, opts.fields.length)) {
-                                            if (from > 0) {
-                                            // Not in the first page, so remove the header row
-                                                moreText = moreText.split('\n').slice(1).join('\n');
-                                            }
-                                            totalText += moreText;
-                                            return totalText;
+                        var queryObject = {
+                            method: 'POST',
+                            params: opts
+                        };
+
+                        return otApi.getAssociations(queryObject)
+                            .then (function (resp) {
+                                return resp.body.next;
+                            })
+                    }
+
+                    // Makes 2 calls to the api,
+                    // The first one to take the next data (in csv)
+                    // The second one to take the next index
+                    function callNext(nextIndex) {
+                        getNextChunk(nextIndex)
+                            .then(function () {
+                                return getNextIndex(nextIndex)
+                                    .then(function (nextNext) {
+                                        if (nextNext) {
+                                            console.log('calling next page with pagination index...');
+                                            console.log(nextNext);
+                                            callNext(nextNext);
                                         } else {
-                                            return null;
+                                            console.log('no more pages, downloading...');
+                                            var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
+                                            saveAs(b, scope.filename + '.csv');
                                         }
                                     });
-                            }
+                            });
+                    }
 
-                            var promise = $q(function (resolve) {
-                                resolve('');
-                            });
-                            var totalText = '';
-                            var promises = [];
-                            for (var i = 0; i < total; i += size) {
-                                promises.push({
-                                    from: i,
-                                    total: size
-                                });
-                                // promises.push(getNextChunk(size, i));
-                            }
-                            promises.forEach(function (p) {
-                                promise = promise.then(function () {
-                                    return getNextChunk(p.total, p.from);
-                                });
-                            });
-                            promise.then(function () {
-                                var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
-                                saveAs(b, scope.filename + '.csv');
-                                // var hiddenElement = document.createElement('a');
-                                // hiddenElement.href = 'data:attachment/csv,' + encodeURI(totalText);
-                                // hiddenElement.target = '_blank';
-                                // hiddenElement.download = scope.filename + ".csv";
-                                // hiddenElement.click();
-                            });
-                        }, otApi.defaultErrorHandler);
+                    callNext();
                 };
 
 

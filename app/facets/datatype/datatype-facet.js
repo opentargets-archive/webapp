@@ -1,17 +1,10 @@
-angular.module('facets')
-
-    /**
-     * The Datatypes facet
-     */
+angular.module('otFacets')
     .directive('datatypeFacet', [function () {
-        'use strict';
-
         return {
-            restrict: 'AE',
+            restrict: 'E',
             scope: {
                 facet: '='
             },
-            // templateUrl: 'facets/datatype/datatype-facet.html',
-            templateUrl: 'directives/generic-nested-facetcollection.html'
+            templateUrl: 'facets/datatype/datatype-facet.html'
         };
     }]);

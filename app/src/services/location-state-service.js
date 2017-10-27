@@ -46,63 +46,70 @@ angular.module('otServices')
 
         /*
          * Parse a location search item string and return object representation
-         * Example:
-         * var bob = parseSearchItem("datatype:genetic_association,datatype:drugs")
-         * // bob = {datatype:["genetic_association","drugs"]}
          */
-        var parseSearchItem = function (item_string) {
-            var obj = {};
-            item_string.split(',').forEach(function (itm) {
-                var tmp = itm.split(':');
-                obj[tmp[0]] = obj[tmp[0]] || []; // make sure the returned value is always an array so we don't have to check every time
-                obj[tmp[0]].push(tmp[1]);
+        var parseSearchItem = function (str) {
+            // Note:
+            // Parsing a search item needs to be backwards compatible with the more verbose form A
+            // but also support the concise form B.
+            //
+            // A: "datatype:genetic_association,datatype:drugs,datasources:chembl"
+            // B: "datatype:genetic_association;drugs,datasources:chembl"
+            //
+            // ie.   A uses list_id_separator = ':'  lists_separator = ',' (but list_ids can reoccur)
+            // while B uses list_separator = ';'  list_id_separator = ':'  lists_separator = ','
+            var keyValueStrs = str.split(',');
+            var keys = [];
+            var listStrs = {};
+            keyValueStrs.forEach(function (keyValueStr) {
+                // keyValueStr could be of form 'datatype:genetic_association' or 'datatype:genetic_association;drugs'
+                var kv = keyValueStr.split(':');
+                var key = kv[0];
+                var value = kv[1];
+
+                // key could already have occurred in listStrs
+                if (!(key in listStrs)) {
+                    listStrs[key] = [];
+                }
+
+                // value could be a string or a ;-separated array of strings
+                value.split(';').forEach(function (el) {
+                    listStrs[key].push(el);
+                });
             });
-            return obj;
+            return listStrs;
         };
 
 
         /**
-         * Returns a string representation of the specified object, in a format matching the syntax:
-         * Example:
-         * var obj = {datatype:["drugs","literature","animals"], pathways:"sdfs"}
-         * param(obj); // returns "datatype:drugs,datatype:literature,datatype:animals,pathways:sdfs"
+         * Returns a string representation of the specified object.
          */
-        otLocationStateService.param = function (obj) {
-            // uses jQuery.param() method
-            // $httpParamSerializerJQLike should work the same... but it doesn't and returns parentheses around arrays etc
-            // so we stick with jQuery for now
-            if (typeof obj === 'string') {
-                // this is to handle simple cases where obj is a simple string,
-                // say like in the case of &version=latest
-                // it returns "latest";
-                // otherwise jQuery would convert it to something like "0=l&1=a&2=t&3=e&4=s&5=t" which turns the URL into an ugly mess
-                return obj;
+        otLocationStateService.param = function (entity) {
+            // Note:
+            // Serializing entities will change to the format B described in parseSearchItem.
+            // ie. using list separator = ';'  list id separator = ':'  lists separator = ','
+            //
+            // Example:
+            // var obj = {datatype:["drugs","literature","animals"], pathways:"sdfs"}
+            // B: 'datatype:drugs;literature;animals,pathways:sdfs'
+            // (not the previously used) A: 'datatype:drugs,datatype:literature,datatype:animals,pathways:sdfs'
+            if (typeof entity === 'string') {
+                return entity;
             }
-            var s = [];
+            if (typeof entity === 'number') {
+                return entity;
+            }
+            var strList = [];
 
-            for (var i in obj) {
-                if (Array.isArray(obj[i])) {
-                    obj[i].forEach(function (a) {
-                        s.push(i + ':' + a);
-                    });
+            for (var key in entity) {
+                if (Array.isArray(entity[key]) && (entity[key].length > 0)) {
+                    strList.push(key + ':' + entity[key].join(';'));
                 }
-                if (typeof obj[i] === 'string') {
-                    s.push(i + ':' + obj[i]);
+                if ((typeof entity[key] === 'string') || (typeof entity[key] === 'number')) {
+                    strList.push(key + ':' + entity[key]);
                 }
             }
 
-            // Object.keys(obj).forEach(function (i) {
-            //     if (Array.isArray(obj[i])) {
-            //         obj[i].forEach(function (a) {
-            //             s.push(i + ':' + a);
-            //         });
-            //     }
-            //     if (typeof obj[i] === 'string') {
-            //         s.push(i + ':' + obj[i]);
-            //     }
-            // });
-
-            return s.join(',');
+            return strList.join(',');
         };
 
 
