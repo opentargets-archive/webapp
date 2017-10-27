@@ -264,25 +264,47 @@ angular.module('otDirectives')
                     }
 
 
-                    function addColumnFilterDropdown (column) {
+                    function addColumnFilterDropdown (column, api) {
                         // see https://datatables.net/examples/api/multi_filter_select.html
                         var select = $('<select><option value=""></option></select>')
                             .appendTo($(column.footer()).empty())
-                            .on('change', function () {
+                            .on('change', function (a, b, c) {
+                                $log.log(a);
+                                $log.log(b);
+                                $log.log(c);
+                                // $log.log($.fn.dataTable().api());
                                 var val = $.fn.dataTable.util.escapeRegex(
                                     $(this).val()
                                 );
-        
                                 column
                                     .search(val ? '^' + val + '$' : '', true, false)
                                     // .search(val ? val : '', true, false)
                                     .draw();
+
+                                // var api = $.fn.dataTable().api();
+                                // $log.log(this);
+                                // $log.log(api.columns());
+
+
+                                // var searchObj = val ? {search: 'applied'} : {search: 'none'};
+                                // api.columns(searchObj).every(function () {
+                                //     var otherColumn = this;
+                                //     // $log.log(otherColumn);
+                                //     if (column !== otherColumn) {
+                                //         addColumnFilterDropdown(otherColumn, api);
+                                //     }
+                                // });
                             });
-        
+                        // $log.log(column);
+                        // $log.log(api);
+                        // column.rows({search: 'applied'}).data().unique().sort().each(function (d, j) {
                         column.data().unique().sort().each(function (d, j) {
                             select.append('<option value="' + d + '">' + d + '</option>');
                         });
                     }
+
+
+                    // function onChange()
 
                     /*
                      * This is the hardcoded data for the Known Drugs table and
@@ -321,11 +343,12 @@ angular.module('otDirectives')
                             // }, $scope.search.info.title+"-known_drugs") );
                             initComplete: function () {
                                 var dropdownColumns = [1, 2, 3, 4, 5, 6, 8, 9];
-                                this.api().columns().every(function () {
+                                var api = this.api();
+                                api.columns().every(function () {
                                     var column = this;
-                                    $log.log(column);
+                                    // $log.log(column.table());
                                     if (dropdownColumns.indexOf(column[0][0]) !== -1) {
-                                        addColumnFilterDropdown(column);
+                                        addColumnFilterDropdown(column, api);
                                     }
                                 });
                             }
