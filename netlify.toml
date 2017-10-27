@@ -14,17 +14,17 @@
 # Deploy Preview context: All Deploy Previews (ie.PRs)
 # will inherit these settings.
 [context.deploy-preview.environment]
-  APIHOST = "https://api.targetvalidation.org/api/"
+  APIHOST = "https://api.opentargets.io/"
 
 # Branch Deploy context: All deploys that are not in
 # an active Deploy Preview will inherit these settings.
 [context.branch-deploy.environment]
-  APIHOST = "https://api.targetvalidation.org/api/"
+  APIHOST = "https://api.opentargets.io/"
 
 # CAREFUL!!! When you point a particular branch to a specific API below,
 # the change will not continue working once the branch is merged into master.
 [context.feature.environment]
-  APIHOST = "https://api.targetvalidation.org/api/"
+  APIHOST = "https://api.opentargets.io/"
 
 [context."expression".environment]
 #  APIHOST = "https://mk-zscorefacet-dot-open-targets-eu-dev.appspot.com/api/"
@@ -32,4 +32,4 @@
 #  APIHOST = "https://mk-fixfacets-dot-open-targets-eu-dev.appspot.com/api/"
 
 [context.master.environment]
-  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/api/"
+  APIHOST = "https://api.opentargets.io/"

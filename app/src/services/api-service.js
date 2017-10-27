@@ -58,9 +58,9 @@ angular.module('otServices')
             // .prefix("/api/")
             // .prefix('http://127.0.0.1:8123/api/')
             // .prefix("https://www.targetvalidation.org/api/")
-            .version('latest')
-            .appname('cttv-web-app')
-            .secret('2J23T20O31UyepRj7754pEA2osMOYfFK')
+            // .version('latest')
+            // .appname('cttv-web-app')
+            // .secret('2J23T20O31UyepRj7754pEA2osMOYfFK')
             .verbose(false);
 
         /**/
@@ -115,6 +115,9 @@ angular.module('otServices')
                 .then(done)
                 .catch(function (err) {
                     $log.warn('GOT ERROR:', err);
+                    if (queryObject.error) {
+                        queryObject.error.call(this, err);
+                    }
                     otApiService.defaultErrorHandler(err, queryObject.trackCall);
                 });
 

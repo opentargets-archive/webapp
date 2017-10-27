@@ -1,10 +1,8 @@
-app/config/custom.json
-app/config/*/custom.json
+app/config/**/custom.json
 .vscode
-bower_components
 **/*~
 node_modules
-jspm_packages
+app/jspm_packages
 .sass-cache
 *.css.map
 .DS_Store
@@ -12,6 +10,9 @@ build
 app/docs/*.html
 .idea
 npm-debug.log
-app/outreach.json
 app/notifications.json
 .wercker
+yarn-error.log
+resources
+versioned-resources
+target-list-examples

@@ -61,6 +61,7 @@
     "PHENODIGM": "Phenodigm",
     "PHEWAS": "PheWAS catalog",
     "PHEWAS_23andme": "23andme",
+    "PVALUE": "p-value",
 
     // Q
     // R
@@ -83,6 +84,7 @@
     // U
     "UNIPROT": "UniProt",
     "UNIPROT_LITERATURE": "UniProt literature",
+    "UNIPROT_SOMATIC": "Uniprot somatic",
     "UP_OR_DOWN": "unclassified"
 
     // V
