@@ -2,7 +2,7 @@
 [build]
   base    = "/"
   publish = "app/"
-  command = "rm -rf node_modules && yarn install && yarn run setup"
+  command = "yarn install && yarn run setup"
 
 # Read https://www.netlify.com/docs/continuous-deployment/#deploy-contexts
 # to understand how context below works.
