@@ -210,6 +210,9 @@ function createVis(container, data, scope) {
     }
 
     function subject2objectData(object) {
+        console.log('object for details...');
+        console.log(object);
+
         var subjId = object.subject_id;
         var objId = object.object_id;
         var subjSymbol = object.subject;
@@ -221,24 +224,24 @@ function createVis(container, data, scope) {
         if (object.entities_type === 'target') {
             optsSubj = {
                 target: [subjId],
-                disease: object.shared,
-                size: 10
+                disease: object.shared.slice(0, 15),
+                size: 15
             };
             optsObj = {
                 target: [objId],
-                disease: object.shared,
-                size: 10
+                disease: object.shared.slice(0, 15),
+                size: 15
             };
         } else {
             optsSubj = {
-                target: object.shared,
+                target: object.shared.slice(0, 15),
                 disease: [subjId],
-                size: 10
+                size: 15
             };
             optsObj = {
-                target: object.shared,
+                target: object.shared.slice(0, 15),
                 disease: [objId], // ??
-                size: 10
+                size: 15
             };
         }
 
@@ -262,10 +265,10 @@ function createVis(container, data, scope) {
         $q.all([subjPromise, objPromise])
             .then(function (resps) {
                 var shared = {};
-                var missingShared = {};
-
-                missingShared[subjId] = {};
-                missingShared[objId] = {};
+                // var missingShared = {};
+                //
+                // missingShared[subjId] = {};
+                // missingShared[objId] = {};
                 resps[0].body.data.map(function (d) {
                     var sharedLabel = (object.entities_type === 'target' ? d.disease.efo_info.label : d.target.gene_info.symbol);
                     var sharedId = (object.entities_type === 'target' ? d.disease.id : d.target.id);
@@ -280,8 +283,6 @@ function createVis(container, data, scope) {
                         score: d.association_score.overall,
                         datatypes: d.association_score.datatypes
                     };
-                    // record this disease as a possible missing disease for the object
-                    missingShared[objId][sharedId] = true;
                     shared[sharedLabel][objSymbol] = {
                         id: objId,
                         label: objSymbol,
@@ -292,781 +293,542 @@ function createVis(container, data, scope) {
 
                 resps[1].body.data.map(function (d) {
                     var sharedLabel = (object.entities_type === 'target' ? d.disease.efo_info.label : d.target.gene_info.symbol);
-                    var sharedId = (object.entities_type === 'target' ? d.disease.id : d.target.id);
+                    shared[sharedLabel][objSymbol].score = d.association_score.overall;
+                    shared[sharedLabel][objSymbol].datatypes = d.association_score.datatypes;
+                });
 
-                    // check if this shared entity has already been set in the prev map
-                    if (shared[sharedLabel]) {
-                        delete missingShared[objId][sharedId];
-                        shared[sharedLabel][objSymbol].score = d.association_score.overall;
-                        shared[sharedLabel][objSymbol].datatypes = d.association_score.datatypes;
-                    } else {
-                        // If not already in the shared object
-                        missingShared[subjId][sharedId] = true;
-                        shared[sharedLabel] = {
-                            id: sharedId,
-                            label: sharedLabel
-                        };
-                        shared[sharedLabel][objSymbol] = {
-                            id: objId,
-                            label: objSymbol,
-                            score: d.association_score.overall,
-                            datatypes: d.association_score.datatypes
-                        };
-                        shared[sharedLabel][subjSymbol] = {
-                            id: subjId,
-                            label: subjSymbol,
-                            score: 0
-                        };
+                var sharedArr = [];
+                for (var shared1 in shared) {
+                    if (shared.hasOwnProperty(shared1)) {
+                        sharedArr.push(shared[shared1]);
                     }
-                });
-
-                // Search for the missing diseases in both targets...
-                // create mock promises in case we don't have missing diseases for any of them
-                var missingSubjPromise = $q(function (resolve) {
-                    resolve ({
-                        body: {
-                            data: []
-                        }
-                    });
-                });
-                var missingObjPromise = $q(function (resolve) {
-                    resolve ({
-                        body: {
-                            data: []
-                        }
-                    });
-                });
-                if (Object.keys(missingShared[subjId]).length) {
-                    var optsMissingSubj = {
-                        target: (object.entities_type === 'target' ? [subjId] : Object.keys(missingShared[subjId])),
-                        disease: (object.entities_type === 'target' ? (Object.keys(missingShared[subjId])) : [subjId])
-                    };
-                    var queryMissingSubj = {
-                        method: 'POST',
-                        trackCall: false,
-                        params: optsMissingSubj
-                    };
-                    missingSubjPromise = otApi.getAssociations(queryMissingSubj);
                 }
 
-                if (Object.keys(missingShared[objId]).length) {
-                    var optsMissingObj = {
-                        target: (object.entities_type === 'target' ? [objId] : Object.keys(missingShared[objId])),
-                        disease: (object.entities_type === 'target' ? Object.keys(missingShared[objId]) : [objId])
-                    };
-                    var queryMissingObj = {
-                        method: 'POST',
-                        trackCall: false,
-                        params: optsMissingObj
-                    };
-                    missingObjPromise = otApi.getAssociations(queryMissingObj);
-                }
+                function showAssociationsDetails(data) {
+                    // Clone link to be moved to the middle
+                    var topLevelElement = this.parentNode.parentNode.parentElement;
+                    var linksG =this.parentNode.parentNode;
+                    var braces1G = d3.select(topLevelElement)
+                        .select('.braces1');
+                    var braces2G = d3.select(topLevelElement)
+                        .select('.braces2');
+                    var linksGWidth = linksG.getBoundingClientRect().width;
+                    // var bracesGWidth = braces1G.node().getBoundingClientRect().width;
+                    var currLink = this.parentNode;
+                    var clonedLink = currLink.cloneNode(true);
+                    var clonedLinkOrigTranslate = d3.select(clonedLink).attr('transform');
+                    var entityId = d3.select(clonedLink).attr('data-entity');
 
-                $q.all([missingSubjPromise, missingObjPromise])
-                    .then (function (resps) {
-                        resps[0].body.data.map(function (d) {
-                            // var disLabel = d.disease.efo_info.label;
-                            var sharedLabel = (object.entities_type === 'target' ? d.disease.efo_info.label : d.target.gene_info.symbol);
-
-                            shared[sharedLabel][subjSymbol].score = d.association_score.overall;
-                            shared[sharedLabel][subjSymbol].datatypes = d.association_score.datatypes;
-                        });
-                        resps[1].body.data.map(function (d) {
-                            // var disLabel = d.disease.efo_info.label;
-                            var sharedLabel = (object.entities_type === 'target' ? d.disease.efo_info.label : d.target.gene_info.symbol);
-                            shared[sharedLabel][objSymbol].score = d.association_score.overall;
-                            shared[sharedLabel][objSymbol].datatypes = d.association_score.datatypes
+                    // Remove all links
+                    d3.select(linksG).selectAll('.linkNode')
+                        .transition()
+                        .duration(1000)
+                        .style('opacity', 0)
+                        .each('end', function () {
+                            d3.select(this).style('display', 'none');
                         });
 
-                        // convert shared entities from object to array
-                        var sharedArr = [];
-                        for (var shared1 in shared) {
-                            if (shared.hasOwnProperty(shared1)) {
-                                sharedArr.push(shared[shared1]);
-                            }
-                        }
+                    // Move the cloned link to the middle
+                    linksG.appendChild(clonedLink);
 
-                        ///////
-                        // Show the shared entities
-                        // function processFlowerData(data) {
-                        //     var fd = [];
-                        //     var otConsts = scope.consts;
-                        //     for (var i = 0; i < otConsts.datatypesOrder.length; i++) {
-                        //         var dkey = otConsts.datatypes[otConsts.datatypesOrder[i]];
-                        //         var key = otConsts.datatypesOrder[i];
-                        //         fd.push({
-                        //             // "value": lookDatasource(data, otConsts.datatypes[key]).score,
-                        //             'value': data ? data[dkey] : 0,
-                        //             'label': otConsts.datatypesLabels[key],
-                        //             'active': true
-                        //         });
-                        //     }
-                        //     return fd;
-                        // }
+                    d3.select(clonedLink)
+                        .transition()
+                        .duration(1000)
+                        .attr('transform', 'translate(0, ' + yMid + ')')
+                        .each('end', function () {
+                            // Closer to the details (cross)
+                            var textBBox = d3.select(clonedLink).select('text').node().getBBox();
+                            var crossX = textBBox.x + textBBox.width + 6;
+                            var crossY = textBBox.y;
+                            var crossG = d3.select(clonedLink)
+                                .append('g')
+                                .attr('transform', 'translate(' + crossX + ','+ crossY + ')')
+                                .on('click', function () {
+                                    // Remove the details view (barChart or flowerViews)
+                                    barChart.remove();
 
-                        function showAssociationsDetails(data) {
-                            // Clone link to be moved to the middle
-                            var topLevelElement = this.parentNode.parentNode.parentElement;
-                            var linksG =this.parentNode.parentNode;
-                            var braces1G = d3.select(topLevelElement)
-                                .select('.braces1');
-                            var braces2G = d3.select(topLevelElement)
-                                .select('.braces2');
-                            var linksGWidth = linksG.getBoundingClientRect().width;
-                            // var bracesGWidth = braces1G.node().getBoundingClientRect().width;
-                            var currLink = this.parentNode;
-                            var clonedLink = currLink.cloneNode(true);
-                            var clonedLinkOrigTranslate = d3.select(clonedLink).attr('transform');
-                            var entityId = d3.select(clonedLink).attr('data-entity');
+                                    // Remove the X
+                                    d3.select(this).remove();
 
-                            // Remove all links
-                            d3.select(linksG).selectAll('.linkNode')
-                                .transition()
-                                .duration(1000)
-                                .style('opacity', 0)
-                                .each('end', function () {
-                                    d3.select(this).style('display', 'none');
-                                });
+                                    // Move the shared entity link group to its place
+                                    d3.select(clonedLink)
+                                        .transition()
+                                        .duration(1000)
+                                        .attr('transform', clonedLinkOrigTranslate);
 
-                            // Move the cloned link to the middle
-                            linksG.appendChild(clonedLink);
-
-                            d3.select(clonedLink)
-                                .transition()
-                                .duration(1000)
-                                .attr('transform', 'translate(0, ' + yMid + ')')
-                                .each('end', function () {
-                                    // Closer to the details (cross)
-                                    var textBBox = d3.select(clonedLink).select('text').node().getBBox();
-                                    var crossX = textBBox.x + textBBox.width + 6;
-                                    var crossY = textBBox.y;
-                                    var crossG = d3.select(clonedLink)
-                                        .append('g')
-                                        .attr('transform', 'translate(' + crossX + ','+ crossY + ')')
-                                        .on('click', function () {
-                                            // Remove the details view (barChart or flowerViews)
-                                            barChart.remove();
-
-                                            // Remove the X
-                                            d3.select(this).remove();
-
-                                            // Move the shared entity link group to its place
-                                            d3.select(clonedLink)
+                                    // and the braces
+                                    d3.select(clonedBrace1)
+                                        .transition()
+                                        .duration(1000)
+                                        .attr('d', function () {
+                                            return brace1OrigPath;
+                                        });
+                                    d3.select(clonedBrace2)
+                                        .transition()
+                                        .duration(1000)
+                                        .attr('d', function () {
+                                            return brace2OrigPath;
+                                        })
+                                        .each('end', function () {
+                                            // Show all the links and braces again
+                                            braces1G
+                                                .selectAll('path')
+                                                .style('display', 'block')
                                                 .transition()
                                                 .duration(1000)
-                                                .attr('transform', clonedLinkOrigTranslate);
-
-                                            // and the braces
-                                            d3.select(clonedBrace1)
+                                                .style('opacity', 1);
+                                            braces2G
+                                                .selectAll('path')
+                                                .style('display', 'block')
                                                 .transition()
                                                 .duration(1000)
-                                                .attr('d', function () {
-                                                    return brace1OrigPath;
-                                                });
-                                            d3.select(clonedBrace2)
+                                                .style('opacity', 1);
+                                            d3.select(linksG)
+                                                .selectAll('.linkNode')
+                                                .style('display', 'block')
                                                 .transition()
                                                 .duration(1000)
-                                                .attr('d', function () {
-                                                    return brace2OrigPath;
-                                                })
+                                                .style('opacity', 1)
                                                 .each('end', function () {
-                                                    // Show all the links and braces again
-                                                    braces1G
-                                                        .selectAll('path')
-                                                        .style('display', 'block')
-                                                        .transition()
-                                                        .duration(1000)
-                                                        .style('opacity', 1);
-                                                    braces2G
-                                                        .selectAll('path')
-                                                        .style('display', 'block')
-                                                        .transition()
-                                                        .duration(1000)
-                                                        .style('opacity', 1);
-                                                    d3.select(linksG)
-                                                        .selectAll('.linkNode')
-                                                        .style('display', 'block')
-                                                        .transition()
-                                                        .duration(1000)
-                                                        .style('opacity', 1)
-                                                        .each('end', function () {
-                                                            // and remove the cloned link and braces
-                                                            d3.select(clonedLink)
-                                                                .remove();
-                                                            d3.select(clonedBrace1)
-                                                                .remove();
-                                                            d3.select(clonedBrace2)
-                                                                .remove();
-                                                        });
+                                                    // and remove the cloned link and braces
+                                                    d3.select(clonedLink)
+                                                        .remove();
+                                                    d3.select(clonedBrace1)
+                                                        .remove();
+                                                    d3.select(clonedBrace2)
+                                                        .remove();
                                                 });
-
                                         });
-                                    var crossSize = 4;
-                                    crossG
-                                        .append('circle')
-                                        .attr('cx', 0)
-                                        .attr('cy', 0)
-                                        .attr('r', crossSize * 1.5)
-                                        .style('cursor', 'pointer')
-                                        .style('fill', 'none')
-                                        .style('pointer-events', 'all')
-                                        .style('stroke', 'none');
-                                    crossG
-                                        .append('line')
-                                        .attr('x1', -crossSize)
-                                        .attr('y1', -crossSize)
-                                        .attr('x2', crossSize)
-                                        .attr('y2', crossSize)
-                                        .style('stroke-width', '2px')
-                                        .style('cursor', 'pointer')
-                                        .style('stroke', '#666666');
-                                    crossG
-                                        .append('line')
-                                        .attr('x1', -crossSize)
-                                        .attr('y1', crossSize)
-                                        .attr('x2', crossSize)
-                                        .attr('y2', -crossSize)
-                                        .style('stroke-width', '2px')
-                                        .style('cursor', 'pointer')
-                                        .style('stroke', '#666666');
-
-
-                                    // Instead of the flowers, try the vertical 2-way bar chart
-                                    var barScale = d3.scale.linear()
-                                        .domain([0, 1])
-                                        .range([0, linksGWidth / 2]);
-                                    var barChartHeight = yMid - (yMid / 2);
-                                    var barHeight = barChartHeight / scope.consts.datatypesOrder.length;
-                                    var barChart = d3.select(linksG)
-                                        .append('g')
-                                        .attr('transform', 'translate(0, ' + (yMid + 10) + ')');
-
-                                    // Tooltips
-                                    var subjEvidenceTooltip;
-                                    function showSubjEvidenceTooltip() {
-                                        var obj = {};
-                                        obj.header = subjSymbol + ' and ' + data.label;
-                                        obj.body = 'Click to obtain details on the association';
-                                        subjEvidenceTooltip = tooltip.plain()
-                                            .width(180)
-                                            .show_closer(false)
-                                            .call(this, obj);
-                                    }
-                                    var objEvidenceTooltip;
-                                    function showObjEvidenceTooltip() {
-                                        var obj = {};
-                                        obj.header = objSymbol + ' and ' + data.label;
-                                        obj.body = 'Click to obtain details on the association';
-                                        objEvidenceTooltip = tooltip.plain()
-                                            .width(180)
-                                            .show_closer(false)
-                                            .call(this, obj);
-                                    }
-
-                                    // View details links
-                                    barChart
-                                        .append('a')
-                                        .attr('href', '/evidence/' + (scope.entitiesType === 'target' ? subjId : data.id) + '/' + (scope.entitiesType === 'target' ? data.id : subjId))
-                                        .append('rect')
-                                        .attr('x', -barScale(1))
-                                        .attr('y', -3)
-                                        .attr('width', barScale(1))
-                                        .attr('height', barHeight * scope.consts.datatypesOrder.length + 1)
-                                        .style('stroke-width', '1px')
-                                        .style('stroke', '#dddddd')
-                                        .style('fill', 'none')
-                                        .style('pointer-events', 'all')
-                                        .on('mouseover', function () {
-                                            showSubjEvidenceTooltip.call(this);
-                                            d3.select(this)
-                                                .style('fill', '#fff6ff');
-                                        })
-                                        .on('mouseout', function () {
-                                            subjEvidenceTooltip.close();
-                                            d3.select(this)
-                                                .style('fill', 'none');
-                                        });
-
-                                    barChart
-                                        .append('a')
-                                        .attr('href', '/evidence/' + (scope.entitiesType === 'target' ? objId : data.id) + '/' + (scope.entitiesType === 'target' ? data.id : objId))
-                                        .append('rect')
-                                        .attr('x', 0)
-                                        .attr('y', -3)
-                                        .attr('width', barScale(1))
-                                        .attr('height', barHeight * scope.consts.datatypesOrder.length + 1)
-                                        .style('stroke-width', '1px')
-                                        .style('stroke', '#dddddd')
-                                        .style('fill', 'none')
-                                        .style('pointer-events', 'all')
-                                        .on('mouseover', function () {
-                                            showObjEvidenceTooltip.call(this);
-                                            d3.select(this)
-                                                .style('fill', '#fff6ff');
-                                        })
-                                        .on('mouseout', function () {
-                                            objEvidenceTooltip.close();
-                                            d3.select(this)
-                                                .style('fill', 'none');
-                                        });
-
-                                    var bars = barChart.selectAll('.bars')
-                                        .data(scope.consts.datatypesOrder);
-                                    var barG = bars
-                                        .enter()
-                                        .append('g')
-                                        .style('pointer-events', 'none')
-                                        .attr('transform', function (d, i) {
-                                            return 'translate(0, ' + (i * barHeight) + ')';
-                                        });
-
-                                    // Subj bars
-                                    barG
-                                        .append('rect')
-                                        .attr('x', 0)
-                                        .attr('y', 0)
-                                        .attr('width', 0)
-                                        .attr('height', barHeight - (barHeight / 4))
-                                        .attr('fill', '#c8ebc7')
-                                        .attr('stroke-width', '1px')
-                                        // .attr('stroke', '#006400');
-                                        // .attr('stroke', '#c8ebc7');
-                                        .attr('stroke', d3.rgb('#c8ebc7').darker())
-                                        .transition()
-                                        .duration(500)
-                                        .attr('x', function (d) {
-                                            return -(barScale(data[subjSymbol].datatypes[scope.consts.datatypes[d]]));
-                                        })
-                                        .attr('width', function (d) {
-                                            return barScale(data[subjSymbol].datatypes[scope.consts.datatypes[d]]);
-                                        });
-
-                                    // Obj bars
-                                    barG
-                                        .append('rect')
-                                        .attr('x', 0)
-                                        .attr('y', 0)
-                                        .attr('width', 0)
-                                        .attr('height', barHeight - (barHeight / 4))
-                                        .attr('fill', '#b2def9')
-                                        .attr('stroke-width', '1px')
-                                        // .attr('stroke', '#005299');
-                                        // .attr('stroke', '#b2def9');
-                                        .attr('stroke', d3.rgb('#b2def9').darker())
-                                        .transition()
-                                        .duration(500)
-                                        .attr('width', function (d) {
-                                            return barScale(data[objSymbol].datatypes[scope.consts.datatypes[d]]);
-                                        });
-
-
-                                    // Datatypes labels
-                                    barG
-                                        .append('text')
-                                        .attr('x', 0)
-                                        .attr('y', ((barHeight - (barHeight / 4)) / 2))
-                                        .style('font-size', '0.8em')
-                                        .style('fill', '#333333')
-                                        .style('text-anchor', 'middle')
-                                        .attr('alignment-baseline', 'middle')
-                                        .style('cursor', 'pointer')
-                                        .text(function (d) {
-                                            return scope.consts.datatypesLabels[d];
-                                        });
-
-
-                                    // Show both flower views
-                                    // Flower subj => disease
-                                    // var flowerDataSubj = processFlowerData(data[subjSymbol].datatypes);
-                                    // var div1 = document.createElement('div');
-                                    // var flower1 = flowerView()
-                                    //     .values(flowerDataSubj)
-                                    //     .diagonal(140)
-                                    //     .fontsize(8)
-                                    //     .color('#5ba633');
-                                    // flower1(div1);
-                                    // var flower1g = d3.select(div1).select('g');
-                                    // var flower1MiddleG = d3.select(linksG).append('g')
-                                    //     .attr('transform', 'translate(' + (-(linksGWidth + bracesGWidth) / 2) + ',' + yMid + ')');
-                                    // flower1MiddleG.node().appendChild(flower1g.node());
-                                    // flower1MiddleG
-                                    //     .append('a')
-                                    //     .attr('href', '/evidence/' + (scope.entity === 'target' ? data.id : subjId) + '/' + (scope.entity === 'target' ? subjId : data.id))
-                                    //     .append('text')
-                                    //     .attr('x', 70)
-                                    //     .attr('y', 140)
-                                    //     .style('text-anchor', 'middle')
-                                    //     .style('alignment-baseline', 'hanging')
-                                    //     .style('font-size', '0.9em')
-                                    //     .style('fill', '#666666')
-                                    //     .style('cursor', 'pointer')
-                                    //     .text('View details');
-                                    //
-                                    // // Flower obj => disease
-                                    // var flowerDataObj = processFlowerData(data[objSymbol].datatypes);
-                                    // var div2 = document.createElement('div');
-                                    // var flower2 = flowerView()
-                                    //     .values(flowerDataObj)
-                                    //     .diagonal(140)
-                                    //     .fontsize(8);
-                                    // flower2(div2);
-                                    // var flower2g = d3.select(div2).select('g');
-                                    // var flower2MiddleG = d3.select(linksG).append('g')
-                                    //     .attr('transform', 'translate(' + (((linksGWidth + bracesGWidth) / 2) - 140) + ',' + yMid + ')');
-                                    // flower2MiddleG.node().appendChild(flower2g.node());
-                                    // flower2MiddleG
-                                    //     .append('a')
-                                    //     .attr('href', '/evidence/' + (scope.entity === 'target' ? data.id : objId) + '/' + (scope.entity === 'target' ? objId : data.id))
-                                    //     .append('text')
-                                    //     .attr('x', 70)
-                                    //     .attr('y', 140)
-                                    //     .style('text-anchor', 'middle')
-                                    //     .style('alignment-baseline', 'hanging')
-                                    //     .style('font-size', '0.9em')
-                                    //     .style('fill', '#666666')
-                                    //     .style('cursor', 'pointer')
-                                    //     .text('View details');
-                                    //
 
                                 });
+                            var crossSize = 4;
+                            crossG
+                                .append('circle')
+                                .attr('cx', 0)
+                                .attr('cy', 0)
+                                .attr('r', crossSize * 1.5)
+                                .style('cursor', 'pointer')
+                                .style('fill', 'none')
+                                .style('pointer-events', 'all')
+                                .style('stroke', 'none');
+                            crossG
+                                .append('line')
+                                .attr('x1', -crossSize)
+                                .attr('y1', -crossSize)
+                                .attr('x2', crossSize)
+                                .attr('y2', crossSize)
+                                .style('stroke-width', '2px')
+                                .style('cursor', 'pointer')
+                                .style('stroke', '#666666');
+                            crossG
+                                .append('line')
+                                .attr('x1', -crossSize)
+                                .attr('y1', crossSize)
+                                .attr('x2', crossSize)
+                                .attr('y2', -crossSize)
+                                .style('stroke-width', '2px')
+                                .style('cursor', 'pointer')
+                                .style('stroke', '#666666');
 
-                            // Clone left brace to be moved to the middle
-                            var brace1 = d3.select(topLevelElement)
-                                .select('.braces1')
-                                .select('path[data-entity="' + entityId + '"]');
-                            var clonedBrace1 = brace1.node().cloneNode(true);
 
-                            // Hide all the left braces
-                            braces1G
-                                .selectAll('path')
-                                .transition()
-                                .duration(1000)
-                                .style('opacity', 0)
-                                .each('end', function () {
-                                    d3.select(this).style('display', 'none');
-                                });
+                            // Instead of the flowers, try the vertical 2-way bar chart
+                            var barScale = d3.scale.linear()
+                                .domain([0, 1])
+                                .range([0, linksGWidth / 2]);
+                            var barChartHeight = yMid - (yMid / 2);
+                            var barHeight = barChartHeight / scope.consts.datatypesOrder.length;
+                            var barChart = d3.select(linksG)
+                                .append('g')
+                                .attr('transform', 'translate(0, ' + (yMid + 10) + ')');
 
-                            // Move the cloned left brace to the middle
-                            braces1G.node().appendChild(clonedBrace1);
-                            var brace1OrigPath = d3.select(clonedBrace1)
-                                .attr('d');
-                            d3.select(clonedBrace1)
-                                .transition()
-                                .duration(1000)
-                                .attr('d', function () {
-                                    return 'M0,' + (yMid) + ' C' + (bracesOffset) + ',' + (yMid) + ' 0,' + (yMid) + ' ' + (bracesOffset) + ',' + (yMid);
-                                });
+                            // Tooltips
+                            var subjEvidenceTooltip;
+                            function showSubjEvidenceTooltip() {
+                                var obj = {};
+                                obj.header = subjSymbol + ' and ' + data.label;
+                                obj.body = 'Click to obtain details on the association';
+                                subjEvidenceTooltip = tooltip.plain()
+                                    .width(180)
+                                    .show_closer(false)
+                                    .call(this, obj);
+                            }
+                            var objEvidenceTooltip;
+                            function showObjEvidenceTooltip() {
+                                var obj = {};
+                                obj.header = objSymbol + ' and ' + data.label;
+                                obj.body = 'Click to obtain details on the association';
+                                objEvidenceTooltip = tooltip.plain()
+                                    .width(180)
+                                    .show_closer(false)
+                                    .call(this, obj);
+                            }
 
-                            // Same for the right brace
-                            var brace2 = d3.select(topLevelElement)
-                                .select('.braces2')
-                                .select('path[data-entity="' + entityId + '"]');
-                            var clonedBrace2 = brace2.node().cloneNode(true);
-                            var brace2OrigPath = d3.select(clonedBrace2)
-                                .attr('d');
-
-                            // Remove all the left braces
-                            braces2G
-                                .selectAll('path')
-                                .transition()
-                                .duration(1000)
-                                .style('opacity', 0)
-                                .each('end', function () {
-                                    d3.select(this).style('display', 'none');
-                                });
-
-                            // Move the cloned left brace to the middle
-                            braces2G.node().appendChild(clonedBrace2);
-                            d3.select(clonedBrace2)
-                                .transition()
-                                .duration(1000)
-                                .attr('d', function () {
-                                    return 'M0,' + (yMid) + ' C' + (-bracesOffset) + ',' + (yMid) + ' 0,' + (yMid) + ' ' + (-bracesOffset) + ',' + (yMid);
+                            // View details links
+                            barChart
+                                .append('a')
+                                .attr('href', '/evidence/' + (scope.entitiesType === 'target' ? subjId : data.id) + '/' + (scope.entitiesType === 'target' ? data.id : subjId))
+                                .append('rect')
+                                .attr('x', -barScale(1))
+                                .attr('y', -3)
+                                .attr('width', barScale(1))
+                                .attr('height', barHeight * scope.consts.datatypesOrder.length + 1)
+                                .style('stroke-width', '1px')
+                                .style('stroke', '#dddddd')
+                                .style('fill', 'none')
+                                .style('pointer-events', 'all')
+                                .on('mouseover', function () {
+                                    showSubjEvidenceTooltip.call(this);
+                                    d3.select(this)
+                                        .style('fill', '#fff6ff');
                                 })
+                                .on('mouseout', function () {
+                                    subjEvidenceTooltip.close();
+                                    d3.select(this)
+                                        .style('fill', 'none');
+                                });
+
+                            barChart
+                                .append('a')
+                                .attr('href', '/evidence/' + (scope.entitiesType === 'target' ? objId : data.id) + '/' + (scope.entitiesType === 'target' ? data.id : objId))
+                                .append('rect')
+                                .attr('x', 0)
+                                .attr('y', -3)
+                                .attr('width', barScale(1))
+                                .attr('height', barHeight * scope.consts.datatypesOrder.length + 1)
+                                .style('stroke-width', '1px')
+                                .style('stroke', '#dddddd')
+                                .style('fill', 'none')
+                                .style('pointer-events', 'all')
+                                .on('mouseover', function () {
+                                    showObjEvidenceTooltip.call(this);
+                                    d3.select(this)
+                                        .style('fill', '#fff6ff');
+                                })
+                                .on('mouseout', function () {
+                                    objEvidenceTooltip.close();
+                                    d3.select(this)
+                                        .style('fill', 'none');
+                                });
+
+                            var bars = barChart.selectAll('.bars')
+                                .data(scope.consts.datatypesOrder);
+                            var barG = bars
+                                .enter()
+                                .append('g')
+                                .style('pointer-events', 'none')
+                                .attr('transform', function (d, i) {
+                                    return 'translate(0, ' + (i * barHeight) + ')';
+                                });
+
+                            // Subj bars
+                            barG
+                                .append('rect')
+                                .attr('x', 0)
+                                .attr('y', 0)
+                                .attr('width', 0)
+                                .attr('height', barHeight - (barHeight / 4))
+                                .attr('fill', '#c8ebc7')
+                                .attr('stroke-width', '1px')
+                                // .attr('stroke', '#006400');
+                                // .attr('stroke', '#c8ebc7');
+                                .attr('stroke', d3.rgb('#c8ebc7').darker())
+                                .transition()
+                                .duration(500)
+                                .attr('x', function (d) {
+                                    return -(barScale(data[subjSymbol].datatypes[scope.consts.datatypes[d]]));
+                                })
+                                .attr('width', function (d) {
+                                    return barScale(data[subjSymbol].datatypes[scope.consts.datatypes[d]]);
+                                });
+
+                            // Obj bars
+                            barG
+                                .append('rect')
+                                .attr('x', 0)
+                                .attr('y', 0)
+                                .attr('width', 0)
+                                .attr('height', barHeight - (barHeight / 4))
+                                .attr('fill', '#b2def9')
+                                .attr('stroke-width', '1px')
+                                // .attr('stroke', '#005299');
+                                // .attr('stroke', '#b2def9');
+                                .attr('stroke', d3.rgb('#b2def9').darker())
+                                .transition()
+                                .duration(500)
+                                .attr('width', function (d) {
+                                    return barScale(data[objSymbol].datatypes[scope.consts.datatypes[d]]);
+                                });
 
 
+                            // Datatypes labels
+                            barG
+                                .append('text')
+                                .attr('x', 0)
+                                .attr('y', ((barHeight - (barHeight / 4)) / 2))
+                                .style('font-size', '0.8em')
+                                .style('fill', '#333333')
+                                .style('text-anchor', 'middle')
+                                .attr('alignment-baseline', 'middle')
+                                .style('cursor', 'pointer')
+                                .text(function (d) {
+                                    return scope.consts.datatypesLabels[d];
+                                });
+                        });
 
-                            // var currTranslate = d3.select(currLink).attr('transform');
-                            // console.log(currTranslate);
-                            // var lNode = topLevelElement
-                            //     .append('g')
-                            //     .attr('transform', currTranslate);
-                            // lNode
-                            //     .append('line')
-                            //     .attr('x1', -linksOffset / 2)
-                            //     .attr('x2', 0)
-                            //     .attr('y1', 0)
-                            //     .attr('y2', 0)
-                            //     .style('stroke-width', '2px')
-                            //     .style('stroke', function (d) {
-                            //         return colorScaleSubj
-                            //     })
+                    // Clone left brace to be moved to the middle
+                    var brace1 = d3.select(topLevelElement)
+                        .select('.braces1')
+                        .select('path[data-entity="' + entityId + '"]');
+                    var clonedBrace1 = brace1.node().cloneNode(true);
 
+                    // Hide all the left braces
+                    braces1G
+                        .selectAll('path')
+                        .transition()
+                        .duration(1000)
+                        .style('opacity', 0)
+                        .each('end', function () {
+                            d3.select(this).style('display', 'none');
+                        });
 
+                    // Move the cloned left brace to the middle
+                    braces1G.node().appendChild(clonedBrace1);
+                    var brace1OrigPath = d3.select(clonedBrace1)
+                        .attr('d');
+                    d3.select(clonedBrace1)
+                        .transition()
+                        .duration(1000)
+                        .attr('d', function () {
+                            return 'M0,' + (yMid) + ' C' + (bracesOffset) + ',' + (yMid) + ' 0,' + (yMid) + ' ' + (bracesOffset) + ',' + (yMid);
+                        });
 
-                            // var flowerDataSubj = processFlowerData(data[subjSymbol].datatypes);
-                            // var flowerDataObj = processFlowerData(data[objSymbol].datatypes);
-                            //
-                            // var div = document.createElement('div');
-                            // var leftDiv = d3.select(div)
-                            //     .style('width', '80%')
-                            //     .style('margin', 'auto')
-                            //     .append('div')
-                            //     .style('width', '50%')
-                            //     .style('float', 'left');
-                            // leftDiv.append('h5')
-                            //     .text(subjSymbol);
-                            // var flower1Div = leftDiv
-                            //     .append('a')
-                            //     .attr('href', '/evidence/' + (scope.entity === 'target' ? subjId : data.id) + '/' + (scope.entity === 'target' ? data.id : subjId))
-                            //     .append('div');
-                            // leftDiv.append('a')
-                            //     .attr('class', 'cttv_flowerLink')
-                            //     .attr('href', '/evidence/' + (scope.entity === 'target' ? subjId : data.id) + '/' + (scope.entity === 'target' ? data.id : subjId))
-                            //     .append('div')
-                            //     .text('View evidence');
-                            //
-                            //
-                            // var rightDiv = d3.select(div)
-                            //     .append('div')
-                            //     .style('margin-left', '50%');
-                            // rightDiv.append('h5')
-                            //     .text(objSymbol);
-                            // var flower2Div = rightDiv.append('div')
-                            //     .append('a')
-                            //     .attr('href', '/evidence/' + (scope.entity === 'target' ? objId : data.id) + '/' + (scope.entity === 'target' ? data.id : objId))
-                            //     .append('div');
-                            // rightDiv.append('a')
-                            //     .attr('class', 'cttv_flowerLink')
-                            //     .attr('href', '/evidence/' + (scope.entity === 'target' ? objId : data.id) + '/' + (scope.entity === 'target' ? data.id : objId))
-                            //     .append('div')
-                            //     .text('View evidence');
-                            //
-                            // var flower1 = flowerView()
-                            //     .values(flowerDataSubj)
-                            //     .diagonal(140)
-                            //     .fontsize(8)
-                            //     .color('#5ba633');
-                            // flower1(flower1Div.node());
-                            //
-                            // var flower2 = flowerView()
-                            //     .values(flowerDataObj)
-                            //     .diagonal(140)
-                            //     .fontsize(8)
-                            //     .color('#0091EB');
-                            // flower2(flower2Div.node());
-                            //
-                            // var obj = {};
-                            // obj.header = 'Associations with ' + data.label;
-                            // obj.body = div.innerHTML;
-                            // tooltip.plain()
-                            //     .id('flowersView')
-                            //     .width(300)
-                            //     .call(this, obj);
-                        }
+                    // Same for the right brace
+                    var brace2 = d3.select(topLevelElement)
+                        .select('.braces2')
+                        .select('path[data-entity="' + entityId + '"]');
+                    var clonedBrace2 = brace2.node().cloneNode(true);
+                    var brace2OrigPath = d3.select(clonedBrace2)
+                        .attr('d');
 
-                        var bracesOffset = width / 12;
-                        var labelOffset = (2 * (width / 12));
-                        var linksOffset = 6 * (width / 12);
-                        var vOffset = 20;
+                    // Remove all the left braces
+                    braces2G
+                        .selectAll('path')
+                        .transition()
+                        .duration(1000)
+                        .style('opacity', 0)
+                        .each('end', function () {
+                            d3.select(this).style('display', 'none');
+                        });
 
-                        var otUtils = scope.utils;
-                        var colorScaleObj = otUtils.colorScales.BLUE_0_1; // blue orig
-                        // TODO: Change to d3.scaleLinear when using d3.v4
-                        var colorScaleSubj = d3.scale.linear()
-                            .domain([0, 1])
-                            // .range(['#c8ebc7', '#5ba633']);
-                            .range(['#c8ebc7', '#006400']);
+                    // Move the cloned left brace to the middle
+                    braces2G.node().appendChild(clonedBrace2);
+                    d3.select(clonedBrace2)
+                        .transition()
+                        .duration(1000)
+                        .attr('d', function () {
+                            return 'M0,' + (yMid) + ' C' + (-bracesOffset) + ',' + (yMid) + ' 0,' + (yMid) + ' ' + (-bracesOffset) + ',' + (yMid);
+                        })
+                }
 
-                        // TODO: Change to d3.scaleLinear
-                        // var xScale = d3.scale.linear()
-                        //     .domain([-1, 1])
-                        //     .range([-linksOffset / 2, linksOffset / 2]);
+                var bracesOffset = width / 12;
+                var labelOffset = (2 * (width / 12));
+                var linksOffset = 6 * (width / 12);
+                var vOffset = 20;
 
-                        // TODO: Change to d3.scaleLinear when using d3.v4
-                        var yScale = d3.scale.linear()
-                            .range([0, width - (vOffset * 2)])
-                            .domain([0, sharedArr.length - 1]);
+                var otUtils = scope.utils;
+                var colorScaleObj = otUtils.colorScales.BLUE_0_1; // blue orig
+                // TODO: Change to d3.scaleLinear when using d3.v4
+                var colorScaleSubj = d3.scale.linear()
+                    .domain([0, 1])
+                    // .range(['#c8ebc7', '#5ba633']);
+                    .range(['#c8ebc7', '#006400']);
 
-                        if (sharedArr.length === 1) {
-                            yScale.range([(width / 2) - vOffset, (width / 2) - vOffset]);
-                        }
-                        var yMid = yScale((sharedArr.length / 2) - 0.5);
+                // TODO: Change to d3.scaleLinear
+                // var xScale = d3.scale.linear()
+                //     .domain([-1, 1])
+                //     .range([-linksOffset / 2, linksOffset / 2]);
+
+                // TODO: Change to d3.scaleLinear when using d3.v4
+                var yScale = d3.scale.linear()
+                    .range([0, width - (vOffset * 2)])
+                    .domain([0, sharedArr.length - 1]);
+
+                if (sharedArr.length === 1) {
+                    yScale.range([(width / 2) - vOffset, (width / 2) - vOffset]);
+                }
+                var yMid = yScale((sharedArr.length / 2) - 0.5);
 
 
-                        var detailsG = svg
-                            .append('g')
-                            .attr('class', 'detailsView')
-                            .attr('transform', 'translate(0, ' + vOffset + ')');
+                var detailsG = svg
+                    .append('g')
+                    .attr('class', 'detailsView')
+                    .attr('transform', 'translate(0, ' + vOffset + ')');
 
-                        var linksG = detailsG
-                            .append('g')
-                            .attr('class', 'links')
-                            .attr('transform', 'translate(' + (labelOffset + bracesOffset + (linksOffset / 2)) + ', 0)');
-                        var linkNodes = linksG.selectAll('.linkNode')
-                            .data(sharedArr)
-                            .enter()
-                            .append('g')
-                            .attr('data-entity', function (d) {
-                                return d.id;
-                            })
-                            .attr('class', 'linkNode')
-                            .attr('transform', 'translate(0,' + (yMid) + ')');
+                var linksG = detailsG
+                    .append('g')
+                    .attr('class', 'links')
+                    .attr('transform', 'translate(' + (labelOffset + bracesOffset + (linksOffset / 2)) + ', 0)');
+                var linkNodes = linksG.selectAll('.linkNode')
+                    .data(sharedArr)
+                    .enter()
+                    .append('g')
+                    .attr('data-entity', function (d) {
+                        return d.id;
+                    })
+                    .attr('class', 'linkNode')
+                    .attr('transform', 'translate(0,' + (yMid) + ')');
 
-                        // subject
-                        linkNodes
-                            .append('line')
-                            .attr('x1', -linksOffset / 2)
-                            .attr('x2', 0)
-                            // .attr('x2', function (d) {
-                            //     return xScale((d[objSymbol].score - d[subjSymbol].score))
-                            // })
-                            .attr('y1', 0)
-                            .attr('y2', 0)
-                            .style('stroke-width', '2px')
-                            .style('stroke', function (d) {
-                                return colorScaleSubj(d[subjSymbol].score);
-                            });
+                // subject
+                linkNodes
+                    .append('line')
+                    .attr('x1', -linksOffset / 2)
+                    .attr('x2', 0)
+                    // .attr('x2', function (d) {
+                    //     return xScale((d[objSymbol].score - d[subjSymbol].score))
+                    // })
+                    .attr('y1', 0)
+                    .attr('y2', 0)
+                    .style('stroke-width', '2px')
+                    .style('stroke', function (d) {
+                        return colorScaleSubj(d[subjSymbol].score);
+                    });
 
-                        // object
-                        linkNodes
-                            .append('line')
-                            .attr('x1', 0)
-                            // .attr('x1', function (d) {
-                            //     return xScale((d[objSymbol].score - d[subjSymbol].score))
-                            // })
-                            .attr('x2', linksOffset / 2)
-                            .attr('y1', 0)
-                            .attr('y2', 0)
-                            .style('stroke-width', '2px')
-                            .style('stroke', function (d) {
-                                return colorScaleObj(d[objSymbol].score);
-                            });
+                // object
+                linkNodes
+                    .append('line')
+                    .attr('x1', 0)
+                    // .attr('x1', function (d) {
+                    //     return xScale((d[objSymbol].score - d[subjSymbol].score))
+                    // })
+                    .attr('x2', linksOffset / 2)
+                    .attr('y1', 0)
+                    .attr('y2', 0)
+                    .style('stroke-width', '2px')
+                    .style('stroke', function (d) {
+                        return colorScaleObj(d[objSymbol].score);
+                    });
 
-                        // labels for links
-                        linkNodes
-                            .append('text')
-                            .attr('x', 0)
-                            .attr('y', -8)
-                            .attr('text-anchor', 'middle')
-                            .attr('fill', '#666666')
-                            .style('opacity', 0)
-                            .style('cursor', 'pointer')
-                            .style('font-size', '0.9em')
-                            .text(function (d) {
-                                return d.label;
-                            })
-                            .on('click', showAssociationsDetails);
-
-
-                        // scaled circle
-                        linkNodes
-                            .append('circle')
-                            .attr('cx', 0)
-                            // .attr('cx', function (d) {
-                            //     return xScale((d[objSymbol].score - d[subjSymbol].score))
-                            // })
-                            .attr('cy', 0)
-                            .attr('r', 5)
-                            .style('fill', '#FFFFFF')
-                            .style('stroke', '#666666')
-                            .style('stroke-width', '2px')
-                            .style('cursor', 'pointer')
-                            .on('click', showAssociationsDetails);
-
-                        // nodes for links
-                        // linkNodes
-                        //     .append('circle')
-                        //     .attr('cx', 0)
-                        //     .attr('cy', 0)
-                        //     .attr('r', 5)
-                        //     // .attr('fill', color)
-                        //     .attr('fill', '#FFFFFF')
-                        //     .style('stroke', '#666666')
-                        //     .style('stroke-width', '2px')
-                        //     .style('cursor', 'pointer')
-                        //     .on('click', showAssociationsTooltip);
-
-                        var linksTransition = linkNodes
-                            .transition()
-                            .duration(1000)
-                            .delay(function (d, i) {
-                                return i*100;
-                            })
-                            .attr('transform', function (d, i) {
-                                // return 'translate(0,' + (i * (width / sharedArr.length)) + ')';
-                                // console.log(sharedArr.length + ' -- ' + width + '(' + i + ') => ' + yScale(i));
-                                return 'translate(0,' + yScale(i) + ')';
-                            });
-                        linksTransition.select('text')
-                            .style('opacity', 1);
+                // labels for links
+                linkNodes
+                    .append('text')
+                    .attr('x', 0)
+                    .attr('y', -8)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', '#666666')
+                    .style('opacity', 0)
+                    .style('cursor', 'pointer')
+                    .style('font-size', '0.9em')
+                    .text(function (d) {
+                        return d.label;
+                    })
+                    .on('click', showAssociationsDetails);
 
 
-                        // braces1
-                        var braces1 = detailsG
-                            .append('g')
-                            .attr('class', 'braces1')
-                            .attr('transform', 'translate(' + (labelOffset) + ',0)');
-                        braces1.selectAll('.braces1')
-                            .data(sharedArr)
-                            .enter()
-                            .append('path')
-                            .attr('data-entity', function (d) {
-                                return d.id;
-                            })
-                            .attr('d', function () {
-                                // return 'M0,' + (height / 2) + ' C' + (bracesOffset) + ',' + (height / 2) + ' 0,' + ((i * 30)) + ' ' + (bracesOffset) + ',' + ((i * 30));
-                                return 'M0,' + (yMid) + ' C' + (bracesOffset) + ',' + (yMid) + ' 0,' + (yMid) + ' ' + (bracesOffset) + ',' + (yMid);
-                            })
-                            .attr('fill', 'none')
-                            .style('stroke-width', '2px')
-                            .attr('stroke', function (d) {
-                                return colorScaleSubj(d[subjSymbol].score);
-                            });
-                        braces1
-                            .selectAll('path')
-                            .transition()
-                            .duration(1000)
-                            .delay(function (d, i) {
-                                return i*100;
-                            })
-                            .attr('d', function (d, i) {
-                                return 'M0,' + (yMid) + ' C' + (bracesOffset) + ',' + (yMid) + ' 0,' + (yScale(i)) + ' ' + (bracesOffset) + ',' + (yScale(i));
-                            });
+                // scaled circle
+                linkNodes
+                    .append('circle')
+                    .attr('cx', 0)
+                    // .attr('cx', function (d) {
+                    //     return xScale((d[objSymbol].score - d[subjSymbol].score))
+                    // })
+                    .attr('cy', 0)
+                    .attr('r', 5)
+                    .style('fill', '#FFFFFF')
+                    .style('stroke', '#666666')
+                    .style('stroke-width', '2px')
+                    .style('cursor', 'pointer')
+                    .on('click', showAssociationsDetails);
 
-                        // braces2
-                        var braces2 = detailsG
-                            .append('g')
-                            .attr('class', 'braces2')
-                            .attr('transform', 'translate(' + (labelOffset + (bracesOffset*2) + linksOffset) + ',0)');
-                        braces2.selectAll('.braces2')
-                            .data(sharedArr)
-                            .enter()
-                            .append('path')
-                            .attr('data-entity', function (d) {
-                                return d.id;
-                            })
-                            .attr('d', function () {
-                                // return 'M0,' + (height / 2) + ' C' + (-bracesOffset) + ',' + (height / 2) + ' 0,' + ((i * 30)) + ' ' + (-bracesOffset) + ',' + ((i * 30));
-                                return 'M0,' + (yMid) + ' C' + (-bracesOffset) + ',' + (yMid) + ' 0,' + (yMid) + ' ' + (-bracesOffset) + ',' + (yMid);
-                            })
-                            .attr('fill', 'none')
-                            .style('stroke-width', '2px')
-                            .attr('stroke', function (d) {
-                                return colorScaleObj(d[objSymbol].score);
-                            });
-                        braces2
-                            .selectAll('path')
-                            .transition()
-                            .duration(1000)
-                            .delay(function (d, i) {
-                                return i*100;
-                            })
-                            .attr('d', function (d, i) {
-                                return 'M0,' + (yMid) + ' C' + (-bracesOffset) + ',' + (yMid) + ' 0,' + (yScale(i)) + ' ' + (-bracesOffset) + ',' + (yScale(i));
-                            });
+                // nodes for links
+                // linkNodes
+                //     .append('circle')
+                //     .attr('cx', 0)
+                //     .attr('cy', 0)
+                //     .attr('r', 5)
+                //     // .attr('fill', color)
+                //     .attr('fill', '#FFFFFF')
+                //     .style('stroke', '#666666')
+                //     .style('stroke-width', '2px')
+                //     .style('cursor', 'pointer')
+                //     .on('click', showAssociationsTooltip);
+
+                var linksTransition = linkNodes
+                    .transition()
+                    .duration(1000)
+                    .delay(function (d, i) {
+                        return i*100;
+                    })
+                    .attr('transform', function (d, i) {
+                        // return 'translate(0,' + (i * (width / sharedArr.length)) + ')';
+                        // console.log(sharedArr.length + ' -- ' + width + '(' + i + ') => ' + yScale(i));
+                        return 'translate(0,' + yScale(i) + ')';
+                    });
+                linksTransition.select('text')
+                    .style('opacity', 1);
 
 
+                // braces1
+                var braces1 = detailsG
+                    .append('g')
+                    .attr('class', 'braces1')
+                    .attr('transform', 'translate(' + (labelOffset) + ',0)');
+                braces1.selectAll('.braces1')
+                    .data(sharedArr)
+                    .enter()
+                    .append('path')
+                    .attr('data-entity', function (d) {
+                        return d.id;
+                    })
+                    .attr('d', function () {
+                        // return 'M0,' + (height / 2) + ' C' + (bracesOffset) + ',' + (height / 2) + ' 0,' + ((i * 30)) + ' ' + (bracesOffset) + ',' + ((i * 30));
+                        return 'M0,' + (yMid) + ' C' + (bracesOffset) + ',' + (yMid) + ' 0,' + (yMid) + ' ' + (bracesOffset) + ',' + (yMid);
+                    })
+                    .attr('fill', 'none')
+                    .style('stroke-width', '2px')
+                    .attr('stroke', function (d) {
+                        return colorScaleSubj(d[subjSymbol].score);
+                    });
+                braces1
+                    .selectAll('path')
+                    .transition()
+                    .duration(1000)
+                    .delay(function (d, i) {
+                        return i*100;
+                    })
+                    .attr('d', function (d, i) {
+                        return 'M0,' + (yMid) + ' C' + (bracesOffset) + ',' + (yMid) + ' 0,' + (yScale(i)) + ' ' + (bracesOffset) + ',' + (yScale(i));
+                    });
+
+                // braces2
+                var braces2 = detailsG
+                    .append('g')
+                    .attr('class', 'braces2')
+                    .attr('transform', 'translate(' + (labelOffset + (bracesOffset*2) + linksOffset) + ',0)');
+                braces2.selectAll('.braces2')
+                    .data(sharedArr)
+                    .enter()
+                    .append('path')
+                    .attr('data-entity', function (d) {
+                        return d.id;
+                    })
+                    .attr('d', function () {
+                        // return 'M0,' + (height / 2) + ' C' + (-bracesOffset) + ',' + (height / 2) + ' 0,' + ((i * 30)) + ' ' + (-bracesOffset) + ',' + ((i * 30));
+                        return 'M0,' + (yMid) + ' C' + (-bracesOffset) + ',' + (yMid) + ' 0,' + (yMid) + ' ' + (-bracesOffset) + ',' + (yMid);
+                    })
+                    .attr('fill', 'none')
+                    .style('stroke-width', '2px')
+                    .attr('stroke', function (d) {
+                        return colorScaleObj(d[objSymbol].score);
+                    });
+                braces2
+                    .selectAll('path')
+                    .transition()
+                    .duration(1000)
+                    .delay(function (d, i) {
+                        return i*100;
+                    })
+                    .attr('d', function (d, i) {
+                        return 'M0,' + (yMid) + ' C' + (-bracesOffset) + ',' + (yMid) + ' 0,' + (yScale(i)) + ' ' + (-bracesOffset) + ',' + (yScale(i));
                     });
 
             });
@@ -1095,7 +857,7 @@ function createVis(container, data, scope) {
             });
 
         var subjLabelTooltip;
-        function showsubjLabelTooltip() {
+        function showSubjLabelTooltip() {
             var obj = {};
             obj.header = '';
             obj.body = subjLabel;
@@ -1110,7 +872,7 @@ function createVis(container, data, scope) {
             .append('g')
             // .attr('class', 'relatedBubble');
             .attr('class', 'relatedSubjectNode')
-            .on('mouseover', showsubjLabelTooltip)
+            .on('mouseover', showSubjLabelTooltip)
             .on('mouseout', function () {
                 subjLabelTooltip.close();
             });
@@ -1151,7 +913,6 @@ function createVis(container, data, scope) {
                 .show_closer(false)
                 .call(this, obj);
         }
-
 
         var objectNode = d3.select(topLevelElement)
             .append('g')
@@ -1363,4 +1124,3 @@ function getTreeData(gene, data, entitiesType) {
     }
     return tree;
 }
-
