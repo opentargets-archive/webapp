@@ -210,8 +210,6 @@ function createVis(container, data, scope) {
     }
 
     function subject2objectData(object) {
-        console.log('object for details...');
-        console.log(object);
 
         var subjId = object.subject_id;
         var objId = object.object_id;
