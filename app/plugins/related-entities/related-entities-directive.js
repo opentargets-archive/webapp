@@ -216,7 +216,7 @@ function createVis(container, data, scope) {
         var subjSymbol = object.subject;
         var objSymbol = object.object;
 
-        // Get the best 10 diseases|targets for target1|disease1 and any of the shared diseases|targets...
+        // Get the best 15 diseases|targets for target1|disease1 and get association details...
         var optsSubj;
         var optsObj;
         if (object.entities_type === 'target') {
@@ -717,7 +717,12 @@ function createVis(container, data, scope) {
                     .style('cursor', 'pointer')
                     .style('font-size', '0.9em')
                     .text(function (d) {
-                        return d.label;
+                        var n = linksOffset / 6;
+                        var l = d.label;
+                        if (l.length > n) {
+                            l = l.substring(0, n) + ' ...';
+                        }
+                        return l;
                     })
                     .on('click', showAssociationsDetails);
 
