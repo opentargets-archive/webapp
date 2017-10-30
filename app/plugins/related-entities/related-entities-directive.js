@@ -464,7 +464,9 @@ function createVis(container, data, scope) {
                             // View details links
                             barChart
                                 .append('a')
-                                .attr('href', '/evidence/' + (scope.entitiesType === 'target' ? subjId : data.id) + '/' + (scope.entitiesType === 'target' ? data.id : subjId))
+                                .attr('xlink:href', function () {
+                                    return '/evidence/' + (scope.entitiesType === 'target' ? subjId : data.id) + '/' + (scope.entitiesType === 'target' ? data.id : subjId);
+                                })
                                 .append('rect')
                                 .attr('x', -barScale(1))
                                 .attr('y', -3)
@@ -487,7 +489,9 @@ function createVis(container, data, scope) {
 
                             barChart
                                 .append('a')
-                                .attr('href', '/evidence/' + (scope.entitiesType === 'target' ? objId : data.id) + '/' + (scope.entitiesType === 'target' ? data.id : objId))
+                                .attr('xlink:href', function () {
+                                    return '/evidence/' + (scope.entitiesType === 'target' ? objId : data.id) + '/' + (scope.entitiesType === 'target' ? data.id : objId);
+                                })
                                 .append('rect')
                                 .attr('x', 0)
                                 .attr('y', -3)
