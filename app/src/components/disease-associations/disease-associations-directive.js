@@ -58,32 +58,32 @@ angular.module('otDirectives')
             {name: '', title: otDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
             {
-                name: otConsts.datatypes.GENETIC_ASSOCIATION,
-                title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]
+                name: otConsts.datatypes.GENETIC_ASSOCIATION.id,
+                title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.id.toUpperCase()]
             },
             {
-                name: otConsts.datatypes.SOMATIC_MUTATION,
-                title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]
+                name: otConsts.datatypes.SOMATIC_MUTATION.id,
+                title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.id.toUpperCase()]
             },
             {
-                name: otConsts.datatypes.KNOWN_DRUG,
-                title: otDictionary[otConsts.datatypes.KNOWN_DRUG.toUpperCase()]
+                name: otConsts.datatypes.KNOWN_DRUG.id,
+                title: otDictionary[otConsts.datatypes.KNOWN_DRUG.id.toUpperCase()]
             },
             {
-                name: otConsts.datatypes.AFFECTED_PATHWAY,
-                title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]
+                name: otConsts.datatypes.AFFECTED_PATHWAY.id,
+                title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.id.toUpperCase()]
             },
             {
-                name: otConsts.datatypes.RNA_EXPRESSION,
-                title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.toUpperCase()]
+                name: otConsts.datatypes.RNA_EXPRESSION.id,
+                title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.id.toUpperCase()]
             },
             {
-                name: otConsts.datatypes.LITERATURE,
-                title: otDictionary[otConsts.datatypes.LITERATURE.toUpperCase()]
+                name: otConsts.datatypes.LITERATURE.id,
+                title: otDictionary[otConsts.datatypes.LITERATURE.id.toUpperCase()]
             },
             {
-                name: otConsts.datatypes.ANIMAL_MODEL,
-                title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.toUpperCase()]
+                name: otConsts.datatypes.ANIMAL_MODEL.id,
+                title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.id.toUpperCase()]
             },
             // empty col for sorting by total score (sum)
             {name: '', title: 'total score', visible: false, className: 'never'},
@@ -161,13 +161,13 @@ angular.module('otDirectives')
                     var mappings = {
                         0: 'target.gene_info.symbol',
                         1: 'association_score.overall',
-                        2: 'association_score.datatypes.' + otConsts.datatypes.GENETIC_ASSOCIATION,
-                        3: 'association_score.datatypes.' + otConsts.datatypes.SOMATIC_MUTATION,
-                        4: 'association_score.datatypes.' + otConsts.datatypes.KNOWN_DRUG,
-                        5: 'association_score.datatypes.' + otConsts.datatypes.AFFECTED_PATHWAY,
-                        6: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION,
-                        7: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE,
-                        8: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL,
+                        2: 'association_score.datatypes.' + otConsts.datatypes.GENETIC_ASSOCIATION.id,
+                        3: 'association_score.datatypes.' + otConsts.datatypes.SOMATIC_MUTATION.id,
+                        4: 'association_score.datatypes.' + otConsts.datatypes.KNOWN_DRUG.id,
+                        5: 'association_score.datatypes.' + otConsts.datatypes.AFFECTED_PATHWAY.id,
+                        6: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION.id,
+                        7: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE.id,
+                        8: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL.id,
                         9: 'association_score.overall'
                     };
                     var order = [];
@@ -265,19 +265,19 @@ angular.module('otDirectives')
                 // The association score
                 row.push(getColorStyleString(data[i].association_score.overall, geneDiseaseLoc));
                 // Genetic association
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.GENETIC_ASSOCIATION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.GENETIC_ASSOCIATION));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.GENETIC_ASSOCIATION.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.GENETIC_ASSOCIATION.id));
                 // Somatic mutation
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.SOMATIC_MUTATION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.SOMATIC_MUTATION));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.SOMATIC_MUTATION.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.SOMATIC_MUTATION.id));
                 // Known drug
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.KNOWN_DRUG), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.KNOWN_DRUG));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.KNOWN_DRUG.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.KNOWN_DRUG.id));
                 // Affected pathway
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.AFFECTED_PATHWAY), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.AFFECTED_PATHWAY));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.AFFECTED_PATHWAY.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.AFFECTED_PATHWAY.id));
                 // Expression atlas
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.RNA_EXPRESSION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.RNA_EXPRESSION));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.RNA_EXPRESSION.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.RNA_EXPRESSION.id));
                 // Literature
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.LITERATURE), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.LITERATURE));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.LITERATURE.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.LITERATURE.id));
                 // Animal model
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.ANIMAL_MODEL), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.ANIMAL_MODEL));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.ANIMAL_MODEL.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.ANIMAL_MODEL.id));
 
                 // Total score
                 row.push(data[i].association_score.datatypes.genetic_association +

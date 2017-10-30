@@ -2,7 +2,7 @@ angular.module('otServices')
 /**
  * Some utility services.
  */
-    .factory('otUtils', ['$window', '$rootScope', function ($window, $rootScope) {
+    .factory('otUtils', ['$window', '$rootScope', 'otConsts', function ($window, $rootScope, otConsts) {
         'use strict';
 
         var otUtilsService = {};
@@ -344,11 +344,13 @@ angular.module('otServices')
          */
         otUtilsService.getEcoLabel = function (arr, eco) {
             var label = eco;
-            for (var i = 0; i < arr.length; i++) {
-                if (arr[i][0].eco_id === eco) {
-                    label = arr[i][0].label;
-                    break;
-                }
+            if (arr) {
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i][0].eco_id === eco) {
+                        label = arr[i][0].label;
+                        break;
+                    }
+                }    
             }
             return label;
         };
@@ -362,6 +364,34 @@ angular.module('otServices')
                 return arr[0];
             }
             return '<ul><li>' + arr.join('</li><li>') + '</li></ul>';
+        };
+
+
+        /**
+         * 
+         */
+        otUtilsService.getDatasourceById = function (id) {
+            return Object.keys(otConsts.datasources)
+                .filter(function (i) {
+                    return otConsts.datasources[i].id === id;
+                })
+                .map(function (j) {
+                    return otConsts.datasources[j];
+                })[0];
+        };
+
+
+        /**
+         * 
+         */
+        otUtilsService.getDatatypeById = function (id) {
+            return Object.keys(otConsts.datatypes)
+                .filter(function (i) {
+                    return otConsts.datatypes[i].id === id;
+                })
+                .map(function (j) {
+                    return otConsts.datatypes[j];
+                })[0];
         };
 
 

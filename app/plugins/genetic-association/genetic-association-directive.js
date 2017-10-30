@@ -2,7 +2,7 @@
  * Somatic mutations plugin
  */
 angular.module('otPlugins')
-    .directive('otGeneticAssociation', ['otConfig', 'otConsts', 'otDictionary', function (otConfig, otConsts, otDictionary) {
+    .directive('otGeneticAssociation', ['otConfig', 'otUtils', function (otConfig, otUtils) {
         'use strict';
 
         return {
@@ -20,9 +20,31 @@ angular.module('otPlugins')
                 scope.ext.common = {};
                 scope.ext.rare = {};
 
+                // scope.sources = {
+                //     common: otConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
+                //     rare: otConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; })
+                // };
                 scope.sources = {
-                    common: otConfig.evidence_sources.genetic_association.common.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; }),
-                    rare: otConfig.evidence_sources.genetic_association.rare.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; })
+                    common: otConfig.evidence_sources.genetic_association.common.map(function (s) {
+                        // so here s is the datasource api 'key' (i.e. lowercase 'pathway')
+                        // now we need to find label and infoUrl from the otConsts.datasources object
+                        var ds = otUtils.getDatasourceById(s);
+
+                        return {
+                            label: ds.label, // otDictionary[dk[0]],
+                            url: ds.infoUrl // otConsts.dbs_info_url[otConsts.invert(s)]
+                        };
+                    }),
+                    rare: otConfig.evidence_sources.genetic_association.rare.map(function (s) {
+                        // so here s is the datasource api 'key' (i.e. lowercase 'pathway')
+                        // now we need to find label and infoUrl from the otConsts.datasources object
+                        var ds = otUtils.getDatasourceById(s);
+
+                        return {
+                            label: ds.label, // otDictionary[dk[0]],
+                            url: ds.infoUrl // otConsts.dbs_info_url[otConsts.invert(s)]
+                        };
+                    })
                 };
 
                 // setup watchers to update the parent
@@ -38,7 +60,6 @@ angular.module('otPlugins')
                 scope.$watchGroup([function () { return scope.ext.common.data; }, function () { return scope.ext.rare.data; }], function () {
                     scope.ext.data = ((scope.ext.common.data && scope.ext.common.data.length > 0) || (scope.ext.rare.data && scope.ext.rare.data.length > 0)) ? [{}] : [];  // just a fake data object to have a length property for now
                 });
-
             }
         };
     }]);

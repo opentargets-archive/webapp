@@ -1,0 +1,64 @@
+/**
+ * Datatypes
+ */
+{ 
+    "GENETIC_ASSOCIATION": {
+        "id": "genetic_association",
+        "label": "Genetic associations",
+        "shortLabel": "Genetics",
+        "datasources": [
+            "GWAS",
+            "GENOMICS_ENGLAND",
+            "PHEWAS",
+            "UNIPROT",
+            "UNIPROT_LITERATURE",
+            "EVA",
+            "GENE_2_PHENOTYPE"
+        ]
+    },
+    "SOMATIC_MUTATION": {
+        "id": "somatic_mutation",
+        "label": "Somatic mutations",
+        "shortLabel": "Somatic",
+        "datasources": [
+            "CANCER_GENE_CENSUS",
+            "EVA_SOMATIC",
+            "INTOGEN",
+            "UNIPROT_SOMATIC"
+        ]
+    },
+    "KNOWN_DRUG": {
+        "id": "known_drug",
+        "label": "Drugs",
+        "shortLabel": "Drugs",
+        "datasources": ["CHEMBL"]
+    },
+    "RNA_EXPRESSION": {
+        "id": "rna_expression",
+        "label": "RNA expression",
+        "shortLabel": "RNA",
+        "datasources": ["EXPRESSION_ATLAS"]
+    },
+    "AFFECTED_PATHWAY": {
+        "id": "affected_pathway",
+        "label": "Affected pathways",
+        "shortLabel": "Pathways",
+        "datasources": [
+            "REACTOME",
+            "SLAPENRICH"
+        ]
+    },
+    "ANIMAL_MODEL": {
+        "id": "animal_model",
+        "label": "Animal models",
+        "shortLabel": "Mouse",
+        "datasources": ["PHENODIGM"]
+    },
+    "LITERATURE": {
+        "id": "literature",
+        "label": "Text mining",
+        "shortLabel": "Text Mining",
+        "datasources": ["EPMC"]
+    }
+    
+}

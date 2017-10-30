@@ -17,9 +17,9 @@ angular.module('otDirectives')
         var colorScale = otUtils.colorScales.BLUE_0_1; // blue orig
 
         /*
-    * Generates and returns the string representation of the span element
-    * with color information for each cell
-    */
+        * Generates and returns the string representation of the span element
+        * with color information for each cell
+        */
         var getColorStyleString = function (value, href) {
             var str = '';
             if (value < 0) {
@@ -50,19 +50,26 @@ angular.module('otDirectives')
             {name: '', title: 'TherapeuticArea EFO'},
             {name: '', title: otDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
-            {name: otConsts.datatypes.GENETIC_ASSOCIATION, title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
-            {name: otConsts.datatypes.SOMATIC_MUTATION, title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
-            {name: otConsts.datatypes.KNOWN_DRUG, title: otDictionary[otConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
-            {name: otConsts.datatypes.AFFECTED_PATHWAY, title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
-            {name: otConsts.datatypes.RNA_EXPRESSION, title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
-            {name: otConsts.datatypes.LITERATURE, title: otDictionary[otConsts.datatypes.LITERATURE.toUpperCase()]},
-            {name: otConsts.datatypes.ANIMAL_MODEL, title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
+            // {name: otConsts.datatypes.GENETIC_ASSOCIATION, title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
+            // {name: otConsts.datatypes.SOMATIC_MUTATION, title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
+            // {name: otConsts.datatypes.KNOWN_DRUG, title: otDictionary[otConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
+            // {name: otConsts.datatypes.AFFECTED_PATHWAY, title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
+            // {name: otConsts.datatypes.RNA_EXPRESSION, title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
+            // {name: otConsts.datatypes.LITERATURE, title: otDictionary[otConsts.datatypes.LITERATURE.toUpperCase()]},
+            // {name: otConsts.datatypes.ANIMAL_MODEL, title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
+            {name: otConsts.datatypes.GENETIC_ASSOCIATION.key, title: otConsts.datatypes.GENETIC_ASSOCIATION.label},
+            {name: otConsts.datatypes.SOMATIC_MUTATION.key, title: otConsts.datatypes.SOMATIC_MUTATION.label},
+            {name: otConsts.datatypes.KNOWN_DRUG.key, title: otConsts.datatypes.KNOWN_DRUG.label},
+            {name: otConsts.datatypes.AFFECTED_PATHWAY.key, title: otConsts.datatypes.AFFECTED_PATHWAY.label},
+            {name: otConsts.datatypes.RNA_EXPRESSION.key, title: otConsts.datatypes.RNA_EXPRESSION.label},
+            {name: otConsts.datatypes.LITERATURE.key, title: otConsts.datatypes.LITERATURE.label},
+            {name: otConsts.datatypes.ANIMAL_MODEL.key, title: otConsts.datatypes.ANIMAL_MODEL.label},
             {name: '', title: otDictionary.THERAPEUTIC_AREA}
         ];
 
         /*
-    Setup the table cols and return the DT object
-    */
+        Setup the table cols and return the DT object
+        */
         var setupTable = function (table, target, filename, download) {
         // $log.log("setupTable()");
         // return $(table).DataTable( otUtils.setTableToolsParams({
@@ -95,13 +102,13 @@ angular.module('otDirectives')
                     var mappings = {
                         0: 'disease.efo_info.label',
                         3: 'association_score.overall',
-                        4: 'association_score.datatypes.' + otConsts.datatypes.GENETIC_ASSOCIATION,
-                        5: 'association_score.datatypes.' + otConsts.datatypes.SOMATIC_MUTATION,
-                        6: 'association_score.datatypes.' + otConsts.datatypes.KNOWN_DRUG,
-                        7: 'association_score.datatypes.' + otConsts.datatypes.AFFECTED_PATHWAY,
-                        8: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION,
-                        9: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE,
-                        10: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL,
+                        4: 'association_score.datatypes.' + otConsts.datatypes.GENETIC_ASSOCIATION.id,
+                        5: 'association_score.datatypes.' + otConsts.datatypes.SOMATIC_MUTATION.id,
+                        6: 'association_score.datatypes.' + otConsts.datatypes.KNOWN_DRUG.id,
+                        7: 'association_score.datatypes.' + otConsts.datatypes.AFFECTED_PATHWAY.id,
+                        8: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION.id,
+                        9: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE.id,
+                        10: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL.id,
                         11: 'association_score.overall'
                     };
                     var order = [];
@@ -300,19 +307,19 @@ angular.module('otDirectives')
                 row.push(getColorStyleString(data.association_score.overall, geneDiseaseLoc));
 
                 // Genetic association
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.GENETIC_ASSOCIATION), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.GENETIC_ASSOCIATION));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.GENETIC_ASSOCIATION.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.GENETIC_ASSOCIATION.id));
                 // Somatic mutation
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.SOMATIC_MUTATION), geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.SOMATIC_MUTATION));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.SOMATIC_MUTATION.id), geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.SOMATIC_MUTATION.id));
                 // Known drug
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.KNOWN_DRUG), geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.KNOWN_DRUG));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.KNOWN_DRUG.id), geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.KNOWN_DRUG.id));
                 // Affected pathway
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.AFFECTED_PATHWAY), geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.AFFECTED_PATHWAY));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.AFFECTED_PATHWAY.id), geneDiseaseLoc +    (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.AFFECTED_PATHWAY.id));
                 // Expression atlas
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.RNA_EXPRESSION), geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.RNA_EXPRESSION));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.RNA_EXPRESSION.id), geneDiseaseLoc +      (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.RNA_EXPRESSION.id));
                 // Literature
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.LITERATURE), geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.LITERATURE));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.LITERATURE.id), geneDiseaseLoc +          (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.LITERATURE.id));
                 // Animal model
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.ANIMAL_MODEL), geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.ANIMAL_MODEL));
+                row.push(getColorStyleString(getScore(i, otConsts.datatypes.ANIMAL_MODEL.id), geneDiseaseLoc +        (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.ANIMAL_MODEL.id));
                 // Therapeutic area
                 var area = _.reduce(data.disease.efo_info.therapeutic_area.labels, iterateeLabel, '');
                 row.push('<span title=\'' + area + '\'>' + area + '</span>');

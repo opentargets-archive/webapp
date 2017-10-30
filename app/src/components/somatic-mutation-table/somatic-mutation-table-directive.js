@@ -9,7 +9,7 @@ angular.module('otDirectives')
     /* Directive to display the somatic mutation data table */
     .directive('otSomaticMutationTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', 'otClearUnderscoresFilter', '$log', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary, otClearUnderscoresFilter, $log) {
         'use strict';
-        // var dbs = otConsts.dbs;
+        // var datasources = otConsts.datasources;
         var searchObj = otUtils.search.translateKeys($location.search());
         var checkPath = otUtils.checkPath;
 
@@ -105,7 +105,7 @@ angular.module('otDirectives')
                             if (item.evidence.known_mutations && item.evidence.known_mutations.length) {
                                 for (var i = 0; i < item.evidence.known_mutations.length; i++) {
                                     var m = item.evidence.known_mutations[i];
-                                    if (item.sourceID === otConsts.dbs.INTOGEN) {
+                                    if (item.sourceID === otConsts.datasources.INTOGEN.id) {
                                         mutation_types += '<div>' + otClearUnderscoresFilter(item.target.activity || otDictionary.NA);
                                     } else {
                                         mutation_types += '<div>' + otClearUnderscoresFilter(m.preferred_name || otDictionary.NA) + '</div>';

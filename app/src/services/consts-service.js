@@ -10,6 +10,10 @@ angular.module('otServices')
         'use strict';
         var consts = initConfig.consts;
 
+        // do we add datatypes and datasources here?
+        consts.datatypes = initConfig.datatypes;
+        consts.datasources = initConfig.datasources;
+
         consts.invert = function (val) {
             var a = invLookup(consts, val);
             return a;

@@ -1,19 +1,7 @@
 angular.module('facets')
 
-    .factory('datatypeFacetParser', ['otDictionary', 'otConsts', 'datasourceFacetParser', function (otDictionary, otConsts, datasourceFacetParser) {
+    .factory('datatypeFacetParser', ['otConsts', 'datasourceFacetParser', 'otUtils', function (otConsts, datasourceFacetParser, otUtils) {
         'use strict';
-
-
-        var datatypes = [
-            {key: otConsts.datatypes.GENETIC_ASSOCIATION, selected: true},
-            {key: otConsts.datatypes.SOMATIC_MUTATION, selected: true},
-            {key: otConsts.datatypes.KNOWN_DRUG, selected: true},
-            {key: otConsts.datatypes.AFFECTED_PATHWAY, selected: true},
-            {key: otConsts.datatypes.RNA_EXPRESSION, selected: true},
-            {key: otConsts.datatypes.LITERATURE, selected: true},
-            {key: otConsts.datatypes.ANIMAL_MODEL, selected: false}
-        ];
-
 
         var parser = {};
 
@@ -33,16 +21,17 @@ angular.module('facets')
          */
         parser.parse = function (config, data, countsToUse, isSelected) {
             // set array of filters
-            config.filters = datatypes.map(function (obj) {
+            config.filters = otConsts.datatypesOrder.map(function (key) {
+                var obj = otConsts.datatypes[key];
                 var conf = {};
                 var def = {};
                 def[countsToUse] = {};
-                var dtb = data.buckets.filter(function (o) { return o.key === obj.key; })[0] || def;
-                conf.key = obj.key;
-                conf.label = otDictionary[obj.key.toUpperCase()] || '';
+                var dtb = data.buckets.filter(function (o) { return o.key === obj.id; })[0] || def;
+                conf.key = obj.id;
+                conf.label = otUtils.getDatatypeById(obj.id).label || ''; // otDictionary[obj.id.toUpperCase()] || '';
                 conf.count = dtb[countsToUse].value; // dtb.doc_count;
                 conf.enabled = dtb.key !== undefined; // it's actually coming from the API and not {}
-                conf.selected = isSelected(config.key, obj.key); // && conf.count>0;    // do we want to show disabled items (with count==0) as selected or not?
+                conf.selected = isSelected(config.key, obj.id); // && conf.count>0;    // do we want to show disabled items (with count==0) as selected or not?
                 conf.facet = config.key;
                 conf.collection = null;
 

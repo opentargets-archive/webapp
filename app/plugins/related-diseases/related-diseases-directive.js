@@ -26,13 +26,13 @@ angular.module('otPlugins')
 
             // Datatypes for the OBJECT
             {name: '', title: otDictionary.ASSOCIATION_SCORE},
-            {name: otConsts.datatypes.GENETIC_ASSOCIATION, title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
-            {name: otConsts.datatypes.SOMATIC_MUTATION, title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
-            {name: otConsts.datatypes.KNOWN_DRUG, title: otDictionary[otConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
-            {name: otConsts.datatypes.AFFECTED_PATHWAY, title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
-            {name: otConsts.datatypes.RNA_EXPRESSION, title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
-            {name: otConsts.datatypes.LITERATURE, title: otDictionary[otConsts.datatypes.LITERATURE.toUpperCase()]},
-            {name: otConsts.datatypes.ANIMAL_MODEL, title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
+            {name: otConsts.datatypes.GENETIC_ASSOCIATION.id, title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.id.toUpperCase()]},
+            {name: otConsts.datatypes.SOMATIC_MUTATION.id, title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.id.toUpperCase()]},
+            {name: otConsts.datatypes.KNOWN_DRUG.id, title: otDictionary[otConsts.datatypes.KNOWN_DRUG.id.toUpperCase()]},
+            {name: otConsts.datatypes.AFFECTED_PATHWAY.id, title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.id.toUpperCase()]},
+            {name: otConsts.datatypes.RNA_EXPRESSION.id, title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.id.toUpperCase()]},
+            {name: otConsts.datatypes.LITERATURE.id, title: otDictionary[otConsts.datatypes.LITERATURE.id.toUpperCase()]},
+            {name: otConsts.datatypes.ANIMAL_MODEL.id, title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.id.toUpperCase()]},
             {name: '', title: 'total score'},
 
             // empty col for the gene name
