@@ -432,7 +432,7 @@ function createVis(container, data, scope) {
                             // Instead of the flowers, try the vertical 2-way bar chart
                             var barScale = d3.scale.linear()
                                 .domain([0, 1])
-                                .range([0, linksGWidth / 2.5]);
+                                .range([0, linksGWidth / 2]);
                             var barChartHeight = yMid - (yMid / 2);
                             var barHeight = barChartHeight / scope.consts.datatypesOrder.length;
                             var barChart = d3.select(linksG)
