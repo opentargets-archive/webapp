@@ -128,7 +128,7 @@
     },
     "UNIPROT_SOMATIC": {
         "id": "uniprot_somatic",
-        "label": "Uniprot Somatic",
+        "label": "Uniprot",
         "infoUrl": "/data-sources#uniprot_somatic",
         "infoTemplate": "uniprot-somatic.md",
         "description": ""

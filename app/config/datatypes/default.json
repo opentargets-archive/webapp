@@ -24,9 +24,9 @@
         "infoTemplate": "somatic-mutation.md",
         "datasources": [
             "CANCER_GENE_CENSUS",
+            "UNIPROT_SOMATIC",
             "EVA_SOMATIC",
-            "INTOGEN",
-            "UNIPROT_SOMATIC"
+            "INTOGEN"
         ]
     },
     "KNOWN_DRUG": {
