@@ -120,6 +120,13 @@
             color: #777;
         }
 
+        tfoot>tr.filter-row>th {
+            padding-left: 2px;
+            padding-right: 2px;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
         ul {
             padding-left: 15px;
         }
