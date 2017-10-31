@@ -266,7 +266,7 @@ angular.module('otDirectives')
 
                     function addColumnFilterDropdown (column, api) {
                         // see https://datatables.net/examples/api/multi_filter_select.html
-                        var select = $('<select><option value=""></option></select>')
+                        var select = $('<select style="width:100%;"><option value=""></option></select>')
                             .appendTo($(column.footer()).empty())
                             .on('change', function (a, b, c) {
                                 $log.log(a);
