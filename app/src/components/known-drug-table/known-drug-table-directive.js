@@ -289,18 +289,18 @@ angular.module('otDirectives')
                                 // update other columns options (saving selection if it applies)
                                 api.columns({search: 'applied'}).every(function () {
                                     var otherColumn = this;
-                                    if (otherColumn[0][0] !== column[0][0]) {
-                                        var footer = $(otherColumn.footer());
-                                        var select = $('select', footer);
-                                        var otherVal = select.val();
+                                    // if (otherColumn[0][0] !== column[0][0]) {
+                                    var footer = $(otherColumn.footer());
+                                    var select = $('select', footer);
+                                    var otherVal = select.val();
 
-                                        // update the select options
-                                        select.empty().append('<option value=""></option>');
-                                        otherColumn.data().unique().sort().each(function (d, j) {
-                                            select.append('<option value="' + d + '">' + d + '</option>');
-                                        });
-                                        select.val(otherVal);
-                                    }
+                                    // update the select options
+                                    select.empty().append('<option value=""></option>');
+                                    otherColumn.data().unique().sort().each(function (d, j) {
+                                        select.append('<option value="' + d + '">' + d + '</option>');
+                                    });
+                                    select.val(otherVal);
+                                    // }
                                 });
                             });
                         column.data().unique().sort().each(function (d, j) {
