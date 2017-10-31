@@ -6,126 +6,126 @@
         "id": "cancer_gene_census",
         "label": "Cancer Gene Census",
         "infoUrl": "/data-sources#census",
-        "infoTemplate": "",
+        "infoTemplate": "cancer-gene-census.md",
         "description": ""
     },
     "CHEMBL": {
         "id": "chembl",
         "label": "Chembl",
         "infoUrl": "/data-sources#chembl",
-        "infoTemplate": "",
+        "infoTemplate": "chembl.md",
         "description": ""
     },
     "EPMC": {
         "id": "europepmc",
         "label": "Europe PMC",
         "infoUrl": "/data-sources#text_mining",
-        "infoTemplate": "",
+        "infoTemplate": "europe-pmc.md",
         "description": ""
     },
     "EVA": {
         "id": "eva",
         "label": "European Variation Archive (EVA)",
         "infoUrl": "/data-sources#eva",
-        "infoTemplate": "",
+        "infoTemplate": "eva.md",
         "description": ""
     },
     "EVA_SOMATIC": {
         "id": "eva_somatic",
         "label": "European Variation Archive (EVA)",
         "infoUrl": "/data-sources#eva",
-        "infoTemplate": "",
+        "infoTemplate": "eva-somatic.md",
         "description": ""
     },
     "EXPRESSION_ATLAS": {
         "id": "expression_atlas",
         "label": "Expression Atlas",
         "infoUrl": "/data-sources#atlas",
-        "infoTemplate": "",
+        "infoTemplate": "expression-atlas.md",
         "description": "<p>The NHGRI-EBI <a href=\"https://www.ebi.ac.uk/gwas/docs/about\">GWAS catalog</a> provides evidence on the association of genes (targets) and common diseases. This data comes from the manual curation of published Genome Wide Association Studies (GWAS). The catalog gives a list of the genetic variants (e.g. SNPs) that are most associated with a disease, by genomic region. We include all associations with p-values ≤ 10-5, so that we broaden the coverage of diseases. We assess the link between variant and gene using the Open Targets custom annotation pipeline to find the association between a disease and its most likely target. Variants are assigned to a gene by first considering any deleterious consequence within the coding region of that gene, followed by whether the variant is located within introns or regulatory regions. If the variant is intergenic, it will be assigned to the promoter region of the nearest gene. The consequences of these <a href=\"http://targetvalidation.org/variants\">variants</a> are annotated using the <a href=\"http://www.ensembl.org/info/docs/tools/vep/index.html\">Variant Effect Predictor</a>.</p>"
     },
     "GENE_2_PHENOTYPE": {
         "id": "gene2phenotype",
         "label": "Gene2Phenotype",
         "infoUrl": "/data-sources#gene2phenotype",
-        "infoTemplate": "",
+        "infoTemplate": "gene2phenotype.md",
         "description": ""
     },
     "GENOMICS_ENGLAND": {
         "id": "genomics_england",
         "label": "Genomics England PanelApp",
         "infoUrl": "/data-sources#genomics_england",
-        "infoTemplate": "",
+        "infoTemplate": "genomics-england.md",
         "description": ""
     },
     "GWAS": {
         "id": "gwas_catalog",
         "label": "GWAS catalog",
         "infoUrl": "/data-sources#gwas",
-        "infoTemplate": "",
+        "infoTemplate": "gwas-catalog.md",
         "description": ""
     },
     "INTOGEN": {
         "id": "intogen",
         "label": "IntOGen",
         "infoUrl": "/data-sources#intogen",
-        "infoTemplate": "",
+        "infoTemplate": "intogen.md",
         "description": ""
     },
     "PHENODIGM": {
         "id": "phenodigm",
-        "label": "Phenodigm",
+        "label": "PhenoDigm",
         "infoUrl": "/data-sources#mouse",
-        "infoTemplate": "",
+        "infoTemplate": "phenodigm.md",
         "description": ""
     },
     "PHEWAS": {
         "id": "phewas_catalog",
         "label": "PheWAS catalog",
         "infoUrl": "/data-sources#phewas",
-        "infoTemplate": "",
+        "infoTemplate": "phewas-catalog.md",
         "description": ""
     },
     "PHEWAS_23andme": {
         "id": "23andme",
-        "label": "23andme",
+        "label": "23andMe",
         "infoUrl": "/data-sources#phewas_23andme",
-        "infoTemplate": "",
+        "infoTemplate": "23andme.md",
         "description": ""
     },
     "REACTOME": {
         "id": "reactome",
         "label": "Reactome",
         "infoUrl": "/data-sources#reactome",
-        "infoTemplate": "",
+        "infoTemplate": "reactome.md",
         "description": ""
     },
     "SLAPENRICH": {
         "id": "slapenrich",
         "label": "SLAPenrich",
         "infoUrl": "/data-sources#SLAPenrich",
-        "infoTemplate": "",
+        "infoTemplate": "slapenrich.md",
         "description": ""
     },
     "UNIPROT": {
         "id": "uniprot",
         "label": "Uniprot",
         "infoUrl": "/data-sources#uniprot",
-        "infoTemplate": "",
+        "infoTemplate": "uniprot.md",
         "description": ""
     },
     "UNIPROT_LITERATURE": {
         "id": "uniprot_literature",
         "label": "Uniprot Literature",
         "infoUrl": "/data-sources#uniprot_lit",
-        "infoTemplate": "",
+        "infoTemplate": "uniprot-literature.md",
         "description": ""
     },
     "UNIPROT_SOMATIC": {
         "id": "uniprot_somatic",
         "label": "Uniprot Somatic",
         "infoUrl": "/data-sources#uniprot_somatic",
-        "infoTemplate": "",
+        "infoTemplate": "uniprot-somatic.md",
         "description": ""
     }
 }
