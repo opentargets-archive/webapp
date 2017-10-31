@@ -6,7 +6,7 @@
         "id": "genetic_association",
         "label": "Genetic associations",
         "shortLabel": "Genetics",
-        "description": "Genetic associations are available for both common and rare (Mendelian) diseases and come from the following sources:",
+        "infoTemplate": "genetic-association.md",
         "datasources": [
             "GWAS",
             "GENOMICS_ENGLAND",
@@ -21,7 +21,7 @@
         "id": "somatic_mutation",
         "label": "Somatic mutations",
         "shortLabel": "Somatic",
-        "description": "Somatic mutation data refers to mutations that may have clinical or treatment implications in cancer and possibly other diseases. This data type is obtained from the following sources:",
+        "infoTemplate": "somatic-mutation.md",
         "datasources": [
             "CANCER_GENE_CENSUS",
             "EVA_SOMATIC",
@@ -33,21 +33,21 @@
         "id": "known_drug",
         "label": "Drugs",
         "shortLabel": "Drugs",
-        "description": "This data type is currently comprised of only one data source:",
+        "infoTemplate": "known-drug.md",
         "datasources": ["CHEMBL"]
     },
     "RNA_EXPRESSION": {
         "id": "rna_expression",
         "label": "RNA expression",
         "shortLabel": "RNA",
-        "description": "This data type contains information on gene expression patterns under different biological conditions coming from the following resource:",
+        "infoTemplate": "rna-expression.md",
         "datasources": ["EXPRESSION_ATLAS"]
     },
     "AFFECTED_PATHWAY": {
         "id": "affected_pathway",
         "label": "Affected pathways",
         "shortLabel": "Pathways",
-        "description": "This data type contains pathway information on biochemical reactions sourced from the following sources:",
+        "infoTemplate": "affected-pathways.md",
         "datasources": [
             "REACTOME",
             "SLAPENRICH"
@@ -57,14 +57,14 @@
         "id": "animal_model",
         "label": "Animal models",
         "shortLabel": "Mouse",
-        "description": "Model organisms are a valuable source for the characterisation and identification of disease-gene associations, especially when the molecular basis and/or function of the candidate target are unknown. We use the data on animal models from PhenoDigm:",
+        "infoTemplate": "animal-models.md",
         "datasources": ["PHENODIGM"]
     },
     "LITERATURE": {
         "id": "literature",
         "label": "Text mining",
         "shortLabel": "Text Mining",
-        "description": "This data type contains evidence of target-disease association which is extracted automatically by mining the following literature database:",
+        "infoTemplate": "literature.md",
         "datasources": ["EPMC"]
     }
     

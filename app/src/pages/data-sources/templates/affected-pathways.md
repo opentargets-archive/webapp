@@ -1,0 +1,1 @@
+This data type contains pathway information on biochemical reactions sourced from the following sources:

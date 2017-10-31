@@ -1,5 +1,10 @@
 /**
  * Datasources, in alphabetical order
+ * "id": the source id in the API/elasticsearch
+ * "label": the nice display name
+ * "infoUrl": docs page and anchor for the datasource. Anchor should really be the id, so we could skip this altogether, but this might break old links
+ * "infoTemplate": the markdownfile with the description/info used in the datasources docs page
+ * "description": currently not used
  */
 {
     "CANCER_GENE_CENSUS": {
