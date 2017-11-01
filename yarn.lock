@@ -1852,9 +1852,9 @@ cttv.flowerView@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/cttv.flowerView/-/cttv.flowerView-0.0.2.tgz#269c4a08dfe6cacf14a440bec40a7bf09c3786b7"
 
-cttv.genome@0.0.27:
-  version "0.0.27"
-  resolved "https://registry.yarnpkg.com/cttv.genome/-/cttv.genome-0.0.27.tgz#a907b5dabfc9e7d1b867261848536b3836b11a9b"
+cttv.genome@0.0.28:
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/cttv.genome/-/cttv.genome-0.0.28.tgz#56ec9d7396a3ff87869c5c4959e516d3f809faf9"
   dependencies:
     cttv.api "0.0.15"
     font-awesome "^4.5.0"
