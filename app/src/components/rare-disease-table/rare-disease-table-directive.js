@@ -2,7 +2,7 @@
 
 angular.module('otDirectives')
 
-    .directive('otRareDiseaseTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', 'otClearUnderscoresFilter', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log, otClearUnderscoresFilter) {
+    .directive('otRareDiseaseTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', 'otClearUnderscoresFilter', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log, otClearUnderscoresFilter) {
         'use strict';
 
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -93,8 +93,10 @@ angular.module('otDirectives')
 
                             // mutation
                             var mut = otDictionary.NA;
+                            var variantString = otDictionary.NA;
                             if (checkPath(item, 'variant.id') && item.variant.id) {
                                 var rsId = item.variant.id.split('/').pop();
+                                variantString = rsId;
                                 if (rsId.indexOf('rs') === 0) {
                                     mut = '<a class=\'ot-external-link\' href=http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + rsId + ' target=_blank>' + rsId + '</a>';
                                 } else if (rsId.indexOf('RCV') === 0) {
@@ -130,7 +132,9 @@ angular.module('otDirectives')
                             row.push(clin);
 
                             // evidence source
+                            var sourceString = '';
                             if (item.type === 'genetic_association' && checkPath(item, 'evidence.variant2disease')) {
+                                sourceString = item.evidence.variant2disease.urls[0].nice_name;
                                 row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.variant2disease.urls[0].url + '\' target=_blank>' + item.evidence.variant2disease.urls[0].nice_name + '</a>');
                             } else {
                                 // TODO: Genomics England URLs are wrong, so (hopefully temporarily) we need to hack them in the UI
@@ -139,8 +143,10 @@ angular.module('otDirectives')
                                     item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
                                 }
                                 if (db === otConsts.dbs.GENE_2_PHENOTYPE) {
+                                    sourceString = 'Further details in Gene2Phenotype database';
                                     row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>Further details in Gene2Phenotype database</a>');
                                 } else {
+                                    sourceString = item.evidence.urls[0].nice_name;
                                     row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>' + item.evidence.urls[0].nice_name + '</a>');
                                 }
                             }
@@ -169,6 +175,9 @@ angular.module('otDirectives')
                             // Publication ids (hidden)
                             row.push(pmidsList.join(', '));
 
+                            // hidden columns for filtering
+                            row.push(variantString); // variant
+                            row.push(sourceString); // evidence source
 
                             newdata.push(row); // push, so we don't end up with empty rows
                         } catch (e) {
@@ -180,6 +189,7 @@ angular.module('otDirectives')
                     return newdata;
                 }
 
+                var dropdownColumns = [1, 2, 3, 4, 5];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
@@ -200,14 +210,27 @@ angular.module('otDirectives')
                                 'visible': false
                             },
                             {
-                                'targets': [2, 5, 6],
+                                'targets': [5, 6],
                                 'width': '14%'
                             },
                             {
                                 'targets': [3, 4],
                                 'width': '20%'
+                            },
+                            {
+                                'targets': [2],
+                                'width': '14%',
+                                'mRender': otColumnFilter.mRenderGenerator(8),
+                                'mData': otColumnFilter.mDataGenerator(2, 8)
+                            },
+                            {
+                                'targets': [5],
+                                'width': '14%',
+                                'mRender': otColumnFilter.mRenderGenerator(9),
+                                'mData': otColumnFilter.mDataGenerator(5, 9)
                             }
-                        ]
+                        ],
+                        initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, (scope.title ? scope.title + '-' : '') + '-rare_diseases'));
                 }
             }
