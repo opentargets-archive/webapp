@@ -1878,14 +1878,14 @@ cttv.spinner@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/cttv.spinner/-/cttv.spinner-0.0.1.tgz#f8aa7f7ed1d71cec8b08fae6a88fee71258aff2b"
 
-cttv.targetAssociationsBubbles@0.0.16:
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/cttv.targetAssociationsBubbles/-/cttv.targetAssociationsBubbles-0.0.16.tgz#11cb50cd1a6676b9c989da09d39682e9b8cdb816"
+cttv.targetAssociationsBubbles@0.0.17:
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/cttv.targetAssociationsBubbles/-/cttv.targetAssociationsBubbles-0.0.17.tgz#d2128d3d1b4c304087af1b8c0f48666a6653f168"
   dependencies:
     cttv.api "0.0.15"
     cttv.bubblesView "0.0.5"
     cttv.consts "0.0.0"
-    cttv.flowerView "0.0.0"
+    cttv.flowerView "0.0.2"
     lodash "^4.2.1"
     tnt.api "^0.1.1"
     tnt.tooltip "^0.2.0"
