@@ -35,7 +35,7 @@ angular.module('otDirectives')
                     $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule/' + scope.drug)
                         .then(function (resp) {
                             scope.displayName = resp.data.pref_name || resp.data.molecule_chembl_id;
-                            scope.mechanism = resp.data.usan_stem_definition || 'NA';
+                            // scope.mechanism = resp.data.usan_stem_definition || 'NA';
                             scope.mol_type = resp.data.molecule_type || 'NA';
                             scope.first_approval = resp.data.first_approval || 'NA';
                             scope.max_phase = resp.data.max_phase || 'NA';
