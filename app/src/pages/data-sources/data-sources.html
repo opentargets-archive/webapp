@@ -11,8 +11,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-4 pull-right">
-
+            <div class="col-sm-4 pull-right hidden-xs">
                 <!-- right-hand content navigation menu -->
                 <ul class="plain arrow-icon">
                     <li ng-repeat="dt in otConsts.datatypesOrder"><a ng-href="#{{otConsts.datatypes[dt].id}}">{{otConsts.datatypes[dt].label}}</a>
@@ -21,22 +20,21 @@
                         </ul>
                     </li>
                 </ul>
-
             </div>
 
-            <div class="col-sm-8">
-
+            
+            <div class="col-sm-8 col-xs-12">
                 <div class="ot-docs-section">
                     <p>We collect data from various sources and combine them into categories called Data types to allow for target identification and prioritisation using our Open Targets Platform. We list our current data types and their data sources below. Note that data from an individual source can contribute to different Data types, e.g. data from EVA is observed in two data types, Genetic associations and Somatic mutations.</p>
                 </div>
 
                 <!-- datatypes and datasources documentation -->
                 <div class="ot-docs-section" ng-repeat="dt in otConsts.datatypesOrder">
-                    <h4><a name="{{otConsts.datatypes[dt].id}}"></a>{{otConsts.datatypes[dt].label}}</h4>
+                    <h4><a id="{{otConsts.datatypes[dt].id}}"></a>{{otConsts.datatypes[dt].label}}</h4>
                     <div ot-md-parser url="src/pages/data-sources/templates/{{otConsts.datatypes[dt].infoTemplate}}"></div>
 
                     <div ng-repeat="ds in otConsts.datatypes[dt].datasources">
-                        <h5><a name="{{otConsts.datasources[ds].infoUrl.split('#')[1]}}"></a>{{otConsts.datasources[ds].label}}</h5>
+                        <h5><a id="{{otConsts.datasources[ds].infoUrl.split('#')[1]}}"></a>{{otConsts.datasources[ds].label}}</h5>
                         <div ot-md-parser url="src/pages/data-sources/templates/{{otConsts.datasources[ds].infoTemplate}}"></div>
                     </div>
                 </div>

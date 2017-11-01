@@ -57,7 +57,8 @@ function initApp (deps) {
                 })
                 .when('/data-sources', {
                     controller: 'DataSourcesController',
-                    templateUrl: 'src/pages/data-sources/data-sources.html'
+                    templateUrl: 'src/pages/data-sources/data-sources.html',
+                    reloadOnSearch: false   // this is to make in-page links (i.e. table of content) work
                 })
                 .when('/terms-of-use', {
                     templateUrl: 'src/pages/static/terms-of-use.html'
