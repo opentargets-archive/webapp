@@ -76,7 +76,7 @@ angular.module('otDirectives')
                             $('#target-list-go2-terms').DataTable(otUtils.setTableToolsParams({
                                 'data': parseGOdata(data.split('\n')),
                                 'ordering': true,
-                                'order': [[2, 'asc']],
+                                'order': [[3, 'asc']],
                                 'autoWidth': false,
                                 'paging': true,
                                 'columnDefs': [
