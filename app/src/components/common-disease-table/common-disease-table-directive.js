@@ -188,7 +188,7 @@ angular.module('otDirectives')
                                 'visible': false
                             },
                             {
-                                'targets': [2, 3, 4, 6],
+                                'targets': [3, 6],
                                 'width': '14%'
                             },
                             {
@@ -197,13 +197,13 @@ angular.module('otDirectives')
                             },
                             {
                                 'targets': [2],
-                                'width': '11.2%',
+                                'width': '14%',
                                 'mRender': otColumnFilter.mRenderGenerator(8),
                                 'mData': otColumnFilter.mDataGenerator(2, 8)
                             },
                             {
                                 'targets': [4],
-                                'width': '11.2%',
+                                'width': '14%',
                                 'mRender': otColumnFilter.mRenderGenerator(9),
                                 'mData': otColumnFilter.mDataGenerator(4, 9)
                             }
