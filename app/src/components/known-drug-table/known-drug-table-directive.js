@@ -7,7 +7,7 @@
 angular.module('otDirectives')
 
     /* Directive to display the known drug evidence table */
-    .directive('otKnownDrugTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
+    .directive('otKnownDrugTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
         'use strict';
         // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -269,75 +269,7 @@ angular.module('otDirectives')
                         return newdata;
                     }
 
-
-                    function addColumnFilterDropdown (column, api) {
-                        // see https://datatables.net/examples/api/multi_filter_select.html
-                        var select = $('<select style="width:100%;"><option value=""></option></select>')
-                            .appendTo($(column.footer()).empty())
-                            .on('change', function (a) {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-                                var filter = filters.filter(function (f) {
-                                    return f.index === column[0][0];
-                                })[0];
-                                var search = filter.regexFn(val);
-                                column
-                                    .search(val ? search : '', true, false)
-                                    .draw();
-
-                                // update other columns options (saving selection if it applies)
-                                api.columns({search: 'applied'}).every(function () {
-                                    var otherColumn = this;
-                                    // if (otherColumn[0][0] !== column[0][0]) {
-                                    var footer = $(otherColumn.footer());
-                                    var select = $('select', footer);
-                                    var otherVal = select.val();
-
-                                    // update the select options
-                                    select.empty().append('<option value=""></option>');
-                                    otherColumn.data().unique().sort().each(function (d, j) {
-                                        select.append('<option value="' + d + '">' + d + '</option>');
-                                    });
-                                    select.val(otherVal);
-                                    // }
-                                });
-                            });
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
-                        });
-                    }
-
-
-                    // function onChange()
-                    var regexFull = function (val) { return '^' + val + '$'; };
-                    var regexLinkText = function (val) { return '' + val; };
-                    var filters = [
-                        {
-                            index: 1, regexFn: regexFull
-                        }, {
-                            index: 2, regexFn: regexFull
-                        }, {
-                            index: 3, regexFn: regexFull
-                        }, {
-                            index: 4, regexFn: regexFull
-                        }, {
-                            index: 5, regexFn: regexFull
-                        }, {
-                            index: 6, regexFn: regexFull
-                        }, {
-                            index: 7, regexFn: regexFull
-                        }, {
-                            index: 8, regexFn: regexFull
-                        }, {
-                            index: 9, regexFn: regexFull
-                        }, {
-                            index: 10, regexFn: regexFull
-                        }
-                    ];
-                    var dropdownColumns = filters.map(function (f) {
-                        return f.index;
-                    });
+                    var dropdownColumns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
                     /*
                      * This is the hardcoded data for the Known Drugs table and
@@ -372,111 +304,37 @@ angular.module('otDirectives')
                                 {
                                     'targets': [1],
                                     'width': '11.2%',
-                                    'mRender': function (data, type, full) {
-                                        switch (type) {
-                                        case 'display':
-                                        default:
-                                            return data;
-                                        case 'filter':
-                                            return full[11];
-                                        }
-                                    },
-                                    'mData': function (source, type, val) {
-                                        switch (type) {
-                                        case 'display':
-                                            return source[1];
-                                        case 'filter':
-                                        default:
-                                            return source[11];
-                                        }
-                                    }
+                                    'mRender': otColumnFilter.mRenderGenerator(11),
+                                    'mData': otColumnFilter.mDataGenerator(1, 11)
                                 },
                                 // drug
                                 {
                                     'targets': [2],
                                     'width': '11.2%',
-                                    'mRender': function (data, type, full) {
-                                        switch (type) {
-                                        case 'display':
-                                        default:
-                                            return data;
-                                        case 'filter':
-                                            return full[12];
-                                        }
-                                    },
-                                    'mData': function (source, type, val) {
-                                        switch (type) {
-                                        case 'display':
-                                            return source[2];
-                                        case 'filter':
-                                        default:
-                                            return source[12];
-                                        }
-                                    }
+                                    'mRender': otColumnFilter.mRenderGenerator(12),
+                                    'mData': otColumnFilter.mDataGenerator(2, 12)
                                 },
                                 // mech of action
                                 {
                                     'targets': [7],
                                     'width': '11.2%',
-                                    'mRender': function (data, type, full) {
-                                        switch (type) {
-                                        case 'display':
-                                        default:
-                                            return data;
-                                        case 'filter':
-                                            return full[13];
-                                        }
-                                    },
-                                    'mData': function (source, type, val) {
-                                        switch (type) {
-                                        case 'display':
-                                            return source[7];
-                                        case 'filter':
-                                        default:
-                                            return source[13];
-                                        }
-                                    }
+                                    'mRender': otColumnFilter.mRenderGenerator(13),
+                                    'mData': otColumnFilter.mDataGenerator(7, 13)
                                 },
                                 // evidence source
                                 {
                                     'targets': [10],
                                     'width': '11.2%',
-                                    'mRender': function (data, type, full) {
-                                        switch (type) {
-                                        case 'display':
-                                        default:
-                                            return data;
-                                        case 'filter':
-                                            return full[14];
-                                        }
-                                    },
-                                    'mData': function (source, type, val) {
-                                        switch (type) {
-                                        case 'display':
-                                            return source[10];
-                                        case 'filter':
-                                        default:
-                                            return source[14];
-                                        }
-                                    }
+                                    'mRender': otColumnFilter.mRenderGenerator(14),
+                                    'mData': otColumnFilter.mDataGenerator(10, 14)
                                 }
                             ],
-                            
                             // "aoColumnDefs" : [
                             //     {"iDataSort" : 2, "aTargets" : [3]},
                             // ]
                             // "ordering": false
                             // }, $scope.search.info.title+"-known_drugs") );
-                            initComplete: function () {                                
-                                var api = this.api();
-                                api.columns().every(function () {
-                                    var column = this;
-                                    if (dropdownColumns.indexOf(column[0][0]) !== -1) {
-                                        addColumnFilterDropdown(column, api);
-                                    }
-                                });
-                            }
-
+                            initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                         }, (scope.title ? scope.title + '-' : '') + 'known_drugs'));
                     }
                 });
