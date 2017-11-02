@@ -114,21 +114,21 @@
     },
     "UNIPROT": {
         "id": "uniprot",
-        "label": "Uniprot",
+        "label": "UniProt",
         "infoUrl": "/data-sources#uniprot",
         "infoTemplate": "uniprot.md",
         "description": ""
     },
     "UNIPROT_LITERATURE": {
         "id": "uniprot_literature",
-        "label": "Uniprot Literature",
+        "label": "UniProt literature",
         "infoUrl": "/data-sources#uniprot_lit",
         "infoTemplate": "uniprot-literature.md",
         "description": ""
     },
     "UNIPROT_SOMATIC": {
         "id": "uniprot_somatic",
-        "label": "Uniprot",
+        "label": "Uniprot somatic",
         "infoUrl": "/data-sources#uniprot_somatic",
         "infoTemplate": "uniprot-somatic.md",
         "description": ""

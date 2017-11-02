@@ -1,0 +1,36 @@
+<div style="min-height:40px;" ng-show="showSpinner">
+    <ot-progress-spinner size="30"></ot-progress-spinner>
+</div>
+
+<div class="section">
+    <!--<uib-tabset>-->
+        <!--<uib-tab heading="Biological Process">-->
+            <!--Biological process GO terms-->
+        <!--</uib-tab>-->
+        <!--<uib-tab heading="Molecular Function">-->
+            <!--Molecular function GO terms-->
+        <!--</uib-tab>-->
+        <!--<uib-tab heading="Cellular Component">-->
+            <!--Cellular component GO terms-->
+        <!--</uib-tab>-->
+
+    <!--</uib-tabset>-->
+
+    <div class="table-panel">
+        <table class='table ot-evidence-table' id="target-list-go2-terms">
+            <thead>
+            <tr>
+                <th>GO term id</th>
+                <th>GO term description</th>
+                <th>Category</th>
+                <th>Relevance (pvalue)<span style="font-size:0.8em;float:right;"><ot-popover key="ENRICHMENT.GO"></ot-popover></span></th>
+                <th>Number of targets</th>
+                <th>Targets</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+</div>

@@ -219,9 +219,31 @@ angular.module('otServices')
         otUtilsService.getPmidsList = function (refs) {
             refs = refs || [];  // to avoid undefined errors
             return refs.map(function (ref) {
+                if (ref.lit_id[ref.lit_id.length - 1] === '/') {
+                    ref.lit_id = ref.lit_id.substring(0, ref.lit_id.length - 1);
+                }
                 return ref.lit_id.split('/').pop();
             });
         };
+
+        // otUtilsService.getPublicationsField = function(refs) {
+        //     refs = refs || [];  // to avoid undefined errors
+        //
+        //     var pub = '';
+        //     pub = '<span class=\'ot-publications-string\'>';
+        //     pub += '<span class=\'badge\'>' + refs.length + '</span>';
+        //     pub += (refs.length === 1 ? ' publication' : ' publications');
+        //     if (refs.length === 1) {
+        //         pub = '<a class="ot-external-link" target="_blank" href="' + refs[0].lit_id + '">' + pub + '</a>';
+        //     } else {
+        //         var pmids = pmidsList.map(function (ref) {
+        //             return 'EXT_ID:' + ref;
+        //         }).join(' OR ');
+        //         pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
+        //     }
+        //     pub += '</span>';
+        //     return pub;
+        // };
 
         otUtilsService.getPublicationsString = function (pmidsList) {
             pmidsList = pmidsList || [];  // to avoid undefined errors
@@ -230,14 +252,13 @@ angular.module('otServices')
                 pub = '<span class=\'ot-publications-string\'>';
                 pub += '<span class=\'badge\'>' + pmidsList.length + '</span>';
                 pub += (pmidsList.length === 1 ? ' publication' : ' publications');
-                if (pmidsList.length === 1) {
-                    pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/abstract/MED/' + pmidsList[0] + '">' + pub + '</a>';
-                } else {
-                    var pmids = pmidsList.map(function (ref) {
-                        return 'EXT_ID:' + ref;
-                    }).join(' OR ');
-                    pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
-                }
+                var pmids = pmidsList.map(function (ref) {
+                    if (ref.substring(0, 3) === 'PMC') {
+                        return ref;
+                    }
+                    return 'EXT_ID:' + ref;
+                }).join(' OR ');
+                pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
                 pub += '</span>';
             }
             return pub;
@@ -337,67 +358,11 @@ angular.module('otServices')
         //     return defer_cancel;
         // };
 
-        /* MP: IMPORTANT! This is a hack introduced on Oct 24th 2017 to deal with a data problem
-         * that consists on the field evidence.evidence_codes_info being null in the evidence data for rare diseases.
-         * This field is supposed to have labels for the evidence.evidence_codes array (which are present).
-         * I'm including here the map of ECO terms to labels because it is not possible to fix the data at this point,
-         * but this hack should be reverted as soon as possible (once we have the correct data).
-         * This map is used in getEcoLabel (below)
-         */
-        var eco2label = {
-            ECO_0000205: "curator_inference",
-            SO_0002165: "trinucleotide_repeat_expansion",
-            SO_0001060: "sequence_variant",
-            SO_0001566: "regulatory_region_variant",
-            SO_0001567: "stop_retained_variant",
-            SO_0001574: "splice_acceptor_variant",
-            SO_0001575: "splice_donor_variant",
-            SO_0001578: "stop_lost",
-            SO_0001580: "coding_sequence_variant",
-            SO_0001582: "initiator_codon_variant",
-            SO_0001583: "missense_variant",
-            SO_0001587: "stop_gained",
-            SO_0001589: "frameshift_variant",
-            SO_0001619: "non_coding_transcript_variant",
-            SO_0001620: "mature_miRNA_variant",
-            SO_0001621: "NMD_transcript_variant",
-            SO_0001623: "5_prime_UTR_variant",
-            SO_0001624: "3_prime_UTR_variant",
-            SO_0001626: "incomplete_terminal_codon_variant",
-            SO_0001627: "intron_variant",
-            SO_0001628: "intergenic_variant",
-            SO_0001630: "splice_region_variant",
-            SO_0001631: "upstream_gene_variant",
-            SO_0001632: "downstream_gene_variant",
-            SO_0001782: "TF_binding_site_variant",
-            SO_0001792: "non_coding_transcript_exon_variant",
-            SO_0001818: "protein_altering_variant",
-            SO_0001819: "synonymous_variant",
-            SO_0001821: "inframe_insertion",
-            SO_0001822: "inframe_deletion",
-            SO_0001825: "conservative_inframe_deletion",
-            SO_0001889: "transcript_amplification",
-            SO_0001891: "regulatory_region_amplification",
-            SO_0001892: "TFBS_amplification",
-            SO_0001893: "transcript_ablation",
-            SO_0001894: "regulatory_region_ablation",
-            SO_0001895: "TFBS_ablation",
-            SO_0001906: "feature_truncation",
-            SO_0001907: "feature_elongation",
-            SO_0002012: "start_lost",
-            nearest_gene_five_prime_end: "Nearest gene counting from 5' end",
-            regulatory_nearest_gene_five_prime_end: "Regulatory nearest gene 5' end"
-        };
-
         /*
          * Search for given eco_code id in the specified evidence_codes_info array
          * and returns corresponding label, or eco_code id if not found
          */
         otUtilsService.getEcoLabel = function (arr, eco) {
-            // Data hack, see above (eco2label)
-            if (!arr) {
-                return eco2label[eco];
-            }
             var label = eco;
             if (arr) {
                 for (var i = 0; i < arr.length; i++) {

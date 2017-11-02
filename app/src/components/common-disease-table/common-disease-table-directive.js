@@ -145,6 +145,7 @@ angular.module('otDirectives')
 
                             var pmidsList = otUtils.getPmidsList(refs);
                             row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : 'N/A');
+                            // row.push(refs.length ? otUtils.getPublicationsField(refs) : 'N/A');
 
                             // Publication ids (hidden)
                             row.push(pmidsList.join(', '));
