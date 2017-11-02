@@ -6,8 +6,9 @@ angular.module('otServices')
 
         function addColumnFilterDropdown (column, api, filters) {
             // see https://datatables.net/examples/api/multi_filter_select.html
+            var footer = $(column.footer()).empty();
             var select = $('<select style="width:100%;"><option value=""></option></select>')
-                .appendTo($(column.footer()).empty())
+                .appendTo(footer)
                 .on('change', function (a) {
                     var val = $.fn.dataTable.util.escapeRegex(
                         $(this).val()
@@ -34,7 +35,42 @@ angular.module('otServices')
                         });
                         select.val(otherVal);
                     });
+
+                    $('.filter-label', button).html($(this).val());
+
+                    select.hide();
+                    button.show();
                 });
+
+            var button = $('<button class="btn column-filter btn-sm" style="width:100%;"><span class="text-left pull-left filter-label"></span><span class="pull-right fa fa-times"></span></button>')
+                .appendTo(footer)
+                .click(function () {
+                    column
+                        .search('', true, false)
+                        .draw();
+
+                    // update other columns options (saving selection if it applies)
+                    api.columns({search: 'applied'}).every(function () {
+                        var otherColumn = this;
+                        var footer = $(otherColumn.footer());
+                        var select = $('select', footer);
+                        var otherVal = select.val();
+
+                        // update the select options
+                        select.empty().append('<option value=""></option>');
+                        otherColumn.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                        select.val(otherVal);
+                    });
+
+                    select.val('');
+
+                    select.show();
+                    button.hide();
+                })
+                .hide();
+
             column.data().unique().sort().each(function (d, j) {
                 select.append('<option value="' + d + '">' + d + '</option>');
             });

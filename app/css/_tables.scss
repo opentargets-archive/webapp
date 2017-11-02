@@ -131,6 +131,17 @@
             padding-left: 15px;
         }
 
+        button.column-filter {
+            background-color: $clr-ui-foreground;
+            color: white;
+            padding-top: 1px;
+            padding-bottom: 1px;
+            border: none;
+            span.fa {
+                line-height: inherit;
+            }
+        }
+
     }
 
 
