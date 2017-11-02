@@ -19,7 +19,7 @@ angular.module('otDirectives')
      * biological object.properties.experiment specific
      */
 
-    .directive('otMouseTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log) {
+    .directive('otMouseTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log) {
         'use strict';
 
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -134,6 +134,7 @@ angular.module('otDirectives')
                     return newdata;
                 }
 
+                var dropdownColumns = [1, 5];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
@@ -161,7 +162,8 @@ angular.module('otDirectives')
                                 'targets': [5],
                                 'width': '10%'
                             }
-                        ]
+                        ],
+                        initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, (scope.title ? scope.title + '-' : '') + '-mouse_models'));
                 }
 
