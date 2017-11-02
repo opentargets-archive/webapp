@@ -98,11 +98,6 @@
             "heading": "Gene Ontology"
         },
         {
-            "name": "go2",
-            "element": "multiple-targets-go-summary-2",
-            "heading": "Gene Ontology (Alt)"
-        },
-        {
             "name": "drugs",
             "element": "multiple-targets-drugs-summary",
             "heading": "Drugs"
