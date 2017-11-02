@@ -107,6 +107,8 @@ angular.module('otDirectives')
                                     var m = item.evidence.known_mutations[i];
                                     if (item.sourceID === otConsts.dbs.INTOGEN) {
                                         mutation_types += '<div>' + otClearUnderscoresFilter(item.target.activity || otDictionary.NA);
+                                    } else if (item.sourceID === otConsts.dbs.UNIPROT_SOMATIC) {
+                                        mutation_types += '<div>missense variant</div>';
                                     } else {
                                         mutation_types += '<div>' + otClearUnderscoresFilter(m.preferred_name || otDictionary.NA) + '</div>';
                                     }
