@@ -103,6 +103,7 @@ angular.module('otDirectives')
                             var pattern = '';
 
                             var mutString = '';
+                            var patternString = '';
                             if (item.evidence.known_mutations && item.evidence.known_mutations.length) {
                                 for (var i = 0; i < item.evidence.known_mutations.length; i++) {
                                     var m = item.evidence.known_mutations[i];
@@ -119,10 +120,14 @@ angular.module('otDirectives')
                                         samples = otDictionary.NA;
                                     }
                                     pattern += '<div>' + (m.inheritance_pattern || otDictionary.NA) +  '</div>';
+                                    patternString += (patternString.length > 0 ? ', ' : '') + (m.inheritance_pattern || otDictionary.NA);
                                 }
                             }
                             if (!mutString) {
                                 mutString = otDictionary.NA;
+                            }
+                            if (!patternString) {
+                                patternString = otDictionary.NA;
                             }
 
                             // col2: mutation type
@@ -149,7 +154,8 @@ angular.module('otDirectives')
                             row.push(pmidsList.join(', '));
 
                             // hidden columns for filtering
-                            row.push(mutString); // evidence source
+                            row.push(mutString); // mutation type
+                            row.push(patternString); // cellular mechanism
                             row.push(item.evidence.urls[0].nice_name); // evidence source
 
                             newdata.push(row); // push, so we don't end up with empty rows
@@ -198,10 +204,16 @@ angular.module('otDirectives')
                                 'mData': otColumnFilter.mDataGenerator(2, 8)
                             },
                             {
-                                'targets': [5],
+                                'targets': [4],
                                 'width': '18%',
                                 'mRender': otColumnFilter.mRenderGenerator(9),
-                                'mData': otColumnFilter.mDataGenerator(5, 9)
+                                'mData': otColumnFilter.mDataGenerator(4, 9)
+                            },
+                            {
+                                'targets': [5],
+                                'width': '18%',
+                                'mRender': otColumnFilter.mRenderGenerator(10),
+                                'mData': otColumnFilter.mDataGenerator(5, 10)
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
