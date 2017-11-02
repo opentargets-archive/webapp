@@ -121,10 +121,20 @@
         }
 
         tfoot>tr.filter-row>th {
-            padding-left: 2px;
-            padding-right: 2px;
+            border-right: 1px solid #DDD;
+            padding: 2px;
+            // padding-left: 2px;
+            // padding-right: 2px;
             font-size: 12px;
             font-weight: normal;
+        }
+
+        tfoot>tr.filter-row>th:last-child {
+            border-right: none;
+        }
+
+        tfoot.filter-foot {
+            display: table-row-group;
         }
 
         ul {
