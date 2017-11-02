@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otGeneTree', ['otUtils', '$timeout', function (otUtils, $timeout) {
+    .directive('otGeneTree', ['otColumnFilter', 'otUtils', '$timeout', function (otColumnFilter, otUtils, $timeout) {
         'use strict';
 
         return {
@@ -74,7 +74,8 @@ angular.module('otPlugins')
                         row.push(homologyType[item.type]);
 
                         // Orthologue
-                        row.push(info[item.target.id].display_name + ' (<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summar?g=' + item.target.id + '" target="_blank">' + item.target.id + ')');
+                        var displayName = (info[item.target.id].display_name) ? info[item.target.id].display_name : '';
+                        row.push(displayName + (displayName ? ' ' : '') + '(<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summar?g=' + item.target.id + '" target="_blank">' + item.target.id + ')');
 
                         // dN/dS
                         row.push(item.dn_ds || 'N/A');
@@ -84,6 +85,9 @@ angular.module('otPlugins')
 
                         // Target %id
                         row.push(item.target.perc_id);
+
+                        // hidden columns for filtering
+                        // row.push(displayName);
 
                         tableData.push(row);
                     });
@@ -118,12 +122,22 @@ angular.module('otPlugins')
                             .then(function (resp2) {
                                 scope.showSpinner = false;
                                 $timeout(function () {
+                                    var dropdownColumns = [0, 1];
                                     $('#gene-homologues-table').DataTable(otUtils.setTableToolsParams({
                                         'data': formatHomologuesDataToArray(resp.body.data[0].homologies, resp2.body),
                                         'ordering': true,
                                         'order': [[4, 'desc']],
                                         'autoWidth': false,
-                                        'paging': true
+                                        'paging': true,
+                                        // 'columnDefs': [
+                                        //     {
+                                        //         'targets': [2],
+                                        //         'width': '14%',
+                                        //         'mRender': otColumnFilter.mRenderGenerator(6),
+                                        //         'mData': otColumnFilter.mDataGenerator(2, 6)
+                                        //     }
+                                        // ],
+                                        initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                                     }, scope.target.id + '-homologies'));
                                 }, 0);
                             });
