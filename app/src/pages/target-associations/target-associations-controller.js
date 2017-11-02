@@ -5,7 +5,7 @@ angular.module('otControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('TargetAssociationsController', ['$scope', '$location', 'otUtils', 'otApi', 'otFacetsFilters', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otApi, otFacetsFilters, otDictionary, otLocationState, otConfig) {
+    .controller('TargetAssociationsController', ['$scope', '$location', 'otUtils', 'otApi', 'otFacetsState', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otApi, otFacetsState, otDictionary, otLocationState, otConfig) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -34,20 +34,14 @@ angular.module('otControllers')
 
         $scope.loading = false;
 
-
-        // filters
-
-        // reset the filters when loading a new page so we don't see the filters from the previous page...
-        otFacetsFilters.reset();
-
-        // Set page filters: this defines the order in which the facets are going to be displayed
-        // as per config JSON
-        otFacetsFilters.pageFacetsStack(otConfig.targetAssociationsFacets.facets);
+        // set page facets (from config)
+        var facetNames = otConfig.targetAssociationsFacets.facets;
+        otFacetsState.setPageFacetNamesFromConfig(facetNames);
 
         // state we want to export to/from the URL
         var stateId = 'view';
         var cancersExcId = 'cancers';
-        var facetsId = otFacetsFilters.stateId;
+        var facetsId = otFacetsState.stateId;
 
 
         /*
@@ -132,7 +126,7 @@ angular.module('otControllers')
                         $scope.n.diseases = resp.body.total;
 
                         // Update the facets
-                        otFacetsFilters.updateFacets(resp.body.facets, otConfig.targetAssociationsFacets.count);
+                        otFacetsState.updatePageFacetsFromApiData(resp.body.facets, otConfig.targetAssociationsFacets.count);
                     } else {
                         // Check if there is a profile page
                         var profileOpts = {

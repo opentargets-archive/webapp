@@ -117,6 +117,12 @@
                 </div>
 
                 <div class="ot-docs-section">
+                    <h4><a name="tissue-specificity"></a>How do you calculate tissue specificity from RNA expression data?</h4>
+                    <p>We compute the tissue specificity of a target as the number of standard deviations from the mean of the log RNA expression of the target across the available tissues. This is a standard z-score calculation. 
+                            A target is considered to be tissue specific if the z-score is greater than 0.674 (or the 75th percentile of a perfect normal distribution). We remove data for under-expressed targets before the z-score calculation. Our RNA expression data comes from Expression Atlas.</p>
+                </div>
+
+                <div class="ot-docs-section">
                     <h4><a name="biblio"></a>I am looking at a target profile and found some articles linked to my target. Where does the bibliography come from?</h4>
                     <p>We link the gene to its protein and get the list of articles from the Publications section in <a href="http://www.uniprot.org/">UniProt</a>.</p>
                 </div>

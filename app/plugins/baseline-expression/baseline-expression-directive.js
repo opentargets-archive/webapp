@@ -1,15 +1,15 @@
 angular.module('otPlugins')
-    .directive('otRnaBaselineExpression', ['$timeout', '$http', 'otUtils', function ($timeout, $http, otUtils) {
+    .directive('otBaselineExpression', ['$timeout', '$http', 'otUtils', function ($timeout, $http, otUtils) {
         'use strict';
 
         return {
             restrict: 'E',
-            templateUrl: 'plugins/rna-expression/rna-baseline-expression.html',
+            templateUrl: 'plugins/baseline-expression/baseline-expression.html',
             scope: {
                 target: '=',
                 width: '='
             },
-            link: function (scope) {
+            link: function (scope, element, attrs) {
                 var w = scope.width - 40;
                 var target = scope.target.symbol;
 
@@ -57,7 +57,7 @@ angular.module('otPlugins')
                             'font-size': '12px',
                             'fill': '#555'
                         })
-                        .text('Normalised expression (TPM)');
+                        .text('Normalised expression (RPKM)');
 
                     var valScale = d3.scale.linear()
                         .domain(valExtent)
@@ -169,8 +169,12 @@ angular.module('otPlugins')
                         .attr('x2', function (d) {
                             return valScale(d.median);
                         })
-                        .attr('y1', 0)
-                        .attr('y2', 10)
+                        .attr('y1', function (d) {
+                            return 0;
+                        })
+                        .attr('y2', function (d) {
+                            return 10;
+                        })
                         .attr('class', 'median')
                         .attr('stroke-width', 2)
                         .attr('stroke', 'black');

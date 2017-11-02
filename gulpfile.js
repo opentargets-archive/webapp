@@ -85,7 +85,6 @@ gulp.task('default', ['lint', 'test']);
 
 gulp.task('lint', function () {
     return gulp.src('app/js/**/*.js')
-        .pipe(ignore.exclude(/bower_components/))
         .pipe(ignore.exclude(/node_modules/))
         .pipe(ignore.exclude(/test/))
         .pipe(jshint())
@@ -188,7 +187,7 @@ gulp.task('copy-fontawesome', function () {
             console.error(err);
         }
     });
-    return gulp.src('bower_components/components-font-awesome/**/*')
+    return gulp.src('node_modules/components-font-awesome/**/*')
         .pipe(gulp.dest(fontawesomePath));
 });
 
@@ -199,7 +198,7 @@ gulp.task('copy-bootstrap', function () {
             console.error(err);
         }
     });
-    return gulp.src('bower_components/bootstrap/**/*')
+    return gulp.src('node_modules/bootstrap/**/*')
         .pipe(gulp.dest(bootstrapPath));
 });
 

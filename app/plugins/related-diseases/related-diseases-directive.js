@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otRelatedDiseases', ['otUtils', 'otConsts', 'otDictionary', 'otApi', '$timeout', function (otUtils, otConsts, otDictionary, otApi, $timeout) {
+    .directive('otRelatedDiseases2', ['otUtils', 'otConsts', 'otDictionary', 'otApi', '$timeout', function (otUtils, otConsts, otDictionary, otApi, $timeout) {
         'use strict';
 
         // Details table --

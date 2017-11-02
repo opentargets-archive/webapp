@@ -45,7 +45,11 @@ angular.module('otServices')
                 SCORE_MAX: 'scorevalue_max', // filterbyscorevalue_max',
                 SCORE_STR: 'stringency',
                 THERAPEUTIC_AREA: 'therapeutic_area', //
-                TARGET_CLASS: 'target_class'
+                TARGET_CLASS: 'target_class',
+                RNA_EXPRESSION_TISSUE: 'rna_expression_tissue',
+                RNA_EXPRESSION_LEVEL: 'rna_expression_level',
+                ZSCORE_EXPRESSION_TISSUE: 'zscore_expression_tissue',
+                ZSCORE_EXPRESSION_LEVEL: 'zscore_expression_level'
             }
         };
 
@@ -55,8 +59,8 @@ angular.module('otServices')
             // .prefix('http://127.0.0.1:8123/api/')
             // .prefix("https://www.targetvalidation.org/api/")
             // .version('latest')
-            .appname('cttv-web-app')
-            .secret('2J23T20O31UyepRj7754pEA2osMOYfFK')
+            // .appname('cttv-web-app')
+            // .secret('2J23T20O31UyepRj7754pEA2osMOYfFK')
             .verbose(false);
 
         /**/
@@ -111,6 +115,9 @@ angular.module('otServices')
                 .then(done)
                 .catch(function (err) {
                     $log.warn('GOT ERROR:', err);
+                    if (queryObject.error) {
+                        queryObject.error.call(this, err);
+                    }
                     otApiService.defaultErrorHandler(err, queryObject.trackCall);
                 });
 
@@ -356,8 +363,17 @@ angular.module('otServices')
         otApiService.addFacetsOptions = function (facets, obj) {
             obj = obj || {};
             for (var i in facets) {
+                // TODO: rna_expression_level should not need to be handled here...
+                // it would be better to have facet-specific serializers for the POST object
                 if (facets.hasOwnProperty(i)) {
-                    obj[otApiService.facets[i.toUpperCase()]] = facets[i];
+                    if (i === 'rna_expression_level') {
+                        obj.rna_expression_level = +facets.rna_expression_level[0];
+                    } else if (i === 'zscore_expression_level') {
+                        obj.zscore_expression_level = +facets.zscore_expression_level[0];
+                    } else {
+                        // TODO: can we remove dependency on otApiService.facets?
+                        obj[otApiService.facets[i.toUpperCase()]] = facets[i];
+                    }
                 }
             }
             return obj;

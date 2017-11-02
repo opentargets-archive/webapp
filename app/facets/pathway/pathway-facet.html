@@ -1,10 +1,9 @@
-<!-- Note: the below html snippet works fine, but we can actually use the generic nested facet template -->
-
-<!--
-<div ot-default-facet-controls facet="facet"></div>
-<div ng-init="isCollapsed=true&&(!datatype.collection.isLastClicked())" ng-repeat="datatype in facet.filters" >
-    <ot-parent-checkbox-facet bucket="datatype" collapsed="isCollapsed" partial="{{partial}}"></ot-parent-checkbox-facet>
-    <div uib-collapse="isCollapsed" style="padding-left:20px">
-        <div ot-checkbox-facet bucket="bucket" ng-repeat="bucket in datatype.collection.filters" partial="{{partial}}"></div>
-    </div>
-</div> -->
+<div>
+    <ot-all-none-facet-primitive facet="facet">
+    </ot-all-none-facet-primitive>
+  </div>
+  <div>
+    <ot-nested-checkbox-facet-primitive ng-repeat="filter in facet.filters"
+                                          filter="filter">
+    </ot-nested-checkbox-facet-primitive>
+  </div>

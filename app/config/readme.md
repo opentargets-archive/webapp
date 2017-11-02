@@ -1,4 +1,4 @@
-### OpenTargets ebapp config
+### OpenTargets webapp config
 
 Config files are organized in directories.
 Directory structure:
