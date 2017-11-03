@@ -64,12 +64,14 @@ angular.module('otDirectives')
                     // curl -X POST -d 'output=mini&organism=hsapiens&significant=1&sort_by_structure=1&ordered_query=0&as_ranges=0&no_iea=0&underrep=0&hierfiltering=none&user_thr=1&min_set_size=0&max_set_size=0&threshold_algo=analytical&domain_size_type=annotated&query=braf+pten+brca1+brca2' http://biit.cs.ut.ee/gprofiler/
                     var opts = 'output=mini&organism=hsapiens&significant=1&sort_by_structure=1&ordered_query=0&as_ranges=0&no_iea=0&underrep=0&hierfiltering=none&user_thr=1&min_set_size=0&max_set_size=0&threshold_algo=analytical&domain_size_type=annotated&query=' + (scope.target.map(function(d){return d.approved_symbol}).join('+'));
 
-                    var httpConfig = {
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-                        }
-                    };
-                    $http.post('https://biit.cs.ut.ee/gprofiler/', opts, httpConfig)
+                    // The proxy is setting this header now
+                    // var httpConfig = {
+                    //     headers: {
+                    //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    //     }
+                    // };
+                    // $http.post('https://biit.cs.ut.ee/gprofiler/', opts, httpConfig)
+                    $http.post('/proxy/biit.cs.ut.ee/gprofiler/', opts)
                         .then (function (resp) {
                             scope.showSpinner = false;
                             var data = resp.data;
