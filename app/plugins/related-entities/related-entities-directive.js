@@ -537,10 +537,10 @@ function createVis(container, data, scope) {
                                 .transition()
                                 .duration(500)
                                 .attr('x', function (d) {
-                                    return -(barScale(data[subjSymbol].datatypes[scope.consts.datatypes[d]]));
+                                    return -(barScale(data[subjSymbol].datatypes[scope.consts.datatypes[d].id]));
                                 })
                                 .attr('width', function (d) {
-                                    return barScale(data[subjSymbol].datatypes[scope.consts.datatypes[d]]);
+                                    return barScale(data[subjSymbol].datatypes[scope.consts.datatypes[d].id]);
                                 });
 
                             // Obj bars
@@ -558,7 +558,7 @@ function createVis(container, data, scope) {
                                 .transition()
                                 .duration(500)
                                 .attr('width', function (d) {
-                                    return barScale(data[objSymbol].datatypes[scope.consts.datatypes[d]]);
+                                    return barScale(data[objSymbol].datatypes[scope.consts.datatypes[d].id]);
                                 });
 
 
@@ -573,7 +573,8 @@ function createVis(container, data, scope) {
                                 .attr('alignment-baseline', 'middle')
                                 .style('cursor', 'pointer')
                                 .text(function (d) {
-                                    return scope.consts.datatypesLabels[d];
+                                    // return scope.consts.datatypesLabels[d];
+                                    return scope.consts.datatypes[d].label;
                                 });
                         });
 
