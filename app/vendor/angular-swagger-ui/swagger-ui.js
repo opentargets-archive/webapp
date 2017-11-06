@@ -87,13 +87,19 @@ angular
 				.execute(swaggerModules.BEFORE_LOAD, options)
 				.then(function() {
 					$http(options)
-						.success(callback)
-						.error(function(data, status) {
-							onError({
-								code: status,
-								message: data
-							});
-						});
+						// Nov 2017 - Luca
+						// updated response to then(success, error)
+						.then(
+							function(resp){
+								callback(resp.data, resp.status, resp.headers);
+							},
+							function(data, status) {
+								onError({
+									code: status,
+									message: data
+								});
+							}
+						);
 				})
 				.catch(onError);
 		}
@@ -391,15 +397,23 @@ angular
 							formatResult(deferred, response);
 						});
 				};
-
+				
 			// execute modules
 			swaggerModules
 				.execute(swaggerModules.BEFORE_EXPLORER_LOAD, options)
 				.then(function() {
 					// send request
 					$http(options)
-						.success(callback)
-						.error(callback);
+						// Nov 2017 - Luca
+						// updated response to then(success, error)
+						.then(
+							function(resp){
+								callback(resp.data, resp.status, resp.headers, resp.config);
+							},
+							function(data, status) {
+								callback(resp.data, resp.status, resp.headers, resp.config);
+							}
+						);
 				});
 
 			return deferred.promise;
@@ -763,7 +777,7 @@ angular
 				phase = args.splice(0, 1),
 				deferred = $q.defer(),
 				phaseModules = modules[phase] || [];
-
+				
 			executeAll(deferred, [].concat(phaseModules), args);
 			return deferred.promise;
 		};
