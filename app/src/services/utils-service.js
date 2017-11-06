@@ -2,7 +2,7 @@ angular.module('otServices')
 /**
  * Some utility services.
  */
-    .factory('otUtils', ['$window', '$rootScope', 'otConsts', function ($window, $rootScope, otConsts) {
+    .factory('otUtils', ['$window', '$rootScope', 'otConsts', '$sce', function ($window, $rootScope, otConsts, $sce) {
         'use strict';
 
         var otUtilsService = {};
@@ -301,6 +301,7 @@ angular.module('otServices')
 
 
         otUtilsService.addMatchedBy = function (r) {
+            console.log(r);
             var matches = {
                 human: 0,
                 ortholog: 0,
@@ -328,13 +329,22 @@ angular.module('otServices')
                 }
                 if (matches.drug) {
                     r.drugMatch = true;
+                    var drugsObj = {};
+                    var drugsHighlight = r.highlight['drugs.evidence_data'];
+                    var parser = new DOMParser();
+                    for (var i=0; i<drugsHighlight.length; i++) {
+                        var thisDrug = drugsHighlight[i];
+                        var el = parser.parseFromString(thisDrug, 'text/xml');
+                        drugsObj[el.firstChild.textContent.toUpperCase()] = 1;
+                    }
+                    r.drugs = Object.keys(drugsObj);
                 }
                 if (matches.phenotype) {
                     r.phenotypeMatch = true;
                 }
             } else {
                 for (var h2 in r.highlight) {
-                    if (h2.startsWith('ortholog') || h2.startsWith('drug') || h2.startsWith('phenotypes.label')) {
+                    if (h2.indexOf('ortholog') === 0 || h2.indexOf('drug') === 0 || h2.indexOf('phenotypes.label') === 0) {
                         delete r.highlight[h2];
                     }
                 }

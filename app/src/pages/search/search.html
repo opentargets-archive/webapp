@@ -60,7 +60,7 @@
                         <span class="search-details">
                             <span class="tag-section"><i class="fa fa-tag fa-lg tag" ng-class="(result.data.type==='target') ? 'target' : 'disease'"></i>{{result.data.type | otUpperCaseFirst}}</span>
                             <span class="tag-section" title="Search keyword matches an ortholog of this target" ng-show="result.orthologMatch"><i class="fa fa-tags tag ortholog"></i>Match from ortholog</span>
-                            <span class="tag-section" title="Search keyword matches a target via drug name" ng-show="result.drugMatch"><i class="fa fa-tags tag drug"></i>Match from drug</span>
+                            <span class="tag-section" title="Search keyword matches a target via drug name" ng-show="result.drugMatch"><i class="fa fa-tags tag drug"></i>Match from drug (<span style="margin-left:3px; margin-right:3px;" ng-repeat="drug in result.drugs"><a href="/summary?drug={{drug}}">{{drug}}</a></span>)</span>
                             <span class="tag-section" title="Search keyword matches a disease via a phenotype" ng-show="result.phenotypeMatch"><i class="fa fa-tags tag phenotype"></i>Match from phenotype</span>
                         </span>
                     </div>
