@@ -1,8 +1,8 @@
 angular.module('otDirectives')
-    .directive('otDrugSummary', ['$http', '$q', function ($http, $q) {
+    .directive('otDrugSummary', ['$http', '$q', 'otApi', 'otUtils', function ($http, $q, otApi, otUtils) {
         'use strict';
 
-        function pngToDataUrl (url, callback, outputFormat) {
+        function pngToDataUrl(url, callback, outputFormat) {
             var img = new Image();
             img.crossOrigin = 'Anonymous';
             img.onload = function () {
@@ -34,38 +34,15 @@ angular.module('otDirectives')
                     var promise = $q(function (res) {
                         res(scope.drug);
                     });
-                    if(scope.drug.indexOf('CHEMBL') !== 0) {
-                         promise = $http.get('https://www.ebi.ac.uk/chembl/api/data/chembl_id_lookup/search?q=' + scope.drug)
-                             .then (function (resp) {
-                                 console.log(resp);
-                                 return resp.data.chembl_id_lookups[0].chembl_id;
-                             })
+                    if (scope.drug.indexOf('CHEMBL') !== 0) {
+                        promise = $http.get('https://www.ebi.ac.uk/chembl/api/data/chembl_id_lookup/search?q=' + scope.drug)
+                            .then(function (resp) {
+                                return resp.data.chembl_id_lookups[0].chembl_id;
+                            })
                     }
 
-                    promise.then (function (drugId) {
+                    promise.then(function (drugId) {
                         scope.drugId = drugId;
-                        // Get the information for the drug...
-                        $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule/' + drugId)
-                            .then(function (resp) {
-                                scope.displayName = resp.data.pref_name || resp.data.molecule_chembl_id;
-                                // scope.mechanism = resp.data.usan_stem_definition || 'NA';
-                                scope.mol_type = resp.data.molecule_type || 'NA';
-                                scope.first_approval = resp.data.first_approval || 'NA';
-                                scope.max_phase = resp.data.max_phase || 'NA';
-                                if (resp.data.molecule_properties && resp.data.molecule_properties.full_molformula) {
-                                    scope.formula = resp.data.molecule_properties.full_molformula;
-                                } else {
-                                    scope.formula = 'NA';
-                                }
-
-                                if (scope.mol_type !== 'Antibody') {
-                                    pngToDataUrl('https://www.ebi.ac.uk/chembl/api/data/image/' + drugId, function (base64Img) {
-                                        var img = document.getElementById('drugDiagramContainer');
-                                        img.setAttribute('src', base64Img);
-                                    });
-                                }
-                            });
-
 
                         // Get the mechanism of action...
                         $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule_form/' + drugId)
@@ -118,7 +95,72 @@ angular.module('otDirectives')
                                         }
                                     });
                             });
+
+                        // Get the information for the drug...
+                        return $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule/' + drugId)
+                            .then(function (resp) {
+                                scope.displayName = resp.data.pref_name || resp.data.molecule_chembl_id;
+                                // scope.mechanism = resp.data.usan_stem_definition || 'NA';
+                                scope.mol_type = resp.data.molecule_type || 'NA';
+                                scope.first_approval = resp.data.first_approval || 'NA';
+                                scope.max_phase = resp.data.max_phase || 'NA';
+                                if (resp.data.molecule_properties && resp.data.molecule_properties.full_molformula) {
+                                    scope.formula = resp.data.molecule_properties.full_molformula;
+                                } else {
+                                    scope.formula = 'NA';
+                                }
+
+                                if (scope.mol_type !== 'Antibody') {
+                                    pngToDataUrl('https://www.ebi.ac.uk/chembl/api/data/image/' + drugId, function (base64Img) {
+                                        var img = document.getElementById('drugDiagramContainer');
+                                        img.setAttribute('src', base64Img);
+                                    });
+                                }
+                                return scope.displayName;
+                            });
+
                     })
+                        .then(function (drugName) {
+                            // Make a new call to OT search with this drug name only for targets...
+                            otApi.getSearch({
+                                method: 'GET',
+                                params: {
+                                    q: drugName,
+                                    size: 100,
+                                    filter: 'target'
+                                }
+                            })
+                                .then (function (targetsResp) {
+                                    scope.targets = targetsResp.body.data.map(function (t) {
+                                        return {
+                                            id: t.id,
+                                            name: t.data.approved_symbol
+                                        };
+                                    }).sort(function (a, b) {
+                                        return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0;
+                                    });
+                                });
+
+                            // Same for diseases...
+                            otApi.getSearch({
+                                method: 'GET',
+                                params: {
+                                    q: drugName,
+                                    size: 100,
+                                    filter: 'disease'
+                                }
+                            })
+                                .then (function (diseasesResp) {
+                                    scope.diseases = diseasesResp.body.data.map(function (d) {
+                                        return {
+                                            id: d.id,
+                                            label: otUtils.ucFirst(d.data.efo_label)
+                                        };
+                                    }).sort(function (a, b) {
+                                        return (a.label < b.label) ? -1 : (a.label > b.label) ? 1 : 0;
+                                    });
+                                });
+                        });
                 });
             }
         };

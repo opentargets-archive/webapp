@@ -330,7 +330,7 @@ angular.module('otServices')
                 if (matches.drug) {
                     r.drugMatch = true;
                     var drugsObj = {};
-                    var drugsHighlight = r.highlight['drugs.evidence_data'];
+                    var drugsHighlight = r.highlight['drugs.evidence_data'] || r.highlight['drugs.drugbank'];
                     var parser = new DOMParser();
                     for (var i=0; i<drugsHighlight.length; i++) {
                         var thisDrug = drugsHighlight[i];
@@ -395,6 +395,12 @@ angular.module('otServices')
             return '<ul><li>' + arr.join('</li><li>') + '</li></ul>';
         };
 
+        /**
+         *
+         */
+        otUtilsService.ucFirst = function (string) {
+            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+        };
 
         /**
          * 

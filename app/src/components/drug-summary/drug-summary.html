@@ -32,18 +32,25 @@
             <td>{{mec.mechanism}}</td>
             <td>{{mec.targets}}</td>
             <td>{{mec.synonyms}}</td>
-            <td><span ng-repeat="ref in mec.refs"><a target=_blank href="{{ref.ref_url}}">{{ref.ref_type}} </a></td>
+            <td><span ng-repeat="ref in mec.refs"><a target=_blank href="{{ref.ref_url}}">{{ref.ref_type}} </a></span></td>
         </tr>
     </table>
 </div>
 
 <div class="section">
-    <h3 class="targets-associated">Targets associated with this drug</h3>
-    
+    <h3 class="targets-associated">Targets associated with {{displayName}}</h3>
+    <span ng-repeat="target in targets">
+        <span style="padding-right:8px;margin-top:5px;"><a href=/target/{{target.id}}/associations><span class="ot-pill-list target-list">{{target.name}}</span>
+        </a></span>
+    </span>
 </div>
 
 <div class="section">
-    <h3 class="targets-associated">Diseases associated with this drug</h3>
+    <h3 class="targets-associated">Diseases associated with {{displayName}}</h3>
+    <span ng-repeat="disease in diseases">
+        <span style="padding-right:8px;margin-top:5px;"><a href=/disease/{{disease.id}}/associations><span class="ot-pill-list disease-list">{{disease.label}}</span>
+        </a></span>
+    </span>
 </div>
 
 <div class="section">
