@@ -33,4 +33,4 @@
 #  APIHOST = "https://mk-fixfacets-dot-open-targets-eu-dev.appspot.com/api/"
 
 [context.master.environment]
-  APIHOST = "https://api.opentargets.io/"
+  APIHOST = "https://open-targets-eu-dev.appspot.com/"
