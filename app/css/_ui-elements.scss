@@ -292,8 +292,9 @@ ot-related-targets-vis, ot-related-diseases-vis {
 
     .ot-pill-list {
         /*padding-right: 10px;*/
-        display: inline;
+        display: inline-block;
         padding: .2em .6em .3em;
+        margin-top:5px;
         font-size: 75%;
         font-weight: 500;
         line-height: 1;
@@ -306,18 +307,19 @@ ot-related-targets-vis, ot-related-diseases-vis {
         }
         &.target-list {
             background-color: $clr-primary;
-            color: #eeeeee;
+            color: #FFFFFF;
         }
         &.target-list:hover {
             background-color: $clr-primary-hover;
+            color: #FFFFFF;
         }
         &.disease-list {
             background-color: $clr-warning;
-            color: #eeeeee;
+            color: #FFFFFF;
         }
         &.disease-list:hover {
             background-color: $clr-warning-hover;
-            color: #eeeeee;
+            color: #FFFFFF;
         }
     }
 
