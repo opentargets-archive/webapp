@@ -37,6 +37,7 @@ angular.module('otServices')
                     });
 
                     $('.filter-label', button).html($(this).val());
+                    button.attr('title', $(this).val());
 
                     select.hide();
                     button.show();
