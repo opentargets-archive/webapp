@@ -1,6 +1,60 @@
 @import "utils";
 @import "colors";
 
+//$subjColorFg: #5ba633;
+$subjColorFg: #006400;
+$subjColorBg: #c8ebc7;
+
+ot-related-targets-vis, ot-related-diseases-vis {
+    #tnt_tooltip_1 {
+        pointer-events: none;
+    }
+    .relatedSubjectLink {
+        stroke: $subjColorBg;
+    }
+    .relatedSubjectNode {
+        fill: $subjColorBg;
+        stroke-width: 3px;
+        stroke: $subjColorFg;
+        >text {
+            text-anchor: middle;
+            alignment-baseline: middle;
+            stroke:none;
+            fill: $subjColorFg;
+            pointer-events: none;
+        }
+    }
+    .relatedBubble {
+        fill: $brand-light-blue;
+        stroke-width: 3px;
+        stroke: $clr-ui-foreground;
+        cursor: pointer;
+        >text {
+            text-anchor: middle;
+            alignment-baseline: middle;
+            stroke:none;
+            fill: $clr-ui-foreground;
+            pointer-events: none;
+        }
+    }
+    .rootRelatedBubble {
+        display: none;
+    }
+}
+
+/* Axis in d3 */
+//ot-related-targets-overview, ot-related-diseases-overview {
+//    line,
+//    path {
+//        fill: none;
+//        stroke: #aaaaaa;
+//        shape-rendering: crispEdges;
+//    }
+//    .tnt_framed {
+//        border: none;
+//    }
+//}
+
 #ot-page-app {
 
     .pdfobject-container {
@@ -10,9 +64,15 @@
         border: 1px solid #666;
     }
 
-    .popover {
-        min-width: 378px;
-        max-width: 100%;
+    ot-popover {
+        .popover {
+            min-width: 378px;
+            max-width: 100%;
+        }
+    }
+
+    .batch-search-popover {
+        font-size: 0.8em;
     }
 
     /*
@@ -461,11 +521,9 @@
      * Flower
      */
 
-
-    .petal {
-        fill: $secondary-color;
-    }
-
+    //.petal {
+    //    fill: $secondary-color;
+    //}
 
 
     /*
@@ -678,3 +736,12 @@
 }
 
 
+// .tooltip {
+//     width: 600px;
+//     min-width: 600px;
+//     max-width: 600px;
+// }
+
+// .facet-help {
+//     margin-left: 4px;
+// }

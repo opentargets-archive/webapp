@@ -1,0 +1,71 @@
+/**
+ * Datatypes
+ */
+{ 
+    "GENETIC_ASSOCIATION": {
+        "id": "genetic_association",
+        "label": "Genetic associations",
+        "shortLabel": "Genetics",
+        "infoTemplate": "genetic-association.md",
+        "datasources": [
+            "GWAS",
+            "GENOMICS_ENGLAND",
+            "PHEWAS",
+            "UNIPROT",
+            "UNIPROT_LITERATURE",
+            "EVA",
+            "GENE_2_PHENOTYPE"
+        ]
+    },
+    "SOMATIC_MUTATION": {
+        "id": "somatic_mutation",
+        "label": "Somatic mutations",
+        "shortLabel": "Somatic",
+        "infoTemplate": "somatic-mutation.md",
+        "datasources": [
+            "CANCER_GENE_CENSUS",
+            "UNIPROT_SOMATIC",
+            "EVA_SOMATIC",
+            "INTOGEN"
+        ]
+    },
+    "KNOWN_DRUG": {
+        "id": "known_drug",
+        "label": "Drugs",
+        "shortLabel": "Drugs",
+        "infoTemplate": "known-drug.md",
+        "datasources": ["CHEMBL"]
+    },
+    "RNA_EXPRESSION": {
+        "id": "rna_expression",
+        "label": "RNA expression",
+        "shortLabel": "RNA",
+        "infoTemplate": "rna-expression.md",
+        "datasources": ["EXPRESSION_ATLAS"]
+    },
+    "AFFECTED_PATHWAY": {
+        "id": "affected_pathway",
+        "label": "Affected pathways",
+        "shortLabel": "Pathways",
+        "infoTemplate": "affected-pathways.md",
+        "datasources": [
+            "REACTOME",
+            "SLAPENRICH"
+        ]
+    },
+    "ANIMAL_MODEL": {
+        "id": "animal_model",
+        "label": "Animal models",
+        "shortLabel": "Mouse",
+        "infoTemplate": "animal-models.md",
+        "datasources": ["PHENODIGM"]
+    },
+    "LITERATURE": {
+        "id": "literature",
+        "label": "Text mining",
+        "shortLabel": "Text Mining",
+        "infoTemplate": "literature.md",
+        "datasources": ["EPMC"]
+    }
+    
+}

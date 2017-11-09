@@ -1,0 +1,1 @@
+[23andMe](https://www.23andme.com/howitworks) has collected a large cohort of self-reported phenotype data along with genetic data. Through a collaboration between Biogen and 23andMe, Biogen has acquired genome-wide association study (GWAS) summary statistics for over 100 phenotypes (PheWAS).

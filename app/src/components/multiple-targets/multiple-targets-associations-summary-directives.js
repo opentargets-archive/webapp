@@ -243,10 +243,12 @@ angular.module('otDirectives')
                 scope.datatypes = [];
                 var datatypes = otConsts.datatypesOrder;
                 for (var i = 0; i < datatypes.length; i++) {
+                    otDictionary;   // just to shut linting up ;)
                     scope.datatypes.push({
-                    // label: otConsts.datatypesLabels[datatypes[i]],
-                        label: otDictionary[datatypes[i]],
-                        id: otConsts.datatypes[datatypes[i]],
+                        // label: otConsts.datatypesLabels[datatypes[i]],
+                        // label: otDictionary[datatypes[i]],
+                        label: otConsts.datatypes[datatypes[i]].label,
+                        id: otConsts.datatypes[datatypes[i]].id,
                         selected: true
                     });
                 }

@@ -1,17 +1,10 @@
-angular.module('facets')
-
-    /**
-    * The therapeutic areas facet
-    */
+angular.module('otFacets')
     .directive('therapeuticAreaFacet', [function () {
-        'use strict';
-
         return {
-            restrict: 'AE',
+            restrict: 'E',
             scope: {
                 facet: '='
             },
-            templateUrl: 'directives/generic-facetcollection.html'
+            templateUrl: 'facets/therapeutic-area/therapeutic-area-facet.html'
         };
     }]);
-

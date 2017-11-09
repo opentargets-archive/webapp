@@ -16,19 +16,22 @@ angular.module('otControllers')
             method: 'GET',
             params: {
                 target_id: $scope.targetId
+            },
+            error: function() {
+                $scope.notFound = true;
             }
         })
             .then(
                 // success
                 function (resp) {
-                    resp = JSON.parse(resp.text);
-                    $scope.target = resp;
-                    $scope.target.label = resp.approved_name || resp.ensembl_external_name;
-                    $scope.target.symbol = resp.approved_symbol || resp.ensembl_external_name;
-                    $scope.target.id = resp.approved_id || resp.ensembl_gene_id;
-                    $scope.target.name = resp.approved_name || resp.ensembl_description;
-                    $scope.target.title = (resp.approved_symbol || resp.ensembl_external_name).split(' ').join('_');
-                    $scope.target.description = resp.uniprot_function[0];
+                    var target = resp.body;
+                    $scope.target = target;
+                    $scope.target.label = target.approved_name || target.ensembl_external_name;
+                    $scope.target.symbol = target.approved_symbol || target.ensembl_external_name;
+                    $scope.target.id = target.approved_id || target.ensembl_gene_id;
+                    $scope.target.name = target.approved_name || target.ensembl_description;
+                    $scope.target.title = (target.approved_symbol || target.ensembl_external_name).split(' ').join('_');
+                    $scope.target.description = target.uniprot_function[0];
 
                     // Check if the target is a TEP (Target Enabling Package)
                     if (otTeps[$scope.targetId]) {
@@ -37,19 +40,19 @@ angular.module('otControllers')
 
                     // Synonyms
                     var syns = {};
-                    var synonyms = resp.symbol_synonyms;
+                    var synonyms = target.symbol_synonyms;
                     if (synonyms !== undefined) {
                         for (var i = 0; i < synonyms.length; i++) {
                             syns[synonyms[i]] = 1;
                         }
                     }
-                    var prev_symbols = resp.previous_symbols;
+                    var prev_symbols = target.previous_symbols;
                     if (prev_symbols !== undefined) {
                         for (var j = 0; j < prev_symbols.length; j++) {
                             syns[prev_symbols[j]] = 1;
                         }
                     }
-                    var name_synonyms = resp.name_synonyms;
+                    var name_synonyms = target.name_synonyms;
                     if (name_synonyms !== undefined) {
                         for (var k = 0; k < name_synonyms.length; k++) {
                             syns[name_synonyms[k]] = 1;
@@ -60,11 +63,11 @@ angular.module('otControllers')
                     // Uniprot
                     // TODO: Probably not being used... make sure & clean up
                     $scope.uniprot = {
-                        id: resp.uniprot_id,
-                        subunits: resp.uniprot_subunit,
-                        locations: resp.uniprot_subcellular_location,
-                        accessions: resp.uniprot_accessions,
-                        keywords: resp.uniprot_keywords
+                        id: target.uniprot_id,
+                        subunits: target.uniprot_subunit,
+                        locations: target.uniprot_subcellular_location,
+                        accessions: target.uniprot_accessions,
+                        keywords: target.uniprot_keywords
                     };
 
                     // Extra sections -- plugins
@@ -74,8 +77,6 @@ angular.module('otControllers')
                         $scope.sections[t].defaultVisibility = $scope.sections[t].visible || false;
                         $scope.sections[t].currentVisibility = $scope.sections[t].visible || false;
                     }
-                },
-                // error handler
-                otApi.defaultErrorHandler
+                }
             );
     }]);

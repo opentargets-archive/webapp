@@ -2,7 +2,7 @@ angular.module('otServices')
 /**
  * Some utility services.
  */
-    .factory('otUtils', ['$window', '$rootScope', function ($window, $rootScope) {
+    .factory('otUtils', ['$window', '$rootScope', 'otConsts', function ($window, $rootScope, otConsts) {
         'use strict';
 
         var otUtilsService = {};
@@ -219,9 +219,31 @@ angular.module('otServices')
         otUtilsService.getPmidsList = function (refs) {
             refs = refs || [];  // to avoid undefined errors
             return refs.map(function (ref) {
+                if (ref.lit_id[ref.lit_id.length - 1] === '/') {
+                    ref.lit_id = ref.lit_id.substring(0, ref.lit_id.length - 1);
+                }
                 return ref.lit_id.split('/').pop();
             });
         };
+
+        // otUtilsService.getPublicationsField = function(refs) {
+        //     refs = refs || [];  // to avoid undefined errors
+        //
+        //     var pub = '';
+        //     pub = '<span class=\'ot-publications-string\'>';
+        //     pub += '<span class=\'badge\'>' + refs.length + '</span>';
+        //     pub += (refs.length === 1 ? ' publication' : ' publications');
+        //     if (refs.length === 1) {
+        //         pub = '<a class="ot-external-link" target="_blank" href="' + refs[0].lit_id + '">' + pub + '</a>';
+        //     } else {
+        //         var pmids = pmidsList.map(function (ref) {
+        //             return 'EXT_ID:' + ref;
+        //         }).join(' OR ');
+        //         pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
+        //     }
+        //     pub += '</span>';
+        //     return pub;
+        // };
 
         otUtilsService.getPublicationsString = function (pmidsList) {
             pmidsList = pmidsList || [];  // to avoid undefined errors
@@ -230,14 +252,13 @@ angular.module('otServices')
                 pub = '<span class=\'ot-publications-string\'>';
                 pub += '<span class=\'badge\'>' + pmidsList.length + '</span>';
                 pub += (pmidsList.length === 1 ? ' publication' : ' publications');
-                if (pmidsList.length === 1) {
-                    pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/abstract/MED/' + pmidsList[0] + '">' + pub + '</a>';
-                } else {
-                    var pmids = pmidsList.map(function (ref) {
-                        return 'EXT_ID:' + ref;
-                    }).join(' OR ');
-                    pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
-                }
+                var pmids = pmidsList.map(function (ref) {
+                    if (ref.substring(0, 3) === 'PMC') {
+                        return ref;
+                    }
+                    return 'EXT_ID:' + ref;
+                }).join(' OR ');
+                pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
                 pub += '</span>';
             }
             return pub;
@@ -337,22 +358,22 @@ angular.module('otServices')
         //     return defer_cancel;
         // };
 
-
         /*
          * Search for given eco_code id in the specified evidence_codes_info array
          * and returns corresponding label, or eco_code id if not found
          */
         otUtilsService.getEcoLabel = function (arr, eco) {
             var label = eco;
-            for (var i = 0; i < arr.length; i++) {
-                if (arr[i][0].eco_id === eco) {
-                    label = arr[i][0].label;
-                    break;
-                }
+            if (arr) {
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i][0].eco_id === eco) {
+                        label = arr[i][0].label;
+                        break;
+                    }
+                }    
             }
             return label;
         };
-
 
         /**
          * Takes an array and formats it to an HTML list (returns a string)
@@ -362,6 +383,34 @@ angular.module('otServices')
                 return arr[0];
             }
             return '<ul><li>' + arr.join('</li><li>') + '</li></ul>';
+        };
+
+
+        /**
+         * 
+         */
+        otUtilsService.getDatasourceById = function (id) {
+            return Object.keys(otConsts.datasources)
+                .filter(function (i) {
+                    return otConsts.datasources[i].id === id;
+                })
+                .map(function (j) {
+                    return otConsts.datasources[j];
+                })[0];
+        };
+
+
+        /**
+         * 
+         */
+        otUtilsService.getDatatypeById = function (id) {
+            return Object.keys(otConsts.datatypes)
+                .filter(function (i) {
+                    return otConsts.datatypes[i].id === id;
+                })
+                .map(function (j) {
+                    return otConsts.datatypes[j];
+                })[0];
         };
 
 

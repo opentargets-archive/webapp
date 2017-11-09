@@ -138,12 +138,11 @@ angular.module('otDirectives')
                                 row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.variant2disease.urls[0].url + '\' target=_blank>' + item.evidence.variant2disease.urls[0].nice_name + '</a>');
                             } else {
                                 // TODO: Genomics England URLs are wrong, so (hopefully temporarily) we need to hack them in the UI
-                                // TODO: We can't use otConsts.dbs.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
-                                if (db === otConsts.dbs.GENOMICS_ENGLAND) {
+                                // TODO: We can't use otConsts.datasources.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
+                                if (db === otConsts.datasources.GENOMICS_ENGLAND.id) {
                                     item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
                                 }
-                                if (db === otConsts.dbs.GENE_2_PHENOTYPE) {
-                                    sourceString = 'Further details in Gene2Phenotype database';
+                                if (db === otConsts.datasources.GENE_2_PHENOTYPE.id) {
                                     row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>Further details in Gene2Phenotype database</a>');
                                 } else {
                                     sourceString = item.evidence.urls[0].nice_name;

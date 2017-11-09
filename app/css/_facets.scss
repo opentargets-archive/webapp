@@ -25,8 +25,16 @@
         color: $bodytext-color;
     }*/
 
+ot-facets {
+    // affects .ot-facets, but needs to be on parent
+    @include scrollbar(4px);
+}
+
 .ot-facets{
     font-size: 12px;
+    max-height: 1000px;
+    overflow-y: auto;
+    padding-right: 5px;
 }
 
 .ot-facets-headers{
@@ -51,6 +59,15 @@
         color: $clr-text-em;
     }
 }
+.btn-group.ot-facets-buttons {
+    padding: 2px;
+    margin-bottom: 2px;
+    margin-right: 10px;
+    label.btn {
+        padding: 2px;
+        font-size: 11px;
+    }
+}
 .ot-facets-selected-summary{
     border-bottom:1px solid $clr-ui-border; // was #CCC
     margin-bottom:25px;
@@ -69,6 +86,22 @@
     padding-left: 20px
 }
 
+
+.ot-facet-summary {
+    // background-color: #e0ebeb;
+    background-color: $clr-ui-foreground;
+    color: white;
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 500;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    @include border-radius( 1.5em );
+    /*background: linear-gradient(90deg, #ffe5e5 50%, #f0f5f5 50%);*/
+}
 
 /*
  * Restyle accordion for facets
@@ -277,3 +310,64 @@
     content: "Profile";
 }
  */
+
+ot-histogram-slider-facet-primitive {
+    .histogram-container,
+    .histogram-backing-container {
+        rect {
+            shape-rendering: crispEdges;
+            &.selected {
+                fill: $clr-ui-foreground;
+            }
+
+            &.deselected {
+                fill: $clr-ui-border;
+            }
+            &.backing-rectangle {
+                fill: #FFF;
+            }
+        }
+    }
+    .x-axis,
+    .y-axis {
+        // path,
+        // line {
+        //   display: none;
+        // }
+        .domain {
+            fill: none;
+            stroke: $clr-text-dim;
+        }
+
+        text {
+          fill: $clr-text-dim;
+        }
+    }
+
+    text.start,
+    text.end {
+        font-size: 10px;
+    }
+    g.count text {
+        font-size: 10px;
+        alignment-baseline: central;
+        fill: $clr-text-dim;
+    }
+
+    .message-label,
+    .y-axis-label {
+        font-size: 10px;
+        fill: $clr-text-dim;
+    }
+}
+
+.checkbox-percentage-bar {
+    height: 2px;
+    margin: 0px 20px;
+    &.fg {
+        background-color: $clr-ui-foreground
+    }
+    &.bg {
+        background-color: $clr-ui-background;
+    }
+}

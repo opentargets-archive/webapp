@@ -10,11 +10,15 @@ angular.module('otServices')
 
         var definitions = {
             'ENRICHMENT.DISEASES': {
-                'description': 'This is the probability (expressed as a pvalue) of finding a disease associated with this set of targets. The lower this value, the higher the probability your targets are specific to the disease',
+                'description': 'This is the probability (expressed as a p-value) of finding a disease associated with this set of targets. The lower this value, the higher the probability your targets are specific to the disease',
+                'link': ''
+            },
+            'ENRICHMENT.GO': {
+                'description': 'This is the probability (expressed as a p-value) of finding a Gene Ontology term associated with this set of targets. The lower this value, the higher the higher the probability your targets are specific to the term',
                 'link': ''
             },
             'ENRICHMENT.PATHWAYS': {
-                'description': 'This is the probability (expressed as a pvalue) of finding a pathway associated with this set of targets. The lower this value, the higher the probability your targets are specific to the pathway',
+                'description': 'This is the probability (expressed as a p-value) of finding a pathway associated with this set of targets. The lower this value, the higher the probability your targets are specific to the pathway',
                 'link': ''
             },
             'KEEPLOADEDLISTS': {
@@ -24,6 +28,14 @@ angular.module('otServices')
             'TEP': {
                 'description': 'TEPs provide a critical mass of reagents and knowledge on a protein target to allow rapid biochemical and chemical exploration and characterisation of proteins with genetic linkage to key disease areas. Click on this icon to know more about TEPs',
                 'link': 'http://www.thesgc.org/tep'
+            },
+            'FACET.SPECIFICITY': {
+                'description': 'Show only targets which are expressed in the selected tissues <strong>more than</strong> the rest of the tissues.',
+                'link': '/faq#tissue-specificity'
+            },
+            'FACET.BASELINE': {
+                'description': 'Each target has an expression level per tissue based on normalised counts. You can filter targets by a set of tissues and an expression level.',
+                'link': ''
             }
         };
 

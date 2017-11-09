@@ -11,173 +11,34 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-4 pull-right">
+            <div class="col-sm-4 pull-right hidden-xs">
+                <!-- right-hand content navigation menu -->
                 <ul class="plain arrow-icon">
-
-                    <li><a href="#genetic">Genetic associations</a>
+                    <li ng-repeat="dt in otConsts.datatypesOrder"><a ng-href="#{{otConsts.datatypes[dt].id}}">{{otConsts.datatypes[dt].label}}</a>
                         <ul class="plain arrow-icon">
-                            <li><a href="#gwas">GWAS Catalog</a></li>
-                            <li><a href="#genomics_england">Genomics England PanelApp</a></li>
-                            <li><a href="#phewascatalog">PheWAS Catalog</a></li>
-                            <li ng-show="phewas_23andme"><a href="#phewas_23andme">23andMe</a></li>
-                            <li><a href="#uniprot">UniProt</a></li>
-                            <li><a href="#uniprot_lit">UniProt literature</a></li>
-                            <li><a href="#eva">European Variation Archive (EVA)</a></li>
-                            <li><a href="#gene2phenotype">Gene2Phenotype</a></li>
+                            <li ng-repeat="ds in otConsts.datatypes[dt].datasources"><a ng-href="#{{otConsts.datasources[ds].infoUrl.split('#')[1]}}">{{otConsts.datasources[ds].label}}</a></li>
                         </ul>
                     </li>
-
-                    <li><a href="#somatic">Somatic mutations</a>
-                        <ul class="plain arrow-icon">
-                            <li><a href="#census">The Cancer Gene Census</a></li>
-                            li><a href="#uniprot">UniProt</a></li>
-                            <li><a href="#eva_somatic">European Variation Archive (EVA)</a></li>
-                            <li><a href="#intogen">IntOGen</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="#drugs">Drugs</a>
-                        <ul class="plain arrow-icon">
-                            <li><a href="#chembl">ChEMBL</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="#reactome">Affected pathways</a>
-                        <ul class="plain arrow-icon">
-                            <li><a href="#reactome">Reactome</a></li>
-                            <li><a href="#SLAPenrich">SLAPenrich</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="#rna-expression">RNA expression</a>
-                        <ul class="plain arrow-icon">
-                            <li><a href="#atlas">Expression Atlas</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="#text_mining">Text mining</a>
-                        <ul class="plain arrow-icon">
-                            <li><a href="#epmc">Europe PMC</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="#mouse">Animal models</a>
-                        <ul class="plain arrow-icon">
-                            <li><a href="#phenodigm">Phenodigm</a></li>
-                        </ul>
-                    </li>
-
                 </ul>
             </div>
 
-            <div class="col-sm-8">
-
+            
+            <div class="col-sm-8 col-xs-12">
                 <div class="ot-docs-section">
                     <p>We collect data from various sources and combine them into categories called Data types to allow for target identification and prioritisation using our Open Targets Platform. We list our current data types and their data sources below. Note that data from an individual source can contribute to different Data types, e.g. data from EVA is observed in two data types, Genetic associations and Somatic mutations.</p>
                 </div>
 
+                <!-- datatypes and datasources documentation -->
+                <div class="ot-docs-section" ng-repeat="dt in otConsts.datatypesOrder">
+                    <h4><a id="{{otConsts.datatypes[dt].id}}"></a>{{otConsts.datatypes[dt].label}}</h4>
+                    <div ot-md-parser url="src/pages/data-sources/templates/{{otConsts.datatypes[dt].infoTemplate}}"></div>
 
-                <div class="ot-docs-section">
-                    <h4><a name="genetic"></a>Genetic associations</h4>
-                    <p>Genetic associations are available for both common and rare (Mendelian) diseases and come from the following sources:</p>
-
-                    <h5><a name="gwas"></a>GWAS Catalog</h5>
-                    <p>The NHGRI-EBI <a href="https://www.ebi.ac.uk/gwas/docs/about">GWAS catalog</a> provides evidence on the association of genes (targets) and common diseases. This data comes from the manual curation of published Genome Wide Association Studies (GWAS). The catalog gives a list of the genetic variants (e.g. SNPs) that are most associated with a disease, by genomic region. We include all associations with p-values ≤ 10-5, so that we broaden the coverage of diseases. We assess the link between variant and gene using the Open Targets custom annotation pipeline to find the association between a disease and its most likely target. Variants are assigned to a gene by first considering any deleterious consequence within the coding region of that gene, followed by whether the variant is located within introns or regulatory regions. If the variant is intergenic, it will be assigned to the promoter region of the nearest gene. The consequences of these <a href="http://targetvalidation.org/variants">variants</a> are annotated using the <a href="http://www.ensembl.org/info/docs/tools/vep/index.html">Variant Effect Predictor</a>.</p>
-
-                    <h5><a name="genomics_england"></a>Genomics England PanelApp</h5>
-                    <p>The <a href="https://panelapp.extge.co.uk/crowdsourcing/PanelApp/">Genomics England PanelApp</a> is a knowledgebase that combines crowdsourcing of expertise with curation to provide gene-disease relationships to aid the clinical interpretation of genomes within the 100,000 Genomes Project. This information is curated initially from four sources: Radboud University Medical Center, Illumina TruGenome Predisposition Screen, Emory Genetic Laboratory, and the UK Genetic Testing Network. The genes curated from at least three of these sources are initially classified as ‘green genes’. Additional sources may be used for the curation of some of the phenotypes, genes or mode of inheritance (e.g. peer-reviewed published articles, OMIM, expert list). Expert review of the gene panels for a particular disease is then sought in PanelApp, and each panel is revised. Only green diagnostic-grade genes on version 1+ panels (which have the highest level of confidence) are utilised for genome analysis within the 100,000 Genomes Project. We include in our Open Targets Platform the ‘green genes’ from version 1+ panels along with their phenotypes, providing the latter can be mapped to a disease or phenotype ontology.</p>
-
-                    <div ng-show="phewascatalog">
-                        <h5><a name="phewascatalog"></a>PheWAS Catalog</h5>
-                        <p>The <a href="https://phewascatalog.org">PheWAS</a> (phenome-wide association studies) resources provide associations between a genetic variant and multiple phenotypes. It contains clinical phenotypes derived from the electronic medical record (EMR)-linked DNA biobank BioVU by the Center for Precision Medicine at the Vanderbilt University Medical Center. The EMR-based PheWAS uses ICD9 (International Classification of Disease, 9th edition), which were mapped to EFO using <a href="https://www.ebi.ac.uk/ols/index"></a>OLS and <a href="http://www.ebi.ac.uk/spot/zooma/"></a>Zooma. The catalog contains all associations with p < 0.05 (uncorrected).</p>
+                    <div ng-repeat="ds in otConsts.datatypes[dt].datasources">
+                        <h5><a id="{{otConsts.datasources[ds].infoUrl.split('#')[1]}}"></a>{{otConsts.datasources[ds].label}}</h5>
+                        <div ot-md-parser url="src/pages/data-sources/templates/{{otConsts.datasources[ds].infoTemplate}}"></div>
                     </div>
-
-                    <div ng-show="phewas_23andme">
-                        <h5><a name="phewas_23andme"></a>23andMe</h5>
-                        <p> <a href="https://www.23andme.com/howitworks">23andMe</a> has collected a large cohort of self-reported phenotype data along with genetic data. Through a collaboration between Biogen and 23andMe, Biogen has acquired genome-wide association study (GWAS) summary statistics for over 100 phenotypes (PheWAS).</p>
-                    </div>
-
-                    <h5><a name="uniprot"></a>UniProt</h5>
-                    <p>The Universal Protein Resource (<a href="http://www.uniprot.org/">UniProt</a>) provides protein sequence and functional information. It manually curates associations between genes and rare (Mendelian) diseases from literature and public databases. These curated variants must be in the coding region of a gene, deleterious, observed in patients, and segregating within their families. </p>
-
-                    <h5><a name="uniprot_lit"></a>UniProt literature</h5>
-                    <p>UniProt may curate target-disease associations but not provide a specific mutation in the coding region of a gene. We classify these variants as UniProt Literature.</p>
-
-                    <h5><a name="eva"></a>European Variation Archive (EVA)</h5>
-                    <p>The EMBL-EBI <a href="http://www.ebi.ac.uk/eva/?Home">European Variation Archive</a> (EVA) is a database of publicly available genetic variants, both short scale (e.g. SNPs) and large structural variants (e.g. larger deletions). For rare (Mendelian) diseases, EVA provides clinically relevant data for the variants that are pathogenic or likely pathogenic. This clinical information comes from <a href="http://www.ncbi.nlm.nih.gov/clinvar/">ClinVar</a>, and includes <a href="http://www.ncbi.nlm.nih.gov/omim"></a>OMIM data.</p>
-
-                    <!-- <h5><a name="decipher"></a>DECIPHER</h5>
-                    <p>The Wellcome Trust Sanger Institute <a href="https://decipher.sanger.ac.uk/index">DECIPHER</a> is a database of genomic variants and phenotypes in patients with developmental disorders. They have provided a summary of the overall effects of disease-causing variants available in the <a href="http://www.ebi.ac.uk/gene2phenotype">gene2phenotype</a> (G2P) dataset. G2P is produced and curated from literature by consultant clinical geneticists in the UK. This data is comprised of both short scale (i.e. sequence variants such as SNPs) and large structural variants (e.g. copy number variants), and can allow targeted filtering of genome-wide data for diagnostic purposes.</p> -->
-
-                    <h5><a name="gene2phenotype"></a>Gene2Phenotype</h5>
-                    <p>The data in <a href="http://www.ebi.ac.uk/gene2phenotype">Gene2Phenotype</a> (G2P) is produced and curated from the literature by consultant clinical geneticists in the UK. This data is comprised of both short scale (i.e. sequence variants such as SNPs) and large structural variants (e.g. copy number variants), and can allow targeted filtering of genome-wide data for diagnostic purposes. The variants were provided by <a href="https://decipher.sanger.ac.uk/index">DECIPHER</a>, a database of genomic variants and phenotypes in patients with developmental disorders.</p>
                 </div>
-
-
-                <div class="ot-docs-section">
-                    <h4><a name="somatic"></a>Somatic mutations</h4>
-                    <p>Somatic mutation data refers to mutations that may have clinical or treatment implications in cancer and possibly other diseases. This data type is obtained from the following sources:</p>
-
-                    <h5><a name="census"></a>Cancer Gene Census</h5>
-                    <p>Cancer Gene Census is a catalogue of genes for which mutations have been causally implicated in cancer. The Catalogue of Somatic Mutations in Cancer (<a href="http://cancer.sanger.ac.uk/cosmic">COSMIC</a>) at the  Wellcome Trust Sanger Institute provides us with the set of genes associated with specific  cancers in the Cancer Gene Census, in addition to other cancers associated with that gene in the COSMIC database.</p>
-
-                    <h5><a name="uniprot"></a>UniProt</h5>
-                    <p>UniProt manually curates somatic mutations from the literature for our associations between genes and cancers.</p>
-
-                    <h5><a name="eva_somatic"></a>European Variation Archive (EVA)</h5>
-                    <p>The EMBL-EBI <a href="http://www.ebi.ac.uk/eva/?Home">European Variation Archive</a> (EVA) provides data on somatic mutations in both cancer and other diseases.</p>
-
-                    <h5><a name="intogen"></a>IntOGen</h5>
-                    <p><a href="http://www.intogen.org/search">IntOGen</a> provides somatic mutations, genes and pathways involved in tumorigenesis. We have imported the latest data from 6,792 samples across 28 cancer types (<a href="http://www.ncbi.nlm.nih.gov/pubmed/25759023">Rubio-Perez et al</a>). In these new dataset, false mutation calls have been filtered out and additional expression data is available for a larger number of samples in certain tumour types. This IntOgen analysis is updated and has not yet been released on the IntOgen website; so there can be discrepancies between targetvalidation.org and the IntOgen site.</p>
-
-                    <div class="ot-docs-section">
-                    <h4><a name="drugs"></a>Drugs</h4>
-                    <p>This data type is currently comprised of only one data source:</p>
-
-                    <h5><a name="chembl"></a>ChEMBL</h5>
-                    <p>The EMBL-EBI <a href="https://www.ebi.ac.uk/chembl/">ChEMBL</a> database provides evidence from known drugs that can be linked to a disease and a known target. ChEMBL contains compound bioactivity data against drug targets. We display the data on drugs that have been approved for marketing by the U.S Food and Drug Administration (FDA), in addition to some clinical candidates.</p>
-                </div>
-
-
-                <div class="ot-docs-section">
-                    <h4><a name="pathways"></a>Affected pathways</h4>
-                    <p>This data type contains pathway information on biochemical reactions sourced from the following sources:</p>
-
-                    <h5><a name="reactome"></a>Reactome</h5>
-                    <p>The <a href="http://www.reactome.org">Reactome</a> database manually curates and identifies reaction pathways that are affected by pathogenic mutations.</p>
-                </div>
-                    
-                    <h5><a name="SLAPenrich"></a>SLAPenrich</h5>
-                    <p> <a href="https://saezlab.github.io/SLAPenrich/">SLAPenrich</a> (Sample-population Level Analysis of Pathway enrichments) is a novel statistical framework for the identification of significantly mutated pathways, at the sample population level, in large cohorts of cancer patients. It is based on a Poisson binomial model that takes into account the length of blocks of exons in genes within each pathway, and the background mutation rate of the analysed cohort of patients. We include in our Open Targets Platform the data obtained using SLAPenrich on somatic mutations from the The Cancer Genome Atlas across 25 different cancer types and a collection of pathway gene sets from Reactome.</p>
-                </div>
-               
-                <div class="ot-docs-section">
-                    <h4><a name="rna-expression"></a>RNA expression</h4>
-                    <p>This data type contains information on gene expression patterns under different biological conditions coming from the following resource:</p>
-
-                    <h5><a name="atlas"></a>Expression Atlas</h5>
-                    <p>The EMBL-EBI <a href="https://www.ebi.ac.uk/gxa/home">Expression Atlas</a> provides information on genes that are differentially expressed. They report the changes on the levels of gene expression between normal and disease samples, or among disease samples from different studies. In addition to differential expression, they provide baseline expression information for each gene. This is available in the page containing the target profile.</p>
-                </div>
-
-
-                <div class="ot-docs-section">
-                    <h4><a name="text_mining"></a>Text mining</h4>
-                    <p>This data type contains evidence of target-disease association which is extracted automatically by mining the following literature database:</p>
-
-                    <h5><a name="epmc"></a>Europe PMC</h5>
-                    <p>The Europe PubMed Central (<a href="http://europepmc.org/">Europe PMC</a>) provides evidence of links between targets and diseases. They mine the titles, abstracts and full text research articles from both PubMed and PubMed Central, and use an entity-to-entity recognition approach to detect co-occurrences of target and disease entities.</p>
-                </div>
-
-
-
-                <div class="ot-docs-section">
-                    <h4><a name="mouse"></a>Animal models</h4>
-                    <p>Model organisms are a valuable source for the characterisation and identification of disease-gene associations, especially when the molecular basis and/or function of the candidate target are unknown. We use the data on animal models from PhenoDigm:</p>
-
-                    <h5><a name="phenodigm"></a>Phenodigm</h5>
-                    <p>The Wellcome Trust Sanger Institute <a href="http://www.sanger.ac.uk/science/tools/phenodigm">PhenoDigm</a> database provides evidence on associations of targets and disease. It uses a semantic approach to map between clinical features observed in humans and mouse phenotype annotations. The phenotypic effects in mice are then mapped to phenotypes associated with human diseases, and matches are identified and scored.</p>
-                </div>
-
+                
             </div>
 
         </div>

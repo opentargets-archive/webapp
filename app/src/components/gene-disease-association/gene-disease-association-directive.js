@@ -16,6 +16,7 @@ angular.module('otDirectives')
                     if (data.length > 0) {
                         var flower = flowerView()
                             .values(data)
+                            .color('#0092e7')
                             .diagonal(200);
                         flower(elem[0]);
                     }

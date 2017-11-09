@@ -2,7 +2,7 @@
  * Somatic mutations plugin
  */
 angular.module('otPlugins')
-    .directive('otTextMining', ['otConfig', 'otConsts', 'otDictionary', function (otConfig, otConsts, otDictionary) {
+    .directive('otTextMining', ['otConfig', 'otUtils', function (otConfig, otUtils) {
         'use strict';
 
         return {
@@ -15,7 +15,16 @@ angular.module('otPlugins')
             },
             link: function (scope) {
                 scope.ext = scope.ext || {};    // object to communicate
-                scope.sources = otConfig.evidence_sources.literature.map(function (s) { return {label: otDictionary[otConsts.invert(s)], url: otConsts.dbs_info_url[otConsts.invert(s)]}; });
+                scope.sources = otConfig.evidence_sources.literature.map(function (s) {
+                    // so here s is the datasource api 'key' (i.e. lowercase 'pathway')
+                    // now we need to find label and infoUrl from the otConsts.datasources object
+                    var ds = otUtils.getDatasourceById(s);
+
+                    return {
+                        label: ds.label, // otDictionary[dk[0]],
+                        url: ds.infoUrl // otConsts.dbs_info_url[otConsts.invert(s)]
+                    };
+                });
             }
         };
     }]);

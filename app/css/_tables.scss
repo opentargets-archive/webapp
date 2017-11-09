@@ -416,15 +416,89 @@
         visibility: hidden;
     }
 
-    ot-hpa-tissue-expression table.matrix-table thead > tr > th:first-child{
-        > div {
-            > span {
-                margin-left: 92.5%;
+    // ot-hpa-tissue-expression table.matrix-table thead > tr > th:first-child{
+    //     > div {
+    //         > span {
+    //             margin-left: 92.5%;
+    //         }
+    //     }
+
+    //     &:after {
+    //         right: 8%;
+    //     }
+    // }
+    ot-tissue-expression {
+        table.table {
+            tr {
+                td {
+                    padding: 0px 8px;
+                    border-top: none;
+                }
+                th {
+                    padding: 0px;
+                    border-bottom: none;
+                }
+            }
+            tbody {
+                border-top: none;
+            }
+            tbody.expression-row-group-tissues {
+                background: #EEE;
+                border-bottom: 1px solid #999;
+                border-left: 1px solid #999;
+                border-right: 1px solid #999;
+            }
+            tr.expression-row-parent__expanded {
+                border-top: 1px solid #999;
+                border-left: 1px solid #999;
+                border-right: 1px solid #999;
+            }
+            tr.expression-row-tissue:first-of-type td {
+                padding-top: 8px;
+            }
+            tr.expression-row-tissue:last-of-type td {
+                padding-bottom: 8px;
+            }
+            tr.expression-row-header {
+                border-bottom: 1px solid #EEE;
+                i {
+                    color: #BBB;
+                }
+                i.ot-sort-active {
+                    color: #0091EA;
+                }
+            }
+            tr.expression-row-low-high {
+                font-size: 10px;
             }
         }
 
-        &:after {
-            right: 8%;
+        .expression-cell-rna, .expression-cell-protein {
+            padding: 2px 0px;
+            vertical-align: middle;
+            font-size: 10px;
+        }
+
+        .expression-bar {
+            height: 12px;
+        }
+
+        .expression-row-parent .expression-bar {
+            background: #0091EA;
+        }
+
+        .expression-row-tissue .expression-bar {
+            background: #88C8F1;
+        }
+        
+        .expression-bar-container {
+            background: #F5F5F5;
+            min-height: 12px;
+            max-height: 12px;
+        }
+
+        .expression-row-parent:hover {
+            background: #EEE;
         }
     }
 

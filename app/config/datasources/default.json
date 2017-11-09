@@ -1,0 +1,136 @@
+/**
+ * Datasources, in alphabetical order
+ * "id": the source id in the API/elasticsearch
+ * "label": the nice display name
+ * "infoUrl": docs page and anchor for the datasource. Anchor should really be the id, so we could skip this altogether, but this might break old links
+ * "infoTemplate": the markdownfile with the description/info used in the datasources docs page
+ * "description": currently not used
+ */
+{
+    "CANCER_GENE_CENSUS": {
+        "id": "cancer_gene_census",
+        "label": "Cancer Gene Census",
+        "infoUrl": "/data-sources#census",
+        "infoTemplate": "cancer-gene-census.md",
+        "description": ""
+    },
+    "CHEMBL": {
+        "id": "chembl",
+        "label": "Chembl",
+        "infoUrl": "/data-sources#chembl",
+        "infoTemplate": "chembl.md",
+        "description": ""
+    },
+    "EPMC": {
+        "id": "europepmc",
+        "label": "Europe PMC",
+        "infoUrl": "/data-sources#text_mining",
+        "infoTemplate": "europe-pmc.md",
+        "description": ""
+    },
+    "EVA": {
+        "id": "eva",
+        "label": "European Variation Archive (EVA)",
+        "infoUrl": "/data-sources#eva",
+        "infoTemplate": "eva.md",
+        "description": ""
+    },
+    "EVA_SOMATIC": {
+        "id": "eva_somatic",
+        "label": "European Variation Archive (EVA)",
+        "infoUrl": "/data-sources#eva_somatic",
+        "infoTemplate": "eva-somatic.md",
+        "description": ""
+    },
+    "EXPRESSION_ATLAS": {
+        "id": "expression_atlas",
+        "label": "Expression Atlas",
+        "infoUrl": "/data-sources#atlas",
+        "infoTemplate": "expression-atlas.md",
+        "description": ""
+    },
+    "GENE_2_PHENOTYPE": {
+        "id": "gene2phenotype",
+        "label": "Gene2Phenotype",
+        "infoUrl": "/data-sources#gene2phenotype",
+        "infoTemplate": "gene2phenotype.md",
+        "description": ""
+    },
+    "GENOMICS_ENGLAND": {
+        "id": "genomics_england",
+        "label": "Genomics England PanelApp",
+        "infoUrl": "/data-sources#genomics_england",
+        "infoTemplate": "genomics-england.md",
+        "description": ""
+    },
+    "GWAS": {
+        "id": "gwas_catalog",
+        "label": "GWAS catalog",
+        "infoUrl": "/data-sources#gwas",
+        "infoTemplate": "gwas-catalog.md",
+        "description": ""
+    },
+    "INTOGEN": {
+        "id": "intogen",
+        "label": "IntOGen",
+        "infoUrl": "/data-sources#intogen",
+        "infoTemplate": "intogen.md",
+        "description": ""
+    },
+    "PHENODIGM": {
+        "id": "phenodigm",
+        "label": "PhenoDigm",
+        "infoUrl": "/data-sources#mouse",
+        "infoTemplate": "phenodigm.md",
+        "description": ""
+    },
+    "PHEWAS": {
+        "id": "phewas_catalog",
+        "label": "PheWAS catalog",
+        "infoUrl": "/data-sources#phewas",
+        "infoTemplate": "phewas-catalog.md",
+        "description": ""
+    },
+    "PHEWAS_23andme": {
+        "id": "23andme",
+        "label": "23andMe",
+        "infoUrl": "/data-sources#phewas_23andme",
+        "infoTemplate": "23andme.md",
+        "description": ""
+    },
+    "REACTOME": {
+        "id": "reactome",
+        "label": "Reactome",
+        "infoUrl": "/data-sources#reactome",
+        "infoTemplate": "reactome.md",
+        "description": ""
+    },
+    "SLAPENRICH": {
+        "id": "slapenrich",
+        "label": "SLAPenrich",
+        "infoUrl": "/data-sources#SLAPenrich",
+        "infoTemplate": "slapenrich.md",
+        "description": ""
+    },
+    "UNIPROT": {
+        "id": "uniprot",
+        "label": "UniProt",
+        "infoUrl": "/data-sources#uniprot",
+        "infoTemplate": "uniprot.md",
+        "description": ""
+    },
+    "UNIPROT_LITERATURE": {
+        "id": "uniprot_literature",
+        "label": "UniProt literature",
+        "infoUrl": "/data-sources#uniprot_lit",
+        "infoTemplate": "uniprot-literature.md",
+        "description": ""
+    },
+    "UNIPROT_SOMATIC": {
+        "id": "uniprot_somatic",
+        "label": "Uniprot somatic",
+        "infoUrl": "/data-sources#uniprot_somatic",
+        "infoTemplate": "uniprot-somatic.md",
+        "description": ""
+    }
+}

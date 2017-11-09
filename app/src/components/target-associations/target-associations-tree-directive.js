@@ -9,6 +9,14 @@ angular.module('otDirectives')
         var gat;
         // var currTarget;
 
+        function decorateSVG(from_svg) {
+            var clone = from_svg.cloneNode(true); // deep cloning of the svg
+            d3.select(clone)
+                .selectAll('.tnt_tree_node_proxy')
+                .remove();
+            return clone;
+        }
+
         return {
             restrict: 'E',
             scope: {
@@ -165,6 +173,7 @@ angular.module('otDirectives')
                                 }
                                 var fView = flowerView()
                                     .fontsize(9)
+                                    .color('#0092e7')
                                     .diagonal(100);
                                 gat = geneAssociationsTree()
                                     .data(data)
@@ -187,8 +196,8 @@ angular.module('otDirectives')
 
                 if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
-                        var svg = elem.children().eq(1)[0].querySelector('svg');
-                        return svg;
+                        // var svg = elem.children().eq(1)[0].querySelector('svg');
+                        return decorateSVG(elem.children().eq(1)[0].querySelector('svg'));
                     };
                 }
             }

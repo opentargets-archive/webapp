@@ -1,0 +1,1 @@
+Model organisms are a valuable source for the characterisation and identification of disease-gene associations, especially when the molecular basis and/or function of the candidate target are unknown. We use the data on animal models from PhenoDigm:

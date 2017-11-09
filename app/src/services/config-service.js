@@ -18,8 +18,8 @@ angular.module('otServices')
                     } else {
                         for (var i = 0; i < obj[prop].length; i++) {
                             var item = obj[prop][i];
-                            if (otConsts.dbs[item]) {
-                                obj[prop][i] = otConsts.dbs[item];
+                            if (otConsts.datasources[item]) {
+                                obj[prop][i] = otConsts.datasources[item].id;
                             }
                         }
                     }

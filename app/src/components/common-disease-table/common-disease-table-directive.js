@@ -113,11 +113,11 @@ angular.module('otDirectives')
                             row.push(t);
 
                             // evidence source
-                            if (item.sourceID === otConsts.dbs.PHEWAS_23andme) {
+                            if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
                                 row.push('<a class=\'ot-external-link\' href=\'https://test-rvizapps.biogen.com/23andmeDev/\' target=\'_blank\'>'
                                     + otClearUnderscoresFilter(item.sourceID)
                                     + '</a>');
-                            } else if (item.sourceID === otConsts.dbs.PHEWAS) {
+                            } else if (item.sourceID === otConsts.datasources.PHEWAS.id) {
                                 row.push('<a class=\'ot-external-link\' href=\'https://phewascatalog.org/phewas\' target=\'_blank\'>'
                                     + otClearUnderscoresFilter(item.sourceID)
                                     + '</a>');
@@ -130,9 +130,9 @@ angular.module('otDirectives')
                             // p-value
                             var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
 
-                            if (item.sourceID === otConsts.dbs.PHEWAS) {
+                            if (item.sourceID === otConsts.datasources.PHEWAS.id) {
                                 msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
-                            } else if (item.sourceID === otConsts.dbs.PHEWAS_23andme) {
+                            } else if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
                                 msg += '<br/>Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '<br />Phenotype: ' + item.unique_association_fields.phenotype;
                             }
                             row.push(msg);
@@ -145,6 +145,7 @@ angular.module('otDirectives')
 
                             var pmidsList = otUtils.getPmidsList(refs);
                             row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : 'N/A');
+                            // row.push(refs.length ? otUtils.getPublicationsField(refs) : 'N/A');
 
                             // Publication ids (hidden)
                             row.push(pmidsList.join(', '));

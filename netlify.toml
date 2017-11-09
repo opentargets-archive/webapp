@@ -2,14 +2,14 @@
 [build]
   base    = "/"
   publish = "app/"
-  command = "npm install && npm run setup"
+  command = "yarn run setup"
 
 # Read https://www.netlify.com/docs/continuous-deployment/#deploy-contexts
 # to understand how context below works.
 
 # Master branch
 [context.production.environment]
-  APIHOST = "https://api.targetvalidation.org/api/"
+  APIHOST = "https://api.opentargets.io/"
 
 # Deploy Preview context: All Deploy Previews (ie.PRs)
 # will inherit these settings.
@@ -26,5 +26,11 @@
 [context.feature.environment]
   APIHOST = "https://api.opentargets.io/"
 
+[context."expression-simple".environment]
+#  APIHOST = "https://mk-levelupdate-dot-open-targets-eu-dev.appspot.com/api/"
+#  APIHOST = "https://mk-zscorefacet-dot-open-targets-eu-dev.appspot.com/api/"
+  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/"
+#  APIHOST = "https://mk-fixfacets-dot-open-targets-eu-dev.appspot.com/api/"
+
 [context.master.environment]
-  APIHOST = "https://api.opentargets.io/"
+  APIHOST = "https://open-targets-eu-dev.appspot.com/"

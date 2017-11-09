@@ -81,7 +81,14 @@ body{
     background: -o-linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
     background: linear-gradient(left, $masthead-background  0%, $extra-brand-color  100%);
 
-
+    .masthead-batch-search-icon {
+        position: absolute;
+        right: -6px;
+        top:16px;
+        a {
+            color: white;
+        }
+    }
 
 
     // padding: 8px 0;

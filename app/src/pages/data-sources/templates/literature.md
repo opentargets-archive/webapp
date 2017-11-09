@@ -1,0 +1,1 @@
+This data type contains evidence of target-disease association which is extracted automatically by mining the following literature database:

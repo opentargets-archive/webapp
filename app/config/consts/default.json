@@ -2,67 +2,9 @@
  * Constants
  */
  {
-    "datatypes": {
-        "GENETIC_ASSOCIATION": "genetic_association",
-        "SOMATIC_MUTATION": "somatic_mutation",
-        "KNOWN_DRUG": "known_drug",
-        "RNA_EXPRESSION": "rna_expression",
-        "AFFECTED_PATHWAY": "affected_pathway",
-        "ANIMAL_MODEL": "animal_model",
-        "LITERATURE": "literature"
-    },
-    "dbs": {
-        "EXPRESSION_ATLAS": "expression_atlas",
-        "UNIPROT": "uniprot",
-        "UNIPROT_LITERATURE": "uniprot_literature",
-        "REACTOME": "reactome",
-        "EVA": "eva",
-        "PHENODIGM": "phenodigm",
-        "GWAS": "gwas_catalog",
-        "PHEWAS": "phewas_catalog",
-        "PHEWAS_23andme": "23andme",
-        "GENOMICS_ENGLAND": "genomics_england",
-        "CANCER_GENE_CENSUS": "cancer_gene_census",
-        "CHEMBL": "chembl",
-        "DISGENET": "disgenet",
-        "EPMC": "europepmc",
-        "EVA_SOMATIC": "eva_somatic",
-        "INTOGEN": "intogen",
-        "GENE_2_PHENOTYPE": "gene2phenotype",
-        "SLAPENRICH": "slapenrich"
-    },
-    "dbs_info_url": {
-        "EXPRESSION_ATLAS": "/data-sources#atlas",
-        "UNIPROT": "/data-sources#uniprot",
-        "UNIPROT_LITERATURE": "/data-sources#uniprot_lit",
-        "REACTOME": "/data-sources#reactome",
-        "EVA": "/data-sources#eva",
-        "PHENODIGM": "/data-sources#mouse",
-        "GWAS": "/data-sources#gwas",
-        "PHEWAS": "/data-sources#phewas",
-        "PHEWAS_23andme": "/data-sources#phewas_23andme",
-        "GENOMICS_ENGLAND": "/data-sources#genomics_england",
-        "CANCER_GENE_CENSUS": "/data-sources#census",
-        "CHEMBL": "/data-sources#chembl",
-        "DISGENET": "/data-sources",  // no longer used
-        "EPMC": "/data-sources#text_mining",
-        "EVA_SOMATIC": "/data-sources#eva",
-        "INTOGEN": "/data-sources#intogen",
-        "GENE_2_PHENOTYPE": "/data-sources#gene2phenotype",
-        "SLAPENRICH": "/data-sources#SLAPenrich"
-    },
     "datatypesOrder": [
         "GENETIC_ASSOCIATION", "SOMATIC_MUTATION", "KNOWN_DRUG", "AFFECTED_PATHWAY", "RNA_EXPRESSION", "LITERATURE", "ANIMAL_MODEL"
     ],
-    "datatypesLabels": {
-        "GENETIC_ASSOCIATION": "Genetics",
-        "SOMATIC_MUTATION": "Somatic",
-        "KNOWN_DRUG": "Drugs",
-        "RNA_EXPRESSION": "RNA",
-        "AFFECTED_PATHWAY": "Pathways",
-        "ANIMAL_MODEL": "Mouse",
-        "LITERATURE": "Text Mining"
-    },
     "DATATYPES": "datatype",
     "PATHWAY": "pathway",
     "DATASOURCES": "datasources",

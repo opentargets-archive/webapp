@@ -1,69 +1,173 @@
-angular.module('facets')
+angular.module('otFacets')
+    .factory('datatypeFacetParser', ['otFilterTypes', 'otConsts', 'otUtils', function (otFilterTypes, otConsts, otUtils) {
+        var parse = function (facetName, apiData, facetsGlobal, countsKey, options) {
+            var datatypeFilters = [];
+            var datasourceFilters = [];
+            var nestedFilters;
+            var summary = [''];
 
-    .factory('datatypeFacetParser', ['otDictionary', 'otConsts', 'datasourceFacetParser', function (otDictionary, otConsts, datasourceFacetParser) {
-        'use strict';
+            /**
+             * constructFilters
+             * Parse the API data and recursively build a nested filter structure.
+             * @param {object} data - The API data
+             */
+            var constructFilters = function (data, datatypeFilters, datasourceFilters) {
+                // iterate all the datatypes (regardless of whether in api response)
+                return otConsts.datatypesOrder.map(function (datatypeName) {
+                    // datatypeKey;
+                    var dt = otConsts.datatypes[datatypeName];
+                    // grab the data bucket
+                    var bucket = data.buckets.filter(function (b) {
+                        return b && (b.key) && (b.key === dt.id);
+                    })[0] || null;
 
+                    // create a new filter (based on the data)
+                    var filter = new otFilterTypes.NestedBooleanFilter({
+                        key: dt.id,
+                        label: otUtils.getDatatypeById(dt.id).label || '', // otDictionary[datatypeKey.toUpperCase()] || '',
+                        count: (bucket) ? bucket[countsKey].value : 0,
+                        enabled: (bucket !== null),
+                        checked: false,
+                        children: null,
+                        facetName: facetName
+                    }, facetsGlobal);
 
-        var datatypes = [
-            {key: otConsts.datatypes.GENETIC_ASSOCIATION, selected: true},
-            {key: otConsts.datatypes.SOMATIC_MUTATION, selected: true},
-            {key: otConsts.datatypes.KNOWN_DRUG, selected: true},
-            {key: otConsts.datatypes.AFFECTED_PATHWAY, selected: true},
-            {key: otConsts.datatypes.RNA_EXPRESSION, selected: true},
-            {key: otConsts.datatypes.LITERATURE, selected: true},
-            {key: otConsts.datatypes.ANIMAL_MODEL, selected: false}
-        ];
+                    var children = null;
+                    if (bucket && bucket.datasource) {
+                        children = constructDatasourceFilters(dt.id, bucket.datasource, parent, datasourceFilters);
+                    }
+                    filter.children = children;
 
+                    // add to the flat list
+                    datatypeFilters.push(filter);
 
-        var parser = {};
+                    // return the created filter
+                    return filter;
+                });
+            };
 
-        /**
-         * Parse function
-         * Every FacetParser *must* expose a parse() function.
-         * The function essentially maps and returns the filters (values) for a specific collection
-         * (i.e. a facet, like the datatype facet or score distribution facet).
-         *
-         * Parser function must take the following parameters:
-         *     config [Object] config object for the collection; contains key and options object
-         *     data [Object] the data object for this facet (from the API)
-         *     countsToUse [String] e.g. "unique_disease_count"
-         *     isSelected [Function] this is the FiltersService.isSelected(). The problem is we cannot reference the FiltersService here (circular dependency)
-         *
-         * It returns an Array of filters.
-         */
-        parser.parse = function (config, data, countsToUse, isSelected) {
-            // set array of filters
-            config.filters = datatypes.map(function (obj) {
-                var conf = {};
-                var def = {};
-                def[countsToUse] = {};
-                var dtb = data.buckets.filter(function (o) { return o.key === obj.key; })[0] || def;
-                conf.key = obj.key;
-                conf.label = otDictionary[obj.key.toUpperCase()] || '';
-                conf.count = dtb[countsToUse].value; // dtb.doc_count;
-                conf.enabled = dtb.key !== undefined; // it's actually coming from the API and not {}
-                conf.selected = isSelected(config.key, obj.key); // && conf.count>0;    // do we want to show disabled items (with count==0) as selected or not?
-                conf.facet = config.key;
-                conf.collection = null;
+            var constructDatasourceFilters = function (datatypeKey, data, parent, datasourceFilters) {
+                return data.buckets.map(function (bucket) {
+                    var filter = new otFilterTypes.NestedBooleanFilter({
+                        key: bucket.key,
+                        // label: otDictionary[otConsts.invert(bucket.key)] || bucket.key,
+                        label: otUtils.getDatasourceById(bucket.key).label || bucket.key,
+                        count: bucket[countsKey].value,
+                        enabled: (bucket !== null),
+                        checked: false,
+                        children: null,
+                        facetName: facetName
+                    }, facetsGlobal);
 
-                if (dtb.datasource) {
-                    // if there are subfilters, we pass those as a Collection config object with the parameter "filters"
-                    conf.collection = {
-                        filters: datasourceFacetParser.parse({key: 'datasources'}, dtb.datasource, countsToUse, isSelected).filters
-                    };
-                }
+                    // add to the flat list
+                    datasourceFilters.push(filter);
 
-                /* .filter( function(obj){
-                    // Use a filter function to keep only those returned by the API??
-                    return obj.count>0;
-                });*/
+                    // return the created filter
+                    return filter;
+                });
+            };
 
-                return conf;
-            });
+            /**
+             * Toggle method for all filters
+             */
+            var setAllChecked = function (value) {
+                // update state
+                nestedFilters.forEach(function (filter) {
+                    filter.setChecked(value);
+                });
+                // global update
+                facetsGlobal.update();
+            };
 
-            return config;
+            /**
+             * Serialize this facet for the url state.
+             * @param {object} urlObj - The URL object. This object can be mutated and must
+             *                          then be returned.
+             */
+            var serialize = function (urlObj) {
+                // datatype
+                urlObj[facetName] = datatypeFilters.filter(function (filter) {
+                    return filter.checked;
+                }).map(function (filter) {
+                    return filter.key;
+                });
+                // datasource
+                urlObj.datasources = datasourceFilters.filter(function (filter) {
+                    return filter.checked;
+                }).map(function (filter) {
+                    return filter.key;
+                });
+                return urlObj;
+            };
+
+            /**
+             * Initialize
+             */
+            var init = function () {
+                // setup the nested filters from the api data (structure)
+                nestedFilters = constructFilters(apiData[facetName], datatypeFilters, datasourceFilters);
+
+                // load the url state (update checked statuses etc.)
+                deserialize(facetsGlobal.getUrlObject());
+            };
+
+            /**
+             * Check if a boolean filter is checked according to the URL object.
+             * Note that the key is an number, but the urlObj may be a string (
+             * ie. 6 vs '6')
+             * @param {object} urlObj - Object representation of the URL
+             * @param {string} key - Key of the filter to check
+             */
+            var filterIsChecked = function (urlObj, facetName, key) {
+                // TODO: need to check if datatype or source and use in place of facetName
+                return (urlObj &&
+                urlObj[facetName] &&
+                (urlObj[facetName] === ('' + key) ||
+                 urlObj[facetName].indexOf('' + key) >= 0));
+            };
+
+            /**
+             * Deserialize the url state and update the facet state.
+             * @param {object} urlObj - The URL object
+             */
+            var deserialize = function (urlObj) {
+                // datatype
+                datatypeFilters.forEach(function (filter) {
+                    filter.setChecked(filterIsChecked(urlObj, 'datatype', filter.key));
+                });
+                // datasource
+                datasourceFilters.forEach(function (filter) {
+                    filter.setChecked(filterIsChecked(urlObj, 'datasources', filter.key));
+                });
+                summary[0] = getSummary();
+            };
+
+            var getSummary = function () {
+                // generate a summary string for the facet
+                var countDatatype = datatypeFilters.filter(function (f) {
+                    return f.checked;
+                }).length;
+                var countDatasource = datasourceFilters.filter(function (f) {
+                    return f.checked;
+                }).length;
+                var count = countDatatype + countDatasource;
+                return count ? count + ' checked' : '';
+            };
+
+            init();
+
+            // Return the Facet object
+            return {
+                summary: summary,
+                filters: nestedFilters,
+                serialize: serialize,
+                deserialize: deserialize,
+                setAllChecked: setAllChecked,
+                options: options
+            };
         };
 
-        return parser;
+        return {
+            parse: parse
+        };
     }]);
-

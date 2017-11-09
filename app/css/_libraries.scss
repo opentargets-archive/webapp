@@ -59,3 +59,9 @@
         //border-color: $btn-primary-border-hover;
     }
 }
+
+.input-group .form-control:focus {
+    // set z-index to default 2 to avoid margins around the search bar
+    // and, most importantly, spinner disappering from searchbox
+    z-index: 2;
+}

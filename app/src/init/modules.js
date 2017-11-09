@@ -5,3 +5,4 @@ angular.module('otServices', []);
 angular.module('otPlugins', []);
 angular.module('otDirectives', []);
 angular.module('otFilters', []);
+angular.module('otFacets', []);

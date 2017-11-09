@@ -1,0 +1,1 @@
+UniProt manually curates somatic mutations from the literature for our associations between genes and cancers.

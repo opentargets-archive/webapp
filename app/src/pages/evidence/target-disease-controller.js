@@ -102,11 +102,11 @@ angular.module('otControllers')
             var fd = [];
 
             for (var i = 0; i < otConsts.datatypesOrder.length; i++) {
-                var dkey = otConsts.datatypes[otConsts.datatypesOrder[i]];
+                var dkey = otConsts.datatypes[otConsts.datatypesOrder[i]].id;
                 var key = otConsts.datatypesOrder[i];
                 fd.push({
                     'value': data ? data[dkey] : 0,
-                    'label': otConsts.datatypesLabels[key],
+                    'label': otConsts.datatypes[key].shortLabel, // otConsts.datatypesLabels[key],
                     'active': true
                 });
             }

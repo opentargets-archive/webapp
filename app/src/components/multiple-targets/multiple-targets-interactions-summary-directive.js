@@ -15,7 +15,7 @@ angular.module('otDirectives')
                 width: '='
             },
             link: function (scope) {
-            // var ivTooltip; // the tooltip for the interaction viewer.
+                // var ivTooltip; // the tooltip for the interaction viewer.
 
                 scope.$watchGroup(['target', 'associations'], function () {
                     if (!scope.target) {

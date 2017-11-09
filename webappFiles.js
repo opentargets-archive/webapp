@@ -25,6 +25,7 @@ var webappFiles = {
             'node_modules/js-yaml/dist/js-yaml.min.js',
             'app/vendor/foamtree/carrotsearch.foamtree.js',
             'node_modules/marked/marked.min.js',
+            'node_modules/venn.js/build/venn.min.js',
             'node_modules/file-saver/FileSaver.min.js',
             'node_modules/moment/moment.js'
         ],
@@ -55,7 +56,8 @@ var webappFiles = {
             'app/plugins/*/*.js',
 
             // Facets
-            'app/facets/*/*.js'
+            'app/facets/*/*.js',
+            'app/facets/*.js'
         ],
 
         css: [

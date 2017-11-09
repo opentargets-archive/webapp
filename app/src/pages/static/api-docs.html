@@ -8,7 +8,7 @@
     </div>
 
     <div class="container" ng-init="apiOrigin=otConfig.api.endsWith('/') ? otConfig.api.slice(0,-1) : otConfig.api">
-        <div class"row">
+        <div class="row">
             <div ot-md-parser url="{{apiOrigin}}/v3/platform/docs"></div>
             <div swagger-ui url="{{apiOrigin}}/v3/platform/swagger" api-explorer="true" parser="yaml" validator-url="false"></div>
         </div>
