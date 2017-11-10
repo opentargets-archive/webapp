@@ -61,6 +61,14 @@ angular.module('otDirectives')
             link: function (scope) {
                 scope.showSpinner = true;
 
+                // The PNG export routine
+                if (otUtils.browser.name !== 'IE') {
+                    scope.toExport = function () {
+                        var svg = document.getElementById('interactionsViewerMultipleTargets').querySelector('svg');
+                        return svg;
+                    };
+                }
+
                 scope.$watchGroup(['interactors', 'categories'], function () {
                     if (!scope.interactors) {
                         return;
