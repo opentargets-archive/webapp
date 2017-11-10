@@ -6687,6 +6687,10 @@ tnt.utils@0.1.3, tnt.utils@^0.1.0, tnt.utils@^0.1.1, tnt.utils@^0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/tnt.utils/-/tnt.utils-0.1.3.tgz#bb67394321c89840cdba272fc4762c04fbc8140f"
 
+tnt@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/tnt/-/tnt-0.0.0.tgz#f20053247ffa68b19c764fde96296b07521dc057"
+
 tntvis@^0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/tntvis/-/tntvis-0.1.7.tgz#886ce98d0a0c42e2676a18e103ed50e65542f617"

@@ -449,12 +449,7 @@ gulp.task('build-interactionsViewer-styles', function () {
         .pipe(gulp.dest(buildDir));
 });
 
-gulp.task('copy-babel-polyfill', function () {
-    return gulp.src('node_modules/babel-polyfill/dist/polyfill.min.js')
-        .pipe(gulp.dest(buildDir));
-});
-
-gulp.task('build-interactionsViewer', ['copy-babel-polyfill', 'build-interactionsViewer-styles'], function () {
+gulp.task('build-interactionsViewer', ['build-interactionsViewer-styles'], function () {
     return browserify({
         entries: basePathIV + 'browser.js',
         debug: true,
@@ -470,4 +465,38 @@ gulp.task('build-interactionsViewer', ['copy-babel-polyfill', 'build-interaction
         .pipe(gutil.noop());
 });
 
-gulp.task('build-lazy-loaded-components', ['build-interactionsViewer']);
+// postgap viewer
+var basePathPV = 'node_modules/ot-postgap/';
+var outputBaseFilePV = 'postgapViewer';
+
+gulp.task('build-postgapViewer-styles', function () {
+    return gulp.src(basePathPV + 'index.scss')
+        .pipe(sass({
+            errLogToConsole: true
+        }))
+        .pipe(rename(outputBaseFilePV + '.css'))
+        .pipe(gulp.dest(buildDir));
+});
+
+gulp.task('build-postgapViewer', ['build-postgapViewer-styles'], function () {
+    return browserify({
+        entries: basePathPV + 'browser.js',
+        debug: true,
+        standalone: outputBaseFilePV
+    }).transform(babelify, {presets: ['es2015'], sourceMaps: true})
+        .bundle()
+        .pipe(source(outputBaseFilePV + '.min.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(uglify())
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(buildDir))
+        .pipe(gutil.noop());
+});
+
+gulp.task('copy-babel-polyfill', function () {
+    return gulp.src('node_modules/babel-polyfill/dist/polyfill.min.js')
+        .pipe(gulp.dest(buildDir));
+});
+
+gulp.task('build-lazy-loaded-components', ['copy-babel-polyfill', 'build-interactionsViewer', 'build-postgapViewer']);

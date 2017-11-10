@@ -77,6 +77,7 @@
     "moment": "^2.19.1",
     "ot.interactions_viewer": "0.0.9",
     "systemjs": "^0.19.27",
+    "tnt": "^0.0.0",
     "tnt.ensembl": "0.0.13",
     "tnt.genome": "0.1.7",
     "tnt.rest": "0.1.1",

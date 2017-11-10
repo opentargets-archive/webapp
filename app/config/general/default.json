@@ -185,6 +185,21 @@
         },
 
         {
+            "name": "postgap",
+            "element": "ot-postgap",
+            "heading": "Variants in genomic context",
+            "dependencies": {
+                "build/postgapViewer.min.js": {
+                    "format": "global"
+                },
+                "build/postgapViewer.css": {
+                    "loader": "css"
+                }
+            },
+            "track": true
+        },
+
+        {
             "name": "genomeBrowser",
             "element": "ot-genome-browser",
             "heading": "Variants, isoforms and genomic context",

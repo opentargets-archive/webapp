@@ -1,6 +1,8 @@
-if (typeof tnt === "undefined") {
-    module.exports = tnt = {};
-}
+// if (typeof tnt === "undefined") {
+//     module.exports = tnt = {};
+// }
+
+module.exports = tnt = require('tnt');
 
 tnt.board = require("tnt.genome");
 tnt.utils = require("tnt.utils");
