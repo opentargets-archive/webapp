@@ -1,6 +1,5 @@
-<uib-tabset>
+<uib-tabset ng-show="ext.common.data.length>0 || ext.rare.data.length>0">
     <uib-tab heading="Table">
-        <div ng-show="ext.common.data.length>0 || ext.rare.data.length>0">
 
             <!-- Common disease table -->
             <div ng-show="ext.common.data.length>0 && !ext.common.hasError">
@@ -13,9 +12,6 @@
                     title="{{target.approved_symbol}}-{{disease.label}}"
                     ext="ext.common">
                 </ot-common-disease-table>
-
-                <!-- Redundant as it's also included in table directive -->
-                <div ng-show="ext.common.data.length===0"><p>No data available</p></div>
             </div>
 
             <uib-alert type="danger" ng-show="ext.common.hasError" ng-cloak style="margin-top:15px">
@@ -44,12 +40,6 @@
                 <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving rare diesease data. Please try again later.
             </uib-alert>
 
-        </div>
-
-        <div ng-show="ext.common.data.length===0 && ext.rare.data.length===0 && !ext.common.hasError && !ext.rare.hasError">
-            <p>No data available</p>
-        </div>
-
     </uib-tab>
 
     <uib-tab heading="Browser">
@@ -58,3 +48,7 @@
         </div>
     </uib-tab>
 </uib-tabset>
+
+<div ng-show="ext.common.data.length===0 && ext.rare.data.length===0 && !ext.common.hasError && !ext.rare.hasError">
+    <p>No data available</p>
+</div>
