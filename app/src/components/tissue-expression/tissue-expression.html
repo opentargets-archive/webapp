@@ -51,13 +51,13 @@
         </td>
         <td class="expression-cell-rna">
           <div class="expression-bar-container">
-            <div ng-if="parent.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(parent) }}" style="width:{{ rnaLevelToPercent(parent) }}%;"></div>
+            <div ng-if="parent.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(parent) }}" ng-style="{width: rnaLevelToPercent(parent) + '%'}"></div>
             <div ng-if="parent.rna.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
           </div>
         </td>
         <td class="expression-cell-protein">
           <div class="expression-bar-container">
-            <div ng-if="parent.protein.level >= 0" class="expression-bar" title="{{ proteinLevelToHint(parent.protein.level) }}" style="width:{{ proteinLevelToPercent(parent.protein.level) }}%;"></div>
+            <div ng-if="parent.protein.level >= 0" class="expression-bar" title="{{ proteinLevelToHint(parent.protein.level) }}" ng-style="{'width': proteinLevelToPercent(parent.protein.level) + '%'}"></div>
             <div ng-if="parent.protein.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
           </div>
         </td>
@@ -68,13 +68,13 @@
         <td class="expression-cell-label">{{ tissue.label | otUpperCaseFirst }}</td>
         <td class="expression-cell-rna">
           <div class="expression-bar-container">
-            <div ng-if="tissue.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(tissue) }}" style="width:{{ rnaLevelToPercent(tissue) }}%;"></div>
+            <div ng-if="tissue.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(tissue) }}" ng-style="{'width': rnaLevelToPercent(tissue) + '%'}"></div>
             <div ng-if="tissue.rna.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
           </div>
         </td>
         <td class="expression-cell-protein">
           <div class="expression-bar-container">
-            <div ng-if="tissue.protein.level >= 0" class="expression-bar" title="{{ proteinLevelToHint(tissue.protein.level) }}" style="width:{{ proteinLevelToPercent(tissue.protein.level) }}%;"></div>
+            <div ng-if="tissue.protein.level >= 0" class="expression-bar" title="{{ proteinLevelToHint(tissue.protein.level) }}" ng-style="{'width': proteinLevelToPercent(tissue.protein.level) + '%'}"></div>
             <div ng-if="tissue.protein.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
           </div>
         </td>
