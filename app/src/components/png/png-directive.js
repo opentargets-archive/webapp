@@ -24,6 +24,8 @@ angular.module('otDirectives')
                 scope.currScale = 1;
                 scope.exportPNG = function () {
                     var container = scope.$parent.toExport();
+                    var subSvg = d3.select(container).select('svg');
+                    var subCanvas = d3.select(container).select('canvas');
                     if (container.nodeName === 'CANVAS') {
                         var canvas = container;
                         var img = canvas.toDataURL('image/png');
@@ -32,6 +34,48 @@ angular.module('otDirectives')
                         a.href = img;
                         document.body.appendChild(a);
                         a.click();
+                    } else if (!subCanvas.empty() && !subSvg.empty()) {
+                        // container has an svg and a canvas
+                        var pngExporter = tnt.utils.png()
+                            .filename(scope.filename || 'image.png')
+                            .scale_factor(scope.currScale)
+                            .stylesheets(['components-OpenTargetsWebapp.min.css'])
+                            .callback(function (originalPng) {
+                                var width = container.offsetWidth * scope.currScale;
+                                var height = container.offsetHeight * scope.currScale;
+                                // Need to add the points (from canvas element)
+                                // since pngExporter only handles the svg element
+                                // get the volcano plot canvas and convert to png
+                                var canvas = subCanvas.node();
+                                var canvasPng = canvas.toDataURL('image/png');
+                                // create points image
+                                var canvasImg = new Image();
+                                canvasImg.width = width;
+                                canvasImg.height = height;
+                                canvasImg.src = canvasPng;
+                                // create original image (from the svg)
+                                var originalImg = new Image();
+                                originalImg.width = width;
+                                originalImg.height = height;
+                                originalImg.src = originalPng;
+                                // combine the images
+                                var combinedCanvas = document.createElement('canvas');
+                                combinedCanvas.width = width;
+                                combinedCanvas.height = height;
+                                var context = combinedCanvas.getContext('2d');
+                                context.drawImage(originalImg, 0, 0);
+                                context.drawImage(canvasImg, 0, 0);
+                                var combinedPng = combinedCanvas.toDataURL('image/png');
+                                // add download behaviour
+                                var a = document.createElement('a');
+                                a.download = scope.filename || 'image.png';
+                                a.href = combinedPng;
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                            });
+
+                        pngExporter(d3.select(subSvg));
                     } else {
                         // We assume it is an SVG
                         var svg = container;
