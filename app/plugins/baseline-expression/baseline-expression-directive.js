@@ -15,15 +15,15 @@ angular.module('otPlugins')
 
                 $timeout(function () {
                     // Expression Atlas
-                    expressionAtlasHeatmapHighcharts.render({
-                        atlasUrl: 'https://www.ebi.ac.uk/gxa/',
-                        target: 'gxaWidget',
-                        query: {
-                            species: 'homo sapiens',
-                            gene: scope.target.symbol
-                        },
-                        disableGoogleAnalytics: true
-                    });
+                    // expressionAtlasHeatmapHighcharts.render({
+                    //     atlasUrl: 'https://www.ebi.ac.uk/gxa/',
+                    //     target: 'gxaWidget',
+                    //     query: {
+                    //         species: 'homo sapiens',
+                    //         gene: scope.target.symbol
+                    //     },
+                    //     disableGoogleAnalytics: true
+                    // });
 
                     // GTEx
                     var url = '/proxy/www.gtexportal.org/rest/v1/dataset/expression?gene_id=' + target + '&boxplot=true';
