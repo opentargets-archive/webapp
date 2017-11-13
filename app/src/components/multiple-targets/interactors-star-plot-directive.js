@@ -64,8 +64,7 @@ angular.module('otDirectives')
                 // The PNG export routine
                 if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
-                        var svg = document.getElementById('interactionsViewerMultipleTargets').querySelector('svg');
-                        return svg;
+                        return document.getElementById('interactionsViewerMultipleTargets').querySelector('div');
                     };
                 }
 
