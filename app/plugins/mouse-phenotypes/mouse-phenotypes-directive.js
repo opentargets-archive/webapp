@@ -11,7 +11,7 @@ angular.module('otPlugins')
                         p.genotype_phenotype.forEach(function (g) {
                             var row = [];
                             // Mouse gene
-                            row.push(d.mouse_gene_symbol);
+                            row.push('<a target="_blank" href="http://www.informatics.jax.org/marker/' + d.mouse_gene_id + '">' + d.mouse_gene_symbol + '</a>');
 
                             // Phenotype category
                             row.push(p.category_mp_label);
@@ -26,13 +26,20 @@ angular.module('otPlugins')
                             row.push(g.subject_background);
 
                             // References
-                            row.push(g.pmid);
+                            if (g.pmid) {
+                                row.push(otUtils.getPublicationsString(g.pmid.split(',')));
+                            } else {
+                                row.push('N/A');
+                            }
+
+                            // hidden columns for filtering
+                            row.push(d.mouse_gene_symbol); // variant
 
                             newData.push(row);
                         })
                     } else {
                         var row = [];
-                        row.push(d.mouse_gene_symbol);
+                        row.push('<a target="_blank" href="http://www.informatics.jax.org/marker/' + d.mouse_gene_id + '">' + d.mouse_gene_symbol + '</a>');
 
                         // Phenotype category
                         row.push(p.category_mp_label);
@@ -42,6 +49,9 @@ angular.module('otPlugins')
                         row.push('N/A');
                         row.push('N/A');
                         row.push('N/A');
+
+                        // hidden columns for filtering
+                        row.push(d.mouse_gene_symbol); // variant
                         newData.push(row);
                     }
                 });
@@ -61,7 +71,7 @@ angular.module('otPlugins')
             link: function (scope, elem) {
                 var data = formatPhenotypesToArray(scope.target.mouse_phenotypes);
 
-                var dropdownColumns = [0,1,2,3,4,5];
+                var dropdownColumns = [0,1];
                 $timeout(function () {
                     var table = elem[0].getElementsByTagName('table');
                     $(table).dataTable(otUtils.setTableToolsParams({
@@ -69,6 +79,14 @@ angular.module('otPlugins')
                         'autoWith': false,
                         'paging': true,
                         'order': [[0, 'asc']],
+                        'columnDefs': [
+                            {
+                                'targets': [0],
+                                'mRender': otColumnFilter.mRenderGenerator(6),
+                                'mData': otColumnFilter.mDataGenerator(0, 6)
+                            }
+                        ],
+
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }))
                 }, 0);
