@@ -185,6 +185,13 @@
         },
 
         {
+            "name" : "mousePhenotypes",
+            "element": "ot-mouse-phenotypes",
+            "heading": "Mouse phenotypes",
+            "track": true
+        },
+
+        {
             "name": "genomeBrowser",
             "element": "ot-genome-browser",
             "heading": "Variants, isoforms and genomic context",

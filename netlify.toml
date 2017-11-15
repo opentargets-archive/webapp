@@ -34,3 +34,6 @@
 
 [context.master.environment]
   APIHOST = "https://open-targets-eu-dev.appspot.com/"
+
+[context.mouse-phenotypes.environment]
+  APIHOST = "https://yapsy-dot-open-targets-eu-dev.appspot.com/"
