@@ -120,8 +120,35 @@
             color: #777;
         }
 
+        tfoot>tr.filter-row>th {
+            padding-left: 2px;
+            padding-right: 2px;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
         ul {
             padding-left: 15px;
+        }
+
+        button.column-filter {
+            background-color: $clr-ui-foreground;
+            color: white;
+            padding-top: 1px;
+            padding-bottom: 1px;
+            padding-left: 5px;
+            padding-right: 5px;
+            border: none;
+            width: 100%;
+            table-layout: fixed;
+            display: table;
+            span.filter-label {
+                display: table-cell;
+                white-space: normal;
+            }
+            span.fa {
+                line-height: inherit;
+            }
         }
 
     }
