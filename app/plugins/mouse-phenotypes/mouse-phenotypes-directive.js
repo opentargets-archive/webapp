@@ -20,7 +20,7 @@ angular.module('otPlugins')
                             row.push(g.mp_label);
 
                             // Allelic composition
-                            row.push(g.subject_allelic_composition);
+                            row.push(otUtils.allelicComposition2Html(g.subject_allelic_composition));
 
                             // Genetic background
                             row.push(g.subject_background);
@@ -76,14 +76,23 @@ angular.module('otPlugins')
                     var table = elem[0].getElementsByTagName('table');
                     $(table).dataTable(otUtils.setTableToolsParams({
                         'data': data,
-                        'autoWith': false,
+                        'autoWidth': false,
                         'paging': true,
                         'order': [[0, 'asc']],
                         'columnDefs': [
                             {
                                 'targets': [0],
                                 'mRender': otColumnFilter.mRenderGenerator(6),
-                                'mData': otColumnFilter.mDataGenerator(0, 6)
+                                'mData': otColumnFilter.mDataGenerator(0, 6),
+                                'width': '8%'
+                            },
+                            {
+                                'targets': [2, 3, 4],
+                                'width': '23%'
+                            },
+                            {
+                                'targets': [1],
+                                'width': '12%'
                             }
                         ],
 
@@ -93,3 +102,23 @@ angular.module('otPlugins')
             }
         };
     }]);
+
+    // 'columnDefs': [
+    //     {
+    //         'targets': [0],    // the access-level (public/private icon)
+    //         'visible': otConfig.show_access_level,
+    //         'width': '3%'
+    //     },
+    //     {
+    //         'targets': [6],    // score
+    //         'visible': false
+    //     },
+    //     {
+    //         'targets': [2, 3, 4],
+    //         'width': '20%'
+    //     },
+    //     {
+    //         'targets': [5],
+    //         'width': '10%'
+    //     }
+    // ],
