@@ -1,92 +1,92 @@
 <div class="col-sm-12 col-md-8 col-md-offset-2">
-  <div class="col-sm-12 form-group">
-    <div class="col-sm-11">
-      Group by 
-      <div class="btn-group">
-        <label class="btn btn-default btn-sm" ng-model="groupByRadioModel" uib-btn-radio="'organs'" ng-click="parents = organs">Organs</label>
-        <label class="btn btn-default btn-sm" ng-model="groupByRadioModel" uib-btn-radio="'anatomicalSystems'" ng-click="parents = anatomicalSystems">Anatomical Systems</label>
+    <div class="col-sm-12 form-group">
+      <div class="col-sm-11">
+        Group by 
+        <div class="btn-group">
+          <label class="btn btn-default btn-sm" ng-model="groupByRadioModel" uib-btn-radio="'organs'" ng-click="parents = organs">Organs</label>
+          <label class="btn btn-default btn-sm" ng-model="groupByRadioModel" uib-btn-radio="'anatomicalSystems'" ng-click="parents = anatomicalSystems">Anatomical Systems</label>
+        </div>
+      </div>
+      <div class="col-sm-1 pull-right">
+        <div class="btn-group">
+          <button class="btn btn-default btn-sm" ng-click="download()">
+            <span class="panel-icon-lg fa fa-download"></span>
+          </button>
+        </div>
       </div>
     </div>
-    <div class="col-sm-1 pull-right">
-      <div class="btn-group">
-        <button class="btn btn-default btn-sm" ng-click="download()">
-          <span class="panel-icon-lg fa fa-download"></span>
-        </button>
-      </div>
-    </div>
+  <div class="col-sm-12">
+    <table class="table">
+      <thead>
+        <tr class="expression-row-header">
+          <th class="text-center col-xs-4" ng-click="sortByLabel()" style="cursor: pointer;">
+            Tissue
+            <i class="fa fa-sort-desc"
+               ng-class="{'ot-sort-active': (orderByRadioModel === 'az')}"></i>
+          </th>
+          <th class="text-center col-xs-4" ng-click="sortByRna()" style="cursor: pointer;">
+            RNA
+            <i class="fa fa-sort-desc"
+               ng-class="{'ot-sort-active': (orderByRadioModel === 'rna')}"></i>
+          </th>
+          <th class="text-center col-xs-4" ng-click="sortByProtein()" style="cursor: pointer;">
+            Protein
+            <i class="fa fa-sort-desc"
+               ng-class="{'ot-sort-active': (orderByRadioModel === 'protein')}"></i>
+          </th>
+        </tr>
+        <tr class="expression-row-low-high">
+          <td class="col-xs-4"></td>
+          <td class="col-xs-4"><span>High</span><span class="pull-right">Low</span></td>
+          <td class="col-xs-4"><span>Low</span><span class="pull-right">High</span></td>
+        </tr>
+      </thead>
+      <tbody ng-repeat-start="parent in parents" class="expression-row-group-parent">
+        <tr class="expression-row-parent"
+            ng-class="{'expression-row-parent__expanded': parent.expanded}"
+            style="cursor: pointer;"
+            ng-click="parent.expanded = !parent.expanded">
+          <td class="expression-cell-label">
+            <span class="bold">{{ parent.label | otUpperCaseFirst }}</span>
+          </td>
+          <td class="expression-cell-rna">
+            <div class="expression-bar-container">
+              <div ng-if="parent.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(parent) }}" ng-style="{'width': rnaLevelToPercent(parent) + '%'}"></div>
+              <div ng-if="parent.rna.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
+            </div>
+          </td>
+          <td class="expression-cell-protein">
+            <div class="expression-bar-container">
+              <div ng-if="parent.protein.level >= 0" class="expression-bar" title="{{ proteinLevelToHint(parent.protein.level) }}" ng-style="{'width': proteinLevelToPercent(parent.protein.level) + '%'}"></div>
+              <div ng-if="parent.protein.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody class="expression-row-group-tissues" ng-show="parent.expanded">
+        <tr ng-repeat="tissue in parent.children track by $index" class="expression-row-tissue">
+          <td class="expression-cell-label">{{ tissue.label | otUpperCaseFirst }}</td>
+          <td class="expression-cell-rna">
+            <div class="expression-bar-container">
+              <div ng-if="tissue.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(tissue) }}" ng-style="{'width': rnaLevelToPercent(tissue) + '%'}"></div>
+              <div ng-if="tissue.rna.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
+            </div>
+          </td>
+          <td class="expression-cell-protein">
+            <div class="expression-bar-container">
+              <div ng-if="tissue.protein.level >= 0" class="expression-bar" title="{{ proteinLevelToHint(tissue.protein.level) }}" ng-style="{'width': proteinLevelToPercent(tissue.protein.level) + '%'}"></div>
+              <div ng-if="tissue.protein.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody ng-repeat-end ng-show="false" class="expression-row-group-ignore">
+        <tr>
+          <td>IGNORE ME!</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-<div class="col-sm-12">
-  <table class="table">
-    <thead>
-      <tr class="expression-row-header">
-        <th class="text-center col-xs-4" ng-click="sortByLabel()" style="cursor: pointer;">
-          Tissue
-          <i class="fa fa-sort-desc"
-             ng-class="{'ot-sort-active': (orderByRadioModel === 'az')}"></i>
-        </th>
-        <th class="text-center col-xs-4" ng-click="sortByRna()" style="cursor: pointer;">
-          RNA
-          <i class="fa fa-sort-desc"
-             ng-class="{'ot-sort-active': (orderByRadioModel === 'rna')}"></i>
-        </th>
-        <th class="text-center col-xs-4" ng-click="sortByProtein()" style="cursor: pointer;">
-          Protein
-          <i class="fa fa-sort-desc"
-             ng-class="{'ot-sort-active': (orderByRadioModel === 'protein')}"></i>
-        </th>
-      </tr>
-      <tr class="expression-row-low-high">
-        <td class="col-xs-4"></td>
-        <td class="col-xs-4"><span>High</span><span class="pull-right">Low</span></td>
-        <td class="col-xs-4"><span>Low</span><span class="pull-right">High</span></td>
-      </tr>
-    </thead>
-    <tbody ng-repeat-start="parent in parents" class="expression-row-group-parent">
-      <tr class="expression-row-parent"
-          ng-class="{'expression-row-parent__expanded': parent.expanded}"
-          style="cursor: pointer;"
-          ng-click="parent.expanded = !parent.expanded">
-        <td class="expression-cell-label">
-          <span class="bold">{{ parent.label | otUpperCaseFirst }}</span>
-        </td>
-        <td class="expression-cell-rna">
-          <div class="expression-bar-container">
-            <div ng-if="parent.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(parent) }}" style="width:{{ rnaLevelToPercent(parent) }}%;"></div>
-            <div ng-if="parent.rna.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
-          </div>
-        </td>
-        <td class="expression-cell-protein">
-          <div class="expression-bar-container">
-            <div ng-if="parent.protein.level >= 0" class="expression-bar" title="{{ proteinLevelToHint(parent.protein.level) }}" style="width:{{ proteinLevelToPercent(parent.protein.level) }}%;"></div>
-            <div ng-if="parent.protein.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-    <tbody class="expression-row-group-tissues" ng-show="parent.expanded">
-      <tr ng-repeat="tissue in parent.children track by $index" class="expression-row-tissue">
-        <td class="expression-cell-label">{{ tissue.label | otUpperCaseFirst }}</td>
-        <td class="expression-cell-rna">
-          <div class="expression-bar-container">
-            <div ng-if="tissue.rna.level >= 0" class="expression-bar pull-right" title="{{ rnaLevelToHint(tissue) }}" style="width:{{ rnaLevelToPercent(tissue) }}%;"></div>
-            <div ng-if="tissue.rna.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
-          </div>
-        </td>
-        <td class="expression-cell-protein">
-          <div class="expression-bar-container">
-            <div ng-if="tissue.protein.level >= 0" class="expression-bar" title="{{ proteinLevelToHint(tissue.protein.level) }}" style="width:{{ proteinLevelToPercent(tissue.protein.level) }}%;"></div>
-            <div ng-if="tissue.protein.level === -1" class="text-center" title="No experimental data"><span>N/A</span></div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-    <tbody ng-repeat-end ng-show="false" class="expression-row-group-ignore">
-      <tr>
-        <td>IGNORE ME!</td>
-        <td></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-</div>
+  </div>
