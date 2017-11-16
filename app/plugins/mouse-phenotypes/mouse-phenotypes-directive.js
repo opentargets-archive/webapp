@@ -20,7 +20,13 @@ angular.module('otPlugins')
                             row.push(g.mp_label);
 
                             // Allelic composition
-                            row.push(otUtils.allelicComposition2Html(g.subject_allelic_composition));
+                            row.push(
+                                g.subject_allelic_composition.split(',')
+                                    .map(function (allele) {
+                                        return otUtils.allelicComposition2Html(allele);
+                                    })
+                                    .join('<br />')
+                            );
 
                             // Genetic background
                             row.push(g.subject_background);
@@ -88,11 +94,11 @@ angular.module('otPlugins')
                             },
                             {
                                 'targets': [2, 3, 4],
-                                'width': '23%'
+                                'width': '22%'
                             },
                             {
                                 'targets': [1],
-                                'width': '12%'
+                                'width': '15%'
                             }
                         ],
 
