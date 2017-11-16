@@ -184,12 +184,12 @@
             "track": true
         },
 
-        {
-            "name" : "mousePhenotypes",
-            "element": "ot-mouse-phenotypes",
-            "heading": "Mouse phenotypes",
-            "track": true
-        },
+//        {
+//            "name" : "mousePhenotypes",
+//            "element": "ot-mouse-phenotypes",
+//            "heading": "Mouse phenotypes",
+//            "track": true
+//        },
 
         {
             "name": "genomeBrowser",
