@@ -430,5 +430,12 @@ angular.module('otServices')
         };
 
 
+        /**
+         * 
+         */
+        otUtilsService.allelicComposition2Html = function (allele) {
+            return allele.replace(/<(.*?)>/g, function (match) { return '<sup>' + match.substr(1, match.length - 2) + '</sup>'; });
+        }
+
         return otUtilsService;
     }]);

@@ -25,8 +25,8 @@
     //border: none;
     //color: $secondary-color;
 
-    border: 1px solid #ccc;
-    border-left: none;
+    border: 1px solid #ccc !important; // use !important to avoid being overridden by gxa plugin
+    border-left: none !important;
     color: #1e5799;
 }
 

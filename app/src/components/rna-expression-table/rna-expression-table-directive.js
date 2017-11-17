@@ -7,7 +7,7 @@
 angular.module('otDirectives')
 
     /* Directive to display the rna expression data table */
-    .directive('otRnaExpressionTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log) {
+    .directive('otRnaExpressionTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log) {
         'use strict';
         // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -137,6 +137,10 @@ angular.module('otDirectives')
                             // Publication ids (hidden)
                             row.push(pmidsList.join(', '));
 
+                            // hidden columns for filtering
+                            row.push(activity); // activity
+                            row.push(item.evidence.experiment_overview || 'Experiment overview and raw data') // experiment overview + data
+
                             newdata.push(row); // push, so we don't end up with empty rows
                         } catch (e) {
                             scope.ext.hasError = true;
@@ -148,6 +152,7 @@ angular.module('otDirectives')
                     return newdata;
                 }
 
+                var dropdownColumns = [1, 2, 3, 4, 5, 9];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
@@ -171,7 +176,7 @@ angular.module('otDirectives')
                                 'width': '6%'
                             },
                             {
-                                'targets': [9, 10],
+                                'targets': [10],
                                 'width': '12%'
                             },
                             {
@@ -179,10 +184,23 @@ angular.module('otDirectives')
                                 'width': '13%'
                             },
                             {
-                                'targets': [3, 4],
+                                'targets': [4],
                                 'width': '10%'
+                            },
+                            {
+                                'targets': [3],
+                                'width': '10%',
+                                'mRender': otColumnFilter.mRenderGenerator(12),
+                                'mData': otColumnFilter.mDataGenerator(3, 12)
+                            },
+                            {
+                                'targets': [9],
+                                'width': '12%',
+                                'mRender': otColumnFilter.mRenderGenerator(13),
+                                'mData': otColumnFilter.mDataGenerator(9, 13)
                             }
-                        ]
+                        ],
+                        initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, (scope.title ? scope.title + '-' : '') + '-RNA_expression'));
                 }
             }
