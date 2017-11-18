@@ -295,27 +295,28 @@ ot-related-targets-vis, ot-related-diseases-vis {
         display: inline-block;
         padding: .2em .6em .3em;
         margin-top:5px;
-        font-size: 75%;
-        font-weight: 500;
-        line-height: 1;
-        text-align: center;
+        // font-size: 75%;
+        // font-weight: 500;
+        // line-height: 1;
+        // text-align: center;
         white-space: nowrap;
-        vertical-align: baseline;
+        // vertical-align: baseline;
         @include border-radius( 1.5em );
         &.drug-list {
             background-color: #e0ebeb;
         }
         &.target-list {
-            background-color: $clr-primary;
-            color: #FFFFFF;
+            // background-color: $clr-primary;
+            background-color: #d9e4ea;
+            // color: #FFFFFF;
         }
         &.target-list:hover {
             background-color: $clr-primary-hover;
             color: #FFFFFF;
         }
         &.disease-list {
-            background-color: $clr-warning;
-            color: #FFFFFF;
+            // background-color: $clr-warning;
+            background-color: #ece8e1;
         }
         &.disease-list:hover {
             background-color: $clr-warning-hover;

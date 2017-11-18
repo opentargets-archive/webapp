@@ -32,17 +32,33 @@ angular.module('otDirectives')
                     }
 
                     var promise = $q(function (res) {
-                        res(scope.drug);
+                       res(scope.drug);
                     });
+
                     if (scope.drug.indexOf('CHEMBL') !== 0) {
-                        promise = $http.get('https://www.ebi.ac.uk/chembl/api/data/chembl_id_lookup/search?q=' + scope.drug)
-                            .then(function (resp) {
-                                return resp.data.chembl_id_lookups[0].chembl_id;
-                            })
+                        // the chembl_id_lookup endpoint seems to be case dependent.
+                        // We try both uppercase and lowercase and use the one with info
+                        var promiseUc = $http.get('/proxy/www.ebi.ac.uk/chembl/api/data/chembl_id_lookup/search?q=' + scope.drug.toUpperCase());
+                        var promiseLc = $http.get('/proxy/www.ebi.ac.uk/chembl/api/data/chembl_id_lookup/search?q=' + scope.drug.toLowerCase());
+
+                        promise = $q.all([promiseUc, promiseLc])
+                            .then (function (resps) {
+                                var chemblId;
+                                resps.forEach(function (resp) {
+                                    if (resp.data.chembl_id_lookups && resp.data.chembl_id_lookups.length) {
+                                        chemblId = resp.data.chembl_id_lookups[0].chembl_id;
+                                    }
+                                });
+                                return chemblId;
+                            });
                     }
 
                     promise.then(function (drugId) {
                         scope.drugId = drugId;
+                        if (!drugId) {
+                            scope.noDrug = true;
+                            return;
+                        }
 
                         // Get the mechanism of action...
                         $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule_form/' + drugId)
@@ -67,30 +83,61 @@ angular.module('otDirectives')
                                                 var mec = mecs[j].mechanism_of_action;
                                                 var target = mecs[j].target_chembl_id;
                                                 var refs = mecs[j].mechanism_refs;
-                                                $http.get('https://www.ebi.ac.uk/chembl/api/data/target?target_chembl_id=' + target)
-                                                    .then(function (resp) {
-                                                        var targetNames = [];
-                                                        for (var i = 0; i < resp.data.targets.length; i++) {
-                                                            var target = resp.data.targets[i];
-                                                            var uniqSyns = {};
-                                                            for (var j = 0; j < target.target_components.length; j++) {
-                                                                var component = target.target_components[j];
-                                                                for (var k = 0; k < component.target_component_synonyms.length; k++) {
-                                                                    var synonym = component.target_component_synonyms[k];
-                                                                    if (synonym.syn_type === 'GENE_SYMBOL') {
-                                                                        uniqSyns[synonym.component_synonym] = true;
+                                                (function (mec, refs) { // make sure mec and refs are passed to the closure and are not mutated while making the calls
+                                                    $http.get('https://www.ebi.ac.uk/chembl/api/data/target?target_chembl_id=' + target)
+                                                        .then(function (resp) {
+                                                            var targetNames = [];
+                                                            for (var i = 0; i < resp.data.targets.length; i++) {
+                                                                var target = resp.data.targets[i];
+                                                                var uniqSyns = {};
+                                                                for (var j = 0; j < target.target_components.length; j++) {
+                                                                    var component = target.target_components[j];
+                                                                    for (var k = 0; k < component.target_component_synonyms.length; k++) {
+                                                                        var synonym = component.target_component_synonyms[k];
+                                                                        if (synonym.syn_type === 'GENE_SYMBOL') {
+                                                                            uniqSyns[synonym.component_synonym.trim()] = {};
+                                                                        }
                                                                     }
                                                                 }
+                                                                // Try to find the synonyms in ot
+                                                                var opts = {
+                                                                    q: Object.keys(uniqSyns),
+                                                                    filter: 'target'
+                                                                };
+
+                                                                var queryObject = {
+                                                                    method: 'POST',
+                                                                    params: opts
+                                                                };
+                                                                (function (uniqSyns, target) { // make sure uniqSyns and target and passed to the closure and don't mutate
+                                                                    otApi.getBestHitSearch(queryObject)
+                                                                        .then (function (resp) {
+                                                                            var uniqSynsArr = Object.keys(uniqSyns).map(function(s) {
+                                                                                return {
+                                                                                    synonym: s
+                                                                                };
+                                                                            });
+                                                                            for (var i = 0; i < resp.body.data.length; i++) {
+                                                                                var q = resp.body.data[i];
+                                                                                if (q.id) {
+                                                                                    uniqSynsArr[i].ensId = q.id
+                                                                                }
+                                                                            }
+                                                                            return uniqSynsArr;
+                                                                        })
+                                                                        .then (function (uniqSynsArr) {
+                                                                            targetNames.push(target.pref_name);
+                                                                            allMecs.push({
+                                                                                mechanism: mec,
+                                                                                targets: targetNames.join(', '),
+                                                                                synonyms: uniqSynsArr,
+                                                                                refs: refs
+                                                                            });
+                                                                        });
+                                                                })(uniqSyns, target);
                                                             }
-                                                            targetNames.push(target.pref_name);
-                                                            allMecs.push({
-                                                                mechanism: mec,
-                                                                targets: targetNames.join(', '),
-                                                                synonyms: Object.keys(uniqSyns).join(', '),
-                                                                refs: refs
-                                                            });
-                                                        }
-                                                    });
+                                                        });
+                                                })(mec, refs);
                                             }
                                         }
                                     });
@@ -121,6 +168,9 @@ angular.module('otDirectives')
 
                     })
                         .then(function (drugName) {
+                            if (!drugName) {
+                                return;
+                            }
                             // Make a new call to OT search with this drug name only for targets...
                             otApi.getSearch({
                                 method: 'GET',
@@ -139,6 +189,9 @@ angular.module('otDirectives')
                                     }).sort(function (a, b) {
                                         return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0;
                                     });
+                                    if (scope.targets.length > 1) {
+                                        scope.batchSearchTargets = otUtils.compressTargetIds(scope.targets.map(function (d) { return d.id })).join(',');
+                                    }
                                 });
 
                             // Same for diseases...
