@@ -437,7 +437,7 @@ body{
 
     position: fixed;
     top: 50%;
-    margin-top: -30px;
+    margin-top: -60px;
     left: 100%;
     z-index: 10000;
     min-height: 30px;
@@ -469,6 +469,36 @@ body{
 }
 
 
+/*
+ *
+ */
+.ot-signup-button {
+    position: fixed;
+    top: 50%;
+    border-right: 1px solid #fff;
+    margin-top: 12px;
+    left: 100%;
+    z-index: 10001;
+    min-height: 30px;
+    @include transform-origin( left 30px );
+    @include transform( rotate(-90deg) );
+    overflow: hidden;
+    box-shadow: 0px 0px 6px 1px rgba(0,0,0,.2);
+    cursor: pointer;
+    
+    div {
+        color: #FFF;
+        background: $clr-success;
+        padding: 7px 12px 5px 12px;
+        font-size: 14px;
+        font-weight: 400;
+    }
+}
+
+.ot-signup-button-round {
+    @include border-top-left-radius( 5px );
+}
+
 
 /*
  * Container for the social media icons / follow us thingy
@@ -477,7 +507,7 @@ body{
     position: fixed;
     top: 50%;
     border-top: 1px solid #fff;
-    z-index: 10001;
+    z-index: 10002;
     right: 0;
     @include border-bottom-left-radius( 5px );
     overflow: hidden;
@@ -485,6 +515,8 @@ body{
 
     width: 30px;
     min-height: 90px;
+
+    margin-top: 40px;
 
     cursor: pointer;
 
