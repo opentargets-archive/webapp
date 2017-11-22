@@ -1,0 +1,80 @@
+<!-- WORKING OPTION 2 -->
+<div ng-controller="SignupFormController">
+        <ot-modal header="Subscribe to our mailing list" on-ok="mySubmit()" has-ok="true" ok-label="Subscribe" has-cancel="true" cancel-label="No, thanks">
+            <div class="modal-body">
+                <div id="mc_embed_signup">
+                    <form action="https://opentargets.us17.list-manage.com/subscribe/post?u=d11d0467053c1d4b918eb8738&amp;id=aa83c5e27a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="" target="_blank" novalidate>
+                        <div id="mc_embed_signup_scroll">
+        
+                        <div class="pull-right">* indicates required</div>
+                        
+                        <div class="form-group">
+                            <label for="mce-EMAIL">Email Address *</label>
+                            <input type="email" value="" name="EMAIL" class="form-control" id="mce-EMAIL">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mce-FNAME">First Name </label>
+                            <input type="text" value="" name="FNAME" class="form-control" id="mce-FNAME">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mce-LNAME">Last Name </label>
+                            <input type="text" value="" name="LNAME" class="form-control" id="mce-LNAME">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mce-FEEDBACK">Your comment</label> 
+                            <!-- <input type="text" value="" name="FEEDBACK" class="form-control" id="mce-FEEDBACK"> -->
+                            <textarea name="FEEDBACK" id="mce-FEEDBACK" rows="10" cols="50" style="width:100%;"></textarea>
+                        </div>
+                        
+                        <div id="mce-responses" class="clear">
+                            <div class="response" id="mce-error-response" style="display:none"></div>
+                            <div class="response" id="mce-success-response" style="display:none"></div>
+                        </div>
+        
+        
+                        <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_d11d0467053c1d4b918eb8738_aa83c5e27a" tabindex="-1" value=""></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </ot-modal>
+        </div>
+        
+        
+        
+        
+        
+        <!-- <ot-modal header="Subscribe!" on-ok="test()" has-ok="true" ok-label="test" has-cancel="true"></ot-modal>
+            <form name="MailchimpSubscriptionForm" ng-controller="MailchimpSubscriptionCtrl">
+                <div ng-hide="mailchimp.result === 'success'">
+                    <input class="hidden" type="hidden" ng-model="mailchimp.username" ng-init="mailchimp.username='username'">
+                    <input class="hidden" type="hidden" ng-model="mailchimp.dc" ng-init="mailchimp.dc='us1'">
+                    <input class="hidden" type="hidden" ng-model="mailchimp.u" ng-init="mailchimp.u='a1b2c3d4e5f6g7h8i9j0'">
+                    <input class="hidden" type="hidden" ng-model="mailchimp.id" ng-init="mailchimp.id='aabb12'">
+                    
+        
+        
+                    <input type="email" name="email" ng-model="mailchimp.EMAIL" placeholder="Email address" required>
+                    <button ng-disabled="MailchimpSubscriptionForm.$invalid" ng-click="addSubscription(mailchimp)">Join</button>
+                </div> -->
+        
+                <!-- Show error message if MailChimp unsuccessfully added the email to the list. -->
+                <!-- <div ng-show="mailchimp.result === 'error'" ng-cloak>
+                    <span ng-bind-html="mailchimp.errorMessage"></span>
+                </div> -->
+        
+                <!-- Show success message if MailChimp returned successfully. -->
+                <!-- <div ng-show="mailchimp.result === 'success'" ng-cloak>
+                    <span ng-bind-html="mailchimp.successMessage"></span>
+                </div> -->
+        
+            <!-- </form>
+        </ot-modal> -->
+        
+        
+        
+        <!-- <input type="text" name="fname" ng-model="mailchimp.FNAME" placeholder="First name">
+                    <input type="text" name="lname" ng-model="mailchimp.LNAME" placeholder="Last name"> -->

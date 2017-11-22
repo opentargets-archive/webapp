@@ -41,7 +41,20 @@ angular.module('otControllers')
                 .result.then(
                     function () {}, 
                     function (res) {}   // this is required with the new version of Angular, or every modal.close() triggers an error in the console
-                )
+                );
+        };
+
+        $scope.openFeedbackForm = function () {
+            $uibModal.open({
+                animation: true,
+                templateUrl: 'src/components/signup-form/feedback-form.html',
+                size: 'md',
+                scope: $scope
+            })
+                .result.then(
+                    function () {}, 
+                    function (res) {}   // this is required with the new version of Angular, or every modal.close() triggers an error in the console
+                );
         };
     }]);
 
