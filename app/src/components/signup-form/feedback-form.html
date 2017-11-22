@@ -1,6 +1,6 @@
 <!-- WORKING OPTION 2 -->
 <div ng-controller="SignupFormController">
-        <ot-modal header="Subscribe to our mailing list" on-ok="mySubmit()" has-ok="true" ok-label="Subscribe" has-cancel="true" cancel-label="No, thanks">
+        <ot-modal header="Send us your comments" on-ok="mySubmit()" has-ok="true" ok-label="Send" has-cancel="true">
             <div class="modal-body">
                 <div id="mc_embed_signup">
                     <form action="https://opentargets.us17.list-manage.com/subscribe/post?u=d11d0467053c1d4b918eb8738&amp;id=aa83c5e27a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="" target="_blank" novalidate>
@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <label for="mce-FEEDBACK">Your comment</label> 
                             <!-- <input type="text" value="" name="FEEDBACK" class="form-control" id="mce-FEEDBACK"> -->
-                            <textarea name="FEEDBACK" id="mce-FEEDBACK" rows="10" cols="50" style="width:100%;"></textarea>
+                            <textarea name="FEEDBACK" id="mce-FEEDBACK" rows="10" cols="50" style="width:100%; resize: none"></textarea>
                         </div>
                         
                         <div id="mce-responses" class="clear">
