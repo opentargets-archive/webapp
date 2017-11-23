@@ -40,6 +40,9 @@
                 <uib-accordion close-others="false">
                     <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
                         <uib-accordion-heading>
+                            <div style="position:relative" ng-show="section.new">
+                                <div class="ot-section-new"><span>New</span></div>
+                            </div>
                             <span ng-click='section.currentVisibility = !section.currentVisibility'>{{section.heading}}</span>
                         </uib-accordion-heading>
                         <ot-plugin-loader target="target" plugin="section.element" visible="{{section.currentVisibility}}" dependencies="section.dependencies" page="target" track="section.track" label="section.name" class="scroll-table-panel"></ot-plugin-loader>
