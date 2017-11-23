@@ -6601,7 +6601,17 @@ tnt.ensembl@0.0.13:
     httpplease-promises "^0.3.0"
     tnt.api "0.0.1"
 
-tnt.genome@0.1.7, tnt.genome@^0.1.7:
+tnt.genome@0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/tnt.genome/-/tnt.genome-0.1.9.tgz#4d5745be4bda1a42dfd6e1838d7a7bb304e1128c"
+  dependencies:
+    es6-promise "^3.0.2"
+    tnt.api "^0.1.1"
+    tnt.board "^0.1.9"
+    tnt.rest "^0.1.1"
+    tnt.utils "^0.1.0"
+
+tnt.genome@^0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/tnt.genome/-/tnt.genome-0.1.7.tgz#6e84890898a53d996d50ba159fa458e98eb0c94a"
   dependencies:

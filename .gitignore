@@ -1,3 +1,5 @@
+rate_limit.csv
+bin/
 app/config/**/custom.json
 .vscode
 **/*~
