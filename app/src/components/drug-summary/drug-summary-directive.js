@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('otDrugSummary', ['$http', '$q', function ($http, $q) {
+    .directive('otDrugSummary', ['$http', '$q', 'otApi', function ($http, $q, otApi) {
         'use strict';
 
         function pngToDataUrl (url, callback, outputFormat) {
@@ -51,6 +51,40 @@ angular.module('otDirectives')
                                     img.setAttribute('src', base64Img);
                                 });
                             }
+                            return scope.displayName;
+                        })
+                        .then(function (drugName) {
+                            return $http.get('https://api.fda.gov/drug/event.json?search=patient.drug.medicinalproduct:' + drugName + '&count=patient.reaction.reactionmeddrapt.exact')
+                                .then(function (fdaResp) {
+                                    return fdaResp.data.results.slice(0, 20);
+                                });
+                        })
+                        .then (function (events20) {
+                            var eventNames = events20.map(function(e) {
+                                e.term = e.term.charAt(0).toUpperCase() + e.term.slice(1).toLowerCase();
+                                return e.term;
+                            });
+                            var opts = {
+                                q: eventNames,
+                                filter: 'disease',
+                                fields: ['efo_code', 'efo_label']
+                            };
+                            var queryObject = {
+                                method: 'POST',
+                                params: opts
+                            };
+
+                            return otApi.getBestHitSearch(queryObject)
+                                .then(function (resp) {
+                                    for (var i = 0; i < resp.body.data.length; i++) {
+                                        var rec = resp.body.data[i];
+                                        if (rec.data && rec.exact) {
+                                            events20[i].label = rec.data.efo_label;
+                                            events20[i].id = rec.data.efo_code;
+                                        }
+                                    }
+                                    scope.effects = events20;
+                                });
                         });
 
 
