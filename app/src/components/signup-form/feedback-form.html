@@ -1,9 +1,9 @@
 <!-- WORKING OPTION 2 -->
 <div ng-controller="SignupFormController">
-        <ot-modal header="Send us your comments" on-ok="mySubmit()" has-ok="true" ok-label="Send" has-cancel="true">
+        <ot-modal header="Send us your comments" on-ok="ajaxSubmit()" has-ok="true" ok-label="Send" has-cancel="true">
             <div class="modal-body">
                 <div id="mc_embed_signup">
-                    <form action="https://opentargets.us17.list-manage.com/subscribe/post?u=d11d0467053c1d4b918eb8738&amp;id=aa83c5e27a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="" target="_blank" novalidate>
+                    <!-- <form action="https://opentargets.us17.list-manage.com/subscribe/post?u=d11d0467053c1d4b918eb8738&amp;id=aa83c5e27a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="" target="_blank" novalidate>
                         <div id="mc_embed_signup_scroll">
         
                         <div class="pull-right">* indicates required</div>
@@ -24,8 +24,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="mce-FEEDBACK">Your comment</label> 
-                            <!-- <input type="text" value="" name="FEEDBACK" class="form-control" id="mce-FEEDBACK"> -->
+                            <label for="mce-FEEDBACK">Your comment</label>
                             <textarea name="FEEDBACK" id="mce-FEEDBACK" rows="10" cols="50" style="width:100%; resize: none"></textarea>
                         </div>
                         
@@ -36,6 +35,41 @@
         
         
                         <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_d11d0467053c1d4b918eb8738_aa83c5e27a" tabindex="-1" value=""></div>
+                        </div>
+                    </form> -->
+
+                    <form id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form">
+                        <div id="mc_embed_signup_scroll">
+        
+                            <div class="pull-right">* indicates required</div>
+                            
+                            <div class="form-group">
+                                <label for="mce-EMAIL">Email Address *</label>
+                                <input type="email" value="" name="EMAIL" class="form-control" id="mce-EMAIL">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="mce-FNAME">First Name </label>
+                                <input type="text" value="" name="FNAME" class="form-control" id="mce-FNAME">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="mce-LNAME">Last Name </label>
+                                <input type="text" value="" name="LNAME" class="form-control" id="mce-LNAME">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="mce-FEEDBACK">Your comment</label>
+                                <textarea name="FEEDBACK" id="mce-FEEDBACK" rows="10" cols="50" style="width:100%; resize: none" class="form-control"></textarea>
+                            </div>
+                            
+                            <div id="mce-responses" class="clear">
+                                <div class="response" id="mce-error-response" style="display:none"></div>
+                                <div class="response" id="mce-success-response" style="display:none"></div>
+                            </div>
+            
+            
+                            <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_d11d0467053c1d4b918eb8738_aa83c5e27a" tabindex="-1" value=""></div>
                         </div>
                     </form>
                 </div>
