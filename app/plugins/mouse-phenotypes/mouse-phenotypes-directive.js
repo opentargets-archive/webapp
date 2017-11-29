@@ -25,8 +25,7 @@ angular.module('otPlugins')
                                         .map(function (allele) {
                                             return otUtils.allelicComposition2Html(allele);
                                         })
-                                        .join('<br />') +
-                                    'bob'
+                                        .join('<br />')
                                 );
 
                                 // Genetic background
