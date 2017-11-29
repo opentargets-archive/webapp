@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otMousePhenotypes', ['otColumnFilter', 'otUtils', '$timeout', function (otColumnFilter, otUtils, $timeout) {
+    .directive('otMousePhenotypes', ['otColumnFilter', 'otUtils', '$timeout', 'otConfig', function (otColumnFilter, otUtils, $timeout, otConfig) {
         'use strict';
 
         function formatPhenotypesToArray (data) {
@@ -26,10 +26,12 @@ angular.module('otPlugins')
                                             return otUtils.allelicComposition2Html(allele);
                                         })
                                         .join('<br />')
+                                        +
+                                        '<div class="small text-lowlight">' + otUtils.allelicComposition2Html(g.subject_background) + '</div>'
                                 );
 
                                 // Genetic background
-                                row.push(g.subject_background);
+                                // row.push(g.subject_background);
 
                                 // References
                                 if (g.pmid) {
@@ -54,7 +56,7 @@ angular.module('otPlugins')
                             row.push('N/A');
                             row.push('N/A');
                             row.push('N/A');
-                            row.push('N/A');
+                            // row.push('N/A');
 
                             // hidden columns for filtering
                             row.push(d.mouse_gene_symbol); // variant
@@ -79,7 +81,19 @@ angular.module('otPlugins')
             link: function (scope, elem) {
                 var data = formatPhenotypesToArray(scope.target.mouse_phenotypes);
 
-                var dropdownColumns = [0,1];
+                scope.data = data;
+                scope.sources = otConfig.evidence_sources.animal_model.map(function (s) {
+                    // so here s is the datasource api 'key' (i.e. lowercase 'pathway')
+                    // now we need to find label and infoUrl from the otConsts.datasources object
+                    var ds = otUtils.getDatasourceById(s);
+
+                    return {
+                        label: ds.label, // otDictionary[dk[0]],
+                        url: ds.infoUrl // otConsts.dbs_info_url[otConsts.invert(s)]
+                    };
+                });
+
+                var dropdownColumns = [0, 1];
                 $timeout(function () {
                     var table = elem[0].getElementsByTagName('table');
                     $(table).dataTable(otUtils.setTableToolsParams({
@@ -90,17 +104,21 @@ angular.module('otPlugins')
                         'columnDefs': [
                             {
                                 'targets': [0],
-                                'mRender': otColumnFilter.mRenderGenerator(6),
-                                'mData': otColumnFilter.mDataGenerator(0, 6),
-                                'width': '8%'
+                                'mRender': otColumnFilter.mRenderGenerator(5),
+                                'mData': otColumnFilter.mDataGenerator(0, 5),
+                                'width': '14%'
                             },
+                            // {
+                            //     'targets': [2, 3, 4],
+                            //     'width': '22%'
+                            // },
+                            // {
+                            //     'targets': [1],
+                            //     'width': '15%'
+                            // }
                             {
-                                'targets': [2, 3, 4],
-                                'width': '22%'
-                            },
-                            {
-                                'targets': [1],
-                                'width': '15%'
+                                'targets': [1, 2, 3],
+                                'width': '24%'
                             }
                         ],
 
