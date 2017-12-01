@@ -20,7 +20,7 @@ angular.module('otPlugins')
                         target: 'gxaWidget',
                         query: {
                             species: 'homo sapiens',
-                            gene: scope.target.symbol
+                            geneQuery: scope.target.ensembl_gene_id
                         },
                         disableGoogleAnalytics: true
                     });
