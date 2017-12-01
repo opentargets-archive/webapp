@@ -83,9 +83,9 @@ angular.module('otDirectives')
                             // Show all previous lists
                             scope.lists = otLoadedLists.getAll();
                             scope.list = otLoadedLists.get(listName);
-                        // if (!scope.storeList) {
-                        //     otLoadedLists.remove(listName);
-                        // }
+                            // if (!scope.storeList) {
+                            //     otLoadedLists.remove(listName);
+                            // }
                         });
                 }
             }
