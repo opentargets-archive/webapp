@@ -208,13 +208,6 @@
             "track": true
         },
 
-//        {
-//            "name" : "mousePhenotypes",
-//            "element": "ot-mouse-phenotypes",
-//            "heading": "Mouse phenotypes",
-//            "track": true
-//        },
-
         {
             "name": "baselineExpression",
             "element": "ot-baseline-expression",
@@ -236,6 +229,15 @@
             },
             "track": true
         },
+
+        {
+            "name" : "mousePhenotypes",
+            "element": "ot-mouse-phenotypes",
+            "heading": "Mouse phenotypes",
+            "track": true,
+            "new": true
+        },
+
 
         {
             "name": "proteinStructure",
