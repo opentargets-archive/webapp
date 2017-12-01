@@ -79,6 +79,13 @@ angular.module('otPlugins')
                 width: '='
             },
             link: function (scope, elem) {
+                // TODO: targets without phenotypes are giving an empty array instead of an empty object:
+                // https://github.com/opentargets/data_pipeline/issues/221
+                if (!Object.keys(scope.target.mouse_phenotypes).length) {
+                    scope.noPhenotypes = true;
+                    return;
+                }
+
                 var data = formatPhenotypesToArray(scope.target.mouse_phenotypes);
 
                 scope.data = data;
