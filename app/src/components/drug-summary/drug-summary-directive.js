@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('otDrugSummary', ['$http', '$q', function ($http, $q) {
+    .directive('otDrugSummary', ['$http', '$q', 'otApi', function ($http, $q, otApi) {
         'use strict';
 
         function pngToDataUrl (url, callback, outputFormat) {
@@ -51,6 +51,7 @@ angular.module('otDirectives')
                                     img.setAttribute('src', base64Img);
                                 });
                             }
+                            return scope.displayName;
                         });
 
 

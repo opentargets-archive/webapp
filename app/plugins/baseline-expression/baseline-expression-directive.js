@@ -53,10 +53,8 @@ angular.module('otPlugins')
                     container.append('g')
                         .attr('transform', 'translate(0,-40)')
                         .append('text')
-                        .style({
-                            'font-size': '12px',
-                            'fill': '#555'
-                        })
+                        .style('font-size', '12px')
+                        .style('fill', '#666666')
                         .text('Normalised expression (RPKM)');
 
                     var valScale = d3.scale.linear()
