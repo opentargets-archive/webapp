@@ -10,6 +10,7 @@ angular.module('otPlugins')
                 'associations': '=',
                 'dependencies': '=',
                 'page': '=',
+                'action': '=',
                 'track': '=',
                 'label': '=',
                 'ext': '=?'     // optional object for external communication
@@ -42,7 +43,7 @@ angular.module('otPlugins')
                         }
 
                         if (scope.track) {
-                            $analytics.eventTrack('profile', {'category': attrs.page, 'label': scope.label});
+                            $analytics.eventTrack(attrs.action, {'category': attrs.page, 'label': scope.label});
                         }
 
                         // spinner

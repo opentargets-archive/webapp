@@ -290,19 +290,53 @@ ot-related-targets-vis, ot-related-diseases-vis {
         color: darkgrey;
     }
 
-    .ot-drug {
-        background-color: #e0ebeb;
-        display: inline;
+    .ot-pill-list {
+        /*padding-right: 10px;*/
+        display: inline-block;
         padding: .2em .6em .3em;
-        font-size: 75%;
-        font-weight: 500;
-        line-height: 1;
-        text-align: center;
+        margin-top:5px;
+        // font-size: 75%;
+        // font-weight: 500;
+        // line-height: 1;
+        // text-align: center;
         white-space: nowrap;
-        vertical-align: baseline;
+        // vertical-align: baseline;
         @include border-radius( 1.5em );
-        /*background: linear-gradient(90deg, #ffe5e5 50%, #f0f5f5 50%);*/
+        &.drug-list {
+            background-color: #e0ebeb;
+        }
+        &.target-list {
+            // background-color: $clr-primary;
+            background-color: #d9e4ea;
+            // color: #FFFFFF;
+        }
+        &.target-list:hover {
+            background-color: $clr-primary-hover;
+            color: #FFFFFF;
+        }
+        &.disease-list {
+            // background-color: $clr-warning;
+            background-color: #ece8e1;
+        }
+        &.disease-list:hover {
+            background-color: $clr-warning-hover;
+            color: #FFFFFF;
+        }
     }
+
+    //.ot-drug {
+    //    background-color: #e0ebeb;
+    //    display: inline;
+    //    padding: .2em .6em .3em;
+    //    font-size: 75%;
+    //    font-weight: 500;
+    //    line-height: 1;
+    //    text-align: center;
+    //    white-space: nowrap;
+    //    vertical-align: baseline;
+    //    @include border-radius( 1.5em );
+    //    /*background: linear-gradient(90deg, #ffe5e5 50%, #f0f5f5 50%);*/
+    //}
 
     //@mixin pricetag ($bg, $border) {
     //    white-space: nowrap;

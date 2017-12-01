@@ -38,10 +38,9 @@ angular.module('otDirectives')
 
         return {
             restrict: 'E',
-            template: '<div></div>',
+            template: '<div style="margin-left: 20px;" ng-show="noRelatedDiseases">No related diseases found</div>',
             scope: {
                 disease: '=',
-                related: '=',
                 width: '='
             },
             link: function (scope, element) {
@@ -64,12 +63,15 @@ angular.module('otDirectives')
                     .then(
                         // success
                         function (resp) {
-                            // var container = document.getElementById('ot-relations-plot');
-                            var container = element[0];
-                            createVis(container, resp.body.data, scope);
-
-                            // createRelationsTree(container, resp.body.data, scope);
-                            // createRelationsTree(container, resp.body.data, (scope.width / 2), scope.target.approved_symbol, scope.entities);
+                            if (resp.body.data.length) {
+                                var container = document.createElement('div');
+                                container.classList.add('col-md-offset-3');
+                                container.classList.add('col-md-6');
+                                element[0].appendChild(container);
+                                createVis(container, resp.body.data, scope);
+                            } else {
+                                scope.noRelatedDiseases = true;
+                            }
                         },
 
                         // error handler
@@ -86,10 +88,9 @@ angular.module('otDirectives')
 
         return {
             restrict: 'E',
-            template: '<div></div>',
+            template: '<div style="margin-left:20px;" ng-show="noRelatedTargets">No related targets found</div>',
             scope: {
                 target: '=',
-                related: '=',
                 width: '='
             },
             link: function (scope, element) {
@@ -112,12 +113,15 @@ angular.module('otDirectives')
                     .then(
                         // success
                         function (resp) {
-                            // var container = document.getElementById('ot-relations-plot');
-                            var container = element[0];
-                            createVis(container, resp.body.data, scope);
-
-                            // createRelationsTree(container, resp.body.data, scope);
-                            // createRelationsTree(container, resp.body.data, (scope.width / 2), scope.target.approved_symbol, scope.entities);
+                            if (resp.body.data.length) {
+                                var container = document.createElement('div');
+                                container.classList.add('col-md-offset-3');
+                                container.classList.add('col-md-6');
+                                element[0].appendChild(container);
+                                createVis(container, resp.body.data, scope);
+                            } else {
+                                scope.noRelatedTargets = true;
+                            }
                         },
 
                         // error handler

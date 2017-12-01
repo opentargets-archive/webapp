@@ -1,28 +1,33 @@
-<div class="table-panel">
-    <table class="table ot-evidence-table">
-        <thead>
-            <tr>
-                <th>Mouse gene</th>
-                <th>Phenotype category</th>
-                <th>Phenotype label</th>
-                <th>Allelic composition</th>
-                <th>Genetic background</th>
-                <th>Publications</th>
-            </tr>
-        </thead>
+<div ng-show="data.length>0">
+    <ot-source-list list="sources"></ot-source-list>
+    <div class="table-panel">
+        <table class="table ot-evidence-table">
+            <thead>
+                <tr>
+                    <th>Mouse gene</th>
+                    <th>Phenotype category</th>
+                    <th>Phenotype label</th>
+                    <th>Allelic composition</th>
+                    <!-- <th>Genetic background</th> -->
+                    <th>Publications</th>
+                </tr>
+            </thead>
 
-        <tbody>
-        </tbody>
+            <tbody>
+            </tbody>
 
-        <tfoot>
-            <tr class="filter-row">
-                <th>Mouse id</th>
-                <th>Phenotype category</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </tfoot>
-    </table>
+            <tfoot>
+                <tr class="filter-row">
+                    <th>Mouse id</th>
+                    <th>Phenotype category</th>
+                    <th></th>
+                    <th></th>
+                    <!-- <th></th> -->
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </div>
+
+<div ng-show="data.length==0"><p>No data available</p></div>
