@@ -1,69 +1,73 @@
 angular.module('otPlugins')
-    .directive('otMousePhenotypes', ['otColumnFilter', 'otUtils', '$timeout', function (otColumnFilter, otUtils, $timeout) {
+    .directive('otMousePhenotypes', ['otColumnFilter', 'otUtils', '$timeout', 'otConfig', function (otColumnFilter, otUtils, $timeout, otConfig) {
         'use strict';
 
-        function formatPhenotypesToArray(data) {
+        function formatPhenotypesToArray (data) {
             var newData = [];
-            data.forEach(function (d) {
-                d.phenotypes.forEach(function (p) {
+            if (data) {
+                data.forEach(function (d) {
+                    d.phenotypes.forEach(function (p) {
+                        if (p.genotype_phenotype && p.genotype_phenotype.length > 0) {
+                            p.genotype_phenotype.forEach(function (g) {
+                                var row = [];
+                                // Mouse gene
+                                row.push('<a target="_blank" href="http://www.informatics.jax.org/marker/' + d.mouse_gene_id + '">' + d.mouse_gene_symbol + '</a>');
 
-                    if (p.genotype_phenotype && p.genotype_phenotype.length) {
-                        p.genotype_phenotype.forEach(function (g) {
+                                // Phenotype category
+                                row.push(p.category_mp_label);
+
+                                // Phenotype label
+                                row.push(g.mp_label);
+
+                                // Allelic composition
+                                row.push(
+                                    g.subject_allelic_composition.split(',')
+                                        .map(function (allele) {
+                                            return otUtils.allelicComposition2Html(allele);
+                                        })
+                                        .join('<br />')
+                                        +
+                                        '<div class="small text-lowlight">' + otUtils.allelicComposition2Html(g.subject_background) + '</div>'
+                                );
+
+                                // Genetic background
+                                // row.push(g.subject_background);
+
+                                // References
+                                if (g.pmid) {
+                                    row.push(otUtils.getPublicationsString(g.pmid.split(',')));
+                                } else {
+                                    row.push('N/A');
+                                }
+
+                                // hidden columns for filtering
+                                row.push(d.mouse_gene_symbol); // variant
+
+                                newData.push(row);
+                            });
+                        } else {
                             var row = [];
-                            // Mouse gene
                             row.push('<a target="_blank" href="http://www.informatics.jax.org/marker/' + d.mouse_gene_id + '">' + d.mouse_gene_symbol + '</a>');
 
                             // Phenotype category
                             row.push(p.category_mp_label);
 
-                            // Phenotype label
-                            row.push(g.mp_label);
-
-                            // Allelic composition
-                            row.push(
-                                g.subject_allelic_composition.split(',')
-                                    .map(function (allele) {
-                                        return otUtils.allelicComposition2Html(allele);
-                                    })
-                                    .join('<br />')
-                            );
-
-                            // Genetic background
-                            row.push(g.subject_background);
-
-                            // References
-                            if (g.pmid) {
-                                row.push(otUtils.getPublicationsString(g.pmid.split(',')));
-                            } else {
-                                row.push('N/A');
-                            }
+                            // fill with N/A
+                            row.push('N/A');
+                            row.push('N/A');
+                            row.push('N/A');
+                            // row.push('N/A');
 
                             // hidden columns for filtering
                             row.push(d.mouse_gene_symbol); // variant
+                            
+                            // LUCA: just show rows with phenotype information to avoid N/A rows...
+                            // newData.push(row);
+                        }
+                    });
 
-                            newData.push(row);
-                        })
-                    } else {
-                        var row = [];
-                        row.push('<a target="_blank" href="http://www.informatics.jax.org/marker/' + d.mouse_gene_id + '">' + d.mouse_gene_symbol + '</a>');
-
-                        // Phenotype category
-                        row.push(p.category_mp_label);
-
-                        // fill with N/A
-                        row.push('N/A');
-                        row.push('N/A');
-                        row.push('N/A');
-                        row.push('N/A');
-
-                        // hidden columns for filtering
-                        row.push(d.mouse_gene_symbol); // variant
-                        newData.push(row);
-                    }
                 });
-
-            });
-
+            };
             return newData;
         }
 
@@ -77,7 +81,19 @@ angular.module('otPlugins')
             link: function (scope, elem) {
                 var data = formatPhenotypesToArray(scope.target.mouse_phenotypes);
 
-                var dropdownColumns = [0,1];
+                scope.data = data;
+                scope.sources = otConfig.evidence_sources.animal_model.map(function (s) {
+                    // so here s is the datasource api 'key' (i.e. lowercase 'pathway')
+                    // now we need to find label and infoUrl from the otConsts.datasources object
+                    var ds = otUtils.getDatasourceById(s);
+
+                    return {
+                        label: ds.label, // otDictionary[dk[0]],
+                        url: ds.infoUrl // otConsts.dbs_info_url[otConsts.invert(s)]
+                    };
+                });
+
+                var dropdownColumns = [0, 1];
                 $timeout(function () {
                     var table = elem[0].getElementsByTagName('table');
                     $(table).dataTable(otUtils.setTableToolsParams({
@@ -88,17 +104,21 @@ angular.module('otPlugins')
                         'columnDefs': [
                             {
                                 'targets': [0],
-                                'mRender': otColumnFilter.mRenderGenerator(6),
-                                'mData': otColumnFilter.mDataGenerator(0, 6),
-                                'width': '8%'
+                                'mRender': otColumnFilter.mRenderGenerator(5),
+                                'mData': otColumnFilter.mDataGenerator(0, 5),
+                                'width': '14%'
                             },
+                            // {
+                            //     'targets': [2, 3, 4],
+                            //     'width': '22%'
+                            // },
+                            // {
+                            //     'targets': [1],
+                            //     'width': '15%'
+                            // }
                             {
-                                'targets': [2, 3, 4],
-                                'width': '22%'
-                            },
-                            {
-                                'targets': [1],
-                                'width': '15%'
+                                'targets': [1, 2, 3],
+                                'width': '24%'
                             }
                         ],
 
