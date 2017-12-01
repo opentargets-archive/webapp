@@ -169,7 +169,13 @@ angular.module('otDirectives')
                             }
 
                             var pmidsList = otUtils.getPmidsList(refs);
-                            row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : 'N/A');
+
+                            // TODO: https://github.com/opentargets/webapp/issues/226
+                            if ((pmidsList.length === 1) && pmidsList[0]==='NA') {
+                                row.push('N/A');
+                            } else {
+                                row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : 'N/A');
+                            }
 
                             // Publication ids (hidden)
                             row.push(pmidsList.join(', '));
