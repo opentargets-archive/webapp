@@ -35,30 +35,12 @@ angular.module('otDirectives')
                        res(scope.drug);
                     });
 
-                    if (scope.drug.indexOf('CHEMBL') !== 0) {
-                        // the chembl_id_lookup endpoint seems to be case dependent.
-                        // We try both uppercase and lowercase and use the one with info
-                        var promiseUc = $http.get('/proxy/www.ebi.ac.uk/chembl/api/data/chembl_id_lookup/search?q=' + scope.drug.toUpperCase());
-                        var promiseLc = $http.get('/proxy/www.ebi.ac.uk/chembl/api/data/chembl_id_lookup/search?q=' + scope.drug.toLowerCase());
-
-                        promise = $q.all([promiseUc, promiseLc])
-                            .then (function (resps) {
-                                var chemblId;
-                                resps.forEach(function (resp) {
-                                    if (resp.data.chembl_id_lookups && resp.data.chembl_id_lookups.length) {
-                                        chemblId = resp.data.chembl_id_lookups[0].chembl_id;
-                                    }
-                                });
-                                return chemblId;
-                            });
-                    }
-
                     promise.then(function (drugId) {
                         scope.drugId = drugId;
-                        if (!drugId) {
-                            scope.noDrug = true;
-                            return;
-                        }
+                        // if (!drugId) {
+                        //     scope.noDrug = true;
+                        //     return;
+                        // }
 
                         // Get the mechanism of action...
                         $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule_form/' + drugId)
@@ -141,6 +123,8 @@ angular.module('otDirectives')
                                             }
                                         }
                                     });
+                            }, function (err) {
+                                scope.noDrug = true;
                             });
 
                         // Get the information for the drug...

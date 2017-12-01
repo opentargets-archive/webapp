@@ -51,7 +51,7 @@
                 </a>
             </span>
         </span>
-        <p ng-if="targets.length > 1"><a href="/summary?targets={{batchSearchTargets}}">Analyse these targets</a></p>
+        <p ng-if="targets.length > 1 && targets.length <= 200"><a href="/summary?targets={{batchSearchTargets}}">Analyse these targets</a></p>
     </div>
 
     <div class="section">

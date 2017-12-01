@@ -301,7 +301,6 @@ angular.module('otServices')
 
 
         otUtilsService.addMatchedBy = function (r) {
-            console.log(r);
             var matches = {
                 human: 0,
                 ortholog: 0,
@@ -329,15 +328,15 @@ angular.module('otServices')
                 }
                 if (matches.drug) {
                     r.drugMatch = true;
-                    var drugsObj = {};
-                    var drugsHighlight = r.highlight['drugs.evidence_data'] || r.highlight['drugs.drugbank'];
-                    var parser = new DOMParser();
-                    for (var i=0; i<drugsHighlight.length; i++) {
-                        var thisDrug = drugsHighlight[i];
-                        var el = parser.parseFromString(thisDrug, 'text/xml');
-                        drugsObj[el.firstChild.textContent.toUpperCase()] = 1;
-                    }
-                    r.drugs = Object.keys(drugsObj);
+                    // var drugsObj = {};
+                    // var drugsHighlight = r.highlight['drugs.evidence_data'] || r.highlight['drugs.drugbank'];
+                    // var parser = new DOMParser();
+                    // for (var i=0; i<drugsHighlight.length; i++) {
+                    //     var thisDrug = drugsHighlight[i];
+                    //     var el = parser.parseFromString(thisDrug, 'text/xml');
+                    //     drugsObj[el.firstChild.textContent.toUpperCase()] = 1;
+                    // }
+                    // r.drugs = Object.keys(drugsObj);
                 }
                 if (matches.phenotype) {
                     r.phenotypeMatch = true;
