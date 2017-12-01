@@ -57,8 +57,11 @@ angular.module('otPlugins')
                     scope.ext.hasError = scope.ext.common.hasError || scope.ext.rare.hasError;
                 });
 
-                scope.$watchGroup([function () { return scope.ext.common.data; }, function () { return scope.ext.rare.data; }], function () {
-                    scope.ext.data = ((scope.ext.common.data && scope.ext.common.data.length > 0) || (scope.ext.rare.data && scope.ext.rare.data.length > 0)) ? [{}] : [];  // just a fake data object to have a length property for now
+                scope.$watchGroup([function () { return scope.ext.common.data; }, function () { return scope.ext.rare.data; }], function (newdata, olddata) {
+                    // scope.ext.data = ((scope.ext.common.data && scope.ext.common.data.length > 0) || (scope.ext.rare.data && scope.ext.rare.data.length > 0)) ? [{}] : [];  // just a fake data object to have a length property for now
+                    if (newdata[0] && newdata[1]) {
+                        scope.ext.data = (newdata[0].length > 0 || newdata[1].length > 0) ? [{}] : [];  // just a fake data object to have a length property for now
+                    }
                 });
             }
         };
