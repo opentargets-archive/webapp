@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otBibliographyTargetChips', ['$log', '$http', function ($log, $http) {
+    .directive('otBibliographyTargetChips', ['$log', '$http', '$timeout', function ($log, $http, $timeout) {
         'use strict';
 
 
@@ -36,18 +36,9 @@ angular.module('otPlugins')
                 scope.onback = onBack;
                 scope.getMoreData = getMoreData;
                 scope.selected = selected;
+                scope.isloading = false;
 
                 scope.selectedagg;
-
-                // scope.aggtype = [
-                //     {id: 'keywords_significant_terms', label: 'keywords'},
-                //     {id: 'top_chunks_significant_terms', label: 'top chunks'},
-                //     {id: 'mesh_headings_label_significant_terms', label: 'mesh headings label'},
-                //     {id: 'chemicals_name_significant_terms', label: 'chemicals name'},
-                //     {id: 'journal_abbr_significant_terms', label: 'journal abbr'},
-                //     {id: 'authors_significant_terms', label: 'authors'}
-                //     // {id:'pub_date_histogram', label:'publication date'},
-                // ];
 
                 scope.aggtype = [
                     {id: 'top_chunks_significant_terms', label: 'Concepts'},
@@ -78,8 +69,6 @@ angular.module('otPlugins')
                         onSelectAggsData();
                     }
                 });
-
-                getData();
 
                 function resetSelected () {
                     // selected = selected || [scope.target.approved_symbol]; //.toLowerCase()];
@@ -216,7 +205,7 @@ angular.module('otPlugins')
                  * Handler for the response data
                  */
                 function onData (data) {
-                    $log.log('onData');
+                    // $log.log('onData');
                     if (data.aggregations) {
                         onAggsData(data);
                     }
@@ -232,7 +221,7 @@ angular.module('otPlugins')
                         b.key = b.key.split('/').pop();
                         return b;
                     });
-                    $log.log(aggs.diseases);
+                    // $log.log(aggs.diseases);
                     return aggs;
                 }
 
@@ -241,7 +230,7 @@ angular.module('otPlugins')
                  * Handler for the aggregations data for the treemap
                  */
                 function onAggsData (data) {
-                    $log.log('onAggsData');
+                    // $log.log('onAggsData');
                     scope.aggs = parseDiseaseAggs(data.aggregations);
                     scope.selectedagg = scope.selectedagg || scope.aggtype[0].id || _.keys(scope.aggs)[0];
 
@@ -250,12 +239,12 @@ angular.module('otPlugins')
 
 
                 function onSelectAggsData () {
-                    $log.log('onSelectedAggsData');
-                    $log.log('*** onSelectAggsData ***');
+                    // $log.log('onSelectedAggsData');
+                    // $log.log('*** onSelectAggsData ***');
                     // var children = data.aggregations.abstract_significant_terms.buckets.filter(function(b){
                     // var children = data.aggregations.top_chunks_significant_terms.buckets.filter(function(b){
-                    $log.log('selection:', scope.selectedagg);
-                    $log.log('aggs:', scope.aggs);
+                    // $log.log('selection:', scope.selectedagg);
+                    // $log.log('aggs:', scope.aggs);
                     var children = scope.aggs[scope.selectedagg].buckets.filter(function (b) {
                         //
                         // don't add these to the treemap if they appears in the 'selected' array (i.e. those we clicked on) or in the symbol synonyms
@@ -289,7 +278,7 @@ angular.module('otPlugins')
                  * reset : if true, previous literature data is removed; if false (DEFAULT), new literature data is appended (e.g. pagination)
                  */
                 function onLiteratureData (data, reset) {
-                    $log.log('onLiteratureData');
+                    // $log.log('onLiteratureData');
                     reset = reset || false;
                     if (reset) {
                         scope.hits = [];
@@ -302,6 +291,9 @@ angular.module('otPlugins')
                     // a flattened list of just the hits (publications) to avoid nested looping in the HTML if we want to
                     // scope.papers = scope.hits.reduce( function(a,b){ return a.concat(b.hits)} , [] );
                 }
+
+                // getData();
+                $timeout(getData, 1);
             }
 
         };

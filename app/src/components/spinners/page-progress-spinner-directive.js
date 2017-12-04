@@ -13,12 +13,16 @@ angular.module('otDirectives')
             // template: '<div class="page-progress-spinner" ng-show="isloading"><span ot-progress-spinner class="text-lowlight fa-{{size}}x"></span></div>',
             template: '<div class="page-progress-spinner" ng-show="isloading"><span ot-progress-spinner size="50" stroke="3" class="text-lowlight"></span></div>',
             scope: {
-                size: '@'
+                size: '@',
+                isloading: '=?'
             },
             link: function (scope) {
-                scope.$watch(function () { return otApi.activeRequests; }, function (newValue) {
-                    scope.isloading = newValue > 0;
-                });
+                if (!scope.isloading) {
+                    scope.$watch(function () { return otApi.activeRequests; }, function (newValue) {
+                        scope.isloading = newValue > 0;
+                    });
+                }
+                // else it means we've passed a variable to use as flag to show/hide the spinner...
             }
         };
     }]);
