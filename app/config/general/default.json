@@ -268,7 +268,8 @@
             "name": "bibliographyChips",
             "element": "ot-bibliography-target-chips",
             "heading": "Bibliography",
-            "track": true
+            "track": true,
+            "new": true
         }
     ],
 
