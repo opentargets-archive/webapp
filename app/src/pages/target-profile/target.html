@@ -19,6 +19,7 @@
             <div class="col-sm-12">
                 <p>
                     <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
+                    <div><span style="font-size:0.8em">(information provided by <a target="_blank" href="http://www.uniprot.org/uniprot/{{target.uniprot_accessions[0]}}">UniProt</a>)</span></div>
                 </p>
 
                 <p ng-show="target.symbol">
