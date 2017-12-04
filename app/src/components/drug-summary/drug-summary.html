@@ -1,40 +1,76 @@
-<h2>
-    Summary page for drug {{displayName}}
-</h2>
+<div ng-show="noDrug">
+    <h2>No drug found with name or id {{drug}}</h2>
+</div>
 
-<div class="section" style="float:right;margin-top:70px;" ng-cloak>
-    <img class="drug-img" ng-if="mol_type=='Antibody'" width="200" height="200" src="/imgs/ab.png">
-    <img class="drug-img" ng-if="mol_type!='Antibody'" width="200" height="200" src="" id="drugDiagramContainer">
-</div>
-<div class="section">
-    <h3 class="summary-section-header">General properties</h3>
-    <div class="drug-property" style="min-height:200px">
-        <ul>
-            <li><b>Name</b>: {{displayName}}</li>
-            <li style="margin-top:8px;"><b>Molecule type</b>: {{mol_type}}</li>
-            <!--<li style="margin-top:8px;"><b>Mechanism of action</b>: {{mechanism}}</li>-->
-            <li style="margin-top:8px;"><b>First approval</b>: {{first_approval}}</li>
-            <li style="margin-top:8px;"><b>Max phase</b>: {{max_phase}}</li>
-            <li style="margin-top:8px;"><b>Molecular formula</b>: {{formula}}</li>
-        </ul>
+<div ng-show="displayName">
+    <h2>
+        Summary page for drug {{displayName}}
+    </h2>
+
+    <div class="section" style="float:right;margin-top:70px;" ng-cloak>
+        <img class="drug-img" ng-if="mol_type=='Antibody'" width="200" height="200" src="/imgs/ab.png">
+        <img class="drug-img" ng-if="mol_type!='Antibody'" width="200" height="200" src="" id="drugDiagramContainer">
     </div>
-    <h3 class="summary-section-header">Mechanisms of action</h3>
-    <span ot-progress-spinner size="24" ng-show="!mechanisms.length"></span>
-    <table ng-show="mechanisms" class="table ot-evidence-table">
-        <tr>
-            <th>Mechanism of action</th>
-            <th>Target</th>
-            <th>Target synonyms</th>
-            <th>References</th>
-        </tr>
-        <tr ng-repeat="mec in mechanisms">
-            <td>{{mec.mechanism}}</td>
-            <td>{{mec.targets}}</td>
-            <td>{{mec.synonyms}}</td>
-            <td><span ng-repeat="ref in mec.refs"><a target=_blank href="{{ref.ref_url}}">{{ref.ref_type}} </a></td>
-        </tr>
-    </table>
+    <div class="section">
+        <h3 class="summary-section-header">General properties</h3>
+        <div class="drug-property" style="min-height:200px">
+            <ul>
+                <li><b>Name</b>: {{displayName}}</li>
+                <li style="margin-top:8px;"><b>ID</b>: {{drug}}</li>
+                <li style="margin-top:8px;"><b>Molecule type</b>: {{mol_type}}</li>
+                <!--<li style="margin-top:8px;"><b>Mechanism of action</b>: {{mechanism}}</li>-->
+                <li style="margin-top:8px;"><b>First approval</b>: {{first_approval}}</li>
+                <li style="margin-top:8px;"><b>Max phase</b>: {{max_phase}}</li>
+                <li style="margin-top:8px;"><b>Molecular formula</b>: {{formula}}</li>
+            </ul>
+        </div>
+        <h3 class="summary-section-header">Mechanisms of action</h3>
+        <span ot-progress-spinner size="24" ng-show="!mechanisms.length"></span>
+        <table ng-show="mechanisms" class="table ot-evidence-table">
+            <tr>
+                <th>Mechanism of action</th>
+                <th>Target</th>
+                <th>Target synonyms</th>
+                <th>References</th>
+            </tr>
+            <tr ng-repeat="mec in mechanisms">
+                <td>{{mec.mechanism}}</td>
+                <td>{{mec.targets}}</td>
+                <td><span ng-repeat="synonym in mec.synonyms"><a ng-if="synonym.ensId" href="/target/{{synonym.ensId}}">{{synonym.synonym}}{{$last ? '' : ', '}}</a><span ng-if="!synonym.ensId">{{synonym.synonym}}{{$last ? '' : ', '}}</span></span></td>
+                <td><span ng-repeat="ref in mec.refs"><a target=_blank href="{{ref.ref_url}}">{{ref.ref_type}} </a></span></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3 class="summary-section-header">Targets associated with {{displayName}}</h3>
+        <span ng-repeat="target in targets">
+            <span style="padding-right:8px;margin-top:5px;">
+                <a href=/target/{{target.id}}>
+                    <span class="ot-pill-list target-list">{{target.name}}</span>
+                </a>
+            </span>
+        </span>
+        <p ng-if="targets.length > 1 && targets.length <= 200"><a href="/summary?targets={{batchSearchTargets}}">Analyse these targets</a></p>
+    </div>
+
+    <div class="section">
+        <h3 class="summary-section-header">Diseases associated with {{displayName}}</h3>
+        <span ng-repeat="disease in diseases">
+        <span style="padding-right:8px;margin-top:5px;"><a href=/disease/{{disease.id}}><span class="ot-pill-list disease-list">{{disease.label}}</span>
+        </a></span>
+    </span>
+    </div>
+<div class="section">
+    <h3 class="summary-section-header">Adverse events</h3>
+    <p class=ot-section-intro>Below is shown the top 20 adverse effects for this drug. An adverse event can be an undesirable experience associated with the use of the drug, including serious drug side effects, product use errors, product quality problems, and therapeutic failures. The source of this data is <a target=_blank href="https://open.fda.gov/drug/event/">OpenFDA</a></p>
+
+    <ul>
+        <li ng-repeat="effect in effects"><span ng-if="!effect.id">{{effect.term}}</span></span><span ng-if="effect.id"><a href="/disease/{{effect.id}}">{{effect.term}}</a></span> ({{effect.count}} reports)</li>
+    </ul>
+    <ot-drug-adverse-events-directive drug="displayName"></ot-drug-adverse-events-directive>
 </div>
+
 <div class="section">
     <h3 class="summary-section-header">External links</h3>
     <ul>

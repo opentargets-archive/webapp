@@ -61,6 +61,13 @@ angular.module('otDirectives')
             link: function (scope) {
                 scope.showSpinner = true;
 
+                // The PNG export routine
+                if (otUtils.browser.name !== 'IE') {
+                    scope.toExport = function () {
+                        return document.getElementById('interactionsViewerMultipleTargets').querySelector('div');
+                    };
+                }
+
                 scope.$watchGroup(['interactors', 'categories'], function () {
                     if (!scope.interactors) {
                         return;
@@ -157,6 +164,7 @@ angular.module('otDirectives')
                         iv.update();
                     }
 
+
                     scope.selectedNodes = [];
                     scope.unselectNode = function (node) {
                         iv.click(node, false); // If the click should fire a "select"/"unselect" event
@@ -186,32 +194,12 @@ angular.module('otDirectives')
                         .size(600)
                         .colorScale(newColorScale)
                         .labelSize(90)
-                        // .on("click", function (d) {
-                        //     console.log("clicked on node...", d);
-                        // })
                         .on('mouseout', function () {
                             hover_tooltip.close();
                         })
                         .on('mouseover', mouseoverTooltip)
                         .on('select', function (selectedNode) {
-                        // We process the selected Node to offer provenance by source
-                        // selectedNode.sources = {};
-                        // for (var inter in selectedNode.interactsWith) {
-                        //     if (selectedNode.interactsWith.hasOwnProperty(inter)) {
-                        //         for (var i=0; i<selectedNode.interactsWith[inter].provenance.length; i++) {
-                        //             var prov = selectedNode.interactsWith[inter].provenance[i];
-                        //             if (!selectedNode.sources[prov.source]) {
-                        //                 selectedNode.sources[prov.source] = {
-                        //                     total: 0
-                        //                 };
-                        //             }
-                        //             selectedNode.sources[prov.source][inter] = true;
-                        //             selectedNode.sources[prov.source].total = Object.keys(selectedNode.sources[prov.source]).length - 1;
-                        //         }
-                        //     }
-                        // }
                             scope.selectedNodes.push(selectedNode);
-                            $log.log('apply from select');
                             scope.$apply();
                         })
                         .on('unselect', function (unselectedNode) {
@@ -220,10 +208,6 @@ angular.module('otDirectives')
                                     scope.selectedNodes.splice(i, 1);
                                 }
                             }
-                            // if (ivTooltip) {
-                            //     ivTooltip.close();
-                            // }
-                            $log.log('apply from unselect');
                             scope.$apply();
                         })
                         .on('interaction', function (interactors) {
@@ -246,46 +230,10 @@ angular.module('otDirectives')
                                 }
                             });
 
-                            // Show reactome entries:
-                            // if (pathways.length) {
-                            //     obj.rows.push({
-                            //         "label": "Shared pathways (" + pathways.length + ")",
-                            //         "value": ""
-                            //     });
-                            //     var targetOptions = [interactors.interactor1, interactors.interactor2].map(function (o) {
-                            //         return '&pathway-target=' + o;
-                            //     }).join('');
-                            //     pathways.forEach(function (i) {
-                            //         obj.rows.push({
-                            //             "value": '<a href="/summary?pathway=' + i.id + targetOptions + '">' + i.label + '</a>',
-                            //             // "value": i.label,
-                            //             "label": "Pathway"
-                            //         });
-                            //     });
-                            // }
-                            //
-                            // // Show OmnipathDB entries:
-                            // if (omnipathDB.length) {
-                            //     obj.rows.push({
-                            //         "label": "Interactions (" + omnipathDB.length + ")",
-                            //         "value": ""
-                            //     });
-                            //     omnipathDB.forEach (function (i) {
-                            //         obj.rows.push({
-                            //             "value": i.id,
-                            //             "label": "OmnipathDB"
-                            //         })
-                            //     });
-                            // }
-
                             scope.pathways = pathways;
                             scope.ppis = ppis;
                             scope.enzSubs = enzSubs;
-
-                        // ivTooltip = tooltip.table()
-                        //     .width(180)
-                        //     .id(1)
-                        //     .call(elem, obj);
+                            scope.$apply();
                         })
                         .on('loaded', function () {
                         // If the "selected" attribute is passed, we select the node programmatically...

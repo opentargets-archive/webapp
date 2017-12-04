@@ -81,16 +81,6 @@
                             {{selectedNodes[0].label}} - {{selectedNodes[1].label}} interaction
                         </div>
 
-                        <!-- Shared pathways -->
-                        <!--<div ng-if="pathways.length" ng-init="showSharedPathways=true">-->
-                            <!--<div style="text-align:left; padding:6px;"><span style="font-size:1.5em; vertical-align:middle">&#x2022</span> <span style="vertical-align:middle;">{{pathways.length}} shared pathway</span><span ng-if="pathways.length!=1">s</span> <span ng-click="showSharedPathways=!showSharedPathways" class="fa pull-right text-lowlight" ng-class="{'fa-caret-right':!showSharedPathways, 'fa-caret-down':showSharedPathways}"></span></div>-->
-                            <!--<div style="padding-bottom:7px;">-->
-                                <!--<div style="margin-left:15px; text-align:left; font-size:0.9em;" ng-show="showSharedPathways" ng-repeat="pathway in pathways"><a-->
-                                        <!--href='/summary?pathway={{pathway.id}}&pathway-target={{selectedNodes[0].label}}&pathway-target={{selectedNodes[1].label}}'><i-->
-                                        <!--style="margin-right:5px;" class="fa fa-sitemap"></i>{{pathway.label}}</a></div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-
                         <div ng-if="pathways.length" style="padding:6px;">
                             <span style="font-size:1.5em; vertical-align:middle">&#x2022</span> <span style="vertical-align:middle;">Shared pathway</span>
                         </div>
@@ -99,30 +89,10 @@
                             <span style="font-size:1.5em; vertical-align:middle">&#x2022</span> <span style="vertical-align:middle;">Protein-protein interaction</span>
                         </div>
 
-                        <!--<div ng-if="ppis.length" ng-init="showPPIs=false">-->
-                            <!--<div style="font-weight:bold; text-align:left; padding:8px;">Protein-protein interactions ({{ppis.length}}) <span ng-click="showPPIs=!showPPIs" class="fa pull-right text-lowlight" ng-class="{'fa-caret-right':!showPPIs, 'fa-caret-down':showPPIs}"></span></div>-->
-                            <!--<div style="padding-bottom:7px;">-->
-                                <!--<div ng-show="showPPIs" ng-repeat="source in ppis" style="margin-left:15px">-->
-                                    <!--{{source.label}}-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-
                         <div ng-if="enzSubs.length" style="padding:6px;">
                             <span style="font-size:1.5em; vertical-align:middle">&#x2022</span> <span style="vertical-align:middle;">Enzyme-substrate relationship</span>
                         </div>
-
-                        <!--<div ng-if="enzSubs.length" ng-init="showEnzSubs=false">-->
-                            <!--<div style="font-weight:bold; text-align:left; padding:8px;">Enzymes-substrates ({{enzSubs.length}}) <span ng-click="showEnzSubs=!showEnzSubs" class="fa pull-right text-lowlight" ng-class="{'fa-caret-right':!showEnzSubs, 'fa-caret-down':showEnzSubs}"></span></div>-->
-                            <!--<div style="padding-bottom:7px;">-->
-                                <!--<div ng-show="showEnzSubs" ng-repeat="source in enzSubs" style="margin-left:15px;">-->
-                                    <!--{{source.label}}-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-
                     </div>
-
 
                 </div>
 
@@ -130,7 +100,8 @@
         </div>
     </div>
     <div class="col-sm-9" >
-        <div id="interactionsViewerMultipleTargets" style="overflow-x:auto;overflow-y:hidden"></div>
+        <ot-png style="float:right" filename="{{$parent.target.approved_symbol}}-protein-interactions.png" track="proteinInteractions"></ot-png>
+        <div id="interactionsViewerMultipleTargets" style="height:600px;overflow-x:auto;overflow-y:hidden"></div>
         <div>
             <p style="font-size:0.9em; padding-left:15px;">Number of interactors per node</p>
             <ot-matrix-legend legend-text="legendText" labels="dataRange" colors="colors" layout="h"></ot-matrix-legend>

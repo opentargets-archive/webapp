@@ -29,6 +29,9 @@
                     <!-- dynamic sections coming from plugins -->
                     <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
                         <uib-accordion-heading>
+                            <div style="position:relative" ng-show="section.new">
+                                <div class="ot-section-new"><span>New</span></div>
+                            </div>
                             <span ng-click='section.visible = !section.visible'>{{section.heading}}</span>
                         </uib-accordion-heading>
                         <ot-plugin-loader disease="disease" plugin="section.element" visible="{{section.visible}}" dependencies="section.dependencies" class="scroll-table-panel"></ot-plugin-loader>

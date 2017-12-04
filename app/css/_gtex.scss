@@ -11,3 +11,17 @@
 .gtexView text {
   fill: #555;
 }
+
+.adverseEvents path,
+.adverseEvents line {
+  fill: none;
+  stroke: #abb2bc;
+  shape-rendering: crispEdges;
+  &.median {
+    stroke: black;
+  }
+}
+
+.adverseEvents text {
+  fill: #555;
+}

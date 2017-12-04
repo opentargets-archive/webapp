@@ -70,11 +70,15 @@ angular.module('otPlugins')
                         row.push(scientific2common[item.target.species]);
 
                         // Homology type
-                        row.push(homologyType[item.type]);
+                        row.push(homologyType[item.type] || 'N/A');
 
                         // Orthologue
                         var displayName = (info[item.target.id].display_name) ? info[item.target.id].display_name : '';
-                        row.push(displayName + (displayName ? ' ' : '') + '(<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summar?g=' + item.target.id + '" target="_blank">' + item.target.id + ')');
+                        if (displayName) {
+                            row.push(displayName + (displayName ? ' ' : '') + '(<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summar?g=' + item.target.id + '" target="_blank">' + item.target.id + ')');
+                        } else {
+                            row.push('<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summar?g=' + item.target.id + '" target="_blank">' + item.target.id);
+                        }
 
                         // dN/dS
                         row.push(item.dn_ds || 'N/A');
