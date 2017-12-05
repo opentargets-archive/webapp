@@ -44,7 +44,7 @@ angular.module('otPlugins')
                     {id: 'top_chunks_significant_terms', label: 'Concepts'},
                     {id: 'genes', label: 'Genes'},
                     {id: 'diseases', label: 'Diseases'},
-                    {id: 'phenotypes', label: 'Phenotypes'},
+                    // {id: 'phenotypes', label: 'Phenotypes'}, // phenotypes don't return any hits at the moment, so leaving out...
                     {id: 'drugs', label: 'Drugs'},
                     {id: 'journal_abbr_significant_terms', label: 'Journal'},
                     {id: 'authors_significant_terms', label: 'Authors'}
@@ -65,8 +65,14 @@ angular.module('otPlugins')
 
                 scope.$watch('selectedagg', function (newValue, oldValue) {
                     if (newValue !== oldValue) {
+                        var refetchData = selected.length > 1;
                         resetSelected();
-                        onSelectAggsData();
+
+                        if (refetchData) {
+                            getData();
+                        } else {
+                            onSelectAggsData();
+                        }
                     }
                 });
 
