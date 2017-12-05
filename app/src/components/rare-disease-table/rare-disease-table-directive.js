@@ -119,7 +119,8 @@ angular.module('otDirectives')
 
                             // TODO: This is a hack in the UI that needs to be solved at the data level
                             // In the next release this should go
-                            if (cons === 'trinucleotide repeat microsatellite feature') {
+                            // See... https://github.com/opentargets/webapp/issues/227
+                            if (cons === 'SO 0002165') {
                                 cons = 'trinucleotide expansion';
                             }
                             row.push(cons);
