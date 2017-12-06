@@ -36,4 +36,4 @@
   APIHOST = "https://api.opentargets.io/"
 
 [context."v3.3".environment]
-  APIHOST = "http://prod-20171108-1200.api.opentargets.io/"
+  APIHOST = "https://prod-20171108-1200.api.opentargets.io/"
