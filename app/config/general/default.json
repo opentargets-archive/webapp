@@ -264,11 +264,18 @@
             "heading": "Gene tree",
             "track": true
         },
+        // {
+        //     "name": "bibliography",
+        //     "element": "ot-bibliography-target",
+        //     "heading": "Bibliography",
+        //     "track": true
+        // },
         {
-            "name": "bibliography",
-            "element": "ot-bibliography-target",
+            "name": "bibliographyChips",
+            "element": "ot-bibliography-target-chips",
             "heading": "Bibliography",
-            "track": true
+            "track": true,
+            "new": true
         }
     ],
 
