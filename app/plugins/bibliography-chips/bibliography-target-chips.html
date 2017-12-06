@@ -1,0 +1,47 @@
+<div style="position:relative; min-height:200px">
+    
+    <ot-page-progress-spinner isloading="isloading"></ot-page-progress-spinner>
+
+    <div>
+        <!-- <span class="tm-chip btn btn-default disabled">{{selected[0]}}</span> -->
+        <span title="{{sel.key}}" ng-repeat="sel in selected" class="tm-chip btn btn-default" ng-click="onback($index)" ng-if="!$first">{{sel.label || sel.key}} <span class="fa fa-lg fa-times-circle"></span></span>
+        <span title="{{chip.key}}" ng-repeat="chip in chips" class="tm-chip btn btn-primary" ng-click="onclick(chip)">{{chip.label || chip.key}}</span>
+    </div>
+
+    <div style="max-width: 200px; margin-bottom: 20px;">
+        <select class="form-control" ng-model="selectedagg" ng-options="value.id as value.label for value in aggtype"></select>
+    </div>
+
+    <div>
+        <p ng-show="noftotal && hits[0].total">Showing {{noftotal}} of {{hits[0].total}} results</p>
+
+        <!-- container for "pages" -->
+        <div ng-repeat="page in hits">
+
+            <div ng-repeat="hit in page.hits" style="margin-bottom:40px;" class="epmc_citation_container">
+                <!-- <h5 style="margin-bottom:5px"><a ng-href="https://europepmc.org/abstract/med/{{hit._source.id}}">{{hit._source.title}}</a></h5> -->
+                <div class="epmc_citation_title">
+                    <a ng-href="https://europepmc.org/abstract/med/{{hit._source.id}}">{{hit._source.title}}</a>
+                </div>
+                <div class="epmc_citation_subdata">
+                    <div class="epmc_citation_authors">
+                        <!-- <span ng-repeat="auth in hit._source.authors"><a ng-href='https://europepmc.org/search?query=AUTH:"{{auth.full_name}}"&page=1'>{{auth.short_name}}</a><span ng-if="!$last">, </span></span> -->
+
+                        <span ng-repeat="auth in hit._source.authors"><a ng-href='https://europepmc.org/search?query=AUTH:"{{auth.ForeName+" "+auth.LastName}}"&page=1'>{{auth.ForeName+" "+auth.LastName}}</a><span ng-if="!$last">, </span></span>
+
+                    <!-- </div>
+
+                    <div class="epmc_citation_journal"> -->
+                        <div><span><a ng-href="https://europepmc.org/search?query=JOURNAL:%22{{hit._source.journal.title}}%22">{{hit._source.journal.title}}</a> </span><span ng-show="hit._source.pub_date"> {{hit._source.pub_date | limitTo : 4}}</span><span ng-show="hit._source.journal_reference.volume"> {{hit._source.journal_reference.volume}}</span><span ng-show=
+                        "hit._source.journal_reference.issue">({{hit._source.journal_reference.issue}})</span><span ng-show="hit._source.journal_reference.pgn">:{{hit._source.journal_reference.pgn}}</span></div>
+                    </div>
+                    <p ot-more-less-text data="hit._source.abstract" limit=600></p>
+                </div>
+            </div>
+
+        </div>
+
+        <p ng-click="getMoreData()" class="btn btn-primary" ng-show="noftotal < hits[0].total">Load more papers</p>
+
+    </div>
+</div>
