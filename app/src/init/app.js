@@ -128,7 +128,6 @@ var deps = [
     'otServices',
     'hm.readmore',
     'ngSanitize',
-    'swaggerUi',
     'otPlugins',
     'otFacets'
 ];
