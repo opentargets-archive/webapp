@@ -95,9 +95,6 @@ function initApp (deps) {
                 .when('/downloads/data', {
                     templateUrl: 'src/pages/static/dumps.html'
                 })
-                .when('/documentation/api', {
-                    templateUrl: 'src/pages/static/api-docs.html'
-                })
                 .when('/outreach', {
                     templateUrl: 'src/pages/outreach/outreach.html',
                     controller: 'OutreachController'

@@ -41,7 +41,7 @@
             "menu": [
                 {
                     "label" : "API documentation",
-                    "href" : "/documentation/api"
+                    "href" : "http://api.opentargets.io/v3/platform/docs"
                 },
                 {
                     "label" : "Python client",
