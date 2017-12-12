@@ -6,12 +6,19 @@
                 <h4>Common diseases</h4>
                 <ot-source-list list="sources.common"></ot-source-list>
 
-                <ot-common-disease-table
+                <!-- <ot-common-disease-table
                     target="{{target.id}}"
                     disease="{{disease.efo}}"
                     title="{{target.approved_symbol}}-{{disease.label}}"
                     ext="ext.common">
-                </ot-common-disease-table>
+                </ot-common-disease-table> -->
+
+                <ot-postgap-table
+                    target="{{target.id}}"
+                    disease="{{disease.efo}}"
+                    title="{{target.approved_symbol}}-{{disease.label}}"
+                    ext="ext.common">
+                </ot-postgap-table>
             </div>
 
             <uib-alert type="danger" ng-show="ext.common.hasError" ng-cloak style="margin-top:15px">
