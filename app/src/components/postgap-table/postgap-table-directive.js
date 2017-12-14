@@ -141,15 +141,15 @@ angular.module('otDirectives')
                             // GWAS Variant (in LD)
                             row.push(item.evidence.variant2disease.lead_snp_rsid);
                             // POSTGAP Score
-                            row.push(item.evidence.gene2variant.metadata.funcgen.ot_g2v_score.toPrecision(2));
+                            row.push(item.evidence.gene2variant.metadata.funcgen.ot_g2v_score.toPrecision(3));
                             // GTEx
-                            row.push(item.evidence.gene2variant.metadata.funcgen.gtex_score.toPrecision(2));
+                            row.push(item.evidence.gene2variant.metadata.funcgen.gtex_score.toPrecision(3));
                             // DHS
-                            row.push(item.evidence.gene2variant.metadata.funcgen.dhs_score.toPrecision(2));
+                            row.push(item.evidence.gene2variant.metadata.funcgen.dhs_score.toPrecision(3));
                             // Fantom5
-                            row.push(item.evidence.gene2variant.metadata.funcgen.fantom5_score.toPrecision(2));
+                            row.push(item.evidence.gene2variant.metadata.funcgen.fantom5_score.toPrecision(3));
                             // PCHiC
-                            row.push(item.evidence.gene2variant.metadata.funcgen.pchic_score.toPrecision(2));
+                            row.push(item.evidence.gene2variant.metadata.funcgen.pchic_score.toPrecision(3));
                             // VEP
                             row.push(item.evidence.gene2variant.metadata.funcgen.vep_score);
                             // Regulome
