@@ -145,9 +145,9 @@ angular.module('otDirectives')
                             // GTEx
                             row.push(item.evidence.gene2variant.metadata.funcgen.gtex_score.toPrecision(2));
                             // DHS
-                            row.push(item.evidence.gene2variant.metadata.funcgen.dhs_score);
+                            row.push(item.evidence.gene2variant.metadata.funcgen.dhs_score.toPrecision(2));
                             // Fantom5
-                            row.push(item.evidence.gene2variant.metadata.funcgen.fantom5_score);
+                            row.push(item.evidence.gene2variant.metadata.funcgen.fantom5_score.toPrecision(2));
                             // PCHiC
                             row.push(item.evidence.gene2variant.metadata.funcgen.pchic_score.toPrecision(2));
                             // VEP
