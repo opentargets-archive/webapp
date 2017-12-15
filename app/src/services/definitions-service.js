@@ -54,7 +54,7 @@ angular.module('otServices')
                 'link': 'https://www.babraham.ac.uk/our-research/nuclear-dynamics/peter-fraser/research/promoter-capture-hic'
             },
             'POSTGAP.VEP': {
-                'description': 'The max value of Ensembl\s Variant Effect Predictor for the variant across transcripts of the target',
+                'description': 'The max value of Ensembl\'s Variant Effect Predictor for the variant across transcripts of the target',
                 'link': 'http://www.ensembl.org/info/docs/tools/vep/index.html'
             },
             'POSTGAP.REGULOME': {
