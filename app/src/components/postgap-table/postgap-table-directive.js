@@ -140,6 +140,8 @@ angular.module('otDirectives')
                             // POSTGAP STUFF
                             // GWAS Variant (in LD)
                             row.push(item.evidence.variant2disease.lead_snp_rsid);
+                            // r2
+                            row.push(parseFloat(item.unique_association_fields.r2).toPrecision(3));
                             // POSTGAP Score
                             row.push(item.evidence.gene2variant.metadata.funcgen.ot_g2v_score.toPrecision(3));
                             // GTEx
@@ -185,7 +187,7 @@ angular.module('otDirectives')
                     return newdata;
                 }
 
-                var dropdownColumns = [1, 2, 3, 4, 6, 14];
+                var dropdownColumns = [1, 2, 3, 4, 6, 15];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
@@ -206,7 +208,7 @@ angular.module('otDirectives')
                                 'width': '3%'
                             },
                             {
-                                'targets': [16],
+                                'targets': [17],
                                 'visible': false
                             },
                             {
@@ -220,14 +222,14 @@ angular.module('otDirectives')
                             {
                                 'targets': [2],
                                 'width': '14%',
-                                'mRender': otColumnFilter.mRenderGenerator(17),
-                                'mData': otColumnFilter.mDataGenerator(2, 17)
+                                'mRender': otColumnFilter.mRenderGenerator(18),
+                                'mData': otColumnFilter.mDataGenerator(2, 18)
                             },
                             {
                                 'targets': [4],
                                 'width': '14%',
-                                'mRender': otColumnFilter.mRenderGenerator(18),
-                                'mData': otColumnFilter.mDataGenerator(4, 18)
+                                'mRender': otColumnFilter.mRenderGenerator(19),
+                                'mData': otColumnFilter.mDataGenerator(4, 19)
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
