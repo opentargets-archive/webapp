@@ -7,7 +7,7 @@
 angular.module('otDirectives')
 
     /* Directive to display the known drug evidence table */
-    .directive('otKnownDrugTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
+    .directive('otKnownDrugTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
         'use strict';
         // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -130,7 +130,7 @@ angular.module('otDirectives')
                                 });
 
                                 // 0: data origin: public / private
-                                row.push((item.access_level !== otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
+                                row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
                                 // 1: disease
                                 row.push('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');
@@ -224,6 +224,12 @@ angular.module('otDirectives')
                                 // row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
 
 
+                                // hidden cols for filtering
+                                row.push(item.disease.efo_info.label); // disease
+                                row.push(item.drug.molecule_name); // drug
+                                row.push(item.evidence.target2drug.mechanism_of_action); // mechanism
+                                row.push(item.evidence.drug2clinic.urls[0].nice_name); // evidence source
+
                                 newdata.push(row); // use push() so we don't end up with empty rows
                             } catch (e) {
                                 scope.ext.hasError = true;
@@ -263,10 +269,12 @@ angular.module('otDirectives')
                         return newdata;
                     }
 
+                    var dropdownColumns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
                     /*
-                * This is the hardcoded data for the Known Drugs table and
-                * will obviously need to change and pull live data when available
-                */
+                     * This is the hardcoded data for the Known Drugs table and
+                     * will obviously need to change and pull live data when available
+                     */
                     function initTableDrugs () {
                     // $('#drugs-table') // Not anymore
                         var table = elem[0].getElementsByTagName('table');
@@ -289,15 +297,44 @@ angular.module('otDirectives')
                                     'width': '5.6%'
                                 },
                                 {
-                                    'targets': [2, 5, 6, 7, 8, 9, 10],
+                                    'targets': [5, 6, 7, 8, 9, 10],
                                     'width': '11.2%'
+                                },
+                                // disease
+                                {
+                                    'targets': [1],
+                                    'width': '11.2%',
+                                    'mRender': otColumnFilter.mRenderGenerator(11),
+                                    'mData': otColumnFilter.mDataGenerator(1, 11)
+                                },
+                                // drug
+                                {
+                                    'targets': [2],
+                                    'width': '11.2%',
+                                    'mRender': otColumnFilter.mRenderGenerator(12),
+                                    'mData': otColumnFilter.mDataGenerator(2, 12)
+                                },
+                                // mech of action
+                                {
+                                    'targets': [7],
+                                    'width': '11.2%',
+                                    'mRender': otColumnFilter.mRenderGenerator(13),
+                                    'mData': otColumnFilter.mDataGenerator(7, 13)
+                                },
+                                // evidence source
+                                {
+                                    'targets': [10],
+                                    'width': '11.2%',
+                                    'mRender': otColumnFilter.mRenderGenerator(14),
+                                    'mData': otColumnFilter.mDataGenerator(10, 14)
                                 }
-                            ]
-                        // "aoColumnDefs" : [
-                        //     {"iDataSort" : 2, "aTargets" : [3]},
-                        // ]
-                        // "ordering": false
-                        // }, $scope.search.info.title+"-known_drugs") );
+                            ],
+                            // "aoColumnDefs" : [
+                            //     {"iDataSort" : 2, "aTargets" : [3]},
+                            // ]
+                            // "ordering": false
+                            // }, $scope.search.info.title+"-known_drugs") );
+                            initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                         }, (scope.title ? scope.title + '-' : '') + 'known_drugs'));
                     }
                 });

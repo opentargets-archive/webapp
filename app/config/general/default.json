@@ -41,7 +41,7 @@
             "menu": [
                 {
                     "label" : "API documentation",
-                    "href" : "/documentation/api"
+                    "href" : "http://api.opentargets.io/v3/platform/docs"
                 },
                 {
                     "label" : "Python client",
@@ -122,7 +122,8 @@
             "name": "relatedDisases",
             "element": "ot-related-diseases",
             "heading": "Similar diseases (based on targets in common)",
-            "track": true
+            "track": true,
+            "new": true
         },
 
         {
@@ -148,9 +149,16 @@
 
     "targetSections": [
         {
+            "name": "drugs",
+            "element": "ot-drugs-display",
+            "heading": "Drugs",
+            "track": true
+        },
+
+        {
             "name": "uniprot",
             "element": "ot-target-features",
-            "heading": "Protein Information (from UniProt)",
+            "heading": "Protein Information",
             "dependencies": {
                 "https://ebi-uniprot.github.io/CDN/protvista/protvista.min.js": {
                     "format": "global"
@@ -163,9 +171,25 @@
         },
 
         {
+            "name": "pathways",
+            "element": "ot-target-pathways",
+            "heading": "Pathways",
+            "track": true
+        },
+
+
+        {
             "name": "relatedTargets",
             "element": "ot-related-targets",
             "heading": "Similar targets (based on diseases in common)",
+            "track": true,
+            "new": true
+        },
+
+        {
+            "name": "genomeBrowser",
+            "element": "ot-genome-browser",
+            "heading": "Variants, isoforms and genomic context",
             "track": true
         },
 
@@ -181,13 +205,6 @@
                     "loader": "css"
                 }
             },
-            "track": true
-        },
-
-        {
-            "name": "genomeBrowser",
-            "element": "ot-genome-browser",
-            "heading": "Variants, isoforms and genomic context",
             "track": true
         },
 
@@ -214,11 +231,13 @@
         },
 
         {
-            "name": "geneOntology",
-            "element": "ot-gene-ontology",
-            "heading": "Gene Ontology",
-            "track": true
+            "name" : "mousePhenotypes",
+            "element": "ot-mouse-phenotypes",
+            "heading": "Mouse phenotypes",
+            "track": true,
+            "new": true
         },
+
 
         {
             "name": "proteinStructure",
@@ -231,17 +250,11 @@
             },
             "track": true
         },
-        {
-            "name": "pathways",
-            "element": "ot-target-pathways",
-            "heading": "Pathways",
-            "track": true
-        },
 
         {
-            "name": "drugs",
-            "element": "ot-drugs-display",
-            "heading": "Drugs",
+            "name": "geneOntology",
+            "element": "ot-gene-ontology",
+            "heading": "Gene Ontology",
             "track": true
         },
 
@@ -257,6 +270,13 @@
             "heading": "Bibliography",
             "track": true
         }
+//        {
+//            "name": "bibliographyChips",
+//            "element": "ot-bibliography-target-chips",
+//            "heading": "Bibliography",
+//            "track": true,
+//            "new": true
+//        }
     ],
 
 

@@ -7,7 +7,7 @@
 angular.module('otDirectives')
 
     /* Directive to display the somatic mutation data table */
-    .directive('otSomaticMutationTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', 'otClearUnderscoresFilter', '$log', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary, otClearUnderscoresFilter, $log) {
+    .directive('otSomaticMutationTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', 'otClearUnderscoresFilter', '$log', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, otClearUnderscoresFilter, $log) {
         'use strict';
         // var datasources = otConsts.datasources;
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -93,7 +93,7 @@ angular.module('otDirectives')
                         var row = [];
                         try {
                             // col 0: data origin: public / private
-                            row.push((item.access_level !== otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
+                            row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
                             // col 1: disease
                             row.push(item.disease.efo_info.label);
@@ -102,6 +102,8 @@ angular.module('otDirectives')
                             var samples = '';
                             var pattern = '';
 
+                            var mutString = '';
+                            var patternString = '';
                             if (item.evidence.known_mutations && item.evidence.known_mutations.length) {
                                 for (var i = 0; i < item.evidence.known_mutations.length; i++) {
                                     var m = item.evidence.known_mutations[i];
@@ -110,6 +112,7 @@ angular.module('otDirectives')
                                     } else if (item.sourceID === otConsts.datasources.UNIPROT_SOMATIC.id) {
                                         mutation_types += '<div>missense variant</div>';
                                     } else {
+                                        mutString += (mutString.length > 0 ? ', ' : '') + otClearUnderscoresFilter(m.preferred_name || otDictionary.NA);
                                         mutation_types += '<div>' + otClearUnderscoresFilter(m.preferred_name || otDictionary.NA) + '</div>';
                                     }
                                     if (m.number_samples_with_mutation_type) {
@@ -118,7 +121,14 @@ angular.module('otDirectives')
                                         samples = otDictionary.NA;
                                     }
                                     pattern += '<div>' + (m.inheritance_pattern || otDictionary.NA) +  '</div>';
+                                    patternString += (patternString.length > 0 ? ', ' : '') + (m.inheritance_pattern || otDictionary.NA);
                                 }
+                            }
+                            if (!mutString) {
+                                mutString = otDictionary.NA;
+                            }
+                            if (!patternString) {
+                                patternString = otDictionary.NA;
                             }
 
                             // col2: mutation type
@@ -144,6 +154,11 @@ angular.module('otDirectives')
                             // col 7: pub ids (hidden)
                             row.push(pmidsList.join(', '));
 
+                            // hidden columns for filtering
+                            row.push(mutString); // mutation type
+                            row.push(patternString); // cellular mechanism
+                            row.push(item.evidence.urls[0].nice_name); // evidence source
+
                             newdata.push(row); // push, so we don't end up with empty rows
                         } catch (e) {
                             $log.log('Error parsing somatic mutation data:');
@@ -154,6 +169,7 @@ angular.module('otDirectives')
                     return newdata;
                 }
 
+                var dropdownColumns = [1, 2, 4, 5];
 
                 function initTableMutations () {
                     var table = elem[0].getElementsByTagName('table');
@@ -175,14 +191,33 @@ angular.module('otDirectives')
                             },
                             // now set the widths
                             {
-                                'targets': [1, 2, 4, 5],
+                                'targets': [1, 4],
                                 'width': '18%'
                             },
                             {
                                 'targets': [3],
                                 'width': '9%'
+                            },
+                            {
+                                'targets': [2],
+                                'width': '18%',
+                                'mRender': otColumnFilter.mRenderGenerator(8),
+                                'mData': otColumnFilter.mDataGenerator(2, 8)
+                            },
+                            {
+                                'targets': [4],
+                                'width': '18%',
+                                'mRender': otColumnFilter.mRenderGenerator(9),
+                                'mData': otColumnFilter.mDataGenerator(4, 9)
+                            },
+                            {
+                                'targets': [5],
+                                'width': '18%',
+                                'mRender': otColumnFilter.mRenderGenerator(10),
+                                'mData': otColumnFilter.mDataGenerator(5, 10)
                             }
-                        ]
+                        ],
+                        initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, filename));
                 }
             }

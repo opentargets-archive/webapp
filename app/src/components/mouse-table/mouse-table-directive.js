@@ -19,7 +19,7 @@ angular.module('otDirectives')
      * biological object.properties.experiment specific
      */
 
-    .directive('otMouseTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log) {
+    .directive('otMouseTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log) {
         'use strict';
 
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -99,7 +99,7 @@ angular.module('otDirectives')
 
                         try {
                             // col 0: data origin: public / private
-                            row.push((item.access_level !== otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
+                            row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
                             // disease
                             row.push(item.disease.efo_info.label);    // or item.disease.efo_info.label ???
@@ -134,6 +134,7 @@ angular.module('otDirectives')
                     return newdata;
                 }
 
+                var dropdownColumns = [1, 5];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
@@ -161,7 +162,8 @@ angular.module('otDirectives')
                                 'targets': [5],
                                 'width': '10%'
                             }
-                        ]
+                        ],
+                        initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, (scope.title ? scope.title + '-' : '') + '-mouse_models'));
                 }
 

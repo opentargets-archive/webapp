@@ -17,7 +17,7 @@ angular.module('otDirectives')
      * pathway 7   Date asserted   .evidence.date_asserted
      * pathway 8   Evidence codes  .evidence.evidence_codes
      */
-    .directive('otPathwayTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', 'otClearUnderscoresFilter', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log, otClearUnderscoresFilter) {
+    .directive('otPathwayTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', 'otClearUnderscoresFilter', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log, otClearUnderscoresFilter) {
         'use strict';
         var searchObj = otUtils.search.translateKeys($location.search());
         var checkPath = otUtils.checkPath;
@@ -96,7 +96,7 @@ angular.module('otDirectives')
 
                         try {
                             // col 0: data origin: public / private
-                            row.push((item.access_level !== otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
+                            row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
                             // disease
                             row.push(item.disease.efo_info.label);
@@ -128,6 +128,9 @@ angular.module('otDirectives')
                             // Publication ids (hidden)
                             row.push(pmidsList.join(', '));
 
+                            // hidden columns for filtering
+                            row.push(item.evidence.urls[0].nice_name); // overview
+
                             newdata.push(row); // use push() so we don't end up with empty rows
                         } catch (e) {
                             scope.ext.hasError = true;
@@ -138,6 +141,7 @@ angular.module('otDirectives')
                     return newdata;
                 }
 
+                var dropdownColumns = [1, 2, 3, 4, 5];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
@@ -164,8 +168,15 @@ angular.module('otDirectives')
                             {
                                 'targets': [1],
                                 'width': '18%'
+                            },
+                            {
+                                'targets': [2],
+                                // 'width': '14%',
+                                'mRender': otColumnFilter.mRenderGenerator(8),
+                                'mData': otColumnFilter.mDataGenerator(2, 8)
                             }
-                        ]
+                        ],
+                        initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, (scope.title ? scope.title + '-' : '') + '-disrupted_pathways'));
                 }
             }

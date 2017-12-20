@@ -172,8 +172,6 @@ angular.module('otDirectives')
             // function parseServerResponse (data) {
                 var newData = [];
 
-                var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>'; // "<span class='fa fa-users' title='private data'>G</span>";
-                var accessLevelPublic = '<span class=\'ot-access-public\' title=\'public data\'></span>'; // "<span class='fa fa-users' title='public data'>P</span>";
                 var cat_list = ['title', 'intro', 'result', 'discussion', 'conclusion', 'other'];   // preferred sorting order
 
                 function formatAuthor (author) {
@@ -185,7 +183,7 @@ angular.module('otDirectives')
                     var row = [];
 
                     // 0 - Access level
-                    row.push((d.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? accessLevelPublic : accessLevelPrivate);
+                    row.push((d.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
                     // 1 - Disease label
                     row.push(d.disease.efo_info.label);
