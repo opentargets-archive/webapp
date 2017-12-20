@@ -140,16 +140,6 @@ angular.module('otControllers')
                 }, otApi.defaultErrorHandler);
         };
 
-
-        // =================================================
-        //  S C O P E   M E T H O D S
-        // =================================================
-
-        $scope.sectionOpen = function (who) {
-            // Fire a target associations tree event for piwik to track
-            $analytics.eventTrack('evidence', {'category': 'evidence', 'label': who});
-        };
-
         // =================================================
         //  M A I N   F L O W
         // =================================================

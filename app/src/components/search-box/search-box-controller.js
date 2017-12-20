@@ -8,8 +8,8 @@ angular.module('otControllers')
 
     .controller('SearchBoxController', ['$scope', '$location', '$window', '$document', '$element', 'otApi', 'otConsts', '$q', 'otUtils', 'otLoadedLists', function ($scope, $location, $window, $document, $element, otApi, otConsts, $q, otUtils, otLoadedLists) {
         var APP_SEARCH_URL = 'search';
-        var APP_EVIDENCE_URL = 'evidence';
-        var APP_AUTOCOMPLETE_URL = 'autocomplete';
+        // var APP_EVIDENCE_URL = 'evidence';
+        // var APP_AUTOCOMPLETE_URL = 'autocomplete';
 
         $scope.search = {
             query: {

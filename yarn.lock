@@ -5288,9 +5288,10 @@ ot-postgap@opentargets/postgapView#0.0.1:
     tnt.rest "^0.1.1"
     vinyl-buffer "^1.0.0"
 
-ot.interactions_viewer@0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/ot.interactions_viewer/-/ot.interactions_viewer-0.0.9.tgz#5945d9e47ef2483683812d66cfa530b3ea11a765"
+ot.interactions_viewer@0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/ot.interactions_viewer/-/ot.interactions_viewer-0.0.11.tgz#928f87a2999f01cb42e9fa04d57dbcdf5147e5ec"
+
   dependencies:
     bluebird "^3.4.6"
     cttv.spinner "0.0.1"

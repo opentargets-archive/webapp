@@ -24,6 +24,8 @@ angular.module('otDirectives')
                 scope.currScale = 1;
                 scope.exportPNG = function () {
                     var container = scope.$parent.toExport();
+                    var subSvg = d3.select(container).select('svg');
+                    var subCanvas = d3.select(container).select('canvas');
                     if (container.nodeName === 'CANVAS') {
                         var canvas = container;
                         var img = canvas.toDataURL('image/png');
@@ -32,6 +34,66 @@ angular.module('otDirectives')
                         a.href = img;
                         document.body.appendChild(a);
                         a.click();
+                    } else if (!subCanvas.empty() && !subSvg.empty()) {
+                        // container has an svg and a canvas
+                        var pngExporter = tnt.utils.png()
+                            .filename(scope.filename || 'image.png')
+                            .scale_factor(scope.currScale)
+                            .stylesheets(['components-OpenTargetsWebapp.min.css'])
+                            .callback(function (originalPng) {
+                                var width = container.offsetWidth * scope.currScale;
+                                var height = width;
+                                var hasDrawnCanvas = false;
+                                var hasDrawnSvg = false;
+
+                                // construct combined canvas and context
+                                function onBothLoad () {
+                                    var combinedPng = combinedCanvas.toDataURL('image/png');
+                                    var a = document.createElement('a');
+                                    a.download = scope.filename || 'image.png';
+                                    a.href = combinedPng;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                }
+                                function onLoadSvg () {
+                                    originalImg.width = width;
+                                    originalImg.height = height;
+                                    context.drawImage(originalImg, 0, 0, width, height);
+                                    hasDrawnSvg = true;
+
+                                    if (hasDrawnCanvas && hasDrawnSvg) {
+                                        onBothLoad();
+                                    }
+                                }
+                                function onLoadCanvas () {
+                                    canvasImg.width = width;
+                                    canvasImg.height = height;
+                                    context.drawImage(canvasImg, 0, 0, width, height);
+                                    hasDrawnCanvas = true;
+
+                                    if (hasDrawnCanvas && hasDrawnSvg) {
+                                        onBothLoad();
+                                    }
+                                }
+
+                                var combinedCanvas = document.createElement('canvas');
+                                combinedCanvas.width = width;
+                                combinedCanvas.height = height;
+                                var context = combinedCanvas.getContext('2d');
+
+                                var canvas = subCanvas.node();
+                                var canvasPng = canvas.toDataURL('image/png');
+                                var canvasImg = new Image();
+                                canvasImg.onload = onLoadCanvas;
+                                canvasImg.src = canvasPng;
+
+                                var originalImg = new Image();
+                                originalImg.onload = onLoadSvg;
+                                originalImg.src = originalPng;
+                            });
+
+                        pngExporter(subSvg);
                     } else {
                         // We assume it is an SVG
                         var svg = container;

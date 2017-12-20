@@ -1,0 +1,74 @@
+<!-- postgap table -->
+<div class="table-panel">
+    <table class='table ot-evidence-table' id="postgap-table">
+        <thead>
+            <tr>
+                <th rowspan="2" colspan="1"></th>
+                <th rowspan="2" colspan="1">Disease</th>
+                <th rowspan="2" colspan="1">Variant</th>
+                <th rowspan="1" colspan="5">Disease-Variant Evidence</th>
+                <th rowspan="1" colspan="9">Variant-Target Evidence</th>
+                <th rowspan="1" colspan="1"></th>
+            </tr>
+            <tr>
+                <!-- <th></th> 
+                <th>Disease</th> -->
+                <!-- <th>Variant</th> -->
+
+                <!-- VARIANT -->
+                
+                <!-- DISEASE-VARIANT -->
+                <th>GWAS variant</th>
+                <th>{{otDictionary.PVALUE}}</th>
+                <th>Evidence source</th>
+                <th>Linkage<br /> Disequilibrium<ot-popover key="POSTGAP.R2"></ot-popover></th>
+                <th>Publications</th>
+                
+
+                <!-- VARIANT-TARGET -->
+                <th>Score<ot-popover key="POSTGAP.SCORE"></ot-popover></th>
+                <!-- variant-type should be which consequence gave the score... -->
+                <th>VEP variant type</th>
+                <th>VEP<ot-popover key="POSTGAP.VEP"></ot-popover></th>
+                <th>GTEx<ot-popover key="POSTGAP.GTEX"></ot-popover></th>
+                <th>PCHiC<ot-popover key="POSTGAP.PCHIC"></ot-popover></th>
+                <th>DHS<ot-popover key="POSTGAP.DHS"></ot-popover></th>
+                <th>Fantom5<ot-popover key="POSTGAP.FANTOM5"></ot-popover></th>
+                <th>Nearest<ot-popover key="POSTGAP.NEAREST"></ot-popover></th>
+                <th>Regulome<ot-popover key="POSTGAP.REGULOME"></ot-popover></th>
+
+                <th>Publications Ids</th>
+                
+                <!--<th>Details <span style="font-size:0.8em;float:right;"><ot-popover html='true' key="COMMONDISEASES.SCOREDETAILS"></ot-popover></th>-->
+                
+            </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+
+        <tfoot>
+            <tr class="filter-row">
+                <th></th> <!-- nameless col for access level -->
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <!--<th>Details <span style="font-size:0.8em;float:right;"><ot-popover html='true' key="COMMONDISEASES.SCOREDETAILS"></ot-popover></th>-->
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+</div>

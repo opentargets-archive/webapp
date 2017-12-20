@@ -1,12 +1,12 @@
 <uib-tabset>
     <uib-tab heading="Gene tree">
         <p class=ot-section-intro>Phylogenetic tree showing the history of the human gene
-            {{target.symbol}} based on protein sequences. All branches in this tree have
+            {{target.symbol}} based on protein sequences from <a target=_blank href="http://www.ensembl.org/{{uniprot.id}}">Ensembl <i class="fa fa-external-link"></i></a>. All branches in this tree have
             the same length (unscaled branches). You can also view the branches in
             different lengths based on the number of evolutionary changes in the tree (select scaled branches)
             All species are shown by default, but you can prune it to a subset of species by unticking the species accordingly.
             Check Protein trees and orthologies for further details. </p>
-        <p ng-if=notFound==1>No gene tree has been found for {{target.symbol}}</p>
+        <p ng-if=notFound==1>No gene tree has been found for {{target.symbol}}.</p>
 
         <ot-png filename="{{target.approved_symbol}}-geneTree.png" track="geneTree"></ot-png>
         <div id="gene-tree"></div>
@@ -32,6 +32,17 @@
 
                 <tbody>
                 </tbody>
+
+                <tfoot>
+                    <tr class="filter-row">
+                        <th>Species</th>  <!-- nameless col for access level -->
+                        <th>Homology type</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </uib-tab>

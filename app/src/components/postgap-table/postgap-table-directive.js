@@ -2,7 +2,7 @@
 
 angular.module('otDirectives')
 
-    .directive('otCommonDiseaseTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', '$log', 'otClearUnderscoresFilter', 'otDictionary', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, $log, otClearUnderscoresFilter, otDictionary) {
+    .directive('otPostgapTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', '$log', 'otClearUnderscoresFilter', 'otDictionary', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, $log, otClearUnderscoresFilter, otDictionary) {
         'use strict';
         var searchObj = otUtils.search.translateKeys($location.search());
         var checkPath = otUtils.checkPath;
@@ -10,7 +10,7 @@ angular.module('otDirectives')
         return {
             restrict: 'AE',
 
-            templateUrl: 'src/components/common-disease-table/common-disease-table.html',
+            templateUrl: 'src/components/postgap-table/postgap-table.html',
 
             scope: {
                 title: '@?',    // optional title for filename export
@@ -104,39 +104,44 @@ angular.module('otDirectives')
                             // disease name
                             row.push(item.disease.efo_info.label);
 
+
                             // Variant
                             var mut = '<a class=\'ot-external-link\' href=\'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>' + item.variant.id.split('/').pop() + '</a>';
                             row.push(mut);
 
-                            // variant type
-                            var t = otClearUnderscoresFilter(otUtils.getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop()));
-                            row.push(t);
 
-                            // evidence source
-                            if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
-                                row.push('<a class=\'ot-external-link\' href=\'https://test-rvizapps.biogen.com/23andmeDev/\' target=\'_blank\'>'
-                                    + otClearUnderscoresFilter(item.sourceID)
-                                    + '</a>');
-                            } else if (item.sourceID === otConsts.datasources.PHEWAS.id) {
-                                row.push('<a class=\'ot-external-link\' href=\'https://phewascatalog.org/phewas\' target=\'_blank\'>'
-                                    + otClearUnderscoresFilter(item.sourceID)
-                                    + '</a>');
-                            } else {
-                                row.push('<a class=\'ot-external-link\' href=\'https://www.ebi.ac.uk/gwas/search?query=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>'
-                                    + otClearUnderscoresFilter(item.sourceID)
-                                    + '</a>');
-                            }
-
+                            // --- Disease-Variant ---
+                            // GWAS Variant (in LD)
+                            row.push(item.evidence.variant2disease.lead_snp_rsid);
                             // p-value
                             var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
-
                             if (item.sourceID === otConsts.datasources.PHEWAS.id) {
                                 msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
                             } else if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
                                 msg += '<br/>Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '<br />Phenotype: ' + item.unique_association_fields.phenotype;
                             }
                             row.push(msg);
-
+                            // evidence source
+                            // if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
+                            //     row.push('<a class=\'ot-external-link\' href=\'https://test-rvizapps.biogen.com/23andmeDev/\' target=\'_blank\'>'
+                            //         + otClearUnderscoresFilter(item.sourceID)
+                            //         + '</a>');
+                            // } else if (item.sourceID === otConsts.datasources.PHEWAS.id) {
+                            //     row.push('<a class=\'ot-external-link\' href=\'https://phewascatalog.org/phewas\' target=\'_blank\'>'
+                            //         + otClearUnderscoresFilter(item.sourceID)
+                            //         + '</a>');
+                            // } else {
+                            //     row.push('<a class=\'ot-external-link\' href=\'https://www.ebi.ac.uk/gwas/search?query=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>'
+                            //         + otClearUnderscoresFilter(item.sourceID)
+                            //         + '</a>');
+                            // }
+                            if (item.sourceID === otConsts.datasources.GWAS.id) {
+                                row.push('<a class=\'ot-external-link\' href=\'https://www.ebi.ac.uk/gwas/search?query=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>'
+                                    + otClearUnderscoresFilter(item.sourceID)
+                                    + '</a>');
+                            }
+                            // r2
+                            row.push(parseFloat(item.unique_association_fields.r2).toPrecision(3));
                             // publications
                             var refs = [];
                             if (checkPath(item, 'evidence.variant2disease.provenance_type.literature.references')) {
@@ -146,6 +151,32 @@ angular.module('otDirectives')
                             var pmidsList = otUtils.getPmidsList(refs);
                             row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : 'N/A');
                             // row.push(refs.length ? otUtils.getPublicationsField(refs) : 'N/A');
+
+
+                            // --- Variant-Target ---
+                            // POSTGAP Score
+                            row.push(item.evidence.gene2variant.metadata.funcgen.ot_g2v_score.toPrecision(3));
+                            // variant type
+                            var t = otClearUnderscoresFilter(otUtils.getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop()));
+                            if (t === 'unknown') {
+                                t = 'N/A';
+                            }
+                            row.push(t);
+                            // VEP
+                            row.push(item.evidence.gene2variant.metadata.funcgen.vep_score);
+                            // GTEx
+                            row.push(item.evidence.gene2variant.metadata.funcgen.gtex_score.toPrecision(3));
+                            // PCHiC
+                            row.push(item.evidence.gene2variant.metadata.funcgen.pchic_score.toPrecision(3));
+                            // DHS
+                            row.push(item.evidence.gene2variant.metadata.funcgen.dhs_score.toPrecision(3));
+                            // Fantom5
+                            row.push(item.evidence.gene2variant.metadata.funcgen.fantom5_score.toPrecision(3));
+                            // Nearest
+                            row.push(item.evidence.gene2variant.metadata.funcgen.is_nearest_gene);
+                            // Regulome
+                            row.push(item.evidence.gene2variant.metadata.funcgen.regulome_score);
+
 
                             // Publication ids (hidden)
                             row.push(pmidsList.join(', '));
@@ -164,7 +195,7 @@ angular.module('otDirectives')
                     return newdata;
                 }
 
-                var dropdownColumns = [1, 2, 3, 4];
+                var dropdownColumns = [1, 2, 3, 5, 9, 15];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
@@ -177,7 +208,7 @@ angular.module('otDirectives')
                         'columnDefs': [
                             {
                                 'sType': 'pval-more',
-                                'targets': 5
+                                'targets': 4
                             },
                             {
                                 'targets': [0],    // the access-level (public/private icon)
@@ -185,7 +216,7 @@ angular.module('otDirectives')
                                 'width': '3%'
                             },
                             {
-                                'targets': [7],
+                                'targets': [17],
                                 'visible': false
                             },
                             {
@@ -199,14 +230,14 @@ angular.module('otDirectives')
                             {
                                 'targets': [2],
                                 'width': '14%',
-                                'mRender': otColumnFilter.mRenderGenerator(8),
-                                'mData': otColumnFilter.mDataGenerator(2, 8)
+                                'mRender': otColumnFilter.mRenderGenerator(18),
+                                'mData': otColumnFilter.mDataGenerator(2, 18)
                             },
                             {
-                                'targets': [4],
+                                'targets': [5],
                                 'width': '14%',
-                                'mRender': otColumnFilter.mRenderGenerator(9),
-                                'mData': otColumnFilter.mDataGenerator(4, 9)
+                                'mRender': otColumnFilter.mRenderGenerator(19),
+                                'mData': otColumnFilter.mDataGenerator(5, 19)
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
