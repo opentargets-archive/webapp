@@ -195,16 +195,8 @@
 
                 <!-- FEEDBACK BUTTON -->
                 <!-- Plese re-enable when we want (after integration day?) -->
-                <div ng-cloak class="ot-feedback-button hidden-xs" ng-controller="FeedbackController" ng-click="openFeedbackForm()">
-
-                    <!-- <a target=_blank href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&colon;&#x73;&#x75;&#x70;&#x70;&#x6F;&#x72;&#x74;&commat;&#x74;&#x61;&#x72;&#x67;&#x65;&#x74;&#x76;&#x61;&#x6C;&#x69;&#x64;&#x61;&#x74;&#x69;&#x6F;&#x6E;&period;&#x6F;&#x72;&#x67;&quest;&#x53;&#x75;&#x62;&#x6A;&#x65;&#x63;&#x74;&equals;&#x4F;&#x70;&#x65;&#x6E;&#x20;&#x54;&#x61;&#x72;&#x67;&#x65;&#x74;&#x73;&#x20;&#x50;&#x6C;&#x61;&#x74;&#x66;&#x6F;&#x72;&#x6D;&#x20;&#x2D;&#x20;&#x66;&#x65;&#x65;&#x64;&#x62;&#x61;&#x63;&#x6B;&body=Page URL: {{location.absUrl()}}"> -->
+                <div ng-cloak class="ot-feedback-button hidden-xs" ng-controller="FeedbackController" ng-click="openFeedbackForm()" ng-show="location.path()=='/'">
                     <div>Feedback</div>
-                    <!-- </a> -->
-                </div>
-
-                <!-- Sign up button -->
-                <div ng-cloak class="ot-signup-button hidden-xs" ng-controller="FeedbackController" ng-class="{'ot-signup-button-round': location.path()!='/' }" ng-click="openSignupForm()">
-                    <div>Sign&nbsp;up</div>
                 </div>
                 
                 <!-- Social media button -->
@@ -247,9 +239,9 @@
 
             </div>
             <!-- end main page content -->
-
+            
             <!-- new footer form - test -->
-            <div style="width:100%; background:#2f2d36">
+            <div ng-show="location.path()!=='/'" style="width:100%; background:#2f2d36">
                 <div class="container">
                     <div class="row" style="border-bottom: 1px solid #403f48;">
                         <div class="col-sm-9 col-md-6" >
