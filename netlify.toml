@@ -32,5 +32,9 @@
   APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/"
 #  APIHOST = "https://mk-fixfacets-dot-open-targets-eu-dev.appspot.com/api/"
 
+[context."postgap-beta".environment]
+  APIHOST = "https://open-targets-eu-dev.appspot.com/"
+
 [context.master.environment]
   APIHOST = "https://open-targets-eu-dev.appspot.com/"
+
