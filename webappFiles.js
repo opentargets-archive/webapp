@@ -9,6 +9,7 @@ var webappFiles = {
             'node_modules/angulartics/dist/angulartics.min.js',
             'node_modules/angulartics/dist/angulartics-piwik.min.js',
             'node_modules/d3/d3.min.js',
+            'node_modules/d3-svg-legend/d3-legend.min.js',
             // 'node_modules/d3-color/build/d3-color.min.js',
             // 'node_modules/d3-interpolate/build/d3-interpolate.min.js',
             // 'node_modules/d3-scale-chromatic/build/d3-scale-chromatic.min.js',

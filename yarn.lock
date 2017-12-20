@@ -1940,6 +1940,10 @@ d3-selection@^1.0.2, d3-selection@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/d3-selection/-/d3-selection-1.1.0.tgz#1998684896488f839ca0372123da34f1d318809c"
 
+d3-svg-legend@1.x:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/d3-svg-legend/-/d3-svg-legend-1.13.0.tgz#6217478c9add9d62cb333617e1961311a41a4db3"
+
 d3-timer@1:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/d3-timer/-/d3-timer-1.0.7.tgz#df9650ca587f6c96607ff4e60cc38229e8dd8531"

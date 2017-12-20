@@ -69,6 +69,7 @@
     "cttv.targetAssociationsTree": "0.0.10",
     "cttv.targetGeneTree": "0.0.14",
     "d3": "~3.5.8",
+    "d3-svg-legend": "1.x",
     "file-saver": "^1.3.3",
     "jquery": "^2.2.4",
     "js-yaml": "^3.10.0",
