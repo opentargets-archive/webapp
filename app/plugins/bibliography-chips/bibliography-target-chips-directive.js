@@ -52,22 +52,10 @@ angular.module('otPlugins')
                     // {id: 'pub_date_histogram', label: 'publication date'}
                 ];
 
-                /*
-                    'top_chunks_significant_terms': {} // 'concepts'
-                    // 'acronym_significant_terms': {},
-                    'authors_significant_terms': {},    // authors
-                    'diseases': {},
-                    'drugs': {},
-                    'genes': {},    // genes
-                    'journal_abbr_significant_terms': {},   // journal
-                    // 'phenotypes': {},
-                    // 'pub_date_histogram': {}, // todo, maybe
-                */
-
                 scope.$watch('selectedagg', function (newValue, oldValue) {
                     if (newValue !== oldValue) {
                         var refetchData = selected.length > 1;
-                        resetSelected();
+                        // resetSelected();
 
                         if (refetchData) {
                             getData();
