@@ -22,7 +22,8 @@ angular.module('otPlugins')
                 //
 
 
-                var API_URL = 'https://vy36p7a9ld.execute-api.eu-west-1.amazonaws.com/dev/search'; // 'https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search';
+                // var API_URL = 'https://vy36p7a9ld.execute-api.eu-west-1.amazonaws.com/dev/search'; // 'https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search';
+                var API_URL = 'https://link.opentargets.io/search';
                 var selected = [];
                 resetSelected();
 
