@@ -86,7 +86,7 @@ angular.module('otDirectives')
                             var db = item.sourceID;
 
                             // col 0: data origin: public / private
-                            row.push((item.access_level !== otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
+                            row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
                             // disease
                             row.push(item.disease.efo_info.label);
@@ -119,7 +119,8 @@ angular.module('otDirectives')
 
                             // TODO: This is a hack in the UI that needs to be solved at the data level
                             // In the next release this should go
-                            if (cons === 'trinucleotide repeat microsatellite feature') {
+                            // See... https://github.com/opentargets/webapp/issues/227
+                            if (cons === 'SO 0002165') {
                                 cons = 'trinucleotide expansion';
                             }
                             row.push(cons);

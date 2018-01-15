@@ -41,7 +41,7 @@
             "menu": [
                 {
                     "label" : "API documentation",
-                    "href" : "/documentation/api"
+                    "href" : "http://api.opentargets.io/v3/platform/docs"
                 },
                 {
                     "label" : "Python client",
@@ -264,19 +264,19 @@
             "heading": "Gene tree",
             "track": true
         },
-        // {
-        //     "name": "bibliography",
-        //     "element": "ot-bibliography-target",
-        //     "heading": "Bibliography",
-        //     "track": true
-        // },
         {
-            "name": "bibliographyChips",
-            "element": "ot-bibliography-target-chips",
+            "name": "bibliography",
+            "element": "ot-bibliography-target",
             "heading": "Bibliography",
-            "track": true,
-            "new": true
+            "track": true
         }
+//        {
+//            "name": "bibliographyChips",
+//            "element": "ot-bibliography-target-chips",
+//            "heading": "Bibliography",
+//            "track": true,
+//            "new": true
+//        }
     ],
 
 
