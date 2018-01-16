@@ -14,6 +14,8 @@ angular.module('otPlugins')
             templateUrl: 'plugins/bibliography-chips/bibliography-target-chips.html',
             scope: {
                 target: '=',
+                disease: '=',
+                ext: '=?',
                 label: '='
             },
             link: function (scope, elem, attrs) {
@@ -22,7 +24,8 @@ angular.module('otPlugins')
                 //
 
 
-                var API_URL = 'https://vy36p7a9ld.execute-api.eu-west-1.amazonaws.com/dev/search'; // 'https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search';
+                // var API_URL = 'https://vy36p7a9ld.execute-api.eu-west-1.amazonaws.com/dev/search'; // 'https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search';
+                var API_URL = 'https://link.opentargets.io/search';
                 var selected = [];
                 resetSelected();
 
@@ -51,35 +54,27 @@ angular.module('otPlugins')
                     // {id: 'pub_date_histogram', label: 'publication date'}
                 ];
 
-                /*
-                    'top_chunks_significant_terms': {} // 'concepts'
-                    // 'acronym_significant_terms': {},
-                    'authors_significant_terms': {},    // authors
-                    'diseases': {},
-                    'drugs': {},
-                    'genes': {},    // genes
-                    'journal_abbr_significant_terms': {},   // journal
-                    // 'phenotypes': {},
-                    // 'pub_date_histogram': {}, // todo, maybe
-                */
-
                 scope.$watch('selectedagg', function (newValue, oldValue) {
                     if (newValue !== oldValue) {
                         var refetchData = selected.length > 1;
-                        resetSelected();
+                        // resetSelected();
 
-                        if (refetchData) {
-                            getData();
-                        } else {
-                            onSelectAggsData();
-                        }
+                        // if (refetchData) {
+                        //     getData();
+                        // } else {
+                        //     onSelectAggsData();
+                        // }
+                        onSelectAggsData();
                     }
                 });
 
                 function resetSelected () {
                     // selected = selected || [scope.target.approved_symbol]; //.toLowerCase()];
                     selected.length = 0;
-                    selected.push({key: scope.target.approved_symbol});
+                    selected.push({
+                        key: scope.target ? scope.target.id : scope.disease.efo,
+                        label: scope.target ? scope.target.approved_symbol : scope.disease.label
+                    });
                 }
 
 
@@ -89,7 +84,10 @@ angular.module('otPlugins')
 
 
                 function addSelected (s) {
-                    selected.push(s); // to lower case for more accurate matching
+                    // some aggregations don't have a label, so we add one for consistency
+                    // so that we can then filter selected aggregation itmes in onSelectAggsData()
+                    s.label = s.label || s.key;
+                    selected.push(s);
                     return selected;
                 }
 
@@ -121,7 +119,7 @@ angular.module('otPlugins')
                     // var ss = scope.target.symbol_synonyms || [];
                     // var ns = /* scope.target.name_synonyms ||*/ [];  // don't use any name synomyms for now
                     // var q = '(\'' + [selected[0]].concat(ss).concat(ns).join('\'OR\'') + '\')'; // e.g. : ('braf'AND'braf1'AND'braf2')
-                    var q = scope.target.id;
+                    var q = selected[0].key; // scope.target.id;
                     if (selected.length > 1) {
                         // q = q + ' AND \'' + selected.slice(1).join('\' AND \'') + '\'';  // e.g. : ('braf'AND'braf1'AND'braf2')AND'NRAS'AND'NRAS mutation'
                         q = [q].concat(
@@ -245,12 +243,6 @@ angular.module('otPlugins')
 
 
                 function onSelectAggsData () {
-                    // $log.log('onSelectedAggsData');
-                    // $log.log('*** onSelectAggsData ***');
-                    // var children = data.aggregations.abstract_significant_terms.buckets.filter(function(b){
-                    // var children = data.aggregations.top_chunks_significant_terms.buckets.filter(function(b){
-                    // $log.log('selection:', scope.selectedagg);
-                    // $log.log('aggs:', scope.aggs);
                     var children = scope.aggs[scope.selectedagg].buckets.filter(function (b) {
                         //
                         // don't add these to the treemap if they appears in the 'selected' array (i.e. those we clicked on) or in the symbol synonyms
@@ -265,11 +257,15 @@ angular.module('otPlugins')
                         // filter: case insensitive
                         // return selected.filter(function (a) { return a.key.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0   &&  
                         //     scope.target.symbol_synonyms.filter(function (a) { return a.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0;
-
-                        // a = selected // b = current 'bucket' we're checking
-                        return selected.filter(function (a) { return a.key.toString().toLowerCase() === b.key.toString().toLowerCase(); }).length === 0 &&
+                        return selected.filter(
+                            function (a) {
+                                // a = selected // b = current 'bucket' we're checking
+                                return a.key.toString().toLowerCase() === b.key.toString().toLowerCase() ||
+                                        a.label.toString().toLowerCase() === b.key.toString().toLowerCase();
+                            }
+                        ).length === 0; // &&
                         // a = synonyms // b = current 'bucket' we're checking
-                            scope.target.symbol_synonyms.filter(function (a) { return a.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0;
+                        // (scope.target ? (scope.target.symbol_synonyms.filter(function (a) { return a.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0) : true);
                     });
 
                     scope.aggs_result_total = children.length;

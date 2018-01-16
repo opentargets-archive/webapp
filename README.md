@@ -102,3 +102,9 @@ REST_API_SCHEME and REST_API_SERVER environment variables from working.
 Both approaches work, **just don't use them at the same time**.
 
 This can be useful to toggle data sources on/off in private instances and fork of the webapp.
+
+
+## Further documentation
+
+### [Plugins](/app/plugins/readme.md)
+Read about how to create platform plugins [here](/app/plugins/readme.md).
