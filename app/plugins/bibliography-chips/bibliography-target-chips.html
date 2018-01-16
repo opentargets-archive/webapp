@@ -21,7 +21,7 @@
             <div ng-repeat="hit in page.hits" style="margin-bottom:40px;" class="epmc_citation_container">
                 <!-- <h5 style="margin-bottom:5px"><a ng-href="https://europepmc.org/abstract/med/{{hit._source.id}}">{{hit._source.title}}</a></h5> -->
                 <div class="epmc_citation_title">
-                    <a ng-href="https://europepmc.org/abstract/med/{{hit._source.id}}">{{hit._source.title}}</a>
+                    <a ng-href="https://europepmc.org/abstract/med/{{hit._source.pub_id}}">{{hit._source.title}}</a>
                 </div>
                 <div class="epmc_citation_subdata">
                     <div class="epmc_citation_authors">
