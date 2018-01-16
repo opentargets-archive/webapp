@@ -139,6 +139,13 @@
             "track": true
         },
         {
+            "name": "bibliographyChips",
+            "element": "ot-bibliography-target-chips",
+            "heading": "Bibliography",
+            "track": true,
+            "new": true
+        },
+        {
             "name": "classification",
             "element": "ot-disease-classification",
             "heading": "Classification",
