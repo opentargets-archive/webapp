@@ -89,16 +89,7 @@ angular.module('otPlugins')
                 var data = formatPhenotypesToArray(scope.target.mouse_phenotypes);
 
                 scope.data = data;
-                scope.sources = otConfig.evidence_sources.animal_model.map(function (s) {
-                    // so here s is the datasource api 'key' (i.e. lowercase 'pathway')
-                    // now we need to find label and infoUrl from the otConsts.datasources object
-                    var ds = otUtils.getDatasourceById(s);
-
-                    return {
-                        label: ds.label, // otDictionary[dk[0]],
-                        url: ds.infoUrl // otConsts.dbs_info_url[otConsts.invert(s)]
-                    };
-                });
+                scope.sources = [{label: 'MGI', url: 'http://www.informatics.jax.org/'}];
 
                 var dropdownColumns = [0, 1];
                 $timeout(function () {
