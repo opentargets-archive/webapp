@@ -76,7 +76,7 @@
     "lodash": "^4.17.4",
     "marked": "^0.3.6",
     "moment": "^2.19.1",
-    "ot-postgap": "opentargets/postgapView#0.0.2",
+    "ot-postgap": "opentargets/postgapView#0.0.3",
     "ot.interactions_viewer": "0.0.11",
     "systemjs": "^0.19.27",
     "tnt": "^0.0.0",
