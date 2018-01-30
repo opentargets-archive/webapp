@@ -163,6 +163,9 @@ angular.module('otDirectives')
                 return sectionSentenceMap;
             };
 
+            function formatAuthor (author) {
+                return author.LastName + ' ' + author.Initials;
+            }
 
             /*
              * Takes the data object returned by the API and formats it 
@@ -174,9 +177,9 @@ angular.module('otDirectives')
 
                 var cat_list = ['title', 'intro', 'result', 'discussion', 'conclusion', 'other'];   // preferred sorting order
 
-                function formatAuthor (author) {
-                    return author.LastName + ' ' + author.Initials;
-                }
+                // function formatAuthor (author) {
+                //     return author.LastName + ' ' + author.Initials;
+                // }
 
                 for (var i = 0; i < data.length; i++) {
                     var d = data[i];
@@ -523,7 +526,8 @@ angular.module('otDirectives')
                                     var authorsStr = '';
                                     if (d.literature.authors) {
                                         var authors = d.literature.authors.map(function (k) {
-                                            return k.short_name;
+                                            // return k.short_name; // short_name field no longer available in API response
+                                            return formatAuthor(k);
                                         });
                                         authorsStr = '"' + authors.join(', ') + '"';
                                     }
