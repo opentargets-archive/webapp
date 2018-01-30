@@ -511,8 +511,10 @@ angular.module('otDirectives')
                                 for (var i = 0; i < data.length; i++) {
                                     var d = data[i];
                                     var row = [];
+                                    // note: wrap data in quotation marks to avoid issues with content and columns
+                                    // as if content contains commas, it will brake CVS structure
                                     // Disease
-                                    row.push(d.disease.efo_info.label);
+                                    row.push('"' + d.disease.efo_info.label + '"');
                                     // Publication id
                                     row.push(d.literature.references[0].lit_id.split('/').pop());
                                     // title
