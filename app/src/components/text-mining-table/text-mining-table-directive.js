@@ -251,9 +251,9 @@ angular.module('otDirectives')
 
                         journalInfo += ' ' + d.literature.journal_reference;
 
-                        var titleAndSource = '<span class=large><a href=\'#\' onClick=\'angular.element(this).scope().openEuropePmc(' + pubmedId + ')\'>' + title + '</a></span>'
-                            + '<br />'
-                            + '<span class=small>' + authorStr + ' ' + journalInfo + '</span>';
+                        var titleAndSource = '<span class=large><a href="http://europepmc.org/abstract/MED/' + pubmedId + '" target="_blank">' + title + '</a></span>'
+                        + '<br />'
+                        + '<span class=small>' + authorStr + ' ' + journalInfo + '</span>';
 
                         // PMID
                         var pmidStr = '<span style="color:#aaaaaa">PMID: ' + pubmedId + '</span>';
@@ -466,10 +466,6 @@ angular.module('otDirectives')
                     scope.ext.hasError = false;
                     dirScope = scope;
                     var filename = scope.title;
-                    scope.openEuropePmc = function (pmid) {
-                        var URL = 'http://europepmc.org/abstract/MED/' + pmid;
-                        window.open(URL);
-                    };
 
                     scope.displaySentences = function (id) {
                         // make the collapse content to be shown or hide
