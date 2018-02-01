@@ -500,12 +500,12 @@ body{
 
     .ot-social-panel-item {
         width: 30px;
-        height: 30px;
+        height: 25px;
         color: #FFF;
         font-size: 14px;
         text-align: center;
         font-family: 'FontAwesome';
-        padding-top: 6px;
+        padding-top: 4px;
     }
 
     .ot-social-panel-follow {
@@ -548,12 +548,33 @@ body{
     };
 }
 
+.ot-social-panel-github{
+    background: #000;
+    &:after {
+        content: "\f09b";
+    };
+}
+
+.ot-social-panel-medium{
+    background: #00Ab6c;
+    &:after {
+        content: "\f23a";
+    };
+}
+
+.ot-social-panel-youtube{
+    background: #F00;
+    &:after {
+        content: "\f16a";
+    };
+}
+
 
 
 .footer-social-bar {
     span {
-        padding-right: 5px;
-        font-size: 15px;
+        // padding-right: 5px;
+        font-size: 18px;
     }
 }
 
