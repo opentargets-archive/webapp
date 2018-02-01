@@ -14,7 +14,7 @@ angular.module('otDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('otDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otApi', '$q', function (otUtils, otDictionary, otConsts, otApi, $q) {
+    .directive('otDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otApi', function (otUtils, otDictionary, otConsts, otApi) {
         'use strict';
 
         var filters = {};
@@ -406,6 +406,7 @@ angular.module('otDirectives')
                             format: 'csv',
                             size: size,
                             fields: ['target.gene_info.symbol',
+                                'target.id',
                                 'association_score.overall',
                                 'association_score.datatypes.genetic_association',
                                 'association_score.datatypes.somatic_mutation',
