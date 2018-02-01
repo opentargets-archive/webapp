@@ -163,6 +163,9 @@ angular.module('otDirectives')
                 return sectionSentenceMap;
             };
 
+            function formatAuthor (author) {
+                return author.LastName + ' ' + author.Initials;
+            }
 
             /*
              * Takes the data object returned by the API and formats it 
@@ -174,9 +177,9 @@ angular.module('otDirectives')
 
                 var cat_list = ['title', 'intro', 'result', 'discussion', 'conclusion', 'other'];   // preferred sorting order
 
-                function formatAuthor (author) {
-                    return author.LastName + ' ' + author.Initials;
-                }
+                // function formatAuthor (author) {
+                //     return author.LastName + ' ' + author.Initials;
+                // }
 
                 for (var i = 0; i < data.length; i++) {
                     var d = data[i];
@@ -212,9 +215,10 @@ angular.module('otDirectives')
                         var abstractSentences = getMatchedSentences(d);
                         var abstractSection = 'Abstract';
                         var abstractText = d.literature.abstract || 'Not abstract supplied.';
-                        var abstract = '<div id=\'' + pubmedId + abstractSection + '\'>' + abstractText + '</div>';
+                        var abId = pubmedId + abstractSection + '--' + i;
+                        var abstract = '<div id=\'' + abId + '\'>' + abstractText + '</div>';
 
-                        var abstractString = '<p class=\'small\'><span onclick=\'angular.element(this).scope().displaySentences("' + pubmedId + abstractSection + '")\'style=\'cursor:pointer\'><i class=\'fa fa-chevron-circle-down\' aria-hidden=\'true\'></i>&nbsp;<span class=\'bold\'>Abstract</span></p>';
+                        var abstractString = '<p class=\'small\'><span onclick=\'angular.element(this).scope().displaySentences("' + abId + '")\'style=\'cursor:pointer\'><i class=\'fa fa-chevron-circle-down\' aria-hidden=\'true\'></i>&nbsp;<span class=\'bold\'>Abstract</span></p>';
                         // var matchedSentences = $('#literature-table').DataTable().row(rowIdx).data()[5]; //this is details
 
                         var title = d.literature.title || '';
@@ -510,8 +514,10 @@ angular.module('otDirectives')
                                 for (var i = 0; i < data.length; i++) {
                                     var d = data[i];
                                     var row = [];
+                                    // note: wrap data in quotation marks to avoid issues with content and columns
+                                    // as if content contains commas, it will brake CVS structure
                                     // Disease
-                                    row.push(d.disease.efo_info.label);
+                                    row.push('"' + d.disease.efo_info.label + '"');
                                     // Publication id
                                     row.push(d.literature.references[0].lit_id.split('/').pop());
                                     // title
@@ -520,7 +526,8 @@ angular.module('otDirectives')
                                     var authorsStr = '';
                                     if (d.literature.authors) {
                                         var authors = d.literature.authors.map(function (k) {
-                                            return k.short_name;
+                                            // return k.short_name; // short_name field no longer available in API response
+                                            return formatAuthor(k);
                                         });
                                         authorsStr = '"' + authors.join(', ') + '"';
                                     }
