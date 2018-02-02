@@ -56,23 +56,30 @@ angular.module('otDirectives')
                             scope.noDrug = true;
                         })
                         .then(function (drugId) {
-
                             // Get the mechanism of action...
                             $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule_form/' + drugId)
                                 .then(function (resp) {
+
                                     var molForms = {};
                                     for (var i = 0; i < resp.data.molecule_forms.length; i++) {
                                         var form = resp.data.molecule_forms[i];
                                         molForms[form.molecule_chembl_id] = true;
                                         molForms[form.parent_chembl_id] = true;
                                     }
+
                                     var promises = [];
                                     Object.keys(molForms).forEach(function (mol) {
                                         promises.push($http.get('https://www.ebi.ac.uk/chembl/api/data/mechanism?molecule_chembl_id=' + mol));
                                     });
                                     $q.all(promises)
                                         .then(function (resps) {
-                                            var allMecs = [];
+                                            // var allMecs = [];
+                                            // In order to properly show/hide teh spinner, we want to know if there will be any mechanism of action
+                                            // and we already know that from hte response.
+                                            var anymech = resps.filter(function (rsp) {
+                                                return rsp.data.mechanisms.length > 0;
+                                            });
+                                            var allMecs = anymech.length === 0 ? undefined : [];
                                             scope.mechanisms = allMecs;
                                             for (var i = 0; i < resps.length; i++) {
                                                 var mecs = resps[i].data.mechanisms;
