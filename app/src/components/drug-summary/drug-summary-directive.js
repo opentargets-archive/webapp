@@ -2,7 +2,7 @@ angular.module('otDirectives')
     .directive('otDrugSummary', ['$http', '$q', 'otApi', 'otUtils', function ($http, $q, otApi, otUtils) {
         'use strict';
 
-        function pngToDataUrl(url, callback, outputFormat) {
+        function pngToDataUrl (url, callback, outputFormat) {
             var img = new Image();
             img.crossOrigin = 'Anonymous';
             img.onload = function () {
@@ -15,6 +15,11 @@ angular.module('otDirectives')
                 dataURL = canvas.toDataURL(outputFormat);
                 callback(dataURL);
                 canvas = null;
+            };
+            img.onerror = function (e) {
+                // If the image is not found we get a 404 error and ugly broken image icon
+                // In that case we invoke the callback with no data so that we can hide the image instead
+                callback(undefined);
             };
             img.src = url;
         }
@@ -48,7 +53,11 @@ angular.module('otDirectives')
                             if (scope.mol_type !== 'Antibody') {
                                 pngToDataUrl('https://www.ebi.ac.uk/chembl/api/data/image/' + scope.drug, function (base64Img) {
                                     var img = document.getElementById('drugDiagramContainer');
-                                    img.setAttribute('src', base64Img);
+                                    if (base64Img) {
+                                        img.setAttribute('src', base64Img);
+                                    } else {
+                                        img.style.visibility = 'hidden';
+                                    }
                                 });
                             }
                             return scope.drug;
@@ -59,7 +68,6 @@ angular.module('otDirectives')
                             // Get the mechanism of action...
                             $http.get('https://www.ebi.ac.uk/chembl/api/data/molecule_form/' + drugId)
                                 .then(function (resp) {
-
                                     var molForms = {};
                                     for (var i = 0; i < resp.data.molecule_forms.length; i++) {
                                         var form = resp.data.molecule_forms[i];
@@ -124,7 +132,7 @@ angular.module('otDirectives')
                                                                                 for (var i = 0; i < resp.body.data.length; i++) {
                                                                                     var q = resp.body.data[i];
                                                                                     if (q.id) {
-                                                                                        uniqSynsArr[i].ensId = q.id
+                                                                                        uniqSynsArr[i].ensId = q.id;
                                                                                     }
                                                                                 }
                                                                                 return uniqSynsArr;
@@ -164,11 +172,15 @@ angular.module('otDirectives')
                                     if (scope.mol_type !== 'Antibody') {
                                         pngToDataUrl('https://www.ebi.ac.uk/chembl/api/data/image/' + drugId, function (base64Img) {
                                             var img = document.getElementById('drugDiagramContainer');
-                                            img.setAttribute('src', base64Img);
+                                            if (base64Img) {
+                                                img.setAttribute('src', base64Img);
+                                            } else {
+                                                img.style.visibility = 'hidden';
+                                            }
                                         });
                                     }
                                     return scope.displayName;
-                                })
+                                });
                         })
                         .then(function (drugName) {
                             if (!drugName) {
@@ -194,7 +206,7 @@ angular.module('otDirectives')
                                     });
                                     if (scope.targets.length > 1) {
                                         scope.batchSearchTargets = otUtils.compressTargetIds(scope.targets.map(function (d) {
-                                            return d.id
+                                            return d.id;
                                         })).join(',');
                                     }
                                 });
