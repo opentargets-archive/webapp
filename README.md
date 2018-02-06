@@ -86,10 +86,12 @@ Then visit https://localhost:8443
 
 The standard container comes with self-signed certificates, so you will have click through a couple of security warnings to get to the app.
 
-If you want to point to an API different than the production one, you can specify the variables
 
-REST_API_SCHEME="http" (`http` or `https` are valid option)
-REST_API_SERVER="server:port" (eg `rest_api:8080` to point to a container named `rest_api` or `api.targetvalidation.org` to point to the production api on the default 80/443 ports)
+If you want to point to an API different than the production one:
+
+you can specify the variables
+`REST_API_SCHEME="http"` (`http` or `https` are valid option) and `REST_API_SERVER="server:port"` (eg `rest_api:8080` to point to a container named `rest_api` or `api.opentargets.io:443` to point to the production api on the default 80/443 ports)
+
 
 To mount a `custom.json` on the container at runtime:
 
