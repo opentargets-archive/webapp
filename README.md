@@ -38,9 +38,12 @@ The standard container comes with self-signed certificates, so you will have cli
 
 #### If you want to point to an API different than the production one:
 
-you can specify the variables
-`REST_API_SCHEME="http"` (`http` or `https` are valid option) and `REST_API_SERVER="server:port"` (eg `rest_api:8080` to point to a container named `rest_api` or `api.opentargets.io:443` to point to the production api on the default 80/443 ports)
+You can specify the variables
+`REST_API_SCHEME="http"` (`http` or `https` are valid option) and `REST_API_SERVER="server:port"` (eg `rest_api:8080` to point to a container named `rest_api` or `api.opentargets.io:443` to point to the production api on the default 443 port)
 
+```sh
+docker run -d -p 8443:443 -p 8080:80 -e "REST_API_SCHEME=https" -e "REST_API_SERVER=devapi.appspot.com:443" quay.io/opentargets/webapp
+```
 
 
 ## Developing
