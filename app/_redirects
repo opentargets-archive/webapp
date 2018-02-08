@@ -1,3 +1,2 @@
 /proxy/* https://proxy.opentargets.io/:splat 200!
 /* /index.html 200
-/api/* https://api.targetvalidation.org/api/:splat 200!
