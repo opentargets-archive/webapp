@@ -113,6 +113,7 @@ Notice that any change to the code will require you to rebuild the content of th
 
 
 You can also build your own container, if you want to change the nginx configuration.
+**NB** before building the container you should have built the app at least once,for eg. with `gulp build-all`
 
 ```sh
 docker build -t mywebapp .
