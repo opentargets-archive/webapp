@@ -39,12 +39,18 @@ The standard container comes with self-signed certificates, so you will have cli
 #### If you want to point to an API different than the production one:
 
 You can specify the variables
-`REST_API_SCHEME="http"` (`http` or `https` are valid option) and `REST_API_SERVER="server:port"` (eg `rest_api:8080` to point to a container named `rest_api` or `api.opentargets.io:443` to point to the production api on the default 443 port)
+- `"REST_API_SCHEME=http"` (`http` or `https` are valid option, `https` is the default) 
+- `"REST_API_SERVER=server.example.com"` (eg. `rest_api` to point to a container named `rest_api` or `api.opentargets.io` to point to the production api. production api is the default)
+- `"REST_API_PORT=80"` (default is the HTTPS/443 port)
+
+The default value is used for each variable if it's not specified.
 
 ```sh
-docker run -d -p 8443:443 -p 8080:80 -e "REST_API_SCHEME=https" -e "REST_API_SERVER=devapi.appspot.com:443" quay.io/opentargets/webapp
+docker run -d -p 8443:443 -p 8080:80 -e "REST_API_SCHEME=https" -e "REST_API_SERVER=devapi.appspot.com" -e "REST_API_PORT=443" quay.io/opentargets/webapp
 ```
 
+Any other modifications, including changing the `custom.json` for the container, cannot be made at runtime. 
+You'd have to create your own fork/modifications. Read on to the developing section.
 
 ## Developing
 Clone the repository and install the dependencies.
@@ -125,6 +131,12 @@ docker run -d -p 7899:80 -p 7443:443 mywebapp
 docker run -d -p 7899:80 -p 7443:443 -v $PWD/webapp/app:/var/www/app mywebapp
 ```
 
+#### Create an nginx container from the branch
+
+If you push some changes to the branch, a container with the tag of the branch will be publicly available after a few minutes on quay.io
+```sh
+docker pull quay.io/opentargets/webapp:<yourbranchname>
+```
 
 ## Further documentation
 
