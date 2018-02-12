@@ -1,5 +1,4 @@
 {
-    "api": "/api/",
     "mastheadNavigationMenu" : [
         {
             "label" : "About",
@@ -453,5 +452,7 @@
                 "type":"rnaSpecificity"
             }
         ]
-    }
+    },
+
+    "api": "/api/"
 }
