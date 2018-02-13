@@ -1,7 +1,0 @@
-# Configuration containing list of application servers.
-# if DNS is updated need to restart or update configuration of nginx
-upstream app_servers {
-    ip_hash;
-    server ${REST_API_SERVER} max_fails=5 fail_timeout=30s;
-    keepalive 32;
-}

@@ -1,2 +1,0 @@
-set $rest_api_scheme $REST_API_SCHEME ;
-set $ensembl_header $ENSEMBL_API_KEY;
