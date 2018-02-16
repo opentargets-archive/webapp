@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otBibliographyTargetChips', ['$log', '$http', '$timeout', function ($log, $http, $timeout) {
+    .directive('otBibliographyTargetChips', ['$log', '$http', '$timeout', '$sce', function ($log, $http, $timeout, $sce) {
         'use strict';
 
 
@@ -24,8 +24,9 @@ angular.module('otPlugins')
                 //
 
 
-                // var API_URL = 'https://vy36p7a9ld.execute-api.eu-west-1.amazonaws.com/dev/search'; // 'https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search';
-                var API_URL = 'https://link.opentargets.io/search';
+                // var API_URL = 'https://vy36p7a9ld.execute-api.eu-west-1.amazonaws.com/dev/search';
+                // var API_URL = 'https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search';
+                var API_URL = 'https://link.opentargets.io/';
                 var selected = [];
                 resetSelected();
 
@@ -42,6 +43,36 @@ angular.module('otPlugins')
                 scope.isloading = false;
 
                 scope.selectedagg;
+
+                scope.getAbstract = function (src) {
+                    // https://link.opentargets.io//entity/markedtext/28407239
+                    $http.get(API_URL + 'entity/markedtext/' + src.pub_id)
+                        .then(
+                            function (resp) {
+                                src.marked = resp.data;
+                                src.marked.abstract = $sce.trustAsHtml(src.marked.abstract);
+                            },
+                            function (resp) {
+                                $log.warn('Error: ', resp); // failure
+                            }
+                        );
+                };
+
+
+                scope.getSimilar = function (src) {
+                    // https://link.opentargets.io/document-more-like-this/28407239
+                    $http.get(API_URL + 'document-more-like-this/' + src.pub_id)
+                        .then(
+                            function (resp) {
+                                src.similar = resp.data.hits;
+                                return resp.data; // success
+                            },
+                            function (resp) {
+                                $log.warn('Error: ', resp); // failure
+                            }
+                        );
+                };
+
 
                 scope.aggtype = [
                     {id: 'top_chunks_significant_terms', label: 'Concepts'},
@@ -142,7 +173,7 @@ angular.module('otPlugins')
                     if (selected.length > 0) {
                         scope.isloading = true;
                         var targets = selected.join('\'AND\'');
-                        $http.get(API_URL + '?query=' + getQuery() + '&aggs=true')
+                        $http.get(API_URL + 'search?query=' + getQuery() + '&aggs=true')
                             .then(
                                 function (resp) {
                                     return resp.data; // success
@@ -182,7 +213,7 @@ angular.module('otPlugins')
 
                     if (after && after_id) {
                         scope.isloading = true;
-                        $http.get(API_URL + '?query=' + getQuery() + '&search_after=' + after + '&search_after_id=' + after_id)
+                        $http.get(API_URL + 'search?query=' + getQuery() + '&search_after=' + after + '&search_after_id=' + after_id)
                             .then(
                                 function (resp) {
                                     return resp.data; // success
@@ -255,7 +286,7 @@ angular.module('otPlugins')
                         // return !selected.includes(b.key) && !scope.target.symbol_synonyms.includes(b.key);
 
                         // filter: case insensitive
-                        // return selected.filter(function (a) { return a.key.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0   &&  
+                        // return selected.filter(function (a) { return a.key.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0   &&
                         //     scope.target.symbol_synonyms.filter(function (a) { return a.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0;
                         return selected.filter(
                             function (a) {

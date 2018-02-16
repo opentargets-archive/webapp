@@ -570,11 +570,13 @@ ot-related-targets-vis, ot-related-diseases-vis {
     }
 
     .epmc_citation_title{
-        font-size: 1.23em;
+        font-size: 16px;
     }
 
     .epmc_citation_subdata {
         padding-left:0px;
+        padding-bottom: 5px;
+        font-size: 12px;
 
         a {
             color:$clr-text;
@@ -586,7 +588,7 @@ ot-related-targets-vis, ot-related-diseases-vis {
     }
 
     .epmc_citation_authors, .epmc_citation_journal, .epmc_citation_source{
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .epmc_citation_authors{

@@ -86,3 +86,75 @@
     margin-bottom: 8px;
     display: inline-block;
 }
+
+// marked abstract styling (highlights)
+.paper-show-more-or-less{
+	color:#2e9dfd;font-size:.8em;cursor:pointer
+}
+.paper-show-more-or-less.inactive{
+	color:inherit;cursor:text
+}
+.paper-pmid{
+	font-size:.8em;color:#777;margin-bottom:1em
+}
+.paper-authors{
+	margin-top:.5em
+}
+.paper-journal{
+	font-size:.8em;margin-top:.2em;margin-bottom:.2em
+}
+.paper-journal .paper-year{
+	font-weight:700;margin-left:5px;margin-right:5px
+}
+.similar-paper{
+	margin-bottom:10px
+}
+.similar-paper .similar-paper-title{
+	color:#2e9dfd;cursor:pointer
+}
+.paper-abstract-short{
+	position:relative
+}
+.paper-abstract-short:before{
+	position:absolute;bottom:0;height:100%;width:100%;content:"";background:linear-gradient(0deg,#fff 10%,hsla(0,0%,100%,0) 90%);pointer-events:none
+}
+.subsection{
+	margin-top:20px;font-size:.8em;color:#333
+}
+.subsection>.subsection-title{
+	font-size:1em;margin-bottom:10px
+}
+.entities{
+	line-height:1.5em
+}
+[data-entity="TARGET&DISEASE"],[data-entity=DISEASE],[data-entity=DRUG],[data-entity=GENE]{
+	padding:.15em;margin:0 .25em;line-height:1;display:inline-block;border-radius:.25em;border:1px solid
+}
+[data-entity="TARGET&DISEASE"]:after,[data-entity=DISEASE]:after,[data-entity=DRUG]:after,[data-entity=GENE]:after{
+	box-sizing:border-box;font-size:.6em;line-height:1;padding:.25em;border-radius:.25em;text-transform:uppercase;display:inline-block;vertical-align:middle;margin:0 0 .1rem .5rem
+}
+[data-entity][data-entity=DRUG]{
+	background:rgba(224,0,132,.2);border-color:#e00084
+}
+[data-entity][data-entity=DRUG]:after{
+	background:#e00084
+}
+[data-entity][data-entity=DISEASE]{
+	background:rgba(67,198,252,.2);border-color:#43c6fc
+}
+[data-entity][data-entity=DISEASE]:after{
+	background:#43c6fc
+}
+[data-entity][data-entity="TARGET&DISEASE"]{
+	background:rgba(105,145,243,.2);border-color:#6991f3;border:1px dashed
+}
+[data-entity][data-entity="TARGET&DISEASE"]:after{
+	background:#6991f3
+}
+/*!*   display: inline; *!*/
+[data-entity][data-entity=GENE]{
+	background:rgba(87,227,81,.2);border-color:#57e351
+}
+[data-entity][data-entity=GENE]:after{
+	background:#57e351
+}
