@@ -16,7 +16,8 @@ angular.module('otPlugins')
                 target: '=',
                 disease: '=',
                 ext: '=?',
-                label: '='
+                label: '=',
+                q: '=?'
             },
             link: function (scope, elem, attrs) {
                 //
@@ -99,13 +100,34 @@ angular.module('otPlugins')
                     }
                 });
 
+                scope.$watch('q', function (nv, ov) {
+                    if (ov === undefined && nv !== undefined) {
+                        resetSelected();
+                    }
+                });
+
                 function resetSelected () {
                     // selected = selected || [scope.target.approved_symbol]; //.toLowerCase()];
+
                     selected.length = 0;
-                    selected.push({
-                        key: scope.target ? scope.target.id : scope.disease.efo,
-                        label: scope.target ? scope.target.approved_symbol : scope.disease.label
-                    });
+                    var o = {
+                        key: scope.q,
+                        label: scope.q
+                    };
+
+                    if (scope.target) {
+                        o.key = scope.target.id;
+                        o.label = scope.target.approved_symbol;
+                    } else if (scope.disease) {
+                        o.key = scope.disease.efo;
+                        o.label = scope.disease.label;
+                    }
+
+                    selected.push(o);
+                    // selected.push({
+                    //     key: (scope.target ? scope.target.id : scope.disease.efo || scope.q),
+                    //     label: (scope.target ? scope.target.approved_symbol : scope.disease.label) || q
+                    // });
                 }
 
 
