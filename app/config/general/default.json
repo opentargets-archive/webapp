@@ -282,7 +282,14 @@
            "heading": "Bibliography",
            "track": true,
            "new": true
-       }
+       },
+       {
+        "name": "cancerHallmark",
+        "element": "ot-cancer-hallmark",
+        "heading": "Cancer hallmark",
+        "track": true,
+        "new": true
+    }
     ],
 
 
@@ -454,5 +461,6 @@
         ]
     },
 
-    "api": "/api/"
+    // "api": "/api/"
+    "api": "https://master-dot-open-targets-eu-dev.appspot.com"
 }
