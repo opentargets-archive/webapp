@@ -461,6 +461,5 @@
         ]
     },
 
-    // "api": "/api/"
-    "api": "https://master-dot-open-targets-eu-dev.appspot.com"
+    "api": "/api/"
 }
