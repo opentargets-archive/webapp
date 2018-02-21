@@ -8,20 +8,18 @@
     <uib-tab heading="Visualisation">
         
         <h4>Function Summary</h4>
-        <p ng-repeat="function in target.hallmarks.function_summary">
-            {{function.description}}
-        </p>
-
         <p>
+            <span ng-repeat="function in target.hallmarks.function_summary">{{function.description}}<span ng-if="!$last">; </span><span ng-if="$last">.</span></span>
+            <br />
             <!-- target info on COSMIC -->
             <a ng-href="http://cancer.sanger.ac.uk/cosmic/gene/analysis?ln={{target.approved_symbol}}">COSMIC profile for {{target.approved_symbol}}</a>
         </p>
         
-        <div class="">
+        
             <div class="row">
                 <div class="col-sm-6">
+
                     <!-- table -->
-                    
                     <table class='table ot-evidence-table'>
                         <thead>
                             <tr>
@@ -32,10 +30,10 @@
                         </thead>
 
                         <tbody>
-                            <tr ng-repeat="mark in hallmarks" ng-click="(mark.promote || mark.suppress) ? setSelected(mark.label) : setSelected(undefined)">
+                            <tr ng-repeat="mark in hallmarks" ng-click="(mark.promote || mark.suppress) ? setSelected(mark.label) : setSelected(undefined)" ng-class="(mark.promote || mark.suppress) ? 'pointer':''">
                                 <td><span>{{mark.label}}</span></td>
-                                <td><span class="fa fa-arrow-circle-o-up fa-2x" ng-class="mark.promote ? 'text-success' : 'disabled'"></span></td>
-                                <td><span class="fa fa-arrow-circle-o-down fa-2x" ng-class="mark.suppress ? 'text-danger' : 'disabled'"></span></td>
+                                <td><span class="fa fa-arrow-circle-o-up fa-2x" ng-class="mark.promote ? 'text-success' : 'text-background'"></span></td>
+                                <td><span class="fa fa-arrow-circle-o-down fa-2x" ng-class="mark.suppress ? 'text-danger' : 'text-background'"></span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -55,23 +53,26 @@
                         <div class="panel-body">
                             <ul>
                                 <li ng-repeat="smark in selectedList">
-                                    <a ng-href="http://europepmc.org/search?query=EXT_ID:{{smark.pmid}}" target="_blank">{{smark.description}} <span class="fa fa-external-link"></span></a>
+                                    <a ng-href="http://europepmc.org/search?query=EXT_ID:{{smark.pmid}}" target="_blank">{{smark.description}}&nbsp;<span class="fa fa-external-link"></span></a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        
     </uib-tab>
 
     <uib-tab heading="Table">
         <h4>Function Summary</h4>
-        <p ng-repeat="function in target.hallmarks.function_summary">
-            {{function.description}}
+        <p>
+            <span ng-repeat="function in target.hallmarks.function_summary">{{function.description}}<span ng-if="!$last">; </span><span ng-if="$last">.</span></span>
+            <br />
+            <!-- target info on COSMIC -->
+            <a ng-href="http://cancer.sanger.ac.uk/cosmic/gene/analysis?ln={{target.approved_symbol}}">COSMIC profile for {{target.approved_symbol}}</a>
         </p>
         
-        <table class='table ot-evidence-table'>
+        <table class='table ot-evidence-table' id="hallmark-table">
             <thead>
                 <tr>
                     <th>Cancer Hallmark</th>
@@ -81,18 +82,11 @@
                 </tr>
             </thead>
 
-            <tbody>
-                <tr ng-repeat="mark in target.hallmarks.cancer_hallmarks">
-                    <td>{{mark.label}}</td>
-                    <td>{{mark.description}}</td>
-                    <td><span ng-show="mark.promote">Promotes</span><br ng-show="mark.promote && mark.suppress"/><span ng-show="mark.suppress">Suppresses</span></td>
-                    <td><a ng-href="http://europepmc.org/search?query=EXT_ID:{{mark.pmid}}" target="_blank">{{mark.pmid}}</a></td>
-                </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
 
     </uib-tab>
 
 </uib-tabset>
 
-<div ng-show="data.length==0"><p>No data available</p></div>
+<div ng-show="target.hallmarks.cancer_hallmarks.length==0"><p>No data available</p></div>
