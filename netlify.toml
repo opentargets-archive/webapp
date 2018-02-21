@@ -24,8 +24,7 @@
 # CAREFUL!!! When you point a particular branch to a specific API below,
 # the change will not continue working once the branch is merged into master.
 [context.feature.environment]
-  # APIHOST = "https://api.opentargets.io/"
-  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/"
+  APIHOST = "https://api.opentargets.io/"
 
 [context."expression-simple".environment]
 #  APIHOST = "https://mk-levelupdate-dot-open-targets-eu-dev.appspot.com/api/"
@@ -40,4 +39,4 @@
   APIHOST = "https://yapsy-dot-open-targets-eu-dev.appspot.com/"
 
 [context.cancer-hallmark.environment]
- APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/"
+  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/"
