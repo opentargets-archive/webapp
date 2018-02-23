@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otCancerHallmark', ['otUtils', '$timeout', function (otUtils, $timeout) {
+    .directive('otCancerHallmark', ['otUtils', 'otColumnFilter', '$timeout', function (otUtils, otColumnFilter, $timeout) {
         'use strict';
 
         return {
@@ -64,12 +64,23 @@ angular.module('otPlugins')
 
                         var l = '<a href="http://europepmc.org/search?query=EXT_ID:' + mark.pmid + '" target="_blank">' + mark.pmid + '</a>';
                         row.push(l);
+
+                        var effect = '';
+                        if (mark.promote && mark.suppress) {
+                            effect = 'Promotes and suppresses';
+                        } else if (mark.promote) {
+                            effect = 'Promotes';
+                        } else if (mark.suppress) {
+                            effect = 'Suppresses';
+                        }
+                        row.push(effect);
                         return row;
                     });
 
                     return rows;
                 }
 
+                var dropdownColumns = [0, 2];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table')[1];
@@ -90,10 +101,17 @@ angular.module('otPlugins')
                                 'width': '49%'
                             },
                             {
-                                'targets': [2, 3],
+                                'targets': [2],
+                                'width': '13%',
+                                'mRender': otColumnFilter.mRenderGenerator(4),
+                                'mData': otColumnFilter.mDataGenerator(2, 4)
+                            },
+                            {
+                                'targets': [3],
                                 'width': '13%'
                             }
-                        ]
+                        ],
+                        initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, scope.target.approved_symbol + '-cancer_hallmark'));
                 }
 
