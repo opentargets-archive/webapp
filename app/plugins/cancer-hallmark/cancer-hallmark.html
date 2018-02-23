@@ -1,6 +1,6 @@
 <p class="ot-section-intro">
     Cancer Hallmarks data is curated from COSMIC (Catalogue Of Somatic Mutations In Cancer), the world's largest and most comprehensive resource for exploring the impact of somatic mutations in human cancer. 
-    For more information on the concept of Cancer Hallmarks, refer to the influential 2011 article by D. Hanahan and R. A. Weinberg, Hallmarks of Cancer: The Next Generation.
+    For more information on the concept of Cancer Hallmarks, refer to the influential <a ng-href="http://www.cell.com/abstract/S0092-8674(11)00127-9" target="_blank">2011 article by D. Hanahan and R. A. Weinberg, Hallmarks of Cancer: The Next Generation</a>.
 </p>
 <!-- {{target.symbol}} -->
 
@@ -12,7 +12,7 @@
             <span ng-repeat="function in target.hallmarks.function_summary">{{function.description}}<span ng-if="!$last">; </span><span ng-if="$last">.</span></span>
             <br />
             <!-- target info on COSMIC -->
-            <a ng-href="http://cancer.sanger.ac.uk/cosmic/gene/analysis?ln={{target.approved_symbol}}">COSMIC profile for {{target.approved_symbol}}</a>
+            <a ng-href="http://cancer.sanger.ac.uk/cosmic/census-page/{{target.approved_symbol}}" target="_blank">COSMIC profile for {{target.approved_symbol}}</a>
         </p>
         
         
@@ -69,7 +69,7 @@
             <span ng-repeat="function in target.hallmarks.function_summary">{{function.description}}<span ng-if="!$last">; </span><span ng-if="$last">.</span></span>
             <br />
             <!-- target info on COSMIC -->
-            <a ng-href="http://cancer.sanger.ac.uk/cosmic/gene/analysis?ln={{target.approved_symbol}}">COSMIC profile for {{target.approved_symbol}}</a>
+            <a ng-href="http://cancer.sanger.ac.uk/cosmic/census-page/{{target.approved_symbol}}" target="_blank">COSMIC profile for {{target.approved_symbol}}</a>
         </p>
         
         <table class='table ot-evidence-table' id="hallmark-table">
