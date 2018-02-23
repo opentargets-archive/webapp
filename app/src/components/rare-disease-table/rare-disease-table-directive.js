@@ -143,7 +143,8 @@ angular.module('otDirectives')
                                 if (db === otConsts.datasources.GENOMICS_ENGLAND.id) {
                                     // item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
                                     item.evidence.urls[0].url = 'https://panelapp.genomicsengland.co.uk/panels/'; // Direct to generic panels page as Genomics England urls don't work.
-                                } else if (db === otConsts.datasources.GENE_2_PHENOTYPE.id) {
+                                }
+                                if (db === otConsts.datasources.GENE_2_PHENOTYPE.id) {
                                     row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>Further details in Gene2Phenotype database</a>');
                                 } else {
                                     sourceString = item.evidence.urls[0].nice_name;
