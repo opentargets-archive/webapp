@@ -20,8 +20,8 @@
             "href" : "",
             "menu" : [
                 {
-                    "label" : "FAQs",
-                    "href" : "/faq"
+                    "label" : "Documentation",
+                    "href" : "https://docs.targetvalidation.org/"
                 },
                 {
                     "label" : "support@targetvalidation.org",
