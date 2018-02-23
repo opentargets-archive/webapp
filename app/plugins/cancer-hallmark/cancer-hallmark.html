@@ -1,0 +1,101 @@
+<p class="ot-section-intro">
+    Cancer Hallmarks data is curated from COSMIC (Catalogue Of Somatic Mutations In Cancer), the world's largest and most comprehensive resource for exploring the impact of somatic mutations in human cancer. 
+    For more information on the concept of Cancer Hallmarks, refer to the influential <a ng-href="http://www.cell.com/abstract/S0092-8674(11)00127-9" target="_blank">2011 article by D. Hanahan and R. A. Weinberg, Hallmarks of Cancer: The Next Generation</a>.
+</p>
+<!-- {{target.symbol}} -->
+
+<uib-tabset>
+    <uib-tab heading="Visualisation">
+        
+        <h4>Function Summary</h4>
+        <p>
+            <span ng-repeat="function in target.hallmarks.function_summary">{{function.description}}<span ng-if="!$last">; </span><span ng-if="$last">.</span></span>
+            <br />
+            <!-- target info on COSMIC -->
+            <a ng-href="http://cancer.sanger.ac.uk/cosmic/census-page/{{target.approved_symbol}}" target="_blank">COSMIC profile for {{target.approved_symbol}}</a>
+        </p>
+        
+        
+            <div class="row">
+                <div class="col-sm-6">
+
+                    <!-- table -->
+                    <table class='table ot-evidence-table'>
+                        <thead>
+                            <tr>
+                                <th>Hallmarks</th>
+                                <th>Promotes</th>
+                                <th>Suppresses</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr ng-repeat="mark in hallmarks" ng-click="(mark.promote || mark.suppress) ? setSelected(mark.label) : setSelected(undefined)" ng-class="(mark.promote || mark.suppress) ? 'pointer':''">
+                                <td><span>{{mark.label}}</span></td>
+                                <td><span class="fa fa-arrow-circle-o-up fa-2x" ng-class="mark.promote ? 'text-success' : 'text-background'"></span></td>
+                                <td><span class="fa fa-arrow-circle-o-down fa-2x" ng-class="mark.suppress ? 'text-danger' : 'text-background'"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <!-- <p class="small">
+                            Note: Icons are based on figure 6 in D. Hanahan and R.A. Weinberg's 2011 article, Hallmarks of Cancer: The Next Generation.
+                    </p> -->
+                </div>
+
+                <div class="col-sm-6">
+                    <!-- side panel -->
+                    <div class="panel panel-default" ng-show="selected">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{selected}} <span class="pull-right fa fa-close" ng-click="setSelected(undefined)"></span></h3>
+                            <div class="pull-right"></div>
+                        </div>
+                        <div class="panel-body">
+                            <ul>
+                                <li ng-repeat="smark in selectedList">
+                                    <a ng-href="http://europepmc.org/search?query=EXT_ID:{{smark.pmid}}" target="_blank">{{smark.description}}&nbsp;<span class="fa fa-external-link"></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+    </uib-tab>
+
+    <uib-tab heading="Table">
+        <h4>Function Summary</h4>
+        <p>
+            <span ng-repeat="function in target.hallmarks.function_summary">{{function.description}}<span ng-if="!$last">; </span><span ng-if="$last">.</span></span>
+            <br />
+            <!-- target info on COSMIC -->
+            <a ng-href="http://cancer.sanger.ac.uk/cosmic/census-page/{{target.approved_symbol}}" target="_blank">COSMIC profile for {{target.approved_symbol}}</a>
+        </p>
+        
+        <table class='table ot-evidence-table' id="hallmark-table">
+            <thead>
+                <tr>
+                    <th>Cancer Hallmark</th>
+                    <th>Description</th>
+                    <th>Promotes or Suppresses</th>
+                    <th>Publication</th>
+                </tr>
+            </thead>
+
+            <tbody></tbody>
+
+            <tfoot>
+                <tr class="filter-row">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+
+    </uib-tab>
+
+</uib-tabset>
+
+<div ng-show="target.hallmarks.cancer_hallmarks.length==0"><p>No data available</p></div>
