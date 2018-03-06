@@ -196,7 +196,7 @@ to other diseases in the ontology. This page also displays the relationships of 
 The Drug section on this page provides a list of all FDA-approved and marketed drugs to treat this disease.
 
 ### <a name="scoring"></a>Association Score
-Details of the score calculation are given on the [scoring](/scoring) page.
+Details of the score calculation are given on the [scoring](https://docs.targetvalidation.org/scoring.html) page.
 
 ### <a name="filters"></a>Filters
 
