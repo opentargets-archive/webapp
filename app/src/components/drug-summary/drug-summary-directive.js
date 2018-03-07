@@ -115,7 +115,7 @@ angular.module('otDirectives')
                                                                     var opts = {
                                                                         q: Object.keys(uniqSyns),
                                                                         filter: 'target',
-                                                                        profile: 'target'
+                                                                        search_profile: 'target'
                                                                     };
 
                                                                     var queryObject = {
@@ -194,7 +194,7 @@ angular.module('otDirectives')
                                     q: drugName,
                                     size: 100,
                                     filter: 'target',
-                                    profile: 'drug'
+                                    search_profile: 'drug'
                                 }
                             })
                                 .then(function (targetsResp) {
@@ -220,7 +220,7 @@ angular.module('otDirectives')
                                     q: drugName,
                                     size: 100,
                                     filter: 'disease',
-                                    profile: 'drug'
+                                    search_profile: 'drug'
                                 }
                             })
                                 .then(function (diseasesResp) {
