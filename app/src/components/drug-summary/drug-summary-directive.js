@@ -114,7 +114,8 @@ angular.module('otDirectives')
                                                                     // Try to find the synonyms in ot
                                                                     var opts = {
                                                                         q: Object.keys(uniqSyns),
-                                                                        filter: 'target'
+                                                                        filter: 'target',
+                                                                        profile: 'target'
                                                                     };
 
                                                                     var queryObject = {
@@ -192,7 +193,8 @@ angular.module('otDirectives')
                                 params: {
                                     q: drugName,
                                     size: 100,
-                                    filter: 'target'
+                                    filter: 'target',
+                                    profile: 'drug'
                                 }
                             })
                                 .then(function (targetsResp) {
@@ -217,7 +219,8 @@ angular.module('otDirectives')
                                 params: {
                                     q: drugName,
                                     size: 100,
-                                    filter: 'disease'
+                                    filter: 'disease',
+                                    profile: 'drug'
                                 }
                             })
                                 .then(function (diseasesResp) {
