@@ -111,7 +111,7 @@
 
                 <div class="ot-docs-section">
                     <h4><a name="score"></a>How is the association score calculated?</h4>
-                    <p><a href="https://www.targetvalidation.org/scoring">Scoring target-disease associations</a> is done at four levels. Firstly, we summarise the strength of the evidence. This score depends on factors that affect the relative strength of the evidence (e.g. *p* values and sample size for SNPs from GWAS Catalog; or phase of the clinical trials for drugs from ChEBML).</p>
+                    <p><a href="https://docs.targetvalidation.org/scoring.html">Scoring target-disease associations</a> is done at four levels. Firstly, we summarise the strength of the evidence. This score depends on factors that affect the relative strength of the evidence (e.g. *p* values and sample size for SNPs from GWAS Catalog; or phase of the clinical trials for drugs from ChEBML).</p>
                     <p>We then aggregate the scores from all evidence into the data source scores, followed by aggregating the data source scores into the data type scores (e.g. Genetic associations score). For the aggregation steps, we take into account the sum of the <a href="https://en.wikipedia.org/wiki/Harmonic_progression_(mathematics)">harmonic progression</a>, and adjust the contribution of each of them using a heuristic weighting.</p>
                     <p>Finally, we sum the individual data source scores using the harmonic sum to give the overall association score.</p>
                 </div>
