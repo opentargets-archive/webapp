@@ -4,7 +4,7 @@ The Center for Therapeutic Target Validation (CTTV) platform brings together evi
 drug targets with diseases. Its aim is to help users identify and prioritise potential targets for further investigation.
 
 The platform brings together evidence from multiple data types that can be relevant to target identification and prioritisation.
-These data are described in detail on the [data sources](/data-sources) page.
+These data are described in detail on the [data sources](https://docs.targetvalidation.org/data-sources/introduction.html) page.
 
 A target can be a protein, protein complex or RNA molecule. We integrate evidence through the gene that codes for
 the target using [Ensembl gene identifiers](http://www.ensembl.org/info/genome/genebuild/genome_annotation.html). We display the
@@ -108,7 +108,7 @@ can be accessed by clicking on the target/disease or the evidence cells of the t
 'View evidence details' in the bubble or tree views. This displays the Target-Disease Evidence page.  At the top of this page is a panel
 indicating the association that is being examined, and a flower that shows the score for each data type as the petals of a flower.  The
 extent of the blue fill of the flower petal indicates the strength of the association for that data type. Details of the data types can be
-found [here](/data-sources).
+found [here](https://docs.targetvalidation.org/data-sources/introduction.html).
 
 The sections below contain the details of the evidence available for this association in each data type. If evidence is available
 for a particularly datatype the section header will contain bold black text and clicking on the header will open our a table that describes the
