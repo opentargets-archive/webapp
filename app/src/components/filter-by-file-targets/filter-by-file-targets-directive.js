@@ -169,6 +169,7 @@ angular.module('otDirectives')
                     var opts = {
                         q: targetNameArray,
                         filter: 'target',
+                        search_profile: 'target',
                         fields: 'approved_symbol'
                     };
 

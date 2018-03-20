@@ -62,6 +62,7 @@ angular.module('otPlugins')
                         var opts = {
                             q: uniprotIds,
                             filter: 'target',
+                            search_profile: 'target',
                             fields: ['approved_symbol', 'association_counts', 'ensembl_gene_id']
                         };
 

@@ -23,34 +23,6 @@ angular.module('otPlugins')
                     'change of cellular energetics'
                 ];
 
-
-                // lightweight list to build visualizations:
-                // only store label, suppress and promote
-                scope.hallmarks = hallmarks.map(function (m) {
-                    var chm = scope.target.hallmarks.cancer_hallmarks.filter(function (ch) {
-                        return ch.label === m;
-                    })[0];
-                    chm = chm || {};
-
-                    return {
-                        label: m,
-                        suppress: chm.suppress || false,
-                        promote: chm.promote || false
-                    };
-                });
-
-
-                // set the selected hallmark when user clicks on table row
-                // selected is just the label
-                // selected list is a list of those matching the label
-                scope.setSelected = function (m) {
-                    scope.selected = m;
-                    scope.selectedList = scope.target.hallmarks.cancer_hallmarks.filter(function (ch) {
-                        return ch.label === scope.selected;
-                    });
-                };
-
-
                 function formatDataToArray () {
                     var rows = scope.target.hallmarks.cancer_hallmarks.map(function (mark) {
                         var row = [];
@@ -79,8 +51,6 @@ angular.module('otPlugins')
 
                     return rows;
                 }
-
-                var dropdownColumns = [0, 2];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table')[1];
@@ -115,11 +85,40 @@ angular.module('otPlugins')
                     }, scope.target.approved_symbol + '-cancer_hallmark'));
                 }
 
+                if (scope.target.hallmarks) {
+                    // lightweight list to build visualizations:
+                    // only store label, suppress and promote
+                    scope.hallmarks = hallmarks.map(function (m) {
+                        var chm = scope.target.hallmarks.cancer_hallmarks.filter(function (ch) {
+                            return ch.label === m;
+                        })[0];
+                        chm = chm || {};
 
-                // initialize table in timeout
-                $timeout(function () {
-                    initTable();
-                }, 0);
+                        return {
+                            label: m,
+                            suppress: chm.suppress || false,
+                            promote: chm.promote || false
+                        };
+                    });
+
+
+                    // set the selected hallmark when user clicks on table row
+                    // selected is just the label
+                    // selected list is a list of those matching the label
+                    scope.setSelected = function (m) {
+                        scope.selected = m;
+                        scope.selectedList = scope.target.hallmarks.cancer_hallmarks.filter(function (ch) {
+                            return ch.label === scope.selected;
+                        });
+                    };
+
+                    var dropdownColumns = [0, 2];
+
+                    // initialize table in timeout
+                    $timeout(function () {
+                        initTable();
+                    }, 0);
+                }
             }
         };
     }]);

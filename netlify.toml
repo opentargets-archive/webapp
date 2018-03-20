@@ -40,3 +40,6 @@
 
 [context.cancer-hallmark.environment]
   APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/"
+
+[context."v3.5".environment]
+  APIHOST = "https://open-targets-staging.appspot.com"
