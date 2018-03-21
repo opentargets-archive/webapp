@@ -1,23 +1,31 @@
 <div style="position:relative; min-height:200px">
     
-    <ot-page-progress-spinner isloading="isloading"></ot-page-progress-spinner>
+    <ot-page-progress-spinner isloading="isloading_hits"></ot-page-progress-spinner>
 
-    <div>
-        <!-- <span class="tm-chip btn btn-default disabled">{{selected[0]}}</span> -->
-        <span title="{{sel.key}}" ng-repeat="sel in selected" class="tm-chip btn btn-default" ng-click="onback($index)" ng-if="!$first">{{sel.label || sel.key}} <span class="fa fa-lg fa-times-circle"></span></span>
-        <span title="{{chip.key}}" ng-repeat="chip in chips" class="tm-chip btn btn-primary" ng-click="onclick(chip)">{{chip.label || chip.key}}</span>
+    <!-- chips -->
+    <!-- <ot-progress-spinner ng-show="isloading_aggs && !isloading_hits"></ot-progress-spinner> -->
+    <div style="position:relative">
+        <ot-block-progress-spinner isloading="isloading_aggs && !isloading_hits"></ot-block-progress-spinner>
+        <div ng-show="(chips && chips.length>0) || selected.length>1">
+            <div>
+                <span title="{{sel.key}}" ng-repeat="sel in selected" class="tm-chip btn btn-default" ng-click="onback($index)" ng-if="!$first">{{sel.label || sel.key}} <span class="fa fa-lg fa-times-circle"></span></span>
+                <span title="{{chip.key}}" ng-repeat="chip in chips" class="tm-chip btn btn-primary" ng-click="onclick(chip)">{{chip.label || chip.key}}</span>
+            </div>
+
+            <div style="max-width: 200px; margin-bottom: 20px;">
+                <select class="form-control" ng-model="selectedagg" ng-options="value.id as value.label for value in aggtype"></select>
+            </div>
+        </div>
     </div>
 
-    <div style="max-width: 200px; margin-bottom: 20px;">
-        <select class="form-control" ng-model="selectedagg" ng-options="value.id as value.label for value in aggtype"></select>
-    </div>
-
+    <!-- papers -->
     <div>
         <p ng-show="noftotal && hits[0].total">Showing {{noftotal}} of {{hits[0].total}} results</p>
 
         <!-- container for "pages" -->
         <div ng-repeat="page in hits">
 
+            <!-- paper -->
             <div ng-repeat="hit in page.hits" style="margin-bottom:40px;" class="epmc_citation_container">
                 
                 <!-- paper title -->
@@ -59,6 +67,7 @@
                     </p>
                     
                     <!-- marked abstract -->
+                    <ot-progress-spinner ng-show="showabstract && !hit._source.marked.abstract"></ot-progress-spinner>
                     <div ng-show="showabstract && hit._source.marked.abstract">
                         <h5>Abstract</h5>
                         <div class="small" ng-bind-html="hit._source.marked.abstract"></div>
@@ -72,7 +81,8 @@
                     </div>
 
                     <!-- similar papers -->
-                    <div ng-show="showsimilar">
+                    <ot-progress-spinner ng-show="showsimilar && !hit._source.similar.hits"></ot-progress-spinner>
+                    <div ng-show="showsimilar && hit._source.similar.hits">
                         <h5>Similar articles</h5>
                         <div ng-repeat="article in hit._source.similar.hits" class="small">
                             <div>

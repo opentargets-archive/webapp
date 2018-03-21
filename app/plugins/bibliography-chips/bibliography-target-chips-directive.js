@@ -32,16 +32,18 @@ angular.module('otPlugins')
                 resetSelected();
 
 
-                /*
+                //
                 //  set SCOPE
-                */
+                //
 
 
                 scope.onclick = onClick;
                 scope.onback = onBack;
                 scope.getMoreData = getMoreData;
                 scope.selected = selected;
-                scope.isloading = false;
+                scope.isloading = 0; // false;
+                scope.isloading_aggs = false;
+                scope.isloading_hits = false;
 
                 scope.selectedagg;
 
@@ -193,11 +195,71 @@ angular.module('otPlugins')
                  */
                 function getData () {
                     if (selected.length > 0) {
-                        scope.isloading = true;
+                        // scope.isloading = true;
                         var targets = selected.join('\'AND\'');
-                        $http.get(API_URL + 'search?query=' + getQuery() + '&aggs=true')
+
+                        // We now make 2 calls: 1 for the chips and 1 for the papers;
+                        // This is because aggregations can be computationally demanding (e.g. for neoplasm) and fail.
+                        // By splitting the call we always have some papers to show
+
+                        // 1. get chips only
+                        // scope.isloading++;
+                        scope.isloading_aggs = true;
+                        $http.get(API_URL + 'search?query=' + getQuery() + '&aggs=true&size=0')
                             .then(
                                 function (resp) {
+                                    return resp.data; // success
+                                },
+                                function (resp) {
+                                    $log.warn('Error: ', resp); // failure
+                                    // in case of an error we remove the last selected thing in the list (since we didn't get the data for it)
+                                    if (selected.length > 1) {
+                                        selected.pop();
+                                    }
+                                }
+                            )
+                            .then(
+                                function (data) {
+                                    // onData(data); // success
+                                    onAggsData(data);
+                                }
+                            )
+                            .finally(
+                                function (d) {
+                                    // scope.isloading--;
+                                    scope.isloading_aggs = false;
+                                }
+                            );
+
+                        // 2. get papers
+                        // scope.isloading++;
+                        scope.isloading_hits = true;
+                        $http.get(API_URL + 'search?query=' + getQuery())
+                            .then(
+                                function (resp) {
+                                    return resp.data; // success
+                                },
+                                function (resp) {
+                                    $log.warn('Error: ', resp); // failure
+                                }
+                            )
+                            .then(
+                                function (data) {
+                                    // onData(data); // success
+                                    onLiteratureData(data, true);
+                                }
+                            )
+                            .finally(
+                                function (d) {
+                                    // scope.isloading--;
+                                    scope.isloading_hits = false;
+                                }
+                            );
+
+                        /* $http.get(API_URL + 'search?query=' + getQuery() + '&aggs=true')
+                            .then(
+                                function (resp) {
+                                    $log.info(resp);
                                     return resp.data; // success
                                 },
                                 function (resp) {
@@ -217,7 +279,7 @@ angular.module('otPlugins')
                                 function (d) {
                                     scope.isloading = false;
                                 }
-                            );
+                            );*/
                     }
                 }
 
@@ -234,7 +296,8 @@ angular.module('otPlugins')
                     var after_id = last._id || undefined;  // e.g. 27921184
 
                     if (after && after_id) {
-                        scope.isloading = true;
+                        // scope.isloading++; // = true;
+                        scope.isloading_hits = true;
                         $http.get(API_URL + 'search?query=' + getQuery() + '&search_after=' + after + '&search_after_id=' + after_id)
                             .then(
                                 function (resp) {
@@ -246,12 +309,14 @@ angular.module('otPlugins')
                             )
                             .then(
                                 function (data) {
-                                    onData(data); // success
+                                    // onData(data); // success
+                                    onLiteratureData(data, false);
                                 }
                             )
                             .finally(
                                 function (d) {
-                                    scope.isloading = false;
+                                    // scope.isloading--; // = false;
+                                    scope.isloading_hits = false;
                                 }
                             );
                     }
@@ -267,7 +332,7 @@ angular.module('otPlugins')
                         onAggsData(data);
                     }
 
-                    if (data.hits) {
+                    if (data.hits && data.hits.hits.length > 0) {
                         onLiteratureData(data, data.aggregations !== undefined);
                     }
                 }
