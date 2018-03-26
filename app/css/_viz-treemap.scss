@@ -127,34 +127,57 @@
 .entities{
 	line-height:1.5em
 }
+
 [data-entity="TARGET&DISEASE"],[data-entity=DISEASE],[data-entity=DRUG],[data-entity=GENE]{
 	padding:.15em;margin:0 .25em;line-height:1;display:inline-block;border-radius:.25em;border:1px solid
 }
+
 [data-entity="TARGET&DISEASE"]:after,[data-entity=DISEASE]:after,[data-entity=DRUG]:after,[data-entity=GENE]:after{
 	box-sizing:border-box;font-size:.6em;line-height:1;padding:.25em;border-radius:.25em;text-transform:uppercase;display:inline-block;vertical-align:middle;margin:0 0 .1rem .5rem
 }
+
 [data-entity][data-entity=DRUG]{
-	background:rgba(224,0,132,.2);border-color:#e00084
+	// background:rgba(224,0,132,.2);
+	// border-color:#e00084
+	background: $clr-error-bg;
+	border-color: darken($clr-error-bg, 10%);
 }
 [data-entity][data-entity=DRUG]:after{
-	background:#e00084
+	// background:#e00084
+	background: $clr-error-bg;
 }
+
 [data-entity][data-entity=DISEASE]{
-	background:rgba(67,198,252,.2);border-color:#43c6fc
+	// background:rgba(67,198,252,.2);
+	// border-color:#43c6fc
+	background: $clr-warning-bg;
+	border-color: darken($clr-warning-bg, 10%);
 }
 [data-entity][data-entity=DISEASE]:after{
-	background:#43c6fc
+	// background:#43c6fc
+	background: $clr-warning-bg;
 }
+
 [data-entity][data-entity="TARGET&DISEASE"]{
-	background:rgba(105,145,243,.2);border-color:#6991f3;border:1px dashed
+	// background:rgba(105,145,243,.2);
+	// border-color:#6991f3;
+	// border:1px dashed;
+	background: lighten( $clr-success-bg, 3%);	// for "target&disease" we want a slightly lighter bg
+	border-color: darken( $clr-success-bg , 10%);
 }
 [data-entity][data-entity="TARGET&DISEASE"]:after{
-	background:#6991f3
+	// background:#6991f3
+	background: $clr-success-bg;
 }
+
 /*!*   display: inline; *!*/
 [data-entity][data-entity=GENE]{
-	background:rgba(87,227,81,.2);border-color:#57e351
+	// background:rgba(87,227,81,.2);
+	// border-color:#57e351
+	background: $clr-info-bg;
+	border-color: darken($clr-info-bg, 10%);
 }
 [data-entity][data-entity=GENE]:after{
-	background:#57e351
+	// background:#57e351
+	background: $clr-info-bg;
 }

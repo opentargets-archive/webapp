@@ -3,7 +3,6 @@
     <ot-page-progress-spinner isloading="isloading_hits"></ot-page-progress-spinner>
 
     <!-- chips -->
-    <!-- <ot-progress-spinner ng-show="isloading_aggs && !isloading_hits"></ot-progress-spinner> -->
     <div style="position:relative">
         <ot-block-progress-spinner isloading="isloading_aggs && !isloading_hits"></ot-block-progress-spinner>
         <div ng-show="(chips && chips.length>0) || selected.length>1">
@@ -30,7 +29,7 @@
                 
                 <!-- paper title -->
                 <div class="epmc_citation_title">
-                    <a ng-href="https://europepmc.org/abstract/med/{{hit._source.pub_id}}">{{hit._source.title}}</a>
+                    <a ng-href="https://europepmc.org/abstract/med/{{hit._source.pub_id}}" target="_blank">{{hit._source.title}}</a>
                 </div>
 
                 <!-- paper data -->
@@ -38,12 +37,12 @@
                     
                     <!-- authors -->
                     <div>
-                        <span ng-repeat="auth in hit._source.authors"><a ng-href='https://europepmc.org/search?query=AUTH:"{{auth.ForeName+" "+auth.LastName}}"&page=1'>{{auth.ForeName+" "+auth.LastName}}</a><span ng-if="!$last">, </span></span>
+                        <span ng-repeat="auth in hit._source.authors"><a ng-href='https://europepmc.org/search?query=AUTH:"{{auth.ForeName+" "+auth.LastName}}"&page=1' target="_blank">{{auth.ForeName+" "+auth.LastName}}</a><span ng-if="!$last">, </span></span>
                     </div>
 
                     <!-- journal, year, reference -->
                     <div>
-                        <span><a ng-href="https://europepmc.org/search?query=JOURNAL:%22{{hit._source.journal.title}}%22">{{hit._source.journal.title}}</a></span>
+                        <span><a ng-href="https://europepmc.org/search?query=JOURNAL:%22{{hit._source.journal.title}}%22" target="_blank">{{hit._source.journal.title}}</a></span>
                         <span ng-show="hit._source.pub_date"><strong>{{hit._source.pub_date | limitTo : 4}}</strong></span>
                         <span ng-show="hit._source.journal_reference.volume"> {{hit._source.journal_reference.volume}}</span><span ng-show="hit._source.journal_reference.issue">({{hit._source.journal_reference.issue}})</span><span ng-show="hit._source.journal_reference.pgn">:{{hit._source.journal_reference.pgn}}</span>
                     </div>
@@ -66,43 +65,45 @@
                         </span>
                     </p>
                     
-                    <!-- marked abstract -->
-                    <ot-progress-spinner ng-show="showabstract && !hit._source.marked.abstract"></ot-progress-spinner>
-                    <div ng-show="showabstract && hit._source.marked.abstract">
-                        <h5>Abstract</h5>
-                        <div class="small" ng-bind-html="hit._source.marked.abstract"></div>
-                        <p>
-                            <span :id="abstractDomId" class="abstract"></span>
-                            <span data-entity="GENE">Gene</span>
-                            <span data-entity="DISEASE">Disease</span>
-                            <span data-entity="DRUG">Drug</span>
-                            <span data-entity="TARGET&DISEASE">Target and disease</span>
-                        </p>
-                    </div>
+                    <div style="padding-left: 10px">
+                        <!-- marked abstract -->
+                        <ot-progress-spinner ng-show="showabstract && !hit._source.marked.abstract"></ot-progress-spinner>
+                        <div ng-show="showabstract && hit._source.marked.abstract">
+                            <h5>Abstract</h5>
+                            <div class="small" ng-bind-html="hit._source.marked.abstract"></div>
+                            <p>
+                                <span :id="abstractDomId" class="abstract"></span>
+                                <span data-entity="GENE">Gene</span>
+                                <span data-entity="DISEASE">Disease</span>
+                                <span data-entity="DRUG">Drug</span>
+                                <span data-entity="TARGET&DISEASE">Target and disease</span>
+                            </p>
+                        </div>
 
-                    <!-- similar papers -->
-                    <ot-progress-spinner ng-show="showsimilar && !hit._source.similar.hits"></ot-progress-spinner>
-                    <div ng-show="showsimilar && hit._source.similar.hits">
-                        <h5>Similar articles</h5>
-                        <div ng-repeat="article in hit._source.similar.hits" class="small">
-                            <div>
-                                <a ng-href="https://europepmc.org/abstract/med/{{article._source.pub_id}}">{{article._source.title}}</a>
+                        <!-- similar papers -->
+                        <ot-progress-spinner ng-show="showsimilar && !hit._source.similar.hits"></ot-progress-spinner>
+                        <div ng-show="showsimilar && hit._source.similar.hits">
+                            <h5>Similar articles</h5>
+                            <div ng-repeat="article in hit._source.similar.hits" class="small">
+                                <div>
+                                    <a ng-href="https://europepmc.org/abstract/med/{{article._source.pub_id}}" target="_blank">{{article._source.title}}</a>
+                                </div>
+                                
+                                <div class="epmc_citation_subdata">
+                                        
+                                    <!-- authors -->
+                                    <div>
+                                        <span ng-repeat="auth in article._source.authors"><a ng-href='https://europepmc.org/search?query=AUTH:"{{auth.ForeName+" "+auth.LastName}}"&page=1' target="_blank">{{auth.ForeName+" "+auth.LastName}}</a><span ng-if="!$last">, </span></span>
+                                    </div>
+                
+                                    <!-- journal, year, reference -->
+                                    <div>
+                                        <span><a ng-href="https://europepmc.org/search?query=JOURNAL:%22{{hit._source.journal.title}}%22" target="_blank">{{article._source.journal.title}}</a></span>
+                                        <span ng-show="article._source.pub_date"><strong>{{article._source.pub_date | limitTo : 4}}</strong></span>
+                                        <span ng-show="article._source.journal_reference.volume"> {{article._source.journal_reference.volume}}</span><span ng-show="article._source.journal_reference.issue">({{article._source.journal_reference.issue}})</span><span ng-show="article._source.journal_reference.pgn">:{{article._source.journal_reference.pgn}}</span>
+                                    </div>
+                                </div> 
                             </div>
-                            
-                            <div class="epmc_citation_subdata">
-                                    
-                                <!-- authors -->
-                                <div>
-                                    <span ng-repeat="auth in article._source.authors"><a ng-href='https://europepmc.org/search?query=AUTH:"{{auth.ForeName+" "+auth.LastName}}"&page=1'>{{auth.ForeName+" "+auth.LastName}}</a><span ng-if="!$last">, </span></span>
-                                </div>
-            
-                                <!-- journal, year, reference -->
-                                <div>
-                                    <span><a ng-href="https://europepmc.org/search?query=JOURNAL:%22{{hit._source.journal.title}}%22">{{article._source.journal.title}}</a></span>
-                                    <span ng-show="article._source.pub_date"><strong>{{article._source.pub_date | limitTo : 4}}</strong></span>
-                                    <span ng-show="article._source.journal_reference.volume"> {{article._source.journal_reference.volume}}</span><span ng-show="article._source.journal_reference.issue">({{article._source.journal_reference.issue}})</span><span ng-show="article._source.journal_reference.pgn">:{{article._source.journal_reference.pgn}}</span>
-                                </div>
-                            </div> 
                         </div>
                     </div>
 
