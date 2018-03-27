@@ -141,7 +141,8 @@ angular.module('otDirectives')
                                 // TODO: Genomics England URLs are wrong, so (hopefully temporarily) we need to hack them in the UI
                                 // TODO: We can't use otConsts.datasources.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
                                 if (db === otConsts.datasources.GENOMICS_ENGLAND.id) {
-                                    item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
+                                    // item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
+                                    item.evidence.urls[0].url = 'https://panelapp.genomicsengland.co.uk/panels/'; // Direct to generic panels page as Genomics England urls don't work.
                                 }
                                 if (db === otConsts.datasources.GENE_2_PHENOTYPE.id) {
                                     row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>Further details in Gene2Phenotype database</a>');
