@@ -89,16 +89,22 @@ angular.module('otPlugins')
                     // lightweight list to build visualizations:
                     // only store label, suppress and promote
                     scope.hallmarks = hallmarks.map(function (m) {
-                        var chm = scope.target.hallmarks.cancer_hallmarks.filter(function (ch) {
+                        // for this hallmark, find if it has data
+                        return scope.target.hallmarks.cancer_hallmarks.filter(function (ch) {
                             return ch.label === m;
-                        })[0];
-                        chm = chm || {};
-
-                        return {
-                            label: m,
-                            suppress: chm.suppress || false,
-                            promote: chm.promote || false
-                        };
+                        }).reduce(
+                            // reduce array: promote/suppress are not the same for each item, 
+                            // so might have both promote suppress but across different items
+                            function (accumulator, current) {
+                                return {
+                                    label: m,
+                                    promote: accumulator.promote || current.promote,
+                                    suppress: accumulator.suppress || current.suppress
+                                };
+                            },
+                            // initialization object (as might not data for a certain hallmark)
+                            {label: m, suppress: false, promote: false}
+                        );
                     });
 
 
