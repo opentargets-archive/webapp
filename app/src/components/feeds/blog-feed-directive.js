@@ -29,7 +29,7 @@ angular.module('otDirectives')
 
                 $http.get(url)
                     .then(function successCallback (response) {
-                        log.info('blog: ', response);
+                        $log.info('blog: ', response);
                         scope.posts = response.data.posts || [];
                         scope.posts.forEach(function (i) {
                             i.pubDate = new Date(i.published_at);   // make published_at string into Date object for easier formating
