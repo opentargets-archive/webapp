@@ -27,7 +27,9 @@ angular.module('otDirectives')
                 var proxy_url = '/proxy/' + url.substr(2);  // e.g. '/proxy/blog.opentargets.org/ghost/api/v0.1/tags/?limit=all&include=count.posts&order=count.posts%20DESC&client_id=ghost-frontend&client_secret=a9fe83f50655'
                 var href_url = ghost.url.api().split('ghost')[0];
 
-                $http.get(url)
+                // $log.log('!! '+proxy_url);
+
+                $http.get(proxy_url)
                     .then(function successCallback (response) {
                         $log.info('blog: ', response);
                         scope.posts = response.data.posts || [];
