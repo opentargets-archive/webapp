@@ -15,14 +15,14 @@ angular.module('otDirectives')
                 // Target
                 row.push(drug.target);
 
+                // Disease
+                row.push('<a href="/disease/' + drug.disease.id + '">' + drug.disease.label + '</a>');
+
                 // Max Phase
                 row.push(drug.maxPhase.label);
 
                 // Molecule type
                 row.push(drug.molType);
-
-                // Indication (disease)
-                row.push(drug.indication);
 
                 data.push(row);
             }
@@ -75,10 +75,13 @@ angular.module('otDirectives')
                                     drugs[drug] = {
                                         target: target,
                                         drug: drug,
+                                        disease: {
+                                            label: ev.disease.efo_info.label,
+                                            id: ev.disease.efo_info.efo_id.split('/').pop()
+                                        },
                                         id: id.split('/').pop(),
                                         maxPhase: maxPhase,
-                                        molType: molType,
-                                        indication: ev.disease.efo_info.label
+                                        molType: molType
                                     };
                                 } else {
                                     // duplicated drug...
@@ -91,10 +94,19 @@ angular.module('otDirectives')
                             $('#target-list-drugs').DataTable(otUtils.setTableToolsParams({
                                 'data': formatDrugDataToArray(scope.drugs),
                                 'ordering': true,
-                                'order': [[2, 'desc']],
+                                'order': [[3, 'desc']],
                                 'autoWidth': false,
                                 'paging': true,
-                                'columnDefs': []
+                                'columnDefs': [
+                                    {
+                                        'targets': [0, 4],
+                                        'width': '20%'
+                                    },
+                                    {
+                                        'targets': [1, 3],
+                                        'width': '15%'
+                                    }
+                                ]
 
                             }, scope.target.length + '-targets-drugs'));
                         });
