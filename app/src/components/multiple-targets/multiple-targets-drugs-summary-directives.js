@@ -21,6 +21,9 @@ angular.module('otDirectives')
                 // Molecule type
                 row.push(drug.molType);
 
+                // Indication (disease)
+                row.push(drug.indication);
+
                 data.push(row);
             }
             return data;
@@ -74,22 +77,14 @@ angular.module('otDirectives')
                                         drug: drug,
                                         id: id.split('/').pop(),
                                         maxPhase: maxPhase,
-                                        molType: molType
+                                        molType: molType,
+                                        indication: ev.disease.efo_info.label
                                     };
                                 } else {
-                                // $log.log("duplicated drug...");
-                                // $log.log(drugs[drug]);
-                                // $log.log(ev);
+                                    // duplicated drug...
                                 }
-                            // drugs[target].drugs[drug] = {
-                            //     name: drug,
-                            //     id: id
-                            // };
                             }
                             var drugsArr = _.values(drugs);
-                            // for (var j=0; j<drugsArr.length; j++) {
-                            //     drugsArr[j].drugs = _.values(drugsArr[j].drugs);
-                            // }
                             scope.uniqueTargets = Object.keys(uniqueTargets).length;
                             scope.drugs = drugsArr;
 
@@ -107,24 +102,3 @@ angular.module('otDirectives')
             }
         };
     }]);
-// .directive('drugSummary', ['$log', function ($log) {
-//     'use strict';
-//
-//     return {
-//         restrict: 'E',
-//         template: '' +
-//         '<div ng-click="showDrugs=!showDrugs" style="cursor:pointer">' +
-//         '   {{target.target}} -- {{target.drugs.length}} drugs' +
-//         '</div>' +
-//         '<div ng-show=showDrugs>' +
-//         '     <span ng-repeat="drug in target.drugs">' +
-//         '        <a target=_blank href="{{drug.id}}">' +
-//         '           <i class="ot-drug">{{drug.name}}</i>' +
-//         '        </a>' +
-//         '     </span>' +
-//         '</div>',
-//         scope: {
-//             target: '='
-//         }
-//     };
-// }]);
