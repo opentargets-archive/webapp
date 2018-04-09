@@ -18,14 +18,16 @@ angular.module('otDirectives')
                 scope.limit = scope.limit || 'all';
                 var url = ghost.url.api('posts', {
                     limit: scope.limit,
-                    include: 'posts, author, tags',
-                    fields: 'title, html, meta_description, published_at, slug, author, tags',
+                    // include: 'posts, author, tags',
+                    // fields: 'title, html, meta_description, published_at, slug, author, tags',
+                    include: 'posts, author',
+                    fields: 'title, html, meta_description, published_at, slug, author',
                     order: 'published_at DESC'
                 });
-                var proxy_url = '/proxy/' + url.substr(8);  // e.g. '/proxy/blog.opentargets.org/ghost/api/v0.1/tags/?limit=all&include=count.posts&order=count.posts%20DESC&client_id=ghost-frontend&client_secret=a9fe83f50655'
+                var proxy_url = '/proxy/' + url.substr(2);  // e.g. '/proxy/blog.opentargets.org/ghost/api/v0.1/tags/?limit=all&include=count.posts&order=count.posts%20DESC&client_id=ghost-frontend&client_secret=a9fe83f50655'
                 var href_url = ghost.url.api().split('ghost')[0];
 
-                $http.get(proxy_url)
+                $http.get(url)
                     .then(function successCallback (response) {
                         scope.posts = response.data.posts || [];
                         scope.posts.forEach(function (i) {
