@@ -1,12 +1,43 @@
-<p>Found {{drugs.length}} unique drugs:
+<style>
+
+        .arc text {
+          font: 10px sans-serif;
+          text-anchor: middle;
+        }
+        
+        .arc path {
+          stroke: #fff;
+        }
+        
+        </style>
+
+<div>
+    
+    <div class="row">
+        <div class="col-sm-6">
+            <svg class="doughnut"></svg>
+        </div>
+        <div class="col-sm-6">
+            <h3>Table summary</h3>
+            <h4><span class="badge large badge-success">{{drugs.length}}</span> unique drugs</h4>
+            <h4><span class="badge large badge-warning">{{associated_diseases.length}}</span> associated disease</h4>
+            <h4><span class="badge large badge-primary">{{associated_targets.length}}</span> associated targets</h4>
+            <!-- <p ng-repeat="(phase, v) in phases">{{phase}} {{v.length}}</p> -->
+        </div>
+    </div>
+</div>
+
+<!-- <p>Found {{drugs.length}} unique drugs:
     <span ng-repeat="drug in drugs | limitTo: show.limit">
-        <!-- <span style="padding-right:10px">[<a href={{drug.url}} target=_blank>{{drug.id}}</a>]</span> -->
-        <!-- <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="label label-primary">{{drug.id}}</i> -->
+        <span style="padding-right:10px">[<a href={{drug.url}} target=_blank>{{drug.id}}</a>]</span>
+        <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="label label-primary">{{drug.id}}</i>
         <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="ot-pill-list drug-list">{{drug.id}}</i>
         </a></span>
     </span>
     <span ng-click="showMoreOrLess()" ng-show="show.moreOrLess"><span class="show-more-dots" ng-show="show.limit<drugs.length">...</span> <a class="ng-binding show-more-links">{{show.ellipsis}}</a></span>
-</p>
+</p> -->
+
+
 <div class="table-panel">
     <table class='table ot-evidence-table'>
         <thead>
