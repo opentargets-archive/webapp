@@ -31,3 +31,6 @@
 
 [context.mouse-phenotypes.environment]
   APIHOST = "https://yapsy-dot-open-targets-eu-dev.appspot.com/"
+
+[context.biomarkers.environment]
+  APIHOST = "https://staging-api.opentargets.io/"

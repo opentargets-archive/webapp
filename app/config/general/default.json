@@ -284,12 +284,19 @@
            "new": true
        },
        {
-        "name": "cancerHallmark",
-        "element": "ot-cancer-hallmark",
-        "heading": "Cancer hallmark",
-        "track": true,
-        "new": true
-    }
+            "name": "cancerHallmark",
+            "element": "ot-cancer-hallmark",
+            "heading": "Cancer hallmark",
+            "track": true,
+            "new": true
+        },
+        {
+             "name": "biomarkers",
+             "element": "ot-biomarkers",
+             "heading": "Cancer biomarkers",
+             "track": true,
+             "new": true
+         }
     ],
 
 
