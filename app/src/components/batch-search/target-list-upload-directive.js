@@ -68,7 +68,7 @@ angular.module('otDirectives')
                     var opts = {
                         q: targets,
                         filter: 'target',
-                        search_profile: 'target',
+                        search_profile: 'batch',
                         fields: 'approved_symbol'
                     };
 
