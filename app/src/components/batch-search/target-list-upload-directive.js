@@ -27,7 +27,7 @@ angular.module('otDirectives')
 
                 // Loads the sample list
                 scope.loadExample = function () {
-                    var exampleTargets = ['nt-nd', 'PTGS2', 'PTGS1', 'AC026248.1', 'TSPAN14', 'SPRED2', 'CDC37', 'UBAC2', 'IL27', 'ADO', 'NKX2-3', 'TYK2', 'GPR35', 'MAP3K8', 'SLC39A11', 'PTGER4', 'PARK7', 'GPR183', 'RORC', 'NXPE1', 'KLF3', 'HLA-DQB1', 'BANK1', 'CUL2', 'NR5A2', 'IPMK', 'IFNG', 'CLCN2', 'ALOX5', 'RGS14', 'AQP8', 'LITAF', 'TUBD1', 'KRAS', 'ADCY3', 'RNF186', 'ZGPAT', 'LSP1', 'CSF2RB', 'ERAP2', 'VDR', 'CCL7', 'TNFSF15', 'ANKRD55', 'GABRG3', 'GABRG2', 'GABRG1', 'SP140', 'ITGA4', 'PDGFB', 'RIT1', 'NOD2', 'CARD9', 'ATG16L1', 'IL23R', 'ICAM1', 'ITGAL'];
+                    var exampleTargets = ['mt-nd', 'PTGS2', 'PTGS1', 'AC026248.1', 'TSPAN14', 'SPRED2', 'CDC37', 'UBAC2', 'IL27', 'ADO', 'NKX2-3', 'TYK2', 'GPR35', 'MAP3K8', 'SLC39A11', 'PTGER4', 'PARK7', 'GPR183', 'RORC', 'NXPE1', 'KLF3', 'HLA-DQB1', 'BANK1', 'CUL2', 'NR5A2', 'IPMK', 'IFNG', 'CLCN2', 'ALOX5', 'RGS14', 'AQP8', 'LITAF', 'TUBD1', 'KRAS', 'ADCY3', 'RNF186', 'ZGPAT', 'LSP1', 'CSF2RB', 'ERAP2', 'VDR', 'CCL7', 'TNFSF15', 'ANKRD55', 'GABRG3', 'GABRG2', 'GABRG1', 'SP140', 'ITGA4', 'PDGFB', 'RIT1', 'NOD2', 'CARD9', 'ATG16L1', 'IL23R', 'ICAM1', 'ITGAL'];
                     searchTargets('sampleList', exampleTargets);
                 };
 
