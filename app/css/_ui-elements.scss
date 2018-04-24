@@ -785,6 +785,24 @@ ot-related-targets-vis, ot-related-diseases-vis {
     .pointer {
         cursor: pointer;
     }
+
+
+    /*
+     * Donut chart
+     */
+
+     ot-donut-chart {
+         .donut {
+            .arc text {
+                font: 10px helvetica;
+                text-anchor: middle;
+            }
+            
+            .arc path {
+                stroke: #fff;
+            }
+         }
+     }
 }
 
 

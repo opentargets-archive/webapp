@@ -106,7 +106,7 @@ angular.module('otDirectives')
                                         scope.ext.data = resp.body.data;
                                         initTableDrugs();
                                         // draw doughnut
-                                        drawPhaseChart(scope.phases);
+                                        // drawPhaseChart(scope.phases);
                                     } else {
                                         // $log.warn("Empty response : drug data");
                                     }
@@ -119,73 +119,81 @@ angular.module('otDirectives')
                     }
 
 
-                    function drawPhaseChart (data) {
-                        var width = 240,
-                            height = 240,
-                            radius = Math.min(width, height) / 2;
+                    // function drawPhaseChart (data) {
+                    //     var width = 200,
+                    //         height = 200,
+                    //         radius = Math.min(width, height) / 2;
 
-                        var color = d3.scale.ordinal()
-                            .range(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
+                    //     // var color = d3.scale.ordinal()
+                    //     //     .range(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
+                    //     var color = d3.scale.category20();
 
-                        var arc = d3.svg.arc()
-                            .outerRadius(radius - 10)
-                            .innerRadius(radius - 70);
+                    //     var arc = d3.svg.arc()
+                    //         .outerRadius(radius - 0)
+                    //         .innerRadius(radius - 60);
 
-                        var pie = d3.layout.pie()
-                            .sort(null)
-                            .value(function (d) { return d.val; });
+                    //     var pie = d3.layout.pie()
+                    //         .sort(null)
+                    //         .value(function (d) { return d.val; });
 
-                        // var svg = elem.find('svg').el(0) // d3.select("body").append("svg")
-                        var svg = d3.select(elem[0].querySelector('svg'))
-                            .attr('width', width)
-                            .attr('height', height)
-                            .append('g')
-                            .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+                    //     // var svg = elem.find('svg').el(0) // d3.select("body").append("svg")
+                    //     var svg = d3.select(elem[0].querySelector('svg'))
+                    //         .attr('width', width)
+                    //         .attr('height', height)
+                    //         .append('g')
+                    //         .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-                        var arraydata = [];
-                        for (var d in data) {
-                            arraydata.push({
-                                label: data[d][0].label,
-                                val: data[d].length
-                            });
-                        }
+                    //     var arraydata = [];
+                    //     for (var d in data) {
+                    //         arraydata.push({
+                    //             label: data[d][0].label,
+                    //             val: data[d].length,
+                    //             color: color(data[d][0].label.split('').reverse().join(''))
+                    //         });
+                    //     }
 
-                        var g = svg.selectAll('.arc')
-                            .data(pie(arraydata))
-                            .enter().append('g')
-                            .attr('class', 'arc')
-                            .attr('title', function (d) { return d.data.label; });
+                    //     var g = svg.selectAll('.arc')
+                    //         .data(pie(arraydata))
+                    //         .enter().append('g')
+                    //         .attr('class', 'arc')
+                    //         .attr('title', function (d) { return d.data.label; });
 
-                        g.append('path')
-                            .attr('d', arc)
-                            .style('fill', function (d) { return color(d.data.val); })
-                            .attr('title', function (d) { return d.data.label; })
-                            .on('click', function (d, i) { 
-                                // console.log(d.data.label);
-                                // console.log(dtable);
-                                var filteredData = dtable
-                                    // .column( 3 )
-                                    // .data()
-                                    // .filter( function ( value, index ) {
-                                    //     return value === d.data.label ? true : false;
-                                    // } );
-                                    .api()
-                                    .columns(3)
-                                    // .search(d.data.label)
-                                    .search('^'+d.data.label+'$', true, false)
-                                    .draw();
-                            });
+                    //     g.append('path')
+                    //         .attr('d', arc)
+                    //         .style('fill', function (d) { return color(d.data.label.split('').reverse().join('')); })
+                    //         // .style('fill', function (d) { return color(d.data.val); })
+                    //         .attr('title', function (d) { return d.data.label; });
+                    //     // .on('click', function (d, i) {
+                    //     //     var filteredData = dtable
+                    //     //         // .column( 3 )
+                    //     //         // .data()
+                    //     //         // .filter( function ( value, index ) {
+                    //     //         //     return value === d.data.label ? true : false;
+                    //     //         // } );
+                    //     //         .api()
+                    //     //         .columns(3)
+                    //     //         // .search(d.data.label)
+                    //     //         .search('^'+d.data.label+'$', true, false)
+                    //     //         .draw();
+                    //     // });
 
-                        g.append('text')
-                            .attr('transform', function (d) { return 'translate(' + arc.centroid(d) + ')'; })
-                            .attr('dy', '.35em')
-                            .text(function (d) { return d.data.label; });
-                    }
+                    //     // g.append('text')
+                    //     //     .attr('transform', function (d) { return 'translate(' + arc.centroid(d) + ')'; })
+                    //     //     .attr('dy', '.35em')
+                    //     //     .text(function (d) { return d.data.label; });
 
-                    function type (d) {
-                        d.val = +d.val;
-                        return d;
-                    }
+                    //     // label goes into legend and not into
+                    //     scope.legend = arraydata;
+                    //     // scope.legend = {
+                    //     //     label = 
+                    //     // }
+
+                    // }
+
+                    // function type (d) {
+                    //     d.val = +d.val;
+                    //     return d;
+                    // }
 
                     function formatDrugsDataToArray (data) {
                         var newdata = [];
@@ -218,9 +226,7 @@ angular.module('otDirectives')
                                     linkClass = '';
                                     target = '';
                                 }
-                                row.push('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' +
-                            item.drug.molecule_name +
-                            '</a>');
+                                row.push('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' + item.drug.molecule_name + '</a>');
 
                                 // 3: phase
                                 // row.push(item.drug.max_phase_for_all_diseases.label);
@@ -335,7 +341,13 @@ angular.module('otDirectives')
                             }
                         });
 
-                        scope.phases = all_phases; // _.uniqBy(data, 'drug.max_phase_for_all_diseases.numeric_index');
+                        scope.phases = Object.keys(all_phases).map(function (phase) {
+                            return {
+                                label: phase,
+                                value: all_phases[phase].length,
+                                id: all_phases[phase].length
+                            }
+                        });
                         scope.associated_diseases = _.uniqBy(data, 'disease.efo_info.efo_id');
                         scope.associated_targets = _.uniqBy(data, 'target.id');
 
@@ -423,12 +435,12 @@ angular.module('otDirectives')
                             initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                         }, (scope.title ? scope.title + '-' : '') + 'known_drugs'));
 
-                        dtable.on( 'search.dt', function () {
-                            console.log('searched for '+dtable.api().search());
-                        } );
+                        // dtable.on( 'search.dt', function () {
+                        //     console.log('searched for '+dtable.api().search());
+                        // } );
 
                         // TODO: remove this as it's just for testing
-                        window.dtable = dtable;
+                        // window.dtable = dtable;
                     }
                 });
             }
