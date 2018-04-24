@@ -32,8 +32,5 @@
 [context.mouse-phenotypes.environment]
   APIHOST = "https://yapsy-dot-open-targets-eu-dev.appspot.com/"
 
-[context.cancer-hallmark.environment]
-  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/"
-
 [context.mk-batchsearch.environment]
   APIHOST = "https://mk-batchsearch-dot-open-targets-eu-dev.appspot.com/"
