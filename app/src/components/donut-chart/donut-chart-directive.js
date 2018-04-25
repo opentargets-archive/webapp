@@ -5,6 +5,8 @@
  * @param {array} data - the data to use for building the chart. Each item in array is in format {label:string, value:number}.
  * @param {boolean} showLegend - true to display legend; false to display labels over each arc of the chart.
  * @param {function} scale - the D3 scale to use for color. Optional.
+ * @param {number} size - external width or height (i.e. the diameter). Optional
+ * @param {number} hole - the diameter of internal donut 'hole'. Optional
  */
 angular.module('otDirectives')
 
@@ -18,13 +20,17 @@ angular.module('otDirectives')
                 header: '@?',       // optional header
                 data: '=',
                 showLegend: '<?',   // optional show legend (else labels added to chart arcs) -- one-way binding
-                scale: '=?'    // optional color scale
+                scale: '=?',    // optional color scale
+                size: '<?',     // optional size (diameter)
+                hole: '<?'      // optional hole size (diameter)
             },
             link: function (scope, elem, attrs) {
                 scope.$watch('data', function (n, o) {
                     if (n === undefined) { return; }
 
                     var color = scope.scale || d3.scale.category20();
+                    var size = scope.size || 200;
+                    var hole = scope.hole || Math.round(size * 0.6);
 
                     var data = scope.data;
 
@@ -36,13 +42,14 @@ angular.module('otDirectives')
                         e.color = e.color || color(e.id);
                     });
 
-                    var width = 200,
-                        height = 200,
-                        radius = Math.min(width, height) / 2;
+                    var width = size,
+                        height = size;
+                        // radius = size / 2,
+
 
                     var arc = d3.svg.arc()
-                        .outerRadius(radius - 0)
-                        .innerRadius(radius - 60);
+                        .outerRadius(size/2)
+                        .innerRadius(hole/2);
 
                     var pie = d3.layout.pie()
                         .sort(null)
