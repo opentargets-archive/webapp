@@ -89,15 +89,17 @@ angular.module('otDirectives')
                         });
                 }
 
-                function fromStr2TargetList (strOfTargets, separators = /(\r\n|\n|\r|,)/gm) {
+                function fromStr2TargetList (strOfTargets) {
                     /* split filter valid ones and trim the goods else [] */
                     if (strOfTargets) {
-                        return strOfTargets.replace(separators, '\n')
+                        return strOfTargets.replace(/(\r\n|\n|\r|,)/gm, '\n')
                             .split('\n')
-                            .filter(t => {
+                            .filter(function (t) {
                                 if (t) { return true; } else { return false; }
                             })
-                            .map(el => { el.trim(); });
+                            .map(function (el) {
+                                return el.trim();
+                            });
                     } else {
                         return [];
                     }
