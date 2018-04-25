@@ -1,16 +1,22 @@
 <div>
     
     <div class="row">
-        <div class="col-sm-6">
+
+        <div class="col-sm-4">
+            <h4>Table summary</h4>
+            <h5><span class="badge large badge-success">{{drugs.length}}</span> unique drugs</h5>
+            <h5><span class="badge large badge-warning">{{associated_diseases.length}}</span> associated disease</h5>
+            <h5><span class="badge large badge-primary">{{associated_targets.length}}</span> associated targets</h5>
+            <!-- <p ng-repeat="(phase, v) in phases">{{phase}} {{v.length}}</p> -->
+        </div>
+        
+        <div class="col-sm-4">
             <ot-donut-chart header="Trials" data="phases" show-legend="true" size="160" hole="100"></ot-donut-chart>
         </div>
-
-        <div class="col-sm-6">
-            <h3>Table summary</h3>
-            <h4><span class="badge large badge-success">{{drugs.length}}</span> unique drugs</h4>
-            <h4><span class="badge large badge-warning">{{associated_diseases.length}}</span> associated disease</h4>
-            <h4><span class="badge large badge-primary">{{associated_targets.length}}</span> associated targets</h4>
-            <!-- <p ng-repeat="(phase, v) in phases">{{phase}} {{v.length}}</p> -->
+        
+        <div class="col-sm-4">
+            <h4>Type vs Activity</h4>
+            <ot-stack-chart data="phases" show-legend="true" size="160" hole="100"></ot-stack-chart>
         </div>
     </div>
 </div>

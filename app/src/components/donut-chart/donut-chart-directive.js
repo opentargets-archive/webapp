@@ -48,8 +48,8 @@ angular.module('otDirectives')
 
 
                     var arc = d3.svg.arc()
-                        .outerRadius(size/2)
-                        .innerRadius(hole/2);
+                        .outerRadius(size / 2)
+                        .innerRadius(hole / 2);
 
                     var pie = d3.layout.pie()
                         .sort(null)
@@ -66,7 +66,9 @@ angular.module('otDirectives')
                         .data(pie(data))
                         .enter().append('g')
                         .attr('class', 'arc')
-                        .attr('title', function (d) { return d.data.label; });
+
+                    g.append('title')
+                        .text(function (d) { return d.data.label + ' (' + d.data.value + ')'; });
 
                     g.append('path')
                         .attr('d', arc)
