@@ -94,12 +94,10 @@ angular.module('otDirectives')
                     if (strOfTargets) {
                         return strOfTargets.replace(separators, '\n')
                             .split('\n')
-                            .filter(function (t) {
+                            .filter(t => {
                                 if (t) { return true; } else { return false; }
                             })
-                            .map(function (el) {
-                                return el.trim();
-                            });
+                            .map(el => { el.trim(); });
                     } else {
                         return [];
                     }
