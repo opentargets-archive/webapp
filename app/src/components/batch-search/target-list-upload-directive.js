@@ -42,7 +42,7 @@ angular.module('otDirectives')
                         scope.noPastedList = true;
                     } else {
                         scope.noPastedList = false;
-                        var targets = scope.pastedList.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
+                        var targets = fromStr2TargetList(scope.pastedList);
                         if (targets.length) {
                             searchTargets(scope.pastedListName, targets);
                         }
@@ -55,11 +55,10 @@ angular.module('otDirectives')
                     var reader = new FileReader();
                     reader.onloadend = function (e) {
                         var fileContent = e.target.result;
-                        var targets = fileContent.replace(/(\r\n|\n|\r|,)/gm, '\n').split('\n');
-                        targets = targets.filter(function (t) {
-                            if (t) { return true; } else { return false; }
-                        });
-                        searchTargets(file.name, targets);
+                        var targets = fromStr2TargetList(fileContent);
+                        if (targets.length) {
+                            searchTargets(file.name, targets);
+                        }
                     };
                     reader.readAsText(file);
                 };
@@ -88,6 +87,22 @@ angular.module('otDirectives')
                             //     otLoadedLists.remove(listName);
                             // }
                         });
+                }
+
+                function fromStr2TargetList (strOfTargets, separators = /(\r\n|\n|\r|,)/gm) {
+                    /* split filter valid ones and trim the goods else [] */
+                    if (strOfTargets) {
+                        return strOfTargets.replace(separators, '\n')
+                            .split('\n')
+                            .filter(function (t) {
+                                if (t) { return true; } else { return false; }
+                            })
+                            .map(function (el) {
+                                return el.trim();
+                            });
+                    } else {
+                        return [];
+                    }
                 }
             }
         };
