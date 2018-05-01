@@ -1,0 +1,31 @@
+<h4 ng-if="header">{{header}}</h4>
+<!-- <div class="row">
+    <div class="col-md-6">
+        
+    </div>
+</div> -->
+<!-- {{data}} -->
+<style>
+
+    .axis text {
+        font: 10px sans-serif;
+    }
+    
+    .axis line,
+    .axis path {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+    
+    .axis--x path, .axis--y path {
+        display: none;
+    }
+    
+</style>
+<svg class="stack"></svg>
+<div>
+    <ul class="plain list-inline">
+        <li ng-repeat="d in activities"><span class="fa fa-circle" ng-style="{'color':'{{d.color}}'}"></span> {{d.id}}</li>
+    </ul>
+</div>

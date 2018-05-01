@@ -65,7 +65,7 @@ angular.module('otDirectives')
                     var g = svg.selectAll('.arc')
                         .data(pie(data))
                         .enter().append('g')
-                        .attr('class', 'arc')
+                        .attr('class', 'arc');
 
                     g.append('title')
                         .text(function (d) { return d.data.label + ' (' + d.data.value + ')'; });

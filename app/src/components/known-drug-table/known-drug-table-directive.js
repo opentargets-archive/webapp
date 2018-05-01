@@ -20,7 +20,8 @@ angular.module('otDirectives')
                 // loadFlag: '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
                 // data: '=?',        // optional data link to pass the data out of the directive
                 // errorFlag: '=?'    // optional error-flag: pass a var to hold parsing-related errors
-                title: '@?',       // optional title for filename export
+                title: '@?',       // optional title for filename export - TODO: this clashes with a DOM element 'title' attribute, causing odd behaviours on roll over. Should be removed
+                output: '@?',       // optional download file name - this will replace title (see above)
                 ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
             controller: ['$scope', function ($scope) {
@@ -38,6 +39,7 @@ angular.module('otDirectives')
                 var table, dtable;
 
                 scope.ext.hasError = false;
+                scope.output = scope.output || scope.title;
 
                 scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }], function () {
                 // if (!attrs.target && !attrs.disease) {
@@ -119,86 +121,11 @@ angular.module('otDirectives')
                     }
 
 
-                    // function drawPhaseChart (data) {
-                    //     var width = 200,
-                    //         height = 200,
-                    //         radius = Math.min(width, height) / 2;
-
-                    //     // var color = d3.scale.ordinal()
-                    //     //     .range(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
-                    //     var color = d3.scale.category20();
-
-                    //     var arc = d3.svg.arc()
-                    //         .outerRadius(radius - 0)
-                    //         .innerRadius(radius - 60);
-
-                    //     var pie = d3.layout.pie()
-                    //         .sort(null)
-                    //         .value(function (d) { return d.val; });
-
-                    //     // var svg = elem.find('svg').el(0) // d3.select("body").append("svg")
-                    //     var svg = d3.select(elem[0].querySelector('svg'))
-                    //         .attr('width', width)
-                    //         .attr('height', height)
-                    //         .append('g')
-                    //         .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
-
-                    //     var arraydata = [];
-                    //     for (var d in data) {
-                    //         arraydata.push({
-                    //             label: data[d][0].label,
-                    //             val: data[d].length,
-                    //             color: color(data[d][0].label.split('').reverse().join(''))
-                    //         });
-                    //     }
-
-                    //     var g = svg.selectAll('.arc')
-                    //         .data(pie(arraydata))
-                    //         .enter().append('g')
-                    //         .attr('class', 'arc')
-                    //         .attr('title', function (d) { return d.data.label; });
-
-                    //     g.append('path')
-                    //         .attr('d', arc)
-                    //         .style('fill', function (d) { return color(d.data.label.split('').reverse().join('')); })
-                    //         // .style('fill', function (d) { return color(d.data.val); })
-                    //         .attr('title', function (d) { return d.data.label; });
-                    //     // .on('click', function (d, i) {
-                    //     //     var filteredData = dtable
-                    //     //         // .column( 3 )
-                    //     //         // .data()
-                    //     //         // .filter( function ( value, index ) {
-                    //     //         //     return value === d.data.label ? true : false;
-                    //     //         // } );
-                    //     //         .api()
-                    //     //         .columns(3)
-                    //     //         // .search(d.data.label)
-                    //     //         .search('^'+d.data.label+'$', true, false)
-                    //     //         .draw();
-                    //     // });
-
-                    //     // g.append('text')
-                    //     //     .attr('transform', function (d) { return 'translate(' + arc.centroid(d) + ')'; })
-                    //     //     .attr('dy', '.35em')
-                    //     //     .text(function (d) { return d.data.label; });
-
-                    //     // label goes into legend and not into
-                    //     scope.legend = arraydata;
-                    //     // scope.legend = {
-                    //     //     label = 
-                    //     // }
-
-                    // }
-
-                    // function type (d) {
-                    //     d.val = +d.val;
-                    //     return d;
-                    // }
-
                     function formatDrugsDataToArray (data) {
                         var newdata = [];
                         var all_drugs = [];
                         var all_phases = {};
+                        var type_activity = {};
 
                         data.forEach(function (item) {
                         // create rows:
@@ -234,13 +161,6 @@ angular.module('otDirectives')
 
                                 // 4: phase numeric (hidden)
                                 row.push(item.drug.max_phase_for_all_diseases.numeric_index);
-
-                                //
-                                all_phases[item.evidence.drug2clinic.max_phase_for_disease.label] = all_phases[item.evidence.drug2clinic.max_phase_for_disease.label] || [];
-                                all_phases[item.evidence.drug2clinic.max_phase_for_disease.label].push({
-                                    id: item.drug.max_phase_for_all_diseases.numeric_index,
-                                    label: item.evidence.drug2clinic.max_phase_for_disease.label
-                                });
 
                                 // 5: status
                                 var sts = otDictionary.NA;
@@ -305,8 +225,8 @@ angular.module('otDirectives')
 
                                 // 10: evidence source
                                 row.push('Curated from <br /><a class=\'ot-external-link\' href=\'' +
-                            item.evidence.drug2clinic.urls[0].url +
-                            '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
+                                    item.evidence.drug2clinic.urls[0].url +
+                                    '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
 
                                 // row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
 
@@ -318,6 +238,19 @@ angular.module('otDirectives')
                                 row.push(item.evidence.drug2clinic.urls[0].nice_name); // evidence source
 
                                 newdata.push(row); // use push() so we don't end up with empty rows
+
+
+                                // parse data for summary viz
+                                //
+                                all_phases[item.evidence.drug2clinic.max_phase_for_disease.label] = all_phases[item.evidence.drug2clinic.max_phase_for_disease.label] || [];
+                                all_phases[item.evidence.drug2clinic.max_phase_for_disease.label].push({
+                                    id: item.drug.max_phase_for_all_diseases.numeric_index,
+                                    label: item.evidence.drug2clinic.max_phase_for_disease.label
+                                });
+
+                                type_activity[item.drug.molecule_type] = type_activity[item.drug.molecule_type] || {};
+                                type_activity[item.drug.molecule_type][activity] = type_activity[item.drug.molecule_type][activity] || [];
+                                type_activity[item.drug.molecule_type][activity].push(activity);
                             } catch (e) {
                                 scope.ext.hasError = true;
                             // $log.log("Error parsing drugs data:");
@@ -346,8 +279,19 @@ angular.module('otDirectives')
                                 label: phase,
                                 value: all_phases[phase].length,
                                 id: all_phases[phase].length
-                            }
+                            };
                         });
+
+                        scope.type_activity = Object.keys(type_activity).map(function (ta) {
+                            return {
+                                label: ta,
+                                values: Object.keys(type_activity[ta]).map(function (act) {
+                                    return {id: act, value: type_activity[ta][act].length};
+                                })
+                            };
+                        });
+                        // console.log('ta: ', scope.type_activity);
+
                         scope.associated_diseases = _.uniqBy(data, 'disease.efo_info.efo_id');
                         scope.associated_targets = _.uniqBy(data, 'target.id');
 
@@ -433,7 +377,7 @@ angular.module('otDirectives')
                             // "ordering": false
                             // }, $scope.search.info.title+"-known_drugs") );
                             initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
-                        }, (scope.title ? scope.title + '-' : '') + 'known_drugs'));
+                        }, (scope.output ? scope.output + '-' : '') + 'known_drugs'));
 
                         // dtable.on( 'search.dt', function () {
                         //     console.log('searched for '+dtable.api().search());
