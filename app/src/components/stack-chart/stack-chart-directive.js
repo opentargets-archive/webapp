@@ -60,7 +60,7 @@ angular.module('otDirectives')
                         .sort(function (a, b) { return a.id > b.id; }); // sort alphabetically
 
                     // setup SVG
-                    var margin = {top: 10, right: 0, bottom: 20, left: 50},
+                    var margin = {top: 10, right: 0, bottom: 60, left: 50},
                         width = width - margin.left - margin.right,
                         height = height - margin.top - margin.bottom;
 
@@ -129,7 +129,13 @@ angular.module('otDirectives')
                     svg.append('g')
                         .attr('class', 'axis axis--x')
                         .attr('transform', 'translate(0,' + (height + 1) + ')')
-                        .call(xAxis);
+                        .call(xAxis)
+                        .selectAll('text')
+                        .attr('y', 10)
+                        .attr('x', -4)
+                        .attr('dy', '.35em')
+                        .attr('transform', 'rotate(-30)')
+                        .style('text-anchor', 'end');
 
                     svg.append('g')
                         .attr('class', 'axis axis--y')
