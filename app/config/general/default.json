@@ -121,8 +121,7 @@
             "name": "relatedDisases",
             "element": "ot-related-diseases",
             "heading": "Similar diseases (based on targets in common)",
-            "track": true,
-            "new": true
+            "track": true
         },
 
         {
@@ -135,14 +134,14 @@
             "name": "drugs",
             "element": "ot-drugs-display",
             "heading": "Drugs",
-            "track": true
+            "track": true,
+            "new": true
         },
         {
             "name": "bibliographyChips",
             "element": "ot-bibliography-target-chips",
             "heading": "Bibliography",
-            "track": true,
-            "new": true
+            "track": true
         },
         {
             "name": "classification",
