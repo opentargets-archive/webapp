@@ -215,8 +215,6 @@ angular.module('otDirectives')
 
                                 // 9: target
                                 row.push('<a href=\'/target/' + item.target.id + '\'>' + item.target.gene_info.symbol + '</a>');
-                                // row.push(item.target.gene_info.symbol);
-                                console.log(target);
 
                                 // 9: target class
                                 var trgc = otDictionary.NA;

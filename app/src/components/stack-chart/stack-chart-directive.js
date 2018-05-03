@@ -57,10 +57,11 @@ angular.module('otDirectives')
                         .filter(function (value, index, self) {
                             return self.indexOf(value) === index;
                         })
-                        .sort(function (a, b) { return a.id > b.id; }); // sort alphabetically
+                        .sort(function (a, b) { return a > b; }); // sort alphabetically
+
 
                     // setup SVG
-                    var margin = {top: 10, right: 0, bottom: 60, left: 50},
+                    var margin = {top: 10, right: 0, bottom: 60, left: 35},
                         width = width - margin.left - margin.right,
                         height = height - margin.top - margin.bottom;
 
@@ -94,16 +95,23 @@ angular.module('otDirectives')
                     //         return {x: d.date, y: d[c]};
                     //     });
                     // }));
-                    var layers = d3.layout.stack()(activities.map(function (c, i) {
+                    console.log(activities);
+                    console.log(data);
+                    var ld = activities.map(function (c, i) {
                         return data.map(function (d) {
+                            var vl = (d.values.find(function (v) { return v.id === c; }) || {value: 0}).value;
                             return {
                                 x: d.label,
-                                y: (d.values[i] || {value: 0}).value,
+                                y: vl,
                                 id: c,
-                                value: (d.values[i] || {value: 0}).value
+                                value: vl
                             };
                         });
-                    }));
+                    });
+                    console.log(ld);
+                    var layers = d3.layout.stack()(ld);
+
+                    console.log(layers);
 
                     // x.domain(layers[0].map(function (d) { return d.x; }));
                     // y.domain([0, d3.max(layers[layers.length - 1], function (d) { return d.y0 + d.y; })]).nice();
@@ -120,7 +128,7 @@ angular.module('otDirectives')
                         .data(function (d) { return d; })
                         .enter().append('rect')
                         .attr('x', function (d) { return x(d.x); })
-                        .attr('y', function (d) { return y(d.y + d.y0); })
+                        .attr('y', function (d) { return Math.ceil(y(d.y + d.y0)); })
                         .attr('height', function (d) { return Math.ceil(y(d.y0) - y(d.y + d.y0)); })
                         .attr('width', x.rangeBand() - 1)
                         .append('title')

@@ -158,145 +158,135 @@
             "name": "drugs",
             "element": "ot-drugs-display",
             "heading": "Drugs",
+            "track": true,
+            "new": true
+        },
+
+        {
+            "name": "uniprot",
+            "element": "ot-target-features",
+            "heading": "Protein Information",
+            "dependencies": {
+                "https://ebi-uniprot.github.io/CDN/protvista/protvista.min.js": {
+                    "format": "global"
+                },
+                "https://ebi-uniprot.github.io/CDN/protvista/css/main.css!": {
+                    "loader": "css"
+                }
+            },
             "track": true
         },
 
         {
-            "name": "drugs-new",
-            "element": "ot-drugs-new-display",
-            "heading": "Drugs new",
+            "name": "pathways",
+            "element": "ot-target-pathways",
+            "heading": "Pathways",
             "track": true
-        }//,
-
-    //     {
-    //         "name": "uniprot",
-    //         "element": "ot-target-features",
-    //         "heading": "Protein Information",
-    //         "dependencies": {
-    //             "https://ebi-uniprot.github.io/CDN/protvista/protvista.min.js": {
-    //                 "format": "global"
-    //             },
-    //             "https://ebi-uniprot.github.io/CDN/protvista/css/main.css!": {
-    //                 "loader": "css"
-    //             }
-    //         },
-    //         "track": true
-    //     },
-
-    //     {
-    //         "name": "pathways",
-    //         "element": "ot-target-pathways",
-    //         "heading": "Pathways",
-    //         "track": true
-    //     },
+        },
 
 
-    //     {
-    //         "name": "relatedTargets",
-    //         "element": "ot-related-targets",
-    //         "heading": "Similar targets (based on diseases in common)",
-    //         "track": true,
-    //         "new": true
-    //     },
+        {
+            "name": "relatedTargets",
+            "element": "ot-related-targets",
+            "heading": "Similar targets (based on diseases in common)",
+            "track": true
+        },
 
-    //     {
-    //         "name": "genomeBrowser",
-    //         "element": "ot-genome-browser",
-    //         "heading": "Variants, isoforms and genomic context",
-    //         "track": true
-    //     },
+        {
+            "name": "genomeBrowser",
+            "element": "ot-genome-browser",
+            "heading": "Variants, isoforms and genomic context",
+            "track": true
+        },
 
-    //     {
-    //         "name": "interactionsViewer",
-    //         "element": "ot-interactions-viewer",
-    //         "heading": "Protein interactions",
-    //         "dependencies": {
-    //             "build/interactionsViewer.min.js": {
-    //                 "format": "global"
-    //             },
-    //             "build/interactionsViewer.css": {
-    //                 "loader": "css"
-    //             }
-    //         },
-    //         "track": true
-    //     },
+        {
+            "name": "interactionsViewer",
+            "element": "ot-interactions-viewer",
+            "heading": "Protein interactions",
+            "dependencies": {
+                "build/interactionsViewer.min.js": {
+                    "format": "global"
+                },
+                "build/interactionsViewer.css": {
+                    "loader": "css"
+                }
+            },
+            "track": true
+        },
 
-    //     {
-    //         "name": "baselineExpression",
-    //         "element": "ot-baseline-expression",
-    //         "heading": "RNA and protein baseline expression",
-    //         "dependencies": {
-    //             "https://www.ebi.ac.uk/gxa/resources/js/lib/fetch-polyfill.min.js" : {
-    //                 "format": "global"
-    //             },
-    //             "https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js": {
-    //                 "format": "global"
-    //             },
-    //             "https://www.ebi.ac.uk/gxa/resources/css/alt-customized-bootstrap-3.3.5.css!": {
-    //                 "loader": "css"
-    //             },
-    //             "https://www.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
-    //                 "format": "global",
-    //                 "deps": ["https://www.ebi.ac.uk/gxa/resources/js/lib/fetch-polyfill.min.js", "https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"]
-    //             }
-    //         },
-    //         "track": true
-    //     },
+        {
+            "name": "baselineExpression",
+            "element": "ot-baseline-expression",
+            "heading": "RNA and protein baseline expression",
+            "dependencies": {
+                "https://www.ebi.ac.uk/gxa/resources/js/lib/fetch-polyfill.min.js" : {
+                    "format": "global"
+                },
+                "https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js": {
+                    "format": "global"
+                },
+                "https://www.ebi.ac.uk/gxa/resources/css/alt-customized-bootstrap-3.3.5.css!": {
+                    "loader": "css"
+                },
+                "https://www.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js": {
+                    "format": "global",
+                    "deps": ["https://www.ebi.ac.uk/gxa/resources/js/lib/fetch-polyfill.min.js", "https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"]
+                }
+            },
+            "track": true
+        },
 
-    //     {
-    //         "name" : "mousePhenotypes",
-    //         "element": "ot-mouse-phenotypes",
-    //         "heading": "Mouse phenotypes",
-    //         "track": true,
-    //         "new": true
-    //     },
+        {
+            "name" : "mousePhenotypes",
+            "element": "ot-mouse-phenotypes",
+            "heading": "Mouse phenotypes",
+            "track": true
+        },
 
 
-    //     {
-    //         "name": "proteinStructure",
-    //         "element": "ot-pdb-target",
-    //         "heading": "Protein Structure",
-    //         "dependencies": {
-    //             "vendor/bio-pv.min.js": {
-    //                 "format": "global"
-    //             }
-    //         },
-    //         "track": true
-    //     },
+        {
+            "name": "proteinStructure",
+            "element": "ot-pdb-target",
+            "heading": "Protein Structure",
+            "dependencies": {
+                "vendor/bio-pv.min.js": {
+                    "format": "global"
+                }
+            },
+            "track": true
+        },
 
-    //     {
-    //         "name": "geneOntology",
-    //         "element": "ot-gene-ontology",
-    //         "heading": "Gene Ontology",
-    //         "track": true
-    //     },
+        {
+            "name": "geneOntology",
+            "element": "ot-gene-ontology",
+            "heading": "Gene Ontology",
+            "track": true
+        },
 
-    //     {
-    //         "name": "geneTree",
-    //         "element": "ot-gene-tree",
-    //         "heading": "Gene tree",
-    //         "track": true
-    //     },
-    //     // {
-    //     //     "name": "bibliography",
-    //     //     "element": "ot-bibliography-target",
-    //     //     "heading": "Bibliography",
-    //     //     "track": true
-    //     // }
-    //    {
-    //        "name": "bibliographyChips",
-    //        "element": "ot-bibliography-target-chips",
-    //        "heading": "Bibliography",
-    //        "track": true,
-    //        "new": true
-    //    },
-    //    {
-    //     "name": "cancerHallmark",
-    //     "element": "ot-cancer-hallmark",
-    //     "heading": "Cancer hallmark",
-    //     "track": true,
-    //     "new": true
-    // }
+        {
+            "name": "geneTree",
+            "element": "ot-gene-tree",
+            "heading": "Gene tree",
+            "track": true
+        },
+        // {
+        //     "name": "bibliography",
+        //     "element": "ot-bibliography-target",
+        //     "heading": "Bibliography",
+        //     "track": true
+        // }
+        {
+            "name": "bibliographyChips",
+            "element": "ot-bibliography-target-chips",
+            "heading": "Bibliography",
+            "track": true
+        },
+        {
+            "name": "cancerHallmark",
+            "element": "ot-cancer-hallmark",
+            "heading": "Cancer hallmark",
+            "track": true
+        }
     ],
 
 
