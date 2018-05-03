@@ -213,6 +213,11 @@ angular.module('otDirectives')
                                 //             + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
                                 //             + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
+                                // 9: target
+                                row.push('<a href=\'/target/' + item.target.id + '\'>' + item.target.gene_info.symbol + '</a>');
+                                // row.push(item.target.gene_info.symbol);
+                                console.log(target);
+
                                 // 9: target class
                                 var trgc = otDictionary.NA;
                                 if (otUtils.checkPath(item, 'target.target_class')) {
@@ -224,7 +229,8 @@ angular.module('otDirectives')
                                 // 8: target context / protein complex members
 
                                 // 10: evidence source
-                                row.push('Curated from <br /><a class=\'ot-external-link\' href=\'' +
+                                // row.push('Curated from <br /><a class=\'ot-external-link\' href=\'' +
+                                row.push('<a class=\'ot-external-link\' href=\'' +
                                     item.evidence.drug2clinic.urls[0].url +
                                     '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
 
@@ -312,7 +318,7 @@ angular.module('otDirectives')
                         return newdata;
                     }
 
-                    var dropdownColumns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                    var dropdownColumns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
                     /*
                      * This is the hardcoded data for the Known Drugs table and
@@ -333,42 +339,42 @@ angular.module('otDirectives')
                                     'targets': [0],    // the access-level (public/private icon)
                                     'visible': otConfig.show_access_level,
                                     'width': '3%'
+                                },  
+                                {
+                                    'targets': [1, 2, 7],
+                                    'width': '12%'
                                 },
                                 {
-                                    'targets': [3],
-                                    'width': '5.6%'
+                                    'targets': [5, 6, 8, 10],
+                                    'width': '10%'
                                 },
                                 {
-                                    'targets': [5, 6, 7, 8, 9, 10],
-                                    'width': '11.2%'
+                                    'targets': [3, 9, 11],
+                                    'width': '7%'
                                 },
                                 // disease
                                 {
                                     'targets': [1],
-                                    'width': '11.2%',
-                                    'mRender': otColumnFilter.mRenderGenerator(11),
-                                    'mData': otColumnFilter.mDataGenerator(1, 11)
+                                    'mRender': otColumnFilter.mRenderGenerator(12),
+                                    'mData': otColumnFilter.mDataGenerator(1, 12)
                                 },
                                 // drug
                                 {
                                     'targets': [2],
-                                    'width': '11.2%',
-                                    'mRender': otColumnFilter.mRenderGenerator(12),
-                                    'mData': otColumnFilter.mDataGenerator(2, 12)
+                                    'mRender': otColumnFilter.mRenderGenerator(13),
+                                    'mData': otColumnFilter.mDataGenerator(2, 13)
                                 },
                                 // mech of action
                                 {
                                     'targets': [7],
-                                    'width': '11.2%',
-                                    'mRender': otColumnFilter.mRenderGenerator(13),
-                                    'mData': otColumnFilter.mDataGenerator(7, 13)
+                                    'mRender': otColumnFilter.mRenderGenerator(14),
+                                    'mData': otColumnFilter.mDataGenerator(7, 14)
                                 },
                                 // evidence source
                                 {
-                                    'targets': [10],
-                                    'width': '11.2%',
-                                    'mRender': otColumnFilter.mRenderGenerator(14),
-                                    'mData': otColumnFilter.mDataGenerator(10, 14)
+                                    'targets': [11],
+                                    'mRender': otColumnFilter.mRenderGenerator(15),
+                                    'mData': otColumnFilter.mDataGenerator(11, 15)
                                 }
                             ],
                             // "aoColumnDefs" : [
