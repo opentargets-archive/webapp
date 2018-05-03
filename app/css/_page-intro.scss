@@ -187,16 +187,13 @@
     height: 0px;
 
     //padding: 20vh 0;
-    padding: 12vm 0;   /* fallback for IE9 */
-    padding: 12vmin 0;
+    padding: 10vm 0;   /* fallback for IE9 */
+    padding: 10vmin 0;
 }
 
 .partner-logo {
-    /*max-width:90%;
-    min-width:20%;
-    position: relative;
-    top: 50%;*/
     transform: translateY(-51%); /* for some reasons at 50% the crisp sanger logo looks fuzzy, while 51% seems to work better */
+    max-width: 100%;
 }
 
 /* deprecated */
