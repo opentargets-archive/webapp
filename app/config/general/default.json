@@ -188,8 +188,7 @@
             "name": "relatedTargets",
             "element": "ot-related-targets",
             "heading": "Similar targets (based on diseases in common)",
-            "track": true,
-            "new": true
+            "track": true
         },
 
         {
@@ -240,8 +239,7 @@
             "name" : "mousePhenotypes",
             "element": "ot-mouse-phenotypes",
             "heading": "Mouse phenotypes",
-            "track": true,
-            "new": true
+            "track": true
         },
 
 
@@ -280,15 +278,13 @@
            "name": "bibliographyChips",
            "element": "ot-bibliography-target-chips",
            "heading": "Bibliography",
-           "track": true,
-           "new": true
+           "track": true
        },
        {
             "name": "cancerHallmark",
             "element": "ot-cancer-hallmark",
             "heading": "Cancer hallmark",
-            "track": true,
-            "new": true
+            "track": true
         },
         {
              "name": "biomarkers",
