@@ -9,11 +9,17 @@ angular.module('otPlugins')
                 target: '='
             },
             link: function (scope, elem, attrs) {
-                var dropdownColumns = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+                var dropdownColumns = [0, 1, 2, 3, 4];
 
                 function formatDataToArray () {
                     var rows = scope.target.cancerbiomarkers[0].map(function (mark) {
                         var row = [];
+
+                        // biomarker
+                        row.push(mark.individualbiomarker || mark.biomarker); // emtpy string evaluates to false
+
+                        // disease
+                        row.push(mark.disease);
 
                         // drug
                         row.push(mark.drugfullname);
@@ -21,13 +27,10 @@ angular.module('otPlugins')
                         // association
                         row.push(mark.association);
 
-                        // disease
-                        row.push(mark.disease);
-
                         // evidence level
                         row.push(mark.evidencelevel);
 
-                        // references
+                        // references (publications)
                         var ref_string = '';
 
                         // pubmed
@@ -50,9 +53,6 @@ angular.module('otPlugins')
 
                         ref_string = ref_string || 'N/A';
                         row.push(ref_string);
-
-                        // biomarker
-                        row.push(mark.individualbiomarker || mark.biomarker); // emtpy string evaluates to false
 
                         return row;
                     });
@@ -81,18 +81,6 @@ angular.module('otPlugins')
                                 'targets': [0, 2],
                                 'width': '21%'
                             }
-                            // {
-                            //     'targets': [3],
-                            //     'width': '18%'
-                            // },
-                            // {
-                            //     'targets': [4],
-                            //     'width': '6%'
-                            // },
-                            // {
-                            //     'targets': [5, 6],
-                            //     'width': '12%'
-                            // }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, scope.target.approved_symbol + '-biomarkers'));
