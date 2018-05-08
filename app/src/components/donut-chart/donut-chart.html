@@ -1,0 +1,11 @@
+<h4 ng-if="header">{{header}}</h4>
+<div class="row">
+    <div class="col-md-6">
+        <svg class="donut"></svg>
+    </div>
+    <div class="col-md-6" ng-if="showLegend">
+        <ul class="plain">
+            <li ng-repeat="d in data"><span class="fa fa-circle" ng-style="{'color':'{{d.color}}'}"></span> {{d.label}} ({{d.value}})</li>
+        </ul>
+    </div>
+</div>

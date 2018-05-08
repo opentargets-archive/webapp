@@ -20,8 +20,8 @@
             "href" : "",
             "menu" : [
                 {
-                    "label" : "FAQs",
-                    "href" : "/faq"
+                    "label" : "Documentation & FAQs",
+                    "href" : "https://docs.targetvalidation.org/"
                 },
                 {
                     "label" : "support@targetvalidation.org",
@@ -121,8 +121,7 @@
             "name": "relatedDisases",
             "element": "ot-related-diseases",
             "heading": "Similar diseases (based on targets in common)",
-            "track": true,
-            "new": true
+            "track": true
         },
 
         {
@@ -135,14 +134,14 @@
             "name": "drugs",
             "element": "ot-drugs-display",
             "heading": "Drugs",
-            "track": true
+            "track": true,
+            "new": true
         },
         {
             "name": "bibliographyChips",
             "element": "ot-bibliography-target-chips",
             "heading": "Bibliography",
-            "track": true,
-            "new": true
+            "track": true
         },
         {
             "name": "classification",
@@ -158,7 +157,8 @@
             "name": "drugs",
             "element": "ot-drugs-display",
             "heading": "Drugs",
-            "track": true
+            "track": true,
+            "new": true
         },
 
         {
@@ -188,8 +188,7 @@
             "name": "relatedTargets",
             "element": "ot-related-targets",
             "heading": "Similar targets (based on diseases in common)",
-            "track": true,
-            "new": true
+            "track": true
         },
 
         {
@@ -240,8 +239,7 @@
             "name" : "mousePhenotypes",
             "element": "ot-mouse-phenotypes",
             "heading": "Mouse phenotypes",
-            "track": true,
-            "new": true
+            "track": true
         },
 
 
@@ -276,20 +274,18 @@
         //     "heading": "Bibliography",
         //     "track": true
         // }
-       {
-           "name": "bibliographyChips",
-           "element": "ot-bibliography-target-chips",
-           "heading": "Bibliography",
-           "track": true,
-           "new": true
-       },
-       {
-        "name": "cancerHallmark",
-        "element": "ot-cancer-hallmark",
-        "heading": "Cancer hallmark",
-        "track": true,
-        "new": true
-    }
+        {
+            "name": "bibliographyChips",
+            "element": "ot-bibliography-target-chips",
+            "heading": "Bibliography",
+            "track": true
+        },
+        {
+            "name": "cancerHallmark",
+            "element": "ot-cancer-hallmark",
+            "heading": "Cancer hallmark",
+            "track": true
+        }
     ],
 
 

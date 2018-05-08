@@ -16,8 +16,8 @@ $secondary-background-color: #EEE;  // gray
 
 $primary-brand-color: #3E8BAD;      // flower blue
 $secondary-brand-color: #FF6350; //#8b435f;    // ot logo red
-$extra-brand-color: #1e5799;        // new blue //#0052A3
 
+$extra-brand-color: #1e5799;        // new blue //#0052A3
 $brand-light-blue: #b2def9;
 
 
@@ -49,8 +49,10 @@ $clr-text-dim: scale-color( $clr-text, $lightness: 38% ); // lighter (AAA)
 $clr-text-inv: inv-color($footer-background);
 $clr-text-inv-dim: scale-color( $clr-text-inv, $lightness: -13%);
 
-$clr-link: $extra-brand-color;
-$clr-link-hover: adjust-color( $extra-brand-color, $lightness: 5% );
+// $clr-link: $extra-brand-color;
+// $clr-link-hover: adjust-color( $extra-brand-color, $lightness: 5% );
+$clr-link: #207dd0;
+$clr-link-hover: adjust-color( #207dd0, $lightness: 5% );
 
 
 
@@ -72,7 +74,7 @@ $clr-artboard-backgroud: #FFF;
 $clr-private-data: #f36633; // GSK orange
 
 /* some bootstrap elements */
-$btn-primary-bg: $extra-brand-color; //$secondary-color;
+$btn-primary-bg: $clr-link; // $extra-brand-color; //$secondary-color;
 $btn-primary-border: adjust-color( $btn-primary-bg, $lightness: -5% );
 $btn-primary-bg-hover: adjust-color( $btn-primary-bg, $lightness: 5% );
 $btn-primary-border-hover: adjust-color( $btn-primary-bg, $lightness: 10% );

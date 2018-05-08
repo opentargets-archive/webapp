@@ -1,6 +1,6 @@
 /**
  * Drugs table
- * 
+ *
  * ext object params:
  *  isLoading, hasError, data
  */
@@ -20,7 +20,8 @@ angular.module('otDirectives')
                 // loadFlag: '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
                 // data: '=?',        // optional data link to pass the data out of the directive
                 // errorFlag: '=?'    // optional error-flag: pass a var to hold parsing-related errors
-                title: '@?',       // optional title for filename export
+                title: '@?',       // optional title for filename export - TODO: this clashes with a DOM element 'title' attribute, causing odd behaviours on roll over. Should be removed
+                output: '@?',       // optional download file name - this will replace title (see above)
                 ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
             controller: ['$scope', function ($scope) {
@@ -35,7 +36,10 @@ angular.module('otDirectives')
                 // var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>';
                 // var accessLevelPublic = '<span class=\'ot-access-public\' title=\'public data\'></span>';
 
+                var table, dtable;
+
                 scope.ext.hasError = false;
+                scope.output = scope.output || scope.title;
 
                 scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }], function () {
                 // if (!attrs.target && !attrs.disease) {
@@ -51,24 +55,24 @@ angular.module('otDirectives')
                     // =================================================
 
                     /*
-                drug    1   Target context  .biological_subject.properties.target_type
-                drug    2   Protein complex members .biological_subject.about
-                drug    3   Drug information    .evidence.evidence_chain[0].evidence.experiment_specific
-                drug    4   Mechanism of action of drug .biological_subject.properties.activity
-                drug    5   Mechanism of action references  .evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs
-                drug    6   Evidence codes: target to drug  .evidence.evidence_chain[0].evidence.evidence_codes
-                drug    7   Provenance - target .evidence.urls.linkouts[1]
-                drug    8   Provenance - drug   .evidence.urls.linkouts[0]
-                drug    9   Provenace - marketed drug indication; SourceDB  .evidence.evidence_chain[1].evidence.experiment_specific
-                drug    10  Date asserted   .evidence.date_asserted
-                drug    11  Evidence codes: drug to disease .evidence.evidence_chain[1].evidence.evidence_codes
-                drug    12  Association score   .evidence.evidence_chain[0].evidence.association_score
-                */
+                        drug    1   Target context  .biological_subject.properties.target_type
+                        drug    2   Protein complex members .biological_subject.about
+                        drug    3   Drug information    .evidence.evidence_chain[0].evidence.experiment_specific
+                        drug    4   Mechanism of action of drug .biological_subject.properties.activity
+                        drug    5   Mechanism of action references  .evidence.evidence_chain[0].evidence.provenance_type.literature.pubmed_refs
+                        drug    6   Evidence codes: target to drug  .evidence.evidence_chain[0].evidence.evidence_codes
+                        drug    7   Provenance - target .evidence.urls.linkouts[1]
+                        drug    8   Provenance - drug   .evidence.urls.linkouts[0]
+                        drug    9   Provenace - marketed drug indication; SourceDB  .evidence.evidence_chain[1].evidence.experiment_specific
+                        drug    10  Date asserted   .evidence.date_asserted
+                        drug    11  Evidence codes: drug to disease .evidence.evidence_chain[1].evidence.evidence_codes
+                        drug    12  Association score   .evidence.evidence_chain[0].evidence.association_score
+                    */
 
                     /*
-                Drug Information                                                        Gene-Drug Evidence
-                Drug    Phase   Type    Mechanism of Action Activity    Clinical Trials Target name Target class    Target context  Protein complex members Evidence type
-                */
+                        Drug Information                                                        Gene-Drug Evidence
+                        Drug    Phase   Type    Mechanism of Action Activity    Clinical Trials Target name Target class    Target context  Protein complex members Evidence type
+                    */
 
                     function getDrugData () {
                     // $scope.search.drugs.is_loading = true;
@@ -103,6 +107,8 @@ angular.module('otDirectives')
                                     if (resp.body.data) {
                                         scope.ext.data = resp.body.data;
                                         initTableDrugs();
+                                        // draw doughnut
+                                        // drawPhaseChart(scope.phases);
                                     } else {
                                         // $log.warn("Empty response : drug data");
                                     }
@@ -118,6 +124,9 @@ angular.module('otDirectives')
                     function formatDrugsDataToArray (data) {
                         var newdata = [];
                         var all_drugs = [];
+                        var all_phases = {};
+                        var type_activity = {};
+
                         data.forEach(function (item) {
                         // create rows:
                             var row = [];
@@ -144,9 +153,7 @@ angular.module('otDirectives')
                                     linkClass = '';
                                     target = '';
                                 }
-                                row.push('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' +
-                            item.drug.molecule_name +
-                            '</a>');
+                                row.push('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' + item.drug.molecule_name + '</a>');
 
                                 // 3: phase
                                 // row.push(item.drug.max_phase_for_all_diseases.label);
@@ -206,6 +213,9 @@ angular.module('otDirectives')
                                 //             + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
                                 //             + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
+                                // 9: target
+                                row.push('<a href=\'/target/' + item.target.id + '\'>' + item.target.gene_info.symbol + '</a>');
+
                                 // 9: target class
                                 var trgc = otDictionary.NA;
                                 if (otUtils.checkPath(item, 'target.target_class')) {
@@ -217,9 +227,10 @@ angular.module('otDirectives')
                                 // 8: target context / protein complex members
 
                                 // 10: evidence source
-                                row.push('Curated from <br /><a class=\'ot-external-link\' href=\'' +
-                            item.evidence.drug2clinic.urls[0].url +
-                            '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
+                                // row.push('Curated from <br /><a class=\'ot-external-link\' href=\'' +
+                                row.push('<a class=\'ot-external-link\' href=\'' +
+                                    item.evidence.drug2clinic.urls[0].url +
+                                    '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
 
                                 // row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
 
@@ -231,6 +242,19 @@ angular.module('otDirectives')
                                 row.push(item.evidence.drug2clinic.urls[0].nice_name); // evidence source
 
                                 newdata.push(row); // use push() so we don't end up with empty rows
+
+
+                                // parse data for summary viz
+                                //
+                                all_phases[item.evidence.drug2clinic.max_phase_for_disease.label] = all_phases[item.evidence.drug2clinic.max_phase_for_disease.label] || [];
+                                all_phases[item.evidence.drug2clinic.max_phase_for_disease.label].push({
+                                    id: item.drug.max_phase_for_all_diseases.numeric_index,
+                                    label: item.evidence.drug2clinic.max_phase_for_disease.label
+                                });
+
+                                type_activity[item.drug.molecule_type] = type_activity[item.drug.molecule_type] || {};
+                                type_activity[item.drug.molecule_type][activity] = type_activity[item.drug.molecule_type][activity] || [];
+                                type_activity[item.drug.molecule_type][activity].push(activity);
                             } catch (e) {
                                 scope.ext.hasError = true;
                             // $log.log("Error parsing drugs data:");
@@ -253,6 +277,29 @@ angular.module('otDirectives')
                                 d.url = '/summary?drug=' + chemblId;
                             }
                         });
+
+                        scope.phases = Object.keys(all_phases).map(function (phase) {
+                            return {
+                                label: phase,
+                                value: all_phases[phase].length,
+                                id: all_phases[phase].length
+                            };
+                        });
+
+                        scope.type_activity = Object.keys(type_activity).map(function (ta) {
+                            return {
+                                label: ta,
+                                values: Object.keys(type_activity[ta]).map(function (act) {
+                                    return {id: act, value: type_activity[ta][act].length};
+                                })
+                            };
+                        });
+                        // console.log('ta: ', scope.type_activity);
+
+                        scope.associated_diseases = _.uniqBy(data, 'disease.efo_info.efo_id');
+                        scope.associated_targets = _.uniqBy(data, 'target.id');
+
+
                         scope.show.moreOrLess = scope.drugs.length > showLim;
 
                         scope.showMoreOrLess = function () {
@@ -269,16 +316,15 @@ angular.module('otDirectives')
                         return newdata;
                     }
 
-                    var dropdownColumns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                    var dropdownColumns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
                     /*
                      * This is the hardcoded data for the Known Drugs table and
                      * will obviously need to change and pull live data when available
                      */
                     function initTableDrugs () {
-                    // $('#drugs-table') // Not anymore
-                        var table = elem[0].getElementsByTagName('table');
-                        $(table).dataTable(otUtils.setTableToolsParams({
+                        table = elem[0].getElementsByTagName('table');
+                        dtable = $(table).dataTable(otUtils.setTableToolsParams({
                             'data': formatDrugsDataToArray(scope.ext.data),
                             'autoWidth': false,
                             'paging': true,
@@ -291,42 +337,42 @@ angular.module('otDirectives')
                                     'targets': [0],    // the access-level (public/private icon)
                                     'visible': otConfig.show_access_level,
                                     'width': '3%'
+                                },  
+                                {
+                                    'targets': [1, 2, 7],
+                                    'width': '12%'
                                 },
                                 {
-                                    'targets': [3],
-                                    'width': '5.6%'
+                                    'targets': [5, 6, 8, 10],
+                                    'width': '10%'
                                 },
                                 {
-                                    'targets': [5, 6, 7, 8, 9, 10],
-                                    'width': '11.2%'
+                                    'targets': [3, 9, 11],
+                                    'width': '7%'
                                 },
                                 // disease
                                 {
                                     'targets': [1],
-                                    'width': '11.2%',
-                                    'mRender': otColumnFilter.mRenderGenerator(11),
-                                    'mData': otColumnFilter.mDataGenerator(1, 11)
+                                    'mRender': otColumnFilter.mRenderGenerator(12),
+                                    'mData': otColumnFilter.mDataGenerator(1, 12)
                                 },
                                 // drug
                                 {
                                     'targets': [2],
-                                    'width': '11.2%',
-                                    'mRender': otColumnFilter.mRenderGenerator(12),
-                                    'mData': otColumnFilter.mDataGenerator(2, 12)
+                                    'mRender': otColumnFilter.mRenderGenerator(13),
+                                    'mData': otColumnFilter.mDataGenerator(2, 13)
                                 },
                                 // mech of action
                                 {
                                     'targets': [7],
-                                    'width': '11.2%',
-                                    'mRender': otColumnFilter.mRenderGenerator(13),
-                                    'mData': otColumnFilter.mDataGenerator(7, 13)
+                                    'mRender': otColumnFilter.mRenderGenerator(14),
+                                    'mData': otColumnFilter.mDataGenerator(7, 14)
                                 },
                                 // evidence source
                                 {
-                                    'targets': [10],
-                                    'width': '11.2%',
-                                    'mRender': otColumnFilter.mRenderGenerator(14),
-                                    'mData': otColumnFilter.mDataGenerator(10, 14)
+                                    'targets': [11],
+                                    'mRender': otColumnFilter.mRenderGenerator(15),
+                                    'mData': otColumnFilter.mDataGenerator(11, 15)
                                 }
                             ],
                             // "aoColumnDefs" : [
@@ -335,7 +381,14 @@ angular.module('otDirectives')
                             // "ordering": false
                             // }, $scope.search.info.title+"-known_drugs") );
                             initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
-                        }, (scope.title ? scope.title + '-' : '') + 'known_drugs'));
+                        }, (scope.output ? scope.output + '-' : '') + 'known_drugs'));
+
+                        // dtable.on( 'search.dt', function () {
+                        //     console.log('searched for '+dtable.api().search());
+                        // } );
+
+                        // TODO: remove this as it's just for testing
+                        // window.dtable = dtable;
                     }
                 });
             }

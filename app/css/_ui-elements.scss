@@ -785,6 +785,48 @@ ot-related-targets-vis, ot-related-diseases-vis {
     .pointer {
         cursor: pointer;
     }
+
+
+    /*
+     * Donut chart
+     */
+
+     ot-donut-chart {
+         .donut {
+            .arc text {
+                font: 10px helvetica;
+                text-anchor: middle;
+            }
+            
+            .arc path {
+                stroke: #fff;
+            }
+         }
+     }
+
+    /*
+     * Stack bar chart
+     */
+
+    ot-stack-chart{
+        .stack {
+            .axis text {
+                font: 10px sans-serif;
+                text-anchor: end;
+            }
+            
+            .axis line,
+            .axis path {
+                fill: none;
+                stroke: #000;
+                shape-rendering: crispEdges;
+            }
+            
+            .axis--x path, .axis--y path {
+                display: none;
+            }
+        }
+    }
 }
 
 

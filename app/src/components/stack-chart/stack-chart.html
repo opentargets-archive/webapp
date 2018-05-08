@@ -1,0 +1,8 @@
+<h4 ng-if="header">{{header}}</h4>
+
+<svg class="stack"></svg>
+<div>
+    <ul class="plain list-inline">
+        <li ng-repeat="d in activities"><span class="fa fa-circle" ng-style="{'color':'{{d.color}}'}"></span> {{d.id}}</li>
+    </ul>
+</div>
