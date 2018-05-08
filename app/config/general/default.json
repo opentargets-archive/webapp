@@ -285,7 +285,14 @@
             "element": "ot-cancer-hallmark",
             "heading": "Cancer hallmark",
             "track": true
-        }
+        },
+        {
+             "name": "biomarkers",
+             "element": "ot-biomarkers",
+             "heading": "Cancer biomarkers",
+             "track": true,
+             "new": true
+         }
     ],
 
 
