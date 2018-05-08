@@ -120,6 +120,10 @@
             color: #777;
         }
 
+        tfoot {
+            display:table-header-group;
+        }
+
         tfoot>tr.filter-row>th {
             padding-left: 2px;
             padding-right: 2px;
