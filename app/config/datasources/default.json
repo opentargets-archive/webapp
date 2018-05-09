@@ -100,7 +100,7 @@
     },
     "PROGENY": {
         "id": "progeny",
-        "label": "Progeny",
+        "label": "PROGENy",
         "infoUrl": "/data-sources#progeny",
         "infoTemplate": "progeny.md",
         "description": ""
