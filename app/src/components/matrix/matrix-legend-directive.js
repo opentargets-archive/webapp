@@ -20,7 +20,7 @@ angular.module('otDirectives')
         + '</div>'
 
         // extra info
-        + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="/faq#score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>';
+        + '<div class="matrix-legend-info"><a ng-if="legendText!=undefined" href="https://docs.targetvalidation.org/faq/association-score"><span class="fa fa-question-circle"></span><span class="matrix-legend-text">{{legendText}}</span></a></div>';
         return {
             restrict: 'AE',
             template: template,
