@@ -19,9 +19,9 @@ angular.module('otDirectives')
                 // 1. Pathway name
                 // limit the length of the label
                 var label = p.name;
-                if (label.length > 30) {
-                    label = label.substring(0, 30) + '...';
-                }
+                // if (label.length > 30) {
+                //     label = label.substring(0, 30) + '...';
+                // }
                 var targetsInUrl = targets.map(function (t) {
                     return 'pathway-target=' + t;
                 }).join('&');

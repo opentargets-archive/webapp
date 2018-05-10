@@ -523,6 +523,22 @@
         overflow-x: auto;
     }
 
+
+    // Pathway table in batch search.
+    // Long cell content is truncated with ellipse 
+    .summary-pathway-table{
+        table-layout: fixed;
+
+        th {
+            width: 25%;
+        }
+        
+        td {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
 }
 
 
