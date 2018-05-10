@@ -95,8 +95,7 @@ angular.module('otDirectives')
                     //         return {x: d.date, y: d[c]};
                     //     });
                     // }));
-                    console.log(activities);
-                    console.log(data);
+
                     var ld = activities.map(function (c, i) {
                         return data.map(function (d) {
                             var vl = (d.values.find(function (v) { return v.id === c; }) || {value: 0}).value;
@@ -108,10 +107,9 @@ angular.module('otDirectives')
                             };
                         });
                     });
-                    console.log(ld);
+
                     var layers = d3.layout.stack()(ld);
 
-                    console.log(layers);
 
                     // x.domain(layers[0].map(function (d) { return d.x; }));
                     // y.domain([0, d3.max(layers[layers.length - 1], function (d) { return d.y0 + d.y; })]).nice();
