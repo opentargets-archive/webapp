@@ -25,7 +25,7 @@ angular.module('otDirectives')
                 var targetsInUrl = targets.map(function (t) {
                     return 'pathway-target=' + t;
                 }).join('&');
-                row.push('<a href=/summary?pathway=' + p.stId + '&' + targetsInUrl + '>' + label + '</a>');
+                row.push('<a href=/summary?pathway=' + p.stId + '&' + targetsInUrl + ' title="' + label + '">' + label + '</a>');
 
                 // 2. Enrichment
                 row.push(p.entities.pValue.toPrecision(2));
