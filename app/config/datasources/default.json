@@ -16,7 +16,7 @@
     },
     "CHEMBL": {
         "id": "chembl",
-        "label": "Chembl",
+        "label": "ChEMBL",
         "infoUrl": "https://docs.targetvalidation.org/data-sources/drugs#chembl", // "/data-sources#chembl",
         "infoTemplate": "chembl.md",
         "description": ""
