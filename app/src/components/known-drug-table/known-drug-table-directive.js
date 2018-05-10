@@ -282,7 +282,7 @@ angular.module('otDirectives')
                             return {
                                 label: phase,
                                 value: all_phases[phase].length,
-                                id: all_phases[phase].length
+                                id: phase // all_phases[phase].length
                             };
                         });
 
