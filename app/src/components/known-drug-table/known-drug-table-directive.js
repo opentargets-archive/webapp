@@ -248,17 +248,21 @@ angular.module('otDirectives')
                                 //
                                 all_phases[item.evidence.drug2clinic.max_phase_for_disease.label] = all_phases[item.evidence.drug2clinic.max_phase_for_disease.label] || [];
                                 all_phases[item.evidence.drug2clinic.max_phase_for_disease.label].push({
+                                    // drug: item.drug.molecule_name,
                                     id: item.drug.max_phase_for_all_diseases.numeric_index,
                                     label: item.evidence.drug2clinic.max_phase_for_disease.label
                                 });
 
                                 type_activity[item.drug.molecule_type] = type_activity[item.drug.molecule_type] || {};
                                 type_activity[item.drug.molecule_type][activity] = type_activity[item.drug.molecule_type][activity] || [];
-                                type_activity[item.drug.molecule_type][activity].push(activity);
+                                // type_activity[item.drug.molecule_type][activity].push(activity);
+                                type_activity[item.drug.molecule_type][activity].push(item.drug.molecule_name);
+                                // type_activity[item.drug.molecule_type][activity].push({
+                                //     activity: activity,
+                                //     drug: item.drug.molecule_name
+                                // });
                             } catch (e) {
                                 scope.ext.hasError = true;
-                            // $log.log("Error parsing drugs data:");
-                            // $log.log(e);
                             }
                         });
 
@@ -282,15 +286,18 @@ angular.module('otDirectives')
                             return {
                                 label: phase,
                                 value: all_phases[phase].length,
+                                // value: _.uniqBy(all_phases[phase], 'drug').length,
                                 id: phase // all_phases[phase].length
                             };
                         });
+
+                        // console.log('typeactivity:', type_activity);
 
                         scope.type_activity = Object.keys(type_activity).map(function (ta) {
                             return {
                                 label: ta,
                                 values: Object.keys(type_activity[ta]).map(function (act) {
-                                    return {id: act, value: type_activity[ta][act].length};
+                                    return {id: act, value: _.uniq(type_activity[ta][act]).length};
                                 })
                             };
                         });
@@ -337,7 +344,7 @@ angular.module('otDirectives')
                                     'targets': [0],    // the access-level (public/private icon)
                                     'visible': otConfig.show_access_level,
                                     'width': '3%'
-                                },  
+                                },
                                 {
                                     'targets': [1, 2, 7],
                                     'width': '12%'
