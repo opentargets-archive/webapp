@@ -4,15 +4,15 @@ The Center for Therapeutic Target Validation (CTTV) platform brings together evi
 drug targets with diseases. Its aim is to help users identify and prioritise potential targets for further investigation.
 
 The platform brings together evidence from multiple data types that can be relevant to target identification and prioritisation.
-These data are described in detail on the [data sources](/data-sources) page.
+These data are described in detail on the [data sources](https://docs.targetvalidation.org/data-sources/introduction.html) page.
 
 A target can be a protein, protein complex or RNA molecule. We integrate evidence through the gene that codes for
 the target using [Ensembl gene identifiers](http://www.ensembl.org/info/genome/genebuild/genome_annotation.html). We display the
 target by the [HGNC gene symbol](http://www.genenames.org) but you can search for it using protein or gene names
-and most synonyms as explained in [What can I search for](/faq#what_can_I search_for).
+and most synonyms as explained in [What can I search for](https://docs.targetvalidation.org/faq/test.html).
 
 We map diseases to terms in the [Experimental Factor Ontology](http://www.ebi.ac.uk/efo/) (EFO), which enables us to
-describe relationships between diseases. For more details see [How are diseases described?](/faq#diseases)
+describe relationships between diseases. For more details see [How are diseases described?](https://docs.targetvalidation.org/faq/describing-diseases.html)
 
   * [Getting Started](#getting_started)
   * [Target Association page](#target_assoc)
@@ -108,7 +108,7 @@ can be accessed by clicking on the target/disease or the evidence cells of the t
 'View evidence details' in the bubble or tree views. This displays the Target-Disease Evidence page.  At the top of this page is a panel
 indicating the association that is being examined, and a flower that shows the score for each data type as the petals of a flower.  The
 extent of the blue fill of the flower petal indicates the strength of the association for that data type. Details of the data types can be
-found [here](/data-sources).
+found [here](https://docs.targetvalidation.org/data-sources/introduction.html).
 
 The sections below contain the details of the evidence available for this association in each data type. If evidence is available
 for a particularly datatype the section header will contain bold black text and clicking on the header will open our a table that describes the
@@ -189,14 +189,14 @@ Information available here includes:
 The Disease Profile page provides a summary of the disease and is accessed by clicking on the disease name in name in the Target-Disease Evidence page, or
 the "View disease profile" link in the Disease Association page, or the ‘P’ icon  from a pop-up menu.
 
-The Disease Profile page provides a description of the disease and its synonyms from the [EFO](/faq#efo) and its relationship
+The Disease Profile page provides a description of the disease and its synonyms from the [EFO](https://docs.targetvalidation.org/faq/describing-diseases.html) and its relationship
 to other diseases in the ontology. This page also displays the relationships of a disease to its immediate parents and children within the
-[EFO](/faq#efo) hierarchy. Clicking on ‘View target associations’ links to the Disease Association page for that disease.
+[EFO](https://www.ebi.ac.uk/efo/) hierarchy. Clicking on ‘View target associations’ links to the Disease Association page for that disease.
 
 The Drug section on this page provides a list of all FDA-approved and marketed drugs to treat this disease.
 
 ### <a name="scoring"></a>Association Score
-Details of the score calculation are given on the [scoring](/scoring) page.
+Details of the score calculation are given on the [scoring](https://docs.targetvalidation.org/scoring.html) page.
 
 ### <a name="filters"></a>Filters
 
