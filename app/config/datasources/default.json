@@ -10,84 +10,84 @@
     "CANCER_GENE_CENSUS": {
         "id": "cancer_gene_census",
         "label": "Cancer Gene Census",
-        "infoUrl": "/data-sources#census",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/somatic-mutations.html",
         "infoTemplate": "cancer-gene-census.md",
         "description": ""
     },
     "CHEMBL": {
         "id": "chembl",
         "label": "Chembl",
-        "infoUrl": "/data-sources#chembl",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/drugs.html",
         "infoTemplate": "chembl.md",
         "description": ""
     },
     "EPMC": {
         "id": "europepmc",
         "label": "Europe PMC",
-        "infoUrl": "/data-sources#text_mining",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/text-mining.html",
         "infoTemplate": "europe-pmc.md",
         "description": ""
     },
     "EVA": {
         "id": "eva",
         "label": "European Variation Archive (EVA)",
-        "infoUrl": "/data-sources#eva",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/genetic-associations.html",
         "infoTemplate": "eva.md",
         "description": ""
     },
     "EVA_SOMATIC": {
         "id": "eva_somatic",
         "label": "European Variation Archive (EVA)",
-        "infoUrl": "/data-sources#eva_somatic",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/somatic-mutations.html",
         "infoTemplate": "eva-somatic.md",
         "description": ""
     },
     "EXPRESSION_ATLAS": {
         "id": "expression_atlas",
         "label": "Expression Atlas",
-        "infoUrl": "/data-sources#atlas",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/rna-expression.html",
         "infoTemplate": "expression-atlas.md",
         "description": ""
     },
     "GENE_2_PHENOTYPE": {
         "id": "gene2phenotype",
         "label": "Gene2Phenotype",
-        "infoUrl": "/data-sources#gene2phenotype",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/genetic-associations.html",
         "infoTemplate": "gene2phenotype.md",
         "description": ""
     },
     "GENOMICS_ENGLAND": {
         "id": "genomics_england",
         "label": "Genomics England PanelApp",
-        "infoUrl": "/data-sources#genomics_england",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/genetic-associations.html",
         "infoTemplate": "genomics-england.md",
         "description": ""
     },
     "GWAS": {
         "id": "gwas_catalog",
         "label": "GWAS catalog",
-        "infoUrl": "/data-sources#gwas",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/genetic-associations.html",
         "infoTemplate": "gwas-catalog.md",
         "description": ""
     },
     "INTOGEN": {
         "id": "intogen",
         "label": "IntOGen",
-        "infoUrl": "/data-sources#intogen",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/somatic-mutations.html",
         "infoTemplate": "intogen.md",
         "description": ""
     },
     "PHENODIGM": {
         "id": "phenodigm",
         "label": "PhenoDigm",
-        "infoUrl": "/data-sources#mouse",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/animal-models.html",
         "infoTemplate": "phenodigm.md",
         "description": ""
     },
     "PHEWAS": {
         "id": "phewas_catalog",
         "label": "PheWAS catalog",
-        "infoUrl": "/data-sources#phewas",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/genetic-associations.html",
         "infoTemplate": "phewas-catalog.md",
         "description": ""
     },
@@ -101,35 +101,35 @@
     "REACTOME": {
         "id": "reactome",
         "label": "Reactome",
-        "infoUrl": "/data-sources#reactome",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/affected-pathways.html",
         "infoTemplate": "reactome.md",
         "description": ""
     },
     "SLAPENRICH": {
         "id": "slapenrich",
         "label": "SLAPenrich",
-        "infoUrl": "/data-sources#SLAPenrich",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/affected-pathways.html",
         "infoTemplate": "slapenrich.md",
         "description": ""
     },
     "UNIPROT": {
         "id": "uniprot",
         "label": "UniProt",
-        "infoUrl": "/data-sources#uniprot",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/genetic-associations.html",
         "infoTemplate": "uniprot.md",
         "description": ""
     },
     "UNIPROT_LITERATURE": {
         "id": "uniprot_literature",
         "label": "UniProt literature",
-        "infoUrl": "/data-sources#uniprot_lit",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/genetic-associations.html",
         "infoTemplate": "uniprot-literature.md",
         "description": ""
     },
     "UNIPROT_SOMATIC": {
         "id": "uniprot_somatic",
         "label": "Uniprot somatic",
-        "infoUrl": "/data-sources#uniprot_somatic",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/somatic-mutations.html",
         "infoTemplate": "uniprot-somatic.md",
         "description": ""
     }
