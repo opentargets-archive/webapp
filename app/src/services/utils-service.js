@@ -2,7 +2,7 @@ angular.module('otServices')
 /**
  * Some utility services.
  */
-    .factory('otUtils', ['$window', '$rootScope', 'otConsts', '$sce', function ($window, $rootScope, otConsts, $sce) {
+    .factory('otUtils', ['$window', '$rootScope', 'otConsts', function ($window, $rootScope, otConsts) {
         'use strict';
 
         var otUtilsService = {};

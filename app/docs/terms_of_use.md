@@ -16,7 +16,7 @@ data than those provided by the data owner.
   changes by placing a notice on our website, but you may wish to check each time you use the website. The date of the most recent revision will appear
   on this, the ‘CTTV Terms of Use’ page. If you do not agree to these changes, please do not continue to use our online services. We will also make
   available an archived copy of the previous Terms of Use for comparison.
-  7. Any questions or comments concerning these Terms of Use can be addressed to: The Operations Director, CTTV, Wellcome Trust Genome Campus, Hinxton CB10 1SD
+  7. Any questions or comments concerning these Terms of Use can be addressed to: The Operations Director, CTTV, Wellcome Genome Campus, Hinxton CB10 1SD
   8. Users of the CTTV target validation platform  agree not to attempt to use any CTTV computers, files or networks apart from through the service
   interfaces provided.
   9. CTTV will make all reasonable effort to maintain continuity of the target validation platform and provide adequate warning of any changes or

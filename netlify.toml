@@ -26,17 +26,11 @@
 [context.feature.environment]
   APIHOST = "https://api.opentargets.io/"
 
-[context."expression-simple".environment]
-#  APIHOST = "https://mk-levelupdate-dot-open-targets-eu-dev.appspot.com/api/"
-#  APIHOST = "https://mk-zscorefacet-dot-open-targets-eu-dev.appspot.com/api/"
-  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/"
-#  APIHOST = "https://mk-fixfacets-dot-open-targets-eu-dev.appspot.com/api/"
-
 [context.master.environment]
   APIHOST = "https://open-targets-eu-dev.appspot.com/"
 
 [context.mouse-phenotypes.environment]
   APIHOST = "https://yapsy-dot-open-targets-eu-dev.appspot.com/"
 
-[context.cancer-hallmark.environment]
-  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/"
+[context.mk-batchsearch.environment]
+  APIHOST = "https://mk-batchsearch-dot-open-targets-eu-dev.appspot.com/"

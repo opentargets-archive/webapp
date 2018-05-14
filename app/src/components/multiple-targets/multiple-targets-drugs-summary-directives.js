@@ -15,6 +15,9 @@ angular.module('otDirectives')
                 // Target
                 row.push(drug.target);
 
+                // Disease
+                row.push('<a href="/disease/' + drug.disease.id + '">' + drug.disease.label + '</a>');
+
                 // Max Phase
                 row.push(drug.maxPhase.label);
 
@@ -72,34 +75,38 @@ angular.module('otDirectives')
                                     drugs[drug] = {
                                         target: target,
                                         drug: drug,
+                                        disease: {
+                                            label: ev.disease.efo_info.label,
+                                            id: ev.disease.efo_info.efo_id.split('/').pop()
+                                        },
                                         id: id.split('/').pop(),
                                         maxPhase: maxPhase,
                                         molType: molType
                                     };
                                 } else {
-                                // $log.log("duplicated drug...");
-                                // $log.log(drugs[drug]);
-                                // $log.log(ev);
+                                    // duplicated drug...
                                 }
-                            // drugs[target].drugs[drug] = {
-                            //     name: drug,
-                            //     id: id
-                            // };
                             }
                             var drugsArr = _.values(drugs);
-                            // for (var j=0; j<drugsArr.length; j++) {
-                            //     drugsArr[j].drugs = _.values(drugsArr[j].drugs);
-                            // }
                             scope.uniqueTargets = Object.keys(uniqueTargets).length;
                             scope.drugs = drugsArr;
 
                             $('#target-list-drugs').DataTable(otUtils.setTableToolsParams({
                                 'data': formatDrugDataToArray(scope.drugs),
                                 'ordering': true,
-                                'order': [[2, 'desc']],
+                                'order': [[3, 'desc']],
                                 'autoWidth': false,
                                 'paging': true,
-                                'columnDefs': []
+                                'columnDefs': [
+                                    {
+                                        'targets': [0, 4],
+                                        'width': '20%'
+                                    },
+                                    {
+                                        'targets': [1, 3],
+                                        'width': '15%'
+                                    }
+                                ]
 
                             }, scope.target.length + '-targets-drugs'));
                         });
@@ -107,24 +114,3 @@ angular.module('otDirectives')
             }
         };
     }]);
-// .directive('drugSummary', ['$log', function ($log) {
-//     'use strict';
-//
-//     return {
-//         restrict: 'E',
-//         template: '' +
-//         '<div ng-click="showDrugs=!showDrugs" style="cursor:pointer">' +
-//         '   {{target.target}} -- {{target.drugs.length}} drugs' +
-//         '</div>' +
-//         '<div ng-show=showDrugs>' +
-//         '     <span ng-repeat="drug in target.drugs">' +
-//         '        <a target=_blank href="{{drug.id}}">' +
-//         '           <i class="ot-drug">{{drug.name}}</i>' +
-//         '        </a>' +
-//         '     </span>' +
-//         '</div>',
-//         scope: {
-//             target: '='
-//         }
-//     };
-// }]);

@@ -23,34 +23,6 @@ angular.module('otPlugins')
                     'change of cellular energetics'
                 ];
 
-
-                // lightweight list to build visualizations:
-                // only store label, suppress and promote
-                scope.hallmarks = hallmarks.map(function (m) {
-                    var chm = scope.target.hallmarks.cancer_hallmarks.filter(function (ch) {
-                        return ch.label === m;
-                    })[0];
-                    chm = chm || {};
-
-                    return {
-                        label: m,
-                        suppress: chm.suppress || false,
-                        promote: chm.promote || false
-                    };
-                });
-
-
-                // set the selected hallmark when user clicks on table row
-                // selected is just the label
-                // selected list is a list of those matching the label
-                scope.setSelected = function (m) {
-                    scope.selected = m;
-                    scope.selectedList = scope.target.hallmarks.cancer_hallmarks.filter(function (ch) {
-                        return ch.label === scope.selected;
-                    });
-                };
-
-
                 function formatDataToArray () {
                     var rows = scope.target.hallmarks.cancer_hallmarks.map(function (mark) {
                         var row = [];
@@ -79,8 +51,6 @@ angular.module('otPlugins')
 
                     return rows;
                 }
-
-                var dropdownColumns = [0, 2];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table')[1];
@@ -115,11 +85,46 @@ angular.module('otPlugins')
                     }, scope.target.approved_symbol + '-cancer_hallmark'));
                 }
 
+                if (scope.target.hallmarks) {
+                    // lightweight list to build visualizations:
+                    // only store label, suppress and promote
+                    scope.hallmarks = hallmarks.map(function (m) {
+                        // for this hallmark, find if it has data
+                        return scope.target.hallmarks.cancer_hallmarks.filter(function (ch) {
+                            return ch.label === m;
+                        }).reduce(
+                            // reduce array: promote/suppress are not the same for each item, 
+                            // so might have both promote suppress but across different items
+                            function (accumulator, current) {
+                                return {
+                                    label: m,
+                                    promote: accumulator.promote || current.promote,
+                                    suppress: accumulator.suppress || current.suppress
+                                };
+                            },
+                            // initialization object (as might not data for a certain hallmark)
+                            {label: m, suppress: false, promote: false}
+                        );
+                    });
 
-                // initialize table in timeout
-                $timeout(function () {
-                    initTable();
-                }, 0);
+
+                    // set the selected hallmark when user clicks on table row
+                    // selected is just the label
+                    // selected list is a list of those matching the label
+                    scope.setSelected = function (m) {
+                        scope.selected = m;
+                        scope.selectedList = scope.target.hallmarks.cancer_hallmarks.filter(function (ch) {
+                            return ch.label === scope.selected;
+                        });
+                    };
+
+                    var dropdownColumns = [0, 2];
+
+                    // initialize table in timeout
+                    $timeout(function () {
+                        initTable();
+                    }, 0);
+                }
             }
         };
     }]);
