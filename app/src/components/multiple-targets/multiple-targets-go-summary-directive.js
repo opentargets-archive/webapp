@@ -1,9 +1,8 @@
 angular.module('otDirectives')
-    .directive('multipleTargetsGoSummary', ['$log', '$http', 'otUtils', function ($log, $http, otUtils) {
-
-        function parseGOdata(data) {
+    .directive('multipleTargetsGoSummary', ['$http', 'otUtils', 'otConsts', function ($http, otUtils, otConsts) {
+        function parseGOdata (data) {
             var tableData = [];
-            for (var i=0; i<data.length; i++) {
+            for (var i = 0; i < data.length; i++) {
                 var dataRow = data[i];
                 var dataFields = dataRow.split('\t');
                 if (dataFields[8] && (dataFields[8].substring(0, 3) === 'GO:')) {
@@ -62,7 +61,7 @@ angular.module('otDirectives')
 
                     // Call gProfiler to get enriched GO terms
                     // curl -X POST -d 'output=mini&organism=hsapiens&significant=1&sort_by_structure=1&ordered_query=0&as_ranges=0&no_iea=0&underrep=0&hierfiltering=none&user_thr=1&min_set_size=0&max_set_size=0&threshold_algo=analytical&domain_size_type=annotated&query=braf+pten+brca1+brca2' http://biit.cs.ut.ee/gprofiler/
-                    var opts = 'output=mini&organism=hsapiens&significant=1&sort_by_structure=1&ordered_query=0&as_ranges=0&no_iea=0&underrep=0&hierfiltering=none&user_thr=1&min_set_size=0&max_set_size=0&threshold_algo=analytical&domain_size_type=annotated&query=' + (scope.target.map(function(d){return d.approved_symbol}).join('+'));
+                    var opts = 'output=mini&organism=hsapiens&significant=1&sort_by_structure=1&ordered_query=0&as_ranges=0&no_iea=0&underrep=0&hierfiltering=none&user_thr=1&min_set_size=0&max_set_size=0&threshold_algo=analytical&domain_size_type=annotated&query=' + (scope.target.map(function (d) { return d.approved_symbol; }).join('+'));
 
                     // The proxy is setting this header now
                     // var httpConfig = {
@@ -71,8 +70,8 @@ angular.module('otDirectives')
                     //     }
                     // };
                     // $http.post('https://biit.cs.ut.ee/gprofiler/', opts, httpConfig)
-                    $http.post('/proxy/biit.cs.ut.ee/gprofiler/', opts)
-                        .then (function (resp) {
+                    $http.post(otConsts.PROXY + 'biit.cs.ut.ee/gprofiler/', opts)
+                        .then(function (resp) {
                             scope.showSpinner = false;
                             var data = resp.data;
                             $('#target-list-go2-terms').DataTable(otUtils.setTableToolsParams({
@@ -90,7 +89,7 @@ angular.module('otDirectives')
 
                             }, scope.target.length + '-targets-enriched-go-terms'));
                         });
-                })
+                });
             }
         };
     }]);

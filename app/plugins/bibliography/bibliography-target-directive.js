@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otBibliographyTarget', ['$http', function ($http) {
+    .directive('otBibliographyTarget', ['$http', 'otConsts', function ($http, otConsts) {
         'use strict';
 
         return {
@@ -20,7 +20,7 @@ angular.module('otPlugins')
                 })).join(' OR ');
                 scope.citations = {};
 
-                $http.get('/proxy/www.ebi.ac.uk/europepmc/webservices/rest/search?query=' + pmidsLinks + '&format=json')
+                $http.get(otConsts.PROXY + 'www.ebi.ac.uk/europepmc/webservices/rest/search?query=' + pmidsLinks + '&format=json')
                     .then(function (resp) {
                         scope.citations.count = resp.data.hitCount;
                         scope.citations.europepmcLink = '//europepmc.org/search?query=' + pmidsLinks;

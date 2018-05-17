@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otInteractionsViewer', ['$log',  '$http', '$q', 'otApi', 'otOmnipathdbSources', function ($log, $http, $q, otApi, otOmnipathdbSources) {
+    .directive('otInteractionsViewer', ['$log',  '$http', '$q', 'otApi', 'otOmnipathdbSources', 'otConsts', function ($log, $http, $q, otApi, otOmnipathdbSources, otConsts) {
         function getNames (bestHits) {
             var mapNames = {};
             for (var i = 0; i < bestHits.length; i++) {
@@ -27,7 +27,7 @@ angular.module('otPlugins')
             },
             link: function (scope, elem, attrs) {
                 var uniprotId = scope.target.uniprot_id;
-                var url = '/proxy/www.omnipathdb.org/interactions/' + uniprotId + '?format=json';
+                var url = otConsts.PROXY + 'www.omnipathdb.org/interactions/' + uniprotId + '?format=json';
                 $http.get(url)
                     .then(function (resp) {
                         var interactors = {};
@@ -55,7 +55,7 @@ angular.module('otPlugins')
                         var promises = [];
 
                         // Promise -- second pass in omnipathdb...
-                        var url = '/proxy/www.omnipathdb.org/interactions/' + uniprotIds.join(',') + '?format=json&fields=sources';
+                        var url = otConsts.PROXY + 'www.omnipathdb.org/interactions/' + uniprotIds.join(',') + '?format=json&fields=sources';
                         promises.push($http.get(url));
 
                         // Promise -- get the names from bestHitSearch

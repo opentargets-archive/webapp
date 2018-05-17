@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otGeneTree', ['otColumnFilter', 'otUtils', '$timeout', function (otColumnFilter, otUtils, $timeout) {
+    .directive('otGeneTree', ['otColumnFilter', 'otUtils', '$timeout', 'otConsts', function (otColumnFilter, otUtils, $timeout, otConsts) {
         'use strict';
 
         return {
@@ -17,7 +17,7 @@ angular.module('otPlugins')
                 var gt = targetGeneTree()
                     .id(scope.target.id)
                     .width(width)
-                    .proxy('/proxy/rest.ensembl.org')
+                    .proxy(otConsts.PROXY + 'rest.ensembl.org')
                     .on('notFound', function () {
                         scope.notFound = 1;
                     });
@@ -103,7 +103,7 @@ angular.module('otPlugins')
 
 
                 var rest = tnt.ensembl()
-                    .proxyUrl('/proxy/rest.ensembl.org');
+                    .proxyUrl(otConsts.PROXY + 'rest.ensembl.org');
 
                 var homologsUrl = rest.url.homologues({
                     'id': scope.target.id,
@@ -113,7 +113,7 @@ angular.module('otPlugins')
                 scope.showSpinner = true;
                 rest.call(homologsUrl)
                     .then(function (resp) {
-                        var infoUrl = '/proxy/rest.ensembl.org/lookup/id/';
+                        var infoUrl = otConsts.PROXY + 'rest.ensembl.org/lookup/id/';
                         var infoTargets = [];
                         resp.body.data[0].homologies.forEach(function (h) {
                             infoTargets.push(h.target.id);
