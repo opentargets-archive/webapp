@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('otDrugAdverseEventsDirective', ['$http', '$q', 'otApi', '$timeout', function ($http, $q, otApi, $timeout) {
+    .directive('otDrugAdverseEventsDirective', ['$http', 'otApi', '$timeout', '$log', function ($http, otApi, $timeout, $log) {
         'use strict';
 
         return {
@@ -50,25 +50,31 @@ angular.module('otDirectives')
                                 params: opts
                             };
 
-                            return otApi.getBestHitSearch(queryObject)
-                                .then(function (resp) {
-                                    for (var i = 0; i < resp.body.data.length; i++) {
-                                        var rec = resp.body.data[i];
-                                        if (rec.data && rec.exact) {
-                                            events20[i].label = rec.data.efo_label;
-                                            events20[i].id = rec.data.efo_code;
+                            if (opts.q.length > 0) {    // check manually that we're not passing an empty query to getBesthitSearch
+                                otApi.getBestHitSearch(queryObject) // no need to return this
+                                    .then(function (resp) {
+                                        for (var i = 0; i < resp.body.data.length; i++) {
+                                            var rec = resp.body.data[i];
+                                            if (rec.data && rec.exact) {
+                                                events20[i].label = rec.data.efo_label;
+                                                events20[i].id = rec.data.efo_code;
+                                            }
                                         }
-                                    }
-                                    // scope.effects = events20;
-                                    $timeout(function () {
-                                        plotAdverseEvents(events20, width);
-                                    }, 0);
-                                });
+                                        // scope.effects = events20;
+                                        $timeout(function () {
+                                            plotAdverseEvents(events20, width);
+                                        }, 0);
+                                    });
+                            }
+                        })
+                        .catch(function (err) {
+                            // It seems that api.fda.gov can return a 404 here. Also getBestHitSearch() can return error if the query is empty
+                            // Trying to catch errors in the above code here: however the first 404 seems to make it through...
+                            $log.log('Drugs adverse event error: ', err);
                         });
-
                 });
 
-                function plotAdverseEvents(events, w) {
+                function plotAdverseEvents (events, w) {
                     var longestName = -Infinity;
                     events.forEach(function (d) {
                         if (d.term.length > longestName) {
@@ -91,13 +97,13 @@ angular.module('otDirectives')
                         .style('font-size', '1.2em')
                         .style('fill', '#666666')
                         .text('Number of reports');
-                    
+
                     var valScale = d3.scale.linear()
                         .domain([0, d3.max(events, function (d) { return d.count; })])
                         .range([0, ~~(w - (longestName * 12))]);
-                    
+
                     var colScale = d3.scale.category20();
-                    
+
                     var reports = svg.selectAll('.report')
                         .data(events)
                         .enter()

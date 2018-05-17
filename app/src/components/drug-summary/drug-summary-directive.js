@@ -123,30 +123,32 @@ angular.module('otDirectives')
                                                                         params: opts
                                                                     };
                                                                     (function (uniqSyns, target) { // make sure uniqSyns and target and passed to the closure and don't mutate
-                                                                        otApi.getBestHitSearch(queryObject)
-                                                                            .then(function (resp) {
-                                                                                var uniqSynsArr = Object.keys(uniqSyns).map(function (s) {
-                                                                                    return {
-                                                                                        synonym: s
-                                                                                    };
-                                                                                });
-                                                                                for (var i = 0; i < resp.body.data.length; i++) {
-                                                                                    var q = resp.body.data[i];
-                                                                                    if (q.id) {
-                                                                                        uniqSynsArr[i].ensId = q.id;
+                                                                        if (queryObject.params.q.length > 0) {
+                                                                            otApi.getBestHitSearch(queryObject)
+                                                                                .then(function (resp) {
+                                                                                    var uniqSynsArr = Object.keys(uniqSyns).map(function (s) {
+                                                                                        return {
+                                                                                            synonym: s
+                                                                                        };
+                                                                                    });
+                                                                                    for (var i = 0; i < resp.body.data.length; i++) {
+                                                                                        var q = resp.body.data[i];
+                                                                                        if (q.id) {
+                                                                                            uniqSynsArr[i].ensId = q.id;
+                                                                                        }
                                                                                     }
-                                                                                }
-                                                                                return uniqSynsArr;
-                                                                            })
-                                                                            .then(function (uniqSynsArr) {
-                                                                                targetNames.push(target.pref_name);
-                                                                                allMecs.push({
-                                                                                    mechanism: mec,
-                                                                                    targets: targetNames.join(', '),
-                                                                                    synonyms: uniqSynsArr,
-                                                                                    refs: refs
+                                                                                    return uniqSynsArr;
+                                                                                })
+                                                                                .then(function (uniqSynsArr) {
+                                                                                    targetNames.push(target.pref_name);
+                                                                                    allMecs.push({
+                                                                                        mechanism: mec,
+                                                                                        targets: targetNames.join(', '),
+                                                                                        synonyms: uniqSynsArr,
+                                                                                        refs: refs
+                                                                                    });
                                                                                 });
-                                                                            });
+                                                                        }
                                                                     })(uniqSyns, target);
                                                                 }
                                                             });
