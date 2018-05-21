@@ -243,7 +243,9 @@ angular.module('otServices')
         // all components that need to update their state based on this will be listening
         $rootScope.$on('$locationChangeSuccess', function () {
             updateState(otLocationStateService.parseLocationSearch($location.search()));
-            ga('send', 'pageview', $location.path());
+            if ($location.host() === 'www.targetvalidation.org') {
+                ga('send', 'pageview', $location.path());
+            }
         });
 
 
