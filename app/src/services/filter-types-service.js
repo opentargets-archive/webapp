@@ -5,7 +5,7 @@ angular.module('otFacets')
                 'category': 'associationFacet',
                 'label': label
             });
-            otGoogleAnalytics.trackEvent('associations', 'facet', scope.label);
+            otGoogleAnalytics.trackEvent('associations', 'facet', label);
         }
 
         // BooleanFilter represents a single toggleable leaf checkbox
