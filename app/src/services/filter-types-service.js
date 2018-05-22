@@ -1,10 +1,11 @@
 angular.module('otFacets')
-    .factory('otFilterTypes', ['$analytics', function ($analytics) {
+    .factory('otFilterTypes', ['$analytics', 'otGoogleAnalytics', function ($analytics, otGoogleAnalytics) {
         function trackWithAnalytics (label) {
             $analytics.eventTrack('collectionLabel', {
                 'category': 'associationFacet',
                 'label': label
             });
+            otGoogleAnalytics.trackEvent('associations', 'facet', scope.label);
         }
 
         // BooleanFilter represents a single toggleable leaf checkbox

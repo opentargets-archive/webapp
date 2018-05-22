@@ -3,7 +3,7 @@
 angular.module('otServices')
 
 
-    .factory('otLocationState', ['$location', '$rootScope', 'otConsts', function ($location, $rootScope, otConsts) {
+    .factory('otLocationState', ['$location', '$rootScope', 'otConsts', 'otGoogleAnalytics', function ($location, $rootScope, otConsts, otGoogleAnalytics) {
         'use strict';
 
         var otLocationStateService = {};
@@ -243,9 +243,7 @@ angular.module('otServices')
         // all components that need to update their state based on this will be listening
         $rootScope.$on('$locationChangeSuccess', function () {
             updateState(otLocationStateService.parseLocationSearch($location.search()));
-            if ($location.host() === 'www.targetvalidation.org') {
-                ga('send', 'pageview', $location.path());
-            }
+            otGoogleAnalytics.trackPageView();
         });
 
 
