@@ -7,6 +7,7 @@
             <h3 ng-show="notFound">No target found with ID {{targetId}}</h3>
 
             <h3 view-title>{{target.symbol}}</h3>
+            <meta-description-content>Browse information about {{target.symbol}} ({{targetId}}) covering related drugs, protein structure, pathways, genetic associations, orthologs, RNA expression and cancer biomarkers. Synonyms: {{synonyms | limitTo:3 | otSemiColonSeparate }}.</meta-description-content>
 
             <p ng-show="target.symbol">{{target.name}}<a href="/target/{{target.id}}/associations"><span class="ot-interpage-link"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span> View associated diseases</span></a>
             </p>

@@ -7,6 +7,7 @@
             <h3 ng-show="notFound">No disease found with ID {{diseaseId}}</h3>
 
             <h3 view-title>{{disease.label}}</h3>
+            <meta-description-content>Browse information about {{disease.label}} ({{diseaseId}}) covering related drugs, phenotypes and literature text mining. Synonyms: {{disease.synonyms | limitTo:3 | otSemiColonSeparate }}.</meta-description-content>
 
             <p ng-show="disease.label"><a href="/disease/{{disease.efo}}/associations"><span><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span> View associated targets</span></a>
             </p>
