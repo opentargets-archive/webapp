@@ -65,11 +65,11 @@ function writeXmlObject (xmlObject, fileStem) {
 }
 
 function createSitemapIndex () {
-    const SITEMAP_STATIC = sitemap('sitemaps/1804/static.xml.gz');
-    const SITEMAP_TARGET_PROFILES = sitemap('sitemaps/1804/target-profiles.xml.gz');
-    const SITEMAP_TARGET_ASSOCS = sitemap('sitemaps/1804/target-associations.xml.gz');
-    const SITEMAP_DISEASE_PROFILES = sitemap('sitemaps/1804/disease-profiles.xml.gz');
-    const SITEMAP_DISEASE_ASSOCS = sitemap('sitemaps/1804/disease-associations.xml.gz');
+    const SITEMAP_STATIC = sitemap('/sitemaps/1804/static.xml.gz');
+    const SITEMAP_TARGET_PROFILES = sitemap('/sitemaps/1804/target-profiles.xml.gz');
+    const SITEMAP_TARGET_ASSOCS = sitemap('/sitemaps/1804/target-associations.xml.gz');
+    const SITEMAP_DISEASE_PROFILES = sitemap('/sitemaps/1804/disease-profiles.xml.gz');
+    const SITEMAP_DISEASE_ASSOCS = sitemap('/sitemaps/1804/disease-associations.xml.gz');
 
     const xmlObject = {
         sitemapindex: [
