@@ -321,10 +321,10 @@ angular.module('otDirectives')
 
             var initTable = function (table, target, disease, filename, download, scope) {
                 return $(table).DataTable({
-                    'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
+                    'dom': '<"clearfix" <"small" i><"pull-right three"B>>rt<"clearfix" <"pull-left small" l><"pull-right small" p>>',
                     'buttons': [
                         {
-                            text: '<span class=\'fa fa-download\' title=\'Download as CSV (max 200 articles)\'></span>',
+                            text: '<span title="Download as TSV (max 200 articles)" style="margin-bottom: 5px;"><span class="fa fa-download"></span> Download .tsv</span>',
                             action: download
                         }
                     ],
