@@ -181,16 +181,18 @@ angular.module('otDirectives')
                 data.forEach(function (d, i) {
                     var row = [];
                     var dlit = d.evidence.literature_ref; // data literature - now we use the epmc data
+                    var pubmedId = dlit.data.pmid;
+
 
                     // 0 - Access level
                     row.push((d.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
                     // 1 - Disease label
-                    row.push(d.disease.efo_info.label);
-
-                    // 2 - Publication ID (hidden)
-                    var pubmedId = dlit.data.pmid;
-                    row.push(pubmedId);
+                    row.push(
+                        '<a href="/disease/' + (d.disease.efo_info.efo_id.split('/').pop()) + '">'
+                        + d.disease.efo_info.label
+                        + '</a>'
+                    );
 
                     // 3 - Publication (title, abstract etc)
 
@@ -223,7 +225,6 @@ angular.module('otDirectives')
                         if (abstractSentences && abstract) {
                             abstractSentences.map(function (f) {
                                 var pos = abstract.indexOf(f.raw);
-                                // abstract = abstract.replace(f.raw, f.formattedHighlighted);
                                 abstract = abstract.replace(f.raw, f.formatted);
 
                                 // If not in the abstract, try the title
@@ -236,9 +237,6 @@ angular.module('otDirectives')
 
                         // journal info
                         var journalInfo = (dlit.data.journalInfo.journal.medlineAbbreviation || dlit.data.journalInfo.journal.title || '');
-                        // if (!journalInfo) {
-                        //     journalInfo = '';
-                        // }
                         // journal reference
                         var jref = dlit.data.journalInfo.volume + '(' + dlit.data.journalInfo.issue + '):' + dlit.data.pageInfo;
                         journalInfo += ' ' + jref;
@@ -248,7 +246,7 @@ angular.module('otDirectives')
                         + '<span class=small>' + authorStr + ' ' + journalInfo + '</span>';
 
                         // PMID
-                        var pmidStr = '<span style="color:#aaaaaa">PMID: ' + pubmedId + '</span>';
+                        var pmidStr = '<span class="text-lowlight">PMID: ' + pubmedId + '</span>';
 
                         // matched sentences
                         dlit.mined_sentences.sort(function (a, b) {
@@ -310,12 +308,7 @@ angular.module('otDirectives')
                     }
 
                     // 4 - Year
-                    // var date = d.literature.date;
-                    // var year = 'N/A';
-                    // if (date) {
-                    //     year = moment(date).year();
-                    // }
-                    // row.push(year);
+                    // Note we could use something like year = moment(date).year() if needed to parse a date string
                     row.push(dlit.data.pubYear || 'N/A');
 
                     newData.push(row);
@@ -328,31 +321,26 @@ angular.module('otDirectives')
             var initTable = function (table, target, disease, filename, download, scope) {
                 return $(table).DataTable({
                     'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
-                    // TODO: We are disabling the download for now because there may be too many items
                     'buttons': [
                         {
                             text: '<span class=\'fa fa-download\' title=\'Download as CSV (max 200 articles)\'></span>',
                             action: download
                         }
                     ],
-                    // "buttons": [],
                     'processing': false,
                     'searching': false,
                     'serverSide': true,
                     'autoWidth': false,
                     'ajax': function (data, cbak) {
-                        // order options
                         // mappings:
                         // 0 => access level
                         // 1 => Disease
-                        // 2 => Pubmed Id (hidden)
-                        // 3 => Abstract
-                        // 4 => Year
+                        // 2 => Abstract
+                        // 3 => Year
                         var mappings = {
-                            1: 'disease.efo_info.label',
-                            // 4: 'literature.date' // we will no longer have literature data from API
-                            // 4: 'evidence.literature_ref.lit_id'  // will use this once pmid is indexed in elasticsearch
-                            4: 'evidence.date_asserted'
+                            // once pmid is indexed in elasticsearch we can use:
+                            // 'evidence.literature_ref.lit_id'
+                            3: 'evidence.date_asserted'
                         };
 
                         scope.ext.isLoading = true;
@@ -372,8 +360,13 @@ angular.module('otDirectives')
                             from: data.start,
                             sort: dirScope.order,
                             search: data.search.value,
-                            // TODO: optimize fields
-                            draw: draw
+                            draw: draw,
+                            fields: [
+                                'disease.efo_info.label',
+                                'disease.efo_info.efo_id',
+                                'evidence.literature_ref',
+                                'evidence.date_asserted'
+                            ]
                         };
                         var queryObject = {
                             method: 'GET',
@@ -394,9 +387,6 @@ angular.module('otDirectives')
                                         // decorate our API repsonse with the abstract data:
                                         // create a new field: 'evidence.literature_ref.data'
                                         resp.body.data.forEach(function (d) {
-                                            // TODO: reset literature just for testing
-                                            // d.literature = {references: d.literature.references};
-                                            // **************************************************************** //
                                             d.evidence.literature_ref.data = resp2.data.resultList.result.find(function (i) {
                                                 return i.pmid === d.evidence.literature_ref.lit_id.split('/').pop();
                                             });
@@ -431,33 +421,30 @@ angular.module('otDirectives')
                             });
                     },
                     'ordering': true,
-                    'order': [[4, 'desc']],
+                    'order': [[3, 'desc']],
                     'orderMulti': false,
                     'columnDefs': [
                         {
-                            'targets': [2],
-                            'visible': false
-                        },
-                        {
-                            'targets': [4],
-                            'orderSequence': ['desc', 'asc']
-                        },
-                        {
-                            'targets': [1],
-                            'orderSequence': ['asc', 'desc']
-                        },
-                        {
-                            'targets': [3],
-                            'orderable': false
-                        },
-                        {
-                            'targets': [0],    // the access-level (public/private icon)
+                            // access-level (public/private icon)
+                            'targets': [0],
                             'visible': otConfig.show_access_level,
                             'width': '3%'
                         },
                         {
-                            'targets': [1], // disease?
+                            // disease
+                            'targets': [1],
+                            'orderable': false,
                             'width': '12%'
+                        },
+                        {
+                            // abstract
+                            'targets': [2],
+                            'orderable': false
+                        },
+                        {
+                            // year
+                            'targets': [3],
+                            'orderSequence': ['desc', 'asc']
                         }
                     ]
                 }, (filename + '-text_mining'));
@@ -477,50 +464,23 @@ angular.module('otDirectives')
                     dirScope = scope;
                     var filename = scope.title;
 
+
                     scope.displaySentences = function (id) {
                         // make the collapse content to be shown or hide
                         $('#' + id).toggle('fast');
                     };
+
 
                     scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }, function () { return scope.title; }], function () {
                         if (!attrs.target || !attrs.disease || !scope.title) {
                             return;
                         }
                         $timeout(function () {
-                            // initTable(document.getElementById('literature2-table'), scope.target, scope.disease, scope.filename, scope.downloadTable);
                             filename = (scope.title || (attrs.target + '-' + attrs.disease)).replace(/ /g, '_') + '-text-mining';
                             initTable(elem[0].getElementsByTagName('table'), attrs.target, attrs.disease, filename, scope.downloadTable, scope);
                         }, 0);
                     });
 
-                    /*
-                    'https://api.opentargets.io/v3/platform/public/evidence/filter'
-                    disease==other
-                    target==ENSG00000157764
-                    datasource==europepmc
-                    size==200
-                    format==tab
-                    fields==target.id
-                    fields==target.gene_info.symbol
-                    fields==disease.id
-                    fields==disease.efo_info.label
-                    fields==evidence.literature_ref.lit_id
-                    */
-
-                    /*
-                    'https://api.opentargets.io/v3/platform/public/evidence/filter'
-                    disease=EFO_0005543
-                    target=ENSG00000157764
-                    datasource=europepmc
-                    size=200
-                    from=0
-                    sort=literature.date
-                    fields=disease.efo_info.label
-                    fields=literature.references
-                    fields=literature.title
-                    fields=literature.authors
-                    expandefo=true
-                    */
 
                     // TODO: If we move all the evidence tables to server side, this should be abstracted out probably in a service
                     scope.downloadTable = function () {
@@ -534,8 +494,7 @@ angular.module('otDirectives')
                             size: size,
                             from: 0,
                             sort: dirScope.order,
-                            // fields: ['disease.efo_info.label', 'literature.references', 'literature.title', 'literature.authors']    // OPT 1
-                            fields: ['target.id', 'target.gene_info.symbol', 'disease.id', 'disease.efo_info.label', 'evidence.literature_ref.lit_id'] // OPT 2 and  3
+                            fields: ['target.id', 'target.gene_info.symbol', 'disease.id', 'disease.efo_info.label', 'evidence.literature_ref.lit_id']
                         };
 
                         var queryObject = {
@@ -545,42 +504,12 @@ angular.module('otDirectives')
 
                         otApi.getFilterBy(queryObject)
                             .then(function (resp) {
-                                // OPTION 1: process manually
-                                // var totalText = 'disease,publication id,title,authors\n';
-                                // var data = resp.body.data;
-                                // for (var i = 0; i < data.length; i++) {
-                                //     var d = data[i];
-                                //     var row = [];
-                                //     // note: wrap data in quotation marks to avoid issues with content and columns
-                                //     // as if content contains commas, it will brake CVS structure
-                                //     // Disease
-                                //     row.push('"' + d.disease.efo_info.label + '"');
-                                //     // Publication id
-                                //     row.push(d.literature.references[0].lit_id.split('/').pop());
-                                //     // title
-                                //     row.push('"' + d.literature.title + '"');
-                                //     // Authors
-                                //     var authorsStr = '';
-                                //     if (d.literature.authors) {
-                                //         var authors = d.literature.authors.map(function (k) {
-                                //             // return k.short_name; // short_name field no longer available in API response
-                                //             return formatAuthor(k);
-                                //         });
-                                //         authorsStr = '"' + authors.join(', ') + '"';
-                                //     }
-                                //     row.push(authorsStr);
-
-                                //     totalText += row.join(',');
-                                //     totalText += '\n';
-                                // }
-                                // var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
-                                // saveAs(b, filename + '.csv');
-
                                 // OPTION 2 - tsv directly from API
+                                // If we get data in .tsv from our API, then we can save it directly ith this:
                                 // var b = new Blob([resp.body], {type: 'text/tsv;charset=utf-8'});
                                 // saveAs(b, filename + '.tsv');
 
-                                // OPTION 3 - process and save as csv
+                                // OPTION 3 - process and save as csv/tsv
                                 var dt = resp.body.data.map(function (d) {
                                     return [
                                         d.target.id,
