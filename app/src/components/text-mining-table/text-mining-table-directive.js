@@ -275,12 +275,13 @@ angular.module('otDirectives')
                         var matchedSentences = d.evidence.literature_ref.mined_sentences.map(function (sent) {
                             var section = otUpperCaseFirstFilter(otClearUnderscoresFilter(sent.section));
                             var sentenceString = '';
+                            var msId = pubmedId + sent.section + '--' + i;
                             if (section !== 'Title' && section !== 'Abstract') {
                                 if (previousSection !== sent.section) {
                                     if (previousSection !== null) { // this is not the first section with matched sentences
                                         sentenceString = sentenceString + '</div>';
                                     }
-                                    sentenceString += '<p class=\'small\'><span onclick=\'angular.element(this).scope().displaySentences("' + pubmedId + sent.section + '")\'style=\'cursor:pointer\'><i class=\'fa fa-chevron-circle-down\' aria-hidden=\'true\'></i>&nbsp;<span class=\'bold\'>' + section + ': </span>' + sectionCount[sent.section];
+                                    sentenceString += '<p class=\'small\'><span onclick=\'angular.element(this).scope().displaySentences("' + msId + '")\'style=\'cursor:pointer\'><i class=\'fa fa-chevron-circle-down\' aria-hidden=\'true\'></i>&nbsp;<span class=\'bold\'>' + section + ': </span>' + sectionCount[sent.section];
                                     if (sectionCount[sent.section] === 1) {
                                         sentenceString += ' matched sentence</span></p>';
                                     } else {
@@ -289,7 +290,7 @@ angular.module('otDirectives')
                                     previousSection = sent.section;
                                 }
 
-                                sentenceString += '<div id=\'' + pubmedId + sent.section + '\' style=\'display:none\'><ul style=\'margin-left: 10px;\'>' + sectionSentences[sent.section] + '</ul></div>';
+                                sentenceString += '<div id=\'' + msId + '\' style=\'display:none\'><ul style=\'margin-left: 10px;\'>' + sectionSentences[sent.section] + '</ul></div>';
                             }
 
                             return sentenceString;
