@@ -63,4 +63,37 @@
             };
         }
     );
+
+    mod.directive(
+        'metaDescriptionContent',
+        ['$rootScope', function ($rootScope) {
+            return {
+                restrict: 'EA',
+                link: function (scope, iElement, iAttrs, controller, transcludeFn) {
+                    // If we've been inserted as an element then we detach from the DOM because the caller
+                    // doesn't want us to have any visual impact in the document.
+                    // Otherwise, we're piggy-backing on an existing element so we'll just leave it alone.
+                    var tagName = iElement[0].tagName.toLowerCase();
+                    if (tagName === 'meta-description-content' || tagName === 'metadescriptioncontent') {
+                        iElement.remove();
+                    }
+
+                    scope.$watch(
+                        function () {
+                            return iElement.text();
+                        },
+                        function (newDescriptionContent) {
+                            $rootScope.metaDescriptionContent = newDescriptionContent;
+                        }
+                    );
+                    scope.$on(
+                        '$destroy',
+                        function () {
+                            delete $rootScope.metaDescriptionContent;
+                        }
+                    );
+                }
+            };
+        }]
+    );
 })(angular, document);

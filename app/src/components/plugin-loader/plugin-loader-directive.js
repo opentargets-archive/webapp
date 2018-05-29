@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otPluginLoader', ['$compile', '$timeout', 'otLazy', '$q', '$analytics', function ($compile, $timeout, otLazy, $q, $analytics) {
+    .directive('otPluginLoader', ['$compile', '$timeout', 'otLazy', '$q', '$analytics', 'otGoogleAnalytics', function ($compile, $timeout, otLazy, $q, $analytics, otGoogleAnalytics) {
         return {
             restrict: 'E',
             scope: {
@@ -44,6 +44,7 @@ angular.module('otPlugins')
 
                         if (scope.track) {
                             $analytics.eventTrack(attrs.action, {'category': attrs.page, 'label': scope.label});
+                            otGoogleAnalytics.trackEvent(attrs.page, 'load plugin', scope.label);
                         }
 
                         // spinner

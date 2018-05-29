@@ -3,7 +3,7 @@
 angular.module('otServices')
 
 
-    .factory('otLocationState', ['$location', '$rootScope', 'otConsts', function ($location, $rootScope, otConsts) {
+    .factory('otLocationState', ['$location', '$rootScope', 'otConsts', 'otGoogleAnalytics', function ($location, $rootScope, otConsts, otGoogleAnalytics) {
         'use strict';
 
         var otLocationStateService = {};
@@ -241,9 +241,9 @@ angular.module('otServices')
         // This is the main part of the service:
         // it watches for changes in the URL search, then process the search and fire an event
         // all components that need to update their state based on this will be listening
-        // $rootScope.$on('$locationChangeSuccess', function(){
         $rootScope.$on('$locationChangeSuccess', function () {
             updateState(otLocationStateService.parseLocationSearch($location.search()));
+            otGoogleAnalytics.trackPageView();
         });
 
 

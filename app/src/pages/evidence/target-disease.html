@@ -5,6 +5,7 @@
     <div class="ot-content-header">
         <div class="container">
             <h3 view-title>Evidence for {{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}} in {{search.info.efo.label}}</h3>
+            <meta-description-content>{{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}} ({{search.target}}) is associated with {{search.info.efo.label}} ({{search.disease}}) through evidence in the Open Targets Platform from GWAS, clinical trials, differential expression experiments, pathways, text mining and experiments in animal models.</meta-description-content>
             <p></p><!-- bit of a hugly hack, I confess, just to get the spacing consistent with other pages; will adjust and remove in the future -->
         </div>
     </div>
