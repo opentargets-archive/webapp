@@ -457,13 +457,14 @@ angular.module('otDirectives')
                 restrict: 'AE',
                 templateUrl: 'src/components/text-mining-table/text-mining-table.html',
                 scope: {
-                    title: '@?',    // optional title for filename export
+                    // 'title' clashes with a DOM element 'title' attribute, causing odd behaviours on roll over.
+                    output: '@?',   // optional download file name - replacea title (see above)
                     ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
                 },
                 link: function (scope, elem, attrs) {
                     scope.ext.hasError = false;
                     dirScope = scope;
-                    var filename = scope.title;
+                    var filename = scope.output;
 
 
                     scope.displaySentences = function (id) {
@@ -472,12 +473,12 @@ angular.module('otDirectives')
                     };
 
 
-                    scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }, function () { return scope.title; }], function () {
-                        if (!attrs.target || !attrs.disease || !scope.title) {
+                    scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }, function () { return scope.output; }], function () {
+                        if (!attrs.target || !attrs.disease || !scope.output) {
                             return;
                         }
                         $timeout(function () {
-                            filename = (scope.title || (attrs.target + '-' + attrs.disease)).replace(/ /g, '_') + '-text-mining';
+                            filename = (scope.output || (attrs.target + '-' + attrs.disease)).replace(/ /g, '_') + '-text-mining';
                             initTable(elem[0].getElementsByTagName('table'), attrs.target, attrs.disease, filename, scope.downloadTable, scope);
                         }, 0);
                     });
