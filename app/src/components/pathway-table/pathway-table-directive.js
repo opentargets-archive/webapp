@@ -28,7 +28,7 @@ angular.module('otDirectives')
             templateUrl: 'src/components/pathway-table/pathway-table.html',
 
             scope: {
-                title: '@?',    // optional title for filename export
+                output: '@?',    // optional output for filename export
                 ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
 
@@ -177,7 +177,7 @@ angular.module('otDirectives')
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
-                    }, (scope.title ? scope.title + '-' : '') + '-disrupted_pathways'));
+                    }, (scope.output ? scope.output + '-' : '') + '-disrupted_pathways'));
                 }
             }
         };

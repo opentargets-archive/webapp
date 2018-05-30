@@ -130,28 +130,8 @@ angular.module('otPlugins')
                         ],
 
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
-                    }));
+                    }, scope.target.approved_symbol + '-mouse_phenotypes'));
                 }, 0);
             }
         };
     }]);
-
-// 'columnDefs': [
-//     {
-//         'targets': [0],    // the access-level (public/private icon)
-//         'visible': otConfig.show_access_level,
-//         'width': '3%'
-//     },
-//     {
-//         'targets': [6],    // score
-//         'visible': false
-//     },
-//     {
-//         'targets': [2, 3, 4],
-//         'width': '20%'
-//     },
-//     {
-//         'targets': [5],
-//         'width': '10%'
-//     }
-// ],

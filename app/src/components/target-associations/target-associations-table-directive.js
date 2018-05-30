@@ -5,7 +5,7 @@ angular.module('otDirectives')
 /**
 * Matrix (heatmap) view for target associations
 */
-    .directive('otTargetAssociationsTable', ['otApi', 'otUtils', 'otDictionary', 'otConsts', '$q', '$analytics', function (otApi, otUtils, otDictionary, otConsts, $q, $analytics) {
+    .directive('otTargetAssociationsTable', ['otApi', 'otUtils', 'otDictionary', 'otConsts', '$analytics', function (otApi, otUtils, otDictionary, otConsts, $analytics) {
         'use strict';
 
         var whoiam = 'table';
@@ -80,16 +80,14 @@ angular.module('otDirectives')
         Setup the table cols and return the DT object
         */
         var setupTable = function (table, target, filename, download) {
-        // $log.log("setupTable()");
-        // return $(table).DataTable( otUtils.setTableToolsParams({
             var t = $(table).DataTable({
-            // "dom": '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"<"#cttvTableDownloadIcon">>rt<"pull-left small" l><"pull-right small" p>>',
                 'destroy': true,
                 'pagingType': 'simple',
-                'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
+                // 'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
+                'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>>rt<"clearfix" <"pull-left small" l><"pull-right small" p>>',
                 'buttons': [
                     {
-                        text: '<span class=\'fa fa-download\' title=\'Download as CSV\'></span>',
+                        text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .csv</span>',
                         action: download
                     }
                 ],
@@ -417,7 +415,7 @@ angular.module('otDirectives')
                         return cols.length === n;
                     }
 
-                    function getNextChunk(nextIndex) {
+                    function getNextChunk (nextIndex) {
                         var opts = {
                             target: scope.target,
                             facets: false,
@@ -461,7 +459,7 @@ angular.module('otDirectives')
                             });
                     }
 
-                    function getNextIndex(nextIndex) {
+                    function getNextIndex (nextIndex) {
                         var opts = {
                             target: [scope.target],
                             facets: false,
@@ -481,15 +479,15 @@ angular.module('otDirectives')
                         };
 
                         return otApi.getAssociations(queryObject)
-                            .then (function (resp) {
+                            .then(function (resp) {
                                 return resp.body.next;
-                            })
+                            });
                     }
 
                     // Makes 2 calls to the api,
                     // The first one to take the next data (in csv)
                     // The second one to take the next index
-                    function callNext(nextIndex) {
+                    function callNext (nextIndex) {
                         getNextChunk(nextIndex)
                             .then(function () {
                                 return getNextIndex(nextIndex)
@@ -505,7 +503,6 @@ angular.module('otDirectives')
                     }
 
                     callNext();
-
                 };
 
                 scope.$watchGroup(['facets', 'target', 'active'], function () {

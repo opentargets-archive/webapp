@@ -1,6 +1,6 @@
 /**
  * Mouse table
- * 
+ *
  * ext object params:
  *  isLoading, hasError, data
  */
@@ -9,11 +9,11 @@ angular.module('otDirectives')
     /*
      * Probability:
      * evidence.association_scrore.probability.value
-     * 
+     *
      * Mouse phenotypes:
      * show the values for each key (e.g. circling, imapired balance, deafness, etc)
      * evidence.properties.evidence_chain[1].biological object.properties.experiment_specific
-     * 
+     *
      * Human phenotypes:
      * same as for moouse phenotypes
      * biological object.properties.experiment specific
@@ -31,7 +31,7 @@ angular.module('otDirectives')
             templateUrl: 'src/components/mouse-table/mouse-table.html',
 
             scope: {
-                title: '@?',    // optional title for filename export
+                output: '@?',    // optional output for filename export
                 ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
 
@@ -88,7 +88,7 @@ angular.module('otDirectives')
 
 
                 /*
-                 * Takes the data object returned by the API and formats it 
+                 * Takes the data object returned by the API and formats it
                  * to an array of arrays to be displayed by the dataTable widget.
                  */
                 function formatDataToArray (data) {
@@ -164,7 +164,7 @@ angular.module('otDirectives')
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
-                    }, (scope.title ? scope.title + '-' : '') + '-mouse_models'));
+                    }, (scope.output ? scope.output + '-' : '') + '-mouse_models'));
                 }
 
 

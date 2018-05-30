@@ -14,7 +14,7 @@ angular.module('otDirectives')
             templateUrl: 'src/components/rare-disease-table/rare-disease-table.html',
 
             scope: {
-                title: '@?',    // optional title for filename export
+                output: '@?',    // optional output for filename export
                 ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
 
@@ -73,7 +73,7 @@ angular.module('otDirectives')
 
 
                 /*
-                 * Takes the data object returned by the API and formats it 
+                 * Takes the data object returned by the API and formats it
                  * to an array of arrays to be displayed by the dataTable widget.
                  */
                 function formatDataToArray (data) {
@@ -173,7 +173,7 @@ angular.module('otDirectives')
                             var pmidsList = otUtils.getPmidsList(refs);
 
                             // TODO: https://github.com/opentargets/webapp/issues/226
-                            if ((pmidsList.length === 1) && pmidsList[0]==='NA') {
+                            if ((pmidsList.length === 1) && pmidsList[0] === 'NA') {
                                 row.push('N/A');
                             } else {
                                 row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : 'N/A');
@@ -238,7 +238,7 @@ angular.module('otDirectives')
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
-                    }, (scope.title ? scope.title + '-' : '') + '-rare_diseases'));
+                    }, (scope.output ? scope.output + '-' : '') + '-rare_diseases'));
                 }
             }
         };

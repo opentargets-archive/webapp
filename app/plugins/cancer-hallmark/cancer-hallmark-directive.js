@@ -93,7 +93,7 @@ angular.module('otPlugins')
                         return scope.target.hallmarks.cancer_hallmarks.filter(function (ch) {
                             return ch.label === m;
                         }).reduce(
-                            // reduce array: promote/suppress are not the same for each item, 
+                            // reduce array: promote/suppress are not the same for each item,
                             // so might have both promote suppress but across different items
                             function (accumulator, current) {
                                 return {
