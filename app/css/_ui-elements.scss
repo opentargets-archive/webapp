@@ -65,6 +65,18 @@ ot-related-targets-vis, ot-related-diseases-vis {
     }
 
     ot-popover {
+        > span {
+            display:inline-block;
+            margin-left:8px;
+        }
+
+        i {
+            color: $clr-link;
+            &:hover {
+                color: $clr-link-hover;
+            }
+        }
+
         .popover {
             min-width: 378px;
             max-width: 100%;

@@ -1,2 +1,6 @@
-<div ng-bind-html="content"
-     style="width:350px;font-size:0.8em;"></div>
+<span>
+    <span uib-popover-template="'src/components/popover/popover-template.html'" popover-animation="true" popover-trigger="'mouseenter'" ng-click="$event.stopPropagation()">
+        <a ng-if="link" target=_blank ng-click="$event.stopPropagation()" ng-href="{{link}}"><i class="fa fa-question-circle"></i></a>
+        <i ng-if="!link" class="fa fa-question-circle" style="cursor:default;"></i>
+    </span>
+</span>

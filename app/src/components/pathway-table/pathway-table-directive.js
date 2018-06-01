@@ -1,13 +1,13 @@
 /**
  * PAthways table
- * 
+ *
  * ext object params:
  *  isLoading, hasError, data
  */
 angular.module('otDirectives')
 
     /*
-     * Directive to display the pathwyas data table 
+     * Directive to display the pathwyas data table
      * pathway 1   Target context  .biological_subject.properties.target_type
      * pathway 2   Protein complex members .biological_subject.about
      * pathway 3   Activity    .biological_subject.properties.activity
@@ -85,7 +85,7 @@ angular.module('otDirectives')
 
 
                 /*
-                 * Takes the data object returned by the API and formats it 
+                 * Takes the data object returned by the API and formats it
                  * to an array of arrays to be displayed by the dataTable widget.
                  */
                 function formatDataToArray (data) {
