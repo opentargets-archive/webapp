@@ -135,9 +135,15 @@ angular.module('otDirectives')
                             // evidence source
                             var sourceString = '';
                             if (item.type === 'genetic_association' && checkPath(item, 'evidence.variant2disease')) {
+                                // console.log("1) ", item.evidence.variant2disease.urls[0].url);
                                 sourceString = item.evidence.variant2disease.urls[0].nice_name;
-                                row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.variant2disease.urls[0].url + '\' target=_blank>' + item.evidence.variant2disease.urls[0].nice_name + '</a>');
+                                var idString = '';
+                                if (db === otConsts.datasources.EVA.id) {
+                                    idString = '<p class="text-lowlight"><small>(ID: ' + item.evidence.variant2disease.urls[0].url.split('/').pop() + ')</small></p>';
+                                }
+                                row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.variant2disease.urls[0].url + '\' target=_blank>' + sourceString + '</a>' + idString);
                             } else {
+                                // console.log('2) ', item.evidence.urls[0].url);
                                 // TODO: Genomics England URLs are wrong, so (hopefully temporarily) we need to hack them in the UI
                                 // TODO: We can't use otConsts.datasources.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
                                 if (db === otConsts.datasources.GENOMICS_ENGLAND.id) {
