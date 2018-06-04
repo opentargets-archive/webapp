@@ -141,7 +141,11 @@ angular.module('otDirectives')
                             row.push(pattern);
 
                             // col 5: evidence source
-                            row.push('<a href=\'' + item.evidence.urls[0].url + '\' target=\'_blank\' class=\'ot-external-link\'>' + item.evidence.urls[0].nice_name + '</a>');
+                            var idString = '';
+                            if (item.sourceID === otConsts.datasources.EVA_SOMATIC.id) {
+                                idString = '<p class="text-lowlight"><small>(ID: ' + item.evidence.urls[0].url.split('/').pop() + ')</small></p>';
+                            }
+                            row.push('<a href=\'' + item.evidence.urls[0].url + '\' target=\'_blank\' class=\'ot-external-link\'>' + item.evidence.urls[0].nice_name + '</a>' + idString);
 
                             // cols 6: publications
                             var refs = [];
