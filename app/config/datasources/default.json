@@ -135,7 +135,7 @@
     },
     "UNIPROT_SOMATIC": {
         "id": "uniprot_somatic",
-        "label": "UniProt somatic",
+        "label": "UniProt",
         "infoUrl": "https://docs.targetvalidation.org/data-sources/somatic-mutations#uniprot-somatic", // "/data-sources#uniprot_somatic",
         "infoTemplate": "uniprot-somatic.md",
         "description": ""
