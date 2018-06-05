@@ -59,7 +59,7 @@
     .sorting::after, .sorting_asc::after, .sorting_desc::after {
         font-size:12px;
         bottom: 5px;
-        right: 6px;
+        right: 5px;
         //left: 50%;
         content: '\f0dc';
         font-family: 'FontAwesome';
@@ -96,7 +96,7 @@
             border-top: none;
             border-right: 1px solid #DDD;
             padding: 6px ;
-            padding-right: 26px ;
+            padding-right: 16px ;
             line-height: 15px;
             font-weight: 300;
             font-size: 16px;

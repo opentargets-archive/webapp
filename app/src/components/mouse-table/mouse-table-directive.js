@@ -19,7 +19,7 @@ angular.module('otDirectives')
      * biological object.properties.experiment specific
      */
 
-    .directive('otMouseTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log) {
+    .directive('otMouseTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', '$log', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, $log) {
         'use strict';
 
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -118,7 +118,7 @@ angular.module('otDirectives')
 
 
                             // evidence source
-                            row.push(otDictionary.PHENODIGM);
+                            row.push(otConsts.datasources.PHENODIGM.label);
 
                             // score -- hidden column now
                             row.push((item.scores.association_score).toFixed(2));
@@ -134,7 +134,7 @@ angular.module('otDirectives')
                     return newdata;
                 }
 
-                var dropdownColumns = [1, 5];
+                var dropdownColumns = [1];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
@@ -160,7 +160,8 @@ angular.module('otDirectives')
                             },
                             {
                                 'targets': [5],
-                                'width': '10%'
+                                'width': '15%',
+                                'orderable': false
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
