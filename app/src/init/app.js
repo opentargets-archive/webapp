@@ -52,21 +52,28 @@ function initApp (deps) {
                 })
 
                 // Docs
+                // 05-06-2018 (Luca):
+                // Redirects to new external docs pages.
+                // This is essentially for users who might still have a bookmarked url.
+                // TODO: again in a few months we can review and remove
                 .when('/faq', {
-                    templateUrl: 'src/pages/static/faq.html'
+                    resolveRedirectTo: function () { window.location.replace('https://docs.targetvalidation.org/faq/'); }
                 })
                 .when('/data-sources', {
-                    controller: 'DataSourcesController',
-                    templateUrl: 'src/pages/data-sources/data-sources.html',
-                    reloadOnSearch: false   // this is to make in-page links (i.e. table of content) work
+                    resolveRedirectTo: function () { window.location.replace('https://docs.targetvalidation.org/data-sources/'); }
                 })
-                .when('/terms-of-use', {
-                    templateUrl: 'src/pages/static/terms-of-use.html'
+                .when('/scoring', {
+                    resolveRedirectTo: function () { window.location.replace('https://docs.targetvalidation.org/getting-started/scoring'); }
                 })
+                .when('/outreach', {
+                    resolveRedirectTo: function () { window.location.replace('https://docs.targetvalidation.org/outreach/'); }
+                })
+
                 // 31-08-2017 (Luca):
                 // Since we changed the route URL, the following is for backward compatibility only
                 // TODO:
                 // a few months after release delete the following 2 blocks FROM HERE
+                // NOTE: these are actually linked to from docs, so update there first
                 .when('/data_sources', {
                     redirectTo: '/data-sources'
                 })
@@ -74,11 +81,14 @@ function initApp (deps) {
                     redirectTo: '/terms-of-use'
                 })
                 // TODO: delete TO HERE
+
+                // Pages still internal to the webapp.
+                // TODO: these could be moved externally in the near future, so check from here
+                .when('/terms-of-use', {
+                    templateUrl: 'src/pages/static/terms-of-use.html'
+                })
                 .when('/release-notes', {
                     templateUrl: 'src/pages/static/release-notes.html'
-                })
-                .when('/scoring', {
-                    templateUrl: 'src/pages/static/scoring.html'
                 })
                 .when('/about', {
                     templateUrl: 'src/pages/static/about.html'
@@ -89,23 +99,14 @@ function initApp (deps) {
                 .when('/variants', {
                     templateUrl: 'src/pages/static/variants.html'
                 })
-                .when('/documentation/components', {
-                    templateUrl: 'src/pages/static/docs.html'
-                })
                 .when('/downloads/data', {
                     templateUrl: 'src/pages/static/dumps.html'
                 })
-                .when('/outreach', {
-                    templateUrl: 'src/pages/outreach/outreach.html',
-                    controller: 'OutreachController'
-                })
+                // to here
+
                 .otherwise({
                     redirectTo: '/'
                 });
-
-            // function supports_history_api() {
-            //     return !!(window.history && history.pushState);
-            // }
 
             $locationProvider.html5Mode(true).hashPrefix('!');
         }]);

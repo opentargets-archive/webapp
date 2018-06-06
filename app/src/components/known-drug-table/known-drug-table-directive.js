@@ -291,8 +291,6 @@ angular.module('otDirectives')
                             };
                         });
 
-                        // console.log('typeactivity:', type_activity);
-
                         scope.type_activity = Object.keys(type_activity).map(function (ta) {
                             return {
                                 label: ta,
@@ -301,7 +299,6 @@ angular.module('otDirectives')
                                 })
                             };
                         });
-                        // console.log('ta: ', scope.type_activity);
 
                         scope.associated_diseases = _.uniqBy(data, 'disease.efo_info.efo_id');
                         scope.associated_targets = _.uniqBy(data, 'target.id');

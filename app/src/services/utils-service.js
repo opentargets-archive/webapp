@@ -61,10 +61,7 @@ angular.module('otServices')
      *
      */
         otUtilsService.setTableToolsParams = function (obj, title) {
-        // obj.sDom = '<"pull-left" T><"pull-right" f>rt<"pull-left" i><"pull-right" p>';
-        // obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" T>rt<"pull-left small" l><"pull-right small" p>>';
-
-            obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>rt<"pull-left small" l><"pull-right small" p>>';
+            obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>>rt<"clearfix" <"pull-left small" l><"pull-right small" p>>';
             obj.buttons = [
             // {
             //     extend: 'copy', //extend: 'copyHtml5',
@@ -72,7 +69,7 @@ angular.module('otServices')
             // },
                 {
                     extend: 'csv', // extend: 'csvHtml5',
-                    text: '<span class=\'fa fa-download\' title=\'Download as .csv\'><span>',
+                    text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .csv</span>',
                     title: title// ,
                 // exportOptions: {
                 //    columns: ':visible'
@@ -226,24 +223,6 @@ angular.module('otServices')
             });
         };
 
-        // otUtilsService.getPublicationsField = function(refs) {
-        //     refs = refs || [];  // to avoid undefined errors
-        //
-        //     var pub = '';
-        //     pub = '<span class=\'ot-publications-string\'>';
-        //     pub += '<span class=\'badge\'>' + refs.length + '</span>';
-        //     pub += (refs.length === 1 ? ' publication' : ' publications');
-        //     if (refs.length === 1) {
-        //         pub = '<a class="ot-external-link" target="_blank" href="' + refs[0].lit_id + '">' + pub + '</a>';
-        //     } else {
-        //         var pmids = pmidsList.map(function (ref) {
-        //             return 'EXT_ID:' + ref;
-        //         }).join(' OR ');
-        //         pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
-        //     }
-        //     pub += '</span>';
-        //     return pub;
-        // };
 
         otUtilsService.getPublicationsString = function (pmidsList) {
             pmidsList = pmidsList || [];  // to avoid undefined errors
@@ -379,7 +358,7 @@ angular.module('otServices')
                         label = arr[i][0].label;
                         break;
                     }
-                }    
+                }
             }
             return label;
         };
@@ -402,7 +381,7 @@ angular.module('otServices')
         };
 
         /**
-         * 
+         *
          */
         otUtilsService.getDatasourceById = function (id) {
             return Object.keys(otConsts.datasources)
@@ -416,7 +395,7 @@ angular.module('otServices')
 
 
         /**
-         * 
+         *
          */
         otUtilsService.getDatatypeById = function (id) {
             return Object.keys(otConsts.datatypes)
@@ -430,11 +409,11 @@ angular.module('otServices')
 
 
         /**
-         * 
+         *
          */
         otUtilsService.allelicComposition2Html = function (allele) {
             return allele.replace(/<(.*?)>/g, function (match) { return '<sup>' + match.substr(1, match.length - 2) + '</sup>'; });
-        }
+        };
 
         return otUtilsService;
     }]);

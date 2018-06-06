@@ -321,7 +321,7 @@ angular.module('otDirectives')
 
             var initTable = function (table, target, disease, filename, download, scope) {
                 return $(table).DataTable({
-                    'dom': '<"clearfix" <"small" i><"pull-right three"B>>rt<"clearfix" <"pull-left small" l><"pull-right small" p>>',
+                    'dom': '<"clearfix" <"small" i><"pull-right"B>>rt<"clearfix" <"pull-left small" l><"pull-right small" p>>',
                     'buttons': [
                         {
                             text: '<span title="Download as TSV (max 200 articles)" style="margin-bottom: 5px;"><span class="fa fa-download"></span> Download .tsv</span>',
@@ -383,7 +383,7 @@ angular.module('otDirectives')
                                 }).join(' OR ');
 
                                 // get data from EPMC
-                                return $http.get('https://www.ebi.ac.uk/europepmc/webservices/rest/search?query='+pmids+'&format=json&resultType=core')
+                                return $http.get('https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=' + pmids + '&format=json&resultType=core')
                                     .then(function (resp2) {
                                         // decorate our API repsonse with the abstract data:
                                         // create a new field: 'evidence.literature_ref.data'
@@ -522,7 +522,7 @@ angular.module('otDirectives')
                                         d.evidence.literature_ref.lit_id.split('/').pop()
                                     ].join('\t');
                                 }).join('\n');
-                                dt = (opts.fields.join('\t') + '\tpmid\n' ) + dt;
+                                dt = (opts.fields.join('\t') + '\tpmid\n') + dt;
 
                                 saveAs(
                                     new Blob([dt], {type: 'text/tsv;charset=utf-8'}),

@@ -7,9 +7,7 @@ angular.module('otDirectives')
             scope: {
                 key: '@'
             },
-            template: '<span ng-if="link" uib-popover-template="\'src/components/popover/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'"><a target=_blank ng-click="$event.stopPropagation()" href="{{link}}"><i class="fa fa-question-circle"></i></a></span>' +
-        '<span ng-if="!link" uib-popover-template="\'src/components/popover/popover.html\'" popover-animation="true" popover-trigger="\'mouseenter\'" ng-click="$event.stopPropagation()" style="margin-left:8px;"><i class="fa fa-question-circle"></i></span>',
-
+            templateUrl: 'src/components/popover/popover.html',
             link: function (scope) {
                 var def = otDefinitions[scope.key];
                 if (def) {

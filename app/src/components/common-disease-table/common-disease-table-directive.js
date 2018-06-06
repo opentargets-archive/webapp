@@ -13,7 +13,7 @@ angular.module('otDirectives')
             templateUrl: 'src/components/common-disease-table/common-disease-table.html',
 
             scope: {
-                title: '@?',    // optional title for filename export
+                output: '@?',    // optional output for filename export
                 ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
 
@@ -86,7 +86,7 @@ angular.module('otDirectives')
 
 
                 /*
-                 * Takes the data object returned by the API and formats it 
+                 * Takes the data object returned by the API and formats it
                  * to an array of arrays to be displayed by the dataTable widget.
                  */
                 function formatDataToArray (data) {
@@ -210,7 +210,7 @@ angular.module('otDirectives')
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
-                    }, (scope.title ? scope.title + '-' : '') + '-common_diseases'));
+                    }, (scope.output ? scope.output + '-' : '') + '-common_diseases'));
                 }
             }
         };
