@@ -3,6 +3,6 @@ angular.module('otFilters')
         'use strict';
 
         return function (inputArray) {
-            return inputArray.join('; ');
+            return (inputArray || []).join('; ');
         };
     });

@@ -17,7 +17,9 @@
 
     <div class="container">
         <div class="row" style="padding-bottom:20px; margin-bottom:20px">
-            <div class="col-sm-12">
+
+            <div class="col-sm-12" ng-class="{'col-md-6': (target.tep || target.chemicalprobes)}">
+            
                 <p>
                     <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
                     <div><span style="font-size:0.8em">(information provided by <a target="_blank" href="http://www.uniprot.org/uniprot/{{target.uniprot_accessions[0]}}">UniProt</a>)</span></div>
@@ -26,19 +28,54 @@
                 <p ng-show="target.symbol">
                     Synonyms: <span class="ot-profile-synonym-list" ng-repeat="syn in synonyms">{{syn}}</span>
                 </p>
+            </div>
+
+            <div class="col-sm-12" ng-class="{'col-md-6': (target.tep || target.chemicalprobes)}">
 
                 <!-- Show if there is a TEP for the target -->
-                <div ng-show="target.tep" style="margin-top:15px;margin-bottom:15px;">
-                    <div style='width:60px;display:inline-block'>
-                    <img src="imgs/partners/TEP.png">
+                <div ng-show="target.tep" class="clearfix" style="margin-bottom:20px">
+                    <div class="pull-left" style="width:0%">
+                        <img src="imgs/partners/TEP.png">
                     </div>
-                    <div style="display:inline-block;vertical-align:middle;">
-                        A Target Enabling Package (TEP) <sup><ot-popover key="TEP"></ot-popover></sup> has been developed for this target. Get more details on <a target=_blank href="http://www.thesgc.org/tep/{{target.tep}}">{{target.symbol}} TEP</a>
-                        <br />
-                        TEPs are provided by the <a href="http://www.thesgc.org/">Structural Genomics Consortium</a>
+                    <div class="pull-right" style="width: 100%; padding-left:70px">
+                        <p>
+                            A Target Enabling Package (TEP) <sup><ot-popover key="TEP"></ot-popover></sup> has been developed for this target. 
+                            Get more details on <a target=_blank href="http://www.thesgc.org/tep/{{target.tep}}">{{target.symbol}} TEP</a>
+                        </p>
+                        <p>
+                            TEPs are provided by the <a href="http://www.thesgc.org/">Structural Genomics Consortium</a>
+                        </p>
                     </div>
                 </div>
 
+                <!-- Show if there are chemical probes for the target -->
+                <div ng-show="target.chemicalprobes" class="clearfix" style="margin-bottom:20px">
+                    <div class="pull-left" style="width:0%">
+                        <img src="imgs/graphics/beaker.png" style="width:46px;">
+                    </div>
+                    <div class="pull-right" style="width: 100%; padding-left:70px">
+                        <p>One or more chemical probes have been developed for this target.</p>
+                        <p>
+                            <span 
+                                ng-repeat="p in target.chemicalprobes" 
+                                class="btn btn-default tm-chip" 
+                                ng-model="probetrigger"
+                                uib-btn-checkbox
+                                btn-checkbox-true="1"
+                                btn-checkbox-false="0"
+                                popover-title="{{p.probe}}"
+                                uib-popover-template="'src/pages/target-profile/probes-popover-tmpl.html'"
+                            >{{p.probe}}</span>
+                        </p>
+                        <p class="small">Chemical probes are provided by ChemicalProbes.org and by the Structural Genomics Consortium</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-bottom:20px; margin-bottom:20px">
+            <div class="col-sm-12">
+                <!-- accordion: plugins sections -->
                 <uib-accordion close-others="false">
                     <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
                         <uib-accordion-heading>
