@@ -41,3 +41,6 @@
 
 #[context."v3.6".environment]
 #  APIHOST = "https://open-targets-eu-dev.appspot.com/"
+
+[context.probes.environment]
+  APIHOST = "https://open-targets-eu-dev.appspot.com/"

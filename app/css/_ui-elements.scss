@@ -715,7 +715,7 @@ ot-related-targets-vis, ot-related-diseases-vis {
             top:-8px;
             right:-8px;
             color:#FFF;
-            ont-size:16px
+            font-size:16px
         }
     }
 
@@ -838,6 +838,15 @@ ot-related-targets-vis, ot-related-diseases-vis {
                 display: none;
             }
         }
+    }
+
+
+    /*
+     * Common panels
+     */
+
+    .simple-spaced-panel{
+        margin-bottom: 24px;
     }
 }
 

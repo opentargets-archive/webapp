@@ -18,7 +18,7 @@
     <div class="container">
         <div class="row" style="padding-bottom:20px; margin-bottom:20px">
 
-            <div class="col-sm-12" ng-class="{'col-md-6': (target.tep || target.chemicalprobes)}">
+            <div class="col-sm-12 simple-spaced-panel" ng-class="{'col-md-6': (target.tep || target.chemicalprobes)}">
             
                 <p>
                     <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
@@ -33,7 +33,7 @@
             <div class="col-sm-12" ng-class="{'col-md-6': (target.tep || target.chemicalprobes)}">
 
                 <!-- Show if there is a TEP for the target -->
-                <div ng-show="target.tep" class="clearfix" style="margin-bottom:20px">
+                <div ng-show="target.tep" class="clearfix simple-spaced-panel">
                     <div class="pull-left" style="width:0%">
                         <img src="imgs/partners/TEP.png">
                     </div>
@@ -49,7 +49,7 @@
                 </div>
 
                 <!-- Show if there are chemical probes for the target -->
-                <div ng-show="target.chemicalprobes" class="clearfix" style="margin-bottom:20px">
+                <div ng-show="target.chemicalprobes" class="clearfix simple-spaced-panel">
                     <div class="pull-left" style="width:0%">
                         <img src="imgs/graphics/beaker.png" style="width:46px;">
                     </div>
@@ -58,16 +58,20 @@
                         <p>
                             <span 
                                 ng-repeat="p in target.chemicalprobes" 
-                                class="btn btn-default tm-chip" 
+                                class="btn btn-default btn-sm" 
                                 ng-model="probetrigger"
                                 uib-btn-checkbox
-                                btn-checkbox-true="1"
-                                btn-checkbox-false="0"
-                                popover-title="{{p.probe}}"
+                                btn-checkbox-true="true"
+                                btn-checkbox-false="false"
+                                popover-trigger="'none'"
+                                popover-is-open="probetrigger"
+                                popover-placement="'auto'"
                                 uib-popover-template="'src/pages/target-profile/probes-popover-tmpl.html'"
-                            >{{p.probe}}</span>
+                                style="margin:0 8px 8px 0"
+                                title="Click for details on {{p.chemicalprobe}}"
+                            >{{p.chemicalprobe}}</span>
                         </p>
-                        <p class="small">Chemical probes are provided by ChemicalProbes.org and by the Structural Genomics Consortium</p>
+                        <p class="small">Chemical probes are provided by <a href="http://www.chemicalprobes.org/" target="_blank">ChemicalProbes.org</a> and by the <a href="https://www.thesgc.org/" target="_blank">Structural Genomics Consortium</a></p>
                     </div>
                 </div>
             </div>

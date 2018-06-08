@@ -35,33 +35,33 @@ angular.module('otControllers')
 
                     // TEST: inject mock data to test chemical probes
                     // TODO: remove when we have final data available
-                    $scope.target.chemicalprobes = [
-                        {
-                            probe: 'BAY-850',
-                            sourcelinks: [
-                                {
-                                    source: 'Structural Genomics Consortium',
-                                    link: 'http://www.thesgc.org/chemical-probes/BAY-850'
-                                },
-                                {
-                                    source: 'Chemical Probes Portal',
-                                    link: 'http://www.chemicalprobes.org/BAY-850'
-                                }
-                            ],
-                            note: 'Lorem ipsum dolor sit amet, mel id nullam nostrum'
-                        },
+                    // $scope.target.chemicalprobes = [
+                    //     {
+                    //         probe: 'BAY-850',
+                    //         sourcelinks: [
+                    //             {
+                    //                 source: 'Structural Genomics Consortium',
+                    //                 link: 'http://www.thesgc.org/chemical-probes/BAY-850'
+                    //             },
+                    //             {
+                    //                 source: 'Chemical Probes Portal',
+                    //                 link: 'http://www.chemicalprobes.org/BAY-850'
+                    //             }
+                    //         ],
+                    //         note: 'Lorem ipsum dolor sit amet, mel id nullam nostrum'
+                    //     },
 
-                        {
-                            probe: 'GSM1',
-                            sourcelinks: [
-                                {
-                                    source: 'Open Science Probes',
-                                    link: 'http://www.sgc-ffm.uni-frankfurt.de/#!specificprobeoverview/GSM1'
-                                }
-                            ],
-                            note: 'Lorem ipsum dolor sit amet, mel id nullam nostrum'
-                        }
-                    ];
+                    //     {
+                    //         probe: 'GSM1',
+                    //         sourcelinks: [
+                    //             {
+                    //                 source: 'Open Science Probes',
+                    //                 link: 'http://www.sgc-ffm.uni-frankfurt.de/#!specificprobeoverview/GSM1'
+                    //             }
+                    //         ],
+                    //         note: ''
+                    //     }
+                    // ];
 
 
                     // Check if the target is a TEP (Target Enabling Package)
