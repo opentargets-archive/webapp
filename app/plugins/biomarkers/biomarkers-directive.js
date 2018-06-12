@@ -12,14 +12,29 @@ angular.module('otPlugins')
                 var dropdownColumns = [0, 1, 2, 3, 4];
 
                 function formatDataToArray () {
-                    var rows = scope.target.cancerbiomarkers[0].map(function (mark) {
+                    // var rows = scope.target.cancerbiomarkers[0].map(function (mark) {
+                    var rows = scope.target.cancerbiomarkers.map(function (mark) {
                         var row = [];
 
                         // biomarker
                         row.push(mark.individualbiomarker || mark.biomarker); // emtpy string evaluates to false
 
-                        // disease
-                        row.push(mark.disease);
+                        // diseases
+                        // this is bit long but we display multiple diseases as a list (for clarity)
+                        // and we also add a hidden comma at the of each line, so it looks clear when downloading the data.
+                        // Or.... we could have just used a simple mark.diseases.map().join(', <br />')
+                        var ds = '<a href="/disease/' + mark.diseases[0].id + '">' + mark.diseases[0].label + '</a>';
+                        if (mark.diseases.length > 1) {
+                            ds = '<ul>'
+                                + mark.diseases.map(function (d, i, arr) {
+                                    return '<li>'
+                                            + '<a href="/disease/' + d.id + '">' + d.label + '</a>'
+                                            + ((i + 1) < arr.length ? '<span style="display:none">, </span>' : '')    // hidden comma used for export
+                                            + '</li>';
+                                }).join('')
+                                + '</ul>';
+                        }
+                        row.push(ds);
 
                         // drug
                         row.push(mark.drugfullname);
@@ -47,12 +62,20 @@ angular.module('otPlugins')
                             ref_string += '<p>';
                             ref_string += mark.references.other.map(function (other) {
                                 return '<a href="' + other.link + '" target="_blank">' + other.name + '</a>';
-                            })
+                            }).join(', ');
                             ref_string += '</p>';
                         }
 
                         ref_string = ref_string || 'N/A';
                         row.push(ref_string);
+
+
+                        // hidden for filtering
+                        row.push(
+                            mark.diseases.map(function (d) {
+                                return d.label;
+                            }).join(', ')
+                        );
 
                         return row;
                     });
@@ -70,17 +93,18 @@ angular.module('otPlugins')
                         'paging': true,
                         'columnDefs': [
                             {
+                                'targets': [0, 1, 2],
+                                'width': '18%'
+                            },
+                            {
                                 'targets': [3, 4, 5],
                                 'width': '15%'
                             },
                             {
                                 'targets': [1],
-                                'width': '13%'
+                                'mRender': otColumnFilter.mRenderGenerator(6),
+                                'mData': otColumnFilter.mDataGenerator(1, 6)
                             },
-                            {
-                                'targets': [0, 2],
-                                'width': '21%'
-                            }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, scope.target.approved_symbol + '-biomarkers'));
