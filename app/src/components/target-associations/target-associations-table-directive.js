@@ -42,7 +42,7 @@ angular.module('otDirectives')
             } else {
                 var col = colorScale(value);
                 var val = (value === 0) ? '0' : otUtils.floatPrettyPrint(value);
-                str = '<span style=\'color: ' + col + '; background: ' + col + ';\' title=\'Score: ' + val + '\'>' + val + '</span>';
+                str = '<span style=\'background: ' + col + ';\' title=\'Score: ' + val + '\'><span class="heatmap-cell-val">' + val + '</span></span>';
             }
 
             if (href && value >= 0) {

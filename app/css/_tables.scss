@@ -251,6 +251,10 @@
                         }
                     }
 
+                    // &:nth-child(2){
+                    //     width: 9%;
+                    // }
+
                     > div {
                         height: 1px;
                         vertical-align: top;
@@ -315,6 +319,10 @@
                 a {
                     color: inherit;
                 }
+
+                // &:nth-child(2){
+                //     padding: 0 1.4%;
+                // }
             }
 
             &:hover{
@@ -326,6 +334,24 @@
             }
 
 
+        }
+
+        .heatmap-cell-val {
+            display: none;
+        }
+
+        &.associations-table {
+            tbody {
+                > tr > td:nth-child(2){
+                    padding: 0 1.4%;
+                }
+            }
+
+            thead {
+                > tr > th:nth-child(2){
+                    width: 9%;
+                }
+            }
         }
     }
 
