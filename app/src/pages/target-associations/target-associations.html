@@ -42,23 +42,24 @@
 
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs">
-                        <li role="presentation" ng-class="(view.t[0]=='bubbles') ? 'active' : ''" ><a href="#" ng-click='setActiveTab("bubbles")'>Bubbles</a></li>
                         <li role="presentation" ng-class="(view.t[0]=='table') ? 'active' : ''"><a href="#" ng-click='setActiveTab("table")'>Table</a></li>
+                        <li role="presentation" ng-class="(view.t[0]=='bubbles') ? 'active' : ''" ><a href="#" ng-click='setActiveTab("bubbles")'>Bubbles</a></li>
                         <li role="presentation" ng-class="(view.t[0]=='tree') ? 'active' : ''"><a href="#" ng-click='setActiveTab("tree")'>Tree</a></li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
+                        
+                        <!-- <div ng-show="view.t[0]=='table'"> -->
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='table'}">
+                            <ot-target-associations-table target="search.query" filename="search.filename" loadprogress="loading" facets="filters" active="{{view.t[0]}}"></ot-target-associations-table>
+                        </div>
+
                         <!-- <div ng-show="view.t[0]=='bubbles'"> -->
                         <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='bubbles'}">
                             <ot-resize>
                                 <ot-target-associations-bubbles target="{{search.query}}" facets="filters" active="{{view.t[0]}}"></ot-target-associations-bubbles>
                             </ot-resize>
-                        </div>
-
-                        <!-- <div ng-show="view.t[0]=='table'"> -->
-                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='table'}">
-                            <ot-target-associations-table target="search.query" filename="search.filename" loadprogress="loading" facets="filters" active="{{view.t[0]}}"></ot-target-associations-table>
                         </div>
 
                         <!-- <div ng-show="view.t[0]=='tree'"> -->
