@@ -45,6 +45,7 @@ angular.module('otPlugins')
                         // evidence level
                         row.push(mark.evidencelevel);
 
+
                         // references (publications)
                         var ref_string = '';
 
@@ -59,6 +60,9 @@ angular.module('otPlugins')
 
                         // other references (abstracts)
                         if (mark.references.other && mark.references.other.length > 0) {
+                            if (ref_string.length > 0) {
+                                ref_string += '<span style="display:none">; </span>';
+                            }
                             ref_string += '<p>';
                             ref_string += mark.references.other.map(function (other) {
                                 return '<a href="' + other.link + '" target="_blank">' + other.name + '</a>';
@@ -68,6 +72,31 @@ angular.module('otPlugins')
 
                         ref_string = ref_string || 'N/A';
                         row.push(ref_string);
+
+
+                        // Sources details (hidden, but exported)
+                        var ref_details = '';
+
+                        // pubmed
+                        if (mark.references.pubmed && mark.references.pubmed.length > 0) {
+                            ref_details += 'PubMed (id): ' +
+                            mark.references.pubmed.map(function (pm) {
+                                return pm.pmid;
+                            }).join(', ');
+                        }
+
+                        // other references (abstracts)
+                        if (mark.references.other && mark.references.other.length > 0) {
+                            if (ref_details.length > 0) {
+                                ref_details += '; ';
+                            }
+                            ref_details += 'Other: ' +
+                            mark.references.other.map(function (other) {
+                                return other.link;
+                            }).join(', ');
+                        }
+
+                        row.push(ref_details);
 
 
                         // hidden for filtering
@@ -101,9 +130,13 @@ angular.module('otPlugins')
                                 'width': '15%'
                             },
                             {
+                                'targets': [6],
+                                'visible': false
+                            },
+                            {
                                 'targets': [1],
-                                'mRender': otColumnFilter.mRenderGenerator(6),
-                                'mData': otColumnFilter.mDataGenerator(1, 6)
+                                'mRender': otColumnFilter.mRenderGenerator(7),
+                                'mData': otColumnFilter.mDataGenerator(1, 7)
                             },
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
