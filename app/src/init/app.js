@@ -50,6 +50,15 @@ function initApp (deps) {
                     templateUrl: 'src/pages/summary/summary.html',
                     controller: 'SummaryController'
                 })
+                // 18-06-2018 (Luca)
+                // for the moment the outreach page is moving back into the app, but also living in the external docs.
+                // Denise will maintain both versions. 
+                // If we want to use the external version, add this redirect instead:
+                // resolveRedirectTo: function () { window.location.replace('https://docs.targetvalidation.org/outreach/'); }
+                .when('/outreach', {
+                    templateUrl: 'src/pages/outreach/outreach.html',
+                    controller: 'OutreachController'
+                })
 
                 // Docs
                 // 05-06-2018 (Luca):
@@ -64,9 +73,6 @@ function initApp (deps) {
                 })
                 .when('/scoring', {
                     resolveRedirectTo: function () { window.location.replace('https://docs.targetvalidation.org/getting-started/scoring'); }
-                })
-                .when('/outreach', {
-                    resolveRedirectTo: function () { window.location.replace('https://docs.targetvalidation.org/outreach/'); }
                 })
 
                 // 31-08-2017 (Luca):
