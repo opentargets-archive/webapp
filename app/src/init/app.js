@@ -93,9 +93,6 @@ function initApp (deps) {
                 .when('/about', {
                     templateUrl: 'src/pages/static/about.html'
                 })
-                .when('/personal-data-collected-examples', {
-                    templateUrl: 'src/pages/static/personal-data-collected-examples.html'
-                })
                 .when('/variants', {
                     templateUrl: 'src/pages/static/variants.html'
                 })
