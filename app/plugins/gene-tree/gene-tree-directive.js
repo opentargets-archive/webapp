@@ -75,9 +75,9 @@ angular.module('otPlugins')
                         // Orthologue
                         var displayName = (info[item.target.id].display_name) ? info[item.target.id].display_name : '';
                         if (displayName) {
-                            row.push(displayName + (displayName ? ' ' : '') + '(<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summar?g=' + item.target.id + '" target="_blank">' + item.target.id + ')');
+                            row.push(displayName + (displayName ? ' ' : '') + '(<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summary?g=' + item.target.id + '" target="_blank">' + item.target.id + ')');
                         } else {
-                            row.push('<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summar?g=' + item.target.id + '" target="_blank">' + item.target.id);
+                            row.push('<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summary?g=' + item.target.id + '" target="_blank">' + item.target.id);
                         }
 
                         // dN/dS
