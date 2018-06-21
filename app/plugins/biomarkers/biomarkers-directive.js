@@ -65,7 +65,7 @@ angular.module('otPlugins')
                             }
                             ref_string += '<p>';
                             ref_string += mark.references.other.map(function (other) {
-                                return '<a href="' + other.link + '" target="_blank">' + other.name + '</a>';
+                                return '<a href="' + other.link + '" target="_blank" class="ot-external-link">' + other.name + '</a>';
                             }).join(', ');
                             ref_string += '</p>';
                         }

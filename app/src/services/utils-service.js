@@ -237,7 +237,8 @@ angular.module('otServices')
                     }
                     return 'EXT_ID:' + ref;
                 }).join(' OR ');
-                pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
+                // pub = '<a class="ot-external-link" target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
+                pub = '<a target="_blank" href="//europepmc.org/search?query=' + pmids + '">' + pub + '</a>';
                 pub += '</span>';
             }
             return pub;

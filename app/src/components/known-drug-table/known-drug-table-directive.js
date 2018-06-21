@@ -208,13 +208,10 @@ angular.module('otDirectives')
                                 }
                                 row.push(activity);
 
-                                // 6: Clinical indications -- REMOVED!
-                                // row.push( "<a href='"
-                                //             + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].url
-                                //             + "' target='_blank'>" + data[i].evidence.evidence_chain[1].evidence.experiment_specific.urls[0].nice_name + " <i class='fa fa-external-link'></i></a>");
 
                                 // 9: target
                                 row.push('<a href=\'/target/' + item.target.id + '\'>' + item.target.gene_info.symbol + '</a>');
+
 
                                 // 9: target class
                                 var trgc = otDictionary.NA;
