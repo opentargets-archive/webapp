@@ -134,8 +134,7 @@
             "name": "drugs",
             "element": "ot-drugs-display",
             "heading": "Drugs",
-            "track": true,
-            "new": true
+            "track": true
         },
         {
             "name": "bibliographyChips",
@@ -157,8 +156,7 @@
             "name": "drugs",
             "element": "ot-drugs-display",
             "heading": "Drugs",
-            "track": true,
-            "new": true
+            "track": true
         },
 
         {
@@ -284,8 +282,7 @@
              "name": "biomarkers",
              "element": "ot-biomarkers",
              "heading": "Cancer biomarkers",
-             "track": true,
-             "new": true
+             "track": true
          }
     ],
 
