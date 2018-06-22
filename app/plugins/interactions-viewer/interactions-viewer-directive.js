@@ -1,10 +1,11 @@
 angular.module('otPlugins')
     .directive('otInteractionsViewer', ['$log',  '$http', '$q', 'otApi', 'otOmnipathdbSources', 'otConsts', function ($log, $http, $q, otApi, otOmnipathdbSources, otConsts) {
+        /*
+         *
+         */
         function getNames (bestHits) {
             var mapNames = {};
-            for (var i = 0; i < bestHits.length; i++) {
-                var bestHit = bestHits[i];
-
+            bestHits.forEach(function (bestHit) {
                 // TODO: There are cases where the bestHitSearch doesn't give anything back. For now, we filter them out
                 if (bestHit.data) {
                     mapNames[bestHit.q] = {
@@ -14,7 +15,7 @@ angular.module('otPlugins')
                         ensembl_id: bestHit.data.ensembl_gene_id
                     };
                 }
-            }
+            });
             return mapNames;
         }
 
@@ -26,8 +27,10 @@ angular.module('otPlugins')
                 width: '='
             },
             link: function (scope, elem, attrs) {
+                // 1 - get interactions for the target
+                // note that Omnipath has updated the interactions enpoint; ids are passed as 'partners' param
                 var uniprotId = scope.target.uniprot_id;
-                var url = otConsts.PROXY + 'www.omnipathdb.org/interactions/' + uniprotId + '?format=json';
+                var url = otConsts.PROXY + 'www.omnipathdb.org/interactions?partners=' + uniprotId + '&format=json';
                 $http.get(url)
                     .then(function (resp) {
                         var interactors = {};
@@ -54,8 +57,10 @@ angular.module('otPlugins')
 
                         var promises = [];
 
+                        // 2 - get interactions for all involved targets
+
                         // Promise -- second pass in omnipathdb...
-                        var url = otConsts.PROXY + 'www.omnipathdb.org/interactions/' + uniprotIds.join(',') + '?format=json&fields=sources';
+                        var url = otConsts.PROXY + 'www.omnipathdb.org/interactions?partners=' + uniprotIds.join(',') + '&format=json&fields=sources';
                         promises.push($http.get(url));
 
                         // Promise -- get the names from bestHitSearch
@@ -88,8 +93,7 @@ angular.module('otPlugins')
                                 var sourceCategories = {};
                                 var missingSources = {};
 
-                                for (var i = 0; i < odbData.length; i++) {
-                                    var link = odbData[i];
+                                odbData.forEach(function (link) {
                                     var sourceObj = mapNames[link.source];
                                     var targetObj = mapNames[link.target];
 
@@ -101,7 +105,7 @@ angular.module('otPlugins')
                                         target = targetObj.approved_symbol;
                                     }
 
-                                    var provenance = link.sources;
+                                    var provenance = link.sources.split(';');   // sources is now a String in omnipath
 
                                     if ((source && target) && (source !== target)) {
                                         if (!interactors[source]) {
@@ -164,7 +168,7 @@ angular.module('otPlugins')
                                         }
                                         // interactors[source].interactsWith[target].provenance = provenance;
                                     }
-                                }
+                                });
 
                                 // Reporting in the console the omnipath sources that haven't been assigned a category yet. See otOmnipathdbSources and otOmnipathdbCategories
                                 if (Object.keys(missingSources).length) {
