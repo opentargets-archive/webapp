@@ -79,7 +79,8 @@ angular.module('otDirectives')
                     //     });
 
                     // Get data from omnipathdb...
-                    var url = otConsts.PROXY + 'www.omnipathdb.org/interactions/' + uniprotIds.join(',') + '?format=json&fields=sources';
+                    // Note that Omnipath now also support POST requests if required in the future
+                    var url = otConsts.PROXY + 'www.omnipathdb.org/interactions?partners=' + uniprotIds.join(',') + '&format=json&fields=sources';
                     var p2 = $http.get(url)
                         .then(function (resp) {
                             return resp;
@@ -168,7 +169,7 @@ angular.module('otDirectives')
                                 var link = odbData[i];
                                 var source = mapNames[link.source];
                                 var target = mapNames[link.target];
-                                var provenance = link.sources;
+                                var provenance = link.sources.split(';');
 
                                 if ((source && target) && (source !== target)) {
                                     if (!interactors[source]) {
