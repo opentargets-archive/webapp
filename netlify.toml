@@ -49,4 +49,4 @@
 #  APIHOST = "https://prereleaseapi.api.opentargets.io/"
 
 [context.shipit.environment]
- APIHOST = "https://prod-20180625-1203.api.opentargets.io/"
+ APIHOST = "http://prod-20180625-1203.api.opentargets.io/"
