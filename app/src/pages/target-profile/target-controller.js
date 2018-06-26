@@ -36,7 +36,7 @@ angular.module('otControllers')
                     // try to replace the pubmed ids with links
                     function makePmidLink (match, offset, string) {
                         var id = match.substring(7);
-                        return 'Pubmed:<a href="https://europepmc.org/abstract/med/' + id + '" target="_blank">' + id + '</a>';
+                        return 'PMID:<a href="https://europepmc.org/abstract/med/' + id + '" target="_blank">' + id + '</a>';
                     }
                     $scope.target.description = target.uniprot_function[0].replace(/Pubmed:\d+/ig, makePmidLink);
 
