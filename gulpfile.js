@@ -23,6 +23,7 @@ var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var jsonminify = require('gulp-jsonminify');
 var merge = require('gulp-merge-json');
+var replace = require('gulp-replace');
 
 var through = require('through2');
 
@@ -79,6 +80,7 @@ var componentsFileGz = componentsFileMin + '.gz';
 // angular uglify
 
 var webappFiles = require('./webappFiles.js');
+var packageFile = require('./package.json');
 
 // a failing test breaks the whole build chain
 gulp.task('default', ['lint', 'test']);
@@ -385,6 +387,8 @@ gulp.task('build-config-all', function () {
             if (process.env.APIHOST) {
                 obj.general.api = process.env.APIHOST; // APIHOST to define an API to point to
             }
+            // add the version as per package.json file
+            obj.general.version = packageFile.version;
             // manually write the file
             fs.stat(join(buildDir, configFile), function (err, stat) {
                 fs.writeFileSync(join(buildDir, configFile), JSON.stringify(obj));
@@ -396,7 +400,15 @@ gulp.task('build-config-all', function () {
 // ----------------------------------------
 
 
-gulp.task('build-webapp', ['build-webapp-styles', 'build-config-all'], function () {
+gulp.task('build-webapp-index', function () {
+    return gulp.src('app/index-tmpl.html')
+        .pipe(rename('index.html'))
+        .pipe(replace('%VER%', packageFile.version))
+        .pipe(gulp.dest('app/'));
+});
+
+
+gulp.task('build-webapp', ['build-webapp-styles', 'build-config-all', 'build-webapp-index'], function () {
     return gulp.src(webappFiles.cttv.js)
         .pipe(sourcemaps.init({
             debug: true

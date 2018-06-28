@@ -25,6 +25,7 @@
     "gulp-merge-json": "^1.2.0",
     "gulp-minify-css": "^1.2.4",
     "gulp-rename": "^1.2.2",
+    "gulp-replace": "^1.0.0",
     "gulp-sass": "^2.3.2",
     "gulp-server-livereload": "^1.9.2",
     "gulp-sourcemaps": "^1.12.0",
