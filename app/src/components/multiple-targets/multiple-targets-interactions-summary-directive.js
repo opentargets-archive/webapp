@@ -169,7 +169,7 @@ angular.module('otDirectives')
                                 var link = odbData[i];
                                 var source = mapNames[link.source];
                                 var target = mapNames[link.target];
-                                var provenance = link.sources.split(';');
+                                var provenance = link.sources;
 
                                 if ((source && target) && (source !== target)) {
                                     if (!interactors[source]) {

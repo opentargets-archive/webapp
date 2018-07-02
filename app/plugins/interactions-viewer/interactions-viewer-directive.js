@@ -105,7 +105,7 @@ angular.module('otPlugins')
                                         target = targetObj.approved_symbol;
                                     }
 
-                                    var provenance = link.sources.split(';');   // sources is now a String in omnipath
+                                    var provenance = link.sources;
 
                                     if ((source && target) && (source !== target)) {
                                         if (!interactors[source]) {
