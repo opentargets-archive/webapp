@@ -5,7 +5,7 @@ angular.module('otControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-    .controller('TargetController', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', 'otTeps', function ($scope, $location, otApi, otUtils, otConfig, otTeps) {
+    .controller('TargetController', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', 'otTeps', 'otDictionary', function ($scope, $location, otApi, otUtils, otConfig, otTeps, otDictionary) {
         'use strict';
 
         otUtils.clearErrors();
@@ -38,7 +38,11 @@ angular.module('otControllers')
                         var id = match.substring(7);
                         return 'PMID:<a href="https://europepmc.org/abstract/med/' + id + '" target="_blank">' + id + '</a>';
                     }
-                    $scope.target.description = target.uniprot_function[0].replace(/Pubmed:\d+/ig, makePmidLink);
+                    if (target.uniprot_function && target.uniprot_function[0]) {
+                        $scope.target.description = target.uniprot_function[0].replace(/Pubmed:\d+/ig, makePmidLink);
+                    } else {
+                        $scope.target.description = otDictionary.NO_DESCRIPTION;
+                    }
 
 
                     // Check if the target is a TEP (Target Enabling Package)
