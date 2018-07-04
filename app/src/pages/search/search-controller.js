@@ -209,11 +209,7 @@ angular.module('otControllers')
 
 
             return otApi.getFilterBy(queryObject).then(function (resp) {
-                var d = resp.body.data.filter(function (i) {
-                    return i.drug.max_phase_for_all_diseases.numeric_index === 4;
-                });
-                d = _.uniqBy(d, 'drug.molecule_name');
-                return d.length;
+                return _.uniqBy(resp.body.data, 'drug.molecule_name').length;
             });
         };
 
