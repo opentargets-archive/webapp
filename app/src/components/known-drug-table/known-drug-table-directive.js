@@ -156,7 +156,6 @@ angular.module('otDirectives')
                                 row.push('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' + item.drug.molecule_name + '</a>');
 
                                 // 3: phase
-                                // row.push(item.drug.max_phase_for_all_diseases.label);
                                 row.push(item.evidence.drug2clinic.max_phase_for_disease.label);
 
                                 // 4: phase numeric (hidden)
@@ -172,10 +171,8 @@ angular.module('otDirectives')
                                 // 6: type
                                 row.push(item.drug.molecule_type);
 
-                                // 7: Mechanism of action
+                                // 7: Mechanism of action + publications
                                 var action = item.evidence.target2drug.mechanism_of_action;
-
-                                // publications
                                 var refs = [];
                                 if (checkPath(item, 'evidence.target2drug.provenance_type.literature.references')) {
                                     refs = item.evidence.target2drug.provenance_type.literature.references;
@@ -189,12 +186,7 @@ angular.module('otDirectives')
                                     var extLink = item.evidence.target2drug.urls[2];
                                     action += '<br /><span><a class=\'ot-external-link\' target=_blank href=' + extLink.url + '>' + extLink.nice_name  + '</a></span>';
                                 }
-
                                 row.push(action);
-
-                                // col 5: pub ids (hidden)
-                                // row.push(pmidsList.join(", "));
-
 
                                 // 8: Activity
                                 var activity = item.target.activity;
@@ -208,35 +200,27 @@ angular.module('otDirectives')
                                 }
                                 row.push(activity);
 
-
                                 // 9: target
                                 row.push('<a href=\'/target/' + item.target.id + '\'>' + item.target.gene_info.symbol + '</a>');
 
-
-                                // 9: target class
+                                // 10: target class
                                 var trgc = otDictionary.NA;
                                 if (otUtils.checkPath(item, 'target.target_class')) {
                                     trgc = item.target.target_class[0] || otDictionary.NA;
                                 }
                                 row.push(trgc);
 
-
-                                // 8: target context / protein complex members
-
-                                // 10: evidence source
-                                // row.push('Curated from <br /><a class=\'ot-external-link\' href=\'' +
+                                // 11: evidence source
                                 row.push('<a class=\'ot-external-link\' href=\'' +
                                     item.evidence.drug2clinic.urls[0].url +
                                     '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
 
-                                // row.push(data[i].evidence.evidence_codes_info[0][0].label);    // Evidence codes
-
-
-                                // hidden cols for filtering
+                                // 12-16: hidden cols for filtering
                                 row.push(item.disease.efo_info.label); // disease
                                 row.push(item.drug.molecule_name); // drug
                                 row.push(item.evidence.target2drug.mechanism_of_action); // mechanism
                                 row.push(item.evidence.drug2clinic.urls[0].nice_name); // evidence source
+                                row.push(item.target.gene_info.symbol); // target symbol
 
                                 newdata.push(row); // use push() so we don't end up with empty rows
 
@@ -368,6 +352,12 @@ angular.module('otDirectives')
                                     'targets': [7],
                                     'mRender': otColumnFilter.mRenderGenerator(14),
                                     'mData': otColumnFilter.mDataGenerator(7, 14)
+                                },
+                                // mech of action
+                                {
+                                    'targets': [9],
+                                    'mRender': otColumnFilter.mRenderGenerator(16),
+                                    'mData': otColumnFilter.mDataGenerator(9, 16)
                                 },
                                 // evidence source
                                 {
