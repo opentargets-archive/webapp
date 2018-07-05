@@ -130,10 +130,17 @@ angular.module('otControllers')
 
             return otApi.getAssociations(queryObject)
                 .then(function (resp) {
-                    $scope.search.association_score = resp.body.data[0].association_score;
+                    // $scope.search.association_score = resp.body.data[0].association_score;
                     if (!resp.body.data.length) {
+                        $scope.search.association_score = {
+                            datatypes: {}
+                        };
+                        Object.values(otConsts.datatypes).forEach(function (d) {
+                            $scope.search.association_score.datatypes[d.id] = 0;
+                        });
                         $scope.search.flower_data = processFlowerData();
                     } else {
+                        $scope.search.association_score = resp.body.data[0].association_score;
                         $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
                         updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
                     }
