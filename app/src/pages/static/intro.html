@@ -8,17 +8,14 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <!--<div class="intro-search-top-pad"> this is a bit of a hack</div>-->
                 <div class="intro-section-heading"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-hero-logo" alt="Open Targets logo"/></div>
                 <h2 class="intro-hero-heading">Find&nbsp;new&nbsp;targets for&nbsp;drug&nbsp;discovery</h2>
 
                 <div ot-search-box id="searchbox-hp" class="intro-search-block"></div>
 
                 <p class="intro-search-examples">Try:
-                    <a href="/target/ENSG00000157764/associations">BRAF</a>
-                    <a href="/target/ENSG00000171862/associations">PTEN</a>
-                    <a href="/disease/EFO_0000270/associations">Asthma</a>
-                    <a href="/disease/EFO_0003767/associations">Inflammatory bowel disease</a>
+                    <a ng-repeat="t in introTryExamples.targets" ng-href="/target/{{otConfig.searchExamples.targets[t].id}}/associations">{{otConfig.searchExamples.targets[t].label}}</a>
+                    <a ng-repeat="t in introTryExamples.diseases" ng-href="/disease/{{otConfig.searchExamples.diseases[t].id}}/associations">{{otConfig.searchExamples.diseases[t].label}}</a>
                 </p>
 
                 <p class="intro-search-batch-search">More than one target? Try our  <span class="batch-search-label"><a href="/batch-search">new batch search</a></span></p>

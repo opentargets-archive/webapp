@@ -43,5 +43,18 @@ angular.module('otControllers')
                 },
                 otApi.defaultErrorHandler
             );
+
+        // TODO: this is for the intro page only; it should probably be moved to its own controller
+        // it picks a random search example from the config, to be displaied in the homepage
+        $scope.introTryExamples = {
+            targets: [],
+            diseases: []
+        };
+        for (var i = 0; i < 2; i++) {
+            $scope.introTryExamples.targets.push(Math.floor(Math.random()*otConfig.searchExamples.targets.length));
+        }
+        for (var i = 0; i < 2; i++) {
+            $scope.introTryExamples.diseases.push(Math.floor(Math.random()*otConfig.searchExamples.diseases.length));
+        }
     }]);
 
