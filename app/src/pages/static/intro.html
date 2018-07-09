@@ -15,7 +15,7 @@
 
                 <p class="intro-search-examples">Try:
                     <a ng-repeat="t in introTryExamples.targets" ng-href="/target/{{otConfig.searchExamples.targets[t].id}}/associations">{{otConfig.searchExamples.targets[t].label}}</a>
-                    <a ng-repeat="t in introTryExamples.diseases" ng-href="/disease/{{otConfig.searchExamples.diseases[t].id}}/associations">{{otConfig.searchExamples.diseases[t].label}}</a>
+                    <a ng-repeat="t in introTryExamples.diseases" ng-href="/disease/{{otConfig.searchExamples.diseases[t].id}}/associations">{{otConfig.searchExamples.diseases[t].label | otUpperCaseFirst}}</a>
                 </p>
 
                 <p class="intro-search-batch-search">More than one target? Try our  <span class="batch-search-label"><a href="/batch-search"> batch search</a></span></p>
