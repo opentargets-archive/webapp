@@ -74,9 +74,16 @@
 
                 <a id="tables"></a>
 
+                <h4 ng-if="!search.has_data">
+                    No evidence found for {{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}} in {{search.info.efo.label}}
+                </h4>
+                <p ng-if="!search.has_data">
+                    Alternatively you can see <a href="/target/{{search.info.gene.ensembl_gene_id}}/associations">other diseases associated with {{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}}</a> or <a href="/disease/{{search.info.efo.efo_code}}/associations">other targets associated with {{search.info.efo.label}}</a>.
+                </p>
+
                 <!-- NEW PLUGINS -->
                 <!-- The plugins are loaded into an accordion, but I guess we're not tied to that and could use any panel -->
-                <uib-accordion close-others="false">
+                <uib-accordion close-others="false" ng-if="search.has_data">
                     <!-- standard default option: show ALL the section (heading reflects data) -->
                     <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
                     <!-- alt option: only show sections with data (to combine with sections expanded) -->
