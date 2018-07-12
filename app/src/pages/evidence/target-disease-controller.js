@@ -141,7 +141,20 @@ angular.module('otControllers')
                         $scope.search.flower_data = processFlowerData();
                     } else {
                         $scope.search.association_score = resp.body.data[0].association_score;
-                        $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
+                        // parse the data:
+                        var fd = {};
+                        Object.keys(resp.body.data[0].association_score.datatypes).forEach(function (d) {
+                            fd[d] = resp.body.data[0].association_score.datatypes[d];
+                            if (resp.body.data[0].association_score.datatypes[d] === 0 &&
+                                (resp.body.data[0].evidence_count.datatypes[d] && resp.body.data[0].evidence_count.datatypes[d] > 0)) {
+                                // fd[d] = Number.MIN_VALUE;    // this is too small and causes D3 to fail
+                                fd[d] = 1e-20; // 0.00000000001;
+                            }
+                        });
+                        // console.log(fd);
+                        $scope.search.fd = fd;
+                        $scope.search.flower_data = processFlowerData(fd);
+                        // $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
                         updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
                     }
                 }, otApi.defaultErrorHandler);
