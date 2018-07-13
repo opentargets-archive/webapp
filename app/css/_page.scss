@@ -457,16 +457,16 @@ body{
     box-shadow: 0px 0px 6px 1px rgba(0,0,0,.2);
     cursor: pointer;
     
-    a, div {
+    a{
         color: #FFF;
 
-        // div {
+        div {
             padding: 7px 12px 5px 12px;
             background: $extra-brand-color;
 
             font-size: 14px;
             font-weight: 400;
-        // }
+        }
     }
 }
 

@@ -194,11 +194,15 @@
 
 
                 <!-- FEEDBACK BUTTON -->
-                <!-- Plese re-enable when we want (after integration day?) -->
-                <div ng-cloak class="ot-feedback-button hidden-xs" ng-controller="FeedbackController" ng-click="openFeedbackForm()" ng-show="location.path()=='/'">
-                    <div>Feedback</div>
+                <!-- <div ng-cloak class="ot-feedback-button hidden-xs" ng-controller="FeedbackController" ng-click="openFeedbackForm()" ng-show="location.path()=='/'"> -->
+                <div class="ot-feedback-button hidden-xs ng-scope" ng-controller="FeedbackController" ng-class="{'ot-feedback-button-round': location.path()!='/' }" style="">
+                    <a target="_blank" href="mailto:support@targetvalidation.org?Subject=Open Targets Platform - feedback&amp;body=Page URL: https://www.targetvalidation.org/">
+                        <div>Feedback</div>
+                    </a>
                 </div>
-                
+
+
+
                 <!-- Social media button -->
                 <div ng-cloak class="ot-social-panel hidden-xs" ng-controller="FeedbackController" ng-show="location.path()=='/'" ng-click="showSocialMedia=!showSocialMedia">
                     <div ng-show="showSocialMedia">
@@ -243,7 +247,7 @@
 
             </div>
             <!-- end main page content -->
-            
+
             <!-- new footer form - test -->
             <div ng-show="location.path()!=='/'" style="width:100%; background:#2f2d36">
                 <div class="container">
@@ -315,7 +319,7 @@
                     data-fontfamily="inherit"
                     data-close-text="<span class='btn btn-success btn-xs'><i class='fa fa-check-circle'></i> OK</span>">
             </script>
-            
+
 
             <!-- Pdf viewer -->
             <script src="./vendor/pdfobject.min.js"></script>
