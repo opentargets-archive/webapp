@@ -130,8 +130,9 @@ angular.module('otControllers')
 
             return otApi.getAssociations(queryObject)
                 .then(function (resp) {
-                    // $scope.search.association_score = resp.body.data[0].association_score;
+                    // if there is no data
                     if (!resp.body.data.length) {
+                        $scope.search.has_data = false;
                         $scope.search.association_score = {
                             datatypes: {}
                         };
@@ -140,8 +141,20 @@ angular.module('otControllers')
                         });
                         $scope.search.flower_data = processFlowerData();
                     } else {
+                        $scope.search.has_data = true;
                         $scope.search.association_score = resp.body.data[0].association_score;
-                        $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
+                        // parse the data:
+                        var fd = {};
+                        Object.keys(resp.body.data[0].association_score.datatypes).forEach(function (d) {
+                            fd[d] = resp.body.data[0].association_score.datatypes[d];
+                            if (resp.body.data[0].association_score.datatypes[d] === 0 &&
+                                (resp.body.data[0].evidence_count.datatypes[d] && resp.body.data[0].evidence_count.datatypes[d] > 0)) {
+                                fd[d] = 1e-20; // set a very low score value to force displaying an empty petal; note that Number.MIN_VALUE is too small and causes D3 to fail
+                            }
+                        });
+                        $scope.search.fd = fd;
+                        $scope.search.flower_data = processFlowerData(fd);
+                        // $scope.search.flower_data = processFlowerData(resp.body.data[0].association_score.datatypes);
                         updateTitle(resp.body.data[0].target.gene_info.symbol, resp.body.data[0].disease.efo_info.label);
                     }
                 }, otApi.defaultErrorHandler);
