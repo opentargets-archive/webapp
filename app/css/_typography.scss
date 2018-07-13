@@ -7,6 +7,10 @@
     font-weight: 300 !important;
 }*/
 
+.text-background{
+    color: #DDD; /*very pale colour*/
+}
+
 .text-lowlight{
     color: $clr-text-dim;
 }
@@ -94,14 +98,14 @@ a {
     /*white-space: nowrap;*/
 }
 
-.ot-external-link::after {
-    /*font: normal normal normal 14px/1 FontAwesome;*/
-    font-family: 'FontAwesome';
-    content: "\00A0\f08e";  /* non-breaking space + fontawesome link icon */
-    padding-left: 0px;
-    font-size: inherit;
-    color: inherit;
-}
+// .ot-external-link::after {
+//     /*font: normal normal normal 14px/1 FontAwesome;*/
+//     font-family: 'FontAwesome';
+//     content: "\00A0\f08e";  /* non-breaking space + fontawesome link icon */
+//     padding-left: 0px;
+//     font-size: inherit;
+//     color: inherit;
+// }
 
 
 /*

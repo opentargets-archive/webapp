@@ -22,6 +22,7 @@ angular.module('otDirectives')
                         params: {
                             q: q,
                             filter: 'target',
+                            search_profile: 'batch',
                             size: 10,
                             fields: 'approved_symbol'
                         }

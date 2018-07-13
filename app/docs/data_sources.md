@@ -42,7 +42,7 @@ or likely pathogenics. These data originate primarily from the [ClinVar](http://
 Mutations that may have clinical or treatment implications in cancer and other diseases are extracted from the following resources:
 
 #### <a name="census"></a>The Cancer Gene Census
-The Wellcome Trust Sanger Institute [COSMIC](http://cancer.sanger.ac.uk/cosmic) database provides evidence from somatic mutations on likely cancer
+The Wellcome Sanger Institute [COSMIC](http://cancer.sanger.ac.uk/cosmic) database provides evidence from somatic mutations on likely cancer
 drivers as manually curated in the [Cancer Gene Census](http://cancer.sanger.ac.uk/census). The COSMIC Cancer Gene Census is a catalogue of genes
 for which mutations have been causally implicated in cancer.
 
@@ -83,6 +83,6 @@ The [Reactome](http://www.reactome.org) database manually curates and identifies
 
 ### <a name="mouse"></a>Animal models
 
-The Wellcome Trust Sanger Institute [PhenoDigm](http://www.sanger.ac.uk/resources/databases/phenodigm/) database provides evidence on associations
+The Wellcome Sanger Institute [PhenoDigm](http://www.sanger.ac.uk/resources/databases/phenodigm/) database provides evidence on associations
 of targets and disease via gene knockout mouse models. The orthologous human gene to the one knocked out in the mouse is identified. The phenotypic
 effects in the mutant mouse are then mapped to phenotypes associated with human diseases and probable matches are identified and scored.

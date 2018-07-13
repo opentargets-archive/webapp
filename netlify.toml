@@ -7,7 +7,6 @@
 # Read https://www.netlify.com/docs/continuous-deployment/#deploy-contexts
 # to understand how context below works.
 
-# Master branch
 [context.production.environment]
   APIHOST = "https://api.opentargets.io/"
 
@@ -18,22 +17,36 @@
 
 # Branch Deploy context: All deploys that are not in
 # an active Deploy Preview will inherit these settings.
+# By default
 [context.branch-deploy.environment]
-  APIHOST = "https://api.opentargets.io/"
+  APIHOST = "https://open-targets-eu-dev.appspot.com/"
 
 # CAREFUL!!! When you point a particular branch to a specific API below,
 # the change will not continue working once the branch is merged into master.
-[context.feature.environment]
-  APIHOST = "https://api.opentargets.io/"
+# master.targetvalidation.org will always point to the APIHOST specified in context.branch-deploy.environment above
+# [context.branch_name.environment]
+#  APIHOST = "https://the-api-url-we-want.com"
 
-[context."expression-simple".environment]
-#  APIHOST = "https://mk-levelupdate-dot-open-targets-eu-dev.appspot.com/api/"
-#  APIHOST = "https://mk-zscorefacet-dot-open-targets-eu-dev.appspot.com/api/"
-  APIHOST = "https://master-dot-open-targets-eu-dev.appspot.com/"
-#  APIHOST = "https://mk-fixfacets-dot-open-targets-eu-dev.appspot.com/api/"
 
-[context.master.environment]
-  APIHOST = "https://open-targets-eu-dev.appspot.com/"
 
-[context.mouse-phenotypes.environment]
-  APIHOST = "https://yapsy-dot-open-targets-eu-dev.appspot.com/"
+#To release:
+# 1) create a v3.xx (or whatever version you use) branch. By default it would point to master.
+# If instead you need to point it to another DEV api, you can uncomment the block below
+
+# [context."v3.7".environment]
+#  APIHOST = "https://MYSPECIALAPIBRANCH-dot-open-targets-eu-dev.appspot.com/"
+
+
+# 2) when backend team tells us the API has been moved to pre-release, and gives you an URL
+# (for eg. an API such as prod-20180618-1252-dot-api.opentargets.io)
+#       1) uncomment below to point the branch to the pre-release API.
+#       2) create a `staging` tag on github using the `draft a new release` functionality
+# 
+# NOTE: The API url SHOULD not end anymore in `open-targets-eu-dev` but 
+# there should be `prod` somewhere in the name
+
+#[context.staging.environment]
+#  APIHOST = "https://prereleaseapi.api.opentargets.io/"
+
+[context.shipit.environment]
+ APIHOST = "http://prod-20180625-1203.api.opentargets.io/"

@@ -16,3 +16,4 @@ yarn-error.log
 resources
 versioned-resources
 target-list-examples
+app/index.html

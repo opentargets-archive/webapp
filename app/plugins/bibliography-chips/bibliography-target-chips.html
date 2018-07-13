@@ -1,42 +1,116 @@
+<p class="ot-section-intro">Scientific literature on {{target.symbol || disease.label}} from <a href="http://blog.opentargets.org/2018/01/18/link/" target="_blank">LINK, the Open Targets Literature Knowledge Graph</a></p>
+
 <div style="position:relative; min-height:200px">
     
-    <ot-page-progress-spinner isloading="isloading"></ot-page-progress-spinner>
+    <ot-page-progress-spinner isloading="isloading_hits"></ot-page-progress-spinner>
 
-    <div>
-        <!-- <span class="tm-chip btn btn-default disabled">{{selected[0]}}</span> -->
-        <span title="{{sel.key}}" ng-repeat="sel in selected" class="tm-chip btn btn-default" ng-click="onback($index)" ng-if="!$first">{{sel.label || sel.key}} <span class="fa fa-lg fa-times-circle"></span></span>
-        <span title="{{chip.key}}" ng-repeat="chip in chips" class="tm-chip btn btn-primary" ng-click="onclick(chip)">{{chip.label || chip.key}}</span>
+    <!-- chips -->
+    <div style="position:relative">
+        <ot-block-progress-spinner isloading="isloading_aggs && !isloading_hits"></ot-block-progress-spinner>
+        <div ng-show="(chips && chips.length>0) || selected.length>1">
+            <div>
+                <span title="{{sel.key}}" ng-repeat="sel in selected" class="tm-chip btn btn-default" ng-click="onback($index)" ng-if="!$first">{{sel.label || sel.key}} <span class="fa fa-lg fa-times-circle"></span></span>
+                <span title="{{chip.key}}" ng-repeat="chip in chips" class="tm-chip btn btn-primary" ng-click="onclick(chip)">{{chip.label || chip.key}}</span>
+            </div>
+
+            <div style="max-width: 200px; margin-bottom: 20px;">
+                <select class="form-control" ng-model="selectedagg" ng-options="value.id as value.label for value in aggtype"></select>
+            </div>
+        </div>
     </div>
 
-    <div style="max-width: 200px; margin-bottom: 20px;">
-        <select class="form-control" ng-model="selectedagg" ng-options="value.id as value.label for value in aggtype"></select>
-    </div>
-
+    <!-- papers -->
     <div>
         <p ng-show="noftotal && hits[0].total">Showing {{noftotal}} of {{hits[0].total}} results</p>
 
         <!-- container for "pages" -->
         <div ng-repeat="page in hits">
 
+            <!-- paper -->
             <div ng-repeat="hit in page.hits" style="margin-bottom:40px;" class="epmc_citation_container">
-                <!-- <h5 style="margin-bottom:5px"><a ng-href="https://europepmc.org/abstract/med/{{hit._source.id}}">{{hit._source.title}}</a></h5> -->
+                
+                <!-- paper title -->
                 <div class="epmc_citation_title">
-                    <a ng-href="https://europepmc.org/abstract/med/{{hit._source.id}}">{{hit._source.title}}</a>
+                    <a ng-href="https://europepmc.org/abstract/med/{{hit._source.pub_id}}" target="_blank">{{hit._source.title}}</a>
                 </div>
+
+                <!-- paper data -->
                 <div class="epmc_citation_subdata">
-                    <div class="epmc_citation_authors">
-                        <!-- <span ng-repeat="auth in hit._source.authors"><a ng-href='https://europepmc.org/search?query=AUTH:"{{auth.full_name}}"&page=1'>{{auth.short_name}}</a><span ng-if="!$last">, </span></span> -->
-
-                        <span ng-repeat="auth in hit._source.authors"><a ng-href='https://europepmc.org/search?query=AUTH:"{{auth.ForeName+" "+auth.LastName}}"&page=1'>{{auth.ForeName+" "+auth.LastName}}</a><span ng-if="!$last">, </span></span>
-
-                    <!-- </div>
-
-                    <div class="epmc_citation_journal"> -->
-                        <div><span><a ng-href="https://europepmc.org/search?query=JOURNAL:%22{{hit._source.journal.title}}%22">{{hit._source.journal.title}}</a> </span><span ng-show="hit._source.pub_date"> {{hit._source.pub_date | limitTo : 4}}</span><span ng-show="hit._source.journal_reference.volume"> {{hit._source.journal_reference.volume}}</span><span ng-show=
-                        "hit._source.journal_reference.issue">({{hit._source.journal_reference.issue}})</span><span ng-show="hit._source.journal_reference.pgn">:{{hit._source.journal_reference.pgn}}</span></div>
+                    
+                    <!-- authors -->
+                    <div>
+                        <span ng-repeat="auth in hit._source.authors"><a ng-href='https://europepmc.org/search?query=AUTH:"{{auth.ForeName+" "+auth.LastName}}"&page=1' target="_blank">{{auth.ForeName+" "+auth.LastName}}</a><span ng-if="!$last">, </span></span>
                     </div>
-                    <p ot-more-less-text data="hit._source.abstract" limit=600></p>
+
+                    <!-- journal, year, reference -->
+                    <div>
+                        <span><a ng-href="https://europepmc.org/search?query=JOURNAL:%22{{hit._source.journal.title}}%22" target="_blank">{{hit._source.journal.title}}</a></span>
+                        <span ng-show="hit._source.pub_date"><strong>{{hit._source.pub_date | limitTo : 4}}</strong></span>
+                        <span ng-show="hit._source.journal_reference.volume"> {{hit._source.journal_reference.volume}}</span><span ng-show="hit._source.journal_reference.issue">({{hit._source.journal_reference.issue}})</span><span ng-show="hit._source.journal_reference.pgn">:{{hit._source.journal_reference.pgn}}</span>
+                    </div>
+                </div>   
+
+                <div>
+                    <!-- Pills with more details -->
+                    <p>
+                        <!-- show abstract -->
+                        <span ng-show="hit._source.abstract" class="btn btn-default btn-xs">
+                            <span ng-show="!showabstract" ng-click="showabstract=!showabstract; getAbstract(hit._source)">Show abstract</span>
+                            <span ng-show="showabstract" ng-click="showabstract=!showabstract;">Hide abstract</span>
+                        </span>
+                        <span class="small" ng-show="!hit._source.abstract">No abstract available</span>
+                        
+                        <!-- show similar -->
+                        <span class="btn btn-default btn-xs">
+                            <span ng-show="!showsimilar" ng-click="showsimilar=!showsimilar; getSimilar(hit._source)">Show similar</span>
+                            <span ng-show="showsimilar" ng-click="showsimilar=!showsimilar;">Hide similar</span>
+                        </span>
+                    </p>
+                    
+                    <div style="padding-left: 10px">
+                        <!-- marked abstract -->
+                        <ot-progress-spinner ng-show="showabstract && !hit._source.marked.abstract"></ot-progress-spinner>
+                        <div ng-show="showabstract && hit._source.marked.abstract">
+                            <h5>Abstract</h5>
+                            <div class="small" ng-bind-html="hit._source.marked.abstract"></div>
+                            <p>
+                                <span :id="abstractDomId" class="abstract"></span>
+                                <span data-entity="GENE">Gene</span>
+                                <span data-entity="DISEASE">Disease</span>
+                                <span data-entity="DRUG">Drug</span>
+                                <span data-entity="TARGET&DISEASE">Target and disease</span>
+                            </p>
+                        </div>
+
+                        <!-- similar papers -->
+                        <ot-progress-spinner ng-show="showsimilar && !hit._source.similar.hits"></ot-progress-spinner>
+                        <div ng-show="showsimilar && hit._source.similar.hits">
+                            <h5>Similar articles</h5>
+                            <div ng-repeat="article in hit._source.similar.hits" class="small">
+                                <div>
+                                    <a ng-href="https://europepmc.org/abstract/med/{{article._source.pub_id}}" target="_blank">{{article._source.title}}</a>
+                                </div>
+                                
+                                <div class="epmc_citation_subdata">
+                                        
+                                    <!-- authors -->
+                                    <div>
+                                        <span ng-repeat="auth in article._source.authors"><a ng-href='https://europepmc.org/search?query=AUTH:"{{auth.ForeName+" "+auth.LastName}}"&page=1' target="_blank">{{auth.ForeName+" "+auth.LastName}}</a><span ng-if="!$last">, </span></span>
+                                    </div>
+                
+                                    <!-- journal, year, reference -->
+                                    <div>
+                                        <span><a ng-href="https://europepmc.org/search?query=JOURNAL:%22{{hit._source.journal.title}}%22" target="_blank">{{article._source.journal.title}}</a></span>
+                                        <span ng-show="article._source.pub_date"><strong>{{article._source.pub_date | limitTo : 4}}</strong></span>
+                                        <span ng-show="article._source.journal_reference.volume"> {{article._source.journal_reference.volume}}</span><span ng-show="article._source.journal_reference.issue">({{article._source.journal_reference.issue}})</span><span ng-show="article._source.journal_reference.pgn">:{{article._source.journal_reference.pgn}}</span>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+                
             </div>
 
         </div>

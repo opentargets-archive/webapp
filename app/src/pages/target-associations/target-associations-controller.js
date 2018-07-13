@@ -29,7 +29,7 @@ angular.module('otControllers')
 
         // the scope view is essentially the state
         $scope.view = {
-            t: ['bubbles']    // t = the selected tab
+            t: ['table']    // t = the selected tab
         };
 
         $scope.loading = false;
@@ -54,7 +54,7 @@ angular.module('otControllers')
 
         // define defaults as needed
             obj = obj || {};
-            obj.t = obj.t || ['bubbles'];
+            obj.t = obj.t || ['table'];
 
             // update the scope; only the tab is needed at the moment
             $scope.view.t = obj.t;

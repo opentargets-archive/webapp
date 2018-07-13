@@ -1,6 +1,6 @@
 angular.module('otDirectives')
 
-    .directive('multipleTargetsPathwaysSummary', ['$http', 'otUtils', function ($http, otUtils) {
+    .directive('multipleTargetsPathwaysSummary', ['$http', 'otUtils', 'otConsts', function ($http, otUtils, otConsts) {
         'use strict';
 
         function formatPathwayDataToArray (pathways, targets4pathways, symbol2id, bg) {
@@ -19,13 +19,13 @@ angular.module('otDirectives')
                 // 1. Pathway name
                 // limit the length of the label
                 var label = p.name;
-                if (label.length > 30) {
-                    label = label.substring(0, 30) + '...';
-                }
+                // if (label.length > 30) {
+                //     label = label.substring(0, 30) + '...';
+                // }
                 var targetsInUrl = targets.map(function (t) {
                     return 'pathway-target=' + t;
                 }).join('&');
-                row.push('<a href=/summary?pathway=' + p.stId + '&' + targetsInUrl + '>' + label + '</a>');
+                row.push('<a href=/summary?pathway=' + p.stId + '&' + targetsInUrl + ' title="' + label + '">' + label + '</a>');
 
                 // 2. Enrichment
                 row.push(p.entities.pValue.toPrecision(2));
@@ -136,7 +136,7 @@ angular.module('otDirectives')
 
                     // Get enrichment analysis from reactome
                     // http://www.reactome.org/AnalysisService/identifiers/projection/\?pageSize\=1\&page\=1 POST
-                    var preFlightUrl = '/proxy/www.reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
+                    var preFlightUrl = otConsts.PROXY + 'www.reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
                     var postData = Object.keys(uniqueTargets).join('\n');
                     $http.post(preFlightUrl, postData)
                         .then(function (resp) {
@@ -145,11 +145,11 @@ angular.module('otDirectives')
                         .then(function (data) {
                             var token = data.summary.token;
                             var nPathways = data.pathwaysFound;
-                            var url = '/proxy/www.reactome.org/AnalysisService/token/' + token + '?pageSize=' + nPathways + '&page=1&resource=UNIPROT';
+                            var url = otConsts.PROXY + 'www.reactome.org/AnalysisService/token/' + token + '?pageSize=' + nPathways + '&page=1&resource=UNIPROT';
                             $http.get(url)
                                 .then(function (resp) {
                                     var token = resp.data.summary.token;
-                                    var url2 = '/proxy/www.reactome.org/AnalysisService/token/' + token + '/found/all';
+                                    var url2 = otConsts.PROXY + 'www.reactome.org/AnalysisService/token/' + token + '/found/all';
                                     var postData2 = resp.data.pathways.map(function (d) {
                                         return d.stId;
                                     }).join(',');

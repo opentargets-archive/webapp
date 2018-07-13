@@ -42,7 +42,7 @@
                                 {{ta.value}} <span>{{ta.value != 1 ? "targets" : "target"}}</span>
                             </div>
                             <div>
-                                Relevance (pvalue): {{ta.enrichment.toPrecision(1)}}
+                                Relevance (p-value): {{ta.enrichment.toPrecision(1)}}
                             </div>
                         </a>
 
@@ -59,7 +59,7 @@
             <div class="container" style="margin-top:20px;margin-bottom:20px;">
                 <div class="row"></div>
                 <span ng-repeat="datatype in datatypes" style="margin-right:15px;">
-                    <input type="checkbox" ng-click="toggleDatatypeFilter(datatype)" ng-checked="datatype.selected" value="{{datatype.label}}"">
+                    <input type="checkbox" ng-click="toggleDatatypeFilter(datatype)" ng-checked="datatype.selected" value="{{datatype.label}}">
                     <span style="display:inline-block;vertical-align:middle;">{{datatype.label}}</span>
                 </span>
             </div>
@@ -82,7 +82,7 @@
             <tr>
                 <th>Disease</th>
                 <th>Disease full name</th>
-                <th>Relevance (pvalue)<span style="font-size:0.8em;float:right;"><ot-popover key="ENRICHMENT.DISEASES"></ot-popover></span></th>
+                <th>Relevance (p-value)<ot-popover key="ENRICHMENT.DISEASES"></ot-popover></th>
                 <th>Number of associated targets</th>
                 <th>Therapeutic Area</th>
                 <th>Highest associated targets (max 10)</th>

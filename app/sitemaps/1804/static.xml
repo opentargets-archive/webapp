@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+    <url>
+        <loc>https://www.targetvalidation.org/</loc>
+        <priority>1</priority>
+        <lastmod>2018-05-23T14:28:33.797Z</lastmod>
+    </url>
+    <url>
+        <loc>https://www.targetvalidation.org/about</loc>
+        <priority>0.8</priority>
+        <lastmod>2018-05-23T14:28:33.797Z</lastmod>
+    </url>
+    <url>
+        <loc>https://www.targetvalidation.org/data/downloads</loc>
+        <priority>0.8</priority>
+        <lastmod>2018-05-23T14:28:33.797Z</lastmod>
+    </url>
+    <url>
+        <loc>https://www.targetvalidation.org/batch-search</loc>
+        <priority>0.8</priority>
+        <lastmod>2018-05-23T14:28:33.797Z</lastmod>
+    </url>
+    <url>
+        <loc>https://www.targetvalidation.org/variants</loc>
+        <priority>0.7</priority>
+        <lastmod>2018-05-23T14:28:33.797Z</lastmod>
+    </url>
+    <url>
+        <loc>https://www.targetvalidation.org/terms-of-use</loc>
+        <priority>0.7</priority>
+        <lastmod>2018-05-23T14:28:33.797Z</lastmod>
+    </url>
+    <url>
+        <loc>https://www.targetvalidation.org/faq</loc>
+        <priority>0.7</priority>
+        <lastmod>2018-05-23T14:28:33.797Z</lastmod>
+    </url>
+    <url>
+        <loc>https://www.targetvalidation.org/scoring</loc>
+        <priority>0.7</priority>
+        <lastmod>2018-05-23T14:28:33.797Z</lastmod>
+    </url>
+</urlset>

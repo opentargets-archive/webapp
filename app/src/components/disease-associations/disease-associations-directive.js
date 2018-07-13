@@ -14,7 +14,7 @@ angular.module('otDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('otDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otApi', '$q', function (otUtils, otDictionary, otConsts, otApi, $q) {
+    .directive('otDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otApi', function (otUtils, otDictionary, otConsts, otApi) {
         'use strict';
 
         var filters = {};
@@ -45,7 +45,7 @@ angular.module('otDirectives')
             } else {
                 var col = colorScale(value);
                 var val = (value === 0) ? '0' : otUtils.floatPrettyPrint(value);
-                str = '<span style=\'color: ' + col + '; background: ' + col + ';\' title=\'Score: ' + val + '\'>' + val + '</span>';
+                str = '<span style=\'background: ' + col + ';\' title=\'Score: ' + val + '\'><span class="heatmap-cell-val">' + val + '</span></span>';
             }
 
             if (href && (value >= 0)) {
@@ -125,10 +125,10 @@ angular.module('otDirectives')
             var t = $(table).DataTable({
                 'destroy': true,
                 'pagingType': 'simple',
-                'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right"B>rt<"pull-left small" l><"pull-right small" p>>',
+                'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>>rt<"clearfix" <"pull-left small" l><"pull-right small" p>>',
                 'buttons': [
                     {
-                        text: '<span class=\'fa fa-download\' title=\'Download as CSV\'></span>',
+                        text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .csv</span>',
                         action: download
                     }
                 ],
@@ -364,7 +364,6 @@ angular.module('otDirectives')
             },
             templateUrl: 'src/components/disease-associations/disease-associations.html',
             link: function (scope, elem) {
-
                 // TODO: initialize the state if we enable this feature
                 // otLocationState.init();
                 // state = otLocationState.getState()[scope.stateId] || {};
@@ -399,13 +398,14 @@ angular.module('otDirectives')
                         return cols.length === n;
                     }
 
-                    function getNextChunk(nextIndex) {
+                    function getNextChunk (nextIndex) {
                         var opts = {
                             disease: [scope.disease],
                             facets: false,
                             format: 'csv',
                             size: size,
                             fields: ['target.gene_info.symbol',
+                                'target.id',
                                 'association_score.overall',
                                 'association_score.datatypes.genetic_association',
                                 'association_score.datatypes.somatic_mutation',
@@ -447,7 +447,7 @@ angular.module('otDirectives')
                             });
                     }
 
-                    function getNextIndex(nextIndex) {
+                    function getNextIndex (nextIndex) {
                         var opts = {
                             disease: [scope.disease],
                             facets: false,
@@ -467,25 +467,25 @@ angular.module('otDirectives')
                         };
 
                         return otApi.getAssociations(queryObject)
-                            .then (function (resp) {
+                            .then(function (resp) {
                                 return resp.body.next;
-                            })
+                            });
                     }
 
                     // Makes 2 calls to the api,
                     // The first one to take the next data (in csv)
                     // The second one to take the next index
-                    function callNext(nextIndex) {
+                    function callNext (nextIndex) {
                         getNextChunk(nextIndex)
                             .then(function () {
                                 return getNextIndex(nextIndex)
                                     .then(function (nextNext) {
                                         if (nextNext) {
-                                            console.log('calling next page with pagination index...');
-                                            console.log(nextNext);
+                                            // console.log('calling next page with pagination index...');
+                                            // console.log(nextNext);
                                             callNext(nextNext);
                                         } else {
-                                            console.log('no more pages, downloading...');
+                                            // console.log('no more pages, downloading...');
                                             var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
                                             saveAs(b, scope.filename + '.csv');
                                         }

@@ -9,7 +9,7 @@
                 <ot-common-disease-table
                     target="{{target.id}}"
                     disease="{{disease.efo}}"
-                    title="{{target.approved_symbol}}-{{disease.label}}"
+                    output="{{target.approved_symbol}}-{{disease.label}}"
                     ext="ext.common">
                 </ot-common-disease-table>
             </div>
@@ -31,7 +31,7 @@
                 <ot-rare-disease-table
                     target="{{target.id}}"
                     disease="{{disease.efo}}"
-                    title="{{target.approved_symbol}}-{{disease.label}}"
+                    output="{{target.approved_symbol}}-{{disease.label}}"
                     ext="ext.rare">
                 </ot-rare-disease-table>
             </div>
@@ -44,6 +44,7 @@
 
     <uib-tab heading="Browser">
         <div style="overflow:hidden">
+            <p class=ot-section-intro>Click on any variant, gene or transcript to get more information about it. Pan or zoom the browser to see neighboring genes. The number above gene variants means that more than 1 overlap the same region at the current zoom level. Genomic coordinates are relative to GRCh38.</p>
             <ot-target-genome-browser width=1140 efo={{disease.efo}} target="{{target.id}}"></ot-target-genome-browser>
         </div>
     </uib-tab>

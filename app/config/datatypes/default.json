@@ -50,13 +50,14 @@
         "infoTemplate": "affected-pathways.md",
         "datasources": [
             "REACTOME",
-            "SLAPENRICH"
+            "SLAPENRICH",
+            "PROGENY"
         ]
     },
     "ANIMAL_MODEL": {
         "id": "animal_model",
         "label": "Animal models",
-        "shortLabel": "Mouse",
+        "shortLabel": "Models",
         "infoTemplate": "animal-models.md",
         "datasources": ["PHENODIGM"]
     },

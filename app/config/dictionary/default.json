@@ -5,7 +5,7 @@
     // A
     "AFFECTED_PATHWAY": "Affected pathways",
     "ANIMAL_MODEL": "Animal models",
-    "ASSOCIATION_SCORE": "Association score",
+    "ASSOCIATION_SCORE": "Overall association score",
 
     // B
     // C
@@ -54,6 +54,7 @@
     // N
     "NA": "N/A",
     "NO_DATA": "No data",
+    "NO_DESCRIPTION": "No description available",
 
     // O
     // P

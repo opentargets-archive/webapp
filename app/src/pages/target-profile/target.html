@@ -7,6 +7,7 @@
             <h3 ng-show="notFound">No target found with ID {{targetId}}</h3>
 
             <h3 view-title>{{target.symbol}}</h3>
+            <meta-description-content>Browse information about {{target.symbol}} ({{targetId}}) covering related drugs, protein structure, pathways, genetic associations, orthologs, RNA expression and cancer biomarkers. Synonyms: {{synonyms | limitTo:3 | otSemiColonSeparate }}.</meta-description-content>
 
             <p ng-show="target.symbol">{{target.name}}<a href="/target/{{target.id}}/associations"><span class="ot-interpage-link"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span> View associated diseases</span></a>
             </p>
@@ -16,28 +17,73 @@
 
     <div class="container">
         <div class="row" style="padding-bottom:20px; margin-bottom:20px">
-            <div class="col-sm-12">
+
+            <div class="col-sm-12 simple-spaced-panel" ng-class="{'col-md-6': (target.tep || target.chemicalprobes)}">
+            
                 <p>
-                    <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more>
+                    <!-- <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more> -->
+                    <div ot-more-less-text data="target.description" limit=1000></div>
                     <div><span style="font-size:0.8em">(information provided by <a target="_blank" href="http://www.uniprot.org/uniprot/{{target.uniprot_accessions[0]}}">UniProt</a>)</span></div>
                 </p>
 
                 <p ng-show="target.symbol">
                     Synonyms: <span class="ot-profile-synonym-list" ng-repeat="syn in synonyms">{{syn}}</span>
                 </p>
+            </div>
+
+            <div class="col-sm-12" ng-class="{'col-md-6': (target.tep || target.chemicalprobes)}">
 
                 <!-- Show if there is a TEP for the target -->
-                <div ng-show="target.tep" style="margin-top:15px;margin-bottom:15px;">
-                    <div style='width:60px;display:inline-block'>
-                    <img src="imgs/partners/TEP.png">
+                <div ng-show="target.tep" class="clearfix simple-spaced-panel">
+                    <div class="pull-left" style="width:0%">
+                        <img src="imgs/partners/TEP.png">
                     </div>
-                    <div style="display:inline-block;vertical-align:middle;">
-                        A Target Enabling Package (TEP) <sup><ot-popover key="TEP"></ot-popover></sup> has been developed for this target. Get more details on <a target=_blank href="http://www.thesgc.org/tep/{{target.tep}}">{{target.symbol}} TEP</a>
-                        <br />
-                        TEPs are provided by the <a href="http://www.thesgc.org/">Structural Genomics Consortium</a>
+                    <div class="pull-right" style="width: 100%; padding-left:70px">
+                        <p>
+                            A Target Enabling Package (TEP) <sup><ot-popover key="TEP"></ot-popover></sup> has been developed for this target. 
+                            Get more details on <a target=_blank href="http://www.thesgc.org/tep/{{target.tep}}">{{target.symbol}} TEP</a>
+                        </p>
+                        <p>
+                            TEPs are provided by the <a href="http://www.thesgc.org/">Structural Genomics Consortium</a>
+                        </p>
                     </div>
                 </div>
 
+                <!-- Show if there are chemical probes for the target -->
+                <div ng-show="target.chemicalprobes" class="clearfix simple-spaced-panel">
+                    <div class="pull-left" style="width:0%">
+                        <img src="imgs/graphics/beaker.png" style="width:46px;">
+                    </div>
+                    <div class="pull-right" style="width: 100%; padding-left:70px">
+                        <p>One or more chemical probes have been developed for this target.</p>
+                        <p>
+                            <span 
+                                ng-repeat="p in target.chemicalprobes" 
+                                class="btn btn-default btn-sm" 
+                                ng-model="probetrigger"
+                                uib-btn-checkbox
+                                btn-checkbox-true="true"
+                                btn-checkbox-false="false"
+                                popover-trigger="'none'"
+                                popover-is-open="probetrigger"
+                                popover-placement="'auto'"
+                                uib-popover-template="'src/pages/target-profile/probes-popover-tmpl.html'"
+                                style="margin:0 8px 8px 0"
+                                title="Click for details on {{p.chemicalprobe}}"
+                            >{{p.chemicalprobe}}</span>
+                        </p>
+                        <p class="small">Chemical probes information from <a href="https://www.thesgc.org/" target="_blank">Structural Genomics Consortium</a>,
+                            the <a href="http://www.chemicalprobes.org/" target="_blank">Chemical Probes Portal</a>,
+                            and <a href="http://www.sgc-ffm.uni-frankfurt.de/" target="_blank">Open Science Probes</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-bottom:20px; margin-bottom:20px">
+            <div class="col-sm-12">
+                <!-- accordion: plugins sections -->
                 <uib-accordion close-others="false">
                     <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
                         <uib-accordion-heading>

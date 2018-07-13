@@ -2,12 +2,12 @@ angular.module('otControllers')
 
 
     /**
-     * Simple controller to expose the current page to the feedback button controller
+     * DEPRECATED!
+     * Controller for homepage stats. These are now included in the general page-controller.
      */
     .controller('StatsController', ['$scope', 'otApi', function ($scope, otApi) {
         'use strict';
-        // expose the location;
-        // note that exposing the page as $location.absUrl() does not work as that would not update when URL changes
+
         $scope.stats = {};
 
         otApi.getStats()

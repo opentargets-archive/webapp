@@ -1,6 +1,6 @@
 angular.module('otDirectives')
 
-    .directive('otMultipleTargetsTissuesSummary', ['$log', '$http', '$q', 'otUtils', 'otApi', function ($log, $http, $q, otUtils, otApi) {
+    .directive('otMultipleTargetsTissuesSummary', ['$log', '$http', '$q', 'otUtils', 'otApi', 'otConsts', function ($log, $http, $q, otUtils, otApi, otConsts) {
         'use strict';
 
         var tissuesOrdered = [
@@ -143,7 +143,7 @@ angular.module('otDirectives')
                     }
 
                     var gtexPromises = [];
-                    var baseGtexUrlPrefix = '/proxy/www.gtexportal.org/api/v6p/expression/';
+                    var baseGtexUrlPrefix = otConsts.PROXY + 'www.gtexportal.org/api/v6p/expression/';
                     var baseGtexUrlSufix = '?boxplot=true';
                     for (var i = 0; i < scope.targets.length; i++) {
                         var target = scope.targets[i];

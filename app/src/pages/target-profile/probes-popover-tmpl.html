@@ -1,0 +1,7 @@
+<div>
+    <div class="tnt_tooltip_closer pointer" ng-click="$parent.probetrigger=false"></div>
+    <p ng-if="p.note && p.note!='none'">{{p.note}}</p>
+    <ul class="list-unstyled">
+        <li ng-repeat="l in p.sourcelinks"><a ng-href="{{ ( !l.link.startsWith('http') ? 'http://' : '' )+ l.link}}" target="_blank" class="ot-external-link">{{l.source}}</a></li>
+    </ul>
+</div>

@@ -14,7 +14,7 @@ angular.module('otDirectives')
             templateUrl: 'src/components/rare-disease-table/rare-disease-table.html',
 
             scope: {
-                title: '@?',    // optional title for filename export
+                output: '@?',    // optional output for filename export
                 ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
 
@@ -73,7 +73,7 @@ angular.module('otDirectives')
 
 
                 /*
-                 * Takes the data object returned by the API and formats it 
+                 * Takes the data object returned by the API and formats it
                  * to an array of arrays to be displayed by the dataTable widget.
                  */
                 function formatDataToArray (data) {
@@ -135,13 +135,20 @@ angular.module('otDirectives')
                             // evidence source
                             var sourceString = '';
                             if (item.type === 'genetic_association' && checkPath(item, 'evidence.variant2disease')) {
+                                // console.log("1) ", item.evidence.variant2disease.urls[0].url);
                                 sourceString = item.evidence.variant2disease.urls[0].nice_name;
-                                row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.variant2disease.urls[0].url + '\' target=_blank>' + item.evidence.variant2disease.urls[0].nice_name + '</a>');
+                                var idString = '';
+                                if (db === otConsts.datasources.EVA.id) {
+                                    idString = '<p class="text-lowlight"><small>(ID: ' + item.evidence.variant2disease.urls[0].url.split('/').pop() + ')</small></p>';
+                                }
+                                row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.variant2disease.urls[0].url + '\' target=_blank>' + sourceString + '</a>' + idString);
                             } else {
+                                // console.log('2) ', item.evidence.urls[0].url);
                                 // TODO: Genomics England URLs are wrong, so (hopefully temporarily) we need to hack them in the UI
                                 // TODO: We can't use otConsts.datasources.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
                                 if (db === otConsts.datasources.GENOMICS_ENGLAND.id) {
-                                    item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
+                                    // item.evidence.urls[0].url = item.evidence.urls[0].url.replace('PanelApp', 'PanelApp/EditPanel');
+                                    // item.evidence.urls[0].url = 'https://panelapp.genomicsengland.co.uk/panels/'; // Direct to generic panels page as Genomics England urls don't work.
                                 }
                                 if (db === otConsts.datasources.GENE_2_PHENOTYPE.id) {
                                     row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>Further details in Gene2Phenotype database</a>');
@@ -172,7 +179,7 @@ angular.module('otDirectives')
                             var pmidsList = otUtils.getPmidsList(refs);
 
                             // TODO: https://github.com/opentargets/webapp/issues/226
-                            if ((pmidsList.length === 1) && pmidsList[0]==='NA') {
+                            if ((pmidsList.length === 1) && pmidsList[0] === 'NA') {
                                 row.push('N/A');
                             } else {
                                 row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : 'N/A');
@@ -237,7 +244,7 @@ angular.module('otDirectives')
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
-                    }, (scope.title ? scope.title + '-' : '') + '-rare_diseases'));
+                    }, (scope.output ? scope.output + '-' : '') + '-rare_diseases'));
                 }
             }
         };

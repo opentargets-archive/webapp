@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otGenomeBrowser', ['otApi', 'otUtils', function (otApi, otUtils) {
+    .directive('otGenomeBrowser', ['otApi', 'otUtils', 'otConsts', function (otApi, otUtils, otConsts) {
         'use strict';
 
         // Decorate the svg for exporting
@@ -103,7 +103,7 @@ angular.module('otPlugins')
                     .width(w);
 
                 gB.rest()
-                    .prefix('/proxy/rest.ensembl.org')
+                    .prefix(otConsts.PROXY + 'rest.ensembl.org')
                     .protocol('')
                     .domain('');
                 var theme = targetGenomeBrowser()

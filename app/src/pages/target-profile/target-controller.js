@@ -5,7 +5,7 @@ angular.module('otControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-    .controller('TargetController', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', 'otTeps', function ($scope, $location, otApi, otUtils, otConfig, otTeps) {
+    .controller('TargetController', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', 'otTeps', 'otDictionary', function ($scope, $location, otApi, otUtils, otConfig, otTeps, otDictionary) {
         'use strict';
 
         otUtils.clearErrors();
@@ -17,7 +17,7 @@ angular.module('otControllers')
             params: {
                 target_id: $scope.targetId
             },
-            error: function() {
+            error: function () {
                 $scope.notFound = true;
             }
         })
@@ -31,7 +31,19 @@ angular.module('otControllers')
                     $scope.target.id = target.approved_id || target.ensembl_gene_id;
                     $scope.target.name = target.approved_name || target.ensembl_description;
                     $scope.target.title = (target.approved_symbol || target.ensembl_external_name).split(' ').join('_');
-                    $scope.target.description = target.uniprot_function[0];
+                    // $scope.target.description = target.uniprot_function[0];
+
+                    // try to replace the pubmed ids with links
+                    function makePmidLink (match, offset, string) {
+                        var id = match.substring(7);
+                        return 'PMID:<a href="https://europepmc.org/abstract/med/' + id + '" target="_blank">' + id + '</a>';
+                    }
+                    if (target.uniprot_function && target.uniprot_function[0]) {
+                        $scope.target.description = target.uniprot_function[0].replace(/Pubmed:\d+/ig, makePmidLink);
+                    } else {
+                        $scope.target.description = otDictionary.NO_DESCRIPTION;
+                    }
+
 
                     // Check if the target is a TEP (Target Enabling Package)
                     if (otTeps[$scope.targetId]) {

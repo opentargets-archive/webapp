@@ -11,20 +11,17 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-npm-deps-{{ checksum "package.json" }}
+            - v1-yarn-deps-{{ checksum "yarn.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v1-npm-deps-
+            - v1-yarn-deps-
 
       - run:
-          name: install npm
-          command: npm install --quiet
+          name: yarn run full-install
+          command: yarn run full-install
 
-      - run:
-          name: run gulp and jspm for good measure
-          command: npm run setup
 
       - save_cache:
-          key: v1-npm-deps-{{ checksum "package.json" }}
+          key: v1-yarn-deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
 

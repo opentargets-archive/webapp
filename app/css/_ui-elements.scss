@@ -65,6 +65,18 @@ ot-related-targets-vis, ot-related-diseases-vis {
     }
 
     ot-popover {
+        > span {
+            display:inline-block;
+            margin-left:8px;
+        }
+
+        i {
+            color: $clr-link;
+            &:hover {
+                color: $clr-link-hover;
+            }
+        }
+
         .popover {
             min-width: 378px;
             max-width: 100%;
@@ -129,7 +141,7 @@ ot-related-targets-vis, ot-related-diseases-vis {
      * Spinners
      */
 
-    .page-progress-spinner{
+    .page-progress-spinner, .block-progress-spinner {
         width:100%;
         height: 100%;
         text-align:center;
@@ -150,6 +162,18 @@ ot-related-targets-vis, ot-related-diseases-vis {
         fill: $secondary-color;
     }
 
+    .block-progress-spinner {
+        padding-top: 0px;
+        
+        ot-progress-spinner {
+            position: absolute;
+            top: 50%;
+
+            svg {
+                margin-top: -50%;
+            }
+        }
+    }
 
 
     /*
@@ -570,11 +594,13 @@ ot-related-targets-vis, ot-related-diseases-vis {
     }
 
     .epmc_citation_title{
-        font-size: 1.23em;
+        font-size: 16px;
     }
 
     .epmc_citation_subdata {
         padding-left:0px;
+        padding-bottom: 5px;
+        font-size: 12px;
 
         a {
             color:$clr-text;
@@ -586,7 +612,7 @@ ot-related-targets-vis, ot-related-diseases-vis {
     }
 
     .epmc_citation_authors, .epmc_citation_journal, .epmc_citation_source{
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .epmc_citation_authors{
@@ -689,7 +715,7 @@ ot-related-targets-vis, ot-related-diseases-vis {
             top:-8px;
             right:-8px;
             color:#FFF;
-            ont-size:16px
+            font-size:16px
         }
     }
 
@@ -766,6 +792,61 @@ ot-related-targets-vis, ot-related-diseases-vis {
                 margin-left: 5px;
             }
         }
+    }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+
+    /*
+     * Donut chart
+     */
+
+     ot-donut-chart {
+         .donut {
+            .arc text {
+                font: 10px helvetica;
+                text-anchor: middle;
+            }
+            
+            .arc path {
+                stroke: #fff;
+            }
+         }
+     }
+
+    /*
+     * Stack bar chart
+     */
+
+    ot-stack-chart{
+        .stack {
+            .axis text {
+                font: 10px sans-serif;
+                text-anchor: end;
+            }
+            
+            .axis line,
+            .axis path {
+                fill: none;
+                stroke: #000;
+                shape-rendering: crispEdges;
+            }
+            
+            .axis--x path, .axis--y path {
+                display: none;
+            }
+        }
+    }
+
+
+    /*
+     * Common panels
+     */
+
+    .simple-spaced-panel{
+        margin-bottom: 24px;
     }
 }
 

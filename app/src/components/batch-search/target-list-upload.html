@@ -1,6 +1,6 @@
 <div class="section">
     <h2>1. Upload your target list:</h2>
-    <p style="color:#aaaaaa">List format is one target per line. A maximum of {{targetListLimit}} targets is currently allowed.</p>
+    <p style="color:#aaaaaa">List format is one target per line (supported identifier formats: HGNC, UniProt, ENSG IDs, synonyms). A maximum of {{targetListLimit}} targets is currently allowed.</p>
     <p><span ng-click="loadExample()"><a href="#">Load sample list</a></span></p>
 
     <div class="container" style="margin-top:30px;margin-bottom:80px;">
@@ -41,7 +41,7 @@
                 <div ng-show="lists.length" style="margin-top:15px;">
                     <!--<input ng-model="storeList" type="checkbox" checked> Keep loaded lists in the browser<ot-popover key="KEEPLOADEDLISTS"></ot-popover>-->
                     <i class="fa fa-exclamation-circle" style="margin-right:5px;"></i>
-                    Your lists are stored in the browser cache for easier access. You can remove them at any time by clicking the icon next to them
+                    Your lists are stored in the browser cache for easier access. You can remove them at any time by clicking the icon next to them.
                 </div>
 
             </div>

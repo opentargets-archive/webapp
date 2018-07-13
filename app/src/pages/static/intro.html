@@ -8,20 +8,17 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <!--<div class="intro-search-top-pad"> this is a bit of a hack</div>-->
                 <div class="intro-section-heading"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-hero-logo" alt="Open Targets logo"/></div>
                 <h2 class="intro-hero-heading">Find&nbsp;new&nbsp;targets for&nbsp;drug&nbsp;discovery</h2>
 
                 <div ot-search-box id="searchbox-hp" class="intro-search-block"></div>
 
                 <p class="intro-search-examples">Try:
-                    <a href="/target/ENSG00000157764/associations">BRAF</a>
-                    <a href="/target/ENSG00000171862/associations">PTEN</a>
-                    <a href="/disease/EFO_0000270/associations">Asthma</a>
-                    <a href="/disease/EFO_0003767/associations">Inflammatory bowel disease</a>
+                    <a ng-repeat="t in introTryExamples.targets" ng-href="/target/{{otConfig.searchExamples.targets[t].id}}/associations">{{otConfig.searchExamples.targets[t].label}}</a>
+                    <a ng-repeat="t in introTryExamples.diseases" ng-href="/disease/{{otConfig.searchExamples.diseases[t].id}}/associations">{{otConfig.searchExamples.diseases[t].label | otUpperCaseFirst}}</a>
                 </p>
 
-                <p class="intro-search-batch-search">More than one target? Try our  <span class="batch-search-label"><a href="/batch-search">new batch search</a></span></p>
+                <p class="intro-search-batch-search">More than one target? Try our  <span class="batch-search-label"><a href="/batch-search"> batch search</a></span></p>
 
 
             </div>
@@ -34,7 +31,7 @@
 
 
 <!-- STATS -->
-<div class="intro-section intro-section-theme-grey" ng-controller="StatsController">
+<div class="intro-section intro-section-theme-grey">
     <!-- <ot-page-progress-spinner></ot-page-progress-spinner> -->
     <div class="container">
         <div class="row">
@@ -52,8 +49,8 @@
                                 <span>
                                     <span class="panel-icon-sm hidden-xs hidden-sm hidden-md panel-inline fa fa-clock-o fa-2x"></span>
                                     <span class="panel-inline">Data last updated</span>
-                                    <span ot-progress-spinner size="24" ng-show="!stats.date"></span>
-                                    <span class="panel-inline" ng-show="stats.date">{{stats.date | date:'MMMM yyyy'}}</span>
+                                    <span ot-progress-spinner size="24" ng-show="!dataStats.date"></span>
+                                    <span class="panel-inline" ng-show="dataStats.date">{{dataStats.date | date:'MMMM yyyy'}}</span>
                                 </span>
                             </div>
                         </h3>
@@ -67,19 +64,19 @@
         <div class="row">
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!stats.targets.total"></span><span class="intro-section-stats-figure" ng-show="stats.targets.total">{{stats.targets.total | number}}</span> targets</h3>
+                <h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!dataStats.targets.total"></span><span class="intro-section-stats-figure" ng-show="dataStats.targets.total">{{dataStats.targets.total | number}}</span> targets</h3>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!stats.associations.total"></span><span class="intro-section-stats-figure" ng-show="stats.associations.total">{{stats.associations.total | number}}</span> associations</h3>
+                <h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!dataStats.associations.total"></span><span class="intro-section-stats-figure" ng-show="dataStats.associations.total">{{dataStats.associations.total | number}}</span> associations</h3>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!stats.diseases.total"></span><span class="intro-section-stats-figure" ng-show="stats.diseases.total">{{stats.diseases.total | number}}</span> diseases</h3>
+                <h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!dataStats.diseases.total"></span><span class="intro-section-stats-figure" ng-show="dataStats.diseases.total">{{dataStats.diseases.total | number}}</span> diseases</h3>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3 intro-section-panel">
-                <a href="data-sources"><h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!stats.datasources.total"></span><span class="intro-section-stats-figure" ng-show="stats.datasources.total">{{stats.datasources.total | number}}</span> data sources</h3></a>
+                <a href="https://docs.targetvalidation.org/data-sources/"><h3 class="intro-section-heading intro-section-stats-panel"><span ot-progress-spinner size="24" ng-show="!dataStats.datasources.total"></span><span class="intro-section-stats-figure" ng-show="dataStats.datasources.total">{{dataStats.datasources.total | number}}</span> data sources</h3></a>
             </div>
 
         </div>
@@ -88,7 +85,7 @@
             <!--<div class="col-xs-12 intro-section-panel">-->
 
                     <!--<div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-clock-o fa-5x"></span></div>-->
-                    <!--<h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-clock-o"></span> Last updated <span ot-progress-spinner size="24" ng-show="!stats.date"></span><span ng-show="stats.date">{{stats.date | date:'MMMM yyyy'}}</span></h3>-->
+                    <!--<h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-clock-o"></span> Last updated <span ot-progress-spinner size="24" ng-show="!dataStats.date"></span><span ng-show="dataStats.date">{{dataStats.date | date:'MMMM yyyy'}}</span></h3>-->
 
             <!--</div>-->
         <!--</div>-->
@@ -157,15 +154,15 @@
         <div class="row">
 
             <div class="col-xs-12 col-md-4 intro-section-panel">
-                <a href="/faq">
+                <a href="https://docs.targetvalidation.org/faq/">
                     <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-question-circle fa-5x"></span></div>
-                    <h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-question-circle"></span> <span class="hidden-xs">Frequently asked questions</span><span class="hidden-sm hidden-md hidden-lg">FAQs</span></h3>
+                    <h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-question-circle"></span> <span class="hidden-xs">Frequently asked questions</span><span class="hidden-sm hidden-md hidden-lg">Documentation</span></h3>
                 </a>
                 <!-- <p>Perhaps a one-liner would be helpful here</p> -->
             </div>
 
             <div class="col-xs-12 col-md-4 intro-section-panel">
-                <a href="/about">
+                <a href="https://docs.targetvalidation.org">
                     <div class="intro-section-panel-icon hidden-xs"><span class="panel-icon-lg fa fa-book fa-5x"></span></div>
                     <h3 class="intro-section-panel-heading intro-last"><span class="panel-icon-sm hidden-sm hidden-md hidden-lg fa fa-book"></span> Documentation</h3>
                 </a>
@@ -197,7 +194,8 @@
             <div class="col-sm-12">
                 <!-- <img src="imgs/logo/ot_logo_webheader.svg" class="intro-logo-tvp" alt="Open Targets logo" style="width: 240px; padding-bottom: 40px;"/> -->
                 <h2 class="intro-section-heading">Open Targets</h2>
-                <h3 class="intro-statement-heading">An innovative pre-competitive collaboration between Wellcome Trust Sanger Institute, EMBL-EBI, GSK and Biogen</h3>
+
+                <h3 class="intro-statement-heading">An innovative pre-competitive collaboration between <span class="text-nowrap">Wellcome Sanger Institute</span>, <span class="text-nowrap">EMBL-EBI</span>, GSK, Biogen, <span class="text-nowrap">Takeda and Celgene</span></h3>
             </div>
         </div>
 
@@ -208,20 +206,23 @@
         </div> -->
 
         <div class="row">
-            <div class="col-xs-12 col-sm-4 col-md-15">
-                <div class="partner-logo-block"><a href="https://www.biogen.com/"><img src="imgs/partners/color/biogen_172x60.png" alt="Biogen" class="partner-logo" /></a></div>
+            <div class="col-xs-12 col-sm-4 col-lg-2">
+                <div class="partner-logo-block"><a href="https://www.biogen.com/"><img src="imgs/partners/color/biogen_172x60.png" alt="Biogen" class="partner-logo" style="width:156px"/></a></div>
             </div>
-            <div class="col-xs-12 col-sm-4 col-md-15">
-                <div class="partner-logo-block"><a href="http://www.ebi.ac.uk"><img src="imgs/partners/color/ebi_195x60.png" alt="EMBL-EBI" class="partner-logo" /></a></div>
+            <div class="col-xs-12 col-sm-4 col-lg-2">
+                <div class="partner-logo-block"><a href="http://www.ebi.ac.uk"><img src="imgs/partners/color/ebi_195x60.png" alt="EMBL-EBI" class="partner-logo" style="width:180px"/></a></div>
             </div>
-            <div class="col-xs-12 col-sm-4 col-md-15">
+            <div class="col-xs-12 col-sm-4 col-lg-2">
                 <div class="partner-logo-block"><a href="http://www.gsk.com"><img src="imgs/partners/color/gsk_86x74.png" alt="GSK" class="partner-logo" /></a></div>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-15">
-                <div class="partner-logo-block"><a href="http://www.sanger.ac.uk"><img src="imgs/partners/color/sanger_160x47.png" alt="Sanger" class="partner-logo" /></a></div>
+            <div class="col-xs-12 col-sm-4 col-lg-2">
+                <div class="partner-logo-block"><a href="http://www.sanger.ac.uk"><img src="imgs/partners/color/sanger_new_200x69.png" alt="Sanger" class="partner-logo" style="width:190px"/></a></div>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-15">
+            <div class="col-xs-12 col-sm-4 col-lg-2">
                 <div class="partner-logo-block"><a href="https://www.takeda.com"><img src="imgs/partners/color/takeda_170x58.png" alt="Takeda" class="partner-logo" /></a></div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-lg-2">
+                <div class="partner-logo-block"><a href="https://www.celgene.com/"><img src="imgs/partners/color/celgene_124x109.png" alt="Takeda" class="partner-logo" style="width:112px"/></a></div>
             </div>
         </div>
 
@@ -237,30 +238,7 @@
 </div>
 
 
-<!-- HP SIGNUP -->
-<!-- <div class="intro-section intro-section-statement intro-section-theme-white" style="border-top: none">
-    <div class="container">
-        <div class="row">
-            <div class="hidden-xs col-sm-3"></div>
 
-            <div class="col-xs-12 col-sm-6 intro-first">
-                <h2 class="intro-statement-heading">Follow our story: sign up for our newsletter</h2>
-                <div id="mc_embed_signup" style="margin-bottom: 15px">
-                    <form action="https://opentargets.us17.list-manage.com/subscribe/post?u=d11d0467053c1d4b918eb8738&amp;id=aa83c5e27a" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-                        <div id="mc_embed_signup_scroll" class="input-group">
-                        <input type="email" value="" name="EMAIL" class="form-control" id="mce-EMAIL" placeholder="email address" required>
-                        <div class="input-group-btn"><button type="submit" class="btn btn-success">Sign up</button></div>
-                        </div>
-                        <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_d11d0467053c1d4b918eb8738_aa83c5e27a" tabindex="-1" value=""></div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="hidden-xs col-sm-3"></div>
-
-        </div>
-    </div>
-</div> -->
 
 
 <!-- FEEDBACK - mobile only -->
@@ -284,8 +262,8 @@
         <div class="row">
             <div class="col-sm-12">
                 <h2 class="intro-section-heading">Publications</h2>
-                <h3 style="color:#fff">See our latest publication on Nucleic Acids Research:</h3>
-                <h4><a href="https://doi.org/10.1093/nar/gkw1055">&quot;Open Targets: a platform for therapeutic target identification and validation&quot;</a></h4>
+                <h3 style="color:#fff">See our breakthrough article on Nucleic Acids Research:</h3>
+                <h4><a href="https://doi.org/10.1093/nar/gkw1055" style="color:#1f5699">&quot;Open Targets: a platform for therapeutic target identification and validation&quot;</a></h4>
                 <!--<h3 class="intro-statement-heading" style="color:#fff">NAR article <a href="https://doi.org/10.1093/nar/gkw1055">&quot;Open Targets: a platform for therapeutic target identification and validation&quot;</a>, <i>Nucleic Acids Research</i>, 45 (D1): D985-D994.</h3>-->
             </div>
         </div>

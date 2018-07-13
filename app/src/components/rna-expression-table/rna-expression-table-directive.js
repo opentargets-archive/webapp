@@ -1,6 +1,6 @@
 /**
  * RNA expression table
- * 
+ *
  * ext object params:
  *  isLoading, hasError, data
  */
@@ -19,11 +19,7 @@ angular.module('otDirectives')
             templateUrl: 'src/components/rna-expression-table/rna-expression-table.html',
 
             scope: {
-                // ext.isLoading: '=?',    // optional load-flag: true when loading, false otherwise. links to a var to trigger spinners etc...
-                // data: '=?',        // optional data link to pass the data out of the directive
-                // title: '=?',       // optional title for filename export
-                // ext.hasError: '=?'    // optional error-flag: pass a var to hold parsing-related errors
-                title: '@?',    // optional title for filename export
+                output: '@?',    // optional output for filename export
                 ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
 
@@ -139,7 +135,7 @@ angular.module('otDirectives')
 
                             // hidden columns for filtering
                             row.push(activity); // activity
-                            row.push(item.evidence.experiment_overview || 'Experiment overview and raw data') // experiment overview + data
+                            row.push(item.evidence.experiment_overview || 'Experiment overview and raw data'); // experiment overview + data
 
                             newdata.push(row); // push, so we don't end up with empty rows
                         } catch (e) {
@@ -201,7 +197,7 @@ angular.module('otDirectives')
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
-                    }, (scope.title ? scope.title + '-' : '') + '-RNA_expression'));
+                    }, (scope.output ? scope.output + '-' : '') + '-RNA_expression'));
                 }
             }
         };

@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otTargetFeatures', ['$timeout', function ($timeout) {
+    .directive('otTargetFeatures', ['$timeout', 'otConsts', function ($timeout, otConsts) {
         'use strict';
 
         return {
@@ -20,7 +20,7 @@ angular.module('otPlugins')
                 $timeout(function () {
                     var ProtVista = require('ProtVista');
                     new ProtVista({
-                        proxy: '/proxy/',
+                        proxy: otConsts.PROXY,
                         el: '#upfv',
                         uniprotacc: scope.target.uniprot_accessions[0],
                         exclusions: ['seqInfo']

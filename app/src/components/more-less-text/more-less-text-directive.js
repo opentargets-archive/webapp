@@ -12,6 +12,9 @@ angular.module('otDirectives')
                 data: '=',
                 limit: '@'
             },
-            templateUrl: 'src/components/more-less-text/more-less-text.html'
+            templateUrl: 'src/components/more-less-text/more-less-text.html',
+            link: function (scope, elem, attrs) {
+                scope.cutoff = scope.limit;
+            }
         };
     }]);

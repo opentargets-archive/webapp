@@ -52,7 +52,7 @@ data type. The score for each data type corresponds to the amount of fill of the
 
 The data type scores are combined to give an overall association score. The value of association score is represented by
 the depth of the blue colour shown in the views of the [Disease Association page](/about#disease_assoc) and the 
-[Target Association page](/about#target_assoc). More details are given on the [scoring](/scoring) page.
+[Target Association page](/about#target_assoc). More details are given on the [scoring](https://docs.targetvalidation.org/scoring.html) page.
 
 #### <a name="biblio"></a>How are the articles shown in the Bibliography on the Target Profile page chosen?
 

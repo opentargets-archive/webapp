@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otBibliographyTargetChips', ['$log', '$http', '$timeout', function ($log, $http, $timeout) {
+    .directive('otBibliographyTargetChips', ['$log', '$http', '$timeout', '$sce', function ($log, $http, $timeout, $sce) {
         'use strict';
 
 
@@ -14,7 +14,10 @@ angular.module('otPlugins')
             templateUrl: 'plugins/bibliography-chips/bibliography-target-chips.html',
             scope: {
                 target: '=',
-                label: '='
+                disease: '=',
+                ext: '=?',
+                label: '=',
+                q: '=?'
             },
             link: function (scope, elem, attrs) {
                 //
@@ -22,23 +25,57 @@ angular.module('otPlugins')
                 //
 
 
-                var API_URL = 'https://vy36p7a9ld.execute-api.eu-west-1.amazonaws.com/dev/search'; // 'https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search';
+                // var API_URL = 'https://vy36p7a9ld.execute-api.eu-west-1.amazonaws.com/dev/search';
+                // var API_URL = 'https://qkorhkwgf1.execute-api.eu-west-1.amazonaws.com/dev/search';
+                var API_URL = 'https://link.opentargets.io/';
                 var selected = [];
                 resetSelected();
 
 
-                /*
+                //
                 //  set SCOPE
-                */
+                //
 
 
                 scope.onclick = onClick;
                 scope.onback = onBack;
                 scope.getMoreData = getMoreData;
                 scope.selected = selected;
-                scope.isloading = false;
+                scope.isloading = 0; // false;
+                scope.isloading_aggs = false;
+                scope.isloading_hits = false;
 
                 scope.selectedagg;
+
+                scope.getAbstract = function (src) {
+                    // https://link.opentargets.io//entity/markedtext/28407239
+                    $http.get(API_URL + 'entity/markedtext/' + src.pub_id)
+                        .then(
+                            function (resp) {
+                                src.marked = resp.data;
+                                src.marked.abstract = $sce.trustAsHtml(src.marked.abstract);
+                            },
+                            function (resp) {
+                                $log.warn('Error: ', resp); // failure
+                            }
+                        );
+                };
+
+
+                scope.getSimilar = function (src) {
+                    // https://link.opentargets.io/document-more-like-this/28407239
+                    $http.get(API_URL + 'document-more-like-this/' + src.pub_id)
+                        .then(
+                            function (resp) {
+                                src.similar = resp.data.hits;
+                                return resp.data; // success
+                            },
+                            function (resp) {
+                                $log.warn('Error: ', resp); // failure
+                            }
+                        );
+                };
+
 
                 scope.aggtype = [
                     {id: 'top_chunks_significant_terms', label: 'Concepts'},
@@ -51,35 +88,48 @@ angular.module('otPlugins')
                     // {id: 'pub_date_histogram', label: 'publication date'}
                 ];
 
-                /*
-                    'top_chunks_significant_terms': {} // 'concepts'
-                    // 'acronym_significant_terms': {},
-                    'authors_significant_terms': {},    // authors
-                    'diseases': {},
-                    'drugs': {},
-                    'genes': {},    // genes
-                    'journal_abbr_significant_terms': {},   // journal
-                    // 'phenotypes': {},
-                    // 'pub_date_histogram': {}, // todo, maybe
-                */
-
                 scope.$watch('selectedagg', function (newValue, oldValue) {
                     if (newValue !== oldValue) {
                         var refetchData = selected.length > 1;
-                        resetSelected();
+                        // resetSelected();
 
-                        if (refetchData) {
-                            getData();
-                        } else {
-                            onSelectAggsData();
-                        }
+                        // if (refetchData) {
+                        //     getData();
+                        // } else {
+                        //     onSelectAggsData();
+                        // }
+                        onSelectAggsData();
+                    }
+                });
+
+                scope.$watch('q', function (nv, ov) {
+                    if (ov === undefined && nv !== undefined) {
+                        resetSelected();
                     }
                 });
 
                 function resetSelected () {
                     // selected = selected || [scope.target.approved_symbol]; //.toLowerCase()];
+
                     selected.length = 0;
-                    selected.push({key: scope.target.approved_symbol});
+                    var o = {
+                        key: scope.q,
+                        label: scope.q
+                    };
+
+                    if (scope.target) {
+                        o.key = scope.target.id;
+                        o.label = scope.target.approved_symbol;
+                    } else if (scope.disease) {
+                        o.key = scope.disease.efo;
+                        o.label = scope.disease.label;
+                    }
+
+                    selected.push(o);
+                    // selected.push({
+                    //     key: (scope.target ? scope.target.id : scope.disease.efo || scope.q),
+                    //     label: (scope.target ? scope.target.approved_symbol : scope.disease.label) || q
+                    // });
                 }
 
 
@@ -89,7 +139,10 @@ angular.module('otPlugins')
 
 
                 function addSelected (s) {
-                    selected.push(s); // to lower case for more accurate matching
+                    // some aggregations don't have a label, so we add one for consistency
+                    // so that we can then filter selected aggregation itmes in onSelectAggsData()
+                    s.label = s.label || s.key;
+                    selected.push(s);
                     return selected;
                 }
 
@@ -121,7 +174,7 @@ angular.module('otPlugins')
                     // var ss = scope.target.symbol_synonyms || [];
                     // var ns = /* scope.target.name_synonyms ||*/ [];  // don't use any name synomyms for now
                     // var q = '(\'' + [selected[0]].concat(ss).concat(ns).join('\'OR\'') + '\')'; // e.g. : ('braf'AND'braf1'AND'braf2')
-                    var q = scope.target.id;
+                    var q = selected[0].key; // scope.target.id;
                     if (selected.length > 1) {
                         // q = q + ' AND \'' + selected.slice(1).join('\' AND \'') + '\'';  // e.g. : ('braf'AND'braf1'AND'braf2')AND'NRAS'AND'NRAS mutation'
                         q = [q].concat(
@@ -142,11 +195,71 @@ angular.module('otPlugins')
                  */
                 function getData () {
                     if (selected.length > 0) {
-                        scope.isloading = true;
+                        // scope.isloading = true;
                         var targets = selected.join('\'AND\'');
-                        $http.get(API_URL + '?query=' + getQuery() + '&aggs=true')
+
+                        // We now make 2 calls: 1 for the chips and 1 for the papers;
+                        // This is because aggregations can be computationally demanding (e.g. for neoplasm) and fail.
+                        // By splitting the call we always have some papers to show
+
+                        // 1. get chips only
+                        // scope.isloading++;
+                        scope.isloading_aggs = true;
+                        $http.get(API_URL + 'search?query=' + getQuery() + '&aggs=true&size=0')
                             .then(
                                 function (resp) {
+                                    return resp.data; // success
+                                },
+                                function (resp) {
+                                    $log.warn('Error: ', resp); // failure
+                                    // in case of an error we remove the last selected thing in the list (since we didn't get the data for it)
+                                    if (selected.length > 1) {
+                                        selected.pop();
+                                    }
+                                }
+                            )
+                            .then(
+                                function (data) {
+                                    // onData(data); // success
+                                    onAggsData(data);
+                                }
+                            )
+                            .finally(
+                                function (d) {
+                                    // scope.isloading--;
+                                    scope.isloading_aggs = false;
+                                }
+                            );
+
+                        // 2. get papers
+                        // scope.isloading++;
+                        scope.isloading_hits = true;
+                        $http.get(API_URL + 'search?query=' + getQuery())
+                            .then(
+                                function (resp) {
+                                    return resp.data; // success
+                                },
+                                function (resp) {
+                                    $log.warn('Error: ', resp); // failure
+                                }
+                            )
+                            .then(
+                                function (data) {
+                                    // onData(data); // success
+                                    onLiteratureData(data, true);
+                                }
+                            )
+                            .finally(
+                                function (d) {
+                                    // scope.isloading--;
+                                    scope.isloading_hits = false;
+                                }
+                            );
+
+                        /* $http.get(API_URL + 'search?query=' + getQuery() + '&aggs=true')
+                            .then(
+                                function (resp) {
+                                    $log.info(resp);
                                     return resp.data; // success
                                 },
                                 function (resp) {
@@ -166,7 +279,7 @@ angular.module('otPlugins')
                                 function (d) {
                                     scope.isloading = false;
                                 }
-                            );
+                            );*/
                     }
                 }
 
@@ -183,8 +296,9 @@ angular.module('otPlugins')
                     var after_id = last._id || undefined;  // e.g. 27921184
 
                     if (after && after_id) {
-                        scope.isloading = true;
-                        $http.get(API_URL + '?query=' + getQuery() + '&search_after=' + after + '&search_after_id=' + after_id)
+                        // scope.isloading++; // = true;
+                        scope.isloading_hits = true;
+                        $http.get(API_URL + 'search?query=' + getQuery() + '&search_after=' + after + '&search_after_id=' + after_id)
                             .then(
                                 function (resp) {
                                     return resp.data; // success
@@ -195,12 +309,14 @@ angular.module('otPlugins')
                             )
                             .then(
                                 function (data) {
-                                    onData(data); // success
+                                    // onData(data); // success
+                                    onLiteratureData(data, false);
                                 }
                             )
                             .finally(
                                 function (d) {
-                                    scope.isloading = false;
+                                    // scope.isloading--; // = false;
+                                    scope.isloading_hits = false;
                                 }
                             );
                     }
@@ -216,7 +332,7 @@ angular.module('otPlugins')
                         onAggsData(data);
                     }
 
-                    if (data.hits) {
+                    if (data.hits && data.hits.hits.length > 0) {
                         onLiteratureData(data, data.aggregations !== undefined);
                     }
                 }
@@ -245,12 +361,6 @@ angular.module('otPlugins')
 
 
                 function onSelectAggsData () {
-                    // $log.log('onSelectedAggsData');
-                    // $log.log('*** onSelectAggsData ***');
-                    // var children = data.aggregations.abstract_significant_terms.buckets.filter(function(b){
-                    // var children = data.aggregations.top_chunks_significant_terms.buckets.filter(function(b){
-                    // $log.log('selection:', scope.selectedagg);
-                    // $log.log('aggs:', scope.aggs);
                     var children = scope.aggs[scope.selectedagg].buckets.filter(function (b) {
                         //
                         // don't add these to the treemap if they appears in the 'selected' array (i.e. those we clicked on) or in the symbol synonyms
@@ -263,13 +373,17 @@ angular.module('otPlugins')
                         // return !selected.includes(b.key) && !scope.target.symbol_synonyms.includes(b.key);
 
                         // filter: case insensitive
-                        // return selected.filter(function (a) { return a.key.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0   &&  
+                        // return selected.filter(function (a) { return a.key.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0   &&
                         //     scope.target.symbol_synonyms.filter(function (a) { return a.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0;
-
-                        // a = selected // b = current 'bucket' we're checking
-                        return selected.filter(function (a) { return a.key.toString().toLowerCase() === b.key.toString().toLowerCase(); }).length === 0 &&
+                        return selected.filter(
+                            function (a) {
+                                // a = selected // b = current 'bucket' we're checking
+                                return a.key.toString().toLowerCase() === b.key.toString().toLowerCase() ||
+                                        a.label.toString().toLowerCase() === b.key.toString().toLowerCase();
+                            }
+                        ).length === 0; // &&
                         // a = synonyms // b = current 'bucket' we're checking
-                            scope.target.symbol_synonyms.filter(function (a) { return a.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0;
+                        // (scope.target ? (scope.target.symbol_synonyms.filter(function (a) { return a.toLowerCase() === b.key.toString().toLowerCase(); }).length === 0) : true);
                     });
 
                     scope.aggs_result_total = children.length;

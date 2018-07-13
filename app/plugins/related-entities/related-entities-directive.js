@@ -1100,14 +1100,15 @@ function createVis(container, data, scope) {
         .style('opacity', 1)
         .each('end', function (d) {
             var siblings = this.parentNode.childNodes;
-            siblings.forEach(function (node) {
+            for (var i = 0; i < siblings.length; i++) {
+                var node = siblings[i];
                 if (node.nodeName === 'text') {
                     d3.select(node)
                         .transition()
                         .duration(1000)
                         .style('opacity', 1);
                 }
-            });
+            }
         })
 }
 

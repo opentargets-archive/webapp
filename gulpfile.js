@@ -23,6 +23,7 @@ var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var jsonminify = require('gulp-jsonminify');
 var merge = require('gulp-merge-json');
+var replace = require('gulp-replace');
 
 var through = require('through2');
 
@@ -79,6 +80,7 @@ var componentsFileGz = componentsFileMin + '.gz';
 // angular uglify
 
 var webappFiles = require('./webappFiles.js');
+var packageFile = require('./package.json');
 
 // a failing test breaks the whole build chain
 gulp.task('default', ['lint', 'test']);
@@ -241,7 +243,7 @@ gulp.task('build-webapp-styles', function () {
 
 /*
  * Gets and returns the list of directories at the specified location
- * @param {string} dir  
+ * @param {string} dir
  * @return {array} The list of directories (folders) as an array of strings
  */
 function getFolders (dir) {
@@ -256,12 +258,12 @@ function getFolders (dir) {
  * Parse a section (folder) in the config dir:
  * the function merges default.json and the optional custom.json into combined.json
  * Under json root there is one element with the same name as the directory.
- * @param {string} scriptsPath 
- * @param {string} dir 
+ * @param {string} scriptsPath
+ * @param {string} dir
  * @return {promise}
  */
 function parseConfigDir (scriptsPath, dir) {
-    return new Promise(function (resolve, reject){       
+    return new Promise(function (resolve, reject) {
         gulp.src(configSourceFiles.map(function (i) { return join(scriptsPath, dir, i); }))
             .pipe(jsonminify()) // remove any comments which would break the merging
             .pipe(merge({
@@ -284,7 +286,7 @@ function parseConfigDir (scriptsPath, dir) {
  * Note: this is structure sensitive. After merging, the api is under 'general'
  */
 function updateAPI (parsedJson) {
-    if (process.env.APIHOST){
+    if (process.env.APIHOST) {
         parsedJson.general.api = process.env.APIHOST; // APIHOST to define an API to point to
     }
     return parsedJson;
@@ -294,7 +296,7 @@ function updateAPI (parsedJson) {
 /**
  * Loop through the directories in config/ and parse/merge default and custom jsons
  */
-gulp.task('parse-custom-configs', function (){
+gulp.task('parse-custom-configs', function () {
     var folders = getFolders(configDir);
     return Promise.all(folders.map(
         function (dir) {
@@ -335,12 +337,12 @@ gulp.task('build-config', ['build-config-merged'], function () {
 // PARSE IN MEMORY
 
 
-/* 
+/*
  * Merge and parse json files in the specified directory and return the processed json (promise)
  */
 function parseConfigDirJson (scriptsPath, dir) {
     var editedJson;
-    return new Promise(function (resolve, reject){       
+    return new Promise(function (resolve, reject) {
         gulp.src(configSourceFiles.map(function (i) { return join(scriptsPath, dir, i); }))
             .pipe(jsonminify()) // remove any comments which would break the merging
             .pipe(merge({       // merge default and custom (if it exists) into combined.json
@@ -385,6 +387,8 @@ gulp.task('build-config-all', function () {
             if (process.env.APIHOST) {
                 obj.general.api = process.env.APIHOST; // APIHOST to define an API to point to
             }
+            // add the version as per package.json file
+            obj.general.version = packageFile.version;
             // manually write the file
             fs.stat(join(buildDir, configFile), function (err, stat) {
                 fs.writeFileSync(join(buildDir, configFile), JSON.stringify(obj));
@@ -396,7 +400,15 @@ gulp.task('build-config-all', function () {
 // ----------------------------------------
 
 
-gulp.task('build-webapp', ['build-webapp-styles', 'build-config-all'], function () {
+gulp.task('build-webapp-index', function () {
+    return gulp.src('app/index-tmpl.html')
+        .pipe(rename('index.html'))
+        .pipe(replace('%VER%', packageFile.version))
+        .pipe(gulp.dest('app/'));
+});
+
+
+gulp.task('build-webapp', ['build-webapp-styles', 'build-config-all', 'build-webapp-index'], function () {
     return gulp.src(webappFiles.cttv.js)
         .pipe(sourcemaps.init({
             debug: true

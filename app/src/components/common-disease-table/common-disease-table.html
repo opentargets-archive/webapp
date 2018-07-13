@@ -1,12 +1,22 @@
 <!-- common disease table -->
+
+<!-- <button type="button" ng-init="isCollapsed=false" class="btn btn-primary btn-sm" ng-click="isCollapsed = !isCollapsed"><span class="fa fa-question-circle"></span> Table legend</button>
+<div uib-collapse="isCollapsed">
+    <div class="well well-sm">
+        <h5>Variant</h5>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>
+</div> -->
+    
+
 <div class="table-panel">
     <table class='table ot-evidence-table' id="common-diseases-table">
         <thead>
             <tr>
                 <th></th> <!-- nameless col for access level -->
                 <th>Disease</th>
-                <th>Variant</th>
-                <th>Variant type</th>
+                <th>Variant<ot-popover key="GENETIC.VARIANT"></ot-popover></th>
+                <th>Variant type<ot-popover key="GENETIC.VARIANT-TYPE"></ot-popover></th>
                 <th>Evidence source</th>
                 <th>{{otDictionary.PVALUE}}</th>
                 <!--<th>Details <span style="font-size:0.8em;float:right;"><ot-popover html='true' key="COMMONDISEASES.SCOREDETAILS"></ot-popover></th>-->
@@ -14,9 +24,6 @@
                 <th>Publications Ids</th>
             </tr>
         </thead>
-
-        <tbody>
-        </tbody>
 
         <tfoot>
             <tr class="filter-row">
@@ -31,5 +38,8 @@
                 <th></th>
             </tr>
         </tfoot>
+        
+        <tbody>
+        </tbody>
     </table>
 </div>

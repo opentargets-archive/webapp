@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otGeneTree', ['otColumnFilter', 'otUtils', '$timeout', function (otColumnFilter, otUtils, $timeout) {
+    .directive('otGeneTree', ['otColumnFilter', 'otUtils', '$timeout', 'otConsts', function (otColumnFilter, otUtils, $timeout, otConsts) {
         'use strict';
 
         return {
@@ -17,7 +17,7 @@ angular.module('otPlugins')
                 var gt = targetGeneTree()
                     .id(scope.target.id)
                     .width(width)
-                    .proxy('/proxy/rest.ensembl.org')
+                    .proxy(otConsts.PROXY + 'rest.ensembl.org')
                     .on('notFound', function () {
                         scope.notFound = 1;
                     });
@@ -75,9 +75,9 @@ angular.module('otPlugins')
                         // Orthologue
                         var displayName = (info[item.target.id].display_name) ? info[item.target.id].display_name : '';
                         if (displayName) {
-                            row.push(displayName + (displayName ? ' ' : '') + '(<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summar?g=' + item.target.id + '" target="_blank">' + item.target.id + ')');
+                            row.push(displayName + (displayName ? ' ' : '') + '(<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summary?g=' + item.target.id + '" target="_blank">' + item.target.id + ')');
                         } else {
-                            row.push('<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summar?g=' + item.target.id + '" target="_blank">' + item.target.id);
+                            row.push('<a href="http://www.ensembl.org/' + item.target.species + '/Gene/Summary?g=' + item.target.id + '" target="_blank">' + item.target.id);
                         }
 
                         // dN/dS
@@ -103,7 +103,7 @@ angular.module('otPlugins')
 
 
                 var rest = tnt.ensembl()
-                    .proxyUrl('/proxy/rest.ensembl.org');
+                    .proxyUrl(otConsts.PROXY + 'rest.ensembl.org');
 
                 var homologsUrl = rest.url.homologues({
                     'id': scope.target.id,
@@ -113,7 +113,7 @@ angular.module('otPlugins')
                 scope.showSpinner = true;
                 rest.call(homologsUrl)
                     .then(function (resp) {
-                        var infoUrl = '/proxy/rest.ensembl.org/lookup/id/';
+                        var infoUrl = otConsts.PROXY + 'rest.ensembl.org/lookup/id/';
                         var infoTargets = [];
                         resp.body.data[0].homologies.forEach(function (h) {
                             infoTargets.push(h.target.id);

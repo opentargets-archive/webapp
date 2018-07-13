@@ -1,6 +1,6 @@
 /**
  * Somatic mutations table
- * 
+ *
  * ext object params:
  *  isLoading, hasError, data
  */
@@ -19,7 +19,7 @@ angular.module('otDirectives')
             templateUrl: 'src/components/somatic-mutation-table/somatic-mutation-table.html',
 
             scope: {
-                title: '@?',    // optional title for filename export
+                output: '@?',    // optional output for filename export
                 ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
             },
 
@@ -37,7 +37,6 @@ angular.module('otDirectives')
 
                 function getMutationData () {
                     scope.ext.isLoading = true;
-                    filename = (scope.title || (attrs.target + '-' + attrs.disease)).replace(/ /g, '_') + '-somatic_mutations';
                     var opts = {
                         size: 1000,
                         datasource: otConfig.evidence_sources.somatic_mutation,
@@ -73,6 +72,7 @@ angular.module('otDirectives')
                             function (resp) {
                                 if (resp.body.data) {
                                     scope.ext.data = resp.body.data;
+                                    filename = (scope.output || (attrs.target + '-' + attrs.disease)).replace(/ /g, '_') + '-somatic_mutations';
                                     initTableMutations();
                                 } else {
                                     $log.warn('Empty response : somatic mutations');
@@ -141,7 +141,11 @@ angular.module('otDirectives')
                             row.push(pattern);
 
                             // col 5: evidence source
-                            row.push('<a href=\'' + item.evidence.urls[0].url + '\' target=\'_blank\' class=\'ot-external-link\'>' + item.evidence.urls[0].nice_name + '</a>');
+                            var idString = '';
+                            if (item.sourceID === otConsts.datasources.EVA_SOMATIC.id) {
+                                idString = '<p class="text-lowlight"><small>(ID: ' + item.evidence.urls[0].url.split('/').pop() + ')</small></p>';
+                            }
+                            row.push('<a href=\'' + item.evidence.urls[0].url + '\' target=\'_blank\' class=\'ot-external-link\'>' + item.evidence.urls[0].nice_name + '</a>' + idString);
 
                             // cols 6: publications
                             var refs = [];

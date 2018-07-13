@@ -1,12 +1,37 @@
-<p>Found {{drugs.length}} unique drugs:
+<div>
+    
+    <div class="row">
+
+        <div class="col-sm-4">
+            <h4>Table summary</h4>
+            <h5><span class="badge large badge-success" style="cursor:default">{{drugs.length}}</span> unique drugs</h5>
+            <h5><span class="badge large badge-warning" style="cursor:default">{{associated_diseases.length}}</span> associated disease</h5>
+            <h5><span class="badge large badge-primary" style="cursor:default">{{associated_targets.length}}</span> associated targets</h5>
+            <!-- <p ng-repeat="(phase, v) in phases">{{phase}} {{v.length}}</p> -->
+        </div>
+        
+        <div class="col-sm-4">
+            <ot-donut-chart header="Trials" data="phases" show-legend="true" size="160" hole="100"></ot-donut-chart>
+        </div>
+        
+        <div class="col-sm-4">
+            <h4>Type vs Activity</h4>
+            <ot-stack-chart data="type_activity" height="200" width="300" show-legend="true"></ot-stack-chart>
+        </div>
+    </div>
+</div>
+
+<!-- <p>Found {{drugs.length}} unique drugs:
     <span ng-repeat="drug in drugs | limitTo: show.limit">
-        <!-- <span style="padding-right:10px">[<a href={{drug.url}} target=_blank>{{drug.id}}</a>]</span> -->
-        <!-- <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="label label-primary">{{drug.id}}</i> -->
+        <span style="padding-right:10px">[<a href={{drug.url}} target=_blank>{{drug.id}}</a>]</span>
+        <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="label label-primary">{{drug.id}}</i>
         <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="ot-pill-list drug-list">{{drug.id}}</i>
         </a></span>
     </span>
     <span ng-click="showMoreOrLess()" ng-show="show.moreOrLess"><span class="show-more-dots" ng-show="show.limit<drugs.length">...</span> <a class="ng-binding show-more-links">{{show.ellipsis}}</a></span>
-</p>
+</p> -->
+
+
 <div class="table-panel">
     <table class='table ot-evidence-table'>
         <thead>
@@ -14,7 +39,7 @@
                 <th rowspan="2" colspan="1"></th>
                 <th rowspan="2" colspan="1">Disease</th>
                 <th rowspan="1" colspan="7">Drug Information</th>
-                <th rowspan="1" colspan="2">Gene-Drug Evidence</th>
+                <th rowspan="1" colspan="3">Gene-Drug Evidence</th>
             </tr>
             <tr>
                 <!-- Drug information -->
@@ -29,21 +54,17 @@
 
                 <!-- Gene-Drug evidence -->
                 <!-- <th>Target name</th> -->
+                <th>Target</th>
                 <th>Target class</th>
-                <th>Evidence source</th>
+                <th>Evidence curated from</th>
                 <!-- <th class="no-last-element">Target</th> --><!-- we have to manually set this border, otherwise datatables thinks it's the last element and removes the border-->
                 <!-- <th class="no-last-element">Protein complex members</th> -->
 
             </tr>
             
-
         </thead>
 
-        <tbody>
-        </tbody>
-
         <tfoot>
-
             <tr class="filter-row">
                 <th></th>
                 <th>Disease</th>
@@ -58,7 +79,7 @@
                 <!-- <th>Clinical Indications</th> -->
 
                 <!-- Gene-Drug evidence -->
-                <!-- <th>Target name</th> -->
+                <th>Target</th>
                 <th>Target class</th>
                 <th></th>
                 <!-- <th class="no-last-element">Target</th> --><!-- we have to manually set this border, otherwise datatables thinks it's the last element and removes the border-->
@@ -66,5 +87,8 @@
 
             </tr>
         </tfoot>
+
+        <tbody>
+        </tbody>
     </table>
 </div>
