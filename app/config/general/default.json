@@ -64,6 +64,8 @@
 
     "show_access_level" : false,
 
+    "enableFooterSignupForm": true,
+
     "dumps_link": "/downloads/data",
 
     "evidence_sources" : {
