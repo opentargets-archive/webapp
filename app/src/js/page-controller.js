@@ -50,11 +50,21 @@ angular.module('otControllers')
             targets: [],
             diseases: []
         };
-        for (var i = 0; i < 2; i++) {
-            $scope.introTryExamples.targets.push(Math.floor(Math.random()*otConfig.searchExamples.targets.length));
+        while ($scope.introTryExamples.targets.length < 2) {
+            // pick a random target from the predefined list
+            var n = Math.floor(Math.random() * (otConfig.searchExamples.targets.length - 1));
+            // but make sure it hasnt' already be selected:
+            // for one it would look wrong to see the same example repeated (e.g. "BRAF BRAF")
+            // but this also causes Angular to throw an error (ng-repeat keys must be unique)
+            if ($scope.introTryExamples.targets.lastIndexOf(n) === -1) {
+                $scope.introTryExamples.targets.push(n);
+            }
         }
-        for (var i = 0; i < 2; i++) {
-            $scope.introTryExamples.diseases.push(Math.floor(Math.random()*otConfig.searchExamples.diseases.length));
+        while ($scope.introTryExamples.diseases.length < 2) {
+            var n = Math.floor(Math.random() * (otConfig.searchExamples.diseases.length - 1));
+            if ($scope.introTryExamples.diseases.lastIndexOf(n) === -1) {
+                $scope.introTryExamples.diseases.push(n);
+            }
         }
     }]);
 
