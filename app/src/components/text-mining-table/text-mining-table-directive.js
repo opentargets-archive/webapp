@@ -363,6 +363,7 @@ angular.module('otDirectives')
                             search: data.search.value,
                             draw: draw,
                             fields: [
+                                'access_level',
                                 'disease.efo_info.label',
                                 'disease.efo_info.efo_id',
                                 'evidence.literature_ref',
