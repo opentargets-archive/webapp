@@ -173,6 +173,16 @@ angular.module('otControllers')
         };
 
 
+        /*
+         * Remove commas from the given string and return it.
+         * This is used to clean up the search string of any commas (as these clash with the URL-state format);
+         * in the future this could be extended to remove also other unwanted chars.
+         */
+        var cleanupSearchString = function (s) {
+            return s.replace(/,/g, ' ').replace(/\s\s+/g, ' ');
+        };
+
+
         /**
          * Public method to link to association page for either a gene or a disease
          * @param {Object} s - config objects:
@@ -202,8 +212,7 @@ angular.module('otControllers')
             if ($location.url() !== APP_SEARCH_URL) {
                 $location.url(APP_SEARCH_URL);
             }
-            $location.search('src=q:' + $scope.search.query.text);
-
+            $location.search('src=q:' + cleanupSearchString($scope.search.query.text));
 
             // reset the query field:
             // the search result page should probably still show this, the problem is that the scope of this search box is separate
