@@ -195,7 +195,7 @@
 
                 <!-- FEEDBACK BUTTON -->
                 <!-- <div ng-cloak class="ot-feedback-button hidden-xs" ng-controller="FeedbackController" ng-click="openFeedbackForm()" ng-show="location.path()=='/'"> -->
-                <div class="ot-feedback-button hidden-xs ng-scope" ng-controller="FeedbackController" ng-class="{'ot-feedback-button-round': location.path()!='/' }" style="">
+                <div class="ot-feedback-button hidden-xs ng-scope" ng-controller="FeedbackController" ng-class="{'ot-feedback-button-round': location.path()!='/' }">
                     <a target="_blank" href="mailto:support@targetvalidation.org?Subject=Open Targets Platform - feedback&amp;body=Page URL: https://www.targetvalidation.org/">
                         <div>Feedback</div>
                     </a>
@@ -336,21 +336,7 @@
 
             <!-- Google Analytics -->
             <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-101860681-5"></script> -->
-            <script>
-                (function(i, s, o, g, r, a, m) {
-                    i['GoogleAnalyticsObject'] = r;
-                    i[r] = i[r] || function() {
-                        (i[r].q = i[r].q || []).push(arguments)
-                    }, i[r].l = 1 * new Date();
-                    a = s.createElement(o),
-                        m = s.getElementsByTagName(o)[0];
-                    a.async = 1;
-                    a.src = g;
-                    m.parentNode.insertBefore(a, m)
-                })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-                ga('create', 'UA-101860681-5', 'auto');// add your tracking ID here.
-                // ga('send', 'pageview'); // not needed as handler triggered
-            </script>
+            <script type="text/javascript" src="./ga.js"></script>
             <!-- End Google Analytics Code -->
 
             <!-- Log page app session -->
