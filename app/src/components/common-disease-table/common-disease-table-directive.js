@@ -130,12 +130,25 @@ angular.module('otDirectives')
                             // p-value
                             var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
 
-                            if (item.sourceID === otConsts.datasources.PHEWAS.id) {
-                                msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
-                            } else if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
-                                msg += '<br/>Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '<br />Phenotype: ' + item.unique_association_fields.phenotype;
-                            }
+                            // if (item.sourceID === otConsts.datasources.PHEWAS.id) {
+                            //     msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
+                            // } else if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
+                            //     msg += '<br/>Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '<br />Phenotype: ' + item.unique_association_fields.phenotype;
+                            // }
                             row.push(msg);
+
+                            // odd ratios
+                            // row.push(
+                            //     (item.unique_association_fields.odd_ratio || item.unique_association_fields.odds_ratio || otDictionary.NA)
+                            //     + '<br />'
+                            //     + (item.unique_association_fields.confidence_interval || otDictionary.NA)
+                            //     + '<br />'
+                            //     + (item.unique_association_fields.cases ? 'cases: ' + item.unique_association_fields.cases : '')
+                            // );
+
+                            row.push(item.unique_association_fields.odd_ratio || item.unique_association_fields.odds_ratio || otDictionary.NA);
+                            row.push(item.unique_association_fields.confidence_interval || otDictionary.NA);
+                            row.push(item.unique_association_fields.cases ? item.unique_association_fields.cases : '');
 
                             // publications
                             var refs = [];
@@ -185,11 +198,13 @@ angular.module('otDirectives')
                                 'width': '3%'
                             },
                             {
-                                'targets': [7],
+                                // 'targets': [7],
+                                'targets': [10],
                                 'visible': false
                             },
                             {
-                                'targets': [3, 6],
+                                // 'targets': [3, 6],
+                                'targets': [3, 9],
                                 'width': '14%'
                             },
                             {
@@ -199,14 +214,14 @@ angular.module('otDirectives')
                             {
                                 'targets': [2],
                                 'width': '14%',
-                                'mRender': otColumnFilter.mRenderGenerator(8),
-                                'mData': otColumnFilter.mDataGenerator(2, 8)
+                                'mRender': otColumnFilter.mRenderGenerator(11),
+                                'mData': otColumnFilter.mDataGenerator(2, 11)
                             },
                             {
                                 'targets': [4],
                                 'width': '14%',
-                                'mRender': otColumnFilter.mRenderGenerator(9),
-                                'mData': otColumnFilter.mDataGenerator(4, 9)
+                                'mRender': otColumnFilter.mRenderGenerator(12),
+                                'mData': otColumnFilter.mDataGenerator(4, 12)
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
