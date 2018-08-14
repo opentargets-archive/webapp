@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otBaselineExpression', ['$timeout', '$http', 'otUtils', 'otConsts', function ($timeout, $http, otUtils, otConsts) {
+    .directive('otBaselineExpression', ['$timeout', '$http', 'otUtils', 'otConsts', '$filter', function ($timeout, $http, otUtils, otConsts, $filter) {
         'use strict';
 
         return {
@@ -30,7 +30,7 @@ angular.module('otPlugins')
                     $http.get(firstUrl)
                         .then(function (resp) {
                             // Need to extract gencodeId (an Ensembl ID with GRCh37 version appended)
-                            var gencodeId = resp.data.geneId.filter(function (g) {
+                            var gencodeId = resp.data.gene.filter(function (g) {
                                 return g.geneSymbol === target;
                             })[0].gencodeId;
                             var secondUrl = otConsts.PROXY + 'www.gtexportal.org/rest/v1/expression/geneExpression?boxplotDetail=full&gencodeId=' + gencodeId;
@@ -194,7 +194,7 @@ angular.module('otPlugins')
 
                     // tissues axis
                     var tissueNames = data.map(function (d) {
-                        return d.tissueId;
+                        return $filter('otClearUnderscores')(d.tissueSiteDetailId);
                     });
                     var tissuesScale = d3.scale.ordinal()
                         .domain(tissueNames)
