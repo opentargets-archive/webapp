@@ -101,18 +101,18 @@ angular.module('otDirectives')
                             // col 0: data origin: public / private
                             row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
-                            // disease name
+                            // 1: disease name
                             row.push(item.disease.efo_info.label);
 
-                            // Variant
+                            // 2: Variant
                             var mut = '<a class=\'ot-external-link\' href=\'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>' + item.variant.id.split('/').pop() + '</a>';
                             row.push(mut);
 
-                            // variant type
+                            // 3: variant type
                             var t = otClearUnderscoresFilter(otUtils.getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop()));
                             row.push(t);
 
-                            // evidence source
+                            // 4: evidence source
                             if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
                                 row.push('<a class=\'ot-external-link\' href=\'https://test-rvizapps.biogen.com/23andmeDev/\' target=\'_blank\'>'
                                     + otClearUnderscoresFilter(item.sourceID)
@@ -127,7 +127,7 @@ angular.module('otDirectives')
                                     + '</a>');
                             }
 
-                            // p-value
+                            // 5: p-value
                             var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
 
                             // if (item.sourceID === otConsts.datasources.PHEWAS.id) {
@@ -137,20 +137,14 @@ angular.module('otDirectives')
                             // }
                             row.push(msg);
 
-                            // odd ratios
-                            // row.push(
-                            //     (item.unique_association_fields.odd_ratio || item.unique_association_fields.odds_ratio || otDictionary.NA)
-                            //     + '<br />'
-                            //     + (item.unique_association_fields.confidence_interval || otDictionary.NA)
-                            //     + '<br />'
-                            //     + (item.unique_association_fields.cases ? 'cases: ' + item.unique_association_fields.cases : '')
-                            // );
+                            // 6: odds ratio (gwas / phewas)
+                            row.push(
+                                (item.unique_association_fields.odd_ratio || item.unique_association_fields.odds_ratio || otDictionary.NA)
+                                + '<br />'
+                                + '(' + (item.unique_association_fields.confidence_interval || otDictionary.NA) + ')'
+                            );
 
-                            row.push(item.unique_association_fields.odd_ratio || item.unique_association_fields.odds_ratio || otDictionary.NA);
-                            row.push(item.unique_association_fields.confidence_interval || otDictionary.NA);
-                            row.push(item.unique_association_fields.cases ? item.unique_association_fields.cases : '');
-
-                            // publications
+                            // 7: publications
                             var refs = [];
                             if (checkPath(item, 'evidence.variant2disease.provenance_type.literature.references')) {
                                 refs = item.evidence.variant2disease.provenance_type.literature.references;
@@ -160,10 +154,10 @@ angular.module('otDirectives')
                             row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : 'N/A');
                             // row.push(refs.length ? otUtils.getPublicationsField(refs) : 'N/A');
 
-                            // Publication ids (hidden)
+                            // 8: Publication ids (hidden)
                             row.push(pmidsList.join(', '));
 
-                            // hidden columns for filtering
+                            // 9, 10: hidden columns for filtering
                             row.push(item.variant.id.split('/').pop()); // variant
                             row.push(otClearUnderscoresFilter(item.sourceID)); // evidence source
 
@@ -198,30 +192,26 @@ angular.module('otDirectives')
                                 'width': '3%'
                             },
                             {
-                                // 'targets': [7],
-                                'targets': [10],
+                                'targets': [8],
                                 'visible': false
                             },
                             {
-                                // 'targets': [3, 6],
-                                'targets': [3, 9],
-                                'width': '14%'
+                                'targets': [1, 3, 7],
+                                'width': '15%'
                             },
                             {
-                                'targets': [1, 5],
-                                'width': '10%'
+                                'targets': [2, 4, 5, 6],
+                                'width': '12%'
                             },
                             {
                                 'targets': [2],
-                                'width': '14%',
-                                'mRender': otColumnFilter.mRenderGenerator(11),
-                                'mData': otColumnFilter.mDataGenerator(2, 11)
+                                'mRender': otColumnFilter.mRenderGenerator(9),
+                                'mData': otColumnFilter.mDataGenerator(2, 9)
                             },
                             {
                                 'targets': [4],
-                                'width': '14%',
-                                'mRender': otColumnFilter.mRenderGenerator(12),
-                                'mData': otColumnFilter.mDataGenerator(4, 12)
+                                'mRender': otColumnFilter.mRenderGenerator(10),
+                                'mData': otColumnFilter.mDataGenerator(4, 10)
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)

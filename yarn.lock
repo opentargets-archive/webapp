@@ -1856,9 +1856,9 @@ cttv.flowerView@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/cttv.flowerView/-/cttv.flowerView-0.0.2.tgz#269c4a08dfe6cacf14a440bec40a7bf09c3786b7"
 
-cttv.genome@0.0.29:
-  version "0.0.29"
-  resolved "https://registry.yarnpkg.com/cttv.genome/-/cttv.genome-0.0.29.tgz#46a01769f51ddf7d9144d868cc5fb59afa0b37c3"
+cttv.genome@opentargets/targetGenomeBrowser:
+  version "0.0.30"
+  resolved "https://codeload.github.com/opentargets/targetGenomeBrowser/tar.gz/546cca059aeecf85ff2ac321f8c520455c6c396a"
   dependencies:
     cttv.api "0.0.15"
     font-awesome "^4.5.0"
