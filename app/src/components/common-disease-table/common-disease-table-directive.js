@@ -138,11 +138,12 @@ angular.module('otDirectives')
                             row.push(msg);
 
                             // 6: odds ratio (gwas / phewas)
-                            row.push(
-                                (item.unique_association_fields.odd_ratio || item.unique_association_fields.odds_ratio || otDictionary.NA)
-                                + '<br />'
-                                + '(' + (item.unique_association_fields.confidence_interval || otDictionary.NA) + ')'
-                            );
+                            var odds = item.unique_association_fields.odd_ratio || item.unique_association_fields.odds_ratio || ''; // otDictionary.NA;
+                            if ((item.unique_association_fields.odd_ratio || item.unique_association_fields.odds_ratio) && item.unique_association_fields.confidence_interval) {
+                                odds += '<br />';
+                                odds += '(' + item.unique_association_fields.confidence_interval + ')';
+                            }
+                            row.push(odds);
 
                             // 7: publications
                             var refs = [];
