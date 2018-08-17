@@ -7,7 +7,7 @@
             All species are shown by default, but you can prune it to a subset of species by unticking the species accordingly.
             Check <a target="_blank" href="https://www.ensembl.org/info/genome/compara/homology_method.html">Protein trees</a> and <a target="_blank" href="https://plants.ensembl.org/info/genome/compara/homology_method.html">orthologies</a> for further details. </p>
         <p ng-if=notFound==1>No gene tree has been found for {{target.symbol}}.</p>
-
+        <p>Source: <a href="https://www.ensembl.org/" target="_blank">Ensembl</a></p>
         <ot-png filename="{{target.approved_symbol}}-geneTree.png" track="geneTree"></ot-png>
         <div id="gene-tree"></div>
     </uib-tab>
@@ -18,6 +18,7 @@
         </div>
 
         <div ng-show="!showSpinner" class="table-panel" style="margin-top:20px;">
+            <p>Source: <a href="https://www.ensembl.org/" target="_blank">Ensembl</a></p>
             <table class='table ot-evidence-table' id="gene-homologues-table">
                 <thead>
                     <tr>
