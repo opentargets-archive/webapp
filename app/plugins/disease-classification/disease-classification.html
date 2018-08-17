@@ -1,10 +1,12 @@
 <uib-tabset>
     <uib-tab heading="Graph">
         <p class="ot-section-intro">Graph showing the diseases related with {{disease.label}}. Click on any disease to get more information about it and its associated targets</p>
+        <p>Source: <a href="https://docs.targetvalidation.org/faq/describing-diseases" target="_blank">Open Targets</a></p>
         <ot-png filename="{{disease.title}}-graph.png" track="diseaseClassification"></ot-png>
         <div id="ot-efo-graph"></div>
     </uib-tab>
     <uib-tab heading="Text">
+        <p><br />Source: <a href="https://docs.targetvalidation.org/faq/describing-diseases" target="_blank">Open Targets</a></p>
         <h4>Paths</h4>
         <ul ng-repeat="path in disease.paths">
             <b>Path {{$index+1}}</b>
