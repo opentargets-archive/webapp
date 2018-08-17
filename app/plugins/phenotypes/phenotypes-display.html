@@ -1,4 +1,9 @@
 <div>
+    <p>Source: 
+        <a href="https://docs.targetvalidation.org/getting-started/getting-started/disease-profile" target="_blank">EFO</a>,
+        <a href="https://www.orpha.net" target="_blank">Orphanet</a>
+    </p>
+
     <div ng-show="uniquePhenotypes.length==0">No phenotypes available</div>
     <ul>
         <li ng-repeat="phenotype in uniquePhenotypes">{{phenotype | otUpperCaseFirst}}</li>
