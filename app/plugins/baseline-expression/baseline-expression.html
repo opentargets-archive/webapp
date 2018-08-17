@@ -11,18 +11,22 @@
         </p>
         <div class="row">
           <div class="col-sm-12">
-              <ot-tissue-expression target="target.id" filename="{{target.symbol}}"></ot-tissue-expression>
+                <ot-tissue-expression target="target.id" filename="{{target.symbol}}"></ot-tissue-expression>
           </div>
         </div>
     </uib-tab>
 
     <uib-tab heading="Expression Atlas">
+        <p>Source: <a href="https://docs.targetvalidation.org/data-sources/rna-expression#expression-atlas" target="_blank">Expression Atlas</a></p>
         <div id="gxaWidget"></div>
     </uib-tab>
 
     <uib-tab heading="GTEx variability">
-        <p class="ot-section-intro ng-binding">Baseline expression variation based on GTEx experiments. Further details can be found in the <a href="http://www.gtexportal.org/home/documentationPage">GTEx</a> project site</p>
+        <p class="ot-section-intro ng-binding">Baseline expression variation based on GTEx experiments. Further details can be found in the <a href="http://www.gtexportal.org/home/documentationPage">GTEx</a> project site.</p>
+        <p>Source: <a href="https://www.gtexportal.org/home/documentationPage" target="_blank">GTEx</a></p>
+        
         <ot-png filename="{{target.approved_symbol}}-gtex.png" track="gtex"></ot-png>
+        
         <div id="gtexWidget"></div>
     </uib-tab>
 </uib-tabset>
