@@ -58,6 +58,18 @@ angular.module('otServices')
             ENSG00000196632: {
                 id: 'ENSG00000196632',
                 symbol: 'WNK3'
+            },
+            ENSG00000104312: {
+                id: 'ENSG00000104312',
+                symbol: 'RIPK2'
+            },
+            ENSG00000101323: {
+                id: 'ENSG00000101323',
+                symbol: 'HAO1'
+            },
+            ENSG00000168143: {
+                id: 'ENSG00000168143',
+                symbol: 'FAM83B'
             }
         };
     }]);
