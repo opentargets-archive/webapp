@@ -55,27 +55,32 @@
                         <img src="imgs/graphics/beaker.png" style="width:46px;">
                     </div>
                     <div class="pull-right" style="width: 100%; padding-left:70px">
-                        <p>One or more chemical probes have been developed for this target.</p>
-                        <p>
-                            <span 
-                                ng-repeat="p in target.chemicalprobes" 
-                                class="btn btn-default btn-sm" 
-                                ng-model="probetrigger"
-                                uib-btn-checkbox
-                                btn-checkbox-true="true"
-                                btn-checkbox-false="false"
-                                popover-trigger="'none'"
-                                popover-is-open="probetrigger"
-                                popover-placement="'auto'"
-                                uib-popover-template="'src/pages/target-profile/probes-popover-tmpl.html'"
-                                style="margin:0 8px 8px 0"
-                                title="Click for details on {{p.chemicalprobe}}"
-                            >{{p.chemicalprobe}}</span>
-                        </p>
-                        <p class="small">Chemical probes information from <a href="https://www.thesgc.org/" target="_blank">Structural Genomics Consortium</a>,
-                            the <a href="http://www.chemicalprobes.org/" target="_blank">Chemical Probes Portal</a>,
-                            and <a href="http://www.sgc-ffm.uni-frankfurt.de/" target="_blank">Open Science Probes</a>.
-                        </p>
+                        <div ng-show="target.chemicalprobes.portalprobes">
+                            <p>One or more chemical probes have been developed for this target.</p>
+                            <p>
+                                <span 
+                                    ng-repeat="p in target.chemicalprobes.portalprobes" 
+                                    class="btn btn-default btn-sm" 
+                                    ng-model="probetrigger"
+                                    uib-btn-checkbox
+                                    btn-checkbox-true="true"
+                                    btn-checkbox-false="false"
+                                    popover-trigger="'none'"
+                                    popover-is-open="probetrigger"
+                                    popover-placement="'auto'"
+                                    uib-popover-template="'src/pages/target-profile/probes-popover-tmpl.html'"
+                                    style="margin:0 8px 8px 0"
+                                    title="Click for details on {{p.chemicalprobe}}"
+                                >{{p.chemicalprobe}}</span>
+                            </p>
+                            <p class="small">Chemical probes information from <a href="https://www.thesgc.org/" target="_blank">Structural Genomics Consortium</a>,
+                                the <a href="http://www.chemicalprobes.org/" target="_blank">Chemical Probes Portal</a>,
+                                and <a href="http://www.sgc-ffm.uni-frankfurt.de/" target="_blank">Open Science Probes</a>.
+                            </p>
+                        </div>
+                        <div ng-show="target.chemicalprobes.probeminer">
+                            <p>Potential chemical probes can be explored with <a ng-href="{{target.chemicalprobes.probeminer.link}}" target="_blank">Probe Miner</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
