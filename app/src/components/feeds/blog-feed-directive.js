@@ -30,7 +30,11 @@ angular.module('otDirectives')
                         scope.posts.forEach(function (i) {
                             i.pubDate = new Date(i.published_at);   // make published_at string into Date object for easier formating
                             i.desc = i.meta_description || i.html;  // authors don't always put a description, so let's use the full html as a backup plan
-                            i.link = href_url + i.slug;               // the url to the full post on the blog
+                            i.link = href_url                       // the url to the full post on the blog in format blog.url/yyyy/mm/dd/post-title
+                                + i.pubDate.getFullYear() + '/'
+                                + ('0' + (i.pubDate.getMonth() + 1)).substr(-2) + '/'
+                                + ('0' + i.pubDate.getDate()).substr(-2) + '/'
+                                + i.slug;
                         });
                     }, function errorCallback (response) {
                         // called asynchronously if an error occurs
