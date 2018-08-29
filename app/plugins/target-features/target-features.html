@@ -1,7 +1,14 @@
 
 <p class="ot-section-intro">General information about {{target.symbol}} protein from <a target="_blank" href="https://www.uniprot.org/uniprot/{{uniprot.id}}" class="ot-external-link">UniProt</a>.</p>
 <p>Source: <a href="https://www.uniprot.org/" target="_blank">UniProt</a></p>
+
 <uib-tabset>
+
+    <uib-tab heading="Graphical">
+        <div id="upfv"></div>
+        <p><a target=_blank href="http://www.uniprot.org/uniprot/{{uniprot.id}}#showFeaturesViewer">See this information in Uniprot</a></p>
+    </uib-tab>
+
     <uib-tab heading="Text">
         <div style="margin-top:20px;">
             <p>ID: <a target="_blank" href="http://www.uniprot.org/uniprot/{{uniprot.id}}">{{uniprot.id}}</a></p>
@@ -27,8 +34,5 @@
             </ul>
         </div>
     </uib-tab>
-    <uib-tab heading="Graphical">
-        <div id="upfv"></div>
-        <p><a target=_blank href="http://www.uniprot.org/uniprot/{{uniprot.id}}#showFeaturesViewer">See this information in Uniprot</a></p>
-    </uib-tab>
+    
 </uib-tabset>
