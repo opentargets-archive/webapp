@@ -3,7 +3,7 @@ angular.module('otControllers')
     /**
     * Controller to allow notifications to the user
     */
-    .controller('NotifyController', ['$scope', '$log', '$http', '$uibModal', '$cookies', '$interval', function ($scope, $log, $http, $uibModal, $cookies, $interval) {
+    .controller('NotifyController', ['$scope', '$log', '$http', '$uibModal', '$cookies', '$interval', 'otConfig', function ($scope, $log, $http, $uibModal, $cookies, $interval, otConfig) {
         'use strict';
         // Default behaviour on icon click
         $scope.notify = function () {};
@@ -15,8 +15,8 @@ angular.module('otControllers')
         };
 
         function polling () {
-            // $http.get("/notifications.json")
-            $http.get('https://opentargets.github.io/live-files/notifications.json')
+            // pull the latest notifications file: note the cache buster to ensure latest one is fetched
+            $http.get('https://opentargets.github.io/live-files/notifications.json?v=' + otConfig.version)
                 .then(function (partial) {
                     // We compare the expiry date with today
                     if (angular.isArray(partial.data)) { // There are notifications
