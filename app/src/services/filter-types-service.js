@@ -18,6 +18,7 @@ angular.module('otFacets')
             this.facetsGlobal = facetsGlobal;
         }
         BooleanFilter.prototype.toggle = function () {
+            console.log('1: toggle!');
             // update internal state
             this.setChecked(!this.checked);
             // send analytics
@@ -50,6 +51,7 @@ angular.module('otFacets')
             this.parents.push(parent);
         };
         NestedBooleanFilter.prototype.toggle = function () {
+            console.log('2: toggle!');
             // new state
             var newState = !(this.checked || this.allChildrenChecked());
             // update internal state
