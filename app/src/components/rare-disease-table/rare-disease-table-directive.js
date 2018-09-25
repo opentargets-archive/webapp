@@ -134,16 +134,20 @@ angular.module('otDirectives')
 
                             // evidence source
                             var sourceString = '';
+                            // Map source string to database name for a clean display in table filter
+                            // Object.keys(otConsts.datasources).forEach(function (i) {
+                            //     if (otConsts.datasources[i] && otConsts.datasources[i].id === db) {
+                            //         sourceString = otConsts.datasources[i].label;
+                            //     }
+                            // });
                             if (item.type === 'genetic_association' && checkPath(item, 'evidence.variant2disease')) {
-                                // console.log("1) ", item.evidence.variant2disease.urls[0].url);
-                                sourceString = item.evidence.variant2disease.urls[0].nice_name;
+                                sourceString = sourceString || item.evidence.variant2disease.urls[0].nice_name;
                                 var idString = '';
                                 if (db === otConsts.datasources.EVA.id) {
                                     idString = '<p class="text-lowlight"><small>(ID: ' + item.evidence.variant2disease.urls[0].url.split('/').pop() + ')</small></p>';
                                 }
                                 row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.variant2disease.urls[0].url + '\' target=_blank>' + sourceString + '</a>' + idString);
                             } else {
-                                // console.log('2) ', item.evidence.urls[0].url);
                                 // TODO: Genomics England URLs are wrong, so (hopefully temporarily) we need to hack them in the UI
                                 // TODO: We can't use otConsts.datasources.GENOMICS_ENGLAND here because the id in the data is wrongly assigned to 'Genomics England PanelApp'. This needs to be fixed at the data level
                                 if (db === otConsts.datasources.GENOMICS_ENGLAND.id) {
@@ -151,9 +155,10 @@ angular.module('otDirectives')
                                     // item.evidence.urls[0].url = 'https://panelapp.genomicsengland.co.uk/panels/'; // Direct to generic panels page as Genomics England urls don't work.
                                 }
                                 if (db === otConsts.datasources.GENE_2_PHENOTYPE.id) {
-                                    row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>Further details in Gene2Phenotype database</a>');
+                                    sourceString = sourceString || 'Further details in Gene2Phenotype database'; // item.evidence.urls[0].nice_name;
+                                    row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>' + sourceString + '</a>');
                                 } else {
-                                    sourceString = item.evidence.urls[0].nice_name;
+                                    sourceString = sourceString || item.evidence.urls[0].nice_name;
                                     row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=_blank>' + item.evidence.urls[0].nice_name + '</a>');
                                 }
                             }
