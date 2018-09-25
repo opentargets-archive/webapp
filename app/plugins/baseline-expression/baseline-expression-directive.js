@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otBaselineExpression', ['$timeout', '$http', 'otUtils', 'otConsts', '$filter', function ($timeout, $http, otUtils, otConsts, $filter) {
+    .directive('otBaselineExpression', ['$timeout', '$http', 'otUtils', '$filter', function ($timeout, $http, otUtils, $filter) {
         'use strict';
 
         return {
@@ -26,14 +26,16 @@ angular.module('otPlugins')
                     });
 
                     // GTEx
-                    var firstUrl = otConsts.PROXY + 'www.gtexportal.org/rest/v1/reference/geneId?geneId=' + target + '&v=clversion';
+                    // var firstUrl = otConsts.PROXY + 'www.gtexportal.org/rest/v1/reference/geneId?geneId=' + target + '&v=clversion';
+                    var firstUrl = 'https://www.gtexportal.org/rest/v1/reference/geneId?geneId=' + target + '&v=clversion';
                     $http.get(firstUrl)
                         .then(function (resp) {
                             // Need to extract gencodeId (an Ensembl ID with GRCh37 version appended)
                             var gencodeId = resp.data.gene.filter(function (g) {
                                 return g.geneSymbol === target;
                             })[0].gencodeId;
-                            var secondUrl = otConsts.PROXY + 'www.gtexportal.org/rest/v1/expression/geneExpression?boxplotDetail=full&gencodeId=' + gencodeId;
+                            // var secondUrl = otConsts.PROXY + 'www.gtexportal.org/rest/v1/expression/geneExpression?boxplotDetail=full&gencodeId=' + gencodeId;
+                            var secondUrl = 'https://www.gtexportal.org/rest/v1/expression/geneExpression?boxplotDetail=full&gencodeId=' + gencodeId;
                             return $http.get(secondUrl);
                         })
                         .then(function (resp) {
