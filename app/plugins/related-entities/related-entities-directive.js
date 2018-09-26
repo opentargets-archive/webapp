@@ -174,6 +174,7 @@ function createVis(container, data, scope) {
     // initial bubbles in the center and not shown
     // hover tooltip on track bars
     var sharedHoverTooltip;
+
     function showSharedHoverTooltip(data) {
         var obj = {};
         obj.header = data.object;
@@ -1061,9 +1062,9 @@ function createVis(container, data, scope) {
         .attr('r', 0)
         .style('opacity', '0')
         // .on('mouseover', showSharedHoverTooltip)
-        .on('mouseover', function () {
-            console.log('4: showSharedHoverTooltip ' + showSharedHoverTooltip);
-            showSharedHoverTooltip();
+        .on('mouseover', function (d) {
+            console.log('4: showSharedHoverTooltip ');
+            showSharedHoverTooltip.call(this, d);
         })
         .on('mouseout', function () {
             console.log('4b: sharedHoverTooltip.close');
