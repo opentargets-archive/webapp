@@ -481,11 +481,13 @@ function createVis(container, data, scope) {
                                 .style('fill', 'none')
                                 .style('pointer-events', 'all')
                                 .on('mouseover', function () {
+                                    console.log('0: [barchart] showSubjEvidenceTooltip');
                                     showSubjEvidenceTooltip.call(this);
                                     d3.select(this)
                                         .style('fill', '#fff6ff');
                                 })
                                 .on('mouseout', function () {
+                                    console.log('0b: [barchart] subjEvidenceTooltip.close');
                                     subjEvidenceTooltip.close();
                                     d3.select(this)
                                         .style('fill', 'none');
@@ -506,11 +508,13 @@ function createVis(container, data, scope) {
                                 .style('fill', 'none')
                                 .style('pointer-events', 'all')
                                 .on('mouseover', function () {
+                                    console.log('1: [barchart] showSubjEvidenceTooltip');
                                     showObjEvidenceTooltip.call(this);
                                     d3.select(this)
                                         .style('fill', '#fff6ff');
                                 })
                                 .on('mouseout', function () {
+                                    console.log('1b: [barchart] subjEvidenceTooltip.close');
                                     objEvidenceTooltip.close();
                                     d3.select(this)
                                         .style('fill', 'none');
@@ -886,11 +890,11 @@ function createVis(container, data, scope) {
             .attr('class', 'relatedSubjectNode')
             // .on('mouseover', showSubjLabelTooltip)
             .on('mouseover', function () {
-                console.log('1: showSubjLabelTooltip')
+                console.log('2: showSubjLabelTooltip')
             })
             .on('mouseout', function () {
                 // subjLabelTooltip.close();
-                console.log('1b: subjLabelTooltip.close');
+                console.log('2b: subjLabelTooltip.close');
             });
         var subjCircleNode = subjectNode
             .append('circle')
@@ -935,11 +939,11 @@ function createVis(container, data, scope) {
             .attr('class', 'relatedBubble')
             // .on('mouseover', showObjLabelTooltip)
             .on('mouseover', function () {
-                console.log('2: showObjLabelTooltip');
+                console.log('3: showObjLabelTooltip');
             })
             .on('mouseout', function () {
                 // objLabelTooltip.close();
-                console.log('2b: objLabelTooltip.close');
+                console.log('3b: objLabelTooltip.close');
             });
         var objCircleNode = objectNode
             .append('circle')
@@ -1056,9 +1060,13 @@ function createVis(container, data, scope) {
         .attr('cy', (width / 2))
         .attr('r', 0)
         .style('opacity', '0')
-        .on('mouseover', showSharedHoverTooltip)
+        // .on('mouseover', showSharedHoverTooltip)
+        .on('mouseover', function () {
+            console.log('4: showSharedHoverTooltip');
+        })
         .on('mouseout', function () {
-            sharedHoverTooltip.close();
+            console.log('4b: sharedHoverTooltip.close');
+            // sharedHoverTooltip.close();
         })
         .on('click', function (d) {
             sharedHoverTooltip.close();
