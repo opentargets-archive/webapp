@@ -884,9 +884,13 @@ function createVis(container, data, scope) {
             .append('g')
             // .attr('class', 'relatedBubble');
             .attr('class', 'relatedSubjectNode')
-            .on('mouseover', showSubjLabelTooltip)
+            // .on('mouseover', showSubjLabelTooltip)
+            .on('mouseover', function () {
+                console.log('1: showSubjLabelTooltip')
+            })
             .on('mouseout', function () {
-                subjLabelTooltip.close();
+                // subjLabelTooltip.close();
+                console.log('1b: subjLabelTooltip.close');
             });
         var subjCircleNode = subjectNode
             .append('circle')
@@ -929,9 +933,13 @@ function createVis(container, data, scope) {
         var objectNode = d3.select(topLevelElement)
             .append('g')
             .attr('class', 'relatedBubble')
-            .on('mouseover', showObjLabelTooltip)
+            // .on('mouseover', showObjLabelTooltip)
+            .on('mouseover', function () {
+                console.log('2: showObjLabelTooltip');
+            })
             .on('mouseout', function () {
-                objLabelTooltip.close();
+                // objLabelTooltip.close();
+                console.log('2b: objLabelTooltip.close');
             });
         var objCircleNode = objectNode
             .append('circle')
