@@ -1062,11 +1062,12 @@ function createVis(container, data, scope) {
         .style('opacity', '0')
         // .on('mouseover', showSharedHoverTooltip)
         .on('mouseover', function () {
-            console.log('4: showSharedHoverTooltip');
+            console.log('4: showSharedHoverTooltip ' + showSharedHoverTooltip);
+            showSharedHoverTooltip();
         })
         .on('mouseout', function () {
             console.log('4b: sharedHoverTooltip.close');
-            // sharedHoverTooltip.close();
+            sharedHoverTooltip.close();
         })
         .on('click', function (d) {
             sharedHoverTooltip.close();
