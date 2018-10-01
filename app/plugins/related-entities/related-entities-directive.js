@@ -176,6 +176,10 @@ function createVis(container, data, scope) {
     var sharedHoverTooltip;
 
     function showSharedHoverTooltip(data) {
+        console.log('showSharedHoverTooltip:');
+        console.log(data);
+        console.log('---');
+
         var obj = {};
         obj.header = data.object;
 
