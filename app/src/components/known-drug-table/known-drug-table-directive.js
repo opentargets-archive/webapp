@@ -159,7 +159,7 @@ angular.module('otDirectives')
                                 row.push(item.evidence.drug2clinic.max_phase_for_disease.label);
 
                                 // 4: phase numeric (hidden)
-                                row.push(item.drug.max_phase_for_all_diseases.numeric_index);
+                                row.push(item.evidence.drug2clinic.max_phase_for_disease.numeric_index);
 
                                 // 5: status
                                 var sts = otDictionary.NA;
