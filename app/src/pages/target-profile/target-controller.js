@@ -23,11 +23,7 @@ angular.module('otControllers')
                     $scope.sections[i].defaultVisibility = true;
                     $scope.sections[i].currentVisibility = true;
 
-                    // OPTION 1: works a treat, but adds a #[id] to the URL... and that doesn't look right
-                    // $location.hash($scope.sections[i].name);
-                    
-                    // OPTION 2: wrapping the call in a timeout allows for accordion elements to have rendered
-                    // $anchorScroll($scope.sections[i].name);
+                    // wrapping the call in a timeout allows for accordion elements to have rendered; as opposed to $anchorScroll($scope.sections[i].name);
                     $timeout(function () {
                         $anchorScroll($scope.sections[i].config.id);
                     }, 0);
