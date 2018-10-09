@@ -15,10 +15,8 @@ angular.module('otControllers')
         var render = function (new_state) {
             var view = new_state.view || {};
             var sec = view.sec;
-            console.log('$ render ', sec);
             if (sec && sec[0]) {
                 var i = $scope.sections.findIndex(function (s) {
-                    console.log(s.heading+' : '+s.config.id);
                     return s.config.id === sec[0];
                 });
                 if (i >= 0) {
