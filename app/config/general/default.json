@@ -158,7 +158,10 @@
             "name": "drugs",
             "element": "ot-drugs-display",
             "heading": "Drugs",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "known_drug"
+            }
         },
 
         {
@@ -173,14 +176,20 @@
                     "loader": "css"
                 }
             },
-            "track": true
+            "track": true,
+            "config": {
+                "id": "protein_information"
+            }
         },
 
         {
             "name": "pathways",
             "element": "ot-target-pathways",
             "heading": "Pathways",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "affected_pathway"
+            }
         },
 
 
@@ -188,14 +197,20 @@
             "name": "relatedTargets",
             "element": "ot-related-targets",
             "heading": "Similar targets (based on diseases in common)",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "related_targets"
+            }
         },
 
         {
             "name": "genomeBrowser",
             "element": "ot-genome-browser",
             "heading": "Variants, isoforms and genomic context",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "genome_browser"
+            }
         },
 
         {
@@ -210,7 +225,10 @@
                     "loader": "css"
                 }
             },
-            "track": true
+            "track": true,
+            "config": {
+                "id": "protein_interactions"
+            }
         },
 
         {
@@ -232,14 +250,20 @@
                     "deps": ["https://www.ebi.ac.uk/gxa/resources/js/lib/fetch-polyfill.min.js", "https://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"]
                 }
             },
-            "track": true
+            "track": true,
+            "config": {
+                "id": "expression"
+            }
         },
 
         {
             "name" : "mousePhenotypes",
             "element": "ot-mouse-phenotypes",
             "heading": "Mouse phenotypes",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "mouse_phenotypes"
+            }
         },
 
 
@@ -252,39 +276,57 @@
                     "format": "global"
                 }
             },
-            "track": true
+            "track": true,
+            "config": {
+                "id": "protein_structure"
+            }
         },
 
         {
             "name": "geneOntology",
             "element": "ot-gene-ontology",
             "heading": "Gene Ontology",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "gene_ontology"
+            }
         },
 
         {
             "name": "geneTree",
             "element": "ot-gene-tree",
             "heading": "Gene tree",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "gene_tree"
+            }
         },
         {
             "name": "bibliographyChips",
             "element": "ot-bibliography-target-chips",
             "heading": "Bibliography",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "bibliography"
+            }
         },
         {
             "name": "cancerHallmark",
             "element": "ot-cancer-hallmark",
             "heading": "Cancer hallmarks",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "hallmarks"
+            }
         },
         {
              "name": "biomarkers",
              "element": "ot-biomarkers",
              "heading": "Cancer biomarkers",
-             "track": true
+             "track": true,
+             "config": {
+                 "id": "biomarkers"
+             }
          }
     ],
 
