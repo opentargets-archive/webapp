@@ -123,33 +123,48 @@
             "name": "relatedDisases",
             "element": "ot-related-diseases",
             "heading": "Similar diseases (based on targets in common)",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "related_diseases"
+            }
         },
 
         {
             "name": "phenotypes",
             "element": "ot-phenotypes-display",
             "heading": "Phenotypes",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "phenotypes"
+            }
         },
         {
             "name": "drugs",
             "element": "ot-drugs-display",
             "heading": "Drugs",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "known_drug"
+            }
         },
         {
             "name": "bibliographyChips",
             "element": "ot-bibliography-target-chips",
             "heading": "Bibliography",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "bibliography"
+            }
         },
         {
             "name": "classification",
             "element": "ot-disease-classification",
             "heading": "Classification",
             "visible": "true",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "classification"
+            }
         }
     ],
 
