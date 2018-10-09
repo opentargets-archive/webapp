@@ -5,12 +5,37 @@ angular.module('otControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-    .controller('TargetController', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', 'otTeps', 'otDictionary', function ($scope, $location, otApi, otUtils, otConfig, otTeps, otDictionary) {
+    .controller('TargetController', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', 'otTeps', 'otDictionary', 'otLocationState', '$anchorScroll', '$timeout', function ($scope, $location, otApi, otUtils, otConfig, otTeps, otDictionary, otLocationState, $anchorScroll, $timeout) {
         'use strict';
 
         otUtils.clearErrors();
 
         $scope.targetId = $location.url().split('/')[2];
+
+        var render = function (new_state) {
+            var view = new_state.view || {};
+            var sec = view.sec;
+            console.log('$ render ', sec);
+            if (sec && sec[0]) {
+                var i = $scope.sections.findIndex(function (s) {
+                    console.log(s.heading+' : '+s.config.id);
+                    return s.config.id === sec[0];
+                });
+                if (i >= 0) {
+                    $scope.sections[i].defaultVisibility = true;
+                    $scope.sections[i].currentVisibility = true;
+
+                    // OPTION 1: works a treat, but adds a #[id] to the URL... and that doesn't look right
+                    // $location.hash($scope.sections[i].name);
+                    
+                    // OPTION 2: wrapping the call in a timeout allows for accordion elements to have rendered
+                    // $anchorScroll($scope.sections[i].name);
+                    $timeout(function () {
+                        $anchorScroll($scope.sections[i].config.id);
+                    }, 0);
+                }
+            }
+        };
 
         otApi.getTarget({
             method: 'GET',
@@ -89,6 +114,7 @@ angular.module('otControllers')
                         $scope.sections[t].defaultVisibility = $scope.sections[t].visible || false;
                         $scope.sections[t].currentVisibility = $scope.sections[t].visible || false;
                     }
+                    render(otLocationState.getState(), otLocationState.getOldState());
                 }
             );
     }]);
