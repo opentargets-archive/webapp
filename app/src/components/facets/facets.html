@@ -1,18 +1,16 @@
-<h4>Show</h4>
-<!-- <div ng-repeat="bob in facets.slice(0,1)"> -->
-<div ng-repeat="bob in facets | limitTo:1">
-        <!-- limitTo:2 -->
-    <ot-facet-loader plugin="{{bob.options.element}}" facet="bob"></ot-facet-loader>
-    <!-- <datatype1-facet facet="bob"></datatype1-facet> -->
+<!-- Facets with the customView option are displayed as stand-alone, i.e. not in an accordion -->
+<div ng-repeat="facet in facets track by facet.options.element">
+    <div ng-if="facet.options.customView">
+        <h4>{{facet.options.heading | otClearUnderscores | otUpperCaseFirst}}</h4>
+        <ot-facet-loader plugin="{{facet.options.element}}" facet="facet"></ot-facet-loader>
+    </div>
 </div>
-<!-- <div ng-init="bob = facets.slice(0,1)" ng-repeat="f in bob">
-    <ot-facet-loader plugin="{{facets[0].options.element}}" facet="facets[0]"></ot-facet-loader>
-</div> -->
 
+<!-- Facets are normally displayed in an accordion -->
 <h4>Filter by</h4>
 <div class="ot-facets" ng-show="true">
     <uib-accordion close-others=false>
-        <div uib-accordion-group ng-init="status = {isOpen: facet.options.open}" is-open="status.isOpen" ng-repeat="facet in facets.slice(1) track by facet.options.element" class="panel-default">
+        <div uib-accordion-group ng-init="status = {isOpen: facet.options.open}" is-open="status.isOpen" ng-repeat="facet in facets track by facet.options.element" class="panel-default" ng-if="!facet.options.customView">
             
             <!-- facet heading -->
             <uib-accordion-heading class="ot-facets-headers">

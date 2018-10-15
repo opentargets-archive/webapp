@@ -12,7 +12,7 @@ angular.module('otServices')
                 for (var i in otConfig.facets) {
                     var facet = otConfig.facets[i];
                     var parser = _.camelCase(facet.options.element) + 'Parser';
-                    facetParsers[facet.key] = $injector.get(_.camelCase(parser));
+                    facetParsers[facet.key] = facetParsers[facet.key] || $injector.get(_.camelCase(parser));
                 }
 
                 // construct object of global methods (like update)
@@ -33,7 +33,6 @@ angular.module('otServices')
             var setPageFacetNamesFromConfig = function (facetConfig) {
                 // note this is a modified version of "pageFacetsStack"" that
                 // does "reset" first as well, since the two are always consecutive
-
                 // set and remove the nesting
                 pageFacetNames = facetConfig.map(function (obj) {
                     return obj.type;
@@ -102,6 +101,7 @@ angular.module('otServices')
                 updatePageFacetsFromApiData: updatePageFacetsFromApiData,
                 getPageFacets: getPageFacets,
                 update: update,
-                stateId: stateId
+                stateId: stateId,
+                pageFacets: pageFacets
             };
         }]);

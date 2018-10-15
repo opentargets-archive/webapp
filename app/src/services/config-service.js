@@ -3,7 +3,7 @@
 angular.module('otServices')
 
 
-    /** º
+    /**
      * The Config service.
      * This stores global config variables for the font end
      */

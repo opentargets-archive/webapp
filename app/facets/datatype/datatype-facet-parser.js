@@ -12,6 +12,7 @@ angular.module('otFacets')
              * @param {object} data - The API data
              */
             var constructFilters = function (data, datatypeFilters, datasourceFilters) {
+
                 // iterate all the datatypes (regardless of whether in api response)
                 return otConsts.datatypesOrder.map(function (datatypeName) {
                     // datatypeKey;
@@ -31,7 +32,6 @@ angular.module('otFacets')
                         children: null,
                         facetName: facetName
                     }, facetsGlobal);
-
                     var children = null;
                     if (bucket && bucket.datasource) {
                         children = constructDatasourceFilters(dt.id, bucket.datasource, parent, datasourceFilters);
@@ -86,7 +86,7 @@ angular.module('otFacets')
              */
             var serialize = function (urlObj) {
                 // datatype
-                urlObj[facetName] = datatypeFilters.filter(function (filter) {
+                urlObj[facetName] = urlObj[facetName] || datatypeFilters.filter(function (filter) {
                     return filter.checked;
                 }).map(function (filter) {
                     return filter.key;

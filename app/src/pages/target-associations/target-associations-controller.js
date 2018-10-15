@@ -72,11 +72,11 @@ angular.module('otControllers')
          * Takes object from locationStateService, initialize the page/component state and fire a query which then updates the screen
          */
         var render = function (new_state, old_state) {
-        // here we want to update facets, tabs, etc:
-        // 1. first we check if the state of a particular element has changed;
-        // 2. if it hasn't changed, and it's undefined (new=undefined, old=undefined),
-        // then it's a page load with no state specified, so we update that element anyway with default values
-        // facets changed?
+            // here we want to update facets, tabs, etc:
+            // 1. first we check if the state of a particular element has changed;
+            // 2. if it hasn't changed, and it's undefined (new=undefined, old=undefined),
+            // then it's a page load with no state specified, so we update that element anyway with default values
+            // facets changed?
             if (! _.isEqual(new_state[facetsId], old_state[facetsId]) || !new_state[facetsId]) {
                 getFacets(new_state[facetsId]);
             }
@@ -94,8 +94,8 @@ angular.module('otControllers')
 
 
         /*
-     * Get facets data as well general page info data (e.g. count, labels etc)
-     */
+         * Get facets data as well general page info data (e.g. count, labels etc)
+         */
         function getFacets (filters) {
         // Set the filters
             $scope.filters = filters;
