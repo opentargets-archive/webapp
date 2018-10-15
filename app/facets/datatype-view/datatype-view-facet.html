@@ -1,0 +1,11 @@
+<div>
+    <button ng-repeat="filter in facet.filters"
+        type="button" 
+        class="btn btn-xs"
+        ng-click="filter.toggle()"
+        ng-disabled="!filter.enabled"
+        ng-class=" filter.checked ? 'btn-primary' : 'btn-default'"
+        style="margin-right: 3px; margin-bottom:3px">
+        {{ filter.label | otUpperCaseFirst | otClearUnderscores }}
+    </button>
+</div>
