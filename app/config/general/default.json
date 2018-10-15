@@ -358,12 +358,13 @@
 
 
     "facets" : {
-        "datatype1" : {
+        "datatypeView" : {
             "key": "datatype",
             "options" : {
-                "element": "datatype1-facet",
-                "heading" : "Data type 1",
-                "open" : true
+                "element": "datatype-view-facet",
+                "heading" : "Show",
+                "open" : true,
+                "customView": true
             }
         },
 
@@ -372,7 +373,7 @@
             "options" : {
                 "element": "datatype-facet",
                 "heading" : "Data type",
-                "open" : false
+                "open" : true
             }
         },
 
@@ -445,10 +446,6 @@
         "facets" : [
 
             {
-                "type":"datatype1"
-            },
-            
-            {
                 "type":"datatype"
             },
 
@@ -460,9 +457,31 @@
                 "type":"targetClass"
             },
 
-            // {
-            //     "type":"rnaExpression"
-            // },
+                // {
+                //     "type":"rnaExpression"
+                // },
+
+            {
+                "type":"rnaSpecificity"
+            }
+        ]
+    },
+
+    "diseasePrioritizationFacets" : {
+        "count" : "unique_target_count",
+        "facets" : [
+
+            {
+                "type":"datatypeView"
+            },
+
+            {
+                "type":"pathway"
+            },
+
+            {
+                "type":"targetClass"
+            },
 
             {
                 "type":"rnaSpecificity"
