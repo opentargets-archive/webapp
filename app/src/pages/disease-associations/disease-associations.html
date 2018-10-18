@@ -50,19 +50,18 @@
                     <!-- Tab panes -->
                     <div class="tab-content">
                         
-                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='table'}">
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='table'}" ng-show="view.t[0]=='table'">
                             <ot-disease-associations disease="search.query" targets="targets"
                                 filename="search.filename"
                                 filters="filters" state-id="dat">
                             </ot-disease-associations>
                         </div>
 
-                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='priority'}">
-                            <h4>New priority view</h4>
-                            <ot-disease-associations disease="search.query" targets="targets"
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='priority'}" ng-show="view.t[0]=='priority'">
+                            <ot-disease-prioritisation disease="search.query" targets="targets"
                                 filename="search.filename"
                                 filters="filters" state-id="dat">
-                            </ot-disease-associations>
+                            </ot-disease-prioritisation>
                         </div>
 
                     </div>
