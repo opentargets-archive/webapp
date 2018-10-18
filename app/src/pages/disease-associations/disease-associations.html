@@ -44,7 +44,7 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs">
                         <li role="presentation" ng-class="(view.t[0]=='table') ? 'active' : ''"><a href="#" ng-click='setActiveTab("table")'>Associations view</a></li>
-                        <li role="presentation" ng-class="(view.t[0]=='priority') ? 'active' : ''" ><a href="#" ng-click='setActiveTab("priority")'>Prioritisation view</a></li>
+                        <li ng-if="otConfig.diseaseAssociations.showPrioritisationView" role="presentation" ng-class="(view.t[0]=='priority') ? 'active' : ''" ><a href="#" ng-click='setActiveTab("priority")'>Prioritisation view</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -57,7 +57,7 @@
                             </ot-disease-associations>
                         </div>
 
-                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='priority'}" ng-show="view.t[0]=='priority'">
+                        <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='priority'}" ng-show="view.t[0]=='priority'" ng-if="otConfig.diseaseAssociations.showPrioritisationView">
                             <ot-disease-prioritisation disease="search.query" targets="targets"
                                 filename="search.filename"
                                 filters="filters" state-id="dat">

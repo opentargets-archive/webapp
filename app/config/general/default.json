@@ -118,6 +118,10 @@
         }
     ],
 
+    "diseaseAssociations": {
+        "showPrioritisationView": true  // mostly for partners who don't want this view yet
+    },
+
     "diseaseSections": [
         {
             "name": "relatedDisases",
