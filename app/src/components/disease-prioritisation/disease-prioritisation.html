@@ -1,0 +1,21 @@
+<div>
+  <!-- <ot-matrix-table class="associations-table"></ot-matrix-table> -->
+  <table class="table matrix-table">
+    <thead>
+      <tr class="cols-overview">
+        <th rowspan="1" colspan="1" ></th>
+        <th rowspan="1" colspan="8" class="evidence" >Target to disease association evidence</th>
+        <th rowspan="1" colspan="2" class="key-attributes">Key target attributes</th>
+      </tr>
+      <tr>
+        <th ng-repeat="c in cols">
+            <div><span title='{{c.title}}'>{{c.title}}</span></div>
+        </th>
+      </tr>
+
+    </thead>
+  </table>
+  <ot-matrix-legend colors="legendData"></ot-matrix-legend>
+  <ot-matrix-legend legend-text="legendText" colors="colors" layout="h"></ot-matrix-legend>
+</div>
+
