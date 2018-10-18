@@ -184,7 +184,7 @@
         }
 
         thead {
-            > tr {
+            > tr:last-child {
                 margin-bottom: 10px ;
 
                 > th {
@@ -203,57 +203,13 @@
 
                     /* Fix for the new DataTables styling */
                     &:after {
-                        //right: 25px;
                         right: 50%;
                         margin-right: -4px;
                     }
-
-                    &:first-child:after {
-                        right: 16%; //25px ;
-                    }
-
-                    &:last-child:after {
-                        left: 16%; //25px;
-                        margin-left: -4px;
-                    }
-
+                    
                     &:hover {
                         background-color: rgba(210,210,210,0.2);    /* values to match F4F4F4 */
                     }
-
-                    &:first-child {
-                        padding-right: 5px;
-                        background-position: right 5px bottom 5px ;
-                        width: auto;
-
-                        > div {
-                            // width:0;
-                            // float: right;
-                            // margin-right: 24px;
-                            > span {
-                                margin-left: 86%;
-                            }
-                        }
-                    }
-
-                    &:last-child {
-                        padding-left: 5px;
-                        background-position: left 5px bottom 5px ;
-                        width: auto;
-
-                        > div {
-                            // width:0;
-                            // float: left;
-                            // margin-left: 24px;
-                            > span {
-                                margin-left: 14%;
-                            }
-                        }
-                    }
-
-                    // &:nth-child(2){
-                    //     width: 9%;
-                    // }
 
                     > div {
                         height: 1px;
@@ -293,6 +249,78 @@
                     height: 16px;
                 }
 
+                a {
+                    color: inherit;
+                }
+
+            }
+
+            &:hover{
+                text-decoration:none;
+            }
+
+            > tr:hover {
+                background-color: #F6F6F6;
+            }
+
+
+        }
+
+        .heatmap-cell-val {
+            display: none;
+        }
+
+        
+    }
+
+    table.matrix-table.associations-table {
+        thead {
+            > tr > th {
+                &:nth-child(2){
+                    width: 9%;
+                }
+            }
+
+            > tr:last-child {
+                > th {
+                    &:first-child:after {
+                        right: 16%;
+                    }
+
+                    &:last-child:after {
+                        left: 16%;
+                        margin-left: -4px;
+                    }
+
+                    &:first-child {
+                        padding-right: 5px;
+                        background-position: right 5px bottom 5px ;
+                        width: auto;
+
+                        > div {
+                            > span {
+                                margin-left: 86%;
+                            }
+                        }
+                    }
+
+                    &:last-child {
+                        padding-left: 5px;
+                        background-position: left 5px bottom 5px ;
+                        width: auto;
+
+                        > div {
+                            > span {
+                                margin-left: 14%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        tbody {
+            > tr > td {
                 &:first-child {
                     border: none;
                     text-align: right;
@@ -315,46 +343,14 @@
                         display: inline;
                     }
                 }
-
-                a {
-                    color: inherit;
-                }
-
-                // &:nth-child(2){
-                //     padding: 0 1.4%;
-                // }
-            }
-
-            &:hover{
-                text-decoration:none;
-            }
-
-            > tr:hover {
-                background-color: #F6F6F6;
-            }
-
-
-        }
-
-        .heatmap-cell-val {
-            display: none;
-        }
-
-        &.associations-table {
-            tbody {
-                > tr > td:nth-child(2){
+                
+                &:nth-child(2){
                     padding: 0 1.4%;
                 }
             }
-
-            thead {
-                > tr > th:nth-child(2){
-                    width: 9%;
-                }
-            }
         }
+        
     }
-
 
 
     .matrix-table span.no-data, .matrix-legend span.no-data{
@@ -373,7 +369,6 @@
         background: #EEE;
         color: #EEE;
     }
-
 
 
     .matrix-legend, .matrix-legend-info{
@@ -427,12 +422,94 @@
         padding-right:5px;
     }
 
+
+
     ot-target-associations-tree .legendBox {
         border: none ;
     }
 
 
+    /*
+     * Prioritisation view
+     */
 
+    ot-disease-prioritisation table.matrix-table {
+        // table alignment
+        width: 80%;
+        margin: auto;
+
+        thead {
+            > tr {
+                > th{
+                    border-bottom: none !important;
+                }
+            }
+
+            // the row with the rotated labels
+            > tr:last-child {
+                > th {
+                    width: initial;
+                }
+            }
+
+            tr.cols-overview{
+                color:#FFF;
+               
+                th{
+                    border-right: 2px solid #FFF;
+                    font-weight: 500;
+
+                    &.evidence {
+                        background: #23569C;
+                    }
+                    &.key-attributes {
+                        background: purple;
+                    }
+                }
+            }
+        }
+
+        tbody {
+            .tractable {
+                background: purple;
+                span {
+                    display: none;
+                }
+            }
+
+            .prioritisation-datatype {
+                padding: 4px 8px;
+            }
+
+            > tr {
+                height: 20px;
+                
+
+                > td {
+                    height: inherit;
+                    vertical-align: middle;
+                    border: none;
+                    text-align: center;
+                    span, a {
+                        height: inherit;
+                        width: inherit;
+                    }
+                    > span {
+                        // the first span is the main container inside the cell,
+                        // used for padding (in place of borders as in regular matrix) etc
+                        width: 100%;
+                        height: 100%;
+                        padding: 1px;   // create the 'border' around cell
+
+                        .cell-background {
+                            width: inherit;
+                            height: inherit;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     /*
      * HPA heatmap
