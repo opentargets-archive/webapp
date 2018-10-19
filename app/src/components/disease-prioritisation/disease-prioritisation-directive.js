@@ -39,6 +39,7 @@ angular.module('otDirectives')
 
         var filters = {};
         var targets;
+        var noDataHtmlString = '<span class="no-data cell-background" title="No data"></span>';
 
         var colorScale = otUtils.colorScales.BLUE_0_1; // blue orig
         // var colorScale = d3.interpolateYlGnBu;
@@ -61,7 +62,7 @@ angular.module('otDirectives')
         var getColorStyleString = function (value, href) {
             var str = '';
             if (value < 0) {
-                str = '<span class=\'no-data cell-background\' title=\'No data\'></span>'; // quick hack: where there's no data, don't put anything so the sorting works better
+                str = noDataHtmlString; // quick hack: where there's no data, don't put anything so the sorting works better
             } else {
                 var col = colorScale(value);
                 var val = (value === 0) ? '0' : otUtils.floatPrettyPrint(value);
@@ -81,6 +82,7 @@ angular.module('otDirectives')
 
             return str;
         };
+
 
         /*
          * Columns definitions
@@ -135,29 +137,13 @@ angular.module('otDirectives')
                 name: '',
                 title: 'Antibody'
             }
-            // TODO: this is for later version / release
+            // TODO: this is for later version / release of tractability
             // {
             //     name: '',
             //     title: 'other target attributes'
             // }
         ];
 
-        var a = [];
-        for (var i = 0; i < cols.length; i++) {
-            var columnData = {
-                'title': '<div><span title=\'' + cols[i].title + '\'>' + cols[i].title + '</span></div>',
-                'name': cols[i].name
-            };
-            // if (i === 9) {
-            //     columnData = {
-            //         'title': '<div><span title=\'' + cols[i].title + '\'>' + cols[i].title + '</span></div>',
-            //         'name': cols[i].name,
-            //         'visible': false,
-            //         'className': 'never'
-            //     };
-            // }
-            a.push(columnData);
-        }
 
         var getHiddenDatatypesCols = function () {
             var hc = [];
@@ -188,20 +174,7 @@ angular.module('otDirectives')
                         action: download
                     }
                 ],
-                // 'columns': a,
                 'columnDefs': [
-                    // {
-                    //     'targets': [9],
-                    //     'className': 'never'
-                    // },
-                    // {
-                    //     'targets': 9,
-                    //     'visible': false
-                    // },
-                    // {
-                    //     'targets': [10],
-                    //     'orderable': false
-                    // },
                     {'orderSequence': ['desc', 'asc'], 'targets': [1, 2, 3, 4, 5, 6, 7, 8]},
                     {'orderSequence': ['asc', 'desc'], 'targets': [0]},
                     {
@@ -210,12 +183,8 @@ angular.module('otDirectives')
                     },
                     {
                         'targets': [2, 3, 4, 5, 6, 7, 8],
-                        'width': '3%'
+                        'width': '7%'   // TODO: this doesn't seem to work when multi-row thead used
                     }
-                    // {
-                    //     'targets': [0, 1, 9, 10, 11],
-                    //     'width': '10%'
-                    // }
                 ],
                 'processing': false,
                 'serverSide': true,
@@ -349,12 +318,17 @@ angular.module('otDirectives')
 
             for (var i = 0; i < data.length; i++) {
                 var row = [];
+
+                // Overview:
+
+                // Target
                 var geneDiseaseLoc = '/evidence/' + data[i].target.id + '/' + data[i].disease.id;
                 row.push('<a href=\'' + geneDiseaseLoc + '\' title=\'' + data[i].target.gene_info.symbol + '\'>' + data[i].target.gene_info.symbol + '</a>');
-                // Ensembl ID
-                // row.push(data[i].target.id);
+
                 // The association score
                 row.push(getColorStyleString(data[i].association_score.overall, geneDiseaseLoc));
+
+                // Datatypes:
 
                 // Genetic association
                 row.push('<span class="prioritisation-datatype">' + getColorStyleString(getScore(i, otConsts.datatypes.GENETIC_ASSOCIATION.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.GENETIC_ASSOCIATION.id) + '</span>');
@@ -371,19 +345,29 @@ angular.module('otDirectives')
                 // Animal model
                 row.push('<span class="prioritisation-datatype">' + getColorStyleString(getScore(i, otConsts.datatypes.ANIMAL_MODEL.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.ANIMAL_MODEL.id) + '</span>');
 
-                // 9: Total score
-                // row.push(data[i].association_score.datatypes.genetic_association +
-                // data[i].association_score.datatypes.somatic_mutation +
-                // data[i].association_score.datatypes.known_drug +
-                // data[i].association_score.datatypes.rna_expression +
-                // data[i].association_score.datatypes.affected_pathway +
-                // data[i].association_score.datatypes.animal_model);
+                // Tractability stuff
 
-                // Push gene name again instead
-                row.push('<span><span class="cell-background tractable"><span class="heatmap-cell-val">1</span></span></span>');
-                row.push('<span><span class=\'no-data cell-background\' title=\'No data\'></span></span>');
-                // TODO: put this back when we have other target attributes data
-                // row.push('<span class=\'no-data\' title=\'No data\'></span>');
+                // Small molecules
+                var sm = '<span>' + noDataHtmlString + '</span>';
+                // if (data[i].target.tractability.smallmolecule.buckets.length > 0) {
+                // TODO: REMOVE BELOW WHEN WE HAVE DATA... THIS STATEMENT IS JUST FOR TESTING
+                if (Math.random() > 0.7) {
+                    sm = '<span><span class="cell-background tractable"><span class="heatmap-cell-val">1</span></span></span>';
+                }
+                row.push(sm);
+
+                // Antibody
+                var ab = '<span>' + noDataHtmlString + '</span>';
+                // if (data[i].target.tractability.antibody.buckets.length > 0) {
+                // TODO: REMOVE BELOW WHEN WE HAVE DATA... THIS STATEMENT IS JUST FOR TESTING
+                if (Math.random() > 0.7) {
+                    ab = '<span><span class="cell-background tractable"><span class="heatmap-cell-val">1</span></span></span>';
+                }
+                row.push(ab);
+
+                // Other target attributes
+                // TODO: put this back when we have data
+                // row.push('<span>' + noDataHtmlString + '</span>');
 
                 newData[i] = row;
             }
@@ -407,7 +391,7 @@ angular.module('otDirectives')
             link: function (scope, elem) {
                 // table itself
                 // var table = elem.children().eq(0).children().eq(0)[0];
-                var table = elem[0].getElementsByTagName('table')
+                var table = elem[0].getElementsByTagName('table');
                 var dtable;
 
                 // legend stuff
@@ -520,11 +504,8 @@ angular.module('otDirectives')
                                 return getNextIndex(nextIndex)
                                     .then(function (nextNext) {
                                         if (nextNext) {
-                                            // console.log('calling next page with pagination index...');
-                                            // console.log(nextNext);
                                             callNext(nextNext);
                                         } else {
-                                            // console.log('no more pages, downloading...');
                                             var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
                                             saveAs(b, scope.filename + '.csv');
                                         }
@@ -538,8 +519,6 @@ angular.module('otDirectives')
 
                 // TODO: check this
                 // Do we want the directive to listen for changes in the URL?
-                // Probably so, but not with this implementation of DataTables...
-                // So for now we leave it OUT
                 // scope.$on(otLocationState.STATECHANGED, function (evt, new_state, old_state) {
                 //     render( new_state, old_state ); // if there are no facets, no worries, the API service will handle undefined
                 // });
