@@ -73,10 +73,6 @@ angular.module('otDirectives')
                 }
             }
 
-            // if (href && (value >= 0)) {
-            //     str = '<a href=' + href + '>' + str + '</a>';
-            // }
-
             // wrap in container span
             str = '<span>' + str + '</span>';
 
@@ -200,19 +196,6 @@ angular.module('otDirectives')
                     }
                     // Order options
                     // mappings:
-                    // 0 => gene name alphabetically -- not supported in the api
-
-                    // 1 => overall
-                    // 2 => genetic_association
-                    // 3 => somatic_mutation
-                    // 4 => known_drug
-                    // 5 => affected_pathway
-                    // 6 => rna_expression
-                    // 7 => text_mining
-                    // 8 => animal_model
-
-                    // 9 => overall -- hidden column
-                    // 10 => gene description -- not supported in the api
                     var mappings = {
                         0: 'target.gene_info.symbol',
                         1: 'association_score.overall',
@@ -223,7 +206,6 @@ angular.module('otDirectives')
                         6: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION.id,
                         7: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE.id,
                         8: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL.id
-                        // 9: 'association_score.overall'
                     };
                     var order = [];
                     for (var i = 0; i < data.order.length; i++) {
@@ -330,20 +312,13 @@ angular.module('otDirectives')
 
                 // Datatypes:
 
-                // Genetic association
-                row.push('<span class="prioritisation-datatype">' + getColorStyleString(getScore(i, otConsts.datatypes.GENETIC_ASSOCIATION.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.GENETIC_ASSOCIATION.id) + '</span>');
-                // Somatic mutation
-                row.push('<span class="prioritisation-datatype">' + getColorStyleString(getScore(i, otConsts.datatypes.SOMATIC_MUTATION.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.SOMATIC_MUTATION.id) + '</span>');
-                // Known drug
-                row.push('<span class="prioritisation-datatype">' + getColorStyleString(getScore(i, otConsts.datatypes.KNOWN_DRUG.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.KNOWN_DRUG.id) + '</span>');
-                // Affected pathway
-                row.push('<span class="prioritisation-datatype">' + getColorStyleString(getScore(i, otConsts.datatypes.AFFECTED_PATHWAY.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.AFFECTED_PATHWAY.id) + '</span>');
-                // Expression atlas
-                row.push('<span class="prioritisation-datatype">' + getColorStyleString(getScore(i, otConsts.datatypes.RNA_EXPRESSION.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.RNA_EXPRESSION.id) + '</span>');
-                // Literature
-                row.push('<span class="prioritisation-datatype">' + getColorStyleString(getScore(i, otConsts.datatypes.LITERATURE.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.LITERATURE.id) + '</span>');
-                // Animal model
-                row.push('<span class="prioritisation-datatype">' + getColorStyleString(getScore(i, otConsts.datatypes.ANIMAL_MODEL.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.ANIMAL_MODEL.id) + '</span>');
+                for (var j = 2; j <= 8; j++) {
+                    row.push(
+                        '<span class="prioritisation-datatype">'
+                        + getColorStyleString(getScore(i, cols[j].name), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + cols[j].name)
+                        + '</span>'
+                    );
+                }
 
                 // Tractability stuff
 
