@@ -166,6 +166,13 @@
         },
 
         {
+            "name": "targetTractability",
+            "element": "ot-target-tractability",
+            "heading": "Target Tractability",
+            "track": true
+        },
+
+        {
             "name": "uniprot",
             "element": "ot-target-features",
             "heading": "Protein Information",
