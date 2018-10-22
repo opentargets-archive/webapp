@@ -475,7 +475,7 @@
 
         tbody {
             .tractable {
-                background: purple;
+                background: #A52085;
                 span {
                     display: none;
                 }
@@ -515,6 +515,32 @@
         }
     }
 
+    /*
+     * Tractability (profile pages)
+     */
+
+    table.tractability-table {
+        table-layout: fixed;
+        tbody{
+            td {
+                border-right: 1px solid #DDD;
+
+                &:last-child {
+                    border-right: none;
+                }
+
+                &.is-tractable {
+                    background: #A52085;
+                    color: white;
+                }
+            }
+        }
+    }
+
+    
+
+        
+    
     /*
      * HPA heatmap
      */

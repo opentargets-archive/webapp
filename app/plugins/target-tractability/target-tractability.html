@@ -1,18 +1,47 @@
 
-<p class="ot-section-intro">Lorem ipsum dolor sitamet...</p>
+<p class="ot-section-intro">
+    Summary of tractability information for {{target.approved_symbol}} for small molecule and antibody modalities.
+</p>
 
-<p>Some more lorem ipsum here probably</p>
+<p>
+    Source: <a href="https://docs.targetvalidation.org/data-sources/data-sources" target="_blank">Open Targets</a>
+</p>
+
 
 <h4>Small molecule</h4>
-<table>
+<table class="table ot-evidence-table tractability-table">
     <thead>
-
+        <tr>
+            <th colspan="3" style="width:15%">Clinical precedence</th>
+            <th colspan="2" style="width:24%">Discovery precedence</th>
+            <th colspan="3">Predicted tractable</th>
+            <th style="width:8%">Unknown</th>
+        </tr>
     </thead>
     <tbody>
-        
+        <tr>
+            <td ng-repeat="cols in columns.smallmolecule" ng-class="target.tractability.smallmolecule.buckets.indexOf($index)>=0 ? 'is-tractable' : 'text-disabled'">{{cols}}</td>
+        </tr>
     </tbody>
 </table>
 
+
+
 <h4>Antibody</h4>
-<table></table>
+<table class="table ot-evidence-table tractability-table">
+    <thead>
+        <tr>
+            <th colspan="3" style="width:15%">Clinical precedence</th>
+            <th colspan="2" style="width:24%">Predicted tractable - high confidence</th>
+            <th colspan="4">Predicted tractable - medium to low confidence</th>
+            <th style="width:8%">Unknown</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td ng-repeat="cols in columns.antibody" ng-class="target.tractability.antibody.buckets.indexOf($index)>=0 ? 'is-tractable' : 'text-disabled'">{{cols}}</td>
+        </tr>
+    </tbody>
+</table>
+
 
