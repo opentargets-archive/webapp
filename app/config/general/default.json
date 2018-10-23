@@ -40,7 +40,7 @@
             "menu": [
                 {
                     "label" : "API documentation",
-                    "href" : "http://api.opentargets.io/v3/platform/docs"
+                    "href" : "https://api.opentargets.io/v3/platform/docs/swagger-ui"
                 },
                 {
                     "label" : "Python client",
