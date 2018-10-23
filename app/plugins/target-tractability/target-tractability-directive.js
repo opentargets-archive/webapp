@@ -39,31 +39,6 @@ angular.module('otPlugins')
                         'Remaining genome'
                     ]
                 };
-
-                // TODO: remove, this is for temporary development only
-                scope.target.tractability = {
-                    'smallmolecule': {
-                        'top_category': 'Unknown',
-                        'small_molecule_genome_member': null,
-                        'buckets': [0, 3, 7],
-                        'high_quality_compounds': 0,
-                        'ensemble': -1,
-                        'categories': {
-                            'clinical_precedence': 0,
-                            'predicted_tractable': 0,
-                            'discovery_precedence': 0
-                        }
-                    },
-                    'antibody': {
-                        'top_category': 'Predicted Tractable - Medium to low confidence',
-                        'buckets': [2, 3, 7],
-                        'categories': {
-                            'predicted_tractable_med_low_confidence': 0.25,
-                            'clinical_precedence': 0,
-                            'predicted_tractable_high_confidence': 0
-                        }
-                    }
-                };
             }
         };
     }]);
