@@ -5,13 +5,32 @@ angular.module('otControllers')
      * Controller for the disease page
      * It loads general information about a given disease
      */
-    .controller('DiseaseController', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', function ($scope, $location, otApi, otUtils, otConfig) {
+    .controller('DiseaseController', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', 'otLocationState', '$anchorScroll', '$timeout', function ($scope, $location, otApi, otUtils, otConfig, otLocationState, $anchorScroll, $timeout) {
         'use strict';
 
         otUtils.clearErrors();
 
         var efo_code = $location.url().split('/')[2];
         $scope.diseaseId = efo_code;
+
+        var render = function (new_state) {
+            var view = new_state.view || {};
+            var sec = view.sec;
+            if (sec && sec[0]) {
+                var i = $scope.sections.findIndex(function (s) {
+                    return s.config.id === sec[0];
+                });
+                if (i >= 0) {
+                    $scope.sections[i].defaultVisibility = true;
+                    $scope.sections[i].currentVisibility = true;
+
+                    // wrapping the call in a timeout allows for accordion elements to have rendered; as opposed to $anchorScroll($scope.sections[i].name);
+                    $timeout(function () {
+                        $anchorScroll($scope.sections[i].config.id);
+                    }, 0);
+                }
+            }
+        };
 
         otApi.getDisease({
             method: 'GET',
@@ -60,7 +79,9 @@ angular.module('otControllers')
                     $scope.sections = otConfig.diseaseSections;
                     for (var t = 0; t < $scope.sections.length; t++) {
                         $scope.sections[t].defaultVisibility = $scope.sections[t].visible;
+                        $scope.sections[t].currentVisibility = $scope.sections[t].visible;
                     }
+                    render(otLocationState.getState(), otLocationState.getOldState());
                 }
             });
 

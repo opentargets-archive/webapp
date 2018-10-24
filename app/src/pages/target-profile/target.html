@@ -87,10 +87,10 @@
         </div>
 
         <div class="row" style="padding-bottom:20px; margin-bottom:20px">
-            <div class="col-sm-12">
+            <div class="col-sm-12" id="plugins">
                 <!-- accordion: plugins sections -->
                 <uib-accordion close-others="false">
-                    <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default">
+                    <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default" id="{{section.config.id}}">
                         <uib-accordion-heading>
                             <div style="position:relative" ng-show="section.new">
                                 <div class="ot-section-new"><span>New</span></div>

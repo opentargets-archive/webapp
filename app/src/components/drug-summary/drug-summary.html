@@ -69,7 +69,7 @@
 
     <div class="section">
         <h3 class="summary-section-header">Adverse events</h3>
-        <p class=ot-section-intro>The top 20 adverse effects for this drug are shown. An adverse event can be an undesirable experience associated with the use of the drug, including serious drug side effects, product use errors, product quality problems, and therapeutic failures. The source of this data is <a target=_blank href="https://open.fda.gov/drug/event/">OpenFDA</a></p>
+        <p class=ot-section-intro>The top 20 adverse effects for this drug are shown. An adverse event can be an undesirable experience associated with the use of the drug, including serious drug side effects, product use errors, product quality problems, and therapeutic failures. The source of this data is <a target=_blank href="https://open.fda.gov/apis/drug/event/">OpenFDA</a>.</p>
 
         <ul>
             <li ng-repeat="effect in effects"><span ng-if="!effect.id">{{effect.term}}</span><span ng-if="effect.id"><a href="/disease/{{effect.id}}">{{effect.term}}</a></span> ({{effect.count}} reports)</li>
