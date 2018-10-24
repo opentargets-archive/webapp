@@ -399,7 +399,8 @@ angular.module('otDirectives')
                             facets: false,
                             format: 'csv',
                             size: size,
-                            fields: ['target.gene_info.symbol',
+                            fields: [
+                                'target.gene_info.symbol',
                                 'target.id',
                                 'association_score.overall',
                                 'association_score.datatypes.genetic_association',
@@ -408,9 +409,11 @@ angular.module('otDirectives')
                                 'association_score.datatypes.affected_pathway',
                                 'association_score.datatypes.rna_expression',
                                 'association_score.datatypes.literature',
-                                'association_score.datatypes.animal_model'
-                                // TODO:
-                                // add tractability info to be downloaded
+                                'association_score.datatypes.animal_model',
+                                // tractability info
+                                // TODO: this would ideally need some re-working to show 'yes' or 'true' instead of list of buckets
+                                'target.tractability.smallmolecule.buckets',
+                                'target.tractability.antibody.buckets'
                             ]
                             // from: from
                         };
