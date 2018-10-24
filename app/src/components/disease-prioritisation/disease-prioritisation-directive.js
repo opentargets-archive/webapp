@@ -124,7 +124,7 @@ angular.module('otDirectives')
                 title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.id.toUpperCase()]
             },
 
-            // tractability 10-11
+            // tractability 9-10
             {
                 name: '',
                 title: 'Small molecule'
@@ -157,9 +157,7 @@ angular.module('otDirectives')
         /*
          * Setup the table cols and return the DT object
          */
-        var setupTable = function (table, disease, target, filename, download, stt) {
-            // stt = stt || {};
-
+        var setupTable = function (table, disease, target, filename, download) {
             var t = $(table).DataTable({
                 'destroy': true,
                 'pagingType': 'simple',
@@ -180,6 +178,10 @@ angular.module('otDirectives')
                     {
                         'targets': [2, 3, 4, 5, 6, 7, 8],
                         'width': '7%'   // TODO: this doesn't seem to work when multi-row thead used
+                    },
+                    {
+                        'targets': [9, 10],
+                        'orderable': false
                     }
                 ],
                 'processing': false,
