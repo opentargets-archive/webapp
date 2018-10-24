@@ -36,7 +36,7 @@ angular.module('otDirectives')
         // 10 => antibody
         // 11 => other target attributes
 
-
+        var checkPath = otUtils.checkPath;
         var filters = {};
         var targets;
         var noDataHtmlString = '<span class="no-data cell-background" title="No data"></span>';
@@ -324,18 +324,14 @@ angular.module('otDirectives')
 
                 // Small molecules
                 var sm = '<span>' + noDataHtmlString + '</span>';
-                // if (data[i].target.tractability.smallmolecule.buckets.length > 0) {
-                // TODO: REMOVE BELOW WHEN WE HAVE DATA... THIS STATEMENT IS JUST FOR TESTING
-                if (Math.random() > 0.7) {
+                if (checkPath(data[i], 'target.tractability.smallmolecule.buckets') && data[i].target.tractability.smallmolecule.buckets.length > 0) {
                     sm = '<span><span class="cell-background tractable"><span class="heatmap-cell-val">1</span></span></span>';
                 }
                 row.push(sm);
 
                 // Antibody
                 var ab = '<span>' + noDataHtmlString + '</span>';
-                // if (data[i].target.tractability.antibody.buckets.length > 0) {
-                // TODO: REMOVE BELOW WHEN WE HAVE DATA... THIS STATEMENT IS JUST FOR TESTING
-                if (Math.random() > 0.7) {
+                if (checkPath(data[i], 'target.tractability.antibody.buckets') && data[i].target.tractability.antibody.buckets.length > 0) {
                     ab = '<span><span class="cell-background tractable"><span class="heatmap-cell-val">1</span></span></span>';
                 }
                 row.push(ab);
