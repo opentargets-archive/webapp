@@ -59,7 +59,7 @@ angular.module('otDirectives')
          * Generates and returns the string representation of the span element
          * with color information for each cell
          */
-        var getColorStyleString = function (value, href) {
+        var getColorStyleString = function (value, href, outerclass) {
             var str = '';
             if (value < 0) {
                 str = noDataHtmlString; // quick hack: where there's no data, don't put anything so the sorting works better
@@ -74,7 +74,11 @@ angular.module('otDirectives')
             }
 
             // wrap in container span
-            str = '<span>' + str + '</span>';
+            var spantag = '<span>';
+            if (outerclass) {
+                spantag = '<span class="' + outerclass + '">';
+            }
+            str = spantag + str + '</span>';
 
             return str;
         };
@@ -318,9 +322,11 @@ angular.module('otDirectives')
 
                 for (var j = 2; j <= 8; j++) {
                     row.push(
-                        '<span class="prioritisation-datatype">'
-                        + getColorStyleString(getScore(i, cols[j].name), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + cols[j].name)
-                        + '</span>'
+                        getColorStyleString(
+                            getScore(i, cols[j].name),
+                            geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + cols[j].name,
+                            'prioritisation-datatype'
+                        )
                     );
                 }
 
@@ -365,7 +371,6 @@ angular.module('otDirectives')
 
             link: function (scope, elem) {
                 // table itself
-                // var table = elem.children().eq(0).children().eq(0)[0];
                 var table = elem[0].getElementsByTagName('table');
                 var dtable;
 
