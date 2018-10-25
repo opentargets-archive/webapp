@@ -187,7 +187,10 @@
             "name": "targetTractability",
             "element": "ot-target-tractability",
             "heading": "Target Tractability",
-            "track": true
+            "track": true,
+            "config": {
+                "id": "tractability"
+            }
         },
 
         {
