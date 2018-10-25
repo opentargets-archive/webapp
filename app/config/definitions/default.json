@@ -28,7 +28,7 @@
         "link": ""
     },
     "GENETIC.VARIANT": {
-        "description": "Variant: Predicted consequence of variants (germline or somatic) on genes associated with diseases",
+        "description": "Variant: The ID of the genetic variant, a locus where the nucleotide sequence differs between individuals",
         "link": "/variants"
     },
     "GENETIC.VARIANT-TYPE": {
