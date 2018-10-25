@@ -127,11 +127,11 @@ angular.module('otDirectives')
             // tractability 9-10
             {
                 name: '',
-                title: 'Small molecule'
+                title: 'Small molecule<br />tractability data'
             },
             {
                 name: '',
-                title: 'Antibody'
+                title: 'Antibody<br />tractability data'
             }
             // TODO: this is for later version / release of tractability
             // {

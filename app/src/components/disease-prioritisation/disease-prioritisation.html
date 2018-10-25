@@ -9,7 +9,7 @@
       </tr>
       <tr>
         <th ng-repeat="c in cols">
-            <div><span title='{{c.title}}' ng-class="c.name ? 'datatype-header' : 'bold'">{{c.title}}</span></div>
+            <div><span title='{{c.title}}' ng-class="c.name ? 'datatype-header' : 'bold'" ng-bind-html="c.title"></span></div>
         </th>
       </tr>
 
