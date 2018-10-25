@@ -56,8 +56,8 @@ angular.module('otDirectives')
         };
 
         /*
-     * Columns definitions
-     */
+        * Columns definitions
+        */
         var cols = [
         // empty col for the gene symbol
             {name: '', title: otDictionary.TARGET_SYMBOL},
@@ -117,8 +117,8 @@ angular.module('otDirectives')
 
 
         /*
-    Setup the table cols and return the DT object
-    */
+        Setup the table cols and return the DT object
+        */
         var setupTable = function (table, disease, target, filename, download, stt) {
             // stt = stt || {};
 
@@ -159,7 +159,9 @@ angular.module('otDirectives')
                         data.start = 0;
                         currLength = data.length;
                         indexes = [];
-                        t.page('first');
+                        if (t) {
+                            t.page('first');
+                        }
                     }
                     // Order options
                     // mappings:

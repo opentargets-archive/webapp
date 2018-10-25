@@ -194,7 +194,9 @@ angular.module('otDirectives')
                         data.start = 0;
                         currLength = data.length;
                         indexes = [];
-                        t.page('first');
+                        if (t) {
+                            t.page('first');
+                        }
                     }
                     // Order options
                     // mappings:
