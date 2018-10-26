@@ -34,7 +34,7 @@ angular.module('otPlugins')
                         'GO cell component - high confidence',
                         'UniProt location - low or unknown confidence',
                         'UniProt predicted signal peptide or transmembrane region',
-                        'GO cell component - medium confidenc',
+                        'GO cell component - medium confidence',
                         'Human Protein Atlas - high confidence',
                         'Remaining genome'
                     ]
