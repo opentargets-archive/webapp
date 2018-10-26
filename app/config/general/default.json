@@ -186,7 +186,7 @@
         {
             "name": "targetTractability",
             "element": "ot-target-tractability",
-            "heading": "Target Tractability",
+            "heading": "Target tractability",
             "track": true,
             "config": {
                 "id": "tractability"
@@ -196,7 +196,7 @@
         {
             "name": "uniprot",
             "element": "ot-target-features",
-            "heading": "Protein Information",
+            "heading": "Protein information",
             "dependencies": {
                 "https://ebi-uniprot.github.io/CDN/protvista/protvista.min.js": {
                     "format": "global"
@@ -299,7 +299,7 @@
         {
             "name": "proteinStructure",
             "element": "ot-pdb-target",
-            "heading": "Protein Structure",
+            "heading": "Protein structure",
             "dependencies": {
                 "vendor/bio-pv.min.js": {
                     "format": "global"
@@ -314,7 +314,7 @@
         {
             "name": "geneOntology",
             "element": "ot-gene-ontology",
-            "heading": "Gene Ontology",
+            "heading": "Gene ontology",
             "track": true,
             "config": {
                 "id": "gene_ontology"
