@@ -46,10 +46,11 @@ angular.module('otDirectives')
                         size: 1000,
                         datasource: otConfig.evidence_sources.pathway,
                         fields: [
-                            'target',
-                            'disease',
+                            'target.activity',
+                            'disease.efo_info',
                             'evidence',
-                            'access_level'
+                            'access_level',
+                            'sourceID'
                         ]
                     };
 
@@ -115,7 +116,13 @@ angular.module('otDirectives')
                             row.push(mut);
 
                             // evidence codes
-                            row.push('Curated in ' + item.evidence.provenance_type.database.id);
+                            var db = Object.keys(otConsts.datasources).find(function (i) {
+                                return otConsts.datasources[i].id === item.sourceID;
+                            });
+                            db = otConsts.datasources[db] || {};
+                            db = db.label || item.evidence.provenance_type.database.id;
+                            row.push('Curated in ' + db);
+                            // row.push('Curated in ' + item.evidence.provenance_type.database.id);
 
                             // publications
                             var refs = [];
