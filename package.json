@@ -68,7 +68,7 @@
     "cttv.spinner": "0.0.1",
     "cttv.targetAssociationsBubbles": "0.0.17",
     "cttv.targetAssociationsTree": "0.0.10",
-    "cttv.targetGeneTree": "0.0.14",
+    "cttv.targetGeneTree": "opentargets/targetGeneTree",
     "d3": "~3.5.8",
     "file-saver": "^1.3.3",
     "jquery": "^3.3.1",

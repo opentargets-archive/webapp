@@ -1905,11 +1905,12 @@ cttv.targetAssociationsTree@0.0.10:
     tnt.tree "^0.1.3"
     tnt.utils "0.1.1"
 
-cttv.targetGeneTree@0.0.14:
+cttv.targetGeneTree@opentargets/targetGeneTree:
   version "0.0.14"
-  resolved "https://registry.yarnpkg.com/cttv.targetGeneTree/-/cttv.targetGeneTree-0.0.14.tgz#ada628e2c8133a00492185ce87a75c683f4123b8"
+  resolved "https://codeload.github.com/opentargets/targetGeneTree/tar.gz/4b4dbb1a422018c13c09843f24c863b2db294c61"
   dependencies:
     cttv.speciesIcons "0.0.1"
+    cttv.spinner "0.0.1"
     rsvp "^3.0.18"
     tnt.ensembl "0.0.13"
     tnt.tooltip "0.2.0"
