@@ -238,4 +238,11 @@ angular.module('otControllers')
                 $window.scrollTo(0, sb.offset().top - p);
             }
         };
+
+        $scope.onInputFocus = function (b) {
+            // var input = $element.find('input').eq(0).parent().eq(0)[0];
+            // input.style.outline = 'red auto 5px';
+            // console.log(input);
+            $scope.showCustomFocus = b;
+        };
     }]);
