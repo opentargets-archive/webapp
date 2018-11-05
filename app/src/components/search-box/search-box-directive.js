@@ -2,36 +2,6 @@ angular.module('otDirectives')
     /**
      * The searchbox with search suggestions
      */
-    // .directive('otSearchBox', ['$timeout', function ($timeout) {
-    //     'use strict';
-
-    //     return {
-    //         restrict: 'AE',
-    //         scope: {
-    //             autofocus: '=?'
-    //         },
-    //         templateUrl: 'src/components/search-box/search-box.html',
-    //         link: function (scope, elem) {
-    //             scope.onInputFocus = function (b) {
-    //                 scope.showCustomFocus = b;
-    //             };
-
-    //             if (scope.autofocus) {
-    //                 var input = elem[0].getElementsByTagName('input')[0];
-    //                 if (input.offsetWidth || input.offsetHeight || input.getClientRects().length) {
-    //                     $timeout(
-    //                         function () {
-    //                             input.focus();
-    //                             scope.onInputFocus(true);
-    //                         },
-    //                         500
-    //                     );
-    //                 }
-    //             }
-    //         }
-    //     };
-    // }]);
-
     .directive('otSearchBox', ['$timeout', '$location', '$window', '$document', 'otApi', 'otConsts', '$q', 'otUtils', 'otLoadedLists', function ($timeout, $location, $window, $document, otApi, otConsts, $q, otUtils, otLoadedLists) {
         'use strict';
 
