@@ -11,7 +11,7 @@
                 <div class="intro-section-heading"><img src="imgs/logo/otp-logo-w-b.svg" class="intro-hero-logo" alt="Open Targets logo"/></div>
                 <h2 class="intro-hero-heading">Find&nbsp;new&nbsp;targets for&nbsp;drug&nbsp;discovery</h2>
 
-                <div ot-search-box id="searchbox-hp" class="intro-search-block"></div>
+                <ot-search-box autofocus='true' id="searchbox-hp" class="intro-search-block"></ot-search-box>
 
                 <p class="intro-search-examples">Try:
                     <a ng-repeat="t in introTryExamples.targets" ng-href="/target/{{otConfig.searchExamples.targets[t].id}}/associations">{{otConfig.searchExamples.targets[t].label}}</a>
