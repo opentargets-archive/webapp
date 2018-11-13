@@ -525,8 +525,19 @@
         }
     }
 
-    
+    .tractability-popover-content {
+        text-align: center;
 
+        .tractabiltiy-popover-section {
+            margin: 10px 0px;
+        }
+
+        .btn-tractability {
+            color: #FFF;
+            background: $purple;
+        }
+    }
+    
         
     
     /*
