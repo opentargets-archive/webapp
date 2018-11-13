@@ -149,16 +149,19 @@ angular.module('otDirectives')
             smallmolecule: [
                 {
                     label: 'Clinical precedence',
+                    labelHtml: '<tspan>Clinical</tspan><tspan dy="10" x=0>precedence</tspan>',  // multiline html label for the flower petals
                     buckets: [1, 2, 3]
                 },
 
                 {
                     label: 'Discovery precedence',
+                    labelHtml: '<tspan>Discovery</tspan><tspan dy="10" x=0>precedence</tspan>',
                     buckets: [4, 7]
                 },
 
                 {
                     label: 'Predicted tractable',
+                    labelHtml: '<tspan>Predicted</tspan><tspan dy="10" x=0>tractable</tspan>',
                     buckets: [5, 6, 8]
                 }
 
@@ -171,21 +174,25 @@ angular.module('otDirectives')
             antibody: [
                 {
                     label: 'Clinical precedence',
+                    labelHtml: '<tspan>Clinical</tspan><tspan dy="10" x=0>precedence</tspan>',
                     buckets: [1, 2, 3]
                 },
 
                 {
                     label: 'Predicted tractable high confidence',
+                    labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(high confidence)</tspan>',
                     buckets: [4, 5]
                 },
 
                 {
                     label: 'Predicted tractable - medium to low confidence',
+                    labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(mid-low confidence)</tspan>',
                     buckets: [6, 7, 8]
                 },
 
                 {
                     label: 'Predicted tractable - Human Protein Atlas',
+                    labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(Human Protein Atlas)</tspan>',
                     buckets: [9]
                 }
 
@@ -345,13 +352,20 @@ angular.module('otDirectives')
                 }
             }, filename);
 
-            // setup mouse over handlers to show the tractability popover
-            t.off('mouseover', tractabilityMouseHandler);   // remove any old handlers
+            // Setup mouseover handlers to show the tractability popover.
+            // With Datatables this is the recommended approach (instead of defining onclicks for each cell)
+            t.off('mouseover', tractabilityMouseHandler);   // remove any old handlers to avoid multiple firing of events
             t.on('mouseover', tractabilityMouseHandler);
 
             return t;
         };
 
+        // The tractability data popover is implemented using the regular Bootstrap popover component
+        // as this can be accessed via JQuery which works nicely inside the Datatable mouse handler
+
+        // Create and display the popover triggered by the table mouse handlers
+        // This is fired every time the mouse rolls over any table element
+        // so we need to check they're actually coming from a tractability cell
         function tractabilityMouseHandler (e) {
             var t = e.target;
 
@@ -370,10 +384,14 @@ angular.module('otDirectives')
                         return getTractabilityPopoverHtml(d);
                     }
                 });
-                $(t).popover('show');
+                $(t).popover('show'); // just show it as the table handles the mouseover
             }
         }
 
+
+        // Generate and return the HTML string to pass to the popover
+        // Since we can only pass string to it, we first create an element with the flower and other buttons
+        // and then generate an html string from it... which yes, it's kinda hacky
         function getTractabilityPopoverHtml (d) {
             var content = document.createElement('div');
             content.className = 'tractability-popover-content';
@@ -381,7 +399,7 @@ angular.module('otDirectives')
 
             var data = tractabilityCategories[d.mode].map(function (item) {
                 return {
-                    label: item.label,
+                    label: item.labelHtml,
                     value: Math.min(
                         item.buckets.filter(function (value) { return -1 !== d.buckets.indexOf(value.toString()); }).length,
                         1
@@ -393,9 +411,24 @@ angular.module('otDirectives')
             var flower = flowerView()
                 .values(data)
                 .color('#891c76')
-                .diagonal(200)
+                .diagonal(260)
                 .fontsize(10);
             flower(flowerContainer);
+
+            // NOTE:
+            // I think this deserves a prize for best webapp frontend hacks
+            // Hack the flower labels text to force it displaying on multiple lines:
+            // we have to get this from the DOM after the flower is created as otherwise the text doesn't render the html tags
+            var svgnodes = flowerContainer.firstChild.firstChild.childNodes;
+            for (var i = 0; i < svgnodes.length; i++) {
+                if (svgnodes[i].nodeName === 'text') {
+                    svgnodes[i].innerHTML = _.unescape(svgnodes[i].innerHTML);
+                    if (svgnodes[i].getAttribute('fill') === '#000') {
+                        svgnodes[i].setAttribute('fill', '#FFF');
+                    }
+                }
+            }
+
 
             content.innerHTML += '<div class="tractabiltiy-popover-section"><strong>Modality:</strong> ' + d.mode + '</div>';
             content.append(flowerContainer);
@@ -411,6 +444,7 @@ angular.module('otDirectives')
 
 
         function getTractabilityCellHtml (d, mode) {
+            // pass the popover parameters to the cell span as data-...
             return '<span>'
                 +   '<span class="cell-background tractable"'
                 +   ' data-mode="' + mode + '"'
@@ -468,8 +502,6 @@ angular.module('otDirectives')
                 var ab = '<span>' + noDataHtmlString + '</span>';
                 if (checkPath(data[i], 'target.tractability.antibody.buckets') && data[i].target.tractability.antibody.buckets.length > 0) {
                     ab = getTractabilityCellHtml(data[i], 'antibody');
-                    // ab = '<span uib-popover="Search for several targets" popover-animation="true" popover-class="batch-search-popover" popover-trigger="\'click\'" popover-placement="bottom-right" ><span class="cell-background tractable"><span class="heatmap-cell-val">1</span></span></span>';
-                    // <span uib-popover="Search for several targets" popover-animation="true" popover-class="batch-search-popover" popover-trigger="'mouseenter'" popover-placement="bottom-right" >
                 }
                 row.push(ab);
 
