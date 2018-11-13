@@ -145,6 +145,58 @@ angular.module('otDirectives')
         ];
 
 
+        var tractabilityCategories = {
+            smallmolecule: [
+                {
+                    label: 'Clinical precedence',
+                    buckets: [1, 2, 3]
+                },
+
+                {
+                    label: 'Discovery precedence',
+                    buckets: [4, 7]
+                },
+
+                {
+                    label: 'Predicted tractable',
+                    buckets: [5, 6, 8]
+                }
+
+                // ,{
+                //     label: 'Unknown',
+                //     buckets: [10]
+                // }
+            ],
+
+            antibody: [
+                {
+                    label: 'Clinical precedence',
+                    buckets: [1, 2, 3]
+                },
+
+                {
+                    label: 'Predicted tractable high confidence',
+                    buckets: [4, 5]
+                },
+
+                {
+                    label: 'Predicted tractable - medium to low confidence',
+                    buckets: [6, 7, 8]
+                },
+
+                {
+                    label: 'Predicted tractable - Human Protein Atlas',
+                    buckets: [9]
+                }
+
+                // ,{
+                //     label: 'Unknown',
+                //     buckets: [10]
+                // }
+            ]
+        };
+
+
         var getHiddenDatatypesCols = function () {
             var hc = [];
             if (filters.datatype) {
@@ -291,13 +343,86 @@ angular.module('otDirectives')
                     // "infoEmpty": "No records available",
                     // "infoFiltered": "(filtered from _MAX_ total records)"
                 }
-                // "aoColumns": [
-                //    { "asSorting": [ "desc", "asc" ] }, //first sort desc, then asc
-                // ]
             }, filename);
+
+            // setup mouse over handlers to show the tractability popover
+            t.off('mouseover', tractabilityMouseHandler);   // remove any old handlers
+            t.on('mouseover', tractabilityMouseHandler);
 
             return t;
         };
+
+        function tractabilityMouseHandler (e) {
+            var t = e.target;
+
+            // when rolling over a cell (either with or without data) first close any open popover
+            if (t.className && t.className.toString().indexOf('cell-background') >= 0) {
+                $('.tractable').popover('destroy');
+            }
+            if (t.className && t.className.toString().indexOf('tractable') >= 0) {
+                var d = t.dataset;
+                $(t).popover({
+                    html: true,
+                    title: d.target + ' tractability data',
+                    // trigger: 'click',
+                    placement: 'left',
+                    content: function () {
+                        return getTractabilityPopoverHtml(d);
+                    }
+                });
+                $(t).popover('show');
+            }
+        }
+
+        function getTractabilityPopoverHtml (d) {
+            var content = document.createElement('div');
+            content.className = 'tractability-popover-content';
+            var flowerContainer = document.createElement('div');
+
+            var data = tractabilityCategories[d.mode].map(function (item) {
+                return {
+                    label: item.label,
+                    value: Math.min(
+                        item.buckets.filter(function (value) { return -1 !== d.buckets.indexOf(value.toString()); }).length,
+                        1
+                    ),
+                    active: true
+                };
+            });
+
+            var flower = flowerView()
+                .values(data)
+                .color('#891c76')
+                .diagonal(200)
+                .fontsize(10);
+            flower(flowerContainer);
+
+            content.innerHTML += '<div class="tractabiltiy-popover-section"><strong>Modality:</strong> ' + d.mode + '</div>';
+            content.append(flowerContainer);
+            content.innerHTML += '<div style="text-align:center">'
+                                + '<div class="tractabiltiy-popover-section"><a href="/target/' + d.targetid + '?view=sec:tractability"><div class="btn btn-sm btn-tractability">View tractability data for ' + d.target + '</div></a></div>'
+                                + '<div class="tractabiltiy-popover-section"><a href="/evidence/' + d.targetid + '/' + d.diseaseid + '"><div class="btn btn-sm btn-primary">View evidence</div></a></div>'
+                                + '<div onclick="$(\'.tractable\').popover(\'destroy\')" class="tnt_tooltip_closer pointer"></div>'
+                                + '</div>';
+
+
+            return content.outerHTML;
+        }
+
+
+        function getTractabilityCellHtml (d, mode) {
+            return '<span>'
+                +   '<span class="cell-background tractable"'
+                +   ' data-mode="' + mode + '"'
+                +   ' data-target="' + d.target.gene_info.symbol + '"'
+                +   ' data-targetid="' + d.target.id + '"'
+                +   ' data-diseaseid="' + d.disease.id + '"'
+                +   ' data-buckets="' + d.target.tractability[mode].buckets + '">'
+                +     '<span class="heatmap-cell-val">1</span>'
+                +   '</span>'
+                + '</span>';
+        }
+
 
         function parseServerResponse (data) {
             var newData = new Array(data.length);
@@ -335,14 +460,16 @@ angular.module('otDirectives')
                 // Small molecules
                 var sm = '<span>' + noDataHtmlString + '</span>';
                 if (checkPath(data[i], 'target.tractability.smallmolecule.buckets') && data[i].target.tractability.smallmolecule.buckets.length > 0) {
-                    sm = '<span><span class="cell-background tractable"><span class="heatmap-cell-val">1</span></span></span>';
+                    sm = getTractabilityCellHtml(data[i], 'smallmolecule');
                 }
                 row.push(sm);
 
                 // Antibody
                 var ab = '<span>' + noDataHtmlString + '</span>';
                 if (checkPath(data[i], 'target.tractability.antibody.buckets') && data[i].target.tractability.antibody.buckets.length > 0) {
-                    ab = '<span><span class="cell-background tractable"><span class="heatmap-cell-val">1</span></span></span>';
+                    ab = getTractabilityCellHtml(data[i], 'antibody');
+                    // ab = '<span uib-popover="Search for several targets" popover-animation="true" popover-class="batch-search-popover" popover-trigger="\'click\'" popover-placement="bottom-right" ><span class="cell-background tractable"><span class="heatmap-cell-val">1</span></span></span>';
+                    // <span uib-popover="Search for several targets" popover-animation="true" popover-class="batch-search-popover" popover-trigger="'mouseenter'" popover-placement="bottom-right" >
                 }
                 row.push(ab);
 
@@ -499,36 +626,11 @@ angular.module('otDirectives')
                     callNext();
                 };
 
-
-                // TODO: check this
-                // Do we want the directive to listen for changes in the URL?
-                // scope.$on(otLocationState.STATECHANGED, function (evt, new_state, old_state) {
-                //     render( new_state, old_state ); // if there are no facets, no worries, the API service will handle undefined
-                // });
-
                 scope.$watchGroup(['filters', 'disease', 'targets'], function (attrs) {
                     filters = attrs[0] || [];
                     targets = attrs[2];
 
                     dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
-
-                    // listener for page changes
-                    dtable.on('page.dt', function () {
-                        // TODO: comment back in when (if) ready
-                        // state.p = +dtable.page.info().page;
-                        // update(scope.stateId, state);
-                    });
-
-                    // listener for order change
-                    dtable.on('order.dt', function () {
-                        // TODO: comment back in when (if) ready
-                        // var order = dtable.order();
-                        // if( !Array.isArray(order[0])){
-                        //     order = [order];
-                        // }
-                        // state.o = order[0];
-                        // update(scope.stateId, state);
-                    });
                 }); // end watchGroup
             } // end link
         }; // end return
