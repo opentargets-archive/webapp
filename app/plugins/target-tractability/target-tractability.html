@@ -20,7 +20,7 @@
         </thead>
         <tbody>
             <tr>
-                <td ng-repeat="cols in columns.smallmolecule" ng-class="target.tractability.smallmolecule.buckets.indexOf($index)>=0 ? 'is-tractable' : 'text-disabled'">{{cols}}</td>
+                <td ng-repeat="cols in columns.smallmolecule" ng-class="target.tractability.smallmolecule.buckets.indexOf(cols.bucket)>=0 ? 'is-tractable' : 'text-disabled'">{{cols.label}}</td>
             </tr>
         </tbody>
     </table>
@@ -43,7 +43,7 @@
         </thead>
         <tbody>
             <tr>
-                <td ng-repeat="cols in columns.antibody" ng-class="target.tractability.antibody.buckets.indexOf($index)>=0 ? 'is-tractable' : 'text-disabled'">{{cols}}</td>
+                <td ng-repeat="cols in columns.antibody" ng-class="target.tractability.antibody.buckets.indexOf(cols.bucket)>=0 ? 'is-tractable' : 'text-disabled'">{{cols.label}}</td>
             </tr>
         </tbody>
     </table>
