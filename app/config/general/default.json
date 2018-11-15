@@ -83,45 +83,44 @@
 
 
     "summaryTargetList": [
-        // {
-        //     "name": "diseases",
-        //     "element": "multiple-targets-associations-summary",
-        //     "heading": "Diseases associated"
-        // },
-        // {
-        //     "name": "pathways",
-        //     "element": "multiple-targets-pathways-summary",
-        //     "heading": "Pathways"
-        // },
-        // {
-        //     "name": "go",
-        //     "element": "multiple-targets-go-summary",
-        //     "heading": "Gene Ontology"
-        // },
+        {
+            "name": "diseases",
+            "element": "multiple-targets-associations-summary",
+            "heading": "Diseases associated"
+        },
+        {
+            "name": "pathways",
+            "element": "multiple-targets-pathways-summary",
+            "heading": "Pathways"
+        },
+        {
+            "name": "go",
+            "element": "multiple-targets-go-summary",
+            "heading": "Gene Ontology"
+        },
         {
             "name": "tractability",
             "element": "multiple-targets-tractability-summary",
             "heading": "Tractability information"
+        },
+        {
+            "name": "drugs",
+            "element": "multiple-targets-drugs-summary",
+            "heading": "Drugs"
+        },
+        {
+            "name": "interactions",
+            "element": "multiple-targets-interactions-summary",
+            "heading": "Interactions between targets",
+            "dependencies": {
+                "build/interactionsViewer.min.js": {
+                    "format": "global"
+                },
+                "build/interactionsViewer.css": {
+                    "loader": "css"
+                }
+            }
         }
-        // ,
-        // {
-        //     "name": "drugs",
-        //     "element": "multiple-targets-drugs-summary",
-        //     "heading": "Drugs"
-        // },
-        // {
-        //     "name": "interactions",
-        //     "element": "multiple-targets-interactions-summary",
-        //     "heading": "Interactions between targets",
-        //     "dependencies": {
-        //         "build/interactionsViewer.min.js": {
-        //             "format": "global"
-        //         },
-        //         "build/interactionsViewer.css": {
-        //             "loader": "css"
-        //         }
-        //     }
-        // }
     ],
 
     "diseaseAssociations": {
