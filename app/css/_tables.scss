@@ -433,7 +433,8 @@
      * Prioritisation view
      */
 
-    ot-disease-prioritisation table.matrix-table {
+    ot-disease-prioritisation table.matrix-table,
+    multiple-targets-tractability-summary table.matrix-table {
         // table alignment
         width: 80%;
         margin: auto;
