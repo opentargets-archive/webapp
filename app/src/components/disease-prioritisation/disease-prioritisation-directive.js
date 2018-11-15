@@ -187,14 +187,14 @@ angular.module('otDirectives')
                 {
                     label: 'Predicted tractable - medium to low confidence',
                     labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(mid-low confidence)</tspan>',
-                    buckets: [6, 7, 8]
-                },
-
-                {
-                    label: 'Predicted tractable - Human Protein Atlas',
-                    labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(Human Protein Atlas)</tspan>',
-                    buckets: [9]
+                    buckets: [6, 7, 8, 9]
                 }
+
+                // {
+                //     label: 'Predicted tractable - Human Protein Atlas',
+                //     labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(Human Protein Atlas)</tspan>',
+                //     buckets: [9]
+                // }
 
                 // ,{
                 //     label: 'Unknown',
