@@ -50,12 +50,12 @@ angular.module('otPlugins')
                         {
                             label: 'Druggable genome',
                             bucket: 8
-                        },
-                        // unknown
-                        {
-                            label: 'Remaining genome',
-                            bucket: 10
                         }
+                        // unknown
+                        // {
+                        //     label: 'Remaining genome',
+                        //     bucket: 10
+                        // }
                     ],
                     antibody: [
                         // clinical precedence
@@ -97,12 +97,12 @@ angular.module('otPlugins')
                         {
                             label: 'Human Protein Atlas - high confidence',
                             bucket: 9
-                        },
-                        // unknown
-                        {
-                            label: 'Remaining genome',
-                            bucket: 10
                         }
+                        // unknown
+                        // {
+                        //     label: 'Remaining genome',
+                        //     bucket: 10
+                        // }
                     ]
                 };
             }
