@@ -1,151 +1,117 @@
 angular.module('otDirectives')
 
-    .directive('multipleTargetsTractabilitySummary', ['otUtils', 'otConfig', '$timeout', function (otUtils, otConfig, $timeout) {
+    .directive('multipleTargetsTractabilitySummary', ['otUtils', '$timeout', function (otUtils, $timeout) {
         'use strict';
 
         var tractabilityCategories = {
             smallmolecule: [
                 {
                     label: 'Clinical precedence',
-                    labelHtml: '<tspan>Clinical</tspan><tspan dy="10" x=0>precedence</tspan>',  // multiline html label for the flower petals
+                    labelHtml: 'Clinical precedence',  // multiline html label for display
                     buckets: [1, 2, 3]
                 },
 
                 {
                     label: 'Discovery precedence',
-                    labelHtml: '<tspan>Discovery</tspan><tspan dy="10" x=0>precedence</tspan>',
+                    labelHtml: 'Discovery precedence',
                     buckets: [4, 7]
                 },
 
                 {
                     label: 'Predicted tractable',
-                    labelHtml: '<tspan>Predicted</tspan><tspan dy="10" x=0>tractable</tspan>',
+                    labelHtml: 'Predicted tractable',
                     buckets: [5, 6, 8]
                 }
 
-                , {
-                    label: 'Unknown',
-                    buckets: [10]
-                }
+                // , {
+                //     label: 'Unknown',
+                //     labelHtml: 'Unknown',
+                //     buckets: [10]
+                // }
             ],
 
             antibody: [
                 {
                     label: 'Clinical precedence',
-                    labelHtml: '<tspan>Clinical</tspan><tspan dy="10" x=0>precedence</tspan>',
+                    labelHtml: 'Clinical precedence',
                     buckets: [1, 2, 3]
                 },
 
                 {
                     label: 'Predicted tractable high confidence',
-                    labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(high confidence)</tspan>',
+                    labelHtml: 'Predicted tractable <br />high confidence',
                     buckets: [4, 5]
                 },
 
                 {
                     label: 'Predicted tractable - medium to low confidence',
-                    labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(mid-low confidence)</tspan>',
-                    buckets: [6, 7, 8]
-                },
+                    labelHtml: 'Predicted tractable <br />mid-low confidence',
+                    buckets: [6, 7, 8, 9]
+                }
 
                 // {
-                //     label: 'Predicted tractable - Human Protein Atlas',
-                //     labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(Human Protein Atlas)</tspan>',
-                //     buckets: [9]
+                //     label: 'Unknown',
+                //     labelHtml: 'Unknown',
+                //     buckets: [10]
                 // }
-
-                {
-                    label: 'Unknown',
-                    buckets: [10]
-                }
             ]
         };
 
 
-        function formatDataToArray (d) {
-            var data = [];
-            d.forEach(function (t) {
-                console.log('formatting ', t);
-                var row = [];
-                row.push('<a href="/target/' + t.id + '">' + t.symbol + '</a>');
-                tractabilityCategories.smallmolecule.forEach(function (sm) {
-                    // t.tractability.smallmolecule.buckets;
-                    var bob = Math.min(
-                        sm.buckets.filter(function (value) { return -1 !== t.tractability.smallmolecule.buckets.indexOf(value); }).length,
-                        1
-                    );
-                    row.push(bob);
-                });
-                tractabilityCategories.antibody.forEach(function (ab) {
-                    var bob = Math.min(
-                        ab.buckets.filter(function (value) { return -1 !== t.tractability.antibody.buckets.indexOf(value); }).length,
-                        1
-                    );
-                    row.push(bob);
-                });
+        /**
+         * Return the HTML string for a cell based on target ID (for the link) and value.
+         * @param {String} id gene ID (e.g. ensembl gene id)
+         * @param {*} val represents whethere there is data (>0) or not (0); it's the count of matching buckets
+         */
+        function getCellHtml (id, val) {
+            var html = '';
+            if (val > 0) {
+                html = '<span><a href="/target/' + id + '?view=sec:tractability"><span class="cell-background tractable"><span class="heatmap-cell-val">1</span></span></a></span>';
+            } else {
+                html = '<span><span class="no-data cell-background" title="No data"></span></span>';
+            }
+            return html;
+        }
 
-                data.push(row);
+
+        /**
+         * Format the tractability data for a given target/category against our category mapping
+         * @param {String} category either 'smallmolecule' or 'antibody'
+         * @param {Oject} target contains id, symbol and tractability data
+         */
+        function formatTractabilityDataToArray (category, target) {
+            return tractabilityCategories[category].map(function (cat) {
+                // check how many (if any) category buckets match this target buckets; that value is used to genereate the cell HTML
+                return getCellHtml(target.id, cat.buckets.filter(function (value) { return -1 !== target.tractability[category].buckets.indexOf(value); }).length);
             });
-            return data;
+        }
+
+
+        /**
+         * Format the data to an array for displaying in datatables
+         * @param {Array} d API response data (already filtered)
+         */
+        function formatDataToArray (d) {
+            return d.map(function (t) {
+                return ['<a href="/target/' + t.id + '">' + t.symbol + '</a>']
+                    .concat(formatTractabilityDataToArray('smallmolecule', t))
+                    .concat(formatTractabilityDataToArray('antibody', t));
+            });
         }
 
 
         /*
-         * Setup the table cols and return the DT object
+         * Setup the table cols and return the DataTable object
          */
         var setupTable = function (table, data, filename) {
-            // var t = $(table).DataTable({
-            //     'destroy': true,
-            //     'pagingType': 'simple',
-            //     'dom': '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>>rt<"clearfix" <"pull-left small" l><"pull-right small" p>>',
-            //     'buttons': [
-            //         {
-            //             text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .csv</span>',
-            //             action: download
-            //         }
-            //     ],
-            //     'columnDefs': [
-            //         {'orderSequence': ['desc', 'asc'], 'targets': [1, 2, 3, 4, 5, 6, 7, 8]},
-            //         {'orderSequence': ['asc', 'desc'], 'targets': [0]},
-            //         {
-            //             'targets': getHiddenDatatypesCols(),
-            //             'visible': false
-            //         },
-            //         {
-            //             'targets': [2, 3, 4, 5, 6, 7, 8],
-            //             'width': '7%'   // TODO: this doesn't seem to work when multi-row thead used
-            //         },
-            //         {
-            //             'targets': [9, 10],
-            //             'orderable': false
-            //         }
-            //     ],
-            //     'processing': false,
-            //     'serverSide': false,
-
-            //     // "order" : [[2, "desc"], [10, "desc"]],
-            //     'order': [1, 'desc'],   // stt.o || [2, "desc"],
-            //     'orderMulti': false,
-            //     'autoWidth': false,
-            //     'ordering': true,
-            //     'lengthMenu': [[10, 50, 200, 500], [10, 50, 200, 500]],
-            //     'pageLength': 50,
-            //     'language': {
-            //         'info': 'Showing _START_ to _END_ of _TOTAL_ targets'
-            //     }
-            // }, filename);
-
             var t = $(table).DataTable(otUtils.setTableToolsParams({
-                'data': formatDataToArray(data),
+                'data': data,
                 'ordering': true,
-                'order': [[0, 'asc']],
                 'autoWidth': false,
                 'paging': true,
                 'columnDefs': [
-                    {
-                        'targets': [0,1,2,3,4,5,6,7,8],
-                        'width': '10%'
-                    }
+                    {'orderSequence': ['desc', 'asc'], 'targets': '_all'},
+                    {'orderSequence': ['asc', 'desc'], 'targets': [0]}
                 ]
             }, filename));
             return t;
@@ -159,22 +125,19 @@ angular.module('otDirectives')
                 target: '='
             },
             link: function (scope, elem) {
-                otConfig;
-                // table itself
-                // var table = elem[0].getElementsByTagName('table');
-                // var dtable = setupTable(table, scope.target, scope.filename);
-
                 scope.cols = tractabilityCategories;
 
-                console.log(
-                    // scope.target.map(function(t){return {antibody:t.tractability.antibody.buckets, smallmolecule:t.tractability.smallmolecule.buckets}})
-                    // scope.target.map(function (t) { return t.tractability ;})
-                    scope.target
-                );
-
+                // process the tractability data:
+                // filter out targets with no tractability data (or 'unknown' / empty buckets)
+                // then map it to just gene info and tractability data
                 var tractabilitydata = scope.target
                     .filter(function (t) {
-                        return t.tractability;
+                        return t.tractability
+                                && (
+                                    (t.tractability.smallmolecule && t.tractability.smallmolecule.buckets && t.tractability.smallmolecule.buckets.length > 0)
+                                    ||
+                                    (t.tractability.antibody && t.tractability.antibody.buckets && t.tractability.antibody.buckets.length > 0)
+                                );
                     })
                     .map(function (t) {
                         return {
@@ -183,49 +146,13 @@ angular.module('otDirectives')
                             tractability: t.tractability
                         };
                     });
+
+                // setup with datatables
                 var table = elem[0].getElementsByTagName('table');
-                var dtable;
-                
-                $timeout(function(){
-                    dtable = setupTable(table, tractabilitydata, 'scopefilename');
+
+                $timeout(function () {
+                    setupTable(table, formatDataToArray(tractabilitydata), 'multiple-targets-tractability-summary');
                 }, 0);
-                
-
-                // dtable;
-
-                // approved_symbol: "FLT1"
-                // drugs: {chembl_drugs: Array(1)}
-                // ensembl_gene_id: "ENSG00000102755"
-                // reactome: (2) [{…}, {…}]
-                // tractability: {smallmolecule: {…}, antibody: {…}}
-                // uniprot_id: "P17948"
-
-
-                // scope.$watch('target', function () {
-                //     if (!scope.target) {
-                //         return;
-                //     }
-
-                //     $('#target-list-drugs').DataTable(otUtils.setTableToolsParams({
-                //         'data': formatDrugDataToArray(scope.drugs),
-                //         'ordering': true,
-                //         'order': [[3, 'desc']],
-                //         'autoWidth': false,
-                //         'paging': true,
-                //         'columnDefs': [
-                //             {
-                //                 'targets': [0, 4],
-                //                 'width': '20%'
-                //             },
-                //             {
-                //                 'targets': [1, 3],
-                //                 'width': '15%'
-                //             }
-                //         ]
-
-                //     }, scope.target.length + '-targets-drugs'));
-
-                // });
             }
         };
     }]);
