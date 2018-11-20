@@ -26,7 +26,10 @@
 # master.targetvalidation.org will always point to the APIHOST specified in context.branch-deploy.environment above
 # [context.branch_name.environment]
 #  APIHOST = "https://the-api-url-we-want.com"
-
+[context.prioritisation.environment]
+  headers = [
+    {for = "/build/config.json", values = {Access-Control-Allow-Origin= '*'}}
+  ]
 
 
 #To release:
