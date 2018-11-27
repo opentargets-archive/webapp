@@ -361,28 +361,6 @@ angular.module('otDirectives')
             // The problem with that is that when implemented, a onmouseout -> destroy means that user won't be able
             // to roll over the popover at all (and they need to click on links and buttons)
 
-
-            // More hacks.
-            // It seems that Bootstrap v3.3.7 introduced an error when calling 'destroy' on popover/tooltip
-            // so here we override the destroy function as detailed here https://github.com/twbs/bootstrap/issues/21830 
-            // This hack should proably live elsewhere in the app though.
-            jQuery.fn.popover.Constructor.prototype.destroy = function () {
-                var that = this;
-                clearTimeout(this.timeout);
-                this.hide(function () {
-                    if (that.$element === null) {
-                        return;
-                    }
-                    that.$element.off('.' + that.type).removeData('bs.' + that.type);
-                    if (that.$tip) {
-                        that.$tip.detach();
-                    }
-                    that.$tip = null;
-                    that.$arrow = null;
-                    that.$viewport = null;
-                    that.$element = null;
-                });
-            };
             return t;
         };
 
