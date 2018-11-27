@@ -357,6 +357,32 @@ angular.module('otDirectives')
             t.off('mouseover', tractabilityMouseHandler);   // remove any old handlers to avoid multiple firing of events
             t.on('mouseover', tractabilityMouseHandler);
 
+            // Now you were expecting a 'mouseout' event handler here to remove the popover, right?
+            // The problem with that is that when implemented, a onmouseout -> destroy means that user won't be able
+            // to roll over the popover at all (and they need to click on links and buttons)
+
+
+            // More hacks.
+            // It seems that Bootstrap v3.3.7 introduced an error when calling 'destroy' on popover/tooltip
+            // so here we override the destroy function as detailed here https://github.com/twbs/bootstrap/issues/21830 
+            // This hack should proably live elsewhere in the app though.
+            jQuery.fn.popover.Constructor.prototype.destroy = function () {
+                var that = this;
+                clearTimeout(this.timeout);
+                this.hide(function () {
+                    if (that.$element === null) {
+                        return;
+                    }
+                    that.$element.off('.' + that.type).removeData('bs.' + that.type);
+                    if (that.$tip) {
+                        that.$tip.detach();
+                    }
+                    that.$tip = null;
+                    that.$arrow = null;
+                    that.$viewport = null;
+                    that.$element = null;
+                });
+            };
             return t;
         };
 
@@ -373,18 +399,23 @@ angular.module('otDirectives')
             if (t.className && t.className.toString().indexOf('cell-background') >= 0) {
                 $('.tractable').popover('destroy');
             }
+
             if (t.className && t.className.toString().indexOf('tractable') >= 0) {
                 var d = t.dataset;
                 $(t).popover({
                     html: true,
                     title: d.target + ' tractability data',
-                    // trigger: 'click',
                     placement: 'left',
                     content: function () {
                         return getTractabilityPopoverHtml(d);
                     }
                 });
-                $(t).popover('show'); // just show it as the table handles the mouseover
+                // Another Bootstrap hack: tooltip.destroy() is asynch and often causes null-related issues when
+                // calling destroy and show in sequence. Delaying a little the 'show' seems to fix it.
+                // Details here: https://stackoverflow.com/questions/27238938/bootstrap-popover-destroy-recreate-works-only-every-second-time
+                setTimeout(function () {
+                    $(t).popover('show'); // just show it as the table handles the mouseover
+                }, 200);
             }
         }
 
