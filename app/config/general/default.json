@@ -496,6 +496,15 @@
                 "heading": "RNA tissue specificity",
                 "open": false
             }
+        },
+
+        "tractability" : {
+            "key": "tractability",
+            "options" : {
+                "element": "tractability-facet",
+                "heading" : "Target tractability",
+                "open" : false
+            }
         }
     },
 
@@ -533,12 +542,12 @@
                 "type":"targetClass"
             },
 
-                // {
-                //     "type":"rnaExpression"
-                // },
-
             {
                 "type":"rnaSpecificity"
+            },
+
+            {
+                "type":"tractability"
             }
         ]
     },
@@ -561,6 +570,10 @@
 
             {
                 "type":"rnaSpecificity"
+            },
+
+            {
+                "type":"tractability"
             }
         ]
     },
