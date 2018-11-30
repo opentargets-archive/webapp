@@ -532,7 +532,8 @@ angular.module('otDirectives')
                 targets: '=',
                 disease: '=',
                 filters: '=',
-                stateId: '@?'
+                stateId: '@?',
+                enabled: '='
             },
 
             templateUrl: 'src/components/disease-prioritisation/disease-prioritisation.html',
@@ -667,11 +668,13 @@ angular.module('otDirectives')
                     callNext();
                 };
 
-                scope.$watchGroup(['filters', 'disease', 'targets'], function (attrs) {
+                scope.$watchGroup(['filters', 'disease', 'targets'], function (attrs, old) {
                     filters = attrs[0] || [];
                     targets = attrs[2];
 
-                    dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
+                    if (scope.enabled) {
+                        dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
+                    }
                 }); // end watchGroup
             } // end link
         }; // end return

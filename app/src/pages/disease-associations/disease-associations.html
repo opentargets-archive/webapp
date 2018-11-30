@@ -53,14 +53,18 @@
                         <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='table'}" ng-show="view.t[0]=='table'">
                             <ot-disease-associations disease="search.query" targets="targets"
                                 filename="search.filename"
-                                filters="filters" state-id="dat">
+                                filters="filters" state-id="dat"
+                                ng-if="view.t[0]=='table'">
                             </ot-disease-associations>
                         </div>
 
                         <div class="tab-pane ng-scope" ng-class="{active: view.t[0]=='priority'}" ng-show="view.t[0]=='priority'" ng-if="otConfig.diseaseAssociations.showPrioritisationView">
-                            <ot-disease-prioritisation disease="search.query" targets="targets"
+                            <ot-disease-prioritisation 
+                                disease="search.query" targets="targets"
                                 filename="search.filename"
-                                filters="filters" state-id="dat">
+                                filters="filters" state-id="dat" 
+                                enabled="canShowPrioritisation"
+                                ng-if="view.t[0]=='priority' && canShowPrioritisation">
                             </ot-disease-prioritisation>
                         </div>
 

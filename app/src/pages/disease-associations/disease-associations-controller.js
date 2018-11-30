@@ -63,6 +63,8 @@ angular.module('otControllers')
             // $window.location.reload();
         };
 
+        $scope.canShowPrioritisation = false;
+
         /*
          * The view is essentially the state for the page;
          * filters are autonomous and do their own business
@@ -70,6 +72,8 @@ angular.module('otControllers')
         var setView = function (obj) {
             // should work also for obj==undefined at page load
             // or if navigating back through browser history
+
+            $scope.canShowPrioritisation = false;
 
             // define defaults as needed
             obj = obj || {};
@@ -105,6 +109,7 @@ angular.module('otControllers')
             }
 
             otFacetsState.setPageFacetNamesFromConfig(facetsNames);
+            $scope.canShowPrioritisation = true;
         };
 
 
