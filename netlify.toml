@@ -26,7 +26,8 @@
 # master.targetvalidation.org will always point to the APIHOST specified in context.branch-deploy.environment above
 # [context.branch_name.environment]
 #  APIHOST = "https://the-api-url-we-want.com"
-# [context.prioritisation.environment]
+[context.prioritisation.environment]
+  APIHOST = "https://mk-tractability-facet-dot-open-targets-eu-dev.appspot.com/"
 #   [[headers]]
 #     for = "/build/config.json"
 #       [headers.values]
