@@ -677,7 +677,7 @@ angular.module('otDirectives')
 
                     scope.$watchGroup(['filters', 'disease', 'targets'], function (attrs, old) {
                         filters = attrs[0] || [];
-                        // targets = attrs[2];
+                        targets = attrs[2];
 
                         var thingsChanged = [];
                         for (var i = 0; i < attrs.length; i++) {
