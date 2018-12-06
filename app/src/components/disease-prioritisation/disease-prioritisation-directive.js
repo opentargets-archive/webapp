@@ -404,7 +404,14 @@ angular.module('otDirectives')
         function getTractabilityPopoverHtml (d) {
             var content = document.createElement('div');
             content.className = 'tractability-popover-content';
+
+            var flowerSection = document.createElement('div');
+            flowerSection.className = 'tractability-flower-section';
+
             var flowerContainer = document.createElement('div');
+            flowerContainer.className = 'tractability-flower-container';
+
+            flowerSection.append(flowerContainer);
 
             var data = tractabilityCategories[d.mode].map(function (item) {
                 return {
@@ -420,8 +427,8 @@ angular.module('otDirectives')
             var flower = flowerView()
                 .values(data)
                 .color('#891c76')
-                .diagonal(260)
-                .fontsize(10);
+                .diagonal(330)
+                .fontsize(12);
             flower(flowerContainer);
 
             // NOTE:
@@ -440,7 +447,7 @@ angular.module('otDirectives')
 
 
             content.innerHTML += '<div class="tractabiltiy-popover-section"><strong>Modality:</strong> ' + d.mode + '</div>';
-            content.append(flowerContainer);
+            content.append(flowerSection);
             content.innerHTML += '<div style="text-align:center">'
                                 + '<div class="tractabiltiy-popover-section"><a href="/target/' + d.targetid + '?view=sec:tractability"><div class="btn btn-sm btn-tractability">View tractability data for ' + d.target + '</div></a></div>'
                                 + '<div class="tractabiltiy-popover-section"><a href="/evidence/' + d.targetid + '/' + d.diseaseid + '"><div class="btn btn-sm btn-primary">View evidence</div></a></div>'
