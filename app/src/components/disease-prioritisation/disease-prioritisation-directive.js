@@ -146,61 +146,67 @@ angular.module('otDirectives')
 
 
         var tractabilityCategories = {
-            smallmolecule: [
-                {
-                    label: 'Clinical precedence',
-                    labelHtml: '<tspan>Clinical</tspan><tspan dy="10" x=0>precedence</tspan>',  // multiline html label for the flower petals
-                    buckets: [1, 2, 3]
-                },
+            smallmolecule: {
+                label: 'small molecule',
+                categories: [
+                    {
+                        label: 'Clinical precedence',
+                        labelHtml: '<tspan>Clinical</tspan><tspan dy="10" x=0>precedence</tspan>',  // multiline html label for the flower petals
+                        buckets: [1, 2, 3]
+                    },
 
-                {
-                    label: 'Discovery precedence',
-                    labelHtml: '<tspan>Discovery</tspan><tspan dy="10" x=0>precedence</tspan>',
-                    buckets: [4, 7]
-                },
+                    {
+                        label: 'Discovery precedence',
+                        labelHtml: '<tspan>Discovery</tspan><tspan dy="10" x=0>precedence</tspan>',
+                        buckets: [4, 7]
+                    },
 
-                {
-                    label: 'Predicted tractable',
-                    labelHtml: '<tspan>Predicted</tspan><tspan dy="10" x=0>tractable</tspan>',
-                    buckets: [5, 6, 8]
-                }
+                    {
+                        label: 'Predicted tractable',
+                        labelHtml: '<tspan>Predicted</tspan><tspan dy="10" x=0>tractable</tspan>',
+                        buckets: [5, 6, 8]
+                    }
 
-                // ,{
-                //     label: 'Unknown',
-                //     buckets: [10]
-                // }
-            ],
+                    // ,{
+                    //     label: 'Unknown',
+                    //     buckets: [10]
+                    // }
+                ]
+            },
 
-            antibody: [
-                {
-                    label: 'Clinical precedence',
-                    labelHtml: '<tspan>Clinical</tspan><tspan dy="10" x=0>precedence</tspan>',
-                    buckets: [1, 2, 3]
-                },
+            antibody: {
+                label: 'antibody',
+                categories: [
+                    {
+                        label: 'Clinical precedence',
+                        labelHtml: '<tspan>Clinical</tspan><tspan dy="10" x=0>precedence</tspan>',
+                        buckets: [1, 2, 3]
+                    },
 
-                {
-                    label: 'Predicted tractable high confidence',
-                    labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(high confidence)</tspan>',
-                    buckets: [4, 5]
-                },
+                    {
+                        label: 'Predicted tractable high confidence',
+                        labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(high confidence)</tspan>',
+                        buckets: [4, 5]
+                    },
 
-                {
-                    label: 'Predicted tractable - medium to low confidence',
-                    labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(mid-low confidence)</tspan>',
-                    buckets: [6, 7, 8, 9]
-                }
+                    {
+                        label: 'Predicted tractable - medium to low confidence',
+                        labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(mid-low confidence)</tspan>',
+                        buckets: [6, 7, 8, 9]
+                    }
 
-                // {
-                //     label: 'Predicted tractable - Human Protein Atlas',
-                //     labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(Human Protein Atlas)</tspan>',
-                //     buckets: [9]
-                // }
+                    // {
+                    //     label: 'Predicted tractable - Human Protein Atlas',
+                    //     labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(Human Protein Atlas)</tspan>',
+                    //     buckets: [9]
+                    // }
 
-                // ,{
-                //     label: 'Unknown',
-                //     buckets: [10]
-                // }
-            ]
+                    // ,{
+                    //     label: 'Unknown',
+                    //     buckets: [10]
+                    // }
+                ]
+            }
         };
 
 
@@ -413,7 +419,7 @@ angular.module('otDirectives')
 
             flowerSection.append(flowerContainer);
 
-            var data = tractabilityCategories[d.mode].map(function (item) {
+            var data = tractabilityCategories[d.mode].categories.map(function (item) {
                 return {
                     label: item.labelHtml,
                     value: Math.min(
@@ -446,7 +452,7 @@ angular.module('otDirectives')
             }
 
 
-            content.innerHTML += '<div class="tractabiltiy-popover-section"><strong>Modality:</strong> ' + d.mode + '</div>';
+            content.innerHTML += '<div class="tractabiltiy-popover-section"><strong>Modality:</strong> ' + tractabilityCategories[d.mode].label + '</div>';
             content.append(flowerSection);
             content.innerHTML += '<div style="text-align:center">'
                                 + '<div class="tractabiltiy-popover-section"><a href="/target/' + d.targetid + '?view=sec:tractability"><div class="btn btn-sm btn-tractability">View tractability data for ' + d.target + '</div></a></div>'
