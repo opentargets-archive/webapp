@@ -450,13 +450,18 @@ angular.module('otDirectives')
                     }
                 }
             }
-
+            // View evidence for SMAD3 and inflammatory bowel disease
+            var evidenceButtonLabel = 'View evidence for ' + d.target + ' and ' + d.disease;
+            var evidenceButtonLabelTrim = evidenceButtonLabel;
+            if (evidenceButtonLabel.length > 40) {
+                evidenceButtonLabelTrim = evidenceButtonLabel.substring(0, 40) + '&hellip;';
+            }
 
             content.innerHTML += '<div class="tractabiltiy-popover-section"><strong>Modality:</strong> ' + tractabilityCategories[d.mode].label + '</div>';
             content.append(flowerSection);
             content.innerHTML += '<div style="text-align:center">'
                                 + '<div class="tractabiltiy-popover-section"><a href="/target/' + d.targetid + '?view=sec:tractability"><div class="btn btn-sm btn-tractability">View tractability data for ' + d.target + '</div></a></div>'
-                                + '<div class="tractabiltiy-popover-section"><a href="/evidence/' + d.targetid + '/' + d.diseaseid + '"><div class="btn btn-sm btn-primary">View evidence</div></a></div>'
+                                + '<div class="tractabiltiy-popover-section"><a href="/evidence/' + d.targetid + '/' + d.diseaseid + '"><div class="btn btn-sm btn-primary" title="' + evidenceButtonLabel + '">' + evidenceButtonLabelTrim + '</div></a></div>'
                                 + '<div onclick="$(\'.tractable\').popover(\'destroy\')" class="tnt_tooltip_closer pointer"></div>'
                                 + '</div>';
 
@@ -472,6 +477,7 @@ angular.module('otDirectives')
                 +   ' data-mode="' + mode + '"'
                 +   ' data-target="' + d.target.gene_info.symbol + '"'
                 +   ' data-targetid="' + d.target.id + '"'
+                +   ' data-disease="' + d.disease.efo_info.label + '"'
                 +   ' data-diseaseid="' + d.disease.id + '"'
                 +   ' data-buckets="' + d.target.tractability[mode].buckets + '">'
                 +     '<span class="heatmap-cell-val">1</span>'
