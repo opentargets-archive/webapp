@@ -72,9 +72,7 @@ angular.module('otControllers')
         var setView = function (obj) {
             // should work also for obj==undefined at page load
             // or if navigating back through browser history
-            console.log('setView', obj);
             $scope.canShowPrioritisation = false;
-            console.log(' -> ', $scope.canShowPrioritisation);
 
             // define defaults as needed
             obj = obj || {};
@@ -100,8 +98,6 @@ angular.module('otControllers')
                 // most elegant way to do this, but will do for now, so
                 // set the datatypes here
                 var currentfacets = otLocationState.getState()[facetsId];
-                console.log('state: ', otLocationState.getState());
-                console.log('currentfacets: ', currentfacets);
 
                 if (!currentfacets || (typeof currentfacets !== 'object')) {
                     currentfacets = {};
