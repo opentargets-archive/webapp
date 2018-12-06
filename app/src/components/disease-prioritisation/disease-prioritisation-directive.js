@@ -518,6 +518,7 @@ angular.module('otDirectives')
                 }
 
                 // Tractability stuff
+                var tractabilityCell = '<span><a href="/target/' + data[i].target.id + '?view=sec:tractability"><span class="cell-background tractable"><span class="heatmap-cell-val">1</span></span></a></span>';
 
                 // Small molecules
                 var sm = '<span>' + noDataHtmlString + '</span>';
