@@ -14,7 +14,7 @@ angular.module('otDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('otDiseasePrioritisation', ['otUtils', 'otDictionary', 'otConsts', 'otApi', function (otUtils, otDictionary, otConsts, otApi) {
+    .directive('otDiseasePrioritisation', ['otUtils', 'otDictionary', 'otConsts', 'otApi', '$timeout', function (otUtils, otDictionary, otConsts, otApi, $timeout) {
         'use strict';
 
 
@@ -221,6 +221,7 @@ angular.module('otDirectives')
          * Setup the table cols and return the DT object
          */
         var setupTable = function (table, disease, target, filename, download) {
+            console.log('setup table');
             var t = $(table).DataTable({
                 'destroy': true,
                 'pagingType': 'simple',
@@ -667,15 +668,56 @@ angular.module('otDirectives')
 
                     callNext();
                 };
-
-                scope.$watchGroup(['filters', 'disease', 'targets'], function (attrs, old) {
-                    filters = attrs[0] || [];
-                    targets = attrs[2];
-
+                
+                // on load
+                $timeout(function () {
+                    console.log('on load.......');
+                    filters = scope.filters || [];
                     if (scope.enabled) {
                         dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
                     }
-                }); // end watchGroup
+                
+
+                    scope.$watchGroup(['filters', 'disease', 'targets'], function (attrs, old) {
+                        filters = attrs[0] || [];
+                        // targets = attrs[2];
+                        console.log('** watch!');
+                        // console.log('enabled: ', scope.enabled);
+                        var thingsChanged = [];
+                        for (var i = 0; i < attrs.length; i++) {
+                            // console.log(i + ' -> ', (attrs[i] === old[i]), ' // ', _.isEqual(attrs[i], old[i]));
+                            // if (! _.isEqual(attrs[i], old[i])) {
+                            //     thingsChanged = true;
+                            // } else {
+                            //     console.log(i, ' : ', attrs[i]);
+                            // }
+                            thingsChanged.push(! _.isEqual(attrs[i], old[i]));
+                        }
+
+                        console.log('thingsChanged: ' + thingsChanged.join(', '));
+
+                        // for (var i = 0; i < attrs.length; i++) {
+                        //     console.log(i+' -> ', (attrs[i] !== old[i]));
+                        // }
+
+                        // if (
+                        //     (! _.isEqual(new_state[stateId], old_state[stateId]) || !new_state[stateId])
+                        //     && !(!_.isEqual(new_state[facetsId], old_state[facetsId]) || !new_state[facetsId])
+                        // )
+                        // console.log('targets changed:', attrs[0] !== attrs[1]);
+                        // if (thingsChanged) {
+                        // console.log('? things changed...');
+                        // if (scope.enabled) {
+                        //_.debounce(function () {
+                        if ( thingsChanged[0] || thingsChanged[1] || thingsChanged[2] ) {
+                            dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
+                        }
+                            
+                        //}, 500);
+                        // }
+                        // }
+                    }); // end watchGroup
+                }, 0);
             } // end link
         }; // end return
     }]);
