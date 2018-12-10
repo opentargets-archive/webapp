@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otTargetPathways', ['$http', '$q', 'otConsts', function ($http, $q, otConsts) {
+    .directive('otTargetPathways', ['$http', '$q', function ($http, $q) {
         'use strict';
 
         // Container for the spinner
@@ -43,7 +43,7 @@ angular.module('otPlugins')
                     for (var i = 0; i < pathways.length; i++) {
                     // for (var pathway in pathways) {
                         var pathway = pathways[i].id;
-                        var p = $http.get(otConsts.PROXY + 'www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/' + pathway + '/stableIdentifier');
+                        var p = $http.get('https://www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/' + pathway + '/stableIdentifier');
                         promises.push(p);
                         // pathwayArr.push(pathways[pathway]["pathway name"]);
                         pathwayArr.push(pathways[i].value['pathway name']);
@@ -76,7 +76,7 @@ angular.module('otPlugins')
                     var pId = pathway.id;
                     if (!pathwayDiagram) {
                         pathwayDiagram = Reactome.Diagram.create({
-                            'proxyPrefix': otConsts.PROXY + 'www.reactome.org',
+                            'proxyPrefix': 'https://www.reactome.org',
                             'placeHolder': 'pathwayDiagramContainer',
                             'width': w,
                             'height': h
