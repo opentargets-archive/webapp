@@ -141,7 +141,13 @@ angular.module('otDirectives')
                             //     }
                             // });
                             if (item.type === 'genetic_association' && checkPath(item, 'evidence.variant2disease')) {
+                                // The evidence.variant2disease.urls field is not required by the JSON schema,
+                                // and therefore some datasources might not have it. Here we perform the check and set default values if needed
+                                if (!item.evidence.variant2disease.urls || !checkPath(item.evidence.variant2disease, 'urls')) {
+                                    item.evidence.variant2disease.urls = [{nice_name: '', url: ''}];
+                                }
                                 sourceString = sourceString || item.evidence.variant2disease.urls[0].nice_name;
+
                                 var idString = '';
                                 if (db === otConsts.datasources.EVA.id) {
                                     idString = '<p class="text-lowlight"><small>(ID: ' + item.evidence.variant2disease.urls[0].url.split('/').pop() + ')</small></p>';
