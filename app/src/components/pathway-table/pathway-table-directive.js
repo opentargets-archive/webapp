@@ -33,6 +33,7 @@ angular.module('otDirectives')
             },
 
             link: function (scope, elem, attrs) {
+                scope.otDictionary = otDictionary;
                 scope.ext.hasError = false;
                 scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }], function () {
                     if (attrs.target && attrs.disease) {
@@ -44,7 +45,7 @@ angular.module('otDirectives')
                     scope.ext.isLoading = true;
                     var opts = {
                         size: 1000,
-                        datasource: otConfig.evidence_sources.pathway,
+                        datasource: otConfig.evidence_sources.pathway.pathway,
                         fields: [
                             'target.activity',
                             'disease.efo_info',
