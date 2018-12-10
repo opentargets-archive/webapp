@@ -1,4 +1,3 @@
-/* eslint-disable angular/di-unused */
 /**
  * PAthways table
  *
@@ -18,10 +17,11 @@ angular.module('otDirectives')
      * pathway 7   Date asserted   .evidence.date_asserted
      * pathway 8   Evidence codes  .evidence.evidence_codes
      */
-    .directive('otSysbioTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', 'otClearUnderscoresFilter', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log, otClearUnderscoresFilter) {
+    .directive('otSysbioTable', ['otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', function (otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log) {
         'use strict';
         var searchObj = otUtils.search.translateKeys($location.search());
-        var checkPath = otUtils.checkPath;
+        var moreHtml = '&hellip;&nbsp;[&nbsp;show&nbsp;more&nbsp;]';
+        var lessHtml = '&nbsp;[&nbsp;show&nbsp;less&nbsp;]';
 
         return {
             restrict: 'AE',
@@ -161,9 +161,10 @@ angular.module('otDirectives')
                                 'width': '48%',
                                 'render': function (data, type, row) {
                                     var text = data;
-                                    // if (data.length > 250) {
-                                    //     text = '<span>' + data.substring(0, 250) + '</span><span class="sysbio-method-more-btn"> [ more ] <span><span class="sysbio-method-more-text">' + data.substring(250) + '</span>';
-                                    // }
+                                    var limit = 260;
+                                    if (data.length > limit) {
+                                        text = '<span>' + data.substring(0, limit) + '</span><span class="sysbio-method-more-text hidden">' + data.substring(limit) + '</span><span class="sysbio-method-more-btn">' + moreHtml + '</span>';
+                                    }
                                     return '<span class="sysbio-method">' + text + '</span>';
                                 }
                             },
@@ -173,27 +174,34 @@ angular.module('otDirectives')
                                     return '<a href="' + data + '"><span class="ot-publications-string"><span class="badge">1</span> publication</span></a>';
                                 }
                             }
-                            // {
-                            //     'targets': [2],
-                            //     'mRender': otColumnFilter.mRenderGenerator(8),
-                            //     'mData': otColumnFilter.mDataGenerator(2, 8)
-                            // }
                         ]
-                        // initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, (scope.output ? scope.output + '-' : '') + '-systems_biology'));
 
                     // Setup click handlers.
                     // With Datatables this is the recommended approach (instead of defining onclicks for each cell)
-                    // t.off('click', clickHandler);   // remove any old handlers to avoid multiple firing of events
-                    // t.on('click', clickHandler);
+                    t.off('click', clickHandler);   // remove any old handlers to avoid multiple firing of events
+                    t.on('click', clickHandler);
 
                     return t;
                 }
 
-                // function clickHandler (e) {
-                //     var t = e.target;
-                //     if (t.className && t.className.toString().indexOf('sysbio-method-more-btn') >= 0) {}
-                // }
+                // Click handler for the whole table
+                function clickHandler (e) {
+                    var t = e.target;
+
+                    // handle clicks for show more / show less text
+                    if (t.className && t.className.toString().indexOf('sysbio-method-more-btn') >= 0) {
+                        if (t.previousSibling.classList.contains('hidden')) {
+                            t.previousSibling.classList.remove('hidden');
+                            // and update text
+                            t.innerHTML = lessHtml;
+                        } else {
+                            t.previousSibling.classList.add('hidden');
+                            // and update text
+                            t.innerHTML = moreHtml;
+                        }
+                    }
+                }
             }
         };
     }]);
