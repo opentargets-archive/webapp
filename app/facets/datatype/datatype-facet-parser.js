@@ -48,7 +48,6 @@ angular.module('otFacets')
 
             var constructDatasourceFilters = function (datatypeKey, data, parent, datasourceFilters) {
                 return data.buckets.map(function (bucket) {
-                    console.log(bucket.key);
                     var filter = new otFilterTypes.NestedBooleanFilter({
                         key: bucket.key,
                         // label: otDictionary[otConsts.invert(bucket.key)] || bucket.key,
