@@ -76,7 +76,10 @@
         "somatic_mutation": ["CANCER_GENE_CENSUS", "UNIPROT_SOMATIC", "EVA_SOMATIC", "INTOGEN"],
         "known_drug" : ["CHEMBL"],
         "rna_expression" : ["EXPRESSION_ATLAS"],
-        "pathway" : ["REACTOME", "SLAPENRICH", "PROGENY"],
+        "pathway" : {
+            "pathway": ["REACTOME", "SLAPENRICH", "PROGENY"],
+            "sysbio": ["SYSBIO"]
+        },
         "animal_model" : ["PHENODIGM"],
         "literature" : ["EPMC"]
     },
@@ -397,7 +400,7 @@
         {
             "name": "affectedPathway",
             "element": "ot-affected-pathway",
-            "heading": "Affected pathways",
+            "heading": "Pathways & systems biology",
             "track": true,
             "config": {
                 "datatype": "affected_pathway"

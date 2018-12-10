@@ -1,3 +1,4 @@
+/* eslint-disable angular/di-unused */
 /**
  * PAthways table
  *
@@ -17,7 +18,7 @@ angular.module('otDirectives')
      * pathway 7   Date asserted   .evidence.date_asserted
      * pathway 8   Evidence codes  .evidence.evidence_codes
      */
-    .directive('otPathwayTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', 'otClearUnderscoresFilter', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log, otClearUnderscoresFilter) {
+    .directive('otSysbioTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', '$log', 'otClearUnderscoresFilter', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, $log, otClearUnderscoresFilter) {
         'use strict';
         var searchObj = otUtils.search.translateKeys($location.search());
         var checkPath = otUtils.checkPath;
@@ -25,7 +26,7 @@ angular.module('otDirectives')
         return {
             restrict: 'AE',
 
-            templateUrl: 'src/components/pathway-table/pathway-table.html',
+            templateUrl: 'src/components/sysbio-table/sysbio-table.html',
 
             scope: {
                 output: '@?',    // optional output for filename export
@@ -45,13 +46,13 @@ angular.module('otDirectives')
                     scope.ext.isLoading = true;
                     var opts = {
                         size: 1000,
-                        datasource: otConfig.evidence_sources.pathway.pathway,
+                        datasource: otConfig.evidence_sources.pathway.sysbio,
                         fields: [
-                            'target.activity',
-                            'disease.efo_info',
-                            'evidence',
                             'access_level',
-                            'sourceID'
+                            'target.gene_info',
+                            'disease.name', 'disease.id',
+                            'unique_association_fields',
+                            'evidence.resource_score.method'
                         ]
                     };
 
@@ -75,7 +76,7 @@ angular.module('otDirectives')
                                     scope.ext.data = resp.body.data;
                                     initTable();
                                 } else {
-                                    $log.warn('Empty response : pathway expression');
+                                    $log.warn('Empty response : pathway system biology');
                                 }
                             },
                             otApi.defaultErrorHandler
@@ -92,6 +93,7 @@ angular.module('otDirectives')
                  */
                 function formatDataToArray (data) {
                     var newdata = [];
+
                     data.forEach(function (item) {
                         // create rows:
                         var row = [];
@@ -100,46 +102,21 @@ angular.module('otDirectives')
                             // col 0: data origin: public / private
                             row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
-                            // disease
-                            row.push(item.disease.efo_info.label);
+                            // 1,2: disease
+                            row.push(item.disease.name);
+                            row.push(item.disease.id);
 
-                            // overview
-                            row.push('<a class=\'ot-external-link\' href=\'' + item.evidence.urls[0].url + '\' target=\'_blank\'>' + item.evidence.urls[0].nice_name + '</a>');
+                            // 3: gene set
+                            row.push(item.unique_association_fields.gene_set);
 
-                            // activity
-                            row.push(otDictionary[item.target.activity.toUpperCase()] || otClearUnderscoresFilter(item.target.activity)); // "up_or_down"->"unclassified" via dictionary
+                            // 4: method description
+                            row.push(item.evidence.resource_score.method.description);
 
-                            // mutations
-                            var mut = otDictionary.NA;
-                            if (item.evidence.known_mutations && item.evidence.known_mutations.length > 0) {
-                                mut = otUtils.arrayToList(item.evidence.known_mutations.map(function (i) { return i.preferred_name || otDictionary.NA; }), true);
-                            }
-                            row.push(mut);
+                            // 5,6: pmid
+                            row.push(item.evidence.resource_score.method.reference);
+                            row.push(item.evidence.resource_score.method.reference); // hidden column, used for downloads info
 
-                            // evidence codes
-                            var db = Object.keys(otConsts.datasources).find(function (i) {
-                                return otConsts.datasources[i].id === item.sourceID;
-                            });
-                            db = otConsts.datasources[db] || {};
-                            db = db.label || item.evidence.provenance_type.database.id;
-                            row.push('Curated in ' + db);
-                            // row.push('Curated in ' + item.evidence.provenance_type.database.id);
-
-                            // publications
-                            var refs = [];
-                            if (checkPath(item, 'evidence.provenance_type.literature.references')) {
-                                refs = item.evidence.provenance_type.literature.references;
-                            }
-                            var pmidsList = otUtils.getPmidsList(refs);
-                            row.push(otUtils.getPublicationsString(pmidsList));
-
-                            // Publication ids (hidden)
-                            row.push(pmidsList.join(', '));
-
-                            // hidden columns for filtering
-                            row.push(item.evidence.urls[0].nice_name); // overview
-
-                            newdata.push(row); // use push() so we don't end up with empty rows
+                            newdata.push(row);
                         } catch (e) {
                             scope.ext.hasError = true;
                             $log.error('Error parsing pathways data:');
@@ -149,11 +126,11 @@ angular.module('otDirectives')
                     return newdata;
                 }
 
-                var dropdownColumns = [1, 2, 3, 4, 5];
+                // var dropdownColumns = [1, 2, 3, 4, 5];
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
-                    $(table).DataTable(otUtils.setTableToolsParams({
+                    var t = $(table).DataTable(otUtils.setTableToolsParams({
                         'data': formatDataToArray(scope.ext.data),
                         'ordering': true,
                         'order': [[1, 'asc']],
@@ -166,27 +143,57 @@ angular.module('otDirectives')
                                 'width': '3%'
                             },
                             {
-                                'targets': [7],
+                                'targets': [2, 6],
                                 'visible': false
                             },
                             {
-                                'targets': [3, 4, 5, 6],
-                                'width': '14%'
+                                'targets': [1, 3],
+                                'width': '20%'
                             },
                             {
                                 'targets': [1],
-                                'width': '18%'
+                                'render': function (data, type, row) {
+                                    return '<a href="/disease/' + row[2] + '">' + data + '</a>';
+                                }
                             },
                             {
-                                'targets': [2],
-                                // 'width': '14%',
-                                'mRender': otColumnFilter.mRenderGenerator(8),
-                                'mData': otColumnFilter.mDataGenerator(2, 8)
+                                'targets': [4],
+                                'width': '48%',
+                                'render': function (data, type, row) {
+                                    var text = data;
+                                    // if (data.length > 250) {
+                                    //     text = '<span>' + data.substring(0, 250) + '</span><span class="sysbio-method-more-btn"> [ more ] <span><span class="sysbio-method-more-text">' + data.substring(250) + '</span>';
+                                    // }
+                                    return '<span class="sysbio-method">' + text + '</span>';
+                                }
+                            },
+                            {
+                                'targets': [5],
+                                'render': function (data, type, row) {
+                                    return '<a href="' + data + '"><span class="ot-publications-string"><span class="badge">1</span> publication</span></a>';
+                                }
                             }
-                        ],
-                        initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
-                    }, (scope.output ? scope.output + '-' : '') + '-disrupted_pathways'));
+                            // {
+                            //     'targets': [2],
+                            //     'mRender': otColumnFilter.mRenderGenerator(8),
+                            //     'mData': otColumnFilter.mDataGenerator(2, 8)
+                            // }
+                        ]
+                        // initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
+                    }, (scope.output ? scope.output + '-' : '') + '-systems_biology'));
+
+                    // Setup click handlers.
+                    // With Datatables this is the recommended approach (instead of defining onclicks for each cell)
+                    // t.off('click', clickHandler);   // remove any old handlers to avoid multiple firing of events
+                    // t.on('click', clickHandler);
+
+                    return t;
                 }
+
+                // function clickHandler (e) {
+                //     var t = e.target;
+                //     if (t.className && t.className.toString().indexOf('sysbio-method-more-btn') >= 0) {}
+                // }
             }
         };
     }]);

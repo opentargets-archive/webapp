@@ -51,7 +51,8 @@
         "datasources": [
             "REACTOME",
             "SLAPENRICH",
-            "PROGENY"
+            "PROGENY",
+            "SYSBIO"
         ]
     },
     "ANIMAL_MODEL": {
