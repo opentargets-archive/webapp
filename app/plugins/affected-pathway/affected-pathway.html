@@ -1,12 +1,38 @@
 <!-- plugin template -->
-<div ng-show="ext.data.length>0">
-    <ot-source-list list="sources"></ot-source-list>
+<!-- affected pathways table -->
+<div ng-show="ext.pathway.data.length>0 && !ext.pathway.hasError">
+    <h4>Affected pathways</h4>
+    <ot-source-list list="sources.pathway"></ot-source-list>
     <ot-pathway-table 
         target="{{target.id}}"
         disease="{{disease.efo}}"
         output="{{target.approved_symbol}}-{{disease.label}}"
-        ext="ext">
+        ext="ext.pathway">
     </ot-pathway-table>
 </div>
-<!-- Redundant as it's also included in table directive -->
-<div ng-show="ext.data.length==0"><p>No data available</p></div>
+
+<uib-alert type="danger" ng-show="ext.pathway.hasError" ng-cloak style="margin-top:15px">
+    <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving affected pathways data. Please try again later.
+</uib-alert>
+
+
+<!-- pathway / sysbio table divider -->
+<div ng-show="ext.pathway.data.length>0 && ext.sysbio.data.length>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
+
+
+<!-- Related sysbio table -->
+<div ng-show="ext.sysbio.data.length>0 && !ext.sysbio.hasError">
+    <h4>Systems biology</h4>
+    <ot-source-list list="sources.sysbio"></ot-source-list>
+
+    <ot-sysbio-table
+        target="{{target.id}}"
+        disease="{{disease.efo}}"
+        output="{{target.approved_symbol}}-{{disease.label}}"
+        ext="ext.sysbio">
+    </ot-sysbio-table>
+</div>
+
+<uib-alert type="danger" ng-show="ext.sysbio.hasError" ng-cloak style="margin-top:15px">
+    <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving sysbio diesease data. Please try again later.
+</uib-alert>
