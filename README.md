@@ -80,7 +80,7 @@ Clone the repository and install the dependencies. Tools are installed via NPM (
 ```sh
 git clone https://github.com/opentargets/webapp.git
 cd webapp
-npm full-install
+npm run full-install
 ## or use yarn directly
 yarn run full-install
 ```
