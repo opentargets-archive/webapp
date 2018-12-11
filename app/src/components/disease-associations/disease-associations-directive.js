@@ -64,34 +64,13 @@ angular.module('otDirectives')
             // {name: "", title: otDictionary.ENSEMBL_ID},
             {name: '', title: otDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
-            {
-                name: otConsts.datatypes.GENETIC_ASSOCIATION.id,
-                title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.SOMATIC_MUTATION.id,
-                title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.KNOWN_DRUG.id,
-                title: otDictionary[otConsts.datatypes.KNOWN_DRUG.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.AFFECTED_PATHWAY.id,
-                title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.RNA_EXPRESSION.id,
-                title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.LITERATURE.id,
-                title: otDictionary[otConsts.datatypes.LITERATURE.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.ANIMAL_MODEL.id,
-                title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.id.toUpperCase()]
-            },
+            {name: otConsts.datatypes.GENETIC_ASSOCIATION.key, title: otConsts.datatypes.GENETIC_ASSOCIATION.label},
+            {name: otConsts.datatypes.SOMATIC_MUTATION.key, title: otConsts.datatypes.SOMATIC_MUTATION.label},
+            {name: otConsts.datatypes.KNOWN_DRUG.key, title: otConsts.datatypes.KNOWN_DRUG.label},
+            {name: otConsts.datatypes.AFFECTED_PATHWAY.key, title: otConsts.datatypes.AFFECTED_PATHWAY.label},
+            {name: otConsts.datatypes.RNA_EXPRESSION.key, title: otConsts.datatypes.RNA_EXPRESSION.label},
+            {name: otConsts.datatypes.LITERATURE.key, title: otConsts.datatypes.LITERATURE.label},
+            {name: otConsts.datatypes.ANIMAL_MODEL.key, title: otConsts.datatypes.ANIMAL_MODEL.label},
             // empty col for sorting by total score (sum)
             {name: '', title: 'total score', visible: false, className: 'never'},
             // empty col for the gene name

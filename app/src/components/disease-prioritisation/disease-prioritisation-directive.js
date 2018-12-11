@@ -99,34 +99,13 @@ angular.module('otDirectives')
             },
 
             // here are the datatypes 2-8:
-            {
-                name: otConsts.datatypes.GENETIC_ASSOCIATION.id,
-                title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.SOMATIC_MUTATION.id,
-                title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.KNOWN_DRUG.id,
-                title: otDictionary[otConsts.datatypes.KNOWN_DRUG.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.AFFECTED_PATHWAY.id,
-                title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.RNA_EXPRESSION.id,
-                title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.LITERATURE.id,
-                title: otDictionary[otConsts.datatypes.LITERATURE.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.ANIMAL_MODEL.id,
-                title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.id.toUpperCase()]
-            },
+            {name: otConsts.datatypes.GENETIC_ASSOCIATION.id, title: otConsts.datatypes.GENETIC_ASSOCIATION.label},
+            {name: otConsts.datatypes.SOMATIC_MUTATION.id, title: otConsts.datatypes.SOMATIC_MUTATION.label},
+            {name: otConsts.datatypes.KNOWN_DRUG.id, title: otConsts.datatypes.KNOWN_DRUG.label},
+            {name: otConsts.datatypes.AFFECTED_PATHWAY.id, title: otConsts.datatypes.AFFECTED_PATHWAY.label},
+            {name: otConsts.datatypes.RNA_EXPRESSION.id, title: otConsts.datatypes.RNA_EXPRESSION.label},
+            {name: otConsts.datatypes.LITERATURE.id, title: otConsts.datatypes.LITERATURE.label},
+            {name: otConsts.datatypes.ANIMAL_MODEL.id, title: otConsts.datatypes.ANIMAL_MODEL.label},
 
             // tractability 9-10
             {
