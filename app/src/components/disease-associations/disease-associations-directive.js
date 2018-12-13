@@ -35,9 +35,9 @@ angular.module('otDirectives')
         var state = {};
 
         /*
-     * Generates and returns the string representation of the span element
-     * with color information for each cell
-     */
+        * Generates and returns the string representation of the span element
+        * with color information for each cell
+        */
         var getColorStyleString = function (value, href) {
             var str = '';
             if (value <= 0) {
@@ -72,7 +72,7 @@ angular.module('otDirectives')
             {name: otConsts.datatypes.LITERATURE.key, title: otConsts.datatypes.LITERATURE.label},
             {name: otConsts.datatypes.ANIMAL_MODEL.key, title: otConsts.datatypes.ANIMAL_MODEL.label},
             // empty col for sorting by total score (sum)
-            {name: '', title: 'total score', visible: false, className: 'never'},
+            {name: '', title: 'total score'},
             // empty col for the gene name
             {name: '', title: otDictionary.TARGET_NAME}
         ];
@@ -83,14 +83,6 @@ angular.module('otDirectives')
                 'title': '<div><span title=\'' + cols[i].title + '\'>' + cols[i].title + '</span></div>',
                 'name': cols[i].name
             };
-            if (i === 9) {
-                columnData = {
-                    'title': '<div><span title=\'' + cols[i].title + '\'>' + cols[i].title + '</span></div>',
-                    'name': cols[i].name,
-                    'visible': false,
-                    'className': 'never'
-                };
-            }
             a.push(columnData);
         }
 
@@ -99,8 +91,6 @@ angular.module('otDirectives')
         Setup the table cols and return the DT object
         */
         var setupTable = function (table, disease, target, filename, download, stt) {
-            // stt = stt || {};
-
             var t = $(table).DataTable({
                 'destroy': true,
                 'pagingType': 'simple',
@@ -115,10 +105,7 @@ angular.module('otDirectives')
                 'columnDefs': [
                     {
                         'targets': [9],
-                        'className': 'never'
-                    },
-                    {
-                        'targets': 9,
+                        'className': 'never',
                         'visible': false
                     },
                     {
@@ -221,7 +208,6 @@ angular.module('otDirectives')
                             };
 
                             // To control pagination
-                            // indexes[currPage + 1] = resp.body.data[resp.body.data.length - 1].search_metadata.sort;
                             indexes[currPage + 1] = resp.body.next;
                             currStart = data.start;
 
@@ -230,23 +216,22 @@ angular.module('otDirectives')
                         });
                 },
 
-                // "order" : [[2, "desc"], [10, "desc"]],
-                'order': [1, 'desc'],   // stt.o || [2, "desc"],
+                'order': [1, 'desc'],
                 'orderMulti': false,
                 'autoWidth': false,
                 'ordering': true,
                 'lengthMenu': [[10, 50, 200, 500], [10, 50, 200, 500]],
                 'pageLength': 50,
                 'language': {
-                // "lengthMenu": "Display _MENU_ records per page",
-                // "zeroRecords": "Nothing found - sorry",
+                    // "lengthMenu": "Display _MENU_ records per page",
+                    // "zeroRecords": "Nothing found - sorry",
                     'info': 'Showing _START_ to _END_ of _TOTAL_ targets'
-                // "infoEmpty": "No records available",
-                // "infoFiltered": "(filtered from _MAX_ total records)"
+                    // "infoEmpty": "No records available",
+                    // "infoFiltered": "(filtered from _MAX_ total records)"
                 }
-            // "aoColumns": [
-            //    { "asSorting": [ "desc", "asc" ] }, //first sort desc, then asc
-            // ]
+                // "aoColumns": [
+                //    { "asSorting": [ "desc", "asc" ] }, //first sort desc, then asc
+                // ]
             }, filename);
 
             return t;
@@ -260,22 +245,12 @@ angular.module('otDirectives')
             };
 
             for (var i = 0; i < data.length; i++) {
-            // var dts = {};
-            // dts.genetic_association = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "genetic_association"; }), "association_score")||0;
-            // dts.somatic_mutation = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "somatic_mutation"; }), "association_score")||0;
-            // dts.known_drug = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "known_drug"; }), "association_score")||0;
-            // dts.affected_pathway = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "affected_pathway"; }), "association_score")||0;
-            // dts.rna_expression = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "rna_expression"; }), "association_score")||0;
-            // dts.literature = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "literature"; }), "association_score")||0;
-            // dts.animal_model = _.result(_.find(data[i].datatypes, function (d) { return d.datatype === "animal_model"; }), "association_score")||0;
-
-            // var dts = data[i].association_score.datatypes;
-            // var ec = data[i].evidence_count.datatypes;
                 var row = [];
                 var geneDiseaseLoc = '/evidence/' + data[i].target.id + '/' + data[i].disease.id;
+
+                // target
                 row.push('<a href=\'' + geneDiseaseLoc + '\' title=\'' + data[i].target.gene_info.symbol + '\'>' + data[i].target.gene_info.symbol + '</a>');
-                // Ensembl ID
-                // row.push(data[i].target.id);
+
                 // The association score
                 row.push(getColorStyleString(data[i].association_score.overall, geneDiseaseLoc));
                 // Genetic association
@@ -303,12 +278,9 @@ angular.module('otDirectives')
 
                 // Push gene name again instead
                 row.push('<a href=\'' + geneDiseaseLoc + '\' title=\'' + data[i].target.gene_info.name + '\'>' + data[i].target.gene_info.name + '</a>');
+
                 // just for for internal use to see direct and indirect associations
-                //    if (data[i].is_direct === true) {
-                //        row.push("<a href=" + geneDiseaseLoc + '> <i class="fa fa-circle"></i> ' + data[i].target.name + "</a>");
-                //    } else {
-                //        row.push("<a href=" + geneDiseaseLoc + '><i class="fa fa-circle-o"></i> ' + data[i].target.name + "</a>");
-                //    }
+                // if (data[i].is_direct === true) { row.push( ... ) }
 
                 newData[i] = row;
             }
@@ -317,22 +289,16 @@ angular.module('otDirectives')
 
 
         /*
-    * TODO: currently not being called - will check when we put this back
-    * Update function passes the current view (state) to the URL
-    */
-        // function update (id, st) {
-        // // $log.log("update:st =", st);
-        //     otLocationState.setStateFor(id, st);
-        // }
+         * TODO: currently not being called
+         * Update function passes the current view (state) to the URL
+         */
+        // function update (id, st) { otLocationState.setStateFor(id, st); }
 
 
         /*
-    * Renders page elements based on state from locationStateService
-    */
-        // function render (new_state, old_state) {
-        // TODO: might not need this?
-        // state = ...
-        // }
+         * Renders page elements based on state from locationStateService
+         */
+        // function render (new_state, old_state) { state = .....}
 
         return {
             restrict: 'E',
@@ -359,7 +325,6 @@ angular.module('otDirectives')
 
                 for (var i = 0; i <= 100; i += 25) {
                     var j = i / 100;
-                    // scope.labs.push(j);
                     scope.colors.push({color: colorScale(j), label: j});
                 }
                 scope.legendData = [
@@ -462,11 +427,8 @@ angular.module('otDirectives')
                                 return getNextIndex(nextIndex)
                                     .then(function (nextNext) {
                                         if (nextNext) {
-                                            // console.log('calling next page with pagination index...');
-                                            // console.log(nextNext);
                                             callNext(nextNext);
                                         } else {
-                                            // console.log('no more pages, downloading...');
                                             var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
                                             saveAs(b, scope.filename + '.csv');
                                         }
@@ -489,67 +451,18 @@ angular.module('otDirectives')
                 scope.$watchGroup(['filters', 'disease', 'targets'], function (attrs) {
                     filters = attrs[0];
                     targets = attrs[2];
-                    // var disease = attrs[1];
-                    // scope.targets = attrs[2];
 
-                    // $log.log("diseaseAssociationsTableDirective:attrs:", attrs);
-                    // actually, is disease going to change?
-                    // I mean, if it changes, the page changes, right?
-                    // if the table exists, we just force an upload (will take the filters into account)
-                    // if (dtable) {
-                    //    $log.log("diseaseAssociationsTableDirective:not calling setupTable:");
-                    //    dtable.ajax.reload();
-                    // } else {
-                    // state = otLocationState.getState()[scope.stateId];
-                    // create a new table
-                    // dtable = setupTable(table, disease, scope.filename, scope.downloadTable);
-                    // dtable = undefined;
-                    // table.destroy();
-                    dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
+                    // if the table has already been setup just reload the data
+                    if (dtable) {
+                        dtable.ajax.reload();
+                    } else {
+                        dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
+                    }
 
-                    // listener for page changes
-                    dtable.on('page.dt', function () {
-                    // TODO: comment back in when (if) ready
-                    // state.p = +dtable.page.info().page;
-                    // update(scope.stateId, state);
-                    });
-
-                    // listener for order change
-                    dtable.on('order.dt', function () {
-                    // TODO: comment back in when (if) ready
-                    // var order = dtable.order();
-                    // if( !Array.isArray(order[0])){
-                    //     order = [order];
-                    // }
-                    // state.o = order[0];
-                    // update(scope.stateId, state);
-                    });
-                // }
+                    // listener for page and order changes
+                    // dtable.on('page.dt', function () { });
+                    // dtable.on('order.dt', function () { });
                 });
-
-            // Watch for filename changes
-            // when available, we update the option for the CSV button, via a little hack:
-            // we update the button action, wrapping the original action in a call where the 4th argument is updated with the correct title
-            // scope.$watch( 'filename', function(val){
-            // if(val){
-            //     // replace spaces with underscores
-            //     val = val.split(" ").join("_");
-            //
-            //     // update the export function to
-            //     var act = dtable.button(".buttons-csv").action();   // the original export function
-            //
-            //     dtable.button(".buttons-csv").action(
-            //         function(){
-            //             //var opts = arguments[3];
-            //             //opts.title = val;
-            //             //act(arguments[0], arguments[1], arguments[2], opts);
-            //             arguments[3].title = val;
-            //             act.apply(this, arguments);
-            //         }
-            //     );
-            //
-            // }
-            // });
             } // end link
         }; // end return
     }]);

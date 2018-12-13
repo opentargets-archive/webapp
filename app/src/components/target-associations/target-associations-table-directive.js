@@ -59,13 +59,6 @@ angular.module('otDirectives')
             {name: '', title: 'TherapeuticArea EFO'},
             {name: '', title: otDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
-            // {name: otConsts.datatypes.GENETIC_ASSOCIATION, title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.toUpperCase()]},
-            // {name: otConsts.datatypes.SOMATIC_MUTATION, title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.toUpperCase()]},
-            // {name: otConsts.datatypes.KNOWN_DRUG, title: otDictionary[otConsts.datatypes.KNOWN_DRUG.toUpperCase()]},
-            // {name: otConsts.datatypes.AFFECTED_PATHWAY, title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.toUpperCase()]},
-            // {name: otConsts.datatypes.RNA_EXPRESSION, title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.toUpperCase()]},
-            // {name: otConsts.datatypes.LITERATURE, title: otDictionary[otConsts.datatypes.LITERATURE.toUpperCase()]},
-            // {name: otConsts.datatypes.ANIMAL_MODEL, title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.toUpperCase()]},
             {name: otConsts.datatypes.GENETIC_ASSOCIATION.key, title: otConsts.datatypes.GENETIC_ASSOCIATION.label},
             {name: otConsts.datatypes.SOMATIC_MUTATION.key, title: otConsts.datatypes.SOMATIC_MUTATION.label},
             {name: otConsts.datatypes.KNOWN_DRUG.key, title: otConsts.datatypes.KNOWN_DRUG.label},
@@ -381,7 +374,7 @@ angular.module('otDirectives')
             },
             templateUrl: 'src/components/target-associations/target-associations-table.html',
             link: function (scope, elem) {
-            // Making the scope accessible in the table processing
+                // Making the scope accessible in the table processing
                 myscope = scope;
 
                 // -----------------------
