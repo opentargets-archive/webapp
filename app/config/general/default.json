@@ -104,7 +104,8 @@
         {
             "name": "tractability",
             "element": "multiple-targets-tractability-summary",
-            "heading": "Tractability information"
+            "heading": "Tractability information",
+            "new": true
         },
         {
             "name": "drugs",
@@ -198,7 +199,8 @@
             "track": true,
             "config": {
                 "id": "tractability"
-            }
+            },
+            "new": true
         },
 
         {
@@ -357,13 +359,13 @@
             }
         },
         {
-             "name": "biomarkers",
-             "element": "ot-biomarkers",
-             "heading": "Cancer biomarkers",
-             "track": true,
-             "config": {
-                 "id": "biomarkers"
-             }
+            "name": "biomarkers",
+            "element": "ot-biomarkers",
+            "heading": "Cancer biomarkers",
+            "track": true,
+            "config": {
+                "id": "biomarkers"
+            }
          }
     ],
 
@@ -404,7 +406,8 @@
             "track": true,
             "config": {
                 "datatype": "affected_pathway"
-            }
+            },
+            "new": true
         },
         {
             "name": "rnaEvidence",
