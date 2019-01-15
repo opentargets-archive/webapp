@@ -14,7 +14,7 @@ angular.module('otDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('otDiseasePrioritisation', ['otUtils', 'otDictionary', 'otConsts', 'otApi', function (otUtils, otDictionary, otConsts, otApi) {
+    .directive('otDiseasePrioritisation', ['otUtils', 'otDictionary', 'otConsts', 'otApi', '$timeout', function (otUtils, otDictionary, otConsts, otApi, $timeout) {
         'use strict';
 
 
@@ -99,34 +99,13 @@ angular.module('otDirectives')
             },
 
             // here are the datatypes 2-8:
-            {
-                name: otConsts.datatypes.GENETIC_ASSOCIATION.id,
-                title: otDictionary[otConsts.datatypes.GENETIC_ASSOCIATION.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.SOMATIC_MUTATION.id,
-                title: otDictionary[otConsts.datatypes.SOMATIC_MUTATION.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.KNOWN_DRUG.id,
-                title: otDictionary[otConsts.datatypes.KNOWN_DRUG.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.AFFECTED_PATHWAY.id,
-                title: otDictionary[otConsts.datatypes.AFFECTED_PATHWAY.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.RNA_EXPRESSION.id,
-                title: otDictionary[otConsts.datatypes.RNA_EXPRESSION.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.LITERATURE.id,
-                title: otDictionary[otConsts.datatypes.LITERATURE.id.toUpperCase()]
-            },
-            {
-                name: otConsts.datatypes.ANIMAL_MODEL.id,
-                title: otDictionary[otConsts.datatypes.ANIMAL_MODEL.id.toUpperCase()]
-            },
+            {name: otConsts.datatypes.GENETIC_ASSOCIATION.id, title: otConsts.datatypes.GENETIC_ASSOCIATION.label},
+            {name: otConsts.datatypes.SOMATIC_MUTATION.id, title: otConsts.datatypes.SOMATIC_MUTATION.label},
+            {name: otConsts.datatypes.KNOWN_DRUG.id, title: otConsts.datatypes.KNOWN_DRUG.label},
+            {name: otConsts.datatypes.AFFECTED_PATHWAY.id, title: otConsts.datatypes.AFFECTED_PATHWAY.label},
+            {name: otConsts.datatypes.RNA_EXPRESSION.id, title: otConsts.datatypes.RNA_EXPRESSION.label},
+            {name: otConsts.datatypes.LITERATURE.id, title: otConsts.datatypes.LITERATURE.label},
+            {name: otConsts.datatypes.ANIMAL_MODEL.id, title: otConsts.datatypes.ANIMAL_MODEL.label},
 
             // tractability 9-10
             {
@@ -143,6 +122,71 @@ angular.module('otDirectives')
             //     title: 'other target attributes'
             // }
         ];
+
+
+        var tractabilityCategories = {
+            smallmolecule: {
+                label: 'small molecule',
+                categories: [
+                    {
+                        label: 'Clinical precedence',
+                        labelHtml: '<tspan>Clinical</tspan><tspan dy="10" x=0>precedence</tspan>',  // multiline html label for the flower petals
+                        buckets: [1, 2, 3]
+                    },
+
+                    {
+                        label: 'Discovery precedence',
+                        labelHtml: '<tspan>Discovery</tspan><tspan dy="10" x=0>precedence</tspan>',
+                        buckets: [4, 7]
+                    },
+
+                    {
+                        label: 'Predicted tractable',
+                        labelHtml: '<tspan>Predicted</tspan><tspan dy="10" x=0>tractable</tspan>',
+                        buckets: [5, 6, 8]
+                    }
+
+                    // ,{
+                    //     label: 'Unknown',
+                    //     buckets: [10]
+                    // }
+                ]
+            },
+
+            antibody: {
+                label: 'antibody',
+                categories: [
+                    {
+                        label: 'Clinical precedence',
+                        labelHtml: '<tspan>Clinical</tspan><tspan dy="10" x=0>precedence</tspan>',
+                        buckets: [1, 2, 3]
+                    },
+
+                    {
+                        label: 'Predicted tractable high confidence',
+                        labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(high confidence)</tspan>',
+                        buckets: [4, 5]
+                    },
+
+                    {
+                        label: 'Predicted tractable - medium to low confidence',
+                        labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(mid-low confidence)</tspan>',
+                        buckets: [6, 7, 8, 9]
+                    }
+
+                    // {
+                    //     label: 'Predicted tractable - Human Protein Atlas',
+                    //     labelHtml: '<tspan>Predicted tractable</tspan><tspan dy="10" x=0>(Human Protein Atlas)</tspan>',
+                    //     buckets: [9]
+                    // }
+
+                    // ,{
+                    //     label: 'Unknown',
+                    //     buckets: [10]
+                    // }
+                ]
+            }
+        };
 
 
         var getHiddenDatatypesCols = function () {
@@ -291,13 +335,135 @@ angular.module('otDirectives')
                     // "infoEmpty": "No records available",
                     // "infoFiltered": "(filtered from _MAX_ total records)"
                 }
-                // "aoColumns": [
-                //    { "asSorting": [ "desc", "asc" ] }, //first sort desc, then asc
-                // ]
             }, filename);
+
+            // Setup mouseover handlers to show the tractability popover.
+            // With Datatables this is the recommended approach (instead of defining onclicks for each cell)
+            t.off('mouseover', tractabilityMouseHandler);   // remove any old handlers to avoid multiple firing of events
+            t.on('mouseover', tractabilityMouseHandler);
+
+            // Now you were expecting a 'mouseout' event handler here to remove the popover, right?
+            // The problem with that is that when implemented, a onmouseout -> destroy means that user won't be able
+            // to roll over the popover at all (and they need to click on links and buttons)
 
             return t;
         };
+
+        // The tractability data popover is implemented using the regular Bootstrap popover component
+        // as this can be accessed via JQuery which works nicely inside the Datatable mouse handler
+
+        // Create and display the popover triggered by the table mouse handlers
+        // This is fired every time the mouse rolls over any table element
+        // so we need to check they're actually coming from a tractability cell
+        function tractabilityMouseHandler (e) {
+            var t = e.target;
+
+            // when rolling over a cell (either with or without data) first close any open popover
+            if (t.className && t.className.toString().indexOf('cell-background') >= 0) {
+                $('.tractable').popover('destroy');
+            }
+
+            if (t.className && t.className.toString().indexOf('tractable') >= 0) {
+                var d = t.dataset;
+                $(t).popover({
+                    html: true,
+                    title: d.target + ' tractability data',
+                    placement: 'left',
+                    content: function () {
+                        return getTractabilityPopoverHtml(d);
+                    }
+                });
+                // Another Bootstrap hack: tooltip.destroy() is asynch and often causes null-related issues when
+                // calling destroy and show in sequence. Delaying a little the 'show' seems to fix it.
+                // Details here: https://stackoverflow.com/questions/27238938/bootstrap-popover-destroy-recreate-works-only-every-second-time
+                setTimeout(function () {
+                    $(t).popover('show'); // just show it as the table handles the mouseover
+                }, 200);
+            }
+        }
+
+
+        // Generate and return the HTML string to pass to the popover
+        // Since we can only pass string to it, we first create an element with the flower and other buttons
+        // and then generate an html string from it... which yes, it's kinda hacky
+        function getTractabilityPopoverHtml (d) {
+            var content = document.createElement('div');
+            content.className = 'tractability-popover-content';
+
+            var flowerSection = document.createElement('div');
+            flowerSection.className = 'tractability-flower-section';
+
+            var flowerContainer = document.createElement('div');
+            flowerContainer.className = 'tractability-flower-container';
+
+            flowerSection.append(flowerContainer);
+
+            var data = tractabilityCategories[d.mode].categories.map(function (item) {
+                return {
+                    label: item.labelHtml,
+                    value: Math.min(
+                        item.buckets.filter(function (value) { return -1 !== d.buckets.indexOf(value.toString()); }).length,
+                        1
+                    ),
+                    active: true
+                };
+            });
+
+            var flower = flowerView()
+                .values(data)
+                .color('#891c76')
+                .diagonal(330)
+                .fontsize(12);
+            flower(flowerContainer);
+
+            // NOTE:
+            // I think this deserves a prize for best webapp frontend hacks
+            // Hack the flower labels text to force it displaying on multiple lines:
+            // we have to get this from the DOM after the flower is created as otherwise the text doesn't render the html tags
+            var svgnodes = flowerContainer.firstChild.firstChild.childNodes;
+            for (var i = 0; i < svgnodes.length; i++) {
+                if (svgnodes[i].nodeName === 'text') {
+                    svgnodes[i].innerHTML = _.unescape(svgnodes[i].innerHTML);
+                    if (svgnodes[i].getAttribute('fill') === '#000') {
+                        svgnodes[i].setAttribute('fill', '#FFF');
+                    }
+                }
+            }
+            // View evidence for SMAD3 and inflammatory bowel disease
+            var evidenceButtonLabel = 'View evidence for ' + d.target + ' and ' + d.disease;
+            var evidenceButtonLabelTrim = evidenceButtonLabel;
+            if (evidenceButtonLabel.length > 40) {
+                evidenceButtonLabelTrim = evidenceButtonLabel.substring(0, 40) + '&hellip;';
+            }
+
+            content.innerHTML += '<div class="tractabiltiy-popover-section"><strong>Modality:</strong> ' + tractabilityCategories[d.mode].label + '</div>';
+            content.append(flowerSection);
+            content.innerHTML += '<div style="text-align:center">'
+                                + '<div class="tractabiltiy-popover-section"><a href="/target/' + d.targetid + '?view=sec:tractability"><div class="btn btn-sm btn-tractability">View tractability data for ' + d.target + '</div></a></div>'
+                                + '<div class="tractabiltiy-popover-section"><a href="/evidence/' + d.targetid + '/' + d.diseaseid + '"><div class="btn btn-sm btn-primary" title="' + evidenceButtonLabel + '">' + evidenceButtonLabelTrim + '</div></a></div>'
+                                + '<div onclick="$(\'.tractable\').popover(\'destroy\')" class="tnt_tooltip_closer pointer"></div>'
+                                + '</div>';
+
+
+            return content.outerHTML;
+        }
+
+
+        function getTractabilityCellHtml (d, mode) {
+            // pass the popover parameters to the cell span as data-...
+            return '<span>'
+                +   '<span class="cell-background tractable"'
+                +   ' data-mode="' + mode + '"'
+                +   ' data-target="' + d.target.gene_info.symbol + '"'
+                +   ' data-targetid="' + d.target.id + '"'
+                +   ' data-disease="' + d.disease.efo_info.label + '"'
+                +   ' data-diseaseid="' + d.disease.id + '"'
+                +   ' data-buckets="' + d.target.tractability[mode].buckets + '">'
+                +     '<span class="heatmap-cell-val">1</span>'
+                +   '</span>'
+                + '</span>';
+        }
+
 
         function parseServerResponse (data) {
             var newData = new Array(data.length);
@@ -336,14 +502,14 @@ angular.module('otDirectives')
                 // Small molecules
                 var sm = '<span>' + noDataHtmlString + '</span>';
                 if (checkPath(data[i], 'target.tractability.smallmolecule.buckets') && data[i].target.tractability.smallmolecule.buckets.length > 0) {
-                    sm = tractabilityCell;
+                    sm = getTractabilityCellHtml(data[i], 'smallmolecule');
                 }
                 row.push(sm);
 
                 // Antibody
                 var ab = '<span>' + noDataHtmlString + '</span>';
                 if (checkPath(data[i], 'target.tractability.antibody.buckets') && data[i].target.tractability.antibody.buckets.length > 0) {
-                    ab = tractabilityCell;
+                    ab = getTractabilityCellHtml(data[i], 'antibody');
                 }
                 row.push(ab);
 
@@ -365,7 +531,8 @@ angular.module('otDirectives')
                 targets: '=',
                 disease: '=',
                 filters: '=',
-                stateId: '@?'
+                stateId: '@?',
+                enabled: '='
             },
 
             templateUrl: 'src/components/disease-prioritisation/disease-prioritisation.html',
@@ -500,37 +667,27 @@ angular.module('otDirectives')
                     callNext();
                 };
 
+                // on load
+                $timeout(function () {
+                    filters = scope.filters || [];
+                    if (scope.enabled) {
+                        dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
+                    }
 
-                // TODO: check this
-                // Do we want the directive to listen for changes in the URL?
-                // scope.$on(otLocationState.STATECHANGED, function (evt, new_state, old_state) {
-                //     render( new_state, old_state ); // if there are no facets, no worries, the API service will handle undefined
-                // });
+                    scope.$watchGroup(['filters', 'disease', 'targets'], function (attrs, old) {
+                        filters = attrs[0] || [];
+                        targets = attrs[2];
 
-                scope.$watchGroup(['filters', 'disease', 'targets'], function (attrs) {
-                    filters = attrs[0] || [];
-                    targets = attrs[2];
+                        var thingsChanged = [];
+                        for (var i = 0; i < attrs.length; i++) {
+                            thingsChanged.push(! _.isEqual(attrs[i], old[i]));
+                        }
 
-                    dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
-
-                    // listener for page changes
-                    dtable.on('page.dt', function () {
-                        // TODO: comment back in when (if) ready
-                        // state.p = +dtable.page.info().page;
-                        // update(scope.stateId, state);
-                    });
-
-                    // listener for order change
-                    dtable.on('order.dt', function () {
-                        // TODO: comment back in when (if) ready
-                        // var order = dtable.order();
-                        // if( !Array.isArray(order[0])){
-                        //     order = [order];
-                        // }
-                        // state.o = order[0];
-                        // update(scope.stateId, state);
-                    });
-                }); // end watchGroup
+                        if ( thingsChanged[0] || thingsChanged[1] || thingsChanged[2] ) {
+                            dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
+                        }
+                    }); // end watchGroup
+                }, 0);
             } // end link
         }; // end return
     }]);

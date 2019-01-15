@@ -1,0 +1,18 @@
+<div style="margin-top:20px;">
+    <table class="table matrix-table">
+        <thead>
+            <tr class="cols-overview">
+                <th colspan="1" rowspan="1"></th>
+                <th colspan="{{cols.smallmolecule.length}}" rowspan="1" class="key-attributes">Small molecule</th>
+                <th colspan="{{cols.antibody.length}}" rowspan="1" class="key-attributes">Antibody</th>
+            </tr>
+            <tr>
+                <th colspan="1" rowspan="1"><div><span>Target symbol</span></div></th>
+                <th ng-repeat="sm in cols.smallmolecule"><div><span ng-bind-html="sm.labelHtml"></span></div></th>
+                <th ng-repeat="ab in cols.antibody"><div><span ng-bind-html="ab.labelHtml"></span></div></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>

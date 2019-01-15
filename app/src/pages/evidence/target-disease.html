@@ -90,6 +90,9 @@
                     <!-- <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default" ng-if="search.association_score.datatypes[section.config.datatype]>0"></div>     -->
                         <!-- accordion header -->
                         <uib-accordion-heading>
+                            <div style="position:relative" ng-show="section.new">
+                                <div class="ot-section-new"><span>New</span></div>
+                            </div>
                             <span ng-click='section.currentVisibility = !section.currentVisibility' class="text-nolight" ng-class="{ 'text-disabled': search.fd[section.config.datatype]==0 }">{{section.heading}}</span>
                         </uib-accordion-heading>
                         

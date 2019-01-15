@@ -76,7 +76,10 @@
         "somatic_mutation": ["CANCER_GENE_CENSUS", "UNIPROT_SOMATIC", "EVA_SOMATIC", "INTOGEN"],
         "known_drug" : ["CHEMBL"],
         "rna_expression" : ["EXPRESSION_ATLAS"],
-        "pathway" : ["REACTOME", "SLAPENRICH", "PROGENY"],
+        "pathway" : {
+            "pathway": ["REACTOME", "SLAPENRICH", "PROGENY"],
+            "sysbio": ["SYSBIO"]
+        },
         "animal_model" : ["PHENODIGM"],
         "literature" : ["EPMC"]
     },
@@ -97,6 +100,12 @@
             "name": "go",
             "element": "multiple-targets-go-summary",
             "heading": "Gene Ontology"
+        },
+        {
+            "name": "tractability",
+            "element": "multiple-targets-tractability-summary",
+            "heading": "Tractability information",
+            "new": true
         },
         {
             "name": "drugs",
@@ -190,7 +199,8 @@
             "track": true,
             "config": {
                 "id": "tractability"
-            }
+            },
+            "new": true
         },
 
         {
@@ -349,13 +359,13 @@
             }
         },
         {
-             "name": "biomarkers",
-             "element": "ot-biomarkers",
-             "heading": "Cancer biomarkers",
-             "track": true,
-             "config": {
-                 "id": "biomarkers"
-             }
+            "name": "biomarkers",
+            "element": "ot-biomarkers",
+            "heading": "Cancer biomarkers",
+            "track": true,
+            "config": {
+                "id": "biomarkers"
+            }
          }
     ],
 
@@ -392,11 +402,12 @@
         {
             "name": "affectedPathway",
             "element": "ot-affected-pathway",
-            "heading": "Affected pathways",
+            "heading": "Pathways & systems biology",
             "track": true,
             "config": {
                 "datatype": "affected_pathway"
-            }
+            },
+            "new": true
         },
         {
             "name": "rnaEvidence",
@@ -491,6 +502,15 @@
                 "heading": "RNA tissue specificity",
                 "open": false
             }
+        },
+
+        "tractability" : {
+            "key": "tractability",
+            "options" : {
+                "element": "tractability-facet",
+                "heading" : "Target tractability",
+                "open" : false
+            }
         }
     },
 
@@ -528,12 +548,12 @@
                 "type":"targetClass"
             },
 
-                // {
-                //     "type":"rnaExpression"
-                // },
-
             {
                 "type":"rnaSpecificity"
+            },
+
+            {
+                "type":"tractability"
             }
         ]
     },
@@ -556,6 +576,10 @@
 
             {
                 "type":"rnaSpecificity"
+            },
+
+            {
+                "type":"tractability"
             }
         ]
     },

@@ -15,7 +15,7 @@ angular.module('otControllers')
                 params: {
                     'id': targets,
                     'size': targets.length,
-                    'fields': ['ensembl_gene_id', 'drugs', 'approved_symbol', 'reactome', 'uniprot_id']
+                    'fields': ['ensembl_gene_id', 'drugs', 'approved_symbol', 'reactome', 'uniprot_id', 'tractability']
                 }
             };
             return otApi.getTarget(queryObject)

@@ -63,6 +63,8 @@ angular.module('otControllers')
             // $window.location.reload();
         };
 
+        $scope.canShowPrioritisation = false;
+
         /*
          * The view is essentially the state for the page;
          * filters are autonomous and do their own business
@@ -70,6 +72,7 @@ angular.module('otControllers')
         var setView = function (obj) {
             // should work also for obj==undefined at page load
             // or if navigating back through browser history
+            $scope.canShowPrioritisation = false;
 
             // define defaults as needed
             obj = obj || {};
@@ -82,6 +85,7 @@ angular.module('otControllers')
 
         // page facets are actually per 'view' and not strictly per page
         var setPageFacets = function (v) {
+            $scope.canShowPrioritisation = false;
             var facetsNames = '';
             v = v || 'table';
             if (v === 'table') {
@@ -95,7 +99,7 @@ angular.module('otControllers')
                 // set the datatypes here
                 var currentfacets = otLocationState.getState()[facetsId];
 
-                if (!currentfacets) {
+                if (!currentfacets || (typeof currentfacets !== 'object')) {
                     currentfacets = {};
                 }
                 if (!currentfacets.datatype || currentfacets.datatype.length === 0) {
@@ -105,6 +109,7 @@ angular.module('otControllers')
             }
 
             otFacetsState.setPageFacetNamesFromConfig(facetsNames);
+            $scope.canShowPrioritisation = true;
         };
 
 

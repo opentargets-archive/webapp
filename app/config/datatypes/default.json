@@ -45,13 +45,14 @@
     },
     "AFFECTED_PATHWAY": {
         "id": "affected_pathway",
-        "label": "Affected pathways",
+        "label": "Pathways & systems biology",
         "shortLabel": "Pathways",
         "infoTemplate": "affected-pathways.md",
         "datasources": [
             "REACTOME",
             "SLAPENRICH",
-            "PROGENY"
+            "PROGENY",
+            "SYSBIO"
         ]
     },
     "ANIMAL_MODEL": {

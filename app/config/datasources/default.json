@@ -119,6 +119,13 @@
         "infoTemplate": "slapenrich.md",
         "description": ""
     },
+    "SYSBIO": {
+        "id": "sysbio",
+        "label": "Sysbio",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/affected-pathways#sysbio",
+        "infoTemplate": "sysbio.md",
+        "description": ""
+    },
     "UNIPROT": {
         "id": "uniprot",
         "label": "UniProt",

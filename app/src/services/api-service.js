@@ -49,7 +49,8 @@ angular.module('otServices')
                 RNA_EXPRESSION_TISSUE: 'rna_expression_tissue',
                 RNA_EXPRESSION_LEVEL: 'rna_expression_level',
                 ZSCORE_EXPRESSION_TISSUE: 'zscore_expression_tissue',
-                ZSCORE_EXPRESSION_LEVEL: 'zscore_expression_level'
+                ZSCORE_EXPRESSION_LEVEL: 'zscore_expression_level',
+                TRACTABILITY: 'tractability'
             }
         };
 

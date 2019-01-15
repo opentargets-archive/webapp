@@ -3,7 +3,8 @@ angular.module('otFacets')
         return {
             restrict: 'E',
             scope: {
-                filter: '='
+                filter: '=',
+                expanded: '=?'
             },
             templateUrl: 'facets/primitives/nested-checkbox-facet-primitive.html',
             compile: function (element) {

@@ -433,7 +433,8 @@
      * Prioritisation view
      */
 
-    ot-disease-prioritisation table.matrix-table {
+    ot-disease-prioritisation table.matrix-table,
+    multiple-targets-tractability-summary table.matrix-table {
         // table alignment
         width: 80%;
         margin: auto;
@@ -499,6 +500,18 @@
                     }
                 }
             }
+
+            .popover {
+                max-width: 300px;
+            }
+
+            .tractability-flower-section {
+                overflow: hidden;
+            }
+
+            .tractability-flower-container {
+                margin: 0 -50%;
+            }
         }
     }
 
@@ -525,8 +538,23 @@
         }
     }
 
-    
+    .tractability-popover-content {
+        text-align: center;
 
+        .tractabiltiy-popover-section {
+            margin: 10px 0px;
+        }
+
+        .btn-tractability {
+            color: #FFF;
+            background: $purple;
+        }
+
+        .cttv_petal_label {
+            font-weight: 400;
+        }
+    }
+    
         
     
     /*

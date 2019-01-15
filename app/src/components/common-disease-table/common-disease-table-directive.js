@@ -26,7 +26,7 @@ angular.module('otDirectives')
                     }
                 });
 
-                // DO WE NEED THIS???
+                // Q: DO WE NEED THIS??? A: Yes, this makes the sorting by p-value work correctly (although could perhaps be implemented in cols definition)
                 jQuery.fn.dataTableExt.oSort['pval-more-asc'] = function (x, y) {
                     var a = x.split('<')[0];
                     var b = y.split('<')[0];
@@ -129,7 +129,6 @@ angular.module('otDirectives')
 
                             // 5: p-value
                             var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
-
                             // if (item.sourceID === otConsts.datasources.PHEWAS.id) {
                             //     msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
                             // } else if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
