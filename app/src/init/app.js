@@ -197,7 +197,7 @@ function configSystemjs (config, $q) {
         },
 
         'map': {
-            'css': 'github:/systemjs/plugin-css@0.1.21/css.js'
+            'css': 'github:/systemjs/plugin-css@0.1.37/css.js'
         },
         'meta': meta
     });
