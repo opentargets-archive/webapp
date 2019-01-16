@@ -1,4 +1,4 @@
-/proxy/* https://mk-include-proxy-dot-open-targets-eu-dev.appspot.com/:splat 200!
+/proxy/* https://platform-api.opentargets.io/:splat 200!
 /* /index.html 200
 # Redirect domain aliases to primary domain
 https://platform.opentargets.org/* https://www.targetvalidation.org/:splat 301!
