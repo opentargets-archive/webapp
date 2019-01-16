@@ -189,15 +189,17 @@ function configSystemjs (config, $q) {
 
     // Configure Systemjs
     System.config({
+        'strictSSL': false,
         'baseURL': './',
         'defaultJSExtensions': false,
         'transpiler': false,
         'paths': {
+            'npm:*': 'jspm_packages/npm/*',
             'github:*': 'jspm_packages/github/*'
         },
 
         'map': {
-            'css': 'github:/systemjs/plugin-css@0.1.37/css.js'
+            'css': 'node_modules/systemjs-plugin-css/css.js'
         },
         'meta': meta
     });
