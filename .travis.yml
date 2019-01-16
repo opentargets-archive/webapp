@@ -15,11 +15,11 @@ before_install:
 #  - sudo apt-get install -y -qq yarn
 # https://gist.github.com/topheman/25241e48a1b4f91ec6d4
   - yarn add jspm@^0.16.34
-  - jspm config registries.github.remote https://github.jspm.io
+#  - jspm config registries.github.remote https://github.jspm.io
   - jspm config registries.github.strictSSL false
   - jspm config registries.github.auth "${JSPM_GITHUB_AUTH_TOKEN}"
-  - jspm config registries.github.maxRepoSize 500
-  - jspm config registries.github.handler jspm-github
+#  - jspm config registries.github.maxRepoSize 500
+#  - jspm config registries.github.handler jspm-github
   - jspm config strictSSL false
 install:
   - yarn install
