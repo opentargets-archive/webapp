@@ -22,7 +22,7 @@
   APIHOST = "https://open-targets-eu-dev.appspot.com/"
 
 [context."mk-proxy".environment]
-  APIHOST = "https://mk-include-proxy-dot-open-targets-eu-dev.appspot.com/"
+  APIHOST = "https://platform-api.opentargets.io/"
 
 # CAREFUL!!! When you point a particular branch to a specific API below,
 # the change will not continue working once the branch is merged into master.
