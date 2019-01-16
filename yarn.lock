@@ -1377,6 +1377,14 @@ buffer@^4.1.0:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
+buffer@^5.1.0:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.2.1.tgz#dd57fa0f109ac59c602479044dca7b8b3d0b71d6"
+  integrity sha512-c+Ko0loDaFfuPWiL02ls9Xd3GO3cPVmUobQ6t3rXNUk304u6hGq+8N/kFi+QEIKhzK3uwolVhLzszmfLmMLnqg==
+  dependencies:
+    base64-js "^1.0.2"
+    ieee754 "^1.1.4"
+
 buffer@~2.1.4:
   version "2.1.13"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-2.1.13.tgz#c88838ebf79f30b8b4a707788470bea8a62c2355"
@@ -4586,6 +4594,43 @@ jspm-github@^0.13.12:
     which "^1.0.9"
     yauzl "^2.3.1"
 
+jspm-nodelibs-assert@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/jspm-nodelibs-assert/-/jspm-nodelibs-assert-0.2.1.tgz#56b77248076babbf55dd1ae4714a75cafd542317"
+  integrity sha1-VrdySAdrq79V3RrkcUp1yv1UIxc=
+
+jspm-nodelibs-buffer@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/jspm-nodelibs-buffer/-/jspm-nodelibs-buffer-0.3.1.tgz#2a6c1167300c2ef4cb3d8b4a44cf49d4b794a2f3"
+  integrity sha512-MGk9PzelPULXaf0lwlmsFzHti3lUaBaqv9O4KY5k5/ZiCsI+PzAt/QSQO7GfO4ejsf8oc9BKznLG+s4ECVpnJQ==
+  dependencies:
+    buffer "^5.1.0"
+
+jspm-nodelibs-fs@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/jspm-nodelibs-fs/-/jspm-nodelibs-fs-0.2.1.tgz#e403183d66eedc6bfe1caad9c94f3442f3b058a0"
+  integrity sha1-5AMYPWbu3Gv+HKrZyU80QvOwWKA=
+
+jspm-nodelibs-path@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/jspm-nodelibs-path/-/jspm-nodelibs-path-0.2.3.tgz#c99502d44fcc50b988a13917302e6ec876c1113a"
+  integrity sha1-yZUC1E/MULmIoTkXMC5uyHbBETo=
+
+jspm-nodelibs-process@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/jspm-nodelibs-process/-/jspm-nodelibs-process-0.2.1.tgz#506b9f0e164a28e2b9abe21fee14693281c213b4"
+  integrity sha1-UGufDhZKKOK5q+If7hRpMoHCE7Q=
+
+jspm-nodelibs-util@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/jspm-nodelibs-util/-/jspm-nodelibs-util-0.2.2.tgz#924e7174cd9d885759d978a4327f8f3457da7a3b"
+  integrity sha1-kk5xdM2diFdZ2XikMn+PNFfaejs=
+
+jspm-nodelibs-vm@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/jspm-nodelibs-vm/-/jspm-nodelibs-vm-0.2.1.tgz#363a7b017256e20a8f71634045259bb1dcbdc8a7"
+  integrity sha1-Njp7AXJW4gqPcWNARSWbsdy9yKc=
+
 jspm-npm@^0.26.8:
   version "0.26.14"
   resolved "https://registry.yarnpkg.com/jspm-npm/-/jspm-npm-0.26.14.tgz#7e166e532e70819caa6b475fab23db801bd4c2f2"
@@ -7259,6 +7304,11 @@ systemjs-plugin-css@0.1.22:
   version "0.1.22"
   resolved "https://registry.yarnpkg.com/systemjs-plugin-css/-/systemjs-plugin-css-0.1.22.tgz#800a719ce57a7bba77124e5c8f95a02c37973478"
   integrity sha1-gApxnOV6e7p3Ek5cj5WgLDeXNHg=
+
+systemjs-plugin-json@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/systemjs-plugin-json/-/systemjs-plugin-json-0.3.0.tgz#23f2492dea7e46a060bc5d14ba983ee2b60cf2d5"
+  integrity sha1-I/JJLep+RqBgvF0Uupg+4rYM8tU=
 
 systemjs@0.19.27:
   version "0.19.27"
