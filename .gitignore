@@ -17,3 +17,4 @@ resources
 versioned-resources
 target-list-examples
 app/index.html
+package-lock.json
