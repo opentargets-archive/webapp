@@ -20,6 +20,7 @@ before_install:
   - jspm config registries.github.auth "${JSPM_GITHUB_AUTH_TOKEN}"
   - jspm config registries.github.maxRepoSize 500
   - jspm config registries.github.handler jspm-github
+  - jspm config strictSSL false
 install:
   - yarn install
   - yarn run setup
