@@ -34,7 +34,7 @@ jobs:
             docker pull "${QUAY_REPO}:${CIRCLE_BRANCH}" || true
             docker build --pull --cache-from "${QUAY_REPO}:${CIRCLE_BRANCH}" --tag "${QUAY_REPO}" .
             docker login -u="opentargets+quaybot" -p="${QUAYBOT_PASSWORD}" quay.io
-            git_sha="${CIRCLE_COMMIT}"
+            git_sha="${CIRCLE_SHA1}"
             docker tag "${QUAY_REPO}" "${QUAY_REPO}:${CIRCLE_BRANCH}"
             docker tag "${QUAY_REPO}" "${QUAY_REPO}:${git_sha}-${CIRCLE_BRANCH}"
             docker push "${QUAY_REPO}:${CIRCLE_BRANCH}" && docker push "${QUAY_REPO}:${git_sha}-${CIRCLE_BRANCH}"
