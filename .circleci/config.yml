@@ -38,19 +38,6 @@ jobs:
       - run:
           name: Build docker image and push to quay.io
           command: |
-#            docker login -u="opentargets+quaybot" -p="${QUAYBOT_PASSWORD}" quay.io
-#            ## branch tag and push
-#            docker tag circle-${CIRCLE_SHA1} ${QUAY_REPO}:${CIRCLE_BRANCH}
-#            docker push ${QUAY_REPO}:${CIRCLE_BRANCH}
-#            ## sha commit push
-#            docker tag ${QUAY_REPO}:${CIRCLE_BRANCH} ${QUAY_REPO}:circle-${CIRCLE_SHA1}
-#            docker push ${QUAY_REPO}:circle-${CIRCLE_SHA1}
-#            ## push latest tag only if master
-#            if [ "$CIRCLE_BRANCH" = "master" ]
-#              then
-#                docker tag ${QUAY_REPO}:${CIRCLE_BRANCH} ${QUAY_REPO}:latest
-#                docker push ${QUAY_REPO}:latest
-#            fi
             docker pull "${QUAY_REPO}:${CIRCLE_BRANCH}" || true
             docker build --pull --cache-from "${QUAY_REPO}:${CIRCLE_BRANCH}" --tag "${QUAY_REPO}" .
             docker login -u="opentargets+quaybot" -p="${QUAYBOT_PASSWORD}" quay.io
