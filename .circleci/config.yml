@@ -8,32 +8,25 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - v1-yarn-deps-{{ checksum "yarn.lock" }}
             # fallback to using the latest cache if no exact match is found
             - v1-yarn-deps-
-
       - run:
           name: yarn run full-install
           command: yarn run full-install
-
-
       - save_cache:
           key: v1-yarn-deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
-
       - run:
           name: running es lint
           command: yarn run eslint
-
       - store_artifacts:
           path: eslint.html
           prefix: eslint
           destination: eslint
-
       - setup_remote_docker
       - run:
           name: Build docker image and push to quay.io
@@ -49,5 +42,4 @@ jobs:
               docker tag "${QUAY_REPO}:${CIRCLE_BRANCH}" "${QUAY_REPO}:latest"
               docker push "${QUAY_REPO}:latest"
             fi
- 
 
