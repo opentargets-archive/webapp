@@ -28,6 +28,10 @@ before_install:
   - rm -f package-lock.json
 install:
   - yarn install
+  - ./node_modules/.bin/jspm config registries.github.remote https://github.jspm.io
+  - ./node_modules/.bin/jspm config registries.github.auth "${JSPM_GITHUB_AUTH_TOKEN}"
+  - ./node_modules/.bin/jspm config registries.github.maxRepoSize 500
+  - ./node_modules/.bin/jspm config registries.github.handler jspm-github
   - yarn run setup
 script:
   - yarn run build-all
