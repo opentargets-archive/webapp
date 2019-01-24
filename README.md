@@ -29,33 +29,51 @@ variable of the app, otherwise the deploy steps described below will fail.
    specified with `APIHOST` in the `netlify.toml` file.
  
 
-### Deploy using our docker container
+### Deploy using our docker image
 
-A docker container with a compiled version of the webapp from a NGINX web server is available on quay.io [![Docker Repository on Quay](https://quay.io/repository/opentargets/webapp/status "Docker Repository on Quay")](https://quay.io/repository/opentargets/webapp)
+A docker image with a compiled version of the webapp from a NGINX web server is available on quay.io [![Docker Repository on Quay](https://quay.io/repository/opentargets/webapp/status "Docker Repository on Quay")](https://quay.io/repository/opentargets/webapp)
 
-To run the app locally using the container:
+To start a container locally using the image:
 ```sh
 docker run -d -p 8443:443 -p 8080:80 quay.io/opentargets/webapp
 ```
 Then visit https://localhost:8443
 
-The standard container comes with self-signed certificates, so you will have click through a couple of security warnings to get to the app.
-
-
-#### If you want to point to the docker container to an API different than the production one:
-
-You can specify the variables:
-- `"REST_API_SCHEME=http"` (`http` or `https` are valid option, `https` is the default) 
-- `"REST_API_SERVER=server.example.com"` (eg. `rest_api` to point to a container
-  named `rest_api` or `api.opentargets.io` to point to the production api.
-  production api is the default)
-- `"REST_API_PORT=80"` (default is the HTTPS/443 port)
-
-The default value is used for each variable if it's not specified.
+The standard image comes with self-signed certificates, so you will have click through a couple of security warnings to get to the app.
+To add your own certificates, run something like this:
 
 ```sh
-docker run -d -p 8443:443 -p 8080:80 -e "REST_API_SCHEME=https" -e "REST_API_SERVER=devapi.appspot.com" -e "REST_API_PORT=443" quay.io/opentargets/webapp
+docker run -d -p 8443:443 -p 8080:80 \
+ -v <my_ssl_dir>/server.crt:/usr/share/nginx/server.crt \
+ -v <my_ssl_dir>/server.key:/usr/share/nginx/server.key \
+ quay.io/opentargets/webapp
 ```
+
+
+#### If you want to point to the docker container to an API server different than the production one:
+
+You can specify the variables:
+- `REST_API_SCHEME` (`http` or `https` are valid options, `https` is the default) 
+- `REST_API_SERVER` (e.g. `rest_api` to point to a container
+   named `rest_api` or `api.opentargets.io` to point to the production api; `platform-api.opentargets.io` is the default)
+- `REST_API_PORT` (default is the HTTPS/443 port)
+
+Example: 
+
+```sh
+docker run -d -p 8443:443 -p 8080:80 \
+ -e "REST_API_SCHEME=https" \
+ -e "REST_API_SERVER=devapi.appspot.com" \
+ -e "REST_API_PORT=443" \
+ quay.io/opentargets/webapp
+```
+
+It is also possible to specify a separate server for all /proxy calls (calls to external services and data resources used in some
+pages). These are the variables:
+- `PROXY_SCHEME` (`http` or `https` are valid options, `$REST_API_SCHEME` is the default)
+- `PROXY_SERVER` (if not set, `$REST_API_SERVER` is the default)
+- `PROXY_PORT` (if not set, `$REST_API_PORT` is the default)
+- `PROXY_PATH` (if not set, `proxy` is the default)
 
 Any other modifications, including changing the `custom.json` for the container,
 cannot be made at runtime. You'd have to create your own fork/modifications.
@@ -70,18 +88,11 @@ Installation and tests need some node.js tools: you must have `node.js` and its
 package manager `npm` installed.  You can get them from
 [http://nodejs.org/](http://nodejs.org/)
 
-Installing gulp globally also helps
-```
-npm install -g gulp
-```
-
 ### Install
 Clone the repository and install the dependencies. Tools are installed via NPM (and yarn)
 ```sh
 git clone https://github.com/opentargets/webapp.git
 cd webapp
-npm run full-install
-## or use yarn directly
 yarn run full-install
 ```
 
@@ -111,11 +122,13 @@ Notice that `APIHOST` can be of the form `"https://somesite.com:1234/api/"` (rec
  API there (for eg if you are serving the app locally in nginx)
 2. (optional) add a `custom.json` with your configurations to override the ones
    contained in `default.json`
-3. run `yarn run setup` or `gulp build-all`
+3. run `yarn run setup`
 4. all the code you need for deployment will be contained in `/app`.
 5. to point to a different API (or update your `custom.json`) and not have to
    rebuild the whole app, you can change the `APIHOST` env var (or
-   `custom.json`) and then run only `gulp build-config` 
+   `custom.json`) and then run only `gulp build-config`. :information_source: To use this feature,
+   make sure to have gulp installed (`npm install -g gulp`) and run gulp instead of
+   yarn in step 3 above (`gulp build-all`).
 
 
 ### Running the app
@@ -123,49 +136,30 @@ Notice that `APIHOST` can be of the form `"https://somesite.com:1234/api/"` (rec
 Any webserver that can serve the `/app` directory will do. 
 
 **NOTE** to have a fully functional app, you also need to have your web server
-to reverse proxy `/proxy` to `https://proxy.opentargets.io`. In nginx this is
-achieved with the following change to `nginx.conf`:
-```conf
-location /proxy/ {
-            proxy_pass https://proxy.opentargets.io/;
-        }
-```
+to reverse proxy `/proxy` to a valid rest_api server. For an example of running the app,
+you can look at how the build and deployment is done for nginx in the `Dockerfile` of
+this project.
 
-#### Use a local server
+### Building custom images using docker
 
-TODO
+#### Use our nginx based Dockerfile 
 
-#### Use our nginx container 
+You can run a nginx webserver using docker.
+We have a `Dockerfile` that is derived from `nginx:alpine` which you can use.
 
-You can run a nginx webserver using docker and mount the app folder as a volume.
-We have a container that is derived from `nginx:alpine` which you can use
+To build:
 ```sh
-docker run -d --name webapp -p 7899:80 -p 7443:443 -v $PWD/webapp/app:/var/www/app quay.io/opentargets/webapp
+docker build . -t webapp-image
 ```
 
-Notice that any change to the code will require you to rebuild the content of
-the app and possibly restart the nginx container. 
+To run: see section **"Deploy using our docker image"** above.
 
-**NB** if you do this with the standard `nginx` container you have to take care
-to redirect `/proxy` to https://proxy.opentargets.io
+If you want to change the nginx configuration, you can change the [nginx_conf/nginx.template](nginx_conf/nginx.template)
+before running the build step above.
 
+### Branch images on quay
 
-You can also build your own container, if you want to change the nginx configuration.
-**NB** before building the container you should have built the app at least once,for eg. with `gulp build-all`
-
-```sh
-docker build -t mywebapp .
-
-# wait for the build to finish
-
-docker run -d -p 7899:80 -p 7443:443 mywebapp
-# or if you want to keep changing the code, mount the volume:
-docker run -d -p 7899:80 -p 7443:443 -v $PWD/webapp/app:/var/www/app mywebapp
-```
-
-#### Branch containers
-
-If you push some changes to the branch, a container with the tag of the branch
+If you push some changes to a branch of the _main_ repo, a container with the tag of the branch
 will be publicly available after a few minutes on quay.io
 ```sh
 docker pull quay.io/opentargets/webapp:<yourbranchname>
