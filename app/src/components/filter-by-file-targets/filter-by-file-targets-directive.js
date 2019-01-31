@@ -76,10 +76,12 @@ angular.module('otDirectives')
                 };
 
                 scope.removeTargets = function () {
-                    // $location.search('targets', null);
+                    // to remove the targets we simply remove them from the URL.
+                    // We have a listener and when removing all targets we reset the directive.
+                    // This is only so that we can reset targets from other links on the page for better usability.
+                    // TODO: should we remove such link on the page, we can also remove the scope.$on(otLocationState.STATECHANGED) listener
+                    // and move that code block in here.
                     otLocationState.setStateFor(scope.id, {});
-                    scope.targets = [];
-                    scope.initFilterByFile();
                 };
 
                 scope.addFile = function () {
@@ -233,10 +235,17 @@ angular.module('otDirectives')
                     });
 
                     // Update the url with the targets in the list
-                    // var compressedTargets = otUtils.compressTargetIds(scope.targets);
-                    // $location.search('targets=' + compressedTargets.join(','));
                     otLocationState.setStateFor(scope.id, getStateObject());
                 };
+
+                scope.$on(otLocationState.STATECHANGED, function (evt, new_state, old_state) {
+                    if (!_.isEqual(new_state.targets, old_state.targets) &&
+                        (!new_state.targets || !new_state.targets.ids || new_state.targets.ids.length === 0)
+                    ) {
+                        scope.targets = [];
+                        scope.initFilterByFile();   
+                    }
+                });
             }
         };
     }]);

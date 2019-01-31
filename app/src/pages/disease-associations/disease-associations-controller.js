@@ -54,13 +54,10 @@ angular.module('otControllers')
         $scope.targets = [];
         $scope.targetLists = [];
 
-        // TODO: should be done through the otLocationState?
         $scope.removeTargetLists = function () {
-            $location.search('targets', null);
-            // TODO: Also remove the filter by target list feature
-            // $scope.removeTargets();
-            // $route.reload();
-            // $window.location.reload();
+            // Simply set the url state for this to an empty object.
+            // The target list directive is listening for state changes and will update accordingly
+            otLocationState.setStateFor('targets', {});
         };
 
         $scope.canShowPrioritisation = false;
@@ -142,7 +139,7 @@ angular.module('otControllers')
 
             // facets changed?
             // Or better, do we need to update the facets?
-            // Because now even if the targets list changed we need to recalculate facets and data
+            // Because even if the targets list changes then we need to recalculate facets and data
             var facetsPromise = $q(function (resolve) {
                 resolve('');
             });
