@@ -18,7 +18,7 @@ angular.module('otDirectives')
         'use strict';
 
         var filters = {};
-        var targets;
+        var targets = [];
 
         var colorScale = otUtils.colorScales.BLUE_0_1; // blue orig
         // var colorScale = d3.interpolateYlGnBu;
@@ -90,7 +90,7 @@ angular.module('otDirectives')
         /*
         Setup the table cols and return the DT object
         */
-        var setupTable = function (table, disease, target, filename, download, stt) {
+        var setupTable = function (table, disease, filename, download) {
             var t = $(table).DataTable({
                 'destroy': true,
                 'pagingType': 'simple',
@@ -186,12 +186,14 @@ angular.module('otDirectives')
                         opts.next = indexes[currPage];
                     }
 
-                    // Restrict the associations to these targets
-                    if (target && target.length) {
-                        opts.target = target;
+                    // set targets and filter (facets) options from the corresponding directive var:
+                    // we don't have access to the scope here, and we don't want to pass these as arguments to setup()
+                    // or it will fail to update when firing the ajax call.
+                    if (targets && targets.length) {
+                        opts.target = targets;
                     }
-
                     opts = otApi.addFacetsOptions(filters, opts);
+
                     var queryObject = {
                         method: 'POST',
                         params: opts
@@ -453,10 +455,11 @@ angular.module('otDirectives')
                     targets = attrs[2];
 
                     // if the table has already been setup just reload the data
+                    // Note that in the prioritization view we re-setup the table every time
                     if (dtable) {
                         dtable.ajax.reload();
                     } else {
-                        dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
+                        dtable = setupTable(table, scope.disease, scope.filename, scope.downloadTable);
                     }
 
                     // listener for page and order changes
