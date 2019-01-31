@@ -124,8 +124,8 @@ angular.module('otControllers')
 
             // Do we have targets?
             var targets;
-            if (new_state.targets) {
-                targets = otUtils.expandTargetIds(new_state.targets.split(','));
+            if (new_state.targets && new_state.targets.ids) {
+                targets = otUtils.expandTargetIds(new_state.targets.ids);
             }
 
             if (targets) {

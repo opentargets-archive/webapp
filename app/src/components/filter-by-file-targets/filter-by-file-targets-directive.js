@@ -7,7 +7,7 @@ angular.module('otDirectives')
  *   <ot-filter-by-file-targets> </ot-filter-by-file-targets>
  *
  */
-    .directive('otFilterByFileTargets', ['$log', 'otApi', '$q', '$analytics', 'otLoadedLists', '$location', 'otUtils', function ($log, otApi, $q, $analytics, otLoadedLists, $location, otUtils) {
+    .directive('otFilterByFileTargets', ['otApi', '$q', '$analytics', 'otLoadedLists', 'otUtils', 'otLocationState', function (otApi, $q, $analytics, otLoadedLists, otUtils, otLocationState) {
         'use strict';
 
         return {
@@ -27,14 +27,13 @@ angular.module('otDirectives')
                 var multiSearchChunkSize = 200;
 
                 scope.lists = otLoadedLists.getAll();
+                scope.id = 'targets';
 
                 scope.useList = function (list) {
                     scope.targetNameIdDict = [];
                     scope.targetIdArray = [];
                     scope.targetNameArray = [];
-
                     for (var i = 0; i < list.list.length; i++) {
-                        $log.log(list.list[i]);
                         if (list.list[i].selected) {
                             scope.targetNameArray.push(list.list[i].result.approved_symbol);
                             scope.targetIdArray.push(list.list[i].result.id);
@@ -77,7 +76,8 @@ angular.module('otDirectives')
                 };
 
                 scope.removeTargets = function () {
-                    $location.search('targets', null);
+                    // $location.search('targets', null);
+                    otLocationState.setStateFor(scope.id, {});
                     scope.targets = [];
                     scope.initFilterByFile();
                 };
@@ -204,6 +204,10 @@ angular.module('otDirectives')
                         });
                 };
 
+                var getStateObject = function () {
+                    return {ids: otUtils.compressTargetIds(scope.targets)};
+                };
+
                 var updateAllArrays = function () {
                     scope.targetIdArray = scope.targetIdArray.filter(function (e) {
                         return !e.id;
@@ -229,8 +233,9 @@ angular.module('otDirectives')
                     });
 
                     // Update the url with the targets in the list
-                    var compressedTargets = otUtils.compressTargetIds(scope.targets);
-                    $location.search('targets=' + compressedTargets.join(','));
+                    // var compressedTargets = otUtils.compressTargetIds(scope.targets);
+                    // $location.search('targets=' + compressedTargets.join(','));
+                    otLocationState.setStateFor(scope.id, getStateObject());
                 };
             }
         };
