@@ -141,10 +141,13 @@ angular.module('otControllers')
             }
 
             // facets changed?
+            // Or better, do we need to update the facets?
+            // Because now even if the targets list changed we need to recalculate facets and data
             var facetsPromise = $q(function (resolve) {
                 resolve('');
             });
-            if (!_.isEqual(new_state[facetsId], old_state[facetsId]) || !new_state[facetsId]) {
+            if (!_.isEqual(new_state[facetsId], old_state[facetsId]) || !new_state[facetsId]
+                || !_.isEqual(new_state.targets, old_state.targets)) {
                 facetsPromise.then(function () {
                     return $scope.getFacets(new_state[facetsId], $scope.targets);
                 });
