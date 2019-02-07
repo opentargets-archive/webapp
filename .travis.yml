@@ -1,0 +1,44 @@
+sudo: required
+language: node_js
+node_js:
+  - "8"
+services:
+  - docker
+env:
+  global:
+    - QUAY_REPO="quay.io/opentargets/webapp"
+cache: yarn
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version "1.13.0"
+  - export PATH="$HOME/.yarn/bin:$PATH"
+  - rm -f package-lock.json
+install:
+  - yarn install
+  - ./node_modules/.bin/jspm config registries.github.remote https://github.jspm.io
+  - ./node_modules/.bin/jspm config registries.github.auth "${JSPM_GITHUB_AUTH_TOKEN}"
+  - ./node_modules/.bin/jspm config registries.github.maxRepoSize 500
+  - ./node_modules/.bin/jspm config registries.github.handler jspm-github
+  - yarn run setup
+script:
+  - yarn run build-all
+  - yarn run eslint
+notifications:
+  email:
+    recipients:
+      - ops@opentargets.org
+    on_success: never
+    on_failure: always
+after_success:
+#  - ./node_modules/.bin/codecov -e ${TRAVIS_NODE_VERSION} -f ./coverage/lcov.info
+  - docker pull "${QUAY_REPO}:${TRAVIS_BRANCH}" || true
+  - docker build --pull --cache-from "${QUAY_REPO}:${TRAVIS_BRANCH}" --tag "${QUAY_REPO}" .
+  - docker login -u="${QUAY_USER}" -p="${QUAY_PASSWORD}" quay.io
+  - git_sha="${TRAVIS_COMMIT}"
+  - docker tag "${QUAY_REPO}" "${QUAY_REPO}:${TRAVIS_BRANCH}"
+  - docker tag "${QUAY_REPO}" "${QUAY_REPO}:${git_sha}-${TRAVIS_BRANCH}"
+  - docker push "${QUAY_REPO}:${TRAVIS_BRANCH}" && docker push "${QUAY_REPO}:${git_sha}-${TRAVIS_BRANCH}"
+  - |
+    if [ "${TRAVIS_BRANCH}" = "master" ]; then
+      docker tag "${QUAY_REPO}:${TRAVIS_BRANCH}" "${QUAY_REPO}:latest"
+      docker push "${QUAY_REPO}:latest"
+    fi
