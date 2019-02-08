@@ -53,8 +53,8 @@
 # NOTE: The API url SHOULD not end anymore in `open-targets-eu-dev` but 
 # there should be `prod` somewhere in the name
 
-#[context.staging.environment]
-#  APIHOST = "https://prereleaseapi.api.opentargets.io/"
+[context.qa.environment]
+  APIHOST = "https://platform-api-qc.opentargets.io/"
 
-[context.shipit.environment]
- APIHOST = "http://prod-20180625-1203.api.opentargets.io/"
+# [context.shipit.environment]
+#   APIHOST = "http://prod-20180625-1203.api.opentargets.io/"
