@@ -181,7 +181,7 @@ angular.module('otDirectives')
                 data.forEach(function (d, i) {
                     var row = [];
                     var dlit = d.evidence.literature_ref; // data literature - now we use the epmc data
-                    var pubmedId = dlit.data.pmid;
+                    var pubmedId = dlit.data.pmid || dlit.data.pmcid || dlit.data.id;
 
 
                     // 0 - Access level
@@ -209,7 +209,7 @@ angular.module('otDirectives')
                     }
 
                     // Abstract
-                    if (!dlit.data.title && !dlit.data.abstractText && !dlit.data.journalInfo.journal) {
+                    if (!dlit.data.title && !dlit.data.abstractText && (!dlit.data.journalInfo || !dlit.data.journalInfo.journal)) {
                         row.push('N/A');
                     } else {
                         var abstractSentences = getMatchedSentences(d);
@@ -390,8 +390,9 @@ angular.module('otDirectives')
                                         // create a new field: 'evidence.literature_ref.data'
                                         resp.body.data.forEach(function (d) {
                                             d.evidence.literature_ref.data = resp2.data.resultList.result.find(function (i) {
-                                                return i.pmid === d.evidence.literature_ref.lit_id.split('/').pop();
-                                            });
+                                                var id =  i.pmid || i.id;   // some data MIGHT not have a pmid, but id SHOULD be the same
+                                                return id === d.evidence.literature_ref.lit_id.split('/').pop();
+                                            }) || {};
                                         });
                                         return resp;
                                     });
