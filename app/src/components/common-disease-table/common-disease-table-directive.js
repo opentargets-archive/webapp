@@ -128,7 +128,8 @@ angular.module('otDirectives')
                             }
 
                             // 5: p-value
-                            var msg = item.evidence.variant2disease.resource_score.value.toPrecision(1);
+                            var pval = item.evidence.variant2disease.resource_score.value;
+                            var msg = (pval ? pval : 0.0).toPrecision(1);
                             // if (item.sourceID === otConsts.datasources.PHEWAS.id) {
                             //     msg += '<div style="margin-top:5px;">Cases: ' + item.unique_association_fields.cases + '<br />Odds ratio: ' + parseFloat(item.unique_association_fields.odds_ratio).toPrecision(2) + '</div>';
                             // } else if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
