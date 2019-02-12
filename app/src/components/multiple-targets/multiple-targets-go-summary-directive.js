@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('multipleTargetsGoSummary', ['$http', 'otUtils', 'otConsts', function ($http, otUtils, otConsts) {
+    .directive('multipleTargetsGoSummary', ['$http', 'otUtils', function ($http, otUtils) {
         var goCategoryMap = {
             BP: 'Biological Process',
             CC: 'Cellular component',
@@ -92,7 +92,8 @@ angular.module('otDirectives')
                     //     }
                     // };
                     // $http.post('https://biit.cs.ut.ee/gprofiler/', opts, httpConfig)
-                    $http.post(otConsts.PROXY + 'biit.cs.ut.ee/gprofiler/api/gost/profile/', opts, config)
+                    // $http.post(otConsts.PROXY + 'biit.cs.ut.ee/gprofiler/api/gost/profile/', opts, config)
+                    $http.post('https://biit.cs.ut.ee/gprofiler/api/gost/profile/', opts, config)
                         .then(function (resp) {
                             scope.showSpinner = false;
                             var data = resp.result;
