@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('multipleTargetsGoSummary', ['$log', '$http', 'otUtils', function ($log, $http, otUtils) {
+    .directive('multipleTargetsGoSummary', ['$http', 'otUtils', function ($http, otUtils) {
         var goCategoryMap = {
             BP: 'Biological Process',
             CC: 'Cellular component',
@@ -44,7 +44,7 @@ angular.module('otDirectives')
             //     }
             // }
             // return tableData;
-            return data
+            return data.result
                 .filter(function (d) { return d.source.substring(0, 3) === 'GO:'; })
                 .map(function (d) {
                     return [
@@ -97,8 +97,7 @@ angular.module('otDirectives')
                     $http.post('https://biit.cs.ut.ee/gprofiler/api/gost/profile/', opts, config)
                         .then(function (resp) {
                             scope.showSpinner = false;
-                            $log.log(resp);
-                            var data = resp.result;
+                            var data = resp.data;
                             $('#target-list-go2-terms').DataTable(otUtils.setTableToolsParams({
                                 'data': parseGOdata(data),
                                 'ordering': true,
