@@ -49,7 +49,7 @@ angular.module('otDirectives')
                 .map(function (d) {
                     return [
                         d.native, // GO term id
-                        d.description, // GO term description
+                        d.name, // GO term description
                         goCategoryMap[d.source.substring(3, 5)], // GO term category
                         d.p_value // GO term pvalue
                     ];
