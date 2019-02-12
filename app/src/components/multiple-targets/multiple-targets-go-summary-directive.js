@@ -44,12 +44,16 @@ angular.module('otDirectives')
             //     }
             // }
             // return tableData;
-            return data.filter(d => d.source.substring(0, 3) === 'GO:').map(d => [
-                d.native, // GO term id
-                d.description, // GO term description
-                goCategoryMap[d.source.substring(3, 5)], // GO term category
-                d.p_value // GO term pvalue
-            ]);
+            return data
+                .filter(function (d) { return d.source.substring(0, 3) === 'GO:'; })
+                .map(function (d) {
+                    return [
+                        d.native, // GO term id
+                        d.description, // GO term description
+                        goCategoryMap[d.source.substring(3, 5)], // GO term category
+                        d.p_value // GO term pvalue
+                    ];
+                });
         }
 
         return {
