@@ -40,7 +40,7 @@
     "xml": "^1.0.1"
   },
   "scripts": {
-    "setup": "./node_modules/.bin/jspm install && ./node_modules/.bin/gulp build-all",
+    "setup": "./node_modules/.bin/jspm install",
     "build-all": "./node_modules/.bin/gulp build-all",
     "server": "./node_modules/.bin/gulp webserver",
     "full-install": "yarn install && yarn run setup && yarn run build-all",
