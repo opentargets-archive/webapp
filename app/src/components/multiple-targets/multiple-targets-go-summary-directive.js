@@ -79,6 +79,7 @@ angular.module('otDirectives')
                     var opts = {
                         organism: 'hsapiens',
                         user_threshold: 1,
+                        sources: ['GO:MF', 'GO:CC', 'GO:BP'],
                         query: scope.target.map(function (d) { return d.approved_symbol; })
                     };
                     const config = {
