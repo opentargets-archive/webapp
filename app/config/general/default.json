@@ -104,8 +104,7 @@
         {
             "name": "tractability",
             "element": "multiple-targets-tractability-summary",
-            "heading": "Tractability information",
-            "new": true
+            "heading": "Tractability information"
         },
         {
             "name": "drugs",
@@ -199,8 +198,7 @@
             "track": true,
             "config": {
                 "id": "tractability"
-            },
-            "new": true
+            }
         },
 
         {
@@ -406,8 +404,7 @@
             "track": true,
             "config": {
                 "datatype": "affected_pathway"
-            },
-            "new": true
+            }
         },
         {
             "name": "rnaEvidence",
