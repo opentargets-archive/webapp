@@ -46,6 +46,7 @@ angular.module('otFacets')
             this.hideCount = config.hideCount || false;
             this.shouldToggleChildren = config.shouldToggleChildren || false;
             this.showExpanded = config.showExpanded;
+            this.customLabelStylingClass = config.customLabelStylingClass;
         }
         NestedBooleanFilter.prototype.addParent = function (parent) {
             this.parents.push(parent);
@@ -125,6 +126,10 @@ angular.module('otFacets')
 
         NestedBooleanFilter.prototype.isShowExpanded = function () {
             return this.showExpanded;
+        };
+
+        NestedBooleanFilter.prototype.getCustomLabelStylingClass = function () {
+            return (this.customLabelStylingClass ? this.customLabelStylingClass : '');
         };
 
         NestedBooleanFilter.prototype.setLastClicked = function () {
