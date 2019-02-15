@@ -48,8 +48,7 @@
                 },
                 {
                     "label" : "Python client",
-                    "href" : "http://opentargets.readthedocs.io/",
-                    "target": "_blank"
+                    "href" : "https://docs.targetvalidation.org/tutorials/python-client"
                 }
             ]
         },
