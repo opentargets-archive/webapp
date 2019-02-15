@@ -10,10 +10,8 @@ COPY ./app /var/www/app/
 COPY ./nginx_conf/server.crt /usr/share/nginx/
 COPY ./nginx_conf/server.key /usr/share/nginx/
 
-#move nginx.conf and template in the right place
-COPY ./nginx_conf/nginx.conf /etc/nginx/nginx.template
-# COPY ./nginx_conf/app_server.template /etc/nginx/conf.d/app_server.template
-# COPY ./nginx_conf/rest_api_scheme.template /etc/nginx/conf.d/rest_api_scheme.template
+#move nginx.template in the right place
+COPY ./nginx_conf/nginx.template /etc/nginx/nginx.template
 
 VOLUME /var/cache/nginx
 
