@@ -43,6 +43,10 @@
                     "href" : "https://api.opentargets.io/v3/platform/docs/swagger-ui"
                 },
                 {
+                    "label" : "API tutorials",
+                    "href" : "https://docs.targetvalidation.org/tutorials/api-tutorials"
+                },
+                {
                     "label" : "Python client",
                     "href" : "http://opentargets.readthedocs.io/",
                     "target": "_blank"
