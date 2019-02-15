@@ -67,13 +67,13 @@ angular.module('otDirectives')
             // {name: "", title: otDictionary.ENSEMBL_ID},
             {name: '', title: otDictionary.ASSOCIATION_SCORE},
             // here are the datatypes:
-            {name: otConsts.datatypes.GENETIC_ASSOCIATION.key, title: otConsts.datatypes.GENETIC_ASSOCIATION.label},
-            {name: otConsts.datatypes.SOMATIC_MUTATION.key, title: otConsts.datatypes.SOMATIC_MUTATION.label},
-            {name: otConsts.datatypes.KNOWN_DRUG.key, title: otConsts.datatypes.KNOWN_DRUG.label},
-            {name: otConsts.datatypes.AFFECTED_PATHWAY.key, title: otConsts.datatypes.AFFECTED_PATHWAY.label},
-            {name: otConsts.datatypes.RNA_EXPRESSION.key, title: otConsts.datatypes.RNA_EXPRESSION.label},
-            {name: otConsts.datatypes.LITERATURE.key, title: otConsts.datatypes.LITERATURE.label},
-            {name: otConsts.datatypes.ANIMAL_MODEL.key, title: otConsts.datatypes.ANIMAL_MODEL.label},
+            {name: otConsts.datatypes.GENETIC_ASSOCIATION.id, title: otConsts.datatypes.GENETIC_ASSOCIATION.label},
+            {name: otConsts.datatypes.SOMATIC_MUTATION.id, title: otConsts.datatypes.SOMATIC_MUTATION.label},
+            {name: otConsts.datatypes.KNOWN_DRUG.id, title: otConsts.datatypes.KNOWN_DRUG.label},
+            {name: otConsts.datatypes.AFFECTED_PATHWAY.id, title: otConsts.datatypes.AFFECTED_PATHWAY.label},
+            {name: otConsts.datatypes.RNA_EXPRESSION.id, title: otConsts.datatypes.RNA_EXPRESSION.label},
+            {name: otConsts.datatypes.LITERATURE.id, title: otConsts.datatypes.LITERATURE.label},
+            {name: otConsts.datatypes.ANIMAL_MODEL.id, title: otConsts.datatypes.ANIMAL_MODEL.label},
             // empty col for sorting by total score (sum)
             {name: '', title: 'total score'},
             // empty col for the gene name
@@ -87,6 +87,19 @@ angular.module('otDirectives')
                 'name': cols[i].name
             };
             a.push(columnData);
+            // if datatype is configured to be expanded, add columns for individual datasources:
+            var datatype = otUtils.getDatatypeById(cols[i].name);
+            if (datatype && datatype.showExpanded) {
+                datatype.datasources.forEach(function (element) {
+                    var datasource = otUtils.getDatasourceById(element.toLowerCase());
+                    columnData = {
+                        'title': '<div><span style=\'color:lightgrey\' class=\'' + datasource.customLabelStylingClass + '\' title=\'' + element + '\'>' +
+                                    datasource.label + '</span></div>',
+                        'name': element
+                    };
+                    a.push(columnData);
+                });
+            }
         }
 
 
@@ -94,6 +107,14 @@ angular.module('otDirectives')
         Setup the table cols and return the DT object
         */
         var setupTable = function (table, disease, filename, download) {
+            var range = function (start, end) {
+                var result = [];
+                for (var i = start; i <= end; i++) {
+                    result.push(i);
+                }
+                return result;
+            };
+
             var t = $(table).DataTable({
                 'destroy': true,
                 'pagingType': 'simple',
@@ -107,15 +128,20 @@ angular.module('otDirectives')
                 'columns': a,
                 'columnDefs': [
                     {
-                        'targets': [9],
+                        'targets': [0],
+                        'width': '30%'
+                    },
+                    {
+                        'targets': [a.length - 2],
                         'className': 'never',
                         'visible': false
                     },
                     {
-                        'targets': [10],
-                        'orderable': false
+                        'targets': [a.length - 1],
+                        'orderable': false,
+                        'width': '30%'
                     },
-                    {'orderSequence': ['desc', 'asc'], 'targets': [1, 2, 3, 4, 5, 6, 7, 8, 9]},
+                    {'orderSequence': ['desc', 'asc'], 'targets': range(1, a.length - 2)},
                     {'orderSequence': ['asc', 'desc'], 'targets': [0]}
                 ],
                 'processing': false,
@@ -168,27 +194,36 @@ angular.module('otDirectives')
                     // 0 => gene name alphabetically -- not supported in the api
 
                     // 1 => overall
+                    // Datatypes (and possible datasources, for datatypes that are configured to show as expanded):
                     // 2 => genetic_association
-                    // 3 => somatic_mutation
-                    // 4 => known_drug
-                    // 5 => affected_pathway
-                    // 6 => rna_expression
-                    // 7 => text_mining
-                    // 8 => animal_model
-                    // 9 => overall -- hidden column
-                    // 10 => gene description -- not supported in the api
+                    // .. => somatic_mutation
+                    // .. => known_drug
+                    // .. => affected_pathway
+                    // .. => rna_expression
+                    // .. => text_mining
+                    // N => animal_model
+                    // last => overall -- hidden column
+                    // xx => gene description -- not supported in the api, so not included in options
                     var mappings = {
                         0: 'target.gene_info.symbol',
-                        1: 'association_score.overall',
-                        2: 'association_score.datatypes.' + otConsts.datatypes.GENETIC_ASSOCIATION.id,
-                        3: 'association_score.datatypes.' + otConsts.datatypes.SOMATIC_MUTATION.id,
-                        4: 'association_score.datatypes.' + otConsts.datatypes.KNOWN_DRUG.id,
-                        5: 'association_score.datatypes.' + otConsts.datatypes.AFFECTED_PATHWAY.id,
-                        6: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION.id,
-                        7: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE.id,
-                        8: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL.id,
-                        9: 'association_score.overall'
+                        1: 'association_score.overall'
                     };
+                    // iterate over the data types of each column and add mappings accordingly:
+                    cols.forEach(function (coldef) {
+                        var datatype = otUtils.getDatatypeById(coldef.name);
+                        if (datatype) {
+                            mappings[Object.keys(mappings).length] = 'association_score.datatypes.' + datatype.id;
+                            // if datatype is configured to be expanded, add columns for individual datasources:
+                            if (datatype.showExpanded) {
+                                datatype.datasources.forEach(function (element) {
+                                    var datasource = otUtils.getDatasourceById(element.toLowerCase());
+                                    mappings[Object.keys(mappings).length] = 'association_score.datasources.' + datasource.id;
+                                });
+                            }
+                        }
+                    });
+                    mappings[Object.keys(mappings).length] = 'association_score.overall';
+
                     var order = [];
                     for (var i = 0; i < data.order.length; i++) {
                         var prefix = data.order[i].dir === 'asc' ? '~' : '';
@@ -273,8 +308,19 @@ angular.module('otDirectives')
         function parseServerResponse (data) {
             var newData = new Array(data.length);
 
+            var getPanelLink = function (datatypeId, datasourceId) {
+                // checks if datasource has its own panel (property hasCustomPanel)
+                var datasource = otUtils.getDatasourceById(datasourceId.toLowerCase());
+                return (datasource.hasCustomPanel ? datasourceId : datatypeId);
+            };
+
             var getScore = function (d, dt) {
+                // TODO - remove unnecessary 2nd part of condition (&& !data[d].evidence_count.datatypes[dt])
                 return (!data[d].association_score.datatypes[dt] && !data[d].evidence_count.datatypes[dt]) ? -1 : data[d].association_score.datatypes[dt];
+            };
+
+            var getDatasourceScore = function (d, datasourceId) {
+                return (!data[d].association_score.datasources[datasourceId]) ? -1 : data[d].association_score.datasources[datasourceId];
             };
 
             for (var i = 0; i < data.length; i++) {
@@ -286,20 +332,24 @@ angular.module('otDirectives')
 
                 // The association score
                 row.push(getColorStyleString(data[i].association_score.overall, geneDiseaseLoc));
-                // Genetic association
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.GENETIC_ASSOCIATION.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.GENETIC_ASSOCIATION.id));
-                // Somatic mutation
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.SOMATIC_MUTATION.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.SOMATIC_MUTATION.id));
-                // Known drug
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.KNOWN_DRUG.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.KNOWN_DRUG.id));
-                // Affected pathway
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.AFFECTED_PATHWAY.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.AFFECTED_PATHWAY.id));
-                // Expression atlas
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.RNA_EXPRESSION.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.RNA_EXPRESSION.id));
-                // Literature
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.LITERATURE.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.LITERATURE.id));
-                // Animal model
-                row.push(getColorStyleString(getScore(i, otConsts.datatypes.ANIMAL_MODEL.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + otConsts.datatypes.ANIMAL_MODEL.id));
+
+                // iterate over the data types
+                cols.forEach(function (coldef) {
+                    var datatype = otUtils.getDatatypeById(coldef.name);
+                    if (datatype) {
+                        // if datatype is configured to be expanded, add columns for individual datasources:
+                        if (datatype.showExpanded) {
+                            row.push(getColorStyleString(getScore(i, datatype.id)));
+                            datatype.datasources.forEach(function (element) {
+                                var datasource = otUtils.getDatasourceById(element.toLowerCase());
+                                row.push(getColorStyleString(getDatasourceScore(i, datasource.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + getPanelLink(datatype.id, datasource.id)));
+                            });
+                        } else {
+                            // add only main column, with href to this datatype's panel:
+                            row.push(getColorStyleString(getScore(i, datatype.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + datatype.id));
+                        }
+                    }
+                });
 
                 // Total score
                 row.push(data[i].association_score.datatypes.genetic_association +
