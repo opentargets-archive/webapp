@@ -1,4 +1,4 @@
-<div ng-init="collapsed= (expanded===undefined) ? true&&(!filter.isLastClicked()) : !expanded">
+<div ng-init="collapsed= (expanded===undefined) ? true&&(!filter.isLastClicked())&&(!filter.isShowExpanded()) : !expanded">
   <!--Parent-->
   <div class="checkbox ot-facet-checkbox clearfix">
     <span style="width:auto">

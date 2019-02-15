@@ -30,6 +30,7 @@ angular.module('otFacets')
                         enabled: (bucket !== null),
                         checked: false,
                         children: null,
+                        showExpanded: dt.showExpanded,
                         facetName: facetName
                     }, facetsGlobal);
                     var children = null;

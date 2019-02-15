@@ -45,6 +45,7 @@ angular.module('otFacets')
             this.parents = [];
             this.hideCount = config.hideCount || false;
             this.shouldToggleChildren = config.shouldToggleChildren || false;
+            this.showExpanded = config.showExpanded;
         }
         NestedBooleanFilter.prototype.addParent = function (parent) {
             this.parents.push(parent);
@@ -121,6 +122,11 @@ angular.module('otFacets')
                 return filter.facetsGlobal.lastClicked === (filter.facetName + ':' + filter.key);
             });
         };
+
+        NestedBooleanFilter.prototype.isShowExpanded = function () {
+            return this.showExpanded;
+        };
+
         NestedBooleanFilter.prototype.setLastClicked = function () {
             this.facetsGlobal.lastClicked = this.facetName + ':' + this.key;
         };
