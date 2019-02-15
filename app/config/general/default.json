@@ -40,7 +40,7 @@
             "menu": [
                 {
                     "label" : "API documentation",
-                    "href" : "https://api.opentargets.io/v3/platform/docs/swagger-ui"
+                    "href" : "https://docs.targetvalidation.org/tutorials/rest-api"
                 },
                 {
                     "label" : "API tutorials",
