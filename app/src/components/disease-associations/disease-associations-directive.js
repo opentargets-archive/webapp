@@ -14,7 +14,7 @@ angular.module('otDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('otDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otApi', function (otUtils, otDictionary, otConsts, otApi) {
+    .directive('otDiseaseAssociations', ['otUtils', 'otDictionary', 'otConsts', 'otApi', 'otGoogleAnalytics', function (otUtils, otDictionary, otConsts, otApi, otGoogleAnalytics) {
         'use strict';
 
         var filters = {};
@@ -33,6 +33,8 @@ angular.module('otDirectives')
         var currLength;
 
         var state = {};
+
+        var tableState; // initializes to undefined
 
         /*
         * Generates and returns the string representation of the span element
@@ -117,7 +119,9 @@ angular.module('otDirectives')
                 ],
                 'processing': false,
                 'serverSide': true,
+                'searchDelay': 500,
                 'ajax': function (data, cbak) {
+                    tableState = data;
                     if (!currLength) {
                         currLength = data.length;
                     }
@@ -231,11 +235,43 @@ angular.module('otDirectives')
                     // "infoEmpty": "No records available",
                     // "infoFiltered": "(filtered from _MAX_ total records)"
                 }
-                // "aoColumns": [
-                //    { "asSorting": [ "desc", "asc" ] }, //first sort desc, then asc
-                // ]
             }, filename);
 
+            // set table event listeners for tracking analytics
+            t.on('search.dt', function () {
+                // track search only if there is a search term
+                // for some odd reason this is also triggered when sorting columns :(
+                if (t.search()) {
+                    otGoogleAnalytics.trackEvent('associations', 'search', 'search-term-entered');
+                }
+            });
+
+            t.on('order.dt', function () {
+                // track column sorting
+                // but not on page load, so only when user clicks
+                if (tableState &&
+                    (tableState.order[0].column !== t.order()[0] || tableState.order[0].dir !== t.order()[1])) {
+                    otGoogleAnalytics.trackEvent('associations', 'sort', 'columnName');
+                }
+            });
+
+            t.on('page.dt', function () {
+                var info = t.page.info();
+                if (tableState) {
+                    var label = '';
+                    if (info.start > tableState.start) {
+                        label = 'next';
+                    }
+                    if (info.start < tableState.start) {
+                        label = 'previous';
+                    }
+                    otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
+                }
+            });
+
+            t.on('length.dt', function (e, settings, len) {
+                otGoogleAnalytics.trackEvent('associations', 'dropdown', 'show-' + len + '-entries');
+            });
             return t;
         };
 
@@ -337,6 +373,7 @@ angular.module('otDirectives')
 
                 // Download the whole table
                 scope.downloadTable = function () {
+                    otGoogleAnalytics.trackEvent('associations', 'download', 'CSV');
                     var size = 10000;
                     var totalText = '';
                     function columnsNumberOk (csv, n) {
