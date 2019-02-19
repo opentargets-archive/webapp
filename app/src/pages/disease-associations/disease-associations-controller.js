@@ -14,7 +14,7 @@ angular.module('otControllers')
  * Then when we get the data, we update content and facets
  */
 
-    .controller('DiseaseAssociationsController', ['$scope', '$location', '$q', 'otApi', 'otFacetsState', 'otDictionary', 'otUtils', 'otLocationState', 'otConfig', 'otConsts', function ($scope, $location, $q, otApi, otFacetsState, otDictionary, otUtils, otLocationState, otConfig, otConsts) {
+    .controller('DiseaseAssociationsController', ['$scope', '$location', '$q', 'otApi', 'otFacetsState', 'otDictionary', 'otUtils', 'otLocationState', 'otConfig', 'otConsts', 'otGoogleAnalytics', function ($scope, $location, $q, otApi, otFacetsState, otDictionary, otUtils, otLocationState, otConfig, otConsts, otGoogleAnalytics) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -237,12 +237,23 @@ angular.module('otControllers')
 
         /*
          * Called from the tables in the HTML, this sets the active tab id.
-         * Valid tabs are: 'bubbles', 'table', 'tree'.
+         * Valid tabs are: 'table', 'priority'.
          */
         $scope.setActiveTab = function (tab) {
             $scope.view.t[0] = tab;
             update();
+            var label = (tab === 'priority') ? 'prioritisation-tab' : 'associations-tab';
+            otGoogleAnalytics.trackEvent('associations', 'view', label);
         };
+
+
+        /**
+         * Used to track link/button clicks from the HTML
+         */
+        $scope.trackClick = function (label) {
+            otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
+        };
+
 
         //
         // on STATECHANGED

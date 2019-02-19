@@ -19,7 +19,11 @@
                 <h3 view-title>{{search.total}} {{search.total===1 ? "target" : "targets"}} associated with {{search.label}}</h3>
                 <meta-description-content>{{search.label}} ({{search.query}}) is associated with {{search.total}} targets through evidence in the Open Targets Platform from GWAS, clinical trials, differential expression experiments, pathways, text mining and experiments in animal models.</meta-description-content>
                 <h5 ng-show="targets.length">Only targets in your list associated with {{search.label}} are shown. <a href="" ng-click="removeTargetLists()">Remove this filter</a></h5>
-                <p><!-- Found {{search.total}} {{search.total===1 ? "target" : "targets"}}<span class="ot-interpage-link">--><a href="/disease/{{search.query}}"><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span> View disease profile</span></a>
+                <p>
+                    <a href="/disease/{{search.query}}" ng-click="trackClick('disease-profile-page')">
+                        <span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span>
+                        View disease profile
+                    </a>
                 </p>
             </div>
         </div>
