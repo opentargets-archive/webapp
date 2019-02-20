@@ -1,0 +1,123 @@
+#beautified with https://nginxbeautifier.com/
+
+#this file is not a "pure" nginx.conf file
+#when the docker image is started, it is run through envsubst
+#which substitures the following evnironment variables:
+# REST_API_SCHEME
+# REST_API_SERVER
+# REST_API_PORT
+# PROXY_SCHEME
+# PROXY_SERVER
+# PROXY_PORT
+# PROXY_PATH
+
+user nginx;
+worker_processes 4;
+# error_log  /var/log/nginx/error.log debug;
+pid /run/nginx.pid;
+worker_rlimit_nofile 65535;
+
+events {
+  worker_connections 20000;
+}
+
+http {
+  server_tokens off;
+  include mime.types;
+  default_type application/octet-stream;
+  access_log /var/log/nginx/access.log;
+  sendfile on;
+  keepalive_timeout 65;
+
+  gzip on;
+  gzip_disable "msie6";
+  gzip_vary on;
+  gzip_proxied any;
+  gzip_comp_level 6;
+  gzip_buffers 16 8k;
+  gzip_http_version 1.1;
+  gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript application/font-woff image/svg+xml image/svg image/png application/octet-stream;
+
+  proxy_cache_path /var/cache/nginx/cache_proxy levels=1 keys_zone=appproxy:10m inactive=1d max_size=1g;
+
+  large_client_header_buffers 4 32k;
+
+  server {
+    listen 8090;
+    location /heartbeat {
+      access_log off;
+      return 200 'working!';
+      add_header Content-Type text/plain;
+    }
+  }
+
+  server {
+    listen 80 default_server;
+    listen 443 ssl http2 default_server;
+
+    root /var/www/app/;
+
+    ssl_certificate /usr/share/nginx/server.crt;
+    ssl_certificate_key /usr/share/nginx/server.key;
+
+    set $no_cache "1";#$http_clear_cache;
+    if ($request_uri ~ .*request_token.*) {
+      set $no_cache "1";
+    }
+
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:kEDH+AESGCM:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_session_cache shared:SSL:10m;
+
+    # just enable this if you are really happy with going trough https only
+    #  add_header Strict-Transport-Security max-age=86400;
+
+    # redirect http calls to https
+    if ($ssl_protocol = "") {
+      return 301 https://$host$request_uri;
+    }
+
+
+    location /api/ {
+      proxy_ignore_client_abort on;
+      proxy_read_timeout 10m;
+      proxy_http_version 1.1;
+      #here is where evnironment variables are substitured on container start
+      proxy_pass ${REST_API_SCHEME}://${REST_API_SERVER}:${REST_API_PORT}/ ;
+      proxy_redirect off;
+      proxy_set_header Host ${REST_API_SERVER};
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Host $server_name;
+    }
+
+
+    #handle maintenance status
+    error_page 503 @maintenance;
+    location @maintenance {
+      rewrite ^(.*)$ /error503.html break;
+    }
+
+    location /proxy/ {
+      proxy_pass ${PROXY_SCHEME}://${PROXY_SERVER}:${PROXY_PORT}/${PROXY_PATH}/ ;
+    }
+
+
+    location ~* /(js|css|imgs|vendor|build)/.*\.(js|css|svg|png|jpg|jpeg|gif|ico)$ {
+      if (-f $document_root/maintenance.on) {
+        return 503;
+      }
+      try_files $uri $uri/ /index.html;
+    }
+
+    location / {
+      if (-f $document_root/maintenance.on) {
+        return 503;
+      }
+      try_files $uri $uri/ /index.html;
+      add_header Pragma "no-cache";
+      add_header Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
+    }
+  }
+}
