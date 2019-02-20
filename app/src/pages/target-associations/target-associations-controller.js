@@ -5,7 +5,7 @@ angular.module('otControllers')
      * AssociationsCtrl
      * Controller for the target associations page
      */
-    .controller('TargetAssociationsController', ['$scope', '$location', 'otUtils', 'otApi', 'otFacetsState', 'otDictionary', 'otLocationState', 'otConfig', function ($scope, $location, otUtils, otApi, otFacetsState, otDictionary, otLocationState, otConfig) {
+    .controller('TargetAssociationsController', ['$scope', '$location', 'otUtils', 'otApi', 'otFacetsState', 'otDictionary', 'otLocationState', 'otConfig', 'otGoogleAnalytics', function ($scope, $location, otUtils, otApi, otFacetsState, otDictionary, otLocationState, otConfig, otGoogleAnalytics) {
         'use strict';
 
         otLocationState.init();   // does nothing, but ensures the otLocationState service is instantiated and ready
@@ -162,6 +162,16 @@ angular.module('otControllers')
         $scope.setActiveTab = function (tab) {
             $scope.view.t[0] = tab;
             update();
+            var label = tab + '-tab';
+            otGoogleAnalytics.trackEvent('associations', 'view', label);
+        };
+
+
+        /**
+         * Used to track link/button clicks from the HTML
+         */
+        $scope.trackClick = function (label) {
+            otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
         };
 
 
