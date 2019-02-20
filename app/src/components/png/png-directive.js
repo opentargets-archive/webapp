@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('otPng', ['$timeout', '$uibModal', '$analytics', function ($timeout, $uibModal, $analytics) {
+    .directive('otPng', ['$timeout', '$uibModal', '$analytics', 'otGoogleAnalytics', function ($timeout, $uibModal, $analytics, otGoogleAnalytics) {
         'use strict';
 
         return {
@@ -114,9 +114,10 @@ angular.module('otDirectives')
                             scope: scope
                         });
                         scope.export = function () {
-                            // track in piwik
+                            // track in piwik and GA
                             if (scope.track) {
-                                $analytics.eventTrack('export', {'category': scope.track, 'label': scope.currScale});
+                                $analytics.eventTrack('export', {'category': scope.track, 'label': scope.currScale});   // piwik
+                                otGoogleAnalytics.trackEvent(scope.track, 'download', 'PNG');  // google analytics
                             }
 
                             // TODO: Set max_size to 2100000
