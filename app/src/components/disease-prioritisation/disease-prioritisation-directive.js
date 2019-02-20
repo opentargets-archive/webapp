@@ -14,7 +14,7 @@ angular.module('otDirectives')
 *   In this example, "loading" is the name of the var in the parent scope, pointing to $scope.loading.
 *   This is useful in conjunction with a spinner where you can have ng-show="loading"
 */
-    .directive('otDiseasePrioritisation', ['otUtils', 'otDictionary', 'otConsts', 'otApi', '$timeout', function (otUtils, otDictionary, otConsts, otApi, $timeout) {
+    .directive('otDiseasePrioritisation', ['otUtils', 'otDictionary', 'otConsts', 'otApi', '$timeout', 'otGoogleAnalytics', function (otUtils, otDictionary, otConsts, otApi, $timeout, otGoogleAnalytics) {
         'use strict';
 
 
@@ -54,6 +54,9 @@ angular.module('otDirectives')
         var currLength;
 
         var state = {};
+
+        var dtable;
+        var tableState; // initializes to undefined
 
         /*
          * Generates and returns the string representation of the span element
@@ -234,7 +237,9 @@ angular.module('otDirectives')
                 ],
                 'processing': false,
                 'serverSide': true,
+                'searchDelay': 500,
                 'ajax': function (data, cbak) {
+                    tableState = data;
                     if (!currLength) {
                         currLength = data.length;
                     }
@@ -346,8 +351,59 @@ angular.module('otDirectives')
             // The problem with that is that when implemented, a onmouseout -> destroy means that user won't be able
             // to roll over the popover at all (and they need to click on links and buttons)
 
+            // set table event listeners for tracking analytics
+            var dtEvents = ['search.dt', 'order.dt', 'page.dt', 'length.dt'];
+            dtEvents.forEach(function (dte) {
+                t.off(dte, trackingHandler);
+                t.on(dte, trackingHandler);
+            });
+
             return t;
         };
+
+
+        // Handler for table events analytics tracking
+        // TODO: handler for search events is always fired too often, even setting a serachDelay (debounce)
+        // it (and possibly all other events) should be implemented in the ajax call implementing a manual debounce
+        function trackingHandler (e, settings) {
+            // search
+            if (e.type === 'search') {
+                if (dtable.search()) {
+                    otGoogleAnalytics.trackEvent('associations', 'search', 'search-term-entered');
+                }
+            }
+
+            // order (column sorting)
+            if (e.type === 'order') {
+                // track column sorting
+                // but not on page load, so only when user clicks
+                if (tableState &&
+                    (tableState.order[0].column !== dtable.order()[0] || tableState.order[0].dir !== dtable.order()[1])) {
+                    otGoogleAnalytics.trackEvent('associations', 'sort', 'columnName');
+                }
+            }
+
+            // page (table pagination next / previous)
+            if (e.type === 'page') {
+                var info = dtable.page.info();
+                if (tableState) {
+                    var label = '';
+                    if (info.start > tableState.start) {
+                        label = 'next';
+                    }
+                    if (info.start < tableState.start) {
+                        label = 'previous';
+                    }
+                    otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
+                }
+            }
+
+            // length (change table length from dropdown menu)
+            if (e.type === 'length') {
+                otGoogleAnalytics.trackEvent('associations', 'dropdown', 'show-' + arguments[2] + '-entries');
+            }
+        }
+
 
         // The tractability data popover is implemented using the regular Bootstrap popover component
         // as this can be accessed via JQuery which works nicely inside the Datatable mouse handler
@@ -365,6 +421,7 @@ angular.module('otDirectives')
 
             if (t.className && t.className.toString().indexOf('tractable') >= 0) {
                 var d = t.dataset;
+                otGoogleAnalytics.trackEvent('associations', 'hover', 'modality-' + d.mode);
                 $(t).popover({
                     html: true,
                     title: d.target + ' tractability data',
@@ -439,8 +496,12 @@ angular.module('otDirectives')
             content.innerHTML += '<div class="tractabiltiy-popover-section"><strong>Modality:</strong> ' + tractabilityCategories[d.mode].label + '</div>';
             content.append(flowerSection);
             content.innerHTML += '<div style="text-align:center">'
-                                + '<div class="tractabiltiy-popover-section"><a href="/target/' + d.targetid + '?view=sec:tractability"><div class="btn btn-sm btn-tractability">View tractability data for ' + d.target + '</div></a></div>'
-                                + '<div class="tractabiltiy-popover-section"><a href="/evidence/' + d.targetid + '/' + d.diseaseid + '"><div class="btn btn-sm btn-primary" title="' + evidenceButtonLabel + '">' + evidenceButtonLabelTrim + '</div></a></div>'
+                                + '<div class="tractabiltiy-popover-section"><a href="/target/' + d.targetid + '?view=sec:tractability">'
+                                +     '<div class="btn btn-sm btn-tractability" onclick="if (window.location.host === \'www.targetvalidation.org\') {ga(\'send\', \'event\', \'associations\', \'btn-click\', \'target-profile-page-tract-tab\');}">View tractability data for ' + d.target
+                                +     '</div></a></div>'
+                                + '<div class="tractabiltiy-popover-section"><a href="/evidence/' + d.targetid + '/' + d.diseaseid + '">'
+                                +     '<div class="btn btn-sm btn-primary" title="' + evidenceButtonLabel + '" onclick="if (window.location.host === \'www.targetvalidation.org\') {ga(\'send\', \'event\', \'associations\', \'btn-click\', \'evidence-page\');}">' + evidenceButtonLabelTrim
+                                +     '</div></a></div>'
                                 + '<div onclick="$(\'.tractable\').popover(\'destroy\')" class="tnt_tooltip_closer pointer"></div>'
                                 + '</div>';
 
@@ -540,7 +601,6 @@ angular.module('otDirectives')
             link: function (scope, elem) {
                 // table itself
                 var table = elem[0].getElementsByTagName('table');
-                var dtable;
 
                 // legend stuff
                 scope.legendText = 'Score';
@@ -559,6 +619,7 @@ angular.module('otDirectives')
 
                 // Download the whole table
                 scope.downloadTable = function () {
+                    otGoogleAnalytics.trackEvent('associations', 'download', 'CSV');
                     var size = 10000;
                     var totalText = '';
                     function columnsNumberOk (csv, n) {
@@ -683,7 +744,7 @@ angular.module('otDirectives')
                             thingsChanged.push(! _.isEqual(attrs[i], old[i]));
                         }
 
-                        if ( thingsChanged[0] || thingsChanged[1] || thingsChanged[2] ) {
+                        if (thingsChanged[0] || thingsChanged[1] || thingsChanged[2]) {
                             dtable = setupTable(table, scope.disease, scope.targets, scope.filename, scope.downloadTable, state);
                         }
                     }); // end watchGroup
