@@ -8,7 +8,7 @@
 # to understand how context below works.
 
 [context.production.environment]
-  APIHOST = "https://api.opentargets.io/"
+  APIHOST = "https://platform-api.opentargets.io/"
 
 # Deploy Preview context: All Deploy Previews (ie.PRs)
 # will inherit these settings.
