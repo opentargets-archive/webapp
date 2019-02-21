@@ -25,7 +25,7 @@ angular.module('otDirectives')
         var currLength;
 
         var tableState; // initializes to undefined
-        var tableDebounceId;
+        var searchDebounceId;
 
 
         /*
@@ -89,7 +89,7 @@ angular.module('otDirectives')
                 ],
                 'processing': false,
                 'serverSide': true,
-                // 'searchDelay': 500,
+                // 'searchDelay': 800,
                 'columns': (function () {
                     var a = [];
                     for (var i = 0; i < cols.length; i++) {
@@ -102,10 +102,10 @@ angular.module('otDirectives')
                         'targets': [1, 2],
                         'visible': false
                     },
-                    // {
-                    //     'targets': [3, 4, 5, 6, 7, 8, 9],
-                    //     'asSorting': ['desc', 'asc']
-                    // },
+                    {
+                        'targets': [3, 4, 5, 6, 7, 8, 9],
+                        'asSorting': ['desc', 'asc']
+                    },
                     {
                         'orderable': false,
                         'targets': 11
@@ -114,118 +114,125 @@ angular.module('otDirectives')
                     {'orderSequence': ['asc', 'desc'], 'targets': [0]}
                 ],
                 'ajax': function (data, cbak) {
-                    clearTimeout(tableDebounceId);
-                    tableDebounceId = setTimeout(function () {
-                        if (!currLength) {
-                            currLength = data.length;
+                    if (!currLength) {
+                        currLength = data.length;
+                    }
+                    if (data.length !== currLength) {
+                        data.start = 0;
+                        currLength = data.length;
+                        indexes = [];
+                        if (t) {
+                            t.page('first');
                         }
-                        if (data.length !== currLength) {
-                            data.start = 0;
-                            currLength = data.length;
-                            indexes = [];
-                            if (t) {
-                                t.page('first');
+                    }
+
+                    // set table event listeners for tracking analytics
+                    // tableState holds the previous state, if any:
+                    // use it to check changes in state and fire appropriate tracking
+                    // order is important! as certain params change depending on others and we don't want to track that
+                    if (tableState) {
+                        if (! _.isEqual(tableState.order, data.order)) {
+                            // table sorting
+                            otGoogleAnalytics.trackEvent('associations', 'sort', 'columnName');
+                        } else if (! _.isEqual(tableState.search, data.search)) {
+                            // table search/filtering
+                            clearTimeout(searchDebounceId);
+                            if (data.search.value) {
+                                // dubounce the search tracking call
+                                searchDebounceId = setTimeout(function () {
+                                    otGoogleAnalytics.trackEvent('associations', 'search', 'search-term-entered');
+                                }, 600);
                             }
+                        } else if (! _.isEqual(tableState.length, data.length)) {
+                            // table length
+                            otGoogleAnalytics.trackEvent('associations', 'dropdown', 'show-' + data.length + '-entries');
+                        } else if (! _.isEqual(tableState.start, data.start)) {
+                            // pagination
+                            var label = (data.start > tableState.start) ? 'next' : 'previous';
+                            otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
                         }
+                    }
+                    // update table state with new data
+                    tableState = data;
 
-                        // set table event listeners for tracking analytics
-                        // tableState holds the previous state, if any
-                        // use it to check changes in state and fire appropriate tracking
-                        // order is important! as certain params change depending on others and we don't want to track that
-                        if (tableState) {
-                            if (! _.isEqual(tableState.order, data.order)) {
-                                otGoogleAnalytics.trackEvent('associations', 'sort', 'columnName');
-                            } else if (! _.isEqual(tableState.search, data.search)) {
-                                otGoogleAnalytics.trackEvent('associations', 'search', 'search-term-entered');
-                            } else if (! _.isEqual(tableState.length, data.length)) {
-                                otGoogleAnalytics.trackEvent('associations', 'dropdown', 'show-' + data.length + '-entries');
-                            } else if (! _.isEqual(tableState.start, data.start)) {
-                                var label = (data.start > tableState.start) ? 'next' : 'previous';
-                                otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
-                            }
-                        }
-                        // store the current state
-                        tableState = data;
+                    // Order options
+                    // mappings:
+                    // 0 => gene name alphabetically -- not supported in the api
+                    // 1 => gene id alphabetically -- not supported in the api and the column is hidden
+                    // 2 => overall
+                    // 3 => genetic_association
+                    // 4 => somatic_mutation
+                    // 5 => known_drug
+                    // 6 => affected_pathway
+                    // 7 => rna_expression
+                    // 8 => text_mining
+                    // 9 => animal_model
+                    // 10 => overall -- hidden column
+                    // 11 => gene description -- not supported in the api
+                    var mappings = {
+                        0: 'disease.efo_info.label',
+                        3: 'association_score.overall',
+                        4: 'association_score.datatypes.' + otConsts.datatypes.GENETIC_ASSOCIATION.id,
+                        5: 'association_score.datatypes.' + otConsts.datatypes.SOMATIC_MUTATION.id,
+                        6: 'association_score.datatypes.' + otConsts.datatypes.KNOWN_DRUG.id,
+                        7: 'association_score.datatypes.' + otConsts.datatypes.AFFECTED_PATHWAY.id,
+                        8: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION.id,
+                        9: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE.id,
+                        10: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL.id,
+                        11: 'association_score.overall'
+                    };
+                    var order = [];
+                    for (var i = 0; i < data.order.length; i++) {
+                        var prefix = data.order[i].dir === 'asc' ? '~' : '';
+                        order.push(prefix + mappings[data.order[i].column]);
+                    }
 
-                        // Order options
-                        // mappings:
-                        // 0 => gene name alphabetically -- not supported in the api
-                        // 1 => gene id alphabetically -- not supported in the api and the column is hidden
-                        // 2 => overall
-                        // 3 => genetic_association
-                        // 4 => somatic_mutation
-                        // 5 => known_drug
-                        // 6 => affected_pathway
-                        // 7 => rna_expression
-                        // 8 => text_mining
-                        // 9 => animal_model
-                        // 10 => overall -- hidden column
-                        // 11 => gene description -- not supported in the api
-                        var mappings = {
-                            0: 'disease.efo_info.label',
-                            3: 'association_score.overall',
-                            4: 'association_score.datatypes.' + otConsts.datatypes.GENETIC_ASSOCIATION.id,
-                            5: 'association_score.datatypes.' + otConsts.datatypes.SOMATIC_MUTATION.id,
-                            6: 'association_score.datatypes.' + otConsts.datatypes.KNOWN_DRUG.id,
-                            7: 'association_score.datatypes.' + otConsts.datatypes.AFFECTED_PATHWAY.id,
-                            8: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION.id,
-                            9: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE.id,
-                            10: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL.id,
-                            11: 'association_score.overall'
-                        };
-                        var order = [];
-                        for (var i = 0; i < data.order.length; i++) {
-                            var prefix = data.order[i].dir === 'asc' ? '~' : '';
-                            order.push(prefix + mappings[data.order[i].column]);
-                        }
+                    var opts = {
+                        target: [target],
+                        facets: false,
+                        direct: true,
+                        size: data.length,
+                        // from: data.start,
+                        sort: order,
+                        search: data.search.value,
+                        draw: draw
+                    };
 
-                        var opts = {
-                            target: [target],
-                            facets: false,
-                            direct: true,
-                            size: data.length,
-                            // from: data.start,
-                            sort: order,
-                            search: data.search.value,
-                            draw: draw
-                        };
+                    var currPage = data.start / data.length;
 
-                        var currPage = data.start / data.length;
+                    // Control pagination
+                    if (data.start > currStart) {
+                        // We are moving forward...
+                        opts.next = indexes[currPage];
+                    } else if (data.start < currStart) {
+                        // We are moving backwards...
+                        opts.next = indexes[currPage];
+                    }
 
-                        // Control pagination
-                        if (data.start > currStart) {
-                            // We are moving forward...
-                            opts.next = indexes[currPage];
-                        } else if (data.start < currStart) {
-                            // We are moving backwards...
-                            opts.next = indexes[currPage];
-                        }
+                    opts = otApi.addFacetsOptions(filters, opts);
+                    var queryObject = {
+                        method: 'POST',
+                        params: opts
+                    };
 
-                        opts = otApi.addFacetsOptions(filters, opts);
-                        var queryObject = {
-                            method: 'POST',
-                            params: opts
-                        };
+                    otApi.getAssociations(queryObject)
+                        .then(function (resp) {
+                            var dtData = parseServerResponse(resp.body.data);
+                            var o = {
+                                recordsTotal: resp.body.total,
+                                recordsFiltered: resp.body.total,
+                                data: dtData,
+                                draw: draw
+                            };
 
-                        otApi.getAssociations(queryObject)
-                            .then(function (resp) {
-                                var dtData = parseServerResponse(resp.body.data);
-                                var o = {
-                                    recordsTotal: resp.body.total,
-                                    recordsFiltered: resp.body.total,
-                                    data: dtData //,
-                                    // draw: draw
-                                };
+                            // To control pagination
+                            // indexes[currPage + 1] = resp.body.data[resp.body.data.length - 1].search_metadata.sort;
+                            indexes[currPage + 1] = resp.body.next;
+                            currStart = data.start;
 
-                                // To control pagination
-                                // indexes[currPage + 1] = resp.body.data[resp.body.data.length - 1].search_metadata.sort;
-                                indexes[currPage + 1] = resp.body.next;
-                                currStart = data.start;
-
-                                draw++;
-                                cbak(o);
-                            });
-                    }, 400);
+                            draw++;
+                            cbak(o);
+                        });
                 },
                 'order': [[3, 'desc']],
                 'orderMulti': false,
