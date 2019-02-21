@@ -149,7 +149,7 @@ angular.module('otDirectives')
                                 // dubounce the search tracking call; built-in 'searchDelay' option fires unwanted events :/
                                 searchDebounceId = setTimeout(function () {
                                     otGoogleAnalytics.trackEvent('associations', 'search', 'search-term-entered');
-                                }, 600);
+                                }, 700);
                             }
                         } else if (! _.isEqual(tableState.length, data.length)) {
                             // table length
