@@ -25,6 +25,7 @@ angular.module('otDirectives')
         var currLength;
 
         var tableState; // initializes to undefined
+        var tableDebounceId;
 
 
         /*
@@ -88,7 +89,7 @@ angular.module('otDirectives')
                 ],
                 'processing': false,
                 'serverSide': true,
-                'searchDelay': 500,
+                // 'searchDelay': 500,
                 'columns': (function () {
                     var a = [];
                     for (var i = 0; i < cols.length; i++) {
@@ -113,97 +114,118 @@ angular.module('otDirectives')
                     {'orderSequence': ['asc', 'desc'], 'targets': [0]}
                 ],
                 'ajax': function (data, cbak) {
-                    tableState = data;
-                    if (!currLength) {
-                        currLength = data.length;
-                    }
-                    if (data.length !== currLength) {
-                        data.start = 0;
-                        currLength = data.length;
-                        indexes = [];
-                        if (t) {
-                            t.page('first');
+                    clearTimeout(tableDebounceId);
+                    tableDebounceId = setTimeout(function () {
+                        if (!currLength) {
+                            currLength = data.length;
                         }
-                    }
+                        if (data.length !== currLength) {
+                            data.start = 0;
+                            currLength = data.length;
+                            indexes = [];
+                            if (t) {
+                                t.page('first');
+                            }
+                        }
 
-                    // Order options
-                    // mappings:
-                    // 0 => gene name alphabetically -- not supported in the api
-                    // 1 => gene id alphabetically -- not supported in the api and the column is hidden
-                    // 2 => overall
-                    // 3 => genetic_association
-                    // 4 => somatic_mutation
-                    // 5 => known_drug
-                    // 6 => affected_pathway
-                    // 7 => rna_expression
-                    // 8 => text_mining
-                    // 9 => animal_model
-                    // 10 => overall -- hidden column
-                    // 11 => gene description -- not supported in the api
-                    var mappings = {
-                        0: 'disease.efo_info.label',
-                        3: 'association_score.overall',
-                        4: 'association_score.datatypes.' + otConsts.datatypes.GENETIC_ASSOCIATION.id,
-                        5: 'association_score.datatypes.' + otConsts.datatypes.SOMATIC_MUTATION.id,
-                        6: 'association_score.datatypes.' + otConsts.datatypes.KNOWN_DRUG.id,
-                        7: 'association_score.datatypes.' + otConsts.datatypes.AFFECTED_PATHWAY.id,
-                        8: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION.id,
-                        9: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE.id,
-                        10: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL.id,
-                        11: 'association_score.overall'
-                    };
-                    var order = [];
-                    for (var i = 0; i < data.order.length; i++) {
-                        var prefix = data.order[i].dir === 'asc' ? '~' : '';
-                        order.push(prefix + mappings[data.order[i].column]);
-                    }
+                        // set table event listeners for tracking analytics
+                        // tableState holds the previous state, if any
+                        // use it to check changes in state and fire appropriate tracking
+                        // order is important! as certain params change depending on others and we don't want to track that
+                        if (tableState) {
+                            if (! _.isEqual(tableState.order, data.order)) {
+                                otGoogleAnalytics.trackEvent('associations', 'sort', 'columnName');
+                            } else if (! _.isEqual(tableState.search, data.search)) {
+                                otGoogleAnalytics.trackEvent('associations', 'search', 'search-term-entered');
+                            } else if (! _.isEqual(tableState.length, data.length)) {
+                                otGoogleAnalytics.trackEvent('associations', 'dropdown', 'show-' + data.length + '-entries');
+                            } else if (! _.isEqual(tableState.start, data.start)) {
+                                var label = (data.start > tableState.start) ? 'next' : 'previous';
+                                otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
+                            }
+                        }
+                        // store the current state
+                        tableState = data;
 
-                    var opts = {
-                        target: [target],
-                        facets: false,
-                        direct: true,
-                        size: data.length,
-                        // from: data.start,
-                        sort: order,
-                        search: data.search.value,
-                        draw: draw
-                    };
+                        // Order options
+                        // mappings:
+                        // 0 => gene name alphabetically -- not supported in the api
+                        // 1 => gene id alphabetically -- not supported in the api and the column is hidden
+                        // 2 => overall
+                        // 3 => genetic_association
+                        // 4 => somatic_mutation
+                        // 5 => known_drug
+                        // 6 => affected_pathway
+                        // 7 => rna_expression
+                        // 8 => text_mining
+                        // 9 => animal_model
+                        // 10 => overall -- hidden column
+                        // 11 => gene description -- not supported in the api
+                        var mappings = {
+                            0: 'disease.efo_info.label',
+                            3: 'association_score.overall',
+                            4: 'association_score.datatypes.' + otConsts.datatypes.GENETIC_ASSOCIATION.id,
+                            5: 'association_score.datatypes.' + otConsts.datatypes.SOMATIC_MUTATION.id,
+                            6: 'association_score.datatypes.' + otConsts.datatypes.KNOWN_DRUG.id,
+                            7: 'association_score.datatypes.' + otConsts.datatypes.AFFECTED_PATHWAY.id,
+                            8: 'association_score.datatypes.' + otConsts.datatypes.RNA_EXPRESSION.id,
+                            9: 'association_score.datatypes.' + otConsts.datatypes.LITERATURE.id,
+                            10: 'association_score.datatypes.' + otConsts.datatypes.ANIMAL_MODEL.id,
+                            11: 'association_score.overall'
+                        };
+                        var order = [];
+                        for (var i = 0; i < data.order.length; i++) {
+                            var prefix = data.order[i].dir === 'asc' ? '~' : '';
+                            order.push(prefix + mappings[data.order[i].column]);
+                        }
 
-                    var currPage = data.start / data.length;
+                        var opts = {
+                            target: [target],
+                            facets: false,
+                            direct: true,
+                            size: data.length,
+                            // from: data.start,
+                            sort: order,
+                            search: data.search.value,
+                            draw: draw
+                        };
 
-                    // Control pagination
-                    if (data.start > currStart) {
-                        // We are moving forward...
-                        opts.next = indexes[currPage];
-                    } else if (data.start < currStart) {
-                        // We are moving backwards...
-                        opts.next = indexes[currPage];
-                    }
+                        var currPage = data.start / data.length;
 
-                    opts = otApi.addFacetsOptions(filters, opts);
-                    var queryObject = {
-                        method: 'POST',
-                        params: opts
-                    };
+                        // Control pagination
+                        if (data.start > currStart) {
+                            // We are moving forward...
+                            opts.next = indexes[currPage];
+                        } else if (data.start < currStart) {
+                            // We are moving backwards...
+                            opts.next = indexes[currPage];
+                        }
 
-                    otApi.getAssociations(queryObject)
-                        .then(function (resp) {
-                            var dtData = parseServerResponse(resp.body.data);
-                            var o = {
-                                recordsTotal: resp.body.total,
-                                recordsFiltered: resp.body.total,
-                                data: dtData,
-                                draw: draw
-                            };
+                        opts = otApi.addFacetsOptions(filters, opts);
+                        var queryObject = {
+                            method: 'POST',
+                            params: opts
+                        };
 
-                            // To control pagination
-                            // indexes[currPage + 1] = resp.body.data[resp.body.data.length - 1].search_metadata.sort;
-                            indexes[currPage + 1] = resp.body.next;
-                            currStart = data.start;
+                        otApi.getAssociations(queryObject)
+                            .then(function (resp) {
+                                var dtData = parseServerResponse(resp.body.data);
+                                var o = {
+                                    recordsTotal: resp.body.total,
+                                    recordsFiltered: resp.body.total,
+                                    data: dtData //,
+                                    // draw: draw
+                                };
 
-                            draw++;
-                            cbak(o);
-                        });
+                                // To control pagination
+                                // indexes[currPage + 1] = resp.body.data[resp.body.data.length - 1].search_metadata.sort;
+                                indexes[currPage + 1] = resp.body.next;
+                                currStart = data.start;
+
+                                draw++;
+                                cbak(o);
+                            });
+                    }, 400);
                 },
                 'order': [[3, 'desc']],
                 'orderMulti': false,
@@ -213,42 +235,6 @@ angular.module('otDirectives')
                 'pageLength': 50
             },
             filename);
-
-            // set table event listeners for tracking analytics
-            t.on('search.dt', function () {
-                // track search only if there is a search term
-                // for some odd reason this is also triggered when sorting columns :(
-                if (t.search()) {
-                    otGoogleAnalytics.trackEvent('associations', 'search', 'search-term-entered');
-                }
-            });
-
-            t.on('order.dt', function () {
-                // track column sorting
-                // but not on page load, so only when user clicks
-                if (tableState &&
-                    (tableState.order[0].column !== t.order()[0] || tableState.order[0].dir !== t.order()[1])) {
-                    otGoogleAnalytics.trackEvent('associations', 'sort', 'columnName');
-                }
-            });
-
-            t.on('page.dt', function () {
-                var info = t.page.info();
-                if (tableState) {
-                    var label = '';
-                    if (info.start > tableState.start) {
-                        label = 'next';
-                    }
-                    if (info.start < tableState.start) {
-                        label = 'previous';
-                    }
-                    otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
-                }
-            });
-
-            t.on('length.dt', function (e, settings, len) {
-                otGoogleAnalytics.trackEvent('associations', 'dropdown', 'show-' + len + '-entries');
-            });
 
             return t;
         };
