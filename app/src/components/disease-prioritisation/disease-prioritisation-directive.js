@@ -57,6 +57,7 @@ angular.module('otDirectives')
 
         var dtable;
         var tableState; // initializes to undefined
+        var searchDebounceId;
 
         /*
          * Generates and returns the string representation of the span element
@@ -237,9 +238,7 @@ angular.module('otDirectives')
                 ],
                 'processing': false,
                 'serverSide': true,
-                'searchDelay': 500,
                 'ajax': function (data, cbak) {
-                    tableState = data;
                     if (!currLength) {
                         currLength = data.length;
                     }
@@ -251,6 +250,36 @@ angular.module('otDirectives')
                             t.page('first');
                         }
                     }
+
+                    // set table event listeners for tracking analytics
+                    // tableState holds the previous state, if any:
+                    // use it to check changes in state and fire appropriate tracking
+                    // order is important! as certain params change depending on others and we don't want to track that
+                    if (tableState) {
+                        if (! _.isEqual(tableState.order, data.order)) {
+                            // table sorting
+                            otGoogleAnalytics.trackEvent('associations', 'sort', 'columnName');
+                        } else if (! _.isEqual(tableState.search, data.search)) {
+                            // table search/filtering
+                            clearTimeout(searchDebounceId);
+                            if (data.search.value) {
+                                // dubounce the search tracking call; built-in 'searchDelay' option fires unwanted events :/
+                                searchDebounceId = setTimeout(function () {
+                                    otGoogleAnalytics.trackEvent('associations', 'search', 'search-term-entered');
+                                }, 700);
+                            }
+                        } else if (! _.isEqual(tableState.length, data.length)) {
+                            // table length
+                            otGoogleAnalytics.trackEvent('associations', 'dropdown', 'show-' + data.length + '-entries');
+                        } else if (! _.isEqual(tableState.start, data.start)) {
+                            // pagination
+                            var label = (data.start > tableState.start) ? 'next' : 'previous';
+                            otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
+                        }
+                    }
+                    // update table state with new data
+                    tableState = data;
+
                     // Order options
                     // mappings:
                     var mappings = {
@@ -326,8 +355,7 @@ angular.module('otDirectives')
                         });
                 },
 
-                // "order" : [[2, "desc"], [10, "desc"]],
-                'order': [1, 'desc'],   // stt.o || [2, "desc"],
+                'order': [[1, 'desc']],
                 'orderMulti': false,
                 'autoWidth': false,
                 'ordering': true,
@@ -351,58 +379,8 @@ angular.module('otDirectives')
             // The problem with that is that when implemented, a onmouseout -> destroy means that user won't be able
             // to roll over the popover at all (and they need to click on links and buttons)
 
-            // set table event listeners for tracking analytics
-            var dtEvents = ['search.dt', 'order.dt', 'page.dt', 'length.dt'];
-            dtEvents.forEach(function (dte) {
-                t.off(dte, trackingHandler);
-                t.on(dte, trackingHandler);
-            });
-
             return t;
         };
-
-
-        // Handler for table events analytics tracking
-        // TODO: handler for search events is always fired too often, even setting a serachDelay (debounce)
-        // it (and possibly all other events) should be implemented in the ajax call implementing a manual debounce
-        function trackingHandler (e, settings) {
-            // search
-            if (e.type === 'search') {
-                if (dtable.search()) {
-                    otGoogleAnalytics.trackEvent('associations', 'search', 'search-term-entered');
-                }
-            }
-
-            // order (column sorting)
-            if (e.type === 'order') {
-                // track column sorting
-                // but not on page load, so only when user clicks
-                if (tableState &&
-                    (tableState.order[0].column !== dtable.order()[0] || tableState.order[0].dir !== dtable.order()[1])) {
-                    otGoogleAnalytics.trackEvent('associations', 'sort', 'columnName');
-                }
-            }
-
-            // page (table pagination next / previous)
-            if (e.type === 'page') {
-                var info = dtable.page.info();
-                if (tableState) {
-                    var label = '';
-                    if (info.start > tableState.start) {
-                        label = 'next';
-                    }
-                    if (info.start < tableState.start) {
-                        label = 'previous';
-                    }
-                    otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
-                }
-            }
-
-            // length (change table length from dropdown menu)
-            if (e.type === 'length') {
-                otGoogleAnalytics.trackEvent('associations', 'dropdown', 'show-' + arguments[2] + '-entries');
-            }
-        }
 
 
         // The tractability data popover is implemented using the regular Bootstrap popover component
