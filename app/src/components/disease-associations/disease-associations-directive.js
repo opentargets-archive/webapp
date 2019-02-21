@@ -35,6 +35,7 @@ angular.module('otDirectives')
         var state = {};
 
         var tableState; // initializes to undefined
+        var searchDebounceId;
 
         /*
         * Generates and returns the string representation of the span element
@@ -119,9 +120,8 @@ angular.module('otDirectives')
                 ],
                 'processing': false,
                 'serverSide': true,
-                'searchDelay': 500,
+                // 'searchDelay': 500,
                 'ajax': function (data, cbak) {
-                    tableState = data;
                     if (!currLength) {
                         currLength = data.length;
                     }
@@ -133,6 +133,36 @@ angular.module('otDirectives')
                             t.page('first');
                         }
                     }
+
+                    // set table event listeners for tracking analytics
+                    // tableState holds the previous state, if any:
+                    // use it to check changes in state and fire appropriate tracking
+                    // order is important! as certain params change depending on others and we don't want to track that
+                    if (tableState) {
+                        if (! _.isEqual(tableState.order, data.order)) {
+                            // table sorting
+                            otGoogleAnalytics.trackEvent('associations', 'sort', 'columnName');
+                        } else if (! _.isEqual(tableState.search, data.search)) {
+                            // table search/filtering
+                            clearTimeout(searchDebounceId);
+                            if (data.search.value) {
+                                // dubounce the search tracking call; built-in 'searchDelay' option fires unwanted events :/
+                                searchDebounceId = setTimeout(function () {
+                                    otGoogleAnalytics.trackEvent('associations', 'search', 'search-term-entered');
+                                }, 600);
+                            }
+                        } else if (! _.isEqual(tableState.length, data.length)) {
+                            // table length
+                            otGoogleAnalytics.trackEvent('associations', 'dropdown', 'show-' + data.length + '-entries');
+                        } else if (! _.isEqual(tableState.start, data.start)) {
+                            // pagination
+                            var label = (data.start > tableState.start) ? 'next' : 'previous';
+                            otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
+                        }
+                    }
+                    // update table state with new data
+                    tableState = data;
+
                     // Order options
                     // mappings:
                     // 0 => gene name alphabetically -- not supported in the api
@@ -222,7 +252,7 @@ angular.module('otDirectives')
                         });
                 },
 
-                'order': [1, 'desc'],
+                'order': [[1, 'desc']],
                 'orderMulti': false,
                 'autoWidth': false,
                 'ordering': true,
@@ -237,41 +267,6 @@ angular.module('otDirectives')
                 }
             }, filename);
 
-            // set table event listeners for tracking analytics
-            t.on('search.dt', function () {
-                // track search only if there is a search term
-                // for some odd reason this is also triggered when sorting columns :(
-                if (t.search()) {
-                    otGoogleAnalytics.trackEvent('associations', 'search', 'search-term-entered');
-                }
-            });
-
-            t.on('order.dt', function () {
-                // track column sorting
-                // but not on page load, so only when user clicks
-                if (tableState &&
-                    (tableState.order[0].column !== t.order()[0] || tableState.order[0].dir !== t.order()[1])) {
-                    otGoogleAnalytics.trackEvent('associations', 'sort', 'columnName');
-                }
-            });
-
-            t.on('page.dt', function () {
-                var info = t.page.info();
-                if (tableState) {
-                    var label = '';
-                    if (info.start > tableState.start) {
-                        label = 'next';
-                    }
-                    if (info.start < tableState.start) {
-                        label = 'previous';
-                    }
-                    otGoogleAnalytics.trackEvent('associations', 'btn-click', label);
-                }
-            });
-
-            t.on('length.dt', function (e, settings, len) {
-                otGoogleAnalytics.trackEvent('associations', 'dropdown', 'show-' + len + '-entries');
-            });
             return t;
         };
 
