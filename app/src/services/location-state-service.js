@@ -141,19 +141,6 @@ angular.module('otServices')
                         // this is a string the new state format (e.g. "view=t:bubble,p:1") so then we parse it
                         raw[i] = parseSearchItem(search[i]);
                     }
-
-                    // TODO:
-                    // we will * REMOVE THIS * whole "if" block in the future, once old style facets URL have been "flushed" out!
-                    //
-                    // If any, try and convert old style facets URLs, but only if there are no new style facets
-                    if (_.indexOf(fc, i) > -1) {
-                        // so if this is an old style facet, check if there are any new style ones, and if not, let's try parse the old facet into new syntax
-                        if (!search.fcts) {
-                            raw.fcts = raw.fcts || {};    // create a "fcts" objects if needed
-                            raw.fcts[i] = (typeof search[i] === 'string') ? [search[i]] : search[i];    // add facets to "fcts"
-                        }
-                        delete raw[i];  // in any case, now delete the old style facet
-                    }
                 }
             }
 

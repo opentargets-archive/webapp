@@ -243,7 +243,7 @@ angular.module('otDirectives')
                         (!new_state.targets || !new_state.targets.ids || new_state.targets.ids.length === 0)
                     ) {
                         scope.targets = [];
-                        scope.initFilterByFile();   
+                        scope.initFilterByFile();
                     }
                 });
             }
