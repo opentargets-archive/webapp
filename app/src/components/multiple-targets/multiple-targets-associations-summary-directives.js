@@ -85,7 +85,7 @@ angular.module('otDirectives')
 //     };
 // }])
 
-    .directive('multipleTargetsTable', ['otUtils', 'otConsts', 'otDictionary', function (otUtils, otConsts, otDictionary) {
+    .directive('multipleTargetsTable', ['otUtils', 'otConsts', 'otDictionary', 'otLocationState', function (otUtils, otConsts, otDictionary, otLocationState) {
         'use strict';
 
         function resolveTies (input, pvalPos, sortedTAs) {
@@ -158,13 +158,8 @@ angular.module('otDirectives')
                 if (d.enriched_entity.label.length > 30) {
                     label = d.enriched_entity.label.substring(0, 30) + '...';
                 }
-                // var t4d = d.targets.map(function (t) {
-                //     return t.target.id
-                // });
-                // var compressedTargetIds = otUtils.compressTargetIds(t4d);
-                // var targetsLink = "?targets=" + (d.targets.map(function (t) {return t.target.id}));
-                var targetsLink = '?targets=' + compressedTargetIds.join(',');
-                var cell = '<a href=\'/disease/' + d.enriched_entity.id + '/associations' + targetsLink + '\'>' + label + '</a>';
+                var targetsLink = otLocationState.param({ids: compressedTargetIds});
+                var cell = '<a href=\'/disease/' + d.enriched_entity.id + '/associations?targets=' + targetsLink + '\'>' + label + '</a>';
                 row.push(cell);
 
                 // 0.b -- full disease name (for searching)

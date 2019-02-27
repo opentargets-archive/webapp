@@ -5,6 +5,11 @@ angular.module('otControllers')
         'use strict';
 
         // Parse the $location search object to determine which entities we have.
+        // TODO 27.02.19: this should be done using the otLocationState service;
+        // however in order to do that the current 'search' params would need to be updated
+        // as they are incompatible with the locationState format;
+        // e.g. "?targets=120899,169398,112655" could be "?targets=ids:120899;169398;112655"
+        // then current urls would no longer work; not sure it's worth it at this time...
         var search = $location.search();
 
         // Associations + profiles -- fetching general data (shows page spinner)
