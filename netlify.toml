@@ -31,6 +31,9 @@
 #  APIHOST = "https://the-api-url-we-want.com"
 [context.prioritisation.environment]
   APIHOST = "https://mk-tractability-facet-dot-open-targets-eu-dev.appspot.com/"
+
+[context.efo3.environment]
+  APIHOST = "https://platform-api-efo3.opentargets.io"
 #   [[headers]]
 #     for = "/build/config.json"
 #       [headers.values]
