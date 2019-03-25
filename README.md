@@ -68,12 +68,16 @@ docker run -d -p 8443:443 -p 8080:80 \
  quay.io/opentargets/webapp
 ```
 
-It is also possible to specify a separate server for all /proxy calls (calls to external services and data resources used in some
+By default, the webapp /proxy should redirect to the proxy that is built into the rest api container.
+But it is also possible to specify a separate server for all /proxy calls (calls to external services and data resources used in some
 pages). These are the variables:
 - `PROXY_SCHEME` (`http` or `https` are valid options, `$REST_API_SCHEME` is the default)
 - `PROXY_SERVER` (if not set, `$REST_API_SERVER` is the default)
 - `PROXY_PORT` (if not set, `$REST_API_PORT` is the default)
 - `PROXY_PATH` (if not set, `proxy` is the default)
+
+:information_source: When using the rest api built-in proxy, additional domains can be included by adding them to the appropriate nginx
+configuration file. See https://github.com/opentargets/rest_api/ documentation for more details.
 
 Any other modifications, including changing the `custom.json` for the container,
 cannot be made at runtime. You'd have to create your own fork/modifications.
