@@ -1,7 +1,8 @@
-app/config/custom.json
 .vscode
 **/*~
+Dockerfile
 node_modules
+app/build
 jspm_packages
 .sass-cache
 .DS_Store
