@@ -156,10 +156,10 @@ angular.module('otDirectives')
                                 row.push('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' + item.drug.molecule_name + '</a>');
 
                                 // 3: phase
-                                row.push(item.evidence.drug2clinic.max_phase_for_disease.label);
+                                row.push(item.evidence.drug2clinic.clinical_trial_phase.label);
 
                                 // 4: phase numeric (hidden)
-                                row.push(item.evidence.drug2clinic.max_phase_for_disease.numeric_index);
+                                row.push(item.evidence.drug2clinic.clinical_trial_phase.numeric_index);
 
                                 // 5: status
                                 var sts = otDictionary.NA;
@@ -227,11 +227,11 @@ angular.module('otDirectives')
 
                                 // parse data for summary viz
                                 //
-                                all_phases[item.evidence.drug2clinic.max_phase_for_disease.label] = all_phases[item.evidence.drug2clinic.max_phase_for_disease.label] || [];
-                                all_phases[item.evidence.drug2clinic.max_phase_for_disease.label].push({
+                                all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] = all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] || [];
+                                all_phases[item.evidence.drug2clinic.clinical_trial_phase.label].push({
                                     // drug: item.drug.molecule_name,
                                     id: item.drug.max_phase_for_all_diseases.numeric_index,
-                                    label: item.evidence.drug2clinic.max_phase_for_disease.label
+                                    label: item.evidence.drug2clinic.clinical_trial_phase.label
                                 });
 
                                 type_activity[item.drug.molecule_type] = type_activity[item.drug.molecule_type] || {};
