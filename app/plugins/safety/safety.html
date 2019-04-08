@@ -1,0 +1,22 @@
+<div ng-if="target.safety">
+
+    <p class="ot-section-intro">
+        The following safety effects have been observed and noted in two publications by <a href="https://europepmc.org/abstract/MED/28216264" target="_blank">Lynch et. al., 2017</a> and <a href="https://europepmc.org/abstract/MED/23197038" blank="_blank">Bowes et. al., 2002</a>.
+    </p>
+    <!-- <p>Source: <a href="https://docs.targetvalidation.org/data-sources/data-sources" target="_blank">Open Targets</a></p> -->
+    <table class='table ot-evidence-table' id="biomarkers-table">
+        <thead>
+            <tr>
+                <th>Main organs & systems affected</th>
+                <th>Agonism or activation effects</th>  
+                <th>Antagonism or inhibition effects</th>
+                <th>Reference</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+
+</div>
+
+<div ng-if="!target.safety"><p>No data available</p></div>
