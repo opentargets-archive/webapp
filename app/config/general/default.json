@@ -184,15 +184,15 @@
     ],
 
     "targetSections": [
-        {
-            "name": "safety",
-            "element": "ot-safety",
-            "heading": "Targety safety",
-            "track": true,
-            "config": {
-                "id": "safety"
-            }
-        },
+        // {
+        //     "name": "safety",
+        //     "element": "ot-safety",
+        //     "heading": "Target safety",
+        //     "track": true,
+        //     "config": {
+        //         "id": "safety"
+        //     }
+        // },
         
         {
             "name": "drugs",
