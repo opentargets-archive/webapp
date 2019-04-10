@@ -9,13 +9,13 @@ angular.module('otServices')
      */
     .factory('otGoogleAnalytics', ['$location', function ($location) {
         function trackPageView () {
-            if ($location.host() === 'www.targetvalidation.org') {
+            if (typeof ga !== 'undefined') {
                 ga('send', 'pageview', $location.path());
             }
         }
 
         function trackEvent (category, action, label, value) {
-            if ($location.host() === 'www.targetvalidation.org') {
+            if (typeof ga !== 'undefined') {
                 ga('send', 'event', category, action, label, value);
             }
         }
