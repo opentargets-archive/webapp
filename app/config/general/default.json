@@ -175,7 +175,6 @@
             "name": "classification",
             "element": "ot-disease-classification",
             "heading": "Classification",
-            "visible": "true",
             "track": true,
             "config": {
                 "id": "classification"
@@ -184,16 +183,6 @@
     ],
 
     "targetSections": [
-        // {
-        //     "name": "safety",
-        //     "element": "ot-safety",
-        //     "heading": "Target safety",
-        //     "track": true,
-        //     "config": {
-        //         "id": "safety"
-        //     }
-        // },
-        
         {
             "name": "drugs",
             "element": "ot-drugs-display",
