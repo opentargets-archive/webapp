@@ -9,57 +9,65 @@ angular.module('otPlugins')
                 target: '='
             },
             link: function (scope, elem, attrs) {
+                /*
+                 * Parse an array of 'effects' (e.g. agonism_activation_effects) into an html list.
+                 * Specify the base url for links and whether the link is external.
+                 */
+                function parseArrayToList (arr, url, ext) {
+                    var ul = '<ul>';
+                    ul += arr.map(function (item) {
+                        var content = otUpperCaseFirstFilter(item.term_in_paper);
+                        if (item.code && url) {
+                            content = '<a href="' + url + item.code + '" ' + (ext ? 'target="_blank" ' : '') + '>' + content + '</a>';
+                        }
+                        return '<li>'
+                                + content + '<span style="display:none">, </span>'
+                                + '</li>';
+                    }).join('');
+                    ul += '</ul>';
+                    return ul;
+                }
+
+
+                /*
+                 * Takes an object like antagonism_inhibition_effects or agonism_activation_effects
+                 * and returns the html to insert in the table cell.
+                 */
+                function parseEffectsDataToHtml (data) {
+                    var effects = '';
+                    if (Object.keys(data).length === 0) {
+                        effects = 'No data available for this publication';
+                    } else {
+                        for (var i in data) {
+                            effects += '<h6>' + otUpperCaseFirstFilter(otClearUnderscoresFilter(i)) + '<span style="display:none">: </span></h6>';
+                            effects += parseArrayToList(data[i], '/disease/');
+                        }
+                    }
+                    return effects;
+                }
+
 
                 function formatDataToArray () {
                     var rows = scope.target.safety.map(function (mark) {
                         var row = [];
 
                         // organs_systems_affected
-                        var organs = '';
-                        organs += '<ul>';
-                        organs += mark.organs_systems_affected.map(function (sys) {
-                            var content = otUpperCaseFirstFilter(sys.term_in_paper);
-                            if (sys.code) {
-                                content = '<a href="http://purl.obolibrary.org/obo/' + sys.code + '" target="_blank">' + content + '</a>';
-                            }
-                            return '<li>'
-                                    + content
-                                    + '</li>';
-                        }).join('');
-                        organs += '</ul>';
-                        row.push(organs);
+                        row.push(parseArrayToList(mark.organs_systems_affected, 'http://purl.obolibrary.org/obo/', true));
 
                         // agonism_activation_effects
-                        row.push(Object.keys(mark.agonism_activation_effects).length === 0 ? 'No data available for this publication' : mark.agonism_activation_effects);
+                        row.push(parseEffectsDataToHtml(mark.agonism_activation_effects));
 
                         // antagonism_inhibition_effects
-                        var effects = '';
-                        var fx = mark.antagonism_inhibition_effects;
-                        for (var i in fx) {
-                            effects += '<h6>' + otUpperCaseFirstFilter(otClearUnderscoresFilter(i)) + '</h6>';
-                            effects += '<ul>';
-                            effects += fx[i].map(function (e) {
-                                var content = otUpperCaseFirstFilter(e.term_in_paper);
-                                if (e.code) {
-                                    content = '<a href="/disease/' + e.code + '">' + content + '</a>';
-                                }
-                                return '<li>'
-                                        + content
-                                        + '</li>';
-                            }).join('');
-                            effects += '</ul>';
-                        }
-                        row.push(effects);
+                        row.push(parseEffectsDataToHtml(mark.antagonism_inhibition_effects));
 
                         // reference
                         row.push('<a href="https://europepmc.org/abstract/MED/' + mark.pmid + '" target="_blank">' + mark.reference + '</a>');
 
-
                         return row;
                     });
-
                     return rows;
                 }
+
 
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
