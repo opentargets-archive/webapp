@@ -18,7 +18,7 @@
     <div class="container">
         <div class="row" style="padding-bottom:20px; margin-bottom:20px">
 
-            <div class="col-sm-12 simple-spaced-panel" ng-class="{'col-md-6': (target.tep || target.chemicalprobes)}">
+            <div class="col-sm-12 simple-spaced-panel" ng-class="{'col-md-6': (target.tep || target.chemicalprobes || target.crispr)}">
             
                 <p>
                     <!-- <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more> -->
@@ -31,7 +31,7 @@
                 </p>
             </div>
 
-            <div class="col-sm-12" ng-class="{'col-md-6': (target.tep || target.chemicalprobes)}">
+            <div class="col-sm-12" ng-class="{'col-md-6': (target.tep || target.chemicalprobes || target.crispr)}">
 
                 <!-- Show if there is a TEP for the target -->
                 <div ng-show="target.tep" class="clearfix simple-spaced-panel">
@@ -52,7 +52,7 @@
                 <!-- Show if there are chemical probes for the target -->
                 <div ng-show="target.chemicalprobes" class="clearfix simple-spaced-panel">
                     <div class="pull-left" style="width:0%">
-                        <img src="imgs/graphics/beaker.png" style="width:46px;">
+                        <img src="imgs/graphics/chemical_probes.svg" style="width:46px;">
                     </div>
                     <div class="pull-right" style="width: 100%; padding-left:70px">
                         <div ng-show="target.chemicalprobes.portalprobes">
@@ -81,6 +81,21 @@
                         <div ng-show="target.chemicalprobes.probeminer">
                             <p>Potential chemical probes can be explored with <a ng-href="{{target.chemicalprobes.probeminer.link}}" target="_blank">Probe Miner</a>.</p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Show if there is a CRISPR data for the target -->
+                <div ng-show="target.crispr" class="clearfix simple-spaced-panel">
+                    <div class="pull-left" style="width:0%">
+                        <img src="imgs/graphics/crispr.svg" style="width:46px;">
+                    </div>
+                    <div class="pull-right" style="width: 100%; padding-left:70px">
+                        <p>
+                            CRISPR-Cas9 cancer cell line dependency data from Project Score is available for {{target.symbol}}.
+                        </p>
+                        <p>
+                            <a href="https://score.depmap.sanger.ac.uk/gene/{{target.crispr}}" class="btn btn-default btn-sm" target="_blank">Project Score {{target.symbol}} profile page</a>
+                        </p>
                     </div>
                 </div>
             </div>
