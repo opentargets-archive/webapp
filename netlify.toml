@@ -13,24 +13,19 @@
 # Deploy Preview context: All Deploy Previews (ie.PRs)
 # will inherit these settings.
 [context.deploy-preview.environment]
-  APIHOST = "https://api.opentargets.io/"
+  APIHOST = "https://platform-api.opentargets.io/"
 
 # Branch Deploy context: All deploys that are not in
 # an active Deploy Preview will inherit these settings.
 # By default
 [context.branch-deploy.environment]
-  APIHOST = "https://open-targets-eu-dev.appspot.com/"
-
-[context."mk-proxy".environment]
-  APIHOST = "https://platform-api.opentargets.io/"
+  APIHOST = "https://platform-api-qc.opentargets.io/"
 
 # CAREFUL!!! When you point a particular branch to a specific API below,
 # the change will not continue working once the branch is merged into master.
 # master.targetvalidation.org will always point to the APIHOST specified in context.branch-deploy.environment above
 # [context.branch_name.environment]
 #  APIHOST = "https://the-api-url-we-want.com"
-[context.prioritisation.environment]
-  APIHOST = "https://mk-tractability-facet-dot-open-targets-eu-dev.appspot.com/"
 #   [[headers]]
 #     for = "/build/config.json"
 #       [headers.values]
