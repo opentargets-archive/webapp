@@ -91,7 +91,7 @@ angular.module('otDirectives')
             var datatype = otUtils.getDatatypeById(cols[i].name);
             if (datatype && datatype.showExpanded) {
                 datatype.datasources.forEach(function (element) {
-                    var datasource = otUtils.getDatasourceById(element.toLowerCase());
+                    var datasource = otConsts.datasources[element];
                     columnData = {
                         'title': '<div><span style=\'color:lightgrey\' class=\'' + datasource.customLabelStylingClass + '\' title=\'' + element + '\'>' +
                                     datasource.label + '</span></div>',
@@ -216,7 +216,7 @@ angular.module('otDirectives')
                             // if datatype is configured to be expanded, add columns for individual datasources:
                             if (datatype.showExpanded) {
                                 datatype.datasources.forEach(function (element) {
-                                    var datasource = otUtils.getDatasourceById(element.toLowerCase());
+                                    var datasource = otConsts.datasources[element];
                                     mappings[Object.keys(mappings).length] = 'association_score.datasources.' + datasource.id;
                                 });
                             }
@@ -341,7 +341,7 @@ angular.module('otDirectives')
                         if (datatype.showExpanded) {
                             row.push(getColorStyleString(getScore(i, datatype.id)));
                             datatype.datasources.forEach(function (element) {
-                                var datasource = otUtils.getDatasourceById(element.toLowerCase());
+                                var datasource = otConsts.datasources[element];
                                 row.push(getColorStyleString(getDatasourceScore(i, datasource.id), geneDiseaseLoc + (geneDiseaseLoc.indexOf('?') === -1 ? '?' : '&') + 'view=sec:' + getPanelLink(datatype.id, datasource.id)));
                             });
                         } else {
