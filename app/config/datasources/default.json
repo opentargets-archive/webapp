@@ -21,6 +21,13 @@
         "infoTemplate": "chembl.md",
         "description": ""
     },
+    "CRISPR": {
+        "id": "crispr",
+        "label": "CRISPR",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/affected-pathways#crispr", // "/data-sources#chembl",
+        "infoTemplate": "crispr.md",
+        "description": ""
+    },
     "EPMC": {
         "id": "europepmc",
         "label": "Europe PMC",
