@@ -169,7 +169,7 @@ will be publicly available after a few minutes on quay.io
 docker pull quay.io/opentargets/webapp:<yourbranchname>
 ```
 
-### Configuring analytics
+## Configuring analytics
 
 The frontend can publish events to both Matomo (former Piwik) and Google Analytics. To enable this,
 make sure you ovewrite the following files at runtime:
