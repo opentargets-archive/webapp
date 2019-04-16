@@ -81,7 +81,8 @@
         "rna_expression" : ["EXPRESSION_ATLAS"],
         "pathway" : {
             "pathway": ["REACTOME", "SLAPENRICH", "PROGENY"],
-            "sysbio": ["SYSBIO"]
+            "sysbio": ["SYSBIO"],
+            "crispr": ["CRISPR"]
         },
         "animal_model" : ["PHENODIGM"],
         "literature" : ["EPMC"]

@@ -19,6 +19,7 @@ angular.module('otPlugins')
                 scope.ext = scope.ext || {};    // object to communicate;
                 scope.ext.pathway = {};
                 scope.ext.sysbio = {};
+                scope.ext.crispr = {};
 
                 scope.sources = {};
                 Object.keys(otConfig.evidence_sources.pathway).forEach(function (p) {
@@ -37,19 +38,40 @@ angular.module('otPlugins')
 
                 // setup watchers to update the parent
 
-                scope.$watchGroup([function () { return scope.ext.pathway.isLoading; }, function () { return scope.ext.sysbio.isLoading; }], function () {
-                    scope.ext.isLoading = scope.ext.pathway.isLoading || scope.ext.sysbio.isLoading;
-                });
-
-                scope.$watchGroup([function () { return scope.ext.pathway.hasError; }, function () { return scope.ext.sysbio.hasError; }], function () {
-                    scope.ext.hasError = scope.ext.pathway.hasError || scope.ext.sysbio.hasError;
-                });
-
-                scope.$watchGroup([function () { return scope.ext.pathway.data; }, function () { return scope.ext.sysbio.data; }], function (newdata, olddata) {
-                    if (newdata[0] && newdata[1]) {
-                        scope.ext.data = (newdata[0].length > 0 || newdata[1].length > 0) ? [{}] : [];  // just a fake data object to have a length property for now
+                scope.$watchGroup(
+                    [
+                        function () { return scope.ext.pathway.isLoading; },
+                        function () { return scope.ext.sysbio.isLoading; },
+                        function () { return scope.ext.crispr.isLoading; }
+                    ],
+                    function () {
+                        scope.ext.isLoading = scope.ext.pathway.isLoading || scope.ext.sysbio.isLoading || scope.ext.crispr.isLoading;
                     }
-                });
+                );
+
+                scope.$watchGroup(
+                    [
+                        function () { return scope.ext.pathway.hasError; },
+                        function () { return scope.ext.sysbio.hasError; },
+                        function () { return scope.ext.crispr.hasError; }
+                    ],
+                    function () {
+                        scope.ext.hasError = scope.ext.pathway.hasError || scope.ext.sysbio.hasError || scope.ext.crispr.hasError;
+                    }
+                );
+
+                scope.$watchGroup(
+                    [
+                        function () { return scope.ext.pathway.data; },
+                        function () { return scope.ext.sysbio.data; },
+                        function () { return scope.ext.crispr.data; }
+                    ],
+                    function (newdata, olddata) {
+                        if (newdata[0] && newdata[1] && newdata[2]) {
+                            scope.ext.data = (newdata[0].length > 0 || newdata[1].length > 0 || newdata[2].length > 0) ? [{}] : [];  // just a fake data object to have a length property for now
+                        }
+                    }
+                );
             }
         };
     }]);
