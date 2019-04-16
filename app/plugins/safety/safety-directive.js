@@ -17,9 +17,9 @@ angular.module('otPlugins')
                     var ul = '<ul>';
                     ul += arr.map(function (item) {
                         var content = otUpperCaseFirstFilter(item.term_in_paper);
-                        if (item.code && url) {
-                            content = '<a href="' + url + item.code + '" ' + (ext ? 'target="_blank" ' : '') + '>' + content + '</a>';
-                        }
+                        // if (item.code && url) {
+                        //     content = '<a href="' + url + item.code + '" ' + (ext ? 'target="_blank" ' : '') + '>' + content + '</a>';
+                        // }
                         return '<li>'
                                 + content + '<span style="display:none">, </span>'
                                 + '</li>';
