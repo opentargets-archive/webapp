@@ -1,9 +1,9 @@
 <!-- plugin template -->
 
-<uib-tabset>
+<uib-tabset active="ext.activetab">
     
     <!-- affected pathways table -->
-    <uib-tab heading="Affected pathways" ng-show="ext.pathway.data.length>0 || ext.pathway.hasError">
+    <uib-tab index=0 heading="Affected pathways" ng-show="(ext.pathway.data.length>0 || ext.pathway.hasError)">
         <div ng-show="ext.pathway.data.length>0" style="margin-top: 1em">
             <ot-source-list list="sources.pathway"></ot-source-list>
             <ot-pathway-table 
@@ -21,7 +21,7 @@
 
 
     <!-- Related sysbio table -->
-    <uib-tab heading="Systems biology" ng-show="ext.sysbio.data.length>0 || ext.sysbio.hasError">
+    <uib-tab index=1 heading="Systems biology" ng-show="(ext.sysbio.data.length>0 || ext.sysbio.hasError)">
         <div ng-show="ext.sysbio.data.length>0" style="margin-top: 1em">
             <ot-source-list list="sources.sysbio"></ot-source-list>
             <ot-sysbio-table
@@ -33,13 +33,13 @@
         </div>
         
         <uib-alert type="danger" ng-show="ext.sysbio.hasError" ng-cloak style="margin-top:15px">
-            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving sysbio diesease data. Please try again later.
+            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving sysbio disease data. Please try again later.
         </uib-alert>
     </uib-tab>
 
 
     <!-- Crispr table -->
-    <uib-tab heading="CRISPR-Cas9 (Cancer Cell Lines)" ng-show="ext.crispr.data.length>0 || ext.crispr.hasError">
+    <uib-tab index=2 heading="CRISPR-Cas9 (Cancer Cell Lines)" ng-show="(ext.crispr.data.length>0 || ext.crispr.hasError)">
         <div ng-show="ext.crispr.data.length>0" style="margin-top: 1em">
             <ot-source-list list="sources.crispr"></ot-source-list>
             <ot-crispr-table
@@ -51,7 +51,7 @@
         </div>
 
         <uib-alert type="danger" ng-show="ext.crispr.hasError" ng-cloak style="margin-top:15px">
-            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving CRISPER diesease data. Please try again later.
+            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving CRISPR data. Please try again later.
         </uib-alert>
     </uib-tab>
 

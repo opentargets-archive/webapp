@@ -20,6 +20,7 @@ angular.module('otPlugins')
                 scope.ext.pathway = {};
                 scope.ext.sysbio = {};
                 scope.ext.crispr = {};
+                scope.ext.activetab = 0;
 
                 scope.sources = {};
                 Object.keys(otConfig.evidence_sources.pathway).forEach(function (p) {
@@ -69,6 +70,11 @@ angular.module('otPlugins')
                     function (newdata, olddata) {
                         if (newdata[0] && newdata[1] && newdata[2]) {
                             scope.ext.data = (newdata[0].length > 0 || newdata[1].length > 0 || newdata[2].length > 0) ? [{}] : [];  // just a fake data object to have a length property for now
+                            for (var i = newdata.length - 1; i >= 0; i--) {
+                                if (newdata[i].length > 0) {
+                                    scope.ext.activetab = i;    // find first tab with data
+                                }
+                            }
                         }
                     }
                 );
