@@ -30,6 +30,7 @@ angular.module('otFacets')
                         enabled: (bucket !== null),
                         checked: false,
                         children: null,
+                        showExpanded: dt.showExpanded,
                         facetName: facetName
                     }, facetsGlobal);
                     var children = null;
@@ -56,6 +57,7 @@ angular.module('otFacets')
                         enabled: (bucket !== null),
                         checked: false,
                         children: null,
+                        customLabelStylingClass: otUtils.getDatasourceById(bucket.key).customLabelStylingClass,
                         facetName: facetName
                     }, facetsGlobal);
 
