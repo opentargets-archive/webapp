@@ -26,7 +26,7 @@ angular.module('otPlugins')
                     });
 
                     // GTEx
-                    var firstUrl = 'https://www.gtexportal.org/rest/v1/reference/geneId?geneId=' + target + '&v=clversion';
+                    var firstUrl = 'https://www.gtexportal.org/rest/v1/reference/gene?geneId=' + target + '&v=clversion';
                     $http.get(firstUrl)
                         .then(function (resp) {
                             // Need to extract gencodeId (an Ensembl ID with GRCh37 version appended)
