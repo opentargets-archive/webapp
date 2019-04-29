@@ -5,7 +5,7 @@ angular.module('otControllers')
 * Controller for the target page
 * It loads information about a given target
 */
-    .controller('TargetController', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', 'otTeps', 'otDictionary', 'otLocationState', '$anchorScroll', '$timeout', function ($scope, $location, otApi, otUtils, otConfig, otTeps, otDictionary, otLocationState, $anchorScroll, $timeout) {
+    .controller('TargetController', ['$scope', '$location', 'otApi', 'otUtils', 'otConfig', 'otTeps', 'otDictionary', 'otLocationState', '$anchorScroll', '$timeout', '$http', function ($scope, $location, otApi, otUtils, otConfig, otTeps, otDictionary, otLocationState, $anchorScroll, $timeout, $http) {
         'use strict';
 
         otUtils.clearErrors();
@@ -109,6 +109,20 @@ angular.module('otControllers')
                         $scope.sections[t].currentVisibility = $scope.sections[t].visible || false;
                     }
                     render(otLocationState.getState(), otLocationState.getOldState());
+
+                    // now check for CRISPR score data
+                    return $http.get('https://api.cellmodelpassports.sanger.ac.uk/score_search/' + $scope.target.symbol);
+                }
+            )
+            .then(
+                function (resp) {
+                    try {
+                        if (resp.data.genes && resp.data.genes.count > 0) {
+                            $scope.target.crispr = resp.data.genes.hits[0].id;
+                        }
+                    } catch (e) {
+                        // something went wrong with the CRISPR API response
+                    }
                 }
             );
     }]);

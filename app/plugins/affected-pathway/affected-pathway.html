@@ -1,38 +1,58 @@
 <!-- plugin template -->
-<!-- affected pathways table -->
-<div ng-show="ext.pathway.data.length>0 && !ext.pathway.hasError">
-    <h4>Affected pathways</h4>
-    <ot-source-list list="sources.pathway"></ot-source-list>
-    <ot-pathway-table 
-        target="{{target.id}}"
-        disease="{{disease.efo}}"
-        output="{{target.approved_symbol}}-{{disease.label}}"
-        ext="ext.pathway">
-    </ot-pathway-table>
-</div>
 
-<uib-alert type="danger" ng-show="ext.pathway.hasError" ng-cloak style="margin-top:15px">
-    <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving affected pathways data. Please try again later.
-</uib-alert>
+<uib-tabset active="ext.activetab">
+    
+    <!-- affected pathways table -->
+    <uib-tab index=0 heading="Affected pathways" ng-show="(ext.pathway.data.length>0 || ext.pathway.hasError)">
+        <div ng-show="ext.pathway.data.length>0" style="margin-top: 1em">
+            <ot-source-list list="sources.pathway"></ot-source-list>
+            <ot-pathway-table 
+                target="{{target.id}}"
+                disease="{{disease.efo}}"
+                output="{{target.approved_symbol}}-{{disease.label}}"
+                ext="ext.pathway">
+            </ot-pathway-table>
+        </div>
+        
+        <uib-alert type="danger" ng-show="ext.pathway.hasError" ng-cloak style="margin-top:15px">
+            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving affected pathways data. Please try again later.
+        </uib-alert>
+    </uib-tab>
 
 
-<!-- pathway / sysbio table divider -->
-<div ng-show="ext.pathway.data.length>0 && ext.sysbio.data.length>0" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
+    <!-- Related sysbio table -->
+    <uib-tab index=1 heading="Systems biology" ng-show="(ext.sysbio.data.length>0 || ext.sysbio.hasError)">
+        <div ng-show="ext.sysbio.data.length>0" style="margin-top: 1em">
+            <ot-source-list list="sources.sysbio"></ot-source-list>
+            <ot-sysbio-table
+                target="{{target.id}}"
+                disease="{{disease.efo}}"
+                output="{{target.approved_symbol}}-{{disease.label}}"
+                ext="ext.sysbio">
+            </ot-sysbio-table>
+        </div>
+        
+        <uib-alert type="danger" ng-show="ext.sysbio.hasError" ng-cloak style="margin-top:15px">
+            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving sysbio disease data. Please try again later.
+        </uib-alert>
+    </uib-tab>
 
 
-<!-- Related sysbio table -->
-<div ng-show="ext.sysbio.data.length>0 && !ext.sysbio.hasError">
-    <h4>Systems biology</h4>
-    <ot-source-list list="sources.sysbio"></ot-source-list>
+    <!-- Crispr table -->
+    <uib-tab index=2 heading="CRISPR-Cas9 (Cancer Cell Lines)" ng-show="(ext.crispr.data.length>0 || ext.crispr.hasError)">
+        <div ng-show="ext.crispr.data.length>0" style="margin-top: 1em">
+            <ot-source-list list="sources.crispr"></ot-source-list>
+            <ot-crispr-table
+                target="{{target.id}}"
+                disease="{{disease.efo}}"
+                output="{{target.approved_symbol}}-{{disease.label}}"
+                ext="ext.crispr">
+            </ot-crispr-table>
+        </div>
 
-    <ot-sysbio-table
-        target="{{target.id}}"
-        disease="{{disease.efo}}"
-        output="{{target.approved_symbol}}-{{disease.label}}"
-        ext="ext.sysbio">
-    </ot-sysbio-table>
-</div>
+        <uib-alert type="danger" ng-show="ext.crispr.hasError" ng-cloak style="margin-top:15px">
+            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving CRISPR data. Please try again later.
+        </uib-alert>
+    </uib-tab>
 
-<uib-alert type="danger" ng-show="ext.sysbio.hasError" ng-cloak style="margin-top:15px">
-    <span class="fa fa-exclamation-triangle" aria-hidden="true"></span> There was an error retrieving sysbio diesease data. Please try again later.
-</uib-alert>
+</uib-tabset>

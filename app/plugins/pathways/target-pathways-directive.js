@@ -34,34 +34,27 @@ angular.module('otPlugins')
 
                     // Get the new identifiers
                     var promises = [];
-                    var pathwayArr = [];
 
                     if (!pathways.length) {
                         scope.noPathways = true;
                     }
 
-                    for (var i = 0; i < pathways.length; i++) {
-                    // for (var pathway in pathways) {
-                        var pathway = pathways[i].id;
-                        var p = $http.get('https://www.reactome.org/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/' + pathway + '/stableIdentifier');
+                    pathways.forEach(function (pathway) {
+                        // new Reactome API
+                        var p = $http.get('https://reactome.org/ContentService/data/query/' + pathway.id);
                         promises.push(p);
-                        // pathwayArr.push(pathways[pathway]["pathway name"]);
-                        pathwayArr.push(pathways[i].value['pathway name']);
-                    }
+                    });
                     $q
                         .all(promises)
                         .then(function (vals) {
-                            for (var i = 0; i < vals.length; i++) {
-                                var val = vals[i].data;
-                                if (val) {
-                                    var idRaw = val.split('\t')[1];
-                                    var id = idRaw.split('.')[0];
+                            vals.forEach(function (val) {
+                                if (val.data) {
                                     reactomePathways.push({
-                                        'id': id,
-                                        'name': pathwayArr[i]
+                                        'id': val.data.stId,
+                                        'name': val.data.displayName
                                     });
                                 }
-                            }
+                            });
                             // Remove the spinner
                             spDiv.parentNode.removeChild(spDiv);
 

@@ -82,6 +82,10 @@ angular.module('otServices')
             ENSG00000138622: {
                 id: 'ENSG00000138622',
                 symbol: 'HCN4'
+            },
+            ENSG00000130382: {
+                id: 'ENSG00000130382',
+                symbol: 'MLLT1'
             }
         };
     }]);

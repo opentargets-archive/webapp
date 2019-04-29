@@ -18,7 +18,7 @@
     <div class="container">
         <div class="row" style="padding-bottom:20px; margin-bottom:20px">
 
-            <div class="col-sm-12 simple-spaced-panel" ng-class="{'col-md-6': (target.tep || target.chemicalprobes)}">
+            <div class="col-sm-12 simple-spaced-panel" ng-class="{'col-md-6': (target.tep || target.chemicalprobes || target.crispr)}">
             
                 <p>
                     <!-- <hm-read-more  hm-text="{{target.description}}" hm-limit="1000" hm-more-text="[show more]" hm-less-text="[show less]" hm-dots-class="show-more-dots" hm-link-class="show-more-links"></hm-read-more> -->
@@ -31,7 +31,7 @@
                 </p>
             </div>
 
-            <div class="col-sm-12" ng-class="{'col-md-6': (target.tep || target.chemicalprobes)}">
+            <div class="col-sm-12" ng-class="{'col-md-6': (target.tep || target.chemicalprobes || target.crispr)}">
 
                 <!-- Show if there is a TEP for the target -->
                 <div ng-show="target.tep" class="clearfix simple-spaced-panel">
@@ -52,7 +52,7 @@
                 <!-- Show if there are chemical probes for the target -->
                 <div ng-show="target.chemicalprobes" class="clearfix simple-spaced-panel">
                     <div class="pull-left" style="width:0%">
-                        <img src="imgs/graphics/beaker.png" style="width:46px;">
+                        <img src="imgs/graphics/chemical_probes.svg" style="width:46px;">
                     </div>
                     <div class="pull-right" style="width: 100%; padding-left:70px">
                         <div ng-show="target.chemicalprobes.portalprobes">
@@ -83,6 +83,21 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Show if there is a CRISPR data for the target -->
+                <div ng-show="target.crispr" class="clearfix simple-spaced-panel">
+                    <div class="pull-left" style="width:0%">
+                        <img src="imgs/graphics/crispr.svg" style="width:46px;">
+                    </div>
+                    <div class="pull-right" style="width: 100%; padding-left:70px">
+                        <p>
+                            CRISPR-Cas9 cancer cell line dependency data from Project Score is available for {{target.symbol}}.
+                        </p>
+                        <p>
+                            <a href="https://score.depmap.sanger.ac.uk/gene/{{target.crispr}}" class="btn btn-default btn-sm" target="_blank">Project Score {{target.symbol}} profile page</a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -90,10 +105,25 @@
             <div class="col-sm-12" id="plugins">
                 <!-- accordion: plugins sections -->
                 <uib-accordion close-others="false">
+                    
+                    <!-- target safety -->
+                    <div uib-accordion-group ng-if="target.safety" is-open="true" attr-section-name="safety" class="panel-default" id="safety">
+                        <uib-accordion-heading>
+                            <!-- <div style="position:relative">
+                                <div class="ot-section-new"><span>New</span></div>
+                            </div> -->
+                            <i class="fa fa-exclamation-triangle fa-lg" style="color:#FC0; margin-right:5px"></i><span>Target safety</span>
+                        </uib-accordion-heading>
+                        <ot-plugin-loader target="target" plugin="'ot-safety'" visible="true"  page="target" action="profile" track="true" label="safety" class="scroll-table-panel"></ot-plugin-loader>
+                    </div>
+                    
                     <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default" id="{{section.config.id}}">
                         <uib-accordion-heading>
-                            <div style="position:relative" ng-show="section.new">
+                            <div style="position:relative" ng-show="!section.icon && section.new" ng-click="section.currentVisibility = !section.currentVisibility">
                                 <div class="ot-section-new"><span>New</span></div>
+                            </div>
+                            <div style="position:relative" ng-show="section.icon" ng-click="section.currentVisibility = !section.currentVisibility">
+                                <div class="ot-section-icon"><img src="{{section.icon}}"style="width: 100%;"></img></div>
                             </div>
                             <span ng-click='section.currentVisibility = !section.currentVisibility'>{{section.heading}}</span>
                         </uib-accordion-heading>

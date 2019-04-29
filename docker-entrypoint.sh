@@ -4,9 +4,9 @@
 export REST_API_SCHEME=${REST_API_SCHEME:=https}
 export REST_API_SERVER=${REST_API_SERVER:=platform-api.opentargets.io}
 export REST_API_PORT=${REST_API_PORT:=443}
-export PROXY_SCHEME=${PROXY_SCHEME:=https}
-export PROXY_SERVER=${PROXY_SERVER:=platform-api.opentargets.io}
-export PROXY_PORT=${PROXY_PORT:=443}
+export PROXY_SCHEME=${PROXY_SCHEME:=$REST_API_SCHEME}
+export PROXY_SERVER=${PROXY_SERVER:=$REST_API_SERVER}
+export PROXY_PORT=${PROXY_PORT:=$REST_API_PORT}
 export PROXY_PATH=${PROXY_PATH:=proxy}
 
 

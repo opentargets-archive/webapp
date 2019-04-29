@@ -64,6 +64,12 @@ body{
     @include border-radius( 1.5em );
 }
 
+.ot-section-icon {
+    position:absolute;
+    right: 0px;
+    width: 45px;
+}
+
 .ot-main-container {
     width:100%;
     background: $primary-background-color;

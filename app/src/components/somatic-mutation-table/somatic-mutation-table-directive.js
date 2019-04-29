@@ -112,8 +112,8 @@ angular.module('otDirectives')
                                     } else if (item.sourceID === otConsts.datasources.UNIPROT_SOMATIC.id) {
                                         mutation_types += '<div>missense variant</div>';
                                     } else {
-                                        mutString += (mutString.length > 0 ? ', ' : '') + otClearUnderscoresFilter(m.preferred_name || otDictionary.NA);
-                                        mutation_types += '<div>' + otClearUnderscoresFilter(m.preferred_name || otDictionary.NA) + '</div>';
+                                        mutString += (mutString.length > 0 ? ', ' : '') + otClearUnderscoresFilter(m.preferred_name || otDictionary.NA).trim();
+                                        mutation_types += '<div>' + otClearUnderscoresFilter(m.preferred_name || otDictionary.NA).trim() + '</div>';
                                     }
                                     if (m.number_samples_with_mutation_type) {
                                         samples += '<div>' + m.number_samples_with_mutation_type + '/' + m.number_mutated_samples || otDictionary.NA + '</div>';

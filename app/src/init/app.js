@@ -74,6 +74,10 @@ function initApp (deps) {
                 .when('/scoring', {
                     resolveRedirectTo: function () { window.location.replace('https://docs.targetvalidation.org/getting-started/scoring'); }
                 })
+                // 18-04-2019 (Luca):
+                .when('/release-notes', {
+                    resolveRedirectTo: function () { window.location.replace('https://docs.targetvalidation.org/release-notes'); }
+                })
 
                 // 31-08-2017 (Luca):
                 // Since we changed the route URL, the following is for backward compatibility only
@@ -92,9 +96,6 @@ function initApp (deps) {
                 // TODO: these could be moved externally in the near future, so check from here
                 .when('/terms-of-use', {
                     templateUrl: 'src/pages/static/terms-of-use.html'
-                })
-                .when('/release-notes', {
-                    templateUrl: 'src/pages/static/release-notes.html'
                 })
                 .when('/about', {
                     templateUrl: 'src/pages/static/about.html'

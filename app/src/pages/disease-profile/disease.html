@@ -29,8 +29,11 @@
                 <uib-accordion close-others="false">
                     <div uib-accordion-group ng-repeat="section in sections" is-open="section.defaultVisibility" attr-section-name="{{section.name}}" class="panel-default" id="{{section.config.id}}">
                         <uib-accordion-heading>
-                            <div style="position:relative" ng-show="section.new">
+                            <div style="position:relative" ng-show="!section.icon && section.new" ng-click="section.currentVisibility = !section.currentVisibility">
                                 <div class="ot-section-new"><span>New</span></div>
+                            </div>
+                            <div style="position:relative" ng-show="section.icon" ng-click="section.currentVisibility = !section.currentVisibility">
+                                <div class="ot-section-icon"><img src="{{section.icon}}"style="width: 100%;"></img></div>
                             </div>
                             <span ng-click='section.currentVisibility = !section.currentVisibility'>{{section.heading}}</span>
                         </uib-accordion-heading>
