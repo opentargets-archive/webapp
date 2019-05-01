@@ -1,9 +1,9 @@
-<div ng-init="collapsed= (expanded===undefined) ? true&&(!filter.isLastClicked()) : !expanded">
+<div ng-init="collapsed= (expanded===undefined) ? true&&(!filter.isLastClicked())&&(!filter.isShowExpanded()) : !expanded">
   <!--Parent-->
   <div class="checkbox ot-facet-checkbox clearfix">
     <span style="width:auto">
       <label ng-class="(!filter.enabled) ? 'disabled' : ''"
-              class="ot-facet-checkbox-label"
+              class="ot-facet-checkbox-label {{ filter.getCustomLabelStylingClass() }}"
               title="{{ filter.label }}">
           <input type="checkbox"
               ot-ui-indeterminate="{{ filter.someChildrenChecked() }}"
