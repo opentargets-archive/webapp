@@ -172,7 +172,7 @@ angular.module('otServices')
         otApiService.defaultErrorHandler = function (error, trackCall) {
             $log.warn('CTTV API ERROR:', error);
             countRequest(trackCall === false ? undefined : false);
-            if (error.status === 403) {
+            if ([0, 403].indexOf(error.status) > -1) {
                 $rootScope.showApiErrorMsg = true;
             }
             if (error.status >= 500) {

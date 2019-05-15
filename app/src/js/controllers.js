@@ -17,6 +17,12 @@ angular.module('otControllers')
             $.fn.dataTable.ext.search = [];
         });
 
+        // Make sure the showApiErrorMsg flag is set to true when there
+        // is an error when navigating (e.g. caused by a session timeout)
+        $rootScope.$on('$routeChangeError', function () {
+            $rootScope.showApiErrorMsg = true;
+        });
+
         $rootScope.$on('cttvApiError', function (event, data) {
             if (data.status === 403) {
                 $rootScope.showApiErrorMsg = true;
