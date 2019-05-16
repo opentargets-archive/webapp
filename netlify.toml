@@ -30,6 +30,9 @@
 
 [context.efo3.environment]
   APIHOST = "https://efo3.opentargets.io/"
+  
+[context.efo3fix.environment]
+  APIHOST = "https://platform-api-efo3-fix.opentargets.io/"
 #   [[headers]]
 #     for = "/build/config.json"
 #       [headers.values]
