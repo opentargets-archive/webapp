@@ -9,13 +9,15 @@ angular.module('otDirectives')
             scope: {
                 target: '=',
                 // loadprogress : '=',
-                filename: '@'
+                filename: '@',
+                ext: '=?'       // optional external object for communication
             },
 
             templateUrl: 'src/components/tissue-expression/tissue-expression.html',
 
             link: function (scope, elem, attrs) {
                 scope.$watch('hierarchy', function (value) { $log.log(value); });
+
                 // set the load progress flag to true before starting the API call
                 // scope.loadprogress = true;
 
@@ -42,9 +44,16 @@ angular.module('otDirectives')
 
                                 // success
                                     function (resp) {
-                                    // set hte load progress flag to false once we get the results
-                                    // scope.loadprogress = false;
+                                        // Set the hasData flag.
+                                        // Note: the API returns a different type of object depending on whether it has data.
+                                        // resp.body.data = Object when there is data
+                                        // resp.body.data = empty Array when there is no data; right now this should only happen for target ADORA3
+                                        // so the property length is undefined for Object, hence wouldn't work for hasdata = length>0
+                                        scope.ext.hasData = !(resp.body.data.length === 0);
 
+                                        if (resp.body.data.length === 0) {
+                                            return;
+                                        }
                                         var data = resp.body.data[scope.target].tissues;
 
                                         // account for difference in ES2 ES5 versions of API

@@ -1,4 +1,4 @@
-<uib-tabset>
+<uib-tabset ng-show="ext.hasData">
     <uib-tab heading="Summary">
         <p class="ot-section-intro">
             Summary of {{target.symbol}} RNA and protein expression in normal human tissue, based on 
@@ -11,7 +11,7 @@
         </p>
         <div class="row">
           <div class="col-sm-12">
-                <ot-tissue-expression target="target.id" filename="{{target.symbol}}"></ot-tissue-expression>
+                <ot-tissue-expression target="target.id" filename="{{target.symbol}}" ext="ext"></ot-tissue-expression>
           </div>
         </div>
     </uib-tab>
@@ -30,3 +30,4 @@
         <div id="gtexWidget"></div>
     </uib-tab>
 </uib-tabset>
+<div ng-show="!ext.hasData && ext.hasData!==undefined">No data for {{target.id}}</div>

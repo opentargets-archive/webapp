@@ -12,6 +12,9 @@ angular.module('otPlugins')
             link: function (scope, element, attrs) {
                 var w = scope.width - 40;
                 var target = scope.target.symbol;
+                scope.ext = {
+                    // hasData: false // leave undefined to start with
+                };
 
                 $timeout(function () {
                     // Expression Atlas
