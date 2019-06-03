@@ -86,6 +86,14 @@ angular.module('otServices')
             ENSG00000130382: {
                 id: 'ENSG00000130382',
                 symbol: 'MLLT1'
+            },
+            ENSG00000213930: {
+                id: 'ENSG00000213930',
+                symbol: 'GALT'
+            },
+            ENSG00000108479: {
+                id: 'ENSG00000108479',
+                symbol: 'GALK1'
             }
         };
     }]);
