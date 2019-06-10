@@ -45,8 +45,8 @@ angular.module('otDirectives')
 
                     // Get Pathways data from Reactome
                     // Get enrichment analysis from reactome
-                    // http://www.reactome.org/AnalysisService/identifiers/projection/\?pageSize\=1\&page\=1 POST
-                    // var preFlightUrl = otConsts.PROXY + 'www.reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
+                    // http://reactome.org/AnalysisService/identifiers/projection/\?pageSize\=1\&page\=1 POST
+                    // var preFlightUrl = otConsts.PROXY + 'reactome.org/AnalysisService/identifiers/projection?pageSize=1&page=1&resource=UNIPROT';
                     // var postData = uniprotIds.join('\n');
                     var p1 = $q(function (resolve, reject) {
                         resolve({data: []});
@@ -58,11 +58,11 @@ angular.module('otDirectives')
                     //     .then (function (data) {
                     //         var token = data.summary.token;
                     //         var nPathways = data.pathwaysFound;
-                    //         var url = otConsts.PROXY + 'www.reactome.org/AnalysisService/token/' + token + '?pageSize=' + nPathways + '&page=1&resource=UNIPROT';
+                    //         var url = otConsts.PROXY + 'reactome.org/AnalysisService/token/' + token + '?pageSize=' + nPathways + '&page=1&resource=UNIPROT';
                     //         return $http.get(url)
                     //             .then (function (resp) {
                     //                 var token = resp.data.summary.token;
-                    //                 var url2 = otConsts.PROXY + 'www.reactome.org/AnalysisService/token/' + token + '/found/all';
+                    //                 var url2 = otConsts.PROXY + 'reactome.org/AnalysisService/token/' + token + '/found/all';
                     //
                     //                 var idsArr = [];
                     //                 for (var i=0; i<resp.data.pathways.length; i++) {
