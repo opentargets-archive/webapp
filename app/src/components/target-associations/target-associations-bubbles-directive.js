@@ -145,14 +145,9 @@ angular.module('otDirectives')
             },
             templateUrl: 'src/components/target-associations/target-associations-bubbles.html',
             link: function (scope, elem, attrs, resizeCtrl) {
-                // var bubblesContainer = elem.children().eq(1).children().eq(0)[0];
-                var legendDiv = elem.children().eq(0).children().eq(0)[0];
-                var bubblesContainer = document.createElement('div');
-                bubblesContainer.id = 'cttvBubblesView';
-                scope.element = 'cttvBubblesView';
-                elem.children().eq(0)[0].insertBefore(bubblesContainer, legendDiv);
-                // bubblesContainer.id = "cttvBubblesView";
-                // scope.element = "cttvBubblesView";
+                var bubblesContainer = elem.children().eq(0).children().eq(0)[0];
+                // bubblesContainer.id = 'cttvBubblesView'; // this seems redundant
+                // scope.element = 'cttvBubblesView';       // this seems redundant
 
                 var bView;
 
@@ -238,6 +233,7 @@ angular.module('otDirectives')
                     }
                 });
 
+
                 function setView (data) { // data is a promise
                     // Fire a target associations tree event for piwik to track
                     $analytics.eventTrack('targetAssociationsBubbles', {'category': 'association', 'label': 'bubbles'});
@@ -253,30 +249,28 @@ angular.module('otDirectives')
                     var colorScale = otUtils.colorScales.BLUE_0_1; // blue orig
 
                     bView = targetAssociations()
-                        // .target("ENSG00000157764")
+                        .cttvApi(otApi.getSelf())
                         .target(scope.target)
                         .diameter(diameter)
                         .linkPrefix('')
                         .showAll(true)
                         .colors(otUtils.colorScales.BLUE_0_1.range())
-                        // .colors(['#e7e1ef', '#dd1c77'])
                         .useFullPath(otUtils.browser.name !== 'IE')
                         .tooltipsOnTA(true)
                         .showMenu(false);
-
 
                     // Setting up legend
                     scope.legendText = 'Score';
                     scope.colors = [];
                     for (var i = 0; i <= 100; i += 25) {
                         var j = i / 100;
-                        // scope.labs.push(j);
                         scope.colors.push({color: colorScale(j), label: j});
                     }
                     scope.legendData = [
                         // {label:"Therapeutic Area", class:"no-data"}
                     ];
                 }
+
 
                 if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
