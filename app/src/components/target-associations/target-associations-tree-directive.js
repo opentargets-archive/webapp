@@ -9,7 +9,7 @@ angular.module('otDirectives')
         var gat;
         // var currTarget;
 
-        function decorateSVG(from_svg) {
+        function decorateSVG (from_svg) {
             var clone = from_svg.cloneNode(true); // deep cloning of the svg
             d3.select(clone)
                 .selectAll('.tnt_tree_node_proxy')
@@ -67,23 +67,29 @@ angular.module('otDirectives')
                         setTreeView(opts.therapeutic_area);
                     } else {
                         otApi.getAssociations(queryObject)
-                            .then(function (resp) {
-                                // var data = resp.body.data;
+                            .then(
+                                function (resp) {
+                                    // flat2tree() now returns a promise
+                                    return otApi.flat2tree(resp.body);
+                                },
+                                otApi.defaultErrorHandler
+                            )
+                            .then(
+                                function (resp) {
+                                    var data = resp.body.data;
 
-                                // if (scope.nocancers === "true") {
-                                //     excludeCancersFromOtherTAs(resp); // side effects on the resp
-                                // }
+                                    // if (scope.nocancers === "true") {
+                                    //     excludeCancersFromOtherTAs(resp); // side effects on the resp
+                                    // }
 
-                                var data = otApi.flat2tree(resp.body);
-                                if (data) {
-                                    gat
-                                        .data(data)
-                                        .therapeuticAreas(opts.therapeutic_area)
-                                        // .datatypes(dts)
-                                        .update();
+                                    if (data) {
+                                        gat
+                                            .data(data)
+                                            .therapeuticAreas(opts.therapeutic_area)
+                                            // .datatypes(dts)
+                                            .update();
+                                    }
                                 }
-                            },
-                            otApi.defaultErrorHandler
                             );
                     }
                 });
@@ -162,12 +168,16 @@ angular.module('otDirectives')
                     otApi.getAssociations(queryObject)
                         .then(
                             function (resp) {
+                                return otApi.flat2tree(resp.body);
+                            }
+                        )
+                        .then(
+                            function (resp) {
                                 // if (scope.nocancers === "true") {
                                 //     excludeCancersFromOtherTAs(resp); // side effect on resp
                                 // }
 
-                                var data = otApi.flat2tree(resp.body);
-                                // var data = resp.body.data;
+                                var data = resp.body.data;
                                 if (_.isEmpty(data)) {
                                     return;
                                 }
@@ -177,7 +187,6 @@ angular.module('otDirectives')
                                     .diagonal(100);
                                 gat = geneAssociationsTree()
                                     .data(data)
-                                    // .datatypes(dts)
                                     .names(otConsts)
                                     .filters(scope.facets)
                                     .diameter(900)
@@ -187,7 +196,6 @@ angular.module('otDirectives')
                                     .colors(colorScale.range())
                                     .hasLegendScale(false);
 
-                                // gat(fView, elem.children().eq(1)[0]);
                                 gat(fView, elem.children().eq(1).children().eq(0)[0]);
                             },
                             otApi.defaultErrorHandler
@@ -196,7 +204,6 @@ angular.module('otDirectives')
 
                 if (otUtils.browser.name !== 'IE') {
                     scope.toExport = function () {
-                        // var svg = elem.children().eq(1)[0].querySelector('svg');
                         return decorateSVG(elem.children().eq(1)[0].querySelector('svg'));
                     };
                 }
