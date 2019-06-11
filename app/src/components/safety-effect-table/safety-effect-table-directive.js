@@ -1,12 +1,12 @@
 /**
  * Known safety effects table
  *
- * ext object params:
+ * optional ext object params:
  *  isLoading, hasError, data
  */
 angular.module('otDirectives')
 
-    /* Directive to display the rna expression data table */
+    /* Directive to display the target known safety effects table  */
     .directive('otSafetyEffectTable', ['otUtils', 'otClearUnderscoresFilter', 'otUpperCaseFirstFilter', function (otUtils, otClearUnderscoresFilter, otUpperCaseFirstFilter) {
 
         return {
@@ -67,23 +67,21 @@ angular.module('otDirectives')
                     var rows = data.map(function (mark) {
                         var row = [];
 
-                        // organs_systems_affected
+                        // Main organs & systems affected
                         row.push(parseArrayToList(mark.organs_systems_affected, 'http://purl.obolibrary.org/obo/', true));
 
-                        // agonism_activation_effects
+                        // Agonism or activation effects
                         row.push(parseEffectsDataToHtml(mark.activation_effects));
 
-                        // antagonism_inhibition_effects
+                        // Antagonism or inhibition effects
                         row.push(parseEffectsDataToHtml(mark.inhibition_effects));
 
-                        // reference
+                        // Publications
                         row.push(
                             mark.references.map(function (ref) {
                                 if (ref.pmid) {
-                                    // return ref.pmid;
                                     return '<a href="https://europepmc.org/abstract/MED/' + ref.pmid + '" target="_blank">' + ref.ref_label + '</a>';
                                 } else {
-                                    // return ref.ref_link;
                                     return '<a href="' + ref.ref_link + '" target="_blank">' + ref.ref_label + '</a>';
                                 }
                             }).join(', ')
