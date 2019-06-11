@@ -47,21 +47,31 @@ angular.module('otPlugins')
                 }
 
 
-                function formatDataToArray () {
-                    var rows = scope.target.safety.map(function (mark) {
+                function formatDataToArray (data) {
+                    var rows = data.map(function (mark) {
                         var row = [];
 
                         // organs_systems_affected
                         row.push(parseArrayToList(mark.organs_systems_affected, 'http://purl.obolibrary.org/obo/', true));
 
                         // agonism_activation_effects
-                        row.push(parseEffectsDataToHtml(mark.agonism_activation_effects));
+                        row.push(parseEffectsDataToHtml(mark.activation_effects));
 
                         // antagonism_inhibition_effects
-                        row.push(parseEffectsDataToHtml(mark.antagonism_inhibition_effects));
+                        row.push(parseEffectsDataToHtml(mark.inhibition_effects));
 
                         // reference
-                        row.push('<a href="https://europepmc.org/abstract/MED/' + mark.pmid + '" target="_blank">' + mark.reference + '</a>');
+                        row.push(
+                            mark.references.map(function (ref) {
+                                if (ref.pmid) {
+                                    // return ref.pmid;
+                                    return '<a href="https://europepmc.org/abstract/MED/' + ref.pmid + '" target="_blank">' + ref.ref_label + '</a>';
+                                } else {
+                                    // return ref.ref_link;
+                                    return '<a href="' + ref.ref_link + '" target="_blank">' + ref.ref_label + '</a>';
+                                }
+                            })
+                        );
 
                         return row;
                     });
@@ -72,7 +82,7 @@ angular.module('otPlugins')
                 function initTable () {
                     var table = elem[0].getElementsByTagName('table');
                     $(table).DataTable(otUtils.setTableToolsParams({
-                        'data': formatDataToArray(),
+                        'data': formatDataToArray(scope.target.safety.adverse_effects),
                         'ordering': true,
                         'autoWidth': false,
                         'paging': true,
@@ -91,9 +101,11 @@ angular.module('otPlugins')
 
                 if (scope.target.safety) {
                     // initialize table in timeout
-                    $timeout(function () {
-                        initTable();
-                    }, 0);
+                    if (scope.target.safety.adverse_effects) {
+                        $timeout(function () {
+                            initTable();
+                        }, 0);
+                    }
                 }
             }
         };
