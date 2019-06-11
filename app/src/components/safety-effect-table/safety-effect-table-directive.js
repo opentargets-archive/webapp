@@ -86,7 +86,7 @@ angular.module('otDirectives')
                                     // return ref.ref_link;
                                     return '<a href="' + ref.ref_link + '" target="_blank">' + ref.ref_label + '</a>';
                                 }
-                            })
+                            }).join(', ')
                         );
 
                         return row;
@@ -105,11 +105,11 @@ angular.module('otDirectives')
                         'columnDefs': [
                             {
                                 'targets': [0, 1, 2],
-                                'width': '28%'
+                                'width': '27%'
                             },
                             {
                                 'targets': [3],
-                                'width': '16%'
+                                'width': '19%'
                             }
                         ]
                     }, scope.target.approved_symbol + '-safety-effect'));
