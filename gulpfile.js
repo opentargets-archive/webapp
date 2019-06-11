@@ -430,7 +430,7 @@ gulp.task('webserver', ['build-all'], function () {
             proxies: [
                 {source: '/api', target: 'http://local.targetvalidation.org:8899/api'},
                 {source: '/proxy/www.ebi.ac.uk/', target: 'https://www.ebi.ac.uk/'},
-                {source: '/proxy/www.reactome.org/', target: 'http://www.reactome.org/'},
+                {source: '/proxy/reactome.org/', target: 'http://reactome.org/'},
                 {source: '/proxy/wwwdev.ebi.ac.uk/', target: 'http://wwwdev.ebi.ac.uk/'},
                 {source: '/proxy/rest.ensembl.org/', target: 'https://rest.ensembl.org/'},
                 {source: '/proxy/reactomedev.oicr.on.ca/', target: 'http://reactomedev.oicr.on.ca/'},

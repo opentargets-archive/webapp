@@ -21,7 +21,7 @@ angular.module('otDirectives')
                     var h = 700;
 
                     // Ask for information of the pathway in reactome:
-                    $http.get(otConsts.PROXY + 'www.reactome.org/ContentService/data/query/' + scope.pathway + '/more')
+                    $http.get(otConsts.PROXY + 'reactome.org/ContentService/data/query/' + scope.pathway + '/more')
                         .then(function (resp) {
                             scope.displayName = resp.data.displayName;
                             scope.description = resp.data.summation[0].text;
@@ -30,7 +30,7 @@ angular.module('otDirectives')
                     function loadPathway () {
                         var pId = scope.pathway;
                         var pathwayDiagram = Reactome.Diagram.create({
-                            'proxyPrefix': otConsts.PROXY + 'www.reactome.org',
+                            'proxyPrefix': otConsts.PROXY + 'reactome.org',
                             'placeHolder': 'pathwayDiagramContainer',
                             'width': w,
                             'height': h

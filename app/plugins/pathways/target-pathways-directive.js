@@ -69,7 +69,7 @@ angular.module('otPlugins')
                     var pId = pathway.id;
                     if (!pathwayDiagram) {
                         pathwayDiagram = Reactome.Diagram.create({
-                            'proxyPrefix': 'https://www.reactome.org',
+                            'proxyPrefix': 'https://reactome.org',
                             'placeHolder': 'pathwayDiagramContainer',
                             'width': w,
                             'height': h
