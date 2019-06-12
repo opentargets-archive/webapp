@@ -79,11 +79,12 @@ angular.module('otDirectives')
                         // Publications
                         row.push(
                             mark.references.map(function (ref) {
-                                if (ref.pmid) {
-                                    return '<a href="https://europepmc.org/abstract/MED/' + ref.pmid + '" target="_blank">' + ref.ref_label + '</a>';
-                                } else {
-                                    return '<a href="' + ref.ref_link + '" target="_blank">' + ref.ref_label + '</a>';
-                                }
+                                var pub_url = ref.pmid ? 'https://europepmc.org/abstract/MED/' + ref.pmid : ref.ref_link;
+                                var pub = '<a href="' + pub_url + '" target="_blank" '
+                                    // add a tooltip (title) for 'HeCaTos' only
+                                    + ((ref.ref_label === 'HeCaToS') ? ' title="HeCaToS Deliverable D01.5 (2015) funded by \'EU 7th Framework Programme (HEALTH-F4-2013-602156).\'" ' : '')
+                                    + '>' + ref.ref_label + '</a>';
+                                return pub;
                             }).join(', ')
                         );
 
