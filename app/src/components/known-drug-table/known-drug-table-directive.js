@@ -80,7 +80,7 @@ angular.module('otDirectives')
                         var opts = {
                         // target:attrs.target,
                         // disease:attrs.disease,
-                            size: 1000,
+                            size: 10000,
                             datasource: otConfig.evidence_sources.known_drug,
                             fields: [
                                 'disease.efo_info',
