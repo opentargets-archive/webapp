@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otPluginLoader', ['$compile', '$timeout', 'otLazy', '$q', '$analytics', 'otGoogleAnalytics', function ($compile, $timeout, otLazy, $q, $analytics, otGoogleAnalytics) {
+    .directive('otPluginLoader', ['$rootScope', '$compile', '$timeout', 'otLazy', '$q', '$analytics', 'otGoogleAnalytics', function ($rootScope, $compile, $timeout, otLazy, $q, $analytics, otGoogleAnalytics) {
         return {
             restrict: 'E',
             scope: {
@@ -76,6 +76,10 @@ angular.module('otPlugins')
                                     var compiled = $compile(template)(scope);
                                     element.append(compiled);
                                 }, 0);
+                            },
+                            function (reason) {
+                                $rootScope.showApiErrorMsg = true;
+                                window.scrollTo(0, 0);
                             });
                     } else {
                         // while (element[0].firstChild) {
