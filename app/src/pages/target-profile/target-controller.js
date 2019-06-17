@@ -107,6 +107,7 @@ angular.module('otControllers')
                     for (var t = 0; t < $scope.sections.length; t++) {
                         $scope.sections[t].defaultVisibility = $scope.sections[t].visible || false;
                         $scope.sections[t].currentVisibility = $scope.sections[t].visible || false;
+                        $scope.sections[t].ext = {};
                     }
                     render(otLocationState.getState(), otLocationState.getOldState());
 
