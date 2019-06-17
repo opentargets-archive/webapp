@@ -99,8 +99,11 @@
                             <span ng-click='section.currentVisibility = !section.currentVisibility' class="text-nolight" ng-class="{ 'text-disabled': search.fd[section.config.datatype]==0 }">{{section.heading}}</span>
                         </uib-accordion-heading>
                         
-                        <div ot-progress-spinner size="30" ng-show="tables[section.name].isLoading || tables[section.name].data === undefined"></div>
-                        
+                        <div ng-show="tables[section.name].isLoading || tables[section.name].data === undefined">
+                            <p>Loading data</p>
+                            <ot-progress-spinner size="30"></ot-progress-spinner>
+                        </div>
+
                         <!-- the main plugin -->
                         <ot-plugin-loader 
                             target="search.info.gene" 
