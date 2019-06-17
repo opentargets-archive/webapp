@@ -4,8 +4,9 @@
     <ot-source-list list="sources"></ot-source-list>
     <ot-known-drug-table 
         target="{{target.id}}" 
-        disease="{{disease.efo}}" 
-        output="{{target.approved_symbol}}-{{disease.label}}" 
+        disease="{{disease.efo}}"
+        target-label="{{target.symbol || target.approved_symbol}}"
+        disease-label="{{disease.label}}"
         ext="ext">
     </ot-known-drug-table>
 </div>
