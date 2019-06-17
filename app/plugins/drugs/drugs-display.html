@@ -1,6 +1,6 @@
 <!-- plugin template -->
-<p class="ot-section-intro">Drugs in clinical trials or approved for {{target.symbol || disease.label}}.</p>
 <div ng-show="ext.data.length>0">
+    <p class="ot-section-intro">Drugs in clinical trials or approved for {{target.symbol || disease.label}}.</p>
     <ot-source-list list="sources"></ot-source-list>
     <ot-known-drug-table 
         target="{{target.id}}" 
