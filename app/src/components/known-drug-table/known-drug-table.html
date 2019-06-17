@@ -1,7 +1,6 @@
 <div>
-    
-    <div class="row">
-
+    <div class="row" ng-if="ext.size >= ext.total">
+        <!-- we're showing all results (10000 or less) -->
         <div class="col-sm-4">
             <h4>Table summary</h4>
             <h5><span class="badge large badge-success" style="cursor:default">{{drugs.length}}</span> unique drugs</h5>
@@ -19,17 +18,16 @@
             <ot-stack-chart data="type_activity" height="200" width="300" show-legend="true"></ot-stack-chart>
         </div>
     </div>
-</div>
 
-<!-- <p>Found {{drugs.length}} unique drugs:
-    <span ng-repeat="drug in drugs | limitTo: show.limit">
-        <span style="padding-right:10px">[<a href={{drug.url}} target=_blank>{{drug.id}}</a>]</span>
-        <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="label label-primary">{{drug.id}}</i>
-        <span style="padding-right:8px"><a href={{drug.url}} target=_blank><i class="ot-pill-list drug-list">{{drug.id}}</i>
-        </a></span>
-    </span>
-    <span ng-click="showMoreOrLess()" ng-show="show.moreOrLess"><span class="show-more-dots" ng-show="show.limit<drugs.length">...</span> <a class="ng-binding show-more-links">{{show.ellipsis}}</a></span>
-</p> -->
+    <div ng-if="ext.total > ext.size" class="panel panel-default text-center">
+        <div class="panel-body">
+            <!-- we're not showing all results -->
+            <h4>Important notice about the Drugs data table for {{targetLabel}}<span ng-if="targetLabel && diseaseLabel"> and </span>{{diseaseLabel}}</h4>
+            <p>This data table below only shows the first {{ext.size}} rows of a data table with {{ext.total}} total rows.</p>
+            <button class="btn btn-default">Download all data ({{ext.total}} rows) <span class="fa fa-download"></span></button>
+        </div>
+    </div>
+</div>
 
 
 <div class="table-panel">

@@ -22,7 +22,9 @@ angular.module('otDirectives')
                 // errorFlag: '=?'    // optional error-flag: pass a var to hold parsing-related errors
                 title: '@?',       // optional title for filename export - TODO: this clashes with a DOM element 'title' attribute, causing odd behaviours on roll over. Should be removed
                 output: '@?',       // optional download file name - this will replace title (see above)
-                ext: '=?'       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
+                ext: '=?',       // optional external object to pass things out of the directive; TODO: this should remove teh need for all parameters above
+                targetLabel: '@?',
+                diseaseLabel: '@?'
             },
             controller: ['$scope', function ($scope) {
                 function init () {
@@ -39,7 +41,7 @@ angular.module('otDirectives')
                 var table, dtable;
 
                 scope.ext.hasError = false;
-                scope.output = scope.output || scope.title;
+                scope.output = scope.output || scope.title || ((scope.targetLabel || '') + (scope.targetLabel && scope.diseaseLabel ? '-' : '') + (scope.diseaseLabel || ''));
 
                 scope.$watchGroup([function () { return attrs.target; }, function () { return attrs.disease; }], function () {
                 // if (!attrs.target && !attrs.disease) {
@@ -48,6 +50,7 @@ angular.module('otDirectives')
                     if (!attrs.target && !attrs.disease) { /* TODO */
                         return;
                     }
+
                     getDrugData();
 
                     // =================================================
@@ -75,11 +78,8 @@ angular.module('otDirectives')
                     */
 
                     function getDrugData () {
-                    // $scope.search.drugs.is_loading = true;
                         scope.ext.isLoading = true;
                         var opts = {
-                        // target:attrs.target,
-                        // disease:attrs.disease,
                             size: 10000,
                             datasource: otConfig.evidence_sources.known_drug,
                             fields: [
@@ -106,6 +106,8 @@ angular.module('otDirectives')
                                 function (resp) {
                                     if (resp.body.data) {
                                         scope.ext.data = resp.body.data;
+                                        scope.ext.total = resp.body.total;
+                                        scope.ext.size = resp.body.size;
                                         initTableDrugs();
                                         // draw doughnut
                                         // drawPhaseChart(scope.phases);
