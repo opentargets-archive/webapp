@@ -444,10 +444,9 @@ angular.module('otDirectives')
                             'paging': true,
                             'order': [[4, 'desc']],
                             'columnDefs': [
-                                {'targets': [5], 'visible': false},
+                                // set column widths
                                 {
                                     'targets': [0],    // the access-level (public/private icon)
-                                    'visible': otConfig.show_access_level,
                                     'width': '3%'
                                 },
                                 {
@@ -461,6 +460,12 @@ angular.module('otDirectives')
                                 {
                                     'targets': [4, 10, 12],
                                     'width': '7%'
+                                },
+                                // set columns visiblity and filters
+                                // access-level
+                                {
+                                    'targets': [0],
+                                    'visible': otConfig.show_access_level
                                 },
                                 // disease
                                 {
@@ -477,6 +482,10 @@ angular.module('otDirectives')
                                     'targets': [3],
                                     'mRender': otColumnFilter.mRenderGenerator(14),
                                     'mData': otColumnFilter.mDataGenerator(3, 14)
+                                },
+                                {
+                                    'targets': [5],
+                                    'visible': false
                                 },
                                 // mech of action
                                 {
@@ -497,18 +506,8 @@ angular.module('otDirectives')
                                     'mData': otColumnFilter.mDataGenerator(12, 16)
                                 }
                             ],
-                            // "aoColumnDefs" : [
-                            //     {"iDataSort" : 2, "aTargets" : [3]},
-                            // ]
-                            // "ordering": false
-                            // }, $scope.search.info.title+"-known_drugs") );
                             initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                         }, (scope.output ? scope.output + '-' : '') + 'known_drugs'));
-
-                        // dtable.on( 'search.dt', function () {
-                        //     console.log('searched for '+dtable.api().search());
-                        // } );
-
                     }
                 });
             }
