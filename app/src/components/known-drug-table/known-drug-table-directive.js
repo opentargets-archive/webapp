@@ -123,6 +123,130 @@ angular.module('otDirectives')
                     }
 
 
+                    scope.downloadAllData = function () {
+                        scope.ext.isDownloading = true;
+                        // otGoogleAnalytics.trackEvent('alldrugs', 'download', 'CSV');
+                        var size = 10000;
+                        var method = 'GET';
+                        var totalText = '';
+                        function columnsNumberOk (csv, n) {
+                            var firstRow = csv.split('\n')[0];
+                            var cols = firstRow.split(',');
+                            return cols.length === n;
+                        }
+
+                        function getNextChunk (nextIndex) {
+                            var opts = {
+                                size: size,
+                                datasource: otConfig.evidence_sources.known_drug,
+                                fields: [
+                                    'access_level',
+                                    'disease.efo_info.efo_id',
+                                    'disease.efo_info.label',
+                                    'drug.molecule_name',
+                                    'evidence.drug2clinic.clinical_trial_phase.label',
+                                    'evidence.drug2clinic.clinical_trial_phase.numeric_index',
+                                    'evidence.drug2clinic.status',
+                                    'drug.molecule_type',
+                                    'evidence.target2drug.mechanism_of_action',
+                                    // publications??
+                                    'target.activity',
+                                    'target.gene_info.symbol',
+                                    'target.id',
+                                    'target.target_class',  // ???
+                                    'item.evidence.drug2clinic.urls.url', // ???
+                                    'item.evidence.drug2clinic.urls.nice_name' // ???
+                                    // 'disease.efo_info.label',
+                                    // 'drug.molecule_name',
+                                    // 'evidence.target2drug.mechanism_of_action',
+                                    // 'evidence.drug2clinic.urls[0].nice_name',
+                                    // 'target.gene_info.symbol'
+                                ],
+                                format: 'csv'
+                            };
+                            if (attrs.target) {
+                                opts.target = attrs.target;
+                            }
+                            if (attrs.disease) {
+                                opts.disease = attrs.disease;
+                            }
+                            if (nextIndex) {
+                                opts.next = nextIndex;
+                            }
+
+                            _.extend(opts, searchObj);
+                            var queryObject = {
+                                method: method,
+                                params: opts
+                            };
+
+                            return otApi.getFilterBy(queryObject)
+                                .then(
+                                    function (resp) {
+                                        var moreText = resp.body;
+
+                                        if (columnsNumberOk(moreText, opts.fields.length)) {
+                                            if (nextIndex) {
+                                                // Not in the first page, so remove the header row
+                                                moreText = moreText.split('\n').slice(1).join('\n');
+                                            }
+                                            totalText += moreText;
+                                        }
+                                    }
+                                );
+                        }
+
+                        function getNextIndex (nextIndex) {
+                            var opts = {
+                                size: size,
+                                datasource: otConfig.evidence_sources.known_drug,
+                                fields: ['thisfielddoesnotexist'] // only interested in the next index
+                            };
+                            if (attrs.target) {
+                                opts.target = attrs.target;
+                            }
+                            if (attrs.disease) {
+                                opts.disease = attrs.disease;
+                            }
+                            if (nextIndex) {
+                                opts.next = nextIndex;
+                            }
+
+                            _.extend(opts, searchObj);
+                            var queryObject = {
+                                method: method,
+                                params: opts
+                            };
+
+                            return otApi.getFilterBy(queryObject)
+                                .then(function (resp) {
+                                    return resp.body.next;
+                                });
+                        }
+
+                        // Makes 2 calls to the api,
+                        // The first one to take the next data (in csv)
+                        // The second one to take the next index (not returned in csv call)
+                        function callNext (nextIndex) {
+                            getNextChunk(nextIndex)
+                                .then(function () {
+                                    return getNextIndex(nextIndex)
+                                        .then(function (nextNext) {
+                                            if (nextNext) {
+                                                callNext(nextNext);
+                                            } else {
+                                                var b = new Blob([totalText], {type: 'text/csv;charset=utf-8'});
+                                                saveAs(b, (scope.output ? scope.output + '-' : '') + 'known_drugs' + '.csv');
+                                                scope.ext.isDownloading = false;
+                                            }
+                                        });
+                                });
+                        }
+
+                        callNext();
+                    };
+
+
                     function formatDrugsDataToArray (data) {
                         var newdata = [];
                         var all_drugs = [];
