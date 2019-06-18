@@ -267,10 +267,13 @@ angular.module('otDirectives')
                                 // 0: data origin: public / private
                                 row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
-                                // 1: disease
+                                // 1: disease name
                                 row.push('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');
 
-                                // 2: drug
+                                // 2: disease id
+                                row.push(item.disease.efo_info.efo_id.split('/').pop());
+
+                                // 3: drug
                                 var link = item.evidence.target2drug.urls[0].url;
                                 var linkClass = 'class="ot-external-link"';
                                 var target = 'target=_blank';
@@ -281,23 +284,23 @@ angular.module('otDirectives')
                                 }
                                 row.push('<a ' + linkClass + ' href=\'' + link + '\' ' + target + '>' + item.drug.molecule_name + '</a>');
 
-                                // 3: phase
+                                // 4: phase
                                 row.push(item.evidence.drug2clinic.clinical_trial_phase.label);
 
-                                // 4: phase numeric (hidden)
+                                // 5: phase numeric (hidden)
                                 row.push(item.evidence.drug2clinic.clinical_trial_phase.numeric_index);
 
-                                // 5: status
+                                // 6: status
                                 var sts = otDictionary.NA;
                                 if (otUtils.checkPath(item, 'evidence.drug2clinic.status')) {
                                     sts = item.evidence.drug2clinic.status;
                                 }
                                 row.push(sts);
 
-                                // 6: type
+                                // 7: type
                                 row.push(item.drug.molecule_type);
 
-                                // 7: Mechanism of action + publications
+                                // 8: Mechanism of action + publications
                                 var action = item.evidence.target2drug.mechanism_of_action;
                                 var refs = [];
                                 if (checkPath(item, 'evidence.target2drug.provenance_type.literature.references')) {
@@ -314,7 +317,7 @@ angular.module('otDirectives')
                                 }
                                 row.push(action);
 
-                                // 8: Activity
+                                // 9: Activity
                                 var activity = item.target.activity;
                                 switch (activity) {
                                 case 'drug_positive_modulator' :
@@ -326,22 +329,22 @@ angular.module('otDirectives')
                                 }
                                 row.push(activity);
 
-                                // 9: target
+                                // 10: target
                                 row.push('<a href=\'/target/' + item.target.id + '\'>' + item.target.gene_info.symbol + '</a>');
 
-                                // 10: target class
+                                // 11: target class
                                 var trgc = otDictionary.NA;
                                 if (otUtils.checkPath(item, 'target.target_class')) {
                                     trgc = item.target.target_class[0] || otDictionary.NA;
                                 }
                                 row.push(trgc);
 
-                                // 11: evidence source
+                                // 12: evidence source
                                 row.push('<a class=\'ot-external-link\' href=\'' +
                                     item.evidence.drug2clinic.urls[0].url +
                                     '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
 
-                                // 12-16: hidden cols for filtering
+                                // 13-17: hidden cols for filtering
                                 row.push(item.disease.efo_info.label); // disease
                                 row.push(item.drug.molecule_name); // drug
                                 row.push(item.evidence.target2drug.mechanism_of_action); // mechanism
@@ -427,7 +430,7 @@ angular.module('otDirectives')
                         return newdata;
                     }
 
-                    var dropdownColumns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+                    var dropdownColumns = [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
                     /*
                      * This is the hardcoded data for the Known Drugs table and
@@ -439,57 +442,59 @@ angular.module('otDirectives')
                             'data': formatDrugsDataToArray(scope.ext.data),
                             'autoWidth': false,
                             'paging': true,
-                            'order': [[3, 'desc']],
-                            // "aoColumnDefs" : [
+                            'order': [[4, 'desc']],
                             'columnDefs': [
-                                {'targets': [4], 'visible': false},
-                                {'iDataSort': 3, 'aTargets': [4]},
+                                {'targets': [5], 'visible': false},
                                 {
                                     'targets': [0],    // the access-level (public/private icon)
                                     'visible': otConfig.show_access_level,
                                     'width': '3%'
                                 },
                                 {
-                                    'targets': [1, 2, 7],
+                                    'targets': [1, 3, 8],
                                     'width': '12%'
                                 },
                                 {
-                                    'targets': [5, 6, 8, 10],
+                                    'targets': [6, 7, 9, 11],
                                     'width': '10%'
                                 },
                                 {
-                                    'targets': [3, 9, 11],
+                                    'targets': [4, 10, 12],
                                     'width': '7%'
                                 },
                                 // disease
                                 {
                                     'targets': [1],
-                                    'mRender': otColumnFilter.mRenderGenerator(12),
-                                    'mData': otColumnFilter.mDataGenerator(1, 12)
+                                    'mRender': otColumnFilter.mRenderGenerator(13),
+                                    'mData': otColumnFilter.mDataGenerator(1, 13)
+                                },
+                                {
+                                    'targets': [2],
+                                    'visible': false
                                 },
                                 // drug
                                 {
-                                    'targets': [2],
-                                    'mRender': otColumnFilter.mRenderGenerator(13),
-                                    'mData': otColumnFilter.mDataGenerator(2, 13)
-                                },
-                                // mech of action
-                                {
-                                    'targets': [7],
+                                    'targets': [3],
                                     'mRender': otColumnFilter.mRenderGenerator(14),
-                                    'mData': otColumnFilter.mDataGenerator(7, 14)
+                                    'mData': otColumnFilter.mDataGenerator(3, 14)
                                 },
                                 // mech of action
                                 {
-                                    'targets': [9],
-                                    'mRender': otColumnFilter.mRenderGenerator(16),
-                                    'mData': otColumnFilter.mDataGenerator(9, 16)
+                                    'targets': [8],
+                                    'mRender': otColumnFilter.mRenderGenerator(15),
+                                    'mData': otColumnFilter.mDataGenerator(8, 15)
+                                },
+                                // mech of action
+                                {
+                                    'targets': [10],
+                                    'mRender': otColumnFilter.mRenderGenerator(17),
+                                    'mData': otColumnFilter.mDataGenerator(10, 17)
                                 },
                                 // evidence source
                                 {
-                                    'targets': [11],
-                                    'mRender': otColumnFilter.mRenderGenerator(15),
-                                    'mData': otColumnFilter.mDataGenerator(11, 15)
+                                    'targets': [12],
+                                    'mRender': otColumnFilter.mRenderGenerator(16),
+                                    'mData': otColumnFilter.mDataGenerator(12, 16)
                                 }
                             ],
                             // "aoColumnDefs" : [
@@ -504,8 +509,6 @@ angular.module('otDirectives')
                         //     console.log('searched for '+dtable.api().search());
                         // } );
 
-                        // TODO: remove this as it's just for testing
-                        // window.dtable = dtable;
                     }
                 });
             }
