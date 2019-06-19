@@ -340,19 +340,22 @@ angular.module('otDirectives')
                                 // 12: target
                                 row.push('<a href=\'/target/' + item.target.id + '\'>' + item.target.gene_info.symbol + '</a>');
 
-                                // 13: target class
+                                // 13: target ID
+                                row.push(item.target.id);
+
+                                // 14: target class
                                 var trgc = otDictionary.NA;
                                 if (otUtils.checkPath(item, 'target.target_class')) {
                                     trgc = item.target.target_class[0] || otDictionary.NA;
                                 }
                                 row.push(trgc);
 
-                                // 14: evidence source
+                                // 15: evidence source
                                 row.push('<a class=\'ot-external-link\' href=\'' +
                                     item.evidence.drug2clinic.urls[0].url +
                                     '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
 
-                                // 15-19: hidden cols for filtering
+                                // 16-20: hidden cols for filtering
                                 row.push(item.disease.efo_info.label); // disease
                                 row.push(item.drug.molecule_name); // drug
                                 row.push(item.evidence.target2drug.mechanism_of_action); // mechanism
@@ -438,7 +441,7 @@ angular.module('otDirectives')
                         return newdata;
                     }
 
-                    var dropdownColumns = [1, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
+                    var dropdownColumns = [1, 3, 5, 6, 7, 8, 9, 11, 12, 14, 15];
 
                     /*
                      * This is the hardcoded data for the Known Drugs table and
@@ -462,11 +465,11 @@ angular.module('otDirectives')
                                     'width': '12%'
                                 },
                                 {
-                                    'targets': [7, 8, 11, 13],
+                                    'targets': [7, 8, 11, 14],
                                     'width': '10%'
                                 },
                                 {
-                                    'targets': [5, 12, 14],
+                                    'targets': [5, 12, 15],
                                     'width': '7%'
                                 },
                                 // set columns visiblity and filters
@@ -478,8 +481,8 @@ angular.module('otDirectives')
                                 // disease
                                 {
                                     'targets': [1],
-                                    'mRender': otColumnFilter.mRenderGenerator(15),
-                                    'mData': otColumnFilter.mDataGenerator(1, 15)
+                                    'mRender': otColumnFilter.mRenderGenerator(16),
+                                    'mData': otColumnFilter.mDataGenerator(1, 16)
                                 },
                                 {
                                     'targets': [2],
@@ -488,8 +491,8 @@ angular.module('otDirectives')
                                 // drug
                                 {
                                     'targets': [3],
-                                    'mRender': otColumnFilter.mRenderGenerator(16),
-                                    'mData': otColumnFilter.mDataGenerator(3, 16)
+                                    'mRender': otColumnFilter.mRenderGenerator(17),
+                                    'mData': otColumnFilter.mDataGenerator(3, 17)
                                 },
                                 // drug id
                                 {
@@ -503,24 +506,29 @@ angular.module('otDirectives')
                                 // mech of action
                                 {
                                     'targets': [9],
-                                    'mRender': otColumnFilter.mRenderGenerator(17),
-                                    'mData': otColumnFilter.mDataGenerator(9, 17)
+                                    'mRender': otColumnFilter.mRenderGenerator(18),
+                                    'mData': otColumnFilter.mDataGenerator(9, 18)
                                 },
                                 {
                                     'targets': [10],
                                     'visible': false
                                 },
-                                // mech of action
+                                // target
                                 {
                                     'targets': [12],
-                                    'mRender': otColumnFilter.mRenderGenerator(19),
-                                    'mData': otColumnFilter.mDataGenerator(12, 19)
+                                    'mRender': otColumnFilter.mRenderGenerator(20),
+                                    'mData': otColumnFilter.mDataGenerator(12, 20)
+                                },
+                                // target ID
+                                {
+                                    'targets': [13],
+                                    'visible': false
                                 },
                                 // evidence source
                                 {
-                                    'targets': [14],
-                                    'mRender': otColumnFilter.mRenderGenerator(18),
-                                    'mData': otColumnFilter.mDataGenerator(14, 18)
+                                    'targets': [15],
+                                    'mRender': otColumnFilter.mRenderGenerator(19),
+                                    'mData': otColumnFilter.mDataGenerator(15, 19)
                                 }
                             ],
                             initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
