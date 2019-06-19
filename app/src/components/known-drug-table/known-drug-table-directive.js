@@ -270,7 +270,7 @@ angular.module('otDirectives')
                                 // 1: disease name
                                 row.push('<a href=\'/disease/' + item.disease.efo_info.efo_id.split('/').pop() + '\'>' + item.disease.efo_info.label + '</a>');
 
-                                // 2: disease id
+                                // 2: disease id (hidden)
                                 row.push(item.disease.efo_info.efo_id.split('/').pop());
 
                                 // 3: drug
@@ -320,7 +320,7 @@ angular.module('otDirectives')
                                 }
                                 row.push(action);
 
-                                // 10: Mechanism of action references
+                                // 10: Mechanism of action references (hidden)
                                 row.push(item.evidence.target2drug.urls.map(function (t2d) {
                                     return t2d.nice_name + ': ' + t2d.url;
                                 }).join(', '));
@@ -340,7 +340,7 @@ angular.module('otDirectives')
                                 // 12: target
                                 row.push('<a href=\'/target/' + item.target.id + '\'>' + item.target.gene_info.symbol + '</a>');
 
-                                // 13: target ID
+                                // 13: target ID (hidden)
                                 row.push(item.target.id);
 
                                 // 14: target class
@@ -355,7 +355,11 @@ angular.module('otDirectives')
                                     item.evidence.drug2clinic.urls[0].url +
                                     '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
 
-                                // 16-20: hidden cols for filtering
+                                // 16: evidence URL (hidden)
+                                row.push(decodeURI(item.evidence.drug2clinic.urls[0].url));
+
+                                // 17-21: hidden cols for filtering
+                                // these do not appear in the HTML and are not included in the download
                                 row.push(item.disease.efo_info.label); // disease
                                 row.push(item.drug.molecule_name); // drug
                                 row.push(item.evidence.target2drug.mechanism_of_action); // mechanism
@@ -481,8 +485,8 @@ angular.module('otDirectives')
                                 // disease
                                 {
                                     'targets': [1],
-                                    'mRender': otColumnFilter.mRenderGenerator(16),
-                                    'mData': otColumnFilter.mDataGenerator(1, 16)
+                                    'mRender': otColumnFilter.mRenderGenerator(17),
+                                    'mData': otColumnFilter.mDataGenerator(1, 17)
                                 },
                                 {
                                     'targets': [2],
@@ -491,8 +495,8 @@ angular.module('otDirectives')
                                 // drug
                                 {
                                     'targets': [3],
-                                    'mRender': otColumnFilter.mRenderGenerator(17),
-                                    'mData': otColumnFilter.mDataGenerator(3, 17)
+                                    'mRender': otColumnFilter.mRenderGenerator(18),
+                                    'mData': otColumnFilter.mDataGenerator(3, 18)
                                 },
                                 // drug id
                                 {
@@ -506,8 +510,8 @@ angular.module('otDirectives')
                                 // mech of action
                                 {
                                     'targets': [9],
-                                    'mRender': otColumnFilter.mRenderGenerator(18),
-                                    'mData': otColumnFilter.mDataGenerator(9, 18)
+                                    'mRender': otColumnFilter.mRenderGenerator(19),
+                                    'mData': otColumnFilter.mDataGenerator(9, 19)
                                 },
                                 {
                                     'targets': [10],
@@ -516,8 +520,8 @@ angular.module('otDirectives')
                                 // target
                                 {
                                     'targets': [12],
-                                    'mRender': otColumnFilter.mRenderGenerator(20),
-                                    'mData': otColumnFilter.mDataGenerator(12, 20)
+                                    'mRender': otColumnFilter.mRenderGenerator(21),
+                                    'mData': otColumnFilter.mDataGenerator(12, 21)
                                 },
                                 // target ID
                                 {
@@ -527,8 +531,13 @@ angular.module('otDirectives')
                                 // evidence source
                                 {
                                     'targets': [15],
-                                    'mRender': otColumnFilter.mRenderGenerator(19),
-                                    'mData': otColumnFilter.mDataGenerator(15, 19)
+                                    'mRender': otColumnFilter.mRenderGenerator(20),
+                                    'mData': otColumnFilter.mDataGenerator(15, 20)
+                                },
+                                // evidence URL
+                                {
+                                    'targets': [16],
+                                    'visible': false
                                 }
                             ],
                             initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
