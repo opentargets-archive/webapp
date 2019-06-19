@@ -320,7 +320,12 @@ angular.module('otDirectives')
                                 }
                                 row.push(action);
 
-                                // 10: Activity
+                                // 10: Mechanism of action references
+                                row.push(item.evidence.target2drug.urls.map(function (t2d) {
+                                    return t2d.nice_name + ': ' + t2d.url;
+                                }).join(', '));
+
+                                // 11: Activity
                                 var activity = item.target.activity;
                                 switch (activity) {
                                 case 'drug_positive_modulator' :
@@ -332,22 +337,22 @@ angular.module('otDirectives')
                                 }
                                 row.push(activity);
 
-                                // 11: target
+                                // 12: target
                                 row.push('<a href=\'/target/' + item.target.id + '\'>' + item.target.gene_info.symbol + '</a>');
 
-                                // 12: target class
+                                // 13: target class
                                 var trgc = otDictionary.NA;
                                 if (otUtils.checkPath(item, 'target.target_class')) {
                                     trgc = item.target.target_class[0] || otDictionary.NA;
                                 }
                                 row.push(trgc);
 
-                                // 13: evidence source
+                                // 14: evidence source
                                 row.push('<a class=\'ot-external-link\' href=\'' +
                                     item.evidence.drug2clinic.urls[0].url +
                                     '\' target=\'_blank\'>' + item.evidence.drug2clinic.urls[0].nice_name + '</a>');
 
-                                // 14-18: hidden cols for filtering
+                                // 15-19: hidden cols for filtering
                                 row.push(item.disease.efo_info.label); // disease
                                 row.push(item.drug.molecule_name); // drug
                                 row.push(item.evidence.target2drug.mechanism_of_action); // mechanism
@@ -433,7 +438,7 @@ angular.module('otDirectives')
                         return newdata;
                     }
 
-                    var dropdownColumns = [1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+                    var dropdownColumns = [1, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14];
 
                     /*
                      * This is the hardcoded data for the Known Drugs table and
@@ -457,11 +462,11 @@ angular.module('otDirectives')
                                     'width': '12%'
                                 },
                                 {
-                                    'targets': [7, 8, 10, 12],
+                                    'targets': [7, 8, 11, 13],
                                     'width': '10%'
                                 },
                                 {
-                                    'targets': [5, 11, 13],
+                                    'targets': [5, 12, 14],
                                     'width': '7%'
                                 },
                                 // set columns visiblity and filters
@@ -473,8 +478,8 @@ angular.module('otDirectives')
                                 // disease
                                 {
                                     'targets': [1],
-                                    'mRender': otColumnFilter.mRenderGenerator(14),
-                                    'mData': otColumnFilter.mDataGenerator(1, 14)
+                                    'mRender': otColumnFilter.mRenderGenerator(15),
+                                    'mData': otColumnFilter.mDataGenerator(1, 15)
                                 },
                                 {
                                     'targets': [2],
@@ -483,8 +488,8 @@ angular.module('otDirectives')
                                 // drug
                                 {
                                     'targets': [3],
-                                    'mRender': otColumnFilter.mRenderGenerator(15),
-                                    'mData': otColumnFilter.mDataGenerator(3, 15)
+                                    'mRender': otColumnFilter.mRenderGenerator(16),
+                                    'mData': otColumnFilter.mDataGenerator(3, 16)
                                 },
                                 // drug id
                                 {
@@ -498,20 +503,24 @@ angular.module('otDirectives')
                                 // mech of action
                                 {
                                     'targets': [9],
-                                    'mRender': otColumnFilter.mRenderGenerator(16),
-                                    'mData': otColumnFilter.mDataGenerator(9, 16)
+                                    'mRender': otColumnFilter.mRenderGenerator(17),
+                                    'mData': otColumnFilter.mDataGenerator(9, 17)
+                                },
+                                {
+                                    'targets': [10],
+                                    'visible': false
                                 },
                                 // mech of action
                                 {
-                                    'targets': [11],
-                                    'mRender': otColumnFilter.mRenderGenerator(18),
-                                    'mData': otColumnFilter.mDataGenerator(11, 18)
+                                    'targets': [12],
+                                    'mRender': otColumnFilter.mRenderGenerator(19),
+                                    'mData': otColumnFilter.mDataGenerator(12, 19)
                                 },
                                 // evidence source
                                 {
-                                    'targets': [13],
-                                    'mRender': otColumnFilter.mRenderGenerator(17),
-                                    'mData': otColumnFilter.mDataGenerator(13, 17)
+                                    'targets': [14],
+                                    'mRender': otColumnFilter.mRenderGenerator(18),
+                                    'mData': otColumnFilter.mDataGenerator(14, 18)
                                 }
                             ],
                             initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
