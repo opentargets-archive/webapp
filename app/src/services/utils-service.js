@@ -54,26 +54,20 @@ angular.module('otServices')
 
 
         /**
-     * Set the default tabletools (i.e.) options, including the export button
-     * @param obj: the datatable config object, or an empty object
-     * @param title: the name to be used to save the file.
-     *               E.g. "bob" will produce bob.pdf and bob.csv when exporting in those formats.
-     *
-     */
+         * Set the default tabletools (i.e.) options, including the export button
+         * @param obj: the datatable config object, or an empty object; 
+         *             if specifying buttons (obj.buttons), that will be used instead of default
+         * @param title: the name to be used to save the file.
+         *               E.g. "bob" will produce bob.pdf and bob.csv when exporting in those formats.
+         *
+         */
         otUtilsService.setTableToolsParams = function (obj, title) {
             obj.dom = '<"clearfix" <"clear small" i><"pull-left small" f><"pull-right" B>>rt<"clearfix" <"pull-left small" l><"pull-right small" p>>';
-            obj.buttons = [
-            // {
-            //     extend: 'copy', //extend: 'copyHtml5',
-            //     text: "<span class='fa fa-files-o' title='Copy to clipboard'><span>",
-            // },
+            obj.buttons = obj.buttons || [
                 {
-                    extend: 'csv', // extend: 'csvHtml5',
+                    extend: 'csv',
                     text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .csv</span>',
-                    title: title// ,
-                // exportOptions: {
-                //    columns: ':visible'
-                // }
+                    title: title
                 }
             ];
 
