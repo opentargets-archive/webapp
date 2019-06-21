@@ -153,7 +153,7 @@ angular.module('otDirectives')
                                     // publications??
                                     'target.activity',
                                     'target.gene_info.symbol',
-                                    'target.id',
+                                    'target.gene_info.geneid',
                                     'target.target_class',  // ???
                                     'item.evidence.drug2clinic.urls.url', // ???
                                     'item.evidence.drug2clinic.urls.nice_name' // ???
@@ -339,10 +339,10 @@ angular.module('otDirectives')
                                 row.push(activity);
 
                                 // 12: target
-                                row.push('<a href=\'/target/' + item.target.id + '\'>' + item.target.gene_info.symbol + '</a>');
+                                row.push('<a href=\'/target/' + item.target.gene_info.geneid + '\'>' + item.target.gene_info.symbol + '</a>');
 
                                 // 13: target ID (hidden)
-                                row.push(item.target.id);
+                                row.push(item.target.gene_info.geneid);
 
                                 // 14: target class
                                 var trgc = otDictionary.NA;
@@ -427,7 +427,7 @@ angular.module('otDirectives')
                         });
 
                         scope.associated_diseases = _.uniqBy(data, 'disease.efo_info.efo_id');
-                        scope.associated_targets = _.uniqBy(data, 'target.id');
+                        scope.associated_targets = _.uniqBy(data, 'target.gene_info.geneid');
 
 
                         scope.show.moreOrLess = scope.drugs.length > showLim;
