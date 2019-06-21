@@ -105,7 +105,8 @@ angular.module('otDirectives')
                             .then(
                                 function (resp) {
                                     if (resp.body.data) {
-                                        scope.ext.data = resp.body.data;
+                                        scope.ext.rawdata = resp.body;
+                                        scope.ext.data = scope.ext.rawdata.data;
                                         scope.ext.total = resp.body.total;
                                         scope.ext.size = resp.body.size;
                                         initTableDrugs();
@@ -452,12 +453,37 @@ angular.module('otDirectives')
                      * will obviously need to change and pull live data when available
                      */
                     function initTableDrugs () {
+                        var filename = (scope.output ? scope.output + '-' : '') + 'known_drugs';
                         table = elem[0].getElementsByTagName('table');
                         dtable = $(table).dataTable(otUtils.setTableToolsParams({
                             'data': formatDrugsDataToArray(scope.ext.data),
                             'autoWidth': false,
                             'paging': true,
                             'order': [[5, 'desc']],
+                            'buttons': [
+                                {
+                                    extend: 'csv',
+                                    text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .csv</span>',
+                                    title: filename
+                                },
+                                {
+                                    extend: 'csv',
+                                    text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .tsv</span>',
+                                    title: filename,
+                                    fieldSeparator: '\t',
+                                    extension: '.tsv'
+                                },
+                                {
+                                    text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .JSON</span>',
+                                    title: filename,
+                                    extension: '.json',
+                                    action: function () {
+                                        var data = scope.ext.rawdata;
+                                        var b = new Blob([JSON.stringify(data)], {type: 'text/json;charset=utf-8'});
+                                        saveAs(b, filename + '.json');
+                                    }
+                                }
+                            ],
                             'columnDefs': [
                                 // set column widths
                                 {
@@ -541,7 +567,7 @@ angular.module('otDirectives')
                                 }
                             ],
                             initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
-                        }, (scope.output ? scope.output + '-' : '') + 'known_drugs'));
+                        }, filename));
                     }
                 });
             }
