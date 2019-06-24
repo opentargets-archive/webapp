@@ -150,7 +150,11 @@ angular.module('otDirectives')
                                         return callNext(resp.body.next);
                                     } else {
                                         var d = alldata.map(function (item) {
-                                            return formatDataToRow(item, false).join(', ');
+                                            return formatDataToRow(item, false)
+                                                .map(function (i) {
+                                                    return '"' + i + '"';
+                                                })
+                                                .join(', ');
                                         }).join('\n');
                                         var b = new Blob([d], {type: 'text/csv;charset=utf-8'});
                                         saveAs(b, (scope.output ? scope.output + '-' : '') + 'known_drugs' + '.csv');
@@ -241,7 +245,7 @@ angular.module('otDirectives')
                         // 10: Mechanism of action references (hidden)
                         row.push(item.evidence.target2drug.urls.map(function (t2d) {
                             return t2d.nice_name + ': ' + t2d.url;
-                        }).join('; '));
+                        }).join(', '));
 
                         // 11: Activity
                         cell = item.target.activity;
