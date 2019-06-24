@@ -37,7 +37,25 @@ angular.module('otDirectives')
                 // this probably shouldn't live here, so we'll see later on...
                 // var accessLevelPrivate = '<span class=\'ot-access-private\' title=\'private data\'></span>';
                 // var accessLevelPublic = '<span class=\'ot-access-public\' title=\'public data\'></span>';
-
+                var downloadCols = [
+                    'Access',
+                    'Disease',
+                    'Disease ID',
+                    'Drug',
+                    'Drug ID',
+                    'Phase',
+                    'Phase (Numeric)',
+                    'Status',
+                    'Type',
+                    'Mechanism of action',
+                    'Mechanism of action references',
+                    'Activity',
+                    'Target',
+                    'Target ID',
+                    'Target class',
+                    'Evidence curated from',
+                    'Evidence URL'
+                ];
                 var table, dtable;
 
                 scope.ext.hasError = false;
@@ -140,7 +158,6 @@ angular.module('otDirectives')
                     scope.ext.isDownloading = true;
                     var alldata = [];
                     // otGoogleAnalytics.trackEvent('alldrugs', 'download', 'CSV');
-
                     function callNext (nextIndex) {
                         getData(nextIndex)
                             .then(
@@ -156,6 +173,8 @@ angular.module('otDirectives')
                                                 })
                                                 .join(',');
                                         }).join('\n');
+                                        // add column headers
+                                        d = downloadCols.join(',') + '\n' + d;
                                         var b = new Blob([d], {type: 'text/csv;charset=utf-8'});
                                         saveAs(b, (scope.output ? scope.output + '-' : '') + 'known_drugs' + '.csv');
                                         scope.ext.isDownloading = false;
