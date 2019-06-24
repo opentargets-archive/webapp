@@ -92,7 +92,7 @@ angular.module('otDirectives')
                 */
                 function getData (nextIndex) {
                     var opts = {
-                        size: 10,
+                        size: 10000,
                         datasource: otConfig.evidence_sources.known_drug,
                         fields: [
                             'access_level',
