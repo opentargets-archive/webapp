@@ -152,9 +152,9 @@ angular.module('otDirectives')
                                         var d = alldata.map(function (item) {
                                             return formatDataToRow(item, false)
                                                 .map(function (i) {
-                                                    return '"' + i + '"';
+                                                    return '"' + i .toString().replace(/"/g, '""') + '"';
                                                 })
-                                                .join(', ');
+                                                .join(',');
                                         }).join('\n');
                                         var b = new Blob([d], {type: 'text/csv;charset=utf-8'});
                                         saveAs(b, (scope.output ? scope.output + '-' : '') + 'known_drugs' + '.csv');
