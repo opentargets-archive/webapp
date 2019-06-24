@@ -305,13 +305,6 @@ angular.module('otDirectives')
                         // 16: evidence URL (hidden)
                         row.push(decodeURI(item.evidence.drug2clinic.urls[0].url));
 
-                        // 17-21: hidden cols for filtering
-                        // these do not appear in the HTML and are not included in the download
-                        row.push(item.disease.efo_info.label); // disease
-                        row.push(item.drug.molecule_name); // drug
-                        row.push(item.evidence.target2drug.mechanism_of_action); // mechanism
-                        row.push(item.evidence.drug2clinic.urls[0].nice_name); // evidence source
-                        row.push(item.target.gene_info.symbol); // target symbol
                         return row;
                     } catch (e) {
                         scope.ext.hasError = true;
@@ -330,6 +323,13 @@ angular.module('otDirectives')
 
                         try {
                             row = formatDataToRow(item, true);
+                            // 17-21: hidden cols for filtering
+                            // these do not appear in the HTML and are not included in the download
+                            row.push(item.disease.efo_info.label); // disease
+                            row.push(item.drug.molecule_name); // drug
+                            row.push(item.evidence.target2drug.mechanism_of_action); // mechanism
+                            row.push(item.evidence.drug2clinic.urls[0].nice_name); // evidence source
+                            row.push(item.target.gene_info.symbol); // target symbol
                             newdata.push(row); // use push() so we don't end up with empty rows
 
                             // Fill the unique drugs
