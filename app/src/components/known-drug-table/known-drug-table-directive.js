@@ -375,6 +375,7 @@ angular.module('otDirectives')
                                 label: item.evidence.drug2clinic.clinical_trial_phase.label
                             });
 
+                            var activity = item.target.activity;
                             type_activity[item.drug.molecule_type] = type_activity[item.drug.molecule_type] || {};
                             type_activity[item.drug.molecule_type][activity] = type_activity[item.drug.molecule_type][activity] || [];
                             type_activity[item.drug.molecule_type][activity].push(item.drug.molecule_name);
