@@ -154,7 +154,47 @@ angular.module('otDirectives')
                 }
 
 
-                scope.downloadAllData = function () {
+                function createDownload (alldata, format) {
+                    // format: csv, tsv, json
+                    format = format.toLowerCase();
+                    if (format !== 'csv' && format !== 'tsv' && format !== 'json') {
+                        // only support the above formats
+                        return;
+                    }
+
+                    var fe = '.' + format;  // file extension
+                    var blob;
+                    if (format === 'json') {
+                        // setup download in JSON format, consistent with datatables one
+                        var jd = {
+                            data: alldata
+                        };
+                        blob = new Blob([JSON.stringify(jd)], {type: 'text/json;charset=utf-8'});
+                    } else {
+                        // setup download in CSV or TSV
+                        var type = 'text/' + format + ';charset=utf-8';
+                        var separator = (format === 'csv') ? ',' : '\t';
+                        var data = alldata.map(function (item) {
+                            return formatDataToRow(item, false)
+                                .map(function (i) {
+                                    // enclose cells quotation marks for CSV only
+                                    var cell = (format === 'csv')
+                                        ? '"' + i .toString().replace(/"/g, '""') + '"'
+                                        : i;
+                                    return cell;
+                                })
+                                .join(separator);
+                        }).join('\n');
+                        // add column headers
+                        data = downloadCols.join(separator) + '\n' + data;
+                        blob = new Blob([data], {type: type});
+                    }
+
+                    saveAs(blob, (scope.output ? scope.output + '-' : '') + 'known_drugs-all' + fe);
+                }
+
+
+                scope.downloadAllData = function (format) {
                     scope.ext.isDownloading = true;
                     var alldata = [];
                     // otGoogleAnalytics.trackEvent('alldrugs', 'download', 'CSV');
@@ -166,17 +206,7 @@ angular.module('otDirectives')
                                     if (resp.body.next) {
                                         return callNext(resp.body.next);
                                     } else {
-                                        var d = alldata.map(function (item) {
-                                            return formatDataToRow(item, false)
-                                                .map(function (i) {
-                                                    return '"' + i .toString().replace(/"/g, '""') + '"';
-                                                })
-                                                .join(',');
-                                        }).join('\n');
-                                        // add column headers
-                                        d = downloadCols.join(',') + '\n' + d;
-                                        var b = new Blob([d], {type: 'text/csv;charset=utf-8'});
-                                        saveAs(b, (scope.output ? scope.output + '-' : '') + 'known_drugs' + '.csv');
+                                        createDownload(alldata, format);
                                         scope.ext.isDownloading = false;
                                     }
                                 }
@@ -439,7 +469,7 @@ angular.module('otDirectives')
                                 title: filename,
                                 extension: '.json',
                                 action: function () {
-                                    var data = scope.ext.rawdata;
+                                    var data = {data: scope.ext.rawdata.data};
                                     var b = new Blob([JSON.stringify(data)], {type: 'text/json;charset=utf-8'});
                                     saveAs(b, filename + '.json');
                                 }
