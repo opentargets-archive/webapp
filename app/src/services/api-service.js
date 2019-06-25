@@ -37,6 +37,7 @@ angular.module('otServices')
             API_LOG_SESSION_URL: 'logSession',
             API_STATS_URL: 'stats',
             API_TARGETS_ENRICHMENT_URL: 'targetsEnrichment',
+            API_DRUG_URL: 'drug',
             facets: {
                 DATATYPE: 'datatype', // 'filterbydatatype',
                 PATHWAY: 'pathway', // filterbypathway',
@@ -159,7 +160,7 @@ angular.module('otServices')
          * It simply logs the error to the console. Can be used in then(succ, err) calls.
          * In the most common use, only the error parameter is needed (it's passed automatically).
          * It's mostly to have a quick and consistent handling of errors.
-         * 
+         *
          * @param {Error} error - The error object.
          * @param {boolean} trackCall - If true, count this request anyway; Defaults to FALSE.
          * @example
@@ -206,7 +207,7 @@ angular.module('otServices')
         /**
          * Get a full search.
          * Returns a promise object with methods then(), success(), error().
-         * 
+         *
          * @param {Object} queryObject - Object containing search parameters.
          *
          * @example
@@ -237,8 +238,8 @@ angular.module('otServices')
 
         /**
          * Get the api object to be used outside of angular.
-         * 
-         * @example 
+         *
+         * @example
          * var api = otApi.getSelf();
          */
         otApiService.getSelf = function () {
@@ -249,7 +250,7 @@ angular.module('otServices')
         /**
          * Search for evidence using the evidence() API function.
          * Returns a promise object with methods then(), success(), error().
-         * 
+         *
          * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
          * @example
          *      otApi.getEvidence(params);
@@ -262,7 +263,7 @@ angular.module('otServices')
 
         /**
          * Short description.
-         * 
+         *
          * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
          * @example
          *      otApi.getAssociations(params);
@@ -275,7 +276,7 @@ angular.module('otServices')
 
         /**
          * Gets the info to be displayed in the serach suggestions box via call to the autocomplete() API method.
-         * 
+         *
          * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
          * @example
          *      otApi.getAutocomplete(params);
@@ -288,7 +289,7 @@ angular.module('otServices')
 
         /**
          * Get disease details via API efo() method based on EFO code.
-         * 
+         *
          * @param {Object} queryObject - Simple Object containing the EFO code passed to the API call.
          * @example
          *      otApi.getEfo({efo:'EFO_1234567'});
@@ -301,7 +302,7 @@ angular.module('otServices')
 
         /**
          * Get gene details via API gene() method based on ENSG code.
-         * 
+         *
          * @param {Object} queryObject - Simple Object containing the ENSG passed to the API call.
          * @example
          *      otApi.getTarget({target_id:"ENSG00000005339"});
@@ -314,7 +315,7 @@ angular.module('otServices')
 
         /**
          * Get disease details via API disease() method based on EFO ids.
-         * 
+         *
          * @param {Object} queryObject - Simple Object containing the EFO code passed to the API call.
          * @example
          *      otApi.getDisease(params);
@@ -355,7 +356,7 @@ angular.module('otServices')
          * Decorates a given object with the API options for the given facets and returns the original object.
          * This can then be used to configure an API call.
          * If no object is supplied to the function, a new object is created and returned.
-         * 
+         *
          * @param {Object} facets - Simple Object containing the parameters passed to the API call.
          * @param {Object} obj - Something else.
          * @example
@@ -383,7 +384,7 @@ angular.module('otServices')
 
         /**
          * Get relations for specified gene or target.
-         * 
+         *
          * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
          * @example
          *      otApi.getTargetRelation(params);
@@ -396,7 +397,7 @@ angular.module('otServices')
 
         /**
          * Get relations for specified gene or target.
-         * 
+         *
          * @param {Object} queryObject - Simple Object containing the parameters passed to the API call.
          * @example
          *      otApi.getDiseaseRelation(params);
@@ -410,7 +411,7 @@ angular.module('otServices')
         /**
          * Logs a session event in the API.
          * This call is 1-off and it doesn't.
-         * 
+         *
          * @example
          *      otApi.logSession();
          */
@@ -428,7 +429,7 @@ angular.module('otServices')
 
         /**
          * Get the API stats.
-         * 
+         *
          * @example
          *      otApi.getStats(params);
          */
@@ -438,6 +439,22 @@ angular.module('otServices')
                 method: 'GET',
                 params: {}
             };
+            return callAPI(queryObject);
+        };
+
+        /**
+         * Get info for specified drug
+         *
+         * @param {Object} queryObject - Simple Object containing the ChEMBL id
+         * @example
+         *      otApi.getDrug({
+         *          params: {
+         *              id:'CHEMBL112'
+         *          }
+         *      });
+         */
+        otApiService.getDrug = function (queryObject) {
+            queryObject.operation = otApiService.API_DRUG_URL;
             return callAPI(queryObject);
         };
 
