@@ -39,10 +39,11 @@
                 <th>References</th>
             </tr>
             <tr ng-repeat="mec in mechanisms">
-                <td>{{mec.mechanism}}</td>
-                <td>{{mec.targets}}</td>
-                <td><span ng-repeat="synonym in mec.synonyms"><a ng-if="synonym.ensId" href="/target/{{synonym.ensId}}">{{synonym.synonym}}{{$last ? '' : ', '}}</a><span ng-if="!synonym.ensId">{{synonym.synonym}}{{$last ? '' : ', '}}</span></span></td>
-                <td><span ng-repeat="ref in mec.refs"><a target=_blank href="{{ref.ref_url}}">{{ref.ref_type}} </a></span></td>
+                <td>{{mec.description}}</td>
+                <td>{{mec.target_name}}</td>
+                <td><span ng-repeat="synonym in mec.target_components"><a ng-if="synonym.ensembl" href="/target/{{synonym.ensembl}}">{{synonym.approved_symbol}}{{$last ? '' : ', '}}</a><span ng-if="!synonym.ensembl">{{synonym.approved_symbol}}{{$last ? '' : ', '}}</span></span></td>
+                <!-- TODO: check references -->
+                <td><span ng-repeat="ref in mec.references"><a target=_blank href="{{ref.urls[0]}}">{{ref.source}} </a></span></td>
             </tr>
         </table>
     </div>
@@ -77,7 +78,7 @@
         <ot-drug-adverse-events-directive drug="displayName"></ot-drug-adverse-events-directive>
     </div>
     
-    <div class="section" >
+    <div class="section">
         <h3 class="summary-section-header">Bibliography</h3>
         <!-- pass the drug display name as generic query term -->
         <ot-bibliography-target-chips q="displayName"></ot-bibliography-target-chips>
