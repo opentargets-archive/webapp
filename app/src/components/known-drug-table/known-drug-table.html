@@ -24,7 +24,14 @@
             <!-- we're not showing all results -->
             <h4>Important notice about the Drugs data table for {{targetLabel}}<span ng-if="targetLabel && diseaseLabel"> and </span>{{diseaseLabel}}</h4>
             <p>This data table below only shows the first {{ext.size}} rows of a data table with {{ext.total}} total rows.</p>
-            <button ng-show="!ext.isDownloading" class="btn btn-default" ng-click="downloadAllData()">Download all data ({{ext.total}} rows) <span class="fa fa-download"></span></button>
+            <div ng-show="!ext.isDownloading">
+                Download all data ({{ext.total}} rows)
+                <span class="btn-group">
+                <button class="btn btn-default" ng-click="downloadAllData('csv')"><span class="fa fa-download"></span> .csv</button>
+                <button class="btn btn-default" ng-click="downloadAllData('tsv')"><span class="fa fa-download"></span> .tsv</button>
+                <button class="btn btn-default" ng-click="downloadAllData('json')"><span class="fa fa-download"></span> .json</button>
+                </span>
+            </div>
             <div ng-show="ext.isDownloading">
                 <h5>Generating download file</h5>
                 <ot-progress-spinner size="30"></ot-progress-spinner>
