@@ -465,7 +465,7 @@ angular.module('otDirectives')
                                 extension: '.tsv'
                             },
                             {
-                                text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .JSON</span>',
+                                text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .json</span>',
                                 title: filename,
                                 extension: '.json',
                                 action: function () {
