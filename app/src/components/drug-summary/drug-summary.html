@@ -11,7 +11,7 @@
         <a ng-if="!internal" target=_blank href="https://www.ebi.ac.uk/chembl/compound/inspect/{{drug}}">{{drug}}</a><span ng-if="internal">{{drug}}</span>
     </div>
 
-    <div class="section" style="float:right;margin-top:70px;" ng-cloak>
+    <div class="section" style="float:right;margin-top:70px;" ng-cloak ng-if="!internal">
         <img class="drug-img" ng-if="mol_type=='Antibody'" width="200" height="200" src="/imgs/ab.png">
         <img class="drug-img" ng-if="mol_type!='Antibody'" width="200" height="200" src="" id="drugDiagramContainer">
     </div>
@@ -72,7 +72,7 @@
         </span>
     </div>
 
-    <div class="section">
+    <div class="section" ng-if="!internal">
         <h3 class="summary-section-header">Adverse events</h3>
         <p class=ot-section-intro>The top 20 adverse effects for this drug are shown. An adverse event can be an undesirable experience associated with the use of the drug, including serious drug side effects, product use errors, product quality problems, and therapeutic failures. The source of this data is <a target=_blank href="https://open.fda.gov/apis/drug/event/">OpenFDA</a>.</p>
 
@@ -82,7 +82,7 @@
         <ot-drug-adverse-events-directive drug="displayName"></ot-drug-adverse-events-directive>
     </div>
     
-    <div class="section">
+    <div class="section" ng-if="!internal">
         <h3 class="summary-section-header">Bibliography</h3>
         <!-- pass the drug display name as generic query term -->
         <ot-bibliography-target-chips q="displayName"></ot-bibliography-target-chips>

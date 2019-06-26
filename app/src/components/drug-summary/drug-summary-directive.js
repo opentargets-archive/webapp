@@ -60,7 +60,7 @@ angular.module('otDirectives')
                                 //     scope.formula = otDictionary.NA;
                                 // }
 
-                                if (scope.mol_type.toLowerCase() !== 'antibody') {
+                                if (!scope.internal && scope.mol_type.toLowerCase() !== 'antibody') {
                                     pngToDataUrl('https://www.ebi.ac.uk/chembl/api/data/image/' + scope.drug, function (base64Img) {
                                         var img = document.getElementById('drugDiagramContainer');
                                         if (base64Img) {
