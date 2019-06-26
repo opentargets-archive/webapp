@@ -52,11 +52,11 @@ angular.module('otDirectives')
                                 scope.max_phase = resp.body.max_clinical_trial_phase || otDictionary.NA;
                                 scope.internal = resp.body.internal_compound;
                                 // TODO: full_molformula is currently not available in the API response
-                                if (resp.body.molecule_properties && resp.body.molecule_properties.full_molformula) {
-                                    scope.formula = resp.body.molecule_properties.full_molformula;
-                                } else {
-                                    scope.formula = otDictionary.NA;
-                                }
+                                // if (resp.body.molecule_properties && resp.body.molecule_properties.full_molformula) {
+                                //     scope.formula = resp.body.molecule_properties.full_molformula;
+                                // } else {
+                                //     scope.formula = otDictionary.NA;
+                                // }
 
                                 if (scope.mol_type.toLowerCase() !== 'antibody') {
                                     pngToDataUrl('https://www.ebi.ac.uk/chembl/api/data/image/' + scope.drug, function (base64Img) {
