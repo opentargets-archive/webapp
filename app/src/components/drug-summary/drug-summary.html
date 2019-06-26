@@ -6,9 +6,10 @@
     <view-title>{{displayName}}</view-title>
     <meta-description-content>Browse information about {{displayName}} ({{drug}}) covering related targets, diseases, literature text mining and adverse events.</meta-description-content>
 
-    <h2>
-        Summary page for drug {{displayName}}
-    </h2>
+    <h2>{{displayName}}</h2>
+    <div>ID:
+        <a ng-if="!internal" target=_blank href="https://www.ebi.ac.uk/chembl/compound/inspect/{{drug}}">{{drug}}</a><span ng-if="internal">{{drug}}</span>
+    </div>
 
     <div class="section" style="float:right;margin-top:70px;" ng-cloak>
         <img class="drug-img" ng-if="mol_type=='Antibody'" width="200" height="200" src="/imgs/ab.png">
@@ -20,7 +21,7 @@
         <div class="drug-property" style="min-height:200px">
             <ul>
                 <li><b>Name</b>: {{displayName}}</li>
-                <li style="margin-top:8px;"><b>ID</b>: {{drug}}</li>
+                <!-- <li style="margin-top:8px;"><b>ID</b>: {{drug}}</li> -->
                 <li style="margin-top:8px;"><b>Molecule type</b>: {{mol_type}}</li>
                 <li style="margin-top:8px;"><b>First approval</b>: {{first_approval}}</li>
                 <li style="margin-top:8px;"><b>Max phase</b>: {{max_phase}}</li>
@@ -85,13 +86,13 @@
         <ot-bibliography-target-chips q="displayName"></ot-bibliography-target-chips>
     </div>
 
-    <div class="section">
+    <!-- <div class="section">
         <h3 class="summary-section-header">External links</h3>
         <ul>
             <li>
                 <a target=_blank href="https://www.ebi.ac.uk/chembl/compound/inspect/{{drug}}">ChEMBL information page for {{drug}}</a>
             </li>
         </ul>
-    </div>
+    </div> -->
 
 </div>
