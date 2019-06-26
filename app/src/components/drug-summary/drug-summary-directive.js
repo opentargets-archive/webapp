@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('otDrugSummary', ['otApi', 'otUtils', 'otDictionary', function (otApi, otUtils, otDictionary) {
+    .directive('otDrugSummary', ['otApi', 'otUtils', 'otDictionary', 'otUpperCaseFirstFilter', function (otApi, otUtils, otDictionary, otUpperCaseFirstFilter) {
         'use strict';
 
         function pngToDataUrl (url, callback, outputFormat) {
@@ -46,12 +46,12 @@ angular.module('otDirectives')
                         .then(
                             function (resp) {
                                 // General properties
-                                scope.displayName = resp.body.pref_name || resp.body.molecule_chembl_id;
+                                scope.displayName = otUpperCaseFirstFilter((resp.body.pref_name || resp.body.molecule_chembl_id).toString().toLowerCase());
                                 scope.mol_type = resp.body.type || otDictionary.NA;
                                 scope.first_approval = resp.body.year_first_approved || otDictionary.NA;
                                 scope.max_phase = resp.body.max_clinical_trial_phase || otDictionary.NA;
                                 scope.internal = resp.body.internal_compound;
-                                // TODO:
+                                // TODO: full_molformula is currently not available in the API response
                                 if (resp.body.molecule_properties && resp.body.molecule_properties.full_molformula) {
                                     scope.formula = resp.body.molecule_properties.full_molformula;
                                 } else {
