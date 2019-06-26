@@ -1,8 +1,8 @@
-<div ng-show="noDrug">
+<div ng-if="noDrug">
     <h2>No drug found with name or id {{drug}}</h2>
 </div>
 
-<div ng-show="displayName">
+<div ng-if="displayName">
     <view-title>{{displayName}}</view-title>
     <meta-description-content>Browse information about {{displayName}} ({{drug}}) covering related targets, diseases, literature text mining and adverse events.</meta-description-content>
 
