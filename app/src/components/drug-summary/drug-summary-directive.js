@@ -69,9 +69,21 @@ angular.module('otDirectives')
                                     });
                                 }
 
-                                // Mechanism of action...
-                                // TODO: process references
-                                scope.mechanisms = resp.body.mechanisms_of_action;
+                                // Mechanism of action
+                                var mecs = resp.body.mechanisms_of_action.map(function (mec) {
+                                    mec.references.map(function (ref) {
+                                        // process the references
+                                        ref.url = ref.urls ? ref.urls[0] : '';
+                                        if (!ref.url) {
+                                            if (ref.source.toLowerCase() === 'wikipedia') {
+                                                ref.url = 'https://en.wikipedia.org/wiki/' + ref.ids[0];
+                                            }
+                                        }
+                                        return ref;
+                                    });
+                                    return mec;
+                                });
+                                scope.mechanisms = mecs;
 
                                 // Associated targets
                                 otApi.getSearch({
