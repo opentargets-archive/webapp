@@ -1,15 +1,10 @@
-<p class="ot-section-intro">Other diseases related to {{entitySymbol}} based on common associated targets</p>
+<p class="ot-section-intro">
+    The top 20 diseases related to {{entitySymbol}} based on a computation of similar disease-to-target connections and overall association scores. 
+    Clicking on a related disease bubble will show you a list of the targets used to calculate the similarity between the two diseases. 
+    For more information on this visualisation and how we compute similarity scores, please read <a href="https://docs.targetvalidation.org/faq/how-do-you-compute-target-and-disease-similarity" target="_blank">our documentation on target and disease similarity</a>.
+</p>
+
 <p>Source: <a href="https://docs.targetvalidation.org/getting-started/scoring" target="_blank">Open Targets</a></p>
-<!--<div class="row">-->
-    <!--<div class="col-sm-12 col-md-6" style="margin-top:20px">-->
-        <!--<div class="row">-->
-            <!--<div class="col-sm-6"></div>-->
-            <!--<div class="col-sm-6"><span style="font-size:0.8em;">Shared targets</span></div>-->
-        <!--</div>-->
-        <!--<ot-related-diseases-overview disease="disease" related="related" width="width"></ot-related-diseases-overview>-->
-    <!--</div>-->
-    <!--<ot-related-entity-details class="col-sm-12 col-md-6" entity="entity" subject="disease" object="related" width="width" ></ot-related-entity-details>-->
-<!--</div>-->
 
 <div class="row">
     <ot-related-diseases-vis disease="disease" width="width"></ot-related-diseases-vis>
