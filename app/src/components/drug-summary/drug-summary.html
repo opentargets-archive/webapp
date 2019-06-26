@@ -42,8 +42,9 @@
                 <td>{{mec.description}}</td>
                 <td>{{mec.target_name}}</td>
                 <td><span ng-repeat="synonym in mec.target_components"><a ng-if="synonym.ensembl" href="/target/{{synonym.ensembl}}">{{synonym.approved_symbol}}{{$last ? '' : ', '}}</a><span ng-if="!synonym.ensembl">{{synonym.approved_symbol}}{{$last ? '' : ', '}}</span></span></td>
-                <!-- TODO: check references -->
-                <td><span ng-repeat="ref in mec.references"><a target=_blank href="{{ref.urls[0]}}">{{ref.source}} </a></span></td>
+                <td><span ng-repeat="ref in mec.references">
+                    <a ng-if="ref.urls" target=_blank href="{{ref.urls[0]}}">{{ref.source}}</a><span ng-if="!ref.urls">{{ref.source}}</span>{{$last ? '' : ', '}}
+                </span></td>
             </tr>
         </table>
     </div>
