@@ -27,6 +27,8 @@
                 <li style="margin-top:8px;"><b>Max phase</b>: {{max_phase}}</li>
                 <!-- TODO: enable molecular formula when it will be back in the API response -->
                 <!-- <li style="margin-top:8px;"><b>Molecular formula</b>: {{formula}}</li> -->
+                <li style="margin-top:8px;"><b>Synonyms</b>: <span class="ot-profile-synonym-list" ng-repeat="syn in synonyms">{{syn}}</span></li>
+                <li style="margin-top:8px;"><b>Known trade names</b>: <span class="ot-profile-synonym-list" ng-repeat="tn in trade_names">{{tn}}</span></li>
             </ul>
         </div>
 

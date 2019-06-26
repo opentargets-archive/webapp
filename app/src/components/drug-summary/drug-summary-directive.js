@@ -51,6 +51,8 @@ angular.module('otDirectives')
                                 scope.first_approval = resp.body.year_first_approved || otDictionary.NA;
                                 scope.max_phase = resp.body.max_clinical_trial_phase || otDictionary.NA;
                                 scope.internal = resp.body.internal_compound;
+                                scope.synonyms = resp.body.synonyms;
+                                scope.trade_names = resp.body.trade_names;
                                 // TODO: full_molformula is currently not available in the API response
                                 // if (resp.body.molecule_properties && resp.body.molecule_properties.full_molformula) {
                                 //     scope.formula = resp.body.molecule_properties.full_molformula;
