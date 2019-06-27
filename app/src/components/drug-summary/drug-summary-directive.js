@@ -76,10 +76,11 @@ angular.module('otDirectives')
                                     mec.references.map(function (ref) {
                                         // process the references
                                         ref.url = ref.urls ? ref.urls[0] : '';
-                                        if (!ref.url) {
-                                            if (ref.source.toLowerCase() === 'wikipedia') {
-                                                ref.url = 'https://en.wikipedia.org/wiki/' + ref.ids[0];
-                                            }
+                                        if (ref.source.toLowerCase() === 'wikipedia') {
+                                            ref.url = 'https://en.wikipedia.org/wiki/' + ref.ids[0];
+                                        }
+                                        if (ref.source.toLowerCase() === 'fda') {
+                                            ref.url = 'http://www.accessdata.fda.gov/drugsatfda_docs/' + ref.ids[0];
                                         }
                                         return ref;
                                     });
