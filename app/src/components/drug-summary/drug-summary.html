@@ -11,27 +11,44 @@
         <a ng-if="!internal" target=_blank href="https://www.ebi.ac.uk/chembl/compound/inspect/{{drug}}">{{drug}}</a><span ng-if="internal">{{drug}}</span>
     </div>
 
-    <div class="section" style="float:right;margin-top:70px;" ng-cloak ng-if="!internal">
-        <img class="drug-img" ng-if="mol_type=='Antibody'" width="200" height="200" src="/imgs/ab.png">
-        <img class="drug-img" ng-if="mol_type!='Antibody'" width="200" height="200" src="" id="drugDiagramContainer">
+    <!-- Withdrawn info -->
+    <div class="section" ng-show="isWithdrawn">
+        <div class="panel panel-default" style="width: 50%; margin-left: 25%; min-width:450px">
+            <div class="panel-body">
+                <h4 style="margin-bottom: 20px"><i class="fa fa-exclamation-triangle fa-lg" style="color:#FC0; margin-right:5px"></i>Withdrawn drug notice</h4>
+                <p><b>Withdrawn class</b>: {{withdrawnClass.join(', ')}}</p>
+                <p><b>Withdrawn reason</b>: {{withdrawnReason.join(', ')}}</p>
+                <p><b>Year first withdrawn</b>: {{withdrawnYear}}</p>
+                <p><b>Withdrawn in</b>: {{withdrawnCountry.join(', ')}}</p>
+            </div>
+        </div>
     </div>
 
+    <!-- General properties -->
     <div class="section">
         <h3 class="summary-section-header">General properties</h3>
-        <div class="drug-property" style="min-height:200px">
+        <!-- Molecule image -->
+        <div class="pull-right" ng-cloak ng-if="!internal">
+            <img class="drug-img" ng-if="molType=='Antibody'" width="200" height="200" src="/imgs/ab.png">
+            <img class="drug-img" ng-if="molType!='Antibody'" width="200" height="200" src="" id="drugDiagramContainer">
+        </div>
+        <!-- list of properties -->
+        <div class="drug-property" style="min-height:200px; width:80%">
             <ul>
                 <li><b>Name</b>: {{displayName}}</li>
-                <!-- <li style="margin-top:8px;"><b>ID</b>: {{drug}}</li> -->
-                <li style="margin-top:8px;"><b>Molecule type</b>: {{mol_type}}</li>
-                <li style="margin-top:8px;"><b>First approval</b>: {{first_approval}}</li>
-                <li style="margin-top:8px;"><b>Max phase</b>: {{max_phase}}</li>
+                <li style="margin-top:8px;"><b>Molecule type</b>: {{molType}}</li>
+                <li style="margin-top:8px;"><b>First approval</b>: {{firstApproval}}</li>
+                <li style="margin-top:8px;"><b>Max phase</b>: {{maxPhase}}</li>
                 <!-- TODO: enable molecular formula when it will be back in the API response -->
                 <!-- <li style="margin-top:8px;"><b>Molecular formula</b>: {{formula}}</li> -->
                 <li style="margin-top:8px;"><b>Synonyms</b>: <span class="ot-profile-synonym-list" ng-repeat="syn in synonyms">{{syn}}</span></li>
-                <li style="margin-top:8px;"><b>Known trade names</b>: <span class="ot-profile-synonym-list" ng-repeat="tn in trade_names">{{tn}}</span></li>
+                <li style="margin-top:8px;"><b>Known trade names</b>: <span class="ot-profile-synonym-list" ng-repeat="tn in tradeNames">{{tn}}</span></li>
             </ul>
         </div>
+    </div>
 
+    <!-- Mechanism of action -->
+    <div class="section">
         <h3 class="summary-section-header">Mechanisms of action</h3>
         <span ot-progress-spinner size="24" ng-show="mechanisms.length==0"></span>
         <table ng-show="mechanisms" class="table ot-evidence-table">
@@ -52,6 +69,7 @@
         </table>
     </div>
 
+    <!-- Targets -->
     <div class="section">
         <h3 class="summary-section-header">Targets associated with {{displayName}}</h3>
         <span ng-repeat="target in targets">
@@ -64,6 +82,7 @@
         <p ng-if="targets.length > 1 && targets.length <= 200"><a href="/summary?targets={{batchSearchTargets}}">Analyse these targets</a></p>
     </div>
 
+    <!-- Diseases -->
     <div class="section">
         <h3 class="summary-section-header">Diseases associated with {{displayName}}</h3>
         <span ng-repeat="disease in diseases">
@@ -72,6 +91,7 @@
         </span>
     </div>
 
+    <!-- Adverse events -->
     <div class="section" ng-if="!internal">
         <h3 class="summary-section-header">Adverse events</h3>
         <p class=ot-section-intro>The top 20 adverse effects for this drug are shown. An adverse event can be an undesirable experience associated with the use of the drug, including serious drug side effects, product use errors, product quality problems, and therapeutic failures. The source of this data is <a target=_blank href="https://open.fda.gov/apis/drug/event/">OpenFDA</a>.</p>
@@ -82,19 +102,10 @@
         <ot-drug-adverse-events-directive drug="displayName"></ot-drug-adverse-events-directive>
     </div>
     
+    <!-- Bibliography -->
     <div class="section" ng-if="!internal">
         <h3 class="summary-section-header">Bibliography</h3>
         <!-- pass the drug display name as generic query term -->
         <ot-bibliography-target-chips q="displayName"></ot-bibliography-target-chips>
     </div>
-
-    <!-- <div class="section">
-        <h3 class="summary-section-header">External links</h3>
-        <ul>
-            <li>
-                <a target=_blank href="https://www.ebi.ac.uk/chembl/compound/inspect/{{drug}}">ChEMBL information page for {{drug}}</a>
-            </li>
-        </ul>
-    </div> -->
-
 </div>

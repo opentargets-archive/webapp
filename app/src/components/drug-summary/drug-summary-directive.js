@@ -47,12 +47,18 @@ angular.module('otDirectives')
                             function (resp) {
                                 // General properties
                                 scope.displayName = otUpperCaseFirstFilter((resp.body.pref_name || resp.body.molecule_chembl_id).toString().toLowerCase());
-                                scope.mol_type = resp.body.type || otDictionary.NA;
-                                scope.first_approval = resp.body.year_first_approved || otDictionary.NA;
-                                scope.max_phase = resp.body.max_clinical_trial_phase || otDictionary.NA;
+                                scope.molType = resp.body.type || otDictionary.NA;
+                                scope.firstApproval = resp.body.year_first_approved || otDictionary.NA;
+                                scope.maxPhase = resp.body.max_clinical_trial_phase || otDictionary.NA;
                                 scope.internal = resp.body.internal_compound;
                                 scope.synonyms = resp.body.synonyms;
-                                scope.trade_names = resp.body.trade_names;
+                                scope.tradeNames = resp.body.trade_names;
+                                scope.isWithdrawn = resp.body.withdrawn_flag;
+                                scope.withdrawnYear = resp.body.withdrawn_year;
+                                scope.withdrawnCountry = resp.body.withdrawn_country;
+                                scope.withdrawnReason = resp.body.withdrawn_reason;
+                                scope.withdrawnClass = resp.body.withdrawn_class;
+
                                 // TODO: full_molformula is currently not available in the API response
                                 // if (resp.body.molecule_properties && resp.body.molecule_properties.full_molformula) {
                                 //     scope.formula = resp.body.molecule_properties.full_molformula;
@@ -60,7 +66,7 @@ angular.module('otDirectives')
                                 //     scope.formula = otDictionary.NA;
                                 // }
 
-                                if (!scope.internal && scope.mol_type.toLowerCase() !== 'antibody') {
+                                if (!scope.internal && scope.molType.toLowerCase() !== 'antibody') {
                                     pngToDataUrl('https://www.ebi.ac.uk/chembl/api/data/image/' + scope.drug, function (base64Img) {
                                         var img = document.getElementById('drugDiagramContainer');
                                         if (base64Img) {
