@@ -1820,9 +1820,20 @@ cttv.api@0.0.15:
     httpplease-promises "^0.3.0"
     tnt.api "^0.1.1"
 
-cttv.api@0.0.20:
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/cttv.api/-/cttv.api-0.0.20.tgz#21bb0765019ee0b8c20fb7ef5d137de804584cdd"
+cttv.api@0.0.21:
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/cttv.api/-/cttv.api-0.0.21.tgz#325f76d9a71e09911cec6d0ff3a61f79a178a11b"
+  integrity sha512-BkjoplKyRIKphoB1BHjaDghwAoqPfIBgGb44O8gusnqEg0L7V85xgiiDl5YNEUHYV0XHm26yI7/umfj30+4j/A==
+  dependencies:
+    es6-promise "^2.0.1"
+    httpplease "^0.15.2"
+    httpplease-promises "^0.3.0"
+    tnt.api "^0.1.1"
+
+cttv.api@0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/cttv.api/-/cttv.api-0.0.22.tgz#ef8767c0db80caac1b992088bbbfc75e6c303899"
+  integrity sha512-bYdh9nRxVUmUuBSvf4uClWJApNdzrLySUV/7PPipbVarmnLuqbP/ntdn9ESvKhp1MqAjO+6XiQk9S8eGA697Fw==
   dependencies:
     es6-promise "^2.0.1"
     httpplease "^0.15.2"
@@ -1882,14 +1893,14 @@ cttv.spinner@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/cttv.spinner/-/cttv.spinner-0.0.1.tgz#f8aa7f7ed1d71cec8b08fae6a88fee71258aff2b"
 
-cttv.targetAssociationsBubbles@0.0.17:
+cttv.targetAssociationsBubbles@opentargets/targetAssociationsBubbles:
   version "0.0.17"
-  resolved "https://registry.yarnpkg.com/cttv.targetAssociationsBubbles/-/cttv.targetAssociationsBubbles-0.0.17.tgz#d2128d3d1b4c304087af1b8c0f48666a6653f168"
+  resolved "https://codeload.github.com/opentargets/targetAssociationsBubbles/tar.gz/081e01ff0dbc910f8b9a90d4292cb7a4c2ff59de"
   dependencies:
-    cttv.api "0.0.15"
+    cttv.api "0.0.21"
     cttv.bubblesView "0.0.5"
     cttv.consts "0.0.0"
-    cttv.flowerView "0.0.2"
+    cttv.flowerView "0.0.0"
     lodash "^4.2.1"
     tnt.api "^0.1.1"
     tnt.tooltip "^0.2.0"
