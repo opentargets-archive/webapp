@@ -38,18 +38,18 @@ angular.module('otDirectives')
 
 
                 scope.$watchGroup(['target', 'facets', 'active'], function (vals) {
-                    var target = vals[0];
-                    var facets = vals[1];
+                    // var target = vals[0];
+                    // var facets = vals[1];
 
                     if (scope.active !== whoiam) {
                         return;
                     }
 
                     // Remove the current tree if the target has changed
-                    if (target !== currTarget) {
+                    if (scope.target !== currTarget) {
                         gat = undefined;
                     }
-                    currTarget = target;
+                    currTarget = scope.target;
 
                     var opts = {
                         target: scope.target,
@@ -58,7 +58,7 @@ angular.module('otDirectives')
                         facets: false,
                         size: 1000
                     };
-                    opts = otApi.addFacetsOptions(facets, opts);
+                    opts = otApi.addFacetsOptions(scope.facets, opts);
                     var queryObject = {
                         method: 'GET',
                         params: opts
