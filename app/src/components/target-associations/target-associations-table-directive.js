@@ -272,19 +272,19 @@ angular.module('otDirectives')
                             cbak(o);
                         });
                 },
-                'columns': a,
-                'columnDefs': [
-                    {
-                        'targets': [1, 2],
-                        'visible': false
-                    },
-                    {
-                        'orderable': false,
-                        'targets': [a.length - 1]
-                    },
-                    {'orderSequence': ['desc', 'asc'], 'targets': range(3, a.length - 1)},
-                    {'orderSequence': ['asc', 'desc'], 'targets': [0]}
-                ],
+                // 'columns': a,
+                // 'columnDefs': [
+                //     {
+                //         'targets': [1, 2],
+                //         'visible': false
+                //     },
+                //     {
+                //         'orderable': false,
+                //         'targets': [a.length - 1]
+                //     },
+                //     {'orderSequence': ['desc', 'asc'], 'targets': range(3, a.length - 1)},
+                //     {'orderSequence': ['asc', 'desc'], 'targets': [0]}
+                // ],
                 'order': [[3, 'desc']],
                 'orderMulti': false,
                 'autoWidth': false,
