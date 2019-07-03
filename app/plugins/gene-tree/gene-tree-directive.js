@@ -1,5 +1,5 @@
 angular.module('otPlugins')
-    .directive('otGeneTree', ['otColumnFilter', 'otUtils', '$timeout', 'otConsts', function (otColumnFilter, otUtils, $timeout, otConsts) {
+    .directive('otGeneTree', ['otColumnFilter', 'otUtils', '$timeout', 'otConsts', '$log', function (otColumnFilter, otUtils, $timeout, otConsts, $log) {
         'use strict';
 
         return {
@@ -116,7 +116,15 @@ angular.module('otPlugins')
                     .then(function (resp) {
                         var infoUrl = otConsts.PROXY + 'rest.ensembl.org/lookup/id/';
                         var infoTargets = [];
-                        resp.body.data[0].homologies.forEach(function (h) {
+                        var homologies = resp.body.data[0].homologies.filter(
+                            function (d) {
+                                if (!scientific2common[d.target.species]) {
+                                    $log.warn('Species not found: ' + d.target.species);
+                                }
+                                return scientific2common[d.target.species];
+                            }
+                        );
+                        homologies.forEach(function (h) {
                             infoTargets.push(h.target.id);
                         });
                         var post = {
@@ -128,7 +136,7 @@ angular.module('otPlugins')
                                 $timeout(function () {
                                     var dropdownColumns = [0, 1];
                                     $('#gene-homologues-table').DataTable(otUtils.setTableToolsParams({
-                                        'data': formatHomologuesDataToArray(resp.body.data[0].homologies, resp2.body),
+                                        'data': formatHomologuesDataToArray(homologies, resp2.body),
                                         'ordering': true,
                                         'order': [[4, 'desc']],
                                         'autoWidth': false,
