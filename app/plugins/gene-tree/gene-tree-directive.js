@@ -51,6 +51,7 @@ angular.module('otPlugins')
                     'oryctolagus_cuniculus': 'Rabbit',
                     'rattus_norvegicus': 'Rat',
                     'sus_scrofa': 'Pig',
+                    'sus_scrofa_usmarc': 'Pig',
                     'xenopus_tropicalis': 'Frog',
                     'danio_rerio': 'Zebrafish',
                     'drosophila_melanogaster': 'Fly',
