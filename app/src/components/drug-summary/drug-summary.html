@@ -7,6 +7,8 @@
     <meta-description-content>Browse information about {{displayName}} ({{drug}}) covering related targets, diseases, literature text mining and adverse events.</meta-description-content>
 
     <h2>{{displayName}}</h2>
+    <h5 ng-if="internal" style="color:#c94c52"><span class="fa fa-lock fa-lg"></span> This is a confidential internal compound!</h5>
+
     <div>ID:
         <a ng-if="!internal" target=_blank href="https://www.ebi.ac.uk/chembl/compound/inspect/{{drug}}">{{drug}}</a><span ng-if="internal">{{drug}}</span>
     </div>
