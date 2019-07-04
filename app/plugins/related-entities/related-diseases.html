@@ -1,6 +1,6 @@
 <p class="ot-section-intro">
     The top 20 diseases related to {{entitySymbol}} based on a computation of similar disease-to-target connections and overall association scores. 
-    Clicking on a related disease bubble will show you a list of the targets used to calculate the similarity between the two diseases. 
+    Clicking on a related disease bubble will show you a list of the targets used to calculate the similarity<span ng-if="disease.efo!=='EFO_0008485' && disease.efo!=='EFO_0008486'"> between the two diseases</span>. 
     For more information on this visualisation and how we compute similarity scores, please read <a href="https://docs.targetvalidation.org/faq/how-do-you-compute-target-and-disease-similarity" target="_blank">our documentation on target and disease similarity</a>.
 </p>
 

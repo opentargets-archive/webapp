@@ -22,7 +22,7 @@
                 <p>
                     <a href="/disease/{{search.query}}" ng-click="trackClick('disease-profile-page')">
                         <span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-align-justify fa-stack-1x fa-inverse"></i></span>
-                        View disease profile
+                        View <span ng-if="search.query!=='EFO_0008485' && search.query!=='EFO_0008486'">disease</span> profile
                     </a>
                 </p>
             </div>
