@@ -323,7 +323,15 @@ angular.module('otDirectives')
                     for (var k = 0; k < scope.associations.length; k++) {
                         var dis = scope.associations[k];
 
-                        if (!dis.enriched_entity.properties.therapeutic_area.codes.length) {
+                        // if (!dis.enriched_entity.properties.therapeutic_area.codes.length) {
+                        // The data structure of the response has changed:
+                        // now therapeutic areas have a 'therapeutic area', which is the same EFO.
+                        // For example 'bladder disease' (which is a TA) appears to be under bladder disease (itself)
+                        // So we have to check for that
+                        if (
+                            dis.enriched_entity.properties.therapeutic_area.codes.length === 1 &&
+                            dis.enriched_entity.properties.therapeutic_area.codes[0] === dis.enriched_entity.id
+                        ) {
                             // If it is a TA
                             var id = dis.enriched_entity.id;
                             var label = dis.enriched_entity.label;
