@@ -1,0 +1,117 @@
+<div>
+    <div class="row" ng-if="ext.size >= ext.total">
+        <!-- we're showing all results (10000 or less) -->
+        <div class="col-sm-4">
+            <h4>Table summary</h4>
+            <h5><span class="badge large badge-success" style="cursor:default">{{stats.summary.unique_drugs}}</span> unique drugs</h5>
+            <h5><span class="badge large badge-warning" style="cursor:default">{{stats.summary.associated_diseases}}</span> associated disease</h5>
+            <h5><span class="badge large badge-primary" style="cursor:default">{{stats.summary.associated_targets}}</span> associated targets</h5>
+        </div>
+        
+        <div class="col-sm-4">
+            <ot-donut-chart header="Trials" data="stats.phases" show-legend="true" size="160" hole="100"></ot-donut-chart>
+        </div>
+        
+        <div class="col-sm-4">
+            <h4>Type vs Activity</h4>
+            <ot-stack-chart data="stats.type_activity" height="200" width="300" show-legend="true"></ot-stack-chart>
+        </div>
+    </div>
+
+    <div ng-if="ext.total > ext.size" class="panel panel-default text-center">
+        <div class="panel-body">
+            <!-- we're not showing all results -->
+            <h4>Important notice about the Drugs data table for {{targetLabel}}<span ng-if="targetLabel && diseaseLabel"> and </span>{{diseaseLabel}}</h4>
+            <p>This data table below only shows the first {{ext.size}} rows of a data table with {{ext.total}} total rows.</p>
+            <div ng-show="!ext.isDownloading">
+                Download all data ({{ext.total}} rows)
+                <span class="btn-group">
+                <button class="btn btn-default" ng-click="downloadAllData('csv')"><span class="fa fa-download"></span> .csv</button>
+                <button class="btn btn-default" ng-click="downloadAllData('tsv')"><span class="fa fa-download"></span> .tsv</button>
+                <button class="btn btn-default" ng-click="downloadAllData('json')"><span class="fa fa-download"></span> .json</button>
+                </span>
+            </div>
+            <div ng-show="ext.isDownloading">
+                <h5>Generating download file</h5>
+                <ot-progress-spinner size="30"></ot-progress-spinner>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="table-panel">
+    <table class='table ot-evidence-table'>
+        <thead>
+            <tr>
+                <th rowspan="1" colspan="1"></th>
+                <th rowspan="1" colspan="3">Clinical trial information</th>
+                <th rowspan="1" colspan="4">Drug information</th>
+                <th rowspan="1" colspan="2">Target information</th>
+            </tr>
+            <tr>
+                <!-- public/private flag-->
+                <th></th>
+
+                <!-- Disease info-->
+                <th>Disease</th>
+                <th>Disease ID</th>
+                
+                <!-- Clinical trial info -->
+                <th>Phase</th>
+                <th>Phase (Numeric)</th>
+                <th>Status</th>
+                <th>Source</th>
+                <th>Source URL</th>
+                
+                <!-- Drug information -->
+                <th>Drug</th>
+                <th>Drug ID</th>
+                <th>Type</th>
+                <th>Mechanism<br /> of action</th>
+                <th>Mechanism of action references</th>
+                <th>Activity</th>
+
+                <!-- Target information -->
+                <th>Target</th>
+                <th>Target ID</th>
+                <th>Target class</th>
+            </tr>
+            
+        </thead>
+
+        <tfoot>
+            <tr class="filter-row">
+                <!-- public/private flag-->
+                <th></th>
+
+                <!-- Disease info-->
+                <th>Disease</th>
+                <th>Disease ID</th>
+                
+                <!-- Clinical trial info -->
+                <th>Phase</th>
+                <th>Phase (Numeric)</th>
+                <th>Status</th>
+                <th>Source</th>
+                <th>Source URL</th>
+                
+                <!-- Drug information -->
+                <th>Drug</th>
+                <th>Drug ID</th>
+                <th>Type</th>
+                <th>Mechanism<br /> of action</th>
+                <th>Mechanism of action references</th>
+                <th>Activity</th>
+
+                <!-- Target information -->
+                <th>Target</th>
+                <th>Target ID</th>
+                <th>Target class</th>
+            </tr>
+        </tfoot>
+
+        <tbody>
+        </tbody>
+    </table>
+</div>
