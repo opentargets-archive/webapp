@@ -476,17 +476,28 @@ angular.module('otDirectives')
                                 'targets': [0],    // the access-level (public/private icon)
                                 'width': '3%'
                             },
+                            // clinical trial
                             {
                                 'targets': [3, 5, 6],
                                 'width': '8%'
                             },
+                            // target
                             {
-                                'targets': [7, 8, 11, 14],
-                                'width': '10%'
+                                'targets': [14],
+                                'width': '8%'
                             },
                             {
-                                'targets': [12, 15],
-                                'width': '7%'
+                                'targets': [16],
+                                'width': '12%'
+                            },
+                            // drug info
+                            {
+                                'targets': [8, 11],
+                                'width': '12%'
+                            },
+                            {
+                                'targets': [10, 13],
+                                'width': '8%'
                             },
                             // set columns visiblity and filters
                             // access-level
