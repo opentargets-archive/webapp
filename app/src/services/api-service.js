@@ -478,8 +478,8 @@ angular.module('otServices')
             queryObject.operation = otApiService.API_DRUG_URL;
             // return callAPI(queryObject);
             // load local file for testing
-            // return $http.get('./response.json');
-            return $http.get('https://platform-dev.opentargets.io/v3/platform/public/evidence/known_drug?target=' + queryObject.params.target);
+            return $http.get('./response.json');
+            // return $http.get('https://platform-dev.opentargets.io/v3/platform/public/evidence/known_drug?target=' + queryObject.params.target);
         };
 
 
