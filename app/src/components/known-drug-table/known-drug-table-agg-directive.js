@@ -391,15 +391,11 @@ angular.module('otDirectives')
                             row = formatDataToRow(item, true);
                             // 17-21: hidden cols for filtering
                             // these do not appear in the HTML and are not included in the download
-                            // TODO: put his back
-                            // row.push(item.disease.efo_info.label); // disease
-                            // row.push(item.drug.molecule_name); // drug
-                            // row.push(item.evidence.target2drug.mechanism_of_action); // mechanism
-                            // row.push(item.evidence.drug2clinic.urls[0].nice_name); // evidence source
-                            // row.push(item.target.gene_info.symbol); // target symbol
-                            for (var jj = 0; jj < 5; jj++) {
-                                row.push('**TODO**');
-                            }
+                            row.push(item.disease_name); // 17: disease
+                            row.push(item.drug_label); // 18: drug
+                            row.push(item.mechanisms_of_action[0]); // 19: mechanism
+                            row.push(item.target_symbol); // 20: target symbol
+                            row.push(item.count + ' record' + (item.count === 1 ? '' : 's')); // 21: source
                             newdata.push(row);
                         } catch (e) {
                             scope.ext.hasError = true;
@@ -517,8 +513,8 @@ angular.module('otDirectives')
                             {
                                 'targets': [6],
                                 'className': 'details-control',
-                                'mRender': otColumnFilter.mRenderGenerator(20),
-                                'mData': otColumnFilter.mDataGenerator(6, 20)
+                                'mRender': otColumnFilter.mRenderGenerator(21),
+                                'mData': otColumnFilter.mDataGenerator(6, 21)
                             },
                             // source URL
                             {
@@ -549,8 +545,8 @@ angular.module('otDirectives')
                             // target
                             {
                                 'targets': [14],
-                                'mRender': otColumnFilter.mRenderGenerator(21),
-                                'mData': otColumnFilter.mDataGenerator(14, 21)
+                                'mRender': otColumnFilter.mRenderGenerator(20),
+                                'mData': otColumnFilter.mDataGenerator(14, 20)
                             },
                             // target ID
                             {
