@@ -101,7 +101,7 @@ angular.module('otDirectives')
                     getData()
                         .then(
                             function (resp) {
-                                console.log('>>> ', resp);
+                                // console.log('>>> ', resp);
                                 if (resp.data) {
                                     scope.ext.rawdata = resp.data;
                                     scope.ext.data = scope.ext.rawdata.data;
@@ -245,7 +245,7 @@ angular.module('otDirectives')
                     */
                     var row = [];
                     var cell = '';
-                    console.log('fD2R ', item);
+                    // console.log('fD2R ', item);
                     try {
                         // 0: data origin: public / private
                         cell = 'public'; // TODO: need a field for this
@@ -274,13 +274,6 @@ angular.module('otDirectives')
                         row.push(item.status || otDictionary.NA);
 
                         // 6: source
-                        // cell = item.urls.map(function (url) {
-                        //     if (asHtml) {
-                        //         return '<a class=\'ot-external-link\' href=\'' + url.url + '\' target=\'_blank\'>' + url.nice_name + '</a>';
-                        //     } else {
-                        //         return url.nice_name;
-                        //     }
-                        // }).join(asHtml ? '<br />' : ', ');
                         cell = item.count + ' record' + (item.count === 1 ? '' : 's'); // same as item.urls.length
                         if (asHtml) {
                             cell += '&nbsp;<span class="fa fa-plus-circle"></span>';
@@ -289,9 +282,19 @@ angular.module('otDirectives')
 
                         // 7: source URL (hidden)
                         row.push(
-                            item.urls.map(function (url) {
-                                return decodeURI(url.url);
-                            }).join(', ')
+                            // item.urls
+                            // item.urls.map(function (url) {
+                            //     return decodeURI(url.url);
+                            // }).join(', ')
+                            item.urls.reduce(function (acc, i) {
+                                var source = acc.filter(function (el) { return el.nice_name === i.nice_name; })[0]
+                                    || {urls: [], nice_name: i.nice_name};
+                                if (!source.urls.length) {
+                                    acc.push(source);
+                                }
+                                source.urls.push(i.url);
+                                return acc;
+                            }, [])
                         );
 
                         // 8: drug
@@ -373,18 +376,13 @@ angular.module('otDirectives')
 
                         return row;
                     } catch (e) {
-                        console.log(e);
                         scope.ext.hasError = true;
                         return [];
                     }
                 }
 
                 function formatDrugsDataToArray (data) {
-                    console.log('formatDrugsDataToArray ', data);
                     var newdata = [];
-                    // var all_drugs = [];
-                    // var all_phases = {};
-                    // var type_activity = {};
 
                     data.forEach(function (item) {
                         var row = [];
@@ -399,83 +397,15 @@ angular.module('otDirectives')
                             // row.push(item.evidence.target2drug.mechanism_of_action); // mechanism
                             // row.push(item.evidence.drug2clinic.urls[0].nice_name); // evidence source
                             // row.push(item.target.gene_info.symbol); // target symbol
-                            for(var jj=0; jj<5; jj++){
+                            for (var jj = 0; jj < 5; jj++) {
                                 row.push('**TODO**');
                             }
-                            newdata.push(row); // use push() so we don't end up with empty rows
-
-                            // Fill the unique drugs
-                            // all_drugs.push({
-                            //     id: item.drug.molecule_name,
-                            //     url: item.evidence.target2drug.urls[0].url
-                            // });
-
-                            // parse data for summary viz
-                            // all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] = all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] || [];
-                            // all_phases[item.evidence.drug2clinic.clinical_trial_phase.label].push({
-                            //     id: item.drug.max_phase_for_all_diseases.numeric_index,
-                            //     label: item.evidence.drug2clinic.clinical_trial_phase.label
-                            // });
-
-                            // var activity = item.target.activity;
-                            // type_activity[item.drug.molecule_type] = type_activity[item.drug.molecule_type] || {};
-                            // type_activity[item.drug.molecule_type][activity] = type_activity[item.drug.molecule_type][activity] || [];
-                            // type_activity[item.drug.molecule_type][activity].push(item.drug.molecule_name);
+                            newdata.push(row);
                         } catch (e) {
                             scope.ext.hasError = true;
                         }
                     });
 
-                    // var all_drugs_sorted = _.sortBy(all_drugs, function (rec) {
-                    //     return rec.id;
-                    // });
-
-                    // var showLim = 50;
-                    // scope.show = {};
-                    // scope.show.limit = showLim;
-                    // scope.show.ellipsis = '[Show more]';
-                    // scope.drugs = _.uniqBy(all_drugs_sorted, 'id');
-                    // scope.drugs.forEach(function (d) {
-                    //     var chemblId = d.url.split('/').pop();
-                    //     if (chemblId.indexOf('CHEMBL') > -1) {
-                    //         d.url = '/summary?drug=' + chemblId;
-                    //     }
-                    // });
-
-                    // scope.phases = Object.keys(all_phases).map(function (phase) {
-                    //     return {
-                    //         label: phase,
-                    //         value: all_phases[phase].length,
-                    //         id: phase
-                    //     };
-                    // });
-
-                    // scope.type_activity = Object.keys(type_activity).map(function (ta) {
-                    //     return {
-                    //         label: ta,
-                    //         values: Object.keys(type_activity[ta]).map(function (act) {
-                    //             return {id: act, value: _.uniq(type_activity[ta][act]).length};
-                    //         })
-                    //     };
-                    // });
-
-                    // scope.associated_diseases = _.uniqBy(data, 'disease.efo_info.efo_id');
-                    // scope.associated_targets = _.uniqBy(data, 'target.gene_info.geneid');
-
-
-                    // scope.show.moreOrLess = scope.drugs.length > showLim;
-
-                    // scope.showMoreOrLess = function () {
-                    //     scope.show.moreOrLess = true;
-                    //     if (scope.show.limit === scope.drugs.length) { // It is already open
-                    //         scope.show.limit = showLim;
-                    //         scope.show.ellipsis = '[Show more]';
-                    //     } else {  // It is closed
-                    //         scope.show.limit = scope.drugs.length;
-                    //         scope.show.ellipsis = '[Show less]';
-                    //     }
-                    // };
-                    console.log(newdata);
                     return newdata;
                 }
 
@@ -586,6 +516,7 @@ angular.module('otDirectives')
                             // source
                             {
                                 'targets': [6],
+                                'className': 'details-control',
                                 'mRender': otColumnFilter.mRenderGenerator(20),
                                 'mData': otColumnFilter.mDataGenerator(6, 20)
                             },
@@ -629,6 +560,40 @@ angular.module('otDirectives')
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, filename));
+                    dtable.on('click', 'td.details-control', clickHandler);
+                    return dtable;
+                }
+
+                function formatDetails (d) {
+                    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                        d[7].map(function (source) {
+                            return '<tr>' +
+                            '<td style="width:25%">' + source.nice_name + '</td>' +
+                            '<td>' + source.urls.map(function (u) {
+                                var url = u;
+                                if (source.nice_name === 'Clinical Trials Information') {
+                                    url = '<a href="' + url + '" target="_blank">' + (url.split('%22')[1]) + '</a>';
+                                }
+                                return url;
+                            }).join(', ') + '</td>' +
+                            '</tr>';
+                        }).join() +
+                    '</table>';
+                }
+                function clickHandler (e) {
+                    var tr = $(e.target).closest('tr');
+                    var row = dtable.api().row(tr);
+
+                    if (row.child.isShown()) {
+                        // This row is already open - close it
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    }
+                    else {
+                        // Open this row
+                        row.child(formatDetails(row.data())).show();
+                        tr.addClass('shown');
+                    }
                 }
             }
         };
