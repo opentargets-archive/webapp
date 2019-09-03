@@ -41,7 +41,7 @@ angular.module('otPlugins')
                         })
                         .then(function (resp) {
                             // var arr = obj2array(resp.data.genetpm);
-                            var arr = resp.data.geneExpression;
+                            var arr = transformData(resp.data.geneExpression);
                             var svg = d3.select('#gtexWidget')
                                 .append('svg')
                                 .attr('width', (w - 150))
@@ -56,7 +56,7 @@ angular.module('otPlugins')
 
                 function plotGtex (container, data) {
                     data.sort(function (a, b) {
-                        return b.data.median - a.data.median;
+                        return b.median - a.median;
                     });
                     var valExtent = getExtent(data);
 
@@ -87,10 +87,10 @@ angular.module('otPlugins')
                     tissues
                         .append('rect')
                         .attr('x', function (d) {
-                            return valScale(d.data.q1);
+                            return valScale(d.q1);
                         })
                         .attr('width', function (d) {
-                            return valScale((d.data.q3) - (d.data.q1));
+                            return valScale((d.q3) - (d.q1));
                         })
                         .attr('y', 0)
                         .attr('height', 10)
@@ -102,10 +102,10 @@ angular.module('otPlugins')
                     tissues
                         .append('line')
                         .attr('x1', function (d) {
-                            return valScale(d.data.q3);
+                            return valScale(d.q3);
                         })
                         .attr('x2', function (d) {
-                            return valScale(d.data.upperLimit);
+                            return valScale(d.upperLimit);
                         })
                         .attr('y1', 5)
                         .attr('y2', 5)
@@ -114,10 +114,10 @@ angular.module('otPlugins')
                     tissues
                         .append('line')
                         .attr('x1', function (d) {
-                            return valScale(d.data.upperLimit);
+                            return valScale(d.upperLimit);
                         })
                         .attr('x2', function (d) {
-                            return valScale(d.data.upperLimit);
+                            return valScale(d.upperLimit);
                         })
                         .attr('y1', 0)
                         .attr('y2', 10)
@@ -129,10 +129,10 @@ angular.module('otPlugins')
                     tissues
                         .append('line')
                         .attr('x1', function (d) {
-                            return valScale(d.data.q1);
+                            return valScale(d.q1);
                         })
                         .attr('x2', function (d) {
-                            return valScale(d.data.lowerLimit);
+                            return valScale(d.lowerLimit);
                         })
                         .attr('y1', 5)
                         .attr('y2', 5)
@@ -141,10 +141,10 @@ angular.module('otPlugins')
                     tissues
                         .append('line')
                         .attr('x1', function (d) {
-                            return valScale(d.data.lowerLimit);
+                            return valScale(d.lowerLimit);
                         })
                         .attr('x2', function (d) {
-                            return valScale(d.data.lowerLimit);
+                            return valScale(d.lowerLimit);
                         })
                         .attr('y1', 0)
                         .attr('y2', 10)
@@ -154,8 +154,8 @@ angular.module('otPlugins')
                     // outliers
                     tissues
                         .each(function (d) {
-                            for (var i = 0; i < d.data.outliers.length; i++) {
-                                var o = d.data.outliers[i];
+                            for (var i = 0; i < d.outliers.length; i++) {
+                                var o = d.outliers[i];
                                 d3.select(this)
                                     .append('circle')
                                     .attr('cx', function () {
@@ -173,10 +173,10 @@ angular.module('otPlugins')
                     tissues
                         .append('line')
                         .attr('x1', function (d) {
-                            return valScale(d.data.median);
+                            return valScale(d.median);
                         })
                         .attr('x2', function (d) {
-                            return valScale(d.data.median);
+                            return valScale(d.median);
                         })
                         .attr('y1', function (d) {
                             return 0;
@@ -215,14 +215,14 @@ angular.module('otPlugins')
                         .call(valAxis);
                 }
 
-                function obj2array (obj) {
-                    var arr = [];
-                    for (var tissue in obj) {
-                        obj[tissue].tissue = tissue;
-                        arr.push(obj[tissue]);
-                    }
-                    return arr;
-                }
+                // function obj2array (obj) {
+                //     var arr = [];
+                //     for (var tissue in obj) {
+                //         obj[tissue].tissue = tissue;
+                //         arr.push(obj[tissue]);
+                //     }
+                //     return arr;
+                // }
 
                 function getExtent (data) {
                     var max = -Infinity;
@@ -231,14 +231,47 @@ angular.module('otPlugins')
                         if (d.high_wisker > max) {
                             max = d.high_wisker;
                         }
-                        for (var j = 0; j < d.data.outliers.length; j++) {
-                            var o = d.data.outliers[j];
+                        for (var j = 0; j < d.outliers.length; j++) {
+                            var o = d.outliers[j];
                             if (o > max) {
                                 max = o;
                             }
                         }
                     }
                     return [0, (max + 10)];
+                }
+
+                // map data to old gtex format
+                function transformData (data) {
+                    return data.map(function (d) {
+                        // d3 requires for the array of values to be sorted before using median and quantile
+                        d.data.sort(function (a, b) { return (a - b); });
+                        var median = d3.median(d.data);
+                        var q1 = d3.quantile(d.data, 0.25);
+                        var q3 = d3.quantile(d.data, 0.75);
+                        var outliers = [];
+                        var notoutliers = [];
+                        var iqr = q3 - q1; // interquartile range
+
+                        // find the outliers and not outliers
+                        d.data.forEach(function (d) {
+                            if (d < q1 - 1.5 * iqr || d > q3 + 1.5 * iqr) {
+                                outliers.push(d);
+                            } else {
+                                notoutliers.push(d);
+                            }
+                        });
+
+                        return {
+                            tissueSiteDetailId: d.tissueSiteDetailId,
+                            median: median,
+                            q1: q1,
+                            q3: q3,
+                            lowerLimit: notoutliers[0],
+                            upperLimit: notoutliers[notoutliers.length - 1],
+                            outliers: outliers
+                        };
+                    });
                 }
 
                 if (otUtils.browser.name !== 'IE') {
