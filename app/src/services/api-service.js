@@ -6,7 +6,7 @@ angular.module('otServices')
 /**
  * The API services, with methods to call the ElasticSearch API
  */
-    .factory('otApi', ['$log', '$rootScope', '$q', 'otConfig', '$http', function ($log, $rootScope, $q, otConfig, $http) {
+    .factory('otApi', ['$log', '$rootScope', '$q', 'otConfig', function ($log, $rootScope, $q, otConfig) {
         'use strict';
 
 
@@ -38,7 +38,7 @@ angular.module('otServices')
             API_STATS_URL: 'stats',
             API_TARGETS_ENRICHMENT_URL: 'targetsEnrichment',
             API_DRUG_URL: 'drug',
-            API_DRUGS_URL: 'drugs',
+            API_KNOWNDRUG_URL: 'knownDrug',
             facets: {
                 DATATYPE: 'datatype', // 'filterbydatatype',
                 PATHWAY: 'pathway', // filterbypathway',
@@ -467,19 +467,16 @@ angular.module('otServices')
          *
          * @param {Object} queryObject
          * @example
-         *      otApi.getDrugs({
+         *      otApi.getKnownDrugs({
          *          params: {
          *              target:'ENSG00000146648',
          *              disease: 'EFO_0000305'
          *          }
          *      });
          */
-        otApiService.getDrugs = function (queryObject) {
-            queryObject.operation = otApiService.API_DRUG_URL;
-            // return callAPI(queryObject);
-            // load local file for testing
-            return $http.get('./response.json');
-            // return $http.get('https://platform-dev.opentargets.io/v3/platform/public/evidence/known_drug?target=' + queryObject.params.target);
+        otApiService.getKnownDrug = function (queryObject) {
+            queryObject.operation = otApiService.API_KNOWNDRUG_URL;
+            return callAPI(queryObject);
         };
 
 
