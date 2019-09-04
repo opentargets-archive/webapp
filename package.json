@@ -63,7 +63,7 @@
     "bio-pv": "^1.8.1",
     "bootstrap": "3.4.0",
     "components-font-awesome": "^4.7.0",
-    "cttv.api": "0.0.22",
+    "cttv.api": "github:opentargets/RestApiJs",
     "cttv.diseaseGraph": "0.0.3",
     "cttv.flowerView": "0.0.2",
     "cttv.genome": "github:opentargets/targetGenomeBrowser",
