@@ -92,7 +92,7 @@ angular.module('otDirectives')
                         method: 'GET',
                         params: opts
                     };
-                    return otApi.getDrugs(queryObject);
+                    return otApi.getKnownDrug(queryObject);
                 }
 
 
@@ -101,13 +101,12 @@ angular.module('otDirectives')
                     getData()
                         .then(
                             function (resp) {
-                                // console.log('>>> ', resp);
-                                if (resp.data) {
-                                    scope.ext.rawdata = resp.data;
+                                if (resp.body) {
+                                    scope.ext.rawdata = resp.body;
                                     scope.ext.data = scope.ext.rawdata.data;
-                                    scope.ext.total = resp.data.data.length; // TODO: we need a TOTAL in the response
-                                    scope.ext.size = resp.data.data.length;
-                                    scope.stats = getTableStats(resp.data.facets);
+                                    scope.ext.total = resp.body.data.length; // TODO: we need a TOTAL in the response
+                                    scope.ext.size = resp.body.data.length;
+                                    scope.stats = getTableStats(resp.body.facets);
                                     initTableDrugs();
                                 } else {
                                     // $log.warn("Empty response : drug data");
