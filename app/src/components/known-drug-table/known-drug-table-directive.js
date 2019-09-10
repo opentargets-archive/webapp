@@ -100,7 +100,8 @@ angular.module('otDirectives')
                             'drug.id',
                             'drug.molecule_name',
                             'drug.molecule_type',
-                            'drug.max_phase_for_all_diseases.numeric_index',
+                            // 'drug.max_phase_for_all_diseases.numeric_index',
+                            'evidence.drug2clinic.clinical_trial_phase.numeric_index',
                             'evidence.target2drug.urls',
                             'evidence.target2drug.provenance_type.database.id',
                             'evidence.target2drug.provenance_type.literature.references',
@@ -371,7 +372,8 @@ angular.module('otDirectives')
                             // parse data for summary viz
                             all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] = all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] || [];
                             all_phases[item.evidence.drug2clinic.clinical_trial_phase.label].push({
-                                id: item.drug.max_phase_for_all_diseases.numeric_index,
+                                // id: item.drug.max_phase_for_all_diseases.numeric_index,
+                                id: item.evidence.drug2clinic.clinical_trial_phase.numeric_index,
                                 label: item.evidence.drug2clinic.clinical_trial_phase.label
                             });
 
