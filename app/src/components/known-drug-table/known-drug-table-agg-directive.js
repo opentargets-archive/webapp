@@ -174,12 +174,17 @@ angular.module('otDirectives')
                     };
                 }
 
-                function createDownload (alldata, format) {
+                function createDownload (alldata, format, full) {
                     // format: csv, tsv, json
                     format = format.toLowerCase();
                     if (format !== 'csv' && format !== 'tsv' && format !== 'json') {
                         // only support the above formats
                         return;
+                    }
+
+                    // is it a full download of all data or just the table?
+                    if (full === undefined) {
+                        full = alldata.length > scope.ext.data;
                     }
 
                     var fe = '.' + format;  // file extension
@@ -210,7 +215,7 @@ angular.module('otDirectives')
                         blob = new Blob([data], {type: type});
                     }
 
-                    saveAs(blob, (scope.output ? scope.output + '-' : '') + 'known_drugs-all' + fe);
+                    saveAs(blob, (scope.output ? scope.output + '-' : '') + 'known_drugs' + (full ? '-all' : '') + fe);
                 }
 
 
@@ -226,7 +231,7 @@ angular.module('otDirectives')
                                     if (resp.body.next) {
                                         return callNext(resp.body.next);
                                     } else {
-                                        createDownload(alldata, format);
+                                        createDownload(alldata, format, true);
                                         scope.ext.isDownloading = false;
                                     }
                                 }
@@ -452,7 +457,7 @@ angular.module('otDirectives')
                                 text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .csv</span>',
                                 title: filename,
                                 action: function () {
-                                    scope.downloadAllData('csv');
+                                    createDownload(scope.ext.data, 'csv');
                                 }
                             },
                             {
@@ -462,7 +467,7 @@ angular.module('otDirectives')
                                 fieldSeparator: '\t',
                                 extension: '.tsv',
                                 action: function () {
-                                    scope.downloadAllData('tsv');
+                                    createDownload(scope.ext.data, 'tsv');
                                 }
                             },
                             {
@@ -473,7 +478,7 @@ angular.module('otDirectives')
                                     // var data = {data: scope.ext.rawdata.data};
                                     // var b = new Blob([JSON.stringify(data)], {type: 'text/json;charset=utf-8'});
                                     // saveAs(b, filename + '.json');
-                                    scope.downloadAllData('json');
+                                    createDownload(scope.ext.data, 'json');
                                 }
                             }
                         ],
