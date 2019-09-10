@@ -34,24 +34,46 @@ angular.module('otDirectives')
                 init();
             }],
             link: function (scope, elem, attrs) {
+                // var downloadCols = [
+                //     'Access',
+                //     'Disease',
+                //     'Disease ID',
+                //     'Drug',
+                //     'Drug ID',
+                //     'Phase',
+                //     'Phase (Numeric)',
+                //     'Status',
+                //     'Type',
+                //     'Mechanism of action',
+                //     'Mechanism of action references',
+                //     'Activity',
+                //     'Target',
+                //     'Target ID',
+                //     'Target class',
+                //     'Evidence curated from',
+                //     'Evidence URL'
+                // ];
                 var downloadCols = [
                     'Access',
                     'Disease',
                     'Disease ID',
-                    'Drug',
-                    'Drug ID',
+
                     'Phase',
                     'Phase (Numeric)',
                     'Status',
+                    'Source',
+                    'Source URL',
+
+                    'Drug',
+                    'Drug ID',
                     'Type',
                     'Mechanism of action',
                     'Mechanism of action references',
                     'Activity',
+
                     'Target',
                     'Target ID',
-                    'Target class',
-                    'Evidence curated from',
-                    'Evidence URL'
+                    'Target class'
                 ];
                 var table, dtable;
 
@@ -244,7 +266,7 @@ angular.module('otDirectives')
                     */
                     var row = [];
                     var cell = '';
-                    // console.log('fD2R ', item);
+
                     try {
                         // 0: data origin: public / private
                         cell = 'public'; // TODO: need a field for this
@@ -280,21 +302,27 @@ angular.module('otDirectives')
                         row.push(cell);
 
                         // 7: source URL (hidden)
-                        row.push(
-                            // item.urls
-                            // item.urls.map(function (url) {
-                            //     return decodeURI(url.url);
-                            // }).join(', ')
-                            item.urls.reduce(function (acc, i) {
-                                var source = acc.filter(function (el) { return el.nice_name === i.nice_name; })[0]
-                                    || {urls: [], nice_name: i.nice_name};
-                                if (!source.urls.length) {
-                                    acc.push(source);
-                                }
-                                source.urls.push(i.url);
-                                return acc;
-                            }, [])
-                        );
+                        // item.urls
+                        // item.urls.map(function (url) {
+                        //     return decodeURI(url.url);
+                        // }).join(', ')
+                        cell = item.urls.reduce(function (acc, i) {
+                            var source = acc.filter(function (el) { return el.nice_name === i.nice_name; })[0]
+                                || {urls: [], nice_name: i.nice_name};
+                            if (!source.urls.length) {
+                                acc.push(source);
+                            }
+                            source.urls.push(i.url);
+                            return acc;
+                        }, []);
+
+                        if (!asHtml) {
+                            // in case of downloads, format the data nicely but simply
+                            cell = cell.map(function (i) {
+                                return i.nice_name + ': ' + i.urls.join(', ');
+                            }).join('; ');
+                        }
+                        row.push(cell);
 
                         // 8: drug
                         cell = item.drug_label;
@@ -422,23 +450,30 @@ angular.module('otDirectives')
                             {
                                 extend: 'csv',
                                 text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .csv</span>',
-                                title: filename
+                                title: filename,
+                                action: function () {
+                                    scope.downloadAllData('csv');
+                                }
                             },
                             {
                                 extend: 'csv',
                                 text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .tsv</span>',
                                 title: filename,
                                 fieldSeparator: '\t',
-                                extension: '.tsv'
+                                extension: '.tsv',
+                                action: function () {
+                                    scope.downloadAllData('tsv');
+                                }
                             },
                             {
                                 text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .json</span>',
                                 title: filename,
                                 extension: '.json',
                                 action: function () {
-                                    var data = {data: scope.ext.rawdata.data};
-                                    var b = new Blob([JSON.stringify(data)], {type: 'text/json;charset=utf-8'});
-                                    saveAs(b, filename + '.json');
+                                    // var data = {data: scope.ext.rawdata.data};
+                                    // var b = new Blob([JSON.stringify(data)], {type: 'text/json;charset=utf-8'});
+                                    // saveAs(b, filename + '.json');
+                                    scope.downloadAllData('json');
                                 }
                             }
                         ],
@@ -594,8 +629,7 @@ angular.module('otDirectives')
                         // This row is already open - close it
                         row.child.hide();
                         tr.removeClass('shown');
-                    }
-                    else {
+                    } else {
                         // Open this row
                         row.child(formatDetails(row.data())).show();
                         tr.addClass('shown');
