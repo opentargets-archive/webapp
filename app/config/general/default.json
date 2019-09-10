@@ -156,7 +156,7 @@
         },
         {
             "name": "drugs",
-            "element": "ot-drugs-display",
+            "element": "ot-drugs-agg",
             "heading": "Drugs",
             "track": true,
             "config": {
@@ -186,7 +186,7 @@
     "targetSections": [
         {
             "name": "drugs",
-            "element": "ot-drugs-display",
+            "element": "ot-drugs-agg",
             "heading": "Drugs",
             "track": true,
             "config": {
