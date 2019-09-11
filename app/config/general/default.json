@@ -40,19 +40,18 @@
             "menu": [
                 {
                     "label" : "API documentation",
-                    "href" : "https://docs.targetvalidation.org/tutorials/rest-api"
+                    "href" : "https://docs.targetvalidation.org/programmatic-access/rest-api"
                 },
                 {
                     "label" : "API tutorials",
-                    "href" : "https://docs.targetvalidation.org/tutorials/api-tutorials"
+                    "href" : "https://docs.targetvalidation.org/programmatic-access/api-tutorials"
                 },
                 {
                     "label" : "Python client",
-                    "href" : "https://docs.targetvalidation.org/tutorials/python-client"
+                    "href" : "https://docs.targetvalidation.org/programmatic-access/python-client"
                 }
             ]
         },
-
 
         {
             "label" : "Downloads",
