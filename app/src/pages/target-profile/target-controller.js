@@ -66,7 +66,7 @@ angular.module('otControllers')
 
                     // Check if the target is a TEP (Target Enabling Package)
                     if (otTeps[$scope.targetId]) {
-                        $scope.target.tep = otTeps[$scope.targetId].symbol;
+                        $scope.target.tep = otTeps[$scope.targetId];
                     }
 
                     // Synonyms
