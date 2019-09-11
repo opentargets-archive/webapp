@@ -128,7 +128,7 @@ angular.module('otDirectives')
                         method: 'GET',
                         params: opts
                     };
-                    return otApi.getFilterBy(queryObject)
+                    return otApi.getFilterBy(queryObject);
                 }
 
 
@@ -225,7 +225,7 @@ angular.module('otDirectives')
                         // 0: data origin: public / private
                         cell = item.access_level;
                         if (asHtml) {
-                            cell = (item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR
+                            cell = (item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR;
                         }
                         row.push(cell);
 
