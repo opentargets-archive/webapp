@@ -611,19 +611,15 @@ angular.module('otDirectives')
                 }
 
                 function formatDetails (d) {
-                    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                    return '<table cellpadding="5" cellspacing="0" border="0" style="width:100%">' +
                         d[7].map(function (source) {
-                            return '<tr>' +
-                            '<td style="width:25%">' + source.nice_name + '</td>' +
-                            '<td>' + source.urls.map(function (u) {
-                                var url = u;
-                                if (source.nice_name === 'Clinical Trials Information') {
-                                    url = '<a href="' + url + '" target="_blank">' + (url.split('%22')[1]) + '</a>';
-                                }
-                                return url;
+                            return '<tr style="vertical-align:top">' +
+                            '<td style="width:20%">' + source.nice_name + '</td>' +
+                            '<td style="width:80%">' + source.urls.map(function (u) {
+                                return '<a href="' + u + '" target="_blank">' + source.nice_name + '</a>';
                             }).join(', ') + '</td>' +
                             '</tr>';
-                        }).join() +
+                        }).join('') +
                     '</table>';
                 }
                 function clickHandler (e) {
