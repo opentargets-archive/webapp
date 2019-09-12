@@ -46,22 +46,23 @@ angular.module('otDirectives')
                         .then(
                             function (resp) {
                                 // General properties
-                                scope.displayName = otUpperCaseFirstFilter((resp.body.pref_name || resp.body.molecule_chembl_id).toString().toLowerCase());
-                                scope.molType = resp.body.type || otDictionary.NA;
-                                scope.firstApproval = resp.body.year_first_approved || otDictionary.NA;
-                                scope.maxPhase = resp.body.max_clinical_trial_phase || otDictionary.NA;
-                                scope.internal = resp.body.internal_compound;
-                                scope.synonyms = resp.body.synonyms;
-                                scope.tradeNames = resp.body.trade_names;
-                                scope.isWithdrawn = resp.body.withdrawn_flag;
-                                scope.withdrawnYear = resp.body.withdrawn_year;
-                                scope.withdrawnCountry = resp.body.withdrawn_country;
-                                scope.withdrawnReason = resp.body.withdrawn_reason;
-                                scope.withdrawnClass = resp.body.withdrawn_class;
+                                var data = resp.body.data[0];
+                                scope.displayName = otUpperCaseFirstFilter((data.pref_name || data.molecule_chembl_id).toString().toLowerCase());
+                                scope.molType = data.type || otDictionary.NA;
+                                scope.firstApproval = data.year_first_approved || otDictionary.NA;
+                                scope.maxPhase = data.max_clinical_trial_phase || otDictionary.NA;
+                                scope.internal = data.internal_compound;
+                                scope.synonyms = data.synonyms;
+                                scope.tradeNames = data.trade_names;
+                                scope.isWithdrawn = data.withdrawn_flag;
+                                scope.withdrawnYear = data.withdrawn_year;
+                                scope.withdrawnCountry = data.withdrawn_country;
+                                scope.withdrawnReason = data.withdrawn_reason;
+                                scope.withdrawnClass = data.withdrawn_class;
 
                                 // TODO: full_molformula is currently not available in the API response
-                                // if (resp.body.molecule_properties && resp.body.molecule_properties.full_molformula) {
-                                //     scope.formula = resp.body.molecule_properties.full_molformula;
+                                // if (data.molecule_properties && data.molecule_properties.full_molformula) {
+                                //     scope.formula = data.molecule_properties.full_molformula;
                                 // } else {
                                 //     scope.formula = otDictionary.NA;
                                 // }
@@ -78,7 +79,7 @@ angular.module('otDirectives')
                                 }
 
                                 // Mechanism of action
-                                var mecs = resp.body.mechanisms_of_action.map(function (mec) {
+                                var mecs = data.mechanisms_of_action.map(function (mec) {
                                     mec.references.map(function (ref) {
                                         // process the references
                                         ref.url = ref.urls ? ref.urls[0] : '';
