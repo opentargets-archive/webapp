@@ -34,47 +34,52 @@ angular.module('otDirectives')
                 init();
             }],
             link: function (scope, elem, attrs) {
+                // Column names for table download.
+                // Currently not used: commenting out until next revision
                 // var downloadCols = [
                 //     'Access',
                 //     'Disease',
                 //     'Disease ID',
-                //     'Drug',
-                //     'Drug ID',
+
                 //     'Phase',
                 //     'Phase (Numeric)',
                 //     'Status',
+                //     'Source',
+                //     'Source URL',
+
+                //     'Drug',
+                //     'Drug ID',
                 //     'Type',
                 //     'Mechanism of action',
                 //     'Mechanism of action references',
                 //     'Activity',
+
                 //     'Target',
                 //     'Target ID',
-                //     'Target class',
-                //     'Evidence curated from',
-                //     'Evidence URL'
+                //     'Target class'
                 // ];
-                var downloadCols = [
+
+                // Column names for full download (i.e. evidence columns)
+                var fullDownloadCols = [
                     'Access',
                     'Disease',
                     'Disease ID',
-
+                    'Drug',
+                    'Drug ID',
                     'Phase',
                     'Phase (Numeric)',
                     'Status',
-                    'Source',
-                    'Source URL',
-
-                    'Drug',
-                    'Drug ID',
                     'Type',
                     'Mechanism of action',
                     'Mechanism of action references',
                     'Activity',
-
                     'Target',
                     'Target ID',
-                    'Target class'
+                    'Target class',
+                    'Evidence curated from',
+                    'Evidence URL'
                 ];
+
                 var table, dtable;
 
                 scope.ext.hasError = false;
@@ -96,9 +101,35 @@ angular.module('otDirectives')
                 // =================================================
 
 
-                function getData (nextIndex) {
+                /**
+                 * Get 'expanded' drug data from the evidence endpoint.
+                 * This is used for download only: note the fields are actually
+                 * different than those use for table display.
+                 *
+                 * @param {*} nextIndex returned by the API, used for pagination
+                 */
+                function getExpandedData (nextIndex) {
                     var opts = {
-                        size: 10000
+                        size: 10000,
+                        datasource: otConfig.evidence_sources.known_drug,
+                        fields: [
+                            'access_level',
+                            'disease.efo_info',
+                            'drug.id',
+                            'drug.molecule_name',
+                            'drug.molecule_type',
+                            'evidence.drug2clinic.clinical_trial_phase.numeric_index',
+                            'evidence.target2drug.urls',
+                            'evidence.target2drug.provenance_type.database.id',
+                            'evidence.target2drug.provenance_type.literature.references',
+                            'evidence.target2drug.mechanism_of_action',
+                            'evidence.drug2clinic.clinical_trial_phase',
+                            'evidence.drug2clinic.status',
+                            'evidence.drug2clinic.urls',
+                            'target.activity',
+                            'target.gene_info',
+                            'target.target_class'
+                        ]
                     };
                     if (attrs.target) {
                         opts.target = attrs.target;
@@ -114,19 +145,37 @@ angular.module('otDirectives')
                         method: 'GET',
                         params: opts
                     };
-                    return otApi.getKnownDrug(queryObject);
+                    return otApi.getFilterBy(queryObject);
                 }
 
 
+                /*
+                 * Get aggregated drug data and initilize drug accordingly.
+                 * This is called when the directive loads the first time.
+                 */
                 function getDrugData () {
                     scope.ext.isLoading = true;
-                    getData()
+                    var opts = {
+                        size: 10000
+                    };
+                    if (attrs.target) {
+                        opts.target = attrs.target;
+                    }
+                    if (attrs.disease) {
+                        opts.disease = attrs.disease;
+                    }
+                    _.extend(opts, searchObj);
+                    var queryObject = {
+                        method: 'GET',
+                        params: opts
+                    };
+                    otApi.getKnownDrug(queryObject)
                         .then(
                             function (resp) {
                                 if (resp.body) {
                                     scope.ext.rawdata = resp.body;
                                     scope.ext.data = scope.ext.rawdata.data;
-                                    scope.ext.total = resp.body.data.length; // TODO: we need a TOTAL in the response
+                                    scope.ext.total = resp.body.data.length; // TODO: need TOTAL in the response
                                     scope.ext.size = resp.body.data.length;
                                     scope.stats = getTableStats(resp.body.facets);
                                     initTableDrugs();
@@ -141,6 +190,12 @@ angular.module('otDirectives')
                         });
                 }
 
+
+                /**
+                 * Parse the stats returned by the API
+                 *
+                 * @param {*} stats the 'facets' object in the API response
+                 */
                 function getTableStats (stats) {
                     return {
                         summary: {
@@ -174,6 +229,16 @@ angular.module('otDirectives')
                     };
                 }
 
+
+                /**
+                 * Make and download a file for the given data in the specified format.
+                 * Note: at the moment this will not work with the aggregated table data.
+                 * It expects 'expanded' evidence data and will format the output accordingly.
+                 *
+                 * @param {Array} alldata data array
+                 * @param {String} format 'csv', 'tsv' or 'json'
+                 * @param {Boolean} full is this a download of all the data? for file naming purpose
+                 */
                 function createDownload (alldata, format, full) {
                     // format: csv, tsv, json
                     format = format.toLowerCase();
@@ -200,7 +265,7 @@ angular.module('otDirectives')
                         var type = 'text/' + format + ';charset=utf-8';
                         var separator = (format === 'csv') ? ',' : '\t';
                         var data = alldata.map(function (item) {
-                            return formatDataToRow(item, false)
+                            return formatExpandedDataToRow(item)
                                 .map(function (i) {
                                     // enclose cells quotation marks for CSV only
                                     var cell = (format === 'csv')
@@ -211,7 +276,7 @@ angular.module('otDirectives')
                                 .join(separator);
                         }).join('\n');
                         // add column headers
-                        data = downloadCols.join(separator) + '\n' + data;
+                        data = fullDownloadCols.join(separator) + '\n' + data;
                         blob = new Blob([data], {type: type});
                     }
 
@@ -219,12 +284,18 @@ angular.module('otDirectives')
                 }
 
 
+                /**
+                 * Fetch data in the specified format and download it to file.
+                 * Note: this downloads 'expanded' evidence data, which is in a slightly
+                 * different format / columns order than what is displayed in the table.
+                 *
+                 * @param {String} format 'csv', 'tsv' or 'json'
+                 */
                 scope.downloadAllData = function (format) {
                     scope.ext.isDownloading = true;
                     var alldata = [];
-                    // otGoogleAnalytics.trackEvent('alldrugs', 'download', 'CSV');
                     function callNext (nextIndex) {
-                        getData(nextIndex)
+                        getExpandedData(nextIndex)
                             .then(
                                 function (resp) {
                                     alldata = alldata.concat(resp.body.data);
@@ -241,6 +312,103 @@ angular.module('otDirectives')
                     callNext();
                 };
 
+
+                /**
+                 * Format expanded data (i.e. not aggregated).
+                 * This is currently for download only.
+                 * Returns a 'row' array.
+                 *
+                 * @param {Object} item a row of data
+                 */
+                function formatExpandedDataToRow (item) {
+                    var row = [];
+                    var cell = '';
+
+                    try {
+                        // 0: data origin: public / private
+                        row.push(item.access_level);
+
+                        // 1: disease name
+                        row.push(item.disease.efo_info.label);
+
+                        // 2: disease id (hidden)
+                        row.push(item.disease.efo_info.efo_id.split('/').pop());
+
+                        // 3: drug
+                        row.push(item.drug.molecule_name);
+
+                        // 4: drug id
+                        row.push(item.drug.id.split('/').pop());
+
+                        // 5: phase
+                        row.push(item.evidence.drug2clinic.clinical_trial_phase.label);
+
+                        // 6: phase numeric (hidden)
+                        row.push(item.evidence.drug2clinic.clinical_trial_phase.numeric_index);
+
+                        // 7: status
+                        var sts = otDictionary.NA;
+                        if (otUtils.checkPath(item, 'evidence.drug2clinic.status')) {
+                            sts = item.evidence.drug2clinic.status;
+                        }
+                        row.push(sts);
+
+                        // 8: type
+                        row.push(item.drug.molecule_type);
+
+                        // 9: Mechanism of action + publications
+                        row.push(item.evidence.target2drug.mechanism_of_action);
+
+                        // 10: Mechanism of action references (hidden)
+                        row.push(item.evidence.target2drug.urls.map(function (t2d) {
+                            return t2d.nice_name + ': ' + t2d.url;
+                        }).join(', '));
+
+                        // 11: Activity
+                        cell = item.target.activity;
+                        switch (cell) {
+                        case 'drug_positive_modulator' :
+                            cell = 'agonist';
+                            break;
+                        case 'drug_negative_modulator' :
+                            cell = 'antagonist';
+                            break;
+                        }
+                        row.push(cell);
+
+                        // 12: target
+                        row.push(item.target.gene_info.symbol);
+
+                        // 13: target ID (hidden)
+                        row.push(item.target.gene_info.geneid);
+
+                        // 14: target class
+                        var trgc = otDictionary.NA;
+                        if (otUtils.checkPath(item, 'target.target_class')) {
+                            trgc = item.target.target_class[0] || otDictionary.NA;
+                        }
+                        row.push(trgc);
+
+                        // 15: evidence source
+                        row.push(item.evidence.drug2clinic.urls[0].nice_name);
+
+                        // 16: evidence URL (hidden)
+                        row.push(decodeURI(item.evidence.drug2clinic.urls[0].url));
+
+                        return row;
+                    } catch (e) {
+                        scope.ext.hasError = true;
+                        return [];
+                    }
+                }
+
+
+                /**
+                 * Format aggregated data for display in table. Returns a 'row' array.
+                 *
+                 * @param {Object} item a row of data
+                 * @param {Boolean} asHtml format the data for display (html) rather than download
+                 */
                 function formatDataToRow (item, asHtml) {
                     /*
                     0 (0)   : access
@@ -352,8 +520,10 @@ angular.module('otDirectives')
 
                         // 11: Mechanism of action + publications
                         cell = item.mechanisms_of_action.join(asHtml ? '<br />' : ', ');
-                        // **TODO**: we no longer have literature.references or target2drugs.urls[2]
-                        // so this block no longer applies
+                        // TODO:
+                        // we no longer have literature.references or target2drugs.urls[2]
+                        // so this block no longer applies.
+                        // Remove unless references are added to API response / data
                         // if (asHtml) {
                         //     var refs = [];
                         //     if (checkPath(item, 'evidence.target2drug.provenance_type.literature.references')) {
@@ -375,7 +545,9 @@ angular.module('otDirectives')
                         // row.push(item.evidence.target2drug.urls.map(function (t2d) {
                         //     return t2d.nice_name + ': ' + t2d.url;
                         // }).join(', '));
-                        row.push('**TODO**');
+                        // TODO: this column is currently hidden. The display data
+                        // is NOT used for download purposes. So this is NOT visible to the user.
+                        row.push('N/A');
 
                         // 11: Activity
                         cell = item.target_activity;
@@ -413,6 +585,11 @@ angular.module('otDirectives')
                     }
                 }
 
+
+                /**
+                 * Format aggregated drugs data for table display.
+                 * @param {Array} data the data array from API response
+                 */
                 function formatDrugsDataToArray (data) {
                     var newdata = [];
 
@@ -439,10 +616,7 @@ angular.module('otDirectives')
 
                 var dropdownColumns = [1, 3, 5, 6, 8, 10, 11, 13, 14, 16];
 
-                /*
-                * This is the hardcoded data for the Known Drugs table and
-                * will obviously need to change and pull live data when available
-                */
+
                 function initTableDrugs () {
                     var filename = (scope.output ? scope.output + '-' : '') + 'known_drugs';
                     table = elem[0].getElementsByTagName('table');
@@ -457,7 +631,7 @@ angular.module('otDirectives')
                                 text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .csv</span>',
                                 title: filename,
                                 action: function () {
-                                    createDownload(scope.ext.data, 'csv');
+                                    scope.downloadAllData('csv');
                                 }
                             },
                             {
@@ -467,7 +641,7 @@ angular.module('otDirectives')
                                 fieldSeparator: '\t',
                                 extension: '.tsv',
                                 action: function () {
-                                    createDownload(scope.ext.data, 'tsv');
+                                    scope.downloadAllData('tsv');
                                 }
                             },
                             {
@@ -475,10 +649,7 @@ angular.module('otDirectives')
                                 title: filename,
                                 extension: '.json',
                                 action: function () {
-                                    // var data = {data: scope.ext.rawdata.data};
-                                    // var b = new Blob([JSON.stringify(data)], {type: 'text/json;charset=utf-8'});
-                                    // saveAs(b, filename + '.json');
-                                    createDownload(scope.ext.data, 'json');
+                                    scope.downloadAllData('json');
                                 }
                             }
                         ],
@@ -610,6 +781,7 @@ angular.module('otDirectives')
                     return dtable;
                 }
 
+
                 function formatDetails (d) {
                     return '<table cellpadding="5" cellspacing="0" border="0" style="width:100%">' +
                         d[7].map(function (source) {
@@ -622,6 +794,8 @@ angular.module('otDirectives')
                         }).join('') +
                     '</table>';
                 }
+
+
                 function clickHandler (e) {
                     var tr = $(e.target).closest('tr');
                     var row = dtable.api().row(tr);
