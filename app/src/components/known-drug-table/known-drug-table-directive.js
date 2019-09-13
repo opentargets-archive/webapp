@@ -372,7 +372,6 @@ angular.module('otDirectives')
                             // parse data for summary viz
                             all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] = all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] || [];
                             all_phases[item.evidence.drug2clinic.clinical_trial_phase.label].push({
-                                // id: item.drug.max_phase_for_all_diseases.numeric_index,
                                 id: item.evidence.drug2clinic.clinical_trial_phase.numeric_index,
                                 label: item.evidence.drug2clinic.clinical_trial_phase.label
                             });
@@ -390,51 +389,27 @@ angular.module('otDirectives')
                         return rec.id;
                     });
 
-                    var showLim = 50;
-                    scope.show = {};
-                    scope.show.limit = showLim;
-                    scope.show.ellipsis = '[Show more]';
-                    scope.drugs = _.uniqBy(all_drugs_sorted, 'id');
-                    scope.drugs.forEach(function (d) {
-                        var chemblId = d.url.split('/').pop();
-                        if (chemblId.indexOf('CHEMBL') > -1) {
-                            d.url = '/summary?drug=' + chemblId;
-                        }
-                    });
-
-                    scope.phases = Object.keys(all_phases).map(function (phase) {
-                        return {
-                            label: phase,
-                            value: all_phases[phase].length,
-                            // value: _.uniqBy(all_phases[phase], 'drug').length,
-                            id: phase // all_phases[phase].length
-                        };
-                    });
-
-                    scope.type_activity = Object.keys(type_activity).map(function (ta) {
-                        return {
-                            label: ta,
-                            values: Object.keys(type_activity[ta]).map(function (act) {
-                                return {id: act, value: _.uniq(type_activity[ta][act]).length};
-                            })
-                        };
-                    });
-
-                    scope.associated_diseases = _.uniqBy(data, 'disease.efo_info.efo_id');
-                    scope.associated_targets = _.uniqBy(data, 'target.gene_info.geneid');
-
-
-                    scope.show.moreOrLess = scope.drugs.length > showLim;
-
-                    scope.showMoreOrLess = function () {
-                        scope.show.moreOrLess = true;
-                        if (scope.show.limit === scope.drugs.length) { // It is already open
-                            scope.show.limit = showLim;
-                            scope.show.ellipsis = '[Show more]';
-                        } else {  // It is closed
-                            scope.show.limit = scope.drugs.length;
-                            scope.show.ellipsis = '[Show less]';
-                        }
+                    scope.stats = {
+                        summary: {
+                            drugs: _.uniqBy(all_drugs_sorted, 'id').length,
+                            targets: _.uniqBy(data, 'target.gene_info.geneid').length,
+                            diseases: _.uniqBy(data, 'disease.efo_info.efo_id').length
+                        },
+                        phases: Object.keys(all_phases).map(function (phase) {
+                            return {
+                                label: phase,
+                                value: all_phases[phase].length,
+                                id: phase
+                            };
+                        }),
+                        type_activity: Object.keys(type_activity).map(function (ta) {
+                            return {
+                                label: ta,
+                                values: Object.keys(type_activity[ta]).map(function (act) {
+                                    return {id: act, value: _.uniq(type_activity[ta][act]).length};
+                                })
+                            };
+                        })
                     };
 
                     return newdata;
