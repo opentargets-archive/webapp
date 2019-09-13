@@ -1,26 +1,11 @@
 <div>
-    <div class="row" ng-if="ext.size >= ext.total">
-        <!-- we're showing all results (10000 or less) -->
-        <div class="col-sm-4">
-            <h4>Table summary</h4>
-            <h5><span class="badge large badge-success" style="cursor:default">{{stats.summary.unique_drugs}}</span> unique drugs</h5>
-            <h5><span class="badge large badge-warning" style="cursor:default">{{stats.summary.associated_diseases}}</span> associated disease</h5>
-            <h5><span class="badge large badge-primary" style="cursor:default">{{stats.summary.associated_targets}}</span> associated targets</h5>
-        </div>
-        
-        <div class="col-sm-4">
-            <ot-donut-chart header="Trials" data="stats.phases" show-legend="true" size="160" hole="100"></ot-donut-chart>
-        </div>
-        
-        <div class="col-sm-4">
-            <h4>Type vs Activity</h4>
-            <ot-stack-chart data="stats.type_activity" height="200" width="300" show-legend="true"></ot-stack-chart>
-        </div>
+    <div ng-if="ext.size >= ext.total">
+        <ot-known-drug-charts data="stats"></ot-known-drug-charts>
     </div>
 
+    <!-- we're not showing all results -->
     <div ng-if="ext.total > ext.size" class="panel panel-default text-center">
         <div class="panel-body">
-            <!-- we're not showing all results -->
             <h4>Important notice about the Drugs data table for {{targetLabel}}<span ng-if="targetLabel && diseaseLabel"> and </span>{{diseaseLabel}}</h4>
             <p>This data table below only shows the first {{ext.size}} rows of a data table with {{ext.total}} total rows.</p>
             <div ng-show="!ext.isDownloading">

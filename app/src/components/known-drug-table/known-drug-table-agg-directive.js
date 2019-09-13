@@ -199,9 +199,9 @@ angular.module('otDirectives')
                 function getTableStats (stats) {
                     return {
                         summary: {
-                            unique_drugs: stats.unique_drugs,
-                            associated_targets: stats.associated_targets,
-                            associated_diseases: stats.associated_diseases
+                            drugs: stats.unique_drugs,
+                            targets: stats.associated_targets,
+                            diseases: stats.associated_diseases
                         },
                         phases: Object.keys(stats.clinical_trials)
                             .sort(function (a, b) { return b > a ? 1 : -1; })
