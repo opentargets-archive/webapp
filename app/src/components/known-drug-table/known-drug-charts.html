@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-sm-4">
+        <h4>Table summary</h4>
+        <h5><span class="badge large badge-success" style="cursor:default">{{data.summary.drugs}}</span> unique drugs</h5>
+        <h5><span class="badge large badge-warning" style="cursor:default">{{data.summary.diseases}}</span> associated disease</h5>
+        <h5><span class="badge large badge-primary" style="cursor:default">{{data.summary.targets}}</span> associated targets</h5>
+    </div>
+    
+    <div class="col-sm-4">
+        <h4>Trials</h4>
+        <ot-donut-chart data="data.phases" show-legend="true" size="160" hole="100"></ot-donut-chart>
+    </div>
+    
+    <div class="col-sm-4">
+        <h4>Type vs Activity</h4>
+        <ot-stack-chart data="data.type_activity" height="200" width="300" show-legend="true"></ot-stack-chart>
+    </div>
+</div>
