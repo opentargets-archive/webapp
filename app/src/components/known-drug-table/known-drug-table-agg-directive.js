@@ -625,34 +625,7 @@ angular.module('otDirectives')
                         'autoWidth': false,
                         'paging': true,
                         'order': [[5, 'desc']],
-                        'buttons': [
-                            {
-                                extend: 'csv',
-                                text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .csv</span>',
-                                title: filename,
-                                action: function () {
-                                    scope.downloadAllData('csv');
-                                }
-                            },
-                            {
-                                extend: 'csv',
-                                text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .tsv</span>',
-                                title: filename,
-                                fieldSeparator: '\t',
-                                extension: '.tsv',
-                                action: function () {
-                                    scope.downloadAllData('tsv');
-                                }
-                            },
-                            {
-                                text: '<span title="Download as .csv"><span class="fa fa-download"></span> Download .json</span>',
-                                title: filename,
-                                extension: '.json',
-                                action: function () {
-                                    scope.downloadAllData('json');
-                                }
-                            }
-                        ],
+                        'buttons': [],
                         /*
                         0 (0)   : access
 

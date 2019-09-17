@@ -2,24 +2,18 @@
     <div ng-if="ext.size >= ext.total">
         <ot-known-drug-charts data="stats"></ot-known-drug-charts>
     </div>
-
-    <!-- we're not showing all results -->
-    <div ng-if="ext.total > ext.size" class="panel panel-default text-center">
-        <div class="panel-body">
-            <h4>Important notice about the Drugs data table for {{targetLabel}}<span ng-if="targetLabel && diseaseLabel"> and </span>{{diseaseLabel}}</h4>
-            <p>This data table below only shows the first {{ext.size}} rows of a data table with {{ext.total}} total rows.</p>
-            <div ng-show="!ext.isDownloading">
-                Download all data ({{ext.total}} rows)
-                <span class="btn-group">
+    <div style="padding-bottom: 15px">
+        <div ng-show="!ext.isDownloading">
+            Download all data 
+            <span class="btn-group">
                 <button class="btn btn-default" ng-click="downloadAllData('csv')"><span class="fa fa-download"></span> .csv</button>
                 <button class="btn btn-default" ng-click="downloadAllData('tsv')"><span class="fa fa-download"></span> .tsv</button>
                 <button class="btn btn-default" ng-click="downloadAllData('json')"><span class="fa fa-download"></span> .json</button>
-                </span>
-            </div>
-            <div ng-show="ext.isDownloading">
-                <h5>Generating download file</h5>
-                <ot-progress-spinner size="30"></ot-progress-spinner>
-            </div>
+            </span>
+        </div>
+        <div ng-show="ext.isDownloading">
+            <h5>Generating download file</h5>
+            <ot-progress-spinner size="30"></ot-progress-spinner>
         </div>
     </div>
 </div>
