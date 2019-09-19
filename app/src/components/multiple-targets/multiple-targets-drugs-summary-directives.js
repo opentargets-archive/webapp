@@ -19,7 +19,7 @@ angular.module('otDirectives')
                 row.push('<a href="/disease/' + drug.disease.id + '">' + drug.disease.label + '</a>');
 
                 // Max Phase
-                row.push(drug.maxPhase.label);
+                // row.push(drug.maxPhase.label);
 
                 // Molecule type
                 row.push(drug.molType);
@@ -94,18 +94,18 @@ angular.module('otDirectives')
                             $('#target-list-drugs').DataTable(otUtils.setTableToolsParams({
                                 'data': formatDrugDataToArray(scope.drugs),
                                 'ordering': true,
-                                'order': [[3, 'desc']],
+                                // 'order': [[3, 'desc']],
                                 'autoWidth': false,
                                 'paging': true,
                                 'columnDefs': [
                                     {
-                                        'targets': [0, 4],
-                                        'width': '20%'
-                                    },
-                                    {
-                                        'targets': [1, 3],
-                                        'width': '15%'
-                                    }
+                                        'targets': [0, 1, 2, 3],
+                                        'width': '25%'
+                                    } // ,
+                                    // {
+                                    //     'targets': [1, 3],
+                                    //     'width': '15%'
+                                    // }
                                 ]
 
                             }, scope.target.length + '-targets-drugs'));
