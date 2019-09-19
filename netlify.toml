@@ -28,6 +28,9 @@
 # [context.branch_name.environment]
 #  APIHOST = "https://the-api-url-we-want.com"
 
+[context.lf-drugagg-682.environment]
+  APIHOST = "https://platform-dev.opentargets.io"
+
 [context.efo3.environment]
   APIHOST = "https://platform-api-qc-efo3.opentargets.io/"
 #   [[headers]]
