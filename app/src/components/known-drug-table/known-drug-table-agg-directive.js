@@ -624,7 +624,7 @@ angular.module('otDirectives')
                         'data': formatDrugsDataToArray(scope.ext.data),
                         'autoWidth': false,
                         'paging': true,
-                        'order': [[4, 'desc']],
+                        'order': [[3, 'desc']],
                         'buttons': [],
                         /*
                         0 (0)   : access
