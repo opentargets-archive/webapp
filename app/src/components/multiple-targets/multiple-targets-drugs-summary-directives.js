@@ -94,18 +94,14 @@ angular.module('otDirectives')
                             $('#target-list-drugs').DataTable(otUtils.setTableToolsParams({
                                 'data': formatDrugDataToArray(scope.drugs),
                                 'ordering': true,
-                                // 'order': [[3, 'desc']],
+                                'order': [],
                                 'autoWidth': false,
                                 'paging': true,
                                 'columnDefs': [
                                     {
                                         'targets': [0, 1, 2, 3],
                                         'width': '25%'
-                                    } // ,
-                                    // {
-                                    //     'targets': [1, 3],
-                                    //     'width': '15%'
-                                    // }
+                                    }
                                 ]
 
                             }, scope.target.length + '-targets-drugs'));
