@@ -1,8 +1,14 @@
 /* Controllers */
 
 angular.module('otControllers')
-    .run(['$rootScope', '$window', '$uibModalStack', function ($rootScope, $window, $uibModalStack) {
+    .run(['$rootScope', '$window', '$uibModalStack', '$location', 'otConfig', function ($rootScope, $window, $uibModalStack, $location, otConfig) {
         'use strict';
+
+        function updateCanonicalUrl () {
+            $rootScope.canonical_url = otConfig.canonical_url_base + $location.path();
+            console.log('rel: ' + $rootScope.canonical_url);
+        }
+
 
         // Close all the modal windows when the route changes
         $rootScope.$on('$routeChangeSuccess', function (newVal, oldVal) {
@@ -15,6 +21,14 @@ angular.module('otControllers')
 
             // Reset the datatables search;
             $.fn.dataTable.ext.search = [];
+
+            // Set canonical view stuff
+            updateCanonicalUrl();
+        });
+
+        $rootScope.$on('$routeUpdate', function (newVal, oldVal) {
+            console.log('(on: update)');
+            updateCanonicalUrl();
         });
 
         $rootScope.$on('cttvApiError', function (event, data) {

@@ -639,5 +639,6 @@
     },
 
 
-    "api": "/api/"
+    "api": "/api/",
+    "canonical_url_base": "https://www.targetvalidation.org"
 }
