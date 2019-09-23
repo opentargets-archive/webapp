@@ -388,10 +388,6 @@ angular.module('otDirectives')
                         return rec.id;
                     });
 
-                    var showLim = 50;
-                    scope.show = {};
-                    scope.show.limit = showLim;
-                    scope.show.ellipsis = '[Show more]';
                     scope.drugs = _.uniqBy(all_drugs_sorted, 'id');
                     scope.drugs.forEach(function (d) {
                         var chemblId = d.url.split('/').pop();
@@ -421,7 +417,10 @@ angular.module('otDirectives')
                     scope.associated_diseases = _.uniqBy(data, 'disease.efo_info.efo_id');
                     scope.associated_targets = _.uniqBy(data, 'target.gene_info.geneid');
 
-
+                    var showLim = 50;
+                    scope.show = {};
+                    scope.show.limit = showLim;
+                    scope.show.ellipsis = '[Show more]';
                     scope.show.moreOrLess = scope.drugs.length > showLim;
 
                     scope.showMoreOrLess = function () {
