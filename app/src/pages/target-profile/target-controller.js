@@ -97,7 +97,6 @@ angular.module('otControllers')
                         id: target.uniprot_id,
                         subunits: target.uniprot_subunit,
                         locations: target.uniprot_subcellular_location,
-                        accessions: target.uniprot_accessions,
                         keywords: target.uniprot_keywords
                     };
 
