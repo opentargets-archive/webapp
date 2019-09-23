@@ -371,7 +371,7 @@ angular.module('otDirectives')
                             // parse data for summary viz
                             all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] = all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] || [];
                             all_phases[item.evidence.drug2clinic.clinical_trial_phase.label].push({
-                                id: item.drug.max_phase_for_all_diseases.numeric_index,
+                                id: item.evidence.drug2clinic.clinical_trial_phase.numeric_index,
                                 label: item.evidence.drug2clinic.clinical_trial_phase.label
                             });
 
