@@ -7,7 +7,7 @@
 angular.module('otDirectives')
 
     /* Directive to display the known drug evidence table */
-    .directive('otKnownDrugTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
+    .directive('otKnownDrugTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', 'otClearUnderscoresFilter', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, otClearUnderscoresFilter) {
         'use strict';
         // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -297,16 +297,16 @@ angular.module('otDirectives')
                         }).join(', '));
 
                         // 11: Activity
-                        cell = item.target.activity;
-                        switch (cell) {
-                        case 'drug_positive_modulator' :
-                            cell = 'agonist';
-                            break;
-                        case 'drug_negative_modulator' :
-                            cell = 'antagonist';
-                            break;
-                        }
-                        row.push(cell);
+                        // cell = item.target.activity;
+                        // switch (cell) {
+                        // case 'drug_positive_modulator' :
+                        //     cell = 'agonist';
+                        //     break;
+                        // case 'drug_negative_modulator' :
+                        //     cell = 'antagonist';
+                        //     break;
+                        // }
+                        row.push(otClearUnderscoresFilter(item.target.activity));
 
                         // 12: target
                         cell = item.target.gene_info.symbol;
