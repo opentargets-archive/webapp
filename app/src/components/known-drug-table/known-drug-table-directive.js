@@ -417,23 +417,6 @@ angular.module('otDirectives')
                     scope.associated_diseases = _.uniqBy(data, 'disease.efo_info.efo_id');
                     scope.associated_targets = _.uniqBy(data, 'target.gene_info.geneid');
 
-                    var showLim = 50;
-                    scope.show = {};
-                    scope.show.limit = showLim;
-                    scope.show.ellipsis = '[Show more]';
-                    scope.show.moreOrLess = scope.drugs.length > showLim;
-
-                    scope.showMoreOrLess = function () {
-                        scope.show.moreOrLess = true;
-                        if (scope.show.limit === scope.drugs.length) { // It is already open
-                            scope.show.limit = showLim;
-                            scope.show.ellipsis = '[Show more]';
-                        } else {  // It is closed
-                            scope.show.limit = scope.drugs.length;
-                            scope.show.ellipsis = '[Show less]';
-                        }
-                    };
-
                     return newdata;
                 }
 
