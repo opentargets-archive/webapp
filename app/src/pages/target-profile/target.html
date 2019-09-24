@@ -108,10 +108,6 @@
                     <!-- target safety -->
                     <div uib-accordion-group ng-if="target.safety" is-open="false" attr-section-name="safety" class="panel-default" id="safety">
                         <uib-accordion-heading>
-                            <!-- TODO: comment this out by 19.09 release when it's no longer new -->
-                            <div style="position:relative">
-                                <div class="ot-section-new"><span>New</span></div>
-                            </div>
                             <i class="fa fa-exclamation-triangle fa-lg" style="color:#FC0; margin-right:5px"></i><span>Target safety</span>
                         </uib-accordion-heading>
                         <ot-plugin-loader target="target" plugin="'ot-safety'" visible="true"  page="target" action="profile" track="true" label="safety" class="scroll-table-panel"></ot-plugin-loader>
