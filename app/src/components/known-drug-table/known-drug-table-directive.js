@@ -7,7 +7,7 @@
 angular.module('otDirectives')
 
     /* Directive to display the known drug evidence table */
-    .directive('otKnownDrugTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary) {
+    .directive('otKnownDrugTable', ['otColumnFilter', 'otApi', 'otConsts', 'otUtils', 'otConfig', '$location', 'otDictionary', 'otClearUnderscoresFilter', function (otColumnFilter, otApi, otConsts, otUtils, otConfig, $location, otDictionary, otClearUnderscoresFilter) {
         'use strict';
         // var dbs = otConsts.dbs;
         var searchObj = otUtils.search.translateKeys($location.search());
@@ -297,16 +297,16 @@ angular.module('otDirectives')
                         }).join(', '));
 
                         // 11: Activity
-                        cell = item.target.activity;
-                        switch (cell) {
-                        case 'drug_positive_modulator' :
-                            cell = 'agonist';
-                            break;
-                        case 'drug_negative_modulator' :
-                            cell = 'antagonist';
-                            break;
-                        }
-                        row.push(cell);
+                        // cell = item.target.activity;
+                        // switch (cell) {
+                        // case 'drug_positive_modulator' :
+                        //     cell = 'agonist';
+                        //     break;
+                        // case 'drug_negative_modulator' :
+                        //     cell = 'antagonist';
+                        //     break;
+                        // }
+                        row.push(otClearUnderscoresFilter(item.target.activity));
 
                         // 12: target
                         cell = item.target.gene_info.symbol;
@@ -371,7 +371,7 @@ angular.module('otDirectives')
                             // parse data for summary viz
                             all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] = all_phases[item.evidence.drug2clinic.clinical_trial_phase.label] || [];
                             all_phases[item.evidence.drug2clinic.clinical_trial_phase.label].push({
-                                id: item.drug.max_phase_for_all_diseases.numeric_index,
+                                id: item.evidence.drug2clinic.clinical_trial_phase.numeric_index,
                                 label: item.evidence.drug2clinic.clinical_trial_phase.label
                             });
 
@@ -388,10 +388,6 @@ angular.module('otDirectives')
                         return rec.id;
                     });
 
-                    var showLim = 50;
-                    scope.show = {};
-                    scope.show.limit = showLim;
-                    scope.show.ellipsis = '[Show more]';
                     scope.drugs = _.uniqBy(all_drugs_sorted, 'id');
                     scope.drugs.forEach(function (d) {
                         var chemblId = d.url.split('/').pop();
@@ -420,20 +416,6 @@ angular.module('otDirectives')
 
                     scope.associated_diseases = _.uniqBy(data, 'disease.efo_info.efo_id');
                     scope.associated_targets = _.uniqBy(data, 'target.gene_info.geneid');
-
-
-                    scope.show.moreOrLess = scope.drugs.length > showLim;
-
-                    scope.showMoreOrLess = function () {
-                        scope.show.moreOrLess = true;
-                        if (scope.show.limit === scope.drugs.length) { // It is already open
-                            scope.show.limit = showLim;
-                            scope.show.ellipsis = '[Show more]';
-                        } else {  // It is closed
-                            scope.show.limit = scope.drugs.length;
-                            scope.show.ellipsis = '[Show less]';
-                        }
-                    };
 
                     return newdata;
                 }

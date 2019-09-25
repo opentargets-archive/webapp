@@ -306,8 +306,22 @@ angular.module('otControllers')
                                 // TARGETS specific
                                 //
                                 if (result.data.type === 'target') {
-                                    // get drugs phase 4 count
-
+                                    // For targets, fetch the uniprot id from the target endpoint
+                                    var queryObject = {
+                                        method: 'GET',
+                                        params: {
+                                            target_id: result.data.id
+                                        }
+                                    };
+                                    otApi.getTarget(queryObject)
+                                        .then(function (resp) {
+                                            try {
+                                                // other response data could also be exposed and displayed
+                                                $scope.search.results.data[0].data.uniprot_id = resp.body.uniprot_id;
+                                            } catch (e) {
+                                                $log.log('Error getting target uniprot id');
+                                            }
+                                        }, otApi.defaultErrorHandler);
                                 }
                             }
                         },

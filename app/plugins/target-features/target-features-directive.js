@@ -13,7 +13,6 @@ angular.module('otPlugins')
                     id: scope.target.uniprot_id,
                     subunits: scope.target.uniprot_subunit,
                     locations: scope.target.uniprot_subcellular_location,
-                    accessions: scope.target.uniprot_accessions,
                     keywords: scope.target.uniprot_keywords
                 };
 
@@ -22,7 +21,7 @@ angular.module('otPlugins')
                     new ProtVista({
                         proxy: otConsts.PROXY,
                         el: '#upfv',
-                        uniprotacc: scope.target.uniprot_accessions[0],
+                        uniprotacc: scope.target.uniprot_id,
                         exclusions: ['seqInfo']
                     });
                 }, 0);
