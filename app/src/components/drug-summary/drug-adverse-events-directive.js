@@ -32,9 +32,14 @@ angular.module('otDirectives')
 
                     var drugName = scope.drug;
                     $http.get('https://api.fda.gov/drug/event.json?search=(primarysource.qualification:1+OR+primarysource.qualification:2+OR+primarysource.qualification:3)+AND+patient.drug.medicinalproduct:' + drugName + '&count=patient.reaction.reactionmeddrapt.exact')
-                        .then(function (fdaResp) {
-                            return fdaResp.data.results.slice(0, 20);
-                        })
+                        .then(
+                            function (fdaResp) {
+                                return fdaResp.data.results.slice(0, 20);
+                            },
+                            function (err) {
+                                return [];
+                            }
+                        )
                         .then(function (events20) {
                             var eventNames = events20.map(function (e) {
                                 e.term = e.term.charAt(0).toUpperCase() + e.term.slice(1).toLowerCase();
