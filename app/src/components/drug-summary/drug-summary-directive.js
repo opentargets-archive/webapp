@@ -80,7 +80,7 @@ angular.module('otDirectives')
 
                                 // Mechanism of action
                                 var mecs = data.mechanisms_of_action.map(function (mec) {
-                                    mec.references.map(function (ref) {
+                                    (mec.references || []).map(function (ref) {
                                         // process the references
                                         ref.url = ref.urls ? ref.urls[0] : '';
                                         if (ref.source.toLowerCase() === 'wikipedia') {
