@@ -5,8 +5,9 @@ angular.module('otControllers')
         'use strict';
 
         function updateCanonicalUrl () {
-            $rootScope.canonical_url = otConfig.canonical_url_base + $location.path();
-            console.log('rel: ' + $rootScope.canonical_url);
+            // configure canonical_url based on config file:
+            // use specified url or default to current one; if null set to empty string
+            $rootScope.canonical_url = (otConfig.canonical_url_base === null) ? '' : (otConfig.canonical_url_base || $location.host()) + $location.path();
         }
 
 
@@ -27,7 +28,6 @@ angular.module('otControllers')
         });
 
         $rootScope.$on('$routeUpdate', function (newVal, oldVal) {
-            console.log('(on: update)');
             updateCanonicalUrl();
         });
 
