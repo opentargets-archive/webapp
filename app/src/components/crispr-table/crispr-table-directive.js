@@ -104,9 +104,8 @@ angular.module('otDirectives')
                             row.push(item.evidence.resource_score.method.description);
 
                             // 5,6: pmid
-                            // TODO: to be replaced with item.evidence.resource_score.method.reference when this will be available in the data
-                            row.push('http://europepmc.org/abstract/MED/30971826');
-                            row.push('http://europepmc.org/abstract/MED/30971826'); // hidden column, used for downloads info
+                            row.push(item.evidence.resource_score.method.reference);
+                            row.push(item.evidence.resource_score.method.reference); // hidden column, used for downloads info
 
                             newdata.push(row);
                         } catch (e) {
