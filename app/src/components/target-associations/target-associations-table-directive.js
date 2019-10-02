@@ -115,28 +115,17 @@ angular.module('otDirectives')
                 ],
                 'processing': false,
                 'serverSide': true,
-                // 'searchDelay': 800,
-                'columns': (function () {
-                    var a = [];
-                    for (var i = 0; i < cols.length; i++) {
-                        a.push({'title': '<div><span title=\'' + cols[i].title + '\'>' + cols[i].title + '</span></div>', name: cols[i].name});
-                    }
-                    return a;
-                })(),
+                'columns': a,
                 'columnDefs': [
                     {
                         'targets': [1, 2],
                         'visible': false
                     },
                     {
-                        'targets': [3, 4, 5, 6, 7, 8, 9],
-                        'asSorting': ['desc', 'asc']
-                    },
-                    {
                         'orderable': false,
-                        'targets': 11
+                        'targets': [a.length - 1]
                     },
-                    {'orderSequence': ['desc', 'asc'], 'targets': [3, 4, 5, 6, 7, 8, 9, 10, 11]},
+                    {'orderSequence': ['desc', 'asc'], 'targets': range(3, a.length - 1)},
                     {'orderSequence': ['asc', 'desc'], 'targets': [0]}
                 ],
                 'ajax': function (data, cbak) {
@@ -272,19 +261,6 @@ angular.module('otDirectives')
                             cbak(o);
                         });
                 },
-                // 'columns': a,
-                // 'columnDefs': [
-                //     {
-                //         'targets': [1, 2],
-                //         'visible': false
-                //     },
-                //     {
-                //         'orderable': false,
-                //         'targets': [a.length - 1]
-                //     },
-                //     {'orderSequence': ['desc', 'asc'], 'targets': range(3, a.length - 1)},
-                //     {'orderSequence': ['asc', 'desc'], 'targets': [0]}
-                // ],
                 'order': [[3, 'desc']],
                 'orderMulti': false,
                 'autoWidth': false,
