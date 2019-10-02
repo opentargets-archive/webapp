@@ -384,7 +384,7 @@ angular.module('otDirectives')
                                 }).join(' OR ');
 
                                 // get data from EPMC
-                                return $http.get('https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=' + pmids + '&format=json&resultType=core')
+                                return $http.get('https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=' + pmids + '&format=json&resultType=core&pageSize=' + resp.body.data.length)
                                     .then(function (resp2) {
                                         // decorate our API repsonse with the abstract data:
                                         // create a new field: 'evidence.literature_ref.data'
