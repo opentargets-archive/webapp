@@ -367,7 +367,9 @@ angular.module('otDirectives')
                     // Enrich the TAs with the disease pvals
                     for (var l = 0; l < tas.length; l++) {
                         var thisTA = tas[l];
-                        thisTA.diseasePvals = pvals4TAs[thisTA.id];
+                        // initialize pvals to empty array to avoid
+                        // undefined related errors in certain cases
+                        thisTA.diseasePvals = pvals4TAs[thisTA.id] || [];
                     }
 
                     // scope.unsortedTherapeuticAreas = tas;
