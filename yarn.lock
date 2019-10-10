@@ -1893,10 +1893,9 @@ cttv.api@0.0.21:
     httpplease-promises "^0.3.0"
     tnt.api "^0.1.1"
 
-cttv.api@0.0.22:
+"cttv.api@github:opentargets/RestApiJs":
   version "0.0.22"
-  resolved "https://registry.yarnpkg.com/cttv.api/-/cttv.api-0.0.22.tgz#ef8767c0db80caac1b992088bbbfc75e6c303899"
-  integrity sha512-bYdh9nRxVUmUuBSvf4uClWJApNdzrLySUV/7PPipbVarmnLuqbP/ntdn9ESvKhp1MqAjO+6XiQk9S8eGA697Fw==
+  resolved "https://codeload.github.com/opentargets/RestApiJs/tar.gz/8a3d2ae13d0078fbf62a268a1334a0f8b4acee15"
   dependencies:
     es6-promise "^2.0.1"
     httpplease "^0.15.2"
@@ -1970,9 +1969,9 @@ cttv.spinner@0.0.1:
     tnt.tree.node "^0.1.1"
     tnt.utils "^0.1.1"
 
-cttv.targetAssociationsTree@0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/cttv.targetAssociationsTree/-/cttv.targetAssociationsTree-0.0.10.tgz#823a5f67a7bc5f0ba5e3cbebae49887fe08d4c7c"
+"cttv.targetAssociationsTree@github:opentargets/targetAssociationsTree":
+  version "0.0.11"
+  resolved "https://codeload.github.com/opentargets/targetAssociationsTree/tar.gz/437554da50b7bf094801e2a560ce49cf28ea736f"
   dependencies:
     cttv.api "0.0.15"
     tnt.tooltip "^0.2.0"
