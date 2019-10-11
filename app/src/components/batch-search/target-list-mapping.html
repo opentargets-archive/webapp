@@ -236,7 +236,7 @@
 
     <div style="margin-top:50px;" ng-show=summaryLink>
         <!-- We are in the limit of bacth search -->
-        <span ng-show="targetIds.length<=listLengthLimit && targetIds.length>=2">
+        <!-- <span ng-show="targetIds.length<=listLengthLimit && targetIds.length>=2">
             <a href="{{summaryLink}}">
                 <button type="button" class="btn btn-primary">
                     Analyse targets
@@ -245,13 +245,18 @@
         </span>
 
         <span ng-show="targetIds.length>listLengthLimit || targetIds.length<2">
-                <button type="button" class="btn btn-disabled">
+                <button type="button" class="btn btn-disabled" enable="false">
                     Analyse targets
                 </button>
-        </span>
+        </span> -->
+
+        <a ng-href="{{(targetIds.length<=listLengthLimit && targetIds.length>=2) ? summaryLink : ''}}">
+            <button type="button" class="btn" ng-class="(targetIds.length<=listLengthLimit && targetIds.length>=2) ? 'btn-primary' : 'btn-disabled disabled'">
+                Analyse targets
+            </button>
+        </a>
 
         <button ng-click="downloadList();" class="btn btn-default">
-            <!--<i class="fa fa-download"></i>-->
             Download list
         </button>
     </div>
