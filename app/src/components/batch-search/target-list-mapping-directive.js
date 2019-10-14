@@ -213,7 +213,7 @@ angular.module('otDirectives')
                         var thisSearch = thisList[i];
 
                         if (thisSearch.result && thisSearch.result.approved_symbol) {
-                            if (thisSearch.result.isExact) {
+                            if (thisSearch.result.isExact || thisSearch.result.approved_symbol === thisSearch.query) {
                                 scope.exact.push({
                                     query: thisSearch.query,
                                     selected: thisSearch.selected,
