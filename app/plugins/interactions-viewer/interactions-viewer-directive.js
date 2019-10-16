@@ -54,6 +54,8 @@ angular.module('otPlugins')
                             scope.interactors = {};
                             return;
                         }
+                        // limit uniprotIds to 500 due to API restrictions in bestHitSearch endpoint
+                        uniprotIds.splice(500);
 
                         var promises = [];
 
