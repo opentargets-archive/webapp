@@ -98,8 +98,8 @@ angular.module('otDirectives')
 
                     scope.nInteractors = interactorsArr.length;
 
-                    // The star plot is currently limited to 200 nodes.
-                    // At this point if we have more than 200 we take the first 200 based on number of connections
+                    // The star plot is currently limited to 180 nodes.
+                    // At this point if we have more than 180 we take the first 180 based on number of connections
                     if (interactorsArr.length > maxNodes) {
                         $log.log(interactorsArr.length + ' interactors found, limiting to ' + maxNodes);
                         interactorsArr = takeBestInteractors(interactorsArr, maxNodes);
@@ -191,9 +191,9 @@ angular.module('otDirectives')
                             return 0;
                         }))
                         .selectedNodesColors(selectedNodesColors)
-                        .size(600)
+                        .size(500)
                         .colorScale(newColorScale)
-                        .labelSize(90)
+                        .labelSize(80)
                         .on('mouseout', function () {
                             hover_tooltip.close();
                         })
