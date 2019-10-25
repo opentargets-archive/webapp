@@ -59,6 +59,7 @@ angular.module('otDirectives')
                                 scope.withdrawnCountry = data.withdrawn_country;
                                 scope.withdrawnReason = data.withdrawn_reason;
                                 scope.withdrawnClass = data.withdrawn_class;
+                                scope.adverseEvents = data.adverse_events;
 
                                 // TODO: full_molformula is currently not available in the API response
                                 // if (data.molecule_properties && data.molecule_properties.full_molformula) {
