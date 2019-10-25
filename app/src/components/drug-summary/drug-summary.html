@@ -96,18 +96,14 @@
     <!-- Adverse events -->
     <div class="section" ng-if="!internal">
         <h3 class="summary-section-header">Adverse events</h3>
-        <!-- <p class=ot-section-intro>The top 20 adverse effects for this drug are shown. An adverse event can be an undesirable experience associated with the use of the drug, including serious drug side effects, product use errors, product quality problems, and therapeutic failures. The source of this data is <a target=_blank href="https://open.fda.gov/apis/drug/event/">OpenFDA</a>.</p>
-
-        <ul>
-            <li ng-repeat="effect in effects"><span ng-if="!effect.id">{{effect.term}}</span><span ng-if="effect.id"><a href="/disease/{{effect.id}}">{{effect.term}}</a></span> ({{effect.count}} reports)</li>
-        </ul> -->
         <p class="ot-section-intro">
             A list of post-marketing adverse events submitted by healthcare professionals to the FDA Adverse Event Reporting System (FAERS).<ot-popover key="DRUG.FAERS"></ot-popover>
             <br />The list only contains adverse events with a log likelihood ratio above a critical value (CV) threshold
             - see our <a href="#">adverse event report documentation page</a> for more information.
         </p>
         <ot-source-list list="[{label:'OpenFDA', url:'#'}]"></ot-source-list>
-        <ot-adverse-events-table data="adverseEvents" output="{{displayName}}"></ot-adverse-events-table>
+        <ot-adverse-events-table ng-if="adverseEvents" data="adverseEvents" output="{{displayName}}"></ot-adverse-events-table>
+        <p ng-if="!adverseEvents">No adverse events data for {{displayName}}</p>
     </div>
     
     <!-- Bibliography -->
