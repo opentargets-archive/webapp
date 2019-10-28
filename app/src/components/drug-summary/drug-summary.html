@@ -9,8 +9,11 @@
     <h2>{{displayName}}</h2>
     <h5 ng-if="internal" style="color:#c94c52"><span class="fa fa-lock fa-lg"></span> This is a confidential internal compound!</h5>
 
-    <div>ID:
-        <a ng-if="!internal" target=_blank href="https://www.ebi.ac.uk/chembl/compound/inspect/{{drug}}">{{drug}}</a><span ng-if="internal">{{drug}}</span>
+    <div>
+        ID: <a ng-if="!internal" target=_blank href="https://www.ebi.ac.uk/chembl/compound/inspect/{{drug}}">{{drug}}</a><span ng-if="internal">{{drug}}</span>
+        <span ng-if="drugBankID && drugBankID.ids && drugBankID.ids.length>0"> | DrugBank:
+            <span ng-repeat="dbid in drugBankID.ids"><a ng-href="https://www.drugbank.ca/drugs/{{dbid}}">{{dbid}}</a><span ng-if="!$last">, </span></span>
+        </span>
     </div>
 
     <!-- Withdrawn info -->

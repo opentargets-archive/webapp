@@ -60,7 +60,8 @@ angular.module('otDirectives')
                                 scope.withdrawnReason = data.withdrawn_reason;
                                 scope.withdrawnClass = data.withdrawn_class;
                                 scope.adverseEvents = data.adverse_events;
-
+                                scope.drugBankID = (data.cross_references || []).filter(function (r) { return r.source.toLowerCase() === 'drugbank'; })[0]; // drugBank id object or undefined
+                                
                                 // TODO: full_molformula is currently not available in the API response
                                 // if (data.molecule_properties && data.molecule_properties.full_molformula) {
                                 //     scope.formula = data.molecule_properties.full_molformula;
