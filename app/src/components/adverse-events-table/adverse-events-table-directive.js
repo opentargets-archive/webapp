@@ -23,7 +23,10 @@ angular.module('otDirectives')
                 // data, type and row
                 function renderLog (d, type) {
                     var w = Math.round((d / maxLlr) * 90);
-                    return '<div style="width:' + w + '%; background:#207dd0"><div style="margin-left:100%; padding-left:5px">' + d.toFixed(2) + '</div></div>';
+                    return '<div style="display: flex; align-items: center;">'
+                            + '<div style="background: #207dd0; width: ' + w + '%; height: 10px; border-right: 1px solid #207dd0; margin-right: 5px;"></div>'
+                            + '<div>' + d.toFixed(2) + '</div>'
+                        + '</div>';
                 }
 
                 // We format rows to arrays; this is not strictly necessary,
