@@ -145,6 +145,11 @@ angular.module('otServices')
                 id: 'ENSG00000136238',
                 symbol: 'RAC1',
                 link: 'https://www.thesgc.org/tep/kalrnrac1'
+            },
+            ENSG00000171303: {
+                id: 'ENSG00000171303',
+                symbol: 'KCNK3',
+                link: 'https://www.thesgc.org/tep/task1'
             }
         };
     }]);
