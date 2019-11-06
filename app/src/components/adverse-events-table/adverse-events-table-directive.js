@@ -69,7 +69,7 @@ angular.module('otDirectives')
                                 'render': renderLog
                             }
                         ]
-                    }, (scope.output ? scope.output + '-' : '') + 'adverse_events'));
+                    }, (scope.output ? scope.output + '-' : '') + 'pharmacovigilance'));
                 }
             }
         };
