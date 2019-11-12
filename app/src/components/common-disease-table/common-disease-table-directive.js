@@ -140,10 +140,10 @@ angular.module('otDirectives')
                             row.push(msg);
 
                             // 6: odds ratio (gwas / phewas)
-                            var odds = item.unique_association_fields.odd_ratio || item.unique_association_fields.odds_ratio || ''; // otDictionary.NA;
-                            if ((item.unique_association_fields.odd_ratio || item.unique_association_fields.odds_ratio) && item.unique_association_fields.confidence_interval) {
+                            var odds = item.unique_association_fields.odds_ratio || item.evidence.variant2disease.odds_ratio || ''; // otDictionary.NA;
+                            if ((item.unique_association_fields.odds_ratio || item.evidence.variant2disease.odds_ratio) && (item.unique_association_fields.confidence_interval || item.evidence.variant2disease.confidence_interval)) {
                                 odds += '<br />';
-                                odds += '(' + item.unique_association_fields.confidence_interval + ')';
+                                odds += '(' + (item.unique_association_fields.confidence_interval || item.evidence.variant2disease.confidence_interval) + ')';
                             }
                             row.push(odds);
 
