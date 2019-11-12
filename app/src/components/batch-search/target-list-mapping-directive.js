@@ -22,9 +22,10 @@ angular.module('otDirectives')
                         params: {
                             q: q,
                             filter: 'target',
-                            search_profile: 'batch',
-                            size: 10,
-                            fields: 'approved_symbol'
+                            // currently the following options seem to break the API call
+                            // search_profile: 'batch',
+                            // fields: 'approved_symbol'
+                            size: 10
                         }
                     };
 
