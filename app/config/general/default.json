@@ -366,6 +366,15 @@
             "config": {
                 "id": "biomarkers"
             }
+         },
+         {
+            "name": "ensemble",
+            "element": "ot-ensemble",
+            "heading": "Ensemble",
+            "track": true,
+            "config": {
+                "id": "ensemble"
+            }
          }
     ],
 
@@ -603,7 +612,7 @@
             {"label":"IL2RA", "id":"ENSG00000134460"},
             {"label":"ACHE", "id":"ENSG00000087085"},
             {"label":"SNCA", "id":"ENSG00000145335"},
-            
+
             {"label":"BRAF", "id":"ENSG00000157764"},
             {"label":"BRCA2", "id":"ENSG00000139618"},
             {"label":"KRAS", "id":"ENSG00000133703"},
