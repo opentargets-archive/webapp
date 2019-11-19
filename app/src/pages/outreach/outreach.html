@@ -13,7 +13,7 @@
             <div class="col-sm-8">
                 <h4>Training sessions</h4>
                  <p>We offer hands-on workshop on the Open Targets initiative and on our Open Targets Platform. Check our <a href="https://blog.opentargets.org/outreach-in-open-targets-supercharge-your-target-id-skills/">blog post</a> for more details.</p>
-                <p ng-hide="sessions">There are no training sessions scheduled, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution</p>
+                <p ng-hide="sessions">There are no training sessions scheduled, <a target="_blank" href="mailto:support@targetvalidation.org">email us</a> to arrange training sessions at your institution</p>
 
                 <!-- upcoming sessions -->
                 <div ng-show="upcoming" class="training-sessions">
@@ -21,7 +21,7 @@
                     <ul>
                         <li class="event" ng-repeat="event in upcoming">{{event.date | date:"fullDate"}}. {{event.event}} {{event.place}} <span ng-if="event.external.link">(<a href="{{event.external.link}}">{{event.external.text}}</a>)</span><span ng-if="!event.external.link && event.external.text">({{event.external.text}})</span></li>
                     </ul>
-                    <p ng-show="upcoming.length">If you can't attend any of the above, <a target=_blank href="mailto:support@targetvalidation.org">email us</a> now to arrange training sessions at your institution.</p>
+                    <p ng-show="upcoming.length">If you can't attend any of the above, <a target="_blank" href="mailto:support@targetvalidation.org">email us</a> now to arrange training sessions at your institution.</p>
                     <p ng-show="!upcoming.length">We are currently putting together our new series of training. Please check back again for future dates.</p>
                 </div>
 
@@ -33,7 +33,7 @@
                             {{event.date | date:"fullDate"}}. {{event.event}} {{event.place}}
                             <span ng-if="event.materials.length">(
                                 <span ng-repeat="material in event.materials">
-                                    <a target=_blank href="{{material.link}}">{{material.label}} {{$last ? '' : ' | '}}</a>
+                                    <a target="_blank" href="{{material.link}}">{{material.label}} {{$last ? '' : ' | '}}</a>
                                 </span>
                             )</span>
                         </li>
@@ -65,8 +65,8 @@
             <div class="col-sm-12">
                 <h4>Online resources</h4>
                 <ul>
-                    <li>Get started with our Open Targets Platform with <a target=_blank href="{{slidesUrl}}">these slides</a></li>
-                    <li>Have a tour on your platform with <a target=_blank href="{{videoUrl}}">this video</a></li>
+                    <li>Get started with our Open Targets Platform with <a target="_blank" href="{{slidesUrl}}">these slides</a></li>
+                    <li>Have a tour on your platform with <a target="_blank" href="{{videoUrl}}">this video</a></li>
                 </ul>
             </div>
         </div>

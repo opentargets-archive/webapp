@@ -1,11 +1,11 @@
-<p class="ot-section-intro">There are {{citations.count || 0}} citations for {{target.symbol}} in UniProt. <span ng-if="citations.count>25">Only the first 25 are shown below.</span> <span ng-if="citations.count">To see all the citations in the EuropePMC portal, follow this <a target=_blank href="{{citations.europepmcLink}}">link</a></span></p>
+<p class="ot-section-intro">There are {{citations.count || 0}} citations for {{target.symbol}} in UniProt. <span ng-if="citations.count>25">Only the first 25 are shown below.</span> <span ng-if="citations.count">To see all the citations in the EuropePMC portal, follow this <a target="_blank" href="{{citations.europepmcLink}}">link</a></span></p>
 <div class="epmc_citation_container" ng-repeat="citation in citations.all track by $index">
     <div class="epmc_citation_title">
-        <a class="epmc_citation_link" target=_blank href="//europepmc.org/abstract/med/{{citation.pmid}}">{{citation.title}}</a>
+        <a class="epmc_citation_link" target="_blank" href="//europepmc.org/abstract/med/{{citation.pmid}}">{{citation.title}}</a>
     </div>
     <div class="epmc_citation_subdata">
         <div class="epmc_citation_authors">
-            <a class="epmc_citation_link" target=_blank href='//europepmc.org/search?query=AUTH:"{{author}}"&page=1' ng-repeat="author in citation.authors track by $index">
+            <a class="epmc_citation_link" target="_blank" href='//europepmc.org/search?query=AUTH:"{{author}}"&page=1' ng-repeat="author in citation.authors track by $index">
                 {{author}}
             </a>
         </div>
