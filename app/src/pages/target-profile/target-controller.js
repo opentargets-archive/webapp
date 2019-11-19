@@ -117,7 +117,8 @@ angular.module('otControllers')
             .then(
                 function (resp) {
                     try {
-                        if (resp.data.genes && resp.data.genes.count > 0) {
+                        if (resp.data.genes && resp.data.genes.count > 0
+                            && resp.data.genes.hits[0].symbol.toUpperCase() === $scope.target.symbol.toUpperCase()) {
                             $scope.target.crispr = resp.data.genes.hits[0].id;
                         }
                     } catch (e) {
