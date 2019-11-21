@@ -51,6 +51,6 @@
     </p>
 </div>
 
-<div ng-show="target.tractability.smallmolecule.buckets.length===0 && target.tractability.antibody.buckets.length===0">
+<div ng-show="!target.tractability || (!target.tractability.smallmolecule && !target.tractability.antibody) || target.tractability.smallmolecule.buckets.length===0 && target.tractability.antibody.buckets.length===0">
     <p>No tractability data for {{target.approved_symbol}} is available.</p>
 </div>
