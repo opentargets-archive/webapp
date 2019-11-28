@@ -61,7 +61,7 @@
     "angulartics": "^0.20.2",
     "babel-polyfill": "^6.26.0",
     "bio-pv": "^1.8.1",
-    "bootstrap": "3.4.0",
+    "bootstrap": "3.4.1",
     "components-font-awesome": "^4.7.0",
     "cttv.api": "github:opentargets/RestApiJs",
     "cttv.diseaseGraph": "0.0.3",
