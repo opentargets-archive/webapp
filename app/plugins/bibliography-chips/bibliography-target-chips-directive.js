@@ -25,8 +25,7 @@ angular.module('otPlugins')
                 //
 
 
-                // var API_URL = 'https://link.opentargets.io/';
-                var API_URL = 'https://prod-191126-145400-dot-open-targets-library.appspot.com/';
+                var API_URL = 'https://link.opentargets.io/';
                 var selected = [];
                 resetSelected();
 
