@@ -26,7 +26,7 @@ angular.module('otPlugins')
 
 
                 // var API_URL = 'https://link.opentargets.io/';
-                var API_URL = 'https://master-dot-open-targets-library.appspot.com/';
+                var API_URL = 'https://mk-usekeyword-dot-open-targets-library.appspot.com/';
                 var selected = [];
                 resetSelected();
 
