@@ -49,7 +49,6 @@ docker run -d -p 8443:443 -p 8080:80 \
  quay.io/opentargets/webapp
 ```
 
-
 #### If you want to point to the docker container to an API server different than the production one:
 
 You can specify the variables:
@@ -86,67 +85,27 @@ Read on to the developing section.
 
 ## Developing (change and contribute to the code)
 
-### Prerequisites
+### Build environment
 
-Installation and tests need some node.js tools: you must have `node.js` and its
-package manager `npm` installed.  You can get them from
-[http://nodejs.org/](http://nodejs.org/)
+The script `build_webapp.sh` will install the various dependencies needed to build the web application from source, assuming you're on a Debian (or Debian-like) machine.
 
-### Install
-Clone the repository and install the dependencies. Tools are installed via NPM (and yarn)
-```sh
-git clone https://github.com/opentargets/webapp.git
-cd webapp
-yarn run full-install
-```
+Note that you will need to set the `APIHOST` environment variable to point to your own REST API server if you're not using the default http://platform-api.opentargets.io
 
+If you need to make any customisations to the web application code, you'll need to run `yarn setup` and `yarn build-all` after each change.
 
-This installs the required node modules and calls `jspm install` which takes
-care of all Angular dependencies and 3rd party widgets. So these commands create
-three directories:
-* `node_modules` - npm packages for the needed tools (http-server and modules
-  for testing); also all Angular code.
-* `app/jspm_packages` - some of the packages needed for loading widgets on
-  demand (deferred loading)
-
-Angular code is installed via Bower includes:
-* UI Bootstrap (Angular directives)
-* Bootstrap (css)
-* FontAwesome (css)
-* D3
-
-
-### Build
-
-After you make your changes you will want to build and run the application:
-
-1. set the `APIHOST` env variable to point to a fully functional rest_api. 
-Notice that `APIHOST` can be of the form `"https://somesite.com:1234/api/"` (recommended)
- or a simple prefix `/api/` if you are taking care of reverse-proxying the 
- API there (for eg if you are serving the app locally in nginx)
-2. (optional) add a `custom.json` with your configurations to override the ones
-   contained in `default.json`
-3. run `yarn run setup`
-4. all the code you need for deployment will be contained in `/app`.
-5. to point to a different API (or update your `custom.json`) and not have to
-   rebuild the whole app, you can change the `APIHOST` env var (or
-   `custom.json`) and then run only `gulp build-config`. :information_source: To use this feature,
-   make sure to have gulp installed (`npm install -g gulp`) and run gulp instead of
-   yarn in step 3 above (`gulp build-all`).
-
+Once the build has completed, the code required for deployment will be in `app/`
 
 ### Running the app
 
+You can test your build with Yarn's built-in web server via `yarn run server` from the `webapp` directory - this should not be used in production.
+
 Any webserver that can serve the `/app` directory will do. 
 
-**NOTE** to have a fully functional app, you also need to have your web server
-to reverse proxy `/proxy` to a valid rest_api server. For an example of running the app,
-you can look at how the build and deployment is done for nginx in the `Dockerfile` of
-this project.
+**NOTE** to have a fully functional app, you also need to have your web server reverse proxy `/proxy` to a valid REST API server. See how the build and deployment is done for Nginx in the `Dockerfile` of this project.
 
 ### Building custom images using docker
 
-#### Use our nginx based Dockerfile 
+#### Use our Nginx based Dockerfile 
 
 You can run a nginx webserver using docker.
 We have a `Dockerfile` that is derived from `nginx:alpine` which you can use.
