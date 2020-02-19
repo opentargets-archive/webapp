@@ -98,7 +98,7 @@ angular.module('otDirectives')
                             row.push(item.evidence.comparison_name);
 
                             // activity
-                            var activityUrl = item.evidence.urls[1].url;
+                            var activityUrl = item.evidence.urls.filter(function (i) { return i.nice_name === 'Gene expression in Expression Atlas'; })[0].url || '';
                             var activity = item.target.activity.split('_').shift();
                             row.push('<a class=\'ot-external-link\' href=\'' + activityUrl + '\' target=\'_blank\'>' + activity + '</a>');
 
@@ -118,7 +118,7 @@ angular.module('otDirectives')
                             row.push(item.evidence.log2_fold_change.percentile_rank);
 
                             // experiment overview
-                            var expID = item.evidence.urls[0].url.split('/').pop();
+                            var expID = (item.evidence.urls.filter(function (i) { return i.nice_name === 'ArrayExpress Experiment overview'; })[0].url || '').split('/').pop();
                             var expOverview = 'https://www.ebi.ac.uk/gxa/experiments/' + expID + '/Experiment%20Design';
                             row.push('<a class=\'ot-external-link\' href=\'' + expOverview + '\' target=\'_blank\'>' + (item.evidence.experiment_overview || 'Experiment overview and raw data') + '</a>');
 
