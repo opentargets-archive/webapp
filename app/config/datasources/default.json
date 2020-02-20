@@ -84,6 +84,13 @@
         "infoTemplate": "intogen.md",
         "description": ""
     },
+    "OT_GENETICS": {
+        "id": "ot_genetics_portal",
+        "label": "Open Targets Genetics Portal",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/genetic-associations#open-targets-genetics-portal",
+        "infoTemplate": "",
+        "description": ""
+    },
     "PHENODIGM": {
         "id": "phenodigm",
         "label": "PhenoDigm",

@@ -14,7 +14,8 @@
             "UNIPROT",
             "UNIPROT_LITERATURE",
             "EVA",
-            "GENE_2_PHENOTYPE"
+            "GENE_2_PHENOTYPE",
+            "OT_GENETICS"
         ]
     },
     "SOMATIC_MUTATION": {
