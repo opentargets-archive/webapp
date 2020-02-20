@@ -115,11 +115,15 @@ angular.module('otDirectives')
                                         mutString += (mutString.length > 0 ? ', ' : '') + otClearUnderscoresFilter(m.preferred_name || otDictionary.NA).trim();
                                         mutation_types += '<div>' + otClearUnderscoresFilter(m.preferred_name || otDictionary.NA).trim() + '</div>';
                                     }
+
                                     if (m.number_samples_with_mutation_type) {
                                         samples += '<div>' + m.number_samples_with_mutation_type + '/' + m.number_mutated_samples || otDictionary.NA + '</div>';
+                                    } else if (m.number_mutated_samples) {
+                                        samples += '<div>' + m.number_mutated_samples + '/' + m.number_samples_tested || otDictionary.NA + '</div>';
                                     } else {
                                         samples = otDictionary.NA;
                                     }
+
                                     pattern += '<div>' + (m.inheritance_pattern || otDictionary.NA) +  '</div>';
                                     patternString += (patternString.length > 0 ? ', ' : '') + (m.inheritance_pattern || otDictionary.NA);
                                 }
