@@ -72,7 +72,7 @@
 
     "evidence_sources" : {
         "genetic_association" : {
-            "common" : ["GWAS", "PHEWAS"],
+            "common" : ["GWAS", "PHEWAS", "OT_GENETICS"],
             "rare" : ["UNIPROT", "EVA", "UNIPROT_LITERATURE", "GENE_2_PHENOTYPE", "GENOMICS_ENGLAND"]
         },
         "somatic_mutation": ["CANCER_GENE_CENSUS", "UNIPROT_SOMATIC", "EVA_SOMATIC", "INTOGEN"],
