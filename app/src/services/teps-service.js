@@ -150,6 +150,11 @@ angular.module('otServices')
                 id: 'ENSG00000171303',
                 symbol: 'KCNK3',
                 link: 'https://www.thesgc.org/tep/task1'
+            },
+            ENSG00000177000: {
+                id: 'ENSG00000177000',
+                symbol: 'MTHFR',
+                link: 'https://www.thesgc.org/tep/mthfr'
             }
         };
     }]);
