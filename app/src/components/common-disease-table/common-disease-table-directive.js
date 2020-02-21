@@ -172,7 +172,7 @@ angular.module('otDirectives')
                     $(table).DataTable(otUtils.setTableToolsParams({
                         'data': formatDataToArray(scope.ext.data),
                         'ordering': true,
-                        'order': [[1, 'asc']],
+                        'order': [[7, 'asc']],
                         'autoWidth': false,
                         'paging': true,
                         'columnDefs': [
