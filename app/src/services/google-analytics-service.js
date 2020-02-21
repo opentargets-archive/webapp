@@ -3,14 +3,14 @@
 angular.module('otServices')
 
 
-    /** º
-     * The Config service.
-     * This stores global config variables for the font end
+    /**
+     * The analytics service
+     * Configures the functions used for tracking with Google Analytics
      */
     .factory('otGoogleAnalytics', ['$location', function ($location) {
         function trackPageView () {
             if ($location.host() === 'www.targetvalidation.org') {
-                ga('send', 'pageview', $location.path());
+                ga('send', 'pageview', $location.url());
             }
         }
 
