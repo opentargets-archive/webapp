@@ -26,7 +26,8 @@ angular.module('otDirectives')
                     }
                 });
 
-                // Q: DO WE NEED THIS??? A: Yes, this makes the sorting by p-value work correctly (although could perhaps be implemented in cols definition)
+                // Custom sort functions
+                // these are needed for certain fields like pval and prioritisation score
                 jQuery.fn.dataTableExt.oSort['pval-more-asc'] = function (x, y) {
                     var a = x.split('<')[0];
                     var b = y.split('<')[0];
@@ -133,7 +134,7 @@ angular.module('otDirectives')
                             row.push(Number(item.evidence.variant2disease.resource_score.value).toPrecision(1));
 
                             // 8: Gene prioritisation
-                            row.push(item.sourceID === otConsts.datasources.OT_GENETICS.id ? item.evidence.gene2variant.resource_score.value : otDictionary.NA);
+                            row.push(item.sourceID === otConsts.datasources.OT_GENETICS.id ? item.evidence.gene2variant.resource_score.value : -1);
 
                             // 9: evidence source
                             if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
@@ -150,10 +151,11 @@ angular.module('otDirectives')
                                     + '</a>');
                             }
 
-                            // 10, 11: hidden columns for filtering
+                            // 10, 11: hidden columns for filtering and custom sorting
                             row.push(item.variant.id.split('/').pop()); // variant
                             row.push(otClearUnderscoresFilter(item.sourceID)); // evidence source
                             row.push(item.disease.efo_info.label);
+                            row.push(item.sourceID === otConsts.datasources.OT_GENETICS.id ? item.evidence.gene2variant.resource_score.value : -1); // gene prioritisation score
 
                             newdata.push(row); // push, so we don't end up with empty rows
                         } catch (e) {
@@ -172,7 +174,7 @@ angular.module('otDirectives')
                     $(table).DataTable(otUtils.setTableToolsParams({
                         'data': formatDataToArray(scope.ext.data),
                         'ordering': true,
-                        'order': [[7, 'asc']],
+                        'order': [[8, 'desc']],
                         'autoWidth': false,
                         'paging': true,
                         'columnDefs': [
@@ -215,6 +217,16 @@ angular.module('otDirectives')
                                 'targets': [9],
                                 'mRender': otColumnFilter.mRenderGenerator(11),
                                 'mData': otColumnFilter.mDataGenerator(9, 11)
+                            },
+                            {
+                                'targets': [8],
+                                'mData': function (item, type) {
+                                    if (type === 'sort') {
+                                        return item[13];
+                                    } else {
+                                        return item[8] === -1 ? otDictionary.NA : item[8];
+                                    }
+                                }
                             }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
