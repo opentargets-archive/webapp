@@ -106,7 +106,13 @@ angular.module('otDirectives')
                             row.push('<a href="/disease/' + item.disease.id + '">' + item.disease.efo_info.label + '</a>');
 
                             // 2: reported trait
-                            row.push(item.sourceID === otConsts.datasources.OT_GENETICS.id ? item.disease.reported_trait : otDictionary.NA);
+                            row.push(
+                                item.sourceID === otConsts.datasources.OT_GENETICS.id ? (
+                                    '<a class=\'ot-external-link\' href=\'' + item.evidence.variant2disease.study_link + '\' target=\'_blank\'>' + item.disease.reported_trait + '</a>'
+                                ) : (
+                                    otDictionary.NA
+                                )
+                            );
 
                             // 3: publications
                             var refs = [];
@@ -156,6 +162,7 @@ angular.module('otDirectives')
                             row.push(otClearUnderscoresFilter(item.sourceID)); // evidence source
                             row.push(item.disease.efo_info.label);
                             row.push(item.sourceID === otConsts.datasources.OT_GENETICS.id ? item.evidence.gene2variant.resource_score.value : -1); // gene prioritisation score
+                            row.push(item.sourceID === otConsts.datasources.OT_GENETICS.id ? item.disease.reported_trait : otDictionary.NA);    // reported trait
 
                             newdata.push(row); // push, so we don't end up with empty rows
                         } catch (e) {
@@ -227,7 +234,12 @@ angular.module('otDirectives')
                                         return item[8] === -1 ? otDictionary.NA : item[8];
                                     }
                                 }
-                            }
+                            },
+                            {
+                                'targets': [2],
+                                'mRender': otColumnFilter.mRenderGenerator(14),
+                                'mData': otColumnFilter.mDataGenerator(2, 14)
+                            },
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, (scope.output ? scope.output + '-' : '') + '-common_diseases'));
