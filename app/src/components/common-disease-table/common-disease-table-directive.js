@@ -127,8 +127,13 @@ angular.module('otDirectives')
                             row.push(pmidsList.join(', '));
 
                             // 5: Variant
-                            var mut = '<a class=\'ot-external-link\' href=\'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>' + item.variant.id.split('/').pop() + '</a>';
-                            row.push(mut);
+                            var variants = '';
+                            if (item.sourceID === otConsts.datasources.OT_GENETICS.id) {
+                                variants = '<a class=\'ot-external-link\' href=\'' + item.variant.source_link + '\' target=\'_blank\'>' + item.variant.id.split('/').pop() + '</a>';
+                            } else {
+                                variants = '<a class=\'ot-external-link\' href=\'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>' + item.variant.id.split('/').pop() + '</a>';
+                            }
+                            row.push(variants);
 
                             // 6: variant type
                             var t = otClearUnderscoresFilter(otUtils.getEcoLabel(item.evidence.evidence_codes_info, item.evidence.gene2variant.functional_consequence.split('/').pop()));
