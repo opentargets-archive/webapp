@@ -156,13 +156,19 @@ angular.module('otDirectives')
                                 row.push('<a class=\'ot-external-link\' href=\'https://phewascatalog.org/phewas\' target=\'_blank\'>'
                                     + otClearUnderscoresFilter(item.sourceID)
                                     + '</a>');
+                            } else if (item.sourceID === otConsts.datasources.OT_GENETICS.id) {
+                                row.push('<a class=\'ot-external-link\' href=\'https://genetics.opentargets.org/study-locus/' 
+                                    + item.evidence.variant2disease.study_link.split('/').pop() + '/' 
+                                    + item.variant.id + '\' target=\'_blank\'>'
+                                    + otClearUnderscoresFilter(item.sourceID)
+                                    + '</a>');
                             } else {
                                 row.push('<a class=\'ot-external-link\' href=\'https://www.ebi.ac.uk/gwas/search?query=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>'
                                     + otClearUnderscoresFilter(item.sourceID)
                                     + '</a>');
                             }
 
-                            // 10, 11: hidden columns for filtering and custom sorting
+                            // 10-14: hidden columns for filtering and custom sorting
                             row.push(item.variant.id.split('/').pop()); // variant
                             row.push(otClearUnderscoresFilter(item.sourceID)); // evidence source
                             row.push(item.disease.efo_info.label);
