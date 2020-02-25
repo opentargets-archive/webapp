@@ -142,7 +142,12 @@ angular.module('otDirectives')
                             // 7: p-value
                             // Note that occasionally the pvalue might be stored as a String (in the response JSON) which triggers an error
                             // so we cast it to a number to be safe
-                            row.push(Number(item.evidence.variant2disease.resource_score.value).toPrecision(1));
+                            row.push(Number(
+                                (item.evidence.variant2disease.mantissa && item.evidence.variant2disease.exponent) ?
+                                    item.evidence.variant2disease.mantissa + 'e' + item.evidence.variant2disease.exponent
+                                    :
+                                    item.evidence.variant2disease.resource_score.value
+                            ).toPrecision(1));
 
                             // 8: Gene prioritisation
                             row.push(item.sourceID === otConsts.datasources.OT_GENETICS.id ? item.evidence.gene2variant.resource_score.value : -1);
