@@ -136,7 +136,7 @@ angular.module('otDirectives')
                             // 5: Variant
                             var variants = '';
                             if (item.sourceID === otConsts.datasources.OT_GENETICS.id) {
-                                variants = '<a class=\'ot-external-link\' href=\'' + item.variant.source_link + '\' target=\'_blank\'>' + item.variant.id.split('/').pop() + '</a>';
+                                variants = '<a class=\'ot-external-link\' href=\'' + item.variant.source_link + '\' target=\'_blank\'>' + (item.variant.rs_id || item.variant.id) + '</a>';
                             } else {
                                 variants = '<a class=\'ot-external-link\' href=\'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>' + item.variant.id.split('/').pop() + '</a>';
                             }
