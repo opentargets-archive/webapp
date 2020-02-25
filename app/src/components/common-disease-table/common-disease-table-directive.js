@@ -200,7 +200,7 @@ angular.module('otDirectives')
                                 'width': '3%'
                             },
                             {
-                                'targets': [4],
+                                'targets': [4, 6],
                                 'visible': false
                             },
                             {
@@ -244,7 +244,7 @@ angular.module('otDirectives')
                                 'targets': [2],
                                 'mRender': otColumnFilter.mRenderGenerator(14),
                                 'mData': otColumnFilter.mDataGenerator(2, 14)
-                            },
+                            }
                         ],
                         initComplete: otColumnFilter.initCompleteGenerator(dropdownColumns)
                     }, (scope.output ? scope.output + '-' : '') + '-common_diseases'));
