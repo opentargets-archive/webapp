@@ -115,13 +115,20 @@ angular.module('otDirectives')
                             );
 
                             // 3: publications
+                            // since there is only 1 or no publications, here we show it as "author(year)"
+                            // which is consistent with the genetics portal
                             var refs = [];
                             if (checkPath(item, 'evidence.variant2disease.provenance_type.literature.references')) {
                                 refs = item.evidence.variant2disease.provenance_type.literature.references;
                             }
-
                             var pmidsList = otUtils.getPmidsList(refs);
-                            row.push(pmidsList.length ? otUtils.getPublicationsString(pmidsList) : otDictionary.NA);
+                            var pubInfo = otDictionary.NA;
+                            if (refs.length && refs[0].author) {
+                                pubInfo = '<a class=\'ot-external-link\' href=\'' + refs[0].lit_id + '\' target=\'_blank\'>' + refs[0].author + ' (' + refs[0].year + ')</a>';
+                            } else if (refs.length) {
+                                pubInfo = otUtils.getPublicationsString(pmidsList);
+                            }
+                            row.push(pubInfo);
 
                             // 4: Publication ids (hidden)
                             row.push(pmidsList.join(', '));
