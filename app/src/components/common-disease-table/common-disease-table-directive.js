@@ -170,9 +170,9 @@ angular.module('otDirectives')
                                     + '</a>');
                             } else if (item.sourceID === otConsts.datasources.OT_GENETICS.id) {
                                 row.push('<a class=\'ot-external-link\' href=\'https://genetics.opentargets.org/study-locus/' 
-                                    + item.evidence.variant2disease.study_link.split('/').pop() + '/' 
+                                    + item.evidence.variant2disease.study_link.split('/').pop() + '/'
                                     + item.variant.id + '\' target=\'_blank\'>'
-                                    + otClearUnderscoresFilter(item.sourceID)
+                                    + otConsts.datasources.OT_GENETICS.label
                                     + '</a>');
                             } else {
                                 row.push('<a class=\'ot-external-link\' href=\'https://www.ebi.ac.uk/gwas/search?query=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>'
