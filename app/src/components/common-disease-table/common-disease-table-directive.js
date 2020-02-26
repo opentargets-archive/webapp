@@ -135,10 +135,13 @@ angular.module('otDirectives')
 
                             // 5: Variant
                             var variants = '';
+                            var variantId = '';
                             if (item.sourceID === otConsts.datasources.OT_GENETICS.id) {
-                                variants = '<a class=\'ot-external-link\' href=\'' + item.variant.source_link + '\' target=\'_blank\'>' + (item.variant.rs_id || item.variant.id) + '</a>';
+                                variantId = (item.variant.rs_id || item.variant.id);
+                                variants = '<a class=\'ot-external-link\' href=\'' + item.variant.source_link + '\' target=\'_blank\'>' + variantId + '</a>';
                             } else {
-                                variants = '<a class=\'ot-external-link\' href=\'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + item.variant.id.split('/').pop() + '\' target=\'_blank\'>' + item.variant.id.split('/').pop() + '</a>';
+                                variantId = item.variant.id.split('/').pop();
+                                variants = '<a class=\'ot-external-link\' href=\'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + variantId + '\' target=\'_blank\'>' + variantId + '</a>';
                             }
                             row.push(variants);
 
@@ -181,7 +184,7 @@ angular.module('otDirectives')
                             }
 
                             // 10-14: hidden columns for filtering and custom sorting
-                            row.push(item.variant.id.split('/').pop()); // variant
+                            row.push(variantId); // variant
                             row.push(otClearUnderscoresFilter(item.sourceID)); // evidence source
                             row.push(item.disease.efo_info.label);
                             row.push(item.sourceID === otConsts.datasources.OT_GENETICS.id ? item.evidence.gene2variant.resource_score.value : -1); // gene prioritisation score
