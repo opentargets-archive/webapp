@@ -223,7 +223,7 @@ angular.module('otDirectives')
                             },
                             {
                                 'targets': [1, 2],
-                                'width': '15%'
+                                'width': '16%'
                             },
                             {
                                 'targets': [3, 5, 6],
@@ -231,7 +231,7 @@ angular.module('otDirectives')
                             },
                             {
                                 'targets': [7, 8],
-                                'width': '10%'
+                                'width': '12%'
                             },
                             {
                                 'targets': [1],
