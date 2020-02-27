@@ -36,8 +36,8 @@
         "link": "/variants"
     },
     "GENETIC.GENE-PRIORITISATION-SCORE": {
-        "description": "Help coming shortly",
-        "link": ""
+        "description": " The gene prioritisation score is the output from our Locus2Gene pipeline that links the genetic loci identified in Genome Wide Association Studies to the most likely causal gene(s) by integrating fine-mapping, colocalisation, and functional genomics. For more information on the gene prioritisation score and our Locus2Gene pipeline, click here.",
+        "link": "https://docs.targetvalidation.org/data-sources/genetic-associations#open-targets-genetics-portal"
     },
     "DRUG.FAERS": {
         "description": "The FDA Adverse Event Reporting System (FAERS) is a database that contains information on post-marketing adverse event and medication error reports submitted to the FDA. Adverse events and medication errors are coded to terms in the Medical Dictionary for Regulatory Activities (MedDRA) terminology.",
