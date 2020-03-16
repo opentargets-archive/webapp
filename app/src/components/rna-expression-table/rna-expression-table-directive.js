@@ -88,7 +88,7 @@ angular.module('otDirectives')
                         var row = [];
 
                         try {
-                            var isExpressionAtlas = (otConsts.datasources.EXPRESSION_ATLAS.id === evidence.provenance_type.database.id.toLowerCase());
+                            var isExpressionAtlas = (otConsts.datasources.EXPRESSION_ATLAS.id === item.evidence.provenance_type.database.id.toLowerCase());
 
                             // col 0: data origin: public / private
                             row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
