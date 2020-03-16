@@ -88,6 +88,8 @@ angular.module('otDirectives')
                         var row = [];
 
                         try {
+                            var isExpressionAtlas = (otConsts.datasources.EXPRESSION_ATLAS.id === evidence.provenance_type.database.id.toLowerCase());
+
                             // col 0: data origin: public / private
                             row.push((item.access_level === otConsts.ACCESS_LEVEL_PUBLIC) ? otConsts.ACCESS_LEVEL_PUBLIC_DIR : otConsts.ACCESS_LEVEL_PRIVATE_DIR);
 
@@ -97,8 +99,11 @@ angular.module('otDirectives')
                             // comparison
                             row.push(item.evidence.comparison_name);
 
-                            // activity
-                            var activityUrl = item.evidence.urls.filter(function (i) { return i.nice_name === 'Gene expression in Expression Atlas'; })[0].url || '';
+                            if (isExpressionAtlas) {
+                                var activityUrl = item.evidence.urls.filter(function (i) { return i.nice_name === 'Gene expression in Expression Atlas'; })[0].url || '';
+                            } else {
+                                var activityUrl = item.evidence.urls[0];
+                            }
                             var activity = item.target.activity.split('_').shift();
                             row.push('<a class=\'ot-external-link\' href=\'' + activityUrl + '\' target=\'_blank\'>' + activity + '</a>');
 
@@ -118,8 +123,12 @@ angular.module('otDirectives')
                             row.push(item.evidence.log2_fold_change.percentile_rank);
 
                             // experiment overview
-                            var expID = (item.evidence.urls.filter(function (i) { return i.nice_name === 'ArrayExpress Experiment overview'; })[0].url || '').split('/').pop();
-                            var expOverview = 'https://www.ebi.ac.uk/gxa/experiments/' + expID + '/Experiment%20Design';
+                            if (isExpressionAtlas) {
+                                var expID = (item.evidence.urls.filter(function (i) { return i.nice_name === 'ArrayExpress Experiment overview'; })[0].url || '').split('/').pop();
+                                var expOverview = 'https://www.ebi.ac.uk/gxa/experiments/' + expID + '/Experiment%20Design';
+                            } else {
+                                var expOverview = (item.evidence.urls[2] || item.evidence.urls[0]).url || otDictionary.NA; 
+                            }
                             row.push('<a class=\'ot-external-link\' href=\'' + expOverview + '\' target=\'_blank\'>' + (item.evidence.experiment_overview || 'Experiment overview and raw data') + '</a>');
 
 
