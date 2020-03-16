@@ -102,7 +102,7 @@ angular.module('otDirectives')
                             if (isExpressionAtlas) {
                                 var activityUrl = item.evidence.urls.filter(function (i) { return i.nice_name === 'Gene expression in Expression Atlas'; })[0].url || '';
                             } else {
-                                var activityUrl = item.evidence.urls[0];
+                                var activityUrl = item.evidence.urls[0].url;
                             }
                             var activity = item.target.activity.split('_').shift();
                             row.push('<a class=\'ot-external-link\' href=\'' + activityUrl + '\' target=\'_blank\'>' + activity + '</a>');
