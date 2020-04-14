@@ -1,4 +1,4 @@
-<div ng-if="target.hallmarks">
+<div ng-if="target.hallmarks.cancer_hallmarks">
 
     <p class="ot-section-intro">
         Essential alterations in cell physiology that dictate malignant growth. Cancer hallmarks, originally described by Hanahan and Weinberg (2000) are manually curated by COSMIC and integrated in the <a href="https://cancer.sanger.ac.uk/census#cl_search" target="_blank">Cancer Gene Census</a>.
@@ -102,4 +102,4 @@
 
 </div>
 
-<div ng-if="!target.hallmarks"><p>No data available</p></div>
+<div ng-if="!target.hallmarks.cancer_hallmarks"><p>No data available</p></div>

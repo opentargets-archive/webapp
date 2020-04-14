@@ -85,7 +85,7 @@ angular.module('otPlugins')
                     }, scope.target.approved_symbol + '-cancer_hallmark'));
                 }
 
-                if (scope.target.hallmarks) {
+                if (scope.target.hallmarks && scope.target.hallmarks.cancer_hallmarks) {
                     // lightweight list to build visualizations:
                     // only store label, suppress and promote
                     scope.hallmarks = hallmarks.map(function (m) {
