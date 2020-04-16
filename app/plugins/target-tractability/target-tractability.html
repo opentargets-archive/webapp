@@ -53,20 +53,24 @@
 
 
     <h4>Other modalities</h4>
-    <table class="table ot-evidence-table tractability-table" style="width:18%" ng-show="target.tractability.other_modalities.buckets.length>0">
-        <thead>
-            <tr>
-                <th colspan="3">Clinical precedence</th>
-                <!-- <th colspan="2" style="width:26%">Predicted tractable - high confidence</th>
-                <th colspan="4">Predicted tractable - medium to low confidence</th> -->
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td ng-repeat="cols in columns.other_modalities" ng-class="target.tractability.other_modalities.buckets.indexOf(cols.bucket)>=0 ? 'is-tractable' : 'text-disabled'">{{cols.label}}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div ng-show="target.tractability.other_modalities.buckets.length>0">
+        <table class="table ot-evidence-table tractability-table" style="width:18%" >
+            <thead>
+                <tr>
+                    <th colspan="3">Clinical precedence</th>
+                    <!-- <th colspan="2" style="width:26%">Predicted tractable - high confidence</th>
+                    <th colspan="4">Predicted tractable - medium to low confidence</th> -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td ng-repeat="cols in columns.other_modalities" ng-class="target.tractability.other_modalities.buckets.indexOf(cols.bucket)>=0 ? 'is-tractable' : 'text-disabled'">{{cols.label}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="text-center bold">** To view the underlying evidence supporting the tractability assessment for GENE-SYMBOL, please download the <a href="/downloads/data">Open Targets tractability data file</a> **</p>
+    </div>
 
     <p ng-show="target.tractability.antibody.buckets.length===0">
         No other modalities tractability data for {{target.approved_symbol}} is available.
