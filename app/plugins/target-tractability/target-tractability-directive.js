@@ -103,6 +103,21 @@ angular.module('otPlugins')
                         //     label: 'Remaining genome',
                         //     bucket: 10
                         // }
+                    ],
+                    other_modalities: [
+                        // clinical precedence
+                        {
+                            label: 'Phase 4',
+                            bucket: 1
+                        },
+                        {
+                            label: 'Phase 2 or 3',
+                            bucket: 2
+                        },
+                        {
+                            label: 'Phase 0 or 1',
+                            bucket: 3
+                        },
                     ]
                 };
             }
