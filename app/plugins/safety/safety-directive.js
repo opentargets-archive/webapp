@@ -29,7 +29,7 @@ angular.module('otPlugins')
                         risk_info: scope.data.risk_info && scope.data.risk_info.length > 0,
                         tox21: scope.data.tox21 && scope.data.tox21.length > 0,
                         etox: scope.data.etox && scope.data.etox.length > 0
-                    }
+                    };
                 } else {
                     scope.data = {};
                 }

@@ -21,7 +21,7 @@
 
     <div ng-if="hasData.tox21 || hasData.etox">
         <h4>Non-clinical experimental toxicity</h4>
-        <p>Details on the routine testing and screening of {{target.symbol}} in non-clinical experimental toxicity panels</p>
+        <p>Details on the routine testing and screening of {{target.symbol}} in non-clinical experimental toxicity panels.</p>
         <ot-safety-tox21-table target="target" data='data.tox21' ng-if="hasData.tox21"></ot-safety-tox21-table>
         <div ng-show="hasData.tox21 && hasData.etox" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
         <ot-safety-etox-table target="target" data='data.etox' ng-if="hasData.etox"></ot-safety-etox-table>
