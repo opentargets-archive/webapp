@@ -4,23 +4,27 @@
         Known side effects and/or safety risk information for {{target.symbol}}, when available.
     </p>
     
-    <div ng-if="data.adverse_effects">
+    <div ng-if="hasData.adverse_effects">
         <h4>Known side effects</h4>
         <ot-safety-effect-table target="target" data='data.adverse_effects'></ot-safety-effect-table>
     </div>
 
     <!-- divider -->
-    <!-- <div ng-show="target.safety.adverse_effects && target.safety.safety_risk_info" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div> -->
+    <div ng-show="hasData.risk_info && hasData.adverse_effects" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
         
-    <div ng-if="data.risk_info">
+    <div ng-if="hasData.risk_info">
         <h4>Safety risk information</h4>
         <ot-safety-risk-table target="target" data='data.risk_info'></ot-safety-risk-table>
     </div>
 
-    <div ng-if="data.tox21 || data.etox">
+    <div ng-show="hasData.tox21 && (data.risk_info || data.adverse_effects)" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
+
+    <div ng-if="hasData.tox21 || hasData.etox">
         <h4>Non-clinical experimental toxicity</h4>
         <p>Details on the routine testing and screening of {{target.symbol}} in non-clinical experimental toxicity panels</p>
-        <ot-safety-tox21-table target="target" data='data.tox21' ng-if="data.tox21"></ot-safety-tox21-table>
+        <ot-safety-tox21-table target="target" data='data.tox21' ng-if="hasData.tox21"></ot-safety-tox21-table>
+        <div ng-show="hasData.tox21 && hasData.etox" style="width: 100%; height: 1px; background: #CCC; margin-top:30px; margin-bottom:30px;"></div>
+        <ot-safety-etox-table target="target" data='data.etox' ng-if="hasData.etox"></ot-safety-etox-table>
     </div>
     
 </div>
