@@ -44,7 +44,7 @@ angular.module('otDirectives')
                         row.push(otUpperCaseFirstFilter(d.experiment_details.assay_format_type || otDictionary.NA));
 
                         // Source
-                        row.push('<a href="' + d.data_source_reference_link + '">' + d.data_source + '</a>');
+                        row.push('<a href="https://tripod.nih.gov/tox21/assays/">' + d.data_source + '</a>');
 
                         return row;
                     });
