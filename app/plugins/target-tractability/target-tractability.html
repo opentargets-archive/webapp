@@ -1,6 +1,6 @@
 
 <p class="ot-section-intro">
-    Summary of tractability information for {{target.approved_symbol}} for small molecule and antibody modalities.
+    Summary of tractability information for {{target.approved_symbol}} for small molecule, antibody, and other modalities.
 </p>
 
 <p>
@@ -52,14 +52,12 @@
 
 
 
-    <h4>Other modalities</h4>
-    <div ng-show="target.tractability.other_modalities.buckets.length>0">
+    <h4>Other modalities (protein, enzyme, oligionucleotide, etc.)</h4>
+    <div ng-show="target.tractability.other_modalities && target.tractability.other_modalities.buckets.length>0">
         <table class="table ot-evidence-table tractability-table" style="width:18%" >
             <thead>
                 <tr>
                     <th colspan="3">Clinical precedence</th>
-                    <!-- <th colspan="2" style="width:26%">Predicted tractable - high confidence</th>
-                    <th colspan="4">Predicted tractable - medium to low confidence</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -68,11 +66,9 @@
                 </tr>
             </tbody>
         </table>
-
-        <p class="text-center bold">** To view the underlying evidence supporting the tractability assessment for GENE-SYMBOL, please download the <a href="/downloads/data">Open Targets tractability data file</a> **</p>
     </div>
 
-    <p ng-show="target.tractability.antibody.buckets.length===0">
+    <p ng-show="!target.tractability.other_modalities || target.tractability.other_modalities.buckets.length===0">
         No other modalities tractability data for {{target.approved_symbol}} is available.
     </p>
 </div>
@@ -80,3 +76,5 @@
 <div ng-show="!target.tractability || (!target.tractability.smallmolecule && !target.tractability.antibody && !target.tractability.other_modalities) || target.tractability.smallmolecule.buckets.length===0 && target.tractability.antibody.buckets.length===0 && target.tractability.other_modalities.buckets.length===0">
     <p>No tractability data for {{target.approved_symbol}} is available.</p>
 </div>
+
+<p class="text-center bold">** To view the underlying evidence for the tractability assessment, please download the <a href="/downloads/data">Open Targets tractability data file</a> **</p>
