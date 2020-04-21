@@ -1,5 +1,6 @@
 Docker container: [![Docker Repository on Quay](https://quay.io/repository/opentargets/webapp/status "Docker Repository on Quay")](https://quay.io/repository/opentargets/webapp)
 
+Travis CI build: [![Build Status](https://travis-ci.com/opentargets/webapp.svg?branch=master)](https://travis-ci.com/opentargets/webapp)
 
 # OpenTargets Web App
 
