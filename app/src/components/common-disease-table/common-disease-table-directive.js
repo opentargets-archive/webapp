@@ -160,7 +160,7 @@ angular.module('otDirectives')
                             );
 
                             // 8: Gene prioritisation
-                            row.push(item.sourceID === otConsts.datasources.OT_GENETICS.id ? item.evidence.gene2variant.resource_score.value : -1);
+                            row.push(item.sourceID === otConsts.datasources.OT_GENETICS.id ? (item.evidence.gene2variant.resource_score.value).toFixed(5) : -1);
 
                             // 9: evidence source
                             if (item.sourceID === otConsts.datasources.PHEWAS_23andme.id) {
