@@ -200,7 +200,7 @@ angular.module('otDirectives')
                     $(table).DataTable(otUtils.setTableToolsParams({
                         'data': formatMutationsDataToArray(scope.ext.data),
                         // 'ordering': true,
-                        'order': [[4, 'desc']],
+                        'order': [[3, 'desc']],
                         'autoWidth': false,
                         'paging': true,
                         'columnDefs': [
