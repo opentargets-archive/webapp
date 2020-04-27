@@ -2,7 +2,7 @@
 [build]
   base    = "/"
   publish = "app/"
-  # command = "yarn run setup && yarn run build-all"
+  command = "yarn run setup && yarn run build-all"
 
 # Read https://www.netlify.com/docs/continuous-deployment/#deploy-contexts
 # to understand how context below works.
