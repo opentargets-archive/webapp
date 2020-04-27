@@ -44,7 +44,7 @@
     "build-all": "./node_modules/.bin/gulp build-all",
     "server": "./node_modules/.bin/gulp webserver",
     "full-install": "yarn install && yarn run setup && yarn run build-all",
-    "build-qa": "./node_modules/.bin/gulp build-all && cp netlify_headers _site/_headers",
+    "build-qa": "./node_modules/.bin/gulp build-all && cp netlify_headers app/_headers",
     "test": "./node_modules/.bin/gulp test",
     "test-single-run": "karma start tests/unit/karma.conf.js  --single-run",
     "eslint": "./node_modules/.bin/eslint -f html -o eslint.html 'app/js/**.js' || exit 0"

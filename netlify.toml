@@ -9,17 +9,15 @@
 
 [context.production.environment]
   APIHOST = "https://platform-api.opentargets.io/"
-  command = "yarn run setup && yarn run build-all"
 
 # Deploy Preview context: All Deploy Previews (ie.PRs)
 # will inherit these settings.
 [context.deploy-preview]
-  # command = "yarn run setup && yarn run build-qa"
-  [[headers]]
-    for = "/*"
-    [headers.values]
-      # Basic-Auth header
-      Basic-Auth = "opentargets:opentargets"
+  command = "yarn run setup && yarn run build-qa"
+  # [[headers]]
+  #   for = "/*"
+  #   [headers.values]
+  #     Basic-Auth = "opentargets:opentargets"
 
 [context.deploy-preview.environment]
   APIHOST = "https://platform-api.opentargets.io/"  
@@ -28,12 +26,11 @@
 # an active Deploy Preview will inherit these settings.
 # By default
 [context.branch-deploy]
-  # command = "yarn run setup && yarn run build-qa"
-  [[headers]]
-    for = "/*"
-    [headers.values]
-      # Basic-Auth header
-      Basic-Auth = "opentargets:opentargets"
+  command = "yarn run setup && yarn run build-qa"
+  # [[headers]]
+  #   for = "/*"
+  #   [headers.values]
+  #     Basic-Auth = "opentargets:opentargets"
 
 [context.branch-deploy.environment]
   APIHOST = "https://platform-api-qc.opentargets.io/"
