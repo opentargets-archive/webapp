@@ -14,6 +14,7 @@
 # will inherit these settings.
 [context.deploy-preview.environment]
   APIHOST = "https://platform-api.opentargets.io/"
+  command = "yarn run setup && yarn run build-qa"
   [[headers]]
     for = "/*"
       [headers.values]
@@ -25,6 +26,7 @@
 # By default
 [context.branch-deploy.environment]
   APIHOST = "https://platform-api-qc.opentargets.io/"
+  command = "yarn run setup && yarn run build-qa"
   [[headers]]
     for = "/*"
       [headers.values]
@@ -64,6 +66,7 @@
 
 [context.qa.environment]
   APIHOST = "https://platform-api-qc.opentargets.io/"
+  command = "yarn run setup && yarn run build-qa"
   [[headers]]
     for = "/*"
       [headers.values]
