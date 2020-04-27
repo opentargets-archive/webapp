@@ -14,7 +14,7 @@
 # Deploy Preview context: All Deploy Previews (ie.PRs)
 # will inherit these settings.
 [context.deploy-preview]
-  # command = "yarn run setup && yarn run build-qa"
+  command = "yarn run setup && yarn run build-qa"
   [[headers]]
     for = "/*"
       [headers.values]
@@ -28,7 +28,7 @@
 # an active Deploy Preview will inherit these settings.
 # By default
 [context.branch-deploy]
-  # command = "yarn run setup && yarn run build-qa"
+  command = "yarn run setup && yarn run build-qa"
   [[headers]]
     for = "/*"
       [headers.values]
