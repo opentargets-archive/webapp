@@ -447,13 +447,6 @@ gulp.task('webserver', ['build-all'], function () {
 
 gulp.task('build-all', ['init', 'build-3rdparty', 'build-components-min', 'build-webapp', 'build-lazy-loaded-components']);
 
-// QA auth stuff 
-
-gulp.task('copy-basic-auth', function () {
-    return gulp.src('netlify_headers')
-        .pipe(gulp.dest('_site/_headers'));
-});
-gulp.task('build-qa', ['build-all', 'copy-basic-auth']);
 
 // Lazy Loaded modules
 // Interactions Viewer
