@@ -2,13 +2,14 @@
 [build]
   base    = "/"
   publish = "app/"
-  command = "yarn run setup && yarn run build-all"
+  # command = "yarn run setup && yarn run build-all"
 
 # Read https://www.netlify.com/docs/continuous-deployment/#deploy-contexts
 # to understand how context below works.
 
 [context.production.environment]
   APIHOST = "https://platform-api.opentargets.io/"
+  command = "yarn run setup && yarn run build-all"
 
 # Deploy Preview context: All Deploy Previews (ie.PRs)
 # will inherit these settings.
