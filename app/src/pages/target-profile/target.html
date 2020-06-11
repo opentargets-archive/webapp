@@ -2,6 +2,19 @@
 
     <div class="ot-content-header">
         <div class="container">
+
+            <div ng-show="!notFound" class="rewrite-alpha-release-notice-container">
+                <p>
+                    <b>** Important Notice **</b>
+                </p>
+                <p>
+                    We are currently redesigning and rebuilding the Open Targets Platform with new features.
+                </p>
+                <p>
+                    For a preview of the new Platform interface, please see <b><a href="http://alpha.targetvalidation.org/target/{{targetId}}">the new profile page for {{target.symbol}}</a></b>
+                </p>
+            </div>
+
             <!-- For the case of unknown targets -->
             <h3 ng-show="notFound">No target found with ID {{targetId}}</h3>
 
