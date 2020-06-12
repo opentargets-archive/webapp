@@ -3,7 +3,7 @@
     <div class="ot-content-header">
         <div class="container">
 
-            <div ng-show="!notFound" class="rewrite-alpha-release-notice-container">
+            <div ng-if="!notFound && otConfig.showNoticeWithLinkToAlphaRewrite" class="rewrite-alpha-release-notice-container">
                 <p>
                     <b>** Important Notice **</b>
                 </p>

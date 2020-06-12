@@ -640,5 +640,8 @@
 
 
     "api": "/api/",
-    "canonical_url_base": "https://www.targetvalidation.org"
+    "canonical_url_base": "https://www.targetvalidation.org",
+
+    "showNoticeWithLinkToAlphaRewrite": true // link to alpha.targetvalidation.org 
+    
 }
