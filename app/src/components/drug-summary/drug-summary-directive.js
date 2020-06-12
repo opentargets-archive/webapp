@@ -1,5 +1,5 @@
 angular.module('otDirectives')
-    .directive('otDrugSummary', ['otApi', 'otUtils', 'otDictionary', 'otUpperCaseFirstFilter', function (otApi, otUtils, otDictionary, otUpperCaseFirstFilter) {
+    .directive('otDrugSummary', ['otApi', 'otUtils', 'otDictionary', 'otUpperCaseFirstFilter', 'otConfig', function (otApi, otUtils, otDictionary, otUpperCaseFirstFilter, otConfig) {
         'use strict';
 
         function pngToDataUrl (url, callback, outputFormat) {
@@ -23,6 +23,7 @@ angular.module('otDirectives')
             };
             img.src = url;
         }
+       
 
         return {
             restrict: 'E',
@@ -35,7 +36,7 @@ angular.module('otDirectives')
                     if (!scope.drug) {
                         return;
                     }
-
+                    scope.showAlphaRewriteLink = otConfig.showNoticeWithLinkToAlphaRewrite;
                     // Get the information for the drug from API
                     otApi.getDrug({
                         method: 'GET',
