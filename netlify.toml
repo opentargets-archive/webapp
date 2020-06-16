@@ -21,11 +21,11 @@
 
 [context.deploy-preview.environment]
   APIHOST = "https://platform-api.opentargets.io/"
-  [[headers]]
-    for = "/*"
-      [headers.values]
-        # Basic-Auth header
-        Basic-Auth = "opentargets:opentargets"
+  # [[headers]]
+  #   for = "/*"
+  #     [headers.values]
+  #       # Basic-Auth header
+  #       Basic-Auth = "opentargets:opentargets"
 
 # Branch Deploy context: All deploys that are not in
 # an active Deploy Preview will inherit these settings.
@@ -39,11 +39,11 @@
 
 [context.branch-deploy.environment]
   APIHOST = "https://platform-api-qc.opentargets.io/"
-  [[headers]]
-    for = "/*"
-      [headers.values]
-        # Basic-Auth header
-        Basic-Auth = "opentargets:opentargets"
+  # [[headers]]
+  #   for = "/*"
+  #     [headers.values]
+  #       # Basic-Auth header
+  #       Basic-Auth = "opentargets:opentargets"
 
 
 # CAREFUL!!! When you point a particular branch to a specific API below,
