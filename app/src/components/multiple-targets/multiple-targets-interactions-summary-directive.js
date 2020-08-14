@@ -1,6 +1,6 @@
 angular.module('otDirectives')
 
-    .directive('multipleTargetsInteractionsSummary', ['$log', '$http', '$q', 'otOmnipathdbSources', 'otConsts', function ($log, $http, $q, otOmnipathdbSources, otConsts) {
+    .directive('multipleTargetsInteractionsSummary', ['$log', '$http', '$q', 'otOmnipathdbSources', function ($log, $http, $q, otOmnipathdbSources) {
         'use strict';
 
         return {
@@ -80,7 +80,7 @@ angular.module('otDirectives')
 
                     // Get data from omnipathdb...
                     // Note that Omnipath now also support POST requests if required in the future
-                    var url = otConsts.PROXY + 'www.omnipathdb.org/interactions?partners=' + uniprotIds.join(',') + '&format=json&fields=sources';
+                    var url = 'https://omnipathdb.org/interactions?partners=' + uniprotIds.join(',') + '&format=json&fields=sources';
                     var p2 = $http.get(url)
                         .then(function (resp) {
                             return resp;

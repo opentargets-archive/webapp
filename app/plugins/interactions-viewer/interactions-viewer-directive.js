@@ -1,6 +1,5 @@
 angular.module('otPlugins')
-    // eslint-disable-next-line angular/di-unused
-    .directive('otInteractionsViewer', ['$log',  '$http', '$q', 'otApi', 'otOmnipathdbSources', 'otConsts', function ($log, $http, $q, otApi, otOmnipathdbSources, otConsts) {
+    .directive('otInteractionsViewer', ['$log',  '$http', '$q', 'otApi', 'otOmnipathdbSources', function ($log, $http, $q, otApi, otOmnipathdbSources) {
         /*
          *
          */
