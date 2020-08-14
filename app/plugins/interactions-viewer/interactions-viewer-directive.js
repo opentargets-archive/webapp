@@ -1,4 +1,5 @@
 angular.module('otPlugins')
+    // eslint-disable-next-line angular/di-unused
     .directive('otInteractionsViewer', ['$log',  '$http', '$q', 'otApi', 'otOmnipathdbSources', 'otConsts', function ($log, $http, $q, otApi, otOmnipathdbSources, otConsts) {
         /*
          *
@@ -30,7 +31,7 @@ angular.module('otPlugins')
                 // 1 - get interactions for the target
                 // note that Omnipath has updated the interactions enpoint; ids are passed as 'partners' param
                 var uniprotId = scope.target.uniprot_id;
-                var url = otConsts.PROXY + 'www.omnipathdb.org/interactions?partners=' + uniprotId + '&format=json';
+                var url = 'https://omnipathdb.org/interactions?partners=' + uniprotId + '&format=json';
                 $http.get(url)
                     .then(function (resp) {
                         var interactors = {};
@@ -62,7 +63,7 @@ angular.module('otPlugins')
                         // 2 - get interactions for all involved targets
 
                         // Promise -- second pass in omnipathdb...
-                        var url = otConsts.PROXY + 'www.omnipathdb.org/interactions?partners=' + uniprotIds.join(',') + '&format=json&fields=sources';
+                        var url = 'https://omnipathdb.org/interactions?partners=' + uniprotIds.join(',') + '&format=json&fields=sources';
                         promises.push($http.get(url));
 
                         // Promise -- get the names from bestHitSearch
