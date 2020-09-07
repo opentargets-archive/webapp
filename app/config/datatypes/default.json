@@ -15,7 +15,8 @@
             "UNIPROT_LITERATURE",
             "EVA",
             "GENE_2_PHENOTYPE",
-            "OT_GENETICS"
+            "OT_GENETICS",
+            "CLINGEN"
         ]
     },
     "SOMATIC_MUTATION": {

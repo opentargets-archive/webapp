@@ -21,6 +21,13 @@
         "infoTemplate": "chembl.md",
         "description": ""
     },
+    "CLINGEN": {
+        "id": "clingen",
+        "label": "ClinGen",
+        "infoUrl": "https://docs.targetvalidation.org/data-sources/genetic-associations#clingen",
+        "infoTemplate": "",
+        "description": ""
+    },
     "CRISPR": {
         "id": "crispr",
         "label": "CRISPR",
