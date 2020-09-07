@@ -13,6 +13,15 @@ angular.module('otControllers')
         var efo_code = $location.url().split('/')[2];
         $scope.diseaseId = efo_code;
 
+        $scope.covid19Ids = [
+            'MONDO_0100096', 
+            'MONDO_0100139', 
+            'MONDO_0100140', 
+            'MONDO_0100141', 
+            'MONDO_0100142',
+            'MONDO_0100143'
+        ];
+
         var render = function (new_state) {
             var view = new_state.view || {};
             var sec = view.sec;
