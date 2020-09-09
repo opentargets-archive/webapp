@@ -29,6 +29,18 @@
             </div>
         </div>
 
+        <div ng-if="otConfig.showNoticeWithLinkToAlphaRewrite" class="rewrite-alpha-release-notice-container">
+            <p>
+                <b>** Important Notice **</b>
+            </p>
+            <p>
+                We are currently redesigning and rebuilding the Open Targets Platform with new features.
+            </p>
+            <p>
+                For a preview of the new Platform interface, please see <b><a href="http://alpha.targetvalidation.org/target/{{search.query}}/classic-associations">the classic view association page for {{search.label}}</a></b>
+            </p>
+        </div>
+
         <div class="container">
             <div class="row" ng-show="search.total>0">
 
