@@ -25,7 +25,12 @@
                 <a href="/disease/{{disease.efo}}/associations">
                     <span><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-th fa-stack-1x fa-inverse"></i></span> View associated targets</span>
                 </a>
-                <span ng-show="covid19Ids.indexOf(diseaseId)>=0">| <a href="http://covid19.opentargets.org/" target="_blank">COVID-19 Target Prioritisation Tool</a></span>
+                <span ng-show="covid19Ids.indexOf(diseaseId)>=0">
+                    |
+                    <a href="http://covid19.opentargets.org/" target="_blank">
+                        <span><span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-sort-amount-desc fa-stack-1x fa-inverse"></i></span>COVID-19 Target Prioritisation Tool</span>
+                    </a>
+                </span>
             </p>
         </div>
     </div>
