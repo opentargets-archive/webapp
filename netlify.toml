@@ -39,11 +39,11 @@
 
 [context.branch-deploy.environment]
   APIHOST = "https://platform-api-qc.opentargets.io/"
-    [[headers]]
-      for = "/*"
-        [headers.values]
-          # Basic-Auth header
-          Basic-Auth = "opentargets:opentargets"
+  # [[headers]]
+  #   for = "/*"
+  #     [headers.values]
+  #       # Basic-Auth header
+  #       Basic-Auth = "opentargets:opentargets"
 
 
 # CAREFUL!!! When you point a particular branch to a specific API below,
@@ -78,11 +78,11 @@
 
 [context.qa.environment]
   APIHOST = "https://platform-api-qc.opentargets.io/"
-    [[headers]]
-      for = "/*"
-        [headers.values]
-          # Basic-Auth header
-          Basic-Auth = "opentargets:opentargets"
+  # [[headers]]
+  #   for = "/*"
+  #     [headers.values]
+  #       # Basic-Auth header
+  #       Basic-Auth = "opentargets:opentargets"
 
 # [context.shipit.environment]
 #   APIHOST = "http://prod-20180625-1203.api.opentargets.io/"
