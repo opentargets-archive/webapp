@@ -36,16 +36,16 @@ angular.module('otPlugins')
                         },
                         {
                             label: 'Active compounds in ChEMBL',
-                            bucket: 7
+                            bucket: 5
                         },
                         // predicted tractable
                         {
                             label: 'DrugEBIlity score > 0.7',
-                            bucket: 5
+                            bucket: 6
                         },
                         {
                             label: 'DrugEBIlity score 0 to 0.7',
-                            bucket: 6
+                            bucket: 7
                         },
                         {
                             label: 'Druggable genome',
