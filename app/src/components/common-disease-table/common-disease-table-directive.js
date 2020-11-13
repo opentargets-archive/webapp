@@ -140,13 +140,8 @@ angular.module('otDirectives')
                                 variantId = (item.variant.rs_id || item.variant.id);
                                 variants = '<a class=\'ot-external-link\' href=\'' + item.variant.source_link + '\' target=\'_blank\'>' + variantId + '</a>';
                             } else if (item.sourceID === otConsts.datasources.PHEWAS.id) {
-                                if ('id' in item.variant){
-                                    variantId = item.variant.id;
-                                    variants = '<a class=\'ot-external-link\' href=\'https://genetics.opentargets.org/variant/' + variantId + '\' target=\'_blank\'>' + variantId + '</a>';
-                                } else {
-                                    variantId = item.variant.rs_id;
-                                    variants = '<a class=\'ot-external-link\' href=\'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + variantId + '\' target=\'_blank\'>' + variantId + '</a>'; 
-                                }
+                                variantId = item.variant.rs_id;
+                                variants = '<a class=\'ot-external-link\' href=\'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + variantId + '\' target=\'_blank\'>' + variantId + '</a>'; 
                             } 
                             else {
                                 variantId = item.variant.id.split('/').pop();
