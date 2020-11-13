@@ -124,7 +124,8 @@ angular.module('otDirectives')
                             // Clinical consequences
                             var clin = 'N/A';
                             if (item.evidence.variant2disease && item.evidence.variant2disease.clinical_significance) {
-                                clin = item.evidence.variant2disease.clinical_significance;
+                                // clin = item.evidence.variant2disease.clinical_significance;
+                                clin = item.evidence.variant2disease.clinical_significance.join(', ')
                             }
                             row.push(clin);
 
