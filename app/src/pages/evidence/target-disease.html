@@ -10,6 +10,23 @@
         </div>
     </div>
 
+    <div ng-if="otConfig.showNoticeWithLinkToAlphaRewrite" class="rewrite-alpha-release-notice-container">
+        <p>
+            <b>** Important Notice **</b>
+        </p>
+        <p>
+            We are currently redesigning and rebuilding the Open Targets Platform with new features and a new approach to scoring and how we display evidence.
+        </p>
+        <p>
+            For a preview of the new Platform interface, please see 
+            <b>
+                <a href="http://alpha.targetvalidation.org/evidence/{{search.info.gene.ensembl_gene_id}}/{{search.info.efo.efo_code}}">
+                    the redesigned evidence page for {{(search.info.gene.approved_symbol || search.info.gene.ensembl_external_name)}} in {{search.info.efo.label}}
+                </a>
+            </b>
+        </p>
+    </div>
+
     <!-- page header with flower and overview -->
     <div class="container">
         <div class="row gene-disease-header">
