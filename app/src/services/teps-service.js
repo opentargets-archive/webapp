@@ -155,6 +155,11 @@ angular.module('otServices')
                 id: 'ENSG00000177000',
                 symbol: 'MTHFR',
                 link: 'https://www.thesgc.org/tep/mthfr'
+            },
+            ENSG00000118007: {
+                id: 'ENSG00000118007',
+                symbol: 'STAG1',
+                link: 'https://www.thesgc.org/tep/stag1'
             }
         };
     }]);
