@@ -36,7 +36,7 @@ angular.module('otDirectives')
                     if (!scope.drug) {
                         return;
                     }
-                    scope.showAlphaRewriteLink = otConfig.showNoticeWithLinkToAlphaRewrite;
+                    scope.showBetaRewriteLink = otConfig.showNoticeWithLinkToBetaRewrite;
                     // Get the information for the drug from API
                     otApi.getDrug({
                         method: 'GET',
