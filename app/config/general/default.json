@@ -642,6 +642,6 @@
     "api": "/api/",
     "canonical_url_base": "https://www.targetvalidation.org",
 
-    "showNoticeWithLinkToBetaRewrite": true // link to https://beta--platform-app.netlify.app/
+    "showNoticeWithLinkToBetaRewrite": true // link to https://beta.targetvalidation.org/
     
 }
