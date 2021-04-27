@@ -1,0 +1,3 @@
+/                   https://beta.targetvalidation.org/
+/target/*           https://beta.targetvalidation.org/target/:splat
+/disease/*          https://beta.targetvalidation.org/disease/:splat
