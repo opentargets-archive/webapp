@@ -1,5 +1,4 @@
 /target/*           https://beta.targetvalidation.org/target/:splat   301!
-/summary drug=:id   https://beta.targetvalidation.org/drug/:id        301!
+/summary  drug=:id  https://beta.targetvalidation.org/drug/:id        301!
 /disease/*          https://beta.targetvalidation.org/disease/:splat  301!
 /index.html         https://beta.targetvalidation.org/                301!
-/*                  https://beta.targetvalidation.org/:splat          301!
